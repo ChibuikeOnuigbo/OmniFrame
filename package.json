@@ -1,0 +1,36 @@
+{
+  "name": "omniframe",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "packages/engine",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @omniframe/web",
+    "build": "npm run build --workspace @omniframe/web",
+    "preview": "npm run preview --workspace @omniframe/web",
+    "test": "vitest run --root packages/engine",
+    "test:watch": "vitest --root packages/engine",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc -p apps/web/tsconfig.json --noEmit && tsc -p packages/engine/tsconfig.json --noEmit",
+    "license:audit": "node scripts/license-audit.mjs",
+    "qa:http": "node scripts/qa-http.mjs",
+    "desktop:dev": "cd apps/desktop/src-tauri && cargo tauri dev",
+    "desktop:build": "cd apps/desktop/src-tauri && cargo tauri build",
+    "native:check": "cargo check -p omniframe-core"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.13.5",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.1"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "onnxruntime-web": "^1.30.0",
+    "vite": "^6.4.3"
+  }
+}

@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.vite/
+build/
+coverage/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+.DS_Store
+playwright-report/
+test-results/
+.cache/
+apps/web/dev-dist/
+image-search/
+qa-artifacts/
+license-audit-report.json
+development-sessions.jsonl

@@ -1,0 +1,1980 @@
+[
+  {
+    "name": "OpenCut",
+    "url": "https://github.com/OpenCut-app/OpenCut",
+    "category": "editor",
+    "relevantFeatures": [
+      "web editor",
+      "timeline",
+      "desktop direction"
+    ],
+    "implementationLessons": "Study the product boundary and media-first workflow; reuse is only after reviewing each file licence and dependency.",
+    "license": "MIT (repository; verify at release)",
+    "codeReuse": "Review/possible reuse after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Kdenlive",
+    "url": "https://github.com/KDE/kdenlive",
+    "category": "editor",
+    "relevantFeatures": [
+      "multi-track timeline",
+      "proxy workflow",
+      "effects",
+      "keyframes"
+    ],
+    "implementationLessons": "Separate timeline model from MLT render graph; proxy suggestions belong to media metadata, not UI guesses.",
+    "license": "GPL-2.0+",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Kdenlive developer docs",
+    "url": "https://community.kde.org/Kdenlive/Development",
+    "category": "editor",
+    "relevantFeatures": [
+      "architecture",
+      "rendering",
+      "effects"
+    ],
+    "implementationLessons": "Inspect established NLE failure handling and render/effect boundaries before adding a native backend.",
+    "license": "Documentation; project licence applies",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "MLT",
+    "url": "https://github.com/mltframework/mlt",
+    "category": "media-engine",
+    "relevantFeatures": [
+      "tractor playlists",
+      "filters",
+      "transitions",
+      "rendering"
+    ],
+    "implementationLessons": "A graph/playlist model scales better than clip-specific UI conditionals; keep an adapter so OmniFrame can use FFmpeg/native later.",
+    "license": "LGPL-2.1+",
+    "codeReuse": "Research/adapter only pending policy review",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenTimelineIO",
+    "url": "https://github.com/AcademySoftwareFoundation/OpenTimelineIO",
+    "category": "timeline",
+    "relevantFeatures": [
+      "portable timeline interchange",
+      "schema",
+      "adapters"
+    ],
+    "implementationLessons": "Use stable IDs and explicit time transforms; import/export is an interchange boundary, not the native project format.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible adapter",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OTIO schema docs",
+    "url": "https://opentimelineio.readthedocs.io/en/latest/tutorials/otio-tutorial.html",
+    "category": "timeline",
+    "relevantFeatures": [
+      "clips",
+      "gaps",
+      "transitions",
+      "time ranges"
+    ],
+    "implementationLessons": "Time ranges and rational rates prevent frame drift; OmniFrame stores integer sequence frames and can export OTIO later.",
+    "license": "Apache-2.0 docs",
+    "codeReuse": "Reference/possible adapter",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "LosslessCut",
+    "url": "https://github.com/mifi/lossless-cut",
+    "category": "editor",
+    "relevantFeatures": [
+      "lossless trimming",
+      "cut lists",
+      "fast media handling"
+    ],
+    "implementationLessons": "Fast path and explicit keyframe limitations are worth surfacing; do not pretend frame-accurate re-encode is lossless.",
+    "license": "GPL-2.0+",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenShot",
+    "url": "https://github.com/OpenShot/openshot-qt",
+    "category": "editor",
+    "relevantFeatures": [
+      "timeline",
+      "titles",
+      "transitions"
+    ],
+    "implementationLessons": "Simple entry flows are useful for launcher UX, while its larger dependency surface is a caution for the native shell.",
+    "license": "GPL-3.0+",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Olive",
+    "url": "https://github.com/olive-editor/olive",
+    "category": "editor",
+    "relevantFeatures": [
+      "non-linear editing",
+      "GPU render graph",
+      "node ideas"
+    ],
+    "implementationLessons": "Keep preview/export on one graph and make property animation data-driven.",
+    "license": "GPL-3.0+",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Shotcut",
+    "url": "https://github.com/mltframework/shotcut",
+    "category": "editor",
+    "relevantFeatures": [
+      "filters",
+      "timeline",
+      "export presets"
+    ],
+    "implementationLessons": "Filter parameter UX and export preset disclosure are useful; do not copy implementation.",
+    "license": "GPL-3.0+",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OBS Studio",
+    "url": "https://github.com/obsproject/obs-studio",
+    "category": "media-engine",
+    "relevantFeatures": [
+      "scene graph",
+      "sources",
+      "filters",
+      "hardware encoding"
+    ],
+    "implementationLessons": "A source/scene abstraction informs OmniFrame\u2019s 2D/3D composition model and capability probing.",
+    "license": "GPL-2.0+",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "libobs API",
+    "url": "https://github.com/obsproject/obs-studio/tree/master/libobs",
+    "category": "media-engine",
+    "relevantFeatures": [
+      "source lifecycle",
+      "rendering",
+      "signals"
+    ],
+    "implementationLessons": "Explicit resource ownership and signal-driven lifecycle are valuable patterns for workers/jobs.",
+    "license": "GPL-2.0+",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Remotion",
+    "url": "https://github.com/remotion-dev/remotion",
+    "category": "rendering",
+    "relevantFeatures": [
+      "React compositions",
+      "deterministic frame rendering",
+      "parametric video"
+    ],
+    "implementationLessons": "A frame is a first-class render input; use this principle for preview/export parity without turning OmniFrame into a template-only system.",
+    "license": "Custom licence; review before reuse",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "FFmpeg",
+    "url": "https://ffmpeg.org/",
+    "category": "media-engine",
+    "relevantFeatures": [
+      "demux/decode/encode",
+      "filters",
+      "hardware codecs"
+    ],
+    "implementationLessons": "Native desktop should wrap capability discovery and structured errors; browser path needs WebCodecs/WASM alternatives.",
+    "license": "LGPL/GPL components vary",
+    "codeReuse": "External executable/library subject to build audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "FFmpeg filters documentation",
+    "url": "https://ffmpeg.org/ffmpeg-filters.html",
+    "category": "media-engine",
+    "relevantFeatures": [
+      "color",
+      "blur",
+      "transform",
+      "audio filters"
+    ],
+    "implementationLessons": "Filter names and pixel-format conversions are a compatibility reference; graph semantics should be tested against export output.",
+    "license": "Documentation",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "FFmpeg pixel formats",
+    "url": "https://ffmpeg.org/ffmpeg-utils.html#Picture-format-decomposition",
+    "category": "color",
+    "relevantFeatures": [
+      "YUV/RGB",
+      "alpha",
+      "range"
+    ],
+    "implementationLessons": "Make transfer function, alpha mode and range explicit at every native boundary.",
+    "license": "Documentation",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "libplacebo",
+    "url": "https://github.com/haasn/libplacebo",
+    "category": "rendering",
+    "relevantFeatures": [
+      "HDR",
+      "color management",
+      "Vulkan/OpenGL"
+    ],
+    "implementationLessons": "Color management and presentation transforms should remain separate from creative effects.",
+    "license": "LGPL-2.1+",
+    "codeReuse": "Research/optional desktop backend",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "VapourSynth",
+    "url": "https://www.vapoursynth.com/",
+    "category": "media-engine",
+    "relevantFeatures": [
+      "frame server",
+      "filter graph",
+      "lazy frames"
+    ],
+    "implementationLessons": "Lazy frame evaluation informs cache/job prioritisation, but the plugin ecosystem needs a separate sandbox.",
+    "license": "LGPL-2.1+",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Krita",
+    "url": "https://github.com/KDE/krita",
+    "category": "masking",
+    "relevantFeatures": [
+      "selection tools",
+      "painting",
+      "transform",
+      "assistants"
+    ],
+    "implementationLessons": "Selection modifier semantics and per-frame manual correction are behavioural references; do not copy source.",
+    "license": "GPL-3.0+",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Krita selection tools docs",
+    "url": "https://docs.krita.org/en/reference_manual/tools/selection_tools.html",
+    "category": "masking",
+    "relevantFeatures": [
+      "freehand",
+      "polygon",
+      "contiguous",
+      "similar color"
+    ],
+    "implementationLessons": "Expose selection operations and modifiers directly, not behind an advanced drawer.",
+    "license": "Documentation",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Krita animation docs",
+    "url": "https://docs.krita.org/en/user_manual/animation.html",
+    "category": "animation",
+    "relevantFeatures": [
+      "keyframes",
+      "onion skin",
+      "manual frame editing"
+    ],
+    "implementationLessons": "Frame navigation and correction must be practical at timeline level.",
+    "license": "Documentation",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "DaVinci Resolve training",
+    "url": "https://www.blackmagicdesign.com/products/davinciresolve/training",
+    "category": "editor",
+    "relevantFeatures": [
+      "professional workflows",
+      "color",
+      "fusion",
+      "fairlight"
+    ],
+    "implementationLessons": "Use as behaviour reference for dense workspaces and mode separation; proprietary implementation is not reused.",
+    "license": "Proprietary docs",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Adobe Premiere keyboard shortcuts",
+    "url": "https://helpx.adobe.com/premiere-pro/using/keyboard-shortcuts.html",
+    "category": "ui",
+    "relevantFeatures": [
+      "blade",
+      "trim",
+      "playback",
+      "markers"
+    ],
+    "implementationLessons": "Common shortcuts reduce learning cost; OmniFrame makes them configurable.",
+    "license": "Proprietary docs",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Final Cut Pro user guide",
+    "url": "https://support.apple.com/guide/final-cut-pro/welcome/mac",
+    "category": "editor",
+    "relevantFeatures": [
+      "magnetic timeline",
+      "roles",
+      "compound clips"
+    ],
+    "implementationLessons": "Roles and compound timelines inform track metadata; do not mimic magnetic editing as the only mode.",
+    "license": "Proprietary docs",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebCodecs API MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "VideoFrame",
+      "VideoDecoder",
+      "VideoEncoder",
+      "AudioData"
+    ],
+    "implementationLessons": "Use direct VideoFrame transfer and close resources deterministically; WebCodecs does not mux containers.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebCodecs specification",
+    "url": "https://w3c.github.io/webcodecs/",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "codec configs",
+      "flush",
+      "hardware acceleration"
+    ],
+    "implementationLessons": "Capability probing must be async and configuration-specific.",
+    "license": "W3C document licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebCodecs samples",
+    "url": "https://w3c.github.io/webcodecs/samples/",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "decode",
+      "encode",
+      "canvas transfer"
+    ],
+    "implementationLessons": "Use the sample lifecycle patterns for queue backpressure and frame closing.",
+    "license": "W3C sample licence",
+    "codeReuse": "Reference/possible adaptation",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "MP4Box.js",
+    "url": "https://github.com/gpac/mp4box.js",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "MP4 demux/mux",
+      "fragmented MP4"
+    ],
+    "implementationLessons": "WebCodecs chunks need a container layer; keep muxing separate from the renderer.",
+    "license": "BSD-3-Clause",
+    "codeReuse": "Possible browser dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "mp4-muxer",
+    "url": "https://github.com/Vanilagy/mp4-muxer",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "WebCodecs MP4 muxing",
+      "fast start"
+    ],
+    "implementationLessons": "Small muxer APIs are suitable for browser export, but verify maintenance and licence at release.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "FFmpeg.wasm",
+    "url": "https://github.com/ffmpegwasm/ffmpeg.wasm",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "WASM FFmpeg",
+      "fallback export"
+    ],
+    "implementationLessons": "Use only as a fallback; large WASM and memory pressure make it unsuitable for interactive frames.",
+    "license": "MIT wrapper; FFmpeg licence applies to core",
+    "codeReuse": "Possible fallback after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Web Workers MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API",
+    "category": "browser-runtime",
+    "relevantFeatures": [
+      "worker lifecycle",
+      "message passing"
+    ],
+    "implementationLessons": "Long operations need cancellation and transferable data, not main-thread loops.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OffscreenCanvas MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas",
+    "category": "browser-runtime",
+    "relevantFeatures": [
+      "worker rendering",
+      "canvas transfer"
+    ],
+    "implementationLessons": "Preview composition can leave the main thread; feature-detect and use a Canvas2D fallback.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Transferable objects MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects",
+    "category": "browser-runtime",
+    "relevantFeatures": [
+      "ArrayBuffer",
+      "ImageBitmap",
+      "VideoFrame"
+    ],
+    "implementationLessons": "Avoid copy-heavy VideoFrame \u2192 PNG \u2192 ImageData pipelines.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebGPU API MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API",
+    "category": "gpu",
+    "relevantFeatures": [
+      "compute",
+      "rendering",
+      "device limits"
+    ],
+    "implementationLessons": "WebGPU is an acceleration path, not a product requirement; the renderer reports CPU/WASM fallback.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebGPU spec",
+    "url": "https://gpuweb.github.io/gpuweb/",
+    "category": "gpu",
+    "relevantFeatures": [
+      "pipelines",
+      "buffers",
+      "textures"
+    ],
+    "implementationLessons": "Explicit resource destruction and device-lost handling are required.",
+    "license": "W3C document licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebGL spec",
+    "url": "https://registry.khronos.org/WebGL/",
+    "category": "gpu",
+    "relevantFeatures": [
+      "fallback rendering",
+      "textures"
+    ],
+    "implementationLessons": "WebGL remains the 3D fallback where WebGPU is unavailable.",
+    "license": "Khronos specification",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebAssembly",
+    "url": "https://webassembly.org/",
+    "category": "browser-runtime",
+    "relevantFeatures": [
+      "portable CPU kernels",
+      "native-like worker code"
+    ],
+    "implementationLessons": "A Rust/WASM CV path can share algorithms with desktop, but transfer overhead must be measured.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible runtime",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Web Audio API MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API",
+    "category": "audio",
+    "relevantFeatures": [
+      "graph audio",
+      "analysis",
+      "gain"
+    ],
+    "implementationLessons": "Keep preview monitoring separate from offline export mixdown.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "AudioWorklet MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet",
+    "category": "audio",
+    "relevantFeatures": [
+      "low-latency processing",
+      "custom DSP"
+    ],
+    "implementationLessons": "Do not run waveform analysis in the UI thread; AudioWorklet is for realtime monitoring, not batch export.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Web Audio samples",
+    "url": "https://webaudio.github.io/web-audio-api/",
+    "category": "audio",
+    "relevantFeatures": [
+      "AudioParam automation",
+      "nodes"
+    ],
+    "implementationLessons": "Automation/keyframe timing needs the same rational timebase as video.",
+    "license": "W3C document licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "File System Access API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/File_System_API",
+    "category": "desktop-web",
+    "relevantFeatures": [
+      "local open/save",
+      "directory handles"
+    ],
+    "implementationLessons": "Use permissioned handles where available and IndexedDB for persistence metadata.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "IndexedDB MDN",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API",
+    "category": "storage",
+    "relevantFeatures": [
+      "large binary metadata",
+      "offline persistence"
+    ],
+    "implementationLessons": "Never put media binaries in localStorage; use IndexedDB/OPFS and an explicit cache budget.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Origin Private File System",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system",
+    "category": "storage",
+    "relevantFeatures": [
+      "OPFS",
+      "worker file IO"
+    ],
+    "implementationLessons": "OPFS is a strong web cache target for thumbnails/proxies while project JSON stays portable.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenCV",
+    "url": "https://github.com/opencv/opencv",
+    "category": "tracking",
+    "relevantFeatures": [
+      "optical flow",
+      "features",
+      "morphology",
+      "inpaint"
+    ],
+    "implementationLessons": "Use established primitives in native/WASM adapters; keep the built-in TypeScript reference path testable.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenCV optical flow docs",
+    "url": "https://docs.opencv.org/4.x/d4/dee/tutorial_optical_flow.html",
+    "category": "tracking",
+    "relevantFeatures": [
+      "Lucas-Kanade",
+      "Farneback"
+    ],
+    "implementationLessons": "Sparse LK plus pyramids is a strong fast baseline; dense flow should be opt-in.",
+    "license": "Apache-2.0 docs",
+    "codeReuse": "Reference/possible adapter",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenCV goodFeaturesToTrack",
+    "url": "https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html",
+    "category": "tracking",
+    "relevantFeatures": [
+      "Shi-Tomasi",
+      "corner quality"
+    ],
+    "implementationLessons": "Track gradients and texture, not raw pixel identity.",
+    "license": "Apache-2.0 docs",
+    "codeReuse": "Reference/possible adapter",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Lucas-Kanade paper",
+    "url": "https://www.ri.cmu.edu/publications/an-iterative-image-registration-technique-with-an-application-to-stereo-vision/",
+    "category": "tracking",
+    "relevantFeatures": [
+      "iterative registration",
+      "image gradients"
+    ],
+    "implementationLessons": "The local structure tensor explains why flat/one-dimensional edges are weak features.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Shi-Tomasi paper",
+    "url": "https://www.ri.cmu.edu/publications/good-features-to-track/",
+    "category": "tracking",
+    "relevantFeatures": [
+      "minimum eigenvalue",
+      "feature selection"
+    ],
+    "implementationLessons": "Use minimum eigenvalue and non-maximum suppression for stable sparse points.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "RANSAC paper",
+    "url": "https://www.sri.com/publication/information-computer-science-pubs/random-sample-consensus/",
+    "category": "tracking",
+    "relevantFeatures": [
+      "robust model fitting",
+      "outlier rejection"
+    ],
+    "implementationLessons": "Camera motion is the dominant model; subject motion should be treated as residual/outliers.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "TAPIR",
+    "url": "https://github.com/google-deepmind/tapnet",
+    "category": "tracking",
+    "relevantFeatures": [
+      "long-range point tracking",
+      "occlusion"
+    ],
+    "implementationLessons": "Research informs confidence/occlusion concepts; a model must pass licence/packaging review before shipping.",
+    "license": "Apache-2.0 code; weights vary",
+    "codeReuse": "Research/possible model after weight audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "TAPIR paper",
+    "url": "https://arxiv.org/abs/2306.08637",
+    "category": "tracking",
+    "relevantFeatures": [
+      "tracking any point",
+      "temporal correspondence"
+    ],
+    "implementationLessons": "Persistent identity needs memory and visibility state, not fixed coordinates.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "TAPNet documentation",
+    "url": "https://github.com/google-deepmind/tapnet/tree/main/tapnet",
+    "category": "tracking",
+    "relevantFeatures": [
+      "video point tracking"
+    ],
+    "implementationLessons": "Use forward/backward and query-point thinking in the track representation.",
+    "license": "Apache-2.0 code; weights vary",
+    "codeReuse": "Research/reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Roboflow supervision",
+    "url": "https://github.com/roboflow/supervision",
+    "category": "tracking",
+    "relevantFeatures": [
+      "detections",
+      "trackers",
+      "geometry utilities"
+    ],
+    "implementationLessons": "Detection/tracking visualisation patterns are useful, but the editor needs temporal corrections and render parity.",
+    "license": "MIT",
+    "codeReuse": "Possible utility after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "SAM2 repository",
+    "url": "https://github.com/facebookresearch/sam2",
+    "category": "segmentation",
+    "relevantFeatures": [
+      "promptable segmentation",
+      "video memory",
+      "occlusion"
+    ],
+    "implementationLessons": "SAM2\u2019s video memory should be used on explicit prompt/keyframes, not re-encoded for every preview frame.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible model/runtime after weight audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "SAM2 model card",
+    "url": "https://huggingface.co/facebook/sam2.1-hiera-tiny",
+    "category": "segmentation",
+    "relevantFeatures": [
+      "Hiera-Tiny",
+      "video propagation",
+      "licence"
+    ],
+    "implementationLessons": "Record code and weight licences separately; expose model download and size before loading.",
+    "license": "Apache-2.0 listed; verify exact revision",
+    "codeReuse": "Possible model after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "SAM2 ONNX browser conversion",
+    "url": "https://huggingface.co/SharpAI/sam2-hiera-tiny-onnx",
+    "category": "segmentation",
+    "relevantFeatures": [
+      "ONNX encoder/decoder",
+      "WebGPU"
+    ],
+    "implementationLessons": "Use ORT-optimised encoder exports; plain shape-inference failures are a concrete browser failure mode.",
+    "license": "Apache-2.0 listed; verify conversion",
+    "codeReuse": "Research/possible model after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "SAM2 browser implementation study",
+    "url": "https://labelbox.com/blog/bringing-ai-to-the-browser-sam2-for-interactive-image-segmentation/",
+    "category": "segmentation",
+    "relevantFeatures": [
+      "onnxruntime-web",
+      "encoder/decoder split"
+    ],
+    "implementationLessons": "The encoder dominates latency; cache embeddings and keep decoder prompts cheap.",
+    "license": "Article/reference",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Transformers.js",
+    "url": "https://github.com/huggingface/transformers.js",
+    "category": "ai-runtime",
+    "relevantFeatures": [
+      "browser inference",
+      "WASM/WebGPU",
+      "model cache"
+    ],
+    "implementationLessons": "Model abstraction should isolate runtime and dtype from normal users.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible runtime",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "ONNX Runtime Web",
+    "url": "https://github.com/microsoft/onnxruntime",
+    "category": "ai-runtime",
+    "relevantFeatures": [
+      "WebGPU EP",
+      "WASM EP",
+      "ORT format"
+    ],
+    "implementationLessons": "Probe execution providers and expose a real fallback; do not hard-require WebGPU.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "ONNX Runtime Web docs",
+    "url": "https://onnxruntime.ai/docs/tutorials/web/",
+    "category": "ai-runtime",
+    "relevantFeatures": [
+      "browser sessions",
+      "execution providers"
+    ],
+    "implementationLessons": "Lazy loading, graph optimisation, and explicit disposal are needed for stable model sessions.",
+    "license": "MIT docs",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WebNN API",
+    "url": "https://www.w3.org/TR/webnn/",
+    "category": "ai-runtime",
+    "relevantFeatures": [
+      "native browser ML"
+    ],
+    "implementationLessons": "Keep WebNN as a future capability adapter rather than building core UX around a partial API.",
+    "license": "W3C document licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "MODNet",
+    "url": "https://huggingface.co/Xenova/modnet",
+    "category": "segmentation",
+    "relevantFeatures": [
+      "portrait matting",
+      "lightweight background removal"
+    ],
+    "implementationLessons": "A fast licensed model is useful for preview, with sparse refinement and full-resolution final passes.",
+    "license": "Apache-2.0 listed; verify weights",
+    "codeReuse": "Possible model after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "BiRefNet Lite",
+    "url": "https://huggingface.co/studioludens/birefnet-lite-512",
+    "category": "segmentation",
+    "relevantFeatures": [
+      "salient segmentation",
+      "hair detail"
+    ],
+    "implementationLessons": "Quality tier can preserve fine boundaries while the pipeline avoids per-frame full inference.",
+    "license": "MIT listed; verify weights",
+    "codeReuse": "Possible model after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "ISNet ONNX model card",
+    "url": "https://huggingface.co/onnx-community/ISNet-ONNX",
+    "category": "licensing",
+    "relevantFeatures": [
+      "background removal"
+    ],
+    "implementationLessons": "Record as research-only because the current listing is AGPL-3.0; never silently bundle it.",
+    "license": "AGPL-3.0 listed",
+    "codeReuse": "Research only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "CoTracker repository",
+    "url": "https://github.com/facebookresearch/co-tracker",
+    "category": "licensing",
+    "relevantFeatures": [
+      "dense point tracking"
+    ],
+    "implementationLessons": "Research ideas only: current project licensing is incompatible with strict MIT/Apache shipping policy.",
+    "license": "CC-BY-NC reported for most project",
+    "codeReuse": "Research only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenCV inpaint docs",
+    "url": "https://docs.opencv.org/4.x/d7/d8b/group__photo__inpaint.html",
+    "category": "inpainting",
+    "relevantFeatures": [
+      "Telea",
+      "Navier-Stokes"
+    ],
+    "implementationLessons": "Repair is a distinct render stage; expose method and failure reason rather than calling blur \u201cinpaint\u201d.",
+    "license": "Apache-2.0 docs",
+    "codeReuse": "Possible native adapter",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Telea inpainting paper",
+    "url": "https://www.math.u-szeged.hu/~telea/download/inpainting.pdf",
+    "category": "inpainting",
+    "relevantFeatures": [
+      "fast marching",
+      "isophotes"
+    ],
+    "implementationLessons": "Boundary-front ordering and isophote continuation inform the CPU repair implementation.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "PatchMatch paper",
+    "url": "https://gfx.cs.princeton.edu/pubs/Barnes_2009_PAR/",
+    "category": "inpainting",
+    "relevantFeatures": [
+      "nearest-neighbour field",
+      "texture synthesis"
+    ],
+    "implementationLessons": "PatchMatch is a real texture fallback for larger holes; use temporal reconstruction when a plate exists.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenMVS",
+    "url": "https://github.com/cdcseacave/openMVS",
+    "category": "3d-tracking",
+    "relevantFeatures": [
+      "camera solve",
+      "multi-view stereo"
+    ],
+    "implementationLessons": "A full 3D solve is distinct from a 2D plane track; keep 2.5D honest when footage lacks parallax.",
+    "license": "AGPL-3.0",
+    "codeReuse": "Research only under policy",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "COLMAP",
+    "url": "https://github.com/colmap/colmap",
+    "category": "3d-tracking",
+    "relevantFeatures": [
+      "SfM",
+      "camera pose",
+      "multi-view"
+    ],
+    "implementationLessons": "Camera reconstruction needs feature tracks, robust estimation, and explicit scene scale ambiguity.",
+    "license": "BSD-3-Clause",
+    "codeReuse": "Research/possible desktop tool after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenMVG",
+    "url": "https://github.com/openMVG/openMVG",
+    "category": "3d-tracking",
+    "relevantFeatures": [
+      "SfM",
+      "structure from motion"
+    ],
+    "implementationLessons": "Use as research for solve diagnostics; not every shot deserves an expensive 3D solve.",
+    "license": "MPL-2.0",
+    "codeReuse": "Research only under policy",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Three.js",
+    "url": "https://threejs.org/",
+    "category": "3d",
+    "relevantFeatures": [
+      "WebGL/WebGPU scene graph",
+      "PBR",
+      "loaders"
+    ],
+    "implementationLessons": "Use GLTFLoader, PMREM, explicit disposal, and WebGL fallback; keep scene data serialisable.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "React Three Fiber",
+    "url": "https://r3f.docs.pmnd.rs/",
+    "category": "3d",
+    "relevantFeatures": [
+      "React renderer",
+      "scene composition"
+    ],
+    "implementationLessons": "Use R3F for declarative viewport composition, not for engine state or project serialisation.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Drei",
+    "url": "https://github.com/pmndrs/drei",
+    "category": "3d",
+    "relevantFeatures": [
+      "controls",
+      "environment",
+      "helpers"
+    ],
+    "implementationLessons": "Helpers accelerate the viewport but should not conceal render quality or licence decisions.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "glTF 2.0 specification",
+    "url": "https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html",
+    "category": "3d",
+    "relevantFeatures": [
+      "PBR",
+      "skins",
+      "animations",
+      "cameras"
+    ],
+    "implementationLessons": "glTF is the primary interchange model: preserve skins, clips, materials, cameras and extras.",
+    "license": "Apache-2.0",
+    "codeReuse": "Specification/possible parser",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "glTF sample models",
+    "url": "https://github.com/KhronosGroup/glTF-Sample-Models",
+    "category": "3d",
+    "relevantFeatures": [
+      "fixtures",
+      "animation",
+      "materials"
+    ],
+    "implementationLessons": "Use fixtures for loader/skin/animation tests; record each asset licence separately.",
+    "license": "Mixed per asset",
+    "codeReuse": "QA fixtures only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "glTF Validator",
+    "url": "https://github.com/KhronosGroup/glTF-Validator",
+    "category": "3d",
+    "relevantFeatures": [
+      "asset validation",
+      "accessors",
+      "animations"
+    ],
+    "implementationLessons": "Validate imported assets before they enter the scene; errors should be actionable.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible dependency/tool",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Khronos glTF registry",
+    "url": "https://www.khronos.org/gltf/",
+    "category": "3d",
+    "relevantFeatures": [
+      "ecosystem",
+      "extensions"
+    ],
+    "implementationLessons": "Track supported extensions explicitly rather than accepting unknown semantics.",
+    "license": "Khronos docs",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "KTX-Software",
+    "url": "https://github.com/KhronosGroup/KTX-Software",
+    "category": "3d",
+    "relevantFeatures": [
+      "KTX2",
+      "Basis Universal",
+      "texture compression"
+    ],
+    "implementationLessons": "Compressed textures reduce GPU memory and load time; preserve source texture metadata.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Draco",
+    "url": "https://github.com/google/draco",
+    "category": "3d",
+    "relevantFeatures": [
+      "geometry compression"
+    ],
+    "implementationLessons": "Decoder is a capability; warn when compressed assets need a download or native path.",
+    "license": "Apache-2.0",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "meshoptimizer",
+    "url": "https://github.com/zeux/meshoptimizer",
+    "category": "3d",
+    "relevantFeatures": [
+      "mesh compression",
+      "vertex cache",
+      "LOD"
+    ],
+    "implementationLessons": "Use for large models and draw-call reduction, not as a prerequisite for a small scene.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Three.js RoomEnvironment",
+    "url": "https://threejs.org/docs/pages/RoomEnvironment.html",
+    "category": "lighting",
+    "relevantFeatures": [
+      "procedural studio room",
+      "PMREM"
+    ],
+    "implementationLessons": "A procedural room gives a deterministic asset-free default environment; it is not a baked lightmap.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "PMREMGenerator",
+    "url": "https://threejs.org/docs/#api/en/extras/PMREMGenerator",
+    "category": "lighting",
+    "relevantFeatures": [
+      "prefiltered environment",
+      "roughness mip levels"
+    ],
+    "implementationLessons": "Convert HDRI/room sources to PMREM before assigning scene.environment for PBR consistency.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "RGBELoader",
+    "url": "https://threejs.org/docs/#examples/en/loaders/RGBELoader",
+    "category": "lighting",
+    "relevantFeatures": [
+      "HDR environment loading"
+    ],
+    "implementationLessons": "HDR background and HDR lighting are separate toggles; dispose source texture after PMREM.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "React Three Lightmap",
+    "url": "https://github.com/pmndrs/react-three-lightmap",
+    "category": "baking",
+    "relevantFeatures": [
+      "in-browser AO/lightmap bake",
+      "worker-like scheduling"
+    ],
+    "implementationLessons": "Progressive work slices keep a bake interruptible and UI-responsive; cache result and invalidate by scene inputs.",
+    "license": "MIT",
+    "codeReuse": "Research/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "three-gpu-baker",
+    "url": "https://github.com/Hoodgail/three-gpu-baker",
+    "category": "baking",
+    "relevantFeatures": [
+      "WebGPU path tracing",
+      "lightmaps",
+      "AO",
+      "SH probes"
+    ],
+    "implementationLessons": "The latest direction is progressive GPU baking with explicit unsupported features; reuse only after checking version/licence.",
+    "license": "MIT",
+    "codeReuse": "Possible optional dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "threejs-lightmap-baker",
+    "url": "https://github.com/unframework/threejs-lightmap-baker",
+    "category": "baking",
+    "relevantFeatures": [
+      "UV atlas",
+      "progressive lightmap"
+    ],
+    "implementationLessons": "Bake needs a second UV channel/shared non-overlapping atlas and seam padding.",
+    "license": "MIT",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "three.js lightbaking",
+    "url": "https://github.com/manthrax/lightbaking",
+    "category": "baking",
+    "relevantFeatures": [
+      "path tracing",
+      "workers",
+      "UV packing"
+    ],
+    "implementationLessons": "Separate import/export and worker execution from the scene renderer.",
+    "license": "MIT",
+    "codeReuse": "Reference/possible adapter",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "xatlas",
+    "url": "https://github.com/jpcy/xatlas",
+    "category": "baking",
+    "relevantFeatures": [
+      "UV unwrapping",
+      "chart packing"
+    ],
+    "implementationLessons": "Generated lightmap UVs are a pipeline step and need a cache key; never claim a bake without valid UVs.",
+    "license": "MIT",
+    "codeReuse": "Possible native/WASM dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "PBRT v4",
+    "url": "https://github.com/mmp/pbrt-v4",
+    "category": "rendering",
+    "relevantFeatures": [
+      "path tracing",
+      "MIS",
+      "materials",
+      "lights"
+    ],
+    "implementationLessons": "Use as a correctness reference for rays, sampling and material energy; do not copy large renderer wholesale.",
+    "license": "BSD-2-Clause",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "PBRT book",
+    "url": "https://pbr-book.org/4ed/contents",
+    "category": "rendering",
+    "relevantFeatures": [
+      "ray/shape intersections",
+      "sampling",
+      "denoising"
+    ],
+    "implementationLessons": "A CPU reference baker is useful for tests even when production preview uses GPU.",
+    "license": "BSD-2-Clause",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Ray Tracing Gems",
+    "url": "https://github.com/Apress/ray-tracing-gems",
+    "category": "rendering",
+    "relevantFeatures": [
+      "real-time ray tracing",
+      "denoising"
+    ],
+    "implementationLessons": "Use chapters as optimisation/denoising references with per-technique licence review.",
+    "license": "Mixed/book terms",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Disney BRDF notes",
+    "url": "https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf",
+    "category": "materials",
+    "relevantFeatures": [
+      "principled PBR",
+      "roughness",
+      "metalness"
+    ],
+    "implementationLessons": "Material controls should map to principled parameters and remain colour-space aware.",
+    "license": "Paper/reference",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Filament materials guide",
+    "url": "https://google.github.io/filament/Filament.html",
+    "category": "materials",
+    "relevantFeatures": [
+      "PBR",
+      "tone mapping",
+      "IBL"
+    ],
+    "implementationLessons": "Renderer defaults and tone mapping need to be documented so exports match previews.",
+    "license": "Apache-2.0",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "ACES documentation",
+    "url": "https://github.com/AcademySoftwareFoundation/OpenColorIO-Config-ACES",
+    "category": "color",
+    "relevantFeatures": [
+      "HDR",
+      "tone mapping",
+      "scene-linear"
+    ],
+    "implementationLessons": "Keep scene-linear lighting separate from display transforms and export in explicit transfer functions.",
+    "license": "BSD-3-Clause config; verify",
+    "codeReuse": "Reference/possible config",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenColorIO",
+    "url": "https://github.com/AcademySoftwareFoundation/OpenColorIO",
+    "category": "color",
+    "relevantFeatures": [
+      "colour transforms",
+      "OCIO configs"
+    ],
+    "implementationLessons": "Professional colour management belongs in a dedicated layer, not scattered across effects.",
+    "license": "BSD-3-Clause",
+    "codeReuse": "Possible native dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Blender manual lighting",
+    "url": "https://docs.blender.org/manual/en/latest/render/lights/index.html",
+    "category": "lighting",
+    "relevantFeatures": [
+      "area",
+      "point",
+      "spot",
+      "sun"
+    ],
+    "implementationLessons": "Offer light types with physically meaningful intensity/range and warn on shadow cost.",
+    "license": "CC-BY-SA docs",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Blender manual world environments",
+    "url": "https://docs.blender.org/manual/en/latest/render/shader_nodes/textures/environment.html",
+    "category": "lighting",
+    "relevantFeatures": [
+      "world shader",
+      "HDRI"
+    ],
+    "implementationLessons": "Environment background and illumination can be rotated/intensity-controlled independently.",
+    "license": "CC-BY-SA docs",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Blender manual light baking",
+    "url": "https://docs.blender.org/manual/en/latest/render/eevee/light_probes/light_baking.html",
+    "category": "baking",
+    "relevantFeatures": [
+      "bake invalidation",
+      "light probes"
+    ],
+    "implementationLessons": "Baked data is only valid for the exact static scene inputs; edits invalidate it.",
+    "license": "CC-BY-SA docs",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Blender manual armatures",
+    "url": "https://docs.blender.org/manual/en/latest/animation/armatures/index.html",
+    "category": "rigging",
+    "relevantFeatures": [
+      "bones",
+      "constraints",
+      "pose mode"
+    ],
+    "implementationLessons": "Separate rest/bind pose from animation pose and expose constraints as data.",
+    "license": "CC-BY-SA docs",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Blender glTF animation export",
+    "url": "https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html",
+    "category": "animation",
+    "relevantFeatures": [
+      "clips",
+      "skins",
+      "morph targets"
+    ],
+    "implementationLessons": "Imported clips need list/play/loop/trim/retime controls while preserving original animation data.",
+    "license": "CC-BY-SA docs",
+    "codeReuse": "Reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "FABRIK paper",
+    "url": "https://www.andreasaristidou.com/FABRIK.html",
+    "category": "rigging",
+    "relevantFeatures": [
+      "inverse kinematics",
+      "constraints"
+    ],
+    "implementationLessons": "FABRIK is a practical interactive solver and handles unreachable targets cleanly.",
+    "license": "Academic paper",
+    "codeReuse": "Algorithm reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "three-ik",
+    "url": "https://github.com/jsantell/THREE.IK",
+    "category": "rigging",
+    "relevantFeatures": [
+      "FABRIK",
+      "ball constraints"
+    ],
+    "implementationLessons": "Useful API reference but old; OmniFrame keeps a small standalone solver for deterministic tests.",
+    "license": "MIT",
+    "codeReuse": "Reference/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Fullik",
+    "url": "https://github.com/lo-th/fullik",
+    "category": "rigging",
+    "relevantFeatures": [
+      "FABRIK 3D",
+      "joint constraints"
+    ],
+    "implementationLessons": "Constraint types and multi-chain structures inform the native rig data model.",
+    "license": "MIT (verify repository)",
+    "codeReuse": "Reference/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "IK-threejs",
+    "url": "https://github.com/upf-gti/IK-threejs",
+    "category": "rigging",
+    "relevantFeatures": [
+      "CCD",
+      "FABRIK",
+      "hinge/ball limits"
+    ],
+    "implementationLessons": "Offer CCD for quick posing and FABRIK for stable chains; always report solver error.",
+    "license": "MIT",
+    "codeReuse": "Reference/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Three.js AnimationMixer",
+    "url": "https://threejs.org/docs/#api/en/animation/AnimationMixer",
+    "category": "animation",
+    "relevantFeatures": [
+      "clip playback",
+      "time scale",
+      "actions"
+    ],
+    "implementationLessons": "Clip playback needs a clock independent of React render cadence.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Anime.js",
+    "url": "https://animejs.com/",
+    "category": "animation",
+    "relevantFeatures": [
+      "timelines",
+      "stagger",
+      "spring",
+      "WAAPI"
+    ],
+    "implementationLessons": "Use restrained timeline motion for shell/landing only; editor playback must be frame-clocked, not CSS-time animated.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Anime.js v4 release notes",
+    "url": "https://github.com/juliangarnier/anime/releases",
+    "category": "animation",
+    "relevantFeatures": [
+      "modular imports",
+      "createTimeline",
+      "spring"
+    ],
+    "implementationLessons": "Tree-shakable imports and explicit timeline labels are useful for a small landing bundle.",
+    "license": "MIT",
+    "codeReuse": "Reference/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Web Animations API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API",
+    "category": "animation",
+    "relevantFeatures": [
+      "browser-native animation",
+      "timeline control"
+    ],
+    "implementationLessons": "Prefer CSS/WAAPI for shell motion so render-time animation is not coupled to UI effects.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Motion One",
+    "url": "https://motion.dev/",
+    "category": "animation",
+    "relevantFeatures": [
+      "small animation runtime",
+      "spring"
+    ],
+    "implementationLessons": "A restrained motion layer is enough; do not animate every control in a dense editor.",
+    "license": "MIT",
+    "codeReuse": "Reference/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "VS Code workbench",
+    "url": "https://github.com/microsoft/vscode",
+    "category": "ui",
+    "relevantFeatures": [
+      "command palette",
+      "docks",
+      "panels",
+      "shortcuts"
+    ],
+    "implementationLessons": "Borrow workbench information architecture: resizable/contextual panels, not its visual identity.",
+    "license": "MIT",
+    "codeReuse": "Behavioural/reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "VS Code web",
+    "url": "https://vscode.dev/",
+    "category": "ui",
+    "relevantFeatures": [
+      "web workbench",
+      "browser persistence"
+    ],
+    "implementationLessons": "A dense tool surface can remain accessible when hierarchy and keyboard navigation are explicit.",
+    "license": "Microsoft product",
+    "codeReuse": "Behavioural reference only",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "shadcn/ui",
+    "url": "https://ui.shadcn.com/",
+    "category": "ui",
+    "relevantFeatures": [
+      "accessible primitives",
+      "composable components"
+    ],
+    "implementationLessons": "Own the component source and adapt primitives to a dense editor rather than shipping a generic dashboard.",
+    "license": "MIT components",
+    "codeReuse": "Possible UI source after audit",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Radix Primitives",
+    "url": "https://www.radix-ui.com/primitives",
+    "category": "ui",
+    "relevantFeatures": [
+      "dialog",
+      "popover",
+      "tabs",
+      "disclosure"
+    ],
+    "implementationLessons": "Use accessible primitives for focus management and keyboard behaviour.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Tailwind CSS",
+    "url": "https://tailwindcss.com/",
+    "category": "ui",
+    "relevantFeatures": [
+      "utility styling",
+      "responsive layout"
+    ],
+    "implementationLessons": "Tokens and utilities can enforce no-overflow/responsive rules; custom CSS still owns the editor density.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Lucide",
+    "url": "https://lucide.dev/",
+    "category": "ui",
+    "relevantFeatures": [
+      "coherent icon family"
+    ],
+    "implementationLessons": "One icon family avoids visual noise in a professional tool.",
+    "license": "ISC",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "React",
+    "url": "https://react.dev/",
+    "category": "ui",
+    "relevantFeatures": [
+      "component model",
+      "concurrent rendering"
+    ],
+    "implementationLessons": "React owns interaction/state presentation; media/geometry stays in the engine package.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Zustand",
+    "url": "https://github.com/pmndrs/zustand",
+    "category": "ui",
+    "relevantFeatures": [
+      "small external store",
+      "selectors"
+    ],
+    "implementationLessons": "Use selectors to keep a dense workbench responsive; do not store decoded frame buffers in React state.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Vite",
+    "url": "https://vite.dev/",
+    "category": "tooling",
+    "relevantFeatures": [
+      "fast dev server",
+      "web build"
+    ],
+    "implementationLessons": "Keep the web shell independently buildable while native/Tauri wiring arrives.",
+    "license": "MIT",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Vitest",
+    "url": "https://vitest.dev/",
+    "category": "testing",
+    "relevantFeatures": [
+      "unit tests",
+      "fast TS tests"
+    ],
+    "implementationLessons": "Engine algorithms are tested in Node without a browser or renderer.",
+    "license": "MIT",
+    "codeReuse": "Development dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Playwright",
+    "url": "https://playwright.dev/",
+    "category": "testing",
+    "relevantFeatures": [
+      "E2E",
+      "screenshots",
+      "overflow QA"
+    ],
+    "implementationLessons": "Automate route/no-overflow/keyboard smoke tests against the actual browser build.",
+    "license": "Apache-2.0",
+    "codeReuse": "Development dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Tauri",
+    "url": "https://tauri.app/",
+    "category": "desktop",
+    "relevantFeatures": [
+      "Rust shell",
+      "native file APIs",
+      "small bundle"
+    ],
+    "implementationLessons": "A Tauri 2 shell can expose the Rust core while the same React workbench runs in web mode.",
+    "license": "MIT/Apache-2.0 components",
+    "codeReuse": "Possible desktop dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Tauri v2 docs",
+    "url": "https://v2.tauri.app/",
+    "category": "desktop",
+    "relevantFeatures": [
+      "capabilities",
+      "permissions",
+      "plugins"
+    ],
+    "implementationLessons": "Native filesystem access must be capability-scoped and never expose arbitrary project code.",
+    "license": "MIT/Apache-2.0 components",
+    "codeReuse": "Reference/possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Tauri filesystem plugin",
+    "url": "https://v2.tauri.app/plugin/file-system/",
+    "category": "desktop",
+    "relevantFeatures": [
+      "scoped file access",
+      "atomic writes"
+    ],
+    "implementationLessons": "Use explicit permission scopes and temp-file/rename atomic saves.",
+    "license": "MIT/Apache-2.0",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Tauri dialog plugin",
+    "url": "https://v2.tauri.app/plugin/dialog/",
+    "category": "desktop",
+    "relevantFeatures": [
+      "open/save dialogs"
+    ],
+    "implementationLessons": "Native entry page can share project-open actions with the web adapter.",
+    "license": "MIT/Apache-2.0",
+    "codeReuse": "Possible dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "OpenTelemetry logs",
+    "url": "https://opentelemetry.io/docs/specs/otel/logs/",
+    "category": "tooling",
+    "relevantFeatures": [
+      "structured logs",
+      "performance tracing"
+    ],
+    "implementationLessons": "Development logs should be honest structured events, never fabricated activity.",
+    "license": "Apache-2.0",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "W3C Media Capabilities",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Media_Capabilities_API",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "decode/encode capability",
+      "smooth/power efficient"
+    ],
+    "implementationLessons": "Probe codecs before presenting presets and use actual machine results.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Web Performance APIs",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Performance",
+    "category": "performance",
+    "relevantFeatures": [
+      "marks",
+      "measures",
+      "memory timing"
+    ],
+    "implementationLessons": "Measure startup, first frame, scrub, tracking and export rather than inventing numbers.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "File API",
+    "url": "https://www.w3.org/TR/FileAPI/",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "Blob",
+      "File",
+      "streams"
+    ],
+    "implementationLessons": "Import should preserve a local File/handle reference and avoid unnecessary data URLs.",
+    "license": "W3C document licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Streams API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Streams_API",
+    "category": "browser-media",
+    "relevantFeatures": [
+      "streaming encode",
+      "backpressure"
+    ],
+    "implementationLessons": "Large exports should be streamed/muxed rather than held as one giant array.",
+    "license": "MDN content licence",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "WASM SIMD proposal",
+    "url": "https://github.com/WebAssembly/simd",
+    "category": "performance",
+    "relevantFeatures": [
+      "vector pixel kernels"
+    ],
+    "implementationLessons": "SIMD is an optimisation for image loops after profiling, never the baseline correctness path.",
+    "license": "W3C/WebAssembly proposal",
+    "codeReuse": "Reference",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Rust image crate",
+    "url": "https://github.com/image-rs/image",
+    "category": "native-media",
+    "relevantFeatures": [
+      "image buffers",
+      "formats"
+    ],
+    "implementationLessons": "Native adapters can use well-scoped image primitives; the browser reference stays typed-array based.",
+    "license": "MIT/Apache-2.0",
+    "codeReuse": "Possible native dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Rust rayon",
+    "url": "https://github.com/rayon-rs/rayon",
+    "category": "native-performance",
+    "relevantFeatures": [
+      "parallel CPU jobs"
+    ],
+    "implementationLessons": "Parallelism belongs behind JobManager and must respect cancellation/memory budgets.",
+    "license": "MIT/Apache-2.0",
+    "codeReuse": "Possible native dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Rust serde",
+    "url": "https://serde.rs/",
+    "category": "native-project",
+    "relevantFeatures": [
+      "project serialisation",
+      "schema"
+    ],
+    "implementationLessons": "Rust and TypeScript project formats need explicit version migrations and stable IDs.",
+    "license": "MIT/Apache-2.0",
+    "codeReuse": "Possible native dependency",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "Cargo deny",
+    "url": "https://github.com/EmbarkStudios/cargo-deny",
+    "category": "licensing",
+    "relevantFeatures": [
+      "dependency licence audit",
+      "advisories"
+    ],
+    "implementationLessons": "Automate native dependency licence/advisory checks before release.",
+    "license": "MIT/Apache-2.0",
+    "codeReuse": "Possible development tool",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  },
+  {
+    "name": "REUSE tool",
+    "url": "https://reuse.software/",
+    "category": "licensing",
+    "relevantFeatures": [
+      "SPDX headers",
+      "licence audit"
+    ],
+    "implementationLessons": "Keep third-party notices machine-readable and complete.",
+    "license": "GPL-3.0+",
+    "codeReuse": "Possible development tool",
+    "referenceType": "implementation",
+    "researchedOn": "2026-09-18"
+  }
+]

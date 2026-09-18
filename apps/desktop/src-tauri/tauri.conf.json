@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "OmniFrame",
+  "version": "0.1.0",
+  "identifier": "ai.arena.omniframe",
+  "build": {
+    "beforeDevCommand": "npm run dev --workspace @omniframe/web",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../../web/dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      { "title": "OmniFrame", "width": 1440, "height": 900, "minWidth": 960, "minHeight": 620, "resizable": true }
+    ],
+    "security": { "csp": null, "capabilities": ["default"] }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Video",
+    "shortDescription": "Local-first precision video editor",
+    "longDescription": "Edit, track, mask and build video in 2D and 3D.",
+    "resources": []
+  }
+}
