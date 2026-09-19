@@ -1,8 +1,8 @@
 {
   "name": "OmniFrame Editor Assist",
   "format": "omniframe-editor-assist-linear-v1",
-  "tokenizer": "fnv1a-token-ngram-v1",
-  "feature_count": 1024,
+  "tokenizer": "fnv1a-token-ngram-char-v2",
+  "feature_count": 2048,
   "labels": [
     "add_adjustment_layer",
     "add_layer",
@@ -27,7 +27,8 @@
   "web_runtime": "onnxruntime-web",
   "desktop_runtime": "onnxruntime or native adapter",
   "training": {
-    "examples": 22,
+    "examples": 108,
+    "validation_examples": 36,
     "labels": [
       "add_adjustment_layer",
       "add_layer",
@@ -48,9 +49,90 @@
       "track_object",
       "undo"
     ],
-    "loss": 0.015797350668332575,
+    "loss": 0.026579,
     "accuracy": 1.0,
-    "time_limited": true
+    "validation": {
+      "examples": 36,
+      "accuracy": 0.666667,
+      "loss": 1.382037,
+      "top3_accuracy": 0.888889,
+      "per_label": {
+        "fit_viewer": {
+          "correct": 2,
+          "total": 2
+        },
+        "save_project": {
+          "correct": 1,
+          "total": 2
+        },
+        "set_aspect_9_16": {
+          "correct": 0,
+          "total": 2
+        },
+        "add_layer": {
+          "correct": 2,
+          "total": 2
+        },
+        "track_object": {
+          "correct": 0,
+          "total": 2
+        },
+        "open_export": {
+          "correct": 2,
+          "total": 2
+        },
+        "mask_subject": {
+          "correct": 2,
+          "total": 2
+        },
+        "track_mask": {
+          "correct": 1,
+          "total": 2
+        },
+        "set_blend_mode": {
+          "correct": 2,
+          "total": 2
+        },
+        "redo": {
+          "correct": 0,
+          "total": 2
+        },
+        "add_adjustment_layer": {
+          "correct": 2,
+          "total": 2
+        },
+        "load_optional_model": {
+          "correct": 2,
+          "total": 2
+        },
+        "omniframe_repair": {
+          "correct": 2,
+          "total": 2
+        },
+        "undo": {
+          "correct": 1,
+          "total": 2
+        },
+        "open_media": {
+          "correct": 1,
+          "total": 2
+        },
+        "set_aspect_16_9": {
+          "correct": 0,
+          "total": 2
+        },
+        "set_aspect_1_1": {
+          "correct": 2,
+          "total": 2
+        },
+        "split_clip": {
+          "correct": 2,
+          "total": 2
+        }
+      }
+    },
+    "time_limited": true,
+    "repeat_until_deadline": false
   },
   "warning": "This is an inspectable linear assistant, not a general-purpose transformer."
 }

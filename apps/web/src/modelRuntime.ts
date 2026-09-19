@@ -3,7 +3,7 @@ import * as ort from 'onnxruntime-web';
 export interface EditorAssistManifest {
   name: string;
   format: 'omniframe-editor-assist-linear-v1';
-  tokenizer: 'fnv1a-token-ngram-v1';
+  tokenizer: 'fnv1a-token-ngram-char-v2';
   feature_count: number;
   labels: string[];
   onnx: string | null;
@@ -31,9 +31,16 @@ function fnv1a(text: string): number {
 
 function featureVector(text: string, featureCount: number): Float32Array {
   const tokens = (text.toLocaleLowerCase().match(/[\p{L}\p{N}_'-]+/gu) ?? []).filter((token) => token.replace(/[_-]/g, '').length > 0);
-  const terms = tokens.concat(tokens.slice(0, -1).map((token, index) => `${token}::${tokens[index + 1]}`));
+  const terms: Array<[string, number]> = tokens.map((token) => [`w:${token}`, 1]);
+  tokens.slice(0, -1).forEach((token, index) => terms.push([`b:${token}::${tokens[index + 1]}`, 1]));
+  const padded = `^${tokens.join(' ')}$`;
+  for (const width of [3, 4, 5]) {
+    for (let index = 0; index <= padded.length - width; index += 1) {
+      terms.push([`c${width}:${padded.slice(index, index + width)}`, 0.35]);
+    }
+  }
   const vector = new Float32Array(featureCount);
-  for (const term of terms.length ? terms : ['<empty>']) vector[fnv1a(term) % featureCount] += 1;
+  for (const [term, weight] of terms.length ? terms : [['<empty>', 1] as [string, number]]) vector[fnv1a(term) % featureCount] += weight;
   let norm = 0;
   for (const value of vector) norm += value * value;
   norm = Math.sqrt(norm) || 1;
@@ -46,7 +53,7 @@ export async function loadEditorAssistModel(manifestUrl: string): Promise<Editor
   const response = await fetch(manifestUrl);
   if (!response.ok) throw new Error(`Editor-assist manifest could not be loaded (${response.status}).`);
   const manifest = await response.json() as EditorAssistManifest;
-  if (manifest.format !== 'omniframe-editor-assist-linear-v1' || manifest.tokenizer !== 'fnv1a-token-ngram-v1') {
+  if (manifest.format !== 'omniframe-editor-assist-linear-v1' || manifest.tokenizer !== 'fnv1a-token-ngram-char-v2') {
     throw new Error('The editor-assist model contract is not compatible with this runtime.');
   }
   if (!manifest.onnx) throw new Error('The selected editor-assist bundle has no ONNX artifact.');

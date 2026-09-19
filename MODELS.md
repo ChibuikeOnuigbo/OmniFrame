@@ -11,4 +11,4 @@ Current registry entries include:
 - CoTracker: research-only CC-BY-NC restriction;
 - built-in pyramidal Lucas–Kanade: MIT OmniFrame implementation, no download.
 
-Exact model revision, weight licence, checksum, commercial-use status and redistribution rights must be filled before a release bundles a weight.
+The optional local editor-assist adapter in `models/editor-assist/` is a measured hashed-feature linear softmax classifier, not a general-purpose foundation model. Its explicit JSONL data, 18 intent labels, 2,048 hashed features, validation holdout and generated `qa/model-training/report.{json,html,svg}` are inspectable. It runs only after explicit opt-in and does not make editing dependent on a model. Exact model revision, weight licence, checksum, commercial-use status and redistribution rights must be filled before a release bundles a third-party weight.

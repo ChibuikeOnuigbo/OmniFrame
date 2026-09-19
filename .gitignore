@@ -17,5 +17,10 @@ qa/captures/*.png
 qa/captures/*.json
 qa/measurements/*.json
 qa/measurements/*.png
+qa/model-training/events.jsonl
+qa/model-training/checkpoints/
+qa/model-training/report.json
+qa/model-training/report.html
+qa/model-training/report.svg
 license-audit-report.json
 development-sessions.jsonl

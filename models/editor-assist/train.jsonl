@@ -1,22 +1,144 @@
 {"text":"split the selected clip at the playhead","label":"split_clip"}
 {"text":"cut this clip here and keep both sides","label":"split_clip"}
+{"text":"blade the shot on the current frame","label":"split_clip"}
+{"text":"make two clips from this point in the timeline","label":"split_clip"}
 {"text":"make the sequence vertical for shorts","label":"set_aspect_9_16"}
 {"text":"switch the canvas to portrait 9 by 16","label":"set_aspect_9_16"}
+{"text":"use a tall phone composition","label":"set_aspect_9_16"}
+{"text":"set the delivery frame to nine sixteen","label":"set_aspect_9_16"}
 {"text":"make a square social composition","label":"set_aspect_1_1"}
+{"text":"change the canvas to one by one","label":"set_aspect_1_1"}
+{"text":"use a square video frame","label":"set_aspect_1_1"}
+{"text":"set the sequence for square social","label":"set_aspect_1_1"}
 {"text":"change the canvas to sixteen nine landscape","label":"set_aspect_16_9"}
+{"text":"return this sequence to widescreen","label":"set_aspect_16_9"}
+{"text":"use a normal landscape video frame","label":"set_aspect_16_9"}
+{"text":"set the delivery canvas to sixteen by nine","label":"set_aspect_16_9"}
 {"text":"paint the foreground subject mask","label":"mask_subject"}
 {"text":"select the person and refine the matte","label":"mask_subject"}
+{"text":"draw a mask around the actor","label":"mask_subject"}
+{"text":"remove the background with a manual mask","label":"mask_subject"}
 {"text":"track this mask through the shot","label":"track_mask"}
+{"text":"propagate the matte across the clip","label":"track_mask"}
+{"text":"follow the painted mask frame by frame","label":"track_mask"}
+{"text":"analyze the subject mask with confidence","label":"track_mask"}
 {"text":"follow the object and report confidence","label":"track_object"}
+{"text":"track this point through the video","label":"track_object"}
+{"text":"analyze motion on the selected target","label":"track_object"}
+{"text":"solve the object movement without inventing points","label":"track_object"}
 {"text":"add a video layer above the current track","label":"add_layer"}
+{"text":"create another compositing layer","label":"add_layer"}
+{"text":"put a new footage layer in the stack","label":"add_layer"}
+{"text":"add a layer for this clip","label":"add_layer"}
 {"text":"create an adjustment layer for the layers below","label":"add_adjustment_layer"}
+{"text":"add a correction layer above the video","label":"add_adjustment_layer"}
+{"text":"make an adjustment track for color effects","label":"add_adjustment_layer"}
+{"text":"apply one adjustment layer to the stack below","label":"add_adjustment_layer"}
 {"text":"use multiply blend mode on the selected layer","label":"set_blend_mode"}
 {"text":"make this layer screen and lower opacity","label":"set_blend_mode"}
+{"text":"change the composite mode to overlay","label":"set_blend_mode"}
+{"text":"blend this layer with add mode","label":"set_blend_mode"}
 {"text":"open the media bin and import a local file","label":"open_media"}
+{"text":"show my local media sources","label":"open_media"}
+{"text":"bring up the asset browser","label":"open_media"}
+{"text":"import a video without uploading it","label":"open_media"}
 {"text":"show the export queue","label":"open_export"}
+{"text":"open delivery settings","label":"open_export"}
+{"text":"prepare a local mp4 export","label":"open_export"}
+{"text":"take me to the render output controls","label":"open_export"}
 {"text":"undo the last edit","label":"undo"}
+{"text":"go back one command","label":"undo"}
+{"text":"reverse the previous timeline change","label":"undo"}
+{"text":"cancel the last action","label":"undo"}
 {"text":"redo the last edit","label":"redo"}
+{"text":"restore the command I undid","label":"redo"}
+{"text":"repeat the previous timeline change","label":"redo"}
+{"text":"bring back the edit I reversed","label":"redo"}
 {"text":"apply the tracked move and repair the background","label":"omniframe_repair"}
+{"text":"move the subject and fill the old region","label":"omniframe_repair"}
+{"text":"remove this person and reconstruct the background","label":"omniframe_repair"}
+{"text":"track transform and repair the shot locally","label":"omniframe_repair"}
 {"text":"load the optional model only when I ask for it","label":"load_optional_model"}
+{"text":"load the local editor assist model","label":"load_optional_model"}
+{"text":"use the ONNX intent model explicitly","label":"load_optional_model"}
+{"text":"open advanced model assistance","label":"load_optional_model"}
 {"text":"fit the viewer and show guides","label":"fit_viewer"}
+{"text":"make the preview fit the panel","label":"fit_viewer"}
+{"text":"reset the viewer zoom","label":"fit_viewer"}
+{"text":"show the canvas guides","label":"fit_viewer"}
 {"text":"save the project to local recovery","label":"save_project"}
+{"text":"save the current project","label":"save_project"}
+{"text":"write a recovery snapshot","label":"save_project"}
+{"text":"store this edit locally","label":"save_project"}
+{"text":"split the source clip at the current marker","label":"split_clip"}
+{"text":"place a cut on the playhead","label":"split_clip"}
+{"text":"separate the shot into two timeline items","label":"split_clip"}
+{"text":"cut the selected footage at this frame","label":"split_clip"}
+{"text":"make a vertical phone video","label":"set_aspect_9_16"}
+{"text":"choose portrait orientation for this sequence","label":"set_aspect_9_16"}
+{"text":"resize the project for a short video","label":"set_aspect_9_16"}
+{"text":"use a 9:16 canvas for this edit","label":"set_aspect_9_16"}
+{"text":"create a one-to-one social video","label":"set_aspect_1_1"}
+{"text":"use equal width and height for the canvas","label":"set_aspect_1_1"}
+{"text":"make the frame square for posting","label":"set_aspect_1_1"}
+{"text":"set a one by one aspect ratio","label":"set_aspect_1_1"}
+{"text":"make the project widescreen","label":"set_aspect_16_9"}
+{"text":"choose landscape orientation for the sequence","label":"set_aspect_16_9"}
+{"text":"set a 16:9 canvas for this edit","label":"set_aspect_16_9"}
+{"text":"use wide video dimensions","label":"set_aspect_16_9"}
+{"text":"isolate the foreground person with a mask","label":"mask_subject"}
+{"text":"create a subject matte for the performer","label":"mask_subject"}
+{"text":"mask the main object in the footage","label":"mask_subject"}
+{"text":"select the person for background removal","label":"mask_subject"}
+{"text":"track the matte as the subject moves","label":"track_mask"}
+{"text":"animate the mask over time","label":"track_mask"}
+{"text":"track the mask path through every frame","label":"track_mask"}
+{"text":"keep the subject matte aligned in the shot","label":"track_mask"}
+{"text":"track the selected object across the scene","label":"track_object"}
+{"text":"follow this object as it moves","label":"track_object"}
+{"text":"solve the motion path for the target","label":"track_object"}
+{"text":"keep tracking the feature in the footage","label":"track_object"}
+{"text":"insert a footage layer into the timeline","label":"add_layer"}
+{"text":"create a new layer above this one","label":"add_layer"}
+{"text":"add another layer to the composition","label":"add_layer"}
+{"text":"put this media on a new layer","label":"add_layer"}
+{"text":"add an adjustment track for color grading","label":"add_adjustment_layer"}
+{"text":"create a new adjustment layer above the clips","label":"add_adjustment_layer"}
+{"text":"use an adjustment layer to affect lower tracks","label":"add_adjustment_layer"}
+{"text":"insert an adjustment layer into the stack","label":"add_adjustment_layer"}
+{"text":"set the selected layer to screen mode","label":"set_blend_mode"}
+{"text":"choose overlay for this layer blend","label":"set_blend_mode"}
+{"text":"change the layer composite to multiply","label":"set_blend_mode"}
+{"text":"use a lighten blend for the overlay","label":"set_blend_mode"}
+{"text":"browse imported clips in the media panel","label":"open_media"}
+{"text":"open the local asset library","label":"open_media"}
+{"text":"show the project media bin","label":"open_media"}
+{"text":"add local footage from the media browser","label":"open_media"}
+{"text":"open the render and export panel","label":"open_export"}
+{"text":"choose settings for the finished video","label":"open_export"}
+{"text":"show local delivery options","label":"open_export"}
+{"text":"open the output format controls","label":"open_export"}
+{"text":"undo the previous timeline command","label":"undo"}
+{"text":"take back that edit","label":"undo"}
+{"text":"step backward in the edit history","label":"undo"}
+{"text":"remove the most recent change","label":"undo"}
+{"text":"redo the command I just undid","label":"redo"}
+{"text":"step forward in the edit history","label":"redo"}
+{"text":"restore the last reverted change","label":"redo"}
+{"text":"repeat the edit that was undone","label":"redo"}
+{"text":"repair the background after moving the subject","label":"omniframe_repair"}
+{"text":"fill the area left by the removed object","label":"omniframe_repair"}
+{"text":"apply motion tracking and reconstruct the scene","label":"omniframe_repair"}
+{"text":"move this subject while preserving the background","label":"omniframe_repair"}
+{"text":"enable the optional local assistant","label":"load_optional_model"}
+{"text":"select the bundled editor model","label":"load_optional_model"}
+{"text":"use the local ONNX assistant for this prompt","label":"load_optional_model"}
+{"text":"activate advanced intent predictions","label":"load_optional_model"}
+{"text":"fit the whole composition inside the viewer","label":"fit_viewer"}
+{"text":"zoom the preview to fit","label":"fit_viewer"}
+{"text":"show the complete frame in the monitor","label":"fit_viewer"}
+{"text":"fit the canvas and guides to the panel","label":"fit_viewer"}
+{"text":"write the project file to disk","label":"save_project"}
+{"text":"save a local copy of this edit","label":"save_project"}
+{"text":"create a recovery save now","label":"save_project"}
+{"text":"store the timeline project locally","label":"save_project"}
