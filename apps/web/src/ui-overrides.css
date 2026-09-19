@@ -1,0 +1,72 @@
+:root {
+  --scroll-thumb: rgba(216, 255, 99, .38);
+  --scroll-thumb-hover: rgba(216, 255, 99, .72);
+}
+
+/* A single quiet scrollbar language across the landing page and studio. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) transparent;
+}
+*::-webkit-scrollbar { width: 7px; height: 7px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: var(--scroll-thumb); background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); background-clip: padding-box; }
+
+/* The inspector is a window, not a permanent wall. */
+.editor-shell.inspector-closed .properties-panel { display: none; }
+.editor-shell.inspector-closed .editor-main { grid-template-columns: 58px minmax(0, 1fr); }
+.editor-shell.inspector-open .editor-main { grid-template-columns: 58px minmax(0, 1fr) 286px; }
+.editor-shell.layout-focus .left-rail { display: none; }
+.editor-shell.layout-focus .editor-main,
+.editor-shell.layout-focus.inspector-closed .editor-main { grid-template-columns: minmax(0, 1fr); }
+.editor-shell.layout-timeline .editor-center { grid-template-rows: minmax(210px, 42%) minmax(300px, 58%); }
+.editor-shell.layout-viewer .editor-center { grid-template-rows: minmax(400px, 1fr) minmax(120px, 22%); }
+.left-rail { background: #0a0e13; }
+.rail-scroll, .rail-bottom { padding: 8px 5px; gap: 2px; }
+.rail-item { width: 44px; min-height: 40px; padding: 8px 0; gap: 0; }
+.rail-item span { display: none; }
+.rail-item.active:before { left: -5px; top: 8px; bottom: 8px; }
+.rail-add { top: 4px; right: 4px; }
+.properties-actions { display: flex; align-items: center; gap: 1px; }
+
+/* Windows > Layout is the compact window manager for the studio. */
+.menu-popover { min-width: 214px; }
+.menu-popover button { min-height: 27px; }
+.statusbar-message { flex: 1 1 auto; min-width: 0; color: var(--lime); overflow: hidden; text-overflow: ellipsis; }
+
+/* Fine-grained timeline display and direct playhead scrubbing. */
+.timebase-control { display: inline-flex; align-items: center; gap: 5px; color: var(--muted2); font: 8px var(--mono); white-space: nowrap; }
+.timebase-control select { height: 27px; padding: 0 6px; border: 1px solid rgba(216,255,99,.2); border-radius: 4px; outline: 0; background: #11161e; color: var(--lime); font: 8px var(--mono); }
+.timeline-inner { cursor: ew-resize; }
+.timeline-clip, .timeline-marker, .time-ruler button { cursor: pointer; }
+.timeline-playhead { pointer-events: auto; cursor: ew-resize; }
+.playhead-grip { position: absolute; top: 0; left: -7px; z-index: 9; width: 15px; height: 13px; padding: 0; border: 0; border-radius: 0 0 3px 3px; background: var(--lime); clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%); cursor: ew-resize; }
+.playhead-grip:hover { background: #f0ff9e; }
+.timeline-footer { gap: 10px; }
+
+/* The landing surface is intentionally short: one promise, one action, one preview. */
+.landing-nav { height: 68px; }
+.landing-nav-actions { gap: 12px; }
+.landing-status { display: inline-flex; align-items: center; gap: 6px; color: var(--muted2); font: 9px var(--mono); text-transform: uppercase; letter-spacing: .12em; }
+.hero-copy h1 { letter-spacing: -.07em; }
+.hero-subtitle { max-width: 390px; font-size: 14px; line-height: 1.55; }
+.hero-meta { margin-top: 34px; }
+.landing-footer { padding-top: 22px; padding-bottom: 22px; }
+
+@media (max-width: 1100px) {
+  .editor-shell.inspector-open .editor-main { grid-template-columns: 52px minmax(0, 1fr) 270px; }
+  .editor-shell.inspector-closed .editor-main { grid-template-columns: 52px minmax(0, 1fr); }
+  .editor-menus { display: flex; }
+  .editor-menu-wrap:not(.menu-windows) { display: none; }
+  .menu-windows .menu-trigger { color: var(--lime); }
+}
+@media (max-width: 760px) {
+  .editor-shell.inspector-open .editor-main { grid-template-columns: 48px minmax(0, 1fr); }
+  .editor-shell.inspector-open .properties-panel { transform: translateX(0); }
+  .editor-shell.inspector-closed .properties-panel { transform: translateX(100%); }
+  .editor-shell.inspector-closed .editor-main { grid-template-columns: 48px minmax(0, 1fr); }
+  .editor-shell.layout-focus .editor-main { grid-template-columns: minmax(0, 1fr); }
+  .timebase-control span { display: none; }
+  .timeline-actions .snap-button { display: none; }
+}

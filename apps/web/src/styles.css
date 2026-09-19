@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-:root { font-family: Manrope, system-ui, sans-serif; color: #e8efec; background: #080a0f; font-synthesis: none; text-rendering: optimizeLegibility; --bg:#080a0f; --panel:#0d1118; --panel2:#111720; --panel3:#171e28; --line:rgba(236,244,241,.09); --line2:rgba(236,244,241,.17); --muted:#89949b; --muted2:#5f6a73; --text:#e8efec; --lime:#d8ff63; --pink:#ff6d86; --blue:#84bfff; --amber:#ffc66e; --green:#84efb7; --mono:'DM Mono',monospace; --display:'Space Grotesk',sans-serif; }
+:root { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e8efec; background: #080a0f; font-synthesis: none; text-rendering: optimizeLegibility; --bg:#080a0f; --panel:#0d1118; --panel2:#111720; --panel3:#171e28; --line:rgba(236,244,241,.09); --line2:rgba(236,244,241,.17); --muted:#89949b; --muted2:#5f6a73; --text:#e8efec; --lime:#d8ff63; --pink:#ff6d86; --blue:#84bfff; --amber:#ffc66e; --green:#84efb7; --mono:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; --display:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 * { box-sizing:border-box; }
 html,body,#root { min-width:0; width:100%; min-height:100%; margin:0; background:var(--bg); }
 body { overflow-x:hidden; }

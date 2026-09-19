@@ -43,6 +43,8 @@ import {
 
 export type Page = 'landing' | 'editor';
 export type Workspace = 'edit' | 'layers' | 'color' | 'mask' | 'maskTracking' | 'tracking' | 'omniframe' | '3d' | 'audio' | 'export';
+export type LayoutMode = 'standard' | 'focus' | 'timeline' | 'viewer';
+export type TimelineDisplay = 'timecode' | 'tenths' | 'frames';
 export type MaskScope = 'frame' | 'range' | 'all';
 export type ToolId = 'select' | 'trim' | 'blade' | 'mask' | 'brush' | 'lasso' | 'magic' | 'track' | 'omniframe' | 'text' | 'hand';
 export type TrackFlag = 'locked' | 'muted' | 'solo' | 'hidden';
@@ -59,6 +61,9 @@ export interface JobView {
 export interface EditorState {
   page: Page;
   workspace: Workspace;
+  layoutMode: LayoutMode;
+  showInspector: boolean;
+  timelineDisplay: TimelineDisplay;
   project: ProjectFile;
   playhead: number;
   isPlaying: boolean;
@@ -190,6 +195,9 @@ function findSelected(project: ProjectFile, clipId: string | null): { track: Tra
 export const useEditorStore = create<EditorState>((set, get) => ({
   page: window.location.hash === '#editor' ? 'editor' : 'landing',
   workspace: 'edit',
+  layoutMode: 'standard',
+  showInspector: false,
+  timelineDisplay: 'timecode',
   project: initialProject,
   playhead: Math.min(0, initialProject.sequences[0]?.duration ?? 0),
   isPlaying: false,
@@ -581,6 +589,13 @@ export function formatTimecode(frame: number, fps: number): string {
   const ss = (totalSeconds % 60).toString().padStart(2, '0');
   const mm = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
   return `${mm}:${ss}:${ff}`;
+}
+
+export function formatTimelinePosition(frame: number, fps: number, display: TimelineDisplay): string {
+  const safeFrame = Math.max(0, Math.round(frame));
+  if (display === 'frames') return `${safeFrame}f`;
+  if (display === 'tenths') return `${(safeFrame / Math.max(1, fps)).toFixed(1)}s`;
+  return formatTimecode(safeFrame, fps);
 }
 
 export function activeSequence(project: ProjectFile): Sequence {
