@@ -426,8 +426,9 @@ def write_model_report(model: LinearModel, examples: list[Example], output_dir: 
     for example in probe_source[: min(36, len(probe_source))]:
         probes.append({"text": example.text, "expected": example.label, "predictions": model.predict(example.text, 3)})
     checkpoint_dir = output_dir / "checkpoints"
-    checkpoint_paths = sorted(checkpoint_dir.glob("checkpoint-*.json")) if checkpoint_dir.exists() else []
-    report = {"model": MODEL_FORMAT, "generated_at": now(), "training_summary": model.training_summary, "validation": validation, "full_dataset": full, "probes": probes, "probe_source": "validation-holdout" if validation_examples else "full-dataset", "checkpoints": {"directory": str(checkpoint_dir), "count": len(checkpoint_paths), "latest": str(checkpoint_paths[-1]) if checkpoint_paths else None}, "note": "Metrics are measured on the supplied examples; they are not a generalization guarantee."}
+    checkpoint_paths = list(checkpoint_dir.glob("checkpoint-*.json")) if checkpoint_dir.exists() else []
+    latest_checkpoint = max(checkpoint_paths, key=lambda path: path.stat().st_mtime) if checkpoint_paths else None
+    report = {"model": MODEL_FORMAT, "generated_at": now(), "training_summary": model.training_summary, "validation": validation, "full_dataset": full, "probes": probes, "probe_source": "validation-holdout" if validation_examples else "full-dataset", "checkpoints": {"directory": str(checkpoint_dir), "count": len(checkpoint_paths), "latest": str(latest_checkpoint) if latest_checkpoint else None}, "note": "Metrics are measured on the supplied examples; they are not a generalization guarantee."}
     (output_dir / "report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     rows = []
     for probe in probes:
