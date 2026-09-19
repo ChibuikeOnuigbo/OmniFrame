@@ -45,6 +45,9 @@ checks = {
     "aspect presets": all(value in app for value in ("16:9", "1:1", "9:16", "4:5")),
     "truthful mask scope labels": all(value in app for value in ("THIS FRAME", "RANGE", "ALL FRAMES")),
     "Krita modifier mapping": all(value in app for value in ("intersect", "subtract", "replace", "add")),
+    "layers compositing view": "LayersInspector" in app and "setClipBlend" in app and ".layer-stack" in css,
+    "model runtime contract": (root / "apps/web/src/modelRuntime.ts").exists() and (root / "modeltrainer.py").exists(),
+    "QA evidence folders": (root / "qa/images").is_dir() and (root / "qa/captures").is_dir() and (root / "qa/measurements").is_dir(),
     "narrow responsive breakpoint": "@media (max-width:760px)" in css,
     "editor grid": ".editor-main{display:grid" in css,
 }

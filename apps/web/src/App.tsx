@@ -48,6 +48,7 @@ import {
 import { useEditorStore, formatTimecode, activeSequence, selectedClip, type Workspace, type EditorState } from './store';
 import { applyClipEffectsToCanvas, drawImageCover, exportMp4, inspectMedia, VideoGrayProvider, type ExportProgressView } from './media';
 import { isDesktopShell, readNativeCapabilities } from './native';
+import { loadEditorAssistModel, type EditorAssistPrediction, type EditorAssistRuntime } from './modelRuntime';
 
 const accent = '#d8ff63';
 const FPS_DEFAULT = 30;
@@ -172,7 +173,7 @@ function StatusBar() {
 }
 
 const workspaceTabs: Array<{ id: Workspace; label: string }> = [
-  { id: 'edit', label: 'Edit' }, { id: 'color', label: 'Color' }, { id: 'mask', label: 'Masking' },
+  { id: 'edit', label: 'Edit' }, { id: 'layers', label: 'Layers' }, { id: 'color', label: 'Color' }, { id: 'mask', label: 'Masking' },
   { id: 'maskTracking', label: 'Mask tracking' }, { id: 'tracking', label: 'Tracking' }, { id: 'omniframe', label: 'Omniframe' },
   { id: '3d', label: '3D' }, { id: 'audio', label: 'Audio' }, { id: 'export', label: 'Export' },
 ];
@@ -188,6 +189,11 @@ function TopBar() {
       if (!capabilities) return;
       setNativeLabel(capabilities.ffmpeg_available ? 'desktop · FFmpeg ready' : 'desktop · FFmpeg unavailable');
     });
+  }, []);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpenMenu(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
   const runMenuAction = (action: () => void) => {
     action();
@@ -230,7 +236,7 @@ function TopBar() {
 
 const railItems: Array<{ id: Workspace | 'media' | 'assets'; label: string; icon: React.ReactNode }> = [
   { id: 'media', label: 'Media', icon: <Film size={17} /> }, { id: 'edit', label: 'Edit', icon: <MousePointer2 size={17} /> },
-  { id: 'color', label: 'Color', icon: <SlidersHorizontal size={17} /> }, { id: 'mask', label: 'Masking', icon: <Brush size={17} /> },
+  { id: 'layers', label: 'Layers', icon: <Layers3 size={17} /> }, { id: 'color', label: 'Color', icon: <SlidersHorizontal size={17} /> }, { id: 'mask', label: 'Masking', icon: <Brush size={17} /> },
   { id: 'maskTracking', label: 'Mask track', icon: <Target size={17} /> }, { id: 'tracking', label: 'Tracking', icon: <Activity size={17} /> },
   { id: 'omniframe', label: 'Omniframe', icon: <Sparkles size={17} /> }, { id: '3d', label: '3D', icon: <Box size={17} /> },
   { id: 'audio', label: 'Audio', icon: <AudioLines size={17} /> }, { id: 'assets', label: 'Assets', icon: <Layers3 size={17} /> },
@@ -499,13 +505,58 @@ function TimelineClip({ clip, track, sequence }: { clip: Clip; track: ReturnType
 
 function PropertiesPanel() {
   const state = useEditorStore();
-  return <aside className="properties-panel"><div className="properties-header"><span>Inspector</span><button className="icon-button" onClick={() => state.set({ showMediaBin: true })}><FolderOpen size={15} /></button></div>{state.workspace === 'mask' ? <MaskInspector /> : state.workspace === 'maskTracking' ? <MaskTrackingInspector /> : state.workspace === 'tracking' ? <TrackingInspector /> : state.workspace === 'omniframe' ? <OmniframeInspector /> : state.workspace === '3d' ? <ThreeInspector /> : state.workspace === 'color' ? <ColorInspector /> : state.workspace === 'audio' ? <AudioInspector /> : state.workspace === 'export' ? <ExportInspector /> : <EditInspector />}</aside>;
+  return <aside className="properties-panel"><div className="properties-header"><span>Inspector</span><button className="icon-button" onClick={() => state.set({ showMediaBin: true })}><FolderOpen size={15} /></button></div>{state.workspace === 'layers' ? <LayersInspector /> : state.workspace === 'mask' ? <MaskInspector /> : state.workspace === 'maskTracking' ? <MaskTrackingInspector /> : state.workspace === 'tracking' ? <TrackingInspector /> : state.workspace === 'omniframe' ? <OmniframeInspector /> : state.workspace === '3d' ? <ThreeInspector /> : state.workspace === 'color' ? <ColorInspector /> : state.workspace === 'audio' ? <AudioInspector /> : state.workspace === 'export' ? <ExportInspector /> : <EditInspector />}</aside>;
 }
 
 function InspectorSection({ title, icon, children, open = true }: { title: string; icon?: React.ReactNode; children: React.ReactNode; open?: boolean }) { return <details className="inspector-section" open={open}><summary>{icon}{title}<ChevronDown size={13} /></summary><div className="inspector-content">{children}</div></details>; }
 function Segmented({ options, value, onChange }: { options: Array<{ label: string; value: string }>; value: string; onChange: (value: string) => void }) { return <div className="segmented">{options.map((option) => <button key={option.value} className={value === option.value ? 'active' : ''} onClick={() => onChange(option.value)}>{option.label}</button>)}</div>; }
 function ValueRow({ label, value, unit, onChange, min, max, step = 1 }: { label: string; value: string | number; unit?: string; onChange?: (value: number) => void; min?: number; max?: number; step?: number }) { return <div className="value-row"><span>{label}</span><div className="value-control"><input type="number" min={min} max={max} step={step} value={value} onChange={(event) => onChange?.(Number(event.target.value))} /><small>{unit}</small></div></div>; }
 function InspectorContext({ icon, title, subtitle, tone = '' }: { icon: React.ReactNode; title: string; subtitle: string; tone?: string }) { return <div className="inspector-context"><span className={`context-icon ${tone}`}>{icon}</span><div><strong>{title}</strong><small>{subtitle}</small></div></div>; }
+
+function LayersInspector() {
+  const state = useEditorStore();
+  const sequence = activeSequence(state.project);
+  const selected = selectedClip(state);
+  const tracks = [...sequence.tracks].reverse();
+  const blendModes: Array<{ label: string; value: Clip['blend'] }> = [
+    { label: 'Normal', value: 'normal' }, { label: 'Multiply', value: 'multiply' }, { label: 'Screen', value: 'screen' },
+    { label: 'Overlay', value: 'overlay' }, { label: 'Soft light', value: 'softLight' }, { label: 'Hard light', value: 'hardLight' },
+    { label: 'Difference', value: 'difference' }, { label: 'Add', value: 'add' }, { label: 'Subtract', value: 'subtract' },
+  ];
+  const trackIcon = (kind: string) => kind === 'scene3d' ? <Box size={13} /> : kind === 'audio' ? <AudioLines size={13} /> : kind === 'text' || kind === 'caption' ? <TextCursorInput size={13} /> : <Film size={13} />;
+  const selectTrack = (trackId: string) => {
+    const track = sequence.tracks.find((item) => item.id === trackId);
+    state.set({ selectedTrackId: trackId, selectedClipId: track?.clips[0]?.id ?? null });
+  };
+  return <><InspectorContext icon={<Layers3 size={16} />} title="Layers" subtitle="Compositing stack · tracks · adjustment layers" tone="violet" /><InspectorSection title="Layer stack" icon={<Layers3 size={14} />}><div className="layer-stack">{tracks.map((track, index) => <div className={`layer-row ${state.selectedTrackId === track.id ? 'active' : ''}`} key={track.id}><button className="layer-select" onClick={() => selectTrack(track.id)}><span className="layer-order">{tracks.length - index}</span><span className="layer-type">{trackIcon(track.kind)}</span><span className="layer-name"><strong>{track.name}</strong><small>{track.isAdjustment ? 'adjustment layer' : `${track.kind} · ${track.clips.length} clip${track.clips.length === 1 ? '' : 's'}`}</small></span></button><button className={`layer-visibility ${track.hidden ? 'off' : ''}`} title={track.hidden ? 'Show layer' : 'Hide layer'} onClick={() => state.toggleTrackFlag(track.id, 'hidden')}>{track.hidden ? <EyeOff size={13} /> : <Eye size={13} />}</button><button className={`layer-visibility ${track.locked ? 'on' : ''}`} title={track.locked ? 'Unlock layer' : 'Lock layer'} onClick={() => state.toggleTrackFlag(track.id, 'locked')}><Lock size={12} /></button></div>)}</div><div className="layer-actions"><button className="add-row" onClick={() => state.addTrack('video')}><Plus size={13} /> Video layer</button><button className="add-row" onClick={() => state.addTrack('graphics')}><Plus size={13} /> Graphics layer</button><button className="add-row" onClick={state.addAdjustmentTrack}><Plus size={13} /> Adjustment layer</button></div></InspectorSection><InspectorSection title="Selected layer compositing" icon={<SlidersHorizontal size={14} />}>{selected ? <><ValueRow label="Opacity" value={Math.round(selected.transform.opacity * 100)} unit="%" min={0} max={100} onChange={(value) => state.setClipOpacity(value / 100)} /><label className="field-label">Blend mode<select className="full-select" value={selected.blend} onChange={(event) => state.setClipBlend(event.target.value as Clip['blend'])}>{blendModes.map((mode) => <option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label><div className="layer-facts"><span>{selected.effects.length} effects</span><span>{selected.masks.length} masks</span><span>{selected.keyframes ? Object.keys(selected.keyframes).length : 0} animated channels</span></div></> : <div className="hint-line">Select a clip in the stack to edit opacity, blend mode, effects and masks. Track visibility and lock state remain independent.</div>}</InspectorSection><div className="layer-note"><Layers3 size={14} /><span>Layers are a compositing view over the real timeline tracks. They do not replace frame-accurate editing; adjustment layers affect tracks below them.</span></div><EditorAssistAdvanced /></>;
+}
+
+function EditorAssistAdvanced() {
+  const [runtime, setRuntime] = useState<EditorAssistRuntime | null>(null);
+  const [status, setStatus] = useState('not loaded');
+  const [prompt, setPrompt] = useState('make this sequence portrait');
+  const [predictions, setPredictions] = useState<EditorAssistPrediction[]>([]);
+  const load = async () => {
+    setStatus('loading local ONNX…');
+    try {
+      const next = await loadEditorAssistModel('/models/editor-assist/manifest.json');
+      setRuntime(next);
+      setStatus(`loaded · ${next.manifest.labels.length} editor intents`);
+    } catch (error) {
+      setStatus(`unavailable · ${(error as Error).message}`);
+    }
+  };
+  const predict = async () => {
+    if (!runtime) return;
+    try {
+      setPredictions(await runtime.predict(prompt));
+      setStatus('scored locally · verify before applying');
+    } catch (error) {
+      setStatus(`inference failed · ${(error as Error).message}`);
+    }
+  };
+  return <InspectorSection title="Advanced · editor assist" icon={<Sparkles size={14} />} open={false}><div className="hint-line">Optional local ONNX intent scoring. It suggests commands only; it cannot mutate a project, upload footage or replace a deliberate editor action.</div><div className="model-runtime-row"><span>status</span><strong>{status}</strong></div><button className="outline-button wide" onClick={() => void load()}><Upload size={14} /> {runtime ? 'Reload local model' : 'Load local model'}</button><label className="field-label">Test an intent<input className="model-input" value={prompt} onChange={(event) => setPrompt(event.target.value)} placeholder="e.g. add a graphics layer" /></label><button className="add-row" disabled={!runtime || !prompt.trim()} onClick={() => void predict()}><Target size={13} /> Score suggestion</button>{predictions.length > 0 && <div className="model-predictions">{predictions.map((prediction) => <div key={prediction.action}><span>{prediction.action}</span><strong>{Math.round(prediction.probability * 100)}%</strong></div>)}</div>}</InspectorSection>;
+}
 
 function EditInspector() {
   const state = useEditorStore();

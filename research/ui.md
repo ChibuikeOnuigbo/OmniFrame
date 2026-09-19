@@ -1,6 +1,6 @@
 # UI and workbench research
 
-**Checked:** 2026-09-19. Sources include Kdenlive UI elements, Kdenlive project monitor and shortcuts documentation, OpenCut's local timeline architecture, Adobe Premiere workspace/effect-controls documentation, DaVinci Resolve's Edit/Cut/Inspector notes, Krita modifier conventions, shadcn/ui/Radix primitives and Lucide icons.
+**Checked:** 2026-09-19. Sources include Kdenlive UI elements, Kdenlive project monitor and shortcuts documentation, OpenCut's local timeline architecture, Adobe Premiere workspace/effect-controls documentation, DaVinci Resolve's Edit/Cut/Inspector notes, Krita modifier conventions, Blender/After Effects compositing comparisons recorded in `research/youtube-features.json`, shadcn/ui/Radix primitives and Lucide icons.
 
 ## Comparative findings
 
@@ -11,16 +11,19 @@
 | DaVinci Resolve | Cut/Edit viewers and Inspector separate source/program and clip-scoped controls while the timeline remains the primary editing surface. | Preserve viewer-to-timeline relationship and expose transform/crop/audio/effects in the inspector. |
 | OpenCut | A local-first multi-track model benefits from explicit segment validation and a render/export boundary. | Keep project state serialisable, local by default and honest about native/export capability gates. |
 | Krita | Shift add, Alt subtract, Ctrl replace and Shift+Alt intersect are fast, learnable mask modifiers. | Preserve these mappings and keep `THIS FRAME`, `RANGE`, `ALL FRAMES` visible. |
+| Blender compositor | Alpha Over explicitly distinguishes foreground/background, opacity factor and premultiplied versus straight alpha; Vector Math provides named vector operations. | Keep alpha convention and blend math explicit in render data, and test vector/matrix operations in the engine rather than hiding them in UI sliders. |
+| After Effects | A layer owns transforms, effects and multiple masks; layer blend modes affect layers below, while mask modes operate among masks on one layer. | The new Layers workspace separates track compositing from mask semantics and persists both in project data. |
 
-The collected Kdenlive and VEGAS reference images are in the temporary `image-search/` directory. `scripts/qa-images.py` uses OpenCV to record dimensions, aspect ratio, dark-pixel density, edge density and candidate vertical/horizontal separators. This is comparative evidence only; it is not a local-app screenshot pass.
+Licensed/local reference images belong in `qa/images/`; generated browser captures belong in `qa/captures/`. `scripts/qa-images.py` uses OpenCV to record dimensions, aspect ratio, dark-pixel density, edge density and candidate vertical/horizontal separators. This is comparative evidence only; it is not a local-app screenshot pass.
 
 ## Layout decisions
 
 - landing page and editor are separate routes/states;
 - top application chrome: project identity, File/Edit/View/Workspace/Help menus, save/undo/redo/command palette, canvas aspect selector, workspace tabs, performance/export;
-- left rail: media, edit, colour, masking, tracking, Omniframe, 3D, audio, assets;
+- left rail: media, edit, layers, colour, masking, tracking, Omniframe, 3D, audio, assets;
 - centre: preview, viewer tools and dense multi-track timeline;
 - right: contextual inspector and effects controls;
+- Layers workspace: a compositing view over real tracks, with visibility/lock, blend modes, opacity, effects/masks counts and adjustment-layer creation; it is not a second timeline or a fake scene graph;
 - bottom: status row with sequence dimensions, fps, playhead time, asset/track counts, selected clip and actual job status;
 - timeline rows remain virtualisation-ready and own their internal horizontal scroll;
 - aspect presets are explicit sequence state: 16:9, 1:1, 9:16 portrait and 4:5, with export using the selected dimensions rather than a hard-coded landscape canvas.

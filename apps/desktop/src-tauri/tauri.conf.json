@@ -21,6 +21,6 @@
     "category": "Video",
     "shortDescription": "Local-first precision video editor",
     "longDescription": "Edit, track, mask and build video in 2D and 3D.",
-    "resources": []
+    "resources": ["../../../models/editor-assist/bundle/*"]
   }
 }

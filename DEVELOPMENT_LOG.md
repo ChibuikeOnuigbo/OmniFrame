@@ -44,3 +44,15 @@ This log records completed changes and observed failures only. It does not claim
   **Status:** native command boundary is implemented in `apps/desktop/src-tauri` and `crates/omniframe-core`.
   **Result:** not compiled in this sandbox because `cargo`, `rustc` and FFmpeg are unavailable.
   **Next:** install Rust/Tauri/FFmpeg in a connected desktop CI job, run `cargo fmt`, `cargo check`, Tauri dev/build for Windows/macOS/Linux and exercise atomic save, relink, cancellation and export failure paths.
+
+## 2026-09-19 — bounded QA/model pass
+
+- **Task:** make the timer repeat research/QA without pretending an agent is autonomous.
+  **Status:** implemented in `timer.py`.
+  **Contract:** ten-hour maximum and 1009 finite observation passes by default; local tree scan, optional research queue, explicit gate commands and explicit completion JSON. Missing gates remain `needs_review`; line count is only an observation and never a quality/completion proxy.
+- **Task:** add a real QA evidence area and screenshot comparison path.
+  **Status:** `qa/`, `scripts/capture-qa.mjs`, `scripts/compare-qa.py`, BeautifulSoup source checks and OpenCV vector/pixel/edge measurements added. Browser capture was attempted and remains blocked by the missing Chromium executable.
+- **Task:** add an optional editor-assist model path.
+  **Status:** a reproducible hashed-feature baseline was trained for 1009 finite passes from explicit local JSONL examples, exported and checked as ONNX, packaged for web/Tauri resources, and exposed through an opt-in `onnxruntime-web` loader and loopback Python service. This is a small classifier, not a claimed transformer or foundation model.
+- **Task:** investigate layers, brushes and compositing.
+  **Status:** Layers workspace now sits over real timeline tracks and persists visibility, lock, opacity, blend mode, effects/mask counts and adjustment-layer creation. Research records Krita brush engines, Adobe mask/layer modes, Blender Alpha Over/premultiplied alpha and vector math. YouTube pointers are recorded without bundling videos; yt-dlp metadata lookup hit the sandbox TLS/SSL boundary.

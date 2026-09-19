@@ -1,0 +1,44 @@
+{
+  "retrievedAt": "2026-09-19",
+  "retrieval": "web-search fallback recorded because yt-dlp YouTube API lookup failed with TLS/SSL EOF in the sandbox",
+  "ytDlpCommand": "python scripts/youtube-research.py --max-results 5",
+  "videos": [
+    {
+      "title": "How To Do EXR MultiLayer Compositing From Blender to DaVinci Resolve/Fusion Workflow",
+      "url": "https://www.youtube.com/watch?v=6-Y0s4-KRK8",
+      "feature": "layer passes, EXR compositing, Blender to Fusion handoff",
+      "implementation_takeaway": "Keep layers/pass channels explicit and make the composite graph inspectable; do not collapse a render pass into a fake flat clip."
+    },
+    {
+      "title": "Advanced Point Tracking for Compositing and Motion Graphics in DaVinci Resolve / Fusion",
+      "url": "https://www.youtube.com/watch?v=zJj6RMZ4zQs",
+      "feature": "point tracking, masks, stabilization, attached graphics",
+      "implementation_takeaway": "Tracking points must be attached to masks/effects with visible loss and confidence, not presented as generic magic."
+    },
+    {
+      "title": "How to Mask Objects in DaVinci Resolve",
+      "url": "https://www.youtube.com/watch?v=Jtt_HOjr73o",
+      "feature": "object masking and mask tracking",
+      "implementation_takeaway": "Mask creation, edge correction and tracking are separate steps; preserve frame/range/all-frame correction scope."
+    },
+    {
+      "title": "Blender vs. After Effects: Compositing Walk-through Comparison",
+      "url": "https://www.youtube.com/watch?v=tDMniELkC_o",
+      "feature": "node compositing versus layer compositing",
+      "implementation_takeaway": "A layer stack is useful for editorial accessibility while a node/pass view is useful for technical compositing; OmniFrame should expose both boundaries without pretending they are the same graph."
+    },
+    {
+      "title": "Blender Video Editing: Learn workflow, transitions, modifiers & more",
+      "url": "https://www.youtube.com/watch?v=99ZdOuJMrao",
+      "feature": "timeline, transitions, keyframes, modifiers and transforms",
+      "implementation_takeaway": "Keep transforms and keyframes frame-addressed and test matrix composition independently from UI state."
+    },
+    {
+      "title": "Introduction to Compositing Nodes in Blender",
+      "url": "https://www.youtube.com/watch?v=CCPW9bVRYaE",
+      "feature": "compositor nodes and image operations",
+      "implementation_takeaway": "Model image operations as typed graph data; keep a CPU reference path before adding GPU/native execution."
+    }
+  ],
+  "licenceNote": "URLs and titles are research pointers. No video or thumbnail is bundled; download requires explicit user flags and rights review."
+}

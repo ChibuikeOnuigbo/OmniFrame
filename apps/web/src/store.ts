@@ -42,7 +42,7 @@ import {
 } from '@omniframe/engine';
 
 export type Page = 'landing' | 'editor';
-export type Workspace = 'edit' | 'color' | 'mask' | 'maskTracking' | 'tracking' | 'omniframe' | '3d' | 'audio' | 'export';
+export type Workspace = 'edit' | 'layers' | 'color' | 'mask' | 'maskTracking' | 'tracking' | 'omniframe' | '3d' | 'audio' | 'export';
 export type MaskScope = 'frame' | 'range' | 'all';
 export type ToolId = 'select' | 'trim' | 'blade' | 'mask' | 'brush' | 'lasso' | 'magic' | 'track' | 'omniframe' | 'text' | 'hand';
 export type TrackFlag = 'locked' | 'muted' | 'solo' | 'hidden';
@@ -110,6 +110,7 @@ export interface EditorState {
   deleteSelectedRipple: () => void;
   addTextClip: () => void;
   setClipOpacity: (opacity: number) => void;
+  setClipBlend: (blend: Clip['blend']) => void;
   setClipTransform: (patch: Partial<Clip['transform']>) => void;
   setClipAudio: (patch: Partial<Pick<Clip, 'gain' | 'pan' | 'fadeIn' | 'fadeOut'>>) => void;
   trimSelected: (edge: 'head' | 'tail', frame: number, ripple?: boolean) => void;
@@ -351,6 +352,14 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     s.commitProject(next, 'Add text clip', { selectedClipId: c.id, selectedTrackId: track.id, toast: 'Text clip added to the timeline.' });
   },
   setClipOpacity: (opacity) => get().setClipTransform({ opacity }),
+  setClipBlend: (blend) => {
+    const s = get();
+    const next = structuredClone(s.project);
+    const selected = findSelected(next, s.selectedClipId);
+    if (!selected) return;
+    selected.clip.blend = blend;
+    s.commitProject(next, `Set clip blend to ${blend}`);
+  },
   setClipTransform: (patch) => {
     const s = get();
     const next = structuredClone(s.project);

@@ -20,7 +20,10 @@ The repository is an engine + web workbench, not a static dashboard:
 - validated typed template slots, project migrations, `.vxproj` serialization, session-safe missing-media relink/proxy states, multiresolution waveform engine data and export presets;
 - browser WebCodecs H.264 + AAC encoding and MIT `mp4-muxer` integration. The UI refuses to write an MP4 if the current browser cannot provide both encoders;
 - Tauri 2/Rust command boundary for atomic project writes, recovery snapshots, project-envelope validation, media fingerprints/relink checks, FFmpeg capability probing and cooperative cancellation;
-- responsive dense workbench with no page-level horizontal overflow, honest empty/error states, command palette, worker boundaries and explicit local-only processing.
+- responsive dense workbench with no page-level horizontal overflow, honest empty/error states, command palette, worker boundaries and explicit local-only processing;
+- Layers compositing workspace over the real track stack with persisted visibility/lock, blend modes, opacity, effects/masks counts and adjustment-layer creation;
+- optional, inspectable editor-assist baseline in `models/editor-assist`, exportable to ONNX for `onnxruntime-web` or a desktop adapter without making editing model-dependent;
+- versioned QA evidence area in `qa/` with Playwright capture, BeautifulSoup structure inspection, OpenCV screenshot/vector comparison and explicit browser-launch failure reporting.
 
 ## Run
 

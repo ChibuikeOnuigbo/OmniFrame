@@ -1,0 +1,22 @@
+{"text":"split the selected clip at the playhead","label":"split_clip"}
+{"text":"cut this clip here and keep both sides","label":"split_clip"}
+{"text":"make the sequence vertical for shorts","label":"set_aspect_9_16"}
+{"text":"switch the canvas to portrait 9 by 16","label":"set_aspect_9_16"}
+{"text":"make a square social composition","label":"set_aspect_1_1"}
+{"text":"change the canvas to sixteen nine landscape","label":"set_aspect_16_9"}
+{"text":"paint the foreground subject mask","label":"mask_subject"}
+{"text":"select the person and refine the matte","label":"mask_subject"}
+{"text":"track this mask through the shot","label":"track_mask"}
+{"text":"follow the object and report confidence","label":"track_object"}
+{"text":"add a video layer above the current track","label":"add_layer"}
+{"text":"create an adjustment layer for the layers below","label":"add_adjustment_layer"}
+{"text":"use multiply blend mode on the selected layer","label":"set_blend_mode"}
+{"text":"make this layer screen and lower opacity","label":"set_blend_mode"}
+{"text":"open the media bin and import a local file","label":"open_media"}
+{"text":"show the export queue","label":"open_export"}
+{"text":"undo the last edit","label":"undo"}
+{"text":"redo the last edit","label":"redo"}
+{"text":"apply the tracked move and repair the background","label":"omniframe_repair"}
+{"text":"load the optional model only when I ask for it","label":"load_optional_model"}
+{"text":"fit the viewer and show guides","label":"fit_viewer"}
+{"text":"save the project to local recovery","label":"save_project"}

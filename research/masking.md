@@ -1,10 +1,12 @@
 # Masking and background-removal research
 
-**Checked:** 2026-09-18. Sources: Krita selection behaviour, OpenCV morphology/inpaint, BiRefNet Lite, MODNet, SAM2, browser worker APIs.
+**Checked:** 2026-09-19. Sources: [Krita brush engines](https://docs.krita.org/en/reference_manual/brushes/brush_engines.html), Krita selection behaviour, [Adobe mask modes](https://helpx.adobe.com/after-effects/desktop/work-with-transparency-and-compositing/work-with-alpha-channels-and-masks/alpha-channels-masks-mattes.html), OpenCV morphology/inpaint, BiRefNet Lite, MODNet, SAM2, browser worker APIs, and the feature/tutorial pointers in `research/youtube-features.json`.
 
 ## Manual masking
 
 The engine retains the requested foundation: brush, rectangle, ellipse, line/stroke, polygon, lasso, magnetic edge walk, flood fill, similar colour, magic brush, path/Bezier, invert, add/subtract/intersect/replace, feather, grow/shrink, smooth, threshold, hole fill and small-component removal.
+
+The brush research points to a deliberately staged roadmap rather than a wall of fake presets: pixel/paint, inking/stabilised stroke, clone/repair, smudge, deform, particle/texture, spray and shape/vector tools. Video masking should borrow the interaction language—size, hardness/flow, stabilisation, texture and pressure where available—while keeping the result as a serialisable mask, not an art-app-only raster canvas. Adobe's mask modes also reinforce that Add/Subtract/Intersect belong to masks on the same layer; layer blend modes belong to compositing between layers.
 
 Krita-inspired modifiers are explicit:
 

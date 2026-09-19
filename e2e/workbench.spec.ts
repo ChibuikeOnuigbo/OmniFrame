@@ -22,9 +22,23 @@ test('editor shortcuts and command palette work', async ({ page }) => {
 
 test('mask and tracking controls are visible', async ({ page }) => {
   await page.goto('/#editor');
-  await page.getByRole('button', { name: 'Masking' }).click();
+  await page.getByRole('button', { name: 'Masking' }).first().click();
   await expect(page.getByText('Apply range')).toBeVisible();
-  await page.getByRole('button', { name: 'Tracking' }).click();
+  await page.getByRole('button', { name: 'Tracking' }).first().click();
   await expect(page.getByText('Backend')).toBeVisible();
   await expect(page.getByText('SAM2 option')).toBeVisible();
+});
+
+test('layers, menus and canvas aspect presets are real controls', async ({ page }) => {
+  await page.goto('/#editor');
+  await page.getByRole('button', { name: 'File', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Open media bin' })).toBeVisible();
+  await page.getByRole('button', { name: 'File', exact: true }).click();
+  await page.getByRole('button', { name: 'Layers', exact: true }).first().click();
+  await expect(page.getByText('Layer stack')).toBeVisible();
+  await expect(page.getByText('Adjustment layer')).toBeVisible();
+  const aspect = page.getByLabel('Sequence aspect ratio');
+  await expect(aspect).toHaveValue('16:9');
+  await aspect.selectOption('1:1');
+  await expect(page.getByLabel('Sequence status')).toContainText('1080×1080');
 });

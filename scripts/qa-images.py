@@ -15,11 +15,17 @@ import cv2
 import numpy as np
 
 
-folder = Path(sys.argv[1] if len(sys.argv) > 1 else "image-search")
-output = Path(sys.argv[2] if len(sys.argv) > 2 else "/tmp/omniframe-qa/image-measurements.json")
+folder = Path(sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "qa/images")
+output = Path(sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith("--") else "/tmp/omniframe-qa/image-measurements.json")
+allow_empty = "--allow-empty" in sys.argv
 files = sorted([*folder.glob("*.png"), *folder.glob("*.jpg"), *folder.glob("*.jpeg")])
 if not files:
-    raise SystemExit(f"no reference images found in {folder}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps({"status": "no-images", "folder": str(folder), "note": "Add licensed/local captures before measuring."}, indent=2) + "\n")
+    print(f"no reference images found in {folder}; folder is ready for licensed/local captures")
+    if allow_empty:
+        raise SystemExit(0)
+    raise SystemExit(2)
 
 measurements = []
 for path in files:

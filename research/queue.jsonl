@@ -1,0 +1,5 @@
+{"id":"browser-runtime","status":"open","query":"Install a browser executable and run Playwright visual/runtime checks at desktop, tablet, mobile and portrait aspect ratios.","source":"local QA"}
+{"id":"youtube-features","status":"open","query":"Use yt-dlp metadata retrieval or a network-approved fallback to collect tutorials for layers, masking, tracking, compositing and 3D workflows.","source":"research"}
+{"id":"native-model","status":"open","query":"Build and verify Linux/macOS Tauri bundles with optional ONNX runtime/model resources.","source":"desktop QA"}
+{"id":"media-fixtures","status":"open","query":"Exercise imported local video/audio/image fixtures, export capability gates and native relink/cancellation.","source":"browser QA"}
+{"id":"geometry-validation","status":"open","query":"Run vector, matrix, rotation, perspective and compositing geometry tests against real fixture transforms.","source":"engine QA"}

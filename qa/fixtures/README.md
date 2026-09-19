@@ -1,0 +1,1 @@
+Keep fixtures tiny and synthetic. Generate them locally for tests; never commit user footage or media downloaded from YouTube.

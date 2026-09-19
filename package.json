@@ -17,6 +17,10 @@
     "typecheck": "tsc -p apps/web/tsconfig.json --noEmit && tsc -p packages/engine/tsconfig.json --noEmit",
     "license:audit": "node scripts/license-audit.mjs",
     "qa:http": "node scripts/qa-http.mjs",
+    "qa:capture": "node scripts/capture-qa.mjs",
+    "research:youtube": "python scripts/youtube-research.py",
+    "model:train": "python modeltrainer.py train --input models/editor-assist/train.jsonl --output models/editor-assist/model.json",
+    "model:predict": "python modeltrainer.py predict --model models/editor-assist/model.json --text",
     "desktop:dev": "cd apps/desktop/src-tauri && cargo tauri dev",
     "desktop:build": "cd apps/desktop/src-tauri && cargo tauri build",
     "native:check": "cargo check -p omniframe-core"

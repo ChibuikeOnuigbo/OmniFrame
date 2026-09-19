@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-09-19",
+  "policy": "comparative research only; no footage upload; no unlicensed asset bundled",
+  "references": [
+    {
+      "name": "Kdenlive UI elements",
+      "url": "https://docs.kdenlive.org/en/user_interface/ui_elements.html",
+      "type": "documentation",
+      "license": "Kdenlive documentation/project terms; reference only",
+      "status": "researched"
+    },
+    {
+      "name": "Kdenlive project monitor",
+      "url": "https://docs.kdenlive.org/en/user_interface/monitors/project_monitor.html",
+      "type": "documentation",
+      "license": "reference only",
+      "status": "researched"
+    },
+    {
+      "name": "Adobe Premiere Effect Controls",
+      "url": "https://helpx.adobe.com/premiere/desktop/add-video-effects/apply-video-effects/about-effect-controls-panel.html",
+      "type": "documentation",
+      "license": "reference only",
+      "status": "researched"
+    },
+    {
+      "name": "DaVinci Resolve feature guide",
+      "url": "https://documents.blackmagicdesign.com/SupportNotes/DaVinci_Resolve_17_New_Features_Guide.pdf",
+      "type": "documentation",
+      "license": "reference only",
+      "status": "researched"
+    },
+    {
+      "name": "OpenCut",
+      "url": "https://github.com/floomhq/opencut",
+      "type": "implementation reference",
+      "license": "MIT repository; verify release revision before reuse",
+      "status": "researched"
+    }
+  ]
+}

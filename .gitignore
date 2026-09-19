@@ -13,5 +13,9 @@ test-results/
 apps/web/dev-dist/
 image-search/
 qa-artifacts/
+qa/captures/*.png
+qa/captures/*.json
+qa/measurements/*.json
+qa/measurements/*.png
 license-audit-report.json
 development-sessions.jsonl
