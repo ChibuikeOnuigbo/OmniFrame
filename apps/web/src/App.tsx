@@ -144,7 +144,6 @@ function FeatureCard({ number, icon, title, copy, tone }: { number: string; icon
 }
 
 function Editor() {
-  const job = useEditorStore((state) => state.job);
   const toast = useEditorStore((state) => state.toast);
   const showPalette = useEditorStore((state) => state.showCommandPalette);
   useEffect(() => {
@@ -156,7 +155,7 @@ function Editor() {
   const showMedia = useEditorStore((state) => state.showMediaBin);
   const layout = useEditorStore((state) => state.layoutMode);
   const inspectorOpen = useEditorStore((state) => state.showInspector);
-  return <main className={`editor-shell layout-${layout} ${inspectorOpen ? 'inspector-open' : 'inspector-closed'}`}><TopBar /><div className="editor-main"><LeftRail /><section className="editor-center"><PreviewPanel /><Timeline /></section><PropertiesPanel /></div><StatusBar />{job.status === 'running' && <JobToast />}{showPalette && <CommandPalette />}{showExport && <ExportDialog />}{showMedia && <MediaBin />}</main>;
+  return <main className={`editor-shell layout-${layout} ${inspectorOpen ? 'inspector-open' : 'inspector-closed'}`}><TopBar /><div className="editor-main"><LeftRail /><section className="editor-center"><PreviewPanel /><Timeline /></section><PropertiesPanel /></div><StatusBar />{showPalette && <CommandPalette />}{showExport && <ExportDialog />}{showMedia && <MediaBin />}</main>;
 }
 
 function StatusBar() {
@@ -173,6 +172,7 @@ function StatusBar() {
     <span>{state.project.assets.length} assets</span>
     <span className="statusbar-clip">{clip ? clip.name : 'No clip'}</span>
     <span className="statusbar-job">{jobLabel}</span>
+    {state.job.status === 'running' && <span className="statusbar-job-progress" title={state.job.detail}><i style={{ width: `${Math.max(4, state.job.progress * 100)}%` }} /></span>}
     {state.toast && <span className="statusbar-message">{state.toast}</span>}
   </footer>;
 }
@@ -187,15 +187,17 @@ const primaryWorkspaceTabs = workspaceTabs.filter((tab) => ['edit', 'layers', 'm
 function TopBar() {
   const state = useEditorStore();
   const sequence = activeSequence(state.project);
-  const [nativeLabel, setNativeLabel] = useState(isDesktopShell() ? 'desktop core' : 'browser local');
+  const desktop = isDesktopShell();
+  const projectActionLabel = desktop ? 'Save project' : 'Download project';
+  const [nativeLabel, setNativeLabel] = useState(desktop ? 'desktop core' : 'web local');
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   useEffect(() => {
-    if (!isDesktopShell()) return;
+    if (!desktop) return;
     void readNativeCapabilities().then((capabilities) => {
       if (!capabilities) return;
       setNativeLabel(capabilities.ffmpeg_available ? 'desktop · FFmpeg ready' : 'desktop · FFmpeg unavailable');
     });
-  }, []);
+  }, [desktop]);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpenMenu(null); };
     window.addEventListener('keydown', onKey);
@@ -208,7 +210,7 @@ function TopBar() {
   const menuItems: Record<string, Array<{ label: string; shortcut?: string; action: () => void; disabled?: boolean }>> = {
     File: [
       { label: 'Open media bin', shortcut: '⇧⌘O', action: () => state.set({ showMediaBin: true }) },
-      { label: 'Save project', shortcut: '⌘S', action: state.saveProject },
+      { label: projectActionLabel, shortcut: '⌘S', action: state.saveProject },
       { label: 'Restore recovery', action: state.restoreAutosave },
       { label: 'Open export queue', shortcut: '⌘E', action: () => state.set({ showExport: true }) },
     ],
@@ -243,7 +245,7 @@ function TopBar() {
       {Object.keys(menuItems).map((menu) => <div className={`editor-menu-wrap menu-${menu.toLowerCase()}`} key={menu}><button className="menu-trigger" aria-expanded={openMenu === menu} onClick={() => setOpenMenu(openMenu === menu ? null : menu)}>{menu}</button>{openMenu === menu && <div className="menu-popover">{menuItems[menu].map((item) => <button key={item.label} disabled={item.disabled} onClick={() => runMenuAction(item.action)}><span>{item.label}</span>{item.shortcut && <kbd>{item.shortcut}</kbd>}</button>)}</div>}</div>)}
     </div></div>
     <nav className="workspace-tabs" aria-label="Editor workspaces">{primaryWorkspaceTabs.map((tab) => <button key={tab.id} className={state.workspace === tab.id ? 'active' : ''} onClick={() => state.setWorkspace(tab.id)}>{tab.label}</button>)}</nav>
-    <div className="topbar-actions"><span className="native-status"><span className="status-dot" /> {nativeLabel}</span><button className="icon-button" disabled={!state.history.canUndo()} title={state.history.undoLabel() ?? 'Undo'} onClick={state.undo}><Undo2 size={16} /></button><button className="icon-button" disabled={!state.history.canRedo()} title={state.history.redoLabel() ?? 'Redo'} onClick={state.redo}><Redo2 size={16} /></button><button className="icon-button" title="Command palette" onClick={() => state.set({ showCommandPalette: true })}><Command size={16} /></button><label className="aspect-control"><span>Canvas</span><select aria-label="Sequence aspect ratio" value={aspect} onChange={(event) => state.setAspectRatio(event.target.value as '16:9' | '1:1' | '9:16' | '4:5')}><option value="16:9">16:9</option><option value="1:1">1:1</option><option value="9:16">9:16</option><option value="4:5">4:5</option></select></label><select className="performance-select" aria-label="Preview performance" value={state.performance} onChange={(event) => state.set({ performance: event.target.value as EditorState['performance'] })}><option>AUTO</option><option>QUALITY</option><option>BALANCED</option><option>PERFORMANCE</option><option>ULTRA PREVIEW</option></select><button className="outline-button compact" onClick={state.saveProject}><Save size={14} /> Save</button><button className="primary-button compact" onClick={() => state.set({ showExport: true })}><Download size={14} /> Export</button></div>
+    <div className="topbar-actions"><span className="native-status"><span className="status-dot" /> {nativeLabel}</span><button className="icon-button" disabled={!state.history.canUndo()} title={state.history.undoLabel() ?? 'Undo'} onClick={state.undo}><Undo2 size={16} /></button><button className="icon-button" disabled={!state.history.canRedo()} title={state.history.redoLabel() ?? 'Redo'} onClick={state.redo}><Redo2 size={16} /></button><button className="icon-button" title="Command palette" onClick={() => state.set({ showCommandPalette: true })}><Command size={16} /></button><label className="aspect-control"><span>Canvas</span><select aria-label="Sequence aspect ratio" value={aspect} onChange={(event) => state.setAspectRatio(event.target.value as '16:9' | '1:1' | '9:16' | '4:5')}><option value="16:9">16:9</option><option value="1:1">1:1</option><option value="9:16">9:16</option><option value="4:5">4:5</option></select></label><select className="performance-select" aria-label="Preview performance" value={state.performance} onChange={(event) => state.set({ performance: event.target.value as EditorState['performance'] })}><option>AUTO</option><option>QUALITY</option><option>BALANCED</option><option>PERFORMANCE</option><option>ULTRA PREVIEW</option></select><button className="outline-button compact project-action" title={desktop ? 'Save project' : 'Download project file'} onClick={state.saveProject}>{desktop ? <Save size={14} /> : <Download size={14} />}<span>{projectActionLabel}</span></button><button className="primary-button compact" title="Export media" onClick={() => state.set({ showExport: true })}><Download size={14} /><span>Export</span></button></div>
   </header>;
 }
 

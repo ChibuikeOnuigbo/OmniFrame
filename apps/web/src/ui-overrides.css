@@ -34,10 +34,24 @@
 .menu-popover { min-width: 214px; }
 .menu-popover button { min-height: 27px; }
 .statusbar-message { flex: 1 1 auto; min-width: 0; color: var(--lime); overflow: hidden; text-overflow: ellipsis; }
+.statusbar-job-progress { display: inline-block; width: 56px; height: 3px; overflow: hidden; background: rgba(216,255,99,.14); }
+.statusbar-job-progress i { display: block; height: 100%; background: var(--lime); }
+
+/* Fewer words, clearer controls. Tooltips retain the full action names. */
+.editor-shell .menu-trigger,
+.editor-shell .workspace-tabs button { font-size: 11px; }
+.editor-shell .native-status,
+.editor-shell .editor-statusbar,
+.editor-shell .timeline-footer { font-size: 9px; }
+.editor-shell .panel-title,
+.editor-shell .timeline-title { font-size: 12px; }
+.editor-shell .timeline-title small { font-size: 9px; }
+.topbar-actions .compact { gap: 0; min-width: 30px; }
+.topbar-actions .compact span { display: none; }
 
 /* Fine-grained timeline display and direct playhead scrubbing. */
-.timebase-control { display: inline-flex; align-items: center; gap: 5px; color: var(--muted2); font: 8px var(--mono); white-space: nowrap; }
-.timebase-control select { height: 27px; padding: 0 6px; border: 1px solid rgba(216,255,99,.2); border-radius: 4px; outline: 0; background: #11161e; color: var(--lime); font: 8px var(--mono); }
+.timebase-control { display: inline-flex; align-items: center; gap: 5px; color: var(--muted2); font: 9px var(--mono); white-space: nowrap; }
+.timebase-control select { height: 27px; padding: 0 6px; border: 1px solid rgba(216,255,99,.2); border-radius: 4px; outline: 0; background: #11161e; color: var(--lime); font: 9px var(--mono); }
 .timeline-inner { cursor: ew-resize; }
 .timeline-clip, .timeline-marker, .time-ruler button { cursor: pointer; }
 .timeline-playhead { pointer-events: auto; cursor: ew-resize; }
@@ -60,6 +74,7 @@
   .editor-menus { display: flex; }
   .editor-menu-wrap:not(.menu-windows) { display: none; }
   .menu-windows .menu-trigger { color: var(--lime); }
+  .project-name small { display: none; }
 }
 @media (max-width: 760px) {
   .editor-shell.inspector-open .editor-main { grid-template-columns: 48px minmax(0, 1fr); }
