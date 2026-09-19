@@ -107,6 +107,8 @@ export interface EditorState {
   selectClip: (clipId: string | null, trackId?: string | null) => void;
   addTrack: (kind: TrackKind) => void;
   addAdjustmentTrack: () => void;
+  reorderTrack: (trackId: string, targetIndex: number) => void;
+  addAssetToNewTrack: (assetId: string, insertAt?: number) => void;
   toggleTrackFlag: (trackId: string, flag: TrackFlag) => void;
   addMarker: () => void;
   updateMarker: (id: string, patch: { label?: string; comment?: string; color?: string; endFrame?: number }) => void;
@@ -131,6 +133,7 @@ export interface EditorState {
   addOmniframeOp: (op: OmniframeOp) => void;
   addScene: (scene: Scene3D) => void;
   addImportedAsset: (asset: Asset) => void;
+  addImportedAssetToNewTrack: (asset: Asset, insertAt?: number) => void;
   updateAsset: (assetId: string, patch: Partial<Asset>) => void;
   commitMaskToClip: (mask: Gray, scope?: MaskScope) => void;
   commitTrackedMasks: (frames: Array<{ frame: number; mask: Gray }>, method: string, confidence: number | null) => void;
@@ -148,8 +151,25 @@ export interface EditorState {
 
 const AUTOSAVE_KEY = 'omniframe.autosave.v3';
 
+function normalizeTimelineProject(project: ProjectFile): ProjectFile {
+  const next = structuredClone(project);
+  for (const sequence of next.sequences) {
+    if (sequence.tracks.length === 0) sequence.tracks.push(newTrack('video', 'Media 1'));
+    const isStarterLayout = sequence.tracks.length === 2
+      && sequence.tracks[0].kind === 'video'
+      && sequence.tracks[0].name === 'V1'
+      && sequence.tracks[1].kind === 'audio'
+      && sequence.tracks[1].name === 'A1'
+      && sequence.tracks.every((track) => track.clips.length === 0);
+    if (isStarterLayout) sequence.tracks = [sequence.tracks[0]];
+    const mediaTrack = sequence.tracks.find((track) => track.kind === 'video') ?? sequence.tracks[0];
+    if (mediaTrack && mediaTrack.clips.length === 0 && (mediaTrack.name === 'V1' || mediaTrack.name === 'Video')) mediaTrack.name = 'Media 1';
+  }
+  return next;
+}
+
 function emptyProject(): ProjectFile {
-  return newProject('Untitled sequence');
+  return normalizeTimelineProject(newProject('Untitled sequence'));
 }
 
 function loadAutosave(): ProjectFile | null {
@@ -158,13 +178,14 @@ function loadAutosave(): ProjectFile | null {
     if (!value) return null;
     const parsed = deserializeProject(value);
     if (!validateProjectShape(parsed).ok) return null;
+    const normalized = normalizeTimelineProject(parsed);
     // Blob URLs are scoped to the previous browser session and cannot be reopened from
     // a recovery snapshot. Keep the asset record for relink, but never pretend it is
     // available after a reload.
-    for (const asset of parsed.assets) {
+    for (const asset of normalized.assets) {
       if (asset.sourcePath.startsWith('blob:')) asset.missing = true;
     }
-    return parsed;
+    return normalized;
   } catch {
     return null;
   }
@@ -190,6 +211,33 @@ function findSelected(project: ProjectFile, clipId: string | null): { track: Tra
     if (clip) return { track, clip };
   }
   return null;
+}
+
+function primaryMediaTrack(sequence: Sequence): Track {
+  let track = sequence.tracks.find((item) => item.name === 'Media 1' && item.kind === 'video')
+    ?? sequence.tracks.find((item) => item.kind === 'video');
+  if (!track) {
+    track = newTrack('video', 'Media 1');
+    sequence.tracks.unshift(track);
+  }
+  if (track.name === 'V1' || track.name === 'Video') track.name = 'Media 1';
+  return track;
+}
+
+function clipForAsset(asset: Asset, start: number): Clip {
+  const sourceFrames = asset.kind === 'model'
+    ? 5 * 30
+    : Math.max(1, Math.round(asset.duration * (asset.fps || 30)));
+  const kind = asset.kind === 'audio' ? 'audio' : asset.kind === 'model' ? 'scene3d' : 'video';
+  return newClip({
+    assetId: asset.id,
+    name: asset.name,
+    sourceIn: 0,
+    sourceOut: sourceFrames,
+    start,
+    kind,
+    color: asset.kind === 'audio' ? '#7c6242' : asset.kind === 'model' ? '#8769bb' : '#2b7180',
+  });
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -289,6 +337,35 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     track.isAdjustment = true;
     next.sequences[0].tracks.unshift(track);
     s.commitProject(next, 'Add adjustment track', { selectedTrackId: track.id, toast: 'Adjustment track added above the stack.' });
+  },
+  reorderTrack: (trackId, targetIndex) => {
+    const s = get();
+    const next = structuredClone(s.project);
+    const tracks = next.sequences[0].tracks;
+    const sourceIndex = tracks.findIndex((track) => track.id === trackId);
+    if (sourceIndex < 0) return;
+    const [track] = tracks.splice(sourceIndex, 1);
+    const index = Math.max(0, Math.min(tracks.length, Math.round(targetIndex)));
+    if (sourceIndex === index || (sourceIndex === tracks.length && index === tracks.length)) return;
+    tracks.splice(index, 0, track);
+    s.commitProject(next, 'Rearrange timeline track', { selectedTrackId: track.id, toast: `${track.name} moved.` });
+  },
+  addAssetToNewTrack: (assetId, insertAt) => {
+    const s = get();
+    const next = structuredClone(s.project);
+    const sequence = next.sequences[0];
+    const asset = next.assets.find((item) => item.id === assetId);
+    if (!asset) return;
+    const clip = clipForAsset(asset, sequence.duration);
+    const trackKind = clip.kind;
+    const count = sequence.tracks.filter((track) => track.kind === trackKind).length + 1;
+    const name = trackKind === 'audio' ? `Audio ${count}` : trackKind === 'scene3d' ? `3D ${count}` : `Media ${count}`;
+    const track = newTrack(trackKind, name);
+    track.clips.push(clip);
+    const index = Math.max(0, Math.min(sequence.tracks.length, Math.round(insertAt ?? sequence.tracks.length)));
+    sequence.tracks.splice(index, 0, track);
+    sequence.duration = Math.max(sequence.duration, clipEnd(clip));
+    s.commitProject(next, 'Create track from media', { selectedClipId: clip.id, selectedTrackId: track.id, toast: `${asset.name} added on a new track.` });
   },
   toggleTrackFlag: (trackId, flag) => {
     const s = get();
@@ -502,15 +579,28 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const next = structuredClone(s.project);
     next.assets.push(asset);
     const sequence = next.sequences[0];
-    const start = sequence.duration > 0 ? sequence.duration : 0;
-    const isAudio = asset.kind === 'audio';
-    const clip = newClip({ assetId: asset.id, name: asset.name, sourceIn: 0, sourceOut: Math.max(1, Math.round(asset.duration * (asset.fps || 30))), start, kind: isAudio ? 'audio' : asset.kind === 'model' ? 'scene3d' : 'video', color: isAudio ? '#7c6242' : asset.kind === 'model' ? '#8769bb' : '#2b7180' });
-    let track = sequence.tracks.find((t) => t.kind === clip.kind);
-    if (!track) { track = newTrack(clip.kind); sequence.tracks.push(track); }
+    const track = primaryMediaTrack(sequence);
+    const clip = clipForAsset(asset, sequence.duration);
     track.clips.push(clip);
     sequence.duration = Math.max(sequence.duration, clipEnd(clip));
     persist(next, s.playhead);
-    return { project: next, importedAsset: asset, selectedClipId: clip.id, selectedTrackId: track.id, toast: `${asset.name} imported.` };
+    return { project: next, importedAsset: asset, selectedClipId: clip.id, selectedTrackId: track.id, toast: `${asset.name} appended to the timeline.` };
+  }),
+  addImportedAssetToNewTrack: (asset, insertAt) => set((s) => {
+    const next = structuredClone(s.project);
+    const sequence = next.sequences[0];
+    next.assets.push(asset);
+    const clip = clipForAsset(asset, sequence.duration);
+    const trackKind = clip.kind;
+    const count = sequence.tracks.filter((track) => track.kind === trackKind).length + 1;
+    const name = trackKind === 'audio' ? `Audio ${count}` : trackKind === 'scene3d' ? `3D ${count}` : `Media ${count}`;
+    const track = newTrack(trackKind, name);
+    track.clips.push(clip);
+    const index = Math.max(0, Math.min(sequence.tracks.length, Math.round(insertAt ?? sequence.tracks.length)));
+    sequence.tracks.splice(index, 0, track);
+    sequence.duration = Math.max(sequence.duration, clipEnd(clip));
+    persist(next, s.playhead);
+    return { project: next, importedAsset: asset, selectedClipId: clip.id, selectedTrackId: track.id, toast: `${asset.name} added on a new track.` };
   }),
   updateAsset: (assetId, patch) => set((s) => {
     const next = structuredClone(s.project);

@@ -49,7 +49,22 @@
 .topbar-actions .compact { gap: 0; min-width: 30px; }
 .topbar-actions .compact span { display: none; }
 
-/* Fine-grained timeline display and direct playhead scrubbing. */
+/* Fine-grained timeline display, direct playhead scrubbing, and track arrangement. */
+.timeline-add-media { display: inline-flex; align-items: center; gap: 6px; min-height: 27px; padding: 0 10px; border: 1px solid rgba(216,255,99,.38); border-radius: 4px; background: rgba(216,255,99,.08); color: var(--lime); font: 10px var(--mono); }
+.timeline-add-media:hover { background: rgba(216,255,99,.15); }
+.track-row[draggable="true"] { cursor: grab; }
+.track-row[draggable="true"]:active { cursor: grabbing; }
+.track-row.dragging { opacity: .35; }
+.track-drag-handle { display: grid; place-items: center; padding: 2px; border: 0; background: transparent; color: var(--muted2); cursor: grab; }
+.track-drag-handle:hover { color: var(--lime); }
+.track-drop-zone { position: relative; z-index: 8; height: 4px; min-width: 820px; border-top: 1px solid transparent; transition: height .12s ease, border-color .12s ease; }
+.track-drop-zone.active { height: 18px; border-top-color: var(--lime); }
+.track-drop-zone.active::before { position: absolute; top: -2px; right: 0; left: 0; height: 3px; border-radius: 3px; background: var(--lime); box-shadow: 0 0 12px rgba(216,255,99,.42); content: ''; }
+.track-drop-zone span { position: absolute; top: 3px; left: 124px; color: var(--lime); font: 8px var(--mono); letter-spacing: .04em; pointer-events: none; }
+.track-drop-zone.end { height: 22px; border-top-color: rgba(216,255,99,.12); }
+.track-drop-zone.end.active { height: 30px; }
+.track-drop-zone.end:not(.active)::after { position: absolute; inset: 6px 12px 0 124px; color: var(--muted2); content: 'Drop a file here to create a track'; font: 8px var(--mono); opacity: .7; }
+.track-drop-zone.end.active span { font-size: 8px; }
 .timebase-control { display: inline-flex; align-items: center; gap: 5px; color: var(--muted2); font: 9px var(--mono); white-space: nowrap; }
 .timebase-control select { height: 27px; padding: 0 6px; border: 1px solid rgba(216,255,99,.2); border-radius: 4px; outline: 0; background: #11161e; color: var(--lime); font: 9px var(--mono); }
 .timeline-inner { cursor: ew-resize; }
