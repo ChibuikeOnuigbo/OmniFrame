@@ -195,7 +195,7 @@ function findSelected(project: ProjectFile, clipId: string | null): { track: Tra
 export const useEditorStore = create<EditorState>((set, get) => ({
   page: window.location.hash === '#editor' ? 'editor' : 'landing',
   workspace: 'edit',
-  layoutMode: 'standard',
+  layoutMode: 'focus',
   showInspector: false,
   timelineDisplay: 'timecode',
   project: initialProject,
