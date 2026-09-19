@@ -227,7 +227,7 @@ function resizeGray(source: Gray, width: number, height: number): Gray {
 }
 
 /**
- * Encode a local source through WebCodecs and mux H.264 + AAC into a real MP4.
+ * Encode a source through WebCodecs and mux H.264 + AAC into a real MP4.
  * The function refuses to silently omit a track: if either encoder is unavailable,
  * it throws a user-readable capability error instead of creating a misleading file.
  */
@@ -320,7 +320,7 @@ async function decodeAudioSource(
   G: { AudioContext?: any; webkitAudioContext?: any },
 ): Promise<AudioBuffer> {
   const AudioContextCtor = G.AudioContext ?? G.webkitAudioContext;
-  if (!AudioContextCtor) throw new Error('Local AAC export requires a browser AudioContext to decode the source audio track.');
+  if (!AudioContextCtor) throw new Error('AAC export requires a browser AudioContext to decode the source audio track.');
   const context = new AudioContextCtor();
   try {
     const response = await fetch(sourceUrl);

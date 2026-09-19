@@ -48,7 +48,7 @@ function featureVector(text: string, featureCount: number): Float32Array {
   return vector;
 }
 
-/** Load only when a caller explicitly opts into the local model bundle. */
+/** Load only when a caller explicitly opts into the model bundle. */
 export async function loadEditorAssistModel(manifestUrl: string): Promise<EditorAssistRuntime> {
   const response = await fetch(manifestUrl);
   if (!response.ok) throw new Error(`Editor-assist manifest could not be loaded (${response.status}).`);

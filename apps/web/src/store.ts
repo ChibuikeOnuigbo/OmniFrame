@@ -510,7 +510,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     track.clips.push(clip);
     sequence.duration = Math.max(sequence.duration, clipEnd(clip));
     persist(next, s.playhead);
-    return { project: next, importedAsset: asset, selectedClipId: clip.id, selectedTrackId: track.id, toast: `${asset.name} imported locally.` };
+    return { project: next, importedAsset: asset, selectedClipId: clip.id, selectedTrackId: track.id, toast: `${asset.name} imported.` };
   }),
   updateAsset: (assetId, patch) => set((s) => {
     const next = structuredClone(s.project);
@@ -568,12 +568,12 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const blob = new Blob([text], { type: 'application/json' });
     const href = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = href; a.download = `${project.name.replace(/\s+/g, '-').toLowerCase()}.vxproj`; a.click(); URL.revokeObjectURL(href);
-    set({ project, toast: 'Project saved as .vxproj and autosaved locally.' });
+    set({ project, toast: 'Project downloaded as .vxproj and recovery updated.' });
   },
   restoreAutosave: () => {
     const project = loadAutosave();
-    if (!project) return set({ toast: 'No valid local recovery snapshot was found.' });
-    set({ project, selectedClipId: null, selectedTrackId: project.sequences[0]?.tracks[0]?.id ?? null, toast: 'Local recovery snapshot restored.' });
+    if (!project) return set({ toast: 'No valid recovery snapshot was found.' });
+    set({ project, selectedClipId: null, selectedTrackId: project.sequences[0]?.tracks[0]?.id ?? null, toast: 'Recovery snapshot restored.' });
   },
   undo: () => set((s) => { s.history.undo(); persist(s.project, s.playhead); return { project: structuredClone(s.project), toast: 'Undo.' }; }),
   redo: () => set((s) => { s.history.redo(); persist(s.project, s.playhead); return { project: structuredClone(s.project), toast: 'Redo.' }; }),
