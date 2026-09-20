@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type React from 'react';
 import {
   Activity, AlertTriangle, Aperture, ArrowDownToLine, AudioLines, Box, Brush, Camera,
-  Check, ChevronDown, Circle, CircleHelp, Command, Download, Eye, EyeOff, FilePlus2,
+  Check, ChevronDown, ChevronLeft, ChevronRight, Circle, CircleHelp, Command, Download, Eye, EyeOff, FilePlus2,
   Film, FolderOpen, Gauge, Grid2X2, Hand, Headphones, KeyRound, Layers3, Lightbulb,
   Link2, LoaderCircle, Lock, Magnet, Menu, Minus, MousePointer2, Move, Pause, Pencil,
   Play, Plus, Redo2, RotateCcw, Save, Scissors, Search, Settings2, SlidersHorizontal,
@@ -159,7 +159,7 @@ function Editor() {
   const showMedia = useEditorStore((state) => state.showMediaBin);
   const layout = useEditorStore((state) => state.layoutMode);
   const inspectorOpen = useEditorStore((state) => state.showInspector);
-  return <main className={`editor-shell layout-${layout} ${inspectorOpen ? 'inspector-open' : 'inspector-closed'}`}><TopBar /><div className="editor-main"><LeftRail /><section className="editor-center"><PreviewPanel /><Timeline /></section><PropertiesPanel /></div><StatusBar />{showPalette && <CommandPalette />}{showExport && <ExportDialog />}{showMedia && <MediaBin />}</main>;
+  return <main className={`editor-shell layout-${layout} ${inspectorOpen ? 'inspector-open' : 'inspector-closed'}`}><TopBar /><div className="editor-main"><div className="editor-upper"><LeftRail /><section className="editor-center"><PreviewPanel /></section><PropertiesPanel /></div><Timeline /></div><StatusBar />{showPalette && <CommandPalette />}{showExport && <ExportDialog />}{showMedia && <MediaBin />}</main>;
 }
 
 function StatusBar() {
@@ -186,7 +186,13 @@ const workspaceTabs: Array<{ id: Workspace; label: string }> = [
   { id: 'maskTracking', label: 'Mask tracking' }, { id: 'tracking', label: 'Tracking' }, { id: 'omniframe', label: 'Omniframe' },
   { id: '3d', label: '3D' }, { id: 'audio', label: 'Audio' }, { id: 'export', label: 'Export' },
 ];
-const primaryWorkspaceTabs = workspaceTabs.filter((tab) => ['edit', 'layers', 'mask', 'tracking', 'omniframe', '3d'].includes(tab.id));
+const primaryWorkspaceTabs = workspaceTabs;
+
+function WorkspaceTabStrip({ tabs, active, onSelect }: { tabs: Array<{ id: Workspace; label: string }>; active: Workspace; onSelect: (workspace: Workspace) => void }) {
+  const tabsRef = useRef<HTMLElement>(null);
+  const scrollTabs = (amount: number) => tabsRef.current?.scrollBy({ left: amount, behavior: 'smooth' });
+  return <div className="workspace-tabs-shell"><button className="tab-scroll-button" title="Show previous workspaces" aria-label="Show previous workspaces" onClick={() => scrollTabs(-180)}><ChevronLeft size={16} /></button><nav ref={tabsRef} className="workspace-tabs" aria-label="Editor workspaces">{tabs.map((tab) => <button key={tab.id} className={active === tab.id ? 'active' : ''} onClick={() => onSelect(tab.id)}>{tab.label}</button>)}</nav><button className="tab-scroll-button" title="Show more workspaces" aria-label="Show more workspaces" onClick={() => scrollTabs(180)}><ChevronRight size={16} /></button></div>;
+}
 
 function TopBar() {
   const state = useEditorStore();
@@ -230,11 +236,10 @@ function TopBar() {
       { label: 'Reset timeline zoom', action: () => state.set({ timelineZoom: 1 }) },
     ],
     Windows: [
-      { label: 'Layout · Standard', action: () => state.set({ layoutMode: 'standard', showInspector: false }) },
-      { label: 'Layout · Focus', action: () => state.set({ layoutMode: 'focus', showInspector: false }) },
-      { label: 'Layout · Timeline', action: () => state.set({ layoutMode: 'timeline', showInspector: false }) },
-      { label: 'Layout · Viewer', action: () => state.set({ layoutMode: 'viewer', showInspector: false }) },
-      { label: state.showInspector ? 'Hide inspector' : 'Show inspector', action: () => state.showInspector ? state.set({ showInspector: false }) : state.set({ showInspector: true, layoutMode: 'standard' }) },
+      { label: 'Layout · Standard', action: () => state.set({ layoutMode: 'standard' }) },
+      { label: 'Layout · Focus', action: () => state.set({ layoutMode: 'focus' }) },
+      { label: 'Layout · Timeline', action: () => state.set({ layoutMode: 'timeline' }) },
+      { label: 'Layout · Viewer', action: () => state.set({ layoutMode: 'viewer' }) },
     ],
     Workspace: workspaceTabs.map((tab) => ({ label: tab.label, action: () => state.setWorkspace(tab.id) })),
     Help: [
@@ -248,7 +253,7 @@ function TopBar() {
     <div className="topbar-left"><Logo /><div className="project-divider" /><div className="project-name"><span>{state.project.name}</span><small>{sequence.width}×{sequence.height} · {sequence.fps} fps · recovery on</small></div><div className="editor-menus" aria-label="Application menu">
       {Object.keys(menuItems).map((menu) => <div className={`editor-menu-wrap menu-${menu.toLowerCase()}`} key={menu}><button className="menu-trigger" aria-expanded={openMenu === menu} onClick={() => setOpenMenu(openMenu === menu ? null : menu)}>{menu}</button>{openMenu === menu && <div className="menu-popover">{menuItems[menu].map((item) => <button key={item.label} disabled={item.disabled} onClick={() => runMenuAction(item.action)}><span>{item.label}</span>{item.shortcut && <kbd>{item.shortcut}</kbd>}</button>)}</div>}</div>)}
     </div></div>
-    <nav className="workspace-tabs" aria-label="Editor workspaces">{primaryWorkspaceTabs.map((tab) => <button key={tab.id} className={state.workspace === tab.id ? 'active' : ''} onClick={() => state.setWorkspace(tab.id)}>{tab.label}</button>)}</nav>
+    <WorkspaceTabStrip tabs={primaryWorkspaceTabs} active={state.workspace} onSelect={state.setWorkspace} />
     <div className="topbar-actions"><span className="native-status"><span className="status-dot" /> {nativeLabel}</span><button className="icon-button" disabled={!state.history.canUndo()} title={state.history.undoLabel() ?? 'Undo'} onClick={state.undo}><Undo2 size={16} /></button><button className="icon-button" disabled={!state.history.canRedo()} title={state.history.redoLabel() ?? 'Redo'} onClick={state.redo}><Redo2 size={16} /></button><button className="icon-button" title="Command palette" onClick={() => state.set({ showCommandPalette: true })}><Command size={16} /></button><label className="aspect-control"><span>Canvas</span><select aria-label="Sequence aspect ratio" value={aspect} onChange={(event) => state.setAspectRatio(event.target.value as '16:9' | '1:1' | '9:16' | '4:5')}><option value="16:9">16:9</option><option value="1:1">1:1</option><option value="9:16">9:16</option><option value="4:5">4:5</option></select></label><select className="performance-select" aria-label="Preview performance" value={state.performance} onChange={(event) => state.set({ performance: event.target.value as EditorState['performance'] })}><option>AUTO</option><option>QUALITY</option><option>BALANCED</option><option>PERFORMANCE</option><option>ULTRA PREVIEW</option></select><button className="outline-button compact project-action" title={desktop ? 'Save project' : 'Download project file'} onClick={state.saveProject}>{desktop ? <Save size={14} /> : <Download size={14} />}<span>{projectActionLabel}</span></button><button className="primary-button compact" title="Export media" onClick={() => state.set({ showExport: true })}><Download size={14} /><span>Export</span></button></div>
   </header>;
 }
@@ -275,7 +280,11 @@ function LeftRail() {
       state.flash((error as Error).message);
     }
   };
-  return <aside className="left-rail"><div className="rail-scroll">{railItems.map((item) => <button key={item.id} title={item.label} className={`rail-item ${item.id === 'media' ? '' : state.workspace === item.id ? 'active' : ''}`} onClick={() => { if (item.id === 'media') state.set({ showMediaBin: true }); else state.setWorkspace(item.id); }}>{item.icon}<span>{item.label}</span>{item.id === 'media' && <Upload size={11} className="rail-add" />}</button>)}<input ref={inputRef} type="file" hidden accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.currentTarget.value = ''; }} /></div><div className="rail-bottom"><button className="rail-item" title="Recover" onClick={() => state.restoreAutosave()}><RotateCcw size={17} /><span>Recover</span></button><button className="rail-item" title="Help" onClick={() => state.flash('Space play · B blade · I mask · T track · O repair')}><CircleHelp size={17} /><span>Help</span></button></div></aside>;
+  const selectAsset = (asset: Asset) => {
+    const clip = state.project.sequences[0].tracks.flatMap((track) => track.clips).find((item) => item.assetId === asset.id);
+    if (clip) state.selectClip(clip.id, state.project.sequences[0].tracks.find((track) => track.clips.some((item) => item.id === clip.id))?.id);
+  };
+  return <aside className="left-rail"><div className="rail-header"><strong>Library</strong><button className="icon-button" title="Add media" onClick={() => inputRef.current?.click()}><Plus size={17} /></button></div><div className="rail-scroll">{railItems.map((item) => <button key={item.id} title={item.label} className={`rail-item ${item.id === 'media' ? '' : state.workspace === item.id ? 'active' : ''}`} onClick={() => { if (item.id === 'media') inputRef.current?.click(); else state.setWorkspace(item.id); }}>{item.icon}<span>{item.label}</span>{item.id === 'media' && <Upload size={11} className="rail-add" />}</button>)}<input ref={inputRef} type="file" hidden accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.currentTarget.value = ''; }} /></div><div className="rail-library"><div className="rail-library-title"><span>Project media</span><small>{state.project.assets.length}</small></div>{state.project.assets.length === 0 ? <div className="rail-library-empty"><FilePlus2 size={17} /><span>Add media to begin</span></div> : state.project.assets.map((asset) => <button className={`rail-asset ${state.project.sequences[0].tracks.some((track) => track.clips.some((clip) => clip.assetId === asset.id && clip.id === state.selectedClipId)) ? 'active' : ''}`} key={asset.id} title={asset.name} onClick={() => selectAsset(asset)}><span className={`rail-asset-icon ${asset.kind}`}>{asset.kind === 'model' ? <Box size={14} /> : asset.kind === 'audio' ? <AudioLines size={14} /> : asset.kind === 'image' ? <Aperture size={14} /> : <Film size={14} />}</span><span>{asset.name}</span></button>)}</div><div className="rail-bottom"><button className="rail-item" title="Recover" onClick={() => state.restoreAutosave()}><RotateCcw size={17} /><span>Recover</span></button><button className="rail-item" title="Help" onClick={() => state.flash('Space play · B blade · I mask · T track · O repair')}><CircleHelp size={17} /><span>Help</span></button></div></aside>;
 }
 
 function PreviewPanel() {
@@ -603,7 +612,7 @@ function TimelineClip({ clip, track, sequence }: { clip: Clip; track: ReturnType
 
 function PropertiesPanel() {
   const state = useEditorStore();
-  return <aside className="properties-panel"><div className="properties-header"><span>Inspector</span><div className="properties-actions"><button className="icon-button" title="Open media" onClick={() => state.set({ showMediaBin: true })}><FolderOpen size={15} /></button><button className="icon-button" title="Close inspector" onClick={() => state.set({ showInspector: false })}><X size={15} /></button></div></div>{state.workspace === 'layers' ? <LayersInspector /> : state.workspace === 'mask' ? <MaskInspector /> : state.workspace === 'maskTracking' ? <MaskTrackingInspector /> : state.workspace === 'tracking' ? <TrackingInspector /> : state.workspace === 'omniframe' ? <OmniframeInspector /> : state.workspace === '3d' ? <ThreeInspector /> : state.workspace === 'color' ? <ColorInspector /> : state.workspace === 'audio' ? <AudioInspector /> : state.workspace === 'export' ? <ExportInspector /> : <EditInspector />}</aside>;
+  return <aside className="properties-panel"><div className="properties-header"><span>Inspector</span><div className="properties-actions"><button className="icon-button" title="Open media" onClick={() => state.set({ showMediaBin: true })}><FolderOpen size={15} /></button></div></div>{state.workspace === 'layers' ? <LayersInspector /> : state.workspace === 'mask' ? <MaskInspector /> : state.workspace === 'maskTracking' ? <MaskTrackingInspector /> : state.workspace === 'tracking' ? <TrackingInspector /> : state.workspace === 'omniframe' ? <OmniframeInspector /> : state.workspace === '3d' ? <ThreeInspector /> : state.workspace === 'color' ? <ColorInspector /> : state.workspace === 'audio' ? <AudioInspector /> : state.workspace === 'export' ? <ExportInspector /> : <EditInspector />}</aside>;
 }
 
 function InspectorSection({ title, icon, children, open = true }: { title: string; icon?: React.ReactNode; children: React.ReactNode; open?: boolean }) { return <details className="inspector-section" open={open}><summary>{icon}{title}<ChevronDown size={13} /></summary><div className="inspector-content">{children}</div></details>; }
