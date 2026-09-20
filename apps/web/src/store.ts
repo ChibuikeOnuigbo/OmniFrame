@@ -303,7 +303,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const frame = s.snapping && Math.abs(delta) === 1 ? snapFrame(raw, magnets, 0) : raw;
     return keepPlaying ? { playhead: frame } : { playhead: frame, isPlaying: false };
   }),
-  setPlayhead: (frame) => set((s) => ({ playhead: Math.max(0, Math.min(Math.max(0, s.project.sequences[0].duration - 1), Math.round(frame))) })),
+  setPlayhead: (frame) => set((s) => {
+    const nextFrame = Math.max(0, Math.min(Math.max(0, s.project.sequences[0].duration - 1), Math.round(frame)));
+    return nextFrame === s.playhead ? s : { playhead: nextFrame };
+  }),
   setPlaybackRate: (playbackRate) => set({ playbackRate }),
   setWorkspace: (workspace) => set({ workspace, activeTool: workspace === 'mask' ? 'mask' : workspace === 'maskTracking' ? 'track' : workspace === 'tracking' ? 'track' : workspace === 'omniframe' ? 'omniframe' : 'select' }),
   setAspectRatio: (aspect) => {
@@ -647,7 +650,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     instance.trackedFrom = { frame: Math.max(0, s.playhead - selected.clip.start), method, ...(confidence === null ? {} : { confidence }) };
     s.commitProject(next, `Commit ${method} tracked masks`, { toast: `${frames.length} measured ${method} mask frames stored.` });
   },
-  setMask: (selectedMask) => set({ selectedMask }),
+  setMask: (selectedMask) => set((s) => selectedMask === null && s.selectedMask === null ? s : { selectedMask }),
   setMaskPath: (maskPath) => set({ maskPath }),
   clearMask: () => set({ selectedMask: null, maskPath: [], toast: 'Current viewer mask cleared.' }),
   saveProject: () => {

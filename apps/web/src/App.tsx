@@ -3,7 +3,7 @@ import type React from 'react';
 import {
   Activity, AlertTriangle, Aperture, ArrowDownToLine, AudioLines, Box, Brush, Camera,
   Check, ChevronDown, ChevronLeft, ChevronRight, Circle, CircleHelp, Command, Download, Eye, EyeOff, FilePlus2,
-  Film, FolderOpen, Gauge, Grid2X2, Hand, Headphones, KeyRound, Layers3, Lightbulb,
+  Film, Gauge, Grid2X2, Hand, Headphones, KeyRound, Layers3, Lightbulb,
   Link2, LoaderCircle, Lock, Magnet, Menu, Minus, MousePointer2, Move, Pause, Pencil,
   Play, Plus, Redo2, RotateCcw, Save, Scissors, Search, Settings2, SlidersHorizontal,
   Sparkles, Split, Square, Target, TextCursorInput, Trash2, Undo2, Upload, WandSparkles,
@@ -114,7 +114,7 @@ function useKeyboardShortcuts() {
       if (event.key.toLowerCase() === 'i') state.setWorkspace('mask');
       if (event.key.toLowerCase() === 't') state.setWorkspace('tracking');
       if (event.key.toLowerCase() === 'o') state.setWorkspace('omniframe');
-      if (event.key.toLowerCase() === 'z' && !event.metaKey && !event.ctrlKey) state.set({ timelineZoom: Math.min(4, state.timelineZoom + 0.25) });
+      if (event.key.toLowerCase() === 'z' && !event.metaKey && !event.ctrlKey) state.set({ timelineZoom: clampTimelineZoom(state.timelineZoom + 0.25) });
       if (event.key === 'Delete' || event.key === 'Backspace') state.deleteSelectedRipple();
     };
     window.addEventListener('keydown', onKey);
@@ -180,6 +180,12 @@ function StatusBar() {
     {state.toast && <span className="statusbar-message">{state.toast}</span>}
   </footer>;
 }
+
+const TIMELINE_LABEL_WIDTH = 178;
+const TIMELINE_BASE_PIXELS_PER_SECOND = 50;
+const MIN_TIMELINE_ZOOM = 0.25;
+const MAX_TIMELINE_ZOOM = 6;
+const clampTimelineZoom = (value: number) => Math.max(MIN_TIMELINE_ZOOM, Math.min(MAX_TIMELINE_ZOOM, value));
 
 const workspaceTabs: Array<{ id: Workspace; label: string }> = [
   { id: 'edit', label: 'Edit' }, { id: 'layers', label: 'Layers' }, { id: 'color', label: 'Color' }, { id: 'mask', label: 'Masking' },
@@ -293,7 +299,7 @@ function LeftRail() {
     const clip = state.project.sequences[0].tracks.flatMap((track) => track.clips).find((item) => item.assetId === asset.id);
     if (clip) state.selectClip(clip.id, state.project.sequences[0].tracks.find((track) => track.clips.some((item) => item.id === clip.id))?.id);
   };
-  return <aside className="left-rail"><div className="rail-header"><strong>Library</strong><button className="icon-button" title="Add media" onClick={() => inputRef.current?.click()}><Plus size={17} /></button></div><div className="rail-scroll">{railItems.map((item) => <button key={item.id} title={item.label} className={`rail-item ${item.id === 'media' ? '' : state.workspace === item.id ? 'active' : ''}`} onClick={() => { if (item.id === 'media') inputRef.current?.click(); else state.setWorkspace(item.id); }}>{item.icon}<span>{item.label}</span>{item.id === 'media' && <Upload size={11} className="rail-add" />}</button>)}<input ref={inputRef} type="file" hidden accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.currentTarget.value = ''; }} /></div><div className="rail-library"><div className="rail-library-title"><span>Project media</span><small>{state.project.assets.length}</small></div><HorizontalScroller label="Media categories" className="media-filter-scroll" step={120}>{mediaFilters.map((filter) => <button key={filter.id} className={`media-filter-button ${mediaFilter === filter.id ? 'active' : ''}`} onClick={() => setMediaFilter(filter.id)}>{filter.label}</button>)}</HorizontalScroller>{state.project.assets.length === 0 ? <div className="rail-library-empty"><FilePlus2 size={17} /><span>Add media to begin</span></div> : visibleAssets.length === 0 ? <div className="rail-library-empty"><Film size={17} /><span>No {mediaFilter} media yet</span></div> : visibleAssets.map((asset) => <button className={`rail-asset ${state.project.sequences[0].tracks.some((track) => track.clips.some((clip) => clip.assetId === asset.id && clip.id === state.selectedClipId)) ? 'active' : ''}`} key={asset.id} title={asset.name} onClick={() => selectAsset(asset)}><span className={`rail-asset-icon ${asset.kind}`}>{asset.kind === 'model' ? <Box size={14} /> : asset.kind === 'audio' ? <AudioLines size={14} /> : asset.kind === 'image' ? <Aperture size={14} /> : <Film size={14} />}</span><span>{asset.name}</span></button>)}</div><div className="rail-bottom"><button className="rail-item" title="Recover" onClick={() => state.restoreAutosave()}><RotateCcw size={17} /><span>Recover</span></button><button className="rail-item" title="Help" onClick={() => state.flash('Space play · B blade · I mask · T track · O repair')}><CircleHelp size={17} /><span>Help</span></button></div></aside>;
+  return <aside className="left-rail"><div className="rail-header"><strong>Library</strong><button className="rail-add-button" title="Add media" onClick={() => inputRef.current?.click()}><Plus size={15} /><span>Add media</span></button></div><div className="rail-scroll">{railItems.map((item) => <button key={item.id} title={item.label} className={`rail-item ${item.id === 'media' ? '' : state.workspace === item.id ? 'active' : ''}`} onClick={() => { if (item.id === 'media') state.set({ showMediaBin: true }); else state.setWorkspace(item.id); }}>{item.icon}<span>{item.label}</span></button>)}<input ref={inputRef} type="file" hidden accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.currentTarget.value = ''; }} /></div><div className="rail-library"><div className="rail-library-title"><span>Project media</span><small>{state.project.assets.length}</small></div><HorizontalScroller label="Media categories" className="media-filter-scroll" step={120}>{mediaFilters.map((filter) => <button key={filter.id} className={`media-filter-button ${mediaFilter === filter.id ? 'active' : ''}`} onClick={() => setMediaFilter(filter.id)}>{filter.label}</button>)}</HorizontalScroller>{state.project.assets.length === 0 ? <div className="rail-library-empty"><FilePlus2 size={17} /><span>Add media to begin</span></div> : visibleAssets.length === 0 ? <div className="rail-library-empty"><Film size={17} /><span>No {mediaFilter} media yet</span></div> : visibleAssets.map((asset) => <button className={`rail-asset ${state.project.sequences[0].tracks.some((track) => track.clips.some((clip) => clip.assetId === asset.id && clip.id === state.selectedClipId)) ? 'active' : ''}`} key={asset.id} title={asset.name} onClick={() => selectAsset(asset)}><span className={`rail-asset-icon ${asset.kind}`}>{asset.kind === 'model' ? <Box size={14} /> : asset.kind === 'audio' ? <AudioLines size={14} /> : asset.kind === 'image' ? <Aperture size={14} /> : <Film size={14} />}</span><span>{asset.name}</span></button>)}</div><div className="rail-bottom"><button className="rail-item" title="Recover" onClick={() => state.restoreAutosave()}><RotateCcw size={17} /><span>Recover</span></button><button className="rail-item" title="Help" onClick={() => state.flash('Space play · B blade · I mask · T track · O repair')}><CircleHelp size={17} /><span>Help</span></button></div></aside>;
 }
 
 function PreviewPanel() {
@@ -302,6 +308,8 @@ function PreviewPanel() {
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const drawRef = useRef<() => void>(() => undefined);
+  const hasRenderedFrame = useRef(false);
   const pathModifiers = useRef({ shift: false, alt: false, ctrl: false });
   const clip = selectedClip(state);
   const selectedAsset = state.project.assets.find((item) => item.id === clip?.assetId);
@@ -323,6 +331,7 @@ function PreviewPanel() {
 
   useEffect(() => {
     setSourceReady(false);
+    hasRenderedFrame.current = false;
     const video = videoRef.current;
     const image = imageRef.current;
     if (video) {
@@ -347,13 +356,25 @@ function PreviewPanel() {
     const sequence = activeSequence(state.project);
     const sourceFrame = (state.playhead - (clip?.start ?? 0)) + (clip?.sourceIn ?? 0);
     const target = Math.max(0, sourceFrame / sequence.fps);
+    let repaint = 0;
+    const refresh = () => {
+      cancelAnimationFrame(repaint);
+      repaint = requestAnimationFrame(() => drawRef.current());
+    };
+    video.addEventListener('seeked', refresh);
     if (Math.abs(video.currentTime - target) > 1 / 90) video.currentTime = target;
+    else refresh();
+    return () => {
+      cancelAnimationFrame(repaint);
+      video.removeEventListener('seeked', refresh);
+    };
   }, [state.playhead, state.isPlaying, isVideo, sourceReady, clip?.start, clip?.sourceIn, state.project]);
 
   useEffect(() => {
     const localFrame = Math.max(0, Math.round(state.playhead - (clip?.start ?? 0)));
     const encoded = clip?.masks[0]?.frames[localFrame];
-    state.setMask(encoded ? decodeRle({ ...encoded, runs: Array.from(encoded.runs) }) : null);
+    if (encoded) state.setMask(decodeRle({ ...encoded, runs: Array.from(encoded.runs) }));
+    else if (state.selectedMask !== null) state.setMask(null);
   }, [clip?.id, clip?.masks, state.playhead]);
 
   const draw = () => {
@@ -368,16 +389,20 @@ function PreviewPanel() {
     const ctx = canvas.getContext('2d');
     const octx = overlay.getContext('2d');
     if (!ctx || !octx) return;
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#10161c'; ctx.fillRect(0, 0, width, height);
-    ctx.fillStyle = '#182027';
-    for (let y = 0; y < height; y += 24 * dpr) for (let x = 0; x < width; x += 24 * dpr) if ((x / dpr / 24 + y / dpr / 24) % 2 < 1) ctx.fillRect(x, y, 24 * dpr, 24 * dpr);
     const video = videoRef.current;
     const image = imageRef.current;
-    if (isVideo && video && video.readyState >= 2) drawImageCover(ctx, video, width, height, clip);
-    else if (isImage && image && image.complete && image.naturalWidth) drawImageCover(ctx, image, width, height, clip);
-    else drawNoMedia(ctx, width, height, asset?.name ?? 'No media loaded');
-    if ((isVideo && video?.readyState && video.readyState >= 2) || (isImage && image?.complete && image.naturalWidth)) applyClipEffectsToCanvas(ctx, width, height, clip, state.playhead / activeSequence(state.project).fps, Math.max(0, state.playhead - (clip?.start ?? 0)));
+    const mediaReady = Boolean((isVideo && video?.readyState && video.readyState >= 2) || (isImage && image?.complete && image.naturalWidth));
+    if (mediaReady || !hasRenderedFrame.current) {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#10161c'; ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = '#182027';
+      for (let y = 0; y < height; y += 24 * dpr) for (let x = 0; x < width; x += 24 * dpr) if ((x / dpr / 24 + y / dpr / 24) % 2 < 1) ctx.fillRect(x, y, 24 * dpr, 24 * dpr);
+      if (isVideo && video && video.readyState >= 2) drawImageCover(ctx, video, width, height, clip);
+      else if (isImage && image && image.complete && image.naturalWidth) drawImageCover(ctx, image, width, height, clip);
+      else drawNoMedia(ctx, width, height, asset?.name ?? 'No media loaded');
+      if (mediaReady) hasRenderedFrame.current = true;
+    }
+    if (mediaReady) applyClipEffectsToCanvas(ctx, width, height, clip, state.playhead / activeSequence(state.project).fps, Math.max(0, state.playhead - (clip?.start ?? 0)));
 
     octx.clearRect(0, 0, width, height);
     if (state.guides) drawGuides(octx, width, height);
@@ -388,11 +413,22 @@ function PreviewPanel() {
       octx.stroke(); octx.setLineDash([]);
     }
   };
+  drawRef.current = draw;
 
   useEffect(() => {
+    if (!state.isPlaying) return;
     let raf = 0;
-    const render = () => { draw(); raf = requestAnimationFrame(render); };
+    const render = () => {
+      drawRef.current();
+      if (useEditorStore.getState().isPlaying) raf = requestAnimationFrame(render);
+    };
     raf = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(raf);
+  }, [state.isPlaying]);
+
+  useEffect(() => {
+    if (state.isPlaying) return;
+    const raf = requestAnimationFrame(() => drawRef.current());
     return () => cancelAnimationFrame(raf);
   }, [state.playhead, state.workspace, state.guides, state.selectedMask, state.maskDisplay, state.maskPath, state.previewZoom, asset?.id, clip?.transform, sourceReady]);
 
@@ -467,7 +503,7 @@ function PreviewPanel() {
   const fullscreen = () => { const stage = canvasRef.current?.parentElement; if (stage?.requestFullscreen) void stage.requestFullscreen(); else setNote('Fullscreen is not available in this browser.'); };
   const viewTransform = `translate(${pan.x}px, ${pan.y}px) scale(${viewScale})`;
 
-  if (state.workspace === '3d') return <section className="preview-panel"><PanelToolbar title="3D viewport" subtitle="3D assets · PBR · environment" /><ThreeViewport asset={selectedAsset?.kind === 'model' ? selectedAsset : modelAsset} /><div className="transport"><button className="text-button" onClick={() => state.set({ showMediaBin: true })}><Upload size={13} /> import 3D asset</button><span className="transport-spacer" /><span className="viewer-note">WebGL renderer · orbit with pointer</span></div></section>;
+  if (state.workspace === '3d') return <section className="preview-panel"><PanelToolbar title="3D viewport" subtitle="3D assets · PBR · environment" /><ThreeViewport asset={selectedAsset?.kind === 'model' ? selectedAsset : modelAsset} /><div className="transport"><span className="viewer-note">Use Add media in the Library or Timeline for 3D files.</span><span className="transport-spacer" /><span className="viewer-note">WebGL renderer · orbit with pointer</span></div></section>;
   return <section className="preview-panel"><PanelToolbar title="Preview" subtitle={`${state.workspace === 'edit' ? 'Omniframe Edit' : state.workspace === 'mask' ? 'Masking mode' : state.workspace === 'maskTracking' ? 'Mask tracking' : state.workspace.toUpperCase()}`} actions={<><div className="zoom-control"><ZoomOut size={13} /><select value={state.previewZoom} onChange={(event) => state.set({ previewZoom: event.target.value })}><option value="fit">Fit</option><option value="25%">25%</option><option value="50%">50%</option><option value="100%">100%</option><option value="125%">125%</option><option value="150%">150%</option><option value="200%">200%</option><option value="300%">300%</option></select><ZoomIn size={13} /></div><button className="icon-button" title="Toggle guides" onClick={() => state.set({ guides: !state.guides })}><Grid2X2 size={15} /></button><button className="icon-button" title="Fullscreen viewer" onClick={fullscreen}><Aperture size={15} /></button></>} /><div className="preview-stage" onWheel={(event) => { event.preventDefault(); changeZoom(event.deltaY > 0 ? -.1 : .1); }} onPointerDown={beginPan} onPointerMove={movePan} onPointerUp={endPan} onPointerCancel={endPan}><video ref={videoRef} className="source-media" muted playsInline preload="auto" onLoadedMetadata={() => setSourceReady(true)} onCanPlay={() => setSourceReady(true)} onTimeUpdate={onVideoTime} onError={() => setNote('The browser could not decode this video. Try generating a proxy in the Media bin.')} /><img ref={imageRef} className="source-media" alt="" onLoad={() => setSourceReady(true)} onError={() => setNote('The browser could not decode this image.')} /><canvas ref={canvasRef} className="preview-canvas" style={{ transform: viewTransform, transformOrigin: 'center center' }} /><canvas ref={overlayRef} className="preview-overlay" style={{ transform: viewTransform, transformOrigin: 'center center' }} onPointerDown={pointer} onPointerMove={pointer} onPointerUp={finishPaint} onPointerCancel={() => state.setMaskPath([])} /><div className="viewer-corner viewer-corner-tl">{state.performance} <span>·</span> {Math.round(viewScale * 100)}%</div><div className="viewer-corner viewer-corner-br"><span className="status-dot" /> canvas 2D <span>·</span> ready</div><div className="viewer-center-readout">{state.selectedMask ? <span className="track-pill"><Brush size={12} /> mask {state.maskDisplay}</span> : !asset ? <span className="track-pill muted"><Film size={12} /> import media to start</span> : null}</div></div>{(state.workspace === 'mask' || state.workspace === 'maskTracking') && <MaskCanvasToolbar />}<div className="transport"><button className="icon-button" onClick={() => state.stepFrame(-1)} title="Previous frame">⏮</button><button className="transport-play" onClick={state.togglePlay}>{state.isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}</button><button className="icon-button" onClick={() => state.stepFrame(1)} title="Next frame">⏭</button><select className="rate-select" value={state.playbackRate} onChange={(event) => state.setPlaybackRate(Number(event.target.value))}><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option></select><span className="transport-time">{formatTimelinePosition(state.playhead, activeSequence(state.project).fps, state.timelineDisplay)} <span>/ {formatTimelinePosition(Math.max(0, activeSequence(state.project).duration), activeSequence(state.project).fps, state.timelineDisplay)}</span></span><div className="transport-spacer" /><button className="text-button" onClick={state.addMarker}><Plus size={13} /> marker</button><button className="text-button" onClick={capture}><Camera size={13} /> capture</button></div>{note && <div className="analysis-note">{note}<button onClick={() => setNote('')}><X size={12} /></button></div>}</section>;
 }
 
@@ -509,10 +545,18 @@ function Timeline() {
   const state = useEditorStore();
   const sequence = activeSequence(state.project);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const timelineScrollRef = useRef<HTMLDivElement>(null);
   const mediaInputRef = useRef<HTMLInputElement>(null);
   const dragging = useRef(false);
+  const scrubRaf = useRef<number | null>(null);
+  const pendingScrubFrame = useRef<number | null>(null);
+  const [localScrubFrame, setLocalScrubFrame] = useState<number | null>(null);
   const [trackDropIndex, setTrackDropIndex] = useState<number | null>(null);
   const [draggingTrackId, setDraggingTrackId] = useState<string | null>(null);
+
+  useEffect(() => () => {
+    if (scrubRaf.current !== null) cancelAnimationFrame(scrubRaf.current);
+  }, []);
 
   const importMedia = async (file: File, newTrackIndex?: number) => {
     const lowerName = file.name.toLowerCase();
@@ -530,7 +574,7 @@ function Timeline() {
     }
   };
 
-  const beginTrackDrag = (event: React.DragEvent<HTMLDivElement>, trackId: string) => {
+  const beginTrackDrag = (event: React.DragEvent<HTMLElement>, trackId: string) => {
     setDraggingTrackId(trackId);
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/x-omniframe-track', trackId);
@@ -560,17 +604,45 @@ function Timeline() {
     setTrackDropIndex(index);
   };
   const duration = Math.max(1, sequence.duration);
-  const width = Math.max(820, 116 + duration * 7 * state.timelineZoom);
-  const usable = width - 116;
-  const playheadLeft = 116 + (state.playhead / duration) * usable;
-  const baseStep = state.timelineDisplay === 'frames' ? 15 : state.timelineDisplay === 'tenths' ? Math.max(1, Math.round(sequence.fps / 10)) : sequence.fps;
-  const tickStep = Math.max(baseStep, Math.ceil(duration / baseStep / 100) * baseStep);
+  const fps = Math.max(1, sequence.fps);
+  const pixelsPerSecond = TIMELINE_BASE_PIXELS_PER_SECOND * state.timelineZoom;
+  const contentWidth = duration / fps * pixelsPerSecond;
+  const width = Math.max(960, TIMELINE_LABEL_WIDTH + contentWidth);
+  const usable = Math.max(1, width - TIMELINE_LABEL_WIDTH);
+  const frameToX = (frame: number) => TIMELINE_LABEL_WIDTH + (Math.max(0, Math.min(duration, frame)) / duration) * usable;
+  const displayFrame = localScrubFrame ?? state.playhead;
+  const playheadLeft = frameToX(displayFrame);
+  const tickCandidates = [.1, .25, .5, 1, 2, 5, 10, 15, 30, 60, 120];
+  const targetTickSeconds = 90 / Math.max(1, pixelsPerSecond);
+  const tickSeconds = tickCandidates.find((seconds) => seconds >= targetTickSeconds) ?? 120;
+  const tickStep = Math.max(1, Math.round(tickSeconds * fps));
   const ticks = Array.from({ length: Math.max(2, Math.floor(duration / tickStep) + 1) }, (_, index) => Math.min(duration, index * tickStep));
   if (ticks[ticks.length - 1] !== duration) ticks.push(duration);
   const frameFromPointer = (clientX: number) => {
     const rect = timelineRef.current?.getBoundingClientRect();
     if (!rect) return state.playhead;
-    return Math.max(0, Math.min(duration - 1, Math.round(((clientX - rect.left - 116) / Math.max(1, usable)) * duration)));
+    return Math.max(0, Math.min(duration - 1, Math.round(((clientX - rect.left - TIMELINE_LABEL_WIDTH) / Math.max(1, usable)) * duration)));
+  };
+  const scheduleScrub = (frame: number) => {
+    setLocalScrubFrame(frame);
+    pendingScrubFrame.current = frame;
+    if (scrubRaf.current !== null) return;
+    scrubRaf.current = requestAnimationFrame(() => {
+      scrubRaf.current = null;
+      const nextFrame = pendingScrubFrame.current;
+      pendingScrubFrame.current = null;
+      if (nextFrame !== null) useEditorStore.getState().setPlayhead(nextFrame);
+    });
+  };
+  const flushScrub = () => {
+    if (scrubRaf.current !== null) {
+      cancelAnimationFrame(scrubRaf.current);
+      scrubRaf.current = null;
+    }
+    const nextFrame = pendingScrubFrame.current;
+    pendingScrubFrame.current = null;
+    if (nextFrame !== null) useEditorStore.getState().setPlayhead(nextFrame);
+    setLocalScrubFrame(null);
   };
   const startScrub = (event: React.PointerEvent<HTMLElement>) => {
     const target = event.target as HTMLElement;
@@ -578,30 +650,86 @@ function Timeline() {
     event.preventDefault();
     dragging.current = true;
     event.currentTarget.setPointerCapture(event.pointerId);
-    state.setPlayhead(frameFromPointer(event.clientX));
+    scheduleScrub(frameFromPointer(event.clientX));
   };
   const scrub = (event: React.PointerEvent<HTMLElement>) => {
-    if (dragging.current) state.setPlayhead(frameFromPointer(event.clientX));
+    if (dragging.current) scheduleScrub(frameFromPointer(event.clientX));
   };
-  const stopScrub = () => { dragging.current = false; };
+  const stopScrub = () => { dragging.current = false; flushScrub(); };
+  const fitTimeline = () => {
+    const viewportWidth = timelineScrollRef.current?.clientWidth ?? 960;
+    const seconds = duration / fps;
+    const fit = seconds > 0 ? (viewportWidth - TIMELINE_LABEL_WIDTH - 24) / (seconds * TIMELINE_BASE_PIXELS_PER_SECOND) : 1;
+    state.set({ timelineZoom: clampTimelineZoom(fit) });
+    timelineScrollRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
+  };
+  const zoomAroundPointer = (nextZoom: number, clientX: number) => {
+    const scroll = timelineScrollRef.current;
+    if (!scroll) {
+      state.set({ timelineZoom: nextZoom });
+      return;
+    }
+    const viewportRect = scroll.getBoundingClientRect();
+    const contentX = clientX - viewportRect.left + scroll.scrollLeft;
+    const frameAtPointer = Math.max(0, Math.min(duration, ((contentX - TIMELINE_LABEL_WIDTH) / Math.max(1, usable)) * duration));
+    const nextWidth = Math.max(960, TIMELINE_LABEL_WIDTH + duration / fps * TIMELINE_BASE_PIXELS_PER_SECOND * nextZoom);
+    const nextX = TIMELINE_LABEL_WIDTH + (frameAtPointer / duration) * Math.max(1, nextWidth - TIMELINE_LABEL_WIDTH);
+    state.set({ timelineZoom: nextZoom });
+    requestAnimationFrame(() => {
+      const nextScrollLeft = nextX - (clientX - viewportRect.left);
+      scroll.scrollLeft = Math.max(0, nextScrollLeft);
+    });
+  };
+  const handleTimelineWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    if (!(event.ctrlKey || event.metaKey)) return;
+    event.preventDefault();
+    const nextZoom = clampTimelineZoom(state.timelineZoom * Math.exp(-event.deltaY * .0025));
+    if (Math.abs(nextZoom - state.timelineZoom) > .001) zoomAroundPointer(nextZoom, event.clientX);
+  };
+  const displayLabel = state.timelineDisplay === 'timecode' ? 'Timecode' : state.timelineDisplay === 'tenths' ? '0.1 sec' : 'Frames';
+  const cycleTimelineDisplay = () => {
+    const modes: EditorState['timelineDisplay'][] = ['timecode', 'tenths', 'frames'];
+    state.set({ timelineDisplay: modes[(modes.indexOf(state.timelineDisplay) + 1) % modes.length] });
+  };
   const positionLabel = (frame: number) => formatTimelinePosition(frame, sequence.fps, state.timelineDisplay);
-  return <section className="timeline-panel"><div className="timeline-header"><div className="timeline-title"><span>Timeline</span><small>{sequence.name} · {sequence.fps} fps</small></div><HorizontalScroller label="Timeline actions" className="timeline-actions-scroll" step={180}><div className="timeline-actions"><button className="timeline-add-media" title="Add media to the timeline" onClick={() => mediaInputRef.current?.click()}><Plus size={14} /><span>Add media</span></button><input ref={mediaInputRef} hidden type="file" accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importMedia(file); event.currentTarget.value = ''; }} /><label className="timebase-control" title="Timeline display"><span>View</span><select value={state.timelineDisplay} onChange={(event) => state.set({ timelineDisplay: event.target.value as EditorState['timelineDisplay'] })}><option value="timecode">Timecode</option><option value="tenths">0.1 sec</option><option value="frames">Frames</option></select></label><button className={`snap-button ${state.snapping ? 'active' : ''}`} onClick={() => state.set({ snapping: !state.snapping })}><Magnet size={14} /> Snap</button><button className="icon-button" title="Zoom timeline out" onClick={() => state.set({ timelineZoom: Math.max(.5, state.timelineZoom - .25) })}><ZoomOut size={14} /></button><span className="zoom-readout">{Math.round(state.timelineZoom * 100)}%</span><button className="icon-button" title="Zoom timeline in" onClick={() => state.set({ timelineZoom: Math.min(4, state.timelineZoom + .25) })}><ZoomIn size={14} /></button></div></HorizontalScroller></div><div className="timeline-scroll"><div ref={timelineRef} className="timeline-inner" style={{ width }} onPointerDown={startScrub} onPointerMove={scrub} onPointerUp={stopScrub} onPointerCancel={stopScrub}><div className="time-ruler"><div className="ruler-label">{state.timelineDisplay === 'frames' ? 'FRAME' : state.timelineDisplay === 'tenths' ? 'SECONDS' : 'TIMECODE'}</div>{ticks.map((frame, index) => <button key={`${frame}-${index}`} style={{ left: `${116 + (frame / duration) * usable}px` }} onClick={() => state.setPlayhead(frame)}>{positionLabel(frame)}</button>)}</div>{sequence.markers.map((marker) => <button key={marker.id} className="timeline-marker" title={marker.label} style={{ left: `${116 + (marker.frame / duration) * usable}px`, backgroundColor: marker.color }} onClick={() => state.setPlayhead(marker.frame)} />)}<div className="timeline-playhead" style={{ left: playheadLeft }}><button className="playhead-grip" aria-label={`Scrub to ${positionLabel(state.playhead)}`} onPointerDown={startScrub} /></div><div className="tracks" onDragLeave={(event) => { if (event.currentTarget === event.target) setTrackDropIndex(null); }}>{sequence.tracks.map((track, index) => <Fragment key={track.id}><TrackDropZone index={index} active={trackDropIndex === index} onDragOver={showTrackDrop} onDrop={handleTrackDrop} /><TrackRow track={track} sequence={sequence} dragging={draggingTrackId === track.id} onDragStart={beginTrackDrag} onDragEnd={endTrackDrag} /></Fragment>)}<TrackDropZone index={sequence.tracks.length} active={trackDropIndex === sequence.tracks.length} onDragOver={showTrackDrop} onDrop={handleTrackDrop} end /></div></div></div><div className="timeline-footer"><span><kbd>Space</kbd> play</span><span><kbd>B</kbd> blade</span><span><kbd>I</kbd> mask</span><span><kbd>T</kbd> track</span><span><kbd>O</kbd> repair</span><span className="footer-spacer" /><span>{sequence.duration ? positionLabel(sequence.duration) : 'empty'} · drag playhead</span></div></section>;
+  return <section className="timeline-panel"><div className="timeline-header"><div className="timeline-title"><span>Timeline</span><small>{sequence.name} · {sequence.fps} fps</small></div><HorizontalScroller label="Timeline actions" className="timeline-actions-scroll" step={180}><div className="timeline-actions"><button className="timeline-add-media" title="Add media to the timeline" onClick={() => mediaInputRef.current?.click()}><Plus size={14} /><span>Add media</span></button><input ref={mediaInputRef} hidden type="file" accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importMedia(file); event.currentTarget.value = ''; }} /><button className="timebase-button" title={`Timeline display: ${displayLabel}. Click to cycle timecode, tenths and frames.`} onClick={cycleTimelineDisplay}><span>{displayLabel}</span></button><button className={`snap-button ${state.snapping ? 'active' : ''}`} onClick={() => state.set({ snapping: !state.snapping })}><Magnet size={14} /> Snap</button><button className="timeline-fit-button" title="Fit the complete sequence in the timeline" onClick={fitTimeline}>Fit</button><label className="timeline-zoom-control" title="Drag to zoom the timeline, or pinch with Ctrl or Command"><span>Zoom</span><input type="range" min={MIN_TIMELINE_ZOOM} max={MAX_TIMELINE_ZOOM} step="0.05" value={state.timelineZoom} aria-label="Timeline zoom" onChange={(event) => state.set({ timelineZoom: clampTimelineZoom(Number(event.target.value)) })} /><output>{Math.round(state.timelineZoom * 100)}%</output></label></div></HorizontalScroller></div><div ref={timelineScrollRef} className="timeline-scroll" onWheel={handleTimelineWheel}><div ref={timelineRef} className="timeline-inner" style={{ width }} onPointerDown={startScrub} onPointerMove={scrub} onPointerUp={stopScrub} onPointerCancel={stopScrub}><div className="time-ruler"><div className="ruler-label">{state.timelineDisplay === 'frames' ? 'FRAME' : state.timelineDisplay === 'tenths' ? 'SECONDS' : 'TIMECODE'}</div>{ticks.map((frame, index) => <button key={`${frame}-${index}`} style={{ left: `${frameToX(frame)}px` }} onClick={() => state.setPlayhead(frame)}>{positionLabel(frame)}</button>)}</div>{sequence.markers.map((marker) => <button key={marker.id} className="timeline-marker" title={marker.label} style={{ left: `${frameToX(marker.frame)}px`, backgroundColor: marker.color }} onClick={() => state.setPlayhead(marker.frame)} />)}<div className="timeline-playhead" style={{ left: playheadLeft }}><button className="playhead-grip" aria-label={`Scrub to ${positionLabel(displayFrame)}`} onPointerDown={startScrub} /></div><div className="tracks" onDragLeave={(event) => { if (event.currentTarget === event.target) setTrackDropIndex(null); }}>{sequence.tracks.map((track, index) => <Fragment key={track.id}><TrackDropZone index={index} active={trackDropIndex === index} onDragOver={showTrackDrop} onDrop={handleTrackDrop} /><TrackRow track={track} sequence={sequence} dragging={draggingTrackId === track.id} onDragStart={beginTrackDrag} onDragEnd={endTrackDrag} /></Fragment>)}<TrackDropZone index={sequence.tracks.length} active={trackDropIndex === sequence.tracks.length} onDragOver={showTrackDrop} onDrop={handleTrackDrop} end /></div></div></div><div className="timeline-footer"><span><kbd>Space</kbd> play</span><span><kbd>B</kbd> blade</span><span><kbd>I</kbd> mask</span><span><kbd>T</kbd> track</span><span><kbd>O</kbd> repair</span><span className="footer-spacer" /><span className="timeline-current-readout">{positionLabel(displayFrame)} / {positionLabel(duration)} · {Math.round(state.timelineZoom * 100)}% · drag playhead</span></div></section>;
 }
 
 function TrackDropZone({ index, active, end = false, onDragOver, onDrop }: { index: number; active: boolean; end?: boolean; onDragOver: (event: React.DragEvent<HTMLDivElement>, index: number) => void; onDrop: (event: React.DragEvent<HTMLDivElement>, index: number) => void }) {
   return <div className={`track-drop-zone ${active ? 'active' : ''} ${end ? 'end' : ''}`} role="button" aria-label={end ? 'Drop media here to create a new track' : 'Drop a track here to rearrange'} onDragOver={(event) => onDragOver(event, index)} onDrop={(event) => onDrop(event, index)}><span>{active ? end ? 'Drop here to create a new track' : 'Drop to place or create a track' : ''}</span></div>;
 }
 
-function TrackRow({ track, sequence, dragging, onDragStart, onDragEnd }: { track: ReturnType<typeof activeSequence>['tracks'][number]; sequence: ReturnType<typeof activeSequence>; dragging: boolean; onDragStart: (event: React.DragEvent<HTMLDivElement>, trackId: string) => void; onDragEnd: () => void }) {
+function TrackRow({ track, sequence, dragging, onDragStart, onDragEnd }: { track: ReturnType<typeof activeSequence>['tracks'][number]; sequence: ReturnType<typeof activeSequence>; dragging: boolean; onDragStart: (event: React.DragEvent<HTMLElement>, trackId: string) => void; onDragEnd: () => void }) {
   const state = useEditorStore();
-  return <div className={`track-row ${track.locked ? 'locked' : ''} ${track.hidden ? 'hidden-track' : ''} ${dragging ? 'dragging' : ''}`} style={{ height: track.height }} draggable onDragStart={(event) => onDragStart(event, track.id)} onDragEnd={onDragEnd}><div className="track-label"><div className="track-label-main"><button className="track-drag-handle" title="Drag track to rearrange" aria-label={`Drag ${track.name} to rearrange`}><Move size={12} /></button><span className="track-kind">{track.kind === 'audio' ? <AudioLines size={13} /> : track.kind === 'text' ? <TextCursorInput size={13} /> : track.kind === 'adjustment' ? <Layers3 size={13} /> : track.kind === 'scene3d' ? <Box size={13} /> : <Film size={13} />}</span><strong>{track.name}</strong></div><div className="track-label-actions"><button title="Mute track" className={track.muted ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'muted')}><AudioLines size={11} /></button><button title="Solo track" className={track.solo ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'solo')}><Headphones size={11} /></button><button title="Hide track" className={track.hidden ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'hidden')}>{track.hidden ? <EyeOff size={11} /> : <Eye size={11} />}</button><button title="Lock track" className={track.locked ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'locked')}>{track.locked ? <Lock size={11} /> : <KeyRound size={11} />}</button></div></div><div className="track-lane" onPointerDown={(event) => { if ((event.target as HTMLElement).closest('.timeline-clip')) return; const rect = event.currentTarget.getBoundingClientRect(); const frame = Math.round(((event.clientX - rect.left) / rect.width) * sequence.duration); state.setPlayhead(frame); }}>{track.clips.map((clip) => <TimelineClip key={clip.id} clip={clip} track={track} sequence={sequence} />)}</div></div>;
+  return <div className={`track-row ${track.locked ? 'locked' : ''} ${track.hidden ? 'hidden-track' : ''} ${dragging ? 'dragging' : ''}`} style={{ height: track.height }}><div className="track-label"><div className="track-label-main"><button className="track-drag-handle" draggable title="Drag track to rearrange" aria-label={`Drag ${track.name} to rearrange`} onDragStart={(event) => onDragStart(event, track.id)} onDragEnd={onDragEnd}><Move size={12} /></button><span className="track-kind">{track.kind === 'audio' ? <AudioLines size={13} /> : track.kind === 'text' ? <TextCursorInput size={13} /> : track.kind === 'adjustment' ? <Layers3 size={13} /> : track.kind === 'scene3d' ? <Box size={13} /> : <Film size={13} />}</span><strong>{track.name}</strong></div><div className="track-label-actions"><button title="Mute track" className={track.muted ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'muted')}><AudioLines size={11} /></button><button title="Solo track" className={track.solo ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'solo')}><Headphones size={11} /></button><button title="Hide track" className={track.hidden ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'hidden')}>{track.hidden ? <EyeOff size={11} /> : <Eye size={11} />}</button><button title="Lock track" className={track.locked ? 'on' : ''} onClick={() => state.toggleTrackFlag(track.id, 'locked')}>{track.locked ? <Lock size={11} /> : <KeyRound size={11} />}</button></div></div><div className="track-lane" onPointerDown={(event) => { if ((event.target as HTMLElement).closest('.timeline-clip')) return; const rect = event.currentTarget.getBoundingClientRect(); const frame = Math.round(((event.clientX - rect.left) / rect.width) * sequence.duration); state.setPlayhead(frame); }}>{track.clips.map((clip) => <TimelineClip key={clip.id} clip={clip} track={track} sequence={sequence} />)}</div></div>;
 }
 
 function TimelineClip({ clip, track, sequence }: { clip: Clip; track: ReturnType<typeof activeSequence>['tracks'][number]; sequence: ReturnType<typeof activeSequence> }) {
   const state = useEditorStore();
-  const left = 100 * clip.start / Math.max(1, sequence.duration);
-  const width = 100 * (clipEnd(clip) - clip.start) / Math.max(1, sequence.duration);
+  const [trimPreview, setTrimPreview] = useState<{ start: number; end: number } | null>(null);
+  const [movePreviewStart, setMovePreviewStart] = useState<number | null>(null);
+  const trimRaf = useRef<number | null>(null);
+  const trimPreviewPending = useRef<{ start: number; end: number } | null>(null);
+  const moveRaf = useRef<number | null>(null);
+  const clipEndFrame = clipEnd(clip);
+  const renderStart = trimPreview?.start ?? movePreviewStart ?? clip.start;
+  const renderEnd = trimPreview?.end ?? (movePreviewStart === null ? clipEndFrame : movePreviewStart + clipEndFrame - clip.start);
+  const left = 100 * renderStart / Math.max(1, sequence.duration);
+  const width = 100 * (renderEnd - renderStart) / Math.max(1, sequence.duration);
   const selected = state.selectedClipId === clip.id;
+  const previewTrim = (edge: 'head' | 'tail', frame: number) => {
+    const next = edge === 'head'
+      ? { start: Math.max(0, Math.min(clipEndFrame - 1, frame)), end: clipEndFrame }
+      : { start: clip.start, end: Math.max(clip.start + 1, Math.min(sequence.duration, frame)) };
+    trimPreviewPending.current = next;
+    if (trimRaf.current !== null) return;
+    trimRaf.current = requestAnimationFrame(() => {
+      trimRaf.current = null;
+      const pending = trimPreviewPending.current;
+      trimPreviewPending.current = null;
+      if (pending) setTrimPreview(pending);
+    });
+  };
   const beginTrim = (event: React.PointerEvent<HTMLSpanElement>, edge: 'head' | 'tail') => {
     event.preventDefault();
     event.stopPropagation();
@@ -610,18 +738,57 @@ function TimelineClip({ clip, track, sequence }: { clip: Clip; track: ReturnType
     const lane = event.currentTarget.parentElement?.parentElement;
     if (!lane) return;
     const updateFrame = (clientX: number) => Math.max(0, Math.min(sequence.duration, Math.round(((clientX - lane.getBoundingClientRect().left) / Math.max(1, lane.getBoundingClientRect().width)) * sequence.duration)));
-    let finalFrame = edge === 'head' ? clip.start : clipEnd(clip);
-    const onMove = (move: PointerEvent) => { finalFrame = updateFrame(move.clientX); state.setPlayhead(finalFrame); };
-    const onUp = (up: PointerEvent) => { finalFrame = updateFrame(up.clientX); window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); state.trimSelected(edge, finalFrame); };
+    let finalFrame = edge === 'head' ? clip.start : clipEndFrame;
+    const onMove = (move: PointerEvent) => { finalFrame = updateFrame(move.clientX); previewTrim(edge, finalFrame); };
+    const onUp = (up: PointerEvent) => {
+      finalFrame = updateFrame(up.clientX);
+      if (trimRaf.current !== null) { cancelAnimationFrame(trimRaf.current); trimRaf.current = null; }
+      trimPreviewPending.current = null;
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      setTrimPreview(null);
+      state.trimSelected(edge, finalFrame);
+    };
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp, { once: true });
   };
-  return <button className={`timeline-clip ${clip.kind} ${selected ? 'selected' : ''} ${clip.locked || track.locked ? 'clip-locked' : ''}`} style={{ left: `${left}%`, width: `${Math.max(2, width)}%`, background: clip.color ?? '#31565e' }} onClick={(event) => { event.stopPropagation(); state.selectClip(clip.id, track.id); }} onDoubleClick={() => state.setWorkspace(clip.kind === 'audio' ? 'audio' : 'edit')}><span className="clip-handle left" onPointerDown={(event) => beginTrim(event, 'head')} /><span className="clip-color-line" /><span>{clip.name}</span><small>{formatTimecode(clip.start, sequence.fps)} · {clipEnd(clip) - clip.start}f {clip.effects.length ? `· ${clip.effects.length} fx` : ''}</small>{clip.kind === 'audio' && <span className="waveform-mini">{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ height: `${35 + ((i * 17) % 60)}%` }} />)}</span>}<span className="clip-handle right" onPointerDown={(event) => beginTrim(event, 'tail')} /></button>;
+  const beginMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if ((event.target as HTMLElement).closest('.clip-handle') || clip.locked || track.locked) return;
+    event.preventDefault();
+    event.stopPropagation();
+    state.selectClip(clip.id, track.id);
+    const lane = event.currentTarget.parentElement;
+    if (!lane) return;
+    const rect = lane.getBoundingClientRect();
+    const length = clipEndFrame - clip.start;
+    const startX = event.clientX;
+    let finalStart = clip.start;
+    const updateStart = (clientX: number) => Math.max(0, Math.min(Math.max(0, sequence.duration - length), clip.start + Math.round(((clientX - startX) / Math.max(1, rect.width)) * sequence.duration)));
+    const onMove = (move: PointerEvent) => {
+      finalStart = updateStart(move.clientX);
+      if (moveRaf.current !== null) return;
+      moveRaf.current = requestAnimationFrame(() => {
+        moveRaf.current = null;
+        setMovePreviewStart(finalStart);
+      });
+    };
+    const onUp = (up: PointerEvent) => {
+      finalStart = updateStart(up.clientX);
+      if (moveRaf.current !== null) { cancelAnimationFrame(moveRaf.current); moveRaf.current = null; }
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      setMovePreviewStart(null);
+      if (finalStart !== clip.start) state.moveSelected(finalStart);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp, { once: true });
+  };
+  return <button className={`timeline-clip ${clip.kind} ${selected ? 'selected' : ''} ${clip.locked || track.locked ? 'clip-locked' : ''}`} style={{ left: `${left}%`, width: `${Math.max(2, width)}%`, background: clip.color ?? '#31565e' }} onPointerDown={beginMove} onClick={(event) => { event.stopPropagation(); state.selectClip(clip.id, track.id); }} onDoubleClick={() => state.setWorkspace(clip.kind === 'audio' ? 'audio' : 'edit')}><span className="clip-handle left" onPointerDown={(event) => beginTrim(event, 'head')} /><span className="clip-color-line" /><span>{clip.name}</span><small>{formatTimecode(renderStart, sequence.fps)} · {renderEnd - renderStart}f {clip.effects.length ? `· ${clip.effects.length} fx` : ''}</small>{clip.kind === 'audio' && <span className="waveform-mini">{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ height: `${35 + ((i * 17) % 60)}%` }} />)}</span>}<span className="clip-handle right" onPointerDown={(event) => beginTrim(event, 'tail')} /></button>;
 }
 
 function PropertiesPanel() {
   const state = useEditorStore();
-  return <aside className="properties-panel"><div className="properties-header"><span>Inspector</span><div className="properties-actions"><button className="icon-button" title="Open media" onClick={() => state.set({ showMediaBin: true })}><FolderOpen size={15} /></button></div></div>{state.workspace === 'layers' ? <LayersInspector /> : state.workspace === 'mask' ? <MaskInspector /> : state.workspace === 'maskTracking' ? <MaskTrackingInspector /> : state.workspace === 'tracking' ? <TrackingInspector /> : state.workspace === 'omniframe' ? <OmniframeInspector /> : state.workspace === '3d' ? <ThreeInspector /> : state.workspace === 'color' ? <ColorInspector /> : state.workspace === 'audio' ? <AudioInspector /> : state.workspace === 'export' ? <ExportInspector /> : <EditInspector />}</aside>;
+  return <aside className="properties-panel"><div className="properties-header"><span>Inspector</span></div>{state.workspace === 'layers' ? <LayersInspector /> : state.workspace === 'mask' ? <MaskInspector /> : state.workspace === 'maskTracking' ? <MaskTrackingInspector /> : state.workspace === 'tracking' ? <TrackingInspector /> : state.workspace === 'omniframe' ? <OmniframeInspector /> : state.workspace === '3d' ? <ThreeInspector /> : state.workspace === 'color' ? <ColorInspector /> : state.workspace === 'audio' ? <AudioInspector /> : state.workspace === 'export' ? <ExportInspector /> : <EditInspector />}</aside>;
 }
 
 function InspectorSection({ title, icon, children, open = true }: { title: string; icon?: React.ReactNode; children: React.ReactNode; open?: boolean }) { return <details className="inspector-section" open={open}><summary>{icon}{title}<ChevronDown size={13} /></summary><div className="inspector-content">{children}</div></details>; }
@@ -644,7 +811,7 @@ function LayersInspector() {
     const track = sequence.tracks.find((item) => item.id === trackId);
     state.set({ selectedTrackId: trackId, selectedClipId: track?.clips[0]?.id ?? null });
   };
-  return <><InspectorContext icon={<Layers3 size={16} />} title="Layers" subtitle="Compositing stack · tracks · adjustment layers" tone="violet" /><InspectorSection title="Layer stack" icon={<Layers3 size={14} />}><div className="layer-stack">{tracks.map((track, index) => <div className={`layer-row ${state.selectedTrackId === track.id ? 'active' : ''}`} key={track.id}><button className="layer-select" onClick={() => selectTrack(track.id)}><span className="layer-order">{tracks.length - index}</span><span className="layer-type">{trackIcon(track.kind)}</span><span className="layer-name"><strong>{track.name}</strong><small>{track.isAdjustment ? 'adjustment layer' : `${track.kind} · ${track.clips.length} clip${track.clips.length === 1 ? '' : 's'}`}</small></span></button><button className={`layer-visibility ${track.hidden ? 'off' : ''}`} title={track.hidden ? 'Show layer' : 'Hide layer'} onClick={() => state.toggleTrackFlag(track.id, 'hidden')}>{track.hidden ? <EyeOff size={13} /> : <Eye size={13} />}</button><button className={`layer-visibility ${track.locked ? 'on' : ''}`} title={track.locked ? 'Unlock layer' : 'Lock layer'} onClick={() => state.toggleTrackFlag(track.id, 'locked')}><Lock size={12} /></button></div>)}</div><div className="layer-actions"><button className="add-row" onClick={() => state.set({ showMediaBin: true })}><Plus size={13} /> Add media to timeline</button></div></InspectorSection><InspectorSection title="Selected layer compositing" icon={<SlidersHorizontal size={14} />}>{selected ? <><ValueRow label="Opacity" value={Math.round(selected.transform.opacity * 100)} unit="%" min={0} max={100} onChange={(value) => state.setClipOpacity(value / 100)} /><label className="field-label">Blend mode<select className="full-select" value={selected.blend} onChange={(event) => state.setClipBlend(event.target.value as Clip['blend'])}>{blendModes.map((mode) => <option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label><div className="layer-facts"><span>{selected.effects.length} effects</span><span>{selected.masks.length} masks</span><span>{selected.keyframes ? Object.keys(selected.keyframes).length : 0} animated channels</span></div></> : <div className="hint-line">Select a clip in the stack to edit opacity, blend mode, effects and masks. Track visibility and lock state remain independent.</div>}</InspectorSection><div className="layer-note"><Layers3 size={14} /><span>Layers are a compositing view over the real timeline tracks. They do not replace frame-accurate editing; adjustment layers affect tracks below them.</span></div><EditorAssistAdvanced /></>;
+  return <><InspectorContext icon={<Layers3 size={16} />} title="Layers" subtitle="Compositing stack · tracks · adjustment layers" tone="violet" /><InspectorSection title="Layer stack" icon={<Layers3 size={14} />}><div className="layer-stack">{tracks.map((track, index) => <div className={`layer-row ${state.selectedTrackId === track.id ? 'active' : ''}`} key={track.id}><button className="layer-select" onClick={() => selectTrack(track.id)}><span className="layer-order">{tracks.length - index}</span><span className="layer-type">{trackIcon(track.kind)}</span><span className="layer-name"><strong>{track.name}</strong><small>{track.isAdjustment ? 'adjustment layer' : `${track.kind} · ${track.clips.length} clip${track.clips.length === 1 ? '' : 's'}`}</small></span></button><button className={`layer-visibility ${track.hidden ? 'off' : ''}`} title={track.hidden ? 'Show layer' : 'Hide layer'} onClick={() => state.toggleTrackFlag(track.id, 'hidden')}>{track.hidden ? <EyeOff size={13} /> : <Eye size={13} />}</button><button className={`layer-visibility ${track.locked ? 'on' : ''}`} title={track.locked ? 'Unlock layer' : 'Lock layer'} onClick={() => state.toggleTrackFlag(track.id, 'locked')}><Lock size={12} /></button></div>)}</div><div className="hint-line">Use the Library or Timeline Add media action to import another source.</div></InspectorSection><InspectorSection title="Selected layer compositing" icon={<SlidersHorizontal size={14} />}>{selected ? <><ValueRow label="Opacity" value={Math.round(selected.transform.opacity * 100)} unit="%" min={0} max={100} onChange={(value) => state.setClipOpacity(value / 100)} /><label className="field-label">Blend mode<select className="full-select" value={selected.blend} onChange={(event) => state.setClipBlend(event.target.value as Clip['blend'])}>{blendModes.map((mode) => <option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label><div className="layer-facts"><span>{selected.effects.length} effects</span><span>{selected.masks.length} masks</span><span>{selected.keyframes ? Object.keys(selected.keyframes).length : 0} animated channels</span></div></> : <div className="hint-line">Select a clip in the stack to edit opacity, blend mode, effects and masks. Track visibility and lock state remain independent.</div>}</InspectorSection><div className="layer-note"><Layers3 size={14} /><span>Layers are a compositing view over the real timeline tracks. They do not replace frame-accurate editing; adjustment layers affect tracks below them.</span></div><EditorAssistAdvanced /></>;
 }
 
 function EditorAssistAdvanced() {
@@ -677,7 +844,7 @@ function EditorAssistAdvanced() {
 function EditInspector() {
   const state = useEditorStore();
   const clip = selectedClip(state);
-  if (!clip) return <EmptyInspector title="Omniframe Edit" copy="Import a video, image, audio file or GLB to populate the sequence." action={<button className="primary-button wide" onClick={() => state.set({ showMediaBin: true })}><Upload size={15} /> Open Media bin</button>} />;
+  if (!clip) return <EmptyInspector title="Omniframe Edit" copy="Use Add media in the Library or Timeline to populate the sequence." />;
   return <><InspectorContext icon={<Film size={16} />} title={clip.name} subtitle={`${clip.kind} clip · ${clipEnd(clip) - clip.start} frames`} /><InspectorSection title="Clip edit" icon={<Scissors size={14} />}><div className="edit-tool-grid"><button onClick={state.splitAtPlayhead}><Split size={13} /> Split</button><button onClick={() => state.trimSelected('head', state.playhead)}><Minus size={13} /> Trim head</button><button onClick={() => state.trimSelected('tail', state.playhead)}><Minus size={13} /> Trim tail</button><button onClick={() => state.deleteSelectedRipple()}><Trash2 size={13} /> Ripple delete</button></div><div className="edit-tool-grid secondary"><button onClick={() => state.rollSelected(1)}>Roll +1</button><button onClick={() => state.slipSelected(1)}>Slip +1</button><button onClick={() => state.slideSelected(1)}>Slide +1</button><button onClick={() => state.moveSelected(state.playhead, state.snapping)}>Move here</button></div></InspectorSection><InspectorSection title="Transform" icon={<Move size={14} />}><ValueRow label="Position X" value={clip.transform.x} unit="px" onChange={(value) => state.setClipTransform({ x: value })} /><ValueRow label="Position Y" value={clip.transform.y} unit="px" onChange={(value) => state.setClipTransform({ y: value })} /><ValueRow label="Scale" value={Math.round(clip.transform.scale * 100)} unit="%" min={1} max={1000} onChange={(value) => state.setClipTransform({ scale: value / 100 })} /><ValueRow label="Rotation" value={clip.transform.rotation} unit="°" onChange={(value) => state.setClipTransform({ rotation: value })} /><ValueRow label="Opacity" value={Math.round(clip.transform.opacity * 100)} unit="%" min={0} max={100} onChange={(value) => state.setClipOpacity(Math.max(0, Math.min(100, value)) / 100)} /></InspectorSection><InspectorSection title="Keyframes" icon={<KeyRound size={14} />}><KeyframeRow label="Position" active={Boolean(clip.keyframes.position?.length)} onClick={() => state.setKeyframe('position', [clip.transform.x, clip.transform.y])} /><KeyframeRow label="Scale" active={Boolean(clip.keyframes.scale?.length)} onClick={() => state.setKeyframe('scale', clip.transform.scale)} /><KeyframeRow label="Opacity" active={Boolean(clip.keyframes.opacity?.length)} onClick={() => state.setKeyframe('opacity', clip.transform.opacity)} /></InspectorSection><InspectorSection title="Effects" icon={<Sparkles size={14} />}><EffectStack clip={clip} /></InspectorSection><InspectorSection title="Clip state" icon={<Settings2 size={14} />}><div className="advanced-row"><span>Clip locked</span><button className={`toggle ${clip.locked ? 'on' : ''}`} onClick={() => state.setClipFlag('locked')} /></div><div className="advanced-row"><span>Audio muted</span><button className={`toggle ${clip.muted ? 'on' : ''}`} onClick={() => state.setClipFlag('muted')} /></div></InspectorSection></>;
 }
 
@@ -798,11 +965,9 @@ function WaveformIcon() { return <span className="waveform-icon"><i /><i /><i />
 function ThreeInspector() {
   const state = useEditorStore();
   const model = state.project.assets.find((asset) => asset.kind === 'model');
-  const input = useRef<HTMLInputElement>(null);
   const [bakeStatus, setBakeStatus] = useState('not baked');
-  const importModel = (file: File) => { const url = URL.createObjectURL(file); const asset: Asset = { id: `model_${crypto.randomUUID?.() ?? Date.now()}`, name: file.name, kind: 'model', sourcePath: url, contentHash: null, mime: file.type || 'model/gltf-binary', width: 0, height: 0, duration: 0, fps: 0, sampleRate: 0, channels: 0, sizeBytes: file.size, missing: false, tags: ['3D'], favorite: false, folderId: null, proxyId: null, importedAt: Date.now() }; state.addImportedAsset(asset); state.flash(`${file.name} imported. The 3D preview reports parser errors instead of showing a fake model.`); };
   const bake = () => { const scene = newScene('Baked scene'); addLight(scene, 'directional', { x: 2, y: 4, z: 2 }); const mesh = simpleBakeMesh(); const result = bakeLightmap({ meshes: [mesh], lights: [{ id: 'key', kind: 'directional', position: { x: 0, y: 4, z: 2 }, direction: { x: 0, y: -1, z: 0 }, color: { x: 1, y: 1, z: 1 }, intensity: 2, halfExtents: { x: 0, y: 0, z: 0 }, castShadow: true }], options: { width: 32, height: 32, samples: 8, bounces: 2, denoisePasses: 1, padding: 1, seed: 20240719, environmentIntensity: .15, environmentColor: { x: 1, y: 1, z: 1 } } }); scene.lightmaps.push({ id: `lightmap_${Date.now()}`, objectId: 'preview', cacheKey: result.cacheKey, width: result.width, height: result.height, samples: result.samples, bounces: result.bounces, bakedAt: Date.now(), bakeMs: result.bakeMs, valid: true }); state.addScene(scene); setBakeStatus(`baked · ${result.bakeMs} ms · cache ${result.cacheKey}`); state.flash('Real CPU light transport bake completed and its cache key was stored. This reference bake covers the diagnostic mesh; imported-model UV baking remains a native/GPU gate.'); };
-  return <><InspectorContext icon={<Box size={16} />} title="3D scene" subtitle="3D assets · PBR · camera · environment" tone="amber" /><InspectorSection title="Environment" icon={<Lightbulb size={14} />}><Segmented options={[{ label: 'Room', value: 'room' }, { label: 'HDRI', value: 'hdri' }, { label: 'Color', value: 'color' }]} value="room" onChange={(value) => state.flash(`${value === 'room' ? 'Deterministic RoomEnvironment' : value.toUpperCase()} selected; background and illumination remain separate controls.`)} /><ValueRow label="Intensity" value={1} unit="EV" /><ValueRow label="Rotation" value={0} unit="°" /></InspectorSection><InspectorSection title="Lights" icon={<Lightbulb size={14} />}><div className="light-row"><span className="light-swatch" /><div><strong>Key directional</strong><small>shadowed punctual light</small></div><span className="small-badge">ON</span></div><div className="light-row"><span className="light-swatch fill" /><div><strong>Environment</strong><small>PMREM / scene-linear</small></div><span className="small-badge">ON</span></div></InspectorSection><InspectorSection title="Model and animation" icon={<Activity size={14} />}><div className="clip-select"><span>Loaded model</span><strong>{model?.name ?? 'none'}</strong></div><button className="add-row" onClick={() => input.current?.click()}><Upload size={14} /> Import 3D asset</button><input ref={input} hidden type="file" accept=".glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc,model/gltf-binary,model/gltf+json" onChange={(event) => { const file = event.target.files?.[0]; if (file) importModel(file); }} /><div className="hint-line">Animation clips, skins and inverse bind matrices are preserved by the glTF loader; frame sampling is independent of React render cadence.</div></InspectorSection><InspectorSection title="Light baking" icon={<Aperture size={14} />}><div className="bake-readout"><span className={bakeStatus.startsWith('baked') ? 'bake-ok' : ''}>{bakeStatus}</span><small>Real CPU reference bake · no timer or preview approximation is labelled baked.</small></div><button className="outline-button wide" onClick={bake}><Aperture size={14} /> Run lightmap + AO bake</button></InspectorSection></>;
+  return <><InspectorContext icon={<Box size={16} />} title="3D scene" subtitle="3D assets · PBR · camera · environment" tone="amber" /><InspectorSection title="Environment" icon={<Lightbulb size={14} />}><Segmented options={[{ label: 'Room', value: 'room' }, { label: 'HDRI', value: 'hdri' }, { label: 'Color', value: 'color' }]} value="room" onChange={(value) => state.flash(`${value === 'room' ? 'Deterministic RoomEnvironment' : value.toUpperCase()} selected; background and illumination remain separate controls.`)} /><ValueRow label="Intensity" value={1} unit="EV" /><ValueRow label="Rotation" value={0} unit="°" /></InspectorSection><InspectorSection title="Lights" icon={<Lightbulb size={14} />}><div className="light-row"><span className="light-swatch" /><div><strong>Key directional</strong><small>shadowed punctual light</small></div><span className="small-badge">ON</span></div><div className="light-row"><span className="light-swatch fill" /><div><strong>Environment</strong><small>PMREM / scene-linear</small></div><span className="small-badge">ON</span></div></InspectorSection><InspectorSection title="Model and animation" icon={<Activity size={14} />}><div className="clip-select"><span>Loaded model</span><strong>{model?.name ?? 'none'}</strong></div><div className="hint-line">Use Add media in the Library or Timeline for GLB, glTF, OBJ, FBX, STL, PLY, USDZ and ABC files. Animation clips, skins and inverse bind matrices are preserved by the glTF loader; frame sampling is independent of React render cadence.</div></InspectorSection><InspectorSection title="Light baking" icon={<Aperture size={14} />}><div className="bake-readout"><span className={bakeStatus.startsWith('baked') ? 'bake-ok' : ''}>{bakeStatus}</span><small>Real CPU reference bake · no timer or preview approximation is labelled baked.</small></div><button className="outline-button wide" onClick={bake}><Aperture size={14} /> Run lightmap + AO bake</button></InspectorSection></>;
 }
 
 function ThreeViewport({ asset }: { asset: Asset | undefined }) {
@@ -881,26 +1046,16 @@ function Toast() { const state = useEditorStore(); useEffect(() => { const timer
 
 function CommandPalette() {
   const state = useEditorStore();
-  const commands = [{ label: 'Add media to timeline', keys: '⇧⌘I', action: () => state.set({ showMediaBin: true }) }, { label: 'Split clip at playhead', keys: 'B', action: state.splitAtPlayhead }, { label: 'Add marker', keys: 'M', action: state.addMarker }, { label: 'Open masking mode', keys: 'I', action: () => state.setWorkspace('mask') }, { label: 'Open mask tracking', keys: '⌥T', action: () => state.setWorkspace('maskTracking') }, { label: 'Open general tracking', keys: 'T', action: () => state.setWorkspace('tracking') }, { label: 'Open Omniframe mode', keys: 'O', action: () => state.setWorkspace('omniframe') }, { label: 'Save project', keys: '⌘S', action: state.saveProject }];
+  const commands = [{ label: 'Split clip at playhead', keys: 'B', action: state.splitAtPlayhead }, { label: 'Add marker', keys: 'M', action: state.addMarker }, { label: 'Open masking mode', keys: 'I', action: () => state.setWorkspace('mask') }, { label: 'Open mask tracking', keys: '⌥T', action: () => state.setWorkspace('maskTracking') }, { label: 'Open general tracking', keys: 'T', action: () => state.setWorkspace('tracking') }, { label: 'Open Omniframe mode', keys: 'O', action: () => state.setWorkspace('omniframe') }, { label: 'Save project', keys: '⌘S', action: state.saveProject }];
   const [query, setQuery] = useState(''); const filtered = commands.filter((command) => command.label.toLowerCase().includes(query.toLowerCase()));
   return <div className="modal-scrim" onClick={() => state.set({ showCommandPalette: false })}><div className="command-palette" onClick={(event) => event.stopPropagation()}><div className="command-search"><Search size={16} /><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search commands, tools, effects…" /></div><div className="command-list">{filtered.map((command) => <button key={command.label} onClick={() => { command.action(); state.set({ showCommandPalette: false }); }}><span>{command.label}</span><kbd>{command.keys}</kbd></button>)}</div><div className="command-footer">↑↓ navigate <span>↵ run</span><span>esc close</span></div></div></div>;
 }
 
 function MediaBin() {
   const state = useEditorStore();
-  const input = useRef<HTMLInputElement>(null);
   const relinkInput = useRef<HTMLInputElement>(null);
   const [relinkId, setRelinkId] = useState<string | null>(null);
   const assets = state.project.assets;
-  const importFile = async (file: File) => {
-    const kind = file.type.startsWith('audio/') ? 'audio' : file.type.startsWith('image/') ? 'image' : /\.(glb|gltf|obj|fbx|stl|ply|usdz|abc)$/i.test(file.name) ? 'model' : 'video';
-    const url = URL.createObjectURL(file);
-    try {
-      const metadata = await inspectMedia(file, url);
-      state.addImportedAsset({ id: `asset_${crypto.randomUUID?.() ?? Date.now()}`, name: file.name, kind, sourcePath: url, contentHash: null, mime: file.type || 'application/octet-stream', ...metadata, sizeBytes: file.size, missing: false, tags: [], favorite: false, folderId: null, proxyId: null, importedAt: Date.now() });
-      state.set({ showMediaBin: false });
-    } catch (error) { URL.revokeObjectURL(url); state.flash((error as Error).message); }
-  };
   const relinkFile = async (file: File) => {
     const asset = assets.find((item) => item.id === relinkId);
     if (!asset) return;
@@ -917,7 +1072,7 @@ function MediaBin() {
     if (clip) state.selectClip(clip.id, state.project.sequences[0].tracks.find((track) => track.clips.some((item) => item.id === clip.id))?.id);
     state.set({ showMediaBin: false });
   };
-  return <div className="modal-scrim" onClick={() => state.set({ showMediaBin: false })}><div className="media-dialog" onClick={(event) => event.stopPropagation()}><div className="dialog-head"><div><span className="section-kicker">MEDIA BIN</span><h2>Sources.</h2></div><button className="icon-button" onClick={() => state.set({ showMediaBin: false })}><X size={16} /></button></div><div className="media-actions"><button className="primary-button" onClick={() => input.current?.click()}><Upload size={15} /> Import media</button><button className="outline-button" onClick={state.restoreAutosave}><RotateCcw size={14} /> Restore recovery</button><input ref={input} hidden type="file" accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.currentTarget.value = ''; }} /><input ref={relinkInput} hidden type="file" accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void relinkFile(file); event.currentTarget.value = ''; }} /></div><div className="media-list">{assets.length === 0 ? <div className="media-empty"><FilePlus2 size={28} /><strong>No imported media.</strong><span>Choose a video, audio file, image or 3D file to append it to the timeline.</span></div> : assets.map((asset) => <div key={asset.id} className="media-item" role="button" tabIndex={0} onClick={() => selectAsset(asset)} onKeyDown={(event) => { if (event.key === 'Enter') selectAsset(asset); }}><span className={`media-type ${asset.kind}`}>{asset.kind === 'model' ? <Box size={16} /> : asset.kind === 'audio' ? <AudioLines size={16} /> : asset.kind === 'image' ? <Aperture size={16} /> : <Film size={16} />}</span><span className="media-meta"><strong>{asset.name}</strong><small>{asset.kind} · {asset.missing ? 'missing — relink required' : asset.width ? `${asset.width}×${asset.height}` : 'metadata pending'}{asset.duration ? ` · ${asset.duration.toFixed(2)}s` : ''}</small></span><span className={`media-source ${asset.missing ? 'missing' : ''}`}><Link2 size={12} /> {asset.missing ? 'missing' : asset.proxyId ? 'proxy ready' : 'ready'}</span>{asset.missing && <button className="outline-button compact" onClick={(event) => { event.stopPropagation(); setRelinkId(asset.id); relinkInput.current?.click(); }}>Relink</button>}{!asset.missing && !asset.proxyId && <button className="icon-button" title="Proxy status" onClick={(event) => { event.stopPropagation(); state.flash('Proxy generation requires the native FFmpeg worker; the browser will not pretend a proxy exists.'); }}><Gauge size={14} /></button>}</div>)}</div><p className="dialog-note">Browser object URLs remain available for this session. Recovery keeps missing assets relinkable; native FFmpeg is required before a proxy can be generated.</p></div></div>;
+  return <div className="modal-scrim" onClick={() => state.set({ showMediaBin: false })}><div className="media-dialog" onClick={(event) => event.stopPropagation()}><div className="dialog-head"><div><span className="section-kicker">MEDIA BIN</span><h2>Sources.</h2></div><button className="icon-button" onClick={() => state.set({ showMediaBin: false })}><X size={16} /></button></div><div className="media-actions"><button className="outline-button" onClick={state.restoreAutosave}><RotateCcw size={14} /> Restore recovery</button><span className="media-action-note">Use Add media in the Library or Timeline to import sources.</span><input ref={relinkInput} hidden type="file" accept="video/*,audio/*,image/*,.glb,.gltf,.obj,.fbx,.stl,.ply,.usdz,.abc" onChange={(event) => { const file = event.target.files?.[0]; if (file) void relinkFile(file); event.currentTarget.value = ''; }} /></div><div className="media-list">{assets.length === 0 ? <div className="media-empty"><FilePlus2 size={28} /><strong>No imported media.</strong><span>Use Add media in the Library or Timeline to append video, audio, image or 3D sources.</span></div> : assets.map((asset) => <div key={asset.id} className="media-item" role="button" tabIndex={0} onClick={() => selectAsset(asset)} onKeyDown={(event) => { if (event.key === 'Enter') selectAsset(asset); }}><span className={`media-type ${asset.kind}`}>{asset.kind === 'model' ? <Box size={16} /> : asset.kind === 'audio' ? <AudioLines size={16} /> : asset.kind === 'image' ? <Aperture size={16} /> : <Film size={16} />}</span><span className="media-meta"><strong>{asset.name}</strong><small>{asset.kind} · {asset.missing ? 'missing — relink required' : asset.width ? `${asset.width}×${asset.height}` : 'metadata pending'}{asset.duration ? ` · ${asset.duration.toFixed(2)}s` : ''}</small></span><span className={`media-source ${asset.missing ? 'missing' : ''}`}><Link2 size={12} /> {asset.missing ? 'missing' : asset.proxyId ? 'proxy ready' : 'ready'}</span>{asset.missing && <button className="outline-button compact" onClick={(event) => { event.stopPropagation(); setRelinkId(asset.id); relinkInput.current?.click(); }}>Relink</button>}{!asset.missing && !asset.proxyId && <button className="icon-button" title="Proxy status" onClick={(event) => { event.stopPropagation(); state.flash('Proxy generation requires the native FFmpeg worker; the browser will not pretend a proxy exists.'); }}><Gauge size={14} /></button>}</div>)}</div><p className="dialog-note">Browser object URLs remain available for this session. Recovery keeps missing assets relinkable; native FFmpeg is required before a proxy can be generated.</p></div></div>;
 }
 function ExportDialog() {
   const state = useEditorStore(); const sequence = activeSequence(state.project); const clip = selectedClip(state); const asset = state.project.assets.find((item) => item.id === clip?.assetId); const aspect = `${sequence.width}:${sequence.height}` === '1920:1080' ? '16:9' : `${sequence.width}:${sequence.height}` === '1080:1080' ? '1:1' : `${sequence.width}:${sequence.height}` === '1080:1920' ? '9:16' : `${sequence.width}:${sequence.height}` === '1080:1350' ? '4:5' : 'custom'; const deliveryPreset = aspect === '16:9' ? 'YouTube 1080p' : aspect === '9:16' ? 'Shorts / Reels' : aspect === '1:1' ? 'Square social' : aspect === '4:5' ? 'Feed portrait' : 'Custom sequence'; const [exporting, setExporting] = useState(false); const [progress, setProgress] = useState<ExportProgressView | null>(null); const [error, setError] = useState(''); const abort = useRef<AbortController | null>(null);
