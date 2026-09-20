@@ -89,10 +89,14 @@ function activeClipOnTrack(clips: Clip[], trackId: string, time: number): Clip |
 export class PreviewEngine {
   private canvas: HTMLCanvasElement
   private ctx: CanvasRenderingContext2D
+  private backCanvas: HTMLCanvasElement
+  private backCtx: CanvasRenderingContext2D
   private raf = 0
   private last = 0
   private running = false
+  private unsubscribe: (() => void) | null = null
   private usedThisFrame = new Set<HTMLMediaElement>()
+  private requestedTime = new WeakMap<HTMLMediaElement, number>()
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
@@ -101,12 +105,26 @@ export class PreviewEngine {
     const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) throw new Error('2D canvas context unavailable')
     this.ctx = ctx
+    this.backCanvas = document.createElement('canvas')
+    this.backCanvas.width = PW
+    this.backCanvas.height = PH
+    const backCtx = this.backCanvas.getContext('2d', { alpha: false })
+    if (!backCtx) throw new Error('2D back-buffer context unavailable')
+    this.backCtx = backCtx
   }
 
   start() {
     if (this.running) return
     this.running = true
     this.last = performance.now()
+    // Pause decoded media synchronously with state. Waiting for the next rAF
+    // made Space/click pause feel delayed under main-thread load.
+    this.unsubscribe = useEditor.subscribe((state, previous) => {
+      if (!state.playing && previous.playing) {
+        videoCache.forEach((video) => video.pause())
+        audioCache.forEach((audio) => audio.pause())
+      }
+    })
     this.raf = requestAnimationFrame(this.loop)
   }
 
@@ -131,10 +149,11 @@ export class PreviewEngine {
   }
 
   private renderFrame(time: number, st: ReturnType<typeof useEditor.getState>) {
-    const ctx = this.ctx
+    const ctx = this.backCtx
     ctx.fillStyle = '#000000'
     ctx.fillRect(0, 0, PW, PH)
     this.usedThisFrame.clear()
+    let visualPending = false
 
     for (const track of st.tracks) {
       if (track.type === 'video' && track.hidden) {
@@ -145,11 +164,23 @@ export class PreviewEngine {
       const asset = st.assets.find((a) => a.id === clip.assetId)
       if (!asset) continue
       const el = this.syncElement(asset, time, clip, st.playing, track.muted, st.speed)
-      if (!el) continue
+      if (!el) {
+        if (track.type === 'video') visualPending = true
+        continue
+      }
       if (track.type === 'video') {
-        this.drawClip(el as CanvasImageSource, clip, asset)
+        const media = asset.kind === 'video' ? el as HTMLVideoElement : null
+        if (media && (media.seeking || media.readyState < HTMLMediaElement.HAVE_CURRENT_DATA)) {
+          visualPending = true
+          continue
+        }
+        this.drawClip(ctx, el as CanvasImageSource, clip, asset)
       }
     }
+
+    // Never flash black while Chromium is decoding a newly requested frame.
+    // Commit the complete back buffer atomically once all active visuals are ready.
+    if (!visualPending) this.ctx.drawImage(this.backCanvas, 0, 0)
 
     // Pause any media element that is no longer part of the active frame.
     const pause = (m: HTMLMediaElement) => {
@@ -157,6 +188,19 @@ export class PreviewEngine {
     }
     videoCache.forEach(pause)
     audioCache.forEach(pause)
+  }
+
+  private seekTo(el: HTMLMediaElement, target: number, tolerance: number) {
+    const clamped = Math.max(0, target)
+    this.requestedTime.set(el, clamped)
+    if (el.seeking || Math.abs(el.currentTime - clamped) <= tolerance) return
+    try {
+      // One seek per decoder completion. The latest target remains in the
+      // vector map and is applied by the next rAF, coalescing rapid scrubs.
+      el.currentTime = clamped
+    } catch {
+      /* metadata may not be ready yet; the next frame retries */
+    }
   }
 
   private syncElement(
@@ -187,38 +231,24 @@ export class PreviewEngine {
 
     if (playing && speed > 0) {
       if (el.paused) {
-        try {
-          el.currentTime = Math.max(0, target)
-          el.play().catch(() => {})
-        } catch {
-          /* ignore */
-        }
-      } else if (Math.abs(el.currentTime - target) > 0.18) {
-        try {
-          el.currentTime = Math.max(0, target)
-        } catch {
-          /* ignore */
-        }
+        this.seekTo(el, target, 0.04)
+        el.play().catch(() => {})
+      } else {
+        this.seekTo(el, target, 0.18)
       }
     } else {
       if (!el.paused) el.pause()
-      if (Math.abs(el.currentTime - target) > 0.02) {
-        try {
-          el.currentTime = Math.max(0, target)
-        } catch {
-          /* ignore */
-        }
-      }
+      this.seekTo(el, target, 0.02)
     }
     return el
   }
 
   private drawClip(
+    ctx: CanvasRenderingContext2D,
     el: CanvasImageSource,
     clip: Clip,
     asset: MediaAsset,
   ) {
-    const ctx = this.ctx
     const vw =
       (el as HTMLVideoElement).videoWidth ||
       (el as HTMLImageElement).naturalWidth ||
@@ -251,6 +281,8 @@ export class PreviewEngine {
   dispose() {
     this.running = false
     cancelAnimationFrame(this.raf)
+    this.unsubscribe?.()
+    this.unsubscribe = null
     videoCache.forEach((v) => v.pause())
     audioCache.forEach((a) => a.pause())
   }

@@ -45,7 +45,7 @@
     {
       "name": "Space starts playback",
       "status": "PASS",
-      "detail": "00:00:00:00->00:00:00:27"
+      "detail": "00:00:00:00->00:00:00:28"
     },
     {
       "name": "Space pauses playback",
@@ -55,7 +55,7 @@
     {
       "name": "Space at project end restarts from zero",
       "status": "PASS",
-      "detail": "00:00:00:07"
+      "detail": "00:00:00:08"
     },
     {
       "name": "restarted playback pauses normally",
@@ -63,19 +63,49 @@
       "detail": ""
     },
     {
+      "name": "preview has a decoded non-black frame before seek",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "click-seek never flashes canvas black",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Space pause state responds without delay",
+      "status": "PASS",
+      "detail": "17.4ms"
+    },
+    {
+      "name": "Space synchronously pauses decoded media elements",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "rapid playhead drag retains a valid composite",
+      "status": "PASS",
+      "detail": "4108,4108,4108,4108,4108"
+    },
+    {
+      "name": "coalesced scrub reaches final decoded frame",
+      "status": "PASS",
+      "detail": "344.0ms"
+    },
+    {
       "name": "image clip drag maps pixels to time",
       "status": "PASS",
-      "detail": "8.003->6.0027 at 48.2196px/s"
+      "detail": "8.003->6 at 48.2196px/s"
     },
     {
       "name": "video left trim preserves source timing",
       "status": "PASS",
-      "detail": "start=0.9505 in=0.9505 dur=7.0525"
+      "detail": "start=1.0369 in=1.0369 dur=6.9661"
     },
     {
       "name": "video right trim changes duration",
       "status": "PASS",
-      "detail": "7.0525->6.0156"
+      "detail": "6.9661->5.9292"
     },
     {
       "name": "ruler scrub seeks to 3s",
@@ -90,7 +120,7 @@
     {
       "name": "split conserves duration",
       "status": "PASS",
-      "detail": "2.0495+3.9661"
+      "detail": "1.9631+3.9661"
     },
     {
       "name": "undo restores pre-split state",
@@ -420,7 +450,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/3847a8cd-d450-411d-be65-3ce6ab384515 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/4d4ee97d-c205-4493-8976-c327980e9374 :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

@@ -19,6 +19,7 @@ page.on('requestfailed',r=>failed.push(`${r.url()} :: ${r.failure()?.errorText}`
 const pass=(name,detail='')=>{results.push({name,status:'PASS',detail}); console.log('PASS',name,detail)}
 const assert=(v,name,detail='')=>{if(!v)throw new Error(`${name}: ${detail}`);pass(name,detail)}
 const num=async(loc,k)=>Number(await loc.getAttribute(k))
+const canvasLuma=()=>page.locator('#of-canvas').evaluate(c=>{const x=c.getContext('2d'),pts=[[.2,.2],[.5,.2],[.8,.2],[.2,.5],[.5,.5],[.8,.5],[.2,.8],[.5,.8],[.8,.8]];return pts.reduce((sum,[px,py])=>{const d=x.getImageData(Math.floor(c.width*px),Math.floor(c.height*py),1,1).data;return sum+d[0]+d[1]+d[2]},0)})
 const shot=async(name)=>page.screenshot({path:join(SHOTS,`${name}.png`)})
 const drag=async(loc,dx,dy=0,steps=12)=>{const b=await loc.boundingBox(); if(!b)throw Error('no box'); await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+dx,b.y+b.height/2+dy,{steps});await page.mouse.up()}
 
@@ -46,6 +47,20 @@ await page.keyboard.press('Space'); const paused=await page.getByTitle('Play (Sp
 await page.getByTitle('Go to end (End)').click(); await page.keyboard.press('Space'); await page.waitForTimeout(220)
 assert((await page.getByTestId('current-time').textContent()).startsWith('00:00:00:'),'Space at project end restarts from zero',await page.getByTestId('current-time').textContent())
 await page.keyboard.press('Space'); assert(await page.getByTitle('Play (Space)').isVisible(),'restarted playback pauses normally')
+// Pause and seek responsiveness: keep the last complete composite while the decoder catches up.
+assert(await canvasLuma()>300,'preview has a decoded non-black frame before seek')
+await page.keyboard.press('Space'); await page.waitForTimeout(100)
+const seekRuler=page.getByTestId('timeline-ruler'), seekBox=await seekRuler.boundingBox(), seekScale=Number(await page.getByTestId('timeline').getAttribute('data-px-per-second'))
+await page.mouse.click(seekBox.x+4*seekScale,seekBox.y+10)
+assert(await canvasLuma()>300,'click-seek never flashes canvas black')
+const pauseStart=performance.now(); await page.keyboard.press('Space'); await page.getByTitle('Play (Space)').waitFor({state:'visible'}); const pauseMs=performance.now()-pauseStart
+assert(pauseMs<120,'Space pause state responds without delay',`${pauseMs.toFixed(1)}ms`)
+assert(await page.evaluate(()=>[...document.querySelectorAll('video,audio')].every(m=>m.paused)),'Space synchronously pauses decoded media elements')
+const scrubLuma=[]; await page.mouse.move(seekBox.x+1*seekScale,seekBox.y+10); await page.mouse.down()
+for(const t of [2,3,4,5,6]){await page.mouse.move(seekBox.x+t*seekScale,seekBox.y+10);scrubLuma.push(await canvasLuma())} await page.mouse.up()
+assert(scrubLuma.every(v=>v>300),'rapid playhead drag retains a valid composite',scrubLuma.join(','))
+const decodeStart=performance.now(); await page.waitForFunction(()=>{const v=document.querySelector('video');return !v||(!v.seeking&&v.readyState>=2)},{timeout:1500}); const decodeMs=performance.now()-decodeStart
+assert(decodeMs<1500,'coalesced scrub reaches final decoded frame',`${decodeMs.toFixed(1)}ms`)
 await shot('stress-03-playback-paused')
 
 // Fit makes the appended image visible; verify drag against measured px/time.

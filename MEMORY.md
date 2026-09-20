@@ -4634,3 +4634,25 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [OBSERVED] PASS Space paused the restarted playback normally.
 - [OBSERVED] PASS Updated Chromium stress suite completed 83 assertions with zero runtime errors and zero unexpected request failures.
 - [OBSERVED] PASS Preview zoom remained overflow-free and all 22 responsive checks remained green.
+
+# Timeline playback, pause, and scrub responsiveness — 2026-09-21
+
+- [OBSERVED] FAIL User reported delayed pause response, black preview flashes when seeking during playback, and slow canvas updates during playhead dragging.
+- [SOURCE-CODE] FAIL The decoder synchronization path reassigned `HTMLMediaElement.currentTime` on every animation frame even while the previous seek was still pending.
+- [SOURCE-CODE] FAIL Repeated current-time assignments could restart Chromium decoder work approximately 60 times per second and delay arrival at the requested frame.
+- [SOURCE-CODE] FAIL The visible canvas was cleared to black before confirming that every active visual source had a decoded current frame.
+- [SOURCE-CODE] PASS Media seeks now use a WeakMap-backed latest-target vector and allow only one in-flight seek per decoder.
+- [SOURCE-CODE] PASS Rapid playhead updates are coalesced: while a media element is seeking, new desired time replaces the vector target and is applied after decoder completion.
+- [SOURCE-CODE] PASS The preview renderer now uses a fixed 1280×720 offscreen back buffer.
+- [SOURCE-CODE] PASS A composite is committed atomically to the visible canvas only when every active visual source has current decoded data.
+- [SOURCE-CODE] PASS During decoder latency, the last complete visible composite is retained instead of flashing black.
+- [SOURCE-CODE] PASS Store playback transitions are subscribed directly by the preview engine so video/audio pause synchronously rather than waiting for the next animation frame.
+- [OBSERVED] PASS Measured Space-to-paused UI response was 17.4ms in the final Chromium run.
+- [OBSERVED] PASS Every decoded video/audio element reported `paused === true` immediately after the Space pause transition.
+- [OBSERVED] PASS Clicking the ruler while playback was active retained a non-black canvas composite.
+- [MEASURED] PASS Nine-point canvas luma remained above the non-black threshold during click-seek.
+- [OBSERVED] PASS Five rapid pointer scrub positions each retained the same valid composite while the decoder coalesced work.
+- [MEASURED] PASS Rapid-scrub luma samples were `4108,4108,4108,4108,4108`; no black frame was exposed.
+- [MEASURED] PASS The final coalesced scrub target reached decoded `readyState >= HAVE_CURRENT_DATA` in 344.0ms.
+- [OBSERVED] PASS Chromium stress suite increased to 89 passing assertions with zero runtime errors and zero unexpected request failures.
+- [MEASURED] PASS Post-change export remained H.264 1280×720 plus 48kHz stereo Opus and decoded fully with zero video/audio decoder errors.
