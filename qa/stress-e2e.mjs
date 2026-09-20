@@ -46,7 +46,7 @@ await page.keyboard.press('Space'); const paused=await page.getByTitle('Play (Sp
 await shot('stress-03-playback-paused')
 
 // Fit makes the appended image visible; verify drag against measured px/time.
-await page.getByTitle('Fit').click(); await page.waitForTimeout(100)
+await page.getByTitle('Fit',{exact:true}).click(); await page.waitForTimeout(100)
 let image=page.locator('[data-kind="image"]'); const imageStart=await num(image,'data-start')
 const dragPx=100, dragScale=Number(await page.getByTestId('timeline').getAttribute('data-px-per-second'))
 await drag(image,-dragPx); await page.waitForTimeout(150)
@@ -85,11 +85,18 @@ assert(Number(await page.getByTestId('timeline').getAttribute('data-px-per-secon
 const startsAfter=await clips.evaluateAll(xs=>xs.map(x=>x.getAttribute('data-start')))
 assert(JSON.stringify(startsBefore)===JSON.stringify(startsAfter),'zoom preserves logical clip times')
 await shot('stress-07-frame-mode')
-await page.getByTitle('Fit').click(); await page.getByTitle('Zoom in').click(); await page.getByTitle('Zoom out').click(); pass('fit/zoom-in/zoom-out controls execute')
+await page.getByTitle('Fit',{exact:true}).click(); await page.getByTitle('Zoom in').click(); await page.getByTitle('Zoom out').click(); pass('fit/zoom-in/zoom-out controls execute')
 
 // Preview controls.
 for(const name of ['Safe areas','Grid']) {await page.getByTitle(name).click(); assert(await page.getByTitle(name).getAttribute('aria-pressed')==='true',`${name} active state`)}
 for(const name of ['50%','100%','200%']) {await page.getByRole('button',{name}).click(); pass(`preview ${name}`)}
+const previewViewport=page.getByTestId('preview-viewport')
+const previewBox=await previewViewport.boundingBox(); const previewOverflow=await previewViewport.evaluate(el=>({overflow:getComputedStyle(el).overflow,clientW:el.clientWidth,clientH:el.clientHeight}))
+assert(previewOverflow.overflow==='hidden','zoomed preview is clipped without scrollbars',JSON.stringify(previewOverflow))
+await page.mouse.move(previewBox.x+previewBox.width/2,previewBox.y+previewBox.height/2); await page.mouse.down(); await page.mouse.move(previewBox.x+previewBox.width/2+100,previewBox.y+previewBox.height/2+60,{steps:10}); await page.mouse.up()
+assert(Math.abs(Number(await previewViewport.getAttribute('data-preview-pan-x')))>1,'200% preview supports bounded pointer pan',await previewViewport.getAttribute('data-preview-pan-x'))
+await shot('stress-08-preview-200-panned')
+await page.getByTitle('Fit preview',{exact:true}).click(); await page.waitForTimeout(100); const fitPan=await previewViewport.getAttribute('data-preview-pan-x'); assert(Math.abs(Number(fitPan))<.01,'Fit recenters preview canvas',fitPan)
 await page.getByTitle('Safe areas').click(); await page.getByTitle('Grid').click(); await shot('stress-08-preview-zoom')
 
 // Track controls and planned panels. Lock must enforce editing, not merely look active.

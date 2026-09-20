@@ -133,6 +133,21 @@
       "detail": ""
     },
     {
+      "name": "zoomed preview is clipped without scrollbars",
+      "status": "PASS",
+      "detail": "{\"overflow\":\"hidden\",\"clientW\":872,\"clientH\":572}"
+    },
+    {
+      "name": "200% preview supports bounded pointer pan",
+      "status": "PASS",
+      "detail": "100.00"
+    },
+    {
+      "name": "Fit recenters preview canvas",
+      "status": "PASS",
+      "detail": "0.00"
+    },
+    {
       "name": "locked track prevents clip deletion",
       "status": "PASS",
       "detail": ""
@@ -375,7 +390,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/5405991e-59e6-4dc4-a9b8-f3ff2fa653a1 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/71e08fc7-692e-438a-9691-3e423cc82fac :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

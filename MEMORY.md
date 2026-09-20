@@ -4599,3 +4599,19 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SOURCE-CODE] PASS GPL and MPL repositories remain reference-only under the project's MIT/Apache-only shipping policy.
 - [SOURCE-CODE] PASS Repositories reported as `NOASSERTION` remain blocked from shipping use pending manual license verification.
 - [SOURCE-CODE] PASS Full ranked findings are in `research/MEMORY.md`; machine-readable metadata is in `research/repository-metadata.jsonl`.
+
+# Preview overflow correction — 2026-09-21
+
+- [SCREENSHOT] FAIL User evidence `image-1.png` showed the preview's 200% canvas participating in layout overflow and exposing a vertical scrollbar.
+- [SOURCE-CODE] FAIL Root cause was `Preview.tsx` assigning 2560×1440 CSS dimensions to the canvas inside an `overflow-auto` flex child.
+- [SOURCE-CODE] PASS The preview is now a fixed `min-w-0 min-h-0 overflow-hidden` viewport; zoomed media never changes editor layout dimensions.
+- [SOURCE-CODE] PASS The 1280×720 rendering stage is centered absolutely and zoomed with a compositor transform rather than oversized layout width/height.
+- [SOURCE-CODE] PASS Fit scale is derived from a `ResizeObserver`, preserving the full 16:9 stage within both available width and height.
+- [OBSERVED] PASS At 200%, computed preview overflow is `hidden` with a measured 872×572 viewport and no preview scrollbar.
+- [OBSERVED] PASS Real pointer drag panned the 200% stage by 100px while remaining clipped to the preview viewport.
+- [OBSERVED] PASS Pan is bounded against scaled canvas edges so users cannot lose the media beyond its reachable limits.
+- [OBSERVED] PASS Fit preview reset pan to zero and recentered the canvas.
+- [SOURCE-CODE] PASS Preview controls are excluded from the pan pointer-capture path, preventing zoom buttons from being swallowed during a panned state.
+- [SCREENSHOT] PASS `qa/screenshots/stress-08-preview-200-panned.png` shows the zoomed/panned image clipped cleanly with no canvas scrollbar or main-layout overflow.
+- [OBSERVED] PASS Updated Chromium stress suite completed 77 assertions with zero browser errors and zero unexpected failed requests.
+- [OBSERVED] PASS All 22 responsive loaded-project viewport checks remained green after the preview architecture change.
