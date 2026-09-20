@@ -183,6 +183,38 @@ function ClipView({
   )
 }
 
+function LiveTimecode() {
+  const ref = useRef<HTMLSpanElement>(null)
+  useEffect(() => {
+    const paint = () => {
+      if (ref.current) ref.current.textContent = formatTimecode(useEditor.getState().playhead)
+    }
+    paint()
+    return useEditor.subscribe((state, previous) => {
+      if (state.playhead !== previous.playhead) paint()
+    })
+  }, [])
+  return <span ref={ref} data-testid="current-time" className="text-white">00:00:00:00</span>
+}
+
+function PlayheadMarker({ px, handle = false }: { px: number; handle?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const paint = () => {
+      if (ref.current) ref.current.style.transform = `translate3d(${useEditor.getState().playhead * px}px,0,0)`
+    }
+    paint()
+    return useEditor.subscribe((state, previous) => {
+      if (state.playhead !== previous.playhead) paint()
+    })
+  }, [px])
+  return (
+    <div ref={ref} className={`absolute left-0 top-0 bottom-0 w-0.5 pointer-events-none ${handle ? 'bg-brand' : 'bg-brand/80'}`}>
+      {handle && <div className="absolute -top-0.5 -left-1 w-2.5 h-2.5 bg-brand rotate-45" />}
+    </div>
+  )
+}
+
 function TrackHeader({ track }: { track: Track }) {
   const toggleMute = useEditor((s) => s.toggleTrackMute)
   const toggleHidden = useEditor((s) => s.toggleTrackHidden)
@@ -213,11 +245,12 @@ function TrackHeader({ track }: { track: Track }) {
 }
 
 export function Timeline() {
+  const renderCount = useRef(0)
+  renderCount.current += 1
   const tracks = useEditor((s) => s.tracks)
   const clips = useEditor((s) => s.clips)
   const px = useEditor((s) => s.pxPerSec)
   const duration = useEditor((s) => s.duration)
-  const playhead = useEditor((s) => s.playhead)
   const tool = useEditor((s) => s.tool)
   const setPlayhead = useEditor((s) => s.setPlayhead)
   const setTool = useEditor((s) => s.setTool)
@@ -324,7 +357,7 @@ export function Timeline() {
   }
 
   return (
-    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
+    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-render-count={renderCount.current} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
       {/* transport + tools + zoom (groups separated by dividers) */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
         {/* transport */}
@@ -340,7 +373,7 @@ export function Timeline() {
           </IconButton>
         </div>
         <div className="px-2 font-mono text-sm tabular-nums whitespace-nowrap">
-          <span data-testid="current-time" className="text-white">{formatTimecode(playhead)}</span>
+          <LiveTimecode />
           <span className="text-ink-500"> / {formatTimecode(duration)}</span>
         </div>
         <Segmented
@@ -356,7 +389,7 @@ export function Timeline() {
         <div className="w-px h-6 bg-ink-700" />
 
         {/* edit tools */}
-        <IconButton title="Split at playhead (B)" onClick={() => splitAt(playhead)}>
+        <IconButton title="Split at playhead (B)" onClick={() => splitAt(useEditor.getState().playhead)}>
           <Scissors size={16} />
         </IconButton>
         <div className="flex items-center gap-1 bg-ink-800 rounded-md p-0.5 border border-ink-700">
@@ -458,13 +491,8 @@ export function Timeline() {
                   )}
                 </div>
               ))}
-              {/* playhead handle */}
-              <div
-                className="absolute top-0 bottom-0 w-0.5 bg-brand cursor-grab active:cursor-grabbing"
-                style={{ left: playhead * px }}
-              >
-                <div className="absolute -top-0.5 -left-1 w-2.5 h-2.5 bg-brand rotate-45" />
-              </div>
+              {/* Imperative marker: playback moves this transform without rerendering tracks/clips. */}
+              <PlayheadMarker px={px} handle />
             </div>
 
             {/* lanes */}
@@ -531,7 +559,7 @@ export function Timeline() {
               </div>
 
               {/* playhead line across lanes */}
-              <div className="absolute top-0 bottom-0 w-0.5 bg-brand/80 pointer-events-none" style={{ left: playhead * px }} />
+              <PlayheadMarker px={px} />
             </div>
           </div>
         </div>

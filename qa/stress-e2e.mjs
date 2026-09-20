@@ -41,8 +41,10 @@ assert(Math.abs(await num(page.locator('[data-kind="image"]'),'data-start')-8)<.
 assert(Math.abs(await num(page.locator('[data-kind="audio"]'),'data-start'))<.01,'audio starts independently at zero')
 
 // Real playback + keyboard pause/play.
-const t0=await page.getByTestId('current-time').textContent(); await page.keyboard.press('Space'); await page.waitForTimeout(900)
+const t0=await page.getByTestId('current-time').textContent(); await page.keyboard.press('Space'); await page.waitForTimeout(80)
+const timelineRendersPlaying=await page.getByTestId('timeline').getAttribute('data-render-count'); await page.waitForTimeout(820)
 const t1=await page.getByTestId('current-time').textContent(); assert(t1!==t0,'Space starts playback',`${t0}->${t1}`)
+assert(await page.getByTestId('timeline').getAttribute('data-render-count')===timelineRendersPlaying,'playback does not rerender timeline clip tree',timelineRendersPlaying)
 await page.keyboard.press('Space'); const paused=await page.getByTitle('Play (Space)').isVisible(); assert(paused,'Space pauses playback')
 await page.getByTitle('Go to end (End)').click(); await page.keyboard.press('Space'); await page.waitForTimeout(220)
 assert((await page.getByTestId('current-time').textContent()).startsWith('00:00:00:'),'Space at project end restarts from zero',await page.getByTestId('current-time').textContent())
@@ -152,6 +154,10 @@ const sizes=[[1920,1080],[1600,900],[1440,900],[1366,768],[1280,720],[1024,768],
 for(const [w,h] of sizes){await page.setViewportSize({width:w,height:h});await page.waitForTimeout(40);const m=await page.evaluate(()=>({doc:document.documentElement.scrollWidth-document.documentElement.clientWidth,body:document.body.scrollWidth-document.body.clientWidth,header:(()=>{const x=document.querySelector('header');return x.scrollWidth-x.clientWidth})()}));assert(m.doc===0&&m.body===0&&m.header===0,`responsive ${w}x${h} no page/header overflow`,JSON.stringify(m));await shot(`viewport-${w}x${h}`)}
 // Resize back without reload and verify assets survive.
 await page.setViewportSize({width:1440,height:900}); assert(await clips.count()===countPreDelete,'resize preserves timeline state')
+
+// Detect media failures that browsers can otherwise keep off the console.
+const hiddenMediaErrors=await page.evaluate(()=>[...document.querySelectorAll('video,audio')].map(m=>({src:m.currentSrc,error:m.error?{code:m.error.code,message:m.error.message}:null,networkState:m.networkState,readyState:m.readyState})).filter(x=>x.error))
+assert(hiddenMediaErrors.length===0,'no hidden HTMLMediaElement decoder/network errors',JSON.stringify(hiddenMediaErrors))
 
 // Export edited multi-media project.
 let exportPath=''; const [download]=await Promise.all([page.waitForEvent('download',{timeout:30000}),page.getByRole('button',{name:/Export/}).click()]);

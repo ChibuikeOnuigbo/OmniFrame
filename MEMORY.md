@@ -4656,3 +4656,19 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [MEASURED] PASS The final coalesced scrub target reached decoded `readyState >= HAVE_CURRENT_DATA` in 344.0ms.
 - [OBSERVED] PASS Chromium stress suite increased to 89 passing assertions with zero runtime errors and zero unexpected request failures.
 - [MEASURED] PASS Post-change export remained H.264 1280×720 plus 48kHz stereo Opus and decoded fully with zero video/audio decoder errors.
+
+# Timeline render isolation and hidden media-error audit — 2026-09-21
+
+- [SOURCE-CODE] FAIL Timeline subscribed its full React component tree to `playhead`; playback therefore reconciled every ruler tick, track, clip, and control at animation-frame frequency.
+- [SOURCE-CODE] PASS Live timecode is now an isolated imperative store subscriber that updates only one text node.
+- [SOURCE-CODE] PASS Ruler and lane playhead markers are isolated imperative subscribers using GPU-friendly `translate3d` transforms.
+- [SOURCE-CODE] PASS The main Timeline component no longer subscribes to playhead changes.
+- [SOURCE-CODE] PASS Split reads the current playhead only when invoked, avoiding a render subscription solely for event-handler data.
+- [MEASURED] PASS Timeline render counter remained exactly `11` throughout the measured 820ms active playback interval.
+- [OBSERVED] PASS Timecode and both playhead markers continued updating while the clip/track tree did not rerender.
+- [MEASURED] PASS Final Space pause response remained 17.0ms after render isolation.
+- [MEASURED] PASS Final coalesced rapid-scrub decode completed in 387.9ms while retaining a non-black composite.
+- [OBSERVED] PASS All hidden HTMLMediaElement `MediaError` objects were explicitly inspected after loaded-project resize and editing; result was an empty array.
+- [OBSERVED] PASS Console errors, page exceptions, unhandled browser failures, unexpected request failures, and hidden decoder/network media errors were all zero.
+- [OBSERVED] PASS Updated Chromium suite completed 91 assertions.
+- [MEASURED] PASS TypeScript and the Vite production build remained successful.

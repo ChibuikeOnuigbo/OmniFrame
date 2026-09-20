@@ -45,7 +45,12 @@
     {
       "name": "Space starts playback",
       "status": "PASS",
-      "detail": "00:00:00:00->00:00:00:28"
+      "detail": "00:00:00:00->00:00:00:27"
+    },
+    {
+      "name": "playback does not rerender timeline clip tree",
+      "status": "PASS",
+      "detail": "11"
     },
     {
       "name": "Space pauses playback",
@@ -55,7 +60,7 @@
     {
       "name": "Space at project end restarts from zero",
       "status": "PASS",
-      "detail": "00:00:00:08"
+      "detail": "00:00:00:07"
     },
     {
       "name": "restarted playback pauses normally",
@@ -75,7 +80,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "17.4ms"
+      "detail": "13.0ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -90,7 +95,7 @@
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "344.0ms"
+      "detail": "339.0ms"
     },
     {
       "name": "image clip drag maps pixels to time",
@@ -418,6 +423,11 @@
       "detail": ""
     },
     {
+      "name": "no hidden HTMLMediaElement decoder/network errors",
+      "status": "PASS",
+      "detail": "[]"
+    },
+    {
       "name": "edited multi-media export downloaded",
       "status": "PASS",
       "detail": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"
@@ -450,7 +460,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/4d4ee97d-c205-4493-8976-c327980e9374 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/682a1c09-a794-4836-9528-c646dc0c295f :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"
