@@ -25,6 +25,7 @@ The CapCut observations come from the official guides at [`how to use CapCut on 
 
 - landing page and editor are separate routes/states;
 - top application chrome: project identity, File/Edit/View/Workspace/Help menus, save/undo/redo/command palette, canvas aspect selector, scrollable workspace tabs with left/right arrows, performance/export;
+- overflowing media-category, mask-tool and timeline-action strips use the same explicit left/right arrow pattern instead of hiding their controls;
 - upper editor: a persistent labelled tool rail on the left, preview/player in the centre, and contextual inspector on the right;
 - bottom editor: a full-width timeline below the upper panels, with its own toolbar, ruler, track labels, visible clip durations, trim handles, playhead and drop zones;
 - left rail labels stay readable at every viewport; media opens the working media bin and the timeline Add media action accepts video, audio, image and 3D sources;
