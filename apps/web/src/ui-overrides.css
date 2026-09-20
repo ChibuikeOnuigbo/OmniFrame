@@ -116,6 +116,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, [role="button"]
 .rail-library { min-height: 0; flex: 1 1 auto; padding: 0 10px 10px; overflow: auto; border-top: 1px solid var(--line); }
 .rail-library-title { display: flex; align-items: center; justify-content: space-between; min-height: 38px; color: #d7d7d7; font-size: 11px; font-weight: 600; }
 .rail-library-title small { color: var(--muted2); font: 10px var(--mono); }
+.media-filter-scroll { margin: 0 -4px 8px; }
+.media-filter-scroll .strip-arrow { flex-basis: 20px; width: 20px; height: 26px; }
+.media-filter-button { flex: 0 0 auto; min-height: 28px; padding: 0 9px; border-radius: 5px; color: var(--muted2); font: 10px var(--display); }
+.media-filter-button:hover { background: #303030; color: var(--text); }
+.media-filter-button.active { background: rgba(38, 198, 183, .14); color: #73e1d7; }
 .rail-library-empty { display: flex; align-items: center; gap: 8px; padding: 12px 6px; color: var(--muted2); font-size: 11px; }
 .rail-asset { display: flex; align-items: center; width: 100%; min-height: 42px; gap: 9px; padding: 5px 7px; border-radius: 6px; background: transparent; color: #b7b7b7; font-size: 11px; text-align: left; }
 .rail-asset:hover, .rail-asset.active { background: #303030; color: #fff; }
@@ -160,6 +165,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, [role="button"]
 .text-button { padding: 8px 10px; color: var(--muted); font: 12px var(--display); }
 .text-button:hover { border-radius: 5px; background: #303030; color: #fff; }
 .mask-canvas-toolbar { min-height: 44px; padding: 5px 18px; background: #242424; }
+.strip-shell { display: flex; min-width: 0; align-items: center; gap: 2px; overflow: hidden; }
+.strip-content { display: flex; min-width: 0; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.strip-content::-webkit-scrollbar { display: none; }
+.strip-arrow { display: grid; flex: 0 0 24px; place-items: center; width: 24px; height: 28px; border-radius: 4px; background: #2c2c2c; color: var(--muted2); }
+.strip-arrow:hover { background: #373737; color: var(--text); }
+.tool-tabs-scroll { flex: 0 1 auto; max-width: 270px; }
+.tool-tabs { flex: 0 0 auto; }
 .tool-tabs button { padding: 8px 10px; border-radius: 5px; font: 11px var(--display); }
 .toolbar-readout, .toolbar-hint { color: var(--muted2); font: 11px var(--display); }
 
@@ -214,7 +226,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, [role="button"]
 .timeline-title { gap: 3px; }
 .timeline-title > span { color: #f4f4f4; font-size: 14px; font-weight: 650; }
 .timeline-title small { color: var(--muted2); font: 11px var(--display); }
-.timeline-actions { gap: 7px; }
+.timeline-actions-scroll { flex: 0 1 auto; max-width: min(100%, 660px); }
+.timeline-actions-scroll .strip-content { flex: 0 1 auto; }
+.timeline-actions { flex: 0 0 auto; gap: 7px; }
 .timeline-add-media { min-height: 34px; padding: 0 13px; border: 1px solid rgba(38, 198, 183, .55); border-radius: 6px; background: rgba(38, 198, 183, .13); color: #73e1d7; font: 12px var(--display); }
 .timeline-add-media:hover { background: rgba(38, 198, 183, .23); }
 .timebase-control { gap: 7px; color: var(--muted2); font: 11px var(--display); }
