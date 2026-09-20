@@ -4615,3 +4615,22 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] PASS `qa/screenshots/stress-08-preview-200-panned.png` shows the zoomed/panned image clipped cleanly with no canvas scrollbar or main-layout overflow.
 - [OBSERVED] PASS Updated Chromium stress suite completed 77 assertions with zero browser errors and zero unexpected failed requests.
 - [OBSERVED] PASS All 22 responsive loaded-project viewport checks remained green after the preview architecture change.
+
+# Persistent inspector toggle and end-play restart — 2026-09-21
+
+- [SCREENSHOT] FAIL User evidence showed two inspector slide icons: one beside Export and one in the right-edge rail.
+- [SOURCE-CODE] FAIL Root cause was independent inspector toggles in both `TopBar.tsx` and `RightPanel.tsx`.
+- [SOURCE-CODE] PASS The duplicate top-bar inspector control beside Export has been removed.
+- [SOURCE-CODE] PASS One right-edge inspector control now persists in both expanded and collapsed states.
+- [SOURCE-CODE] PASS The persistent control flips between `PanelRightClose` and `PanelRightOpen` according to state.
+- [SOURCE-CODE] PASS The control exposes `Hide inspector` / `Show inspector`, `aria-label`, and `aria-expanded` state.
+- [OBSERVED] PASS Chromium found zero inspector-toggle buttons in the top bar.
+- [OBSERVED] PASS Chromium found exactly one persistent inspector toggle while the inspector was open.
+- [OBSERVED] PASS Clicking it closed the inspector while retaining exactly one `Show inspector` control.
+- [OBSERVED] PASS Clicking again reopened the inspector and restored exactly one `Hide inspector` control.
+- [SCREENSHOT] PASS `qa/screenshots/stress-09-panels.png` visibly shows no icon beside Export and one toggle on the inspector edge.
+- [SOURCE-CODE] PASS `play()` and `togglePlay()` now reset the playhead to zero before starting when it is at project duration.
+- [OBSERVED] PASS Space pressed at project end restarted playback at `00:00:00:*`.
+- [OBSERVED] PASS Space paused the restarted playback normally.
+- [OBSERVED] PASS Updated Chromium stress suite completed 83 assertions with zero runtime errors and zero unexpected request failures.
+- [OBSERVED] PASS Preview zoom remained overflow-free and all 22 responsive checks remained green.

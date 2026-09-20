@@ -294,9 +294,15 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({ tracks: s.tracks.map((t) => (t.id === id ? { ...t, locked: !t.locked } : t)) })),
 
     setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
-    play: () => set({ playing: true }),
+    play: () => set((s) => ({
+      playhead: s.playhead >= s.duration - 0.001 ? 0 : s.playhead,
+      playing: true,
+    })),
     pause: () => set({ playing: false }),
-    togglePlay: () => set((s) => ({ playing: !s.playing })),
+    togglePlay: () => set((s) => s.playing
+      ? { playing: false }
+      : { playing: true, playhead: s.playhead >= s.duration - 0.001 ? 0 : s.playhead },
+    ),
     setSpeed: (s) => {
       const sign = s < 0 ? -1 : 1
       set({ speed: sign * clamp(Math.abs(s), 0.1, 4) })

@@ -53,19 +53,29 @@
       "detail": ""
     },
     {
+      "name": "Space at project end restarts from zero",
+      "status": "PASS",
+      "detail": "00:00:00:07"
+    },
+    {
+      "name": "restarted playback pauses normally",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "image clip drag maps pixels to time",
       "status": "PASS",
-      "detail": "8.003->6.0027 at 51.0651px/s"
+      "detail": "8.003->6.0027 at 48.2196px/s"
     },
     {
       "name": "video left trim preserves source timing",
       "status": "PASS",
-      "detail": "start=0.9166 in=0.9166 dur=7.0864"
+      "detail": "start=0.9505 in=0.9505 dur=7.0525"
     },
     {
       "name": "video right trim changes duration",
       "status": "PASS",
-      "detail": "7.0864->6.1073"
+      "detail": "7.0525->6.0156"
     },
     {
       "name": "ruler scrub seeks to 3s",
@@ -80,7 +90,7 @@
     {
       "name": "split conserves duration",
       "status": "PASS",
-      "detail": "2.0834+4.0239"
+      "detail": "2.0495+3.9661"
     },
     {
       "name": "undo restores pre-split state",
@@ -135,7 +145,7 @@
     {
       "name": "zoomed preview is clipped without scrollbars",
       "status": "PASS",
-      "detail": "{\"overflow\":\"hidden\",\"clientW\":872,\"clientH\":572}"
+      "detail": "{\"overflow\":\"hidden\",\"clientW\":835,\"clientH\":572}"
     },
     {
       "name": "200% preview supports bounded pointer pan",
@@ -146,6 +156,26 @@
       "name": "Fit recenters preview canvas",
       "status": "PASS",
       "detail": "0.00"
+    },
+    {
+      "name": "top bar has no duplicate inspector toggle",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single persistent inspector toggle when open",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "inspector edge toggle persists and flips when closed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "inspector edge toggle reopens and flips back",
+      "status": "PASS",
+      "detail": ""
     },
     {
       "name": "locked track prevents clip deletion",
@@ -390,7 +420,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/71e08fc7-692e-438a-9691-3e423cc82fac :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/3847a8cd-d450-411d-be65-3ce6ab384515 :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

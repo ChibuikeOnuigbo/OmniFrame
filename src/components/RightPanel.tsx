@@ -1,4 +1,4 @@
-import { PanelRightOpen, Trash2, Scissors } from 'lucide-react'
+import { PanelRightClose, PanelRightOpen, Trash2, Scissors } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
 import { Field, Section, Slider } from './ui'
@@ -118,28 +118,29 @@ export function RightPanel() {
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
-  if (!rightOpen) {
-    return (
-      <div className="w-9 shrink-0 bg-ink-900 border-l border-ink-700 flex flex-col items-center pt-2">
+  return (
+    <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
+      {rightOpen && (
+        <div className="w-72 shrink-0 bg-ink-850 flex flex-col h-full">
+          <div className="h-9 shrink-0 flex items-center px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
+            {selectedClipId ? 'Clip' : 'Inspector'}
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+          </div>
+        </div>
+      )}
+      <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2">
         <button
           type="button"
-          title="Show inspector"
-          onClick={() => setRightOpen(true)}
+          title={rightOpen ? 'Hide inspector' : 'Show inspector'}
+          aria-label={rightOpen ? 'Hide inspector' : 'Show inspector'}
+          aria-expanded={rightOpen}
+          onClick={() => setRightOpen(!rightOpen)}
           className="grid place-items-center h-8 w-8 rounded-md text-ink-400 hover:text-white hover:bg-ink-700"
         >
-          <PanelRightOpen size={18} />
+          {rightOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
         </button>
-      </div>
-    )
-  }
-
-  return (
-    <div className="w-72 shrink-0 bg-ink-850 border-l border-ink-700 flex flex-col h-full">
-      <div className="h-9 shrink-0 flex items-center px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-        {selectedClipId ? 'Clip' : 'Inspector'}
-      </div>
-      <div className="flex-1 min-h-0 overflow-y-auto">
-        {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
       </div>
     </div>
   )

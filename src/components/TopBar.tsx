@@ -4,8 +4,6 @@ import {
   Download,
   PanelLeftClose,
   PanelLeftOpen,
-  PanelRightClose,
-  PanelRightOpen,
   Film,
   Undo2,
   Redo2,
@@ -21,9 +19,7 @@ export function TopBar() {
   const canRedo = useEditor((s) => s.future.length > 0)
   const importFiles = useEditor((s) => s.importFiles)
   const leftOpen = useEditor((s) => s.leftOpen)
-  const rightOpen = useEditor((s) => s.rightOpen)
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
-  const setRightOpen = useEditor((s) => s.setRightOpen)
 
   const fileInput = useRef<HTMLInputElement>(null)
   const [exporting, setExporting] = useState(false)
@@ -103,15 +99,6 @@ export function TopBar() {
       >
         <Download size={15} />
         <span className="hidden sm:inline">{exporting ? 'Exporting…' : 'Export'}</span>
-      </button>
-
-      <button
-        type="button"
-        title={rightOpen ? 'Hide inspector' : 'Show inspector'}
-        onClick={() => setRightOpen(!rightOpen)}
-        className="grid place-items-center h-8 w-8 rounded-md text-ink-400 hover:text-white hover:bg-ink-700"
-      >
-        {rightOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
       </button>
 
       {exporting && (

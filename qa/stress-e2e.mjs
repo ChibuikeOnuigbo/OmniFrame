@@ -43,6 +43,9 @@ assert(Math.abs(await num(page.locator('[data-kind="audio"]'),'data-start'))<.01
 const t0=await page.getByTestId('current-time').textContent(); await page.keyboard.press('Space'); await page.waitForTimeout(900)
 const t1=await page.getByTestId('current-time').textContent(); assert(t1!==t0,'Space starts playback',`${t0}->${t1}`)
 await page.keyboard.press('Space'); const paused=await page.getByTitle('Play (Space)').isVisible(); assert(paused,'Space pauses playback')
+await page.getByTitle('Go to end (End)').click(); await page.keyboard.press('Space'); await page.waitForTimeout(220)
+assert((await page.getByTestId('current-time').textContent()).startsWith('00:00:00:'),'Space at project end restarts from zero',await page.getByTestId('current-time').textContent())
+await page.keyboard.press('Space'); assert(await page.getByTitle('Play (Space)').isVisible(),'restarted playback pauses normally')
 await shot('stress-03-playback-paused')
 
 // Fit makes the appended image visible; verify drag against measured px/time.
@@ -98,6 +101,12 @@ assert(Math.abs(Number(await previewViewport.getAttribute('data-preview-pan-x'))
 await shot('stress-08-preview-200-panned')
 await page.getByTitle('Fit preview',{exact:true}).click(); await page.waitForTimeout(100); const fitPan=await previewViewport.getAttribute('data-preview-pan-x'); assert(Math.abs(Number(fitPan))<.01,'Fit recenters preview canvas',fitPan)
 await page.getByTitle('Safe areas').click(); await page.getByTitle('Grid').click(); await shot('stress-08-preview-zoom')
+
+// Inspector has one persistent edge control; no duplicate remains beside Export.
+assert(await page.locator('header').getByRole('button',{name:/inspector/i}).count()===0,'top bar has no duplicate inspector toggle')
+const inspectorToggle=page.getByRole('button',{name:'Hide inspector',exact:true}); assert(await inspectorToggle.count()===1,'single persistent inspector toggle when open')
+await inspectorToggle.click(); assert(await page.getByRole('button',{name:'Show inspector',exact:true}).count()===1,'inspector edge toggle persists and flips when closed')
+await page.getByRole('button',{name:'Show inspector',exact:true}).click(); assert(await page.getByRole('button',{name:'Hide inspector',exact:true}).count()===1,'inspector edge toggle reopens and flips back')
 
 // Track controls and planned panels. Lock must enforce editing, not merely look active.
 video=page.locator('[data-kind="video"]').first(); await video.click()
