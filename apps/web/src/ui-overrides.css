@@ -365,3 +365,58 @@ button:focus-visible, input:focus-visible, select:focus-visible, [role="button"]
 .properties-panel,
 .editor-shell.inspector-closed .properties-panel,
 .editor-shell.inspector-open .properties-panel { transform: none !important; }
+
+/* Studio cleanup: the shell never becomes a page-sized scrollbar. Only real lists
+   (media, inspector sections, tracks and dialog results) own vertical scrolling. */
+body:has(.editor-shell) { overflow-x: auto; overflow-y: hidden; }
+.editor-shell { width: max(100vw, 1040px); min-width: 1040px; overflow: hidden; }
+.editor-topbar { min-width: 1040px; overflow: visible; }
+.editor-main { min-width: 1040px; overflow: hidden; }
+.editor-upper { min-height: 0; overflow: hidden; }
+.editor-center { overflow: hidden; }
+.left-rail { overflow: hidden; }
+.rail-scroll, .rail-library { overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; }
+.rail-scroll { max-height: 300px; }
+.properties-panel { overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; }
+.timeline-panel { overflow: hidden; }
+.timeline-scroll { overflow-x: auto; overflow-y: auto; scrollbar-gutter: stable; }
+.strip-shell, .strip-content, .workspace-tabs { overflow-y: hidden; }
+.editor-menus { max-width: none; overflow: visible; }
+.menu-popover, .menu-popover button, select, option { overflow: visible; }
+.command-list { max-height: 52vh; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; }
+
+/* Give actions names and breathing room instead of presenting a wall of glyphs. */
+.studio-text-button { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; gap: 7px; padding: 0 10px; border: 1px solid var(--line2); border-radius: 6px; background: #292929; color: #c7c7c7; font: 11px var(--display); white-space: nowrap; }
+.studio-text-button:hover:not(:disabled) { border-color: rgba(38, 198, 183, .55); background: #333; color: #fff; }
+.studio-text-button svg { flex: 0 0 auto; }
+.topbar-history { display: inline-flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: #232323; }
+.topbar-history .studio-text-button { min-height: 30px; border-color: transparent; background: transparent; }
+.topbar-history .studio-text-button:hover:not(:disabled) { background: #333; }
+.topbar-actions { gap: 10px; }
+.command-action { background: #242424; }
+.performance-control, .aspect-control { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 7px; background: #242424; color: var(--muted2); font: 10px var(--display); white-space: nowrap; }
+.performance-control .performance-select, .aspect-control select { height: 28px; border-color: transparent; background: #1b1b1b; color: #e2e2e2; }
+.preview-toolbar-actions { gap: 8px; }
+.preview-toolbar-actions .studio-text-button { min-height: 34px; }
+.transport { gap: 12px; }
+.transport-controls { display: inline-flex; align-items: center; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: #292929; }
+.transport-step { display: inline-flex; min-width: 48px; min-height: 34px; align-items: center; justify-content: center; gap: 5px; border-radius: 5px; background: transparent; color: #c5c5c5; }
+.transport-step:hover { background: #363636; color: #fff; }
+.transport-step span { font-size: 13px; line-height: 1; }
+.transport-step small { color: var(--muted2); font: 10px var(--display); }
+.transport-rate { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 3px 7px; border: 1px solid var(--line); border-radius: 7px; background: #242424; color: var(--muted2); font: 10px var(--display); }
+.transport-rate .rate-select { height: 28px; border-color: transparent; background: #1b1b1b; color: #e2e2e2; }
+.track-label-actions { padding: 3px; border: 1px solid var(--line); border-radius: 7px; background: #2a2a2a; }
+.track-label-actions button { border-radius: 4px; }
+.timeline-actions { align-items: center; }
+.timeline-actions .timebase-button, .timeline-actions .snap-button, .timeline-actions .timeline-fit-button { background: #292929; }
+
+/* No accidental vertical scrollbars on control rows or native dropdown wrappers. */
+.timeline-header, .panel-toolbar, .transport, .mask-canvas-toolbar, .timeline-footer { overflow: hidden; }
+.performance-control, .aspect-control, .transport-rate, .zoom-control, .timeline-zoom-control { overflow: hidden; }
+.timeline-actions-scroll, .tool-tabs-scroll, .media-filter-scroll { overflow: hidden; }
+.editor-statusbar { overflow: hidden; white-space: nowrap; }
+.modal-scrim { overflow: hidden; }
+.command-palette, .export-dialog, .media-dialog { max-height: 86vh; overflow: hidden; }
+.media-list { overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; }
+.preset-list, .backend-choice, .effect-list { max-height: 260px; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; }
