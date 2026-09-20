@@ -1,0 +1,185 @@
+{
+  "results": [
+    {
+      "name": "invalid non-media import rejected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "invalid import object URL revoked",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "repeated import creates independent asset and clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "library asset HTML5 drag/drop creates timeline clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "library drop maps pointer X to timeline time",
+      "status": "PASS",
+      "detail": "1.9792"
+    },
+    {
+      "name": "locked clip pointer move rejected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "locked left trim rejected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "locked right trim rejected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "locked split rejected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "locked inspector delete rejected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "unlock after lock regressions",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "minimum timeline zoom reached",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "pointer move accurate at 8px/s",
+      "status": "PASS",
+      "detail": "0->4"
+    },
+    {
+      "name": "maximum timeline zoom reached",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "pointer move accurate at 8000px/s",
+      "status": "PASS",
+      "detail": "4->4"
+    },
+    {
+      "name": "timeline horizontal scrolling at maximum zoom",
+      "status": "PASS",
+      "detail": "12000"
+    },
+    {
+      "name": "frame step clamps at zero",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame step clamps at project duration",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "shift arrow steps one second backward",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "reverse J playback stops at zero",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "reverse boundary pauses transport",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "rapid repeated split creates stable segments",
+      "status": "PASS",
+      "detail": "5"
+    },
+    {
+      "name": "rapid undo sequence restores earlier state",
+      "status": "PASS",
+      "detail": "1"
+    },
+    {
+      "name": "rapid redo sequence restores split state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "multi-element overlap exists at two seconds",
+      "status": "PASS",
+      "detail": "1"
+    },
+    {
+      "name": "timeline layer order is deterministic DOM insertion order",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "repeated export 1 downloaded",
+      "status": "PASS",
+      "detail": "/home/user/OmniFrame/qa/exports/advanced-export-1-omniframe-export.mp4"
+    },
+    {
+      "name": "repeated export 2 downloaded",
+      "status": "PASS",
+      "detail": "/home/user/OmniFrame/qa/exports/advanced-export-2-omniframe-export.mp4"
+    },
+    {
+      "name": "pagehide revokes all created object URLs",
+      "status": "PASS",
+      "detail": "7/7"
+    },
+    {
+      "name": "reload clean state after lifecycle release",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "advanced run has zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "advanced run has zero unexpected request failures",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "failed": [
+    "blob:http://localhost:5173/a828bc71-5fa6-4195-8da3-70df0358c2e1 :: net::ERR_ABORTED"
+  ],
+  "unexpectedFailed": [],
+  "lifecycle": [
+    "OF_URL_CREATE blob:http://localhost:5173/905a273a-bb78-4a12-b766-b3f19003f1fd",
+    "OF_URL_REVOKE blob:http://localhost:5173/905a273a-bb78-4a12-b766-b3f19003f1fd",
+    "OF_URL_CREATE blob:http://localhost:5173/a828bc71-5fa6-4195-8da3-70df0358c2e1",
+    "OF_URL_CREATE blob:http://localhost:5173/161a4ee8-c323-4391-b898-523edd6ffcaf",
+    "OF_URL_CREATE blob:http://localhost:5173/74e7b480-5e60-4724-8f61-c5e0ed9ab31c",
+    "OF_URL_CREATE blob:http://localhost:5173/743e5468-b7fd-4e76-8a0a-c8e33057a9cf",
+    "OF_URL_CREATE blob:http://localhost:5173/5e27b443-3ab0-403f-a41b-10b2c749f2e0",
+    "OF_URL_REVOKE blob:http://localhost:5173/5e27b443-3ab0-403f-a41b-10b2c749f2e0",
+    "OF_URL_CREATE blob:http://localhost:5173/91b863ca-ee09-4828-b417-3a030521983b",
+    "OF_URL_REVOKE blob:http://localhost:5173/91b863ca-ee09-4828-b417-3a030521983b"
+  ],
+  "exports": [
+    "/home/user/OmniFrame/qa/exports/advanced-export-1-omniframe-export.mp4",
+    "/home/user/OmniFrame/qa/exports/advanced-export-2-omniframe-export.mp4"
+  ]
+}

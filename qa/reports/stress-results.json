@@ -1,0 +1,382 @@
+{
+  "browser": "/tmp/chromium",
+  "url": "http://localhost:5173/",
+  "results": [
+    {
+      "name": "empty state visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "three media clips imported",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video imported",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "image imported",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio imported",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video starts at zero",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "image appended after video",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio starts independently at zero",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Space starts playback",
+      "status": "PASS",
+      "detail": "00:00:00:00->00:00:00:27"
+    },
+    {
+      "name": "Space pauses playback",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "image clip drag maps pixels to time",
+      "status": "PASS",
+      "detail": "8.003->6.0027 at 51.0651px/s"
+    },
+    {
+      "name": "video left trim preserves source timing",
+      "status": "PASS",
+      "detail": "start=0.9166 in=0.9166 dur=7.0864"
+    },
+    {
+      "name": "video right trim changes duration",
+      "status": "PASS",
+      "detail": "7.0864->6.1073"
+    },
+    {
+      "name": "ruler scrub seeks to 3s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video split creates two clips",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "split conserves duration",
+      "status": "PASS",
+      "detail": "2.0834+4.0239"
+    },
+    {
+      "name": "undo restores pre-split state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "redo restores split state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame mode sets 2400 px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zoom preserves logical clip times",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "fit/zoom-in/zoom-out controls execute",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Safe areas active state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Grid active state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "preview 50%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "preview 100%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "preview 200%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "locked track prevents clip deletion",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "track unlock restores editability",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio track mute toggle",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video track visibility toggle",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Audio opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Text opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Effects opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Transitions opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Templates opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Masks opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Tracking opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Omniframe opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel 3D opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "panel Media opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "transform sliders visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "scale slider keyboard interaction",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Delete removes selected image",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+Z restores deleted image",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+Shift+Z reapplies delete",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "responsive 1920x1080 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1600x900 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1440x900 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1366x768 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1280x720 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1024x768 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 834x1194 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 768x1024 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 430x932 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 414x896 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 390x844 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 375x812 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 360x800 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1100x800 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 1000x800 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 900x800 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 850x800 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 700x850 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 600x850 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 500x850 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 450x850 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "responsive 400x844 no page/header overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
+    },
+    {
+      "name": "resize preserves timeline state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "edited multi-media export downloaded",
+      "status": "PASS",
+      "detail": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"
+    },
+    {
+      "name": "refresh intentionally resets non-persistent project",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "refresh returns clean empty state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "unexpected console/page errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "unexpected failed requests",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "expected reload-time blob aborts classified",
+      "status": "PASS",
+      "detail": "1"
+    }
+  ],
+  "errors": [],
+  "failed": [
+    "blob:http://localhost:5173/5405991e-59e6-4dc4-a9b8-f3ff2fa653a1 :: net::ERR_ABORTED"
+  ],
+  "unexpectedFailed": [],
+  "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"
+}
