@@ -4707,3 +4707,17 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [OBSERVED] PASS Landing browser suite completed 17 assertions with zero runtime errors and zero failed requests.
 - [OBSERVED] PASS Studio stress suite remained at 96 passing assertions after routing integration.
 - [MEASURED] PASS TypeScript and Vite production build remained successful.
+
+# Consolidated preview zoom control — 2026-09-21
+
+- [SOURCE-CODE] PASS Removed separate Fit, 50%, 100%, and 200% preset buttons from the preview toolbar.
+- [SOURCE-CODE] PASS Added one compact 25%–200% range slider with 5% increments.
+- [SOURCE-CODE] PASS Added one Auto Fit icon that measures and centers the canvas inside the preview viewport.
+- [SOURCE-CODE] PASS The toolbar exposes only one zoom text value: the current percentage.
+- [SOURCE-CODE] PASS Slider changes retain bounded canvas panning and never alter editor layout dimensions.
+- [SOURCE-CODE] PASS Auto Fit resets pan to zero and restores measured contain scaling.
+- [OBSERVED] PASS Real Chromium drove the slider to 50%, 100%, and 200% and observed matching canvas scale values.
+- [OBSERVED] PASS Chromium verified that the three duplicate percentage buttons no longer exist.
+- [SCREENSHOT] PASS Updated compact toolbar is visible in `qa/screenshots/stress-08-preview-zoom.png`.
+- [OBSERVED] PASS Full studio stress suite completed 97 assertions with zero runtime errors and zero unexpected failed requests.
+- [MEASURED] PASS TypeScript and Vite production build remained successful.

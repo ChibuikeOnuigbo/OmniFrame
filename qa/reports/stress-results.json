@@ -60,7 +60,7 @@
     {
       "name": "Space at project end restarts from zero",
       "status": "PASS",
-      "detail": "00:00:00:07"
+      "detail": "00:00:00:08"
     },
     {
       "name": "restarted playback pauses normally",
@@ -80,7 +80,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "15.2ms"
+      "detail": "10.9ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -95,7 +95,7 @@
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "338.0ms"
+      "detail": "344.0ms"
     },
     {
       "name": "image clip drag maps pixels to time",
@@ -163,17 +163,22 @@
       "detail": ""
     },
     {
-      "name": "preview 50%",
+      "name": "preview slider 50%",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "preview 100%",
+      "name": "preview slider 100%",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "preview 200%",
+      "name": "preview slider 200%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "duplicate preset zoom buttons removed",
       "status": "PASS",
       "detail": ""
     },
@@ -485,7 +490,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/0712ebf0-a928-4c38-b179-081e2a056315 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/78895c1c-d954-48c5-bc3a-bbd22754f84c :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

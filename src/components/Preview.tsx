@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Maximize2, Scan, Grid3x3 } from 'lucide-react'
 import { PreviewEngine } from '../lib/playback'
 import { useEditor } from '../store'
-import { IconButton, Segmented } from './ui'
+import { IconButton } from './ui'
 
 const CANVAS_W = 1280
 const CANVAS_H = 720
@@ -121,17 +121,29 @@ export function Preview() {
       <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
         <IconButton title="Safe areas" active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton>
         <IconButton title="Grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton>
-        <div className="ml-1">
-          <Segmented
-            options={[
-              { value: 'fit', label: <Maximize2 size={13} />, title: 'Fit preview' },
-              { value: 0.5, label: '50%' },
-              { value: 1, label: '100%' },
-              { value: 2, label: '200%' },
-            ]}
-            value={display}
-            onChange={(v) => chooseDisplay(v as 'fit' | number)}
+        <div className="ml-1 flex h-8 items-center gap-2 rounded-md border border-ink-700 bg-ink-800 px-1.5">
+          <IconButton
+            title="Auto fit preview"
+            active={display === 'fit'}
+            onClick={() => chooseDisplay('fit')}
+            className="h-7 w-7"
+          >
+            <Maximize2 size={14} />
+          </IconButton>
+          <input
+            data-testid="preview-zoom-slider"
+            aria-label="Preview zoom"
+            type="range"
+            min={25}
+            max={200}
+            step={5}
+            value={Math.max(25, Math.min(200, Math.round(scale * 100)))}
+            onChange={(e) => chooseDisplay(Number(e.target.value) / 100)}
+            className="of-range w-24 sm:w-28"
           />
+          <output className="w-9 text-right text-[10px] tabular-nums text-ink-400">
+            {Math.round(scale * 100)}%
+          </output>
         </div>
       </div>
 
