@@ -1,6 +1,6 @@
 {
   "browser": "/tmp/chromium",
-  "url": "http://localhost:5173/",
+  "url": "http://localhost:5173/#studio",
   "results": [
     {
       "name": "empty state visible",
@@ -60,7 +60,7 @@
     {
       "name": "Space at project end restarts from zero",
       "status": "PASS",
-      "detail": "00:00:00:08"
+      "detail": "00:00:00:07"
     },
     {
       "name": "restarted playback pauses normally",
@@ -80,7 +80,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "12.0ms"
+      "detail": "15.2ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -95,7 +95,7 @@
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "307.4ms"
+      "detail": "338.0ms"
     },
     {
       "name": "image clip drag maps pixels to time",
@@ -485,7 +485,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/50c9c674-e80d-401a-9af1-26685ef74fce :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/0712ebf0-a928-4c38-b179-081e2a056315 :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

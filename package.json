@@ -12,6 +12,7 @@
     "qa:e2e": "node qa/e2e.mjs",
     "qa:stress": "node qa/stress-e2e.mjs",
     "qa:advanced": "node qa/advanced-e2e.mjs",
+    "qa:landing": "node qa/landing-e2e.mjs",
     "tauri": "tauri"
   },
   "dependencies": {

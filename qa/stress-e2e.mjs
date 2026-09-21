@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-const ROOT = process.cwd(), URL = process.env.URL || 'http://localhost:5173/'
+const ROOT = process.cwd(), URL = process.env.URL || 'http://localhost:5173/#studio'
 const SHOTS = join(ROOT, 'qa/screenshots'), REPORTS = join(ROOT, 'qa/reports')
 mkdirSync(SHOTS,{recursive:true}); mkdirSync(REPORTS,{recursive:true})
 await inflate(join(ROOT,'node_modules/@sparticuz/chromium/bin/al2023.tar.br'))

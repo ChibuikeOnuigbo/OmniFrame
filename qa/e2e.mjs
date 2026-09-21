@@ -19,7 +19,7 @@ import { join, basename } from 'node:path'
 import { createRequire } from 'node:module'
 import { spawnSync } from 'node:child_process'
 
-const URL = process.env.URL || 'http://localhost:5173/'
+const URL = process.env.URL || 'http://localhost:5173/#studio'
 const OUT = 'qa/shots'
 mkdirSync(OUT, { recursive: true })
 

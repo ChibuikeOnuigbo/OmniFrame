@@ -3,7 +3,7 @@ import serverlessChromium, { inflate } from '@sparticuz/chromium'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-const ROOT=process.cwd(), URL=process.env.URL||'http://localhost:5173/'
+const ROOT=process.cwd(), URL=process.env.URL||'http://localhost:5173/#studio'
 const reports=join(ROOT,'qa/reports'), traces=join(ROOT,'qa/traces'), videos=join(ROOT,'qa/recordings'), exportsDir=join(ROOT,'qa/exports')
 for(const p of [reports,traces,videos,exportsDir]) mkdirSync(p,{recursive:true})
 await inflate(join(ROOT,'node_modules/@sparticuz/chromium/bin/al2023.tar.br')); process.env.LD_LIBRARY_PATH=`${join(tmpdir(),'al2023/lib')}:${tmpdir()}`

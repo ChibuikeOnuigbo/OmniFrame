@@ -4688,3 +4688,22 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [OBSERVED] PASS Hidden HTMLMediaElement error audit remained empty.
 - [OBSERVED] PASS Final Chromium suite completed 96 assertions with zero console/page errors and zero unexpected request failures.
 - [MEASURED] PASS TypeScript, Vite production build, and npm audit all passed; npm audit reported zero vulnerabilities.
+
+# Public landing page — 2026-09-21
+
+- [SOURCE-CODE] PASS The root URL now opens a dedicated concise landing page; `#studio` opens the editor directly.
+- [SOURCE-CODE] PASS Landing copy discusses open source, local-first editing, precise cuts, multi-track media, responsive timelines, and exports without readiness/status language.
+- [SOURCE-CODE] PASS The page has one primary `Open Studio` call to action and one real GitHub open-source link.
+- [SOURCE-CODE] PASS Clicking `Open Studio` runs a 520ms branded wipe transition before mounting the editor and updating the URL hash.
+- [SOURCE-CODE] PASS Reduced-motion users receive a shortened transition and globally minimized animation durations.
+- [SOURCE-CODE] PASS Browser back navigation returns from `#studio` to the landing page.
+- [SOURCE-CODE] PASS Existing editor QA routes now use `#studio`, keeping landing and studio concerns independently testable.
+- [SCREENSHOT] PASS Desktop landing evidence is `qa/screenshots/landing-1440x900.png`.
+- [SCREENSHOT] PASS Mobile landing evidence is `qa/screenshots/landing-360x800.png`.
+- [SCREENSHOT] PASS In-progress transition evidence is `qa/screenshots/landing-transition.png`.
+- [OBSERVED] PASS Landing opened by default and displayed its hero, open-source link, and single studio CTA.
+- [MEASURED] PASS Landing had zero horizontal page/body overflow at 1920×1080, 1440×900, 1024×768, 768×1024, 430×932, 390×844, and 360×800.
+- [OBSERVED] PASS The wipe was visibly active 180ms after the CTA click and the studio mounted after completion.
+- [OBSERVED] PASS Landing browser suite completed 17 assertions with zero runtime errors and zero failed requests.
+- [OBSERVED] PASS Studio stress suite remained at 96 passing assertions after routing integration.
+- [MEASURED] PASS TypeScript and Vite production build remained successful.

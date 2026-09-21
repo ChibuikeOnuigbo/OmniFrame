@@ -1,0 +1,91 @@
+{
+  "results": [
+    {
+      "name": "landing page opens by default",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "concise hero visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single studio CTA visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "open-source link is real",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "landing 1920x1080 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 1440x900 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 1024x768 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 768x1024 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 430x932 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 390x844 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 360x800 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "studio transition animation plays",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "studio route updates hash",
+      "status": "PASS",
+      "detail": "http://localhost:5173/#studio"
+    },
+    {
+      "name": "studio mounts after transition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "browser back returns to landing",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "landing has zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "landing has zero failed requests",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

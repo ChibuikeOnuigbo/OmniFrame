@@ -2,54 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
-html,
-body,
-#root {
-  height: 100%;
-  width: 100%;
-}
-
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; width: 100%; }
 body {
   margin: 0;
   background: #08090d;
   color: #e6e8ee;
   font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* The whole app is a fixed viewport shell. Only inner panels scroll. */
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+* { box-sizing: border-box; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #3c475d; }
+.no-select { user-select: none; -webkit-user-select: none; }
 
-* {
-  box-sizing: border-box;
-}
-
-/* Sleek, thin scrollbars everywhere. */
-::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #2e374a;
-  border-radius: 8px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3c475d;
-}
-
-.no-select {
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* Custom range slider used across the editor (no native ugly slider). */
 .of-range {
   -webkit-appearance: none;
   appearance: none;
@@ -70,9 +40,7 @@ body {
   cursor: pointer;
   transition: transform 0.08s ease;
 }
-.of-range::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-}
+.of-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .of-range::-moz-range-thumb {
   width: 13px;
   height: 13px;
@@ -83,15 +51,33 @@ body {
 }
 
 @keyframes of-fade {
-  from {
-    opacity: 0;
-    transform: translateY(2px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.of-fade {
-  animation: of-fade 0.12s ease-out;
+.of-fade { animation: of-fade 0.12s ease-out; }
+
+@keyframes of-landing-in {
+  from { opacity: 0; transform: scale(1.015); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes of-copy-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes of-visual-in {
+  from { opacity: 0; transform: translateY(22px) rotateX(4deg); }
+  to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+@keyframes of-studio-wipe {
+  0% { transform: translateX(-105%) skewX(-8deg); }
+  60%, 100% { transform: translateX(105%) skewX(-8deg); }
+}
+.of-landing-enter { animation: of-landing-in 0.55s cubic-bezier(.2,.8,.2,1) both; }
+.of-hero-copy { animation: of-copy-in 0.65s 0.08s cubic-bezier(.2,.8,.2,1) both; }
+.of-hero-visual { animation: of-visual-in 0.75s 0.16s cubic-bezier(.2,.8,.2,1) both; transform-style: preserve-3d; }
+.of-landing-leave > div:not(:last-child) { opacity: 0.65; transition: opacity 0.35s ease; }
+.of-studio-wipe { animation: of-studio-wipe 0.55s cubic-bezier(.7,0,.3,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
