@@ -41,6 +41,11 @@ for (const kind of ['video', 'image', 'audio']) {
   assert(await page.locator(`[data-testid="media-asset"][data-asset-kind="${kind}"]`).count() === 1, `${kind} item retains its type identity`)
 }
 await page.screenshot({ path: join(SHOTS, 'media-library-all-types.png') })
+await page.setViewportSize({ width: 1920, height: 1080 })
+await page.waitForTimeout(120)
+await page.screenshot({ path: join(SHOTS, 'media-library-wide-1920x1080.png') })
+await page.setViewportSize({ width: 1440, height: 900 })
+await page.waitForTimeout(120)
 
 await page.getByTestId('media-type-filter').selectOption('audio')
 assert(await page.getByTestId('media-asset').count() === 1, 'audio music filter isolates audio')
@@ -55,6 +60,7 @@ await page.screenshot({ path: join(SHOTS, 'media-library-search.png') })
 
 await page.getByTestId('media-search').fill('missing-file')
 assert(await page.getByText('No media matches this search').isVisible(), 'empty search state is clear')
+await page.screenshot({ path: join(SHOTS, 'media-library-empty-search.png') })
 await page.getByTestId('media-search').fill('')
 
 await page.setViewportSize({ width: 900, height: 700 })
@@ -66,6 +72,13 @@ assert(await page.getByTestId('media-search').isVisible(), 'combined panel can r
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
 assert(!overflow, 'narrow viewport has no horizontal overflow')
 await page.screenshot({ path: join(SHOTS, 'media-library-narrow-900x700.png') })
+await page.setViewportSize({ width: 768, height: 720 })
+await page.waitForTimeout(220)
+await page.getByTitle('Media library').click()
+await page.waitForTimeout(220)
+const tabletOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
+assert(!tabletOverflow, '768px viewport has no horizontal overflow')
+await page.screenshot({ path: join(SHOTS, 'media-library-compact-768x720.png') })
 
 assert(errors.length === 0, 'zero runtime errors', errors.join(' | '))
 // Chromium reports an in-flight object URL as aborted when responsive panel

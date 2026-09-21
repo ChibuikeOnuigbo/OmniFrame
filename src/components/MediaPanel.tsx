@@ -9,8 +9,8 @@ type MediaFilter = 'all' | 'video' | 'image' | 'audio'
 const FILTERS: Array<{ value: MediaFilter; label: string }> = [
   { value: 'all', label: 'All types' },
   { value: 'video', label: 'Video' },
-  { value: 'image', label: 'Images' },
-  { value: 'audio', label: 'Audio / music' },
+  { value: 'image', label: 'Image' },
+  { value: 'audio', label: 'Audio' },
 ]
 
 export function MediaPanel() {
@@ -115,7 +115,9 @@ export function MediaPanel() {
                   ) : a.kind === 'video' ? (
                     <Film size={22} className="text-ink-500" />
                   ) : (
-                    <div className="flex items-center -space-x-1 text-ink-500"><Music size={20} /><AudioLines size={15} /></div>
+                    <div className="flex items-center -space-x-1 rounded-full border border-brand/20 bg-brand/10 px-2.5 py-2 text-brand/80 shadow-[0_0_18px_rgba(108,76,255,0.12)]">
+                      <Music size={20} /><AudioLines size={15} />
+                    </div>
                   )}
                   <span className="absolute top-1 right-1 grid place-items-center h-6 w-6 rounded bg-ink-950/80 text-brand opacity-0 group-hover:opacity-100 transition-opacity">
                     <Plus size={14} />

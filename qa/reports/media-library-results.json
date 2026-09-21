@@ -81,6 +81,11 @@
       "detail": ""
     },
     {
+      "name": "768px viewport has no horizontal overflow",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "zero runtime errors",
       "status": "PASS",
       "detail": ""
@@ -93,7 +98,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/27a021ce-f24c-4ea6-9a6e-c76d062e1496 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/75a922de-a330-42a6-8787-6887b6e5f1bd :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": []
 }

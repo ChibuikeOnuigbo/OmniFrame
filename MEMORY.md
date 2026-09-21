@@ -4836,3 +4836,14 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] `qa/screenshots/media-library-narrow-900x700.png` shows the reopened compact library at lower width with no horizontal overflow.
 - [OBSERVED] One Chromium blob request reported `ERR_ABORTED` during consumer teardown; established advanced/stress suites classify this browser object-URL cancellation as expected. Unexpected request failures remained zero.
 - [BUILD] PASS TypeScript and Vite production build after the screenshot suite addition.
+
+# Media Library visual polish and expanded viewport gallery — 2026-09-21
+
+- [VISUAL-REVIEW] The previous native filter displayed `Audio / music` truncated in the compact 82px control; shortened the visible option to `Audio` while preserving music/audio meaning through paired icons.
+- [DESIGN] Audio thumbnails now use a restrained violet circular badge, subtle border, and low-intensity glow so their identity is legible without making the panel visually noisy.
+- [BROWSER-QA] PASS Expanded focused suite to 19 assertions, including a real 768px viewport with no horizontal overflow.
+- [SCREENSHOT] `qa/screenshots/media-library-wide-1920x1080.png` records the full editor and unified library at a large desktop size.
+- [SCREENSHOT] `qa/screenshots/media-library-compact-768x720.png` records the manually reopened library at compact width.
+- [SCREENSHOT] `qa/screenshots/media-library-empty-search.png` records the polished no-results state.
+- [SCREENSHOT] Refreshed all-types, audio-filter, filename-search, and 900px responsive evidence after the icon and filter polish.
+- [BUILD] PASS TypeScript, production build, and diff whitespace checks.
