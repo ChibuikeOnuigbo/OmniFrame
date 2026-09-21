@@ -4672,3 +4672,19 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [OBSERVED] PASS Console errors, page exceptions, unhandled browser failures, unexpected request failures, and hidden decoder/network media errors were all zero.
 - [OBSERVED] PASS Updated Chromium suite completed 91 assertions.
 - [MEASURED] PASS TypeScript and the Vite production build remained successful.
+
+# Narrow-panel recovery and final performance regression — 2026-09-21
+
+- [SOURCE-CODE] PASS Left-dock tab buttons now expose `aria-pressed`, making hidden/open state observable without depending on transient width animation.
+- [SOURCE-CODE] PASS The expandable media panel exposes explicit `data-open` state for browser regression evidence.
+- [OBSERVED] PASS At 400×844, the automatically hidden inspector reopened from its persistent edge control.
+- [OBSERVED] PASS At 400×844, the inspector closed again and retained its recovery control.
+- [OBSERVED] PASS At 400×844, the hidden Media panel reopened from the permanent icon rail.
+- [MEASURED] PASS Reopening the Media panel at 400×844 produced zero document horizontal overflow.
+- [OBSERVED] PASS The narrow Media panel closed again without losing its rail control.
+- [MEASURED] PASS Timeline render count remained exactly 11 during the measured active-playback interval; playhead animation caused zero clip-tree rerenders.
+- [MEASURED] PASS Final Space pause response was 12.0ms.
+- [MEASURED] PASS Final coalesced scrub decode reached the requested frame in 307.4ms with no black flash.
+- [OBSERVED] PASS Hidden HTMLMediaElement error audit remained empty.
+- [OBSERVED] PASS Final Chromium suite completed 96 assertions with zero console/page errors and zero unexpected request failures.
+- [MEASURED] PASS TypeScript, Vite production build, and npm audit all passed; npm audit reported zero vulnerabilities.

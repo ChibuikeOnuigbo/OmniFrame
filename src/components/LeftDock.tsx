@@ -61,6 +61,7 @@ export function LeftDock() {
               key={t.id}
               type="button"
               title={t.label}
+              aria-pressed={active}
               onClick={() => {
                 if (leftTab === t.id && leftOpen) setLeftOpen(false)
                 else setLeftTab(t.id)
@@ -80,6 +81,8 @@ export function LeftDock() {
 
       {/* expandable content panel */}
       <div
+        data-testid="left-panel"
+        data-open={leftOpen}
         className={[
           'shrink-0 bg-ink-850 border-r border-ink-700 overflow-hidden transition-[width] duration-150',
           leftOpen ? 'w-[232px]' : 'w-0',

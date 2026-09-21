@@ -60,7 +60,7 @@
     {
       "name": "Space at project end restarts from zero",
       "status": "PASS",
-      "detail": "00:00:00:07"
+      "detail": "00:00:00:08"
     },
     {
       "name": "restarted playback pauses normally",
@@ -80,7 +80,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "13.0ms"
+      "detail": "12.0ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -95,7 +95,7 @@
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "339.0ms"
+      "detail": "307.4ms"
     },
     {
       "name": "image clip drag maps pixels to time",
@@ -418,6 +418,31 @@
       "detail": "{\"doc\":0,\"body\":0,\"header\":0}"
     },
     {
+      "name": "hidden inspector recovers at narrow width",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "narrow inspector can hide again",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "hidden media panel recovers at narrow width",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "recovered narrow panel creates no page overflow",
+      "status": "PASS",
+      "detail": "0"
+    },
+    {
+      "name": "narrow media panel can hide again",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "resize preserves timeline state",
       "status": "PASS",
       "detail": ""
@@ -460,7 +485,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/682a1c09-a794-4836-9528-c646dc0c295f :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/50c9c674-e80d-401a-9af1-26685ef74fce :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

@@ -152,6 +152,12 @@ await page.getByTitle('Undo (Ctrl+Z)').click();
 // Full responsive matrix while preserving loaded state; assert no page/header overflow.
 const sizes=[[1920,1080],[1600,900],[1440,900],[1366,768],[1280,720],[1024,768],[834,1194],[768,1024],[430,932],[414,896],[390,844],[375,812],[360,800],[1100,800],[1000,800],[900,800],[850,800],[700,850],[600,850],[500,850],[450,850],[400,844]]
 for(const [w,h] of sizes){await page.setViewportSize({width:w,height:h});await page.waitForTimeout(40);const m=await page.evaluate(()=>({doc:document.documentElement.scrollWidth-document.documentElement.clientWidth,body:document.body.scrollWidth-document.body.clientWidth,header:(()=>{const x=document.querySelector('header');return x.scrollWidth-x.clientWidth})()}));assert(m.doc===0&&m.body===0&&m.header===0,`responsive ${w}x${h} no page/header overflow`,JSON.stringify(m));await shot(`viewport-${w}x${h}`)}
+// Hidden panels must remain recoverable at narrow widths without creating page overflow.
+await page.getByRole('button',{name:'Show inspector',exact:true}).click(); assert(await page.getByRole('button',{name:'Hide inspector',exact:true}).isVisible(),'hidden inspector recovers at narrow width')
+await page.getByRole('button',{name:'Hide inspector',exact:true}).click(); assert(await page.getByRole('button',{name:'Show inspector',exact:true}).isVisible(),'narrow inspector can hide again')
+await page.getByRole('button',{name:'Media',exact:true}).click(); await page.waitForTimeout(180); assert(await page.getByTestId('left-panel').getAttribute('data-open')==='true','hidden media panel recovers at narrow width')
+const narrowRecovered=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth); assert(narrowRecovered===0,'recovered narrow panel creates no page overflow',String(narrowRecovered))
+await page.getByRole('button',{name:'Media',exact:true}).click(); await page.waitForTimeout(180); assert(await page.getByTestId('left-panel').getAttribute('data-open')==='false','narrow media panel can hide again')
 // Resize back without reload and verify assets survive.
 await page.setViewportSize({width:1440,height:900}); assert(await clips.count()===countPreDelete,'resize preserves timeline state')
 
