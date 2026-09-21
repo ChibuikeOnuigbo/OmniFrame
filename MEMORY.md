@@ -4824,3 +4824,15 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [BROWSER-QA] PASS Zero browser runtime errors observed during import, filter, search, and viewport resize.
 - [SCREENSHOT] PASS `qa/screenshots/media-library-search-filter.png` records the unified library with all three asset types.
 - [REPORT] PASS `qa/reports/media-library-results.json` records eight focused assertions.
+
+# Expanded Media Library visual regression — 2026-09-21
+
+- [USER-REQUEST] Captured additional screenshots of the new combined Media Library and verified its controls in-browser.
+- [QA-AUTOMATION] Added repeatable `qa/media-library-e2e.mjs` rather than relying only on an ad-hoc browser session.
+- [BROWSER-QA] PASS 18 focused assertions covering the unified rail control, removal of duplicate Audio entry, import, all three media identities, search, filters, empty state, narrow layout, runtime health, and network health.
+- [SCREENSHOT] `qa/screenshots/media-library-all-types.png` shows video, image, and audio together.
+- [SCREENSHOT] `qa/screenshots/media-library-audio-filter.png` shows the Audio / music filtered state and paired mini icons.
+- [SCREENSHOT] `qa/screenshots/media-library-search.png` shows filename search isolating an image.
+- [SCREENSHOT] `qa/screenshots/media-library-narrow-900x700.png` shows the reopened compact library at lower width with no horizontal overflow.
+- [OBSERVED] One Chromium blob request reported `ERR_ABORTED` during consumer teardown; established advanced/stress suites classify this browser object-URL cancellation as expected. Unexpected request failures remained zero.
+- [BUILD] PASS TypeScript and Vite production build after the screenshot suite addition.
