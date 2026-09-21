@@ -1,6 +1,5 @@
 import {
-  Clapperboard,
-  Music,
+  LibraryBig,
   Type,
   Wand2,
   Shuffle,
@@ -22,8 +21,7 @@ interface TabDef {
 }
 
 const TABS: TabDef[] = [
-  { id: 'media', label: 'Media', icon: Clapperboard },
-  { id: 'audio', label: 'Audio', icon: Music },
+  { id: 'media', label: 'Media library', icon: LibraryBig },
   { id: 'text', label: 'Text', icon: Type },
   { id: 'effects', label: 'Effects', icon: Wand2 },
   { id: 'transitions', label: 'Transitions', icon: Shuffle },
@@ -103,8 +101,7 @@ export function LeftDock() {
             </button>
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto">
-            {leftTab === 'media' && <MediaPanel kind="all" />}
-            {leftTab === 'audio' && <MediaPanel kind="audio" />}
+            {(leftTab === 'media' || leftTab === 'audio') && <MediaPanel />}
             {leftTab === 'text' && (
               <PlannedPanel title="Text & titles" note="Rich text, presets and per-letter animation are part of the next phase. Timeline editing, trimming, splitting and export are working now." />
             )}

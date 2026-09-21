@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-21",
+  "result": "PASS",
+  "assertions": 8,
+  "counts": {
+    "all": 3,
+    "audio": 1,
+    "image": 1,
+    "searchAudio": 1
+  },
+  "responsiveViewport": "900x700",
+  "horizontalOverflow": false,
+  "runtimeErrors": []
+}

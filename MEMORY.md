@@ -4810,3 +4810,17 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] PASS `qa/screenshots/landing-transition.png` shows the slim paper-cut seam separating live Studio and Landing scenes.
 - [OBSERVED] PASS Landing suite completed 24 assertions with zero runtime errors and zero failed requests.
 - [SOURCE-CODE] PASS Research and implementation decisions are recorded in `research/paper-transition-motion.md`.
+
+# Combined media library search and filters — 2026-09-21
+
+- [USER-REQUEST] Combined the separate Media and Audio rail entries into one Media Library destination.
+- [SOURCE-CODE] PASS The unified panel imports and displays video, image, and audio assets together.
+- [SOURCE-CODE] PASS Added a compact filename search and Type filter with All types, Video, Images, and Audio / music options.
+- [SOURCE-CODE] PASS Audio assets retain paired miniature music-note and audio-wave icons, while image and video items retain distinct miniature icons.
+- [DESIGN] PASS Search and type filter share one compact row and avoid adding another toolbar or oversized controls.
+- [BROWSER-QA] PASS Imported one real WebM video, one JPEG image, and one OGG audio fixture; unified view showed three assets.
+- [BROWSER-QA] PASS Audio filter showed one asset, image filter showed one asset, and filename search for audio showed one asset.
+- [BROWSER-QA] PASS At 900x700 the existing responsive panel collapse produced no horizontal overflow.
+- [BROWSER-QA] PASS Zero browser runtime errors observed during import, filter, search, and viewport resize.
+- [SCREENSHOT] PASS `qa/screenshots/media-library-search-filter.png` records the unified library with all three asset types.
+- [REPORT] PASS `qa/reports/media-library-results.json` records eight focused assertions.
