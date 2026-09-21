@@ -81,14 +81,19 @@
       "detail": ""
     },
     {
-      "name": "purple wave moves across combined scenes",
+      "name": "paper-cut edge moves across combined scenes",
       "status": "PASS",
-      "detail": "535"
+      "detail": "651"
+    },
+    {
+      "name": "paper-cut edge is slim and 0.2s faster",
+      "status": "PASS",
+      "detail": "{\"left\":651.2775268554688,\"width\":71.44488525390625,\"duration\":\"0.98s\"}"
     },
     {
       "name": "landing uses a moving polygon mask",
       "status": "PASS",
-      "detail": "polygon(54.3873% 0px, 100.627% 0px, 100.627% 100%, 54.3873% 100%, 55.0794% 92%, 53.7873% 84%, 55.1794% 76%, 53.6873% 68%, 55.0794% 60%, 53.7873% 52%, 55.1794% 44%, 53.6873% 36%, 55.0794% 28%, 53.7873% 20%, 54.9794% 12%, 53.8873% 4%)"
+      "detail": "polygon(47.8584% 0px, 100% 0px, 100% 100%, 47.8584% 100%, 48.5541% 92%, 47.2841% 84%, 48.6541% 76%, 47.1884% 68%, 48.5541% 60%, 47.2841% 52%, 48.6541% 44%, 47.1884% 36%, 48.5541% 28%, 47.2841% 20%, 48.4541% 12%, 47.3798% 4%)"
     },
     {
       "name": "studio route updates hash",

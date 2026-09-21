@@ -31,7 +31,7 @@ export default function App() {
       window.location.hash = 'studio'
       setStudio(true)
       setTransitioning(false)
-    }, reduced ? 60 : 1180)
+    }, reduced ? 60 : 980)
   }
 
   return (
@@ -47,9 +47,10 @@ export default function App() {
         </div>
       )}
       {transitioning && (
-        <div data-testid="transition-wave" className="pointer-events-none absolute inset-y-0 left-0 z-30 w-[14vw] min-w-24 of-transition-wave" aria-hidden="true">
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-600 via-brand to-violet-400 shadow-[0_0_70px_rgba(109,94,252,.45)]" />
-          <div className="absolute inset-y-0 right-[-2px] w-1 bg-white/25 blur-[1px]" />
+        <div data-testid="transition-wave" className="pointer-events-none absolute inset-y-0 left-0 z-30 w-[5vw] min-w-12 max-w-20 of-transition-wave" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#090a10]/95 via-[#1a1530]/95 to-brand shadow-[-14px_0_28px_rgba(0,0,0,.45),10px_0_32px_rgba(109,94,252,.28)]" />
+          <div className="absolute inset-y-0 left-[16%] w-[38%] bg-gradient-to-r from-transparent via-violet-300/10 to-violet-200/25" />
+          <div className="absolute inset-y-0 right-0 w-1.5 bg-gradient-to-r from-brand-400 to-violet-200/80 shadow-[0_0_16px_rgba(144,131,255,.55)]" />
         </div>
       )}
     </div>

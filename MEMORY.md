@@ -4796,3 +4796,17 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SOURCE-CODE] PASS Route completion timer increased to the same 1180ms, preserving synchronization between mask, wave, and Studio activation.
 - [OBSERVED] PASS Extended transition retained live Studio beneath the mask and the restored violet wave between both scenes.
 - [OBSERVED] PASS Landing suite completed 23 assertions with zero runtime errors and zero failed requests.
+
+# Slim paper-cut transition and 0.2-second speed increase — 2026-09-21
+
+- [USER-CORRECTION] Transition requested 0.2 seconds faster and the visible wrapper was considered oversized.
+- [RESEARCH] PASS Paper-tear/page-reveal references consistently use a narrow irregular edge, lifted-edge shadow, and immediate visibility of the scene below.
+- [SOURCE-CODE] PASS Transition duration decreased from 1.18s to 0.98s for route timer, Landing mask, and moving edge together.
+- [SOURCE-CODE] PASS Visible wrapper decreased from 14vw/minimum 96px to 5vw with a 48px minimum and 80px maximum.
+- [SOURCE-CODE] PASS Removed full-width skew, which had enlarged the wrapper bounding box across the full viewport height.
+- [SOURCE-CODE] PASS Replaced the large violet block with a nearly black folded side, restrained violet reflection, 1.5px illuminated seam, and asymmetric paper-lift shadows.
+- [SOURCE-CODE] PASS Alternating polygon points retain an organic cut edge without external bitmap or stock-video assets.
+- [MEASURED] PASS Browser measured the moving paper edge at 71.44px wide and animation duration at exactly 0.98s.
+- [SCREENSHOT] PASS `qa/screenshots/landing-transition.png` shows the slim paper-cut seam separating live Studio and Landing scenes.
+- [OBSERVED] PASS Landing suite completed 24 assertions with zero runtime errors and zero failed requests.
+- [SOURCE-CODE] PASS Research and implementation decisions are recorded in `research/paper-transition-motion.md`.
