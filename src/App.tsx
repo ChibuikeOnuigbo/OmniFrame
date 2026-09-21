@@ -46,6 +46,12 @@ export default function App() {
           <Landing onEnter={openStudio} />
         </div>
       )}
+      {transitioning && (
+        <div data-testid="transition-wave" className="pointer-events-none absolute inset-y-0 left-0 z-30 w-[14vw] min-w-24 of-transition-wave" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-600 via-brand to-violet-400 shadow-[0_0_70px_rgba(109,94,252,.45)]" />
+          <div className="absolute inset-y-0 right-[-2px] w-1 bg-white/25 blur-[1px]" />
+        </div>
+      )}
     </div>
   )
 }

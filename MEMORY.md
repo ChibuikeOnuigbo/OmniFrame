@@ -4773,3 +4773,14 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] PASS Combined-scene evidence is `qa/screenshots/landing-transition.png`.
 - [OBSERVED] PASS Studio remained mounted after the mask completed and the route changed to `#studio`.
 - [OBSERVED] PASS Landing transition suite completed 19 assertions with zero runtime errors and zero failed requests.
+
+# Restored branded wave over combined scene transition — 2026-09-21
+
+- [USER-CORRECTION] The original purple sweep was intended to remain; only its masking behavior needed improvement.
+- [SOURCE-CODE] PASS Restored a broad branded violet wave band as the visible transition edge.
+- [SOURCE-CODE] PASS The wave is layered above both scenes while Landing remains clipped ahead and live Studio remains revealed behind.
+- [SOURCE-CODE] PASS The band and landing mask share the same 680ms easing and traverse the viewport together.
+- [SOURCE-CODE] PASS Both sides of the violet band use alternating polygon points, preserving the energetic original motion without reverting to an opaque full-screen sheet.
+- [SCREENSHOT] PASS `qa/screenshots/landing-transition.png` shows Studio on the revealed left, Landing on the unreached right, and the violet wave between them.
+- [OBSERVED] PASS At 220ms the branded wave was visible, positioned inside the viewport, and the live Studio was already mounted below the completed mask region.
+- [OBSERVED] PASS Landing suite completed 21 assertions with zero runtime errors and zero failed requests.

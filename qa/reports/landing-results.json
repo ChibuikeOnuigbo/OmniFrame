@@ -66,9 +66,19 @@
       "detail": ""
     },
     {
+      "name": "branded purple wave remains visible at reveal boundary",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "purple wave moves across combined scenes",
+      "status": "PASS",
+      "detail": "290"
+    },
+    {
       "name": "landing uses a moving polygon mask",
       "status": "PASS",
-      "detail": "polygon(39.4143% 0px, 100% 0px, 100% 100%, 39.4143% 100%, 40.0931% 92%, 38.9413% 84%, 40.1931% 76%, 38.8625% 68%, 40.0931% 60%, 38.9413% 52%, 40.1931% 44%, 38.8625% 36%, 40.0931% 28%, 38.9413% 20%, 39.9931% 12%, 39.0201% 4%)"
+      "detail": "polygon(31.5269% 0px, 100% 0px, 100% 100%, 31.5269% 100%, 32.19% 92%, 31.1486% 84%, 32.29% 76%, 31.0856% 68%, 32.19% 60%, 31.1486% 52%, 32.29% 44%, 31.0856% 36%, 32.19% 28%, 31.1486% 20%, 32.09% 12%, 31.2117% 4%)"
     },
     {
       "name": "studio route updates hash",
