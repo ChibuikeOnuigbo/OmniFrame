@@ -4762,3 +4762,14 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [OBSERVED] PASS Landing transition suite completed 19 assertions with zero runtime errors and zero failed requests.
 - [OBSERVED] PASS Full Studio stress regression remained at 108 passing assertions with zero runtime errors and zero unexpected request failures.
 - [MEASURED] PASS TypeScript and production build remained successful.
+
+# Landing-to-Studio combined wave reveal refinement — 2026-09-21
+
+- [SOURCE-CODE] PASS Studio mounts underneath the landing page before transition motion begins.
+- [SOURCE-CODE] PASS The landing scene itself is clipped away; there is no opaque purple sheet hiding both scenes.
+- [SOURCE-CODE] PASS The moving boundary uses a sixteen-point alternating mask edge to create a restrained wave/ripple while revealing Studio behind it.
+- [OBSERVED] PASS At 220ms, Landing remained visible on the unreached side while the already-revealed side displayed the live Studio.
+- [MEASURED] PASS Mid-transition computed polygon contained sixteen responsive percentage points and was neither `none` nor a flat inset.
+- [SCREENSHOT] PASS Combined-scene evidence is `qa/screenshots/landing-transition.png`.
+- [OBSERVED] PASS Studio remained mounted after the mask completed and the route changed to `#studio`.
+- [OBSERVED] PASS Landing transition suite completed 19 assertions with zero runtime errors and zero failed requests.
