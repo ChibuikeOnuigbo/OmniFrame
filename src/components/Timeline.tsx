@@ -21,7 +21,7 @@ import {
   MousePointer2,
 } from 'lucide-react'
 import { useEditor } from '../store'
-import type { Clip, Track } from '../types'
+import type { Clip, MediaAsset, Track } from '../types'
 import { chooseTickInterval, formatTimecode, formatClock, uid, clamp } from '../lib/time'
 import { IconButton, Segmented } from './ui'
 
@@ -62,6 +62,7 @@ function getTrackAtY(y: number, lanesTop: number, tracks: Track[]): string | nul
 
 function ClipView({
   clip,
+  asset,
   px,
   tool,
   selected,
@@ -69,6 +70,7 @@ function ClipView({
   tracks,
 }: {
   clip: Clip
+  asset?: MediaAsset
   px: number
   tool: 'select' | 'blade'
   selected: boolean
@@ -145,6 +147,7 @@ function ClipView({
       data-start={clip.start.toFixed(4)}
       data-duration={clip.duration.toFixed(4)}
       data-in-point={clip.inPoint.toFixed(4)}
+      data-volume={clip.volume.toFixed(3)}
       onPointerDown={onDown('move')}
       onPointerMove={onMove}
       onPointerUp={onUp}
@@ -156,7 +159,26 @@ function ClipView({
       style={{ left, width }}
       title={clip.name}
     >
-      <div className="px-1.5 py-0.5 truncate text-ink-100 bg-black/20 border-b border-white/5 flex items-center gap-1">
+      {!isAudio && (asset?.thumbnail || asset?.kind === 'image') && (
+        <div
+          data-testid="clip-filmstrip"
+          className="pointer-events-none absolute inset-0 opacity-55"
+          style={{
+            backgroundImage: `linear-gradient(90deg,rgba(8,9,13,.15),rgba(8,9,13,.15)),url(${asset.kind === 'image' ? asset.url : asset.thumbnail})`,
+            backgroundRepeat: 'repeat-x',
+            backgroundPosition: 'center',
+            backgroundSize: 'auto 100%',
+          }}
+        />
+      )}
+      {isAudio && asset?.waveform && (
+        <div data-testid="clip-waveform" className="pointer-events-none absolute inset-x-1 bottom-1 top-5 flex items-center gap-px opacity-70" aria-hidden="true">
+          {asset.waveform.map((peak, index) => (
+            <i key={index} className="min-w-px flex-1 rounded-full bg-violet-300" style={{ height: `${Math.max(8, peak * 92)}%` }} />
+          ))}
+        </div>
+      )}
+      <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/35 border-b border-white/5 flex items-center gap-1">
         {isAudio ? <Music size={10} /> : <Video size={10} />}
         <span className="truncate">{clip.name}</span>
       </div>
@@ -273,6 +295,9 @@ export function Timeline() {
 
   const contentWidth = Math.max(duration, 20) * px + 80
   const totalHeight = tracks.reduce((a, t) => a + t.height, 0)
+  const hasVideo = clips.some((clip) => clip.kind === 'video' || clip.kind === 'image')
+  const hasAudio = clips.some((clip) => clip.kind === 'audio')
+  const mediaMode = hasVideo && hasAudio ? 'Video + Audio' : hasVideo ? 'Video' : hasAudio ? 'Audio' : 'Empty'
 
   const fitZoom = () => {
     const el = scrollRef.current
@@ -444,7 +469,9 @@ export function Timeline() {
         <div className="flex min-w-max">
           {/* left: track headers */}
           <div className="w-[168px] shrink-0 sticky left-0 z-20 bg-ink-900 border-r border-ink-800">
-            <div className="h-[28px] border-b border-ink-800 bg-ink-900" />
+            <div className="h-[28px] border-b border-ink-800 bg-ink-900 flex items-center px-2">
+              <span data-testid="timeline-media-mode" className="truncate text-[10px] font-medium text-ink-400">{mediaMode}</span>
+            </div>
             {tracks.map((t) => (
               <TrackHeader key={t.id} track={t} />
             ))}
@@ -547,6 +574,7 @@ export function Timeline() {
                     <div key={c.id} className="absolute inset-x-0 pointer-events-none" style={{ top, height: tr.height }}>
                       <ClipView
                         clip={c}
+                        asset={assets.find((asset) => asset.id === c.assetId)}
                         px={px}
                         tool={tool}
                         selected={c.id === selectedClipId}

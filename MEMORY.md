@@ -4721,3 +4721,29 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] PASS Updated compact toolbar is visible in `qa/screenshots/stress-08-preview-zoom.png`.
 - [OBSERVED] PASS Full studio stress suite completed 97 assertions with zero runtime errors and zero unexpected failed requests.
 - [MEASURED] PASS TypeScript and Vite production build remained successful.
+
+# Automatic media tracks, source visuals, and audio extraction — 2026-09-21
+
+- [SOURCE-CODE] PASS Removed the requested landing badge “Open-source video editing”.
+- [SOURCE-CODE] PASS Removed the requested landing note “Runs in your browser”.
+- [SOURCE-CODE] PASS Landing feature cards now read Masking, Tracking, and 3D editing with concise supporting text.
+- [SOURCE-CODE] PASS New and reset projects start with zero tracks instead of manually created blank Video 1 / Audio 1 rows.
+- [SOURCE-CODE] PASS Import and placement automatically create the first required track and label it `Video` or `Audio`; subsequent same-kind tracks receive numeric suffixes.
+- [SOURCE-CODE] PASS Timeline classification is derived from actual clips: `Empty`, `Video`, `Audio`, or `Video + Audio`.
+- [SOURCE-CODE] PASS Classification appears in the fixed track-header corner rather than crowding transport controls.
+- [SOURCE-CODE] PASS Imported videos receive a real JPEG thumbnail captured from a decoded source frame.
+- [SOURCE-CODE] PASS Video clips repeat that source thumbnail as a filmstrip; image clips use the real imported image.
+- [SOURCE-CODE] PASS Imported audio is decoded through Web Audio and summarized into 96 normalized real sample peaks.
+- [SOURCE-CODE] PASS Audio clips render those decoded peaks as a waveform rather than decorative/random bars.
+- [SOURCE-CODE] PASS Extract Audio creates a separately selectable, movable, trimmable audio asset and clip aligned with its source video.
+- [SOURCE-CODE] PASS Extraction mutes the source video clip volume to prevent doubled playback.
+- [SOURCE-CODE] PASS Extraction is idempotent per source clip and its action disappears after successful extraction.
+- [OBSERVED] PASS Empty Chromium project contained zero manual blank tracks.
+- [OBSERVED] PASS A video-only import created exactly one track and classified the sequence as `Video`.
+- [OBSERVED] PASS An audio-only import created exactly one track and classified the sequence as `Audio`.
+- [OBSERVED] PASS Mixed video/image/audio import classified the sequence as `Video + Audio`.
+- [OBSERVED] PASS Browser found source filmstrips on visual clips and one decoded waveform on the audio fixture.
+- [OBSERVED] PASS Extract Audio changed a video-only sequence to `Video + Audio`, created one independent audio clip, and changed source video volume to zero.
+- [SOURCE-CODE] PASS Research and independent UI decisions are recorded at `research/capcut-timeline-audio.md` with exact CapCut and OpenShot URLs.
+- [OBSERVED] PASS Updated Chromium suite completed 108 assertions with zero runtime errors and zero unexpected request failures.
+- [MEASURED] PASS TypeScript and Vite production build remained successful.

@@ -66,8 +66,8 @@ export function MediaPanel({ kind }: { kind: 'all' | 'audio' }) {
                 className="group relative rounded-md overflow-hidden border border-ink-700 bg-ink-800 hover:border-brand transition-colors text-left"
               >
                 <div className="aspect-video grid place-items-center bg-ink-900">
-                  {a.kind === 'image' ? (
-                    <img src={a.url} alt={a.name} className="w-full h-full object-cover" />
+                  {a.kind === 'image' || (a.kind === 'video' && a.thumbnail) ? (
+                    <img src={a.kind === 'image' ? a.url : a.thumbnail} alt={a.name} className="w-full h-full object-cover" />
                   ) : a.kind === 'video' ? (
                     <Film size={22} className="text-ink-500" />
                   ) : (

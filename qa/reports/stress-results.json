@@ -8,6 +8,11 @@
       "detail": ""
     },
     {
+      "name": "empty project has no manual blank tracks",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "three media clips imported",
       "status": "PASS",
       "detail": ""
@@ -28,6 +33,21 @@
       "detail": ""
     },
     {
+      "name": "timeline automatically identifies mixed media",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video and image clips use visual filmstrips",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio clip uses decoded source waveform",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "video starts at zero",
       "status": "PASS",
       "detail": ""
@@ -39,6 +59,41 @@
     },
     {
       "name": "audio starts independently at zero",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single video import creates automatic Video timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single video import creates one track",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "extract audio changes automatic mode to Video + Audio",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "extract audio mutes linked video sound to prevent doubling",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "extract audio creates independent editable audio clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single audio import creates automatic Audio timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single audio import creates one track",
       "status": "PASS",
       "detail": ""
     },
@@ -60,7 +115,7 @@
     {
       "name": "Space at project end restarts from zero",
       "status": "PASS",
-      "detail": "00:00:00:08"
+      "detail": "00:00:00:07"
     },
     {
       "name": "restarted playback pauses normally",
@@ -80,7 +135,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "10.9ms"
+      "detail": "17.5ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -90,12 +145,12 @@
     {
       "name": "rapid playhead drag retains a valid composite",
       "status": "PASS",
-      "detail": "4108,4108,4108,4108,4108"
+      "detail": "4106,4106,4106,4106,4106"
     },
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "344.0ms"
+      "detail": "338.2ms"
     },
     {
       "name": "image clip drag maps pixels to time",
@@ -490,7 +545,7 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/78895c1c-d954-48c5-bc3a-bbd22754f84c :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/3279faa9-98fc-4b25-a7ab-d1fe9d02ff9a :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

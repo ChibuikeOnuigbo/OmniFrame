@@ -14,6 +14,8 @@ export interface MediaAsset {
   height: number
   size: number // bytes
   thumbnail?: string // optional dataURL preview
+  waveform?: number[] // normalized source peaks for real timeline visualization
+  extractedFromClipId?: string
 }
 
 export type TrackType = 'video' | 'audio'

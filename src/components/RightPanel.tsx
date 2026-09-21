@@ -1,4 +1,4 @@
-import { PanelRightClose, PanelRightOpen, Trash2, Scissors } from 'lucide-react'
+import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
 import { Field, Section, Slider } from './ui'
@@ -10,6 +10,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const setClipTransform = useEditor((s) => s.setClipTransform)
   const removeClip = useEditor((s) => s.removeClip)
   const splitAt = useEditor((s) => s.splitAt)
+  const extractAudio = useEditor((s) => s.extractAudio)
   const asset = assets.find((a) => a.id === clip.assetId)
   const t = clip.transform
 
@@ -42,6 +43,15 @@ function ClipInspector({ clip }: { clip: Clip }) {
             <Trash2 size={13} /> Delete
           </button>
         </div>
+        {clip.kind === 'video' && !assets.some((item) => item.extractedFromClipId === clip.id) && (
+          <button
+            type="button"
+            onClick={() => void extractAudio(clip.id)}
+            className="mt-2 flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 text-xs hover:bg-ink-700"
+          >
+            <AudioLines size={13} /> Extract audio
+          </button>
+        )}
       </Section>
 
       <Section title="Transform">

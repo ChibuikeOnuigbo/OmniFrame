@@ -58,6 +58,7 @@ export interface EditorState {
   trimClip: (id: string, edge: 'left' | 'right', value: number) => void
   splitAt: (time: number) => void
   removeClip: (id: string) => void
+  extractAudio: (id: string) => Promise<void>
   selectClip: (id: string | null) => void
   setClipProp: (id: string, partial: Partial<Clip>) => void
   setClipTransform: (id: string, partial: Partial<ClipTransform>) => void
@@ -117,7 +118,7 @@ export const useEditor = create<EditorState>((set, get) => {
 
   return {
     assets: [],
-    tracks: [makeTrack('video', 'Video 1'), makeTrack('audio', 'Audio 1')],
+    tracks: [],
     clips: [],
     playhead: 0,
     duration: 10,
@@ -153,7 +154,8 @@ export const useEditor = create<EditorState>((set, get) => {
       const existing = get().tracks.find((t) => t.type === type && !t.locked)
       if (existing) return existing.id
       const count = get().tracks.filter((t) => t.type === type).length + 1
-      const track = makeTrack(type, `${type === 'audio' ? 'Audio' : 'Video'} ${count}`)
+      const base = type === 'audio' ? 'Audio' : 'Video'
+      const track = makeTrack(type, count === 1 ? base : `${base} ${count}`)
       set((s) => ({ tracks: [...s.tracks, track] }))
       return track.id
     },
@@ -272,6 +274,51 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
+    extractAudio: async (id) => {
+      const state = get()
+      const sourceClip = state.clips.find((clip) => clip.id === id && clip.kind === 'video')
+      if (!sourceClip) return
+      const sourceAsset = state.assets.find((asset) => asset.id === sourceClip.assetId)
+      if (!sourceAsset || state.assets.some((asset) => asset.extractedFromClipId === id)) return
+      const audioTrackId = get().ensureTrack('audio')
+      let waveform: number[] | undefined
+      try {
+        const blob = await (await fetch(sourceAsset.url)).blob()
+        waveform = await decodeWaveform(new File([blob], sourceAsset.name, { type: blob.type }))
+      } catch {
+        waveform = undefined
+      }
+      const assetId = uid('asset')
+      const audioAsset: MediaAsset = {
+        ...sourceAsset,
+        id: assetId,
+        name: `${sourceAsset.name} — audio`,
+        kind: 'audio',
+        width: 0,
+        height: 0,
+        thumbnail: undefined,
+        waveform,
+        extractedFromClipId: id,
+      }
+      const extracted: Clip = {
+        ...sourceClip,
+        id: uid('clip'),
+        assetId,
+        trackId: audioTrackId,
+        name: audioAsset.name,
+        kind: 'audio',
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+      }
+      pushSnapshot()
+      set((s) => {
+        const clips = [
+          ...s.clips.map((clip) => clip.id === id ? { ...clip, volume: 0 } : clip),
+          extracted,
+        ]
+        return { assets: [...s.assets, audioAsset], clips, selectedClipId: extracted.id, duration: recompute(clips) }
+      })
+    },
+
     selectClip: (id) => set({ selectedClipId: id }),
 
     setClipProp: (id, partial) => {
@@ -355,7 +402,7 @@ export const useEditor = create<EditorState>((set, get) => {
       for (const asset of get().assets) URL.revokeObjectURL(asset.url)
       set({
         assets: [],
-        tracks: [makeTrack('video', 'Video 1'), makeTrack('audio', 'Audio 1')],
+        tracks: [],
         clips: [],
         playhead: 0,
         duration: 10,
@@ -370,7 +417,53 @@ export const useEditor = create<EditorState>((set, get) => {
   }
 })
 
-// Read a File into a MediaAsset, probing real duration/dimensions.
+async function decodeWaveform(file: File, bins = 96): Promise<number[] | undefined> {
+  try {
+    const Context = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!Context) return undefined
+    const context = new Context()
+    const buffer = await context.decodeAudioData(await file.arrayBuffer())
+    const peaks = Array.from({ length: bins }, (_, bin) => {
+      const from = Math.floor((bin / bins) * buffer.length)
+      const to = Math.max(from + 1, Math.floor(((bin + 1) / bins) * buffer.length))
+      let peak = 0
+      for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+        const data = buffer.getChannelData(channel)
+        const stride = Math.max(1, Math.floor((to - from) / 64))
+        for (let i = from; i < to; i += stride) peak = Math.max(peak, Math.abs(data[i] || 0))
+      }
+      return peak
+    })
+    await context.close()
+    const max = Math.max(...peaks, 0.001)
+    return peaks.map((peak) => peak / max)
+  } catch {
+    return undefined
+  }
+}
+
+async function captureVideoThumbnail(video: HTMLVideoElement): Promise<string | undefined> {
+  try {
+    video.currentTime = Math.min(Math.max(video.duration * 0.2, 0), 2)
+    await new Promise<void>((resolve) => {
+      video.onseeked = () => resolve()
+      video.onerror = () => resolve()
+      setTimeout(resolve, 1500)
+    })
+    if (!video.videoWidth || !video.videoHeight) return undefined
+    const canvas = document.createElement('canvas')
+    canvas.width = 160
+    canvas.height = 90
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return undefined
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+    return canvas.toDataURL('image/jpeg', 0.68)
+  } catch {
+    return undefined
+  }
+}
+
+// Read a File into a MediaAsset, probing real duration/dimensions and visual summaries.
 async function readMediaFile(file: File): Promise<MediaAsset | null> {
   const url = URL.createObjectURL(file)
   const kind: MediaKindGuess = file.type.startsWith('video')
@@ -399,6 +492,8 @@ async function readMediaFile(file: File): Promise<MediaAsset | null> {
       const duration = isFinite(el.duration) ? el.duration : 5
       const width = (el as HTMLVideoElement).videoWidth || 0
       const height = (el as HTMLVideoElement).videoHeight || 0
+      const thumbnail = kind === 'video' ? await captureVideoThumbnail(el as HTMLVideoElement) : undefined
+      const waveform = kind === 'audio' ? await decodeWaveform(file) : undefined
       return {
         id: uid('asset'),
         name: file.name,
@@ -408,6 +503,8 @@ async function readMediaFile(file: File): Promise<MediaAsset | null> {
         width,
         height,
         size: file.size,
+        thumbnail,
+        waveform,
       }
     } else {
       const img = new Image()

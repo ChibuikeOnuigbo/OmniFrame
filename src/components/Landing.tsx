@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, Github, Layers3, Scissors, Sparkles } from 'lucide-react'
+import { ArrowRight, Box, Brush, Crosshair, Github, Scissors } from 'lucide-react'
 
 export function Landing({ onEnter }: { onEnter: () => void }) {
   const [leaving, setLeaving] = useState(false)
@@ -40,9 +40,6 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
 
         <section className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1fr_1.05fr] lg:py-14">
           <div className="max-w-xl of-hero-copy">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-ink-300">
-              <Sparkles size={13} className="text-brand-400" /> Open-source video editing
-            </div>
             <h1 className="text-4xl font-semibold leading-[1.04] tracking-[-0.045em] sm:text-6xl">
               Edit video.<br /><span className="text-ink-400">Keep your flow.</span>
             </h1>
@@ -58,14 +55,13 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
               >
                 Open Studio <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
               </button>
-              <span className="text-xs text-ink-500">Runs in your browser</span>
             </div>
 
             <div className="mt-10 grid max-w-lg grid-cols-3 gap-3">
               {[
-                [Scissors, 'Precise', 'Move, trim, split'],
-                [Layers3, 'Multi-track', 'Video and audio'],
-                [Sparkles, 'Responsive', 'Smooth scrubbing'],
+                [Brush, 'Masking', 'Shape and isolate'],
+                [Crosshair, 'Tracking', 'Follow motion'],
+                [Box, '3D editing', 'Compose in depth'],
               ].map(([Icon, title, note]) => {
                 const FeatureIcon = Icon as typeof Scissors
                 return (

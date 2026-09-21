@@ -25,6 +25,7 @@ const drag=async(loc,dx,dy=0,steps=12)=>{const b=await loc.boundingBox(); if(!b)
 
 await page.goto(URL,{waitUntil:'networkidle'}); await shot('stress-01-empty')
 assert(await page.getByText('Your canvas is empty').isVisible(),'empty state visible')
+assert(await page.getByTestId('timeline').getByRole('button',{name:/Lock|Mute|Hide/}).count()===0,'empty project has no manual blank tracks')
 await page.getByTestId('import-input').setInputFiles([
  join(ROOT,'qa/fixtures/pexels-cinematic-8s.webm'),
  join(ROOT,'qa/fixtures/pexels-landscape-962322.jpg'),
@@ -36,9 +37,26 @@ assert(await clips.count()===3,'three media clips imported')
 assert(await page.locator('[data-kind="video"]').count()===1,'video imported')
 assert(await page.locator('[data-kind="image"]').count()===1,'image imported')
 assert(await page.locator('[data-kind="audio"]').count()===1,'audio imported')
+assert(await page.getByTestId('timeline-media-mode').textContent()==='Video + Audio','timeline automatically identifies mixed media')
+assert(await page.getByTestId('clip-filmstrip').count()>=2,'video and image clips use visual filmstrips')
+assert(await page.getByTestId('clip-waveform').count()===1,'audio clip uses decoded source waveform')
 assert(Math.abs(await num(page.locator('[data-kind="video"]'),'data-start'))<.01,'video starts at zero')
 assert(Math.abs(await num(page.locator('[data-kind="image"]'),'data-start')-8)<.1,'image appended after video')
 assert(Math.abs(await num(page.locator('[data-kind="audio"]'),'data-start'))<.01,'audio starts independently at zero')
+
+// Track structure is inferred from media; users never create or classify tracks manually.
+for(const [fixture,expected] of [[join(ROOT,'qa/fixtures/pexels-cinematic-8s.webm'),'Video'],[join(ROOT,'qa/fixtures/test-audio-6s.ogg'),'Audio']]){
+  const probe=await browser.newPage({viewport:{width:1000,height:700}}); await probe.goto(URL,{waitUntil:'networkidle'}); await probe.getByTestId('import-input').setInputFiles(fixture); await probe.waitForFunction(()=>document.querySelectorAll('[data-testid="timeline-clip"]').length===1)
+  assert(await probe.getByTestId('timeline-media-mode').textContent()===expected,`single ${expected.toLowerCase()} import creates automatic ${expected} timeline`)
+  assert(await probe.getByTestId('timeline').getByRole('button',{name:'Lock'}).count()===1,`single ${expected.toLowerCase()} import creates one track`)
+  if(expected==='Video'){
+    await probe.locator('[data-kind="video"]').click(); const showInspector=probe.getByRole('button',{name:'Show inspector',exact:true}); if(await showInspector.count())await showInspector.click(); await probe.getByRole('button',{name:'Extract audio',exact:true}).click(); await probe.waitForFunction(()=>document.querySelectorAll('[data-kind="audio"]').length===1)
+    assert(await probe.getByTestId('timeline-media-mode').textContent()==='Video + Audio','extract audio changes automatic mode to Video + Audio')
+    assert(await probe.locator('[data-kind="video"]').getAttribute('data-volume')==='0.000','extract audio mutes linked video sound to prevent doubling')
+    assert(await probe.locator('[data-kind="audio"]').count()===1,'extract audio creates independent editable audio clip')
+  }
+  await probe.close()
+}
 
 // Real playback + keyboard pause/play.
 const t0=await page.getByTestId('current-time').textContent(); await page.keyboard.press('Space'); await page.waitForTimeout(80)
