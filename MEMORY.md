@@ -4784,3 +4784,15 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] PASS `qa/screenshots/landing-transition.png` shows Studio on the revealed left, Landing on the unreached right, and the violet wave between them.
 - [OBSERVED] PASS At 220ms the branded wave was visible, positioned inside the viewport, and the live Studio was already mounted below the completed mask region.
 - [OBSERVED] PASS Landing suite completed 21 assertions with zero runtime errors and zero failed requests.
+
+# Elevated landing feature surfaces and slower transition — 2026-09-21
+
+- [SOURCE-CODE] PASS Masking, Tracking, and 3D editing cards now use a 95%-opaque black/violet gradient surface instead of near-transparent white.
+- [SOURCE-CODE] PASS Cards use a 24px backdrop blur, subtle violet border, black shadow, internal violet glow, and explicit z-index 10 above the page grid.
+- [SCREENSHOT] PASS Updated surfaces are visible in `qa/screenshots/landing-1440x900.png`.
+- [MEASURED] PASS Browser computed the first card background as an opaque dark three-stop gradient, backdrop blur as 24px, and z-index as 10.
+- [USER-CORRECTION] Landing-to-Studio animation was requested to be approximately 0.5 seconds slower.
+- [SOURCE-CODE] PASS Combined landing mask and branded wave durations increased together from 680ms to 1180ms.
+- [SOURCE-CODE] PASS Route completion timer increased to the same 1180ms, preserving synchronization between mask, wave, and Studio activation.
+- [OBSERVED] PASS Extended transition retained live Studio beneath the mask and the restored violet wave between both scenes.
+- [OBSERVED] PASS Landing suite completed 23 assertions with zero runtime errors and zero failed requests.

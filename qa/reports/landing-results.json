@@ -21,6 +21,16 @@
       "detail": ""
     },
     {
+      "name": "three feature cards visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "feature cards use elevated dark palette surface",
+      "status": "PASS",
+      "detail": "{\"background\":\"linear-gradient(to right bottom, rgba(25, 21, 38, 0.95), rgba(17, 19, 29, 0.95), rgba(10, 13, 20, 0.95))\",\"backdrop\":\"blur(24px)\",\"z\":\"10\"}"
+    },
+    {
       "name": "landing 1920x1080 has no horizontal overflow",
       "status": "PASS",
       "detail": "{\"doc\":0,\"body\":0}"
@@ -73,12 +83,12 @@
     {
       "name": "purple wave moves across combined scenes",
       "status": "PASS",
-      "detail": "290"
+      "detail": "535"
     },
     {
       "name": "landing uses a moving polygon mask",
       "status": "PASS",
-      "detail": "polygon(31.5269% 0px, 100% 0px, 100% 100%, 31.5269% 100%, 32.19% 92%, 31.1486% 84%, 32.29% 76%, 31.0856% 68%, 32.19% 60%, 31.1486% 52%, 32.29% 44%, 31.0856% 36%, 32.19% 28%, 31.1486% 20%, 32.09% 12%, 31.2117% 4%)"
+      "detail": "polygon(54.3873% 0px, 100.627% 0px, 100.627% 100%, 54.3873% 100%, 55.0794% 92%, 53.7873% 84%, 55.1794% 76%, 53.6873% 68%, 55.0794% 60%, 53.7873% 52%, 55.1794% 44%, 53.6873% 36%, 55.0794% 28%, 53.7873% 20%, 54.9794% 12%, 53.8873% 4%)"
     },
     {
       "name": "studio route updates hash",

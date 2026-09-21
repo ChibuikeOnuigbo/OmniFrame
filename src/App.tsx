@@ -31,7 +31,7 @@ export default function App() {
       window.location.hash = 'studio'
       setStudio(true)
       setTransitioning(false)
-    }, reduced ? 60 : 680)
+    }, reduced ? 60 : 1180)
   }
 
   return (
