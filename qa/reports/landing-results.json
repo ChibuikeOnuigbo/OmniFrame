@@ -56,9 +56,19 @@
       "detail": "{\"doc\":0,\"body\":0}"
     },
     {
-      "name": "studio transition animation plays",
+      "name": "masked studio transition plays",
       "status": "PASS",
       "detail": ""
+    },
+    {
+      "name": "studio mounts underneath moving mask",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "landing uses a moving polygon mask",
+      "status": "PASS",
+      "detail": "polygon(18.5631% 0px, 101.375% 0px, 99.6562% 100%, 16.8443% 100%)"
     },
     {
       "name": "studio route updates hash",
@@ -66,7 +76,7 @@
       "detail": "http://localhost:5173/#studio"
     },
     {
-      "name": "studio mounts after transition",
+      "name": "studio remains mounted after transition",
       "status": "PASS",
       "detail": ""
     },

@@ -7,8 +7,7 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
   const enter = () => {
     if (leaving) return
     setLeaving(true)
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    window.setTimeout(onEnter, reduced ? 60 : 520)
+    onEnter()
   }
 
   return (
@@ -108,8 +107,6 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
           <span>Built in the open.</span><span>Local-first · Cross-platform</span>
         </footer>
       </div>
-
-      {leaving && <div className="pointer-events-none fixed inset-0 z-50 bg-brand of-studio-wipe" aria-hidden="true" />}
     </main>
   )
 }

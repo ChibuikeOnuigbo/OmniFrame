@@ -68,15 +68,16 @@ body {
   from { opacity: 0; transform: translateY(22px) rotateX(4deg); }
   to { opacity: 1; transform: translateY(0) rotateX(0); }
 }
-@keyframes of-studio-wipe {
-  0% { transform: translateX(-105%) skewX(-8deg); }
-  60%, 100% { transform: translateX(105%) skewX(-8deg); }
+@keyframes of-landing-mask-out {
+  0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  100% { clip-path: polygon(108% 0, 108% 0, 98% 100%, 98% 100%); }
 }
 .of-landing-enter { animation: of-landing-in 0.55s cubic-bezier(.2,.8,.2,1) both; }
 .of-hero-copy { animation: of-copy-in 0.65s 0.08s cubic-bezier(.2,.8,.2,1) both; }
 .of-hero-visual { animation: of-visual-in 0.75s 0.16s cubic-bezier(.2,.8,.2,1) both; transform-style: preserve-3d; }
-.of-landing-leave > div:not(:last-child) { opacity: 0.65; transition: opacity 0.35s ease; }
-.of-studio-wipe { animation: of-studio-wipe 0.55s cubic-bezier(.7,0,.3,1) both; }
+.of-landing-leave {
+  animation: of-landing-mask-out 0.68s cubic-bezier(.4,0,.2,1) both;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }

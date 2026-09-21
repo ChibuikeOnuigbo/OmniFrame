@@ -4747,3 +4747,18 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SOURCE-CODE] PASS Research and independent UI decisions are recorded at `research/capcut-timeline-audio.md` with exact CapCut and OpenShot URLs.
 - [OBSERVED] PASS Updated Chromium suite completed 108 assertions with zero runtime errors and zero unexpected request failures.
 - [MEASURED] PASS TypeScript and Vite production build remained successful.
+
+# Landing-to-Studio scene mask transition — 2026-09-21
+
+- [OBSERVED] FAIL The previous purple wipe covered the viewport while the landing page remained underneath, so revealed regions did not progressively become the Studio.
+- [SOURCE-CODE] PASS Studio now mounts immediately beneath the landing scene when the CTA is activated.
+- [SOURCE-CODE] PASS The landing scene remains above Studio only while a 680ms polygon clip-path animation removes it from left to right.
+- [SOURCE-CODE] PASS The angled mask boundary acts as the moving transition edge; every area behind that edge is the live Studio scene.
+- [SOURCE-CODE] PASS The URL changes to `#studio` only after the visual transition completes, then the landing scene unmounts.
+- [SOURCE-CODE] PASS Reduced-motion users complete the same scene switch in 60ms.
+- [OBSERVED] PASS At 220ms, both the underlying Studio and the masked landing scene were simultaneously visible.
+- [MEASURED] PASS Browser-observed in-progress mask was a nontrivial animated polygon, including `polygon(18.56% 0px, 101.38% 0px, 99.66% 100%, 16.84% 100%)`.
+- [SCREENSHOT] PASS `qa/screenshots/landing-transition.png` visibly shows Studio on the revealed left side and landing content on the retained right side.
+- [OBSERVED] PASS Landing transition suite completed 19 assertions with zero runtime errors and zero failed requests.
+- [OBSERVED] PASS Full Studio stress regression remained at 108 passing assertions with zero runtime errors and zero unexpected request failures.
+- [MEASURED] PASS TypeScript and production build remained successful.
