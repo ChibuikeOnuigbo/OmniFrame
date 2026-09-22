@@ -19,11 +19,13 @@ import {
   Scissors,
   Slash,
   MousePointer2,
+  ChevronDown,
+  Gauge,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
-import { IconButton, Segmented } from './ui'
+import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 
 const RULER_H = 28
@@ -33,6 +35,7 @@ const MAX_PX = 8000 // continuous zoom remains usable through frame-level detail
 // Snap a time value to nearby clip edges and the playhead.
 function snapTime(value: number): number {
   const st = useEditor.getState()
+  if (!st.snapping) return value
   const px = st.pxPerSec
   const thresh = 8 / px
   let best = value
@@ -163,7 +166,8 @@ function ClipView({
       onPointerMove={onMove}
       onPointerUp={onUp}
       className={[
-        'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden cursor-grab active:cursor-grabbing border text-[11px] select-none',
+        'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden border text-[11px] select-none',
+        tool === 'select' ? 'cursor-grab active:cursor-grabbing' : 'cursor-inherit',
         selected ? 'border-brand ring-1 ring-brand z-10' : 'border-ink-600',
         clip.hidden
           ? 'opacity-40 border-dashed hover:opacity-65 hover:border-violet-300 hover:shadow-[0_0_12px_rgba(167,139,250,.5)]'
@@ -309,6 +313,9 @@ export function Timeline() {
   const togglePlay = useEditor((s) => s.togglePlay)
   const speed = useEditor((s) => s.speed)
   const setSpeed = useEditor((s) => s.setSpeed)
+  const snapping = useEditor((s) => s.snapping)
+  const toggleSnapping = useEditor((s) => s.toggleSnapping)
+  const setScrubbing = useEditor((s) => s.setScrubbing)
   const splitAt = useEditor((s) => s.splitAt)
   const addClipToTrack = useEditor((s) => s.addClipToTrack)
   const assets = useEditor((s) => s.assets)
@@ -323,6 +330,24 @@ export function Timeline() {
   const [scrollLeft, setScrollLeft] = useState(0)
   const [viewW, setViewW] = useState(900)
   const seeking = useRef(false)
+  const [toolMenuOpen, setToolMenuOpen] = useState(false)
+  const [speedMenuOpen, setSpeedMenuOpen] = useState(false)
+  const [customSpeed, setCustomSpeed] = useState(Math.abs(speed))
+  const toolButtonRef = useRef<HTMLButtonElement>(null)
+  const speedButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!toolMenuOpen && !speedMenuOpen) return
+    const close = (event: PointerEvent) => {
+      const target = event.target as HTMLElement
+      if (target.closest('[data-testid="tool-menu"], [data-testid="speed-menu"], [data-testid="tool-menu-button"], [data-testid="speed-menu-button"]')) return
+      setToolMenuOpen(false); setSpeedMenuOpen(false)
+    }
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') { setToolMenuOpen(false); setSpeedMenuOpen(false) } }
+    window.addEventListener('pointerdown', close)
+    window.addEventListener('keydown', escape)
+    return () => { window.removeEventListener('pointerdown', close); window.removeEventListener('keydown', escape) }
+  }, [toolMenuOpen, speedMenuOpen])
 
   const contentWidth = Math.max(duration, 20) * px + 80
   const totalHeight = tracks.reduce((a, t) => a + t.height, 0)
@@ -434,7 +459,7 @@ export function Timeline() {
   }
 
   return (
-    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-project-fps={FPS} data-drop-frame={dropFrameTimecode ? 'true' : 'false'} data-render-count={renderCount.current} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
+    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-project-fps={FPS} data-drop-frame={dropFrameTimecode ? 'true' : 'false'} data-render-count={renderCount.current} className={`h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 ${tool === 'blade' ? 'of-blade-tool' : 'of-select-tool'}`}>
       {/* transport + tools + zoom (groups separated by dividers) */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
         {/* transport */}
@@ -453,62 +478,37 @@ export function Timeline() {
           <LiveTimecode />
           <span className="text-ink-500"> / {formatTimecode(duration)}</span>
         </div>
-        <Segmented
-          options={[
-            { value: 0.5, label: '0.5×' },
-            { value: 1, label: '1×' },
-            { value: 2, label: '2×' },
-          ]}
-          value={speed < 0 ? -speed : speed}
-          onChange={(v) => setSpeed(v)}
-        />
+        <button ref={speedButtonRef} type="button" data-testid="speed-menu-button" title="Playback speed" aria-expanded={speedMenuOpen} onClick={() => { setToolMenuOpen(false); setSpeedMenuOpen((open) => !open) }} className="flex h-8 min-w-[66px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"><Gauge size={15} /><span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span><ChevronDown size={12} /></button>
 
         <div className="w-px h-6 bg-ink-700" />
 
         {/* edit tools */}
-        <IconButton title="Split at playhead (B)" onClick={() => splitAt(useEditor.getState().playhead)}>
-          <Scissors size={16} />
-        </IconButton>
-        <div className="flex items-center gap-1 bg-ink-800 rounded-md p-0.5 border border-ink-700">
-          <IconButton title="Select tool (V)" active={tool === 'select'} onClick={() => setTool('select')}>
-            <MousePointer2 size={16} />
-          </IconButton>
-          <IconButton title="Blade tool (B)" active={tool === 'blade'} onClick={() => setTool('blade')}>
-            <Slash size={16} />
-          </IconButton>
-        </div>
+        <button type="button" title="Split at playhead (B)" onClick={() => splitAt(useEditor.getState().playhead)} className="flex h-8 items-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 px-2.5 text-xs text-ink-300 hover:bg-ink-700 hover:text-white"><Scissors size={15} /><span className="hidden lg:inline">Split</span></button>
+        <button ref={toolButtonRef} type="button" data-testid="tool-menu-button" title="Editing tools" aria-expanded={toolMenuOpen} onClick={() => { setSpeedMenuOpen(false); setToolMenuOpen((open) => !open) }} className="flex h-8 min-w-[42px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-ink-200 hover:bg-ink-700">{tool === 'select' ? <MousePointer2 size={16} /> : <Slash size={16} />}<ChevronDown size={12} /></button>
 
         <div className="flex-1 min-w-[12px]" />
 
         {/* zoom group */}
-        <div className="flex items-center gap-1 shrink-0">
-          <IconButton title="Zoom out" onClick={() => zoomBy(0.8)}>
-            <ZoomOut size={15} />
-          </IconButton>
-          <input
-            type="range"
-            data-testid="timeline-scale"
-            aria-label="Timeline zoom"
-            className="of-range w-28"
-            min={8}
-            max={MAX_PX}
-            value={px}
-            onChange={(e) => setZoom(parseFloat(e.target.value))}
-          />
-          <IconButton title="Zoom in" onClick={() => zoomBy(1.25)}>
-            <ZoomIn size={15} />
-          </IconButton>
-          <IconButton title="Fit" onClick={fitZoom}>
-            <Maximize size={15} />
-          </IconButton>
+        <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-md border border-ink-700 bg-ink-800">
+          <IconButton title="Zoom out" onClick={() => zoomBy(0.8)} className="rounded-none border-r border-ink-700"><ZoomOut size={15} /></IconButton>
+          <div className="relative flex h-full items-center px-2"><input type="range" data-testid="timeline-scale" aria-label="Timeline zoom" className="of-range w-24 sm:w-28" min={8} max={MAX_PX} value={px} onChange={(e) => setZoom(parseFloat(e.target.value))} /><i aria-hidden="true" title="Fit point" className="pointer-events-none absolute top-1/2 h-3 w-px -translate-y-1/2 bg-white/60" style={{ left: `${8 + (Math.max(8, (viewW - HEADER_W - 40) / Math.max(duration, 10)) - 8) / (MAX_PX - 8) * 100}%` }} /></div>
+          <IconButton title="Zoom in" onClick={() => zoomBy(1.25)} className="rounded-none border-l border-ink-700"><ZoomIn size={15} /></IconButton>
+          <IconButton title="Fit" onClick={fitZoom} className="rounded-none border-l border-ink-700"><Maximize size={15} /></IconButton>
         </div>
-        <IconButton title="Snapping (on)" active>
-          <Magnet size={15} />
-        </IconButton>
+        <button type="button" data-testid="snapping-toggle" title={`Snapping (${snapping ? 'on' : 'off'})`} aria-pressed={snapping} onClick={toggleSnapping} className={`flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs ${snapping ? 'border-brand/60 bg-brand/15 text-violet-200' : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700'}`}><Magnet size={15} /><span className="hidden xl:inline">Snap</span></button>
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
           {px.toFixed(0)} px/s{frameMode ? ' · frame' : ''}
         </span>
       </div>
+
+      {toolMenuOpen && <div data-testid="tool-menu" role="menu" className="fixed z-[90] w-44 rounded-lg border border-ink-600 bg-ink-850 p-1.5 shadow-2xl" style={{ left: Math.min(toolButtonRef.current?.getBoundingClientRect().left ?? 8, window.innerWidth - 184), top: (toolButtonRef.current?.getBoundingClientRect().bottom ?? 48) + 4 }}>
+        {[{ id: 'select' as const, label: 'Select', key: 'V', icon: MousePointer2 }, { id: 'blade' as const, label: 'Blade', key: 'B', icon: Slash }].map((item) => <button key={item.id} role="menuitemradio" aria-checked={tool === item.id} onClick={() => { setTool(item.id); setToolMenuOpen(false) }} className={`flex h-9 w-full items-center gap-2 rounded-md px-2.5 text-xs ${tool === item.id ? 'bg-brand/15 text-violet-200' : 'text-ink-300 hover:bg-ink-700'}`}><item.icon size={15} /><span>{item.label}</span><kbd className="ml-auto text-[10px] text-ink-500">{item.key}</kbd></button>)}
+      </div>}
+      {speedMenuOpen && <div data-testid="speed-menu" className="fixed z-[90] w-[min(224px,calc(100vw-16px))] rounded-lg border border-ink-600 bg-ink-850 p-2 shadow-2xl" style={{ left: Math.max(8, Math.min(speedButtonRef.current?.getBoundingClientRect().left ?? 8, window.innerWidth - 232)), top: (speedButtonRef.current?.getBoundingClientRect().bottom ?? 48) + 4 }}>
+        <div className="grid grid-cols-3 gap-1">{[0.5,1,2].map((value) => <button key={value} onClick={() => { setSpeed(value); setCustomSpeed(value) }} className={`h-8 rounded-md text-xs ${Math.abs(speed) === value ? 'bg-brand text-white' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'}`}>{value}×</button>)}</div>
+        <label className="mt-2 block text-[10px] text-ink-400"><span className="mb-1 flex justify-between"><span>Custom</span><output>{customSpeed.toFixed(2)}×</output></span><input aria-label="Custom playback speed" type="range" min="0.1" max="4" step="0.05" value={customSpeed} onChange={(event) => { const value = Number(event.target.value); setCustomSpeed(value); setSpeed(value) }} className="of-range w-full" /></label>
+        <div className="mt-1 text-[9px] text-ink-500">Safe range: 0.10×–4.00×</div>
+      </div>}
 
       {/* body */}
       <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto">
@@ -531,6 +531,7 @@ export function Timeline() {
               className="h-[28px] sticky top-0 z-10 bg-ink-850 border-b border-ink-800 cursor-grab active:cursor-grabbing"
               onPointerDown={(e) => {
                 seeking.current = true
+                setScrubbing(true)
                 ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
                 seekFromClientX(e.clientX)
               }}
@@ -539,12 +540,14 @@ export function Timeline() {
               }}
               onPointerUp={(e) => {
                 seeking.current = false
+                setScrubbing(false)
                 try {
                   ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
                 } catch {
                   /* noop */
                 }
               }}
+              onPointerCancel={() => { seeking.current = false; setScrubbing(false) }}
             >
               {/* Adaptive visible-range major and minor ticks. */}
               {ticks.map((tk, i) => (

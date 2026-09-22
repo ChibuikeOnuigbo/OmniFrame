@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.of-select-tool [data-testid="timeline-lanes"],
+.of-select-tool [data-testid="timeline-ruler"] { cursor: default; }
+.of-blade-tool [data-testid="timeline-lanes"],
+.of-blade-tool [data-testid="timeline-ruler"],
+.of-blade-tool [data-testid="timeline-clip"] { cursor: url('/src/blade-cursor.svg') 4 24, crosshair; }
+
 :root { color-scheme: dark; }
 html, body, #root { height: 100%; width: 100%; }
 body {

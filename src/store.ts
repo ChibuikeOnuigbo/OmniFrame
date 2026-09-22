@@ -50,6 +50,8 @@ export interface EditorState {
   past: Doc[]
   future: Doc[]
   inInteraction: boolean
+  snapping: boolean
+  scrubbing: boolean
 
   // ---- media ----
   addAsset: (a: MediaAsset) => void
@@ -83,6 +85,8 @@ export interface EditorState {
   setPreviewQuality: (quality: PreviewQuality) => void
   setZoom: (px: number) => void
   zoomBy: (factor: number) => void
+  toggleSnapping: () => void
+  setScrubbing: (active: boolean) => void
 
   // ---- ui ----
   setTool: (t: Tool) => void
@@ -145,6 +149,8 @@ export const useEditor = create<EditorState>((set, get) => {
     past: [],
     future: [],
     inInteraction: false,
+    snapping: true,
+    scrubbing: false,
 
     addAsset: (a) => set((s) => ({ assets: [...s.assets, a] })),
 
@@ -406,6 +412,8 @@ export const useEditor = create<EditorState>((set, get) => {
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
     zoomBy: (factor) => set((s) => ({ pxPerSec: clamp(s.pxPerSec * factor, 8, 8000) })),
+    toggleSnapping: () => set((state) => ({ snapping: !state.snapping })),
+    setScrubbing: (scrubbing) => set({ scrubbing }),
 
     setTool: (t) => set({ tool: t }),
     setLeftTab: (t) => set({ leftTab: t, leftOpen: true }),

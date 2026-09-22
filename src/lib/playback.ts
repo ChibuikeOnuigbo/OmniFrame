@@ -137,7 +137,7 @@ export class PreviewEngine {
     this.last = ts
     const st = useEditor.getState()
     let time = st.playhead
-    if (st.playing) {
+    if (st.playing && !st.scrubbing) {
       time += dt * st.speed
       if (time >= st.duration) {
         time = st.duration
