@@ -140,7 +140,7 @@ export const useEditor = create<EditorState>((set, get) => {
     speed: 1,
     projectFps: 30,
     dropFrameTimecode: false,
-    previewQuality: 'high',
+    previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high', 'ultra'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     selectedClipId: null,
     tool: 'select',
     leftTab: 'media',
@@ -408,7 +408,10 @@ export const useEditor = create<EditorState>((set, get) => {
     setDropFrameTimecode: (enabled) => set((state) => ({
       dropFrameTimecode: enabled && (state.projectFps === 29.97 || state.projectFps === 59.94),
     })),
-    setPreviewQuality: (previewQuality) => set({ previewQuality }),
+    setPreviewQuality: (previewQuality) => {
+      localStorage.setItem('omniframe.previewQuality', previewQuality)
+      set({ previewQuality })
+    },
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
     zoomBy: (factor) => set((s) => ({ pxPerSec: clamp(s.pxPerSec * factor, 8, 8000) })),
