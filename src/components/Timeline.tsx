@@ -374,24 +374,25 @@ export function Timeline() {
     }
   }, [])
 
-  const onWheel = (e: React.WheelEvent) => {
-    if (e.ctrlKey || e.metaKey) {
-      e.preventDefault()
-      const el = scrollRef.current
-      if (!el) return
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const onWheel = (event: WheelEvent) => {
+      if (!event.ctrlKey && !event.metaKey) return
+      event.preventDefault()
       const rect = el.getBoundingClientRect()
-      const cursorX = e.clientX - rect.left - HEADER_W
-      const timeAtCursor = (scrollLeft + cursorX) / px
-      const factor = e.deltaY < 0 ? 1.12 : 0.89
+      const cursorX = event.clientX - rect.left - HEADER_W
+      const timeAtCursor = (el.scrollLeft + cursorX) / px
+      const factor = event.deltaY < 0 ? 1.12 : 0.89
       const next = clamp(px * factor, 8, MAX_PX)
       setZoom(next)
       requestAnimationFrame(() => {
-        if (scrollRef.current) {
-          scrollRef.current.scrollLeft = timeAtCursor * next - cursorX
-        }
+        el.scrollLeft = timeAtCursor * next - cursorX
       })
     }
-  }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [px, setZoom])
 
   const seekFromClientX = (clientX: number) => {
     const el = lanesRef.current
@@ -485,6 +486,8 @@ export function Timeline() {
           </IconButton>
           <input
             type="range"
+            data-testid="timeline-scale"
+            aria-label="Timeline zoom"
             className="of-range w-28"
             min={8}
             max={MAX_PX}
@@ -507,7 +510,7 @@ export function Timeline() {
       </div>
 
       {/* body */}
-      <div ref={scrollRef} onWheel={onWheel} className="flex-1 min-h-0 overflow-auto">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto">
         <div className="flex min-w-max">
           {/* left: track headers */}
           <div className="w-[168px] shrink-0 sticky left-0 z-20 bg-ink-900 border-r border-ink-800">
