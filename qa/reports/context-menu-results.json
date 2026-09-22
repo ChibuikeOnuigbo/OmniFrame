@@ -56,6 +56,41 @@
       "detail": ""
     },
     {
+      "name": "visible clip offers Hide Clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Hide Clip shows safe shortcut on right",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Hide Clip changes only canonical clip state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "hidden clip remains visible at reduced opacity",
+      "status": "PASS",
+      "detail": "0.4"
+    },
+    {
+      "name": "hidden clip gains hover glow",
+      "status": "PASS",
+      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(109, 94, 252) 0px 0px 0px 1px, rgba(167, 139, 250, 0.5) 0px 0px 12px 0px"
+    },
+    {
+      "name": "hidden clip offers Unhide Clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "H toggles selected clip without browser shortcut collision",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "paste appears after copy",
       "status": "PASS",
       "detail": ""
@@ -127,6 +162,26 @@
     },
     {
       "name": "select remains usable after right click",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup contains three real categories",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Shortcuts category documents Hide Clip command",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reduce motion setting has observable effect",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Escape closes settings popup",
       "status": "PASS",
       "detail": ""
     },

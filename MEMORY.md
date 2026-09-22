@@ -4918,3 +4918,17 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [COMMANDS] Shared clip clipboard now serves both context commands and keyboard shortcuts.
 - [QA] Playwright context suite passes 28 assertions with zero runtime errors, including input/select ownership and continued usability.
 - [LIMITATION] Track header/lane, ruler, gap, and playhead-specific command sets remain explicit future work; unsupported target types are not faked.
+
+# Clip-level hide and compact Settings checkpoint — 2026-09-22
+
+- [SCOPE] Surgical changes only to canonical clip state, render filtering, timeline clip visuals, centralized clip context commands, header Settings, and focused QA.
+- [SOURCE-CODE] Added canonical `Clip.hidden`; new clips and extracted audio start visible, while duplication deliberately preserves the source hidden state.
+- [SOURCE-CODE] Added undo-aware `toggleClipHidden` command and target-specific Hide Clip / Unhide Clip context action.
+- [SHORTCUT] Plain `H` toggles selected clip only when Studio owns keyboard focus; inputs/textareas/contenteditable remain excluded, avoiding browser modifier collisions.
+- [VISUAL] Hidden clips remain recoverable at 40% opacity, use a dashed edge and EyeOff identity, and gain a violet hover outline/glow.
+- [RENDER] PreviewEngine excludes hidden clips in its active-clip resolver; export uses the same rendering engine and therefore honors hidden state.
+- [SETTINGS] Added one Settings icon between Import and Export and a compact popup, not a side panel.
+- [SETTINGS] Exposed only real categories/options: Timeline zoom/reset, actual shortcut reference, and persisted Reduce Motion.
+- [BROWSER-QA] Focused context/settings suite increased to 39 PASS with zero runtime errors.
+- [SCREENSHOT] `qa/screenshots/timeline-hidden-clip-context-menu.png` and `qa/screenshots/settings-popup-accessibility.png` inspected.
+- [LIMITATION] Adaptive ruler/timebase and 21-repository reference lab remain separate unfinished scope; not claimed complete here.

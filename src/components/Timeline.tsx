@@ -159,12 +159,16 @@ function ClipView({
       data-duration={clip.duration.toFixed(4)}
       data-in-point={clip.inPoint.toFixed(4)}
       data-volume={clip.volume.toFixed(3)}
+      data-hidden={clip.hidden ? 'true' : 'false'}
       onPointerDown={onDown('move')}
       onPointerMove={onMove}
       onPointerUp={onUp}
       className={[
         'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden cursor-grab active:cursor-grabbing border text-[11px] select-none',
         selected ? 'border-brand ring-1 ring-brand z-10' : 'border-ink-600',
+        clip.hidden
+          ? 'opacity-40 border-dashed hover:opacity-65 hover:border-violet-300 hover:shadow-[0_0_12px_rgba(167,139,250,.5)]'
+          : 'hover:border-violet-400/80',
         isAudio ? 'bg-brand/15' : 'bg-brand/25',
       ].join(' ')}
       style={{ left, width }}
@@ -203,7 +207,7 @@ function ClipView({
         </div>
       )}
       <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/35 border-b border-white/5 flex items-center gap-1">
-        {isAudio ? <Music size={10} /> : <Video size={10} />}
+        {clip.hidden ? <EyeOff size={10} aria-label="Hidden clip" /> : isAudio ? <Music size={10} /> : <Video size={10} />}
         <span className="truncate">{clip.name}</span>
       </div>
       {!isAudio && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}

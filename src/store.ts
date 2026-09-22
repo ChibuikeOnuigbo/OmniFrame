@@ -58,6 +58,7 @@ export interface EditorState {
   trimClip: (id: string, edge: 'left' | 'right', value: number) => void
   splitAt: (time: number) => void
   removeClip: (id: string) => void
+  toggleClipHidden: (id: string) => void
   insertClipCopy: (clip: Clip, start: number) => void
   extractAudio: (id: string) => Promise<void>
   selectClip: (id: string | null) => void
@@ -186,6 +187,7 @@ export const useEditor = create<EditorState>((set, get) => {
         name: asset.name,
         kind: asset.kind,
         volume: 1,
+        hidden: false,
         transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
       }
       set((s) => {
@@ -275,6 +277,15 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
+    toggleClipHidden: (id) => {
+      const clip = get().clips.find((item) => item.id === id)
+      if (!clip || get().tracks.find((track) => track.id === clip.trackId)?.locked) return
+      pushSnapshot()
+      set((state) => ({
+        clips: state.clips.map((item) => item.id === id ? { ...item, hidden: !item.hidden } : item),
+      }))
+    },
+
     insertClipCopy: (source, start) => {
       if (!get().assets.some((asset) => asset.id === source.assetId)) return
       const track = get().tracks.find((item) => item.id === source.trackId)
@@ -325,6 +336,7 @@ export const useEditor = create<EditorState>((set, get) => {
         trackId: audioTrackId,
         name: audioAsset.name,
         kind: 'audio',
+        hidden: false,
         transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
       }
       pushSnapshot()

@@ -82,7 +82,7 @@ export function allMediaElements(): HTMLMediaElement[] {
 
 function activeClipOnTrack(clips: Clip[], trackId: string, time: number): Clip | undefined {
   return clips.find(
-    (c) => c.trackId === trackId && time >= c.start && time < c.start + c.duration,
+    (c) => !c.hidden && c.trackId === trackId && time >= c.start && time < c.start + c.duration,
   )
 }
 

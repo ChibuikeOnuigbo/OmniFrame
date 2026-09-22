@@ -48,6 +48,7 @@ export interface Clip {
   name: string
   kind: MediaKind
   volume: number // 0..1 (audio)
+  hidden: boolean // clip-level visibility; distinct from track visibility
   transform: ClipTransform
 }
 

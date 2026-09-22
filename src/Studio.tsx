@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2 } from 'lucide-react'
+import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2, Eye, EyeOff } from 'lucide-react'
 import { useEditor } from './store'
 import type { Clip } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
@@ -32,6 +32,7 @@ export default function Studio() {
   const canUndo = useEditor((s) => s.past.length > 0)
   const canRedo = useEditor((s) => s.future.length > 0)
   const insertClipCopy = useEditor((s) => s.insertClipCopy)
+  const toggleClipHidden = useEditor((s) => s.toggleClipHidden)
   const extractAudio = useEditor((s) => s.extractAudio)
   const [contextMenu, setContextMenu] = useState<ContextState | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -77,6 +78,13 @@ export default function Studio() {
           st().pause()
           setPlayhead(st().playhead + (e.shiftKey ? 1 : f))
           break
+        case 'h':
+        case 'H':
+          if (selectedClipId) {
+            e.preventDefault()
+            toggleClipHidden(selectedClipId)
+          }
+          break
         case 'b':
         case 'B':
           setTool('blade')
@@ -115,7 +123,7 @@ export default function Studio() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [togglePlay, setPlayhead, setTool, removeClip, selectedClipId, zoomBy, undo, redo, setSpeed])
+  }, [togglePlay, setPlayhead, setTool, removeClip, toggleClipHidden, selectedClipId, zoomBy, undo, redo, setSpeed])
 
   // Release imported blob URLs when the document is actually leaving. Assets
   // remain live for the project lifetime so preview and export can reuse them.
@@ -151,6 +159,7 @@ export default function Studio() {
           ...(clipboardClip ? [{ id: 'paste', label: 'Paste at playhead', shortcut: 'Ctrl+V', icon: Clipboard, run: () => insertClipCopy(clipboardClip!, useEditor.getState().playhead) }] : []),
           { id: 'duplicate', label: 'Duplicate', shortcut: 'Ctrl+D', icon: Files, run: () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration) },
           ...(contextMenu.type === 'VIDEO_CLIP' ? [{ id: 'separate-audio', label: 'Separate audio', icon: AudioLines, run: () => void extractAudio(contextMenu.clip.id) }] : []),
+          { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
         ]
       : [
