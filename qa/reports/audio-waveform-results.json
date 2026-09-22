@@ -1,0 +1,64 @@
+{
+  "results": [
+    {
+      "name": "waveform uses 256 decoded source bins",
+      "status": "PASS",
+      "detail": "256"
+    },
+    {
+      "name": "waveform contains varied source amplitude data",
+      "status": "PASS",
+      "detail": "220"
+    },
+    {
+      "name": "loud and quiet source regions differ",
+      "status": "PASS",
+      "detail": "0.4999..1"
+    },
+    {
+      "name": "waveform starts at full clip gain",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "waveform records current clip gain",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "visible amplitude scales down with volume",
+      "status": "PASS",
+      "detail": "13.4375 -> 3.35938"
+    },
+    {
+      "name": "zero volume collapses waveform to center line",
+      "status": "PASS",
+      "detail": "0.125"
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero unexpected request failures",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "initial": {
+    "bins": 256,
+    "uniquePeaks": 220,
+    "minPeak": 0.4999,
+    "maxPeak": 1,
+    "maxHeight": 13.4375,
+    "volume": "1.000"
+  },
+  "reduced": {
+    "volume": "0.250",
+    "maxHeight": 3.35938
+  },
+  "errors": [],
+  "failed": [],
+  "unexpectedFailed": []
+}

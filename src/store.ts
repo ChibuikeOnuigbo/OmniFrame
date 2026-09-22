@@ -417,7 +417,7 @@ export const useEditor = create<EditorState>((set, get) => {
   }
 })
 
-async function decodeWaveform(file: File, bins = 96): Promise<number[] | undefined> {
+async function decodeWaveform(file: File, bins = 256): Promise<number[] | undefined> {
   try {
     const Context = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
     if (!Context) return undefined

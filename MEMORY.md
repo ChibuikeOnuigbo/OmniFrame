@@ -4847,3 +4847,19 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] `qa/screenshots/media-library-empty-search.png` records the polished no-results state.
 - [SCREENSHOT] Refreshed all-types, audio-filter, filename-search, and 900px responsive evidence after the icon and filter polish.
 - [BUILD] PASS TypeScript, production build, and diff whitespace checks.
+
+# Source-accurate audio waveform and gain visualization — 2026-09-22
+
+- [USER-REQUEST] Audio timeline clips must show the actual sound shape and current volume rather than a decorative generic waveform.
+- [SOURCE-CODE] Increased audio decoding from 96 to 256 source-amplitude bins for materially finer timeline detail.
+- [SOURCE-CODE] Waveform bins are decoded from all channels using absolute source peaks, preserving loud and quiet regions.
+- [SOURCE-CODE] Trimmed/split clips now render only the source interval selected by clip in-point and duration instead of repeating the complete asset waveform.
+- [SOURCE-CODE] Visual waveform amplitude now scales with the clip's real 0..1 gain; zero volume collapses to a center line.
+- [SOURCE-CODE] Added a restrained center line so silence and low-volume material remain spatially legible.
+- [BROWSER-QA] PASS Added `qa/audio-waveform-e2e.mjs` with nine focused assertions using a real decoded OGG fixture.
+- [MEASURED] PASS Decoded 256 bins with 220 distinct peak values and a measured source range of 0.4999..1.0000.
+- [MEASURED] PASS Changing gain from 100% to 25% reduced maximum rendered amplitude from 13.4375px to 3.35938px.
+- [MEASURED] PASS Zero gain reduced every bar to no more than the one-CSS-pixel center state.
+- [BROWSER-QA] PASS Zero runtime errors and zero unexpected failed requests.
+- [SCREENSHOT] `qa/screenshots/audio-waveform-volume-25.png` records the selected audio clip and synchronized 25% Volume inspector value.
+- [BUILD] PASS TypeScript, Vite production build, and whitespace checks.

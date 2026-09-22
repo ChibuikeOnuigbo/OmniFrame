@@ -138,6 +138,16 @@ function ClipView({
   const left = clip.start * px
   const width = Math.max(6, clip.duration * px)
   const isAudio = clip.kind === 'audio'
+  const visibleWaveform = (() => {
+    if (!isAudio || !asset?.waveform?.length) return []
+    const sourceDuration = Math.max(asset.duration, 0.001)
+    const from = Math.max(0, Math.floor((clip.inPoint / sourceDuration) * asset.waveform.length))
+    const to = Math.min(
+      asset.waveform.length,
+      Math.max(from + 1, Math.ceil(((clip.inPoint + clip.duration) / sourceDuration) * asset.waveform.length)),
+    )
+    return asset.waveform.slice(from, to)
+  })()
 
   return (
     <div
@@ -171,10 +181,23 @@ function ClipView({
           }}
         />
       )}
-      {isAudio && asset?.waveform && (
-        <div data-testid="clip-waveform" className="pointer-events-none absolute inset-x-1 bottom-1 top-5 flex items-center gap-px opacity-70" aria-hidden="true">
-          {asset.waveform.map((peak, index) => (
-            <i key={index} className="min-w-px flex-1 rounded-full bg-violet-300" style={{ height: `${Math.max(8, peak * 92)}%` }} />
+      {isAudio && visibleWaveform.length > 0 && (
+        <div
+          data-testid="clip-waveform"
+          data-waveform-bins={visibleWaveform.length}
+          data-source-offset={clip.inPoint.toFixed(4)}
+          data-applied-volume={clip.volume.toFixed(3)}
+          className="pointer-events-none absolute inset-x-1 bottom-1 top-5 flex items-center gap-px opacity-80"
+          aria-hidden="true"
+        >
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-violet-200/20" />
+          {visibleWaveform.map((peak, index) => (
+            <i
+              key={index}
+              data-peak={peak.toFixed(4)}
+              className="min-w-px flex-1 rounded-full bg-violet-300"
+              style={{ height: `${clip.volume === 0 ? 1 : Math.max(4, peak * clip.volume * 96)}%` }}
+            />
           ))}
         </div>
       )}
