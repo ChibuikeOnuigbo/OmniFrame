@@ -83,7 +83,7 @@ body {
 .of-hero-copy { animation: of-copy-in 0.65s 0.08s cubic-bezier(.2,.8,.2,1) both; }
 .of-hero-visual { animation: of-visual-in 0.75s 0.16s cubic-bezier(.2,.8,.2,1) both; transform-style: preserve-3d; }
 .of-landing-leave {
-  animation: of-landing-mask-out 0.98s cubic-bezier(.4,0,.2,1) both;
+  animation: of-landing-mask-out 0.98s cubic-bezier(.32,0,.67,0) both;
 }
 
 @keyframes of-transition-wave-move {
@@ -92,7 +92,7 @@ body {
   100% { left: 103vw; transform: scaleX(.82); }
 }
 .of-transition-wave {
-  animation: of-transition-wave-move 0.98s cubic-bezier(.4,0,.2,1) both;
+  animation: of-transition-wave-move 0.98s cubic-bezier(.32,0,.67,0) both;
   clip-path: polygon(12% 0, 100% 0, 94% 10%, 100% 20%, 93% 30%, 100% 40%, 94% 50%, 100% 60%, 93% 70%, 100% 80%, 94% 90%, 100% 100%, 10% 100%, 3% 90%, 9% 80%, 2% 70%, 9% 60%, 3% 50%, 10% 40%, 2% 30%, 9% 20%, 3% 10%);
   will-change: left, transform;
 }

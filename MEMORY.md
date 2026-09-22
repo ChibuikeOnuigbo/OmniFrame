@@ -4863,3 +4863,14 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [BROWSER-QA] PASS Zero runtime errors and zero unexpected failed requests.
 - [SCREENSHOT] `qa/screenshots/audio-waveform-volume-25.png` records the selected audio clip and synchronized 25% Volume inspector value.
 - [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
+
+# Landing reveal cubic-in motion correction — 2026-09-22
+
+- [USER-CORRECTION] Previous Landing-to-Studio transition curve was rejected as visually unpleasant; requested cubic-in motion.
+- [SOURCE-CODE] Replaced the prior standard ease curve with cubic-in `cubic-bezier(.32,0,.67,0)`.
+- [SOURCE-CODE] Applied the identical easing to both the Landing polygon mask and the synchronized paper-cut boundary to prevent drift.
+- [BROWSER-QA] PASS Computed transition timing function is exactly `cubic-bezier(0.32, 0, 0.67, 0)`.
+- [BROWSER-QA] PASS Landing suite increased to 25 assertions, with zero runtime errors and zero failed requests.
+- [BROWSER-QA] PASS Mask and paper edge remain synchronized at 0.98s; measured edge width 63.67px during the cubic-in transition.
+- [SCREENSHOT] Refreshed `qa/screenshots/landing-transition.png` with the corrected motion state.
+- [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
