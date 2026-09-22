@@ -24,12 +24,12 @@ import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track } from '../types'
 import { chooseTickInterval, formatTimecode, formatClock, uid, clamp } from '../lib/time'
 import { IconButton, Segmented } from './ui'
+import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 
 const RULER_H = 28
 const HEADER_W = 168
 const FPS = 30
 const MAX_PX = 8000 // high enough that one frame spans many pixels (true frame-level zoom)
-let clipClipboard: Clip | null = null
 
 // Snap a time value to nearby clip edges and the playhead.
 function snapTime(value: number): number {
@@ -69,7 +69,6 @@ function ClipView({
   selected,
   lanesRef,
   tracks,
-  onContextMenu,
 }: {
   clip: Clip
   asset?: MediaAsset
@@ -78,7 +77,6 @@ function ClipView({
   selected: boolean
   lanesRef: React.RefObject<HTMLDivElement>
   tracks: Track[]
-  onContextMenu: (event: React.MouseEvent, clip: Clip) => void
 }) {
   const moveClip = useEditor((s) => s.moveClip)
   const trimClip = useEditor((s) => s.trimClip)
@@ -161,7 +159,6 @@ function ClipView({
       data-duration={clip.duration.toFixed(4)}
       data-in-point={clip.inPoint.toFixed(4)}
       data-volume={clip.volume.toFixed(3)}
-      onContextMenu={(event) => onContextMenu(event, clip)}
       onPointerDown={onDown('move')}
       onPointerMove={onMove}
       onPointerUp={onUp}
@@ -313,11 +310,8 @@ export function Timeline() {
   const setZoom = useEditor((s) => s.setZoom)
   const zoomBy = useEditor((s) => s.zoomBy)
   const selectedClipId = useEditor((s) => s.selectedClipId)
-  const selectClip = useEditor((s) => s.selectClip)
   const removeClip = useEditor((s) => s.removeClip)
   const insertClipCopy = useEditor((s) => s.insertClipCopy)
-  const extractAudio = useEditor((s) => s.extractAudio)
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; clip: Clip } | null>(null)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const lanesRef = useRef<HTMLDivElement>(null)
@@ -339,10 +333,10 @@ export function Timeline() {
       const selected = useEditor.getState().clips.find((clip) => clip.id === useEditor.getState().selectedClipId)
       const key = event.key.toLowerCase()
       if ((key === 'c' || key === 'x') && selected) {
-        event.preventDefault(); clipClipboard = structuredClone(selected)
+        event.preventDefault(); writeClipClipboard(selected)
         if (key === 'x') removeClip(selected.id)
-      } else if (key === 'v' && clipClipboard) {
-        event.preventDefault(); insertClipCopy(clipClipboard, useEditor.getState().playhead)
+      } else if (key === 'v' && readClipClipboard()) {
+        event.preventDefault(); insertClipCopy(readClipClipboard()!, useEditor.getState().playhead)
       } else if (key === 'd' && selected) {
         event.preventDefault(); insertClipCopy(selected, selected.start + selected.duration)
       }
@@ -351,21 +345,6 @@ export function Timeline() {
     return () => window.removeEventListener('keydown', onClipboardKey)
   }, [insertClipCopy, removeClip])
 
-  useEffect(() => {
-    if (!contextMenu) return
-    const close = () => setContextMenu(null)
-    const key = (event: KeyboardEvent) => { if (event.key === 'Escape') close() }
-    window.addEventListener('pointerdown', close)
-    window.addEventListener('keydown', key)
-    return () => { window.removeEventListener('pointerdown', close); window.removeEventListener('keydown', key) }
-  }, [contextMenu])
-
-  const openContextMenu = (event: React.MouseEvent, clip: Clip) => {
-    event.preventDefault()
-    event.stopPropagation()
-    selectClip(clip.id)
-    setContextMenu({ x: Math.min(event.clientX, window.innerWidth - 220), y: Math.min(event.clientY, window.innerHeight - 260), clip })
-  }
 
   const fitZoom = () => {
     const el = scrollRef.current
@@ -648,7 +627,6 @@ export function Timeline() {
                         selected={c.id === selectedClipId}
                         lanesRef={lanesRef}
                         tracks={tracks}
-                        onContextMenu={openContextMenu}
                       />
                     </div>
                   )
@@ -661,50 +639,7 @@ export function Timeline() {
           </div>
         </div>
       </div>
-      {contextMenu && (
-        <div
-          data-testid="clip-context-menu"
-          role="menu"
-          className="fixed z-50 w-52 rounded-lg border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-2xl backdrop-blur-xl"
-          style={{ left: contextMenu.x, top: contextMenu.y }}
-          onPointerDown={(event) => event.stopPropagation()}
-        >
-          {[
-            ['Cut', 'Ctrl+X', () => { clipClipboard = structuredClone(contextMenu.clip); removeClip(contextMenu.clip.id) }],
-            ['Copy', 'Ctrl+C', () => { clipClipboard = structuredClone(contextMenu.clip) }],
-            ['Paste', 'Ctrl+V', () => { if (clipClipboard) insertClipCopy(clipClipboard, useEditor.getState().playhead) }, !clipClipboard],
-            ['Duplicate', 'Ctrl+D', () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration)],
-            ['Delete', 'Delete', () => removeClip(contextMenu.clip.id)],
-          ].map(([label, shortcut, action, disabled]) => (
-            <button key={String(label)} role="menuitem" disabled={Boolean(disabled)} onClick={() => { (action as () => void)(); setContextMenu(null) }} className="flex h-8 w-full items-center justify-between rounded-md px-2.5 text-left hover:bg-ink-700 disabled:opacity-35 disabled:hover:bg-transparent">
-              <span>{String(label)}</span><span className="text-[10px] text-ink-500">{String(shortcut)}</span>
-            </button>
-          ))}
-          {contextMenu.clip.kind === 'video' && (
-            <>
-              <div className="my-1 border-t border-ink-700" />
-              <button role="menuitem" onClick={() => { void extractAudio(contextMenu.clip.id); setContextMenu(null) }} className="flex h-8 w-full items-center rounded-md px-2.5 text-left hover:bg-ink-700">Separate audio</button>
-            </>
-          )}
-          {Boolean((window as typeof window & { __TAURI_INTERNALS__?: unknown }).__TAURI_INTERNALS__) && (
-            <>
-              <div className="my-1 border-t border-ink-700" />
-              <button role="menuitem" onClick={() => {
-                localStorage.setItem('omniframe.clipPreset', JSON.stringify({ transform: contextMenu.clip.transform, volume: contextMenu.clip.volume }))
-                setContextMenu(null)
-              }} className="flex h-8 w-full items-center rounded-md px-2.5 text-left hover:bg-ink-700">Save clip preset</button>
-              {localStorage.getItem('omniframe.clipPreset') && (
-                <button role="menuitem" onClick={() => {
-                  const preset = JSON.parse(localStorage.getItem('omniframe.clipPreset') || '{}') as { transform?: Clip['transform']; volume?: number }
-                  if (preset.transform) useEditor.getState().setClipTransform(contextMenu.clip.id, preset.transform)
-                  if (typeof preset.volume === 'number') useEditor.getState().setClipProp(contextMenu.clip.id, { volume: preset.volume })
-                  setContextMenu(null)
-                }} className="flex h-8 w-full items-center rounded-md px-2.5 text-left hover:bg-ink-700">Apply saved preset</button>
-              )}
-            </>
-          )}
-        </div>
-      )}
+
     </div>
   )
 }

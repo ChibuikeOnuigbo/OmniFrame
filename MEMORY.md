@@ -4906,3 +4906,15 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [SCREENSHOT] `qa/screenshots/studio-context-menu-mobile-390x844.png` shows safe mobile placement.
 - [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
 - [SCOPE] The pasted Chapel Lane dialog specification refers to a component not present in OmniFrame; no unrelated fake modal was introduced.
+
+# Centralized target-aware context resolver — 2026-09-22
+
+- [ARCHITECTURE] Replaced reachable per-Timeline right-click rendering with one Studio capture-phase resolver and one menu renderer.
+- [TARGETING] Resolver uses the physical DOM surface under the pointer, not current selection; current implemented types are EMPTY_EDITOR, CANVAS, MEDIA_PANEL, VIDEO_CLIP, AUDIO_CLIP, and IMAGE_CLIP.
+- [OWNERSHIP] Inputs, textareas, contenteditable surfaces, selects, options, menus, and listboxes retain native/popup ownership and are not covered by an OmniFrame menu.
+- [POSITIONING] Menu opens right/down when space permits and flips left/up near viewport edges, preserving an 8px safe area.
+- [DESIGN] Added compact 224px surface, restrained elevation, target label, Lucide icons, 36px actions, clear primary action, keyboard focus ring, hidden irrelevant actions, and separated destructive styling.
+- [STATE] Context opening does not change selection or automatically open Inspector/panels.
+- [COMMANDS] Shared clip clipboard now serves both context commands and keyboard shortcuts.
+- [QA] Playwright context suite passes 28 assertions with zero runtime errors, including input/select ownership and continued usability.
+- [LIMITATION] Track header/lane, ruler, gap, and playhead-specific command sets remain explicit future work; unsupported target types are not faked.

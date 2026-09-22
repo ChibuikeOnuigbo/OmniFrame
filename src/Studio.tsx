@@ -1,5 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2 } from 'lucide-react'
 import { useEditor } from './store'
+import type { Clip } from './types'
+import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
+
+type ContextTarget =
+  | { type: 'EMPTY_EDITOR' }
+  | { type: 'CANVAS' }
+  | { type: 'MEDIA_PANEL' }
+  | { type: 'VIDEO_CLIP' | 'AUDIO_CLIP' | 'IMAGE_CLIP'; clip: Clip }
+
+type ContextState = ContextTarget & { x: number; y: number; anchorX: number; anchorY: number }
 import { TopBar } from './components/TopBar'
 import { LeftDock } from './components/LeftDock'
 import { Preview } from './components/Preview'
@@ -20,7 +31,10 @@ export default function Studio() {
   const setSpeed = useEditor((s) => s.setSpeed)
   const canUndo = useEditor((s) => s.past.length > 0)
   const canRedo = useEditor((s) => s.future.length > 0)
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null)
+  const insertClipCopy = useEditor((s) => s.insertClipCopy)
+  const extractAudio = useEditor((s) => s.extractAudio)
+  const [contextMenu, setContextMenu] = useState<ContextState | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!contextMenu) return
@@ -128,15 +142,50 @@ export default function Studio() {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
+  const clipboardClip = readClipClipboard()
+  const contextCommands = contextMenu ? (
+    'clip' in contextMenu
+      ? [
+          { id: 'cut', label: 'Cut', shortcut: 'Ctrl+X', icon: Scissors, run: () => { writeClipClipboard(contextMenu.clip); removeClip(contextMenu.clip.id) } },
+          { id: 'copy', label: 'Copy', shortcut: 'Ctrl+C', icon: Copy, run: () => { writeClipClipboard(contextMenu.clip) } },
+          ...(clipboardClip ? [{ id: 'paste', label: 'Paste at playhead', shortcut: 'Ctrl+V', icon: Clipboard, run: () => insertClipCopy(clipboardClip!, useEditor.getState().playhead) }] : []),
+          { id: 'duplicate', label: 'Duplicate', shortcut: 'Ctrl+D', icon: Files, run: () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration) },
+          ...(contextMenu.type === 'VIDEO_CLIP' ? [{ id: 'separate-audio', label: 'Separate audio', icon: AudioLines, run: () => void extractAudio(contextMenu.clip.id) }] : []),
+          { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
+        ]
+      : [
+          { id: 'add-media', label: contextMenu.type === 'MEDIA_PANEL' ? 'Import media' : 'Add media', shortcut: 'Import', icon: Upload, primary: true, run: () => document.getElementById('topbar-import-input')?.click() },
+          ...(canUndo ? [{ id: 'undo', label: 'Undo', shortcut: 'Ctrl+Z', icon: Undo2, run: undo }] : []),
+          ...(canRedo ? [{ id: 'redo', label: 'Redo', shortcut: 'Ctrl+Shift+Z', icon: Redo2, run: redo }] : []),
+        ]
+  ) : []
+
   return (
     <div
       className="h-full w-full flex flex-col bg-ink-950 text-ink-100 overflow-hidden no-select"
-      onContextMenu={(event) => {
+      onContextMenuCapture={(event) => {
+        const element = event.target as HTMLElement
+        // Preserve native editing commands for genuine editable fields.
+        if (element.closest('input, textarea, [contenteditable="true"]')) return
         event.preventDefault()
-        setContextMenu({
-          x: Math.max(8, Math.min(event.clientX, window.innerWidth - 216)),
-          y: Math.max(8, Math.min(event.clientY, window.innerHeight - 152)),
-        })
+        event.stopPropagation()
+        // An open popup owns its interaction; never cover it with a parent menu.
+        if (element.closest('[role="menu"], [role="listbox"], select, option')) return
+        const clipElement = element.closest<HTMLElement>('[data-testid="timeline-clip"]')
+        const clip = clipElement ? useEditor.getState().clips.find((item) => item.id === clipElement.dataset.clipId) : undefined
+        const target: ContextTarget = clip
+          ? { type: clip.kind === 'audio' ? 'AUDIO_CLIP' : clip.kind === 'image' ? 'IMAGE_CLIP' : 'VIDEO_CLIP', clip }
+          : element.closest('[data-testid="preview-stage"]')
+            ? { type: 'CANVAS' }
+            : element.closest('[data-testid="media-library"]')
+              ? { type: 'MEDIA_PANEL' }
+              : { type: 'EMPTY_EDITOR' }
+        const width = 224
+        const height = 'clip' in target ? (target.type === 'VIDEO_CLIP' ? 260 : 220) : 144
+        const margin = 8, offset = 4
+        const x = event.clientX + width + offset <= window.innerWidth - margin ? event.clientX + offset : event.clientX - width - offset
+        const y = event.clientY + height + offset <= window.innerHeight - margin ? event.clientY + offset : event.clientY - height - offset
+        setContextMenu({ ...target, x: Math.max(margin, x), y: Math.max(margin, y), anchorX: event.clientX, anchorY: event.clientY })
       }}
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => {
@@ -155,27 +204,39 @@ export default function Studio() {
       </div>
       {contextMenu && (
         <div
+          ref={menuRef}
           data-testid="studio-context-menu"
+          data-context-target={contextMenu.type}
+          data-anchor-x={contextMenu.anchorX}
+          data-anchor-y={contextMenu.anchorY}
           role="menu"
-          aria-label="Studio actions"
-          className="fixed z-[70] w-52 rounded-lg border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-2xl backdrop-blur-xl"
+          aria-label={`${contextMenu.type.toLowerCase().replace(/_/g, ' ')} actions`}
+          className="fixed z-[70] w-56 max-h-[min(420px,calc(100vh-16px))] overflow-y-auto rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-2 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.42)] backdrop-blur-xl"
           style={{ left: contextMenu.x, top: contextMenu.y }}
           onContextMenu={(event) => event.preventDefault()}
           onPointerDown={(event) => event.stopPropagation()}
         >
-          <button
-            role="menuitem"
-            onClick={() => {
-              document.getElementById('topbar-import-input')?.click()
-              setContextMenu(null)
-            }}
-            className="flex h-9 w-full items-center justify-between rounded-md px-3 text-left font-medium hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-          >
-            <span>Add media</span><span className="text-[10px] font-normal text-ink-500">Import</span>
-          </button>
-          <div className="my-1 border-t border-ink-700" />
-          <button role="menuitem" disabled={!canUndo} onClick={() => { undo(); setContextMenu(null) }} className="flex h-8 w-full items-center justify-between rounded-md px-3 text-left hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-35 disabled:hover:bg-transparent"><span>Undo</span><span className="text-[10px] text-ink-500">Ctrl+Z</span></button>
-          <button role="menuitem" disabled={!canRedo} onClick={() => { redo(); setContextMenu(null) }} className="flex h-8 w-full items-center justify-between rounded-md px-3 text-left hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-35 disabled:hover:bg-transparent"><span>Redo</span><span className="text-[10px] text-ink-500">Ctrl+Shift+Z</span></button>
+          <div className="px-2.5 pb-1.5 pt-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
+            {contextMenu.type.replace(/_/g, ' ')}
+          </div>
+          {contextCommands.map((command, index) => {
+            const Icon = command.icon
+            const destructive = 'destructive' in command && command.destructive
+            const primary = 'primary' in command && command.primary
+            return (
+              <button
+                key={command.id}
+                role="menuitem"
+                autoFocus={index === 0}
+                onClick={() => { command.run(); setContextMenu(null) }}
+                className={`flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-left font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand ${destructive ? 'text-red-400 hover:bg-red-500/10' : primary ? 'bg-brand/10 text-violet-200 hover:bg-brand/20' : 'hover:bg-ink-700'}`}
+              >
+                <Icon size={15} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 flex-1 truncate">{command.label}</span>
+                {'shortcut' in command && command.shortcut && <span className="shrink-0 text-[10px] font-normal text-ink-500">{command.shortcut}</span>}
+              </button>
+            )
+          })}
         </div>
       )}
     </div>

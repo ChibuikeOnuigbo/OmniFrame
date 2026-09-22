@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-22",
+  "architecture": "single Studio capture-phase resolver",
+  "implementedTargets": ["EMPTY_EDITOR", "CANVAS", "MEDIA_PANEL", "VIDEO_CLIP", "AUDIO_CLIP", "IMAGE_CLIP"],
+  "nativeOwnership": ["INPUT", "TEXTAREA", "CONTENTEDITABLE", "SELECT", "OPTION", "ROLE_MENU", "ROLE_LISTBOX"],
+  "commandsTested": 10,
+  "assertionsPassed": 28,
+  "runtimeErrors": 0,
+  "knownLimitations": [
+    "Track lane/header, ruler, gap, and playhead-specific registries are not yet implemented.",
+    "Text, shape, adjustment, and canvas-object targets do not exist in the current editor and are not advertised.",
+    "Browser developer tools remain available through browser menus and keyboard shortcuts; page right-click is overridden only inside Studio non-editable surfaces."
+  ]
+}
