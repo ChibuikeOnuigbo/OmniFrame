@@ -1,0 +1,165 @@
+### openreel-video :: apps/web/src/components/editor/timeline/TimeRuler.tsx
+16:  pixelsPerSecond: number;
+26:  pixelsPerSecond,
+46:  const safePixelsPerSecond = pixelsPerSecond > 0 ? pixelsPerSecond : 100;
+47:  const visibleStart = scrollX / safePixelsPerSecond;
+48:  const visibleEnd = (scrollX + viewportWidth) / safePixelsPerSecond;
+60:  const getTickConfig = () => {
+61:    if (safePixelsPerSecond > 500) {
+64:    if (safePixelsPerSecond > 200) {
+67:    if (safePixelsPerSecond > 100) {
+70:    if (safePixelsPerSecond > 50) {
+73:    if (safePixelsPerSecond > 20) {
+79:  const tickConfig = getTickConfig();
+80:  const rawStartTick = Math.floor(visibleStart / tickConfig.minor) * tickConfig.minor;
+81:  const startTick = Math.max(0, rawStartTick);
+83:  interface TickMark {
+89:  const ticks: TickMark[] = [];
+90:  for (let t = startTick; t <= visibleEnd + tickConfig.minor; t += tickConfig.minor) {
+94:    const isMajor = roundedTime === 0 || Math.abs(roundedTime % tickConfig.major) < 0.0001;
+95:    const showLabel = roundedTime === 0 || Math.abs(roundedTime % tickConfig.labelEvery) < 0.0001;
+96:    ticks.push({ time: roundedTime, isMajor, showLabel });
+108:      return Math.max(0, x / safePixelsPerSecond);
+110:    [safePixelsPerSecond],
+145:      const thresholdSec = SNAP_THRESHOLD_PX / safePixelsPerSecond;
+167:        const pixelDelta = Math.abs(rawTime - prevTime) * safePixelsPerSecond;
+168:        velocity = pixelDelta / dt;
+
+### clypra :: src/components/editor/timeline/TimelineRuler.tsx
+11:  timeToPixel,
+12:  pixelToTime,
+20:  pixelsPerSecond: number;
+36:// ── Interval table ──────────────────────────────────────────────────────
+37:const INTERVAL_TABLE: [number, number][] = [
+66:function formatTime(seconds: number): string {
+67:  const m = Math.floor(seconds / 60);
+68:  const s = Math.floor(seconds % 60);
+76:  pixelsPerSecond: number;
+85:  pixelsPerSecond,
+92:  const x = Math.round(marker.time * pixelsPerSecond) + startOffset;
+110:        const dt = pixelToTime(dx, pixelsPerSecond);
+115:          `${Math.round(newTime * pixelsPerSecond)}px`,
+123:        const dt = pixelToTime(dx, pixelsPerSecond);
+133:    [marker.id, marker.time, pixelsPerSecond, onDragEnd],
+351:  pixelsPerSecond,
+356:  // PERF (8-G / Rank 3): TimelineRuler only needs frameRate, which changes rarely
+359:  // every playback tick even though its content doesn't change with time.
+360:  const frameRate = useProjectStore((s) => s.project?.frameRate ?? 30);
+378:  // Ruler labels stop at seconds; frame/millisecond precision belongs to
+381:    (seconds: number): string => {
+382:      return formatTimelineTimecode(seconds, frameRate || 30);
+384:    [frameRate],
+387:  // ── Memoized tick generation ─────────────────────────────────────────────
+388:  const ticks = useMemo(() => {
+
+### losslesscut :: src/renderer/src/Timeline.tsx
+1:import type { MutableRefObject, CSSProperties, WheelEventHandler, MouseEventHandler } from 'react';
+22:import { keyMap } from './hooks/useTimelineScroll';
+31:const Waveform = memo(({ waveform, calculateTimelinePercent, fileDurationNonZero, darkMode }: {
+34:  fileDurationNonZero: number,
+39:  const width = 'to' in waveform ? ((Math.min(waveform.to, fileDurationNonZero) - waveform.from) / fileDurationNonZero) * 100 : 100;
+42:    pointerEvents: 'none', position: 'absolute', height: '100%', left: leftPos, width: `${width}%`, filter: darkMode ? undefined : 'invert(1)', imageRendering: 'pixelated',
+55:const Waveforms = memo(({ calculateTimelinePercent, fileDurationNonZero, waveforms, overviewWaveform, zoom, darkMode, height }: {
+57:  fileDurationNonZero: number,
+60:  zoom: number,
+64:  <div style={{ height, width: `${zoom * 100}%`, position: 'relative' }}>
+65:    {zoom === 1 && overviewWaveform != null ? (
+66:      <Waveform waveform={overviewWaveform} calculateTimelinePercent={calculateTimelinePercent} fileDurationNonZero={fileDurationNonZero} darkMode={darkMode} />
+68:      <Waveform key={`${waveform.from}-${waveform.to}`} waveform={waveform} calculateTimelinePercent={calculateTimelinePercent} fileDurationNonZero={fileDurationNonZero} darkMode={darkMode} />
+89:  fileDurationNonZero,
+93:  zoom,
+107:  zoomWindowStartTime,
+108:  zoomWindowEndTime,
+109:  onZoomWindowStartTimeChange,
+114:  onWheel,
+121:  fileDurationNonZero: number,
+126:  zoom: number,
+140:  zoomWindowStartTime: number,
+141:  zoomWindowEndTime: number | undefined,
+142:  onZoomWindowStartTimeChange: (a: number) => void,
+149:  onWheel: WheelEventHandler,
+
+### pitivi :: pitivi/timeline/ruler.py
+26:from pitivi.utils.timeline import Zoomable
+38:# - an interval duration in seconds for which a timestamp will be displayed
+39:# - how the ticks should be displayed for this interval:
+40:#   (tick interval duration in seconds, height ratio) tuples.
+41:SCALES = (
+46:    # 1 second.
+70:MIN_TICK_SPACING_PIXELS = 6
+73:TIMES_LEFT_MARGIN_PIXELS = 3
+75:# The minimum width for a frame to be displayed.
+76:FRAME_MIN_WIDTH_PIXELS = 5
+78:FRAME_HEIGHT_PIXELS = 5
+84:class ScaleRuler(Gtk.DrawingArea, Loggable):
+87:    Displays a series of consecutive intervals. For each interval its beginning
+88:    time is shown. If zoomed in enough, shows the frames in alternate colors.
+91:        zoom (pitivi.utils.timeline.Zoomable): Zoom controller.
+97:    def __init__(self, zoom, settings, style_context):
+100:        self.log("Creating new ScaleRuler")
+102:        self.zoom = zoom
+114:        # all values are in pixels
+118:        self.position = 0  # In nanoseconds
+120:        self._scales = [(interval, list(reversed(ticks))) for interval, ticks in SCALES]
+154:        self._color_frame = gtk_style_context_get_color(context, Gtk.StateFlags.LINK)
+203:            position = self.pixel_to_ns(event.x + self.pixbuf_offset)
+212:            position = self.pixel_to_ns(event.x + self.pixbuf_offset)
+220:        position = self.pixel_to_ns(event.x + self.pixbuf_offset)
+
+### shotcut :: src/qml/views/timeline/Ruler.qml
+24:    property real timeScale: 1
+25:    readonly property real intervalFrames: profile.fps * ((timeScale > 5) ? 1 : (5 * Math.max(1, Math.floor(1.5 / timeScale))))
+26:    readonly property real tickSpacing: intervalFrames * timeScale
+59:                text: application.clockFromFrames(parent.tickIndex * rulerTop.intervalFrames + 2).substr(0, 8)
+69:        property double currentPos: timeline.position * timeScale
+72:            var text = application.timeFromFrames(mouse.x / timeScale);
+81:        timeScale: rulerTop.timeScale
+87:                msg += "<br>" + application.timeFromFrames(start);
+89:                msg += "<br>" + application.timeFromFrames(start) + " - " + application.timeFromFrames(end);
+90:                msg += "<br>" + application.timeFromFrames(end - start);
+
+### olive :: app/timeline/timelinecoordinate.cpp
+21:#include "timelinecoordinate.h"
+25:TimelineCoordinate::TimelineCoordinate() :
+30:TimelineCoordinate::TimelineCoordinate(const rational &frame, const Track::Reference &track) :
+31:  frame_(frame),
+36:TimelineCoordinate::TimelineCoordinate(const rational &frame, const Track::Type &track_type, const int &track_index) :
+37:  frame_(frame),
+42:const rational &TimelineCoordinate::GetFrame() const
+44:  return frame_;
+47:const Track::Reference &TimelineCoordinate::GetTrack() const
+52:void TimelineCoordinate::SetFrame(const rational &frame)
+54:  frame_ = frame;
+57:void TimelineCoordinate::SetTrack(const Track::Reference &track)
+
+### opencut-classic :: apps/web/src/components/timeline/timeline.tsx
+
+### remotion :: packages/canvas/src/calculate-timeline.ts
+9:	getCascadedStart,
+10:	getCascadedStartWithTrim,
+11:	getTimelineVisibleDuration,
+12:	getTimelineVisibleStart,
+14:import {getTimelineNestedLevel} from './get-timeline-nestedness';
+16:	TimelineTrackData,
+17:	TimelineTrackWithOriginalTimings,
+18:} from './get-timeline-sequence-sort-key';
+19:import {getTimelineSequenceSortKey} from './get-timeline-sequence-sort-key';
+21:import {timelineSequenceNodePathToKey} from './timeline-sequence-node-path-to-key';
+43:export const calculateTimeline = ({
+51:}): TimelineTrackData[] => {
+54:		(sequence) => sequence.timelineOrder,
+56:	const tracks: TimelineTrackWithOriginalTimings[] = [];
+79:	const timelineSequences = sortedSequences.filter((sequence) => {
+92:	for (let i = 0; i < timelineSequences.length; i++) {
+93:		const sequence = timelineSequences[i];
+94:		const cascadedStart = getCascadedStart(sequence, sortedSequences);
+95:		const cascadedStartWithTrim = getCascadedStartWithTrim(
+104:		const visibleStart = getTimelineVisibleStart(sequence, sortedSequences);
+105:		const visibleDuration = getTimelineVisibleDuration(
+112:		const hasKeyframeRows =
+121:				from: visibleStart,
+122:				duration: visibleDuration,
+128:			depth: getTimelineNestedLevel(sequence, sortedSequences, 0),
+
+### react-browser-video-editor :: src/components/Timeline.tsx
+

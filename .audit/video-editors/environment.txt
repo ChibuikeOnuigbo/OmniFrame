@@ -1,0 +1,14 @@
+Date: 2026-09-22T18:20:21+00:00
+OS: Linux e2b.local 6.1.158+ #1 SMP PREEMPT_DYNAMIC Mon May 11 18:48:24 UTC 2026 x86_64 GNU/Linux
+git: git version 2.39.5
+node: v22.22.3
+npm: 10.9.8
+pnpm: ./qa/reference-audit.sh: line 6: pnpm: command not found
+unavailable
+bun: ./qa/reference-audit.sh: line 6: bun: command not found
+unavailable
+rustc: ./qa/reference-audit.sh: line 6: rustc: command not found
+unavailable
+cargo: ./qa/reference-audit.sh: line 6: cargo: command not found
+unavailable
+python: Python 3.11.2
