@@ -27,6 +27,7 @@ export interface Track {
   muted: boolean
   hidden: boolean
   locked: boolean
+  gapless: boolean // ripple later clips on this track when a clip is removed
   height: number // px in the timeline
 }
 

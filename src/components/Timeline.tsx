@@ -21,6 +21,7 @@ import {
   MousePointer2,
   ChevronDown,
   Gauge,
+  AlignJustify,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track } from '../types'
@@ -272,6 +273,7 @@ function TrackHeader({ track }: { track: Track }) {
   const toggleMute = useEditor((s) => s.toggleTrackMute)
   const toggleHidden = useEditor((s) => s.toggleTrackHidden)
   const toggleLock = useEditor((s) => s.toggleTrackLock)
+  const toggleGapless = useEditor((s) => s.toggleTrackGapless)
   return (
     <div
       className="shrink-0 flex items-center gap-1 px-2 border-b border-ink-800 bg-ink-850"
@@ -290,6 +292,9 @@ function TrackHeader({ track }: { track: Track }) {
           {track.hidden ? <EyeOff size={13} /> : <Eye size={13} />}
         </IconButton>
       )}
+      <IconButton title={track.gapless ? 'Disable gapless ripple' : 'Enable gapless ripple'} active={track.gapless} onClick={() => toggleGapless(track.id)}>
+        <AlignJustify size={13} />
+      </IconButton>
       <IconButton title={track.locked ? 'Unlock' : 'Lock'} active={track.locked} onClick={() => toggleLock(track.id)}>
         {track.locked ? <Lock size={13} /> : <Unlock size={13} />}
       </IconButton>

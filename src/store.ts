@@ -73,6 +73,7 @@ export interface EditorState {
   toggleTrackMute: (id: string) => void
   toggleTrackHidden: (id: string) => void
   toggleTrackLock: (id: string) => void
+  toggleTrackGapless: (id: string) => void
 
   // ---- transport ----
   setPlayhead: (t: number) => void
@@ -113,6 +114,7 @@ function makeTrack(type: TrackType, name: string): Track {
     muted: false,
     hidden: false,
     locked: false,
+    gapless: false,
     height: type === 'video' ? 64 : 48,
   }
 }
@@ -284,7 +286,13 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!current || get().tracks.find((t) => t.id === current.trackId)?.locked) return
       pushSnapshot()
       set((s) => {
-        const clips = s.clips.filter((c) => c.id !== id)
+        const track = s.tracks.find((item) => item.id === current.trackId)
+        const removedEnd = current.start + current.duration
+        const clips = s.clips
+          .filter((c) => c.id !== id)
+          .map((clip) => track?.gapless && clip.trackId === current.trackId && clip.start >= removedEnd
+            ? { ...clip, start: Math.max(current.start, clip.start - current.duration) }
+            : clip)
         return {
           clips,
           selectedClipId: s.selectedClipId === id ? null : s.selectedClipId,
@@ -385,6 +393,10 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({ tracks: s.tracks.map((t) => (t.id === id ? { ...t, hidden: !t.hidden } : t)) })),
     toggleTrackLock: (id) =>
       set((s) => ({ tracks: s.tracks.map((t) => (t.id === id ? { ...t, locked: !t.locked } : t)) })),
+    toggleTrackGapless: (id) => {
+      pushSnapshot()
+      set((s) => ({ tracks: s.tracks.map((t) => (t.id === id ? { ...t, gapless: !t.gapless } : t)) }))
+    },
 
     setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
     play: () => set((s) => ({
