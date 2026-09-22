@@ -16,7 +16,6 @@ import { LeftDock } from './components/LeftDock'
 import { Preview } from './components/Preview'
 import { RightPanel } from './components/RightPanel'
 import { Timeline } from './components/Timeline'
-import { fps } from './lib/time'
 
 export default function Studio() {
   const importFiles = useEditor((s) => s.importFiles)
@@ -25,6 +24,7 @@ export default function Studio() {
   const setTool = useEditor((s) => s.setTool)
   const removeClip = useEditor((s) => s.removeClip)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const projectFps = useEditor((s) => s.projectFps)
   const zoomBy = useEditor((s) => s.zoomBy)
   const undo = useEditor((s) => s.undo)
   const redo = useEditor((s) => s.redo)
@@ -53,7 +53,7 @@ export default function Studio() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      if (t && (t.isContentEditable || t.closest('input, textarea, select, option, button, [role="dialog"], [role="menu"], [role="listbox"]'))) return
       const meta = e.ctrlKey || e.metaKey
       const st = () => useEditor.getState()
       if (meta && e.key.toLowerCase() === 'z') {
@@ -62,7 +62,7 @@ export default function Studio() {
         return
       }
       if (meta) return
-      const f = 1 / fps()
+      const f = 1 / projectFps
       switch (e.key) {
         case ' ':
           e.preventDefault()
@@ -123,7 +123,7 @@ export default function Studio() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [togglePlay, setPlayhead, setTool, removeClip, toggleClipHidden, selectedClipId, zoomBy, undo, redo, setSpeed])
+  }, [togglePlay, setPlayhead, setTool, removeClip, toggleClipHidden, selectedClipId, projectFps, zoomBy, undo, redo, setSpeed])
 
   // Release imported blob URLs when the document is actually leaving. Assets
   // remain live for the project lifetime so preview and export can reuse them.

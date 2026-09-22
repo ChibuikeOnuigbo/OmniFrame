@@ -22,13 +22,12 @@ import {
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track } from '../types'
-import { chooseTickInterval, formatTimecode, formatRulerLabel, fps, uid, clamp } from '../lib/time'
+import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { IconButton, Segmented } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 
 const RULER_H = 28
 const HEADER_W = 168
-const FPS = fps()
 const MAX_PX = 8000 // continuous zoom remains usable through frame-level detail
 
 // Snap a time value to nearby clip edges and the playhead.
@@ -300,6 +299,7 @@ export function Timeline() {
   const tracks = useEditor((s) => s.tracks)
   const clips = useEditor((s) => s.clips)
   const px = useEditor((s) => s.pxPerSec)
+  const FPS = useEditor((s) => s.projectFps)
   const duration = useEditor((s) => s.duration)
   const tool = useEditor((s) => s.tool)
   const setPlayhead = useEditor((s) => s.setPlayhead)
@@ -432,7 +432,7 @@ export function Timeline() {
   }
 
   return (
-    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-render-count={renderCount.current} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
+    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-project-fps={FPS} data-render-count={renderCount.current} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
       {/* transport + tools + zoom (groups separated by dividers) */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
         {/* transport */}

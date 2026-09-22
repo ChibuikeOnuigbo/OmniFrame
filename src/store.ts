@@ -38,6 +38,7 @@ export interface EditorState {
   pxPerSec: number
   playing: boolean
   speed: number
+  projectFps: number
   selectedClipId: string | null
   tool: Tool
   leftTab: LeftTab
@@ -74,6 +75,7 @@ export interface EditorState {
   pause: () => void
   togglePlay: () => void
   setSpeed: (s: number) => void
+  setProjectFps: (fps: number) => void
   setZoom: (px: number) => void
   zoomBy: (factor: number) => void
 
@@ -127,6 +129,7 @@ export const useEditor = create<EditorState>((set, get) => {
     pxPerSec: 100,
     playing: false,
     speed: 1,
+    projectFps: 30,
     selectedClipId: null,
     tool: 'select',
     leftTab: 'media',
@@ -383,6 +386,11 @@ export const useEditor = create<EditorState>((set, get) => {
     setSpeed: (s) => {
       const sign = s < 0 ? -1 : 1
       set({ speed: sign * clamp(Math.abs(s), 0.1, 4) })
+    },
+
+    setProjectFps: (value) => {
+      const supported = [23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120]
+      if (supported.includes(value)) set({ projectFps: value })
     },
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),

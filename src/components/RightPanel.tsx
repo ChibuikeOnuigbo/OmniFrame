@@ -99,6 +99,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
 }
 
 function ProjectInspector() {
+  const projectFps = useEditor((s) => s.projectFps)
   return (
     <div>
       <Section title="Project">
@@ -106,7 +107,7 @@ function ProjectInspector() {
           <span className="text-[11px] text-ink-300">1920 × 1080</span>
         </Field>
         <Field label="Frame rate">
-          <span className="text-[11px] text-ink-300">30 fps</span>
+          <span className="text-[11px] text-ink-300">{projectFps} fps</span>
         </Field>
       </Section>
       <Section title="Tips">

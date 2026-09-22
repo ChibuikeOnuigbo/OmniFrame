@@ -91,6 +91,21 @@
       "detail": ""
     },
     {
+      "name": "H hides selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "undo restores clip visibility",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "redo restores hidden state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "paste appears after copy",
       "status": "PASS",
       "detail": ""
@@ -156,6 +171,11 @@
       "detail": ""
     },
     {
+      "name": "typing H in input does not hide selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "select control retains popup ownership",
       "status": "PASS",
       "detail": ""
@@ -167,6 +187,16 @@
     },
     {
       "name": "settings popup contains three real categories",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Settings interaction owns H shortcut",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project FPS updates authoritative ruler timebase",
       "status": "PASS",
       "detail": ""
     },

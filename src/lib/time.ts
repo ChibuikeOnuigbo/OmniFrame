@@ -8,9 +8,10 @@ export function fps(): number {
 
 export function formatTimecode(seconds: number, frameRate = fps()): string {
   const s = Math.max(0, seconds)
+  const nominalFps = Math.max(1, Math.round(frameRate))
   const totalFrames = Math.round(s * frameRate)
-  const f = totalFrames % frameRate
-  const totalSeconds = Math.floor(totalFrames / frameRate)
+  const f = totalFrames % nominalFps
+  const totalSeconds = Math.floor(totalFrames / nominalFps)
   const sec = totalSeconds % 60
   const min = Math.floor(totalSeconds / 60) % 60
   const hr = Math.floor(totalSeconds / 3600)
