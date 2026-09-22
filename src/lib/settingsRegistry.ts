@@ -1,4 +1,4 @@
-export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'accessibility'
+export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'accessibility' | 'ai'
 export type SettingsScope = 'project' | 'user' | 'session'
 
 export interface SettingDefinition {
@@ -44,6 +44,22 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     description: 'Minimizes nonessential interface animation.', aliases: ['animation', 'accessibility', 'motion'],
     controlType: 'toggle', defaultValue: false, scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'document.of-reduced-motion', testId: 'setting-reduced-motion', sourceRefs: [],
+  },
+  {
+    id: 'ai.provider', category: 'ai', label: 'AI provider', description: 'Selects the service used for AI requests.',
+    aliases: ['OpenRouter', 'OpenAI', 'Anthropic', 'Gemini', 'Mistral', 'Groq', 'Together', 'DeepSeek', 'xAI', 'custom endpoint'],
+    controlType: 'select', defaultValue: 'openrouter', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'ai.session.provider', testId: 'setting-ai-provider', sourceRefs: [],
+  },
+  {
+    id: 'ai.model', category: 'ai', label: 'Model ID', description: 'The provider model identifier used for requests.', aliases: ['model name'],
+    controlType: 'select', defaultValue: 'openai/gpt-4o-mini', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'ai.session.model', testId: 'setting-ai-model', sourceRefs: [],
+  },
+  {
+    id: 'ai.apiKey', category: 'ai', label: 'API key', description: 'Provider credential retained only until this tab closes.', aliases: ['credential', 'token', 'BYOK'],
+    controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'ai.session.apiKey', testId: 'setting-ai-api-key', sourceRefs: [],
   },
   ...[
     ['shortcut.hideClip', 'Hide / unhide selected clip', 'H'],

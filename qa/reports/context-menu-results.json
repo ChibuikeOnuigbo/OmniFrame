@@ -186,7 +186,7 @@
       "detail": ""
     },
     {
-      "name": "settings popup contains four real categories",
+      "name": "settings popup contains five real categories",
       "status": "PASS",
       "detail": ""
     },
@@ -212,6 +212,21 @@
     },
     {
       "name": "Shortcuts category documents Hide Clip command",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "AI settings warn users to enter keys, not code",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "custom OpenAI-compatible provider exposes an HTTPS endpoint",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "AI connection validates credentials before a network request",
       "status": "PASS",
       "detail": ""
     },
