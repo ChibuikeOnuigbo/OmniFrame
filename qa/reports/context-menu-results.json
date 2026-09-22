@@ -1,0 +1,95 @@
+{
+  "results": [
+    {
+      "name": "Cut command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Copy command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Paste command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Duplicate command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Delete command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Separate audio command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Group is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Transcribe is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Create compound clip is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Save clip preset is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "paste disabled before copy",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "paste enabled after copy",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "duplicate creates an independent clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+D duplicates selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+X cuts selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+V pastes cut clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "separate audio creates an audio track",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

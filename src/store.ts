@@ -58,6 +58,7 @@ export interface EditorState {
   trimClip: (id: string, edge: 'left' | 'right', value: number) => void
   splitAt: (time: number) => void
   removeClip: (id: string) => void
+  insertClipCopy: (clip: Clip, start: number) => void
   extractAudio: (id: string) => Promise<void>
   selectClip: (id: string | null) => void
   setClipProp: (id: string, partial: Partial<Clip>) => void
@@ -271,6 +272,23 @@ export const useEditor = create<EditorState>((set, get) => {
           selectedClipId: s.selectedClipId === id ? null : s.selectedClipId,
           duration: recompute(clips),
         }
+      })
+    },
+
+    insertClipCopy: (source, start) => {
+      if (!get().assets.some((asset) => asset.id === source.assetId)) return
+      const track = get().tracks.find((item) => item.id === source.trackId)
+      if (!track || track.locked) return
+      pushSnapshot()
+      const clip: Clip = {
+        ...structuredClone(source),
+        id: uid('clip'),
+        start: Math.max(0, start),
+        transform: { ...source.transform },
+      }
+      set((state) => {
+        const clips = [...state.clips, clip]
+        return { clips, selectedClipId: clip.id, duration: recompute(clips) }
       })
     },
 

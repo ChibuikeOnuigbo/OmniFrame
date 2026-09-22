@@ -4874,3 +4874,19 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [BROWSER-QA] PASS Mask and paper edge remain synchronized at 0.98s; measured edge width 63.67px during the cubic-in transition.
 - [SCREENSHOT] Refreshed `qa/screenshots/landing-transition.png` with the corrected motion state.
 - [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
+
+# Functional timeline right-click menu — 2026-09-22
+
+- [USER-REQUEST] Add a CapCut-informed clip context menu, keep unsupported web functions out, and expose real preset saving only in desktop.
+- [RESEARCH] Official CapCut extraction guides confirm right-clicking a video clip and choosing Separate/Extract audio creates an independent editable audio layer below the source video.
+- [SOURCE] https://www.capcut.com/resource/extract-audio-from-video-online
+- [SOURCE] https://www.capcut.com/resource/extract-audio-from-video
+- [SOURCE-CODE] Added a restrained dark context menu on timeline clip right-click with Cut, Copy, Paste, Duplicate, Delete, and conditionally Separate audio.
+- [SOURCE-CODE] Cut/copy/paste use an internal clip clipboard; inserted copies retain source, trim, transform, gain, track, and asset linkage while receiving a unique ID.
+- [SOURCE-CODE] Context actions participate in project history through store snapshots.
+- [SOURCE-CODE] Ctrl/Cmd+X, C, V, and D now perform the same real operations as their displayed menu shortcuts.
+- [SOURCE-CODE] Web does not expose Compound clip, Group, Transcribe, or Save preset because those workflows are unsupported.
+- [SOURCE-CODE] Tauri desktop conditionally exposes Save clip preset and Apply saved preset; these persist and reapply transform and volume settings through desktop local storage.
+- [BROWSER-QA] PASS 18 focused assertions cover menu contents, web omissions, disabled/enabled Paste, pointer Duplicate, keyboard Duplicate/Cut/Paste, Separate audio, and runtime health.
+- [SCREENSHOT] `qa/screenshots/timeline-clip-context-menu.png` records the selected filmstrip and polished context menu.
+- [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
