@@ -191,12 +191,37 @@
       "detail": ""
     },
     {
-      "name": "Low preview quality reduces backing resolution",
+      "name": "Low preview quality uses a strongly reduced backing resolution",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "Ultra preview quality uses full HD backing resolution",
+      "name": "Low preview quality applies pixelated scaling",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Medium preview quality is moderately reduced",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Medium preview remains only slightly soft",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "High preview quality adds a modest clarity increase",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "High preview uses the clear effect profile",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ultra preview quality is removed",
       "status": "PASS",
       "detail": ""
     },

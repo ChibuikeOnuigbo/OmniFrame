@@ -34,7 +34,7 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
   },
   {
     id: 'playback.previewQuality', category: 'playback', label: 'Preview quality',
-    description: 'Changes the real compositing canvas resolution to reduce preview workload.', aliases: ['resolution', 'low', 'medium', 'high', 'ultra', 'performance'],
+    description: 'Changes the real compositing canvas resolution to reduce preview workload.', aliases: ['resolution', 'low', 'medium', 'high', 'pixelated', 'performance'],
     controlType: 'radio', defaultValue: 'high', scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.previewQuality', testId: 'setting-preview-quality',
     sourceRefs: [{ editor: 'OpenShot', url: 'https://www.openshot.org/files/user-guide/preferences.html', evidence: 'Optimized preview resolution is an explicit preview preference.' }],

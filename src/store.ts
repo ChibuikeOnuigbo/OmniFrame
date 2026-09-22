@@ -3,7 +3,7 @@ import type { Clip, MediaAsset, Track, TrackType, ClipTransform } from './types'
 import { uid, clamp } from './lib/time'
 
 export type Tool = 'select' | 'blade'
-export type PreviewQuality = 'low' | 'medium' | 'high' | 'ultra'
+export type PreviewQuality = 'low' | 'medium' | 'high'
 export type LeftTab =
   | 'media'
   | 'audio'
@@ -140,7 +140,7 @@ export const useEditor = create<EditorState>((set, get) => {
     speed: 1,
     projectFps: 30,
     dropFrameTimecode: false,
-    previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high', 'ultra'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
+    previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     selectedClipId: null,
     tool: 'select',
     leftTab: 'media',

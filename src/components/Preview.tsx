@@ -7,11 +7,12 @@ import { IconButton } from './ui'
 const CANVAS_W = 1280
 const CANVAS_H = 720
 const VIEW_PADDING = 16
+// These are real compositor backing resolutions, not cosmetic labels.
+// Low intentionally trades detail for speed; Medium stays slightly soft; High adds only a modest clarity step.
 const PREVIEW_DIMENSIONS = {
-  low: { width: 640, height: 360 },
-  medium: { width: 960, height: 540 },
-  high: { width: 1280, height: 720 },
-  ultra: { width: 1920, height: 1080 },
+  low: { width: 426, height: 240 },
+  medium: { width: 854, height: 480 },
+  high: { width: 1440, height: 810 },
 } as const
 
 type Point = { x: number; y: number }
@@ -144,7 +145,7 @@ export function Preview() {
         className={`absolute ${canPan ? 'cursor-grab active:cursor-grabbing' : ''}`}
         style={stageStyle}
       >
-        <canvas id="of-canvas" ref={canvasRef} className="block w-full h-full bg-black shadow-2xl rounded-sm" />
+        <canvas id="of-canvas" ref={canvasRef} data-quality-effect={previewQuality === 'low' ? 'pixelated' : previewQuality === 'medium' ? 'soft' : 'clear'} className="block w-full h-full bg-black shadow-2xl rounded-sm" style={{ imageRendering: previewQuality === 'low' ? 'pixelated' : 'auto', filter: previewQuality === 'medium' ? 'contrast(0.99)' : previewQuality === 'high' ? 'contrast(1.025) saturate(1.01)' : 'none' }} />
         {safe && (
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-[5%] border border-dashed border-white/40" />
