@@ -86,6 +86,31 @@
       "detail": ""
     },
     {
+      "name": "non-clip right click shows Add media",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "non-clip menu does not show clip actions",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Add media opens real multi-file picker",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Escape closes studio context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "mobile menu stays inside safe viewport bounds",
+      "status": "PASS",
+      "detail": "{\"x\":174,\"y\":692,\"width\":208,\"height\":123}"
+    },
+    {
       "name": "zero runtime errors",
       "status": "PASS",
       "detail": ""

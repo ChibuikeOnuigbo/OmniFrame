@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useEditor } from './store'
 import { TopBar } from './components/TopBar'
 import { LeftDock } from './components/LeftDock'
@@ -18,6 +18,21 @@ export default function Studio() {
   const undo = useEditor((s) => s.undo)
   const redo = useEditor((s) => s.redo)
   const setSpeed = useEditor((s) => s.setSpeed)
+  const canUndo = useEditor((s) => s.past.length > 0)
+  const canRedo = useEditor((s) => s.future.length > 0)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null)
+
+  useEffect(() => {
+    if (!contextMenu) return
+    const close = () => setContextMenu(null)
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') close() }
+    window.addEventListener('pointerdown', close)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('pointerdown', close)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [contextMenu])
 
   // Global keyboard shortcuts (disabled while typing in inputs).
   useEffect(() => {
@@ -116,6 +131,13 @@ export default function Studio() {
   return (
     <div
       className="h-full w-full flex flex-col bg-ink-950 text-ink-100 overflow-hidden no-select"
+      onContextMenu={(event) => {
+        event.preventDefault()
+        setContextMenu({
+          x: Math.max(8, Math.min(event.clientX, window.innerWidth - 216)),
+          y: Math.max(8, Math.min(event.clientY, window.innerHeight - 152)),
+        })
+      }}
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => {
         e.preventDefault()
@@ -131,6 +153,31 @@ export default function Studio() {
         </div>
         <RightPanel />
       </div>
+      {contextMenu && (
+        <div
+          data-testid="studio-context-menu"
+          role="menu"
+          aria-label="Studio actions"
+          className="fixed z-[70] w-52 rounded-lg border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-2xl backdrop-blur-xl"
+          style={{ left: contextMenu.x, top: contextMenu.y }}
+          onContextMenu={(event) => event.preventDefault()}
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          <button
+            role="menuitem"
+            onClick={() => {
+              document.getElementById('topbar-import-input')?.click()
+              setContextMenu(null)
+            }}
+            className="flex h-9 w-full items-center justify-between rounded-md px-3 text-left font-medium hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <span>Add media</span><span className="text-[10px] font-normal text-ink-500">Import</span>
+          </button>
+          <div className="my-1 border-t border-ink-700" />
+          <button role="menuitem" disabled={!canUndo} onClick={() => { undo(); setContextMenu(null) }} className="flex h-8 w-full items-center justify-between rounded-md px-3 text-left hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-35 disabled:hover:bg-transparent"><span>Undo</span><span className="text-[10px] text-ink-500">Ctrl+Z</span></button>
+          <button role="menuitem" disabled={!canRedo} onClick={() => { redo(); setContextMenu(null) }} className="flex h-8 w-full items-center justify-between rounded-md px-3 text-left hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-35 disabled:hover:bg-transparent"><span>Redo</span><span className="text-[10px] text-ink-500">Ctrl+Shift+Z</span></button>
+        </div>
+      )}
     </div>
   )
 }

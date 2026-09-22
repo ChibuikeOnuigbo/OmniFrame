@@ -665,7 +665,7 @@ export function Timeline() {
         <div
           data-testid="clip-context-menu"
           role="menu"
-          className="fixed z-50 w-52 rounded-lg border border-ink-600 bg-ink-850/98 p-1.5 text-xs text-ink-200 shadow-2xl backdrop-blur-xl"
+          className="fixed z-50 w-52 rounded-lg border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-2xl backdrop-blur-xl"
           style={{ left: contextMenu.x, top: contextMenu.y }}
           onPointerDown={(event) => event.stopPropagation()}
         >

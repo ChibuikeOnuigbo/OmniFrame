@@ -4890,3 +4890,19 @@ This addendum supersedes earlier `NOT-TESTED` backlog rows where the same named 
 - [BROWSER-QA] PASS 18 focused assertions cover menu contents, web omissions, disabled/enabled Paste, pointer Duplicate, keyboard Duplicate/Cut/Paste, Separate audio, and runtime health.
 - [SCREENSHOT] `qa/screenshots/timeline-clip-context-menu.png` records the selected filmstrip and polished context menu.
 - [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
+
+# Studio-wide custom right-click menu — 2026-09-22
+
+- [USER-CORRECTION] Normal browser context menu must not appear inside Studio when right-clicking outside timeline clips.
+- [SOURCE-CODE] Studio root now prevents the default browser context menu and opens an application-owned menu at the pointer.
+- [SOURCE-CODE] Non-clip menu exposes only real contextual actions: Add media, Undo, and Redo; disabled history actions remain visibly unavailable.
+- [SOURCE-CODE] Add media activates the existing real multi-file picker rather than duplicating import plumbing.
+- [SOURCE-CODE] Clip right-click continues to stop propagation and opens the richer clip-specific menu instead of the generic Studio menu.
+- [ACCESSIBILITY] Menu uses menu/menuitem semantics, visible keyboard focus, Escape dismissal, and safe viewport clamping.
+- [DESIGN] Replaced an initially over-transparent custom-color surface after screenshot inspection with a 98%-opaque `#11131d` surface, controlled border, compact spacing, and restrained shadow.
+- [RESPONSIVE] PASS Custom menu remains at least 8px inside a 390x844 viewport; measured bounds x=174, y=692, width=208, height=123.
+- [BROWSER-QA] PASS Context-menu suite expanded to 23 assertions with zero runtime errors.
+- [SCREENSHOT] `qa/screenshots/studio-context-menu-desktop.png` shows the corrected opaque desktop surface.
+- [SCREENSHOT] `qa/screenshots/studio-context-menu-mobile-390x844.png` shows safe mobile placement.
+- [BUILD] PASS TypeScript, Vite production build, and whitespace checks.
+- [SCOPE] The pasted Chapel Lane dialog specification refers to a component not present in OmniFrame; no unrelated fake modal was introduced.
