@@ -1,0 +1,11 @@
+[
+  {"id":"add-media","targets":["EMPTY_EDITOR","CANVAS","MEDIA_PANEL"],"action":"central top-bar multi-file picker","stateChange":"shared project asset import","undo":"not applicable to chooser opening"},
+  {"id":"cut","targets":["VIDEO_CLIP","AUDIO_CLIP","IMAGE_CLIP"],"action":"shared clipboard plus removeClip","undo":"store snapshot"},
+  {"id":"copy","targets":["VIDEO_CLIP","AUDIO_CLIP","IMAGE_CLIP"],"action":"shared immutable clip clipboard","undo":"not mutating"},
+  {"id":"paste","targets":["VIDEO_CLIP","AUDIO_CLIP","IMAGE_CLIP"],"precondition":"compatible clipboard content","action":"insertClipCopy at playhead","undo":"store snapshot"},
+  {"id":"duplicate","targets":["VIDEO_CLIP","AUDIO_CLIP","IMAGE_CLIP"],"action":"insertClipCopy after source","undo":"store snapshot"},
+  {"id":"separate-audio","targets":["VIDEO_CLIP"],"action":"extractAudio","undo":"project history behavior inherited"},
+  {"id":"delete","targets":["VIDEO_CLIP","AUDIO_CLIP","IMAGE_CLIP"],"action":"removeClip","undo":"store snapshot"},
+  {"id":"undo","targets":["EMPTY_EDITOR","CANVAS","MEDIA_PANEL"],"precondition":"past snapshot exists","action":"undo"},
+  {"id":"redo","targets":["EMPTY_EDITOR","CANVAS","MEDIA_PANEL"],"precondition":"future snapshot exists","action":"redo"}
+]

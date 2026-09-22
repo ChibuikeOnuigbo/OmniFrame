@@ -1,0 +1,196 @@
+{
+  "results": [
+    {
+      "name": "ruler labels do not overlap at 40 px/s",
+      "status": "PASS",
+      "detail": "9 labels"
+    },
+    {
+      "name": "major tick times strictly increase at 40 px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "major tick density is bounded at 40 px/s",
+      "status": "PASS",
+      "detail": "9"
+    },
+    {
+      "name": "ruler labels do not overlap at 160 px/s",
+      "status": "PASS",
+      "detail": "9 labels"
+    },
+    {
+      "name": "major tick times strictly increase at 160 px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "major tick density is bounded at 160 px/s",
+      "status": "PASS",
+      "detail": "9"
+    },
+    {
+      "name": "ruler labels do not overlap at 640 px/s",
+      "status": "PASS",
+      "detail": "2 labels"
+    },
+    {
+      "name": "major tick times strictly increase at 640 px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "major tick density is bounded at 640 px/s",
+      "status": "PASS",
+      "detail": "2"
+    },
+    {
+      "name": "ruler labels do not overlap at 2400 px/s",
+      "status": "PASS",
+      "detail": "10 labels"
+    },
+    {
+      "name": "major tick times strictly increase at 2400 px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "major tick density is bounded at 2400 px/s",
+      "status": "PASS",
+      "detail": "1"
+    },
+    {
+      "name": "continuous zoom physically widens clip",
+      "status": "PASS",
+      "detail": "[320.109375,1280.46875,5121.90625,19207.1875]"
+    },
+    {
+      "name": "Ctrl-wheel increases continuous timeline scale",
+      "status": "PASS",
+      "detail": "320.0000 -> 358.4"
+    },
+    {
+      "name": "wheel zoom preserves pointer time anchor",
+      "status": "PASS",
+      "detail": "2.0840 -> 2.0839"
+    },
+    {
+      "name": "project ruler accepts 23.976 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 23.976 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 24 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 24 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 25 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 25 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 29.97 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "29.97 drop-frame display can be enabled",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 29.97 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 30 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 30 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 50 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 50 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 59.94 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 59.94 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 60 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 60 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project ruler accepts 120 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "frame ticks increase at 120 fps",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "29.97 drop-frame ten-minute boundary is exact",
+      "status": "PASS",
+      "detail": "00:10:00;00"
+    },
+    {
+      "name": "59.94 drop-frame ten-minute boundary is exact",
+      "status": "PASS",
+      "detail": "00:10:00;00"
+    },
+    {
+      "name": "zero ruler runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "clipWidths": [
+    320.109375,
+    1280.46875,
+    5121.90625,
+    19207.1875
+  ]
+}

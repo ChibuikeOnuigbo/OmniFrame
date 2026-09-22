@@ -1,0 +1,280 @@
+{
+  "results": [
+    {
+      "name": "Cut command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Copy command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Duplicate command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Delete command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Separate audio command is available",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Group is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Transcribe is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Create compound clip is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Save clip preset is not exposed in web",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "paste hidden before copy",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "resolver identifies physical video clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "visible clip offers Hide Clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Hide Clip shows safe shortcut on right",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Hide Clip changes only canonical clip state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "hidden clip remains visible at reduced opacity",
+      "status": "PASS",
+      "detail": "0.4"
+    },
+    {
+      "name": "hidden clip gains hover glow",
+      "status": "PASS",
+      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(109, 94, 252) 0px 0px 0px 1px, rgba(167, 139, 250, 0.5) 0px 0px 12px 0px"
+    },
+    {
+      "name": "hidden clip offers Unhide Clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "H toggles selected clip without browser shortcut collision",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "H hides selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "undo restores clip visibility",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "redo restores hidden state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "paste appears after copy",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "duplicate creates an independent clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+D duplicates selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+X cuts selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+V pastes cut clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "separate audio creates an audio track",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "non-clip right click shows Add media",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "resolver identifies canvas target",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "canvas menu does not show clip actions",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Add media opens real multi-file picker",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Escape closes studio context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "text input preserves native editing context",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "input remains usable after right click",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "typing H in input does not hide selected clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "select control retains popup ownership",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "select remains usable after right click",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup contains five real categories",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Low preview quality uses a strongly reduced backing resolution",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Low preview quality applies pixelated scaling",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Medium preview quality is moderately reduced",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Medium preview remains only slightly soft",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "High preview quality adds a modest clarity increase",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "High preview uses the clear effect profile",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ultra preview quality is removed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Settings interaction owns H shortcut",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "project FPS updates authoritative ruler timebase",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Shortcuts category documents Hide Clip command",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "AI settings warn users to enter keys, not code",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "custom OpenAI-compatible provider exposes an HTTPS endpoint",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "AI connection validates credentials before a network request",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reduce motion setting has observable effect",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Escape closes settings popup",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "mobile menu stays inside safe viewport bounds",
+      "status": "PASS",
+      "detail": "{\"x\":132,\"y\":612,\"width\":224,\"height\":114}"
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

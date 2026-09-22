@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.of-select-tool [data-testid="timeline-lanes"],
+.of-select-tool [data-testid="timeline-ruler"] { cursor: default; }
+.of-blade-tool [data-testid="timeline-lanes"],
+.of-blade-tool [data-testid="timeline-ruler"],
+.of-blade-tool [data-testid="timeline-clip"] { cursor: url('/src/blade-cursor.svg') 4 24, crosshair; }
+
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; width: 100%; }
+body {
+  margin: 0;
+  background: #08090d;
+  color: #e6e8ee;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+* { box-sizing: border-box; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #3c475d; }
+.no-select { user-select: none; -webkit-user-select: none; }
+
+.of-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: #2e374a;
+  outline: none;
+  cursor: pointer;
+}
+.of-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #6d5efc;
+  border: 2px solid #0c0e13;
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+.of-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.of-range::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #6d5efc;
+  border: 2px solid #0c0e13;
+  cursor: pointer;
+}
+
+@keyframes of-fade {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.of-fade { animation: of-fade 0.12s ease-out; }
+
+@keyframes of-landing-in {
+  from { opacity: 0; transform: scale(1.015); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes of-copy-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes of-visual-in {
+  from { opacity: 0; transform: translateY(22px) rotateX(4deg); }
+  to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+@keyframes of-landing-mask-out {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, .6% 92%, 0 84%, .7% 76%, 0 68%, .6% 60%, 0 52%, .7% 44%, 0 36%, .6% 28%, 0 20%, .5% 12%, 0 4%);
+  }
+  48% {
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%, 50.7% 92%, 49.4% 84%, 50.8% 76%, 49.3% 68%, 50.7% 60%, 49.4% 52%, 50.8% 44%, 49.3% 36%, 50.7% 28%, 49.4% 20%, 50.6% 12%, 49.5% 4%);
+  }
+  100% {
+    clip-path: polygon(106% 0, 108% 0, 108% 100%, 106% 100%, 106.6% 92%, 105.4% 84%, 106.7% 76%, 105.3% 68%, 106.6% 60%, 105.4% 52%, 106.7% 44%, 105.3% 36%, 106.6% 28%, 105.4% 20%, 106.5% 12%, 105.5% 4%);
+  }
+}
+.of-landing-enter { animation: of-landing-in 0.55s cubic-bezier(.2,.8,.2,1) both; }
+.of-hero-copy { animation: of-copy-in 0.65s 0.08s cubic-bezier(.2,.8,.2,1) both; }
+.of-hero-visual { animation: of-visual-in 0.75s 0.16s cubic-bezier(.2,.8,.2,1) both; transform-style: preserve-3d; }
+.of-landing-leave {
+  animation: of-landing-mask-out 0.98s cubic-bezier(.32,0,.67,0) both;
+}
+
+@keyframes of-transition-wave-move {
+  0% { left: -6vw; transform: scaleX(.82); }
+  48% { left: 47.5vw; transform: scaleX(1); }
+  100% { left: 103vw; transform: scaleX(.82); }
+}
+.of-transition-wave {
+  animation: of-transition-wave-move 0.98s cubic-bezier(.32,0,.67,0) both;
+  clip-path: polygon(12% 0, 100% 0, 94% 10%, 100% 20%, 93% 30%, 100% 40%, 94% 50%, 100% 60%, 93% 70%, 100% 80%, 94% 90%, 100% 100%, 10% 100%, 3% 90%, 9% 80%, 2% 70%, 9% 60%, 3% 50%, 10% 40%, 2% 30%, 9% 20%, 3% 10%);
+  will-change: left, transform;
+}
+
+.of-reduced-motion *, .of-reduced-motion *::before, .of-reduced-motion *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

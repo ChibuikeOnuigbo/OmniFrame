@@ -1,0 +1,131 @@
+{
+  "results": [
+    {
+      "name": "landing page opens by default",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "concise hero visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "single studio CTA visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "open-source link is real",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "three feature cards visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "feature cards use elevated dark palette surface",
+      "status": "PASS",
+      "detail": "{\"background\":\"linear-gradient(to right bottom, rgba(25, 21, 38, 0.95), rgba(17, 19, 29, 0.95), rgba(10, 13, 20, 0.95))\",\"backdrop\":\"blur(24px)\",\"z\":\"10\"}"
+    },
+    {
+      "name": "landing 1920x1080 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 1440x900 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 1024x768 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 768x1024 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 430x932 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 390x844 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "landing 360x800 has no horizontal overflow",
+      "status": "PASS",
+      "detail": "{\"doc\":0,\"body\":0}"
+    },
+    {
+      "name": "masked studio transition plays",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "studio mounts underneath moving mask",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "branded purple wave remains visible at reveal boundary",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "paper-cut edge moves across combined scenes",
+      "status": "PASS",
+      "detail": "193"
+    },
+    {
+      "name": "paper-cut edge is slim and 0.2s faster",
+      "status": "PASS",
+      "detail": "{\"left\":192.96206665039062,\"width\":63.669647216796875,\"duration\":\"0.98s\",\"easing\":\"cubic-bezier(0.32, 0, 0.67, 0)\"}"
+    },
+    {
+      "name": "landing reveal uses cubic-in easing",
+      "status": "PASS",
+      "detail": "cubic-bezier(0.32, 0, 0.67, 0)"
+    },
+    {
+      "name": "landing uses a moving polygon mask",
+      "status": "PASS",
+      "detail": "polygon(17.8612% 0px, 100% 0px, 100% 100%, 17.8612% 100%, 18.497% 92%, 17.6469% 84%, 18.597% 76%, 17.6112% 68%, 18.497% 60%, 17.6469% 52%, 18.597% 44%, 17.6112% 36%, 18.497% 28%, 17.6469% 20%, 18.397% 12%, 17.6826% 4%)"
+    },
+    {
+      "name": "studio route updates hash",
+      "status": "PASS",
+      "detail": "http://localhost:5173/#studio"
+    },
+    {
+      "name": "studio remains mounted after transition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "browser back returns to landing",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "landing has zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "landing has zero failed requests",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

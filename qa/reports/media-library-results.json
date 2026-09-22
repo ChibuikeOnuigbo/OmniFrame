@@ -1,0 +1,104 @@
+{
+  "results": [
+    {
+      "name": "one combined Media Library rail control",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "separate Audio rail control removed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "media search is visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "type filter is visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "combined library shows video image and audio",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video item retains its type identity",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "image item retains its type identity",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio item retains its type identity",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio music filter isolates audio",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "filtered result is audio",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "search filters by filename",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "search result preserves image identity",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "empty search state is clear",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "narrow viewport collapses panel automatically",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "combined panel can reopen at narrow width",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "narrow viewport has no horizontal overflow",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "768px viewport has no horizontal overflow",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero unexpected failed requests",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "failed": [
+    "blob:http://localhost:5173/75a922de-a330-42a6-8787-6887b6e5f1bd :: net::ERR_ABORTED"
+  ],
+  "unexpectedFailed": []
+}
