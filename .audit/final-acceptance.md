@@ -16,7 +16,8 @@
 | Encoded export validation | SKIPPED | No export artifact decoded |
 | Project reload persistence | SKIPPED/UNSUPPORTED | No project save/load subsystem exists |
 | Web shortcut safety | PASS for Chromium/input/Settings | Negative and positive browser tests |
-| Native desktop shortcut matrix | SKIPPED | Native shells not launched |
+| Native desktop shortcut matrix | SKIPPED | Tauri build attempted; `cargo` is unavailable in this sandbox |
+| Drop-frame display | PASS | 29.97/59.94 SMPTE ten-minute boundaries verified in Chromium |
 | Compact categorized Settings | PASS | Real dialog interactions |
 | No unrelated redesign | PASS by scoped diff review | Changes restricted to requested components/utilities/tests |
 | 21 reference clones | PASS | Exact commits in inventory |

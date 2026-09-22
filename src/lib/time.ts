@@ -6,17 +6,28 @@ export function fps(): number {
   return 30
 }
 
-export function formatTimecode(seconds: number, frameRate = fps()): string {
+export function formatTimecode(seconds: number, frameRate = fps(), dropFrame = false): string {
   const s = Math.max(0, seconds)
   const nominalFps = Math.max(1, Math.round(frameRate))
-  const totalFrames = Math.round(s * frameRate)
+  let totalFrames = Math.round(s * frameRate)
+  const supportsDropFrame = frameRate === 29.97 || frameRate === 59.94
+  if (dropFrame && supportsDropFrame) {
+    const droppedPerMinute = nominalFps === 60 ? 4 : 2
+    const framesPerTenMinutes = Math.round(frameRate * 600)
+    const framesPerMinute = Math.round(frameRate * 60)
+    const tenMinuteBlocks = Math.floor(totalFrames / framesPerTenMinutes)
+    const remainder = totalFrames % framesPerTenMinutes
+    const extraMinutes = Math.max(0, Math.floor((remainder - droppedPerMinute) / framesPerMinute))
+    totalFrames += droppedPerMinute * (tenMinuteBlocks * 9 + extraMinutes)
+  }
   const f = totalFrames % nominalFps
   const totalSeconds = Math.floor(totalFrames / nominalFps)
   const sec = totalSeconds % 60
   const min = Math.floor(totalSeconds / 60) % 60
   const hr = Math.floor(totalSeconds / 3600)
   const pad = (n: number, l = 2) => String(n).padStart(l, '0')
-  return `${pad(hr)}:${pad(min)}:${pad(sec)}:${pad(f)}`
+  const frameSeparator = dropFrame && supportsDropFrame ? ';' : ':'
+  return `${pad(hr)}:${pad(min)}:${pad(sec)}${frameSeparator}${pad(f)}`
 }
 
 export function formatClock(seconds: number): string {
@@ -40,9 +51,9 @@ export function chooseTickInterval(pxPerSec: number, minPx = 72, frameRate = fps
   return candidates.find((interval) => interval * pxPerSec >= minPx) ?? candidates[candidates.length - 1]
 }
 
-export function formatRulerLabel(seconds: number, interval: number, frameRate = fps()): string {
+export function formatRulerLabel(seconds: number, interval: number, frameRate = fps(), dropFrame = false): string {
   if (!Number.isFinite(seconds)) return '00:00'
-  if (interval < 1) return formatTimecode(seconds, frameRate)
+  if (interval < 1) return formatTimecode(seconds, frameRate, dropFrame)
   const total = Math.max(0, Math.round(seconds))
   const hours = Math.floor(total / 3600)
   const minutes = Math.floor(total / 60) % 60

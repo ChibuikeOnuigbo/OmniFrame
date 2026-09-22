@@ -53,7 +53,7 @@ export default function Studio() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null
-      if (t && (t.isContentEditable || t.closest('input, textarea, select, option, button, [role="dialog"], [role="menu"], [role="listbox"]'))) return
+      if (t && (t.isContentEditable || t.closest('input, textarea, select, option, [role="dialog"], [role="menu"], [role="listbox"]'))) return
       const meta = e.ctrlKey || e.metaKey
       const st = () => useEditor.getState()
       if (meta && e.key.toLowerCase() === 'z') {

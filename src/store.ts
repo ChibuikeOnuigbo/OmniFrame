@@ -39,6 +39,7 @@ export interface EditorState {
   playing: boolean
   speed: number
   projectFps: number
+  dropFrameTimecode: boolean
   selectedClipId: string | null
   tool: Tool
   leftTab: LeftTab
@@ -76,6 +77,7 @@ export interface EditorState {
   togglePlay: () => void
   setSpeed: (s: number) => void
   setProjectFps: (fps: number) => void
+  setDropFrameTimecode: (enabled: boolean) => void
   setZoom: (px: number) => void
   zoomBy: (factor: number) => void
 
@@ -130,6 +132,7 @@ export const useEditor = create<EditorState>((set, get) => {
     playing: false,
     speed: 1,
     projectFps: 30,
+    dropFrameTimecode: false,
     selectedClipId: null,
     tool: 'select',
     leftTab: 'media',
@@ -390,8 +393,11 @@ export const useEditor = create<EditorState>((set, get) => {
 
     setProjectFps: (value) => {
       const supported = [23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120]
-      if (supported.includes(value)) set({ projectFps: value })
+      if (supported.includes(value)) set({ projectFps: value, dropFrameTimecode: false })
     },
+    setDropFrameTimecode: (enabled) => set((state) => ({
+      dropFrameTimecode: enabled && (state.projectFps === 29.97 || state.projectFps === 59.94),
+    })),
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
     zoomBy: (factor) => set((s) => ({ pxPerSec: clamp(s.pxPerSec * factor, 8, 8000) })),

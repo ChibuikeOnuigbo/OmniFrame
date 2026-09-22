@@ -300,6 +300,7 @@ export function Timeline() {
   const clips = useEditor((s) => s.clips)
   const px = useEditor((s) => s.pxPerSec)
   const FPS = useEditor((s) => s.projectFps)
+  const dropFrameTimecode = useEditor((s) => s.dropFrameTimecode)
   const duration = useEditor((s) => s.duration)
   const tool = useEditor((s) => s.tool)
   const setPlayhead = useEditor((s) => s.setPlayhead)
@@ -417,7 +418,7 @@ export function Timeline() {
       const frame = f - Math.floor(t) * FPS
       const major = frame === 0
       let label: string | undefined
-      if (major) label = formatTimecode(t)
+      if (major) label = formatTimecode(t, FPS, dropFrameTimecode)
       else if (frameW >= 32 && (frameW >= 64 || frame % (frameW >= 64 ? 1 : 5) === 0)) label = String(frame)
       ticks.push({ t, label, major })
     }
@@ -425,7 +426,7 @@ export function Timeline() {
     const interval = chooseTickInterval(px, 72, FPS)
     const minor = interval / (interval * px < 120 ? 2 : 5)
     for (let t = Math.floor(tStart / interval) * interval; t <= tEnd; t += interval) {
-      ticks.push({ t, label: formatRulerLabel(t, interval, FPS), major: true })
+      ticks.push({ t, label: formatRulerLabel(t, interval, FPS, dropFrameTimecode), major: true })
     }
     for (let t = Math.floor(tStart / minor) * minor; t <= tEnd; t += minor) {
       if (!ticks.some((x) => Math.abs(x.t - t) < 1e-6)) ticks.push({ t, major: false })
@@ -433,7 +434,7 @@ export function Timeline() {
   }
 
   return (
-    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-project-fps={FPS} data-render-count={renderCount.current} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
+    <div data-testid="timeline" data-px-per-second={px.toFixed(4)} data-project-fps={FPS} data-drop-frame={dropFrameTimecode ? 'true' : 'false'} data-render-count={renderCount.current} className="h-[280px] shrink-0 flex flex-col bg-ink-900 border-t border-ink-700">
       {/* transport + tools + zoom (groups separated by dividers) */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
         {/* transport */}

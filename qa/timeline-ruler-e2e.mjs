@@ -66,10 +66,17 @@ const fpsSelect = page.getByLabel('Project frame rate')
 for (const fps of ['23.976','24','25','29.97','30','50','59.94','60','120']) {
   await fpsSelect.selectOption(fps)
   check(await timeline.getAttribute('data-project-fps') === fps, `project ruler accepts ${fps} fps`)
+  if (fps === '29.97') {
+    await page.getByLabel('Drop-frame timecode').check()
+    check(await timeline.getAttribute('data-drop-frame') === 'true', '29.97 drop-frame display can be enabled')
+  }
   await scale.fill('8000')
   const tickTimes = await page.locator('[data-testid="ruler-tick"]').evaluateAll(nodes => nodes.slice(0, 20).map(n => Number(n.getAttribute('data-time'))))
   check(tickTimes.every((time, i) => i === 0 || time > tickTimes[i-1]), `frame ticks increase at ${fps} fps`)
 }
+const dropFrameSamples = await page.evaluate(async () => { const time = await import('/src/lib/time.ts'); return [time.formatTimecode(600, 29.97, true), time.formatTimecode(600, 59.94, true)] })
+check(dropFrameSamples[0] === '00:10:00;00', '29.97 drop-frame ten-minute boundary is exact', dropFrameSamples[0])
+check(dropFrameSamples[1] === '00:10:00;00', '59.94 drop-frame ten-minute boundary is exact', dropFrameSamples[1])
 await page.keyboard.press('Escape')
 check(errors.length === 0, 'zero ruler runtime errors', errors.join(' | '))
 writeFileSync(join(REPORTS, 'timeline-ruler-results.json'), JSON.stringify({ results, errors, clipWidths: widths }, null, 2))

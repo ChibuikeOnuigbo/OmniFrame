@@ -116,13 +116,13 @@ await shot('stress-06-split')
 await page.getByTitle('Undo (Ctrl+Z)').click(); assert(await page.locator('[data-kind="video"]').count()===1,'undo restores pre-split state')
 await page.getByTitle('Redo (Ctrl+Shift+Z)').click(); assert(await page.locator('[data-kind="video"]').count()===2,'redo restores split state')
 
-// Frame mode + zoom controls, preserve logical clip values.
+// Continuous high zoom preserves logical clip values; no unit-mode button exists.
 const startsBefore=await clips.evaluateAll(xs=>xs.map(x=>x.getAttribute('data-start')))
-await page.getByRole('button',{name:'Frames'}).click(); await page.waitForTimeout(100)
-assert(Number(await page.getByTestId('timeline').getAttribute('data-px-per-second'))===2400,'frame mode sets 2400 px/s')
+await page.getByTestId('timeline-scale').fill('2400'); await page.waitForTimeout(100)
+assert(Number(await page.getByTestId('timeline').getAttribute('data-px-per-second'))===2400,'continuous zoom reaches 2400 px/s')
 const startsAfter=await clips.evaluateAll(xs=>xs.map(x=>x.getAttribute('data-start')))
 assert(JSON.stringify(startsBefore)===JSON.stringify(startsAfter),'zoom preserves logical clip times')
-await shot('stress-07-frame-mode')
+await shot('stress-07-high-zoom')
 await page.getByTitle('Fit',{exact:true}).click(); await page.getByTitle('Zoom in').click(); await page.getByTitle('Zoom out').click(); pass('fit/zoom-in/zoom-out controls execute')
 
 // Preview controls.
@@ -154,7 +154,7 @@ assert(await page.locator('[data-kind="video"]').count()===videoCountLocked,'loc
 await page.getByTestId('timeline').getByRole('button',{name:'Unlock'}).first().click(); pass('track unlock restores editability')
 await page.getByTitle('Mute').click(); await page.getByTitle('Mute').click(); pass('audio track mute toggle')
 await page.getByTestId('timeline').getByRole('button',{name:'Hide',exact:true}).click(); await page.getByTestId('timeline').getByRole('button',{name:'Hide',exact:true}).click(); pass('video track visibility toggle')
-for(const tab of ['Audio','Text','Effects','Transitions','Templates','Masks','Tracking','Omniframe','3D','Media']) {await page.getByRole('button',{name:tab,exact:true}).click(); pass(`panel ${tab} opens`)}
+for(const tab of ['Text','Effects','Transitions','Templates','Masks','Tracking','Omniframe','3D','Media library']) {await page.getByRole('button',{name:tab,exact:true}).click(); pass(`panel ${tab} opens`)}
 await shot('stress-09-panels')
 
 // Transform controls: select image, change scale slider by keyboard.

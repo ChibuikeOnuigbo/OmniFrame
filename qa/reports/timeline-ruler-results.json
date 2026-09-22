@@ -111,6 +111,11 @@
       "detail": ""
     },
     {
+      "name": "29.97 drop-frame display can be enabled",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "frame ticks increase at 29.97 fps",
       "status": "PASS",
       "detail": ""
@@ -164,6 +169,16 @@
       "name": "frame ticks increase at 120 fps",
       "status": "PASS",
       "detail": ""
+    },
+    {
+      "name": "29.97 drop-frame ten-minute boundary is exact",
+      "status": "PASS",
+      "detail": "00:10:00;00"
+    },
+    {
+      "name": "59.94 drop-frame ten-minute boundary is exact",
+      "status": "PASS",
+      "detail": "00:10:00;00"
     },
     {
       "name": "zero ruler runtime errors",
