@@ -22,14 +22,14 @@ import {
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track } from '../types'
-import { chooseTickInterval, formatTimecode, formatClock, uid, clamp } from '../lib/time'
+import { chooseTickInterval, formatTimecode, formatRulerLabel, fps, uid, clamp } from '../lib/time'
 import { IconButton, Segmented } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 
 const RULER_H = 28
 const HEADER_W = 168
-const FPS = 30
-const MAX_PX = 8000 // high enough that one frame spans many pixels (true frame-level zoom)
+const FPS = fps()
+const MAX_PX = 8000 // continuous zoom remains usable through frame-level detail
 
 // Snap a time value to nearby clip edges and the playhead.
 function snapTime(value: number): number {
@@ -400,9 +400,8 @@ export function Timeline() {
     setPlayhead((clientX - rect.left) / px)
   }
 
-  // Ruler ticks — virtualized to the visible window.
-  // At high zoom we switch to CapCut-style frame mode: every tick = 1 frame,
-  // labelled HH:MM:SS:FF (30 ticks per second at 30fps).
+  // Ruler ticks are bounded to the visible window and derived from the same
+  // time-to-pixel scale used by clips, seeking, and the playhead.
   const tStart = Math.max(0, scrollLeft / px)
   const tEnd = (scrollLeft + viewW - HEADER_W) / px
   const frameW = px / FPS
@@ -422,10 +421,10 @@ export function Timeline() {
       ticks.push({ t, label, major })
     }
   } else {
-    const interval = chooseTickInterval(px)
-    const minor = interval / (interval * px < 40 ? 2 : 5)
+    const interval = chooseTickInterval(px, 72, FPS)
+    const minor = interval / (interval * px < 120 ? 2 : 5)
     for (let t = Math.floor(tStart / interval) * interval; t <= tEnd; t += interval) {
-      ticks.push({ t, label: interval < 1 ? formatTimecode(t) : formatClock(t), major: true })
+      ticks.push({ t, label: formatRulerLabel(t, interval, FPS), major: true })
     }
     for (let t = Math.floor(tStart / minor) * minor; t <= tEnd; t += minor) {
       if (!ticks.some((x) => Math.abs(x.t - t) < 1e-6)) ticks.push({ t, major: false })
@@ -498,14 +497,6 @@ export function Timeline() {
           <IconButton title="Fit" onClick={fitZoom}>
             <Maximize size={15} />
           </IconButton>
-          <button
-            type="button"
-            title="Zoom to frame level (each tick = 1 frame)"
-            onClick={() => setZoom(80 * FPS)}
-            className="h-8 px-2 rounded-md bg-ink-800 border border-ink-700 text-[11px] hover:bg-ink-700"
-          >
-            Frames
-          </button>
         </div>
         <IconButton title="Snapping (on)" active>
           <Magnet size={15} />
@@ -551,15 +542,19 @@ export function Timeline() {
                 }
               }}
             >
-              {/* ticks (frame mode: every tick = 1 frame; else major + minor) */}
+              {/* Adaptive visible-range major and minor ticks. */}
               {ticks.map((tk, i) => (
                 <div
                   key={i}
+                  data-testid="ruler-tick"
+                  data-time={tk.t.toFixed(6)}
+                  data-major={tk.major ? 'true' : 'false'}
                   className={`absolute bottom-0 top-0 w-px ${tk.major ? 'bg-ink-600' : 'bg-ink-700'}`}
                   style={{ left: tk.t * px }}
                 >
                   {tk.label && (
                     <span
+                      data-testid="ruler-label"
                       className={`absolute top-1 left-1 text-[9px] tabular-nums ${
                         tk.major ? 'text-ink-300 font-medium' : 'text-ink-500'
                       }`}
