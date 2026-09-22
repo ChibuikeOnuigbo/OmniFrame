@@ -186,7 +186,17 @@
       "detail": ""
     },
     {
-      "name": "settings popup contains three real categories",
+      "name": "settings popup contains four real categories",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Low preview quality reduces backing resolution",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Ultra preview quality uses full HD backing resolution",
       "status": "PASS",
       "detail": ""
     },

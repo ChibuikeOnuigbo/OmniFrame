@@ -22,19 +22,19 @@ export function TopBar() {
   const importFiles = useEditor((s) => s.importFiles)
   const leftOpen = useEditor((s) => s.leftOpen)
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
-  const pxPerSec = useEditor((s) => s.pxPerSec)
-  const setZoom = useEditor((s) => s.setZoom)
   const projectFps = useEditor((s) => s.projectFps)
   const setProjectFps = useEditor((s) => s.setProjectFps)
   const dropFrameTimecode = useEditor((s) => s.dropFrameTimecode)
   const setDropFrameTimecode = useEditor((s) => s.setDropFrameTimecode)
+  const previewQuality = useEditor((s) => s.previewQuality)
+  const setPreviewQuality = useEditor((s) => s.setPreviewQuality)
 
   const fileInput = useRef<HTMLInputElement>(null)
   const [exporting, setExporting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [settingsCategory, setSettingsCategory] = useState<'timeline' | 'shortcuts' | 'accessibility'>('timeline')
+  const [settingsCategory, setSettingsCategory] = useState<'timeline' | 'playback' | 'shortcuts' | 'accessibility'>('timeline')
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('omniframe.reducedMotion') === 'true')
   const settingsRef = useRef<HTMLDivElement>(null)
 
@@ -145,13 +145,14 @@ export function TopBar() {
       {settingsOpen && (
         <div ref={settingsRef} data-testid="settings-popup" role="dialog" aria-label="Settings" className="fixed right-3 top-12 z-[80] flex w-[min(440px,calc(100vw-24px))] max-h-[min(420px,calc(100vh-64px))] overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.5)] backdrop-blur-xl">
           <nav aria-label="Settings categories" className="w-32 shrink-0 border-r border-ink-700 p-2">
-            {(['timeline', 'shortcuts', 'accessibility'] as const).map((category) => (
+            {(['timeline', 'playback', 'shortcuts', 'accessibility'] as const).map((category) => (
               <button key={category} data-testid="settings-category" aria-pressed={settingsCategory === category} onClick={() => setSettingsCategory(category)} className={`mb-1 h-9 w-full rounded-lg px-3 text-left text-xs capitalize outline-none focus-visible:ring-2 focus-visible:ring-brand ${settingsCategory === category ? 'bg-brand/15 text-violet-200' : 'text-ink-400 hover:bg-ink-700 hover:text-white'}`}>{category}</button>
             ))}
           </nav>
           <section className="min-w-0 flex-1 overflow-y-auto p-4">
             <div className="mb-4 flex items-center justify-between"><h2 className="text-sm font-semibold capitalize">{settingsCategory}</h2><button aria-label="Close settings" onClick={() => setSettingsOpen(false)} className="grid h-7 w-7 place-items-center rounded-md text-ink-400 hover:bg-ink-700 hover:text-white"><X size={14} /></button></div>
-            {settingsCategory === 'timeline' && <div className="space-y-4"><label className="block"><span className="mb-2 flex justify-between text-xs text-ink-300"><span>Timeline zoom</span><output className="tabular-nums text-ink-500">{Math.round(pxPerSec)} px/s</output></span><input aria-label="Timeline zoom setting" type="range" min="8" max="8000" step="1" value={pxPerSec} onChange={(event) => setZoom(Number(event.target.value))} className="of-range w-full" /></label><label className="block text-xs text-ink-300"><span className="mb-2 block">Project frame rate</span><select aria-label="Project frame rate" value={projectFps} onChange={(event) => setProjectFps(Number(event.target.value))} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200">{[23.976,24,25,29.97,30,50,59.94,60,120].map((rate)=><option key={rate} value={rate}>{rate} fps</option>)}</select></label>{(projectFps === 29.97 || projectFps === 59.94) && <label className="flex items-center justify-between gap-4 text-xs text-ink-300"><span><span className="block">Drop-frame timecode</span><span className="mt-1 block text-[10px] text-ink-500">SMPTE clock-aligned display; timing is unchanged.</span></span><input aria-label="Drop-frame timecode" type="checkbox" checked={dropFrameTimecode} onChange={(event) => setDropFrameTimecode(event.target.checked)} className="h-4 w-4 accent-violet-500" /></label>}<button onClick={() => setZoom(80)} className="h-8 rounded-md border border-ink-700 bg-ink-800 px-3 text-xs hover:bg-ink-700">Reset zoom</button></div>}
+            {settingsCategory === 'timeline' && <div className="space-y-4"><label className="block text-xs text-ink-300"><span className="mb-2 block">Project frame rate</span><select aria-label="Project frame rate" value={projectFps} onChange={(event) => setProjectFps(Number(event.target.value))} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200">{[23.976,24,25,29.97,30,50,59.94,60,120].map((rate)=><option key={rate} value={rate}>{rate} fps</option>)}</select></label>{(projectFps === 29.97 || projectFps === 59.94) && <label className="flex items-center justify-between gap-4 text-xs text-ink-300"><span><span className="block">Drop-frame timecode</span><span className="mt-1 block text-[10px] text-ink-500">SMPTE clock-aligned display; timing is unchanged.</span></span><input aria-label="Drop-frame timecode" type="checkbox" checked={dropFrameTimecode} onChange={(event) => setDropFrameTimecode(event.target.checked)} className="h-4 w-4 accent-violet-500" /></label>}</div>}
+            {settingsCategory === 'playback' && <div><div className="mb-2 text-xs text-ink-300">Preview quality</div><div role="radiogroup" aria-label="Preview quality" className="grid grid-cols-2 gap-2">{(['low','medium','high','ultra'] as const).map((quality)=><button key={quality} type="button" role="radio" aria-checked={previewQuality === quality} onClick={() => setPreviewQuality(quality)} className={`h-9 rounded-md border px-3 text-xs capitalize ${previewQuality === quality ? 'border-brand bg-brand/15 text-violet-200' : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700'}`}>{quality}</button>)}</div><p className="mt-3 text-[10px] leading-relaxed text-ink-500">Lower quality reduces preview canvas pixels and GPU/compositing work. Timeline timing and project FPS stay unchanged.</p></div>}
             {settingsCategory === 'shortcuts' && <dl className="space-y-2 text-xs">{[['Hide / unhide selected clip','H'],['Select tool','V'],['Blade tool','B'],['Undo','Ctrl / Cmd + Z']].map(([label,key])=><div key={label} className="flex items-center justify-between gap-3"><dt className="text-ink-300">{label}</dt><dd className="rounded border border-ink-700 bg-ink-800 px-2 py-1 font-mono text-[10px] text-ink-400">{key}</dd></div>)}</dl>}
             {settingsCategory === 'accessibility' && <label className="flex items-center justify-between gap-4 text-xs"><span><span className="block text-ink-200">Reduce motion</span><span className="mt-1 block text-ink-500">Minimize nonessential interface animation.</span></span><input aria-label="Reduce motion" type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)} className="h-4 w-4 accent-violet-500" /></label>}
           </section>

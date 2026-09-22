@@ -3,6 +3,7 @@ import type { Clip, MediaAsset, Track, TrackType, ClipTransform } from './types'
 import { uid, clamp } from './lib/time'
 
 export type Tool = 'select' | 'blade'
+export type PreviewQuality = 'low' | 'medium' | 'high' | 'ultra'
 export type LeftTab =
   | 'media'
   | 'audio'
@@ -40,6 +41,7 @@ export interface EditorState {
   speed: number
   projectFps: number
   dropFrameTimecode: boolean
+  previewQuality: PreviewQuality
   selectedClipId: string | null
   tool: Tool
   leftTab: LeftTab
@@ -78,6 +80,7 @@ export interface EditorState {
   setSpeed: (s: number) => void
   setProjectFps: (fps: number) => void
   setDropFrameTimecode: (enabled: boolean) => void
+  setPreviewQuality: (quality: PreviewQuality) => void
   setZoom: (px: number) => void
   zoomBy: (factor: number) => void
 
@@ -133,6 +136,7 @@ export const useEditor = create<EditorState>((set, get) => {
     speed: 1,
     projectFps: 30,
     dropFrameTimecode: false,
+    previewQuality: 'high',
     selectedClipId: null,
     tool: 'select',
     leftTab: 'media',
@@ -398,6 +402,7 @@ export const useEditor = create<EditorState>((set, get) => {
     setDropFrameTimecode: (enabled) => set((state) => ({
       dropFrameTimecode: enabled && (state.projectFps === 29.97 || state.projectFps === 59.94),
     })),
+    setPreviewQuality: (previewQuality) => set({ previewQuality }),
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
     zoomBy: (factor) => set((s) => ({ pxPerSec: clamp(s.pxPerSec * factor, 8, 8000) })),

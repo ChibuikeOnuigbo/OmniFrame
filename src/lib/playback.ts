@@ -94,20 +94,24 @@ export class PreviewEngine {
   private raf = 0
   private last = 0
   private running = false
+  private width: number
+  private height: number
   private unsubscribe: (() => void) | null = null
   private usedThisFrame = new Set<HTMLMediaElement>()
   private requestedTime = new WeakMap<HTMLMediaElement, number>()
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, width = PW, height = PH) {
     this.canvas = canvas
-    canvas.width = PW
-    canvas.height = PH
+    this.width = width
+    this.height = height
+    canvas.width = width
+    canvas.height = height
     const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) throw new Error('2D canvas context unavailable')
     this.ctx = ctx
     this.backCanvas = document.createElement('canvas')
-    this.backCanvas.width = PW
-    this.backCanvas.height = PH
+    this.backCanvas.width = width
+    this.backCanvas.height = height
     const backCtx = this.backCanvas.getContext('2d', { alpha: false })
     if (!backCtx) throw new Error('2D back-buffer context unavailable')
     this.backCtx = backCtx
@@ -151,7 +155,7 @@ export class PreviewEngine {
   private renderFrame(time: number, st: ReturnType<typeof useEditor.getState>) {
     const ctx = this.backCtx
     ctx.fillStyle = '#000000'
-    ctx.fillRect(0, 0, PW, PH)
+    ctx.fillRect(0, 0, this.width, this.height)
     this.usedThisFrame.clear()
     let visualPending = false
 
@@ -259,14 +263,14 @@ export class PreviewEngine {
       (el as HTMLImageElement).naturalHeight ||
       asset.height ||
       PH
-    const cover = Math.max(PW / vw, PH / vh)
+    const cover = Math.max(this.width / vw, this.height / vh)
     const dw = vw * cover
     const dh = vh * cover
 
     ctx.save()
     ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity))
-    const cx = PW / 2 + clip.transform.x
-    const cy = PH / 2 + clip.transform.y
+    const cx = this.width / 2 + clip.transform.x * (this.width / PW)
+    const cy = this.height / 2 + clip.transform.y * (this.height / PH)
     ctx.translate(cx, cy)
     ctx.rotate((clip.transform.rotation * Math.PI) / 180)
     ctx.scale(clip.transform.scale, clip.transform.scale)

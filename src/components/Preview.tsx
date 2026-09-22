@@ -7,6 +7,12 @@ import { IconButton } from './ui'
 const CANVAS_W = 1280
 const CANVAS_H = 720
 const VIEW_PADDING = 16
+const PREVIEW_DIMENSIONS = {
+  low: { width: 640, height: 360 },
+  medium: { width: 960, height: 540 },
+  high: { width: 1280, height: 720 },
+  ultra: { width: 1920, height: 1080 },
+} as const
 
 type Point = { x: number; y: number }
 
@@ -17,6 +23,8 @@ export function Preview() {
   const dragRef = useRef<{ pointerId: number; origin: Point; pan: Point } | null>(null)
   const clipCount = useEditor((s) => s.clips.length)
   const playing = useEditor((s) => s.playing)
+  const previewQuality = useEditor((s) => s.previewQuality)
+  const previewDimensions = PREVIEW_DIMENSIONS[previewQuality]
   const [display, setDisplay] = useState<'fit' | number>('fit')
   const [safe, setSafe] = useState(false)
   const [grid, setGrid] = useState(false)
@@ -25,11 +33,11 @@ export function Preview() {
 
   useEffect(() => {
     if (!canvasRef.current) return
-    const engine = new PreviewEngine(canvasRef.current)
+    const engine = new PreviewEngine(canvasRef.current, previewDimensions.width, previewDimensions.height)
     engineRef.current = engine
     engine.start()
     return () => engine.dispose()
-  }, [])
+  }, [previewDimensions.width, previewDimensions.height])
 
   useEffect(() => {
     const el = viewportRef.current
@@ -87,6 +95,9 @@ export function Preview() {
       ref={viewportRef}
       data-testid="preview-viewport"
       data-preview-scale={scale.toFixed(4)}
+      data-preview-quality={previewQuality}
+      data-preview-width={previewDimensions.width}
+      data-preview-height={previewDimensions.height}
       data-preview-pan-x={pan.x.toFixed(2)}
       data-preview-pan-y={pan.y.toFixed(2)}
       className="flex-1 min-h-0 min-w-0 relative bg-ink-950 overflow-hidden"
@@ -114,7 +125,7 @@ export function Preview() {
       onDoubleClick={() => setPan({ x: 0, y: 0 })}
     >
       <div className="absolute top-2 left-3 z-20 flex items-center gap-2 text-[11px] text-ink-400">
-        <span className="px-2 py-0.5 rounded bg-ink-900/70 border border-ink-800">Preview · 1920×1080</span>
+        <span className="px-2 py-0.5 rounded bg-ink-900/70 border border-ink-800">Preview · {previewDimensions.width}×{previewDimensions.height} · {previewQuality}</span>
         {playing && <span className="px-2 py-0.5 rounded bg-brand/20 text-brand border border-brand/40">LIVE</span>}
       </div>
 
