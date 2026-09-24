@@ -13,8 +13,15 @@
       "feature": "Feature-Slice 03: Fill Tool & Hair Recolor",
       "status": "verified",
       "details": "Contiguous flood fill with Euclidean threshold, anti-halo dilation, luminance preservation, and layer blend modes verified via Playwright and OpenCV (152 frames decoded, blue dom +118.60, shading std 11.12)"
+    },
+    {
+      "run": 3,
+      "timestamp": "2026-09-24T13:00:29+00:00",
+      "feature": "Feature-Slice 02: Multi-Frame Paint & Onion Skinning",
+      "status": "verified",
+      "details": "Cel frame scoping, exposure hold frames ('on twos'), step prev/next navigation, onion skin ghosting, and OpenCV video export verification (159 frames decoded)"
     }
   ],
-  "total_runs": 2,
-  "last_updated": "2026-09-24T12:46:47+00:00"
+  "total_runs": 3,
+  "last_updated": "2026-09-24T13:00:29+00:00"
 }

@@ -13,6 +13,7 @@ import type {
   PaintLayer,
   WorkspacePreset,
   FocusMode,
+  OnionSkinSettings,
 } from './types'
 import { uid, clamp } from './lib/time'
 
@@ -88,6 +89,8 @@ export interface EditorState {
   drawingEnabled: boolean
   drawingFillTolerance: number
   drawingPreserveLuminance: boolean
+  drawingHoldFrames: number
+  onionSkin: OnionSkinSettings
 
   // ---- workspace layout & focus mode ----
   workspacePreset: WorkspacePreset
@@ -153,6 +156,10 @@ export interface EditorState {
   setPaintLayerBlendMode: (layerId: string, blendMode: GlobalCompositeOperation) => void
   setPaintLayerBlur: (layerId: string, blur: number) => void
   setPaintLayerOpacity: (layerId: string, opacity: number) => void
+  setOnionSkin: (partial: Partial<OnionSkinSettings>) => void
+  toggleOnionSkin: () => void
+  setDrawingHoldFrames: (frames: number) => void
+  stepFrame: (delta: number) => void
 
   // ---- layout actions ----
   setWorkspacePreset: (preset: WorkspacePreset) => void
@@ -256,6 +263,15 @@ export const useEditor = create<EditorState>((set, get) => {
     drawingEnabled: false,
     drawingFillTolerance: 32,
     drawingPreserveLuminance: false,
+    drawingHoldFrames: 1,
+    onionSkin: {
+      enabled: false,
+      beforeFrames: 1,
+      afterFrames: 1,
+      opacity: 0.35,
+      tintBefore: '#ef4444',
+      tintAfter: '#10b981',
+    },
 
     // ---- layout initial state ----
     workspacePreset: 'default',
@@ -745,6 +761,15 @@ export const useEditor = create<EditorState>((set, get) => {
         ),
       }))
     },
+    setOnionSkin: (partial) => set((s) => ({ onionSkin: { ...s.onionSkin, ...partial } })),
+    toggleOnionSkin: () => set((s) => ({ onionSkin: { ...s.onionSkin, enabled: !s.onionSkin.enabled } })),
+    setDrawingHoldFrames: (frames) => set({ drawingHoldFrames: Math.max(1, Math.min(120, frames)) }),
+    stepFrame: (delta) => {
+      const fps = get().projectFps || 30
+      const dur = get().duration || 10
+      const newTime = Math.max(0, Math.min(dur, get().playhead + delta / fps))
+      get().setPlayhead(newTime)
+    },
 
     // ---- layout actions ----
     setWorkspacePreset: (preset) => {
@@ -815,6 +840,39 @@ export const useEditor = create<EditorState>((set, get) => {
             drawingEnabled: false,
           })
           break
+        case '3d':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            rightOpen: true,
+            leftTab: 'threed',
+            leftDockWidth: 300,
+            rightPanelWidth: 280,
+            timelineHeight: 180,
+            drawingEnabled: false,
+          })
+          break
+        case 'minimal':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: false,
+            rightOpen: false,
+            timelineHeight: 140,
+            drawingEnabled: false,
+          })
+          break
+        case 'full-canvas':
+          set({
+            workspacePreset: preset,
+            focusMode: 'canvas-only',
+            leftOpen: false,
+            rightOpen: false,
+            timelineHeight: 0,
+            drawingEnabled: false,
+          })
+          break
       }
     },
     setFocusMode: (mode) => {
@@ -830,6 +888,8 @@ export const useEditor = create<EditorState>((set, get) => {
         set({ leftOpen: false, rightOpen: false, timelineHeight: 140 })
       } else if (mode === 'timeline') {
         set({ leftOpen: false, rightOpen: false, timelineHeight: 520 })
+      } else if (mode === 'one-panel') {
+        set({ leftOpen: false, rightOpen: true, timelineHeight: 160 })
       }
     },
     setTimelineHeight: (height) => set({ timelineHeight: Math.max(120, Math.min(600, height)) }),

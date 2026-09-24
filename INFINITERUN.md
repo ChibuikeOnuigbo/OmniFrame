@@ -27,9 +27,10 @@ OmniFrame is developed under an uninterrupted continuous engineering loop. Work 
 - Temporal paint scope (frame-by-frame cel animation, hold frame, track duration, clip attachment).
 - Feature-Slice 01 (Basic Paint): Brush, Eraser, Line, Rectangle, Circle, Color Picker, Stroke Width, and Real-time Canvas Renderer. (VERIFIED - Run #1).
 - Feature-Slice 03 (Fill Tool & Hair Recolor Workflow): Contiguous flood fill with threshold, grow dilation, luminance/shading preservation, non-destructive layer blend modes (Normal, Multiply, Screen, Overlay, Color), and layer blur. (VERIFIED - Run #2).
+- Feature-Slice 02 (Multi-Frame Paint & Onion Skinning): Cel frame scoping, exposure hold frames ('on twos'), step prev/next navigation, onion skin ghost rendering, extended workspace presets ('3d', 'minimal', 'full-canvas'), and 'one-panel' focus mode. (VERIFIED - Run #3).
 - Comprehensive research documentation: `drawingtool.md`, `research/DRAWING_RESEARCH_MATRIX.md`, `research/DRAWING_FEATURE_INVENTORY.md`.
-- Automated Playwright E2E suites (`qa/drawing-layout-e2e.mjs` and `qa/fill-hair-recolor-e2e.mjs`) verifying stroke recording, hair recoloring, layer manipulation, and visual video exports decoded by OpenCV.
-- Next Candidate: Feature-Slice 02: Multi-Frame Paint & Rotoscoping (onion skinning, cel keyframes, frame hold/propagation).
+- Automated Playwright E2E suites (`qa/drawing-layout-e2e.mjs`, `qa/fill-hair-recolor-e2e.mjs`, and `qa/onion-skin-cel-animation-e2e.mjs`) verifying stroke recording, hair recoloring, multi-frame cels, and visual video exports decoded by OpenCV.
+- Next Candidate: Feature-Slice 04: Selection Family & Mask Conversion (Rectangle, Ellipse, Lasso, Polygon, and Selection-to-Mask conversion).
 
 ---
 
@@ -39,6 +40,7 @@ OmniFrame is developed under an uninterrupted continuous engineering loop. Work 
 |---|---|---|---|---|---|
 | Run 1 | 2026-09-24 | Feature-Slice 01: Basic Paint | VERIFIED | `qa/drawing-layout-e2e.mjs`, OpenCV 365 frames decoded, `evidence/drawing/omniframe-drawing-active-mode.png` | Feature-Slice 03: Fill & Hair Recolor |
 | Run 2 | 2026-09-24 | Feature-Slice 03: Fill & Hair Recolor | VERIFIED | `qa/fill-hair-recolor-e2e.mjs`, OpenCV 152 frames decoded (hair ROI blue dom: +118.60, shading std: 11.12), `evidence/drawing/omniframe-hair-recolor-active.png` | Feature-Slice 02: Multi-Frame Paint & Onion Skinning |
+| Run 3 | 2026-09-24 | Feature-Slice 02: Multi-Frame Paint & Onion Skinning | VERIFIED | `qa/onion-skin-cel-animation-e2e.mjs`, OpenCV 159 frames decoded (avg lum 198.21), `evidence/drawing/omniframe-onion-skin-active.png` | Feature-Slice 04: Selection Family & Mask Conversion |
 
 ---
 

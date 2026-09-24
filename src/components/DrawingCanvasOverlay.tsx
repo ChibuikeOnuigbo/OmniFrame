@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useEditor } from '../store'
 import { uid } from '../lib/time'
-import { renderStroke, renderAllPaintLayers, floodFillRegion } from '../lib/drawingEngine'
+import { renderStroke, renderAllPaintLayers, renderOnionSkin, floodFillRegion } from '../lib/drawingEngine'
 import type { StrokePoint, DrawingStroke } from '../types'
 
 interface DrawingCanvasOverlayProps {
@@ -26,11 +26,14 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
   const activePaintLayerId = useEditor((s) => s.activePaintLayerId)
   const paintLayers = useEditor((s) => s.paintLayers)
   const drawingStrokes = useEditor((s) => s.drawingStrokes)
+  const onionSkin = useEditor((s) => s.onionSkin)
   const addDrawingStroke = useEditor((s) => s.addDrawingStroke)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
 
-  // Redraw existing strokes and layers whenever strokes, layers, or playhead changes
+  const currentFrame = Math.round(playhead * projectFps)
+
+  // Redraw existing strokes, onion skin, and layers whenever state changes
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -38,8 +41,14 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     if (!ctx) return
 
     ctx.clearRect(0, 0, width, height)
+
+    // Render Onion Skinning ghost cels underneath active frame
+    if (onionSkin.enabled && drawingScope.type === 'frame') {
+      renderOnionSkin(ctx, width, height, drawingStrokes, currentFrame, projectFps, onionSkin)
+    }
+
     renderAllPaintLayers(ctx, width, height, drawingStrokes, paintLayers, playhead, projectFps)
-  }, [drawingStrokes, paintLayers, playhead, projectFps, width, height])
+  }, [drawingStrokes, paintLayers, playhead, projectFps, onionSkin, drawingScope, currentFrame, width, height])
 
   if (!drawingEnabled) return null
 
@@ -127,6 +136,11 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
 
     // Clear and redraw all strokes plus active live stroke
     ctx.clearRect(0, 0, width, height)
+
+    if (onionSkin.enabled && drawingScope.type === 'frame') {
+      renderOnionSkin(ctx, width, height, drawingStrokes, currentFrame, projectFps, onionSkin)
+    }
+
     renderAllPaintLayers(ctx, width, height, drawingStrokes, paintLayers, playhead, projectFps)
 
     const liveStroke: DrawingStroke = {

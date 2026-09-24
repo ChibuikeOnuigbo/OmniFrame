@@ -12,6 +12,9 @@ import {
   Clock,
   PaintBucket,
   Sparkles,
+  Layers,
+  ChevronLeft,
+  ChevronRight,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -40,6 +43,11 @@ export function DrawingToolbar() {
   const setDrawingPreserveLuminance = useEditor((s) => s.setDrawingPreserveLuminance)
   const drawingScope = useEditor((s) => s.drawingScope)
   const setDrawingScope = useEditor((s) => s.setDrawingScope)
+  const drawingHoldFrames = useEditor((s) => s.drawingHoldFrames)
+  const setDrawingHoldFrames = useEditor((s) => s.setDrawingHoldFrames)
+  const onionSkin = useEditor((s) => s.onionSkin)
+  const toggleOnionSkin = useEditor((s) => s.toggleOnionSkin)
+  const stepFrame = useEditor((s) => s.stepFrame)
   const clearDrawingStrokes = useEditor((s) => s.clearDrawingStrokes)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
@@ -63,9 +71,11 @@ export function DrawingToolbar() {
       setDrawingScope({ type: 'span', startTime: playhead, duration: 2.0 })
     } else if (type === 'frame') {
       const currentFrame = Math.round(playhead * projectFps)
-      setDrawingScope({ type: 'frame', frame: currentFrame })
+      setDrawingScope({ type: 'frame', frame: currentFrame, holdFrames: drawingHoldFrames })
     }
   }
+
+  const currentFrame = Math.round(playhead * projectFps)
 
   return (
     <div
@@ -193,6 +203,75 @@ export function DrawingToolbar() {
           <option value="frame">Current Frame Cel</option>
         </select>
       </div>
+
+      {/* Frame Animation / Rotoscoping Controls */}
+      {drawingScope.type === 'frame' && (
+        <div className="flex items-center gap-1 border-r border-ink-700 pr-2 animate-in fade-in duration-100">
+          <button
+            type="button"
+            data-testid="step-prev-cel-btn"
+            title="Step Previous Frame (,)"
+            aria-label="Step previous frame"
+            onClick={() => stepFrame(-1)}
+            className="p-1 rounded hover:bg-ink-800 text-ink-300 hover:text-white"
+          >
+            <ChevronLeft size={13} />
+          </button>
+          <span
+            data-testid="current-cel-badge"
+            className="font-mono text-[10px] font-semibold text-brand px-1 py-0.5 rounded bg-brand/10 border border-brand/30"
+          >
+            F#{currentFrame}
+          </span>
+          <button
+            type="button"
+            data-testid="step-next-cel-btn"
+            title="Step Next Frame (.)"
+            aria-label="Step next frame"
+            onClick={() => stepFrame(1)}
+            className="p-1 rounded hover:bg-ink-800 text-ink-300 hover:text-white"
+          >
+            <ChevronRight size={13} />
+          </button>
+
+          {/* Hold Frames */}
+          <select
+            data-testid="cel-hold-frames-select"
+            title="Exposure / Hold Frames"
+            aria-label="Cel hold frames"
+            value={drawingHoldFrames}
+            onChange={(e) => {
+              const val = Number(e.target.value)
+              setDrawingHoldFrames(val)
+              setDrawingScope({ ...drawingScope, holdFrames: val })
+            }}
+            className="bg-ink-800 text-ink-200 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono focus:outline-none focus:border-brand"
+          >
+            <option value={1}>1f hold</option>
+            <option value={2}>2f (twos)</option>
+            <option value={3}>3f hold</option>
+            <option value={4}>4f hold</option>
+          </select>
+
+          {/* Onion Skin Toggle */}
+          <button
+            type="button"
+            data-testid="onion-skin-toggle"
+            title={`Onion Skinning: ${onionSkin.enabled ? 'ON (ghosting adjacent cels)' : 'OFF'}`}
+            aria-label="Toggle onion skinning"
+            aria-pressed={onionSkin.enabled}
+            onClick={() => toggleOnionSkin()}
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors ${
+              onionSkin.enabled
+                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                : 'bg-ink-800 text-ink-400 hover:text-white'
+            }`}
+          >
+            <Layers size={11} />
+            <span>Onion</span>
+          </button>
+        </div>
+      )}
 
       {/* Clear Strokes */}
       <button

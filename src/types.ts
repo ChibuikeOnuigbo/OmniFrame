@@ -81,6 +81,16 @@ export interface TemporalScope {
   startTime?: number // seconds
   duration?: number // seconds
   frame?: number // frame index
+  holdFrames?: number // number of frames to hold/expose cel without duplicate data
+}
+
+export interface OnionSkinSettings {
+  enabled: boolean
+  beforeFrames: number // default 1
+  afterFrames: number // default 1
+  opacity: number // default 0.35
+  tintBefore?: string // default #ef4444
+  tintAfter?: string // default #10b981
 }
 
 export interface DrawingStroke {
@@ -108,8 +118,8 @@ export interface PaintLayer {
 }
 
 // ---- Workspace Layout & Focus Mode Types ----
-export type WorkspacePreset = 'default' | 'edit' | 'timeline-focus' | 'preview-focus' | 'drawing' | 'color'
-export type FocusMode = 'none' | 'preview' | 'timeline' | 'canvas-only'
+export type WorkspacePreset = 'default' | 'edit' | 'timeline-focus' | 'preview-focus' | 'drawing' | 'color' | '3d' | 'minimal' | 'full-canvas'
+export type FocusMode = 'none' | 'preview' | 'timeline' | 'canvas-only' | 'one-panel'
 
 export interface Clip {
   id: string

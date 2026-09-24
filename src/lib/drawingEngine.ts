@@ -1,4 +1,4 @@
-import type { DrawingStroke, PaintLayer, StrokePoint } from '../types'
+import type { DrawingStroke, PaintLayer, StrokePoint, OnionSkinSettings } from '../types'
 
 const imageCache = new Map<string, HTMLImageElement>()
 
@@ -169,12 +169,82 @@ export function isStrokeVisibleAtTime(stroke: DrawingStroke, time: number, fps: 
 
   if (scope.type === 'frame') {
     const frameIndex = scope.frame ?? 0
-    const strokeTime = frameIndex / fps
+    const hold = Math.max(1, scope.holdFrames ?? 1)
+    const start = frameIndex / fps
+    const end = (frameIndex + hold) / fps
     const frameDelta = 1 / (2 * fps)
-    return Math.abs(time - strokeTime) <= frameDelta
+    return time >= start - frameDelta && time < end - frameDelta
   }
 
   return true
+}
+
+/**
+ * Renders onion skin ghost cels of previous and next animation frames.
+ */
+export function renderOnionSkin(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  strokes: DrawingStroke[],
+  currentFrame: number,
+  fps: number,
+  settings: OnionSkinSettings,
+) {
+  if (!settings.enabled || strokes.length === 0) return
+
+  // Render prior frames (e.g. currentFrame - 1, currentFrame - 2)
+  for (let delta = settings.beforeFrames; delta >= 1; delta--) {
+    const targetFrame = currentFrame - delta
+    if (targetFrame < 0) continue
+
+    const priorStrokes = strokes.filter((s) => {
+      const sc = s.temporalScope
+      if (!sc || sc.type !== 'frame') return false
+      const f = sc.frame ?? 0
+      const hold = Math.max(1, sc.holdFrames ?? 1)
+      return targetFrame >= f && targetFrame < f + hold
+    })
+
+    if (priorStrokes.length === 0) continue
+
+    ctx.save()
+    ctx.globalAlpha = settings.opacity / delta
+    for (const stroke of priorStrokes) {
+      const ghostStroke: DrawingStroke = {
+        ...stroke,
+        color: settings.tintBefore || '#ef4444',
+      }
+      renderStroke(ctx, ghostStroke, width, height)
+    }
+    ctx.restore()
+  }
+
+  // Render future frames (e.g. currentFrame + 1, currentFrame + 2)
+  for (let delta = 1; delta <= settings.afterFrames; delta++) {
+    const targetFrame = currentFrame + delta
+
+    const futureStrokes = strokes.filter((s) => {
+      const sc = s.temporalScope
+      if (!sc || sc.type !== 'frame') return false
+      const f = sc.frame ?? 0
+      const hold = Math.max(1, sc.holdFrames ?? 1)
+      return targetFrame >= f && targetFrame < f + hold
+    })
+
+    if (futureStrokes.length === 0) continue
+
+    ctx.save()
+    ctx.globalAlpha = settings.opacity / delta
+    for (const stroke of futureStrokes) {
+      const ghostStroke: DrawingStroke = {
+        ...stroke,
+        color: settings.tintAfter || '#10b981',
+      }
+      renderStroke(ctx, ghostStroke, width, height)
+    }
+    ctx.restore()
+  }
 }
 
 /**

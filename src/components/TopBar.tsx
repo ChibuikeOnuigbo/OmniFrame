@@ -205,6 +205,9 @@ export function TopBar() {
               { id: 'preview-focus', label: 'Preview Focus' },
               { id: 'drawing', label: 'Drawing & Paint' },
               { id: 'color', label: 'Color Grading' },
+              { id: '3d', label: '3D Scene & Compositing' },
+              { id: 'minimal', label: 'Minimal' },
+              { id: 'full-canvas', label: 'Full Canvas' },
             ].map((p) => (
               <button
                 key={p.id}
@@ -232,6 +235,7 @@ export function TopBar() {
               { id: 'none', label: 'Normal Workspace' },
               { id: 'preview', label: 'Preview Focus' },
               { id: 'timeline', label: 'Timeline Focus' },
+              { id: 'one-panel', label: 'One Panel Only (Inspector)' },
               { id: 'canvas-only', label: 'Hide Everything (Zen)' },
             ].map((m) => (
               <button

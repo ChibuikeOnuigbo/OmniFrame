@@ -54,3 +54,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-24T12:31:08+00:00 — Drawing Run #1: [VERIFIED] Feature-Slice 01: Basic Paint — Stroke recording, brush, line, rectangle, circle, arrow, swatches, canvas rendering, export with 365 frames decoded
 
 - 2026-09-24T12:46:47+00:00 — Drawing Run #2: [VERIFIED] Feature-Slice 03: Fill Tool & Hair Recolor — Contiguous flood fill with Euclidean threshold, anti-halo dilation, luminance preservation, and layer blend modes verified via Playwright and OpenCV (152 frames decoded, blue dom +118.60, shading std 11.12)
+
+- 2026-09-24T13:00:29+00:00 — Drawing Run #3: [VERIFIED] Feature-Slice 02: Multi-Frame Paint & Onion Skinning — Cel frame scoping, exposure hold frames ('on twos'), step prev/next navigation, onion skin ghosting, and OpenCV video export verification (159 frames decoded)

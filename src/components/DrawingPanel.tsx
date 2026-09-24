@@ -16,6 +16,9 @@ import {
   PaintBucket,
   Sliders,
   Sparkles,
+  Layers,
+  ChevronLeft,
+  ChevronRight,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -54,6 +57,12 @@ export function DrawingPanel() {
   const setDrawingPreserveLuminance = useEditor((s) => s.setDrawingPreserveLuminance)
   const drawingScope = useEditor((s) => s.drawingScope)
   const setDrawingScope = useEditor((s) => s.setDrawingScope)
+  const drawingHoldFrames = useEditor((s) => s.drawingHoldFrames)
+  const setDrawingHoldFrames = useEditor((s) => s.setDrawingHoldFrames)
+  const onionSkin = useEditor((s) => s.onionSkin)
+  const setOnionSkin = useEditor((s) => s.setOnionSkin)
+  const toggleOnionSkin = useEditor((s) => s.toggleOnionSkin)
+  const stepFrame = useEditor((s) => s.stepFrame)
   const paintLayers = useEditor((s) => s.paintLayers)
   const activePaintLayerId = useEditor((s) => s.activePaintLayerId)
   const createPaintLayer = useEditor((s) => s.createPaintLayer)
@@ -83,11 +92,12 @@ export function DrawingPanel() {
       setDrawingScope({ type: 'span', startTime: playhead, duration: 2.0 })
     } else if (type === 'frame') {
       const currentFrame = Math.round(playhead * projectFps)
-      setDrawingScope({ type: 'frame', frame: currentFrame })
+      setDrawingScope({ type: 'frame', frame: currentFrame, holdFrames: drawingHoldFrames })
     }
   }
 
   const activeLayer = paintLayers.find((l) => l.id === activePaintLayerId) || paintLayers[0]
+  const currentFrame = Math.round(playhead * projectFps)
 
   return (
     <div data-testid="drawing-panel" className="p-3 text-xs text-ink-200 flex flex-col gap-4">
@@ -214,8 +224,8 @@ export function DrawingPanel() {
       )}
 
       {/* Temporal Scope */}
-      <div>
-        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+      <div className="flex flex-col gap-2">
+        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider flex items-center gap-1">
           <Clock size={12} />
           Temporal Scope
         </div>
@@ -226,8 +236,131 @@ export function DrawingPanel() {
         >
           <option value="global">All Frames (Global Annotation)</option>
           <option value="span">Span (Current Playhead + 2.0s)</option>
-          <option value="frame">Current Frame Only (Cel)</option>
+          <option value="frame">Current Frame Cel (Animation / Roto)</option>
         </select>
+
+        {drawingScope.type === 'frame' && (
+          <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2 animate-in fade-in duration-150">
+            {/* Cel Stepping */}
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-ink-400 uppercase font-mono">Cel Frame</span>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  data-testid="panel-step-prev-cel"
+                  title="Step Previous Frame (,)"
+                  onClick={() => stepFrame(-1)}
+                  className="p-1 rounded bg-ink-800 hover:bg-ink-750 text-ink-300 hover:text-white"
+                >
+                  <ChevronLeft size={13} />
+                </button>
+                <span className="font-mono text-[11px] font-bold text-brand px-1.5 py-0.5 rounded bg-brand/10 border border-brand/30">
+                  Frame #{currentFrame}
+                </span>
+                <button
+                  type="button"
+                  data-testid="panel-step-next-cel"
+                  title="Step Next Frame (.)"
+                  onClick={() => stepFrame(1)}
+                  className="p-1 rounded bg-ink-800 hover:bg-ink-750 text-ink-300 hover:text-white"
+                >
+                  <ChevronRight size={13} />
+                </button>
+              </div>
+            </div>
+
+            {/* Hold / Exposure */}
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-[10px] text-ink-400 uppercase font-mono">Hold / Exposure</span>
+              <select
+                data-testid="panel-cel-hold-frames"
+                value={drawingHoldFrames}
+                onChange={(e) => {
+                  const val = Number(e.target.value)
+                  setDrawingHoldFrames(val)
+                  setDrawingScope({ ...drawingScope, holdFrames: val })
+                }}
+                className="bg-ink-800 text-ink-200 border border-ink-700 rounded px-2 py-0.5 text-xs font-mono focus:outline-none focus:border-brand"
+              >
+                <option value={1}>1 frame (on ones)</option>
+                <option value={2}>2 frames (on twos)</option>
+                <option value={3}>3 frames (on threes)</option>
+                <option value={4}>4 frames (on fours)</option>
+              </select>
+            </div>
+
+            {/* Onion Skinning Controls */}
+            <div className="pt-2 border-t border-ink-800 flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-ink-400 uppercase font-mono flex items-center gap-1">
+                  <Layers size={11} className={onionSkin.enabled ? 'text-amber-400' : ''} />
+                  Onion Skinning
+                </span>
+                <button
+                  type="button"
+                  data-testid="panel-onion-skin-toggle"
+                  onClick={() => toggleOnionSkin()}
+                  className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
+                    onionSkin.enabled
+                      ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                      : 'bg-ink-800 text-ink-400 hover:text-white'
+                  }`}
+                >
+                  {onionSkin.enabled ? 'Active (Ghosting)' : 'Disabled'}
+                </button>
+              </div>
+
+              {onionSkin.enabled && (
+                <div className="flex flex-col gap-1.5 pt-1 text-[10px] text-ink-400">
+                  <div className="flex justify-between items-center">
+                    <span className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
+                      Prev Ghost Frames
+                    </span>
+                    <span className="font-mono text-ink-200">{onionSkin.beforeFrames}f</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={3}
+                    value={onionSkin.beforeFrames}
+                    onChange={(e) => setOnionSkin({ beforeFrames: Number(e.target.value) })}
+                    className="of-range w-full"
+                  />
+
+                  <div className="flex justify-between items-center">
+                    <span className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                      Next Ghost Frames
+                    </span>
+                    <span className="font-mono text-ink-200">{onionSkin.afterFrames}f</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={3}
+                    value={onionSkin.afterFrames}
+                    onChange={(e) => setOnionSkin({ afterFrames: Number(e.target.value) })}
+                    className="of-range w-full"
+                  />
+
+                  <div className="flex justify-between items-center">
+                    <span>Ghost Opacity</span>
+                    <span className="font-mono text-ink-200">{Math.round(onionSkin.opacity * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={10}
+                    max={80}
+                    value={Math.round(onionSkin.opacity * 100)}
+                    onChange={(e) => setOnionSkin({ opacity: Number(e.target.value) / 100 })}
+                    className="of-range w-full"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Paint Layers */}
