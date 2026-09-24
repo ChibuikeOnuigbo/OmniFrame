@@ -13,7 +13,9 @@
 //   - drift is corrected by occasional currentTime seeks, not per-frame seeks
 
 import { useEditor } from '../store'
-import type { Clip, MediaAsset, Track } from '../types'
+import type { Clip, MediaAsset, Track, Transition } from '../types'
+import { clamp } from './time'
+import { renderAllPaintLayers } from './drawingEngine'
 
 export const PW = 1280
 export const PH = 720
@@ -159,10 +161,44 @@ export class PreviewEngine {
     this.usedThisFrame.clear()
     let visualPending = false
 
-    for (const track of st.tracks) {
+    // Standard NLE visual compositing: lower tracks drawn first, higher visual tracks composite on top
+    const renderTracks = [...st.tracks].reverse()
+
+    for (const track of renderTracks) {
       if (track.type === 'video' && track.hidden) {
         continue
       }
+
+      // Check if an active transition is playing on this track
+      const activeTrans = (st.transitions || []).find(
+        (tr) =>
+          tr.trackId === track.id &&
+          tr.enabled &&
+          time >= tr.startTime &&
+          time <= tr.startTime + tr.duration,
+      )
+
+      if (activeTrans && track.type === 'video') {
+        const fromClip = st.clips.find((c) => c.id === activeTrans.fromClipId)
+        const toClip = st.clips.find((c) => c.id === activeTrans.toClipId)
+        const fromAsset = fromClip ? st.assets.find((a) => a.id === fromClip.assetId) : null
+        const toAsset = toClip ? st.assets.find((a) => a.id === toClip.assetId) : null
+        if (fromClip && toClip && fromAsset && toAsset) {
+          this.drawTransition(
+            ctx,
+            activeTrans,
+            fromClip,
+            toClip,
+            fromAsset,
+            toAsset,
+            time,
+            st,
+            track.muted,
+          )
+          continue
+        }
+      }
+
       const clip = activeClipOnTrack(st.clips, track.id, time)
       if (!clip) continue
       const asset = st.assets.find((a) => a.id === clip.assetId)
@@ -182,6 +218,19 @@ export class PreviewEngine {
       }
     }
 
+    // Composite Paint Layers & Vector Drawing Strokes
+    if (st.drawingStrokes && st.drawingStrokes.length > 0) {
+      renderAllPaintLayers(
+        ctx,
+        this.width,
+        this.height,
+        st.drawingStrokes,
+        st.paintLayers || [],
+        time,
+        st.projectFps || 30,
+      )
+    }
+
     // Never flash black while Chromium is decoding a newly requested frame.
     // Commit the complete back buffer atomically once all active visuals are ready.
     if (!visualPending) this.ctx.drawImage(this.backCanvas, 0, 0)
@@ -192,6 +241,155 @@ export class PreviewEngine {
     }
     videoCache.forEach(pause)
     audioCache.forEach(pause)
+  }
+
+  private drawTransition(
+    ctx: CanvasRenderingContext2D,
+    trans: Transition,
+    fromClip: Clip,
+    toClip: Clip,
+    fromAsset: MediaAsset,
+    toAsset: MediaAsset,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+    trackMuted: boolean,
+  ) {
+    const fromEl = this.syncElement(fromAsset, time, fromClip, st.playing, trackMuted, st.speed)
+    const toEl = this.syncElement(toAsset, time, toClip, st.playing, trackMuted, st.speed)
+    if (!fromEl && !toEl) return
+
+    const progress = clamp((time - trans.startTime) / Math.max(0.001, trans.duration), 0, 1)
+
+    ctx.save()
+    switch (trans.type) {
+      case 'cross_dissolve': {
+        if (fromEl) {
+          ctx.save()
+          ctx.globalAlpha = 1 - progress
+          this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+          ctx.restore()
+        }
+        if (toEl) {
+          ctx.save()
+          ctx.globalAlpha = progress
+          this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.restore()
+        }
+        break
+      }
+      case 'dip_to_black': {
+        if (progress < 0.5) {
+          if (fromEl) {
+            ctx.save()
+            ctx.globalAlpha = 1 - progress * 2
+            this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+            ctx.restore()
+          }
+        } else {
+          if (toEl) {
+            ctx.save()
+            ctx.globalAlpha = (progress - 0.5) * 2
+            this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+            ctx.restore()
+          }
+        }
+        break
+      }
+      case 'dip_to_white': {
+        if (progress < 0.5) {
+          if (fromEl) this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+          ctx.fillStyle = `rgba(255, 255, 255, ${progress * 2})`
+          ctx.fillRect(0, 0, this.width, this.height)
+        } else {
+          if (toEl) this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.fillStyle = `rgba(255, 255, 255, ${(1 - progress) * 2})`
+          ctx.fillRect(0, 0, this.width, this.height)
+        }
+        break
+      }
+      case 'wipe_left': {
+        if (fromEl) this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+        if (toEl) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(this.width * (1 - progress), 0, this.width * progress, this.height)
+          ctx.clip()
+          this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.restore()
+        }
+        break
+      }
+      case 'wipe_right': {
+        if (fromEl) this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+        if (toEl) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(0, 0, this.width * progress, this.height)
+          ctx.clip()
+          this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.restore()
+        }
+        break
+      }
+      case 'slide_left': {
+        if (fromEl) {
+          ctx.save()
+          ctx.translate(-progress * this.width, 0)
+          this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+          ctx.restore()
+        }
+        if (toEl) {
+          ctx.save()
+          ctx.translate((1 - progress) * this.width, 0)
+          this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.restore()
+        }
+        break
+      }
+      case 'slide_right': {
+        if (fromEl) {
+          ctx.save()
+          ctx.translate(progress * this.width, 0)
+          this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+          ctx.restore()
+        }
+        if (toEl) {
+          ctx.save()
+          ctx.translate(-(1 - progress) * this.width, 0)
+          this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.restore()
+        }
+        break
+      }
+      case 'zoom': {
+        if (fromEl) {
+          ctx.save()
+          const s = 1.0 + progress * 0.4
+          ctx.translate(this.width / 2, this.height / 2)
+          ctx.scale(s, s)
+          ctx.translate(-this.width / 2, -this.height / 2)
+          ctx.globalAlpha = 1 - progress
+          this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+          ctx.restore()
+        }
+        if (toEl) {
+          ctx.save()
+          const s = 1.4 - progress * 0.4
+          ctx.translate(this.width / 2, this.height / 2)
+          ctx.scale(s, s)
+          ctx.translate(-this.width / 2, -this.height / 2)
+          ctx.globalAlpha = progress
+          this.drawClip(ctx, toEl as CanvasImageSource, toClip, toAsset)
+          ctx.restore()
+        }
+        break
+      }
+      default: {
+        if (fromEl) this.drawClip(ctx, fromEl as CanvasImageSource, fromClip, fromAsset)
+        break
+      }
+    }
+    ctx.restore()
   }
 
   private seekTo(el: HTMLMediaElement, target: number, tolerance: number) {

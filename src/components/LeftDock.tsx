@@ -8,11 +8,13 @@ import {
   Crosshair,
   Layers,
   Box,
+  Palette,
   X,
   type LucideIcon,
 } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
 import { MediaPanel } from './MediaPanel'
+import { DrawingPanel } from './DrawingPanel'
 
 interface TabDef {
   id: LeftTab
@@ -22,6 +24,7 @@ interface TabDef {
 
 const TABS: TabDef[] = [
   { id: 'media', label: 'Media library', icon: LibraryBig },
+  { id: 'drawing', label: 'Drawing & Paint', icon: Palette },
   { id: 'text', label: 'Text', icon: Type },
   { id: 'effects', label: 'Effects', icon: Wand2 },
   { id: 'transitions', label: 'Transitions', icon: Shuffle },
@@ -46,6 +49,7 @@ export function LeftDock() {
   const leftOpen = useEditor((s) => s.leftOpen)
   const setLeftTab = useEditor((s) => s.setLeftTab)
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
+  const leftDockWidth = useEditor((s) => s.leftDockWidth)
 
   return (
     <div className="flex shrink-0 h-full">
@@ -58,6 +62,7 @@ export function LeftDock() {
             <button
               key={t.id}
               type="button"
+              data-testid={`left-tab-${t.id}`}
               title={t.label}
               aria-pressed={active}
               onClick={() => {
@@ -81,12 +86,10 @@ export function LeftDock() {
       <div
         data-testid="left-panel"
         data-open={leftOpen}
-        className={[
-          'shrink-0 bg-ink-850 border-r border-ink-700 overflow-hidden transition-[width] duration-150',
-          leftOpen ? 'w-[232px]' : 'w-0',
-        ].join(' ')}
+        style={{ width: leftOpen ? `${leftDockWidth - 48}px` : '0px' }}
+        className="shrink-0 bg-ink-850 border-r border-ink-700 overflow-hidden transition-[width] duration-150"
       >
-        <div className="w-[232px] h-full flex flex-col">
+        <div style={{ width: `${leftDockWidth - 48}px` }} className="h-full flex flex-col">
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700">
             <span className="text-xs font-semibold uppercase tracking-wider text-ink-300">
               {TABS.find((t) => t.id === leftTab)?.label}
@@ -102,6 +105,7 @@ export function LeftDock() {
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto">
             {(leftTab === 'media' || leftTab === 'audio') && <MediaPanel />}
+            {leftTab === 'drawing' && <DrawingPanel />}
             {leftTab === 'text' && (
               <PlannedPanel title="Text & titles" note="Rich text, presets and per-letter animation are part of the next phase. Timeline editing, trimming, splitting and export are working now." />
             )}

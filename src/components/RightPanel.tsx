@@ -127,12 +127,13 @@ export function RightPanel() {
   const rightOpen = useEditor((s) => s.rightOpen)
   const setRightOpen = useEditor((s) => s.setRightOpen)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const rightPanelWidth = useEditor((s) => s.rightPanelWidth)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
   return (
     <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
       {rightOpen && (
-        <div className="w-72 shrink-0 bg-ink-850 flex flex-col h-full">
+        <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
           <div className="h-9 shrink-0 flex items-center px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
             {selectedClipId ? 'Clip' : 'Inspector'}
           </div>

@@ -4,6 +4,31 @@
 
 export type MediaKind = 'video' | 'image' | 'audio'
 
+export type TransitionType =
+  | 'cross_dissolve'
+  | 'dip_to_black'
+  | 'dip_to_white'
+  | 'wipe_left'
+  | 'wipe_right'
+  | 'wipe_up'
+  | 'wipe_down'
+  | 'slide_left'
+  | 'slide_right'
+  | 'zoom'
+
+export interface Transition {
+  id: string
+  type: TransitionType
+  fromClipId: string
+  toClipId: string
+  trackId: string
+  startTime: number // timeline start timestamp (seconds)
+  duration: number // transition duration (seconds)
+  alignment: 'centered' | 'start_at_cut' | 'end_at_cut'
+  parameters?: Record<string, any>
+  enabled: boolean
+}
+
 export interface MediaAsset {
   id: string
   name: string
@@ -38,6 +63,53 @@ export interface ClipTransform {
   rotation: number // degrees
   opacity: number // 0..1
 }
+
+// ---- Drawing & Paint Subsystem Types ----
+export type DrawingToolType = 'brush' | 'eraser' | 'line' | 'rectangle' | 'circle' | 'arrow' | 'fill'
+
+export interface StrokePoint {
+  x: number // Normalized [0, 1] relative to stage width
+  y: number // Normalized [0, 1] relative to stage height
+  pressure?: number // 0..1
+  timestamp: number // ms from stroke start
+}
+
+export type TemporalScopeType = 'global' | 'span' | 'frame'
+
+export interface TemporalScope {
+  type: TemporalScopeType
+  startTime?: number // seconds
+  duration?: number // seconds
+  frame?: number // frame index
+}
+
+export interface DrawingStroke {
+  id: string
+  layerId: string
+  tool: DrawingToolType
+  color: string
+  size: number // base size in stage pixels
+  opacity: number // 0..1
+  points: StrokePoint[]
+  temporalScope: TemporalScope
+  fillTolerance?: number // threshold 1..100 for flood fill
+  preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
+  maskDataUrl?: string // raster patch for flood fill
+}
+
+export interface PaintLayer {
+  id: string
+  name: string
+  visible: boolean
+  locked: boolean
+  opacity: number
+  blendMode?: GlobalCompositeOperation
+  blur?: number // Gaussian blur radius in px
+}
+
+// ---- Workspace Layout & Focus Mode Types ----
+export type WorkspacePreset = 'default' | 'edit' | 'timeline-focus' | 'preview-focus' | 'drawing' | 'color'
+export type FocusMode = 'none' | 'preview' | 'timeline' | 'canvas-only'
 
 export interface Clip {
   id: string

@@ -1,0 +1,38 @@
+# OmniFrame Master Screenshot Inventory (`screenshot.md`)
+
+This register tracks all full-frame screenshots and visual captures validating OmniFrame's architectural subsystems, viewport responsivity, rendering engine, timeline interactions, and transitions.
+
+| ID | File Path | Resolution | Subsystem / Feature | Description |
+|---|---|---|---|---|
+| SS-001 | `evidence/timeline/omniframe-timeline-full-stack.png` | 1440x900 | Timeline & Tracks | Full timeline stack with multiple video tracks (V1, V2), clips, adaptive ruler, and active playhead. |
+| SS-002 | `evidence/timeline/omniframe-transition-context-menu.png` | 1440x900 | Transition System | Active context menu over a first-class transition block, displaying presets (Dissolve, Dip Black, Dip White, Wipe, Slide, Zoom). |
+| SS-003 | `qa/screenshots/landing-1440x900.png` | 1440x900 | Landing Page | Desktop landing page with hero CTA, project initialization, and template selectors. |
+| SS-004 | `qa/screenshots/landing-360x800.png` | 360x800 | Landing Page | Mobile landing page viewport test. |
+| SS-005 | `qa/screenshots/landing-transition.png` | 1440x900 | Landing Transition | Transition animation from landing screen into studio workspace. |
+| SS-006 | `qa/screenshots/media-library-all-types.png` | 1440x900 | Media Ingestion | Media library panel displaying ingested video, audio, and image assets. |
+| SS-007 | `qa/screenshots/media-library-audio-filter.png` | 1440x900 | Media Ingestion | Media library filtered exclusively by audio MIME types. |
+| SS-008 | `qa/screenshots/media-library-compact-768x720.png` | 768x720 | Media Ingestion | Compact tablet viewport test for media asset cards. |
+| SS-009 | `qa/screenshots/media-library-empty-search.png` | 1440x900 | Media Ingestion | Empty search state handling in media dock. |
+| SS-010 | `qa/screenshots/media-library-narrow-900x700.png` | 900x700 | Media Ingestion | Narrow window media panel layout. |
+| SS-011 | `qa/screenshots/media-library-search-filter.png` | 1440x900 | Media Ingestion | Active search query filtering media items. |
+| SS-012 | `qa/screenshots/media-library-search.png` | 1440x900 | Media Ingestion | Media dock search bar interaction. |
+| SS-013 | `qa/screenshots/media-library-wide-1920x1080.png` | 1920x1080 | Media Ingestion | Ultra-wide / 1080p full workspace media dock layout. |
+| SS-014 | `qa/screenshots/settings-popup-accessibility.png` | 1440x900 | Settings & Preferences | Settings modal with keyboard navigation and accessible tabs. |
+| SS-015 | `qa/screenshots/stress-01-empty.png` | 1440x900 | Studio Stress Suite | Fresh empty studio session prior to media ingestion. |
+| SS-016 | `qa/screenshots/stress-02-video-image-audio.png` | 1440x900 | Studio Stress Suite | Timeline populated with mixed media types (video, image, audio). |
+| SS-017 | `qa/screenshots/stress-03-playback-paused.png` | 1440x900 | Studio Stress Suite | Playhead paused at frame position with preview frame synchronization. |
+| SS-018 | `qa/screenshots/stress-04-image-moved.png` | 1440x900 | Studio Stress Suite | Image clip repositioned along the temporal timeline track. |
+| SS-019 | `qa/screenshots/stress-05-video-trimmed.png` | 1440x900 | Studio Stress Suite | Video clip trimmed using edge trim handles. |
+| SS-020 | `qa/screenshots/stress-06-split.png` | 1440x900 | Studio Stress Suite | Razor split tool dividing clip into contiguous segments. |
+| SS-021 | `qa/screenshots/stress-07-frame-mode.png` | 1440x900 | Studio Stress Suite | Continuous zoom ruler switched into high-density frame mode. |
+| SS-022 | `qa/screenshots/stress-08-preview-200-panned.png` | 1440x900 | Canvas Preview | 200% canvas zoom with 2D pan offset. |
+| SS-023 | `qa/screenshots/stress-08-preview-zoom.png` | 1440x900 | Canvas Preview | Canvas zoom fit and magnification controls. |
+| SS-024 | `qa/screenshots/stress-09-panels.png` | 1440x900 | Workspace Layout | Dockable panels toggle and collapse states. |
+| SS-025 | `qa/screenshots/stress-10-exported.png` | 1440x900 | Video Pipeline | Export confirmation dialog and status toast. |
+| SS-026 | `qa/screenshots/studio-context-menu-desktop.png` | 1440x900 | Context System | Centralized context menu invocation on desktop viewport. |
+| SS-027 | `qa/screenshots/studio-context-menu-mobile-390x844.png` | 390x844 | Context System | Long-press / right-click context menu on mobile viewport. |
+| SS-028 | `qa/screenshots/timeline-clip-context-menu.png` | 1440x900 | Timeline Context | Clip contextual actions (Cut, Copy, Duplicate, Split, Extract Audio). |
+| SS-029 | `qa/screenshots/timeline-hidden-clip-context-menu.png` | 1440x900 | Timeline Context | Clip contextual actions showing 'Unhide Clip' toggle. |
+| SS-030 | `qa/screenshots/audio-waveform-volume-25.png` | 1440x900 | Audio Subsystem | Audio clip rendered with real audio waveform peaks at 25% gain. |
+| SS-031 | `evidence/drawing/omniframe-drawing-active-mode.png` | 1440x900 | Drawing Subsystem | Active drawing mode with floating tool palette, left dock paint panel, multiple paint layers, and canvas vector strokes (brush, boxes, arrows). |
+| SS-032 | `evidence/drawing/omniframe-hair-recolor-active.png` | 1440x900 | Drawing Subsystem | Feature-Slice 03: Contiguous flood fill & hair recolor workflow with blue `#3b82f6` fill, luminance/shading preservation, active floating toolbar, left dock blend mode controls, and timeline clip. |

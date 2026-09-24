@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Maximize2, Scan, Grid3x3 } from 'lucide-react'
+import { Maximize2, Scan, Grid3x3, Paintbrush } from 'lucide-react'
 import { PreviewEngine } from '../lib/playback'
 import { useEditor } from '../store'
 import { IconButton } from './ui'
+import { DrawingToolbar } from './DrawingToolbar'
+import { DrawingCanvasOverlay } from './DrawingCanvasOverlay'
 
 const CANVAS_W = 1280
 const CANVAS_H = 720
@@ -131,6 +133,14 @@ export function Preview() {
       </div>
 
       <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
+        <IconButton
+          title="Drawing & Paint"
+          data-testid="toggle-drawing-btn"
+          active={useEditor.getState().drawingEnabled}
+          onClick={() => useEditor.getState().toggleDrawingEnabled()}
+        >
+          <Paintbrush size={15} />
+        </IconButton>
         <IconButton title="Safe areas" active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton>
         <IconButton title="Grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton>
         <div className="ml-1 flex h-8 items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-800">
@@ -140,12 +150,15 @@ export function Preview() {
         </div>
       </div>
 
+      <DrawingToolbar />
+
       <div
         data-testid="preview-stage"
         className={`absolute ${canPan ? 'cursor-grab active:cursor-grabbing' : ''}`}
         style={stageStyle}
       >
         <canvas id="of-canvas" ref={canvasRef} data-quality-effect={previewQuality === 'low' ? 'pixelated' : previewQuality === 'medium' ? 'soft' : 'clear'} className="block w-full h-full bg-black shadow-2xl rounded-sm" style={{ imageRendering: previewQuality === 'low' ? 'pixelated' : 'auto', filter: previewQuality === 'medium' ? 'contrast(0.99)' : previewQuality === 'high' ? 'contrast(1.025) saturate(1.01)' : 'none' }} />
+        <DrawingCanvasOverlay width={previewDimensions.width} height={previewDimensions.height} />
         {safe && (
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-[5%] border border-dashed border-white/40" />

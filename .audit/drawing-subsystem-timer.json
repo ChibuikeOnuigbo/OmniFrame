@@ -1,0 +1,20 @@
+{
+  "runs": [
+    {
+      "run": 1,
+      "timestamp": "2026-09-24T12:31:08+00:00",
+      "feature": "Feature-Slice 01: Basic Paint",
+      "status": "verified",
+      "details": "Stroke recording, brush, line, rectangle, circle, arrow, swatches, canvas rendering, export with 365 frames decoded"
+    },
+    {
+      "run": 2,
+      "timestamp": "2026-09-24T12:46:47+00:00",
+      "feature": "Feature-Slice 03: Fill Tool & Hair Recolor",
+      "status": "verified",
+      "details": "Contiguous flood fill with Euclidean threshold, anti-halo dilation, luminance preservation, and layer blend modes verified via Playwright and OpenCV (152 frames decoded, blue dom +118.60, shading std 11.12)"
+    }
+  ],
+  "total_runs": 2,
+  "last_updated": "2026-09-24T12:46:47+00:00"
+}

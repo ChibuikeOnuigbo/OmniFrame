@@ -8,9 +8,13 @@ import {
   Undo2,
   Redo2,
   Settings,
+  LayoutGrid,
+  Check,
+  Maximize,
   X,
 } from 'lucide-react'
 import { useEditor } from '../store'
+import type { WorkspacePreset, FocusMode } from '../types'
 import { exportVideo } from '../lib/export'
 import { SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
 import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
@@ -30,12 +34,18 @@ export function TopBar() {
   const setDropFrameTimecode = useEditor((s) => s.setDropFrameTimecode)
   const previewQuality = useEditor((s) => s.previewQuality)
   const setPreviewQuality = useEditor((s) => s.setPreviewQuality)
+  const workspacePreset = useEditor((s) => s.workspacePreset)
+  const setWorkspacePreset = useEditor((s) => s.setWorkspacePreset)
+  const focusMode = useEditor((s) => s.focusMode)
+  const setFocusMode = useEditor((s) => s.setFocusMode)
 
   const fileInput = useRef<HTMLInputElement>(null)
   const [exporting, setExporting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [layoutOpen, setLayoutOpen] = useState(false)
+  const layoutRef = useRef<HTMLDivElement>(null)
   const [settingsCategory, setSettingsCategory] = useState<SettingsCategory>('timeline')
   const [settingsSearch, setSettingsSearch] = useState('')
   const settingsMatches = searchSettings(settingsSearch)
@@ -86,6 +96,17 @@ export function TopBar() {
     window.addEventListener('keydown', closeEscape)
     return () => { window.removeEventListener('pointerdown', closeOutside); window.removeEventListener('keydown', closeEscape) }
   }, [settingsOpen])
+
+  useEffect(() => {
+    if (!layoutOpen) return
+    const closeOutside = (event: PointerEvent) => {
+      if (!layoutRef.current?.contains(event.target as Node)) setLayoutOpen(false)
+    }
+    const closeEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setLayoutOpen(false) }
+    window.addEventListener('pointerdown', closeOutside)
+    window.addEventListener('keydown', closeEscape)
+    return () => { window.removeEventListener('pointerdown', closeOutside); window.removeEventListener('keydown', closeEscape) }
+  }, [layoutOpen])
 
   const onPickFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) importFiles(e.target.files)
@@ -150,6 +171,89 @@ export function TopBar() {
       </button>
       <input id="topbar-import-input" data-testid="import-input" aria-label="Import media files" ref={fileInput} type="file" accept="video/*,image/*,audio/*" multiple hidden onChange={onPickFiles} />
 
+      <div className="relative">
+        <button
+          type="button"
+          data-testid="workspace-layout-btn"
+          title="Workspace Layout & Focus Mode"
+          aria-label="Workspace Layout"
+          aria-expanded={layoutOpen}
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => setLayoutOpen((open) => !open)}
+          className={`grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+            layoutOpen ? 'bg-ink-700 text-white' : 'text-ink-400'
+          }`}
+        >
+          <LayoutGrid size={15} />
+        </button>
+
+        {layoutOpen && (
+          <div
+            ref={layoutRef}
+            data-testid="layout-popup"
+            role="dialog"
+            aria-label="Workspace Layouts"
+            className="fixed right-16 top-12 z-[80] flex w-64 flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.5)] backdrop-blur-xl p-2 text-xs text-ink-200"
+          >
+            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
+              Workspace Presets
+            </div>
+            {[
+              { id: 'default', label: 'Default' },
+              { id: 'edit', label: 'Edit' },
+              { id: 'timeline-focus', label: 'Timeline Focus' },
+              { id: 'preview-focus', label: 'Preview Focus' },
+              { id: 'drawing', label: 'Drawing & Paint' },
+              { id: 'color', label: 'Color Grading' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                data-testid={`preset-${p.id}`}
+                onClick={() => {
+                  setWorkspacePreset(p.id as WorkspacePreset)
+                  setLayoutOpen(false)
+                }}
+                className={`flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-ink-700 transition-colors ${
+                  workspacePreset === p.id ? 'bg-brand/20 text-brand font-medium' : 'text-ink-300'
+                }`}
+              >
+                <span>{p.label}</span>
+                {workspacePreset === p.id && <Check size={14} />}
+              </button>
+            ))}
+
+            <div className="my-1 border-t border-ink-700" />
+
+            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
+              Focus Mode
+            </div>
+            {[
+              { id: 'none', label: 'Normal Workspace' },
+              { id: 'preview', label: 'Preview Focus' },
+              { id: 'timeline', label: 'Timeline Focus' },
+              { id: 'canvas-only', label: 'Hide Everything (Zen)' },
+            ].map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                data-testid={`focus-${m.id}`}
+                onClick={() => {
+                  setFocusMode(m.id as FocusMode)
+                  setLayoutOpen(false)
+                }}
+                className={`flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-ink-700 transition-colors ${
+                  focusMode === m.id ? 'bg-brand/20 text-brand font-medium' : 'text-ink-300'
+                }`}
+              >
+                <span>{m.label}</span>
+                {focusMode === m.id && <Check size={14} />}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       <button
         type="button"
         data-testid="settings-button"
@@ -165,6 +269,7 @@ export function TopBar() {
 
       <button
         type="button"
+        data-testid="export-video-btn"
         onClick={onExport}
         disabled={exporting}
         title={exporting ? 'Exporting video' : 'Export video'}

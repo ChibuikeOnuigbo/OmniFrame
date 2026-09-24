@@ -1,5 +1,19 @@
 import { create } from 'zustand'
-import type { Clip, MediaAsset, Track, TrackType, ClipTransform } from './types'
+import type {
+  Clip,
+  MediaAsset,
+  Track,
+  TrackType,
+  ClipTransform,
+  Transition,
+  DrawingToolType,
+  StrokePoint,
+  TemporalScope,
+  DrawingStroke,
+  PaintLayer,
+  WorkspacePreset,
+  FocusMode,
+} from './types'
 import { uid, clamp } from './lib/time'
 
 export type Tool = 'select' | 'blade'
@@ -12,6 +26,7 @@ export type LeftTab =
   | 'transitions'
   | 'templates'
   | 'masks'
+  | 'drawing'
   | 'tracking'
   | 'omniframe'
   | 'threed'
@@ -19,6 +34,9 @@ export type LeftTab =
 interface Doc {
   tracks: Track[]
   clips: Clip[]
+  transitions: Transition[]
+  drawingStrokes: DrawingStroke[]
+  paintLayers: PaintLayer[]
 }
 
 const MIN_CLIP = 0.05 // seconds
@@ -27,6 +45,9 @@ function cloneDoc(s: EditorState): Doc {
   return {
     tracks: structuredClone(s.tracks),
     clips: structuredClone(s.clips),
+    transitions: structuredClone(s.transitions || []),
+    drawingStrokes: structuredClone(s.drawingStrokes || []),
+    paintLayers: structuredClone(s.paintLayers || []),
   }
 }
 
@@ -34,6 +55,8 @@ export interface EditorState {
   assets: MediaAsset[]
   tracks: Track[]
   clips: Clip[]
+  transitions: Transition[]
+  selectedTransitionId: string | null
   playhead: number
   duration: number
   pxPerSec: number
@@ -53,14 +76,46 @@ export interface EditorState {
   snapping: boolean
   scrubbing: boolean
 
+  // ---- drawing & paint subsystem ----
+  paintLayers: PaintLayer[]
+  activePaintLayerId: string
+  drawingStrokes: DrawingStroke[]
+  drawingTool: DrawingToolType
+  drawingColor: string
+  drawingSize: number
+  drawingOpacity: number
+  drawingScope: TemporalScope
+  drawingEnabled: boolean
+  drawingFillTolerance: number
+  drawingPreserveLuminance: boolean
+
+  // ---- workspace layout & focus mode ----
+  workspacePreset: WorkspacePreset
+  focusMode: FocusMode
+  timelineHeight: number
+  leftDockWidth: number
+  rightPanelWidth: number
+
   // ---- media ----
   addAsset: (a: MediaAsset) => void
   importFiles: (files: FileList | File[]) => Promise<void>
 
   // ---- tracks / clips ----
   ensureTrack: (type: TrackType) => string
+  createTrack: (type?: TrackType, position?: 'above' | 'below', referenceTrackId?: string) => string
+  deleteTrack: (id: string) => void
+  moveTrack: (sourceId: string, targetId: string, position: 'above' | 'below') => void
+  setTrackHeight: (id: string, height: number) => void
+  setTrackName: (id: string, name: string) => void
   addClipToTrack: (trackId: string, assetId: string, atTime?: number) => void
   moveClip: (id: string, newStart: number, newTrackId?: string) => void
+  moveClipToNewTrack: (
+    clipId: string,
+    newStart: number,
+    trackType: TrackType,
+    position: 'above' | 'below',
+    referenceTrackId: string,
+  ) => string
   trimClip: (id: string, edge: 'left' | 'right', value: number) => void
   splitAt: (time: number) => void
   removeClip: (id: string) => void
@@ -74,6 +129,37 @@ export interface EditorState {
   toggleTrackHidden: (id: string) => void
   toggleTrackLock: (id: string) => void
   toggleTrackGapless: (id: string) => void
+
+  // ---- transitions ----
+  addTransition: (params: Omit<Transition, 'id'>) => string
+  updateTransition: (id: string, patch: Partial<Transition>) => void
+  removeTransition: (id: string) => void
+  selectTransition: (id: string | null) => void
+
+  // ---- drawing actions ----
+  addDrawingStroke: (stroke: DrawingStroke) => void
+  clearDrawingStrokes: (layerId?: string) => void
+  setDrawingTool: (tool: DrawingToolType) => void
+  setDrawingColor: (color: string) => void
+  setDrawingSize: (size: number) => void
+  setDrawingOpacity: (opacity: number) => void
+  setDrawingScope: (scope: TemporalScope) => void
+  setDrawingEnabled: (enabled: boolean) => void
+  toggleDrawingEnabled: () => void
+  setDrawingFillTolerance: (tolerance: number) => void
+  setDrawingPreserveLuminance: (preserve: boolean) => void
+  createPaintLayer: (name?: string) => string
+  togglePaintLayerVisibility: (layerId: string) => void
+  setPaintLayerBlendMode: (layerId: string, blendMode: GlobalCompositeOperation) => void
+  setPaintLayerBlur: (layerId: string, blur: number) => void
+  setPaintLayerOpacity: (layerId: string, opacity: number) => void
+
+  // ---- layout actions ----
+  setWorkspacePreset: (preset: WorkspacePreset) => void
+  setFocusMode: (mode: FocusMode) => void
+  setTimelineHeight: (height: number) => void
+  setLeftDockWidth: (width: number) => void
+  setRightPanelWidth: (width: number) => void
 
   // ---- transport ----
   setPlayhead: (t: number) => void
@@ -135,6 +221,8 @@ export const useEditor = create<EditorState>((set, get) => {
     assets: [],
     tracks: [],
     clips: [],
+    transitions: [],
+    selectedTransitionId: null,
     playhead: 0,
     duration: 10,
     pxPerSec: 100,
@@ -153,6 +241,28 @@ export const useEditor = create<EditorState>((set, get) => {
     inInteraction: false,
     snapping: true,
     scrubbing: false,
+
+    // ---- drawing initial state ----
+    paintLayers: [
+      { id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 },
+    ],
+    activePaintLayerId: 'default-paint-layer',
+    drawingStrokes: [],
+    drawingTool: 'brush',
+    drawingColor: '#f59e0b',
+    drawingSize: 6,
+    drawingOpacity: 1,
+    drawingScope: { type: 'global' },
+    drawingEnabled: false,
+    drawingFillTolerance: 32,
+    drawingPreserveLuminance: false,
+
+    // ---- layout initial state ----
+    workspacePreset: 'default',
+    focusMode: 'none',
+    timelineHeight: 280,
+    leftDockWidth: 320,
+    rightPanelWidth: 280,
 
     addAsset: (a) => set((s) => ({ assets: [...s.assets, a] })),
 
@@ -173,11 +283,137 @@ export const useEditor = create<EditorState>((set, get) => {
     ensureTrack: (type) => {
       const existing = get().tracks.find((t) => t.type === type && !t.locked)
       if (existing) return existing.id
-      const count = get().tracks.filter((t) => t.type === type).length + 1
-      const base = type === 'audio' ? 'Audio' : 'Video'
-      const track = makeTrack(type, count === 1 ? base : `${base} ${count}`)
-      set((s) => ({ tracks: [...s.tracks, track] }))
-      return track.id
+      return get().createTrack(type)
+    },
+
+    createTrack: (type = 'video', position = 'above', referenceTrackId) => {
+      pushSnapshot()
+      const existing = get().tracks
+      const sameTypeCount = existing.filter((t) => t.type === type).length + 1
+      const prefix = type === 'video' ? 'V' : 'A'
+      const newTrack = makeTrack(type, `${prefix}${sameTypeCount}`)
+
+      if (!referenceTrackId) {
+        if (type === 'video') {
+          // New video track created above existing video tracks
+          set((s) => ({ tracks: [newTrack, ...s.tracks] }))
+        } else {
+          // Audio tracks append to bottom
+          set((s) => ({ tracks: [...s.tracks, newTrack] }))
+        }
+        return newTrack.id
+      }
+
+      const refIdx = existing.findIndex((t) => t.id === referenceTrackId)
+      if (refIdx === -1) {
+        set((s) => ({ tracks: [...s.tracks, newTrack] }))
+        return newTrack.id
+      }
+
+      const insertIdx = position === 'above' ? refIdx : refIdx + 1
+      const updated = [...existing]
+      updated.splice(insertIdx, 0, newTrack)
+      set({ tracks: updated })
+      return newTrack.id
+    },
+
+    deleteTrack: (id) => {
+      pushSnapshot()
+      set((s) => {
+        const tracks = s.tracks.filter((t) => t.id !== id)
+        const clips = s.clips.filter((c) => c.trackId !== id)
+        const transitions = (s.transitions || []).filter((tr) => tr.trackId !== id)
+        return {
+          tracks,
+          clips,
+          transitions,
+          selectedClipId: s.selectedClipId && clips.some((c) => c.id === s.selectedClipId) ? s.selectedClipId : null,
+          duration: recompute(clips),
+        }
+      })
+    },
+
+    moveTrack: (sourceId, targetId, position) => {
+      if (sourceId === targetId) return
+      pushSnapshot()
+      const list = [...get().tracks]
+      const srcIdx = list.findIndex((t) => t.id === sourceId)
+      const tgtIdx = list.findIndex((t) => t.id === targetId)
+      if (srcIdx === -1 || tgtIdx === -1) return
+      const [item] = list.splice(srcIdx, 1)
+      const newTgtIdx = list.findIndex((t) => t.id === targetId)
+      const insIdx = position === 'above' ? newTgtIdx : newTgtIdx + 1
+      list.splice(insIdx, 0, item)
+      set({ tracks: list })
+    },
+
+    setTrackHeight: (id, height) => {
+      set((s) => ({
+        tracks: s.tracks.map((t) => (t.id === id ? { ...t, height: clamp(height, 28, 160) } : t)),
+      }))
+    },
+
+    setTrackName: (id, name) => {
+      set((s) => ({
+        tracks: s.tracks.map((t) => (t.id === id ? { ...t, name } : t)),
+      }))
+    },
+
+    moveClipToNewTrack: (clipId, newStart, trackType, position, referenceTrackId) => {
+      pushSnapshot()
+      const existing = get().tracks
+      const sameTypeCount = existing.filter((t) => t.type === trackType).length + 1
+      const prefix = trackType === 'video' ? 'V' : 'A'
+      const newTrack = makeTrack(trackType, `${prefix}${sameTypeCount}`)
+
+      const refIdx = existing.findIndex((t) => t.id === referenceTrackId)
+      const insertIdx = refIdx === -1
+        ? (trackType === 'video' ? 0 : existing.length)
+        : (position === 'above' ? refIdx : refIdx + 1)
+
+      const updatedTracks = [...existing]
+      updatedTracks.splice(insertIdx, 0, newTrack)
+
+      const updatedClips = get().clips.map((c) =>
+        c.id === clipId ? { ...c, trackId: newTrack.id, start: Math.max(0, newStart) } : c,
+      )
+
+      set({
+        tracks: updatedTracks,
+        clips: updatedClips,
+        selectedClipId: clipId,
+        duration: recompute(updatedClips),
+      })
+      return newTrack.id
+    },
+
+    addTransition: (params) => {
+      pushSnapshot()
+      const id = uid('trans')
+      const newTrans: Transition = { ...params, id }
+      set((s) => ({
+        transitions: [...(s.transitions || []), newTrans],
+        selectedTransitionId: id,
+      }))
+      return id
+    },
+
+    updateTransition: (id, patch) => {
+      set((s) => ({
+        transitions: (s.transitions || []).map((tr) => (tr.id === id ? { ...tr, ...patch } : tr)),
+      }))
+    },
+
+    removeTransition: (id) => {
+      pushSnapshot()
+      set((s) => ({
+        transitions: (s.transitions || []).filter((tr) => tr.id !== id),
+        selectedTransitionId: s.selectedTransitionId === id ? null : s.selectedTransitionId,
+      }))
+    },
+
+    selectTransition: (id) => {
+      set({ selectedTransitionId: id, selectedClipId: id ? null : get().selectedClipId })
     },
 
     addClipToTrack: (trackId, assetId, atTime) => {
@@ -293,8 +529,12 @@ export const useEditor = create<EditorState>((set, get) => {
           .map((clip) => track?.gapless && clip.trackId === current.trackId && clip.start >= removedEnd
             ? { ...clip, start: Math.max(current.start, clip.start - current.duration) }
             : clip)
+        const transitions = (s.transitions || []).filter(
+          (tr) => tr.fromClipId !== id && tr.toClipId !== id,
+        )
         return {
           clips,
+          transitions,
           selectedClipId: s.selectedClipId === id ? null : s.selectedClipId,
           duration: recompute(clips),
         }
@@ -435,6 +675,167 @@ export const useEditor = create<EditorState>((set, get) => {
     setLeftOpen: (v) => set({ leftOpen: v }),
     setRightOpen: (v) => set({ rightOpen: v }),
 
+    // ---- drawing actions ----
+    addDrawingStroke: (stroke) => {
+      pushSnapshot()
+      set((s) => ({ drawingStrokes: [...s.drawingStrokes, stroke] }))
+    },
+    clearDrawingStrokes: (layerId) => {
+      pushSnapshot()
+      set((s) => ({
+        drawingStrokes: layerId
+          ? s.drawingStrokes.filter((st) => st.layerId !== layerId)
+          : [],
+      }))
+    },
+    setDrawingTool: (tool) => set({ drawingTool: tool }),
+    setDrawingColor: (color) => set({ drawingColor: color }),
+    setDrawingSize: (size) => set({ drawingSize: Math.max(1, Math.min(100, size)) }),
+    setDrawingOpacity: (opacity) => set({ drawingOpacity: Math.max(0, Math.min(1, opacity)) }),
+    setDrawingScope: (scope) => set({ drawingScope: scope }),
+    setDrawingEnabled: (enabled) => set({ drawingEnabled: enabled }),
+    toggleDrawingEnabled: () => set((s) => ({ drawingEnabled: !s.drawingEnabled })),
+    createPaintLayer: (name) => {
+      const id = uid('layer')
+      const newLayer: PaintLayer = {
+        id,
+        name: name || `Paint ${get().paintLayers.length + 1}`,
+        visible: true,
+        locked: false,
+        opacity: 1,
+      }
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: [...s.paintLayers, newLayer],
+        activePaintLayerId: id,
+      }))
+      return id
+    },
+    togglePaintLayerVisibility: (layerId) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) =>
+          l.id === layerId ? { ...l, visible: !l.visible } : l,
+        ),
+      }))
+    },
+    setDrawingFillTolerance: (tolerance) => set({ drawingFillTolerance: Math.max(1, Math.min(100, tolerance)) }),
+    setDrawingPreserveLuminance: (preserve) => set({ drawingPreserveLuminance: preserve }),
+    setPaintLayerBlendMode: (layerId, blendMode) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) =>
+          l.id === layerId ? { ...l, blendMode } : l,
+        ),
+      }))
+    },
+    setPaintLayerBlur: (layerId, blur) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) =>
+          l.id === layerId ? { ...l, blur: Math.max(0, Math.min(50, blur)) } : l,
+        ),
+      }))
+    },
+    setPaintLayerOpacity: (layerId, opacity) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) =>
+          l.id === layerId ? { ...l, opacity: Math.max(0, Math.min(1, opacity)) } : l,
+        ),
+      }))
+    },
+
+    // ---- layout actions ----
+    setWorkspacePreset: (preset) => {
+      switch (preset) {
+        case 'default':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            rightOpen: true,
+            leftDockWidth: 320,
+            timelineHeight: 280,
+            rightPanelWidth: 280,
+            drawingEnabled: false,
+          })
+          break
+        case 'edit':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            rightOpen: false,
+            leftDockWidth: 300,
+            timelineHeight: 340,
+            drawingEnabled: false,
+          })
+          break
+        case 'timeline-focus':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: false,
+            rightOpen: false,
+            timelineHeight: 460,
+            drawingEnabled: false,
+          })
+          break
+        case 'preview-focus':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: false,
+            rightOpen: false,
+            timelineHeight: 160,
+            drawingEnabled: false,
+          })
+          break
+        case 'drawing':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'drawing',
+            rightOpen: false,
+            leftDockWidth: 280,
+            timelineHeight: 180,
+            drawingEnabled: true,
+          })
+          break
+        case 'color':
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: false,
+            rightOpen: true,
+            rightPanelWidth: 320,
+            timelineHeight: 220,
+            drawingEnabled: false,
+          })
+          break
+      }
+    },
+    setFocusMode: (mode) => {
+      if (mode === 'none') {
+        const currentPreset = get().workspacePreset
+        get().setWorkspacePreset(currentPreset)
+        return
+      }
+      set({ focusMode: mode })
+      if (mode === 'canvas-only') {
+        set({ leftOpen: false, rightOpen: false, timelineHeight: 0 })
+      } else if (mode === 'preview') {
+        set({ leftOpen: false, rightOpen: false, timelineHeight: 140 })
+      } else if (mode === 'timeline') {
+        set({ leftOpen: false, rightOpen: false, timelineHeight: 520 })
+      }
+    },
+    setTimelineHeight: (height) => set({ timelineHeight: Math.max(120, Math.min(600, height)) }),
+    setLeftDockWidth: (width) => set({ leftDockWidth: Math.max(220, Math.min(600, width)) }),
+    setRightPanelWidth: (width) => set({ rightPanelWidth: Math.max(220, Math.min(500, width)) }),
+
     beginHistory: () => {
       if (!get().inInteraction) {
         pushSnapshot()
@@ -444,29 +845,39 @@ export const useEditor = create<EditorState>((set, get) => {
     endHistory: () => set({ inInteraction: false }),
 
     undo: () => {
-      const { past, future, tracks, clips } = get()
+      const { past, future } = get()
       if (past.length === 0) return
       const prev = past[past.length - 1]
+      const current = cloneDoc(get())
       set({
         tracks: prev.tracks,
         clips: prev.clips,
+        transitions: prev.transitions || [],
+        drawingStrokes: prev.drawingStrokes || [],
+        paintLayers: prev.paintLayers || [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
         past: past.slice(0, -1),
-        future: [...future, cloneDoc({ tracks, clips } as EditorState)],
+        future: [...future.slice(-49), current],
         duration: recompute(prev.clips),
         selectedClipId: null,
+        selectedTransitionId: null,
       })
     },
     redo: () => {
-      const { past, future, tracks, clips } = get()
+      const { past, future } = get()
       if (future.length === 0) return
       const next = future[future.length - 1]
+      const current = cloneDoc(get())
       set({
         tracks: next.tracks,
         clips: next.clips,
+        transitions: next.transitions || [],
+        drawingStrokes: next.drawingStrokes || [],
+        paintLayers: next.paintLayers || [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
         future: future.slice(0, -1),
-        past: [...past, cloneDoc({ tracks, clips } as EditorState)],
+        past: [...past.slice(-49), current],
         duration: recompute(next.clips),
         selectedClipId: null,
+        selectedTransitionId: null,
       })
     },
 
@@ -476,6 +887,10 @@ export const useEditor = create<EditorState>((set, get) => {
         assets: [],
         tracks: [],
         clips: [],
+        transitions: [],
+        drawingStrokes: [],
+        paintLayers: [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
+        selectedTransitionId: null,
         playhead: 0,
         duration: 10,
         selectedClipId: null,
@@ -488,6 +903,10 @@ export const useEditor = create<EditorState>((set, get) => {
     recomputeDuration: () => set((s) => ({ duration: recompute(s.clips) })),
   }
 })
+
+if (typeof window !== 'undefined') {
+  ;(window as any).__omniframe_store = useEditor
+}
 
 async function decodeWaveform(file: File, bins = 256): Promise<number[] | undefined> {
   try {

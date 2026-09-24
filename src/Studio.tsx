@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2, Eye, EyeOff } from 'lucide-react'
+import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2, Eye, EyeOff, Sparkles } from 'lucide-react'
 import { useEditor } from './store'
-import type { Clip } from './types'
+import type { Clip, Transition } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
 
 type ContextTarget =
   | { type: 'EMPTY_EDITOR' }
   | { type: 'CANVAS' }
   | { type: 'MEDIA_PANEL' }
+  | { type: 'TRANSITION'; transition: Transition }
   | { type: 'VIDEO_CLIP' | 'AUDIO_CLIP' | 'IMAGE_CLIP'; clip: Clip }
 
 type ContextState = ContextTarget & { x: number; y: number; anchorX: number; anchorY: number }
@@ -151,13 +152,79 @@ export default function Studio() {
   }, [])
 
   const clipboardClip = readClipClipboard()
+  const focusMode = useEditor((s) => s.focusMode)
+  const setFocusMode = useEditor((s) => s.setFocusMode)
+  const setTimelineHeight = useEditor((s) => s.setTimelineHeight)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && useEditor.getState().focusMode !== 'none') {
+        useEditor.getState().setFocusMode('none')
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  const onSplitterPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const startY = e.clientY
+    const startHeight = useEditor.getState().timelineHeight
+
+    const onPointerMove = (ev: PointerEvent) => {
+      const deltaY = startY - ev.clientY
+      setTimelineHeight(startHeight + deltaY)
+    }
+
+    const onPointerUp = () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+    }
+
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+  }
+
   const contextCommands = contextMenu ? (
-    'clip' in contextMenu
+    contextMenu.type === 'TRANSITION'
+      ? [
+          { id: 'trans-dissolve', label: 'Cross Dissolve', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'cross_dissolve' }) },
+          { id: 'trans-dip-black', label: 'Dip to Black', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'dip_to_black' }) },
+          { id: 'trans-dip-white', label: 'Dip to White', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'dip_to_white' }) },
+          { id: 'trans-wipe-left', label: 'Wipe Left', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'wipe_left' }) },
+          { id: 'trans-slide-left', label: 'Slide Left', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'slide_left' }) },
+          { id: 'trans-zoom', label: 'Zoom Push', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'zoom' }) },
+          { id: 'trans-dur-15', label: 'Duration: 1.5s', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { duration: 1.5 }) },
+          { id: 'delete', label: 'Delete Transition', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => useEditor.getState().removeTransition(contextMenu.transition.id) },
+        ]
+      : 'clip' in contextMenu
       ? [
           { id: 'cut', label: 'Cut', shortcut: 'Ctrl+X', icon: Scissors, run: () => { writeClipClipboard(contextMenu.clip); removeClip(contextMenu.clip.id) } },
           { id: 'copy', label: 'Copy', shortcut: 'Ctrl+C', icon: Copy, run: () => { writeClipClipboard(contextMenu.clip) } },
           ...(clipboardClip ? [{ id: 'paste', label: 'Paste at playhead', shortcut: 'Ctrl+V', icon: Clipboard, run: () => insertClipCopy(clipboardClip!, useEditor.getState().playhead) }] : []),
           { id: 'duplicate', label: 'Duplicate', shortcut: 'Ctrl+D', icon: Files, run: () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration) },
+          ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'IMAGE_CLIP' ? [{
+            id: 'add-transition',
+            label: 'Add Transition',
+            icon: Sparkles,
+            run: () => {
+              const clp = contextMenu.clip
+              const st = useEditor.getState()
+              const adj = st.clips.find(
+                (c) => c.trackId === clp.trackId && c.id !== clp.id && Math.abs(c.start - (clp.start + clp.duration)) < 0.2,
+              )
+              st.addTransition({
+                type: 'cross_dissolve',
+                fromClipId: clp.id,
+                toClipId: adj ? adj.id : clp.id,
+                trackId: clp.trackId,
+                startTime: Math.max(0, clp.start + clp.duration - 0.5),
+                duration: 1.0,
+                alignment: 'centered',
+                enabled: true,
+              })
+            },
+          }] : []),
           ...(contextMenu.type === 'VIDEO_CLIP' ? [{ id: 'separate-audio', label: 'Separate audio', icon: AudioLines, run: () => void extractAudio(contextMenu.clip.id) }] : []),
           { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
@@ -180,9 +247,15 @@ export default function Studio() {
         event.stopPropagation()
         // An open popup owns its interaction; never cover it with a parent menu.
         if (element.closest('[role="menu"], [role="listbox"], select, option')) return
+        const transElement = element.closest<HTMLElement>('[data-testid="timeline-transition"]')
+        const transition = transElement
+          ? (useEditor.getState().transitions || []).find((tr) => tr.id === transElement.dataset.transitionId)
+          : undefined
         const clipElement = element.closest<HTMLElement>('[data-testid="timeline-clip"]')
         const clip = clipElement ? useEditor.getState().clips.find((item) => item.id === clipElement.dataset.clipId) : undefined
-        const target: ContextTarget = clip
+        const target: ContextTarget = transition
+          ? { type: 'TRANSITION', transition }
+          : clip
           ? { type: clip.kind === 'audio' ? 'AUDIO_CLIP' : clip.kind === 'image' ? 'IMAGE_CLIP' : 'VIDEO_CLIP', clip }
           : element.closest('[data-testid="preview-stage"]')
             ? { type: 'CANVAS' }
@@ -190,7 +263,7 @@ export default function Studio() {
               ? { type: 'MEDIA_PANEL' }
               : { type: 'EMPTY_EDITOR' }
         const width = 224
-        const height = 'clip' in target ? (target.type === 'VIDEO_CLIP' ? 260 : 220) : 144
+        const height = target.type === 'TRANSITION' ? 280 : 'clip' in target ? (target.type === 'VIDEO_CLIP' ? 280 : 220) : 144
         const margin = 8, offset = 4
         const x = event.clientX + width + offset <= window.innerWidth - margin ? event.clientX + offset : event.clientX - width - offset
         const y = event.clientY + height + offset <= window.innerHeight - margin ? event.clientY + offset : event.clientY - height - offset
@@ -203,10 +276,32 @@ export default function Studio() {
       }}
     >
       <TopBar />
-      <div className="flex-1 min-h-0 flex">
+      {focusMode !== 'none' && (
+        <div
+          data-testid="focus-mode-banner"
+          className="absolute top-14 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-3 py-1.5 bg-ink-900/95 border border-brand/60 rounded-full shadow-2xl backdrop-blur-md text-xs text-ink-200"
+        >
+          <span className="font-medium text-brand">Focus Mode: {focusMode}</span>
+          <button
+            type="button"
+            data-testid="exit-focus-btn"
+            onClick={() => setFocusMode('none')}
+            className="px-2 py-0.5 rounded-full bg-brand text-white font-medium hover:bg-brand-600 transition-colors shadow-sm"
+          >
+            Exit (Esc)
+          </button>
+        </div>
+      )}
+      <div className="flex-1 min-h-0 flex relative">
         <LeftDock />
         <div className="flex-1 min-w-0 flex flex-col">
           <Preview />
+          <div
+            data-testid="timeline-splitter"
+            onPointerDown={onSplitterPointerDown}
+            className="h-1.5 w-full bg-ink-800 hover:bg-brand/70 cursor-row-resize transition-colors z-20 shrink-0"
+            title="Drag to resize timeline"
+          />
           <Timeline />
         </div>
         <RightPanel />
