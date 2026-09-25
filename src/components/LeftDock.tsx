@@ -5,7 +5,6 @@ import {
   Wand2,
   Shuffle,
   Box,
-  Palette,
   X,
   type LucideIcon,
 } from 'lucide-react'
