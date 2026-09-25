@@ -233,11 +233,31 @@ export function DrawingPanel() {
         </div>
       )}
 
-      {/* Temporal Scope */}
+      {/* Temporal Scope & Apply to All Frames */}
       <div className="flex flex-col gap-2">
-        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider flex items-center gap-1">
-          <Clock size={12} />
-          Temporal Scope
+        <div className="flex items-center justify-between">
+          <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider flex items-center gap-1">
+            <Clock size={12} />
+            Temporal Scope
+          </div>
+          <label className="flex items-center gap-1.5 cursor-pointer text-[10px] text-ink-300">
+            <input
+              type="checkbox"
+              data-testid="apply-to-all-frames-toggle"
+              checked={drawingScope.type === 'global'}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setDrawingScope({ type: 'global' })
+                } else {
+                  setDrawingScope({ type: 'frame', frame: currentFrame, holdFrames: drawingHoldFrames })
+                }
+              }}
+              className="rounded border-ink-700 bg-ink-800 text-brand"
+            />
+            <span className={drawingScope.type === 'global' ? 'text-brand font-medium' : 'text-ink-400'}>
+              Apply to All Frames
+            </span>
+          </label>
         </div>
         <select
           value={drawingScope.type}

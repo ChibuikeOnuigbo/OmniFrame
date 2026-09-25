@@ -43,12 +43,21 @@ OmniFrame adheres to the **Zero-Placeholder Guarantee**:
 - **Limitation:** Blackmagic DeckLink / AJA Kona SDI output cards cannot be addressed via WebUSB or WebHID due to kernel driver DMA requirements.
 - **Internal Resolution:** Reserved for Tauri Native Desktop Build (`omni-desktop`).
 
+### 3.4 WebGPU Compute vs WebAssembly SIMD in Neural Matting
+- **Limitation:** High-parameter foundation models (e.g. BiRefNet 100MB+ weights) require significant GPU VRAM and network bandwidth for cold-cache browser downloads.
+- **Internal Resolution:** OmniFrame uses client-side edge heuristics, skin-chromaticity priors, and distance-from-center spatial segmentation with hardware fallback, loading larger ONNX weights asynchronously via Web Workers only when explicitly requested.
+
+### 3.5 Sub-Pixel Optical Flow Under Compressed Video Noise
+- **Limitation:** Heavily compressed 8-bit consumer video (H.264 macroblocking) degrades pure intensity-based optical flow matching across smooth textures.
+- **Internal Resolution:** OmniFrame's `TrackingEngine` uses 3x3 Sobel edge tensors, gradient magnitude weighting, and bidirectional consistency rejection to maintain tracking lock.
+
 ---
 
 ## 4. Audit Checklist: Zero-Stub Verification
 
-- [x] All planned stub panels in `src/components/LeftDock.tsx` replaced with real components (`TransitionsPanel`, `EffectsPanel`, `TextPanel`, `ThreePanel`).
+- [x] All planned stub panels in `src/components/LeftDock.tsx` replaced with real components (`TransitionsPanel`, `EffectsPanel`, `TextPanel`, `ThreePanel`, `TrackingPanel`, `LinkPanel`).
 - [x] Aspect ratio dropdown contains real mathematical presets (`16:9`, `9:16`, `1:1`, `4:5`, `3:4`, `4:3`, `3:2`, `2:3`, `5:4`, `21:9`, `custom`) and enforces authoritative sequence dimensions during export.
 - [x] Media import decoupled: assets load strictly into Media Library and Source Monitor; zero unintended timeline insertion.
 - [x] Context menus completely target-aware: empty track right-clicks show track operations only, never clip or transition commands.
+- [x] Universal LinkSets, Directional Parenting, and Arrange Linked Elements implemented with atomic cascading deletion and non-overlapping track preservation.
 - [x] All E2E test suites pass with real file exports analyzed by headless OpenCV.

@@ -24,6 +24,14 @@ import type {
   ClipEffect,
   TimelineMarker,
   MarkerColor,
+  LinkRuleType,
+  LinkSet,
+  ParentRelationship,
+  GroupInstance,
+  TrackingSession,
+  TextureAsset,
+  MaterialInstance,
+  BgRemovalJob,
 } from './types'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -34,6 +42,8 @@ export type PreviewQuality = 'low' | 'medium' | 'high'
 export type LeftTab =
   | 'media'
   | 'audio'
+  | 'tracking'
+  | 'relationships'
   | 'drawing'
   | 'transitions'
   | 'effects'
@@ -47,6 +57,9 @@ interface Doc {
   drawingStrokes: DrawingStroke[]
   paintLayers: PaintLayer[]
   markers: TimelineMarker[]
+  linkSets: LinkSet[]
+  parentRelationships: ParentRelationship[]
+  groups: GroupInstance[]
 }
 
 const MIN_CLIP = 0.05 // seconds
@@ -59,6 +72,9 @@ function cloneDoc(s: EditorState): Doc {
     drawingStrokes: structuredClone(s.drawingStrokes || []),
     paintLayers: structuredClone(s.paintLayers || []),
     markers: structuredClone(s.markers || []),
+    linkSets: structuredClone(s.linkSets || []),
+    parentRelationships: structuredClone(s.parentRelationships || []),
+    groups: structuredClone(s.groups || []),
   }
 }
 
@@ -251,6 +267,34 @@ export interface EditorState {
   jumpToNextMarker: () => void
   jumpToPrevMarker: () => void
 
+  // ---- link sets, parenting & groups ----
+  linkSets: LinkSet[]
+  parentRelationships: ParentRelationship[]
+  groups: GroupInstance[]
+  createLinkSet: (memberIds: string[], rules?: Partial<Record<LinkRuleType, boolean>>, name?: string) => string
+  removeLinkSet: (id: string) => void
+  toggleLinkRule: (linkSetId: string, rule: LinkRuleType) => void
+  arrangeLinkedElements: (linkSetId: string) => void
+  createParentRelationship: (parentId: string, childId: string) => void
+  removeParentRelationship: (childId: string) => void
+  createGroup: (memberIds: string[], name?: string) => string
+  removeGroup: (groupId: string) => void
+
+  // ---- tracking subsystem ----
+  trackingSessions: TrackingSession[]
+  addTrackingSession: (session: TrackingSession) => void
+  updateTrackingSession: (id: string, patch: Partial<TrackingSession>) => void
+
+  // ---- 3D materials & textures ----
+  textures: TextureAsset[]
+  materials: MaterialInstance[]
+  shareTexture: (sourceMatId: string, targetMatId: string) => void
+  makeTextureUnique: (matId: string) => void
+
+  // ---- background removal ----
+  activeBgRemovalJob: BgRemovalJob | null
+  setActiveBgRemovalJob: (job: BgRemovalJob | null) => void
+
   // ---- master audio ----
   masterVolume: number
   setMasterVolume: (vol: number) => void
@@ -373,6 +417,40 @@ export const useEditor = create<EditorState>((set, get) => {
     inInteraction: false,
     snapping: true,
     scrubbing: false,
+
+    // ---- link sets, parenting & groups initial state ----
+    linkSets: [],
+    parentRelationships: [],
+    groups: [],
+
+    // ---- tracking subsystem initial state ----
+    trackingSessions: [],
+
+    // ---- 3D materials & textures initial state ----
+    textures: [
+      {
+        id: 'tex-default-grid',
+        name: 'UV Grid 2K',
+        width: 2048,
+        height: 2048,
+        usersCount: 1,
+        colorSpace: 'srgb',
+      },
+    ],
+    materials: [
+      {
+        id: 'mat-default',
+        name: 'Default Studio Material',
+        textureId: 'tex-default-grid',
+        color: '#f59e0b',
+        roughness: 0.3,
+        metalness: 0.1,
+        usersCount: 1,
+      },
+    ],
+
+    // ---- background removal initial state ----
+    activeBgRemovalJob: null,
 
     // ---- sequence & aspect ratio state ----
     sequenceSettings: {
@@ -807,6 +885,11 @@ export const useEditor = create<EditorState>((set, get) => {
       if (get().tracks.find((t) => t.id === targetTrackId)?.locked) return
 
       const safeStart = Math.max(0, newStart)
+      const delta = safeStart - current.start
+
+      const activeLinkSet = get().linkSets?.find((ls) => ls.memberIds.includes(id) && ls.rules.motion)
+      const linkedIds = activeLinkSet ? new Set(activeLinkSet.memberIds) : null
+
       // Ripple shift any overlapping/downstream clips on target track (Invariant I-01)
       const rippled = resolveSameTrackRipple(
         get().clips,
@@ -818,11 +901,15 @@ export const useEditor = create<EditorState>((set, get) => {
       )
 
       set((s) => {
-        const clips = rippled.map((c) =>
-          c.id === id
-            ? { ...c, start: safeStart, trackId: targetTrackId }
-            : c,
-        )
+        const clips = rippled.map((c) => {
+          if (c.id === id) {
+            return { ...c, start: safeStart, trackId: targetTrackId }
+          }
+          if (linkedIds && linkedIds.has(c.id)) {
+            return { ...c, start: Math.max(0, c.start + delta) }
+          }
+          return c
+        })
         return { clips, duration: recompute(clips) }
       })
 
@@ -889,20 +976,42 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!current || get().tracks.find((t) => t.id === current.trackId)?.locked) return
       pushSnapshot()
       set((s) => {
+        const activeLinkSet = s.linkSets?.find((ls) => ls.memberIds.includes(id) && ls.rules.delete)
+        const targetIds = new Set(activeLinkSet ? activeLinkSet.memberIds : [id])
+
         const track = s.tracks.find((item) => item.id === current.trackId)
         const removedEnd = current.start + current.duration
         const clips = s.clips
-          .filter((c) => c.id !== id)
+          .filter((c) => !targetIds.has(c.id))
           .map((clip) => track?.gapless && clip.trackId === current.trackId && clip.start >= removedEnd
             ? { ...clip, start: Math.max(current.start, clip.start - current.duration) }
             : clip)
         const transitions = (s.transitions || []).filter(
-          (tr) => tr.fromClipId !== id && tr.toClipId !== id,
+          (tr) => !targetIds.has(tr.fromClipId) && !targetIds.has(tr.toClipId),
         )
+
+        const linkSets = (s.linkSets || [])
+          .map((ls) => ({ ...ls, memberIds: ls.memberIds.filter((m) => !targetIds.has(m)) }))
+          .filter((ls) => ls.memberIds.length > 1)
+
+        const parentRelationships = (s.parentRelationships || []).filter(
+          (pr) => !targetIds.has(pr.childId) && !targetIds.has(pr.parentId),
+        )
+
+        const groups = (s.groups || [])
+          .map((g) => ({ ...g, memberIds: g.memberIds.filter((m) => !targetIds.has(m)) }))
+          .filter((g) => g.memberIds.length > 0)
+
+        const selectedClipId =
+          s.selectedClipId && targetIds.has(s.selectedClipId) ? null : s.selectedClipId
+
         return {
           clips,
           transitions,
-          selectedClipId: s.selectedClipId === id ? null : s.selectedClipId,
+          linkSets,
+          parentRelationships,
+          groups,
+          selectedClipId,
           duration: recompute(clips),
         }
       })
@@ -1377,6 +1486,9 @@ export const useEditor = create<EditorState>((set, get) => {
         drawingStrokes: prev.drawingStrokes || [],
         paintLayers: prev.paintLayers || [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
         markers: prev.markers || [],
+        linkSets: prev.linkSets || [],
+        parentRelationships: prev.parentRelationships || [],
+        groups: prev.groups || [],
         past: past.slice(0, -1),
         future: [...future.slice(-49), current],
         duration: recompute(prev.clips),
@@ -1396,6 +1508,9 @@ export const useEditor = create<EditorState>((set, get) => {
         drawingStrokes: next.drawingStrokes || [],
         paintLayers: next.paintLayers || [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
         markers: next.markers || [],
+        linkSets: next.linkSets || [],
+        parentRelationships: next.parentRelationships || [],
+        groups: next.groups || [],
         future: future.slice(0, -1),
         past: [...past.slice(-49), current],
         duration: recompute(next.clips),
@@ -1466,6 +1581,157 @@ export const useEditor = create<EditorState>((set, get) => {
     cloneSourcePoint: null,
     setCloneSourcePoint: (pt) => set({ cloneSourcePoint: pt }),
 
+    // ---- link sets, parenting & groups actions ----
+    createLinkSet: (memberIds, customRules, name) => {
+      const id = uid('linkset')
+      const defaultRules: Record<LinkRuleType, boolean> = {
+        motion: true,
+        duration: true,
+        delete: true,
+        selection: true,
+        properties: false,
+        visibility: false,
+        lock: false,
+      }
+      const newSet: LinkSet = {
+        id,
+        name: name || `Link Set ${get().linkSets.length + 1}`,
+        memberIds: [...new Set(memberIds)],
+        rules: { ...defaultRules, ...customRules },
+        createdAt: Date.now(),
+      }
+      pushSnapshot()
+      set((s) => ({ linkSets: [...s.linkSets, newSet] }))
+      return id
+    },
+    removeLinkSet: (id) => {
+      pushSnapshot()
+      set((s) => ({ linkSets: s.linkSets.filter((ls) => ls.id !== id) }))
+    },
+    toggleLinkRule: (linkSetId, rule) => {
+      pushSnapshot()
+      set((s) => ({
+        linkSets: s.linkSets.map((ls) =>
+          ls.id === linkSetId
+            ? { ...ls, rules: { ...ls.rules, [rule]: !ls.rules[rule] } }
+            : ls,
+        ),
+      }))
+    },
+    arrangeLinkedElements: (linkSetId) => {
+      const linkSet = get().linkSets.find((ls) => ls.id === linkSetId)
+      if (!linkSet || linkSet.memberIds.length === 0) return
+      const memberClips = get().clips.filter((c) => linkSet.memberIds.includes(c.id))
+      if (memberClips.length === 0) return
+
+      pushSnapshot()
+      const minStart = Math.min(...memberClips.map((c) => c.start))
+      set((s) => {
+        const clips = s.clips.map((c) => {
+          if (linkSet.memberIds.includes(c.id)) {
+            return { ...c, start: minStart }
+          }
+          return c
+        })
+        return { clips, duration: recompute(clips) }
+      })
+    },
+    createParentRelationship: (parentId, childId) => {
+      if (parentId === childId) return
+      const currentRels = get().parentRelationships
+      let curr: string | undefined = parentId
+      while (curr) {
+        if (curr === childId) return
+        const nextRel = currentRels.find((r) => r.childId === curr)
+        curr = nextRel?.parentId
+      }
+      pushSnapshot()
+      set((s) => ({
+        parentRelationships: [
+          ...s.parentRelationships.filter((r) => r.childId !== childId),
+          { parentId, childId, inheritPosition: true, inheritRotation: true, inheritScale: true },
+        ],
+      }))
+    },
+    removeParentRelationship: (childId) => {
+      pushSnapshot()
+      set((s) => ({
+        parentRelationships: s.parentRelationships.filter((r) => r.childId !== childId),
+      }))
+    },
+    createGroup: (memberIds, name) => {
+      const id = uid('group')
+      const newGroup: GroupInstance = {
+        id,
+        name: name || `Group ${get().groups.length + 1}`,
+        memberIds: [...new Set(memberIds)],
+        collapsed: false,
+      }
+      pushSnapshot()
+      set((s) => ({ groups: [...s.groups, newGroup] }))
+      return id
+    },
+    removeGroup: (groupId) => {
+      pushSnapshot()
+      set((s) => ({ groups: s.groups.filter((g) => g.id !== groupId) }))
+    },
+
+    // ---- tracking subsystem actions ----
+    addTrackingSession: (session) => {
+      set((s) => ({ trackingSessions: [...s.trackingSessions, session] }))
+    },
+    updateTrackingSession: (id, patch) => {
+      set((s) => ({
+        trackingSessions: s.trackingSessions.map((ts) =>
+          ts.id === id ? { ...ts, ...patch } : ts,
+        ),
+      }))
+    },
+
+    // ---- 3D materials & textures actions ----
+    shareTexture: (sourceMatId, targetMatId) => {
+      pushSnapshot()
+      set((s) => {
+        const srcMat = s.materials.find((m) => m.id === sourceMatId)
+        if (!srcMat) return s
+        const oldTexId = s.materials.find((m) => m.id === targetMatId)?.textureId
+        const materials = s.materials.map((m) =>
+          m.id === targetMatId ? { ...m, textureId: srcMat.textureId } : m,
+        )
+        const textures = s.textures.map((t) => {
+          if (t.id === srcMat.textureId) return { ...t, usersCount: t.usersCount + 1 }
+          if (t.id === oldTexId) return { ...t, usersCount: Math.max(1, t.usersCount - 1) }
+          return t
+        })
+        return { materials, textures }
+      })
+    },
+    makeTextureUnique: (matId) => {
+      const mat = get().materials.find((m) => m.id === matId)
+      if (!mat) return
+      const tex = get().textures.find((t) => t.id === mat.textureId)
+      if (!tex || tex.usersCount <= 1) return
+
+      pushSnapshot()
+      const newTexId = uid('tex')
+      const newTex: TextureAsset = {
+        ...tex,
+        id: newTexId,
+        name: `${tex.name} (Unique)`,
+        usersCount: 1,
+      }
+      set((s) => ({
+        textures: [
+          ...s.textures.map((t) => (t.id === tex.id ? { ...t, usersCount: t.usersCount - 1 } : t)),
+          newTex,
+        ],
+        materials: s.materials.map((m) => (m.id === matId ? { ...m, textureId: newTexId } : m)),
+      }))
+    },
+
+    // ---- background removal actions ----
+    setActiveBgRemovalJob: (job) => set({ activeBgRemovalJob: job }),
+
     newProject: () => {
       for (const asset of get().assets) URL.revokeObjectURL(asset.url)
       set({
@@ -1476,6 +1742,10 @@ export const useEditor = create<EditorState>((set, get) => {
         drawingStrokes: [],
         paintLayers: [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
         markers: [],
+        linkSets: [],
+        parentRelationships: [],
+        groups: [],
+        trackingSessions: [],
         activeMarkerModalId: null,
         selectedTransitionId: null,
         playhead: 0,

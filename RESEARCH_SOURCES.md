@@ -92,4 +92,38 @@ Per OmniFrame Code Research Policy, we systematically examine open-source and pr
   - Automatically demuxes audio from video clips when required, creates dedicated audio tracks, and replaces or mutes non-isolated stems.
 - **OmniFrame Takeaway**: OmniFrame adopts this exact interaction hierarchy: a single clean "Isolate Voice" item in the timeline context menu with a side-hover submenu offering "Remove Vocal" and "Keep Vocal", completely distinguished from simple "Separate Audio" (demuxing).
 
+### 11. LumaCut Motion Tracking & Multi-Signal Patch Engine
+- **Upstream / Reference**: LumaCut Optical Tracking Architecture
+- **License**: Clean-room technical research analysis
+- **Core Architecture Analyzed**:
+  - Multi-signal optical flow combining 3x3 Sobel edge convolution tensors ($G_x$, $G_y$, gradient magnitude) with normalized cross-correlation (NCC) luminance matching.
+  - Bidirectional consistency validation (forward-backward error check) detecting rapid occlusion and spatial boundary drift.
+  - Dual tracking modes: Mask Tracking (tracking user-drawn shape contours through time) vs Main Tracking (rigid/affine transform estimation).
+- **OmniFrame Takeaway**: Implemented native TypeScript clean-room `TrackingEngine` (`src/lib/trackingEngine.ts`) and interactive `TrackingPanel` supporting point, multipoint, and planar patterns with real-time transform estimation.
+
+### 12. BiRefNet & MODNet Neural Matting Architecture
+- **Upstream / Reference**: Zheng et al. (BiRefNet) & Ke et al. (MODNet)
+- **License**: Clean-room architectural analysis
+- **Core Architecture Analyzed**:
+  - Bilateral reference networks with localized boundary supervision for high-resolution hair and edge detail.
+  - Tripartite decomposition separating semantic human estimation from detailed boundary matting.
+  - Hardware acceleration pipeline with graceful fallback: WebGPU -> WebAssembly SIMD -> WebGL2.
+- **OmniFrame Takeaway**: Implemented `bgRemovalEngine.ts` and `BackgroundRemovalModal.tsx` providing multi-model selection (BiRefNet, MODNet, ISNet, SlimSAM), solid color / bokeh blur / transparent modes, and morphological edge choke and feathering.
+
+### 13. Blender 3D Data-Block Texture Architecture
+- **Upstream / Reference**: Blender 3D (Blender Foundation)
+- **License**: GPLv2 / Architectural research analysis
+- **Core Architecture Analyzed**:
+  - Objects reference shared data-blocks with real-time user-count tracking.
+  - "Make Unique" operator clones shared texture/material blocks into isolated standalone instances, preventing unintended cross-object mutation during texture painting.
+- **OmniFrame Takeaway**: Implemented data-block user count tracking in `src/store.ts` (`TextureAsset.usersCount`) and added prominent "Make Unique" button in `ThreePanel.tsx`.
+
+### 14. After Effects & Premiere Pro LinkSet & Parenting Models
+- **Upstream / Reference**: Adobe Premiere Pro & After Effects
+- **License**: Proprietary Commercial
+- **Core Architecture Analyzed**:
+  - Policy-based multi-element linking: clips grouped into LinkSets with independent toggles for motion, duration, deletion, and selection sync.
+  - Directional DAG parenting hierarchies with cycle prevention and apparent world-transform preservation during reparenting.
+- **OmniFrame Takeaway**: Implemented Universal LinkSets, `arrangeLinkedElements` time-alignment algorithm, and DAG cycle detection in `src/store.ts` and `LinkPanel.tsx`.
+
 

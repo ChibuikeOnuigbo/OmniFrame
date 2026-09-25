@@ -51,6 +51,8 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-045 | `qa/screenshots/mobile-full-studio.png` | 390x844 | Mobile Responsiveness | Full mobile studio view on iPhone viewport (390x844) with zero horizontal overflow, responsive preview scaling, compact top bar, and timeline transport. |
 | SS-046 | `qa/screenshots/mobile-drawer-responsive.png` | 390x844 | Mobile Responsiveness | Slide-out overlay drawer on mobile viewport showing clean slide-in transition over preview without layout shifting. |
 | SS-047 | `qa/screenshots/ratio-dropdown-actual-icons.png` | 1440x900 | Aspect Ratio Subsystem | Aspect Ratio popover and trigger button featuring actual platform icons, YouTube + TikTok stacked paper slide for 9:16, Instagram icons, and custom dimension controls without hyphens. |
+| SS-048 | `evidence/screenshots/supreme-master-verification.png` | 1440x900 | Supreme Master Verification | Full studio desktop verification demonstrating Motion Tracking, Universal LinkSets & Arrange Linked Elements, 3D Camera Paint, Sequence Templates modal, and Drawing "Apply to All Frames" toggle. |
+| SS-049 | `evidence/test_edit_composite.png` | 1280x720 | YouTube Reference Test Edit | Synthetic test edit composite visualizing kinetic typography with cyan glow, "3D in 2D" perspective plane with drop shadow, and neon cel drawing accents. |
 
 
 

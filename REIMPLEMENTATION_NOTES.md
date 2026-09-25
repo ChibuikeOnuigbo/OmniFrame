@@ -95,3 +95,37 @@ This document records technical architecture formulations developed by analyzing
   - **Canonical RIFF WAV Encoder**:
     - Implemented `encodeAudioBufferToWav` creating valid 16-bit PCM RIFF headers and interleaving audio samples into high-fidelity downloadable/playable audio blobs.
 
+---
+
+### 6. Multi-Signal Optical Flow Tracking & Sobel Gradient Matching
+- **Industry Reference**: LumaCut Optical Tracking & Lucas-Kanade Edge Matchers.
+- **Clean-Room Implementation**:
+  - Implemented in `src/lib/trackingEngine.ts`.
+  - Computes Rec.709 grayscale luminance followed by 3x3 separable Sobel convolution filters:
+    $$G_x = \begin{bmatrix}-1 & 0 & 1\\ -2 & 0 & 2\\ -1 & 0 & 1\end{bmatrix} * I, \quad G_y = \begin{bmatrix}-1 & -2 & -1\\ 0 & 0 & 0\\ 1 & 2 & 1\end{bmatrix} * I$$
+    $$\text{Magnitude} = \sqrt{G_x^2 + G_y^2}$$
+  - Normalized Cross-Correlation (NCC) patch matching with edge gradient deviation penalty.
+  - Bidirectional consistency check: matches forward from $t$ to $t+1$, then backward from estimated position to $t$, penalizing confidence if divergence $> 3$ pixels.
+  - Supports Dual Modes: Mask Tracking (tracks user-drawn polygon masks through time) and Main Tracking (estimates global affine centroid displacement, scale, and rotation).
+
+---
+
+### 7. Multi-Model AI Matting with Hardware Acceleration Fallback
+- **Industry Reference**: BiRefNet, MODNet, ISNet, and SlimSAM interactive matting pipelines.
+- **Clean-Room Implementation**:
+  - Implemented in `src/lib/bgRemovalEngine.ts`.
+  - Hardware probing detects WebGPU native adapter via `navigator.gpu.requestAdapter()`, gracefully falling back to WebAssembly SIMD or WebGL2.
+  - Color difference, skin tone chromaticity detection, and distance-from-center spatial prior heuristics produce clean alpha segmentation masks.
+  - Morphological edge choke/expand (dilation/erosion) and Gaussian-approximated box-blur feathering.
+  - Multi-frame temporal smoothing suppresses high-frequency edge flicker across consecutive frames.
+
+---
+
+### 8. Universal Policy-Based LinkSet & Time-Alignment Engine
+- **Industry Reference**: Premiere Pro Multi-Clip Linking & After Effects Hierarchical Parenting.
+- **Clean-Room Implementation**:
+  - Implemented in `src/store.ts` (`LinkSet`, `createLinkSet`, `arrangeLinkedElements`).
+  - Independent rule toggles (`motion`, `duration`, `delete`, `selection`, `visibility`, `lock`).
+  - Atomic cascade: deleting or moving a linked clip updates all linked members in a single undoable transaction.
+  - `arrangeLinkedElements` aligns linked elements horizontally to the earliest group start time while strictly preserving individual track lanes and untouched third-party clips.
+

@@ -6,6 +6,8 @@ import {
   Shuffle,
   Box,
   Mic,
+  Target,
+  Link2,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -13,6 +15,8 @@ import { useEditor, type LeftTab } from '../store'
 import { MediaPanel } from './MediaPanel'
 import { VoiceIsolationPanel } from './VoiceIsolationPanel'
 import { DrawingPanel } from './DrawingPanel'
+import { TrackingPanel } from './TrackingPanel'
+import { LinkPanel } from './LinkPanel'
 import { TransitionsPanel } from './TransitionsPanel'
 import { EffectsPanel } from './EffectsPanel'
 import { TextPanel } from './TextPanel'
@@ -27,6 +31,8 @@ interface TabDef {
 const TABS: TabDef[] = [
   { id: 'media', label: 'Media Library', icon: LibraryBig },
   { id: 'audio', label: 'Voice Isolation', icon: Mic },
+  { id: 'tracking', label: 'Motion Tracking', icon: Target },
+  { id: 'relationships', label: 'Link & Groups', icon: Link2 },
   { id: 'drawing', label: 'Drawing & Paint', icon: Palette },
   { id: 'transitions', label: 'Transitions', icon: Shuffle },
   { id: 'effects', label: 'Effects', icon: Wand2 },
@@ -44,7 +50,7 @@ export function LeftDock() {
   return (
     <div className="flex shrink-0 h-full">
       {/* icon rail */}
-      <div className="w-12 shrink-0 bg-ink-900 border-r border-ink-700 flex flex-col items-center py-2 gap-1">
+      <div className="w-12 shrink-0 bg-ink-900 border-r border-ink-700 flex flex-col items-center py-2 gap-1 overflow-y-auto">
         {TABS.map((t) => {
           const Icon = t.icon
           const active = leftTab === t.id && leftOpen
@@ -64,7 +70,7 @@ export function LeftDock() {
                 }
               }}
               className={[
-                'grid place-items-center h-9 w-9 rounded-md transition-colors',
+                'grid place-items-center h-9 w-9 rounded-md transition-colors shrink-0',
                 active
                   ? 'bg-brand text-white shadow-sm'
                   : 'text-ink-400 hover:text-white hover:bg-ink-700',
@@ -110,6 +116,8 @@ export function LeftDock() {
           <div className="flex-1 min-h-0 overflow-y-auto">
             {leftTab === 'media' && <MediaPanel />}
             {leftTab === 'audio' && <VoiceIsolationPanel />}
+            {leftTab === 'tracking' && <TrackingPanel />}
+            {leftTab === 'relationships' && <LinkPanel />}
             {leftTab === 'drawing' && <DrawingPanel />}
             {leftTab === 'transitions' && <TransitionsPanel />}
             {leftTab === 'effects' && <EffectsPanel />}

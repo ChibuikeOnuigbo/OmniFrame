@@ -272,3 +272,168 @@ export const DEFAULT_PROJECT: ProjectSettings = {
   fps: 30,
   sampleRate: 48000,
 }
+
+// ---- Universal Link System, Parenting & Groups ----
+export type LinkRuleType = 'motion' | 'duration' | 'delete' | 'selection' | 'visibility' | 'lock' | 'property'
+
+export interface LinkSet {
+  id: string
+  name: string
+  memberIds: string[] // Clip IDs
+  rules: Record<LinkRuleType, boolean>
+  propertyLinks?: Record<string, string> // e.g. { 'effects.blur': 'effects.blur' }
+}
+
+export interface ParentRelationship {
+  childId: string
+  parentId: string
+  inheritPosition: boolean
+  inheritRotation: boolean
+  inheritScale: boolean
+  localOffset: ClipTransform
+}
+
+export interface GroupInstance {
+  id: string
+  name: string
+  memberIds: string[]
+  collapsed: boolean
+  locked: boolean
+  hidden: boolean
+}
+
+// ---- 3D Textures, Materials & Camera Paint ----
+export type TextureMapType = 'baseColor' | 'normal' | 'roughness' | 'metallic' | 'emission' | 'opacity'
+
+export interface TextureAsset {
+  id: string
+  name: string
+  url: string
+  width: number
+  height: number
+  mapType: TextureMapType
+  sharedAssetIds: string[] // 3D models or objects sharing this texture
+}
+
+export interface MaterialInstance {
+  id: string
+  name: string
+  textureId?: string
+  normalMapId?: string
+  roughnessMapId?: string
+  roughness: number
+  metallic: number
+  emission: string
+  opacity: number
+}
+
+export type CameraPaintMode = 'CAMERA_LOCKED' | 'SURFACE_PROJECTED' | 'WORLD_ANCHORED' | 'TEXTURE_BAKED'
+
+export interface CameraPaintPoint {
+  x: number
+  y: number
+  z?: number
+  surfaceU?: number
+  surfaceV?: number
+}
+
+export interface CameraPaintStroke {
+  id: string
+  mode: CameraPaintMode
+  points: CameraPaintPoint[]
+  color: string
+  size: number
+  bakedTextureId?: string
+}
+
+// ---- Tracking Subsystem (LumaCut Multi-Signal Architecture) ----
+export type TrackingMode = 'mask' | 'main'
+export type MainTrackingType = 'point' | 'multipoint' | 'motion' | 'planar' | 'camera'
+
+export interface TrackPoint {
+  x: number // normalized 0..1
+  y: number // normalized 0..1
+  frame: number
+  confidence: number
+}
+
+export interface TrackingFrameResult {
+  frame: number
+  points: TrackPoint[]
+  maskDataUrl?: string
+  transform?: ClipTransform
+  confidence: number
+}
+
+export interface TrackingSession {
+  id: string
+  targetClipId: string
+  mode: TrackingMode
+  mainType?: MainTrackingType
+  points: TrackPoint[]
+  frameResults: TrackingFrameResult[]
+  isTracking: boolean
+  competitionEnabled: boolean // competing foreground vs background boundary analysis
+}
+
+// ---- Background Removal Multi-Model Subsystem ----
+export type BgRemovalModelId = 'birefnet-lite-512' | 'modnet' | 'isnet-onnx' | 'slimsam-77'
+
+export interface BgRemovalJob {
+  id: string
+  clipId: string
+  modelId: BgRemovalModelId
+  device: 'webgpu' | 'wasm'
+  progress: number
+  status: 'idle' | 'loading' | 'processing' | 'done' | 'error'
+  error?: string
+}
+
+// ---- OmniFrame Edit Mode & Propagation ----
+export type OmniframeOperationType =
+  | 'move'
+  | 'cut'
+  | 'duplicate'
+  | 'remove'
+  | 'fill'
+  | 'resize'
+  | 'scale'
+  | 'rotate'
+  | 'translate'
+  | 'recolor'
+  | 'blur'
+  | 'sharpen'
+  | 'isolate'
+
+export interface OmniframeOperation {
+  id: string
+  type: OmniframeOperationType
+  referenceFrame: number
+  targetRange: { start: number; end: number }
+  selectionMaskUrl: string
+  transformDelta: ClipTransform
+  confidence: number
+  applyToAllFrames: boolean
+}
+
+// ---- Templates Subsystem ----
+export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
+
+export interface TemplateSlot {
+  id: string
+  name: string
+  type: TemplateSlotType
+  clipId?: string
+  required: boolean
+  defaultContent?: string
+  durationConstraint?: number
+}
+
+export interface TemplateDefinition {
+  id: string
+  name: string
+  description: string
+  slots: TemplateSlot[]
+  thumbnail?: string
+}
+

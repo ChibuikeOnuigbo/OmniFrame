@@ -22,6 +22,7 @@ import { useEditor } from './store'
 import type { Clip, Transition } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
 import { VoiceIsolationModal } from './components/VoiceIsolationModal'
+import { BackgroundRemovalModal } from './components/BackgroundRemovalModal'
 import { executeVoiceIsolationForClip } from './lib/voiceIsolation'
 import { MarkerModal } from './components/MarkerModal'
 
@@ -43,6 +44,8 @@ import { Timeline } from './components/Timeline'
 export default function Studio() {
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false)
   const [voiceModalClipId, setVoiceModalClipId] = useState<string | undefined>(undefined)
+  const [isBgModalOpen, setIsBgModalOpen] = useState(false)
+  const [bgModalClipId, setBgModalClipId] = useState<string | undefined>(undefined)
   const importFiles = useEditor((s) => s.importFiles)
   const togglePlay = useEditor((s) => s.togglePlay)
   const setPlayhead = useEditor((s) => s.setPlayhead)
@@ -308,6 +311,17 @@ export default function Studio() {
               ],
             },
           ] : []),
+          ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'IMAGE_CLIP' ? [
+            {
+              id: 'remove-bg-modal',
+              label: 'AI Background Removal…',
+              icon: Sparkles,
+              run: () => {
+                setBgModalClipId(contextMenu.clip.id)
+                setIsBgModalOpen(true)
+              },
+            },
+          ] : []),
           { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
         ]
@@ -554,6 +568,15 @@ export default function Studio() {
           setVoiceModalClipId(undefined)
         }}
         initialClipId={voiceModalClipId}
+      />
+
+      <BackgroundRemovalModal
+        isOpen={isBgModalOpen}
+        onClose={() => {
+          setIsBgModalOpen(false)
+          setBgModalClipId(undefined)
+        }}
+        clipId={bgModalClipId}
       />
 
       <MarkerModal />
