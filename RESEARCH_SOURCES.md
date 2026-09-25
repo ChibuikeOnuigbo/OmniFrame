@@ -56,3 +56,13 @@ Per OmniFrame Code Research Policy, we systematically examine open-source and pr
   - Dragging a clip vertically out of its track dynamically opens a new track insertion zone above or below.
   - Cut-point transition glyph buttons and intuitive right-click context menus for transition presets.
 - **OmniFrame Takeaway**: Implemented track creation above/below, transition glyph pills, and target-aware context menus.
+
+### 7. Audacity Vocal Reduction and Isolation
+- **Repository / Upstream**: `github.com/audacity/audacity` (Nyquist vocal isolation plugin & C++ audio DSP)
+- **License**: GPL-2.0-or-later / GPL-3.0
+- **Core Architecture Analyzed**:
+  - Center-Channel Cancellation & Mid/Side phase extraction ($M = (L+R)/2$, $S = (L-R)/2$).
+  - 3-band crossover filter isolating human vocal formant frequencies (140Hz–7500Hz) while leaving bass kicks/sub-frequencies (<140Hz) and high-frequency sparkle intact.
+  - Dynamic envelope tracking and bandpass filtering for speech intelligibility.
+- **OmniFrame Takeaway**: Clean-room implementation in TypeScript/Web Audio (`src/lib/voiceIsolation.ts`) with zero dependency on GPL binaries, implementing time-domain Chamberlin SVF crossover filters and canonical 16-bit WAV PCM encoding.
+

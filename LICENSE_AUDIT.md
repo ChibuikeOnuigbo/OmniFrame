@@ -27,5 +27,6 @@ Date of Audit: 2026-09-24
 ### 3. GPL Research Compliance Certification
 OmniFrame developers study open-source GPL architectures (Kdenlive, Shotcut, OpenShot, Olive) strictly for knowledge discovery, interface standards, and mathematical models (e.g. Bézier math, projection transformations, timeline intervals).
 - **No GPL Source Code Ingestion**: No source files, C++ functions, or copyrighted MLT/Kdenlive source code snippets are copied or pasted into OmniFrame.
-- **Clean-Room TypeScript Implementation**: All data structures, React hooks, Zustand stores, and WebGL shaders are written de novo in modern web-standard TypeScript.
-- **Dependency Isolation**: No GPL libraries are statically or dynamically linked in OmniFrame Web.
+- **Clean-Room TypeScript Implementation**: All data structures, React hooks, Zustand stores, Web Audio DSP algorithms, and WebGL shaders are written de novo in modern web-standard TypeScript.
+- **Dependency Isolation**: No GPL libraries are statically or dynamically linked in OmniFrame Web. The Voice Isolation DSP engine (`src/lib/voiceIsolation.ts`) executes pure Float32Array Web Audio math and canonical WAV RIFF byte-array encoding without any external C/C++ or GPL binary dependencies.
+

@@ -5,11 +5,13 @@ import {
   Wand2,
   Shuffle,
   Box,
+  Mic,
   X,
   type LucideIcon,
 } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
 import { MediaPanel } from './MediaPanel'
+import { VoiceIsolationPanel } from './VoiceIsolationPanel'
 import { DrawingPanel } from './DrawingPanel'
 import { TransitionsPanel } from './TransitionsPanel'
 import { EffectsPanel } from './EffectsPanel'
@@ -24,6 +26,7 @@ interface TabDef {
 
 const TABS: TabDef[] = [
   { id: 'media', label: 'Media Library', icon: LibraryBig },
+  { id: 'audio', label: 'Voice Isolation', icon: Mic },
   { id: 'drawing', label: 'Drawing & Paint', icon: Palette },
   { id: 'transitions', label: 'Transitions', icon: Shuffle },
   { id: 'effects', label: 'Effects', icon: Wand2 },
@@ -96,7 +99,8 @@ export function LeftDock() {
             </button>
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto">
-            {(leftTab === 'media' || leftTab === 'audio') && <MediaPanel />}
+            {leftTab === 'media' && <MediaPanel />}
+            {leftTab === 'audio' && <VoiceIsolationPanel />}
             {leftTab === 'drawing' && <DrawingPanel />}
             {leftTab === 'transitions' && <TransitionsPanel />}
             {leftTab === 'effects' && <EffectsPanel />}

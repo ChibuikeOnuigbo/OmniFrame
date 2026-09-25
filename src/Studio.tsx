@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2, Eye, EyeOff, Sparkles, Minimize2, Plus } from 'lucide-react'
+import { Clipboard, Copy, Scissors, Trash2, Upload, Files, AudioLines, Undo2, Redo2, Eye, EyeOff, Sparkles, Minimize2, Plus, Mic, Music2 } from 'lucide-react'
 import { useEditor } from './store'
 import type { Clip, Transition } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
+import { VoiceIsolationModal } from './components/VoiceIsolationModal'
+import { executeVoiceIsolationForClip } from './lib/voiceIsolation'
 
 type ContextTarget =
   | { type: 'EMPTY_EDITOR' }
@@ -20,6 +22,8 @@ import { RightPanel } from './components/RightPanel'
 import { Timeline } from './components/Timeline'
 
 export default function Studio() {
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false)
+  const [voiceModalClipId, setVoiceModalClipId] = useState<string | undefined>(undefined)
   const importFiles = useEditor((s) => s.importFiles)
   const togglePlay = useEditor((s) => s.togglePlay)
   const setPlayhead = useEditor((s) => s.setPlayhead)
@@ -227,6 +231,33 @@ export default function Studio() {
             },
           }] : []),
           ...(contextMenu.type === 'VIDEO_CLIP' ? [{ id: 'separate-audio', label: 'Separate audio', icon: AudioLines, run: () => void extractAudio(contextMenu.clip.id) }] : []),
+          ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'AUDIO_CLIP' ? [
+            {
+              id: 'isolate-voice-modal',
+              label: 'Isolate Voice…',
+              icon: Mic,
+              run: () => {
+                setVoiceModalClipId(contextMenu.clip.id)
+                setIsVoiceModalOpen(true)
+              },
+            },
+            {
+              id: 'isolate-voice-keep',
+              label: 'Isolate Voice (Keep Vocal)',
+              icon: Mic,
+              run: () => {
+                void executeVoiceIsolationForClip(contextMenu.clip.id, { mode: 'keep_vocal' })
+              },
+            },
+            {
+              id: 'isolate-voice-remove',
+              label: 'Isolate Voice (Remove Vocal)',
+              icon: Music2,
+              run: () => {
+                void executeVoiceIsolationForClip(contextMenu.clip.id, { mode: 'remove_vocal' })
+              },
+            },
+          ] : []),
           { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
         ]
@@ -394,6 +425,15 @@ export default function Studio() {
           })}
         </div>
       )}
+
+      <VoiceIsolationModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => {
+          setIsVoiceModalOpen(false)
+          setVoiceModalClipId(undefined)
+        }}
+        initialClipId={voiceModalClipId}
+      />
     </div>
   )
 }

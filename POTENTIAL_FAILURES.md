@@ -32,4 +32,7 @@ This register applies Failure Modes and Effects Analysis (FMEA) to OmniFrame's a
 | PF-0026 | Downstream Ripple Performance | Large timelines with hundreds of clips experiencing layout stutter during ripple push. | High | Low | Batch downstream displacement updates using map-based lookups and single immutable Zustand state commit. |
 | PF-0027 | Pixel Aspect Ratio Distortion | Non-square pixel media (e.g. DVCPRO, anamorphic) stretching incorrectly when mapped to sequence canvas. | Medium | Medium | Detect pixel aspect ratio (PAR) metadata and apply non-uniform scaling normalization to square pixel space. |
 | PF-0028 | Export Stream Blank Frame | MediaRecorder recording first frame before video element decoder renders first decoded packet. | High | Low | Enforce synchronous compositor canvas pre-render and playhead seek confirmation before starting MediaRecorder. |
+| PF-0029 | Voice Isolation Mono Input Inversion | Processing a pure mono track with vocal removal (L - R = 0) could result in near total silence without warning. | High | Medium | Detect mono / highly correlated channels in `isolateVoiceFromAudioBuffer`; alert user or fallback to spectral subtraction with formant notch filtering. |
+| PF-0030 | Large Audio File Buffer Allocation | Ingesting multi-hour podcast audio files into Web Audio buffer exceeding browser 2GB memory boundary. | High | Low | Chunk audio buffers into 60-second processing slices or stream via Web Audio AudioWorklet with off-thread processing. |
+
 

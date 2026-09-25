@@ -78,7 +78,7 @@
     {
       "name": "hidden clip gains hover glow",
       "status": "PASS",
-      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(109, 94, 252, 0.7) 0px 0px 0px 2px, rgba(110, 78, 255, 0.45) 0px 0px 13.935px 0px"
+      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(109, 94, 252, 0.7) 0px 0px 0px 2px, rgba(110, 78, 255, 0.45) 0px 0px 13.9341px 0px"
     },
     {
       "name": "hidden clip offers Unhide Clip",

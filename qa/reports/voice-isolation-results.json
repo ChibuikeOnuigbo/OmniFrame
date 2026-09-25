@@ -1,0 +1,145 @@
+{
+  "results": [
+    {
+      "name": "Voice Isolation tab present in left rail",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Voice Isolation sidebar panel opened",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Keep Vocal button in sidebar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Remove Vocal button in sidebar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Separation strength slider in sidebar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Preserve bass toggle in sidebar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Speech focus toggle in sidebar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Execute button in sidebar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Source audio clip placed on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolate Voice… modal launcher in context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Keep Vocal quick action in context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Remove Vocal quick action in context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Voice Isolation Modal opens from context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Target clip selector present in modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Keep vocal mode button in modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Remove vocal mode button in modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Strength slider in modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Preserve bass toggle in modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Speech focus toggle in modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Modal automatically closes upon DSP completion",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "New synchronized clip with [Vocal Removed] created on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Removed vocal clip is canonical audio kind",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "New isolated asset registered in Media Library",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Waveform extracted with 256 bins for isolated asset",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Success alert displayed in sidebar panel",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "New synchronized clip with [Vocal Isolated] created on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolated vocal asset registered in Media Library",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": []
+}
