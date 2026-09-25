@@ -45,6 +45,17 @@ export interface MediaAsset {
 
 export type TrackType = 'video' | 'audio'
 
+export type MarkerColor = 'blue' | 'green' | 'red' | 'yellow' | 'purple' | 'orange'
+
+export interface TimelineMarker {
+  id: string
+  time: number // Time in seconds
+  duration?: number // Optional duration span for range markers (0 for single-point)
+  label: string
+  notes?: string
+  color: MarkerColor
+}
+
 export interface Track {
   id: string
   type: TrackType
@@ -151,6 +162,7 @@ export type DrawingToolType =
   | 'arrow'
   | 'star'
   | 'fill'
+  | 'clone'
   | 'eyedropper'
   | SelectionToolType
 
@@ -201,6 +213,7 @@ export interface DrawingStroke {
   fillTolerance?: number // threshold 1..100 for flood fill
   preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
   maskDataUrl?: string // raster patch for flood fill
+  cloneSource?: { x: number; y: number } // normalized source anchor for clone stamp
 }
 
 export interface PaintLayer {

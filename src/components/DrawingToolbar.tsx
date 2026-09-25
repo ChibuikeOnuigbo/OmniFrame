@@ -27,6 +27,7 @@ import {
   FlipHorizontal,
   Maximize2,
   Minimize2,
+  Stamp,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -77,6 +78,7 @@ export function DrawingToolbar() {
     { id: 'pencil', label: 'Pencil (Pixel)', icon: Pencil },
     { id: 'marker', label: 'Highlighter', icon: Highlighter },
     { id: 'calligraphy', label: 'Calligraphy Chisel', icon: PenTool },
+    { id: 'clone', label: 'Clone Stamp (Alt+Click to set source)', icon: Stamp },
     { id: 'fill', label: 'Fill / Recolor', icon: PaintBucket },
     { id: 'eraser', label: 'Eraser', icon: Eraser },
     { id: 'eyedropper', label: 'Eyedropper Color Picker', icon: Pipette },

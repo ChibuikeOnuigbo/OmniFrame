@@ -45,5 +45,7 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-039 | `qa/screenshots/voice-isolation-context-menu.png` | 1440x900 | Voice Isolation Subsystem | Clip context menu showing lightweight Isolate Voice… dialog launcher and quick-action commands (Keep Vocal, Remove Vocal) for audio clips. |
 | SS-040 | `qa/screenshots/voice-isolation-modal.png` | 1440x900 | Voice Isolation Subsystem | Dedicated Voice Isolation popup modal with clip selector, mode cards, fine-grained DSP controls, progress bar, and execution action. |
 | SS-041 | `qa/screenshots/voice-isolation-timeline-tracks.png` | 1440x900 | Voice Isolation Subsystem | Timeline displaying newly extracted, synchronized audio tracks with calculated 256-bin RMS waveforms and media library asset registration. |
+| SS-042 | `qa/screenshots/marker-dialog-active.png` | 1440x900 | Sequence Markers Subsystem | Edit Timeline Marker popup dialog with marker name input, timecode readout, span duration input, color badge selector (blue, green, red, yellow, purple, orange), comments/notes textarea, delete, and save actions. |
+| SS-043 | `qa/screenshots/timeline-markers-and-vu-meter.png` | 1440x900 | Timeline & Audio Subsystem | Timeline ruler showing sequence marker flag pins and label pill ("Outro Fade"), transport bar displaying Add Marker button, real-time stereo audio VU meter with Left/Right LED channels, numerical dB readout, and master volume slider set to 125%. |
 
 

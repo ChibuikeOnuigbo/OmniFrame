@@ -141,6 +141,15 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       return
     }
 
+    if (drawingTool === 'clone') {
+      if (e.altKey || !useEditor.getState().cloneSourcePoint) {
+        const previewCanvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
+        const sampleUrl = previewCanvas ? previewCanvas.toDataURL() : undefined
+        useEditor.getState().setCloneSourcePoint({ ...pt, sampleDataUrl: sampleUrl })
+        return
+      }
+    }
+
     if (drawingTool === 'fill') {
       const previewCanvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
       if (!previewCanvas) return
@@ -187,6 +196,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
         opacity: drawingOpacity,
         points: currentPointsRef.current,
         temporalScope: drawingScope,
+        cloneSource: useEditor.getState().cloneSourcePoint || undefined,
       }
       renderStroke(ctx, liveStroke, width, height)
     }
@@ -244,6 +254,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       opacity: drawingOpacity,
       points: currentPointsRef.current,
       temporalScope: drawingScope,
+      cloneSource: useEditor.getState().cloneSourcePoint || undefined,
     }
     renderStroke(ctx, liveStroke, width, height)
   }
@@ -309,6 +320,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
         opacity: drawingOpacity,
         points: [...currentPointsRef.current],
         temporalScope: { ...drawingScope },
+        cloneSource: useEditor.getState().cloneSourcePoint || undefined,
       }
       addDrawingStroke(finalStroke)
     }

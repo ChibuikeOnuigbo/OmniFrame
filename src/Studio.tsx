@@ -5,6 +5,7 @@ import type { Clip, Transition } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
 import { VoiceIsolationModal } from './components/VoiceIsolationModal'
 import { executeVoiceIsolationForClip } from './lib/voiceIsolation'
+import { MarkerModal } from './components/MarkerModal'
 
 type ContextTarget =
   | { type: 'EMPTY_EDITOR' }
@@ -125,6 +126,23 @@ export default function Studio() {
           setSpeed(Math.abs(st().speed) || 1)
           st().play()
           break
+        case 'm':
+        case 'M': {
+          e.preventDefault()
+          const s = st()
+          const existing = s.markers.find((m) => Math.abs(m.time - s.playhead) < 0.1)
+          if (existing) {
+            s.setActiveMarkerModalId(existing.id)
+          } else {
+            const id = s.addMarker({
+              time: s.playhead,
+              label: `Marker ${s.markers.length + 1}`,
+              color: 'blue',
+            })
+            s.setActiveMarkerModalId(id)
+          }
+          break
+        }
       }
     }
     window.addEventListener('keydown', onKey)
@@ -434,6 +452,8 @@ export default function Studio() {
         }}
         initialClipId={voiceModalClipId}
       />
+
+      <MarkerModal />
     </div>
   )
 }

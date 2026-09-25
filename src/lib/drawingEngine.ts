@@ -458,6 +458,43 @@ export function renderStroke(
     )
     ctx.closePath()
     ctx.fill()
+  } else if (stroke.tool === 'clone') {
+    if (stroke.cloneSource?.sampleDataUrl) {
+      let img = imageCache.get(stroke.cloneSource.sampleDataUrl)
+      if (!img) {
+        img = new Image()
+        img.src = stroke.cloneSource.sampleDataUrl
+        imageCache.set(stroke.cloneSource.sampleDataUrl, img)
+      }
+      if (img.complete && img.naturalWidth > 0) {
+        const radius = Math.max(2, (stroke.size * (width / 1280)) / 2)
+        const offsetX = (pts[0].x - stroke.cloneSource.x) * width
+        const offsetY = (pts[0].y - stroke.cloneSource.y) * height
+
+        ctx.save()
+        // Clip to the stamp brush path
+        ctx.beginPath()
+        for (const p of pts) {
+          ctx.arc(p.x * width, p.y * height, radius, 0, Math.PI * 2)
+        }
+        ctx.clip()
+
+        // Draw the sampled canvas offset by clone displacement
+        ctx.drawImage(img, offsetX, offsetY, width, height)
+        ctx.restore()
+      }
+    } else {
+      // Fallback: render crisp pattern
+      ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+      ctx.setLineDash([4, 4])
+      ctx.beginPath()
+      ctx.moveTo(pts[0].x * width, pts[0].y * height)
+      for (let i = 1; i < pts.length; i++) {
+        ctx.lineTo(pts[i].x * width, pts[i].y * height)
+      }
+      ctx.stroke()
+      ctx.setLineDash([])
+    }
   }
 
   ctx.restore()

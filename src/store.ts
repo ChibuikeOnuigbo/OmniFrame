@@ -22,6 +22,8 @@ import type {
   MonitorMode,
   TimelineInsertionMode,
   ClipEffect,
+  TimelineMarker,
+  MarkerColor,
 } from './types'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -44,6 +46,7 @@ interface Doc {
   transitions: Transition[]
   drawingStrokes: DrawingStroke[]
   paintLayers: PaintLayer[]
+  markers: TimelineMarker[]
 }
 
 const MIN_CLIP = 0.05 // seconds
@@ -55,6 +58,7 @@ function cloneDoc(s: EditorState): Doc {
     transitions: structuredClone(s.transitions || []),
     drawingStrokes: structuredClone(s.drawingStrokes || []),
     paintLayers: structuredClone(s.paintLayers || []),
+    markers: structuredClone(s.markers || []),
   }
 }
 
@@ -234,6 +238,28 @@ export interface EditorState {
   endHistory: () => void
   undo: () => void
   redo: () => void
+
+  // ---- markers ----
+  markers: TimelineMarker[]
+  activeMarkerModalId: string | null
+  setActiveMarkerModalId: (id: string | null) => void
+  addMarker: (marker: Omit<TimelineMarker, 'id'>) => string
+  updateMarker: (id: string, patch: Partial<TimelineMarker>) => void
+  removeMarker: (id: string) => void
+  clearMarkers: () => void
+  jumpToMarker: (id: string) => void
+  jumpToNextMarker: () => void
+  jumpToPrevMarker: () => void
+
+  // ---- master audio ----
+  masterVolume: number
+  setMasterVolume: (vol: number) => void
+  masterMuted: boolean
+  setMasterMuted: (muted: boolean) => void
+
+  // ---- clone stamp ----
+  cloneSourcePoint: { x: number; y: number } | null
+  setCloneSourcePoint: (pt: { x: number; y: number } | null) => void
 
   // ---- project ----
   newProject: () => void
@@ -1350,6 +1376,7 @@ export const useEditor = create<EditorState>((set, get) => {
         transitions: prev.transitions || [],
         drawingStrokes: prev.drawingStrokes || [],
         paintLayers: prev.paintLayers || [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
+        markers: prev.markers || [],
         past: past.slice(0, -1),
         future: [...future.slice(-49), current],
         duration: recompute(prev.clips),
@@ -1368,6 +1395,7 @@ export const useEditor = create<EditorState>((set, get) => {
         transitions: next.transitions || [],
         drawingStrokes: next.drawingStrokes || [],
         paintLayers: next.paintLayers || [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
+        markers: next.markers || [],
         future: future.slice(0, -1),
         past: [...past.slice(-49), current],
         duration: recompute(next.clips),
@@ -1375,6 +1403,68 @@ export const useEditor = create<EditorState>((set, get) => {
         selectedTransitionId: null,
       })
     },
+
+    // ---- markers initial state & actions ----
+    markers: [],
+    activeMarkerModalId: null,
+    setActiveMarkerModalId: (id) => set({ activeMarkerModalId: id }),
+    addMarker: (marker) => {
+      const id = uid('marker')
+      const newMarker: TimelineMarker = {
+        id,
+        time: Math.max(0, marker.time),
+        duration: Math.max(0, marker.duration || 0),
+        label: marker.label.trim() || 'Marker',
+        notes: marker.notes || '',
+        color: marker.color || 'blue',
+      }
+      pushSnapshot()
+      set((s) => ({
+        markers: [...s.markers, newMarker].sort((a, b) => a.time - b.time),
+      }))
+      return id
+    },
+    updateMarker: (id, patch) => {
+      pushSnapshot()
+      set((s) => ({
+        markers: s.markers.map((m) => (m.id === id ? { ...m, ...patch } : m)).sort((a, b) => a.time - b.time),
+      }))
+    },
+    removeMarker: (id) => {
+      pushSnapshot()
+      set((s) => ({
+        markers: s.markers.filter((m) => m.id !== id),
+        activeMarkerModalId: s.activeMarkerModalId === id ? null : s.activeMarkerModalId,
+      }))
+    },
+    clearMarkers: () => {
+      pushSnapshot()
+      set({ markers: [], activeMarkerModalId: null })
+    },
+    jumpToMarker: (id) => {
+      const marker = get().markers.find((m) => m.id === id)
+      if (marker) get().setPlayhead(marker.time)
+    },
+    jumpToNextMarker: () => {
+      const { markers, playhead } = get()
+      const next = markers.find((m) => m.time > playhead + 0.05)
+      if (next) get().setPlayhead(next.time)
+    },
+    jumpToPrevMarker: () => {
+      const { markers, playhead } = get()
+      const prev = [...markers].reverse().find((m) => m.time < playhead - 0.05)
+      if (prev) get().setPlayhead(prev.time)
+    },
+
+    // ---- master audio ----
+    masterVolume: 1.0,
+    setMasterVolume: (vol) => set({ masterVolume: Math.max(0, Math.min(1.5, vol)) }),
+    masterMuted: false,
+    setMasterMuted: (muted) => set({ masterMuted: muted }),
+
+    // ---- clone stamp ----
+    cloneSourcePoint: null,
+    setCloneSourcePoint: (pt) => set({ cloneSourcePoint: pt }),
 
     newProject: () => {
       for (const asset of get().assets) URL.revokeObjectURL(asset.url)
@@ -1385,6 +1475,8 @@ export const useEditor = create<EditorState>((set, get) => {
         transitions: [],
         drawingStrokes: [],
         paintLayers: [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
+        markers: [],
+        activeMarkerModalId: null,
         selectedTransitionId: null,
         playhead: 0,
         duration: 10,

@@ -18,6 +18,7 @@ All 10 automated end-to-end Playwright test suites and OpenCV forensic inspectio
 | `qa/fill-hair-recolor-e2e.mjs` | Flood Fill Tool, Hair Recolor & Luminance Preservation | 8 / 8 PASS | 0 | Blue dominance (+44.13), shading std dev (85.62) |
 | `qa/layout-selection-mask-e2e.mjs` | Selection Family, Marching Ants & Paint Layer Masking | 10 / 10 PASS | 0 | Decoded 97 masked frames (avg lum: 106.7) |
 | `qa/onion-skin-cel-animation-e2e.mjs`| Frame Cel Scoping, Holds & Onion Skin Ghosting | 8 / 8 PASS | 0 | Decoded 139 cel frames (avg lum: 107.5) |
+| `qa/marker-audiometer-e2e.mjs` | Sequence Markers, Stereo Audio VU Meter & Master Level Controls | 19 / 19 PASS | 0 | Verified marker modal, ruler pins, and VU meter |
 
 ---
 

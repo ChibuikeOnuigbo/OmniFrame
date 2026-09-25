@@ -7,6 +7,23 @@ All notable technical changes, architectural refactorings, feature implementatio
 ## [Unreleased] - 2026-09-25
 
 ### Added
+- **Sequence Marker Subsystem (`src/components/MarkerModal.tsx`, `src/store.ts`, `src/components/Timeline.tsx`)**:
+  - Full data model (`TimelineMarker`, `MarkerColor`): time, duration, label, color, notes.
+  - Store actions with complete undo/redo integration: `addMarker`, `updateMarker`, `removeMarker`, `clearMarkers`, `jumpToMarker`, `jumpToNextMarker`, `jumpToPrevMarker`.
+  - Color-coded badges: blue, green, red, yellow, purple, orange.
+  - Timeline ruler rendering: interactive marker flag pins, duration span ribbons, and label pills.
+  - Snapping integration: playhead and clips snap directly to marker time positions.
+  - Double-click to edit marker properties, single-click to seek playhead.
+  - Keyboard shortcut `M` (industry standard Premiere/Resolve/FCP) to add or edit markers at playhead.
+- **Stereo Audio VU Meter & Master Level Subsystem (`src/components/AudioMeter.tsx`)**:
+  - Real-time dual-channel (Left / Right) 16-segment LED level meters with peak hold indicators.
+  - Numerical dB readout (from $-\infty\,\text{dB}$ through $+3\,\text{dB}$ clipping).
+  - Master volume slider ($0\%$ to $150\%$) and quick master mute button.
+  - Seamlessly integrated into timeline transport bar.
+- **Clone Stamp Tool (`src/lib/drawingEngine.ts`, `src/components/DrawingCanvasOverlay.tsx`, `src/components/DrawingToolbar.tsx`)**:
+  - Added `'clone'` to `DrawingToolType` and `cloneSource` to `DrawingStroke`.
+  - Added Alt+Click canvas sampling to capture clone source coordinates and canvas texture.
+  - Implemented displacement offset rendering and circular stamp clipping in Canvas 2D engine.
 - **Voice Isolation Subsystem (`src/lib/voiceIsolation.ts`)**:
   - Implemented 3-band Chamberlin State Variable Filter (SVF) crossover for vocal extraction.
   - "Remove Vocal" (Karaoke / Instrumental) mode with sub-bass ($\le 140\,\text{Hz}$) mono preservation and mid-side phase cancellation in the $140\,\text{Hz}-7500\,\text{Hz}$ speech band ($>98\%$ center vocal attenuation, $>86\%$ bass retention).

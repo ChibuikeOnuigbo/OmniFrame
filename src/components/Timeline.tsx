@@ -30,18 +30,20 @@ import {
   Layers,
   ArrowRight,
   Minimize2,
+  Bookmark,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
+import { AudioMeter } from './AudioMeter'
 
 const RULER_H = 28
 const HEADER_W = 168
 const MAX_PX = 8000 // continuous zoom remains usable through frame-level detail
 
-// Snap a time value to nearby clip edges and the playhead.
+// Snap a time value to nearby clip edges, markers, and the playhead.
 function snapTime(value: number): number {
   const st = useEditor.getState()
   if (!st.snapping) return value
@@ -56,6 +58,13 @@ function snapTime(value: number): number {
         bestDist = d
         best = t
       }
+    }
+  }
+  for (const m of st.markers || []) {
+    const dm = Math.abs(m.time - value)
+    if (dm < bestDist) {
+      bestDist = dm
+      best = m.time
     }
   }
   const dph = Math.abs(st.playhead - value)
@@ -652,6 +661,24 @@ export function Timeline() {
   const removeClip = useEditor((s) => s.removeClip)
   const insertClipCopy = useEditor((s) => s.insertClipCopy)
   const toggleClipHidden = useEditor((s) => s.toggleClipHidden)
+  const markers = useEditor((s) => s.markers)
+  const addMarker = useEditor((s) => s.addMarker)
+  const setActiveMarkerModalId = useEditor((s) => s.setActiveMarkerModalId)
+
+  const handleAddMarker = () => {
+    const playheadTime = useEditor.getState().playhead
+    const existing = markers.find((m) => Math.abs(m.time - playheadTime) < 0.1)
+    if (existing) {
+      setActiveMarkerModalId(existing.id)
+    } else {
+      const id = addMarker({
+        time: playheadTime,
+        label: `Marker ${markers.length + 1}`,
+        color: 'blue',
+      })
+      setActiveMarkerModalId(id)
+    }
+  }
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const lanesRef = useRef<HTMLDivElement>(null)
@@ -981,7 +1008,23 @@ export function Timeline() {
           <ChevronDown size={12} />
         </button>
 
+        {/* marker button */}
+        <button
+          type="button"
+          data-testid="add-marker-btn"
+          title="Add Marker at playhead (M)"
+          aria-label="Add marker"
+          onClick={handleAddMarker}
+          className="flex h-8 items-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
+        >
+          <Bookmark size={14} className="text-blue-400" />
+          <span className="hidden sm:inline">Marker</span>
+        </button>
+
         <div className="flex-1 min-w-[12px]" />
+
+        {/* Audio VU Meter & Master Volume */}
+        <AudioMeter />
 
         {/* zoom group */}
         <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-md border border-ink-700 bg-ink-800">
@@ -1187,6 +1230,76 @@ export function Timeline() {
                   )}
                 </div>
               ))}
+
+              {/* Sequence Timeline Markers */}
+              {markers.map((marker) => {
+                const markerLeft = marker.time * px
+                const markerWidth = marker.duration ? Math.max(4, marker.duration * px) : 0
+                const colorHex =
+                  marker.color === 'green'
+                    ? '#10b981'
+                    : marker.color === 'red'
+                    ? '#ef4444'
+                    : marker.color === 'yellow'
+                    ? '#f59e0b'
+                    : marker.color === 'purple'
+                    ? '#a855f7'
+                    : marker.color === 'orange'
+                    ? '#f97316'
+                    : '#3b82f6'
+
+                return (
+                  <div
+                    key={marker.id}
+                    data-testid="timeline-marker"
+                    data-marker-id={marker.id}
+                    data-marker-color={marker.color}
+                    data-marker-time={marker.time.toFixed(3)}
+                    title={`${marker.label} (${formatTimecode(marker.time, FPS, dropFrameTimecode)})${marker.notes ? `\n${marker.notes}` : ''}`}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setPlayhead(marker.time)
+                    }}
+                    onDoubleClick={(e) => {
+                      e.stopPropagation()
+                      setActiveMarkerModalId(marker.id)
+                    }}
+                    className="absolute top-0 z-20 cursor-pointer group"
+                    style={{ left: markerLeft }}
+                  >
+                    {/* Duration span ribbon */}
+                    {markerWidth > 0 && (
+                      <div
+                        className="absolute top-0 h-[28px] opacity-25 pointer-events-none"
+                        style={{
+                          width: markerWidth,
+                          backgroundColor: colorHex,
+                        }}
+                      />
+                    )}
+
+                    {/* Flag pin */}
+                    <div
+                      className="relative w-3.5 h-4 flex items-center justify-center -ml-1.5 transition-transform group-hover:scale-125"
+                      style={{ color: colorHex }}
+                    >
+                      <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
+                        <path d="M0 0 H12 L7 6 L12 12 H0 Z" />
+                      </svg>
+                    </div>
+
+                    {/* Marker label pill */}
+                    <span
+                      className="absolute top-4 left-1 text-[8px] font-semibold px-1 py-0.2 rounded text-white shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100"
+                      style={{ backgroundColor: colorHex }}
+                    >
+                      {marker.label}
+                    </span>
+                  </div>
+                )
+              })}
+
               {/* Imperative marker */}
               <PlayheadMarker px={px} handle />
             </div>
