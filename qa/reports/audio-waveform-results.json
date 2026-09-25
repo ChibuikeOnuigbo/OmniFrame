@@ -28,12 +28,12 @@
     {
       "name": "visible amplitude scales down with volume",
       "status": "PASS",
-      "detail": "13.4375 -> 3.35938"
+      "detail": "11.5156 -> 2.875"
     },
     {
       "name": "zero volume collapses waveform to center line",
       "status": "PASS",
-      "detail": "0.125"
+      "detail": "0.109375"
     },
     {
       "name": "zero runtime errors",
@@ -51,12 +51,12 @@
     "uniquePeaks": 220,
     "minPeak": 0.4999,
     "maxPeak": 1,
-    "maxHeight": 13.4375,
+    "maxHeight": 11.5156,
     "volume": "1.000"
   },
   "reduced": {
     "volume": "0.250",
-    "maxHeight": 3.35938
+    "maxHeight": 2.875
   },
   "errors": [],
   "failed": [],

@@ -1,18 +1,22 @@
 import {
   LibraryBig,
+  Palette,
   Type,
   Wand2,
   Shuffle,
-  LayoutTemplate,
-  Brush,
-  Crosshair,
-  Layers,
   Box,
+  Mic,
   X,
   type LucideIcon,
 } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
 import { MediaPanel } from './MediaPanel'
+import { VoiceIsolationPanel } from './VoiceIsolationPanel'
+import { DrawingPanel } from './DrawingPanel'
+import { TransitionsPanel } from './TransitionsPanel'
+import { EffectsPanel } from './EffectsPanel'
+import { TextPanel } from './TextPanel'
+import { ThreePanel } from './ThreePanel'
 
 interface TabDef {
   id: LeftTab
@@ -21,35 +25,25 @@ interface TabDef {
 }
 
 const TABS: TabDef[] = [
-  { id: 'media', label: 'Media library', icon: LibraryBig },
-  { id: 'text', label: 'Text', icon: Type },
-  { id: 'effects', label: 'Effects', icon: Wand2 },
+  { id: 'media', label: 'Media Library', icon: LibraryBig },
+  { id: 'audio', label: 'Voice Isolation', icon: Mic },
+  { id: 'drawing', label: 'Drawing & Paint', icon: Palette },
   { id: 'transitions', label: 'Transitions', icon: Shuffle },
-  { id: 'templates', label: 'Templates', icon: LayoutTemplate },
-  { id: 'masks', label: 'Masks', icon: Brush },
-  { id: 'tracking', label: 'Tracking', icon: Crosshair },
-  { id: 'omniframe', label: 'Omniframe', icon: Layers },
-  { id: 'threed', label: '3D', icon: Box },
+  { id: 'effects', label: 'Effects', icon: Wand2 },
+  { id: 'text', label: 'Text & Titles', icon: Type },
+  { id: 'threed', label: '3D Scene', icon: Box },
 ]
-
-function PlannedPanel({ title, note }: { title: string; note: string }) {
-  return (
-    <div className="p-4 text-xs text-ink-400 leading-relaxed">
-      <div className="text-ink-200 font-medium mb-1">{title}</div>
-      {note}
-    </div>
-  )
-}
 
 export function LeftDock() {
   const leftTab = useEditor((s) => s.leftTab)
   const leftOpen = useEditor((s) => s.leftOpen)
   const setLeftTab = useEditor((s) => s.setLeftTab)
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
+  const leftDockWidth = useEditor((s) => s.leftDockWidth)
 
   return (
     <div className="flex shrink-0 h-full">
-      {/* icon rail — always visible so options are never hidden */}
+      {/* icon rail */}
       <div className="w-12 shrink-0 bg-ink-900 border-r border-ink-700 flex flex-col items-center py-2 gap-1">
         {TABS.map((t) => {
           const Icon = t.icon
@@ -58,16 +52,21 @@ export function LeftDock() {
             <button
               key={t.id}
               type="button"
+              data-testid={`left-tab-${t.id}`}
               title={t.label}
+              aria-label={t.label}
               aria-pressed={active}
               onClick={() => {
                 if (leftTab === t.id && leftOpen) setLeftOpen(false)
-                else setLeftTab(t.id)
+                else {
+                  setLeftTab(t.id)
+                  setLeftOpen(true)
+                }
               }}
               className={[
                 'grid place-items-center h-9 w-9 rounded-md transition-colors',
                 active
-                  ? 'bg-brand text-white'
+                  ? 'bg-brand text-white shadow-sm'
                   : 'text-ink-400 hover:text-white hover:bg-ink-700',
               ].join(' ')}
             >
@@ -81,12 +80,19 @@ export function LeftDock() {
       <div
         data-testid="left-panel"
         data-open={leftOpen}
-        className={[
-          'shrink-0 bg-ink-850 border-r border-ink-700 overflow-hidden transition-[width] duration-150',
-          leftOpen ? 'w-[232px]' : 'w-0',
-        ].join(' ')}
+        style={{
+          width: leftOpen
+            ? `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`
+            : '0px',
+        }}
+        className="shrink-0 bg-ink-850 border-r border-ink-700 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:shadow-2xl"
       >
-        <div className="w-[232px] h-full flex flex-col">
+        <div
+          style={{
+            width: `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`,
+          }}
+          className="h-full flex flex-col"
+        >
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700">
             <span className="text-xs font-semibold uppercase tracking-wider text-ink-300">
               {TABS.find((t) => t.id === leftTab)?.label}
@@ -94,6 +100,7 @@ export function LeftDock() {
             <button
               type="button"
               title="Collapse"
+              aria-label="Collapse panel"
               onClick={() => setLeftOpen(false)}
               className="grid place-items-center h-7 w-7 rounded text-ink-400 hover:text-white hover:bg-ink-700"
             >
@@ -101,31 +108,13 @@ export function LeftDock() {
             </button>
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto">
-            {(leftTab === 'media' || leftTab === 'audio') && <MediaPanel />}
-            {leftTab === 'text' && (
-              <PlannedPanel title="Text & titles" note="Rich text, presets and per-letter animation are part of the next phase. Timeline editing, trimming, splitting and export are working now." />
-            )}
-            {leftTab === 'effects' && (
-              <PlannedPanel title="Effects" note="An extensible effect registry (blur, color, stylize, composite) is scaffolded in the architecture. The first effects ship in the next phase." />
-            )}
-            {leftTab === 'transitions' && (
-              <PlannedPanel title="Transitions" note="Cut, crossfade, dip, wipe, slide and 3D pushes will plug into the same render graph used by the preview." />
-            )}
-            {leftTab === 'templates' && (
-              <PlannedPanel title="Templates" note="Typed template slots (video / image / 3D / text) with validation are specified and will be implemented next." />
-            )}
-            {leftTab === 'masks' && (
-              <PlannedPanel title="Masking" note="Brush / lasso / magic / flood-fill masking with per-frame and tracked propagation is a core planned feature." />
-            )}
-            {leftTab === 'tracking' && (
-              <PlannedPanel title="Tracking" note="Point, object, planar and mask tracking with a hybrid optical-flow + segmentation engine is specified and next." />
-            )}
-            {leftTab === 'omniframe' && (
-              <PlannedPanel title="Omniframe" note="The signature cross-frame edit mode (cut/move/fill that propagates through all frames) is specified and next." />
-            )}
-            {leftTab === 'threed' && (
-              <PlannedPanel title="3D / 2.5D" note="GLB/GLTF import, lighting, materials and 3D-to-2D transitions are specified and next." />
-            )}
+            {leftTab === 'media' && <MediaPanel />}
+            {leftTab === 'audio' && <VoiceIsolationPanel />}
+            {leftTab === 'drawing' && <DrawingPanel />}
+            {leftTab === 'transitions' && <TransitionsPanel />}
+            {leftTab === 'effects' && <EffectsPanel />}
+            {leftTab === 'text' && <TextPanel />}
+            {leftTab === 'threed' && <ThreePanel />}
           </div>
         </div>
       </div>
