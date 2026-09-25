@@ -72,7 +72,7 @@ export function EffectsPanel() {
       <div data-testid="effects-panel-empty" className="p-4 text-xs text-ink-500 text-center">
         <Wand2 size={24} className="mx-auto mb-2 opacity-40 text-ink-400" />
         <p className="font-medium text-ink-300">No media clips</p>
-        <p className="text-[11px] text-ink-500 mt-1">Import or add a clip to the timeline to apply real-time color grading and shader filters.</p>
+        <p className="text-[11px] text-ink-500 mt-1">Import or add a clip to the timeline to apply realtime color grading and shader filters.</p>
       </div>
     )
   }
@@ -109,7 +109,7 @@ export function EffectsPanel() {
             { id: 'vintage', label: 'Vintage 70s' },
             { id: 'warm', label: 'Golden Hour' },
             { id: 'cyberpunk', label: 'Cyberpunk' },
-            { id: 'invert', label: 'Invert / X-Ray' },
+            { id: 'invert', label: 'Invert / X Ray' },
           ].map((p) => (
             <button
               key={p.id}

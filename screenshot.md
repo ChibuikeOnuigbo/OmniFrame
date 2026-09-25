@@ -50,6 +50,8 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-044 | `qa/screenshots/unified-desktop-suite.png` | 1440x900 | Unified Preview & Text Subsystem | Unified preview viewport rendering bold text title ("OMNIFRAME 2026 HERO"), cross dissolve cut transition, transitions dock panel, and clip inspector. |
 | SS-045 | `qa/screenshots/mobile-full-studio.png` | 390x844 | Mobile Responsiveness | Full mobile studio view on iPhone viewport (390x844) with zero horizontal overflow, responsive preview scaling, compact top bar, and timeline transport. |
 | SS-046 | `qa/screenshots/mobile-drawer-responsive.png` | 390x844 | Mobile Responsiveness | Slide-out overlay drawer on mobile viewport showing clean slide-in transition over preview without layout shifting. |
+| SS-047 | `qa/screenshots/ratio-dropdown-actual-icons.png` | 1440x900 | Aspect Ratio Subsystem | Aspect Ratio popover and trigger button featuring actual platform icons, YouTube + TikTok stacked paper slide for 9:16, Instagram icons, and custom dimension controls without hyphens. |
+
 
 
 

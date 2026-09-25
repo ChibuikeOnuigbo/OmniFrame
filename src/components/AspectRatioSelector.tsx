@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import {
-  Maximize2,
   ChevronDown,
   Lock,
   Unlock,
   RotateCcw,
   Check,
   Tv,
-  Smartphone,
   Square,
   Film,
   Sliders,
@@ -15,6 +13,120 @@ import {
 import { useEditor } from '../store'
 import { RATIO_PRESETS, validateDimensions, MIN_DIMENSION, MAX_DIMENSION } from '../lib/aspectRatios'
 import type { AspectRatioType } from '../types'
+
+export function YouTubeIcon({ size = 15, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
+      <rect x="2" y="4" width="20" height="16" rx="4.5" fill="#FF0000" />
+      <polygon points="10,8.5 16,12 10,15.5" fill="white" />
+    </svg>
+  )
+}
+
+export function TikTokIcon({ size = 15, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
+      <rect x="2" y="2" width="20" height="20" rx="4.5" fill="#010101" />
+      <path
+        d="M16.5 8.2c-.9-.6-1.5-1.5-1.6-2.6h-2.2v9.3a2.3 2.3 0 1 1-2.3-2.3c.4 0 .8.1 1.1.3V10.5a4.7 4.7 0 0 0-1.1-.1 4.6 4.6 0 1 0 4.6 4.6V10.2c1.1.8 2.4 1.3 3.8 1.3V9.3c-.8 0-1.6-.4-2.3-1.1z"
+        fill="#25F4EE"
+        transform="translate(-0.5, -0.5)"
+        opacity="0.85"
+      />
+      <path
+        d="M16.5 8.2c-.9-.6-1.5-1.5-1.6-2.6h-2.2v9.3a2.3 2.3 0 1 1-2.3-2.3c.4 0 .8.1 1.1.3V10.5a4.7 4.7 0 0 0-1.1-.1 4.6 4.6 0 1 0 4.6 4.6V10.2c1.1.8 2.4 1.3 3.8 1.3V9.3c-.8 0-1.6-.4-2.3-1.1z"
+        fill="#FE2C55"
+        transform="translate(0.5, 0.5)"
+        opacity="0.85"
+      />
+      <path
+        d="M16.5 8.2c-.9-.6-1.5-1.5-1.6-2.6h-2.2v9.3a2.3 2.3 0 1 1-2.3-2.3c.4 0 .8.1 1.1.3V10.5a4.7 4.7 0 0 0-1.1-.1 4.6 4.6 0 1 0 4.6 4.6V10.2c1.1.8 2.4 1.3 3.8 1.3V9.3c-.8 0-1.6-.4-2.3-1.1z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  )
+}
+
+export function YouTubeTikTokPaperSlideIcon({ className = '' }: { className?: string }) {
+  return (
+    <span
+      data-testid="ratio-icon-9-16-stack"
+      className={`relative inline-flex items-center w-6 h-5 shrink-0 select-none ${className}`}
+      title="YouTube Shorts and TikTok 9:16 vertical stack"
+    >
+      {/* YouTube card (back paper slide) */}
+      <span
+        className="absolute left-0 top-0.5 w-3.5 h-4.5 rounded-[3px] bg-[#FF0000] shadow-sm flex items-center justify-center border border-white/20 transform -rotate-6 transition-transform"
+        style={{ zIndex: 1 }}
+      >
+        <svg width="6" height="6" viewBox="0 0 24 24" fill="white">
+          <polygon points="7,5 19,12 7,19" />
+        </svg>
+      </span>
+
+      {/* TikTok card (front paper slide, slid out to the side) */}
+      <span
+        className="absolute left-2.5 top-0 w-3.5 h-4.5 rounded-[3px] bg-[#0f0f14] shadow-md flex items-center justify-center border border-[#25F4EE]/40 transform rotate-6 transition-transform"
+        style={{ zIndex: 2 }}
+      >
+        <svg width="7" height="7" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M16 8c-.8-.5-1.4-1.3-1.5-2.2h-1.9v8.2a2 2 0 1 1-2-2c.4 0 .7.1 1 .3V9.5a4 4 0 0 0-1-.1 4 4 0 1 0 4 4V10c1 .7 2.1 1.1 3.4 1.1V9.2c-.7 0-1.4-.4-2-1.2z"
+            fill="#25F4EE"
+            transform="translate(-0.3, -0.3)"
+          />
+          <path
+            d="M16 8c-.8-.5-1.4-1.3-1.5-2.2h-1.9v8.2a2 2 0 1 1-2-2c.4 0 .7.1 1 .3V9.5a4 4 0 0 0-1-.1 4 4 0 1 0 4 4V10c1 .7 2.1 1.1 3.4 1.1V9.2c-.7 0-1.4-.4-2-1.2z"
+            fill="#FE2C55"
+            transform="translate(0.3, 0.3)"
+          />
+          <path
+            d="M16 8c-.8-.5-1.4-1.3-1.5-2.2h-1.9v8.2a2 2 0 1 1-2-2c.4 0 .7.1 1 .3V9.5a4 4 0 0 0-1-.1 4 4 0 1 0 4 4V10c1 .7 2.1 1.1 3.4 1.1V9.2c-.7 0-1.4-.4-2-1.2z"
+            fill="#FFFFFF"
+          />
+        </svg>
+      </span>
+    </span>
+  )
+}
+
+export function InstagramIcon({ size = 15, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
+      <defs>
+        <radialGradient id="ig-grad" cx="20%" cy="100%" r="130%">
+          <stop offset="0%" stopColor="#ffc107" />
+          <stop offset="20%" stopColor="#f44336" />
+          <stop offset="60%" stopColor="#e91e63" />
+          <stop offset="100%" stopColor="#9c27b0" />
+        </radialGradient>
+      </defs>
+      <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-grad)" />
+      <rect x="6.5" y="6.5" width="11" height="11" rx="3" stroke="white" strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="3" stroke="white" strokeWidth="1.5" />
+      <circle cx="15.5" cy="8.5" r="0.75" fill="white" />
+    </svg>
+  )
+}
+
+export function CinemascopeIcon({ size = 15, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
+      <rect x="1" y="6" width="22" height="12" rx="2" fill="#1e1e2d" stroke="#8b5cf6" strokeWidth="1.2" />
+      <path d="M4 6v12M20 6v12M8 6v12M16 6v12" stroke="#8b5cf6" strokeWidth="0.8" strokeDasharray="1.5 1.5" opacity="0.6" />
+      <polygon points="10,9 15,12 10,15" fill="#a78bfa" />
+    </svg>
+  )
+}
+
+export function CustomRatioIcon({ size = 15, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
+      <rect x="3" y="3" width="18" height="18" rx="3" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="3 2" />
+      <path d="M8 12h8M12 8v8" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 export function AspectRatioSelector() {
   const sequenceSettings = useEditor((s) => s.sequenceSettings)
@@ -123,16 +235,42 @@ export function AspectRatioSelector() {
   // Representative icon based on ratio format
   const renderRepresentativeIcon = () => {
     const ar = sequenceSettings.aspectRatio
-    if (ar === '9:16' || ar === '4:5' || ar === '2:3') {
-      return <Smartphone size={13} className="text-brand shrink-0" />
+    if (ar === '9:16') {
+      return <YouTubeTikTokPaperSlideIcon />
     }
-    if (ar === '1:1') {
-      return <Square size={13} className="text-amber-400 shrink-0" />
+    if (ar === '16:9') {
+      return <YouTubeIcon size={14} />
+    }
+    if (ar === '1:1' || ar === '4:5') {
+      return <InstagramIcon size={14} />
     }
     if (ar === '21:9') {
-      return <Film size={13} className="text-violet-400 shrink-0" />
+      return <CinemascopeIcon size={14} />
     }
-    return <Tv size={13} className="text-brand shrink-0" />
+    if (ar === 'custom') {
+      return <CustomRatioIcon size={14} />
+    }
+    return <Tv size={14} className="text-brand shrink-0" />
+  }
+
+  // Specific icon for preset items
+  const renderPresetIcon = (presetId: string) => {
+    if (presetId === '9:16') {
+      return <YouTubeTikTokPaperSlideIcon />
+    }
+    if (presetId === '16:9') {
+      return <YouTubeIcon size={15} />
+    }
+    if (presetId === '1:1' || presetId === '4:5') {
+      return <InstagramIcon size={15} />
+    }
+    if (presetId === '21:9') {
+      return <CinemascopeIcon size={15} />
+    }
+    if (presetId === 'custom') {
+      return <CustomRatioIcon size={15} />
+    }
+    return <Tv size={15} className="text-brand shrink-0" />
   }
 
   return (
@@ -146,11 +284,11 @@ export function AspectRatioSelector() {
         >
           <div className="font-semibold text-white flex items-center gap-1.5">
             <span>{currentPreset.label}</span>
-            <span className="text-ink-500 font-mono text-[10px]">({sequenceSettings.width}×{sequenceSettings.height})</span>
+            <span className="text-ink-500 font-mono text-[10px]">({sequenceSettings.width} × {sequenceSettings.height})</span>
           </div>
           <div className="text-ink-400 text-[10px]">{currentPreset.description}</div>
           <div className="mt-1 flex items-center gap-1 text-[9px] text-brand">
-            {currentPreset.platforms.slice(0, 3).map((plat, idx) => (
+            {currentPreset.platforms.slice(0, 3).map((plat) => (
               <span key={plat} className="px-1 py-0.5 rounded bg-brand/10 border border-brand/30">
                 {plat}
               </span>
@@ -159,13 +297,13 @@ export function AspectRatioSelector() {
         </div>
       )}
 
-      {/* Compact Closed Trigger Button */}
+      {/* Compact Closed Trigger Button: Takes small space with actual icons */}
       <button
         ref={buttonRef}
         type="button"
         data-testid="ratio-selector-btn"
         id="aspect-ratio-selector-trigger"
-        title="Sequence Aspect Ratio & Output Format"
+        title="Sequence Aspect Ratio and Output Format"
         aria-label="Aspect Ratio Selector"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -174,25 +312,25 @@ export function AspectRatioSelector() {
         onMouseLeave={() => setTooltipVisible(false)}
         onFocus={() => setTooltipVisible(true)}
         onBlur={() => setTooltipVisible(false)}
-        className="flex items-center gap-1.5 h-7 px-2 rounded-md bg-ink-900/90 hover:bg-ink-800 border border-ink-700/80 hover:border-ink-600 text-ink-200 hover:text-white shadow-lg backdrop-blur-md transition-all text-xs font-medium"
+        className="flex items-center gap-2 h-7 px-2.5 rounded-md bg-ink-900/90 hover:bg-ink-800 border border-ink-700/80 hover:border-ink-600 text-ink-200 hover:text-white shadow-lg backdrop-blur-md transition-all text-xs font-medium"
       >
         {renderRepresentativeIcon()}
         <span className="font-mono text-[11px] font-semibold tracking-tight">
           {sequenceSettings.isCustom
-            ? `${sequenceSettings.width}×${sequenceSettings.height}`
+            ? `${sequenceSettings.width} × ${sequenceSettings.height}`
             : sequenceSettings.aspectRatio}
         </span>
         <ChevronDown size={12} className={`text-ink-400 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
-      {/* Accessible Popover Menu - Positioned bottom-right above trigger to prevent overflow */}
+      {/* Accessible Popover Menu: Positioned bottom-right above trigger */}
       {open && (
         <div
           ref={popoverRef}
           role="dialog"
           aria-label="Aspect Ratio Presets"
           data-testid="ratio-popover"
-          className="absolute bottom-full right-0 mb-2 w-72 max-h-[440px] overflow-y-auto rounded-xl bg-ink-900/98 border border-ink-700 shadow-2xl backdrop-blur-xl p-2 z-50 text-xs text-ink-200 animate-in fade-in zoom-in-95 duration-150"
+          className="absolute bottom-full right-0 mb-2 w-72 max-h-[460px] overflow-y-auto rounded-xl bg-ink-900/98 border border-ink-700 shadow-2xl backdrop-blur-xl p-2 z-50 text-xs text-ink-200 animate-in fade-in zoom-in-95 duration-150"
         >
           <div className="flex items-center justify-between px-2 py-1 border-b border-ink-800 mb-1.5">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">
@@ -203,7 +341,7 @@ export function AspectRatioSelector() {
             </span>
           </div>
 
-          {/* Preset List */}
+          {/* Preset List with Real Platform Icons and Stacked Paper Slide */}
           <div className="space-y-0.5">
             {RATIO_PRESETS.map((preset) => {
               const active = sequenceSettings.aspectRatio === preset.id
@@ -219,15 +357,20 @@ export function AspectRatioSelector() {
                       : 'hover:bg-ink-800 text-ink-300 hover:text-white'
                   }`}
                 >
-                  <div className="min-w-0 pr-2">
-                    <div className="flex items-center gap-1.5 font-medium">
-                      <span>{preset.label}</span>
-                      <span className="text-[10px] font-mono text-ink-500">
-                        ({preset.width}×{preset.height})
-                      </span>
+                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <div className="flex items-center justify-center w-6 h-5 shrink-0">
+                      {renderPresetIcon(preset.id)}
                     </div>
-                    <div className="text-[10px] text-ink-500 truncate">
-                      {preset.platforms.slice(0, 3).join(' · ')}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <span>{preset.label}</span>
+                        <span className="text-[10px] font-mono text-ink-500">
+                          ({preset.width} × {preset.height})
+                        </span>
+                      </div>
+                      <div className="text-[10px] text-ink-500 truncate">
+                        {preset.platforms.slice(0, 3).join(' · ')}
+                      </div>
                     </div>
                   </div>
                   {active && <Check size={14} className="shrink-0 text-brand" />}
@@ -236,14 +379,17 @@ export function AspectRatioSelector() {
             })}
           </div>
 
-          {/* Custom Dimension Editor */}
+          {/* Custom Dimension Editor: Takes small space, quick customize */}
           {sequenceSettings.aspectRatio === 'custom' && (
             <div
               data-testid="custom-ratio-editor"
               className="mt-2 pt-2 border-t border-ink-800 space-y-2 animate-in fade-in duration-100"
             >
               <div className="flex items-center justify-between text-[11px] font-medium text-ink-300">
-                <span>Custom Dimensions</span>
+                <span className="flex items-center gap-1 text-cyan-400">
+                  <CustomRatioIcon size={12} />
+                  <span>Custom Dimensions</span>
+                </span>
                 <button
                   type="button"
                   data-testid="reset-custom-ratio-btn"
@@ -258,7 +404,7 @@ export function AspectRatioSelector() {
 
               <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-center">
                 <div>
-                  <label className="block text-[9px] text-ink-500 font-mono mb-0.5">WIDTH (PX)</label>
+                  <label className="block text-[9px] text-ink-500 font-mono mb-0.5">WIDTH PX</label>
                   <input
                     type="number"
                     data-testid="custom-width-input"
@@ -284,7 +430,7 @@ export function AspectRatioSelector() {
                 </button>
 
                 <div>
-                  <label className="block text-[9px] text-ink-500 font-mono mb-0.5">HEIGHT (PX)</label>
+                  <label className="block text-[9px] text-ink-500 font-mono mb-0.5">HEIGHT PX</label>
                   <input
                     type="number"
                     data-testid="custom-height-input"

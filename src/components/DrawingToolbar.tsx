@@ -186,7 +186,7 @@ export function DrawingToolbar() {
           <button
             type="button"
             data-testid="shrink-selection-btn"
-            title="Shrink / Contract Selection (-10px)"
+            title="Shrink / Contract Selection (10px inward)"
             aria-label="Shrink selection"
             onClick={() => shrinkSelection(10)}
             className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-ink-800 hover:bg-ink-700 text-ink-300 hover:text-white text-[10px] transition-colors"

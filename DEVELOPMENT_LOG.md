@@ -66,3 +66,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-25T21:16:24+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
 
 - 2026-09-25T21:16:37+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
+
+- 2026-09-25T21:41:45+00:00 — Drawing Run #7: [VERIFIED] Ratio Dropdown Platform Icons Stacked Paper Slide and Canvas Empty Playback Fix — Fixed canvas empty overlay hiding during playback, added authentic platform icons and YouTube TikTok paper slide stack for 9:16, custom dimension editor in compact space, and removed hyphens from user text

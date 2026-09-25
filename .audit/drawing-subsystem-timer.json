@@ -41,8 +41,15 @@
       "feature": "Unified Preview Text Effects and Mobile Responsiveness",
       "status": "verified",
       "details": "Unified preview canvas, text titles, real-time effects and transitions, isolate voice hover submenu, and 390px mobile responsiveness passing 21/21 E2E tests"
+    },
+    {
+      "run": 7,
+      "timestamp": "2026-09-25T21:41:45+00:00",
+      "feature": "Ratio Dropdown Platform Icons Stacked Paper Slide and Canvas Empty Playback Fix",
+      "status": "verified",
+      "details": "Fixed canvas empty overlay hiding during playback, added authentic platform icons and YouTube TikTok paper slide stack for 9:16, custom dimension editor in compact space, and removed hyphens from user text"
     }
   ],
-  "total_runs": 6,
-  "last_updated": "2026-09-25T21:16:21+00:00"
+  "total_runs": 7,
+  "last_updated": "2026-09-25T21:41:45+00:00"
 }

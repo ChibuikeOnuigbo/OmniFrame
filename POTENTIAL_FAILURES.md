@@ -40,6 +40,9 @@ This register applies Failure Modes and Effects Analysis (FMEA) to OmniFrame's a
 | PF-0034 | WebGL Context Loss During Mobile Device Orientation Shifts | Switching mobile device between portrait and landscape can cause mobile browser to reclaim WebGL contexts. | Medium | Low | Listen for `webglcontextlost` on ThreeViewer canvas, invoke `event.preventDefault()`, and reconstruct Three.js scene/camera on `webglcontextrestored`. |
 | PF-0035 | Mobile Touch Gesture Conflict Between Timeline Scroll and Playhead Scrubbing | Touch panning on mobile timeline conflicting with horizontal playhead scrubbing. | Medium | Low | Require dedicated touch drag on the ruler playhead handle with `touch-action: pan-y` on the track lanes. |
 | PF-0036 | Canvas Video Export With Real-Time Filters Dropping Frames Under High GPU Load | Applying multiple simultaneous canvas CSS/WebGL filters (e.g. Cyberpunk with hueRotate, contrast, saturation) during 4K export dropping frames. | High | Low | Export engine uses offline deterministic frame-by-frame rendering with `MediaRecorder` pausing per frame or WebCodecs VideoEncoder chunking. |
+| PF-0037 | Custom Aspect Ratio Numerical Input Rescaling Loop Under Ratio Lock | Entering custom dimensions while ratio lock is enabled causing mutual re-calculation of width and height. | Medium | Low | Decouple active input field from programmatic recalculation so only the opposite dimension adapts based on the initial aspect ratio. |
+| PF-0038 | Platform Brand SVG Icon Rasterization Degradation at Non-Integer Device Pixel Ratios | High-density mobile screens with 2.6x or 3.0x pixel ratios rendering stacked paper slide cards with sub-pixel blur. | Low | Low | Define SVG viewports with explicit integer coordinate grids and anti-aliasing geometric hints. |
+
 
 
 

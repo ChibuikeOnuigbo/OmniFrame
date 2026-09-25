@@ -28,7 +28,7 @@ export const RATIO_PRESETS: RatioPreset[] = [
     width: 1080,
     height: 1920,
     platforms: ['TikTok', 'Instagram Reels', 'YouTube Shorts'],
-    description: 'Full-screen vertical mobile format.',
+    description: 'Fullscreen vertical mobile format.',
     platformIcon: 'tiktok',
   },
   {
@@ -107,8 +107,8 @@ export const RATIO_PRESETS: RatioPreset[] = [
     aspectRatio: '21:9',
     width: 2560,
     height: 1080,
-    platforms: ['Cinemascope', 'Ultra-Wide Monitors', 'Anamorphic Film'],
-    description: 'Ultra-widescreen cinematic presentation.',
+    platforms: ['Cinemascope', 'Ultra Wide Monitors', 'Anamorphic Film'],
+    description: 'Ultrawidescreen cinematic presentation.',
     platformIcon: 'generic',
   },
   {
@@ -118,7 +118,7 @@ export const RATIO_PRESETS: RatioPreset[] = [
     width: 1920,
     height: 1080,
     platforms: ['Custom Dimensions'],
-    description: 'User-specified pixel width and height.',
+    description: 'User specified pixel width and height.',
     platformIcon: 'generic',
   },
 ]

@@ -20,7 +20,7 @@ export const AI_PROVIDERS: AiProviderDefinition[] = [
   { id: 'together', label: 'Together AI', endpoint: 'https://api.together.xyz/v1', defaultModel: 'meta-llama/Llama-3.3-70B-Instruct-Turbo', keyPrefixHint: 'Together API key', protocol: 'openai', docsUrl: 'https://api.together.ai/settings/api-keys' },
   { id: 'deepseek', label: 'DeepSeek', endpoint: 'https://api.deepseek.com/v1', defaultModel: 'deepseek-chat', keyPrefixHint: 'Usually starts with sk-', protocol: 'openai', docsUrl: 'https://platform.deepseek.com/api_keys' },
   { id: 'xai', label: 'xAI', endpoint: 'https://api.x.ai/v1', defaultModel: 'grok-3-mini', keyPrefixHint: 'xAI API key', protocol: 'openai', docsUrl: 'https://console.x.ai/' },
-  { id: 'custom', label: 'Custom (OpenAI-compatible)', endpoint: '', defaultModel: '', keyPrefixHint: 'Enter only the provider-issued API key', protocol: 'openai', docsUrl: '' },
+  { id: 'custom', label: 'Custom (OpenAI compatible)', endpoint: '', defaultModel: '', keyPrefixHint: 'Enter only the provider issued API key', protocol: 'openai', docsUrl: '' },
 ]
 
 export interface AiConnectionConfig { provider: AiProviderId; apiKey: string; model: string; endpoint?: string }

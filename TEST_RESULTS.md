@@ -34,6 +34,9 @@ All 10 automated end-to-end Playwright test suites and OpenCV forensic inspectio
   - Rendered Text Hero: `evidence/cutouts/cut-rendered-text-hero.png` (sharpness: $1931.52$, contrast std: $57.98$).
   - Timeline Cut Transition: `evidence/cutouts/cut-cross-dissolve-timeline.png` (sharpness: $4653.67$, contrast std: $45.11$).
   - Mobile Full Studio: `evidence/cutouts/cut-mobile-responsive-full.png` (sharpness: $513.06$, zero overflow on 390px).
+- **Aspect Ratio Dropdown & Stacked Paper Slide Cutouts**:
+  - Stacked Paper Slide Ratio Trigger: `evidence/cutouts/cut-ratio-trigger-stacked-slide.png` (sharpness: $2923.41$, contrast std: $28.98$).
+  - Aspect Ratio Popover with Actual Icons: `evidence/cutouts/cut-ratio-dropdown-stacked-icons.png` (sharpness: $1638.01$, contrast std: $19.29$).
 
 ---
 
@@ -53,4 +56,7 @@ All 10 automated end-to-end Playwright test suites and OpenCV forensic inspectio
 - [x] **Invariant I-14**: Unified preview viewport: eliminates Program/Source monitor tab split, plays library assets with dedicated transport controls, and integrates 3D Orbit Viewer.
 - [x] **Invariant I-15**: Full mobile viewport responsiveness: 0px horizontal document scroll overflow on 390px screens with slide-out overlay drawers.
 - [x] **Invariant I-16**: Text clips and real-time transition/effects rendering natively supported in preview canvas and export pipeline.
+- [x] **Invariant I-17**: Canvas empty notice hides immediately whenever playback is running or canvas contains media.
+- [x] **Invariant I-18**: Aspect ratio selector presents genuine platform icons, 9:16 stacked YouTube + TikTok paper slide, compact custom dimensions, and zero hyphenated user text.
+
 

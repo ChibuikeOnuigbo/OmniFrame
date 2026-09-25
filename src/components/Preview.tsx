@@ -291,7 +291,7 @@ export function Preview() {
         <IconButton title="Grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton>
         <div className="ml-1 flex h-8 items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-800">
           <button type="button" title="Auto fit preview" aria-label="Auto fit preview" aria-pressed={display === 'fit'} onClick={() => chooseDisplay('fit')} className={`grid w-9 place-items-center border-r border-ink-700 ${display === 'fit' ? 'bg-brand text-white' : 'text-ink-400 hover:bg-ink-700 hover:text-white'}`}><Maximize2 size={14} /></button>
-          <div className="relative flex items-center px-2"><input data-testid="preview-zoom-slider" aria-label="Preview zoom" type="range" min={25} max={200} step={5} value={Math.max(25, Math.min(200, Math.round(scale * 100)))} onChange={(e) => chooseDisplay(Number(e.target.value) / 100)} className="of-range w-20 sm:w-28" /><i aria-hidden="true" title="Auto-fit point" className="pointer-events-none absolute top-1/2 h-3 w-px -translate-y-1/2 bg-white/60" style={{ left: `${8 + Math.max(0, Math.min(1, (fitScale * 100 - 25) / 175)) * 100}%` }} /></div>
+          <div className="relative flex items-center px-2"><input data-testid="preview-zoom-slider" aria-label="Preview zoom" type="range" min={25} max={200} step={5} value={Math.max(25, Math.min(200, Math.round(scale * 100)))} onChange={(e) => chooseDisplay(Number(e.target.value) / 100)} className="of-range w-20 sm:w-28" /><i aria-hidden="true" title="Auto fit point" className="pointer-events-none absolute top-1/2 h-3 w-px -translate-y-1/2 bg-white/60" style={{ left: `${8 + Math.max(0, Math.min(1, (fitScale * 100 - 25) / 175)) * 100}%` }} /></div>
           <output className="hidden sm:flex w-11 items-center justify-end border-l border-ink-700 pr-2 text-[10px] tabular-nums text-ink-400">{Math.round(scale * 100)}%</output>
         </div>
       </div>
@@ -431,7 +431,8 @@ export function Preview() {
         </div>
       )}
 
-      {clipCount === 0 && !isPreviewingAsset && !is3DMode && (
+      {/* Empty canvas notice: hidden when playback is running, media is active, or canvas is non-empty */}
+      {clipCount === 0 && !playing && !assetPlaying && !isPreviewingAsset && !is3DMode && !drawingEnabled && (
         <div className="absolute inset-0 z-10 grid place-items-center pointer-events-none">
           <div className="text-center text-ink-500 px-4">
             <div className="text-sm font-medium text-ink-400">Your canvas is empty</div>

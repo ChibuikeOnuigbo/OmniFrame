@@ -34,6 +34,9 @@ This register catalogs pixel-level cutouts and zoomed component evaluations demo
 | CUT-028 | `evidence/cutouts/cut-rendered-text-hero.png` | `qa/screenshots/unified-desktop-suite.png` | 576x230 | Rendered Text Canvas Hero | Unified preview canvas actively rendering crisp bold text clip title ("OMNIFRAME 2026 HERO") with drop shadow and typography compositing. |
 | CUT-029 | `evidence/cutouts/cut-cross-dissolve-timeline.png` | `qa/screenshots/unified-desktop-suite.png` | 230x99 | Centered Cut Transition Pill | Timeline showing amber diagonal-striped cross dissolve transition centered directly on cut boundary between incoming and outgoing clips. |
 | CUT-030 | `evidence/cutouts/cut-mobile-responsive-full.png` | `qa/screenshots/mobile-full-studio.png` | 390x844 | Mobile Studio Full Layout | Full responsive mobile studio rendering preview canvas, compact transport controls, timecode, and timeline with zero horizontal overflow. |
+| CUT-031 | `evidence/cutouts/cut-ratio-dropdown-stacked-icons.png` | `qa/screenshots/ratio-dropdown-actual-icons.png` | 302x477 | Aspect Ratio Popover Actual Icons | Popover dropdown displaying genuine brand and platform icons, featuring YouTube + TikTok stacked paper slide for 9:16, YouTube widescreen for 16:9, and Instagram for 1:1 and 4:5. |
+| CUT-032 | `evidence/cutouts/cut-ratio-trigger-stacked-slide.png` | `qa/screenshots/ratio-dropdown-actual-icons.png` | 108x36 | Stacked Paper Slide Ratio Trigger | Compact bottom-right aspect ratio trigger pill showing overlapping YouTube and TikTok cards like a paper slide deck alongside 9:16 label. |
+
 
 
 

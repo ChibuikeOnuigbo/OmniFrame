@@ -60,4 +60,8 @@ All notable technical changes, architectural refactorings, feature implementatio
 - Fixed `F-0034`: Unified preview monitor by deleting Program/Source distinction tabs and embedding direct asset playback and interactive 3D Orbit Viewer.
 - Fixed `F-0035`: Scoped LeftDock mobile drawer overlay styling with `max-sm:` prefix, eliminating horizontal document overflow on 390px mobile screens and restoring desktop pointer clicks.
 - Fixed `F-0036`: Context menu updated with single "Isolate Voice" parent item and side-hover submenu exposing "Remove Vocal" and "Keep Vocal", keeping "Separate audio" strictly for video track extraction.
+- Fixed `F-0037`: Conditionally hide 'Your canvas is empty' overlay whenever preview is actively playing, asset preview is active, or timeline clips exist.
+- Fixed `F-0038`: Replaced generic aspect ratio icons with authentic brand icons (YouTube, Instagram, Cinemascope, Custom) and added `YouTubeTikTokPaperSlideIcon` for 9:16 with overlapping paper slide cards.
+- Fixed `F-0039`: Removed all hyphens from user-facing text strings throughout the application (e.g. 'Fullscreen', 'Ultra Wide', 'realtime', 'Drop frame', 'Invert / X Ray').
+
 

@@ -244,7 +244,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 <div>
                   <span className="font-medium">Speech Formant Bandpass Focus</span>
                   <p className="text-[10px] text-ink-500">
-                    Filters out sub-audible rumble and high-frequency cymbal bleed (130Hz - 6500Hz).
+                    Filters out sub audible rumble and high frequency cymbal bleed (130Hz to 6500Hz).
                   </p>
                 </div>
               </label>
