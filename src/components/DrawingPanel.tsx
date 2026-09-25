@@ -2,11 +2,16 @@ import { useEditor } from '../store'
 import type { DrawingToolType, TemporalScopeType } from '../types'
 import {
   Paintbrush,
+  Pencil,
+  Highlighter,
+  PenTool,
   Eraser,
   Slash,
   Square,
   Circle,
   MoveRight,
+  Star,
+  Pipette,
   Plus,
   Eye,
   EyeOff,
@@ -77,12 +82,17 @@ export function DrawingPanel() {
 
   const tools: { id: DrawingToolType; label: string; icon: LucideIcon }[] = [
     { id: 'brush', label: 'Brush', icon: Paintbrush },
+    { id: 'pencil', label: 'Pencil', icon: Pencil },
+    { id: 'marker', label: 'Highlighter', icon: Highlighter },
+    { id: 'calligraphy', label: 'Calligraphy', icon: PenTool },
     { id: 'fill', label: 'Fill / Recolor', icon: PaintBucket },
     { id: 'eraser', label: 'Eraser', icon: Eraser },
+    { id: 'eyedropper', label: 'Eyedropper', icon: Pipette },
     { id: 'line', label: 'Line', icon: Slash },
     { id: 'rectangle', label: 'Rectangle', icon: Square },
     { id: 'circle', label: 'Circle', icon: Circle },
     { id: 'arrow', label: 'Arrow', icon: MoveRight },
+    { id: 'star', label: 'Star', icon: Star },
   ]
 
   const handleScopeChange = (type: TemporalScopeType) => {

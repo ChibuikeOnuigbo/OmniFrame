@@ -49,7 +49,9 @@ OmniFrame is developed under an uninterrupted continuous engineering loop. Work 
 | Run 1 | 2026-09-24 | Feature-Slice 01: Basic Paint | VERIFIED | `qa/drawing-layout-e2e.mjs`, OpenCV 365 frames decoded, `evidence/drawing/omniframe-drawing-active-mode.png` | Feature-Slice 03: Fill & Hair Recolor |
 | Run 2 | 2026-09-24 | Feature-Slice 03: Fill & Hair Recolor | VERIFIED | `qa/fill-hair-recolor-e2e.mjs`, OpenCV 152 frames decoded (hair ROI blue dom: +118.60, shading std: 11.12), `evidence/drawing/omniframe-hair-recolor-active.png` | Feature-Slice 02: Multi-Frame Paint & Onion Skinning |
 | Run 3 | 2026-09-24 | Feature-Slice 02: Multi-Frame Paint & Onion Skinning | VERIFIED | `qa/onion-skin-cel-animation-e2e.mjs`, OpenCV 159 frames decoded (avg lum 198.21), `evidence/drawing/omniframe-onion-skin-active.png` | Feature-Slice 04: Selection Family & Mask Conversion |
-| Run 4 | 2026-09-24 | Layout Management & Feature-Slice 04: Selection & Masking | VERIFIED | `qa/layout-selection-mask-e2e.mjs`, OpenCV 90 frames decoded (avg lum 183.17), `evidence/drawing/omniframe-layout-manager-active.png`, `evidence/drawing/omniframe-selection-marching-ants.png` | Feature-Slice 05: Bézier Vector Splines & Path Editing |
+| Run 4 | 2026-09-24 | Layout Management & Feature-Slice 04: Selection & Masking | VERIFIED | `qa/layout-selection-mask-e2e.mjs`, OpenCV 90 frames decoded (avg lum 183.17), `evidence/drawing/omniframe-layout-manager-active.png`, `evidence/drawing/omniframe-selection-marching-ants.png` | Feature-Slice 05: Extended Tools & Voice Isolation |
+| Run 5 | 2026-09-25 | Feature-Slice 05: Extended Drawing Tools, Selection Grow/Shrink, & Voice Isolation DSP | VERIFIED | `qa/voice-isolation-e2e.mjs` (28/28 PASS), `evidence/cutouts/cut-voice-isolation-modal.png`, `evidence/cutouts/cut-voice-isolation-panel.png`, OpenCV metrics verified | Continuous Performance & Regression Audit |
+
 
 ---
 

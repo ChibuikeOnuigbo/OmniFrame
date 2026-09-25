@@ -340,6 +340,68 @@ export function renderStroke(
     const last = pts[pts.length - 1]
     ctx.lineTo(last.x * width, last.y * height)
     ctx.stroke()
+  } else if (stroke.tool === 'pencil') {
+    ctx.imageSmoothingEnabled = false
+    ctx.lineCap = 'square'
+    ctx.lineJoin = 'miter'
+    ctx.lineWidth = Math.max(1, Math.round(stroke.size * (width / 1280) * 0.4))
+    ctx.beginPath()
+    ctx.moveTo(pts[0].x * width, pts[0].y * height)
+    for (let i = 1; i < pts.length; i++) {
+      ctx.lineTo(pts[i].x * width, pts[i].y * height)
+    }
+    ctx.stroke()
+  } else if (stroke.tool === 'marker') {
+    ctx.globalCompositeOperation = 'multiply'
+    ctx.globalAlpha = Math.min(1.0, 0.45 * (stroke.opacity ?? 1.0))
+    ctx.lineCap = 'square'
+    ctx.lineJoin = 'bevel'
+    ctx.lineWidth = Math.max(8, stroke.size * 2 * (width / 1280))
+    ctx.beginPath()
+    ctx.moveTo(pts[0].x * width, pts[0].y * height)
+    for (let i = 1; i < pts.length; i++) {
+      ctx.lineTo(pts[i].x * width, pts[i].y * height)
+    }
+    ctx.stroke()
+  } else if (stroke.tool === 'calligraphy') {
+    const angleRad = Math.PI / 4 // 45 degrees
+    const baseWidth = Math.max(2, stroke.size * (width / 1280))
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i]
+      const cx = p.x * width
+      const cy = p.y * height
+      ctx.beginPath()
+      ctx.ellipse(cx, cy, baseWidth, baseWidth * 0.25, angleRad, 0, Math.PI * 2)
+      ctx.fill()
+    }
+  } else if (stroke.tool === 'star') {
+    const start = pts[0]
+    const end = pts[pts.length - 1]
+    const cx = ((start.x + end.x) / 2) * width
+    const cy = ((start.y + end.y) / 2) * height
+    const rOuter = (Math.abs(end.x - start.x) / 2) * width
+    const rInner = rOuter * 0.45
+    const spikes = 5
+    let rot = (Math.PI / 2) * 3
+    const step = Math.PI / spikes
+
+    ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    ctx.beginPath()
+    ctx.moveTo(cx, cy - rOuter)
+    for (let i = 0; i < spikes; i++) {
+      let x = cx + Math.cos(rot) * rOuter
+      let y = cy + Math.sin(rot) * rOuter
+      ctx.lineTo(x, y)
+      rot += step
+
+      x = cx + Math.cos(rot) * rInner
+      y = cy + Math.sin(rot) * rInner
+      ctx.lineTo(x, y)
+      rot += step
+    }
+    ctx.lineTo(cx, cy - rOuter)
+    ctx.closePath()
+    ctx.stroke()
   } else if (stroke.tool === 'line') {
     const start = pts[0]
     const end = pts[pts.length - 1]
@@ -425,6 +487,10 @@ export function createSelectionMask(
   } else {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#ffffff'
+  }
+
+  if (selection.feather && selection.feather > 0) {
+    ctx.filter = `blur(${Math.min(32, selection.feather)}px)`
   }
 
   if (selection.type === 'rectangle') {

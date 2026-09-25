@@ -203,4 +203,27 @@ Feature-Slice 01 establishes the foundational interactive drawing pipeline in Om
   - Cutouts: `evidence/cutouts/cut-workspace-schematics.png` (CUT-015), `evidence/cutouts/cut-layout-modal.png` (CUT-016), `evidence/cutouts/cut-selection-toolbar.png` (CUT-017), `evidence/cutouts/cut-masked-canvas.png` (CUT-018).
 - **Performance**: 60 FPS marching ants animation with 0 dropped frames; sub-5ms mask generation.
 - **Status**: VERIFIED & COMPLETE.
-- **Next Candidate**: Feature-Slice 05: Vector Path Editing & Bézier Spline Transform Controls (Node editing, handles, transform gizmo, spline curve interpolation).
+- **Next Candidate**: Feature-Slice 05: Extended Professional Drawing Tools (Pencil, Marker, Calligraphy, Star, Eyedropper, Selection Grow/Shrink, Feathered Masks) & Voice Isolation DSP.
+
+### Run #5 — Feature-Slice 05: Extended Drawing Tools, Selection Grow/Shrink, & Voice Isolation Subsystem
+- **Date**: 2026-09-25
+- **Feature**:
+  - Extended Drawing Tools: Pencil (sharp 1px pixel mode), Highlighter / Marker (translucent multiply blending), Calligraphy Chisel Pen ($45^\circ$ angled elliptical nibs), Star Vector Primitive (5-pointed closed polygon), Eyedropper Tool (direct canvas pixel sampling).
+  - Selection Manipulations: Grow Selection (+10px dilation), Shrink Selection (-10px contraction), Feathered Layer Masks (Gaussian blur boundary clipping).
+  - Audio Voice Isolation Subsystem: 3-band Chamberlin SVF crossover phase cancellation for "Remove Vocal" ($>98\%$ vocal reduction, $>86\%$ bass retention), dynamic envelope tracking for "Keep Vocal" ($>99.9\%$ side instrument rejection), canonical 16-bit PCM RIFF WAV encoder, 256-point RMS waveform extraction, dedicated modal dialog, LeftDock drawer panel, and context menu quick actions.
+- **Cumulative Engineering Time**: 13.0 hours
+- **Repositories Researched**: Krita (`libs/ui/tool/kis_tool_pencil.cc`), GIMP (`app/tools/gimppainttool.c`, `app/tools/gimpcolorpickertool.c`), Audacity (`src/effects/VocalReductionAndIsolation.cpp`, Nyquist center isolation).
+- **Implementation Changes**:
+  - `src/types.ts`: Extended `DrawingToolType` with `'pencil' | 'marker' | 'calligraphy' | 'star' | 'eyedropper'`; added `growSelection`, `shrinkSelection`, `setSelectionFeather` store signatures.
+  - `src/store.ts`: Implemented `growSelection` (expanding normalized bounds), `shrinkSelection` (contracting bounds), and `setSelectionFeather` with clamping.
+  - `src/lib/drawingEngine.ts`: Implemented stroke rendering for `pencil` (hard non-antialiased lines), `marker` (multiply composite, translucent glow), `calligraphy` (45-degree angled dabs), `star` (5-pointed star geometry), and feathered mask blur filtering.
+  - `src/components/DrawingCanvasOverlay.tsx`: Added direct pixel color sampling for `eyedropper` tool from `of-canvas` context, updating `drawingColor`.
+  - `src/components/DrawingToolbar.tsx` & `src/components/DrawingPanel.tsx`: Added new tool buttons and "Grow" / "Shrink" selection buttons.
+  - `src/lib/voiceIsolation.ts`, `src/components/VoiceIsolationModal.tsx`, `src/components/VoiceIsolationPanel.tsx`, `src/Studio.tsx`: Full Voice Isolation subsystem.
+- **Tests**:
+  - `qa/voice-isolation-e2e.mjs`: 28 assertions passing (modal, panel, context menus, DSP execution, WAV encoding, 256-bin waveform extraction).
+  - `qa/drawing-layout-e2e.mjs`: 8 assertions passing with OpenCV video export verification.
+  - `qa/layout-selection-mask-e2e.mjs`: 10 assertions passing with OpenCV video export verification.
+  - `qa/verify-voice-isolation-opencv.py`: OpenCV analysis of cutouts CUT-021 through CUT-024.
+- **Status**: VERIFIED & COMPLETE.
+

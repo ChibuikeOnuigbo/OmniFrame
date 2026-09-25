@@ -139,7 +139,20 @@ export type TimelineInsertionMode = 'insert' | 'overwrite'
 
 // ---- Drawing & Paint Subsystem Types ----
 export type SelectionToolType = 'select-rect' | 'select-ellipse' | 'select-lasso'
-export type DrawingToolType = 'brush' | 'eraser' | 'line' | 'rectangle' | 'circle' | 'arrow' | 'fill' | SelectionToolType
+export type DrawingToolType =
+  | 'brush'
+  | 'pencil'
+  | 'marker'
+  | 'calligraphy'
+  | 'eraser'
+  | 'line'
+  | 'rectangle'
+  | 'circle'
+  | 'arrow'
+  | 'star'
+  | 'fill'
+  | 'eyedropper'
+  | SelectionToolType
 
 export interface StrokePoint {
   x: number // Normalized [0, 1] relative to stage width

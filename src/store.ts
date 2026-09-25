@@ -194,6 +194,9 @@ export interface EditorState {
   clearSelection: () => void
   convertSelectionToMask: (layerId?: string) => void
   invertSelection: () => void
+  growSelection: (pixels?: number) => void
+  shrinkSelection: (pixels?: number) => void
+  setSelectionFeather: (feather: number) => void
 
   // ---- layout actions ----
   setWorkspacePreset: (preset: WorkspacePreset) => void
@@ -1112,6 +1115,51 @@ export const useEditor = create<EditorState>((set, get) => {
     invertSelection: () => {
       set((s) => ({
         activeSelection: s.activeSelection ? { ...s.activeSelection, inverted: !s.activeSelection.inverted } : null,
+      }))
+    },
+    growSelection: (pixels = 10) => {
+      set((s) => {
+        if (!s.activeSelection) return {}
+        const b = s.activeSelection.bounds
+        const deltaX = pixels / 1920
+        const deltaY = pixels / 1080
+        const newX = Math.max(0, b.x - deltaX)
+        const newY = Math.max(0, b.y - deltaY)
+        const newW = Math.min(1 - newX, b.width + deltaX * 2)
+        const newH = Math.min(1 - newY, b.height + deltaY * 2)
+        return {
+          activeSelection: {
+            ...s.activeSelection,
+            bounds: { x: newX, y: newY, width: newW, height: newH },
+          },
+        }
+      })
+    },
+    shrinkSelection: (pixels = 10) => {
+      set((s) => {
+        if (!s.activeSelection) return {}
+        const b = s.activeSelection.bounds
+        const deltaX = pixels / 1920
+        const deltaY = pixels / 1080
+        if (b.width <= deltaX * 2 || b.height <= deltaY * 2) return {}
+        return {
+          activeSelection: {
+            ...s.activeSelection,
+            bounds: {
+              x: b.x + deltaX,
+              y: b.y + deltaY,
+              width: b.width - deltaX * 2,
+              height: b.height - deltaY * 2,
+            },
+          },
+        }
+      })
+    },
+    setSelectionFeather: (feather: number) => {
+      set((s) => ({
+        activeSelection: s.activeSelection
+          ? { ...s.activeSelection, feather: Math.max(0, Math.min(64, feather)) }
+          : null,
       }))
     },
 

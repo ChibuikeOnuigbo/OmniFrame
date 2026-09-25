@@ -2,11 +2,16 @@ import { useEditor } from '../store'
 import type { DrawingToolType, TemporalScopeType } from '../types'
 import {
   Paintbrush,
+  Pencil,
+  Highlighter,
+  PenTool,
   Eraser,
   Slash,
   Square,
   Circle,
   MoveRight,
+  Star,
+  Pipette,
   Trash2,
   X,
   Clock,
@@ -20,6 +25,8 @@ import {
   LassoSelect,
   Scissors,
   FlipHorizontal,
+  Maximize2,
+  Minimize2,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -57,6 +64,8 @@ export function DrawingToolbar() {
   const activeSelection = useEditor((s) => s.activeSelection)
   const convertSelectionToMask = useEditor((s) => s.convertSelectionToMask)
   const invertSelection = useEditor((s) => s.invertSelection)
+  const growSelection = useEditor((s) => s.growSelection)
+  const shrinkSelection = useEditor((s) => s.shrinkSelection)
   const clearSelection = useEditor((s) => s.clearSelection)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
@@ -65,12 +74,17 @@ export function DrawingToolbar() {
 
   const tools: { id: DrawingToolType; label: string; icon: LucideIcon }[] = [
     { id: 'brush', label: 'Brush', icon: Paintbrush },
+    { id: 'pencil', label: 'Pencil (Pixel)', icon: Pencil },
+    { id: 'marker', label: 'Highlighter', icon: Highlighter },
+    { id: 'calligraphy', label: 'Calligraphy Chisel', icon: PenTool },
     { id: 'fill', label: 'Fill / Recolor', icon: PaintBucket },
     { id: 'eraser', label: 'Eraser', icon: Eraser },
+    { id: 'eyedropper', label: 'Eyedropper Color Picker', icon: Pipette },
     { id: 'line', label: 'Line', icon: Slash },
     { id: 'rectangle', label: 'Rectangle', icon: Square },
     { id: 'circle', label: 'Circle', icon: Circle },
     { id: 'arrow', label: 'Arrow', icon: MoveRight },
+    { id: 'star', label: 'Star', icon: Star },
     { id: 'select-rect', label: 'Rectangular Marquee', icon: BoxSelect },
     { id: 'select-ellipse', label: 'Elliptical Marquee', icon: CircleDashed },
     { id: 'select-lasso', label: 'Lasso Selection', icon: LassoSelect },
@@ -153,6 +167,30 @@ export function DrawingToolbar() {
           >
             <FlipHorizontal size={11} />
             <span>Invert</span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="grow-selection-btn"
+            title="Grow / Expand Selection (+10px)"
+            aria-label="Grow selection"
+            onClick={() => growSelection(10)}
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-ink-800 hover:bg-ink-700 text-ink-300 hover:text-white text-[10px] transition-colors"
+          >
+            <Maximize2 size={11} />
+            <span>Grow</span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="shrink-selection-btn"
+            title="Shrink / Contract Selection (-10px)"
+            aria-label="Shrink selection"
+            onClick={() => shrinkSelection(10)}
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-ink-800 hover:bg-ink-700 text-ink-300 hover:text-white text-[10px] transition-colors"
+          >
+            <Minimize2 size={11} />
+            <span>Shrink</span>
           </button>
 
           <button

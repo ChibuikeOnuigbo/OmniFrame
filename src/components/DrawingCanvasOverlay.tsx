@@ -126,6 +126,21 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       return
     }
 
+    if (drawingTool === 'eyedropper') {
+      const previewCanvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
+      if (previewCanvas) {
+        const pCtx = previewCanvas.getContext('2d', { willReadFrequently: true })
+        if (pCtx) {
+          const pxX = Math.max(0, Math.min(previewCanvas.width - 1, Math.round(pt.x * previewCanvas.width)))
+          const pxY = Math.max(0, Math.min(previewCanvas.height - 1, Math.round(pt.y * previewCanvas.height)))
+          const pixel = pCtx.getImageData(pxX, pxY, 1, 1).data
+          const hex = '#' + ((1 << 24) + (pixel[0] << 16) + (pixel[1] << 8) + pixel[2]).toString(16).slice(1)
+          useEditor.getState().setDrawingColor(hex)
+        }
+      }
+      return
+    }
+
     if (drawingTool === 'fill') {
       const previewCanvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
       if (!previewCanvas) return
