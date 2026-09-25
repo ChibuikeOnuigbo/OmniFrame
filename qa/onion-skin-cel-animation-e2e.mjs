@@ -47,7 +47,13 @@ async function run() {
   const characterFixture = join(ROOT, 'qa', 'assets', 'drawing', 'character-hair-outline.png')
   const fileInput = page.locator('input[type="file"]').first()
   await fileInput.setInputFiles([characterFixture])
-  await page.waitForTimeout(1500)
+  await page.waitForTimeout(600)
+  const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
+  if (await addBtn.count() > 0) {
+    await addBtn.click({ force: true })
+  }
+  await page.evaluate(() => window.__omniframe_store.getState().setMonitorMode('program'))
+  await page.waitForTimeout(400)
 
   const clipCount = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
   assert(clipCount >= 1, `Expected clip loaded, found ${clipCount}`)

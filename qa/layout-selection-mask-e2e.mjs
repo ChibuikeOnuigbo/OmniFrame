@@ -49,7 +49,13 @@ async function run() {
   const characterFixture = join(ROOT, 'qa', 'assets', 'drawing', 'character-hair-outline.png')
   const fileInput = page.locator('input[type="file"]').first()
   await fileInput.setInputFiles([characterFixture])
-  await page.waitForTimeout(1200)
+  await page.waitForTimeout(600)
+  const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
+  if (await addBtn.count() > 0) {
+    await addBtn.click({ force: true })
+  }
+  await page.evaluate(() => window.__omniframe_store.getState().setMonitorMode('program'))
+  await page.waitForTimeout(300)
 
   const clipCount = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
   assert(clipCount >= 1, 'Character asset loaded on timeline', `Clips: ${clipCount}`)
@@ -239,6 +245,7 @@ async function run() {
   console.log('Drawing brush strokes on masked layer...')
   await page.evaluate(() => {
     const s = window.__omniframe_store.getState()
+    s.setDrawingEnabled(true)
     s.setDrawingTool('brush')
     s.setDrawingColor('#ef4444') // Solid red
     s.setDrawingSize(14)
@@ -246,10 +253,11 @@ async function run() {
   })
   await page.waitForTimeout(300)
 
-  // Draw diagonal stroke across the canvas
-  await page.mouse.move(canvasBox.x + canvasBox.width * 0.1, canvasBox.y + canvasBox.height * 0.1)
+  // Draw diagonal stroke across the canvas with fresh bounding box
+  const strokeBox = await drawingCanvas.boundingBox()
+  await page.mouse.move(strokeBox.x + strokeBox.width * 0.2, strokeBox.y + strokeBox.height * 0.2)
   await page.mouse.down()
-  await page.mouse.move(canvasBox.x + canvasBox.width * 0.9, canvasBox.y + canvasBox.height * 0.9, { steps: 12 })
+  await page.mouse.move(strokeBox.x + strokeBox.width * 0.8, strokeBox.y + strokeBox.height * 0.8, { steps: 12 })
   await page.mouse.up()
   await page.waitForTimeout(500)
 

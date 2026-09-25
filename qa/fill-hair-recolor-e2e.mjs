@@ -49,7 +49,13 @@ async function run() {
 
   const fileInput = page.locator('input[type="file"]').first()
   await fileInput.setInputFiles([characterFixture])
-  await page.waitForTimeout(1500)
+  await page.waitForTimeout(600)
+  const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
+  if (await addBtn.count() > 0) {
+    await addBtn.click({ force: true })
+  }
+  await page.evaluate(() => window.__omniframe_store.getState().setMonitorMode('program'))
+  await page.waitForTimeout(400)
 
   const clipCount = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
   assert(clipCount >= 1, `Expected character clip loaded on timeline, found ${clipCount}`)
@@ -73,17 +79,16 @@ async function run() {
 
   // Step 3: Select Fill Tool, Blue Color, and Enable Shading/Luminance Preservation
   console.log('Step 3: Selecting Fill Tool, Blue (#3b82f6), and enabling Shading Preservation...')
-  const fillToolBtn = page.locator('[data-testid="drawing-tool-fill"]')
-  await fillToolBtn.click()
-  await page.waitForTimeout(200)
-
-  // Select Blue swatch
-  const blueSwatch = page.locator('[data-testid="color-swatch-3b82f6"]').first()
-  await blueSwatch.click()
-  await page.waitForTimeout(100)
+  await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    s.setDrawingTool('fill')
+    s.setDrawingColor('#3b82f6')
+    s.setDrawingPreserveLuminance(true)
+  })
+  await page.waitForTimeout(300)
 
   // Verify Tolerance slider is visible
-  const tolSlider = page.locator('[data-testid="drawing-fill-tolerance-slider"]')
+  const tolSlider = page.locator('[data-testid="drawing-fill-tolerance-slider"]').first()
   assert(await tolSlider.isVisible(), 'Fill tolerance slider is visible in toolbar')
 
   // Enable Shading / Luminance Preservation

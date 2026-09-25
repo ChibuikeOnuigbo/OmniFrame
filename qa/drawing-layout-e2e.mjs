@@ -47,7 +47,15 @@ async function run() {
 
   const fileInput = page.locator('input[type="file"]').first()
   await fileInput.setInputFiles([videoFixture, imageFixture])
-  await page.waitForTimeout(1500)
+  await page.waitForTimeout(600)
+  const addBtns = page.locator('[data-testid="add-to-timeline-btn"]')
+  const btnCount = await addBtns.count()
+  for (let i = 0; i < btnCount; i++) {
+    await addBtns.nth(i).click({ force: true })
+    await page.waitForTimeout(200)
+  }
+  await page.evaluate(() => window.__omniframe_store.getState().setMonitorMode('program'))
+  await page.waitForTimeout(400)
 
   const clipCount = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
   assert(clipCount >= 2, `Expected at least 2 clips loaded, found ${clipCount}`)
