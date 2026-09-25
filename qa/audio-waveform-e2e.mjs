@@ -19,6 +19,11 @@ const assert = (value, name, detail = '') => { if (!value) throw Error(`${name}:
 
 await page.goto(URL, { waitUntil: 'networkidle' })
 await page.getByTestId('panel-all-import-input').setInputFiles(join(ROOT, 'qa/fixtures/test-audio-6s.ogg'))
+await page.waitForTimeout(400)
+const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
+if (await addBtn.count() > 0) {
+  await addBtn.click({ force: true })
+}
 const clip = page.locator('[data-testid="timeline-clip"][data-kind="audio"]')
 await clip.waitFor()
 const waveform = clip.getByTestId('clip-waveform')
