@@ -27,8 +27,8 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     sourceRefs: [{ editor: 'OpenShot', url: 'https://www.openshot.org/files/user-guide/preferences.html', evidence: 'Default profiles include project frame rate.' }],
   },
   {
-    id: 'timeline.dropFrameTimecode', category: 'timeline', label: 'Drop-frame timecode',
-    description: 'Uses SMPTE clock-aligned display at 29.97 or 59.94 fps without changing timing.', aliases: ['smpte', 'timecode', '29.97', '59.94'],
+    id: 'timeline.dropFrameTimecode', category: 'timeline', label: 'Drop frame timecode',
+    description: 'Uses SMPTE clock aligned display at 29.97 or 59.94 fps without changing timing.', aliases: ['smpte', 'timecode', '29.97', '59.94'],
     controlType: 'toggle', defaultValue: false, scope: 'project', persistent: false, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.dropFrameTimecode', testId: 'setting-drop-frame', sourceRefs: [],
   },

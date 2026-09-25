@@ -1,0 +1,17 @@
+{
+  "marker_modal": {
+    "laplacian_variance_sharpness": 1467.2693945248664,
+    "contrast_std": 26.113641787835157,
+    "mean_brightness": 12.686057971014494
+  },
+  "audio_vu_meter": {
+    "laplacian_variance_sharpness": 1668.2067901234568,
+    "contrast_std": 23.5656780762776,
+    "mean_brightness": 24.084288653733097
+  },
+  "timeline_ruler_markers": {
+    "laplacian_variance_sharpness": 839.6528529353342,
+    "contrast_std": 12.950865188479675,
+    "mean_brightness": 17.838244507092675
+  }
+}
