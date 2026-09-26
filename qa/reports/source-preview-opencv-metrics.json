@@ -1,0 +1,44 @@
+{
+  "source_preview_detail_banner": {
+    "laplacian_variance_sharpness": 8042.16,
+    "contrast_std": 39.16,
+    "mean_brightness": 18.94,
+    "width": 430,
+    "height": 45
+  },
+  "source_preview_transport_bar": {
+    "laplacian_variance_sharpness": 2745.33,
+    "contrast_std": 24.14,
+    "mean_brightness": 15.96,
+    "width": 780,
+    "height": 52
+  },
+  "media_specs_modal": {
+    "laplacian_variance_sharpness": 1873.39,
+    "contrast_std": 22.39,
+    "mean_brightness": 12.48,
+    "width": 433,
+    "height": 450
+  },
+  "medialib_threed_filter": {
+    "laplacian_variance_sharpness": 1195.87,
+    "contrast_std": 18.36,
+    "mean_brightness": 21.86,
+    "width": 272,
+    "height": 460
+  },
+  "timeline_text_track_reduced": {
+    "laplacian_variance_sharpness": 275.79,
+    "contrast_std": 9.05,
+    "mean_brightness": 16.73,
+    "width": 682,
+    "height": 180
+  },
+  "track_headers_zindex": {
+    "laplacian_variance_sharpness": 22.43,
+    "contrast_std": 3.25,
+    "mean_brightness": 18.45,
+    "width": 168,
+    "height": 180
+  }
+}

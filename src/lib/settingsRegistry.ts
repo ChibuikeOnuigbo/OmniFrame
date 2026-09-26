@@ -27,8 +27,8 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     sourceRefs: [{ editor: 'OpenShot', url: 'https://www.openshot.org/files/user-guide/preferences.html', evidence: 'Default profiles include project frame rate.' }],
   },
   {
-    id: 'timeline.dropFrameTimecode', category: 'timeline', label: 'Drop-frame timecode',
-    description: 'Uses SMPTE clock-aligned display at 29.97 or 59.94 fps without changing timing.', aliases: ['smpte', 'timecode', '29.97', '59.94'],
+    id: 'timeline.dropFrameTimecode', category: 'timeline', label: 'Drop frame timecode',
+    description: 'Uses SMPTE clock aligned display at 29.97 or 59.94 fps without changing timing.', aliases: ['smpte', 'timecode', '29.97', '59.94'],
     controlType: 'toggle', defaultValue: false, scope: 'project', persistent: false, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.dropFrameTimecode', testId: 'setting-drop-frame', sourceRefs: [],
   },
@@ -55,6 +55,14 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     id: 'ai.model', category: 'ai', label: 'Model ID', description: 'The provider model identifier used for requests.', aliases: ['model name'],
     controlType: 'select', defaultValue: 'openai/gpt-4o-mini', scope: 'session', persistent: false, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'ai.session.model', testId: 'setting-ai-model', sourceRefs: [],
+  },
+  {
+    id: 'ai.audioIsolationModel', category: 'ai', label: 'Audio isolation model',
+    description: 'Selects the neural model architecture for voice and instrumental stem separation.',
+    aliases: ['voice isolation', 'vocal removal', 'omni-voicetarget', 'htdemucs', 'roformer', 'audio stem', 'karaoke'],
+    controlType: 'select', defaultValue: 'omni-voicetarget', scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.audioIsolationModel', testId: 'setting-audio-isolation-model',
+    sourceRefs: [{ editor: 'OmniFrame', url: 'https://huggingface.co/AEmotionStudio/roformer-models', evidence: 'BS-RoFormer & HTDemucs SOTA separation benchmark.' }],
   },
   {
     id: 'ai.apiKey', category: 'ai', label: 'API key', description: 'Provider credential retained only until this tab closes.', aliases: ['credential', 'token', 'BYOK'],
