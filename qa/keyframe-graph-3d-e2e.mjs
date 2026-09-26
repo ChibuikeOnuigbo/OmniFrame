@@ -110,6 +110,13 @@ async function runTest() {
       await page.waitForTimeout(300)
       console.log('[PASS] Applied cubic-in easing preset to keyframe')
     }
+
+    // Verify handle modes and delete button
+    const handleModeBtn = page.locator('[data-testid="handle-mode-aligned"]')
+    await handleModeBtn.waitFor({ state: 'visible' })
+    const deleteKeyBtn = page.locator('[data-testid="graph-delete-keyframe-btn"]')
+    await deleteKeyBtn.waitFor({ state: 'visible' })
+    console.log('[PASS] Handle mode selector and delete keyframe button verified')
   }
 
   // Capture Graph Editor visual proof

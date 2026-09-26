@@ -291,7 +291,9 @@ export function GraphEditor() {
     }
   }
 
-  const selectedKeyframe = activeCurve?.keyframes.find((k) => k.id === selectedKeyframeId)
+  const selectedKeyframe =
+    activeCurve?.keyframes.find((k) => k.id === selectedKeyframeId) ||
+    (activeCurve?.keyframes && activeCurve.keyframes.length > 0 ? activeCurve.keyframes[0] : null)
   const isKeyAtPlayhead = activeCurve?.keyframes.some((k) => Math.abs(k.time - clipPlayheadTime) < 0.05)
 
   return (
@@ -585,6 +587,7 @@ export function GraphEditor() {
                   stroke="#0f172a"
                   strokeWidth="2"
                   className="cursor-pointer hover:scale-125 transition-transform"
+                  onClick={() => setSelectedKeyframeId(key.id)}
                   onPointerDown={(e) => handlePointerDownKey(e, key)}
                 />
               )
@@ -608,13 +611,51 @@ export function GraphEditor() {
           {/* Current Keyframe Info & Easing Bar */}
           <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between gap-2 p-1.5 rounded-lg bg-ink-900/90 border border-ink-800/90 backdrop-blur-md text-xs">
             {selectedKeyframe ? (
-              <div className="flex items-center gap-3 overflow-x-auto scrollbar-none">
-                <span className="font-semibold text-ink-200">
+              <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none w-full">
+                <span className="font-semibold text-ink-200 shrink-0">
                   Key: {selectedKeyframe.time.toFixed(2)}s | {selectedKeyframe.value.toFixed(1)}{activeCurve?.unit || ''}
                 </span>
 
+                {/* Delete selected keyframe */}
+                <button
+                  type="button"
+                  data-testid="graph-delete-keyframe-btn"
+                  title="Delete Keyframe"
+                  onClick={() => {
+                    if (!activeClip || !activeCurve) return
+                    removeClipKeyframe(activeClip.id, activeCurve.id, selectedKeyframe.id)
+                    setSelectedKeyframeId(null)
+                  }}
+                  className="p-1 rounded hover:bg-red-500/20 text-ink-400 hover:text-red-400 transition-colors shrink-0"
+                >
+                  <Trash2 size={13} />
+                </button>
+
+                {/* Tangent Handle Modes */}
+                <div className="flex items-center gap-0.5 bg-ink-950 px-1 py-0.5 rounded border border-ink-800 shrink-0">
+                  {(['free', 'aligned', 'mirrored', 'auto'] as const).map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      data-testid={`handle-mode-${m}`}
+                      title={`Handle Mode: ${m}`}
+                      onClick={() => {
+                        if (!activeClip || !activeCurve) return
+                        updateClipKeyframe(activeClip.id, activeCurve.id, selectedKeyframe.id, { handleMode: m })
+                      }}
+                      className={`px-1.5 py-0.5 rounded text-[9px] uppercase font-mono font-medium transition-colors ${
+                        (selectedKeyframe.handleMode || 'aligned') === m
+                          ? 'bg-brand text-white font-semibold'
+                          : 'text-ink-400 hover:text-white hover:bg-ink-800'
+                      }`}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+
                 {/* Easing Preset Selectors */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 shrink-0">
                   {EASING_PRESETS.map((p) => (
                     <button
                       key={p.id}

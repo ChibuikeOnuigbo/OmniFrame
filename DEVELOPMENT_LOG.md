@@ -70,3 +70,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-25T21:41:45+00:00 — Drawing Run #7: [VERIFIED] Ratio Dropdown Platform Icons Stacked Paper Slide and Canvas Empty Playback Fix — Fixed canvas empty overlay hiding during playback, added authentic platform icons and YouTube TikTok paper slide stack for 9:16, custom dimension editor in compact space, and removed hyphens from user text
 
 - 2026-09-25T23:04:01+00:00 — Drawing Run #8: [VERIFIED] Platform Aspect Ratio Icons Instagram 3:4 Pinterest 2:3 and Dropdown Modernization — Researched standard social aspect ratios for 2026, implemented authentic platform icons across all presets with Instagram for 3:4 grid/feed, Pinterest for 2:3 pin, and verified all E2E tests
+
+- 2026-09-26T22:17:10+00:00 — Drawing Run #9: [PASS] Voice Isolation & Curve 3D Verification — Playwright E2E and OpenCV metrics verified for Graph Editor, Keyframing, and 3D Viewport

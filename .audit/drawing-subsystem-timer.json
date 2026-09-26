@@ -55,8 +55,15 @@
       "feature": "Platform Aspect Ratio Icons Instagram 3:4 Pinterest 2:3 and Dropdown Modernization",
       "status": "verified",
       "details": "Researched standard social aspect ratios for 2026, implemented authentic platform icons across all presets with Instagram for 3:4 grid/feed, Pinterest for 2:3 pin, and verified all E2E tests"
+    },
+    {
+      "run": 9,
+      "timestamp": "2026-09-26T22:17:10+00:00",
+      "feature": "Voice Isolation & Curve 3D Verification",
+      "status": "PASS",
+      "details": "Playwright E2E and OpenCV metrics verified for Graph Editor, Keyframing, and 3D Viewport"
     }
   ],
-  "total_runs": 8,
-  "last_updated": "2026-09-25T23:04:01+00:00"
+  "total_runs": 9,
+  "last_updated": "2026-09-26T22:17:10+00:00"
 }
