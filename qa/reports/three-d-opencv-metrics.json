@@ -14,16 +14,16 @@
     "height": 34
   },
   "three_d_video_plane": {
-    "laplacian_variance_sharpness": 625.27,
-    "contrast_std": 15.82,
-    "mean_brightness": 7.66,
+    "laplacian_variance_sharpness": 670.36,
+    "contrast_std": 31.37,
+    "mean_brightness": 10.87,
     "width": 520,
     "height": 370
   },
   "three_d_floating_object": {
-    "laplacian_variance_sharpness": 259.51,
-    "contrast_std": 31.49,
-    "mean_brightness": 31.27,
+    "laplacian_variance_sharpness": 450.69,
+    "contrast_std": 61.61,
+    "mean_brightness": 45.2,
     "width": 280,
     "height": 260
   }

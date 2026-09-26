@@ -51,6 +51,16 @@ assert(await detailPill.isVisible(), 'Source asset detail pill is visible in bot
 const addBtnInPill = page.locator('[data-testid="add-preview-asset-timeline-btn"]')
 assert((await addBtnInPill.count()) === 0, 'No "+ Add to Timeline" button in source detail banner')
 
+// Verify ellipsis on long asset name
+const detailName = page.locator('[data-testid="preview-asset-detail-name"]')
+assert(await detailName.isVisible(), 'Source preview detail asset name element is visible')
+const isEllipsisActive = await detailName.evaluate((el) => {
+  const style = window.getComputedStyle(el)
+  return style.textOverflow === 'ellipsis' && el.scrollWidth > el.clientWidth
+})
+assert(isEllipsisActive, 'Source preview detail name uses CSS text-overflow: ellipsis and is truncated')
+console.log('[PASS] Source preview detail name confirmed using ellipsis (...)')
+
 // 2. Verify source transport bar has increased width and height
 const transportBar = page.locator('[data-testid="asset-transport-bar"]')
 assert(await transportBar.isVisible(), 'Source transport bar is visible')

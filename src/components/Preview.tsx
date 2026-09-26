@@ -361,13 +361,17 @@ export function Preview() {
       {isPreviewingAsset && (
         <div
           data-testid="preview-asset-detail"
-          className="absolute bottom-16 left-4 z-30 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-950/90 border border-ink-700/80 shadow-xl text-xs backdrop-blur-xs animate-in fade-in duration-100"
+          className="absolute bottom-16 left-4 z-30 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-950/90 border border-ink-700/80 shadow-xl text-xs backdrop-blur-xs animate-in fade-in duration-100 max-w-[280px] sm:max-w-md"
         >
           <Film size={14} className="text-brand shrink-0" />
-          <span className="font-medium text-ink-100 max-w-[180px] sm:max-w-xs truncate">
+          <span
+            data-testid="preview-asset-detail-name"
+            title={previewAsset.name}
+            className="font-medium text-ink-100 max-w-[130px] sm:max-w-[170px] truncate text-ellipsis overflow-hidden whitespace-nowrap block"
+          >
             {previewAsset.name}
           </span>
-          <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-brand/20 text-brand font-semibold">
+          <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-brand/20 text-brand font-semibold shrink-0">
             {previewAsset.kind}
           </span>
           <button
@@ -376,7 +380,7 @@ export function Preview() {
             title="Return to Timeline Sequence"
             aria-label="Return to timeline sequence"
             onClick={() => setSourcePreviewAsset(null)}
-            className="p-1 rounded-md hover:bg-ink-800 text-ink-400 hover:text-white transition-colors ml-1"
+            className="p-1 rounded-md hover:bg-ink-800 text-ink-400 hover:text-white transition-colors ml-1 shrink-0"
           >
             <X size={14} />
           </button>

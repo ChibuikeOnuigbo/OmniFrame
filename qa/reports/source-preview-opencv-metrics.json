@@ -1,8 +1,8 @@
 {
   "source_preview_detail_banner": {
-    "laplacian_variance_sharpness": 8042.16,
-    "contrast_std": 39.16,
-    "mean_brightness": 18.94,
+    "laplacian_variance_sharpness": 4651.38,
+    "contrast_std": 30.66,
+    "mean_brightness": 12.96,
     "width": 430,
     "height": 45
   },
@@ -14,7 +14,7 @@
     "height": 52
   },
   "media_specs_modal": {
-    "laplacian_variance_sharpness": 1873.39,
+    "laplacian_variance_sharpness": 1873.29,
     "contrast_std": 22.39,
     "mean_brightness": 12.48,
     "width": 433,
