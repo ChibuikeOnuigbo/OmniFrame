@@ -42,6 +42,8 @@ This register catalogs pixel-level cutouts and zoomed component evaluations demo
 | CUT-036 | `evidence/cutouts/cut-test-edit-3d-in-2d.png` | `evidence/test_edit_composite.png` | 670x450 | "3D in 2D" Compositing Test Edit | Perspective warped video plane with realistic drop-shadow, bold kinetic typography ("OMNIFRAME: 3D COMPOSITING"), and cel drawing speed line accents. |
 | CUT-037 | `evidence/cutouts/cut-mobile-drawing-toolbar.png` | `evidence/screenshots/mobile-drawing-toolbar-responsive.png` | 360x40 | Mobile Responsive Drawing Toolbar | Floating drawing palette on 390px mobile phone viewport constrained to 360px width, showing artistic drawing tools, compact color swatches, stroke size, and zero horizontal page overflow. |
 | CUT-038 | `evidence/cutouts/cut-timeline-seq-ping-icon.png` | `evidence/screenshots/mobile-drawing-toolbar-responsive.png` | 80x40 | Compact Sequence Ping Icon | Small, unobtrusive pill icon (`[ • Seq ]`) down close to the timeline ruler, completely freeing up the top viewport controls from obstruction. |
+| CUT-039 | `evidence/cutouts/cut-blender-rotation-inspector.png` | `evidence/screenshots/blender-rotation-full.png` | 320x200 | Blender Rotation Gizmo in Inspector | RightPanel Clip Inspector rendering authentic Blender 3-axis rotation gizmo icon (RGB arcs, central pivot) adjacent to Rotation slider. |
+| CUT-040 | `evidence/cutouts/cut-blender-rotation-3d-guide.png` | `evidence/screenshots/blender-rotation-full.png` | 272x200 | Blender Rotation Gizmo in 3D Guide | ThreePanel 3D workspace Camera Controls Guide rendering Blender rotation icon next to Orbit Camera instructions. |
 
 
 

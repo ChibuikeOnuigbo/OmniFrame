@@ -54,6 +54,7 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-048 | `evidence/screenshots/supreme-master-verification.png` | 1440x900 | Supreme Master Verification | Full studio desktop verification demonstrating Motion Tracking, Universal LinkSets & Arrange Linked Elements, 3D Camera Paint, Sequence Templates modal, and Drawing "Apply to All Frames" toggle. |
 | SS-049 | `evidence/test_edit_composite.png` | 1280x720 | YouTube Reference Test Edit | Synthetic test edit composite visualizing kinetic typography with cyan glow, "3D in 2D" perspective plane with drop shadow, and neon cel drawing accents. |
 | SS-050 | `evidence/screenshots/mobile-drawing-toolbar-responsive.png` | 390x844 | Mobile Drawing Toolbar | Mobile iPhone viewport (390x844) demonstrating responsive floating drawing toolbar with 374px bounded width, horizontal tool scrolling, compact titles, and zero page overflow. |
+| SS-051 | `evidence/screenshots/blender-rotation-full.png` | 1440x900 | Blender Rotation Gizmo Verification | Full studio desktop viewport demonstrating Blender 3-axis rotation gizmo icons integrated in RightPanel Clip Inspector and ThreePanel Camera Controls Guide. |
 
 
 

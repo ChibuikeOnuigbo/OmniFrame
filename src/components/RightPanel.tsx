@@ -1,4 +1,5 @@
 import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines } from 'lucide-react'
+import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
 import { Field, Section, Slider } from './ui'
@@ -67,7 +68,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
           <Slider min={0.1} max={3} step={0.01} value={t.scale} onChange={(v) => setClipTransform(clip.id, { scale: v })} />
           <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{t.scale.toFixed(2)}</span>
         </Field>
-        <Field label="Rotation">
+        <Field label={<span className="flex items-center gap-1.5"><BlenderRotationIcon size={13} /><span>Rotation</span></span>}>
           <Slider min={-180} max={180} value={t.rotation} onChange={(v) => setClipTransform(clip.id, { rotation: v })} />
           <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
         </Field>

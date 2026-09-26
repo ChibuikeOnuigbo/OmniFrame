@@ -13,6 +13,7 @@ import {
   Link,
   Unlink,
 } from 'lucide-react'
+import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 
 export function ThreePanel() {
@@ -38,7 +39,7 @@ export function ThreePanel() {
           <span>3D & 2.5D Compositing</span>
         </div>
         <p className="text-[11px] text-ink-400 leading-relaxed">
-          Interactive WebGL viewport supporting camera orbit, pan, dolly, coordinate axes, and 2.5D video planes.
+          WebGL viewport supporting camera orbit, pan, dolly, coordinate axes, and 2.5D video planes.
         </p>
       </div>
 
@@ -124,16 +125,19 @@ export function ThreePanel() {
           </button>
         </div>
         <p className="text-[11px] text-ink-400 leading-relaxed">
-          Paint brush strokes directly onto 3D geometry or 2.5D video surfaces aligned from camera viewpoint.
+          Paint brush strokes directly onto 3D geometry or 2.5D video surfaces from camera viewpoint.
         </p>
       </div>
 
       {/* Camera Controls Guide */}
       <div className="pt-2 border-t border-ink-800 space-y-2">
         <span className="text-[10px] font-semibold uppercase text-ink-500 block">Camera Controls Guide</span>
-        <div className="space-y-1 text-[11px] text-ink-400">
-          <div className="flex justify-between">
-            <span className="text-ink-300">Orbit Camera:</span>
+        <div className="space-y-1.5 text-[11px] text-ink-400">
+          <div className="flex justify-between items-center">
+            <span className="flex items-center gap-1.5 text-ink-300">
+              <BlenderRotationIcon size={13} />
+              <span>Orbit Camera:</span>
+            </span>
             <span className="font-mono text-ink-500">Left-click + Drag</span>
           </div>
           <div className="flex justify-between">

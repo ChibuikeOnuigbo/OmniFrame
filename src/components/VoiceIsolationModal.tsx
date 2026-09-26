@@ -105,7 +105,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 Isolate Voice & Vocal Removal
               </h2>
               <p className="text-[11px] text-ink-400">
-                Mid/Side stereo phase cancellation & speech formant DSP
+                Stereo DSP vocal isolation and removal
               </p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                   <span>Keep Vocal</span>
                 </div>
                 <p className="text-[11px] text-ink-400 leading-snug">
-                  Isolates dialogue and singing, attenuating background music and stereo noise.
+                  Isolates dialogue and vocals.
                 </p>
               </button>
 
@@ -189,7 +189,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                   <span>Remove Vocal</span>
                 </div>
                 <p className="text-[11px] text-ink-400 leading-snug">
-                  Creates an instrumental / karaoke track by canceling center vocals and keeping bass.
+                  Extracts instrumental backing track.
                 </p>
               </button>
             </div>
@@ -225,9 +225,9 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                   className="rounded border-ink-700 bg-ink-800 text-brand focus:ring-brand/40 h-4 w-4"
                 />
                 <div>
-                  <span className="font-medium">Preserve Low Bass & Kick Drum</span>
+                  <span className="font-medium">Preserve Low Bass</span>
                   <p className="text-[10px] text-ink-500">
-                    Crossover keeps frequencies &le; 140Hz in mono so bass and rhythm don't thin out.
+                    Preserves sub-140Hz frequencies.
                   </p>
                 </div>
               </label>
@@ -242,9 +242,9 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                   className="rounded border-ink-700 bg-ink-800 text-brand focus:ring-brand/40 h-4 w-4"
                 />
                 <div>
-                  <span className="font-medium">Speech Formant Bandpass Focus</span>
+                  <span className="font-medium">Speech Formant Bandpass</span>
                   <p className="text-[10px] text-ink-500">
-                    Filters out sub audible rumble and high frequency cymbal bleed (130Hz to 6500Hz).
+                    Filters 130Hz–6.5kHz speech band.
                   </p>
                 </div>
               </label>
