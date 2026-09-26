@@ -1,0 +1,23 @@
+{
+  "modal": {
+    "width": 540,
+    "height": 540,
+    "mean_luminance": 22.75681412894376,
+    "std_luminance": 32.279402540880135,
+    "sharpness_laplacian": 2694.051978200296,
+    "path": "/home/user/OmniFrame/evidence/cutouts/cut-voice-isolation-modal.png"
+  },
+  "panel": {
+    "width": 272,
+    "height": 610,
+    "mean_luminance": 28.53831967213115,
+    "std_luminance": 26.039853871609978,
+    "sharpness_laplacian": 2383.851786113505,
+    "path": "/home/user/OmniFrame/evidence/cutouts/cut-voice-isolation-panel.png"
+  },
+  "context_menu": {
+    "width": 500,
+    "height": 450,
+    "path": "/home/user/OmniFrame/evidence/cutouts/cut-voice-isolation-context-menu.png"
+  }
+}

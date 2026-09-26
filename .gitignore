@@ -10,3 +10,5 @@ dist-ssr
 coverage
 playwright-report
 test-results
+qa/exports/*.webm
+qa/exports/*.mp4

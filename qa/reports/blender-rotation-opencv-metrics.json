@@ -1,0 +1,16 @@
+{
+  "inspector_rotation_field": {
+    "laplacian_variance_sharpness": 498.33,
+    "contrast_std": 13.03,
+    "mean_brightness": 22.64,
+    "width": 320,
+    "height": 200
+  },
+  "three_panel_camera_guide": {
+    "laplacian_variance_sharpness": 765.22,
+    "contrast_std": 11.46,
+    "mean_brightness": 22.14,
+    "width": 272,
+    "height": 200
+  }
+}

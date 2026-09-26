@@ -1,0 +1,16 @@
+{
+  "audio_inspector_checkbox": {
+    "laplacian_variance_sharpness": 1584.18,
+    "contrast_std": 20.13,
+    "mean_brightness": 24.21,
+    "width": 284,
+    "height": 370
+  },
+  "leftdock_audio_tab": {
+    "laplacian_variance_sharpness": 2042.74,
+    "contrast_std": 51.89,
+    "mean_brightness": 43.84,
+    "width": 48,
+    "height": 110
+  }
+}

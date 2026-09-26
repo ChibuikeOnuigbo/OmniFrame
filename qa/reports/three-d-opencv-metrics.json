@@ -1,0 +1,30 @@
+{
+  "three_d_hud_toolbar": {
+    "laplacian_variance_sharpness": 2157.11,
+    "contrast_std": 36.84,
+    "mean_brightness": 25.22,
+    "width": 595,
+    "height": 48
+  },
+  "three_d_aim_status_badge": {
+    "laplacian_variance_sharpness": 8718.63,
+    "contrast_std": 38.02,
+    "mean_brightness": 22.11,
+    "width": 144,
+    "height": 34
+  },
+  "three_d_video_plane": {
+    "laplacian_variance_sharpness": 670.36,
+    "contrast_std": 31.37,
+    "mean_brightness": 10.87,
+    "width": 520,
+    "height": 370
+  },
+  "three_d_floating_object": {
+    "laplacian_variance_sharpness": 450.69,
+    "contrast_std": 61.61,
+    "mean_brightness": 45.2,
+    "width": 280,
+    "height": 260
+  }
+}
