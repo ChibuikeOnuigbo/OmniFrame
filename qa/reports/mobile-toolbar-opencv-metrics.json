@@ -1,7 +1,16 @@
 {
-  "laplacian_variance_sharpness": 893.12,
-  "contrast_std": 26.42,
-  "mean_brightness": 23.55,
-  "width": 380,
-  "height": 70
+  "mobile_drawing_toolbar": {
+    "laplacian_variance_sharpness": 4158.4,
+    "contrast_std": 31.14,
+    "mean_brightness": 21.82,
+    "width": 360,
+    "height": 40
+  },
+  "timeline_seq_ping_icon": {
+    "laplacian_variance_sharpness": 809.36,
+    "contrast_std": 11.61,
+    "mean_brightness": 16.87,
+    "width": 80,
+    "height": 40
+  }
 }

@@ -44,12 +44,13 @@ export function Preview() {
   const workspacePreset = useEditor((s) => s.workspacePreset)
   const assets = useEditor((s) => s.assets)
   const sourcePreview = useEditor((s) => s.sourcePreview)
+  const monitorMode = useEditor((s) => s.monitorMode)
   const setSourcePreviewAsset = useEditor((s) => s.setSourcePreviewAsset)
   const projectFps = useEditor((s) => s.projectFps)
 
-  // Active uploaded media asset if selected from media library
+  // Active uploaded media asset if selected from media library in source monitor mode
   const previewAsset = assets.find((a) => a.id === sourcePreview.assetId)
-  const isPreviewingAsset = Boolean(previewAsset)
+  const isPreviewingAsset = Boolean(previewAsset) && monitorMode === 'source' && !drawingEnabled
 
   // 3D View mode
   const [is3DMode, setIs3DMode] = useState(workspacePreset === '3d')
@@ -216,9 +217,9 @@ export function Preview() {
       onPointerCancel={() => { dragRef.current = null }}
       onDoubleClick={() => setPan({ x: 0, y: 0 })}
     >
-      {/* Top Left: Unified Status & Navigation Pill */}
-      <div className="absolute top-2 left-3 z-30 flex items-center gap-1.5 text-xs">
-        {isPreviewingAsset ? (
+      {/* Top Left: Media Asset Ingestion / Preview Pill (Only active when previewing source media) */}
+      {isPreviewingAsset && (
+        <div className="absolute top-2 left-3 z-30 flex items-center gap-1.5 text-xs">
           <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-ink-900/95 border border-brand/50 shadow-xl backdrop-blur-md">
             <Film size={13} className="text-brand" />
             <span className="font-medium text-ink-100 max-w-[140px] sm:max-w-xs truncate">
@@ -247,18 +248,8 @@ export function Preview() {
               <X size={13} />
             </button>
           </div>
-        ) : (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-ink-900/85 border border-ink-800 shadow-md backdrop-blur-md text-[11px] text-ink-400">
-            <span className="w-2 h-2 rounded-full bg-brand" />
-            <span className="font-medium text-ink-200">Timeline Sequence</span>
-            {playing && (
-              <span className="px-1.5 py-0.2 rounded bg-brand/20 text-brand text-[9px] font-bold border border-brand/40 animate-pulse">
-                PLAYING
-              </span>
-            )}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Top Right: View & 3D Controls */}
       <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
@@ -289,7 +280,7 @@ export function Preview() {
         </IconButton>
         <IconButton title="Safe areas" active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton>
         <IconButton title="Grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton>
-        <div className="ml-1 flex h-8 items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-800">
+        <div className="ml-1 flex h-8 items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-800 max-sm:hidden">
           <button type="button" title="Auto fit preview" aria-label="Auto fit preview" aria-pressed={display === 'fit'} onClick={() => chooseDisplay('fit')} className={`grid w-9 place-items-center border-r border-ink-700 ${display === 'fit' ? 'bg-brand text-white' : 'text-ink-400 hover:bg-ink-700 hover:text-white'}`}><Maximize2 size={14} /></button>
           <div className="relative flex items-center px-2"><input data-testid="preview-zoom-slider" aria-label="Preview zoom" type="range" min={25} max={200} step={5} value={Math.max(25, Math.min(200, Math.round(scale * 100)))} onChange={(e) => chooseDisplay(Number(e.target.value) / 100)} className="of-range w-20 sm:w-28" /><i aria-hidden="true" title="Auto fit point" className="pointer-events-none absolute top-1/2 h-3 w-px -translate-y-1/2 bg-white/60" style={{ left: `${8 + Math.max(0, Math.min(1, (fitScale * 100 - 25) / 175)) * 100}%` }} /></div>
           <output className="hidden sm:flex w-11 items-center justify-end border-l border-ink-700 pr-2 text-[10px] tabular-nums text-ink-400">{Math.round(scale * 100)}%</output>
@@ -297,6 +288,18 @@ export function Preview() {
       </div>
 
       <DrawingToolbar />
+
+      {/* Bottom Left: Very small & short Sequence Ping Icon down close to timeline */}
+      {!isPreviewingAsset && (
+        <div
+          data-testid="timeline-sequence-indicator"
+          className="absolute bottom-2 left-2 z-20 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-ink-900/80 border border-ink-800/80 shadow-xs backdrop-blur-sm text-[9px] text-ink-400 pointer-events-none"
+          title="Active Timeline Sequence"
+        >
+          <span className={`w-1.5 h-1.5 rounded-full ${playing ? 'bg-emerald-400 animate-ping' : 'bg-brand'}`} />
+          <span className="font-mono text-ink-300">Seq</span>
+        </div>
+      )}
 
       {/* 3D Mode Canvas Stage: Full Orbit / Drag / Rotate around View */}
       {is3DMode ? (
