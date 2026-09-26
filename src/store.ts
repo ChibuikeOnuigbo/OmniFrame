@@ -35,6 +35,9 @@ import type {
   BlenderMode,
   Primitive3D,
   Scene3DObject,
+  OmniframeCharacter,
+  OmniframeScopeType,
+  ClipMask,
 } from './types'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -60,6 +63,7 @@ export type Tool = 'select' | 'blade'
 export type PreviewQuality = 'low' | 'medium' | 'high'
 export type LeftTab =
   | 'media'
+  | 'omniframe'
   | 'audio'
   | 'tracking'
   | 'relationships'
@@ -68,6 +72,54 @@ export type LeftTab =
   | 'effects'
   | 'text'
   | 'threed'
+
+export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
+  {
+    id: 'char_light',
+    name: 'Light Yagami',
+    label: 'Character 1 (Far Left)',
+    bounds: { x: 0.016, y: 0.078, width: 0.190, height: 0.866 },
+    cutoutUrl: '/assets/death_note/char_light.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+  {
+    id: 'char_l',
+    name: 'L Lawliet',
+    label: 'Character 2 (Crouching)',
+    bounds: { x: 0.203, y: 0.384, width: 0.194, height: 0.523 },
+    cutoutUrl: '/assets/death_note/char_l.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+  {
+    id: 'char_mello',
+    name: 'Mello',
+    label: 'Character 3 (Leather Jacket)',
+    bounds: { x: 0.406, y: 0.126, width: 0.153, height: 0.817 },
+    cutoutUrl: '/assets/death_note/char_mello.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+  {
+    id: 'char_near',
+    name: 'Near (Nate River)',
+    label: 'Character 4 (Stacking Dice)',
+    bounds: { x: 0.557, y: 0.436, width: 0.235, height: 0.519 },
+    cutoutUrl: '/assets/death_note/char_near.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+  {
+    id: 'char_ryuk',
+    name: 'Ryuk Shinigami',
+    label: 'Character 5 (Far Right Shinigami)',
+    bounds: { x: 0.723, y: 0.016, width: 0.263, height: 0.944 },
+    cutoutUrl: '/assets/death_note/char_ryuk.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+]
 
 interface Doc {
   tracks: Track[]
@@ -79,6 +131,8 @@ interface Doc {
   linkSets: LinkSet[]
   parentRelationships: ParentRelationship[]
   groups: GroupInstance[]
+  omniframeCharacters?: OmniframeCharacter[]
+  attachDirectlyToVideo?: boolean
 }
 
 const MIN_CLIP = 0.05 // seconds
@@ -94,6 +148,8 @@ function cloneDoc(s: EditorState): Doc {
     linkSets: structuredClone(s.linkSets || []),
     parentRelationships: structuredClone(s.parentRelationships || []),
     groups: structuredClone(s.groups || []),
+    omniframeCharacters: structuredClone(s.omniframeCharacters || []),
+    attachDirectlyToVideo: s.attachDirectlyToVideo ?? true,
   }
 }
 
@@ -237,6 +293,32 @@ export interface EditorState {
   growSelection: (pixels?: number) => void
   shrinkSelection: (pixels?: number) => void
   setSelectionFeather: (feather: number) => void
+
+  // ---- OmniFrame & Character Manipulation ----
+  omniframeMode: boolean
+  omniframeCharacters: OmniframeCharacter[]
+  selectedCharacterId: string | null
+  attachDirectlyToVideo: boolean
+  attachedVideoClipId: string | null
+
+  setOmniframeMode: (v: boolean) => void
+  setSelectedCharacterId: (id: string | null) => void
+  setOmniframeCharacterTransform: (
+    charId: string,
+    transform: Partial<ClipTransform>,
+    scope?: OmniframeScopeType,
+    sectionRange?: { start: number; end: number },
+    frame?: number
+  ) => void
+  evaluateCharacterTransformAtTime: (charId: string, time: number) => ClipTransform
+  cutCharacterToNewTrack: (charId: string) => string
+  duplicateCharacter: (charId: string) => string
+  removeCharacterInfill: (charId: string) => void
+  resetCharacterPosition: (charId: string) => void
+
+  setAttachDirectlyToVideo: (attach: boolean, targetClipId?: string) => void
+  convertDrawingToMask: (clipId?: string, layerId?: string) => string | null
+  convertMaskToSelection: (maskId: string, mode?: 'shape' | 'filled') => void
 
   // ---- layout actions ----
   setWorkspacePreset: (preset: WorkspacePreset) => void
@@ -439,7 +521,19 @@ export const useEditor = create<EditorState>((set, get) => {
   }
 
   return {
-    assets: [],
+    assets: [
+      {
+        id: 'asset-death-note-vid',
+        name: 'Death Note Chibi - 5 Characters.mp4',
+        kind: 'video',
+        url: '/death_note_video.mp4',
+        duration: 8.0,
+        width: 1672,
+        height: 941,
+        fps: 30,
+        size: 1548200,
+      },
+    ],
     tracks: [],
     clips: [],
     transitions: [],
@@ -463,6 +557,13 @@ export const useEditor = create<EditorState>((set, get) => {
     inInteraction: false,
     snapping: true,
     scrubbing: false,
+
+    // ---- OmniFrame & Character Manipulation initial state ----
+    omniframeMode: false,
+    omniframeCharacters: INITIAL_DEATH_NOTE_CHARACTERS,
+    selectedCharacterId: 'char_light',
+    attachDirectlyToVideo: true,
+    attachedVideoClipId: null,
 
     // ---- link sets, parenting & groups initial state ----
     linkSets: [],
@@ -1497,6 +1598,209 @@ export const useEditor = create<EditorState>((set, get) => {
           ? { ...s.activeSelection, feather: Math.max(0, Math.min(64, feather)) }
           : null,
       }))
+    },
+
+    // ---- OmniFrame & Character Manipulation actions ----
+    setOmniframeMode: (v) => set({ omniframeMode: v }),
+    setSelectedCharacterId: (id) => set({ selectedCharacterId: id }),
+    setOmniframeCharacterTransform: (charId, transform, scope, sectionRange, frame) => {
+      pushSnapshot()
+      set((s) => ({
+        omniframeCharacters: s.omniframeCharacters.map((c) => {
+          if (c.id !== charId) return c
+          return {
+            ...c,
+            transform: { ...c.transform, ...transform },
+            scope: scope ?? c.scope,
+            sectionRange: sectionRange !== undefined ? sectionRange : c.sectionRange,
+            frameNumber: frame !== undefined ? frame : c.frameNumber,
+          }
+        }),
+      }))
+    },
+    evaluateCharacterTransformAtTime: (charId, time) => {
+      const char = get().omniframeCharacters.find((c) => c.id === charId)
+      if (!char) return { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 }
+      const fps = get().projectFps || 30
+      const currentFrame = Math.round(time * fps)
+
+      if (char.scope === 'all') {
+        return char.transform
+      } else if (char.scope === 'section') {
+        const range = char.sectionRange || { start: 2.0, end: 5.0 }
+        if (time >= range.start && time <= range.end) {
+          return char.transform
+        }
+        return { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 }
+      } else if (char.scope === 'frame') {
+        const targetFrame = char.frameNumber ?? Math.round((char.sectionRange?.start || 0) * fps)
+        if (Math.abs(currentFrame - targetFrame) <= 0.5) {
+          return char.transform
+        }
+        return { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 }
+      }
+      return char.transform
+    },
+    cutCharacterToNewTrack: (charId) => {
+      const char = get().omniframeCharacters.find((c) => c.id === charId)
+      if (!char) return ''
+      pushSnapshot()
+      const activeClip = get().clips.find((c) => c.id === get().selectedClipId) || get().clips[0]
+      const trkId = get().createTrack('video', 'above')
+      const newClipId = uid('clip_char')
+      const newClip: Clip = {
+        id: newClipId,
+        trackId: trkId,
+        assetId: char.id,
+        start: activeClip ? activeClip.start : 0,
+        duration: activeClip ? activeClip.duration : 8.0,
+        inPoint: 0,
+        name: `${char.name} (Cut Track)`,
+        kind: 'video',
+        volume: 1,
+        hidden: false,
+        transform: { ...char.transform },
+      }
+      set((s) => ({
+        clips: [...s.clips, newClip],
+        selectedClipId: newClip.id,
+      }))
+      return newClipId
+    },
+    duplicateCharacter: (charId) => {
+      const char = get().omniframeCharacters.find((c) => c.id === charId)
+      if (!char) return ''
+      pushSnapshot()
+      const newId = `char_${char.id}_dup_${Date.now()}`
+      const newChar: OmniframeCharacter = {
+        ...structuredClone(char),
+        id: newId,
+        name: `${char.name} (Copy)`,
+        label: `${char.label} Copy`,
+        transform: {
+          ...char.transform,
+          x: char.transform.x + 40,
+          y: char.transform.y + 20,
+        },
+      }
+      set((s) => ({
+        omniframeCharacters: [...s.omniframeCharacters, newChar],
+        selectedCharacterId: newId,
+      }))
+      return newId
+    },
+    removeCharacterInfill: (charId) => {
+      pushSnapshot()
+      set((s) => ({
+        omniframeCharacters: s.omniframeCharacters.map((c) =>
+          c.id === charId
+            ? {
+                ...c,
+                transform: { ...c.transform, opacity: 0 },
+              }
+            : c
+        ),
+      }))
+    },
+    resetCharacterPosition: (charId) => {
+      pushSnapshot()
+      set((s) => ({
+        omniframeCharacters: s.omniframeCharacters.map((c) =>
+          c.id === charId
+            ? {
+                ...c,
+                transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+                scope: 'all',
+              }
+            : c
+        ),
+      }))
+    },
+
+    setAttachDirectlyToVideo: (attach, targetClipId) => {
+      pushSnapshot()
+      if (!attach) {
+        const trkId = get().createTrack('video', 'above')
+        const videoClip = get().clips.find((c) => c.kind === 'video') || get().clips[0]
+        const drawingClipId = uid('clip_drawing')
+        const drawingClip: Clip = {
+          id: drawingClipId,
+          trackId: trkId,
+          assetId: 'asset-drawing-overlay',
+          start: videoClip ? videoClip.start : 0,
+          duration: videoClip ? videoClip.duration : 8.0,
+          inPoint: 0,
+          name: 'Drawing Overlay (Separate Track)',
+          kind: 'video',
+          volume: 1,
+          hidden: false,
+          transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+        }
+        set((s) => ({
+          clips: [...s.clips, drawingClip],
+          selectedClipId: drawingClip.id,
+          attachDirectlyToVideo: false,
+          attachedVideoClipId: videoClip?.id || null,
+        }))
+      } else {
+        const targetClip = targetClipId
+          ? get().clips.find((c) => c.id === targetClipId)
+          : get().clips.find((c) => c.kind === 'video' && !c.name.includes('Drawing Overlay'))
+        set((s) => ({
+          clips: s.clips.filter((c) => !c.name.includes('Drawing Overlay')),
+          attachDirectlyToVideo: true,
+          attachedVideoClipId: targetClip?.id || null,
+        }))
+      }
+    },
+
+    convertDrawingToMask: (clipId, layerId) => {
+      const activeClip = clipId
+        ? get().clips.find((c) => c.id === clipId)
+        : get().clips.find((c) => c.id === get().selectedClipId) || get().clips[0]
+      if (!activeClip) return null
+      const strokes = layerId
+        ? get().drawingStrokes.filter((s) => s.layerId === layerId)
+        : get().drawingStrokes
+
+      const allPts = strokes.flatMap((st) => st.points || [])
+      let pts = [
+        { x: 0.2, y: 0.2 },
+        { x: 0.8, y: 0.2 },
+        { x: 0.8, y: 0.8 },
+        { x: 0.2, y: 0.8 },
+      ]
+      if (allPts.length > 0) {
+        const xs = allPts.map((p) => p.x)
+        const ys = allPts.map((p) => p.y)
+        const minX = Math.max(0, Math.min(...xs))
+        const maxX = Math.min(1, Math.max(...xs))
+        const minY = Math.max(0, Math.min(...ys))
+        const maxY = Math.min(1, Math.max(...ys))
+        pts = [
+          { x: minX, y: minY },
+          { x: maxX, y: minY },
+          { x: maxX, y: maxY },
+          { x: minX, y: maxY },
+        ]
+      }
+
+      const newMaskId = uid('mask_from_drawing')
+      pushSnapshot()
+      return newMaskId
+    },
+
+    convertMaskToSelection: (maskId, mode = 'shape') => {
+      pushSnapshot()
+      const b = { x: 0.25, y: 0.25, width: 0.5, height: 0.5 }
+      const newSel: ActiveSelection = {
+        type: mode === 'shape' ? 'polygon' : 'rectangle',
+        bounds: b,
+        inverted: false,
+        feather: 2,
+        fillMode: mode === 'shape' ? 'outline' : 'filled',
+      }
+      set({ activeSelection: newSel })
     },
 
     // ---- layout actions ----

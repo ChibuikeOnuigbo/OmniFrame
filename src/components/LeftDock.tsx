@@ -9,10 +9,12 @@ import {
   Target,
   Link2,
   X,
+  Scissors,
   type LucideIcon,
 } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
 import { MediaPanel } from './MediaPanel'
+import { OmniFramePanel } from './OmniFramePanel'
 import { VoiceIsolationPanel } from './VoiceIsolationPanel'
 import { DrawingPanel } from './DrawingPanel'
 import { TrackingPanel } from './TrackingPanel'
@@ -30,6 +32,7 @@ interface TabDef {
 
 const TABS: TabDef[] = [
   { id: 'media', label: 'Media Library', icon: LibraryBig },
+  { id: 'omniframe', label: 'OmniFrame AI', icon: Scissors },
   { id: 'audio', label: 'Audio', icon: Volume2 },
   { id: 'tracking', label: 'Masking & Tracking', icon: Target },
   { id: 'relationships', label: 'Link & Groups', icon: Link2 },
@@ -115,6 +118,7 @@ export function LeftDock() {
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto">
             {leftTab === 'media' && <MediaPanel />}
+            {leftTab === 'omniframe' && <OmniFramePanel />}
             {leftTab === 'audio' && <VoiceIsolationPanel />}
             {leftTab === 'tracking' && <TrackingPanel />}
             {leftTab === 'relationships' && <LinkPanel />}

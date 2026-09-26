@@ -62,8 +62,15 @@
       "feature": "Voice Isolation & Curve 3D Verification",
       "status": "PASS",
       "details": "Playwright E2E and OpenCV metrics verified for Graph Editor, Keyframing, and 3D Viewport"
+    },
+    {
+      "run": 10,
+      "timestamp": "2026-09-26T23:10:00+00:00",
+      "feature": "OmniFrame Mode, Drawing Mode & Masking Conversions",
+      "status": "PASS",
+      "details": "Verified All Frames, Section, 1-frame scopes, Drawing Add to Video toggle, frame attach stepper, and Mask <-> Drawing <-> Selection conversions"
     }
   ],
-  "total_runs": 9,
-  "last_updated": "2026-09-26T22:17:10+00:00"
+  "total_runs": 10,
+  "last_updated": "2026-09-26T23:10:00+00:00"
 }

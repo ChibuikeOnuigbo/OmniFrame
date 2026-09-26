@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useEditor } from '../store'
 import type { DrawingToolType, TemporalScopeType } from '../types'
 import {
@@ -64,6 +65,10 @@ export function DrawingPanel() {
   const setDrawingScope = useEditor((s) => s.setDrawingScope)
   const drawingHoldFrames = useEditor((s) => s.drawingHoldFrames)
   const setDrawingHoldFrames = useEditor((s) => s.setDrawingHoldFrames)
+  const attachDirectlyToVideo = useEditor((s) => s.attachDirectlyToVideo)
+  const setAttachDirectlyToVideo = useEditor((s) => s.setAttachDirectlyToVideo)
+  const attachedVideoClipId = useEditor((s) => s.attachedVideoClipId)
+  const clips = useEditor((s) => s.clips)
   const onionSkin = useEditor((s) => s.onionSkin)
   const setOnionSkin = useEditor((s) => s.setOnionSkin)
   const toggleOnionSkin = useEditor((s) => s.toggleOnionSkin)
@@ -80,19 +85,38 @@ export function DrawingPanel() {
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
 
-  const tools: { id: DrawingToolType; label: string; icon: LucideIcon }[] = [
-    { id: 'brush', label: 'Brush', icon: Paintbrush },
-    { id: 'pencil', label: 'Pencil', icon: Pencil },
-    { id: 'marker', label: 'Highlighter', icon: Highlighter },
-    { id: 'calligraphy', label: 'Calligraphy', icon: PenTool },
-    { id: 'fill', label: 'Fill / Recolor', icon: PaintBucket },
-    { id: 'eraser', label: 'Eraser', icon: Eraser },
-    { id: 'eyedropper', label: 'Eyedropper', icon: Pipette },
-    { id: 'line', label: 'Line', icon: Slash },
-    { id: 'rectangle', label: 'Rectangle', icon: Square },
-    { id: 'circle', label: 'Circle', icon: Circle },
-    { id: 'arrow', label: 'Arrow', icon: MoveRight },
-    { id: 'star', label: 'Star', icon: Star },
+  const videoClips = clips.filter((c) => c.kind === 'video' && !c.name.includes('Drawing Overlay'))
+  const [selectedMergeSourceClipId, setSelectedMergeSourceClipId] = useState<string>(
+    attachedVideoClipId || videoClips[0]?.id || ''
+  )
+
+  const toolGroups = [
+    {
+      group: 'Freehand Paint',
+      items: [
+        { id: 'brush' as DrawingToolType, label: 'Brush', icon: Paintbrush },
+        { id: 'pencil' as DrawingToolType, label: 'Pencil', icon: Pencil },
+        { id: 'marker' as DrawingToolType, label: 'Marker', icon: Highlighter },
+      ],
+    },
+    {
+      group: 'Shapes & Vectors',
+      items: [
+        { id: 'line' as DrawingToolType, label: 'Line', icon: Slash },
+        { id: 'rectangle' as DrawingToolType, label: 'Box', icon: Square },
+        { id: 'circle' as DrawingToolType, label: 'Circle', icon: Circle },
+        { id: 'arrow' as DrawingToolType, label: 'Arrow', icon: MoveRight },
+        { id: 'star' as DrawingToolType, label: 'Star', icon: Star },
+      ],
+    },
+    {
+      group: 'Color & Tools',
+      items: [
+        { id: 'fill' as DrawingToolType, label: 'Fill / Recolor', icon: PaintBucket },
+        { id: 'eraser' as DrawingToolType, label: 'Eraser', icon: Eraser },
+        { id: 'eyedropper' as DrawingToolType, label: 'Eyedropper', icon: Pipette },
+      ],
+    },
   ]
 
   const handleScopeChange = (type: TemporalScopeType) => {
@@ -132,32 +156,169 @@ export function DrawingPanel() {
       </div>
 
       {/* Tools Selection */}
-      <div>
-        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider mb-1.5">Tools</div>
-        <div className="grid grid-cols-2 gap-1">
-          {tools.map((t) => {
-            const Icon = t.icon
-            const active = drawingTool === t.id
-            return (
-              <button
-                key={t.id}
-                type="button"
-                data-testid={`panel-tool-${t.id}`}
-                onClick={() => {
-                  setDrawingTool(t.id)
-                  if (!drawingEnabled) setDrawingEnabled(true)
-                }}
-                className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-left transition-colors ${
-                  active
-                    ? 'bg-brand/20 border-brand text-brand font-medium'
-                    : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white'
-                }`}
-              >
-                <Icon size={13} />
-                <span className="truncate">{t.label}</span>
-              </button>
-            )
-          })}
+      <div className="flex flex-col gap-2.5">
+        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Drawing Tools</div>
+        {toolGroups.map((grp) => (
+          <div key={grp.group} className="space-y-1">
+            <span className="text-[10px] text-ink-500 font-semibold uppercase">{grp.group}</span>
+            <div className="grid grid-cols-3 gap-1">
+              {grp.items.map((t) => {
+                const Icon = t.icon
+                const active = drawingTool === t.id
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    data-testid={`panel-tool-${t.id}`}
+                    onClick={() => {
+                      setDrawingTool(t.id)
+                      if (!drawingEnabled) setDrawingEnabled(true)
+                    }}
+                    className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-left transition-colors ${
+                      active
+                        ? 'bg-brand/20 border-brand text-brand font-medium'
+                        : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white'
+                    }`}
+                  >
+                    <Icon size={12} className="shrink-0" />
+                    <span className="truncate text-[10px]">{t.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add Directly to Video (Attached vs Separate Track) */}
+      <div className="p-2.5 rounded-lg bg-ink-900 border border-ink-800 flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <span className="font-medium text-ink-200 text-[11px] flex items-center gap-1.5">
+            <Layers size={13} className="text-brand" />
+            Timeline Attachment
+          </span>
+          <label className="flex items-center gap-1.5 cursor-pointer text-[10px] text-ink-300">
+            <input
+              type="checkbox"
+              data-testid="attach-directly-to-video-toggle"
+              checked={attachDirectlyToVideo}
+              onChange={(e) => setAttachDirectlyToVideo(e.target.checked, selectedMergeSourceClipId)}
+              className="accent-brand rounded cursor-pointer"
+            />
+            <span className={attachDirectlyToVideo ? 'text-brand font-medium' : 'text-amber-400 font-medium'}>
+              {attachDirectlyToVideo ? 'Add Directly to Video' : 'Separate Timeline Track'}
+            </span>
+          </label>
+        </div>
+        {!attachDirectlyToVideo && (
+          <div className="p-2 rounded bg-ink-950 border border-ink-800/90 text-[10px] text-ink-300 flex flex-col gap-1.5">
+            <span className="text-amber-400 font-semibold">
+              Drawing converted to independent timeline track!
+            </span>
+            <span>Edit, trim, or move side-by-side with video clips in timeline.</span>
+            {videoClips.length > 1 && (
+              <div className="pt-1 border-t border-ink-800 flex flex-col gap-1">
+                <span className="text-ink-400">Target video to merge back into:</span>
+                <select
+                  data-testid="drawing-merge-source-select"
+                  value={selectedMergeSourceClipId}
+                  onChange={(e) => setSelectedMergeSourceClipId(e.target.value)}
+                  className="bg-ink-900 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] text-ink-200"
+                >
+                  {videoClips.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Frame Attach Count Picker */}
+      <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
+        <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
+          <span>Attach Frame Count</span>
+          <span className="font-mono text-brand font-bold" data-testid="active-attach-frames-label">
+            {drawingHoldFrames} {drawingHoldFrames === 1 ? 'frame' : 'frames'} ({(drawingHoldFrames / projectFps).toFixed(2)}s)
+          </span>
+        </div>
+
+        {/* Presets */}
+        <div className="grid grid-cols-6 gap-1">
+          {[
+            { f: 1, label: '1f' },
+            { f: 2, label: '2f' },
+            { f: 6, label: '6f' },
+            { f: 12, label: '12f' },
+            { f: 24, label: '24f' },
+            { f: 90, label: 'All' },
+          ].map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              data-testid={`attach-preset-${preset.label.toLowerCase()}`}
+              onClick={() => {
+                setDrawingHoldFrames(preset.f)
+                if (drawingScope.type === 'frame') {
+                  setDrawingScope({ ...drawingScope, holdFrames: preset.f })
+                }
+              }}
+              className={`py-1 rounded text-[10px] font-mono font-medium border text-center transition-colors ${
+                drawingHoldFrames === preset.f
+                  ? 'bg-brand text-white border-brand shadow-xs'
+                  : 'bg-ink-950 border-ink-800 text-ink-400 hover:text-white hover:bg-ink-850'
+              }`}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Stepper */}
+        <div className="flex items-center justify-between gap-2 pt-1">
+          <span className="text-[10px] text-ink-400">Custom Frame Hold:</span>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              data-testid="attach-frame-decrement"
+              onClick={() => {
+                const next = Math.max(1, drawingHoldFrames - 1)
+                setDrawingHoldFrames(next)
+                if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
+              }}
+              className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
+            >
+              -
+            </button>
+            <input
+              type="number"
+              data-testid="attach-frame-count-input"
+              min={1}
+              max={240}
+              value={drawingHoldFrames}
+              onChange={(e) => {
+                const val = Math.max(1, Math.min(240, parseInt(e.target.value, 10) || 1))
+                setDrawingHoldFrames(val)
+                if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: val })
+              }}
+              className="w-12 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono text-center text-ink-100"
+            />
+            <button
+              type="button"
+              data-testid="attach-frame-increment"
+              onClick={() => {
+                const next = Math.min(240, drawingHoldFrames + 1)
+                setDrawingHoldFrames(next)
+                if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
+              }}
+              className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
 

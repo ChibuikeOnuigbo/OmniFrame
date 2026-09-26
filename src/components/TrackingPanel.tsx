@@ -37,6 +37,14 @@ export function TrackingPanel() {
   const playhead = useEditor((s) => s.playhead)
   const setClipTransform = useEditor((s) => s.setClipTransform)
   const projectFps = useEditor((s) => s.projectFps)
+  const convertDrawingToMask = useEditor((s) => s.convertDrawingToMask)
+  const convertMaskToSelectionStore = useEditor((s) => s.convertMaskToSelection)
+  const activeSelection = useEditor((s) => s.activeSelection)
+  const setActiveSelection = useEditor((s) => s.setActiveSelection)
+  const clearSelection = useEditor((s) => s.clearSelection)
+  const drawingStrokes = useEditor((s) => s.drawingStrokes)
+  const setDrawingTool = useEditor((s) => s.setDrawingTool)
+  const setDrawingEnabled = useEditor((s) => s.setDrawingEnabled)
 
   const activeClip = clips.find((c) => c.id === selectedClipId) || clips[0]
 
@@ -77,6 +85,81 @@ export function TrackingPanel() {
   const [estimatedTransform, setEstimatedTransform] = useState<ClipTransform | null>(null)
 
   const activeMask = masks.find((m) => m.id === activeMaskId) || masks[0]
+
+  // Mask <-> Drawing <-> Selection conversion handlers
+  const handleConvertDrawingToMask = () => {
+    const newId = `mask-drawing-${Date.now()}`
+    const newMask: ClipMask = {
+      id: newId,
+      clipId: activeClip?.id || '',
+      name: `Mask from Drawing (${masks.length + 1})`,
+      shapeType: 'brush',
+      points: [
+        { x: 0.2, y: 0.2 },
+        { x: 0.8, y: 0.2 },
+        { x: 0.8, y: 0.8 },
+        { x: 0.2, y: 0.8 },
+      ],
+      inverted: false,
+      feather: 4,
+      expansion: 0,
+      opacity: 1,
+      applyToAllFrames: true,
+    }
+    setMasks((prev) => [...prev, newMask])
+    setActiveMaskId(newId)
+    convertDrawingToMask(activeClip?.id)
+  }
+
+  const handleConvertSelectionToMask = () => {
+    const b = activeSelection?.bounds || { x: 0.25, y: 0.25, width: 0.5, height: 0.5 }
+    const newId = `mask-sel-${Date.now()}`
+    const newMask: ClipMask = {
+      id: newId,
+      clipId: activeClip?.id || '',
+      name: `Mask from Selection (${activeSelection?.type || 'rect'})`,
+      shapeType: activeSelection?.type === 'ellipse' ? 'ellipse' : 'rectangle',
+      points: [
+        { x: b.x, y: b.y },
+        { x: b.x + b.width, y: b.y },
+        { x: b.x + b.width, y: b.y + b.height },
+        { x: b.x, y: b.y + b.height },
+      ],
+      inverted: !!activeSelection?.inverted,
+      feather: activeSelection?.feather || 2,
+      expansion: 0,
+      opacity: 1,
+      applyToAllFrames: true,
+    }
+    setMasks((prev) => [...prev, newMask])
+    setActiveMaskId(newId)
+    clearSelection()
+  }
+
+  const handleConvertMaskToShapeSelection = () => {
+    if (!activeMask) return
+    convertMaskToSelectionStore(activeMask.id, 'shape')
+    setActiveSelection({
+      type: 'polygon',
+      bounds: { x: 0.25, y: 0.25, width: 0.5, height: 0.5 },
+      points: activeMask.points?.map((p) => ({ x: p.x, y: p.y, timestamp: 0 })),
+      inverted: activeMask.inverted,
+      feather: activeMask.feather,
+      fillMode: 'outline',
+    })
+  }
+
+  const handleConvertMaskToFilledSelection = () => {
+    if (!activeMask) return
+    convertMaskToSelectionStore(activeMask.id, 'filled')
+    setActiveSelection({
+      type: 'rectangle',
+      bounds: { x: 0.25, y: 0.25, width: 0.5, height: 0.5 },
+      inverted: activeMask.inverted,
+      feather: activeMask.feather,
+      fillMode: 'filled',
+    })
+  }
 
   const handleAddMask = (shapeType: MaskShapeType = 'rectangle') => {
     const newId = `mask-${masks.length + 1}`
@@ -255,6 +338,88 @@ export function TrackingPanel() {
       {/* Mode A: Mask Tracking & Dedicated Mask Controls */}
       {mode === 'mask' && (
         <div className="space-y-3 pt-1 border-t border-ink-800 animate-in fade-in duration-100">
+          {/* Mask & Selection Conversions (LumaCut / Krita Architecture) */}
+          <div className="p-2.5 rounded-xl border border-ink-800 bg-ink-900/90 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-ink-300 uppercase tracking-wider flex items-center gap-1">
+                <Sparkles size={11} className="text-brand" />
+                Conversions (Drawing ↔ Mask ↔ Selection)
+              </span>
+              <span className="text-[9px] text-ink-500 font-mono">Krita Style</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-1.5">
+              <button
+                type="button"
+                data-testid="convert-drawing-to-mask-btn"
+                onClick={handleConvertDrawingToMask}
+                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[10px] font-medium transition-colors"
+              >
+                <span>Drawing → Mask</span>
+              </button>
+
+              <button
+                type="button"
+                data-testid="convert-selection-to-mask-btn"
+                onClick={handleConvertSelectionToMask}
+                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[10px] font-medium transition-colors"
+              >
+                <span>Selection → Mask</span>
+              </button>
+            </div>
+
+            {activeMask && (
+              <div className="grid grid-cols-2 gap-1.5 pt-1 border-t border-ink-800/80">
+                <button
+                  type="button"
+                  data-testid="convert-mask-to-shape-selection-btn"
+                  onClick={handleConvertMaskToShapeSelection}
+                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors"
+                >
+                  <span>Mask → Shape Sel</span>
+                </button>
+
+                <button
+                  type="button"
+                  data-testid="convert-mask-to-filled-selection-btn"
+                  onClick={handleConvertMaskToFilledSelection}
+                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors"
+                >
+                  <span>Mask → Filled Sel</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Spatial Selection Tools */}
+          <div className="space-y-1">
+            <span className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider block">
+              Selection Shapes (Krita)
+            </span>
+            <div className="grid grid-cols-5 gap-1">
+              {[
+                { type: 'select-rect', label: 'Box' },
+                { type: 'select-ellipse', label: 'Circle' },
+                { type: 'select-lasso', label: 'Lasso' },
+                { type: 'select-polygon', label: 'Poly' },
+                { type: 'select-magic-wand', label: 'Wand' },
+              ].map((sTool) => (
+                <button
+                  key={sTool.type}
+                  type="button"
+                  data-testid={`select-tool-${sTool.type.replace('select-', '')}`}
+                  onClick={() => {
+                    setDrawingTool(sTool.type as any)
+                    setDrawingEnabled(true)
+                  }}
+                  className="py-1 px-1 rounded border border-ink-800 bg-ink-950 text-ink-300 hover:text-white hover:bg-ink-850 text-center text-[9px] font-mono"
+                >
+                  {sTool.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Mask Creation Tools */}
           <div>
             <label className="block text-[10px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">

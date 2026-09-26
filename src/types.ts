@@ -157,7 +157,14 @@ export interface SourcePreviewState {
 export type TimelineInsertionMode = 'insert' | 'overwrite'
 
 // ---- Drawing & Paint Subsystem Types ----
-export type SelectionToolType = 'select-rect' | 'select-ellipse' | 'select-lasso'
+export type SelectionToolType =
+  | 'select-rect'
+  | 'select-ellipse'
+  | 'select-lasso'
+  | 'select-polygon'
+  | 'select-magic-wand'
+  | 'select-character'
+
 export type DrawingToolType =
   | 'brush'
   | 'pencil'
@@ -201,12 +208,14 @@ export interface OnionSkinSettings {
 }
 
 export interface ActiveSelection {
-  type: 'rectangle' | 'ellipse' | 'lasso'
+  type: 'rectangle' | 'ellipse' | 'lasso' | 'polygon' | 'magic-wand' | 'character'
   bounds: { x: number; y: number; width: number; height: number } // normalized [0, 1]
   points?: StrokePoint[]
   maskDataUrl?: string
   inverted?: boolean
   feather?: number // px
+  fillMode?: 'outline' | 'filled'
+  characterName?: string
 }
 
 export interface DrawingStroke {
@@ -471,6 +480,21 @@ export type OmniframeOperationType =
   | 'blur'
   | 'sharpen'
   | 'isolate'
+
+export type OmniframeScopeType = 'all' | 'section' | 'frame'
+
+export interface OmniframeCharacter {
+  id: string
+  name: string
+  label: string
+  bounds: { x: number; y: number; width: number; height: number } // normalized [0, 1]
+  cutoutUrl: string
+  transform: ClipTransform
+  scope: OmniframeScopeType
+  sectionRange?: { start: number; end: number } // in seconds (e.g. 2.0s to 5.0s)
+  frameNumber?: number // for 1-frame scope (e.g. frame 90)
+  keyframeOffsets?: { frame: number; transform: ClipTransform }[]
+}
 
 export interface OmniframeOperation {
   id: string

@@ -47,6 +47,13 @@ export function Preview() {
   const monitorMode = useEditor((s) => s.monitorMode)
   const setSourcePreviewAsset = useEditor((s) => s.setSourcePreviewAsset)
   const projectFps = useEditor((s) => s.projectFps)
+  const leftTab = useEditor((s) => s.leftTab)
+  const leftOpen = useEditor((s) => s.leftOpen)
+  const playhead = useEditor((s) => s.playhead)
+  const omniframeCharacters = useEditor((s) => s.omniframeCharacters)
+  const selectedCharacterId = useEditor((s) => s.selectedCharacterId)
+  const setSelectedCharacterId = useEditor((s) => s.setSelectedCharacterId)
+  const evaluateCharacterTransformAtTime = useEditor((s) => s.evaluateCharacterTransformAtTime)
 
   // Active uploaded media asset if selected from media library in source monitor mode
   const previewAsset = assets.find((a) => a.id === sourcePreview.assetId)
@@ -343,6 +350,55 @@ export function Preview() {
             }}
           />
           <DrawingCanvasOverlay width={canvasW} height={canvasH} />
+
+          {/* OmniFrame Mode Character Overlays on Preview */}
+          {leftTab === 'omniframe' && leftOpen && (
+            <div
+              data-testid="omniframe-canvas-overlay"
+              className="absolute inset-0 pointer-events-auto select-none"
+            >
+              {omniframeCharacters.map((char) => {
+                const isSelected = char.id === selectedCharacterId
+                const evalTransform = evaluateCharacterTransformAtTime(char.id, playhead)
+                const leftPct = (char.bounds.x * 100).toFixed(2)
+                const topPct = (char.bounds.y * 100).toFixed(2)
+                const widthPct = (char.bounds.width * 100).toFixed(2)
+                const heightPct = (char.bounds.height * 100).toFixed(2)
+
+                return (
+                  <div
+                    key={char.id}
+                    data-testid={`canvas-character-box-${char.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedCharacterId(char.id)
+                    }}
+                    style={{
+                      position: 'absolute',
+                      left: `${leftPct}%`,
+                      top: `${topPct}%`,
+                      width: `${widthPct}%`,
+                      height: `${heightPct}%`,
+                      transform: `translate(${evalTransform.x}px, ${evalTransform.y}px) scale(${evalTransform.scale}) rotate(${evalTransform.rotation}deg)`,
+                      transformOrigin: 'center center',
+                    }}
+                    className={`cursor-pointer transition-all border-2 rounded-md ${
+                      isSelected
+                        ? 'border-brand bg-brand/15 shadow-lg ring-2 ring-brand/50'
+                        : 'border-white/30 hover:border-brand/70 hover:bg-white/5'
+                    }`}
+                  >
+                    {/* Badge */}
+                    <div className={`absolute -top-5 left-0 px-1.5 py-0.2 rounded text-[9px] font-semibold tracking-wide whitespace-nowrap shadow-sm pointer-events-none ${
+                      isSelected ? 'bg-brand text-white font-bold' : 'bg-ink-900/90 text-ink-300 border border-ink-700'
+                    }`}>
+                      {char.name}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
           {safe && (
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-[5%] border border-dashed border-white/40" />

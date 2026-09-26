@@ -1,0 +1,30 @@
+{
+  "omniframe_character_cards": {
+    "laplacian_variance_sharpness": 1883.48,
+    "contrast_std": 25.73,
+    "mean_brightness": 21.18,
+    "width": 272,
+    "height": 1040
+  },
+  "drawing_attach_picker_toggle": {
+    "laplacian_variance_sharpness": 2488.65,
+    "contrast_std": 25.43,
+    "mean_brightness": 21.71,
+    "width": 272,
+    "height": 1017
+  },
+  "mask_conversion_buttons": {
+    "laplacian_variance_sharpness": 3685.86,
+    "contrast_std": 29.2,
+    "mean_brightness": 28.16,
+    "width": 272,
+    "height": 816
+  },
+  "omniframe_full_verified_screenshot": {
+    "laplacian_variance_sharpness": 1391.73,
+    "contrast_std": 21.64,
+    "mean_brightness": 16.66,
+    "width": 1440,
+    "height": 900
+  }
+}

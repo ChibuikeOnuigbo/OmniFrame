@@ -72,3 +72,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-25T23:04:01+00:00 — Drawing Run #8: [VERIFIED] Platform Aspect Ratio Icons Instagram 3:4 Pinterest 2:3 and Dropdown Modernization — Researched standard social aspect ratios for 2026, implemented authentic platform icons across all presets with Instagram for 3:4 grid/feed, Pinterest for 2:3 pin, and verified all E2E tests
 
 - 2026-09-26T22:17:10+00:00 — Drawing Run #9: [PASS] Voice Isolation & Curve 3D Verification — Playwright E2E and OpenCV metrics verified for Graph Editor, Keyframing, and 3D Viewport
+
+- 2026-09-26T23:10:00+00:00 — Drawing Run #10: [PASS] OmniFrame Mode, Drawing Mode & Masking Conversions — Verified All Frames, Section, 1-frame scopes, Drawing Add to Video toggle, frame attach stepper, and Mask <-> Drawing <-> Selection conversions
