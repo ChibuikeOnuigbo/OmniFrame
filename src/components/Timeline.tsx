@@ -31,6 +31,7 @@ import {
   ArrowRight,
   Minimize2,
   Bookmark,
+  Type,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
@@ -38,6 +39,7 @@ import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { AudioMeter } from './AudioMeter'
+import { TimelineController, TrackModel } from '../lib/oop/TimelineController'
 
 const RULER_H = 28
 const HEADER_W = 168
@@ -102,11 +104,13 @@ function evaluateDragTarget(
     }
   }
 
+  const clips = useEditor.getState().clips
   let accY = 0
   for (let i = 0; i < tracks.length; i++) {
     const t = tracks[i]
     const trackTop = accY
-    const trackBottom = accY + t.height
+    const tHeight = new TrackModel(t).getEffectiveHeight(clips)
+    const trackBottom = accY + tHeight
 
     // Gap between tracks (boundary zone +/- 10px)
     if (i > 0 && Math.abs(relY - trackTop) <= 10) {
@@ -178,7 +182,7 @@ function PlayheadMarker({ px, handle = false }: { px: number; handle?: boolean }
     })
   }, [px])
   return (
-    <div ref={ref} className={`absolute left-0 top-0 bottom-0 w-0.5 pointer-events-none z-30 ${handle ? 'bg-red-500' : 'bg-red-500/80'}`}>
+    <div ref={ref} className={`absolute left-0 top-0 bottom-0 w-0.5 pointer-events-none z-25 ${handle ? 'bg-red-500' : 'bg-red-500/80'}`}>
       {handle && (
         <div className="absolute -top-1 -left-1.5 w-3.5 h-3.5 bg-red-500 rotate-45 shadow-[0_0_6px_rgba(239,68,68,0.8)]" />
       )}
@@ -202,6 +206,8 @@ function TrackHeader({
   const createTrack = useEditor((s) => s.createTrack)
   const deleteTrack = useEditor((s) => s.deleteTrack)
   const setTrackHeight = useEditor((s) => s.setTrackHeight)
+  const clips = useEditor((s) => s.clips)
+  const effectiveHeight = new TrackModel(track).getEffectiveHeight(clips)
   const [menuOpen, setMenuOpen] = useState(false)
   const btnRef = useRef<HTMLButtonElement>(null)
 
@@ -210,7 +216,7 @@ function TrackHeader({
       data-testid="track-header"
       data-track-id={track.id}
       className="shrink-0 flex items-center gap-1 px-2 border-b border-ink-800 bg-ink-850 relative group"
-      style={{ height: track.height }}
+      style={{ height: effectiveHeight }}
     >
       <span className="text-ink-500">
         {track.type === 'audio' ? <Music size={13} /> : <Video size={13} />}
@@ -367,7 +373,9 @@ function TransitionView({
   const track = tracks.find((t) => t.id === transition.trackId)
   if (!track || track.hidden) return null
 
-  const top = tracks.slice(0, tracks.indexOf(track)).reduce((a, t) => a + t.height, 0)
+  const clips = useEditor((s) => s.clips)
+  const trackHeight = new TrackModel(track).getEffectiveHeight(clips)
+  const top = tracks.slice(0, tracks.indexOf(track)).reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
   const left = transition.startTime * px
   const width = Math.max(20, transition.duration * px)
 
@@ -429,7 +437,7 @@ function TransitionView({
       ].join(' ')}
       style={{
         top: top + 4,
-        height: track.height - 8,
+        height: trackHeight - 8,
         left,
         width,
       }}
@@ -529,6 +537,7 @@ function ClipView({
   const left = clip.start * px
   const width = Math.max(6, clip.duration * px)
   const isAudio = clip.kind === 'audio'
+  const isText = clip.kind === 'text' || Boolean((clip as any).textStyle)
   const visibleWaveform = (() => {
     if (!isAudio || !asset?.waveform?.length) return []
     const sourceDuration = Math.max(asset.duration, 0.001)
@@ -556,17 +565,29 @@ function ClipView({
         'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
         tool === 'select' ? 'cursor-grab active:cursor-grabbing' : 'cursor-inherit',
         selected
-          ? 'border-2 border-brand ring-2 ring-brand/70 shadow-[0_0_14px_rgba(108,76,255,0.45)] z-10'
+          ? isText
+            ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
+            : isAudio
+            ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_14px_rgba(192,132,252,0.5)] z-10'
+            : 'border-2 border-brand ring-2 ring-brand/70 shadow-[0_0_14px_rgba(108,76,255,0.45)] z-10'
+          : isText
+          ? 'border border-amber-600/70 hover:border-amber-400 hover:shadow-md'
+          : isAudio
+          ? 'border border-purple-800/60 hover:border-purple-400 hover:shadow-md'
           : 'border border-ink-600 hover:border-violet-300 hover:shadow-md',
         clip.hidden
           ? 'opacity-40 border-dashed hover:opacity-65 hover:border-violet-300 hover:shadow-[0_0_12px_rgba(167,139,250,.5)]'
           : '',
-        isAudio ? 'bg-violet-950/60' : 'bg-brand/25',
+        isText
+          ? 'bg-amber-950/75 text-amber-100'
+          : isAudio
+          ? 'bg-violet-950/60 text-purple-200'
+          : 'bg-brand/25 text-ink-100',
       ].join(' ')}
       style={{ left, width }}
       title={clip.name}
     >
-      {!isAudio && (asset?.thumbnail || asset?.kind === 'image') && (
+      {!isAudio && !isText && (asset?.thumbnail || asset?.kind === 'image') && (
         <div
           data-testid="clip-filmstrip"
           className="pointer-events-none absolute inset-0 opacity-55"
@@ -577,6 +598,21 @@ function ClipView({
             backgroundSize: 'auto 100%',
           }}
         />
+      )}
+      {isText && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-90 px-2 overflow-hidden">
+          <span
+            className="truncate font-semibold tracking-wide text-center"
+            style={{
+              color: clip.textStyle?.color || '#fef08a',
+              fontFamily: clip.textStyle?.fontFamily || 'sans-serif',
+              fontSize: '11px',
+              textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+            }}
+          >
+            {clip.textStyle?.text || clip.name}
+          </span>
+        </div>
       )}
       {isAudio && visibleWaveform.length > 0 && (
         <div
@@ -598,11 +634,19 @@ function ClipView({
           ))}
         </div>
       )}
-      <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/35 border-b border-white/5 flex items-center gap-1">
-        {clip.hidden ? <EyeOff size={10} aria-label="Hidden clip" /> : isAudio ? <Music size={10} /> : <Video size={10} />}
+      <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/40 border-b border-white/5 flex items-center gap-1">
+        {clip.hidden ? (
+          <EyeOff size={10} aria-label="Hidden clip" />
+        ) : isText ? (
+          <Type size={10} className="text-amber-400" />
+        ) : isAudio ? (
+          <Music size={10} />
+        ) : (
+          <Video size={10} />
+        )}
         <span className="truncate">{clip.name}</span>
       </div>
-      {!isAudio && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}
+      {!isAudio && !isText && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}
 
       {/* trim handles */}
       <div
@@ -735,7 +779,7 @@ export function Timeline() {
   }, [toolMenuOpen, speedMenuOpen, contextMenu])
 
   const contentWidth = Math.max(duration, 20) * px + 80
-  const totalHeight = tracks.reduce((a, t) => a + t.height, 0)
+  const totalHeight = tracks.reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
   const hasVideo = clips.some((clip) => clip.kind === 'video' || clip.kind === 'image')
   const hasAudio = clips.some((clip) => clip.kind === 'audio')
   const mediaMode = hasVideo && hasAudio ? 'Video + Audio' : hasVideo ? 'Video' : hasAudio ? 'Audio' : 'Empty'
@@ -814,23 +858,62 @@ export function Timeline() {
     setPlayhead((clientX - rect.left) / px)
   }
 
-  // Active clip drag listeners with threshold-based click vs drag state machine
+  // Active clip drag listeners with threshold-based click vs drag state machine & auto-scroll
   const startClipDrag = (clip: Clip, e: React.PointerEvent) => {
     const lanes = lanesRef.current
     if (!lanes) return
     const startX = e.clientX
     const startY = e.clientY
     let hasMoved = false
+    let autoScrollRaf: number | null = null
+    let latestClientX = startX
+    let latestClientY = startY
+
+    const stepAutoScroll = () => {
+      const scrollEl = scrollRef.current
+      const lanesEl = lanesRef.current
+      if (hasMoved && scrollEl && lanesEl) {
+        const containerRect = scrollEl.getBoundingClientRect()
+        const auto = TimelineController.calculateAutoScroll(latestClientX, containerRect, HEADER_W)
+        if (auto.shouldScroll) {
+          scrollEl.scrollLeft += auto.deltaX
+
+          const lanesRect = lanesEl.getBoundingClientRect()
+          const candidateTime = Math.max(0, snapTime((latestClientX - lanesRect.left) / px))
+          const evaluatedTarget = evaluateDragTarget(latestClientY, lanesEl, tracks, clip.kind)
+
+          const updated: DragState = {
+            clipId: clip.id,
+            clipName: clip.name,
+            kind: clip.kind,
+            origStart: clip.start,
+            origDuration: clip.duration,
+            origTrackId: clip.trackId,
+            startX,
+            startY,
+            curTime: candidateTime,
+            target: evaluatedTarget,
+          }
+          dragRef.current = updated
+          setDragState(updated)
+        }
+      }
+      autoScrollRaf = requestAnimationFrame(stepAutoScroll)
+    }
+
+    autoScrollRaf = requestAnimationFrame(stepAutoScroll)
 
     const onPointerMove = (moveEv: PointerEvent) => {
+      latestClientX = moveEv.clientX
+      latestClientY = moveEv.clientY
       const dist = Math.hypot(moveEv.clientX - startX, moveEv.clientY - startY)
       if (!hasMoved) {
         if (dist < 5) return // Drag threshold: remain in click mode under 5px
         hasMoved = true
       }
 
-      const d = (moveEv.clientX - startX) / px
-      const candidateTime = Math.max(0, snapTime(clip.start + d))
+      const lanesRect = lanes.getBoundingClientRect()
+      const candidateTime = Math.max(0, snapTime((moveEv.clientX - lanesRect.left) / px))
       const evaluatedTarget = evaluateDragTarget(moveEv.clientY, lanes, tracks, clip.kind)
       const updated: DragState = {
         clipId: clip.id,
@@ -849,6 +932,10 @@ export function Timeline() {
     }
 
     const onPointerUp = () => {
+      if (autoScrollRaf !== null) {
+        cancelAnimationFrame(autoScrollRaf)
+        autoScrollRaf = null
+      }
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)
       window.removeEventListener('keydown', onKeyDown)
@@ -886,6 +973,10 @@ export function Timeline() {
 
     const onKeyDown = (keyEv: KeyboardEvent) => {
       if (keyEv.key === 'Escape') {
+        if (autoScrollRaf !== null) {
+          cancelAnimationFrame(autoScrollRaf)
+          autoScrollRaf = null
+        }
         window.removeEventListener('pointermove', onPointerMove)
         window.removeEventListener('pointerup', onPointerUp)
         window.removeEventListener('keydown', onKeyDown)
@@ -1168,7 +1259,7 @@ export function Timeline() {
       <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto relative">
         <div className="flex min-w-max relative">
           {/* left: track headers */}
-          <div className="w-[168px] shrink-0 sticky left-0 z-20 bg-ink-900 border-r border-ink-800">
+          <div className="w-[168px] shrink-0 sticky left-0 z-40 bg-ink-900 border-r border-ink-800 shadow-sm">
             <div className="h-[28px] border-b border-ink-800 bg-ink-900 flex items-center px-2">
               <span data-testid="timeline-media-mode" className="truncate text-[10px] font-medium text-ink-400">
                 {mediaMode}
@@ -1325,46 +1416,56 @@ export function Timeline() {
                 const rect = lanes.getBoundingClientRect()
                 const expectedType = asset.kind === 'audio' ? 'audio' : 'video'
                 const target = evaluateDragTarget(e.clientY, lanes, tracks, asset.kind)
-                const trackId =
-                  target.mode === 'dock' && target.trackId
-                    ? target.trackId
-                    : useEditor.getState().ensureTrack(expectedType)
+                let trackId: string
+                if (target.mode === 'above' && target.referenceTrackId) {
+                  trackId = useEditor.getState().createTrack(expectedType, 'above', target.referenceTrackId)
+                } else if (target.mode === 'below' && target.referenceTrackId) {
+                  trackId = useEditor.getState().createTrack(expectedType, 'below', target.referenceTrackId)
+                } else if (target.mode === 'dock' && target.trackId) {
+                  trackId = target.trackId
+                } else {
+                  trackId = useEditor.getState().ensureTrack(expectedType)
+                }
                 addClipToTrack(trackId, assetId, Math.max(0, (e.clientX - rect.left) / px))
               }}
             >
-              {tracks.map((tr) => (
-                <div
-                  key={tr.id}
-                  data-testid={`track-lane-${tr.id}`}
-                  className="relative border-b border-ink-800 bg-ink-900/40"
-                  style={{ height: tr.height }}
-                  onPointerDown={(e) => {
-                    if (e.target === e.currentTarget) seekFromClientX(e.clientX)
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    setContextMenu({
-                      type: 'empty-track',
-                      x: e.clientX,
-                      y: e.clientY,
-                      trackId: tr.id,
-                    })
-                  }}
-                >
-                  {/* subtle row striping for readability */}
-                  <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent,transparent_39px,rgba(255,255,255,0.02)_40px)] pointer-events-none" />
-                </div>
-              ))}
+              {tracks.map((tr) => {
+                const laneHeight = new TrackModel(tr).getEffectiveHeight(clips)
+                return (
+                  <div
+                    key={tr.id}
+                    data-testid={`track-lane-${tr.id}`}
+                    className="relative border-b border-ink-800 bg-ink-900/40"
+                    style={{ height: laneHeight }}
+                    onPointerDown={(e) => {
+                      if (e.target === e.currentTarget) seekFromClientX(e.clientX)
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setContextMenu({
+                        type: 'empty-track',
+                        x: e.clientX,
+                        y: e.clientY,
+                        trackId: tr.id,
+                      })
+                    }}
+                  >
+                    {/* subtle row striping for readability */}
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent,transparent_39px,rgba(255,255,255,0.02)_40px)] pointer-events-none" />
+                  </div>
+                )
+              })}
 
               {/* clips layer */}
               <div className="absolute inset-0 pointer-events-none">
                 {clips.map((c) => {
                   const tr = tracks.find((t) => t.id === c.trackId)
                   if (!tr) return null
-                  const top = tracks.slice(0, tracks.indexOf(tr)).reduce((a, t) => a + t.height, 0)
+                  const top = tracks.slice(0, tracks.indexOf(tr)).reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
+                  const laneHeight = new TrackModel(tr).getEffectiveHeight(clips)
                   return (
-                    <div key={c.id} className="absolute inset-x-0 pointer-events-none" style={{ top, height: tr.height }}>
+                    <div key={c.id} className="absolute inset-x-0 pointer-events-none" style={{ top, height: laneHeight }}>
                       <ClipView
                         clip={c}
                         asset={assets.find((asset) => asset.id === c.assetId)}
@@ -1441,7 +1542,7 @@ export function Timeline() {
               {dragState && (
                 <div
                   data-testid="timeline-drag-ghost"
-                  className="absolute rounded-md border-2 border-dashed border-violet-400 bg-violet-500/35 pointer-events-none z-30 flex items-center justify-between px-2 text-white font-mono text-[10px] shadow-2xl"
+                  className="absolute rounded-md border-2 border-dashed border-amber-400 bg-amber-500/35 pointer-events-none z-30 flex items-center justify-between px-2 text-amber-100 font-mono text-[10px] shadow-[0_0_16px_rgba(251,191,36,0.6)]"
                   style={{
                     left: dragState.curTime * px,
                     width: Math.max(10, dragState.origDuration * px),

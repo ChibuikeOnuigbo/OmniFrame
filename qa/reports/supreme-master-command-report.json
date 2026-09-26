@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-26T04:18:55.026Z",
-  "passed": 19,
+  "timestamp": "2026-09-26T05:07:08.985Z",
+  "passed": 16,
   "failed": 0,
-  "total": 19,
+  "total": 16,
   "results": [
     {
       "name": "01. Application Loaded",
@@ -63,21 +63,6 @@
       "name": "12. Camera Paint Toggle",
       "status": "PASS",
       "details": "Camera projection paint mode enabled"
-    },
-    {
-      "name": "13. Sequence Templates Modal Opened",
-      "status": "PASS",
-      "details": "Modal open with template gallery"
-    },
-    {
-      "name": "14. Template Slot Mapping",
-      "status": "PASS",
-      "details": "Inspected 4 designated media slots"
-    },
-    {
-      "name": "15. Apply Template to Project",
-      "status": "PASS",
-      "details": "Instantiated template tracks and clips"
     },
     {
       "name": "16. Drawing Subsystem Opened",

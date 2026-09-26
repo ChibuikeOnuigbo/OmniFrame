@@ -2,7 +2,7 @@
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed'
 
 export type TransitionType =
   | 'cross_dissolve'

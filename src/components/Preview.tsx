@@ -217,40 +217,6 @@ export function Preview() {
       onPointerCancel={() => { dragRef.current = null }}
       onDoubleClick={() => setPan({ x: 0, y: 0 })}
     >
-      {/* Top Left: Media Asset Ingestion / Preview Pill (Only active when previewing source media) */}
-      {isPreviewingAsset && (
-        <div className="absolute top-2 left-3 z-30 flex items-center gap-1.5 text-xs">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-ink-900/95 border border-brand/50 shadow-xl backdrop-blur-md">
-            <Film size={13} className="text-brand" />
-            <span className="font-medium text-ink-100 max-w-[140px] sm:max-w-xs truncate">
-              {previewAsset.name}
-            </span>
-            <span className="text-[10px] uppercase font-mono px-1 rounded bg-brand/20 text-brand">
-              {previewAsset.kind}
-            </span>
-            <button
-              type="button"
-              data-testid="add-preview-asset-timeline-btn"
-              title="Add this asset to timeline"
-              onClick={() => addAssetToTimeline(previewAsset)}
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-brand hover:bg-brand-600 text-white text-[10px] font-medium transition-colors ml-1"
-            >
-              <Plus size={11} />
-              <span className="hidden sm:inline">Add to Timeline</span>
-            </button>
-            <button
-              type="button"
-              data-testid="close-asset-preview-btn"
-              title="Return to Timeline Sequence"
-              onClick={() => setSourcePreviewAsset(null)}
-              className="p-1 rounded hover:bg-ink-800 text-ink-400 hover:text-white transition-colors"
-            >
-              <X size={13} />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Top Right: View & 3D Controls */}
       <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
         {/* 3D Orbit Viewer Toggle */}
@@ -352,52 +318,6 @@ export function Preview() {
               <p className="text-xs text-ink-400 mt-1">Audio Track · {formatTimecode(assetDuration, projectFps)}</p>
             </div>
           )}
-
-          {/* Floating Media Transport Bar for Asset Preview */}
-          <div
-            data-testid="asset-transport-bar"
-            className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-900/90 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200"
-          >
-            <button
-              type="button"
-              data-testid="asset-play-pause-btn"
-              onClick={toggleAssetPlay}
-              className="p-1 rounded hover:bg-ink-800 text-white"
-            >
-              {assetPlaying ? <Pause size={15} /> : <Play size={15} />}
-            </button>
-
-            <button
-              type="button"
-              data-testid="asset-rewind-btn"
-              onClick={() => handleAssetSeek(0)}
-              className="p-1 rounded hover:bg-ink-800 text-ink-400 hover:text-white"
-            >
-              <RotateCcw size={13} />
-            </button>
-
-            <span className="font-mono text-[10px] text-ink-400 min-w-[50px]">
-              {formatTimecode(assetCurrentTime, projectFps)} / {formatTimecode(assetDuration, projectFps)}
-            </span>
-
-            <input
-              type="range"
-              min={0}
-              max={assetDuration || 1}
-              step={0.05}
-              value={assetCurrentTime}
-              onChange={(e) => handleAssetSeek(parseFloat(e.target.value))}
-              className="of-range w-24 sm:w-36"
-            />
-
-            <button
-              type="button"
-              onClick={() => setAssetMuted(!assetMuted)}
-              className="p-1 rounded hover:bg-ink-800 text-ink-400 hover:text-white"
-            >
-              {assetMuted ? <VolumeX size={14} className="text-red-400" /> : <Volume2 size={14} />}
-            </button>
-          </div>
         </div>
       ) : (
         /* Unified Timeline Sequence Canvas Viewport */
@@ -431,6 +351,86 @@ export function Preview() {
               backgroundSize: '10% 10%',
             }} />
           )}
+        </div>
+      )}
+
+      {/* Source Media Details Banner (Bottom Left, resized and part of preview) */}
+      {isPreviewingAsset && (
+        <div
+          data-testid="preview-asset-detail"
+          className="absolute bottom-16 left-4 z-30 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-950/90 border border-ink-700/80 shadow-xl text-xs backdrop-blur-xs animate-in fade-in duration-100"
+        >
+          <Film size={14} className="text-brand shrink-0" />
+          <span className="font-medium text-ink-100 max-w-[180px] sm:max-w-xs truncate">
+            {previewAsset.name}
+          </span>
+          <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-brand/20 text-brand font-semibold">
+            {previewAsset.kind}
+          </span>
+          <button
+            type="button"
+            data-testid="close-asset-preview-btn"
+            title="Return to Timeline Sequence"
+            aria-label="Return to timeline sequence"
+            onClick={() => setSourcePreviewAsset(null)}
+            className="p-1 rounded-md hover:bg-ink-800 text-ink-400 hover:text-white transition-colors ml-1"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {/* Expanded, High-Contrast Media Transport Bar for Asset Preview */}
+      {isPreviewingAsset && (
+        <div
+          data-testid="asset-transport-bar"
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-32px)] max-w-3xl h-11 flex items-center gap-2.5 px-4 rounded-xl bg-ink-950/95 border border-ink-700/80 shadow-2xl text-xs text-ink-200 backdrop-blur-xs animate-in fade-in duration-100"
+        >
+          <button
+            type="button"
+            data-testid="asset-play-pause-btn"
+            onClick={toggleAssetPlay}
+            aria-label={assetPlaying ? 'Pause asset playback' : 'Play asset'}
+            className="h-8 w-8 rounded-lg bg-brand/20 hover:bg-brand/30 border border-brand/40 text-brand flex items-center justify-center transition-colors shrink-0"
+          >
+            {assetPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+          </button>
+
+          <button
+            type="button"
+            data-testid="asset-rewind-btn"
+            onClick={() => handleAssetSeek(0)}
+            aria-label="Rewind asset to start"
+            className="h-8 w-8 rounded-lg bg-ink-850 hover:bg-ink-800 border border-ink-750 text-ink-300 hover:text-white flex items-center justify-center transition-colors shrink-0"
+            title="Rewind to start"
+          >
+            <RotateCcw size={14} />
+          </button>
+
+          <span className="font-mono text-xs text-ink-300 tabular-nums shrink-0 select-none">
+            {formatTimecode(assetCurrentTime, projectFps)} / {formatTimecode(assetDuration, projectFps)}
+          </span>
+
+          <input
+            type="range"
+            min={0}
+            max={assetDuration || 1}
+            step={0.05}
+            value={assetCurrentTime}
+            onChange={(e) => handleAssetSeek(parseFloat(e.target.value))}
+            className="of-range flex-1 min-w-[80px]"
+            aria-label="Seek source media"
+          />
+
+          <button
+            type="button"
+            onClick={() => setAssetMuted(!assetMuted)}
+            aria-label={assetMuted ? 'Unmute asset audio' : 'Mute asset audio'}
+            className="h-8 w-8 rounded-lg bg-ink-850 hover:bg-ink-800 border border-ink-750 text-ink-300 hover:text-white flex items-center justify-center transition-colors shrink-0"
+            title={assetMuted ? 'Unmute' : 'Mute'}
+          >
+            {assetMuted ? <VolumeX size={15} className="text-red-400" /> : <Volume2 size={15} />}
+          </button>
         </div>
       )}
 

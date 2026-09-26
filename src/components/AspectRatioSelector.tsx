@@ -349,7 +349,7 @@ export function AspectRatioSelector() {
         <div
           role="tooltip"
           data-testid="ratio-platform-tooltip"
-          className="absolute bottom-full right-0 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink-900/95 border border-ink-700 shadow-xl backdrop-blur-md text-[11px] text-ink-200 z-50 pointer-events-none whitespace-nowrap animate-in fade-in duration-100"
+          className="absolute bottom-full right-0 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink-950 border border-ink-700 shadow-xl text-[11px] text-ink-200 z-50 pointer-events-none whitespace-nowrap animate-in fade-in duration-100"
         >
           <div className="font-semibold text-white flex items-center gap-1.5">
             <span>{currentPreset.label}</span>
@@ -381,7 +381,7 @@ export function AspectRatioSelector() {
         onMouseLeave={() => setTooltipVisible(false)}
         onFocus={() => setTooltipVisible(true)}
         onBlur={() => setTooltipVisible(false)}
-        className="flex items-center gap-2 h-7 px-2.5 rounded-md bg-ink-900/90 hover:bg-ink-800 border border-ink-700/80 hover:border-ink-600 text-ink-200 hover:text-white shadow-lg backdrop-blur-md transition-all text-xs font-medium"
+        className="flex items-center gap-2 h-7 px-2.5 rounded-md bg-ink-950 hover:bg-ink-900 border border-ink-750 hover:border-ink-600 text-ink-200 hover:text-white shadow-lg transition-all text-xs font-medium"
       >
         {renderRepresentativeIcon()}
         <span className="font-mono text-[11px] font-semibold tracking-tight">
@@ -399,9 +399,9 @@ export function AspectRatioSelector() {
           role="dialog"
           aria-label="Aspect Ratio Presets"
           data-testid="ratio-popover"
-          className="absolute bottom-full right-0 mb-2 w-72 max-h-[460px] overflow-y-auto rounded-xl bg-ink-900/98 border border-ink-700 shadow-2xl backdrop-blur-xl p-2 z-50 text-xs text-ink-200 animate-in fade-in zoom-in-95 duration-150"
+          className="absolute bottom-full right-0 mb-2 w-72 max-h-72 overflow-y-auto rounded-xl bg-ink-950 border border-ink-750 shadow-2xl p-1.5 z-50 text-xs text-ink-200 animate-in fade-in zoom-in-95 duration-150"
         >
-          <div className="flex items-center justify-between px-2 py-1 border-b border-ink-800 mb-1.5">
+          <div className="flex items-center justify-between px-2 py-1 border-b border-ink-800 mb-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">
               Sequence Aspect Ratio
             </span>
@@ -420,29 +420,29 @@ export function AspectRatioSelector() {
                   type="button"
                   data-testid={`ratio-preset-${preset.id}`}
                   onClick={() => handleSelectPreset(preset.id)}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors text-left ${
+                  className={`w-full flex items-center justify-between px-2 py-1 rounded-md transition-colors text-left ${
                     active
                       ? 'bg-brand/20 text-brand font-medium'
-                      : 'hover:bg-ink-800 text-ink-300 hover:text-white'
+                      : 'hover:bg-ink-850 text-ink-300 hover:text-white'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                  <div className="flex items-center gap-2 min-w-0 pr-1.5">
                     <div className="flex items-center justify-center w-6 h-5 shrink-0">
                       {renderPresetIcon(preset.id)}
                     </div>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-1.5 font-medium">
+                      <div className="flex items-center gap-1.5 font-medium leading-tight">
                         <span>{preset.label}</span>
-                        <span className="text-[10px] font-mono text-ink-500">
+                        <span className="text-[9px] font-mono text-ink-500">
                           ({preset.width} × {preset.height})
                         </span>
                       </div>
-                      <div className="text-[10px] text-ink-500 truncate">
+                      <div className="text-[9px] text-ink-500 truncate leading-tight">
                         {preset.platforms.slice(0, 3).join(' · ')}
                       </div>
                     </div>
                   </div>
-                  {active && <Check size={14} className="shrink-0 text-brand" />}
+                  {active && <Check size={13} className="shrink-0 text-brand" />}
                 </button>
               )
             })}

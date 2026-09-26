@@ -13,7 +13,6 @@ import {
   Maximize,
   X,
   Sliders,
-  LayoutTemplate,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
@@ -23,7 +22,6 @@ import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProv
 import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
 import { LayoutManagerModal } from './LayoutManagerModal'
-import { TemplatePickerModal } from './TemplatePickerModal'
 
 export function TopBar() {
   const undo = useEditor((s) => s.undo)
@@ -49,7 +47,6 @@ export function TopBar() {
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [templatesModalOpen, setTemplatesModalOpen] = useState(false)
   const [layoutOpen, setLayoutOpen] = useState(false)
   const [layoutModalOpen, setLayoutModalOpen] = useState(false)
   const layoutRef = useRef<HTMLDivElement>(null)
@@ -281,18 +278,6 @@ export function TopBar() {
 
       <button
         type="button"
-        data-testid="templates-button"
-        title="Sequence Templates"
-        aria-label="Sequence Templates"
-        onClick={() => setTemplatesModalOpen(true)}
-        className="flex items-center gap-1.5 h-8 px-2.5 rounded-md border border-ink-700 bg-ink-800 text-ink-300 text-xs font-medium hover:bg-ink-700 hover:text-white transition-colors"
-      >
-        <LayoutTemplate size={14} className="text-brand" />
-        <span className="hidden sm:inline">Templates</span>
-      </button>
-
-      <button
-        type="button"
         data-testid="settings-button"
         title="Settings"
         aria-label="Settings"
@@ -361,7 +346,6 @@ export function TopBar() {
       )}
 
       <LayoutManagerModal isOpen={layoutModalOpen} onClose={() => setLayoutModalOpen(false)} />
-      <TemplatePickerModal isOpen={templatesModalOpen} onClose={() => setTemplatesModalOpen(false)} />
     </header>
   )
 }

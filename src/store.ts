@@ -36,6 +36,7 @@ import type {
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
+import { TimelineController } from './lib/oop/TimelineController'
 
 export type Tool = 'select' | 'blade'
 export type PreviewQuality = 'low' | 'medium' | 'high'
@@ -629,14 +630,7 @@ export const useEditor = create<EditorState>((set, get) => {
 
     cleanupEmptyTracks: () => {
       set((s) => {
-        const baseVideoId = s.tracks.find((t) => t.type === 'video')?.id
-        const baseAudioId = s.tracks.find((t) => t.type === 'audio')?.id
-        const occupiedTrackIds = new Set(s.clips.map((c) => c.trackId))
-        const remainingTracks = s.tracks.filter((t) => {
-          if (t.id === baseVideoId || t.id === baseAudioId) return true
-          if (occupiedTrackIds.has(t.id) || t.locked) return true
-          return false
-        })
+        const remainingTracks = TimelineController.purgeEmptyTracks(s.tracks, s.clips)
         if (remainingTracks.length === s.tracks.length) return {}
         return { tracks: remainingTracks }
       })
@@ -652,21 +646,41 @@ export const useEditor = create<EditorState>((set, get) => {
 
     addTextTitleClip: (text = 'Title', duration = 4.0) => {
       pushSnapshot()
-      const trackId = get().ensureTrack('video')
-      const trackEnd = get().clips
-        .filter((c) => c.trackId === trackId)
-        .reduce((end, c) => Math.max(end, c.start + c.duration), 0)
+      const existingVideoTracks = get().tracks.filter((t) => t.type === 'video')
+      const baseTrackId = existingVideoTracks[0]?.id || get().ensureTrack('video')
+      const start = Math.max(0, get().playhead)
+
+      // If base track already has a clip overlapping at playhead, overlay on a separate track
+      let targetTrackId = baseTrackId
+      const hasBaseOverlap = get().clips.some(
+        (c) => c.trackId === baseTrackId && !(c.start + c.duration <= start || c.start >= start + duration),
+      )
+
+      if (hasBaseOverlap) {
+        const availableTrack = existingVideoTracks.find(
+          (t) =>
+            t.id !== baseTrackId &&
+            !get().clips.some(
+              (c) => c.trackId === t.id && !(c.start + c.duration <= start || c.start >= start + duration),
+            ),
+        )
+        if (availableTrack) {
+          targetTrackId = availableTrack.id
+        } else {
+          targetTrackId = get().createTrack('video', 'above', baseTrackId)
+        }
+      }
 
       const clipId = uid('text')
       const clip: Clip = {
         id: clipId,
-        trackId,
+        trackId: targetTrackId,
         assetId: 'text-asset',
-        start: trackEnd,
+        start,
         duration,
         inPoint: 0,
         name: text,
-        kind: 'image',
+        kind: 'text',
         volume: 1,
         hidden: false,
         transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
@@ -843,10 +857,7 @@ export const useEditor = create<EditorState>((set, get) => {
       if (track.type !== expectedType) return
       pushSnapshot()
 
-      const trackEnd = get().clips
-        .filter((c) => c.trackId === trackId)
-        .reduce((end, c) => Math.max(end, c.start + c.duration), 0)
-      const start = Math.max(0, atTime ?? trackEnd)
+      const start = Math.max(0, atTime ?? get().playhead)
       const duration = asset.kind === 'image' ? 5 : asset.duration || 5
       const clip: Clip = {
         id: uid('clip'),
@@ -1798,14 +1809,35 @@ async function captureVideoThumbnail(video: HTMLVideoElement): Promise<string | 
       video.onerror = () => resolve()
       setTimeout(resolve, 1500)
     })
-    if (!video.videoWidth || !video.videoHeight) return undefined
+    const vw = video.videoWidth || 160
+    const vh = video.videoHeight || 90
+    if (!vw || !vh) return undefined
+
     const canvas = document.createElement('canvas')
     canvas.width = 160
     canvas.height = 90
     const ctx = canvas.getContext('2d')
     if (!ctx) return undefined
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-    return canvas.toDataURL('image/jpeg', 0.68)
+
+    // Dark solid letterbox background
+    ctx.fillStyle = '#0b0f19'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // Calculate aspect-ratio-preserving contain dimensions
+    const videoAspect = vw / vh
+    const canvasAspect = canvas.width / canvas.height
+    let dw = canvas.width
+    let dh = canvas.height
+    if (videoAspect > canvasAspect) {
+      dh = canvas.width / videoAspect
+    } else {
+      dw = canvas.height * videoAspect
+    }
+    const dx = (canvas.width - dw) / 2
+    const dy = (canvas.height - dh) / 2
+
+    ctx.drawImage(video, dx, dy, dw, dh)
+    return canvas.toDataURL('image/jpeg', 0.85)
   } catch {
     return undefined
   }

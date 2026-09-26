@@ -55,6 +55,10 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-049 | `evidence/test_edit_composite.png` | 1280x720 | YouTube Reference Test Edit | Synthetic test edit composite visualizing kinetic typography with cyan glow, "3D in 2D" perspective plane with drop shadow, and neon cel drawing accents. |
 | SS-050 | `evidence/screenshots/mobile-drawing-toolbar-responsive.png` | 390x844 | Mobile Drawing Toolbar | Mobile iPhone viewport (390x844) demonstrating responsive floating drawing toolbar with 374px bounded width, horizontal tool scrolling, compact titles, and zero page overflow. |
 | SS-051 | `evidence/screenshots/blender-rotation-full.png` | 1440x900 | Blender Rotation Gizmo Verification | Full studio desktop viewport demonstrating Blender 3-axis rotation gizmo icons integrated in RightPanel Clip Inspector and ThreePanel Camera Controls Guide. |
+| SS-052 | `evidence/screenshots/source-preview-fullscreen-bar.png` | 1440x900 | Source Preview & Transport | Dedicated Source Preview mode showing clean bottom-left details pill without '+ Add to Timeline' button and expanded full-width transport bar with enlarged touch targets. |
+| SS-053 | `evidence/screenshots/media-specs-modal-verified.png` | 1440x900 | Media Library Technical Specs | Technical file metadata dialog launched from 3-dot button showing filename, format, duration, resolution, size, and decoder pipeline. |
+| SS-054 | `evidence/screenshots/source-preview-oop-tracks-verified.png` | 1440x900 | OOP Timeline Architecture | Full studio desktop demonstrating CapCut-style 40% reduced text track (38px), text insertion at playhead, and sticky track headers with z-index above playhead. |
+
 
 
 
