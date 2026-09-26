@@ -382,6 +382,12 @@ export default function Studio() {
         const element = event.target as HTMLElement
         // Preserve native editing commands for genuine editable fields.
         if (element.closest('input, textarea, [contenteditable="true"]')) return
+        // Do not open context menu when right-clicking in 3D viewport or Graph Editor canvas (used for camera/viewport panning)
+        if (element.closest('[data-testid="three-canvas-wrapper"], [data-testid="graph-svg-canvas"]')) {
+          event.preventDefault()
+          event.stopPropagation()
+          return
+        }
         event.preventDefault()
         event.stopPropagation()
         // An open popup owns its interaction; never cover it with a parent menu.
@@ -509,7 +515,7 @@ export default function Studio() {
                       data-testid={`ctx-submenu-${command.id}`}
                       className="absolute left-full top-0 ml-1.5 w-56 rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.5)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95 duration-100"
                     >
-                      {command.submenu.map((subItem) => {
+                      {command.submenu?.map((subItem) => {
                         const SubIcon = subItem.icon
                         return (
                           <button
@@ -541,7 +547,7 @@ export default function Studio() {
                 role="menuitem"
                 autoFocus={index === 0}
                 onClick={() => {
-                  command.run()
+                  command.run?.()
                   setContextMenu(null)
                   setActiveSubmenuId(null)
                 }}

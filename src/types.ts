@@ -73,6 +73,12 @@ export interface ClipTransform {
   scale: number
   rotation: number // degrees
   opacity: number // 0..1
+  z?: number
+  rotationX?: number
+  rotationY?: number
+  scaleX?: number
+  scaleY?: number
+  scaleZ?: number
 }
 
 export interface ClipEffect {
@@ -88,13 +94,15 @@ export interface ClipEffect {
 
 export interface TextTitleStyle {
   text: string
-  fontSize: number
-  color: string
-  backgroundColor: string
-  fontFamily: string
+  fontSize?: number
+  color?: string
+  backgroundColor?: string
+  fontFamily?: string
   bold?: boolean
   italic?: boolean
 }
+
+export type TextStyle = TextTitleStyle
 
 // ---- Aspect Ratio & Sequence Settings ----
 export type AspectRatioType =
@@ -213,7 +221,7 @@ export interface DrawingStroke {
   fillTolerance?: number // threshold 1..100 for flood fill
   preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
   maskDataUrl?: string // raster patch for flood fill
-  cloneSource?: { x: number; y: number } // normalized source anchor for clone stamp
+  cloneSource?: { x: number; y: number; sampleDataUrl?: string } // normalized source anchor for clone stamp
 }
 
 export interface PaintLayer {
@@ -257,6 +265,24 @@ export interface Clip {
   transform: ClipTransform
   effects?: ClipEffect
   textStyle?: TextTitleStyle
+  animation?: import('./lib/animation/CurveEngine').ClipAnimation
+}
+
+// ---- 3D Scene Architecture & Blender Modes ----
+export type BlenderMode = 'object' | 'camera' | 'texturing' | 'animation'
+export type Primitive3D = 'wheel' | 'cube' | 'sphere' | 'torus' | 'diamond' | 'plane'
+
+export interface Scene3DObject {
+  id: string
+  name: string
+  type: Primitive3D
+  position: { x: number; y: number; z: number }
+  rotation: { x: number; y: number; z: number }
+  scale: { x: number; y: number; z: number }
+  color: string
+  wireframe?: boolean
+  materialId?: string
+  animation?: import('./lib/animation/CurveEngine').ClipAnimation
 }
 
 export interface ProjectSettings {
@@ -282,6 +308,7 @@ export interface LinkSet {
   memberIds: string[] // Clip IDs
   rules: Record<LinkRuleType, boolean>
   propertyLinks?: Record<string, string> // e.g. { 'effects.blur': 'effects.blur' }
+  createdAt?: number
 }
 
 export interface ParentRelationship {
@@ -308,23 +335,28 @@ export type TextureMapType = 'baseColor' | 'normal' | 'roughness' | 'metallic' |
 export interface TextureAsset {
   id: string
   name: string
-  url: string
+  url?: string
   width: number
   height: number
-  mapType: TextureMapType
-  sharedAssetIds: string[] // 3D models or objects sharing this texture
+  mapType?: TextureMapType
+  sharedAssetIds?: string[] // 3D models or objects sharing this texture
+  usersCount?: number
+  colorSpace?: string
 }
 
 export interface MaterialInstance {
   id: string
   name: string
   textureId?: string
+  color?: string
   normalMapId?: string
   roughnessMapId?: string
-  roughness: number
-  metallic: number
-  emission: string
-  opacity: number
+  roughness?: number
+  metalness?: number
+  metallic?: number
+  emission?: string
+  opacity?: number
+  usersCount?: number
 }
 
 export type CameraPaintMode = 'CAMERA_LOCKED' | 'SURFACE_PROJECTED' | 'WORLD_ANCHORED' | 'TEXTURE_BAKED'
@@ -392,7 +424,27 @@ export interface TrackingSession {
 }
 
 // ---- Background Removal Multi-Model Subsystem ----
-export type BgRemovalModelId = 'birefnet-lite-512' | 'modnet' | 'isnet-onnx' | 'slimsam-77'
+export type BgRemovalModelId =
+  | 'birefnet-general'
+  | 'modnet-photographic'
+  | 'isnet-anime'
+  | 'slimsam-fast'
+  | 'birefnet-lite-512'
+  | 'modnet'
+  | 'isnet-onnx'
+  | 'slimsam-77'
+
+export interface BgRemovalOptions {
+  modelId: BgRemovalModelId
+  mode?: 'transparent' | 'solid' | 'blur'
+  solidColor?: string
+  blurRadius?: number
+  chokeExpand?: number
+  featherRadius?: number
+  edgeFeather?: number
+  threshold?: number
+  temporalSmoothing?: boolean
+}
 
 export interface BgRemovalJob {
   id: string

@@ -32,12 +32,14 @@ import {
   Minimize2,
   Bookmark,
   Type,
+  Activity,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
+import { GraphEditor } from './GraphEditor'
 import { AudioMeter } from './AudioMeter'
 import { TimelineController, TrackModel } from '../lib/oop/TimelineController'
 
@@ -694,6 +696,8 @@ export function Timeline() {
   const addClipToTrack = useEditor((s) => s.addClipToTrack)
   const moveClip = useEditor((s) => s.moveClip)
   const moveClipToNewTrack = useEditor((s) => s.moveClipToNewTrack)
+  const createTrack = useEditor((s) => s.createTrack)
+  const deleteTrack = useEditor((s) => s.deleteTrack)
   const addTransition = useEditor((s) => s.addTransition)
   const updateTransition = useEditor((s) => s.updateTransition)
   const removeTransition = useEditor((s) => s.removeTransition)
@@ -708,6 +712,8 @@ export function Timeline() {
   const markers = useEditor((s) => s.markers)
   const addMarker = useEditor((s) => s.addMarker)
   const setActiveMarkerModalId = useEditor((s) => s.setActiveMarkerModalId)
+  const graphEditorOpen = useEditor((s) => s.graphEditorOpen)
+  const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
 
   const handleAddMarker = () => {
     const playheadTime = useEditor.getState().playhead
@@ -1167,6 +1173,21 @@ export function Timeline() {
           <Magnet size={15} />
           <span className="hidden xl:inline">Snap</span>
         </button>
+        <button
+          type="button"
+          data-testid="toggle-graph-editor-btn"
+          title={`Graph Editor / Curves (${graphEditorOpen ? 'Active' : 'Hidden'})`}
+          aria-pressed={graphEditorOpen}
+          onClick={() => setGraphEditorOpen(!graphEditorOpen)}
+          className={`flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs transition-colors ${
+            graphEditorOpen
+              ? 'border-brand/60 bg-brand/20 text-white font-medium shadow-xs'
+              : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
+          }`}
+        >
+          <Activity size={15} className={graphEditorOpen ? 'text-brand' : ''} />
+          <span className="hidden xl:inline">Curves</span>
+        </button>
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
           {px.toFixed(0)} px/s{frameMode ? ' · frame' : ''}
         </span>
@@ -1256,7 +1277,10 @@ export function Timeline() {
       )}
 
       {/* body */}
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto relative">
+      {graphEditorOpen ? (
+        <GraphEditor />
+      ) : (
+        <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto relative">
         <div className="flex min-w-max relative">
           {/* left: track headers */}
           <div className="w-[168px] shrink-0 sticky left-0 z-40 bg-ink-900 border-r border-ink-800 shadow-sm">
@@ -1561,6 +1585,7 @@ export function Timeline() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Centralized Target-Aware Context Menu */}
       {contextMenu && (

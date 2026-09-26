@@ -32,12 +32,29 @@ import type {
   TextureAsset,
   MaterialInstance,
   BgRemovalJob,
+  BlenderMode,
+  Primitive3D,
+  Scene3DObject,
 } from './types'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
 import { TimelineController } from './lib/oop/TimelineController'
 import type { VoiceIsolationModel } from './lib/voiceIsolation'
+import {
+  InterpolationType,
+  ExtrapolationMode,
+  TangentHandleMode,
+  KeyframeNode,
+  PropertyCurve,
+  ClipAnimation,
+  createDefaultClipAnimation,
+  addOrUpdateKeyframe,
+  removeKeyframe,
+  applyEasingPreset,
+  evaluateCurve,
+  evaluateClipAnimation,
+} from './lib/animation/CurveEngine'
 
 export type Tool = 'select' | 'blade'
 export type PreviewQuality = 'low' | 'medium' | 'high'
@@ -306,8 +323,32 @@ export interface EditorState {
   setMasterMuted: (muted: boolean) => void
 
   // ---- clone stamp ----
-  cloneSourcePoint: { x: number; y: number } | null
-  setCloneSourcePoint: (pt: { x: number; y: number } | null) => void
+  cloneSourcePoint: { x: number; y: number; sampleDataUrl?: string } | null
+  setCloneSourcePoint: (pt: { x: number; y: number; sampleDataUrl?: string } | null) => void
+
+  // ---- 3D Scene Architecture & Blender Modes ----
+  is3DMode: boolean
+  setIs3DMode: (active: boolean) => void
+  activeBlenderMode: BlenderMode
+  setActiveBlenderMode: (mode: BlenderMode) => void
+  scene3DObjects: Scene3DObject[]
+  selected3DObjectId: string | null
+  setSelected3DObjectId: (id: string | null) => void
+  addScene3DObject: (object: Scene3DObject) => void
+  updateScene3DObject: (id: string, updates: Partial<Scene3DObject>) => void
+  removeScene3DObject: (id: string) => void
+
+  // ---- Graph Editor & Keyframing System ----
+  graphEditorOpen: boolean
+  setGraphEditorOpen: (open: boolean) => void
+  graphEditorMode: 'value' | 'speed'
+  setGraphEditorMode: (mode: 'value' | 'speed') => void
+  activeCurveProperty: string
+  setActiveCurveProperty: (propId: string) => void
+  setClipKeyframe: (clipId: string, propertyId: string, time: number, value: number, interpolation?: InterpolationType) => void
+  removeClipKeyframe: (clipId: string, propertyId: string, keyframeId: string) => void
+  updateClipKeyframe: (clipId: string, propertyId: string, keyframeId: string, updates: Partial<KeyframeNode>) => void
+  setCurveExtrapolation: (clipId: string, propertyId: string, before: ExtrapolationMode, after: ExtrapolationMode) => void
 
   // ---- project ----
   newProject: () => void
@@ -456,6 +497,150 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- background removal initial state ----
     activeBgRemovalJob: null,
+
+    // ---- 3D scene & Blender modes initial state ----
+    is3DMode: false,
+    setIs3DMode: (active) => set({ is3DMode: active }),
+    activeBlenderMode: 'object',
+    setActiveBlenderMode: (mode) => set({ activeBlenderMode: mode }),
+    scene3DObjects: [
+      {
+        id: '3d-wheel-1',
+        name: '3D Wheel',
+        type: 'wheel',
+        position: { x: 2.5, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: { x: 1, y: 1, z: 1 },
+        color: '#8b5cf6',
+        wireframe: false,
+      },
+    ],
+    selected3DObjectId: '3d-wheel-1',
+    setSelected3DObjectId: (id) => set({ selected3DObjectId: id }),
+    addScene3DObject: (obj) => {
+      pushSnapshot()
+      set((s) => ({ scene3DObjects: [...s.scene3DObjects, obj], selected3DObjectId: obj.id }))
+    },
+    updateScene3DObject: (id, updates) => {
+      set((s) => ({
+        scene3DObjects: s.scene3DObjects.map((o) => (o.id === id ? { ...o, ...updates } : o)),
+      }))
+    },
+    removeScene3DObject: (id) => {
+      pushSnapshot()
+      set((s) => ({
+        scene3DObjects: s.scene3DObjects.filter((o) => o.id !== id),
+        selected3DObjectId: s.selected3DObjectId === id ? (s.scene3DObjects[0]?.id || null) : s.selected3DObjectId,
+      }))
+    },
+
+    // ---- Graph Editor & Keyframing System ----
+    graphEditorOpen: false,
+    setGraphEditorOpen: (open) => set({ graphEditorOpen: open }),
+    graphEditorMode: 'value',
+    setGraphEditorMode: (mode) => set({ graphEditorMode: mode }),
+    activeCurveProperty: 'rotation_z',
+    setActiveCurveProperty: (propId) => set({ activeCurveProperty: propId }),
+
+    setClipKeyframe: (clipId, propertyId, time, value, interpolation = 'bezier') => {
+      pushSnapshot()
+      set((s) => {
+        const clips = s.clips.map((clip) => {
+          if (clip.id !== clipId) return clip
+          const anim = clip.animation || createDefaultClipAnimation(clip.transform, clip.duration)
+          const curve = anim.curves[propertyId] || {
+            id: propertyId,
+            property: propertyId,
+            channel: 'Scalar',
+            label: propertyId,
+            color: '#38bdf8',
+            defaultValue: value,
+            keyframes: [],
+            extrapolationBefore: 'constant',
+            extrapolationAfter: 'constant',
+          }
+          const { curve: updatedCurve } = addOrUpdateKeyframe(curve, time, value, interpolation)
+          return {
+            ...clip,
+            animation: {
+              ...anim,
+              curves: {
+                ...anim.curves,
+                [propertyId]: updatedCurve,
+              },
+            },
+          }
+        })
+        return { clips }
+      })
+    },
+
+    removeClipKeyframe: (clipId, propertyId, keyframeId) => {
+      pushSnapshot()
+      set((s) => {
+        const clips = s.clips.map((clip) => {
+          if (clip.id !== clipId || !clip.animation) return clip
+          const curve = clip.animation.curves[propertyId]
+          if (!curve) return clip
+          const updatedCurve = removeKeyframe(curve, keyframeId)
+          return {
+            ...clip,
+            animation: {
+              ...clip.animation,
+              curves: {
+                ...clip.animation.curves,
+                [propertyId]: updatedCurve,
+              },
+            },
+          }
+        })
+        return { clips }
+      })
+    },
+
+    updateClipKeyframe: (clipId, propertyId, keyframeId, updates) => {
+      set((s) => {
+        const clips = s.clips.map((clip) => {
+          if (clip.id !== clipId || !clip.animation) return clip
+          const curve = clip.animation.curves[propertyId]
+          if (!curve) return clip
+          const keys = curve.keyframes.map((k) => (k.id === keyframeId ? { ...k, ...updates } : k))
+          keys.sort((a, b) => a.time - b.time)
+          return {
+            ...clip,
+            animation: {
+              ...clip.animation,
+              curves: {
+                ...clip.animation.curves,
+                [propertyId]: { ...curve, keyframes: keys },
+              },
+            },
+          }
+        })
+        return { clips }
+      })
+    },
+
+    setCurveExtrapolation: (clipId, propertyId, before, after) => {
+      set((s) => {
+        const clips = s.clips.map((clip) => {
+          if (clip.id !== clipId || !clip.animation) return clip
+          const curve = clip.animation.curves[propertyId]
+          if (!curve) return clip
+          return {
+            ...clip,
+            animation: {
+              ...clip.animation,
+              curves: {
+                ...clip.animation.curves,
+                [propertyId]: { ...curve, extrapolationBefore: before, extrapolationAfter: after },
+              },
+            },
+          }
+        })
+        return { clips }
+      })
+    },
 
     // ---- sequence & aspect ratio state ----
     sequenceSettings: {
@@ -1605,7 +1790,7 @@ export const useEditor = create<EditorState>((set, get) => {
         duration: true,
         delete: true,
         selection: true,
-        properties: false,
+        property: false,
         visibility: false,
         lock: false,
       }
@@ -1665,7 +1850,7 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({
         parentRelationships: [
           ...s.parentRelationships.filter((r) => r.childId !== childId),
-          { parentId, childId, inheritPosition: true, inheritRotation: true, inheritScale: true },
+          { parentId, childId, inheritPosition: true, inheritRotation: true, inheritScale: true, localOffset: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 } },
         ],
       }))
     },
@@ -1682,6 +1867,8 @@ export const useEditor = create<EditorState>((set, get) => {
         name: name || `Group ${get().groups.length + 1}`,
         memberIds: [...new Set(memberIds)],
         collapsed: false,
+        locked: false,
+        hidden: false,
       }
       pushSnapshot()
       set((s) => ({ groups: [...s.groups, newGroup] }))
@@ -1715,8 +1902,8 @@ export const useEditor = create<EditorState>((set, get) => {
           m.id === targetMatId ? { ...m, textureId: srcMat.textureId } : m,
         )
         const textures = s.textures.map((t) => {
-          if (t.id === srcMat.textureId) return { ...t, usersCount: t.usersCount + 1 }
-          if (t.id === oldTexId) return { ...t, usersCount: Math.max(1, t.usersCount - 1) }
+          if (t.id === srcMat.textureId) return { ...t, usersCount: (t.usersCount ?? 1) + 1 }
+          if (t.id === oldTexId) return { ...t, usersCount: Math.max(1, (t.usersCount ?? 1) - 1) }
           return t
         })
         return { materials, textures }
@@ -1726,7 +1913,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const mat = get().materials.find((m) => m.id === matId)
       if (!mat) return
       const tex = get().textures.find((t) => t.id === mat.textureId)
-      if (!tex || tex.usersCount <= 1) return
+      if (!tex || (tex.usersCount ?? 1) <= 1) return
 
       pushSnapshot()
       const newTexId = uid('tex')
@@ -1738,7 +1925,7 @@ export const useEditor = create<EditorState>((set, get) => {
       }
       set((s) => ({
         textures: [
-          ...s.textures.map((t) => (t.id === tex.id ? { ...t, usersCount: t.usersCount - 1 } : t)),
+          ...s.textures.map((t) => (t.id === tex.id ? { ...t, usersCount: (t.usersCount ?? 1) - 1 } : t)),
           newTex,
         ],
         materials: s.materials.map((m) => (m.id === matId ? { ...m, textureId: newTexId } : m)),

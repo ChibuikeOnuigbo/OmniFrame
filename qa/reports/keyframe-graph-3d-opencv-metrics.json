@@ -1,0 +1,30 @@
+{
+  "graph_editor_curve_canvas": {
+    "laplacian_variance_sharpness": 1353.3,
+    "contrast_std": 23.12,
+    "mean_brightness": 16.35,
+    "width": 803,
+    "height": 231
+  },
+  "three_d_blender_toolbar": {
+    "laplacian_variance_sharpness": 2631.33,
+    "contrast_std": 50.74,
+    "mean_brightness": 41.48,
+    "width": 410,
+    "height": 34
+  },
+  "three_d_safe_frame": {
+    "laplacian_variance_sharpness": 882.72,
+    "contrast_std": 21.32,
+    "mean_brightness": 10.17,
+    "width": 771,
+    "height": 486
+  },
+  "rightpanel_keyframe_diamonds": {
+    "laplacian_variance_sharpness": 702.6,
+    "contrast_std": 16.31,
+    "mean_brightness": 24.71,
+    "width": 256,
+    "height": 33
+  }
+}

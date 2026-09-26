@@ -60,6 +60,8 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-054 | `evidence/screenshots/source-preview-oop-tracks-verified.png` | 1440x900 | OOP Timeline Architecture | Full studio desktop demonstrating CapCut-style 40% reduced text track (38px), text insertion at playhead, and sticky track headers with z-index above playhead. |
 | SS-055 | `evidence/screenshots/three-d-video-plane-composite.png` | 1440x900 | 3D in 2D Compositing Viewport | 3D mode demonstrating 2.5D video plane with live sequence playback continuation, studio bezel, cyan rim light, floating 3D diamond, Blender rotation status readout, and HUD aim controls. |
 | SS-056 | `evidence/screenshots/audio-inspector-checkbox-context.png` | 1440x900 | Audio Section & Context Dismissal | Clip Inspector Audio section with CapCut-style Voice Isolation checkbox, custom dropdown with Remove/Keep Vocal modes and omni-voicetarget model, and context menu outside click dismiss. |
+| SS-057 | `evidence/screenshots/graph-editor-curves-verified.png` | 803x231 | Interactive Graph Editor Curves | Graph Editor showing Value Graph vs Speed Graph, animatable property channel tree, Bezier curve paths, draggable keyframe nodes and tangent handles, and easing presets bar (cubic-in, ease-in-out, back, bounce). |
+| SS-058 | `evidence/screenshots/three-d-camera-keyframe-curves-verified.png` | 1440x900 | 3D Viewport & Keyframing Engine | Full studio desktop viewport demonstrating 3D camera navigation (WASD, orbit, pan, dolly), sequence aspect ratio safe frame synchronization (9:16 portrait), Blender modes toolbar (Object, Camera View, Texturing, Curves), 3D Wheel primitive with cubic-in rotation easing, and RightPanel keyframing diamonds. |
 
 
 

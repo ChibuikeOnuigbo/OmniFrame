@@ -119,7 +119,7 @@ export function generateMattingMask(
   }
 
   // Refine mask: Edge Choke / Expand & Feathering
-  return refineAlphaMask(mask, width, height, options.chokeExpand, options.featherRadius)
+  return refineAlphaMask(mask, width, height, options.chokeExpand ?? 0, options.featherRadius ?? 0)
 }
 
 // Morphological Choke/Expand and Box-blur Feathering

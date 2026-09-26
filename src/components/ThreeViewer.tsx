@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import * as THREE from 'three'
 import {
   RotateCcw,
@@ -11,11 +11,19 @@ import {
   Play,
   Pause,
   Sparkles,
+  Camera,
+  Paintbrush,
+  Activity,
+  Plus,
+  Sliders,
+  Check,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
+import type { BlenderMode, Primitive3D } from '../types'
+import { evaluateCurve } from '../lib/animation/CurveEngine'
 
-export type CameraAimTarget = 'video' | 'object' | 'composite' | 'free'
+export type CameraAimTarget = 'video' | 'object' | 'composite' | 'camera_view' | 'free'
 
 export interface ThreeViewerProps {
   width?: number
@@ -37,33 +45,50 @@ export function ThreeViewer({
 
   // Meshes
   const videoPlaneMeshRef = useRef<THREE.Mesh | null>(null)
-  const objectMeshRef = useRef<THREE.Mesh | null>(null)
+  const objectMeshRef = useRef<THREE.Group | THREE.Mesh | null>(null)
   const videoTextureRef = useRef<THREE.Texture | null>(null)
 
   // Zustand state
   const playing = useEditor((s) => s.playing)
   const togglePlay = useEditor((s) => s.togglePlay)
+  const playhead = useEditor((s) => s.playhead)
   const sequenceSettings = useEditor((s) => s.sequenceSettings)
+  const activeBlenderMode = useEditor((s) => s.activeBlenderMode)
+  const setActiveBlenderMode = useEditor((s) => s.setActiveBlenderMode)
+  const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
+  const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
+  const clips = useEditor((s) => s.clips)
+  const selectedClipId = useEditor((s) => s.selectedClipId)
 
   // Component UI state
-  const [primitive, setPrimitive] = useState<'cube' | 'sphere' | 'torus' | 'diamond'>('cube')
+  const [primitive, setPrimitive] = useState<Primitive3D>('wheel')
   const [wireframe, setWireframe] = useState(false)
   const [showGrid, setShowGrid] = useState(true)
   const [aimTarget, setAimTarget] = useState<CameraAimTarget>('composite')
+  const [materialRoughness, setMaterialRoughness] = useState(0.25)
+  const [materialMetalness, setMaterialMetalness] = useState(0.8)
+  const [materialColor, setMaterialColor] = useState('#8b5cf6')
 
-  // Aspect ratio calculation for the 2.5D plane
+  // Project sequence aspect ratio for 2.5D plane and camera FOV
   const planeAspect = sequenceSettings.width / Math.max(1, sequenceSettings.height)
   const planeH = 2.0
   const planeW = planeH * planeAspect
 
   // Coordinates
-  const objectPosition = useRef(new THREE.Vector3(planeW * 0.5 + 0.7, 0.2, 0.8))
+  const objectPosition = useRef(new THREE.Vector3(planeW * 0.45 + 0.8, 0.15, 0.6))
 
   // Camera spherical coordinates for smooth orbit/pan/dolly
-  const sphericalRef = useRef({ radius: 5.2, theta: 0.42, phi: 1.32 })
-  const targetRef = useRef(new THREE.Vector3(objectPosition.current.x * 0.5, 0.1, 0.4))
+  const sphericalRef = useRef({ radius: 5.4, theta: 0.38, phi: 1.35 })
+  const targetRef = useRef(new THREE.Vector3(objectPosition.current.x * 0.4, 0.1, 0.3))
   const isPointerDownRef = useRef(false)
   const lastPointerRef = useRef({ x: 0, y: 0, button: 0 })
+
+  // Active clip animation for keyframed 3D wheel/object rotation
+  const activeClip = clips.find((c) => c.id === selectedClipId) || clips[0]
+  const clipPlayheadTime = activeClip ? Math.max(0, playhead - activeClip.start) : playhead
+
+  // Active keys tracking for WASD navigation
+  const keysPressedRef = useRef<Set<string>>(new Set())
 
   const updateCameraPosition = () => {
     const cam = cameraRef.current
@@ -76,18 +101,22 @@ export function ThreeViewer({
     cam.lookAt(targetRef.current)
   }
 
-  // Handle Aim transitions
+  // Handle Aim / Camera transitions
   const handleAim = (target: CameraAimTarget) => {
     setAimTarget(target)
-    if (target === 'video') {
+    if (target === 'camera_view') {
+      // Direct Camera Perspective View (Unreal/Unity/Blender Numpad 0)
+      targetRef.current.set(0, 0, 0)
+      sphericalRef.current = { radius: Math.max(3.2, planeH * 2.2), theta: 0, phi: Math.PI / 2 }
+    } else if (target === 'video') {
       targetRef.current.set(0, 0, 0)
       sphericalRef.current = { radius: Math.max(3.8, planeH * 2.1), theta: 0.05, phi: 1.5 }
     } else if (target === 'object') {
       targetRef.current.copy(objectPosition.current)
-      sphericalRef.current = { radius: 2.6, theta: Math.PI / 4, phi: Math.PI / 3 }
+      sphericalRef.current = { radius: 2.8, theta: Math.PI / 4, phi: Math.PI / 3 }
     } else if (target === 'composite') {
-      targetRef.current.set(objectPosition.current.x * 0.45, 0.1, 0.35)
-      sphericalRef.current = { radius: 5.2, theta: 0.42, phi: 1.32 }
+      targetRef.current.set(objectPosition.current.x * 0.4, 0.1, 0.3)
+      sphericalRef.current = { radius: 5.4, theta: 0.38, phi: 1.35 }
     }
     updateCameraPosition()
   }
@@ -97,45 +126,70 @@ export function ThreeViewer({
     handleAim('composite')
   }
 
+  // Keyboard WASD camera listener
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in text inputs
+      if ((e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA') return
+      const k = e.code
+      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyQ', 'KeyE'].includes(k)) {
+        keysPressedRef.current.add(k)
+      }
+    }
+    const onKeyUp = (e: KeyboardEvent) => {
+      keysPressedRef.current.delete(e.code)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+    }
+  }, [])
+
   // Initialize Three.js Scene
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x07090e)
+    scene.background = new THREE.Color(0x06080d)
     sceneRef.current = scene
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
+    // Camera aspect matches project sequence aspect ratio
+    const projAspect = sequenceSettings.width / Math.max(1, sequenceSettings.height)
+    const camera = new THREE.PerspectiveCamera(45, projAspect, 0.1, 1000)
     cameraRef.current = camera
     updateCameraPosition()
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true })
     renderer.setSize(width, height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.1
+    renderer.toneMappingExposure = 1.15
+    renderer.domElement.id = 'of-three-canvas'
+    renderer.domElement.setAttribute('data-testid', 'three-canvas-element')
     rendererRef.current = renderer
     container.replaceChildren(renderer.domElement)
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85)
     scene.add(ambientLight)
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.4)
-    keyLight.position.set(6, 9, 6)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.5)
+    keyLight.position.set(6, 10, 7)
     scene.add(keyLight)
 
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.2) // Electric cyan rim light
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.4) // Electric cyan rim
     rimLight.position.set(-6, 4, -4)
     scene.add(rimLight)
 
-    const fillLight = new THREE.DirectionalLight(0xf59e0b, 0.8) // Amber fill light
+    const fillLight = new THREE.DirectionalLight(0xf59e0b, 0.9) // Amber fill
     fillLight.position.set(4, -3, 3)
     scene.add(fillLight)
 
     // Ground Grid
-    const gridHelper = new THREE.GridHelper(12, 24, 0x6366f1, 0x1e1e2d)
+    const gridHelper = new THREE.GridHelper(14, 28, 0x6366f1, 0x1e1e2d)
     gridHelper.position.y = -planeH * 0.52
     gridHelper.name = 'gridHelper'
     scene.add(gridHelper)
@@ -146,15 +200,68 @@ export function ThreeViewer({
     axesHelper.name = 'axesHelper'
     scene.add(axesHelper)
 
-    // Render Animation Loop
+    // Render & Animation Loop
     let animId: number
+    let lastTime = performance.now()
+
     const animate = () => {
       animId = requestAnimationFrame(animate)
+      const now = performance.now()
+      const dt = (now - lastTime) / 1000
+      lastTime = now
 
-      // Rotate floating 3D object
+      // WASD Camera Navigation Processing
+      if (keysPressedRef.current.size > 0 && cameraRef.current) {
+        const cam = cameraRef.current
+        const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cam.quaternion)
+        forward.y = 0
+        forward.normalize()
+
+        const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion)
+        right.y = 0
+        right.normalize()
+
+        const speed = 3.5 * dt
+
+        if (keysPressedRef.current.has('KeyW')) {
+          targetRef.current.addScaledVector(forward, speed)
+          cam.position.addScaledVector(forward, speed)
+        }
+        if (keysPressedRef.current.has('KeyS')) {
+          targetRef.current.addScaledVector(forward, -speed)
+          cam.position.addScaledVector(forward, -speed)
+        }
+        if (keysPressedRef.current.has('KeyA')) {
+          targetRef.current.addScaledVector(right, -speed)
+          cam.position.addScaledVector(right, -speed)
+        }
+        if (keysPressedRef.current.has('KeyD')) {
+          targetRef.current.addScaledVector(right, speed)
+          cam.position.addScaledVector(right, speed)
+        }
+        if (keysPressedRef.current.has('KeyQ')) {
+          targetRef.current.y -= speed
+          cam.position.y -= speed
+        }
+        if (keysPressedRef.current.has('KeyE')) {
+          targetRef.current.y += speed
+          cam.position.y += speed
+        }
+        setAimTarget('free')
+      }
+
+      // 3D Object Rotation (Keyframed or Auto-spin)
       if (objectMeshRef.current) {
-        objectMeshRef.current.rotation.y += 0.012
-        objectMeshRef.current.rotation.x += 0.006
+        const wheelCurve = activeClip?.animation?.curves?.['wheel_rotation'] || activeClip?.animation?.curves?.['rotation_z']
+        if (wheelCurve && wheelCurve.keyframes.length > 0) {
+          // Evaluate exact curve at current playhead time
+          const evalDeg = evaluateCurve(wheelCurve, clipPlayheadTime)
+          objectMeshRef.current.rotation.z = (evalDeg * Math.PI) / 180
+        } else if (playing) {
+          // Continuous rotation when playing without static keyframes
+          objectMeshRef.current.rotation.z += 0.04
+          objectMeshRef.current.rotation.y += 0.01
+        }
       }
 
       // Update live video / canvas texture
@@ -171,7 +278,16 @@ export function ThreeViewer({
       renderer.dispose()
       container.replaceChildren()
     }
-  }, [width, height])
+  }, [width, height, sequenceSettings.width, sequenceSettings.height, playing, activeClip, clipPlayheadTime])
+
+  // Synchronize Camera Aspect Ratio on sequence settings change
+  useEffect(() => {
+    if (cameraRef.current) {
+      const projAspect = sequenceSettings.width / Math.max(1, sequenceSettings.height)
+      cameraRef.current.aspect = projAspect
+      cameraRef.current.updateProjectionMatrix()
+    }
+  }, [sequenceSettings.width, sequenceSettings.height])
 
   // Setup / Update 2.5D Video Plane
   useEffect(() => {
@@ -269,52 +385,96 @@ export function ThreeViewer({
     scene.add(planeGroup)
   }, [sourceCanvas, videoElement, planeW, planeH])
 
-  // Setup / Update 3D Floating Object
+  // Setup / Update 3D Floating Object (Wheel, Cube, Sphere, Torus, Diamond, Plane)
   useEffect(() => {
     const scene = sceneRef.current
     if (!scene) return
 
     if (objectMeshRef.current) {
       scene.remove(objectMeshRef.current)
-      objectMeshRef.current.geometry.dispose()
-      if (Array.isArray(objectMeshRef.current.material)) {
-        objectMeshRef.current.material.forEach((m) => m.dispose())
-      } else {
-        objectMeshRef.current.material.dispose()
-      }
       objectMeshRef.current = null
     }
 
-    let geom: THREE.BufferGeometry
-    let color = 0x38bdf8
-
-    if (primitive === 'cube') {
-      geom = new THREE.BoxGeometry(1.2, 1.2, 1.2)
-      color = 0xf59e0b // Amber gold
-    } else if (primitive === 'sphere') {
-      geom = new THREE.SphereGeometry(0.8, 32, 32)
-      color = 0x10b981 // Emerald green
-    } else if (primitive === 'torus') {
-      geom = new THREE.TorusGeometry(0.7, 0.28, 24, 48)
-      color = 0xa855f7 // Violet purple
-    } else {
-      // Diamond (Octahedron)
-      geom = new THREE.OctahedronGeometry(0.9, 0)
-      color = 0x38bdf8 // Sky cyan
-    }
-
     const mat = new THREE.MeshStandardMaterial({
-      color,
-      metalness: 0.7,
-      roughness: 0.25,
+      color: new THREE.Color(materialColor),
+      metalness: materialMetalness,
+      roughness: materialRoughness,
       wireframe,
     })
 
-    const mesh = new THREE.Mesh(geom, mat)
-    mesh.position.copy(objectPosition.current)
-    objectMeshRef.current = mesh
-    scene.add(mesh)
-  }, [primitive, wireframe])
+    if (primitive === 'wheel') {
+      // High-detail 3D Wheel: Rim + Spokes + Outer Tire + Center Hub
+      const wheelGroup = new THREE.Group()
+      wheelGroup.name = 'wheelGroup'
+
+      // Outer Rubber Tire
+      const tireGeom = new THREE.CylinderGeometry(0.9, 0.9, 0.4, 32)
+      tireGeom.rotateX(Math.PI / 2)
+      const tireMat = new THREE.MeshStandardMaterial({
+        color: 0x181e28,
+        metalness: 0.2,
+        roughness: 0.85,
+        wireframe,
+      })
+      const tireMesh = new THREE.Mesh(tireGeom, tireMat)
+      wheelGroup.add(tireMesh)
+
+      // Inner Metallic Rim
+      const rimGeom = new THREE.TorusGeometry(0.72, 0.1, 16, 32)
+      const rimMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(materialColor),
+        metalness: 0.9,
+        roughness: 0.2,
+        wireframe,
+      })
+      const rimMesh = new THREE.Mesh(rimGeom, rimMat)
+      wheelGroup.add(rimMesh)
+
+      // 6 Spokes
+      for (let i = 0; i < 6; i++) {
+        const spokeGeom = new THREE.CylinderGeometry(0.04, 0.04, 1.4, 12)
+        const spokeMesh = new THREE.Mesh(spokeGeom, rimMat)
+        spokeMesh.rotation.z = (i * Math.PI) / 3
+        wheelGroup.add(spokeMesh)
+      }
+
+      // Center Hub
+      const hubGeom = new THREE.CylinderGeometry(0.24, 0.24, 0.44, 16)
+      hubGeom.rotateX(Math.PI / 2)
+      const hubMat = new THREE.MeshStandardMaterial({
+        color: 0xf59e0b,
+        metalness: 0.8,
+        roughness: 0.3,
+        wireframe,
+      })
+      const hubMesh = new THREE.Mesh(hubGeom, hubMat)
+      wheelGroup.add(hubMesh)
+
+      wheelGroup.position.copy(objectPosition.current)
+      objectMeshRef.current = wheelGroup
+      scene.add(wheelGroup)
+    } else {
+      let geom: THREE.BufferGeometry
+
+      if (primitive === 'cube') {
+        geom = new THREE.BoxGeometry(1.2, 1.2, 1.2)
+      } else if (primitive === 'sphere') {
+        geom = new THREE.SphereGeometry(0.8, 32, 32)
+      } else if (primitive === 'torus') {
+        geom = new THREE.TorusGeometry(0.7, 0.28, 24, 48)
+      } else if (primitive === 'plane') {
+        geom = new THREE.PlaneGeometry(1.4, 1.4)
+      } else {
+        // Diamond (Octahedron)
+        geom = new THREE.OctahedronGeometry(0.9, 0)
+      }
+
+      const mesh = new THREE.Mesh(geom, mat)
+      mesh.position.copy(objectPosition.current)
+      objectMeshRef.current = mesh
+      scene.add(mesh)
+    }
+  }, [primitive, wireframe, materialRoughness, materialMetalness, materialColor])
 
   // Toggle Grid Visibility
   useEffect(() => {
@@ -324,7 +484,7 @@ export function ThreeViewer({
     if (grid) grid.visible = showGrid
   }, [showGrid])
 
-  // Mouse / Pointer Event Handlers for Free Orbit, Pan, and Dolly
+  // Pointer Event Handlers for Free Orbit, Pan, and Dolly
   const handlePointerDown = (e: React.PointerEvent) => {
     isPointerDownRef.current = true
     lastPointerRef.current = { x: e.clientX, y: e.clientY, button: e.button }
@@ -340,7 +500,7 @@ export function ThreeViewer({
     const s = sphericalRef.current
 
     if (e.button === 2 || e.shiftKey) {
-      // Pan camera target
+      // Pan camera target and position together
       const cam = cameraRef.current
       if (!cam) return
       const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion)
@@ -349,9 +509,9 @@ export function ThreeViewer({
       targetRef.current.addScaledVector(up, dy * 0.005 * s.radius)
       setAimTarget('free')
     } else {
-      // Orbit camera
+      // Orbit camera around target
       s.theta -= dx * 0.008
-      s.phi = Math.max(0.1, Math.min(Math.PI - 0.1, s.phi - dy * 0.008))
+      s.phi = Math.max(0.08, Math.min(Math.PI - 0.08, s.phi - dy * 0.008))
       setAimTarget('free')
     }
 
@@ -367,8 +527,8 @@ export function ThreeViewer({
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault()
-    const factor = e.deltaY < 0 ? 0.9 : 1.1
-    sphericalRef.current.radius = Math.max(1.2, Math.min(30, sphericalRef.current.radius * factor))
+    const factor = e.deltaY < 0 ? 0.88 : 1.12
+    sphericalRef.current.radius = Math.max(1.0, Math.min(35, sphericalRef.current.radius * factor))
     updateCameraPosition()
   }
 
@@ -380,7 +540,7 @@ export function ThreeViewer({
       <div
         ref={containerRef}
         data-testid="three-canvas-wrapper"
-        className="w-full h-full cursor-grab active:cursor-grabbing"
+        className="w-full h-full cursor-grab active:cursor-grabbing relative"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -388,6 +548,154 @@ export function ThreeViewer({
         onWheel={handleWheel}
         onContextMenu={(e) => e.preventDefault()}
       />
+
+      {/* Unreal / Unity Style Camera Safe Frame Perspective Overlay */}
+      <div
+        data-testid="camera-safe-frame"
+        className="absolute inset-4 pointer-events-none border border-cyan-500/40 rounded-sm shadow-[0_0_20px_rgba(56,189,248,0.15)] flex flex-col justify-between p-2"
+      >
+        <div className="flex items-center justify-between text-[10px] text-cyan-400 font-mono tracking-wider bg-ink-950/70 px-2 py-0.5 rounded backdrop-blur-xs self-start">
+          <span>CAM: {sequenceSettings.aspectRatio} ({sequenceSettings.width}×{sequenceSettings.height})</span>
+        </div>
+        <div className="flex items-center justify-between text-[9px] text-ink-400 font-mono self-end">
+          <span>SAFE ACTION / TITLE 90%</span>
+        </div>
+      </div>
+
+      {/* Blender Modes Top Toolbar (Object Mode, Camera View, Texturing, Animation) */}
+      <div
+        data-testid="blender-modes-toolbar"
+        className="absolute top-3 left-4 z-20 flex items-center gap-1 p-1 rounded-lg bg-ink-900/90 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs"
+      >
+        <button
+          type="button"
+          data-testid="blender-mode-object"
+          title="Object Mode: Select & transform 3D meshes"
+          onClick={() => {
+            setActiveBlenderMode('object')
+            handleAim('composite')
+          }}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
+            activeBlenderMode === 'object'
+              ? 'bg-brand text-white font-semibold shadow-xs'
+              : 'text-ink-400 hover:text-white hover:bg-ink-800'
+          }`}
+        >
+          <Box size={13} />
+          <span>Object Mode</span>
+        </button>
+
+        <button
+          type="button"
+          data-testid="blender-mode-camera"
+          title="Camera View: Lock view to scene rendering perspective (Blender Numpad 0 / Unreal)"
+          onClick={() => {
+            setActiveBlenderMode('camera')
+            handleAim('camera_view')
+          }}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
+            activeBlenderMode === 'camera'
+              ? 'bg-amber-500 text-ink-950 font-semibold shadow-xs'
+              : 'text-ink-400 hover:text-white hover:bg-ink-800'
+          }`}
+        >
+          <Camera size={13} />
+          <span>Camera View</span>
+        </button>
+
+        <button
+          type="button"
+          data-testid="blender-mode-texturing"
+          title="Texturing / Material Mode: Inspect & edit connected textures and PBR materials"
+          onClick={() => setActiveBlenderMode('texturing')}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
+            activeBlenderMode === 'texturing'
+              ? 'bg-emerald-500 text-ink-950 font-semibold shadow-xs'
+              : 'text-ink-400 hover:text-white hover:bg-ink-800'
+          }`}
+        >
+          <Paintbrush size={13} />
+          <span>Texturing</span>
+        </button>
+
+        <button
+          type="button"
+          data-testid="blender-mode-animation"
+          title="Animation Mode: Open Keyframe Curve Editor"
+          onClick={() => {
+            setActiveBlenderMode('animation')
+            setActiveCurveProperty('wheel_rotation')
+            setGraphEditorOpen(true)
+          }}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
+            activeBlenderMode === 'animation'
+              ? 'bg-violet-600 text-white font-semibold shadow-xs'
+              : 'text-ink-400 hover:text-white hover:bg-ink-800'
+          }`}
+        >
+          <Activity size={13} />
+          <span>Curves</span>
+        </button>
+      </div>
+
+      {/* Texturing / Material Drawer (Visible when in Texturing mode) */}
+      {activeBlenderMode === 'texturing' && (
+        <div
+          data-testid="texturing-material-panel"
+          className="absolute top-14 left-4 z-20 w-64 p-3 rounded-lg bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 space-y-2.5 animate-in fade-in duration-150"
+        >
+          <div className="flex items-center justify-between border-b border-ink-800 pb-1.5 font-semibold text-ink-100">
+            <span>Material & Textures</span>
+            <span className="text-[10px] text-brand font-mono">PBR Shading</span>
+          </div>
+
+          <div className="space-y-1">
+            <span className="text-[11px] text-ink-400">Diffuse Color</span>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                data-testid="material-color-picker"
+                value={materialColor}
+                onChange={(e) => setMaterialColor(e.target.value)}
+                className="w-7 h-7 rounded border border-ink-700 bg-transparent cursor-pointer"
+              />
+              <span className="text-[11px] font-mono text-ink-300">{materialColor}</span>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex justify-between text-[11px] text-ink-400">
+              <span>Roughness</span>
+              <span className="font-mono">{materialRoughness.toFixed(2)}</span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.02"
+              value={materialRoughness}
+              onChange={(e) => setMaterialRoughness(parseFloat(e.target.value))}
+              className="w-full accent-brand"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex justify-between text-[11px] text-ink-400">
+              <span>Metalness</span>
+              <span className="font-mono">{materialMetalness.toFixed(2)}</span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.02"
+              value={materialMetalness}
+              onChange={(e) => setMaterialMetalness(parseFloat(e.target.value))}
+              className="w-full accent-brand"
+            />
+          </div>
+        </div>
+      )}
 
       {/* 3D Navigation & Viewport HUD Toolbar */}
       <div
@@ -460,9 +768,9 @@ export function ThreeViewer({
 
         <div className="w-px h-4 bg-ink-700 shrink-0" />
 
-        {/* 3D Floating Primitive Selectors */}
+        {/* 3D Floating Primitive Selectors (Wheel, Cube, Sphere, Torus, Diamond, Plane) */}
         <div className="flex items-center gap-1 shrink-0">
-          {(['cube', 'sphere', 'torus', 'diamond'] as const).map((prim) => (
+          {(['wheel', 'cube', 'sphere', 'torus', 'diamond', 'plane'] as const).map((prim) => (
             <button
               key={prim}
               type="button"
@@ -470,7 +778,9 @@ export function ThreeViewer({
               title={`Change 3D Object to ${prim}`}
               onClick={() => setPrimitive(prim)}
               className={`px-1.5 py-0.5 rounded text-[10px] capitalize font-medium transition-colors ${
-                primitive === prim ? 'bg-brand/20 text-brand border border-brand/40' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
+                primitive === prim
+                  ? 'bg-brand/20 text-brand border border-brand/40 font-semibold'
+                  : 'text-ink-400 hover:bg-ink-800 hover:text-white'
               }`}
             >
               {prim}
@@ -526,18 +836,16 @@ export function ThreeViewer({
         >
           <BlenderRotationIcon size={12} />
           <span>
-            {aimTarget === 'composite'
-              ? '3D in 2D Composite'
+            {aimTarget === 'camera_view'
+              ? 'Camera View'
+              : aimTarget === 'composite'
+              ? '3D in 2D'
               : aimTarget === 'video'
-              ? 'Aim: 2.5D Video Plane'
+              ? 'Video Plane'
               : aimTarget === 'object'
-              ? 'Aim: 3D Object'
-              : 'Free Orbit Camera'}
+              ? '3D Object'
+              : 'Free Orbit'}
           </span>
-        </div>
-
-        <div className="px-2 py-1 rounded bg-ink-900/60 border border-ink-800/60 text-[10px] text-ink-400 hidden sm:block">
-          Left-drag: Orbit · Right-drag: Pan · Wheel: Dolly
         </div>
       </div>
     </div>

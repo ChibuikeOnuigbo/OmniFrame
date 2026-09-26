@@ -1,8 +1,8 @@
 {
   "audio_inspector_checkbox": {
-    "laplacian_variance_sharpness": 1832.59,
-    "contrast_std": 21.22,
-    "mean_brightness": 24.69,
+    "laplacian_variance_sharpness": 1584.18,
+    "contrast_std": 20.13,
+    "mean_brightness": 24.21,
     "width": 284,
     "height": 370
   },

@@ -28,7 +28,7 @@ export function ThreePanel() {
 
   const currentMat = materials.find((m) => m.id === targetMatId) || materials[0]
   const currentTex = currentMat ? textures.find((t) => t.id === currentMat.textureId) : null
-  const isShared = currentTex ? currentTex.usersCount > 1 : false
+  const isShared = currentTex ? (currentTex.usersCount ?? 1) > 1 : false
 
   return (
     <div data-testid="three-panel" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">

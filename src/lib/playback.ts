@@ -16,6 +16,7 @@ import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track, Transition } from '../types'
 import { clamp } from './time'
 import { renderAllPaintLayers } from './drawingEngine'
+import { evaluateClipAnimation } from './animation/CurveEngine'
 
 export const PW = 1280
 export const PH = 720
@@ -229,7 +230,7 @@ export class PreviewEngine {
           visualPending = true
           continue
         }
-        this.drawClip(ctx, el as CanvasImageSource, clip, asset)
+        this.drawClip(ctx, el as CanvasImageSource, clip, asset, time)
       }
     }
 
@@ -276,12 +277,12 @@ export class PreviewEngine {
     if (!hasFrom && !hasTo) return
 
     const drawFrom = (context: CanvasRenderingContext2D) => {
-      if (fromEl && fromAsset) this.drawClip(context, fromEl as CanvasImageSource, fromClip, fromAsset)
+      if (fromEl && fromAsset) this.drawClip(context, fromEl as CanvasImageSource, fromClip, fromAsset, time)
       else if (fromClip.textStyle) this.drawTextClip(context, fromClip)
     }
 
     const drawTo = (context: CanvasRenderingContext2D) => {
-      if (toEl && toAsset) this.drawClip(context, toEl as CanvasImageSource, toClip, toAsset)
+      if (toEl && toAsset) this.drawClip(context, toEl as CanvasImageSource, toClip, toAsset, time)
       else if (toClip.textStyle) this.drawTextClip(context, toClip)
     }
 
@@ -542,6 +543,7 @@ export class PreviewEngine {
     el: CanvasImageSource,
     clip: Clip,
     asset: MediaAsset,
+    time: number = 0,
   ) {
     const vw =
       (el as HTMLVideoElement).videoWidth ||
@@ -557,8 +559,9 @@ export class PreviewEngine {
     const dw = vw * cover
     const dh = vh * cover
 
+    const evalT = evaluateClipAnimation(clip, time)
     ctx.save()
-    ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity))
+    ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity))
 
     // Apply Real Clip Effects (brightness, contrast, saturation, blur, grayscale, invert, sepia, hueRotate)
     if (clip.effects) {
@@ -575,11 +578,11 @@ export class PreviewEngine {
       if (filters.length > 0) ctx.filter = filters.join(' ')
     }
 
-    const cx = this.width / 2 + clip.transform.x * (this.width / PW)
-    const cy = this.height / 2 + clip.transform.y * (this.height / PH)
+    const cx = this.width / 2 + evalT.x * (this.width / PW)
+    const cy = this.height / 2 + evalT.y * (this.height / PH)
     ctx.translate(cx, cy)
-    ctx.rotate((clip.transform.rotation * Math.PI) / 180)
-    ctx.scale(clip.transform.scale, clip.transform.scale)
+    ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    ctx.scale(evalT.scaleX, evalT.scaleY)
     try {
       ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
     } catch {

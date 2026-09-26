@@ -74,10 +74,17 @@ function download(blob: Blob, filename: string) {
 }
 
 export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
-  const canvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
-  if (!canvas) throw new Error('Preview canvas not found')
   const st = useEditor.getState()
   if (st.clips.length === 0) throw new Error('Add a clip to the timeline before exporting.')
+
+  // If in 3D mode, record directly from the 3D WebGL canvas camera perspective
+  let canvas = (st.is3DMode
+    ? (document.getElementById('of-three-canvas') as HTMLCanvasElement | null)
+    : (document.getElementById('of-canvas') as HTMLCanvasElement | null))
+  if (!canvas) {
+    canvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
+  }
+  if (!canvas) throw new Error('Preview canvas not found')
 
   const mime = pickMime()
   if (!mime) throw new Error('MediaRecorder is not supported in this browser.')

@@ -101,7 +101,7 @@ export function Slider({
   )
 }
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+export function Field({ label, children }: { label: ReactNode; children: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3 py-1.5">
       <span className="text-ink-400 text-xs shrink-0">{label}</span>

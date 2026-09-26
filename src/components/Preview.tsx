@@ -53,10 +53,11 @@ export function Preview() {
   const isPreviewingAsset = Boolean(previewAsset) && monitorMode === 'source' && !drawingEnabled
 
   // 3D View mode
-  const [is3DMode, setIs3DMode] = useState(workspacePreset === '3d')
+  const is3DMode = useEditor((s) => s.is3DMode)
+  const setIs3DMode = useEditor((s) => s.setIs3DMode)
   useEffect(() => {
     if (workspacePreset === '3d') setIs3DMode(true)
-  }, [workspacePreset])
+  }, [workspacePreset, setIs3DMode])
 
   // Asset video local playback state
   const [assetPlaying, setAssetPlaying] = useState(false)
@@ -279,7 +280,7 @@ export function Preview() {
         </div>
       )}
 
-      {isPreviewingAsset ? (
+      {isPreviewingAsset && previewAsset ? (
         /* Uploaded Media Asset Interactive Player */
         <div
           data-testid="preview-asset-stage"
@@ -358,7 +359,7 @@ export function Preview() {
       )}
 
       {/* Source Media Details Banner (Bottom Left, resized and part of preview) */}
-      {isPreviewingAsset && (
+      {isPreviewingAsset && previewAsset && (
         <div
           data-testid="preview-asset-detail"
           className="absolute bottom-16 left-4 z-30 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-950/90 border border-ink-700/80 shadow-xl text-xs backdrop-blur-xs animate-in fade-in duration-100 max-w-[280px] sm:max-w-md"

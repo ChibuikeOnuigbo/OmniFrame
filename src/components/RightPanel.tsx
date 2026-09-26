@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines, Volume2 } from 'lucide-react'
+import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines, Volume2, Diamond, Activity } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
@@ -15,6 +15,11 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const splitAt = useEditor((s) => s.splitAt)
   const extractAudio = useEditor((s) => s.extractAudio)
   const defaultModel = useEditor((s) => s.audioIsolationModel)
+  const playhead = useEditor((s) => s.playhead)
+  const setClipKeyframe = useEditor((s) => s.setClipKeyframe)
+  const removeClipKeyframe = useEditor((s) => s.removeClipKeyframe)
+  const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
+  const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
   const asset = assets.find((a) => a.id === clip.assetId)
   const t = clip.transform
 
@@ -23,6 +28,53 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
   const [isProcessing, setIsProcessing] = useState(false)
   const [isolationStatus, setIsolationStatus] = useState<string | null>(null)
+
+  const clipTime = Math.max(0, playhead - clip.start)
+
+  // Helper to render keyframe toggle diamond and curve button
+  const renderKeyframeControl = (propertyId: string, currentValue: number) => {
+    const curve = clip.animation?.curves?.[propertyId]
+    const existingKey = curve?.keyframes?.find((k) => Math.abs(k.time - clipTime) < 0.05)
+    const hasKey = !!existingKey
+
+    const handleToggle = () => {
+      if (hasKey && existingKey) {
+        removeClipKeyframe(clip.id, propertyId, existingKey.id)
+      } else {
+        setClipKeyframe(clip.id, propertyId, clipTime, currentValue, 'bezier')
+      }
+    }
+
+    const handleOpenCurve = () => {
+      setActiveCurveProperty(propertyId)
+      setGraphEditorOpen(true)
+    }
+
+    return (
+      <div className="flex items-center gap-1 shrink-0 ml-1">
+        <button
+          type="button"
+          data-testid={`keyframe-diamond-${propertyId}`}
+          title={hasKey ? 'Remove Keyframe at Current Time' : 'Add Keyframe at Current Time'}
+          onClick={handleToggle}
+          className={`p-1 rounded transition-colors ${
+            hasKey ? 'text-brand' : 'text-ink-500 hover:text-ink-200'
+          }`}
+        >
+          <Diamond size={13} fill={hasKey ? 'currentColor' : 'none'} />
+        </button>
+        <button
+          type="button"
+          data-testid={`open-curve-${propertyId}`}
+          title="Open in Curve Graph Editor"
+          onClick={handleOpenCurve}
+          className="p-1 rounded text-ink-500 hover:text-brand hover:bg-ink-800 transition-colors"
+        >
+          <Activity size={12} />
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -67,23 +119,28 @@ function ClipInspector({ clip }: { clip: Clip }) {
       <Section title="Transform">
         <Field label="Position X">
           <Slider min={-960} max={960} value={t.x} onChange={(v) => setClipTransform(clip.id, { x: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.x)}</span>
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.x)}</span>
+          {renderKeyframeControl('position_x', t.x)}
         </Field>
         <Field label="Position Y">
           <Slider min={-540} max={540} value={t.y} onChange={(v) => setClipTransform(clip.id, { y: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.y)}</span>
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.y)}</span>
+          {renderKeyframeControl('position_y', t.y)}
         </Field>
         <Field label="Scale">
           <Slider min={0.1} max={3} step={0.01} value={t.scale} onChange={(v) => setClipTransform(clip.id, { scale: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{t.scale.toFixed(2)}</span>
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{t.scale.toFixed(2)}</span>
+          {renderKeyframeControl('scale_x', t.scale)}
         </Field>
         <Field label={<span className="flex items-center gap-1.5"><BlenderRotationIcon size={13} /><span>Rotation</span></span>}>
           <Slider min={-180} max={180} value={t.rotation} onChange={(v) => setClipTransform(clip.id, { rotation: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
+          {renderKeyframeControl('rotation_z', t.rotation)}
         </Field>
         <Field label="Opacity">
           <Slider min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
+          {renderKeyframeControl('opacity', t.opacity)}
         </Field>
       </Section>
 
@@ -207,66 +264,14 @@ function ClipInspector({ clip }: { clip: Clip }) {
               min={16}
               max={128}
               step={2}
-              value={clip.textStyle.fontSize}
+              value={clip.textStyle.fontSize ?? 32}
               onChange={(v) => {
                 useEditor.setState((s) => ({
                   clips: s.clips.map((c) => (c.id === clip.id ? { ...c, textStyle: { ...c.textStyle!, fontSize: v } } : c)),
                 }))
               }}
             />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{clip.textStyle.fontSize}px</span>
-          </Field>
-        </Section>
-      )}
-
-      {clip.effects && (
-        <Section title="Effects">
-          <Field label="Brightness">
-            <Slider min={0} max={2} step={0.05} value={clip.effects.brightness ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { brightness: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.brightness ?? 1).toFixed(2)}</span>
-          </Field>
-          <Field label="Contrast">
-            <Slider min={0} max={2} step={0.05} value={clip.effects.contrast ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { contrast: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.contrast ?? 1).toFixed(2)}</span>
-          </Field>
-          <Field label="Saturation">
-            <Slider min={0} max={2} step={0.05} value={clip.effects.saturation ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { saturation: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.saturation ?? 1).toFixed(2)}</span>
-          </Field>
-          <Field label="Blur">
-            <Slider min={0} max={20} step={0.5} value={clip.effects.blur ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { blur: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.blur ?? 0).toFixed(0)}px</span>
-          </Field>
-        </Section>
-      )}
-
-      {clip.textStyle && (
-        <Section title="Text & Title">
-          <Field label="Text">
-            <input
-              value={clip.textStyle.text}
-              onChange={(e) => {
-                const text = e.target.value
-                useEditor.setState((s) => ({
-                  clips: s.clips.map((c) => (c.id === clip.id ? { ...c, name: text, textStyle: { ...c.textStyle!, text } } : c)),
-                }))
-              }}
-              className="bg-ink-800 border border-ink-700 rounded px-2 h-7 text-xs text-ink-100 outline-none focus:border-brand w-full"
-            />
-          </Field>
-          <Field label="Font Size">
-            <Slider
-              min={16}
-              max={128}
-              step={2}
-              value={clip.textStyle.fontSize}
-              onChange={(v) => {
-                useEditor.setState((s) => ({
-                  clips: s.clips.map((c) => (c.id === clip.id ? { ...c, textStyle: { ...c.textStyle!, fontSize: v } } : c)),
-                }))
-              }}
-            />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{clip.textStyle.fontSize}px</span>
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.textStyle.fontSize ?? 32)}px</span>
           </Field>
         </Section>
       )}
