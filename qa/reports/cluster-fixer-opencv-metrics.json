@@ -1,0 +1,52 @@
+{
+  "desktop_studio_settings": {
+    "path": "evidence/screenshots/cluster-fixer-settings-desktop.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian": 2413.57,
+    "contrast_rms": 104.94,
+    "mean_brightness": 86.17,
+    "valid": true
+  },
+  "mobile_settings_360x800": {
+    "path": "evidence/screenshots/cluster-fixer-settings-mobile-360x800.png",
+    "width": 360,
+    "height": 800,
+    "channels": 3,
+    "sharpness_laplacian": 1417.07,
+    "contrast_rms": 22.15,
+    "mean_brightness": 21.78,
+    "valid": true
+  },
+  "context_menu_customizer": {
+    "path": "evidence/cutouts/cut-settings-context-menu-customizer.png",
+    "width": 342,
+    "height": 353,
+    "channels": 3,
+    "sharpness_laplacian": 2003.84,
+    "contrast_rms": 22.91,
+    "mean_brightness": 24.68,
+    "valid": true
+  },
+  "shortcuts_customizer": {
+    "path": "evidence/cutouts/cut-settings-shortcuts-customizer.png",
+    "width": 342,
+    "height": 353,
+    "channels": 3,
+    "sharpness_laplacian": 2683.56,
+    "contrast_rms": 22.71,
+    "mean_brightness": 23.76,
+    "valid": true
+  },
+  "inspector_unclustered": {
+    "path": "evidence/cutouts/cut-inspector-unclustered-accordion.png",
+    "width": 280,
+    "height": 37,
+    "channels": 3,
+    "sharpness_laplacian": 2706.04,
+    "contrast_rms": 34.01,
+    "mean_brightness": 26.94,
+    "valid": true
+  }
+}

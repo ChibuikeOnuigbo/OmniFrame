@@ -42,6 +42,16 @@ export function TopBar() {
   const focusMode = useEditor((s) => s.focusMode)
   const setFocusMode = useEditor((s) => s.setFocusMode)
 
+  const customShortcuts = useEditor((s) => s.customShortcuts)
+  const setCustomShortcut = useEditor((s) => s.setCustomShortcut)
+  const resetCustomShortcuts = useEditor((s) => s.resetCustomShortcuts)
+  const contextMenuEnabledCommands = useEditor((s) => s.contextMenuEnabledCommands)
+  const toggleContextMenuCommand = useEditor((s) => s.toggleContextMenuCommand)
+  const setContextMenuCommand = useEditor((s) => s.setContextMenuCommand)
+  const resetContextMenuCommands = useEditor((s) => s.resetContextMenuCommands)
+  const [editingShortcutId, setEditingShortcutId] = useState<string | null>(null)
+  const [editingKeyVal, setEditingKeyVal] = useState('')
+
   const fileInput = useRef<HTMLInputElement>(null)
   const [exporting, setExporting] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -303,34 +313,417 @@ export function TopBar() {
       </button>
 
       {settingsOpen && (
-        <div ref={settingsRef} data-testid="settings-popup" role="dialog" aria-label="Settings" className="fixed right-3 top-12 z-[80] flex w-[min(440px,calc(100vw-24px))] max-h-[min(420px,calc(100vh-64px))] flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.5)] backdrop-blur-xl">
+        <div
+          ref={settingsRef}
+          data-testid="settings-popup"
+          role="dialog"
+          aria-label="Settings"
+          className="fixed inset-x-2 top-14 sm:inset-auto sm:right-3 sm:top-12 z-[80] flex w-auto sm:w-[min(520px,calc(100vw-24px))] max-h-[min(540px,calc(100vh-64px))] flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.6)] backdrop-blur-xl"
+        >
           <header className="border-b border-ink-700 p-3">
-            <div className="mb-2 flex items-center justify-between"><h2 className="text-sm font-semibold">Settings</h2><button aria-label="Close settings" onClick={() => setSettingsOpen(false)} className="grid h-7 w-7 place-items-center rounded-md text-ink-400 hover:bg-ink-700 hover:text-white"><X size={14} /></button></div>
-            <input type="search" aria-label="Search settings" placeholder="Search settings" value={settingsSearch} onChange={(event) => setSettingsSearch(event.target.value)} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 outline-none placeholder:text-ink-500 focus:border-brand" />
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-sm font-semibold">Settings</h2>
+              <button
+                aria-label="Close settings"
+                onClick={() => setSettingsOpen(false)}
+                className="grid h-7 w-7 place-items-center rounded-md text-ink-400 hover:bg-ink-700 hover:text-white"
+              >
+                <X size={14} />
+              </button>
+            </div>
+            <input
+              type="search"
+              aria-label="Search settings"
+              placeholder="Search settings"
+              value={settingsSearch}
+              onChange={(event) => setSettingsSearch(event.target.value)}
+              className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 outline-none placeholder:text-ink-500 focus:border-brand"
+            />
           </header>
-          <div className="flex min-h-0 flex-1">
-          <nav aria-label="Settings categories" className="w-32 shrink-0 border-r border-ink-700 p-2">
-            {SETTINGS_CATEGORIES.map((category) => (
-              <button key={category} data-testid="settings-category" aria-pressed={settingsCategory === category} onClick={() => setSettingsCategory(category)} className={`mb-1 h-9 w-full rounded-lg px-3 text-left text-xs capitalize outline-none focus-visible:ring-2 focus-visible:ring-brand ${settingsCategory === category ? 'bg-brand/15 text-violet-200' : 'text-ink-400 hover:bg-ink-700 hover:text-white'}`}>{category}</button>
-            ))}
-          </nav>
-          <section className="min-w-0 flex-1 overflow-y-auto p-4">
-            <h3 className="mb-4 text-sm font-semibold capitalize">{settingsSearch ? 'Search results' : settingsCategory}</h3>
-            {settingsSearch && <div data-testid="settings-search-results" className="space-y-1">{settingsMatches.length === 0 ? <p className="text-xs text-ink-500">No available settings match.</p> : settingsMatches.map((item) => <button key={item.id} type="button" onClick={() => { setSettingsCategory(item.category); setSettingsSearch('') }} className="block w-full rounded-md px-2 py-2 text-left hover:bg-ink-700"><span className="block text-xs text-ink-200">{item.label}</span><span className="mt-0.5 block text-[10px] capitalize text-ink-500">{item.category} · {item.scope}</span></button>)}</div>}
-            {!settingsSearch && settingsCategory === 'timeline' && <div className="space-y-4"><label className="block text-xs text-ink-300"><span className="mb-2 block">Project frame rate</span><select aria-label="Project frame rate" value={projectFps} onChange={(event) => setProjectFps(Number(event.target.value))} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200">{[23.976,24,25,29.97,30,50,59.94,60,120].map((rate)=><option key={rate} value={rate}>{rate} fps</option>)}</select></label>{(projectFps === 29.97 || projectFps === 59.94) && <label className="flex items-center justify-between gap-4 text-xs text-ink-300"><span><span className="block">Drop frame timecode</span><span className="mt-1 block text-[10px] text-ink-500">SMPTE clock aligned display; timing is unchanged.</span></span><input aria-label="Drop frame timecode" type="checkbox" checked={dropFrameTimecode} onChange={(event) => setDropFrameTimecode(event.target.checked)} className="h-4 w-4 accent-violet-500" /></label>}</div>}
-            {!settingsSearch && settingsCategory === 'playback' && <div><div className="mb-2 text-xs text-ink-300">Preview quality</div><div role="radiogroup" aria-label="Preview quality" className="grid grid-cols-3 gap-2">{(['low','medium','high'] as const).map((quality)=><button key={quality} type="button" role="radio" aria-checked={previewQuality === quality} onClick={() => setPreviewQuality(quality)} className={`h-9 rounded-md border px-3 text-xs capitalize ${previewQuality === quality ? 'border-brand bg-brand/15 text-violet-200' : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700'}`}>{quality}</button>)}</div><p className="mt-3 text-[10px] leading-relaxed text-ink-500">Adjusts viewport preview resolution. Timeline timing and project FPS remain unchanged.</p></div>}
-            {!settingsSearch && settingsCategory === 'shortcuts' && <dl className="space-y-2 text-xs">{[['Hide / unhide selected clip','H'],['Select tool','V'],['Blade tool','B'],['Undo','Ctrl / Cmd + Z']].map(([label,key])=><div key={label} className="flex items-center justify-between gap-3"><dt className="text-ink-300">{label}</dt><dd className="rounded border border-ink-700 bg-ink-800 px-2 py-1 font-mono text-[10px] text-ink-400">{key}</dd></div>)}</dl>}
-            {!settingsSearch && settingsCategory === 'accessibility' && <label className="flex items-center justify-between gap-4 text-xs"><span><span className="block text-ink-200">Reduce motion</span><span className="mt-1 block text-ink-500">Minimize nonessential interface animation.</span></span><input aria-label="Reduce motion" type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)} className="h-4 w-4 accent-violet-500" /></label>}
-            {!settingsSearch && settingsCategory === 'ai' && <div className="space-y-3 text-xs">
-              <div className="rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-[10px] leading-relaxed text-amber-200"><strong>Enter an API key only.</strong> Never paste source code, prompts, passwords, recovery codes, or other private information here. Browser requests expose the key to this tab and the selected provider; use a restricted key with spending limits.</div>
-              <label className="block text-ink-300"><span className="mb-1 block">Provider</span><select data-testid="setting-ai-provider" aria-label="AI provider" value={aiProvider} onChange={(event) => selectAiProvider(event.target.value as AiProviderId)} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs">{AI_PROVIDERS.map((provider) => <option key={provider.id} value={provider.id}>{provider.label}</option>)}</select></label>
-              {aiProvider === 'custom' && <label className="block text-ink-300"><span className="mb-1 block">HTTPS API base URL</span><input aria-label="Custom AI endpoint" type="url" placeholder="https://example.com/v1" value={aiEndpoint} onChange={(event) => setAiEndpoint(event.target.value)} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs" /><span className="mt-1 block text-[10px] text-ink-500">Must implement the OpenAI compatible /chat/completions endpoint. Do not paste JavaScript or configuration code.</span></label>}
-              <label className="block text-ink-300"><span className="mb-1 block">Model ID</span><input data-testid="setting-ai-model" aria-label="AI model ID" autoComplete="off" value={aiModel} onChange={(event) => setAiModel(event.target.value)} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs" /><span className="mt-1 block text-[10px] text-ink-500">Use the exact model ID shown by your provider, not code or a model description.</span></label>
-              <label className="block text-ink-300"><span className="mb-1 block">API key</span><input data-testid="setting-ai-api-key" aria-label="AI API key" type="password" autoComplete="off" spellCheck={false} placeholder={AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.keyPrefixHint} value={aiApiKey} onChange={(event) => setAiApiKey(event.target.value)} className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs" /><span className="mt-1 block text-[10px] text-ink-500">Stored in memory only; cleared when the tab closes. Obtain it from the provider's official console.</span></label>
-              <button type="button" disabled={aiTestState === 'testing'} onClick={testProvider} className="h-8 rounded-md border border-ink-600 bg-ink-800 px-3 text-xs text-ink-200 hover:bg-ink-700 disabled:opacity-50">{aiTestState === 'testing' ? 'Testing…' : 'Test connection'}</button>
-              {aiTestMessage && <p role="status" className={aiTestState === 'success' ? 'text-emerald-400' : 'text-red-400'}>{aiTestMessage}</p>}
-            </div>}
-          </section>
+          <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
+            <nav
+              aria-label="Settings categories"
+              className="flex flex-row sm:flex-col overflow-x-auto sm:overflow-x-visible sm:w-36 shrink-0 border-b sm:border-b-0 sm:border-r border-ink-700 p-1.5 sm:p-2 gap-1 scrollbar-none"
+            >
+              {SETTINGS_CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  data-testid="settings-category"
+                  data-category-id={category}
+                  aria-pressed={settingsCategory === category}
+                  onClick={() => setSettingsCategory(category)}
+                  className={`h-8 sm:h-9 shrink-0 rounded-lg px-2.5 sm:px-3 text-left text-xs capitalize outline-none transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand ${
+                    settingsCategory === category
+                      ? 'bg-brand/20 text-violet-200 font-medium'
+                      : 'text-ink-400 hover:bg-ink-700 hover:text-white'
+                  }`}
+                >
+                  {category === 'contextMenu' ? 'Context Menu' : category}
+                </button>
+              ))}
+            </nav>
+            <section className="min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 text-xs">
+              <h3 className="mb-3 text-sm font-semibold capitalize text-ink-100">
+                {settingsSearch
+                  ? 'Search results'
+                  : settingsCategory === 'contextMenu'
+                  ? 'Context Menu Actions'
+                  : settingsCategory}
+              </h3>
+
+              {settingsSearch && (
+                <div data-testid="settings-search-results" className="space-y-1">
+                  {settingsMatches.length === 0 ? (
+                    <p className="text-xs text-ink-500">No available settings match.</p>
+                  ) : (
+                    settingsMatches.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setSettingsCategory(item.category)
+                          setSettingsSearch('')
+                        }}
+                        className="block w-full rounded-md px-2 py-2 text-left hover:bg-ink-700"
+                      >
+                        <span className="block text-xs text-ink-200">{item.label}</span>
+                        <span className="mt-0.5 block text-[10px] capitalize text-ink-500">
+                          {item.category} · {item.scope}
+                        </span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'timeline' && (
+                <div className="space-y-4">
+                  <label className="block text-xs text-ink-300">
+                    <span className="mb-2 block">Project frame rate</span>
+                    <select
+                      aria-label="Project frame rate"
+                      value={projectFps}
+                      onChange={(event) => setProjectFps(Number(event.target.value))}
+                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200"
+                    >
+                      {[23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120].map((rate) => (
+                        <option key={rate} value={rate}>
+                          {rate} fps
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  {(projectFps === 29.97 || projectFps === 59.94) && (
+                    <label className="flex items-center justify-between gap-4 text-xs text-ink-300">
+                      <span>
+                        <span className="block">Drop frame timecode</span>
+                        <span className="mt-1 block text-[10px] text-ink-500">
+                          SMPTE clock aligned display; timing is unchanged.
+                        </span>
+                      </span>
+                      <input
+                        aria-label="Drop frame timecode"
+                        type="checkbox"
+                        checked={dropFrameTimecode}
+                        onChange={(event) => setDropFrameTimecode(event.target.checked)}
+                        className="h-4 w-4 accent-violet-500"
+                      />
+                    </label>
+                  )}
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'playback' && (
+                <div>
+                  <div className="mb-2 text-xs text-ink-300">Preview quality</div>
+                  <div role="radiogroup" aria-label="Preview quality" className="grid grid-cols-3 gap-2">
+                    {(['low', 'medium', 'high'] as const).map((quality) => (
+                      <button
+                        key={quality}
+                        type="button"
+                        role="radio"
+                        aria-checked={previewQuality === quality}
+                        onClick={() => setPreviewQuality(quality)}
+                        className={`h-9 rounded-md border px-3 text-xs capitalize ${
+                          previewQuality === quality
+                            ? 'border-brand bg-brand/15 text-violet-200'
+                            : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700'
+                        }`}
+                      >
+                        {quality}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-[10px] leading-relaxed text-ink-500">
+                    Adjusts viewport preview resolution. Timeline timing and project FPS remain unchanged.
+                  </p>
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'contextMenu' && (
+                <div data-testid="settings-context-menu-section" className="space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-ink-800">
+                    <p className="text-[11px] text-ink-400">
+                      Customize which actions appear when right-clicking on clips and timeline tracks.
+                    </p>
+                    <button
+                      type="button"
+                      data-testid="reset-context-menu-btn"
+                      onClick={resetContextMenuCommands}
+                      className="text-[10px] text-brand hover:underline shrink-0 ml-2"
+                    >
+                      Reset Defaults
+                    </button>
+                  </div>
+                  <div className="space-y-1.5 max-h-[300px] overflow-y-auto pr-1">
+                    {[
+                      { id: 'cut', label: 'Cut Clip', shortcut: 'Ctrl+X', desc: 'Cut clip to clipboard' },
+                      { id: 'copy', label: 'Copy Clip', shortcut: 'Ctrl+C', desc: 'Copy clip to clipboard' },
+                      { id: 'paste', label: 'Paste at Playhead', shortcut: 'Ctrl+V', desc: 'Paste copied clip' },
+                      { id: 'duplicate', label: 'Duplicate Clip', shortcut: 'Ctrl+D', desc: 'Duplicate next to clip' },
+                      { id: 'split', label: 'Split at Playhead', shortcut: 'Ctrl+B', desc: 'Split clip at current time' },
+                      { id: 'marker', label: 'Add Marker', shortcut: 'M', desc: 'Place timeline marker pin' },
+                      { id: 'add-transition', label: 'Add Transition', shortcut: '', desc: 'Cross dissolve or wipe' },
+                      { id: 'separate-audio', label: 'Separate Audio', shortcut: '', desc: 'Extract audio to new track' },
+                      { id: 'isolate-voice', label: 'Voice Isolation', shortcut: '', desc: 'Vocal / Instrumental separation' },
+                      { id: 'remove-bg-modal', label: 'AI Background Removal', shortcut: '', desc: 'Segment character foreground' },
+                      { id: 'compound-clip', label: 'Compound Sequence', shortcut: 'Ctrl+G', desc: 'Group or decompose clips' },
+                      { id: 'hide-toggle', label: 'Hide / Unhide Clip', shortcut: 'H', desc: 'Toggle clip visibility' },
+                      { id: 'delete', label: 'Delete Clip', shortcut: 'Delete', desc: 'Remove clip from sequence' },
+                    ].map((item) => {
+                      const enabled = contextMenuEnabledCommands[item.id] !== false
+                      return (
+                        <label
+                          key={item.id}
+                          data-testid={`ctx-setting-toggle-${item.id}`}
+                          className="flex items-center justify-between p-2 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none"
+                        >
+                          <div className="min-w-0 flex-1 pr-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-medium text-ink-200">{item.label}</span>
+                              {item.shortcut && (
+                                <span className="px-1.5 py-0.5 rounded bg-ink-800 border border-ink-700 text-[9px] font-mono text-ink-400">
+                                  {item.shortcut}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] text-ink-500 block truncate">{item.desc}</span>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={enabled}
+                            onChange={() => toggleContextMenuCommand(item.id)}
+                            className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                          />
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'shortcuts' && (
+                <div data-testid="settings-shortcuts-section" className="space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-ink-800">
+                    <p className="text-[11px] text-ink-400">
+                      Customize keyboard shortcuts for high-speed editing.
+                    </p>
+                    <button
+                      type="button"
+                      data-testid="reset-shortcuts-btn"
+                      onClick={resetCustomShortcuts}
+                      className="text-[10px] text-brand hover:underline shrink-0 ml-2"
+                    >
+                      Reset All
+                    </button>
+                  </div>
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                    {[
+                      { id: 'split', label: 'Split at Playhead', defaultKey: 'B' },
+                      { id: 'marker', label: 'Add Marker', defaultKey: 'M' },
+                      { id: 'hide', label: 'Hide / Unhide Clip', defaultKey: 'H' },
+                      { id: 'selectTool', label: 'Select Tool', defaultKey: 'V' },
+                      { id: 'bladeTool', label: 'Blade Tool', defaultKey: 'B' },
+                      { id: 'delete', label: 'Delete Clip', defaultKey: 'Delete' },
+                      { id: 'duplicate', label: 'Duplicate Clip', defaultKey: 'Ctrl+D' },
+                      { id: 'cut', label: 'Cut Clip', defaultKey: 'Ctrl+X' },
+                      { id: 'copy', label: 'Copy Clip', defaultKey: 'Ctrl+C' },
+                      { id: 'paste', label: 'Paste Clip', defaultKey: 'Ctrl+V' },
+                      { id: 'undo', label: 'Undo', defaultKey: 'Ctrl+Z' },
+                      { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Shift+Z' },
+                      { id: 'playPause', label: 'Play / Pause', defaultKey: 'Space' },
+                      { id: 'omniframe', label: 'OmniFrame AI Tab', defaultKey: 'Alt+O' },
+                      { id: 'threed', label: 'Toggle 3D Mode', defaultKey: '3' },
+                    ].map((item) => {
+                      const curKey = customShortcuts[item.id] || item.defaultKey
+                      const isEditing = editingShortcutId === item.id
+                      return (
+                        <div
+                          key={item.id}
+                          data-testid={`shortcut-row-${item.id}`}
+                          className="flex items-center justify-between gap-3 p-1.5 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors"
+                        >
+                          <span className="text-xs text-ink-200">{item.label}</span>
+                          <div className="flex items-center gap-1.5">
+                            {isEditing ? (
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="text"
+                                  autoFocus
+                                  data-testid={`shortcut-input-${item.id}`}
+                                  value={editingKeyVal}
+                                  onChange={(e) => setEditingKeyVal(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      if (editingKeyVal.trim()) setCustomShortcut(item.id, editingKeyVal.trim())
+                                      setEditingShortcutId(null)
+                                    } else if (e.key === 'Escape') {
+                                      setEditingShortcutId(null)
+                                    }
+                                  }}
+                                  placeholder="Type key"
+                                  className="w-16 h-6 rounded bg-ink-900 border border-brand px-1.5 font-mono text-[11px] text-white outline-none"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (editingKeyVal.trim()) setCustomShortcut(item.id, editingKeyVal.trim())
+                                    setEditingShortcutId(null)
+                                  }}
+                                  className="px-1.5 py-0.5 rounded bg-brand text-[10px] text-white"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                data-testid={`edit-shortcut-${item.id}`}
+                                title={`Click to customize shortcut for ${item.label}`}
+                                onClick={() => {
+                                  setEditingShortcutId(item.id)
+                                  setEditingKeyVal(curKey)
+                                }}
+                                className="rounded border border-ink-700 bg-ink-800 px-2 py-1 font-mono text-[10px] text-ink-300 hover:border-brand hover:text-white transition-colors"
+                              >
+                                {curKey}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'accessibility' && (
+                <label className="flex items-center justify-between gap-4 text-xs">
+                  <span>
+                    <span className="block text-ink-200">Reduce motion</span>
+                    <span className="mt-1 block text-ink-500">Minimize nonessential interface animation.</span>
+                  </span>
+                  <input
+                    aria-label="Reduce motion"
+                    type="checkbox"
+                    checked={reducedMotion}
+                    onChange={(event) => setReducedMotion(event.target.checked)}
+                    className="h-4 w-4 accent-violet-500"
+                  />
+                </label>
+              )}
+
+              {!settingsSearch && settingsCategory === 'ai' && (
+                <div className="space-y-3 text-xs">
+                  <div className="rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-[10px] leading-relaxed text-amber-200">
+                    <strong>Enter an API key only.</strong> Never paste source code, prompts, passwords, recovery
+                    codes, or other private information here. Browser requests expose the key to this tab and the
+                    selected provider; use a restricted key with spending limits.
+                  </div>
+                  <label className="block text-ink-300">
+                    <span className="mb-1 block">Provider</span>
+                    <select
+                      data-testid="setting-ai-provider"
+                      aria-label="AI provider"
+                      value={aiProvider}
+                      onChange={(event) => selectAiProvider(event.target.value as AiProviderId)}
+                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                    >
+                      {AI_PROVIDERS.map((provider) => (
+                        <option key={provider.id} value={provider.id}>
+                          {provider.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  {aiProvider === 'custom' && (
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block">HTTPS API base URL</span>
+                      <input
+                        aria-label="Custom AI endpoint"
+                        type="url"
+                        placeholder="https://example.com/v1"
+                        value={aiEndpoint}
+                        onChange={(event) => setAiEndpoint(event.target.value)}
+                        className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                      />
+                      <span className="mt-1 block text-[10px] text-ink-500">
+                        Must implement the OpenAI compatible /chat/completions endpoint. Do not paste JavaScript or
+                        configuration code.
+                      </span>
+                    </label>
+                  )}
+                  <label className="block text-ink-300">
+                    <span className="mb-1 block">Model ID</span>
+                    <input
+                      data-testid="setting-ai-model"
+                      aria-label="AI model ID"
+                      autoComplete="off"
+                      value={aiModel}
+                      onChange={(event) => setAiModel(event.target.value)}
+                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                    />
+                    <span className="mt-1 block text-[10px] text-ink-500">
+                      Use the exact model ID shown by your provider, not code or a model description.
+                    </span>
+                  </label>
+                  <label className="block text-ink-300">
+                    <span className="mb-1 block">API key</span>
+                    <input
+                      data-testid="setting-ai-api-key"
+                      aria-label="AI API key"
+                      type="password"
+                      autoComplete="off"
+                      spellCheck={false}
+                      placeholder={AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.keyPrefixHint}
+                      value={aiApiKey}
+                      onChange={(event) => setAiApiKey(event.target.value)}
+                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                    />
+                    <span className="mt-1 block text-[10px] text-ink-500">
+                      Stored in memory only; cleared when the tab closes. Obtain it from the provider's official
+                      console.
+                    </span>
+                  </label>
+                  <button
+                    type="button"
+                    disabled={aiTestState === 'testing'}
+                    onClick={testProvider}
+                    className="h-8 rounded-md border border-ink-600 bg-ink-800 px-3 text-xs text-ink-200 hover:bg-ink-700 disabled:opacity-50"
+                  >
+                    {aiTestState === 'testing' ? 'Testing…' : 'Test connection'}
+                  </button>
+                  {aiTestMessage && (
+                    <p
+                      role="status"
+                      className={aiTestState === 'success' ? 'text-emerald-400' : 'text-red-400'}
+                    >
+                      {aiTestMessage}
+                    </p>
+                  )}
+                </div>
+              )}
+            </section>
           </div>
         </div>
       )}

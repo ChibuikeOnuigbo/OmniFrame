@@ -1,9 +1,22 @@
 import React, { useState } from 'react'
-import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines, Volume2, Diamond, Activity, FolderOpen, FolderOutput, Layers } from 'lucide-react'
+import {
+  PanelRightClose,
+  PanelRightOpen,
+  Trash2,
+  Scissors,
+  AudioLines,
+  Volume2,
+  Diamond,
+  Activity,
+  FolderOpen,
+  FolderOutput,
+  Layers,
+  SlidersHorizontal,
+} from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
-import { Field, Section, Slider } from './ui'
+import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
 
@@ -175,21 +188,28 @@ function ClipInspector({ clip }: { clip: Clip }) {
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
           {renderKeyframeControl('opacity', t.opacity)}
         </Field>
-        <Field label="3D Depth (Z)">
-          <Slider min={-1000} max={1000} value={t.z ?? 0} onChange={(v) => setClipTransform(clip.id, { z: v })} />
-          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.z ?? 0)}</span>
-          {renderKeyframeControl('position_z', t.z ?? 0)}
-        </Field>
-        <Field label="Rotation X (Tilt)">
-          <Slider min={-180} max={180} value={t.rotationX ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationX: v })} />
-          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationX ?? 0)}°</span>
-          {renderKeyframeControl('rotation_x', t.rotationX ?? 0)}
-        </Field>
-        <Field label="Rotation Y (Pan)">
-          <Slider min={-180} max={180} value={t.rotationY ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationY: v })} />
-          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationY ?? 0)}°</span>
-          {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
-        </Field>
+
+        {/* 3D Spatial Properties: Clean Accordion Sub-Group */}
+        <AccordionGroup
+          title="3D Spatial (Depth, Tilt, Pan)"
+          defaultOpen={Boolean(t.z || t.rotationX || t.rotationY)}
+        >
+          <Field label="3D Depth (Z)">
+            <Slider min={-1000} max={1000} value={t.z ?? 0} onChange={(v) => setClipTransform(clip.id, { z: v })} />
+            <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.z ?? 0)}</span>
+            {renderKeyframeControl('position_z', t.z ?? 0)}
+          </Field>
+          <Field label="Rotation X (Tilt)">
+            <Slider min={-180} max={180} value={t.rotationX ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationX: v })} />
+            <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationX ?? 0)}°</span>
+            {renderKeyframeControl('rotation_x', t.rotationX ?? 0)}
+          </Field>
+          <Field label="Rotation Y (Pan)">
+            <Slider min={-180} max={180} value={t.rotationY ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationY: v })} />
+            <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationY ?? 0)}°</span>
+            {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
+          </Field>
+        </AccordionGroup>
       </Section>
 
       {(clip.kind === 'audio' || clip.kind === 'video') && (
@@ -388,16 +408,33 @@ export function RightPanel() {
   const setRightOpen = useEditor((s) => s.setRightOpen)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const rightPanelWidth = useEditor((s) => s.rightPanelWidth)
+  const unclusterInspector = useEditor((s) => s.unclusterInspector)
+  const setUnclusterInspector = useEditor((s) => s.setUnclusterInspector)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
   return (
     <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
       {rightOpen && (
         <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
-          <div className="h-9 shrink-0 flex items-center px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-            {selectedClipId ? 'Clip' : 'Inspector'}
+          <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
+            <span>{selectedClipId ? 'Clip Inspector' : 'Project Inspector'}</span>
+            <button
+              type="button"
+              data-testid="inspector-uncluster-btn"
+              title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+              aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+              aria-pressed={unclusterInspector}
+              onClick={() => setUnclusterInspector(!unclusterInspector)}
+              className={`grid h-6 w-6 place-items-center rounded transition-colors ${
+                unclusterInspector
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-ink-400 hover:text-white hover:bg-ink-750'
+              }`}
+            >
+              <SlidersHorizontal size={12} />
+            </button>
           </div>
-          <div className="flex-1 min-h-0 overflow-y-auto">
+          <div className={`flex-1 min-h-0 overflow-y-auto ${unclusterInspector ? 'space-y-0.5' : ''}`}>
             {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
           </div>
         </div>

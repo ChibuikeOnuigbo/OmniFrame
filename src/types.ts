@@ -546,6 +546,23 @@ export interface OmniframeOperation {
 // ---- Templates Subsystem ----
 export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
 
+// ---- Settings Customization: Shortcuts & Context Menu ----
+export interface ShortcutItem {
+  id: string
+  label: string
+  key: string
+  description: string
+  defaultKey: string
+}
+
+export interface ContextMenuItemConfig {
+  id: string
+  label: string
+  enabled: boolean
+  shortcut?: string
+  description: string
+}
+
 export interface TemplateSlot {
   id: string
   name: string

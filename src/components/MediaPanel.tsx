@@ -85,14 +85,7 @@ export function MediaPanel() {
 
   return (
     <div className="flex flex-col h-full" data-testid="media-library">
-      <div className="p-3 pb-2 space-y-2">
-        <button
-          type="button"
-          onClick={() => fileInput.current?.click()}
-          className="w-full flex items-center justify-center gap-2 h-9 rounded-md bg-ink-800 border border-ink-700 text-xs font-medium hover:bg-ink-700 transition-colors"
-        >
-          <Upload size={15} /> Import media
-        </button>
+      <div className="p-2.5 pb-2" role="search">
         <input
           id="panel-all-import-input"
           data-testid="panel-all-import-input"
@@ -105,7 +98,7 @@ export function MediaPanel() {
           onChange={onPick}
         />
 
-        <div className="flex items-center gap-1.5" role="search">
+        <div className="flex items-center gap-1.5">
           <label className="relative flex-1 min-w-0">
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-500 pointer-events-none" />
             <span className="sr-only">Search media</span>
@@ -134,6 +127,16 @@ export function MediaPanel() {
               ))}
             </select>
           </label>
+          <button
+            type="button"
+            data-testid="media-import-btn"
+            title="Import media files"
+            aria-label="Import media files"
+            onClick={() => fileInput.current?.click()}
+            className="grid place-items-center h-8 w-8 shrink-0 rounded-md bg-brand text-white hover:bg-brand-600 transition-colors shadow-xs"
+          >
+            <Upload size={14} />
+          </button>
         </div>
       </div>
 

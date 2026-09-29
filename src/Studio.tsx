@@ -20,6 +20,7 @@ import {
   Layers,
   FolderOutput,
   FolderOpen,
+  Bookmark,
 } from 'lucide-react'
 import { useEditor } from './store'
 import type { Clip, Transition } from './types'
@@ -111,6 +112,19 @@ export default function Studio() {
       if (meta && e.key.toLowerCase() === 'z') {
         e.preventDefault()
         e.shiftKey ? redo() : undo()
+        return
+      }
+      if (meta && e.key.toLowerCase() === 'b') {
+        e.preventDefault()
+        st().splitAt(st().playhead)
+        return
+      }
+      if (meta && e.key.toLowerCase() === 'd') {
+        if (selectedClipId) {
+          e.preventDefault()
+          const c = st().clips.find((cl) => cl.id === selectedClipId)
+          if (c) insertClipCopy(c, c.start + c.duration)
+        }
         return
       }
       if (meta) return
@@ -271,6 +285,22 @@ export default function Studio() {
           { id: 'copy', label: 'Copy', shortcut: 'Ctrl+C', icon: Copy, run: () => { writeClipClipboard(contextMenu.clip) } },
           ...(clipboardClip ? [{ id: 'paste', label: 'Paste at playhead', shortcut: 'Ctrl+V', icon: Clipboard, run: () => insertClipCopy(clipboardClip!, useEditor.getState().playhead) }] : []),
           { id: 'duplicate', label: 'Duplicate', shortcut: 'Ctrl+D', icon: Files, run: () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration) },
+          { id: 'split', label: 'Split at Playhead', shortcut: 'Ctrl+B', icon: Scissors, run: () => useEditor.getState().splitAt(useEditor.getState().playhead) },
+          {
+            id: 'marker',
+            label: 'Add Marker',
+            shortcut: 'M',
+            icon: Bookmark,
+            run: () => {
+              const s = useEditor.getState()
+              const id = s.addMarker({
+                time: s.playhead,
+                label: `Marker ${s.markers.length + 1}`,
+                color: 'blue',
+              })
+              s.setActiveMarkerModalId(id)
+            },
+          },
           ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'IMAGE_CLIP' ? [{
             id: 'add-transition',
             label: 'Add Transition',
@@ -412,6 +442,18 @@ export default function Studio() {
         ]
   ) : []
 
+  const contextMenuEnabledCommands = useEditor((s) => s.contextMenuEnabledCommands)
+  const filteredCommands = contextCommands.filter((command) => {
+    if (!command) return false
+    if (command.id in contextMenuEnabledCommands) {
+      return contextMenuEnabledCommands[command.id] !== false
+    }
+    if (command.id === 'create-compound-clip' && contextMenuEnabledCommands['compound-clip'] === false) {
+      return false
+    }
+    return true
+  })
+
   return (
     <div
       className="h-full w-full flex flex-col bg-ink-950 text-ink-100 overflow-hidden no-select"
@@ -531,7 +573,7 @@ export default function Studio() {
           <div className="px-2.5 pb-1.5 pt-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
             {contextMenu.type.replace(/_/g, ' ')}
           </div>
-          {contextCommands.map((command, index) => {
+          {filteredCommands.map((command, index) => {
             const Icon = command.icon
             const destructive = 'destructive' in command && command.destructive
             const primary = 'primary' in command && command.primary

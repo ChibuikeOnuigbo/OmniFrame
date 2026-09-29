@@ -97,8 +97,15 @@
       "feature": "OmniFrame Mode Vetting & UI Decluttering",
       "status": "verified",
       "details": "Vetted OmniFrame on image asset and multi-frame video across frames 0, 90, 105, 150 with clean inpainting zero-ghost and decluttered UI"
+    },
+    {
+      "run": 15,
+      "timestamp": "2026-09-29T23:24:16+00:00",
+      "feature": "Cluster Fixer, Space-Saving Icons, Settings Context Menu & Shortcuts Customizer",
+      "status": "verified",
+      "details": "Replaced bulky text buttons with sleek icons+tooltips, added collapsible accordion groups in Inspector, implemented context menu & shortcuts customizers in responsive Settings popup down to 360px"
     }
   ],
-  "total_runs": 14,
-  "last_updated": "2026-09-29T23:00:59+00:00"
+  "total_runs": 15,
+  "last_updated": "2026-09-29T23:24:16+00:00"
 }

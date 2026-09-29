@@ -1227,12 +1227,13 @@ export function Timeline() {
         {/* edit tools */}
         <button
           type="button"
-          title="Split at playhead (B)"
+          data-testid="timeline-split-btn"
+          title="Split at playhead (Ctrl+B / B)"
+          aria-label="Split at playhead"
           onClick={() => splitAt(useEditor.getState().playhead)}
-          className="flex h-8 items-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 px-2.5 text-xs text-ink-300 hover:bg-ink-700 hover:text-white"
+          className="grid place-items-center h-8 w-8 rounded-md border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
         >
           <Scissors size={15} />
-          <span className="hidden lg:inline">Split</span>
         </button>
         <button
           ref={toolButtonRef}
@@ -1244,10 +1245,10 @@ export function Timeline() {
             setSpeedMenuOpen(false)
             setToolMenuOpen((open) => !open)
           }}
-          className="flex h-8 min-w-[42px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-ink-200 hover:bg-ink-700"
+          className="flex h-8 min-w-[36px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-1.5 text-ink-200 hover:bg-ink-700"
         >
-          {tool === 'select' ? <MousePointer2 size={16} /> : <Slash size={16} />}
-          <ChevronDown size={12} />
+          {tool === 'select' ? <MousePointer2 size={15} /> : <Slash size={15} />}
+          <ChevronDown size={11} />
         </button>
 
         {/* marker button */}
@@ -1257,10 +1258,9 @@ export function Timeline() {
           title="Add Marker at playhead (M)"
           aria-label="Add marker"
           onClick={handleAddMarker}
-          className="flex h-8 items-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
+          className="grid place-items-center h-8 w-8 rounded-md border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
         >
-          <Bookmark size={14} className="text-blue-400" />
-          <span className="hidden sm:inline">Marker</span>
+          <Bookmark size={15} />
         </button>
 
         <div className="flex-1 min-w-[12px]" />
@@ -1278,7 +1278,7 @@ export function Timeline() {
               type="range"
               data-testid="timeline-scale"
               aria-label="Timeline zoom"
-              className="of-range w-24 sm:w-28"
+              className="of-range w-20 sm:w-28"
               min={8}
               max={MAX_PX}
               value={px}
@@ -1306,17 +1306,17 @@ export function Timeline() {
         <button
           type="button"
           data-testid="snapping-toggle"
-          title={`Snapping (${snapping ? 'on' : 'off'})`}
+          title={`Snapping: ${snapping ? 'ON' : 'OFF'} (S)`}
+          aria-label="Toggle snapping"
           aria-pressed={snapping}
           onClick={toggleSnapping}
-          className={`flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs ${
+          className={`grid place-items-center h-8 w-8 rounded-md border transition-colors ${
             snapping
               ? 'border-brand/60 bg-brand/15 text-violet-200'
-              : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700'
+              : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
           }`}
         >
           <Magnet size={15} />
-          <span className="hidden xl:inline">Snap</span>
         </button>
         <button
           type="button"

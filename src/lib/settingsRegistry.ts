@@ -1,4 +1,4 @@
-export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'accessibility' | 'ai'
+export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'accessibility' | 'ai'
 export type SettingsScope = 'project' | 'user' | 'session'
 
 export interface SettingDefinition {
@@ -73,12 +73,20 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     ['shortcut.hideClip', 'Hide / unhide selected clip', 'H'],
     ['shortcut.selectTool', 'Select tool', 'V'],
     ['shortcut.bladeTool', 'Blade tool', 'B'],
+    ['shortcut.split', 'Split at playhead', 'Ctrl+B / B'],
+    ['shortcut.marker', 'Add Marker at playhead', 'M'],
     ['shortcut.undo', 'Undo', 'Ctrl / Cmd + Z'],
   ].map(([id, label, shortcut]): SettingDefinition => ({
     id, category: 'shortcuts', label, description: shortcut, aliases: ['keyboard', 'key', shortcut], controlType: 'read-only',
     defaultValue: shortcut, scope: 'session', persistent: false, requiresReload: false, capability: 'web-and-desktop',
     runtimeBinding: id, testId: `setting-${id.replace(/\./g, '-')}`, sourceRefs: [],
   })),
+  {
+    id: 'contextMenu.customization', category: 'contextMenu', label: 'Context menu customization',
+    description: 'Toggle actions and submenus displayed in clip and track right-click menus.', aliases: ['context menu', 'right click', 'actions'],
+    controlType: 'toggle', defaultValue: true, scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.contextMenuEnabledCommands', testId: 'setting-context-menu', sourceRefs: [],
+  },
 ]
 
 export const SETTINGS_CATEGORIES = [...new Set(SETTINGS_REGISTRY.map((item) => item.category))] as SettingsCategory[]

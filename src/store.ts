@@ -162,7 +162,44 @@ function cloneDoc(s: EditorState): Doc {
   }
 }
 
-export interface EditorState {
+export const DEFAULT_CONTEXT_COMMANDS: Record<string, boolean> = {
+  cut: true,
+  copy: true,
+  paste: true,
+  duplicate: true,
+  split: true,
+  marker: true,
+  'add-transition': true,
+  'separate-audio': true,
+  'isolate-voice': true,
+  'remove-bg-modal': true,
+  'compound-clip': true,
+  'open-compound-clip': true,
+  'uncompound-clip': true,
+  'hide-toggle': true,
+  delete: true,
+}
+
+export const DEFAULT_SHORTCUTS: Record<string, string> = {
+  split: 'B',
+  marker: 'M',
+  hide: 'H',
+  selectTool: 'V',
+  bladeTool: 'B',
+  delete: 'Delete',
+  duplicate: 'Ctrl+D',
+  cut: 'Ctrl+X',
+  copy: 'Ctrl+C',
+  paste: 'Ctrl+V',
+  undo: 'Ctrl+Z',
+  redo: 'Ctrl+Shift+Z',
+  playPause: 'Space',
+  omniframe: 'Alt+O',
+  threed: '3',
+  speed: 'Ctrl+R',
+}
+
+interface EditorState {
   assets: MediaAsset[]
   tracks: Track[]
   clips: Clip[]
@@ -374,6 +411,17 @@ export interface EditorState {
   setLeftTab: (t: LeftTab) => void
   setLeftOpen: (v: boolean) => void
   setRightOpen: (v: boolean) => void
+
+  // ---- settings: context menu, shortcuts, unclustering ----
+  customShortcuts: Record<string, string>
+  contextMenuEnabledCommands: Record<string, boolean>
+  unclusterInspector: boolean
+  setCustomShortcut: (id: string, key: string) => void
+  resetCustomShortcuts: () => void
+  toggleContextMenuCommand: (id: string) => void
+  setContextMenuCommand: (id: string, enabled: boolean) => void
+  resetContextMenuCommands: () => void
+  setUnclusterInspector: (enabled: boolean) => void
 
   // ---- history ----
   beginHistory: () => void
@@ -606,6 +654,11 @@ export const useEditor = create<EditorState>((set, get) => {
     inInteraction: false,
     snapping: true,
     scrubbing: false,
+
+    // ---- settings: context menu, shortcuts, unclustering initial state ----
+    customShortcuts: { ...DEFAULT_SHORTCUTS },
+    contextMenuEnabledCommands: { ...DEFAULT_CONTEXT_COMMANDS },
+    unclusterInspector: false,
 
     // ---- OmniFrame & Character Manipulation initial state ----
     omniframeMode: false,
@@ -1713,6 +1766,28 @@ export const useEditor = create<EditorState>((set, get) => {
     setLeftTab: (t) => set({ leftTab: t, leftOpen: true }),
     setLeftOpen: (v) => set({ leftOpen: v }),
     setRightOpen: (v) => set({ rightOpen: v }),
+
+    // ---- settings actions ----
+    setCustomShortcut: (id, key) =>
+      set((s) => ({ customShortcuts: { ...s.customShortcuts, [id]: key } })),
+    resetCustomShortcuts: () => set({ customShortcuts: { ...DEFAULT_SHORTCUTS } }),
+    toggleContextMenuCommand: (id) =>
+      set((s) => ({
+        contextMenuEnabledCommands: {
+          ...s.contextMenuEnabledCommands,
+          [id]: !s.contextMenuEnabledCommands[id],
+        },
+      })),
+    setContextMenuCommand: (id, enabled) =>
+      set((s) => ({
+        contextMenuEnabledCommands: {
+          ...s.contextMenuEnabledCommands,
+          [id]: enabled,
+        },
+      })),
+    resetContextMenuCommands: () =>
+      set({ contextMenuEnabledCommands: { ...DEFAULT_CONTEXT_COMMANDS } }),
+    setUnclusterInspector: (unclusterInspector) => set({ unclusterInspector }),
 
     // ---- drawing actions ----
     addDrawingStroke: (stroke) => {
