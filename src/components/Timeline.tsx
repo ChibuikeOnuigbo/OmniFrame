@@ -33,6 +33,14 @@ import {
   Bookmark,
   Type,
   Activity,
+  ArrowLeft,
+  FolderOpen,
+  FolderOutput,
+  Package,
+  Box,
+  Image as ImageIcon,
+  ChevronRight,
+  Film,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
@@ -213,18 +221,59 @@ function TrackHeader({
   const [menuOpen, setMenuOpen] = useState(false)
   const btnRef = useRef<HTMLButtonElement>(null)
 
+  const trackClips = clips.filter((c) => c.trackId === track.id)
+  const primaryKind = trackClips[0]?.kind || (track.type === 'audio' ? 'audio' : 'video')
+
+  const kindBadge = (() => {
+    switch (primaryKind) {
+      case 'audio':
+        return <span data-testid="track-kind-badge-audio" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">AUD</span>
+      case 'image':
+        return <span data-testid="track-kind-badge-image" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-purple-500/20 text-purple-400 border border-purple-500/30 shrink-0">IMG</span>
+      case 'text':
+        return <span data-testid="track-kind-badge-text" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">TXT</span>
+      case 'threed':
+        return <span data-testid="track-kind-badge-threed" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30 shrink-0">3D</span>
+      case 'compound':
+        return <span data-testid="track-kind-badge-compound" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-indigo-500/25 text-indigo-300 border border-indigo-400/40 shrink-0">CMP</span>
+      case 'video':
+      default:
+        return <span data-testid="track-kind-badge-video" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-sky-500/20 text-sky-400 border border-sky-500/30 shrink-0">VID</span>
+    }
+  })()
+
+  const kindIcon = (() => {
+    switch (primaryKind) {
+      case 'audio':
+        return <Music size={13} className="text-emerald-400" />
+      case 'image':
+        return <ImageIcon size={13} className="text-purple-400" />
+      case 'text':
+        return <Type size={13} className="text-amber-400" />
+      case 'threed':
+        return <Box size={13} className="text-fuchsia-400" />
+      case 'compound':
+        return <Layers size={13} className="text-indigo-400" />
+      case 'video':
+      default:
+        return <Video size={13} className="text-sky-400" />
+    }
+  })()
+
   return (
     <div
       data-testid="track-header"
       data-track-id={track.id}
+      data-track-kind={primaryKind}
       className="shrink-0 flex items-center gap-1 px-2 border-b border-ink-800 bg-ink-850 relative group"
       style={{ height: effectiveHeight }}
     >
-      <span className="text-ink-500">
-        {track.type === 'audio' ? <Music size={13} /> : <Video size={13} />}
+      <span className="shrink-0">
+        {kindIcon}
       </span>
-      <span className="text-[11px] font-semibold text-ink-200 truncate flex-1">
-        {track.name}
+      <span className="text-[11px] font-semibold text-ink-200 truncate flex-1 flex items-center gap-1.5 min-w-0">
+        <span className="truncate">{track.name}</span>
+        {kindBadge}
       </span>
 
       {track.type === 'audio' ? (
@@ -538,8 +587,49 @@ function ClipView({
 
   const left = clip.start * px
   const width = Math.max(6, clip.duration * px)
+  const isCompound = clip.kind === 'compound'
   const isAudio = clip.kind === 'audio'
   const isText = clip.kind === 'text' || Boolean((clip as any).textStyle)
+  const is3D = clip.kind === 'threed'
+  const isImage = clip.kind === 'image' || asset?.kind === 'image'
+  const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage)
+
+  const clipBorderClass = selected
+    ? isCompound
+      ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 shadow-[0_0_16px_rgba(129,140,248,0.6)] z-10'
+      : isText
+      ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
+      : isAudio
+      ? 'border-2 border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_14px_rgba(52,211,153,0.5)] z-10'
+      : isImage
+      ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_14px_rgba(192,132,252,0.5)] z-10'
+      : is3D
+      ? 'border-2 border-fuchsia-400 ring-2 ring-fuchsia-400/80 shadow-[0_0_14px_rgba(232,121,249,0.5)] z-10'
+      : 'border-2 border-sky-400 ring-2 ring-sky-400/80 shadow-[0_0_14px_rgba(56,189,248,0.5)] z-10'
+    : isCompound
+    ? 'border border-indigo-500/80 hover:border-indigo-300 hover:shadow-md'
+    : isText
+    ? 'border border-amber-600/70 hover:border-amber-400 hover:shadow-md'
+    : isAudio
+    ? 'border border-emerald-800/70 hover:border-emerald-400 hover:shadow-md'
+    : isImage
+    ? 'border border-purple-800/70 hover:border-purple-400 hover:shadow-md'
+    : is3D
+    ? 'border border-fuchsia-800/70 hover:border-fuchsia-400 hover:shadow-md'
+    : 'border border-sky-600/70 hover:border-sky-300 hover:shadow-md'
+
+  const clipBgClass = isCompound
+    ? 'bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 text-indigo-100'
+    : isText
+    ? 'bg-amber-950/75 text-amber-100'
+    : isAudio
+    ? 'bg-emerald-950/70 text-emerald-100'
+    : isImage
+    ? 'bg-purple-950/65 text-purple-100'
+    : is3D
+    ? 'bg-fuchsia-950/70 text-fuchsia-100'
+    : 'bg-sky-950/65 text-sky-100'
+
   const visibleWaveform = (() => {
     if (!isAudio || !asset?.waveform?.length) return []
     const sourceDuration = Math.max(asset.duration, 0.001)
@@ -562,34 +652,33 @@ function ClipView({
       data-volume={clip.volume.toFixed(3)}
       data-hidden={clip.hidden ? 'true' : 'false'}
       onPointerDown={onDown('move')}
+      onDoubleClick={(e) => {
+        e.stopPropagation()
+        if (clip.kind === 'compound' && clip.sourceSequenceId) {
+          useEditor.getState().openSequence(clip.sourceSequenceId)
+        }
+      }}
       onContextMenu={(e) => onContextMenu(e, clip)}
       className={[
         'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
         tool === 'select' ? 'cursor-grab active:cursor-grabbing' : 'cursor-inherit',
-        selected
-          ? isText
-            ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
-            : isAudio
-            ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_14px_rgba(192,132,252,0.5)] z-10'
-            : 'border-2 border-brand ring-2 ring-brand/70 shadow-[0_0_14px_rgba(108,76,255,0.45)] z-10'
-          : isText
-          ? 'border border-amber-600/70 hover:border-amber-400 hover:shadow-md'
-          : isAudio
-          ? 'border border-purple-800/60 hover:border-purple-400 hover:shadow-md'
-          : 'border border-ink-600 hover:border-violet-300 hover:shadow-md',
+        clipBorderClass,
         clip.hidden
           ? 'opacity-40 border-dashed hover:opacity-65 hover:border-violet-300 hover:shadow-[0_0_12px_rgba(167,139,250,.5)]'
           : '',
-        isText
-          ? 'bg-amber-950/75 text-amber-100'
-          : isAudio
-          ? 'bg-violet-950/60 text-purple-200'
-          : 'bg-brand/25 text-ink-100',
+        clipBgClass,
       ].join(' ')}
       style={{ left, width }}
       title={clip.name}
     >
-      {!isAudio && !isText && (asset?.thumbnail || asset?.kind === 'image') && (
+      {isCompound && (
+        <div className="pointer-events-none absolute inset-0 opacity-15 flex flex-col justify-around py-1 px-1">
+          <div className="h-1.5 w-3/4 rounded bg-indigo-400" />
+          <div className="h-1.5 w-1/2 rounded bg-purple-400 ml-4" />
+          <div className="h-1.5 w-2/3 rounded bg-sky-400" />
+        </div>
+      )}
+      {!isCompound && !isAudio && !isText && (asset?.thumbnail || asset?.kind === 'image') && (
         <div
           data-testid="clip-filmstrip"
           className="pointer-events-none absolute inset-0 opacity-55"
@@ -625,30 +714,41 @@ function ClipView({
           className="pointer-events-none absolute inset-x-1 bottom-1 top-5 flex items-center gap-px opacity-80"
           aria-hidden="true"
         >
-          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-violet-200/20" />
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-emerald-200/20" />
           {visibleWaveform.map((peak, index) => (
             <i
               key={index}
               data-peak={peak.toFixed(4)}
-              className="min-w-px flex-1 rounded-full bg-violet-300"
+              className="min-w-px flex-1 rounded-full bg-emerald-400"
               style={{ height: `${clip.volume === 0 ? 1 : Math.max(4, peak * clip.volume * 96)}%` }}
             />
           ))}
         </div>
       )}
-      <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/40 border-b border-white/5 flex items-center gap-1">
+      <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/40 border-b border-white/5 flex items-center gap-1 min-w-0">
         {clip.hidden ? (
           <EyeOff size={10} aria-label="Hidden clip" />
+        ) : isCompound ? (
+          <Layers size={10} className="text-indigo-300 shrink-0" />
         ) : isText ? (
-          <Type size={10} className="text-amber-400" />
+          <Type size={10} className="text-amber-400 shrink-0" />
         ) : isAudio ? (
-          <Music size={10} />
+          <Music size={10} className="text-emerald-400 shrink-0" />
+        ) : isImage ? (
+          <ImageIcon size={10} className="text-purple-400 shrink-0" />
+        ) : is3D ? (
+          <Box size={10} className="text-fuchsia-400 shrink-0" />
         ) : (
-          <Video size={10} />
+          <Video size={10} className="text-sky-400 shrink-0" />
         )}
         <span className="truncate">{clip.name}</span>
+        {isCompound && (
+          <span className="ml-auto text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 font-mono font-bold shrink-0">
+            NESTED ({clip.nestedClipCount || 2})
+          </span>
+        )}
       </div>
-      {!isAudio && !isText && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}
+      {!isCompound && !isAudio && !isText && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}
 
       {/* trim handles */}
       <div
@@ -714,6 +814,8 @@ export function Timeline() {
   const setActiveMarkerModalId = useEditor((s) => s.setActiveMarkerModalId)
   const graphEditorOpen = useEditor((s) => s.graphEditorOpen)
   const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
+  const breadcrumbs = useEditor((s) => s.breadcrumbs || [{ id: 'main', name: 'Main Timeline' }])
+  const navigateBreadcrumb = useEditor((s) => s.navigateBreadcrumb)
 
   const handleAddMarker = () => {
     const playheadTime = useEditor.getState().playhead
@@ -1042,6 +1144,49 @@ export function Timeline() {
         tool === 'blade' ? 'of-blade-tool' : 'of-select-tool'
       }`}
     >
+      {/* Sequence Breadcrumbs Bar */}
+      <div
+        data-testid="sequence-breadcrumbs-bar"
+        className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none"
+      >
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {breadcrumbs.map((b, idx) => {
+            const isLast = idx === breadcrumbs.length - 1
+            return (
+              <div key={b.id} className="flex items-center gap-1.5">
+                {idx > 0 && <ChevronRight size={12} className="text-ink-500" />}
+                <button
+                  type="button"
+                  data-testid={`breadcrumb-item-${b.id}`}
+                  onClick={() => navigateBreadcrumb(b.id)}
+                  className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-colors ${
+                    isLast
+                      ? 'bg-indigo-600/30 text-indigo-300 font-semibold border border-indigo-500/40 shadow-xs'
+                      : 'text-ink-400 hover:text-ink-100 hover:bg-ink-850'
+                  }`}
+                >
+                  {idx === 0 ? <Film size={12} className="text-brand" /> : <Layers size={12} className="text-indigo-400" />}
+                  <span className="truncate max-w-[160px]">{b.name}</span>
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        {breadcrumbs.length > 1 && (
+          <button
+            type="button"
+            data-testid="breadcrumb-back-button"
+            onClick={() => navigateBreadcrumb(breadcrumbs[breadcrumbs.length - 2].id)}
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs"
+            title="Exit Compound Clip to Parent Timeline"
+          >
+            <ArrowLeft size={12} />
+            <span>Back to Timeline</span>
+          </button>
+        )}
+      </div>
+
       {/* transport + tools + zoom */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
         {/* transport */}
@@ -1682,6 +1827,57 @@ export function Timeline() {
                   <span>Duplicate</span>
                   <kbd className="ml-auto text-[10px] text-ink-500">Cmd+D</kbd>
                 </button>
+
+                <div className="my-1 border-t border-ink-700" />
+
+                {contextMenu.clip.kind === 'compound' ? (
+                  <>
+                    <button
+                      type="button"
+                      data-testid="context-menu-open-compound-clip"
+                      onClick={() => {
+                        if (contextMenu.clip?.sourceSequenceId) {
+                          useEditor.getState().openSequence(contextMenu.clip.sourceSequenceId)
+                        }
+                        setContextMenu(null)
+                      }}
+                      className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-indigo-500/20 text-indigo-300 hover:text-indigo-200 text-left font-medium"
+                    >
+                      <Layers size={14} className="text-indigo-400" />
+                      <span>Open Compound Clip</span>
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="context-menu-uncompound-clip"
+                      onClick={() => {
+                        useEditor.getState().uncompoundClip(contextMenu.clip!.id)
+                        setContextMenu(null)
+                      }}
+                      className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-amber-500/20 text-amber-300 hover:text-amber-200 text-left"
+                    >
+                      <FolderOutput size={14} className="text-amber-400" />
+                      <span>Uncompound Clip</span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    data-testid="context-menu-create-compound-clip"
+                    onClick={() => {
+                      const selIds = useEditor.getState().selectedClipIds
+                      const idsToCompound = selIds.length > 1 && selIds.includes(contextMenu.clip!.id)
+                        ? selIds
+                        : [contextMenu.clip!.id]
+                      useEditor.getState().createCompoundClip(idsToCompound)
+                      setContextMenu(null)
+                    }}
+                    className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-indigo-500/20 text-indigo-300 hover:text-indigo-200 text-left"
+                  >
+                    <Layers size={14} className="text-indigo-400" />
+                    <span>Create Compound Clip</span>
+                  </button>
+                )}
+
                 <div className="my-1 border-t border-ink-700" />
                 <button
                   type="button"

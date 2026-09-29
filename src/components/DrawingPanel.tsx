@@ -25,6 +25,9 @@ import {
   Layers,
   ChevronLeft,
   ChevronRight,
+  RotateCcw,
+  CornerDownRight,
+  Shield,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -43,9 +46,18 @@ const BLEND_MODES: { label: string; value: GlobalCompositeOperation }[] = [
   { label: 'Multiply (Darken / Shadow)', value: 'multiply' },
   { label: 'Screen (Brighten / Glow)', value: 'screen' },
   { label: 'Overlay (Vibrant Tone)', value: 'overlay' },
-  { label: 'Color (Recolor / Hair Shading)', value: 'color' },
+  { label: 'Soft Light', value: 'soft-light' },
+  { label: 'Hard Light', value: 'hard-light' },
   { label: 'Darken', value: 'darken' },
   { label: 'Lighten', value: 'lighten' },
+  { label: 'Color Dodge', value: 'color-dodge' },
+  { label: 'Color Burn', value: 'color-burn' },
+  { label: 'Difference', value: 'difference' },
+  { label: 'Exclusion', value: 'exclusion' },
+  { label: 'Hue', value: 'hue' },
+  { label: 'Saturation', value: 'saturation' },
+  { label: 'Color (Recolor / Shading)', value: 'color' },
+  { label: 'Luminosity', value: 'luminosity' },
 ]
 
 export function DrawingPanel() {
@@ -82,6 +94,16 @@ export function DrawingPanel() {
   const setPaintLayerOpacity = useEditor((s) => s.setPaintLayerOpacity)
   const drawingStrokes = useEditor((s) => s.drawingStrokes)
   const clearDrawingStrokes = useEditor((s) => s.clearDrawingStrokes)
+  const activeMaskId = useEditor((s) => s.activeMaskId)
+  const setActiveMask = useEditor((s) => s.setActiveMask)
+  const addTransparencyMask = useEditor((s) => s.addTransparencyMask)
+  const removeTransparencyMask = useEditor((s) => s.removeTransparencyMask)
+  const toggleTransparencyMask = useEditor((s) => s.toggleTransparencyMask)
+  const invertTransparencyMask = useEditor((s) => s.invertTransparencyMask)
+  const setTransparencyMaskOpacity = useEditor((s) => s.setTransparencyMaskOpacity)
+  const applyTransparencyMask = useEditor((s) => s.applyTransparencyMask)
+  const brushDynamics = useEditor((s) => s.brushDynamics)
+  const setBrushDynamics = useEditor((s) => s.setBrushDynamics)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
 
@@ -155,6 +177,70 @@ export function DrawingPanel() {
         </button>
       </div>
 
+      {/* Krita-Style Transparency Mask Active Editing Banner */}
+      {activeMaskId && (
+        <div data-testid="mask-editing-banner" className="p-2.5 rounded-lg bg-indigo-950/70 border border-indigo-700/60 flex flex-col gap-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-semibold text-indigo-300 flex items-center gap-1.5">
+              <Layers size={13} className="text-indigo-400" />
+              <span>Editing Transparency Mask</span>
+            </span>
+            <button
+              type="button"
+              data-testid="exit-mask-editing-btn"
+              onClick={() => setActiveMask(null)}
+              className="text-[10px] text-indigo-200 hover:text-white px-1.5 py-0.5 rounded bg-indigo-800/60 hover:bg-indigo-700 transition-colors"
+            >
+              Back to Layer
+            </button>
+          </div>
+          <div className="text-[10px] text-indigo-200/80 leading-relaxed">
+            Non-destructive: Black hides pixels, White reveals, Gray creates semi-transparency.
+          </div>
+          <div className="flex items-center gap-1.5 pt-1">
+            <button
+              type="button"
+              data-testid="mask-swatch-black"
+              onClick={() => setDrawingColor('#000000')}
+              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium border ${
+                drawingColor === '#000000'
+                  ? 'bg-black text-white border-brand'
+                  : 'bg-black/60 text-ink-300 border-ink-700 hover:text-white'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-black border border-white/40" />
+              <span>Hide (Black)</span>
+            </button>
+            <button
+              type="button"
+              data-testid="mask-swatch-white"
+              onClick={() => setDrawingColor('#ffffff')}
+              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium border ${
+                drawingColor === '#ffffff'
+                  ? 'bg-white text-ink-950 border-brand font-bold'
+                  : 'bg-white/10 text-ink-200 border-ink-700 hover:text-white'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-white border border-ink-400" />
+              <span>Reveal (White)</span>
+            </button>
+            <button
+              type="button"
+              data-testid="mask-swatch-gray"
+              onClick={() => setDrawingColor('#808080')}
+              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium border ${
+                drawingColor === '#808080'
+                  ? 'bg-ink-700 text-white border-brand'
+                  : 'bg-ink-800 text-ink-300 border-ink-700 hover:text-white'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-gray-400" />
+              <span>50% Gray</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Tools Selection */}
       <div className="flex flex-col gap-2.5">
         <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Drawing Tools</div>
@@ -206,33 +292,25 @@ export function DrawingPanel() {
               className="accent-brand rounded cursor-pointer"
             />
             <span className={attachDirectlyToVideo ? 'text-brand font-medium' : 'text-amber-400 font-medium'}>
-              {attachDirectlyToVideo ? 'Add Directly to Video' : 'Separate Timeline Track'}
+              {attachDirectlyToVideo ? 'Direct Video Overlay' : 'Separate Track'}
             </span>
           </label>
         </div>
-        {!attachDirectlyToVideo && (
-          <div className="p-2 rounded bg-ink-950 border border-ink-800/90 text-[10px] text-ink-300 flex flex-col gap-1.5">
-            <span className="text-amber-400 font-semibold">
-              Drawing converted to independent timeline track!
-            </span>
-            <span>Edit, trim, or move side-by-side with video clips in timeline.</span>
-            {videoClips.length > 1 && (
-              <div className="pt-1 border-t border-ink-800 flex flex-col gap-1">
-                <span className="text-ink-400">Target video to merge back into:</span>
-                <select
-                  data-testid="drawing-merge-source-select"
-                  value={selectedMergeSourceClipId}
-                  onChange={(e) => setSelectedMergeSourceClipId(e.target.value)}
-                  className="bg-ink-900 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] text-ink-200"
-                >
-                  {videoClips.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+        {!attachDirectlyToVideo && videoClips.length > 1 && (
+          <div className="flex items-center justify-between gap-1 pt-1 border-t border-ink-800 text-[10px]">
+            <span className="text-ink-400">Target Video:</span>
+            <select
+              data-testid="drawing-merge-source-select"
+              value={selectedMergeSourceClipId}
+              onChange={(e) => setSelectedMergeSourceClipId(e.target.value)}
+              className="bg-ink-950 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] text-ink-200"
+            >
+              {videoClips.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
           </div>
         )}
       </div>
@@ -568,42 +646,191 @@ export function DrawingPanel() {
             Add Layer
           </button>
         </div>
-        <div className="flex flex-col gap-1 max-h-36 overflow-y-auto">
+        <div className="flex flex-col gap-1.5 max-h-56 overflow-y-auto">
           {paintLayers.map((layer) => {
-            const isActive = layer.id === activePaintLayerId
+            const isLayerActive = layer.id === activePaintLayerId && !activeMaskId
+            const isMaskActive = layer.transparencyMask && layer.transparencyMask.id === activeMaskId
             return (
-              <div
-                key={layer.id}
-                onClick={() => useEditor.setState({ activePaintLayerId: layer.id })}
-                className={`flex items-center justify-between px-2 py-1.5 rounded cursor-pointer border transition-colors ${
-                  isActive
-                    ? 'bg-ink-800 border-brand/50 text-white'
-                    : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850'
-                }`}
-              >
-                <span className="truncate">{layer.name}</span>
-                <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                  <button
-                    type="button"
-                    data-testid={`toggle-layer-visibility-${layer.id}`}
-                    onClick={() => togglePaintLayerVisibility(layer.id)}
-                    className="p-1 rounded text-ink-400 hover:text-white hover:bg-ink-750"
-                  >
-                    {layer.visible ? <Eye size={13} /> : <EyeOff size={13} className="text-ink-600" />}
-                  </button>
-                  <button
-                    type="button"
-                    data-testid={`clear-layer-strokes-${layer.id}`}
-                    onClick={() => clearDrawingStrokes(layer.id)}
-                    title="Clear layer strokes"
-                    className="p-1 rounded text-ink-400 hover:text-red-400 hover:bg-ink-750"
-                  >
-                    <Trash2 size={13} />
-                  </button>
+              <div key={layer.id} className="flex flex-col gap-1">
+                {/* Main Layer Row */}
+                <div
+                  data-testid={`paint-layer-item-${layer.id}`}
+                  onClick={() => {
+                    useEditor.setState({ activePaintLayerId: layer.id })
+                    setActiveMask(null)
+                  }}
+                  className={`flex items-center justify-between px-2 py-1.5 rounded cursor-pointer border transition-colors ${
+                    isLayerActive
+                      ? 'bg-ink-800 border-brand/50 text-white'
+                      : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 truncate">
+                    <span className="truncate">{layer.name}</span>
+                    {layer.transparencyMask && (
+                      <span className="text-[9px] px-1 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono">
+                        +Mask
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                    {!layer.transparencyMask && (
+                      <button
+                        type="button"
+                        data-testid={`add-transparency-mask-${layer.id}`}
+                        onClick={() => addTransparencyMask(layer.id)}
+                        title="Add Krita-style Transparency Mask"
+                        className="text-[10px] text-indigo-300 hover:text-white px-1.5 py-0.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 font-medium"
+                      >
+                        + Mask
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      data-testid={`toggle-layer-visibility-${layer.id}`}
+                      onClick={() => togglePaintLayerVisibility(layer.id)}
+                      className="p-1 rounded text-ink-400 hover:text-white hover:bg-ink-750"
+                    >
+                      {layer.visible ? <Eye size={13} /> : <EyeOff size={13} className="text-ink-600" />}
+                    </button>
+                    <button
+                      type="button"
+                      data-testid={`clear-layer-strokes-${layer.id}`}
+                      onClick={() => clearDrawingStrokes(layer.id)}
+                      title="Clear layer strokes"
+                      className="p-1 rounded text-ink-400 hover:text-red-400 hover:bg-ink-750"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
                 </div>
+
+                {/* Indented Transparency Mask Child Node (Krita KisTransparencyMask) */}
+                {layer.transparencyMask && (
+                  <div
+                    data-testid={`transparency-mask-item-${layer.id}`}
+                    onClick={() => {
+                      useEditor.setState({ activePaintLayerId: layer.id })
+                      setActiveMask(layer.transparencyMask!.id)
+                    }}
+                    className={`ml-3.5 flex items-center justify-between px-2 py-1 rounded cursor-pointer border text-xs transition-colors ${
+                      isMaskActive
+                        ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-xs'
+                        : 'bg-ink-950/60 border-ink-800/80 text-ink-400 hover:bg-ink-900'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5 truncate">
+                      <CornerDownRight size={11} className="text-indigo-400 shrink-0" />
+                      <span className="truncate">Transparency Mask</span>
+                      {layer.transparencyMask.inverted && (
+                        <span className="text-[8px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
+                          INV
+                        </span>
+                      )}
+                      {isMaskActive && (
+                        <span className="text-[8px] px-1 py-0.2 rounded bg-indigo-500 text-white font-bold">
+                          EDITING
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        type="button"
+                        data-testid={`invert-mask-${layer.id}`}
+                        onClick={() => invertTransparencyMask(layer.id)}
+                        title="Invert Mask (Black <-> White)"
+                        className="p-1 rounded text-ink-400 hover:text-amber-300 hover:bg-ink-800"
+                      >
+                        <RotateCcw size={11} />
+                      </button>
+                      <button
+                        type="button"
+                        data-testid={`toggle-mask-enabled-${layer.id}`}
+                        onClick={() => toggleTransparencyMask(layer.id)}
+                        title={layer.transparencyMask.enabled ? 'Bypass Mask' : 'Enable Mask'}
+                        className="p-1 rounded text-ink-400 hover:text-white hover:bg-ink-800"
+                      >
+                        {layer.transparencyMask.enabled ? (
+                          <Eye size={12} className="text-indigo-400" />
+                        ) : (
+                          <EyeOff size={12} className="text-ink-600" />
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        data-testid={`delete-mask-${layer.id}`}
+                        onClick={() => removeTransparencyMask(layer.id)}
+                        title="Delete Transparency Mask"
+                        className="p-1 rounded text-ink-400 hover:text-red-400 hover:bg-ink-800"
+                      >
+                        <Trash2 size={11} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )
           })}
+        </div>
+      </div>
+
+      {/* Krita Professional Brush Dynamics & Tablet Stylus */}
+      <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
+        <div className="flex items-center justify-between text-[11px] font-medium text-ink-300">
+          <span className="flex items-center gap-1">
+            <Sliders size={12} className="text-brand" />
+            <span>Brush Dynamics & Stabilizer (Krita Engine)</span>
+          </span>
+          <span className="text-[9px] font-mono text-ink-400">Stylus / Pen</span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          <label className="flex items-center gap-1.5 cursor-pointer text-ink-300 hover:text-white">
+            <input
+              type="checkbox"
+              data-testid="brush-pressure-size-checkbox"
+              checked={brushDynamics.pressureSize}
+              onChange={(e) => setBrushDynamics({ pressureSize: e.target.checked })}
+              className="rounded border-ink-700 text-brand focus:ring-brand bg-ink-800"
+            />
+            <span className="text-[11px]">Pressure Size</span>
+          </label>
+
+          <label className="flex items-center gap-1.5 cursor-pointer text-ink-300 hover:text-white">
+            <input
+              type="checkbox"
+              data-testid="brush-pressure-opacity-checkbox"
+              checked={brushDynamics.pressureOpacity}
+              onChange={(e) => setBrushDynamics({ pressureOpacity: e.target.checked })}
+              className="rounded border-ink-700 text-brand focus:ring-brand bg-ink-800"
+            />
+            <span className="text-[11px]">Pressure Opacity</span>
+          </label>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between items-center text-[10px] text-ink-400 uppercase font-mono">
+            <span>Smoothing Mode</span>
+            <span className="text-brand font-semibold capitalize">{brushDynamics.smoothingMode}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-1 bg-ink-950 p-0.5 rounded border border-ink-800">
+            {(['none', 'smooth', 'stabilizer'] as const).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                data-testid={`smoothing-mode-${mode}`}
+                onClick={() => setBrushDynamics({ smoothingMode: mode })}
+                className={`py-1 rounded text-[10px] font-medium capitalize transition-colors ${
+                  brushDynamics.smoothingMode === mode
+                    ? 'bg-brand text-white'
+                    : 'text-ink-400 hover:text-white'
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

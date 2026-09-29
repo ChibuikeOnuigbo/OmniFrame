@@ -76,6 +76,17 @@ function getImage(asset: MediaAsset): HTMLImageElement {
   return i
 }
 
+const urlImageCache = new Map<string, HTMLImageElement>()
+function getUrlImage(url: string): HTMLImageElement {
+  let img = urlImageCache.get(url)
+  if (!img) {
+    img = new Image()
+    img.src = url
+    urlImageCache.set(url, img)
+  }
+  return img
+}
+
 export function allMediaElements(): HTMLMediaElement[] {
   return [
     ...Array.from(videoCache.values()),
@@ -212,6 +223,12 @@ export class PreviewEngine {
 
       const clip = activeClipOnTrack(st.clips, track.id, time)
       if (!clip) continue
+
+      if (clip.kind === 'compound' && track.type === 'video') {
+        this.drawCompoundClip(ctx, clip, time, st, track.muted)
+        continue
+      }
+
       const asset = st.assets.find((a) => a.id === clip.assetId)
       if (!asset) {
         if (clip.textStyle && track.type === 'video') {
@@ -583,15 +600,140 @@ export class PreviewEngine {
     ctx.translate(cx, cy)
     ctx.rotate((evalT.rotationZ * Math.PI) / 180)
     ctx.scale(evalT.scaleX, evalT.scaleY)
-    try {
-      ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
-    } catch {
-      /* not ready */
+
+    const st = useEditor.getState()
+    const isOmniFrameEligible =
+      asset.id === 'asset-death-note-vid' ||
+      clip.assetId === 'asset-death-note-vid' ||
+      asset.id === 'asset-death-note-img' ||
+      clip.assetId === 'asset-death-note-img' ||
+      asset.name.toLowerCase().includes('death note') ||
+      clip.name.toLowerCase().includes('death note')
+    if (isOmniFrameEligible && st.omniframeCharacters && st.omniframeCharacters.length > 0) {
+      this.drawOmniframeCharacters(ctx, dw, dh, time, st)
+    } else {
+      try {
+        ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
+      } catch {
+        /* not ready */
+      }
     }
 
     // Render Title / Text Overlay if clip has text style
     if (clip.textStyle) {
       this.drawTextClip(ctx, clip)
+    }
+
+    ctx.restore()
+  }
+
+  private drawOmniframeCharacters(
+    ctx: CanvasRenderingContext2D,
+    dw: number,
+    dh: number,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+  ) {
+    const bgImg = getUrlImage('/assets/death_note/clean_background.png')
+    if (bgImg.complete && bgImg.naturalWidth > 0) {
+      ctx.drawImage(bgImg, -dw / 2, -dh / 2, dw, dh)
+    } else {
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(-dw / 2, -dh / 2, dw, dh)
+    }
+
+    const characters = st.omniframeCharacters || []
+    for (const char of characters) {
+      const evalT = st.evaluateCharacterTransformAtTime(char.id, time)
+      if ((evalT.opacity ?? 1) <= 0.01) continue
+
+      const charImg = getUrlImage(char.cutoutUrl)
+      if (!charImg.complete || charImg.naturalWidth === 0) continue
+
+      const baseLeft = -dw / 2 + char.bounds.x * dw
+      const baseTop = -dh / 2 + char.bounds.y * dh
+      const baseW = char.bounds.width * dw
+      const baseH = char.bounds.height * dh
+
+      const scale = evalT.scale ?? 1
+      const cx = baseLeft + baseW / 2 + (evalT.x ?? 0) * (dw / PW)
+      const cy = baseTop + baseH / 2 + (evalT.y ?? 0) * (dh / PH)
+      const cw = baseW * scale
+      const ch = baseH * scale
+
+      ctx.save()
+      ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity ?? 1))
+      ctx.translate(cx, cy)
+      if (evalT.rotation) {
+        ctx.rotate((evalT.rotation * Math.PI) / 180)
+      }
+      ctx.drawImage(charImg, -cw / 2, -ch / 2, cw, ch)
+      ctx.restore()
+    }
+  }
+
+  private drawCompoundClip(
+    ctx: CanvasRenderingContext2D,
+    clip: Clip,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+    trackMuted: boolean,
+  ) {
+    const evalT = evaluateClipAnimation(clip, time)
+    ctx.save()
+    ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity))
+
+    if (clip.effects) {
+      const eff = clip.effects
+      const filters: string[] = []
+      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
+      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
+      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
+      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
+      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
+      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
+      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
+      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
+      if (filters.length > 0) ctx.filter = filters.join(' ')
+    }
+
+    const cx = this.width / 2 + evalT.x * (this.width / PW)
+    const cy = this.height / 2 + evalT.y * (this.height / PH)
+    ctx.translate(cx, cy)
+    ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    ctx.scale(evalT.scaleX, evalT.scaleY)
+
+    const innerTime = time - clip.start + clip.inPoint
+    const childSeq = (st.sequences || []).find((s) => s.id === clip.sourceSequenceId)
+    const childClips = childSeq ? childSeq.clips : (clip.originalChildClips || [])
+    const childTracks = childSeq ? childSeq.tracks : (clip.originalChildTracks || [])
+
+    const renderChildTracks = [...childTracks].reverse()
+    for (const childTrack of renderChildTracks) {
+      if (childTrack.type === 'video' && childTrack.hidden) continue
+
+      const childClip = activeClipOnTrack(childClips, childTrack.id, innerTime)
+      if (!childClip) continue
+
+      if (childClip.kind === 'compound') {
+        this.drawCompoundClip(ctx, childClip, innerTime, st, trackMuted || childTrack.muted)
+        continue
+      }
+
+      const childAsset = st.assets.find((a) => a.id === childClip.assetId)
+      if (!childAsset) {
+        if (childClip.textStyle && childTrack.type === 'video') {
+          this.drawTextClip(ctx, childClip)
+        }
+        continue
+      }
+
+      const el = this.syncElement(childAsset, innerTime, childClip, st.playing, trackMuted || childTrack.muted, st.speed)
+      if (!el) continue
+
+      if (childTrack.type === 'video') {
+        this.drawClip(ctx, el as CanvasImageSource, childClip, childAsset, innerTime)
+      }
     }
 
     ctx.restore()

@@ -38,6 +38,9 @@ import type {
   OmniframeCharacter,
   OmniframeScopeType,
   ClipMask,
+  Sequence,
+  TransparencyMask,
+  BrushDynamics,
 } from './types'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -133,6 +136,9 @@ interface Doc {
   groups: GroupInstance[]
   omniframeCharacters?: OmniframeCharacter[]
   attachDirectlyToVideo?: boolean
+  sequences?: Sequence[]
+  activeSequenceId?: string
+  breadcrumbs?: { id: string; name: string }[]
 }
 
 const MIN_CLIP = 0.05 // seconds
@@ -150,6 +156,9 @@ function cloneDoc(s: EditorState): Doc {
     groups: structuredClone(s.groups || []),
     omniframeCharacters: structuredClone(s.omniframeCharacters || []),
     attachDirectlyToVideo: s.attachDirectlyToVideo ?? true,
+    sequences: structuredClone(s.sequences || []),
+    activeSequenceId: s.activeSequenceId ?? 'main',
+    breadcrumbs: structuredClone(s.breadcrumbs || [{ id: 'main', name: 'Main Timeline' }]),
   }
 }
 
@@ -294,6 +303,18 @@ export interface EditorState {
   shrinkSelection: (pixels?: number) => void
   setSelectionFeather: (feather: number) => void
 
+  // ---- Krita-Style Transparency Masks & Brush Dynamics ----
+  activeMaskId: string | null
+  brushDynamics: BrushDynamics
+  addTransparencyMask: (layerId: string) => string
+  removeTransparencyMask: (layerId: string) => void
+  toggleTransparencyMask: (layerId: string) => void
+  invertTransparencyMask: (layerId: string) => void
+  setTransparencyMaskOpacity: (layerId: string, opacity: number) => void
+  applyTransparencyMask: (layerId: string) => void
+  setActiveMask: (maskId: string | null) => void
+  setBrushDynamics: (dynamics: Partial<BrushDynamics>) => void
+
   // ---- OmniFrame & Character Manipulation ----
   omniframeMode: boolean
   omniframeCharacters: OmniframeCharacter[]
@@ -314,6 +335,8 @@ export interface EditorState {
   cutCharacterToNewTrack: (charId: string) => string
   duplicateCharacter: (charId: string) => string
   removeCharacterInfill: (charId: string) => void
+  deleteCharacter: (charId: string) => void
+  restoreCharacter: (charId: string) => void
   resetCharacterPosition: (charId: string) => void
 
   setAttachDirectlyToVideo: (attach: boolean, targetClipId?: string) => void
@@ -432,6 +455,18 @@ export interface EditorState {
   updateClipKeyframe: (clipId: string, propertyId: string, keyframeId: string, updates: Partial<KeyframeNode>) => void
   setCurveExtrapolation: (clipId: string, propertyId: string, before: ExtrapolationMode, after: ExtrapolationMode) => void
 
+  // ---- compound clips & sequence hierarchy ----
+  sequences: Sequence[]
+  activeSequenceId: string
+  breadcrumbs: { id: string; name: string }[]
+  selectedClipIds: string[]
+  createCompoundClip: (clipIds?: string[], name?: string) => string | null
+  uncompoundClip: (compoundClipId: string) => boolean
+  openSequence: (sequenceId: string) => void
+  navigateBreadcrumb: (sequenceId: string) => void
+  selectClips: (ids: string[]) => void
+  toggleClipSelection: (id: string, multi?: boolean) => void
+
   // ---- project ----
   newProject: () => void
   recomputeDuration: () => void
@@ -529,9 +564,19 @@ export const useEditor = create<EditorState>((set, get) => {
         url: '/death_note_video.mp4',
         duration: 8.0,
         width: 1672,
-        height: 941,
+        height: 940,
         fps: 30,
         size: 1548200,
+      },
+      {
+        id: 'asset-death-note-img',
+        name: 'Death Note Chibi - 5 Characters.jfif',
+        kind: 'image',
+        url: '/death_note_composite.jfif',
+        duration: 5.0,
+        width: 1672,
+        height: 941,
+        size: 158400,
       },
     ],
     tracks: [],
@@ -548,6 +593,10 @@ export const useEditor = create<EditorState>((set, get) => {
     previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     audioIsolationModel: 'omni-voicetarget',
     selectedClipId: null,
+    selectedClipIds: [],
+    sequences: [],
+    activeSequenceId: 'main',
+    breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
     tool: 'select',
     leftTab: 'media',
     leftOpen: true,
@@ -793,6 +842,14 @@ export const useEditor = create<EditorState>((set, get) => {
       tintAfter: '#10b981',
     },
     activeSelection: null,
+    activeMaskId: null,
+    brushDynamics: {
+      pressureSize: true,
+      pressureOpacity: false,
+      pressureFlow: false,
+      smoothingMode: 'smooth',
+      stabilizerRadius: 30,
+    },
 
     // ---- layout initial state ----
     workspacePreset: 'default',
@@ -1392,7 +1449,18 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
-    selectClip: (id) => set({ selectedClipId: id }),
+    selectClip: (id) => set({ selectedClipId: id, selectedClipIds: id ? [id] : [] }),
+    selectClips: (ids) => set({ selectedClipIds: ids, selectedClipId: ids[0] || null }),
+    toggleClipSelection: (id, multi = false) => {
+      const s = get()
+      if (!multi) {
+        set({ selectedClipId: id, selectedClipIds: id ? [id] : [] })
+        return
+      }
+      const exists = s.selectedClipIds.includes(id)
+      const newIds = exists ? s.selectedClipIds.filter((x) => x !== id) : [...s.selectedClipIds, id]
+      set({ selectedClipIds: newIds, selectedClipId: newIds[newIds.length - 1] || null })
+    },
 
     setClipProp: (id, partial) => {
       set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...partial } : c)) }))
@@ -1415,6 +1483,197 @@ export const useEditor = create<EditorState>((set, get) => {
     toggleTrackGapless: (id) => {
       pushSnapshot()
       set((s) => ({ tracks: s.tracks.map((t) => (t.id === id ? { ...t, gapless: !t.gapless } : t)) }))
+    },
+
+    // ---- Compound Clip & Sequence Actions ----
+    createCompoundClip: (clipIds, customName) => {
+      const s = get()
+      const targetIds = clipIds && clipIds.length > 0
+        ? clipIds
+        : (s.selectedClipIds.length > 0 ? s.selectedClipIds : (s.selectedClipId ? [s.selectedClipId] : []))
+
+      if (targetIds.length === 0) return null
+      const targetClips = s.clips.filter((c) => targetIds.includes(c.id))
+      if (targetClips.length === 0) return null
+
+      pushSnapshot()
+
+      const minStart = Math.min(...targetClips.map((c) => c.start))
+      const maxEnd = Math.max(...targetClips.map((c) => c.start + c.duration))
+      const compoundDuration = Math.max(0.1, maxEnd - minStart)
+      const baseTrackId = targetClips[0].trackId
+
+      const childSequenceId = `seq-compound-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+      const compoundClipId = `clip-compound-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+      const compoundName = customName || (targetClips.length === 1 ? `Compound: ${targetClips[0].name}` : `Compound Clip (${targetClips.length} Clips)`)
+
+      // Rebase child clips: child start relative to compound start (0)
+      const childClips: Clip[] = targetClips.map((child) => ({
+        ...structuredClone(child),
+        start: Math.max(0, child.start - minStart),
+      }))
+
+      // Collect child tracks used by these clips
+      const childTrackIds = new Set(targetClips.map((c) => c.trackId))
+      const childTracks: Track[] = s.tracks
+        .filter((t) => childTrackIds.has(t.id))
+        .map((t) => structuredClone(t))
+
+      const childSequence: Sequence = {
+        id: childSequenceId,
+        name: compoundName,
+        duration: compoundDuration,
+        tracks: childTracks,
+        clips: childClips,
+        parentSequenceId: s.activeSequenceId,
+        compoundClipId,
+      }
+
+      // Create outer compound clip
+      const compoundClip: Clip = {
+        id: compoundClipId,
+        trackId: baseTrackId,
+        assetId: '',
+        start: minStart,
+        duration: compoundDuration,
+        inPoint: 0,
+        name: compoundName,
+        kind: 'compound',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        sourceSequenceId: childSequenceId,
+        originalChildClips: structuredClone(targetClips),
+        originalChildTracks: structuredClone(childTracks),
+        nestedTrackCount: childTracks.length,
+        nestedClipCount: targetClips.length,
+      }
+
+      const remainingClips = s.clips.filter((c) => !targetIds.includes(c.id))
+      const newClips = [...remainingClips, compoundClip]
+
+      // Update sequences registry
+      const updatedSequences = [...s.sequences.filter((seq) => seq.id !== childSequenceId), childSequence]
+
+      set({
+        clips: newClips,
+        sequences: updatedSequences,
+        selectedClipId: compoundClipId,
+        selectedClipIds: [compoundClipId],
+        duration: recompute(newClips),
+      })
+
+      return compoundClipId
+    },
+
+    uncompoundClip: (compoundClipId: string) => {
+      const s = get()
+      const compoundClip = s.clips.find((c) => c.id === compoundClipId && c.kind === 'compound')
+      if (!compoundClip) return false
+
+      pushSnapshot()
+
+      const childSeq = s.sequences.find((seq) => seq.id === compoundClip.sourceSequenceId)
+      const rawChildren = childSeq ? childSeq.clips : (compoundClip.originalChildClips || [])
+      const rawTracks = childSeq ? childSeq.tracks : (compoundClip.originalChildTracks || [])
+
+      const activeTrackIds = new Set(s.tracks.map((t) => t.id))
+      const tracksToAdd: Track[] = []
+      for (const t of rawTracks) {
+        if (!activeTrackIds.has(t.id)) {
+          tracksToAdd.push(structuredClone(t))
+          activeTrackIds.add(t.id)
+        }
+      }
+
+      const unfoldedClips: Clip[] = rawChildren.map((child) => ({
+        ...structuredClone(child),
+        start: compoundClip.start + child.start,
+      }))
+
+      const remainingClips = s.clips.filter((c) => c.id !== compoundClipId)
+      const newClips = [...remainingClips, ...unfoldedClips]
+      const newTracks = [...s.tracks, ...tracksToAdd]
+
+      const unfoldedIds = unfoldedClips.map((c) => c.id)
+
+      set({
+        tracks: newTracks,
+        clips: newClips,
+        selectedClipId: unfoldedIds[0] || null,
+        selectedClipIds: unfoldedIds,
+        duration: recompute(newClips),
+      })
+
+      return true
+    },
+
+    openSequence: (sequenceId: string) => {
+      const s = get()
+      if (s.activeSequenceId === sequenceId) return
+
+      // Save current state into current sequence in sequences list
+      const currentSeqIndex = s.sequences.findIndex((seq) => seq.id === s.activeSequenceId)
+      let updatedSequences = [...s.sequences]
+      const currentSnapshot: Sequence = {
+        id: s.activeSequenceId,
+        name: s.breadcrumbs.find((b) => b.id === s.activeSequenceId)?.name || (s.activeSequenceId === 'main' ? 'Main Timeline' : 'Sequence'),
+        duration: s.duration,
+        tracks: structuredClone(s.tracks),
+        clips: structuredClone(s.clips),
+      }
+      if (currentSeqIndex >= 0) {
+        updatedSequences[currentSeqIndex] = currentSnapshot
+      } else {
+        updatedSequences.push(currentSnapshot)
+      }
+
+      if (sequenceId === 'main') {
+        const mainSeq = updatedSequences.find((seq) => seq.id === 'main')
+        if (mainSeq) {
+          set({
+            activeSequenceId: 'main',
+            breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
+            tracks: mainSeq.tracks,
+            clips: mainSeq.clips,
+            sequences: updatedSequences,
+            selectedClipId: null,
+            selectedClipIds: [],
+            duration: recompute(mainSeq.clips),
+            playhead: 0,
+          })
+        } else {
+          set({
+            activeSequenceId: 'main',
+            breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
+            sequences: updatedSequences,
+            selectedClipId: null,
+            selectedClipIds: [],
+          })
+        }
+        return
+      }
+
+      const targetSeq = updatedSequences.find((seq) => seq.id === sequenceId)
+      if (!targetSeq) return
+
+      const newBreadcrumbs = [{ id: 'main', name: 'Main Timeline' }, { id: targetSeq.id, name: targetSeq.name }]
+
+      set({
+        activeSequenceId: targetSeq.id,
+        breadcrumbs: newBreadcrumbs,
+        tracks: structuredClone(targetSeq.tracks),
+        clips: structuredClone(targetSeq.clips),
+        sequences: updatedSequences,
+        selectedClipId: null,
+        selectedClipIds: [],
+        duration: recompute(targetSeq.clips),
+        playhead: 0,
+      })
+    },
+
+    navigateBreadcrumb: (sequenceId: string) => {
+      get().openSequence(sequenceId)
     },
 
     setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
@@ -1600,6 +1859,107 @@ export const useEditor = create<EditorState>((set, get) => {
       }))
     },
 
+    // ---- Krita-Style Transparency Mask Actions ----
+    addTransparencyMask: (layerId) => {
+      const maskId = uid('mask')
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) => {
+          if (l.id !== layerId) return l
+          return {
+            ...l,
+            transparencyMask: {
+              id: maskId,
+              parentLayerId: layerId,
+              name: 'Transparency Mask',
+              enabled: true,
+              inverted: false,
+              opacity: 1,
+            },
+          }
+        }),
+        activeMaskId: maskId,
+        drawingColor: '#000000', // Default to black (erase / hide in Krita)
+      }))
+      return maskId
+    },
+    removeTransparencyMask: (layerId) => {
+      pushSnapshot()
+      set((s) => {
+        const mask = s.paintLayers.find((l) => l.id === layerId)?.transparencyMask
+        return {
+          paintLayers: s.paintLayers.map((l) => {
+            if (l.id !== layerId) return l
+            const { transparencyMask, ...rest } = l
+            return rest
+          }),
+          drawingStrokes: s.drawingStrokes.filter((st) => !(st.layerId === layerId && st.maskId)),
+          activeMaskId: s.activeMaskId && mask && mask.id === s.activeMaskId ? null : s.activeMaskId,
+        }
+      })
+    },
+    toggleTransparencyMask: (layerId) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) => {
+          if (l.id !== layerId || !l.transparencyMask) return l
+          return {
+            ...l,
+            transparencyMask: {
+              ...l.transparencyMask,
+              enabled: !l.transparencyMask.enabled,
+            },
+          }
+        }),
+      }))
+    },
+    invertTransparencyMask: (layerId) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) => {
+          if (l.id !== layerId || !l.transparencyMask) return l
+          return {
+            ...l,
+            transparencyMask: {
+              ...l.transparencyMask,
+              inverted: !l.transparencyMask.inverted,
+            },
+          }
+        }),
+      }))
+    },
+    setTransparencyMaskOpacity: (layerId, opacity) => {
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((l) => {
+          if (l.id !== layerId || !l.transparencyMask) return l
+          return {
+            ...l,
+            transparencyMask: {
+              ...l.transparencyMask,
+              opacity: Math.max(0, Math.min(1, opacity)),
+            },
+          }
+        }),
+      }))
+    },
+    applyTransparencyMask: (layerId) => {
+      pushSnapshot()
+      set((s) => {
+        const mask = s.paintLayers.find((l) => l.id === layerId)?.transparencyMask
+        return {
+          paintLayers: s.paintLayers.map((l) => {
+            if (l.id !== layerId) return l
+            const { transparencyMask, ...rest } = l
+            return rest
+          }),
+          activeMaskId: s.activeMaskId && mask && mask.id === s.activeMaskId ? null : s.activeMaskId,
+        }
+      })
+    },
+    setActiveMask: (maskId) => set({ activeMaskId: maskId }),
+    setBrushDynamics: (dynamics) => set((s) => ({ brushDynamics: { ...s.brushDynamics, ...dynamics } })),
+
     // ---- OmniFrame & Character Manipulation actions ----
     setOmniframeMode: (v) => set({ omniframeMode: v }),
     setSelectedCharacterId: (id) => set({ selectedCharacterId: id }),
@@ -1697,6 +2057,27 @@ export const useEditor = create<EditorState>((set, get) => {
             ? {
                 ...c,
                 transform: { ...c.transform, opacity: 0 },
+              }
+            : c
+        ),
+      }))
+    },
+    deleteCharacter: (charId) => {
+      pushSnapshot()
+      const remaining = get().omniframeCharacters.filter((c) => c.id !== charId)
+      set({
+        omniframeCharacters: remaining,
+        selectedCharacterId: remaining[0]?.id || null,
+      })
+    },
+    restoreCharacter: (charId) => {
+      pushSnapshot()
+      set((s) => ({
+        omniframeCharacters: s.omniframeCharacters.map((c) =>
+          c.id === charId
+            ? {
+                ...c,
+                transform: { ...c.transform, opacity: 1 },
               }
             : c
         ),
@@ -1994,10 +2375,14 @@ export const useEditor = create<EditorState>((set, get) => {
         linkSets: prev.linkSets || [],
         parentRelationships: prev.parentRelationships || [],
         groups: prev.groups || [],
+        sequences: prev.sequences || [],
+        activeSequenceId: prev.activeSequenceId || 'main',
+        breadcrumbs: prev.breadcrumbs || [{ id: 'main', name: 'Main Timeline' }],
         past: past.slice(0, -1),
         future: [...future.slice(-49), current],
         duration: recompute(prev.clips),
         selectedClipId: null,
+        selectedClipIds: [],
         selectedTransitionId: null,
       })
     },
@@ -2016,10 +2401,14 @@ export const useEditor = create<EditorState>((set, get) => {
         linkSets: next.linkSets || [],
         parentRelationships: next.parentRelationships || [],
         groups: next.groups || [],
+        sequences: next.sequences || [],
+        activeSequenceId: next.activeSequenceId || 'main',
+        breadcrumbs: next.breadcrumbs || [{ id: 'main', name: 'Main Timeline' }],
         future: future.slice(0, -1),
         past: [...past.slice(-49), current],
         duration: recompute(next.clips),
         selectedClipId: null,
+        selectedClipIds: [],
         selectedTransitionId: null,
       })
     },
@@ -2258,6 +2647,10 @@ export const useEditor = create<EditorState>((set, get) => {
         playhead: 0,
         duration: 10,
         selectedClipId: null,
+        selectedClipIds: [],
+        sequences: [],
+        activeSequenceId: 'main',
+        breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
         past: [],
         future: [],
         playing: false,

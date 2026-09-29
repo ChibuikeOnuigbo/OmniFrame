@@ -74,3 +74,11 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-26T22:17:10+00:00 — Drawing Run #9: [PASS] Voice Isolation & Curve 3D Verification — Playwright E2E and OpenCV metrics verified for Graph Editor, Keyframing, and 3D Viewport
 
 - 2026-09-26T23:10:00+00:00 — Drawing Run #10: [PASS] OmniFrame Mode, Drawing Mode & Masking Conversions — Verified All Frames, Section, 1-frame scopes, Drawing Add to Video toggle, frame attach stepper, and Mask <-> Drawing <-> Selection conversions
+
+- 2026-09-27T11:54:21+00:00 — Drawing Run #11: [VERIFIED] Compound Clip & Color Coding Architecture — Sequence hierarchy, breadcrumb navigation, target-aware context menu, distinct track/clip palettes, video character shift preview verified with Playwright E2E and OpenCV
+
+- 2026-09-27T12:55:12+00:00 — Drawing Run #12: [VERIFIED]  — 
+
+- 2026-09-27T15:29:08+00:00 — Drawing Run #13: [VERIFIED]  — 
+
+- 2026-09-29T23:00:59+00:00 — Drawing Run #14: [VERIFIED] OmniFrame Mode Vetting & UI Decluttering — Vetted OmniFrame on image asset and multi-frame video across frames 0, 90, 105, 150 with clean inpainting zero-ghost and decluttered UI

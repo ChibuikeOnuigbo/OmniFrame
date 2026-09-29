@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines, Volume2, Diamond, Activity } from 'lucide-react'
+import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines, Volume2, Diamond, Activity, FolderOpen, FolderOutput, Layers } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
@@ -105,6 +105,39 @@ function ClipInspector({ clip }: { clip: Clip }) {
             <Trash2 size={13} /> Delete
           </button>
         </div>
+        {clip.kind === 'compound' && (
+          <div className="mt-2 p-2 rounded bg-indigo-950/60 border border-indigo-500/30 flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-xs text-indigo-200">
+              <span className="font-semibold flex items-center gap-1.5">
+                <Layers size={13} className="text-indigo-400" />
+                <span>Compound Sequence</span>
+              </span>
+              <span className="text-[10px] font-mono text-indigo-300">
+                {clip.nestedTrackCount || 1} Tracks · {clip.nestedClipCount || 1} Clips
+              </span>
+            </div>
+            <div className="flex gap-2 mt-1">
+              <button
+                type="button"
+                data-testid="inspector-open-compound-btn"
+                onClick={() => {
+                  if (clip.sourceSequenceId) useEditor.getState().openSequence(clip.sourceSequenceId)
+                }}
+                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 text-xs font-medium transition-colors"
+              >
+                <FolderOpen size={12} /> Open Timeline
+              </button>
+              <button
+                type="button"
+                data-testid="inspector-uncompound-btn"
+                onClick={() => useEditor.getState().uncompoundClip(clip.id)}
+                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-medium transition-colors"
+              >
+                <FolderOutput size={12} /> Decompose
+              </button>
+            </div>
+          </div>
+        )}
         {clip.kind === 'video' && !assets.some((item) => item.extractedFromClipId === clip.id) && (
           <button
             type="button"
@@ -141,6 +174,21 @@ function ClipInspector({ clip }: { clip: Clip }) {
           <Slider min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
           {renderKeyframeControl('opacity', t.opacity)}
+        </Field>
+        <Field label="3D Depth (Z)">
+          <Slider min={-1000} max={1000} value={t.z ?? 0} onChange={(v) => setClipTransform(clip.id, { z: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.z ?? 0)}</span>
+          {renderKeyframeControl('position_z', t.z ?? 0)}
+        </Field>
+        <Field label="Rotation X (Tilt)">
+          <Slider min={-180} max={180} value={t.rotationX ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationX: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationX ?? 0)}°</span>
+          {renderKeyframeControl('rotation_x', t.rotationX ?? 0)}
+        </Field>
+        <Field label="Rotation Y (Pan)">
+          <Slider min={-180} max={180} value={t.rotationY ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationY: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationY ?? 0)}°</span>
+          {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
         </Field>
       </Section>
 

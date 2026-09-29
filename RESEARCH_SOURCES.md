@@ -126,4 +126,48 @@ Per OmniFrame Code Research Policy, we systematically examine open-source and pr
   - Directional DAG parenting hierarchies with cycle prevention and apparent world-transform preservation during reparenting.
 - **OmniFrame Takeaway**: Implemented Universal LinkSets, `arrangeLinkedElements` time-alignment algorithm, and DAG cycle detection in `src/store.ts` and `LinkPanel.tsx`.
 
+### 15. DaVinci Resolve & Final Cut Pro Compound Clip / Nested Sequence Architecture
+- **Upstream / Reference**: Blackmagic DaVinci Resolve & Apple Final Cut Pro X
+- **License**: Proprietary Commercial Architectural Research
+- **Core Architecture Analyzed**:
+  - Compound clips collapse multiple multi-track items into a single container clip on the parent timeline.
+  - Child start positions are rebased relative to compound start (t=0).
+  - Double-clicking opens the internal nested sequence with breadcrumb navigation.
+  - "Decompose in Place" / "Uncompound Clip" dissolves the container and restores child clips to the outer timeline with original track positions and absolute timing.
+  - Compound clip has its own container-level transforms (scale, 3D rotation, opacity) applied to all children in unison.
+- **OmniFrame Takeaway**: Implemented first-class `Sequence` model, `sourceSequenceId`, rebased child timing, breadcrumbs navigation bar with Back button, target-aware context menu, and atomic undo/redo in `src/store.ts`, `Timeline.tsx`, `RightPanel.tsx`, and `playback.ts`.
+
+### 16. Runway Gen-2, Adobe Photoshop Generative Fill & Meta SAM Temporal Video Inpainting
+- **Upstream / Reference**: Runway Gen-2, Adobe Photoshop Generative Fill, Meta Segment Anything Model (SAM)
+- **License**: Research & Industry Standards
+- **Core Architecture Analyzed**:
+  - When characters or foreground elements are displaced or erased in video editing, rendering a moved cutout directly over the raw original frame causes severe "double ghost" artifacts (the original character remains visible underneath).
+  - Clean video manipulation mandates a two-pass compositing pipeline:
+    1. Plate Inpainting: The background is reconstructed at the original character bounding box (or clean reference backdrop plate `clean_background.png` is composited) to erase the character's original presence.
+    2. Dynamic Cutout Projection: The isolated foreground cutout is composited at its evaluated temporal position (`all`, `frame`, or `section` scope) with sub-pixel alignment and zero trace of the underlying silhouette.
+  - Duplication workflows instantiate independent clone entities with decoupled transform states, allowing multiple identical characters to be animated concurrently without interfering with the inpainting layer.
+- **OmniFrame Takeaway**: Integrated `clean_background.png` inpainting backdrop in `drawOmniframeCharacters` (`src/lib/playback.ts`), eliminated duplicate DOM overlay images, implemented `duplicateCharacter`, `removeCharacterInfill`, `deleteCharacter`, and `restoreCharacter` in `src/store.ts`, and built the 'Rearrange Clean' non-overlapping layout engine.
+
+### 17. Krita Digital Painting Architecture, `KisTransparencyMask` & Desktop vs Web Porting
+- **Upstream / Reference**: Krita (`invent.kde.org/graphics/krita`, `docs.krita.org`)
+- **License**: GNU General Public License v3 (GPLv3) — Studied for clean-room engineering research in full compliance with the Code Research Policy.
+- **Core Architecture Analyzed**:
+  - **Node Tree Model (`KisNode`)**: Krita's image model is structured as a hierarchical node tree rooted at `KisImage::rootLayer()`. Layers (`KisLayer`) can host child masks (`KisMask`) that non-destructively modify the layer's projection without touching the original pixel device.
+  - **Transparency Mask (`KisTransparencyMask`)**: A 1-channel / grayscale selection device attached as a child node to a paint layer.
+    - Pixel semantics: Black ($0$) corresponds to complete transparency (hides pixels, letting lower layers show through); White ($255$) corresponds to complete opacity (reveals pixels); Grays represent continuous semi-transparency.
+    - Applying an eraser on the mask restores original opacity by painting white ($255$).
+    - Mask can be independently enabled/disabled (bypassed), inverted, or blended with variable opacity.
+  - **Desktop High-Performance Engine**:
+    - Tiled memory manager (`KisPaintDevice` using 64x64 pixel tiles with copy-on-write COW mementos for undo).
+    - Multi-threaded asynchronous compositing pipeline (`KisAsyncMerger`).
+    - GPU canvas rendering utilizing OpenGL/ANGLE and native hardware tablet drivers (Wintab, Windows Pointer, libinput, Apple Pencil) for high-frequency pressure, tilt, and barrel rotation.
+  - **Web Porting Strategy for OmniFrame**:
+    - **Local-First & Browser-Safe**: Avoid heavy C++ dependencies in web mode; utilize browser-native `PointerEvents` (`e.pressure`, `e.tiltX`, `e.tiltY`, `e.pointerType`), 2D Canvas / `OffscreenCanvas`, and WebGL2 shaders.
+    - **Non-Destructive Mask Pipeline**: Compositing renders layer base strokes to an offscreen buffer, evaluates mask strokes on a white-initialized mask buffer, and multiplies perceptual luminance $(0.299R + 0.587G + 0.114B)$ into layer alpha before compositing into the master project stack.
+    - **Desktop OmniFrame Profile**: Bridges deeper native settings, high-frequency tablet events, and multi-layer OpenRaster (ORA) / KRA exchange.
+- **OmniFrame Takeaway**: Implemented `TransparencyMask` in `src/types.ts` and `src/store.ts`, added non-destructive luminance compositing in `src/lib/drawingEngine.ts`, created Krita-style indented mask child node UI in `DrawingPanel.tsx`, and added stylus pressure size dynamics and stabilizer leash smoothing.
+
+
+
+
 

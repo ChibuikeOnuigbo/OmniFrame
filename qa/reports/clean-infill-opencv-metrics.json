@@ -1,0 +1,76 @@
+{
+  "full_screenshot": {
+    "path": "evidence/screenshots/omniframe-clean-infill-characters-repositioned.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian": 2850.57,
+    "contrast_rms": 96.42,
+    "mean_brightness": 71.21,
+    "valid": true
+  },
+  "preview_rearranged": {
+    "path": "evidence/cutouts/cut-omniframe-clean-infill-preview-rearranged.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6566.0,
+    "contrast_rms": 85.11,
+    "mean_brightness": 212.91,
+    "valid": true
+  },
+  "all_frame_scope": {
+    "path": "evidence/cutouts/cut-omniframe-all-frame-scope.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6981.35,
+    "contrast_rms": 90.21,
+    "mean_brightness": 205.77,
+    "valid": true
+  },
+  "one_frame_active": {
+    "path": "evidence/cutouts/cut-omniframe-one-frame-scope-active.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 7029.71,
+    "contrast_rms": 90.87,
+    "mean_brightness": 205.92,
+    "valid": true
+  },
+  "one_frame_original": {
+    "path": "evidence/cutouts/cut-omniframe-one-frame-scope-original.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 7016.07,
+    "contrast_rms": 90.57,
+    "mean_brightness": 206.68,
+    "valid": true
+  },
+  "section_scope_inside": {
+    "path": "evidence/cutouts/cut-omniframe-section-scope-inside.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6375.91,
+    "contrast_rms": 82.24,
+    "mean_brightness": 215.68,
+    "valid": true
+  },
+  "character_deleted_infilled": {
+    "path": "evidence/cutouts/cut-omniframe-character-deleted-infilled.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6489.06,
+    "contrast_rms": 73.43,
+    "mean_brightness": 224.52,
+    "valid": true
+  },
+  "infill_differentiation": {
+    "mean_pixel_diff": 53.74,
+    "clean_erasure_verified": true
+  }
+}

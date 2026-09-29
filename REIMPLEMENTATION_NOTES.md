@@ -129,3 +129,30 @@ This document records technical architecture formulations developed by analyzing
   - Atomic cascade: deleting or moving a linked clip updates all linked members in a single undoable transaction.
   - `arrangeLinkedElements` aligns linked elements horizontally to the earliest group start time while strictly preserving individual track lanes and untouched third-party clips.
 
+---
+
+### 9. Compound Clip & Nested Sequence Architecture
+- **Industry Reference**: DaVinci Resolve Compound Clips, Apple Final Cut Pro Compound Clips, Premiere Pro Nested Sequences.
+- **Clean-Room Implementation**:
+  - Implemented in `src/types.ts` (`Sequence`), `src/store.ts` (`createCompoundClip`, `uncompoundClip`, `openSequence`, `navigateBreadcrumb`), `src/components/Timeline.tsx`, `src/Studio.tsx`, `src/components/RightPanel.tsx`, and `src/lib/playback.ts` (`drawCompoundClip`).
+  - First-class sequence registry storing nested sequence tracks, child clips, and duration.
+  - Container-level transform propagation (scale, translation, 3D Z-rotation, opacity) evaluated across all child tracks during canvas compositing.
+  - Seamless double-click nested timeline inspection with sticky breadcrumb navigation bar and 'Back to Timeline' return.
+  - Target-aware context menu integration allowing one-click compounding, uncompounding (decomposing), and opening.
+  - 100% atomic undo/redo recorded in history document snapshots (`Doc`).
+
+---
+
+### 11. Krita-Style Transparency Masking & Stylus Dynamics Subsystem
+- **Industry Reference**: Krita `KisTransparencyMask`, `KisPaintDevice`, and Brush Stabilizer Engine.
+- **Clean-Room Implementation**:
+  - Implemented in `src/types.ts` (`TransparencyMask`, `BrushDynamics`), `src/store.ts` (`addTransparencyMask`, `removeTransparencyMask`, `toggleTransparencyMask`, `invertTransparencyMask`, `setTransparencyMaskOpacity`, `applyTransparencyMask`, `setActiveMask`, `setBrushDynamics`), `src/lib/drawingEngine.ts` (`renderAllPaintLayers`), `src/components/DrawingPanel.tsx`, and `DrawingCanvasOverlay.tsx`.
+  - Non-Destructive Luminance Masking: Evaluates mask strokes onto an offscreen canvas initialized to white ($#\text{FFFFFF} = \text{100\% opaque}$). When black ($#\text{000000}$) or grays are painted, the perceptual luminance $(0.299R + 0.587G + 0.114B) / 255$ multiplies into layer pixel alpha, non-destructively hiding pixels.
+  - Full Mask Operations: Inverting the mask swaps transparent and opaque zones; toggling bypass immediately reveals all original layer pixels with zero data loss.
+  - Krita-Style Layer Hierarchy: Renders child transparency mask nodes indented under their parent paint layer with quick actions (Invert, Bypass, Delete, Active target badge).
+  - Dedicated Mask Editing Banner: Automatically displays grayscale quick swatches (Black = Hide, White = Reveal, 50% Gray) and a 'Back to Layer' exit button when a mask is selected.
+  - Stylus Pressure & Stabilizer: Integrates `e.pressure` into brush radius scaling and adds leash-delay smoothing to produce smooth, professional digital painting strokes.
+
+
+
+

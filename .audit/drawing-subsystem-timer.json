@@ -69,8 +69,36 @@
       "feature": "OmniFrame Mode, Drawing Mode & Masking Conversions",
       "status": "PASS",
       "details": "Verified All Frames, Section, 1-frame scopes, Drawing Add to Video toggle, frame attach stepper, and Mask <-> Drawing <-> Selection conversions"
+    },
+    {
+      "run": 11,
+      "timestamp": "2026-09-27T11:54:21+00:00",
+      "feature": "Compound Clip & Color Coding Architecture",
+      "status": "verified",
+      "details": "Sequence hierarchy, breadcrumb navigation, target-aware context menu, distinct track/clip palettes, video character shift preview verified with Playwright E2E and OpenCV"
+    },
+    {
+      "run": 12,
+      "timestamp": "2026-09-27T12:55:12+00:00",
+      "feature": "",
+      "status": "verified",
+      "details": ""
+    },
+    {
+      "run": 13,
+      "timestamp": "2026-09-27T15:29:08+00:00",
+      "feature": "",
+      "status": "verified",
+      "details": ""
+    },
+    {
+      "run": 14,
+      "timestamp": "2026-09-29T23:00:59+00:00",
+      "feature": "OmniFrame Mode Vetting & UI Decluttering",
+      "status": "verified",
+      "details": "Vetted OmniFrame on image asset and multi-frame video across frames 0, 90, 105, 150 with clean inpainting zero-ghost and decluttered UI"
     }
   ],
-  "total_runs": 10,
-  "last_updated": "2026-09-26T23:10:00+00:00"
+  "total_runs": 14,
+  "last_updated": "2026-09-29T23:00:59+00:00"
 }

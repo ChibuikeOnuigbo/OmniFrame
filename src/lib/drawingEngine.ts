@@ -644,11 +644,88 @@ export function renderAllPaintLayers(
     const layerStrokes = strokes.filter((s) => (s.layerId || 'default-paint-layer') === layer.id)
     if (layerStrokes.length === 0) continue
 
-    // If layer has an active mask, render strokes to offscreen buffer first, then clip with mask
+    const baseStrokes = layerStrokes.filter((s) => !s.maskId)
+    const maskStrokes = layerStrokes.filter(
+      (s) => s.maskId && layer.transparencyMask && s.maskId === layer.transparencyMask.id,
+    )
+
+    // Krita-Style Transparency Mask: Non-destructive luminance-to-alpha masking
+    if (
+      layer.transparencyMask &&
+      layer.transparencyMask.enabled &&
+      (maskStrokes.length > 0 || layer.transparencyMask.dataUrl)
+    ) {
+      if (typeof document !== 'undefined') {
+        const layerCanvas = document.createElement('canvas')
+        layerCanvas.width = width
+        layerCanvas.height = height
+        const layerCtx = layerCanvas.getContext('2d')
+
+        const maskCanvas = document.createElement('canvas')
+        maskCanvas.width = width
+        maskCanvas.height = height
+        const maskCtx = maskCanvas.getContext('2d')
+
+        if (layerCtx && maskCtx) {
+          // 1. Render layer base strokes
+          for (const stroke of baseStrokes) {
+            if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
+            renderStroke(layerCtx, stroke, width, height)
+          }
+
+          // 2. Render mask canvas: Default filled with solid white (100% opaque / visible in Krita)
+          maskCtx.fillStyle = '#ffffff'
+          maskCtx.fillRect(0, 0, width, height)
+
+          for (const stroke of maskStrokes) {
+            if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
+            // In Krita, using the eraser on a transparency mask restores opacity by painting white
+            if (stroke.tool === 'eraser') {
+              const whiteStroke = { ...stroke, tool: 'brush' as const, color: '#ffffff' }
+              renderStroke(maskCtx, whiteStroke, width, height)
+            } else {
+              renderStroke(maskCtx, stroke, width, height)
+            }
+          }
+
+          // 3. Pixel-level non-destructive luminance multiplication
+          const lImgData = layerCtx.getImageData(0, 0, width, height)
+          const mImgData = maskCtx.getImageData(0, 0, width, height)
+          const lData = lImgData.data
+          const mData = mImgData.data
+          const inverted = layer.transparencyMask.inverted
+          const maskStrength = layer.transparencyMask.opacity ?? 1
+          const len = lData.length
+
+          for (let i = 0; i < len; i += 4) {
+            if (lData[i + 3] === 0) continue
+            // Standard perceptual luminance: 0.299*R + 0.587*G + 0.114*B
+            let lum = (0.299 * mData[i] + 0.587 * mData[i + 1] + 0.114 * mData[i + 2]) / 255.0
+            if (inverted) lum = 1.0 - lum
+            if (maskStrength < 1.0) {
+              lum = 1.0 - (1.0 - lum) * maskStrength
+            }
+            lData[i + 3] = Math.round(lData[i + 3] * Math.max(0, Math.min(1, lum)))
+          }
+          layerCtx.putImageData(lImgData, 0, 0)
+
+          // 4. Composite masked layer result
+          ctx.save()
+          if (layer.blendMode) ctx.globalCompositeOperation = layer.blendMode
+          if (typeof layer.opacity === 'number') ctx.globalAlpha = layer.opacity
+          if (layer.blur && layer.blur > 0) ctx.filter = `blur(${layer.blur}px)`
+          ctx.drawImage(layerCanvas, 0, 0)
+          ctx.restore()
+          continue
+        }
+      }
+    }
+
+    // If layer has an active legacy raster mask, render strokes to offscreen buffer first, then clip with mask
     if (layer.maskDataUrl) {
       const { canvas: offCanvas, ctx: offCtx } = getSharedOffscreen(width, height)
       if (offCanvas && offCtx) {
-        for (const stroke of layerStrokes) {
+        for (const stroke of baseStrokes) {
           if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
           renderStroke(offCtx, stroke, width, height)
         }
@@ -694,7 +771,7 @@ export function renderAllPaintLayers(
       ctx.filter = `blur(${layer.blur}px)`
     }
 
-    for (const stroke of layerStrokes) {
+    for (const stroke of baseStrokes) {
       if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
       renderStroke(ctx, stroke, width, height)
     }

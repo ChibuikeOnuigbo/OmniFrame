@@ -358,8 +358,9 @@ export function Preview() {
               className="absolute inset-0 pointer-events-auto select-none"
             >
               {omniframeCharacters.map((char) => {
-                const isSelected = char.id === selectedCharacterId
                 const evalTransform = evaluateCharacterTransformAtTime(char.id, playhead)
+                if ((evalTransform.opacity ?? 1) <= 0.01) return null
+                const isSelected = char.id === selectedCharacterId
                 const leftPct = (char.bounds.x * 100).toFixed(2)
                 const topPct = (char.bounds.y * 100).toFixed(2)
                 const widthPct = (char.bounds.width * 100).toFixed(2)
@@ -382,17 +383,22 @@ export function Preview() {
                       transform: `translate(${evalTransform.x}px, ${evalTransform.y}px) scale(${evalTransform.scale}) rotate(${evalTransform.rotation}deg)`,
                       transformOrigin: 'center center',
                     }}
-                    className={`cursor-pointer transition-all border-2 rounded-md ${
+                    className={`cursor-pointer transition-all rounded-md ${
                       isSelected
-                        ? 'border-brand bg-brand/15 shadow-lg ring-2 ring-brand/50'
-                        : 'border-white/30 hover:border-brand/70 hover:bg-white/5'
+                        ? 'border-2 border-brand bg-brand/5 shadow-lg ring-2 ring-brand/50'
+                        : 'border border-dashed border-ink-500/40 hover:border-brand/70 hover:bg-white/5'
                     }`}
                   >
                     {/* Badge */}
-                    <div className={`absolute -top-5 left-0 px-1.5 py-0.2 rounded text-[9px] font-semibold tracking-wide whitespace-nowrap shadow-sm pointer-events-none ${
+                    <div className={`absolute -top-5 left-0 px-1.5 py-0.5 rounded text-[9px] font-semibold tracking-wide whitespace-nowrap shadow-sm pointer-events-none z-10 flex items-center gap-1 ${
                       isSelected ? 'bg-brand text-white font-bold' : 'bg-ink-900/90 text-ink-300 border border-ink-700'
                     }`}>
-                      {char.name}
+                      <span>{char.name}</span>
+                      {(evalTransform.x !== 0 || evalTransform.y !== 0) && (
+                        <span className="text-[8px] opacity-90 font-mono text-amber-300">
+                          ({evalTransform.x > 0 ? `+${evalTransform.x}` : evalTransform.x}, {evalTransform.y > 0 ? `+${evalTransform.y}` : evalTransform.y})
+                        </span>
+                      )}
                     </div>
                   </div>
                 )

@@ -31,11 +31,27 @@ export function OmniFramePanel() {
   const cutCharacterToNewTrack = useEditor((s) => s.cutCharacterToNewTrack)
   const duplicateCharacter = useEditor((s) => s.duplicateCharacter)
   const removeCharacterInfill = useEditor((s) => s.removeCharacterInfill)
+  const deleteCharacter = useEditor((s) => s.deleteCharacter)
+  const restoreCharacter = useEditor((s) => s.restoreCharacter)
   const resetCharacterPosition = useEditor((s) => s.resetCharacterPosition)
 
   const activeClip = clips.find((c) => c.id === selectedClipId) || clips[0]
   const selectedChar = omniframeCharacters.find((c) => c.id === selectedCharacterId) || omniframeCharacters[0]
   const currentFrame = Math.round(playhead * projectFps)
+
+  const handleAutoArrange = () => {
+    const positions: Record<string, { x: number; y: number; scale: number }> = {
+      char_light: { x: -30, y: 0, scale: 0.95 },
+      char_l: { x: 40, y: 35, scale: 0.95 },
+      char_mello: { x: 10, y: -10, scale: 0.95 },
+      char_near: { x: 30, y: 20, scale: 0.95 },
+      char_ryuk: { x: 60, y: -20, scale: 0.95 },
+    }
+    omniframeCharacters.forEach((c) => {
+      const pos = positions[c.id] || { x: 0, y: 0, scale: 1 }
+      setOmniframeCharacterTransform(c.id, pos, 'all')
+    })
+  }
 
   // Scope form state for active character
   const [sectionStart, setSectionStart] = useState<number>(selectedChar?.sectionRange?.start ?? 2.0)
@@ -87,25 +103,31 @@ export function OmniFramePanel() {
       </div>
 
       {/* Target Video Banner */}
-      <div className="p-2 rounded-lg bg-ink-900 border border-ink-800 flex items-center justify-between">
-        <div className="flex items-center gap-2 truncate">
-          <Film size={13} className="text-ink-400 shrink-0" />
-          <div className="truncate">
-            <div className="text-[11px] font-medium text-ink-200 truncate">
-              {activeClip ? activeClip.name : 'Death Note Chibi - 5 Characters.mp4'}
-            </div>
-            <div className="text-[10px] text-ink-400 font-mono">
-              Duration: {activeClip ? activeClip.duration.toFixed(1) : '8.0'}s · Playhead: {playhead.toFixed(2)}s (F#{currentFrame})
-            </div>
-          </div>
+      <div className="px-2.5 py-1.5 rounded-lg bg-ink-900 border border-ink-800 flex items-center justify-between text-[11px]">
+        <div className="flex items-center gap-1.5 truncate">
+          <Film size={12} className="text-brand shrink-0" />
+          <span className="font-medium text-ink-200 truncate">
+            {activeClip ? activeClip.name : 'Death Note Chibi - 5 Characters.mp4'}
+          </span>
         </div>
+        <span className="text-[10px] text-ink-400 font-mono shrink-0">
+          F#{currentFrame} ({playhead.toFixed(2)}s)
+        </span>
       </div>
 
       {/* Detected Characters List */}
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
           <span>Detected Characters ({omniframeCharacters.length})</span>
-          <span className="text-[10px] text-brand">1-Click Select</span>
+          <button
+            type="button"
+            data-testid="omniframe-auto-arrange-btn"
+            onClick={handleAutoArrange}
+            className="flex items-center gap-1 text-[10px] text-brand hover:text-white px-2 py-0.5 rounded bg-brand/20 hover:bg-brand/30 border border-brand/40 font-semibold transition-colors"
+          >
+            <Sparkles size={11} />
+            <span>Rearrange Clean</span>
+          </button>
         </div>
         <div className="grid grid-cols-1 gap-1 max-h-48 overflow-y-auto pr-0.5">
           {omniframeCharacters.map((char) => {
@@ -434,6 +456,38 @@ export function OmniFramePanel() {
                 <Copy size={12} />
                 <span>Duplicate</span>
               </button>
+
+              {selectedChar.transform.opacity === 0 ? (
+                <button
+                  type="button"
+                  data-testid="omniframe-restore-btn"
+                  onClick={() => restoreCharacter(selectedChar.id)}
+                  className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-medium hover:bg-emerald-500/30 transition-colors"
+                >
+                  <Eye size={12} />
+                  <span>Restore</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  data-testid="omniframe-delete-infill-btn"
+                  onClick={() => removeCharacterInfill(selectedChar.id)}
+                  className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium hover:bg-amber-500/30 transition-colors"
+                >
+                  <Trash2 size={12} />
+                  <span>Delete / Infill</span>
+                </button>
+              )}
+
+              <button
+                type="button"
+                data-testid="omniframe-delete-permanent-btn"
+                onClick={() => deleteCharacter(selectedChar.id)}
+                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-300 font-medium hover:bg-red-500/30 transition-colors"
+              >
+                <Trash2 size={12} />
+                <span>Remove</span>
+              </button>
             </div>
           </div>
         </div>
@@ -470,9 +524,13 @@ export function OmniFramePanel() {
                       Y: {evalTransform.y > 0 ? `+${evalTransform.y}` : evalTransform.y}px
                     </span>
                     <span className={`text-[8px] px-1 py-0.2 rounded font-bold uppercase ${
-                      isModified ? 'bg-brand text-white' : 'bg-ink-800 text-ink-500'
+                      evalTransform.opacity === 0
+                        ? 'bg-amber-500/30 text-amber-300 border border-amber-500/40'
+                        : isModified
+                        ? 'bg-brand text-white'
+                        : 'bg-ink-800 text-ink-500'
                     }`}>
-                      {isModified ? 'Shifted' : 'Original'}
+                      {evalTransform.opacity === 0 ? 'Infilled' : isModified ? 'Shifted' : 'Original'}
                     </span>
                   </div>
                 </div>

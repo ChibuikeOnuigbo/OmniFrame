@@ -37,6 +37,8 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
   const addDrawingStroke = useEditor((s) => s.addDrawingStroke)
   const activeSelection = useEditor((s) => s.activeSelection)
   const setActiveSelection = useEditor((s) => s.setActiveSelection)
+  const activeMaskId = useEditor((s) => s.activeMaskId)
+  const brushDynamics = useEditor((s) => s.brushDynamics)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
 
@@ -106,7 +108,8 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     const rawY = (e.clientY - rect.top) / rect.height
     const x = Math.max(0, Math.min(1, rawX))
     const y = Math.max(0, Math.min(1, rawY))
-    const pressure = e.pressure && e.pressure > 0 ? e.pressure : 0.5
+    const rawPressure = e.pressure && e.pressure > 0 ? e.pressure : 0.5
+    const pressure = brushDynamics?.pressureSize ? rawPressure : 0.5
     const timestamp = Date.now() - strokeStartTimeRef.current
     return { x, y, pressure, timestamp }
   }
@@ -190,6 +193,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       const liveStroke: DrawingStroke = {
         id: 'preview',
         layerId: activePaintLayerId,
+        maskId: activeMaskId || undefined,
         tool: drawingTool,
         color: drawingColor,
         size: drawingSize,
@@ -207,7 +211,17 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const pt = getCanvasCoords(e)
+    const rawPt = getCanvasCoords(e)
+    let pt = rawPt
+    if (brushDynamics?.smoothingMode === 'stabilizer' && currentPointsRef.current.length > 0) {
+      const lastPt = currentPointsRef.current[currentPointsRef.current.length - 1]
+      const weight = 0.6
+      pt = {
+        ...rawPt,
+        x: lastPt.x * (1 - weight) + rawPt.x * weight,
+        y: lastPt.y * (1 - weight) + rawPt.y * weight,
+      }
+    }
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
@@ -248,6 +262,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     const liveStroke: DrawingStroke = {
       id: 'preview',
       layerId: activePaintLayerId,
+      maskId: activeMaskId || undefined,
       tool: drawingTool,
       color: drawingColor,
       size: drawingSize,
@@ -314,6 +329,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       const finalStroke: DrawingStroke = {
         id: uid('strk'),
         layerId: activePaintLayerId,
+        maskId: activeMaskId || undefined,
         tool: drawingTool,
         color: drawingColor,
         size: drawingSize,

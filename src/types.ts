@@ -2,7 +2,17 @@
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound'
+
+export interface Sequence {
+  id: string
+  name: string
+  duration: number
+  tracks: Track[]
+  clips: Clip[]
+  parentSequenceId?: string | null
+  compoundClipId?: string | null
+}
 
 export type TransitionType =
   | 'cross_dissolve'
@@ -221,6 +231,7 @@ export interface ActiveSelection {
 export interface DrawingStroke {
   id: string
   layerId: string
+  maskId?: string // If present, stroke belongs to transparency mask attached to layerId
   tool: DrawingToolType
   color: string
   size: number // base size in stage pixels
@@ -233,6 +244,24 @@ export interface DrawingStroke {
   cloneSource?: { x: number; y: number; sampleDataUrl?: string } // normalized source anchor for clone stamp
 }
 
+export interface TransparencyMask {
+  id: string
+  parentLayerId: string
+  name: string
+  enabled: boolean // whether mask is active or bypassed
+  inverted: boolean // if true, mask values are inverted (black <-> white)
+  opacity: number // 0..1 mask strength
+  dataUrl?: string // raster 1-channel / grayscale mask buffer
+}
+
+export interface BrushDynamics {
+  pressureSize: boolean // Stylus pressure scales brush diameter
+  pressureOpacity: boolean // Stylus pressure scales opacity
+  pressureFlow: boolean // Stylus pressure scales flow
+  smoothingMode: 'none' | 'smooth' | 'stabilizer' // Krita smoothing algorithms
+  stabilizerRadius: number // Leash delay radius in px (10..100)
+}
+
 export interface PaintLayer {
   id: string
   name: string
@@ -241,7 +270,8 @@ export interface PaintLayer {
   opacity: number
   blendMode?: GlobalCompositeOperation
   blur?: number // Gaussian blur radius in px
-  maskDataUrl?: string // raster restriction / transparency mask
+  maskDataUrl?: string // raster restriction / legacy mask
+  transparencyMask?: TransparencyMask // Krita-style non-destructive child transparency mask
 }
 
 // ---- Workspace Layout & Focus Mode Types ----
@@ -275,6 +305,12 @@ export interface Clip {
   effects?: ClipEffect
   textStyle?: TextTitleStyle
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
+  // Compound Clip / Nested Sequence references
+  sourceSequenceId?: string
+  originalChildClips?: Clip[]
+  originalChildTracks?: Track[]
+  nestedTrackCount?: number
+  nestedClipCount?: number
 }
 
 // ---- 3D Scene Architecture & Blender Modes ----

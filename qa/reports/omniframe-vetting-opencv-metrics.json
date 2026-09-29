@@ -1,0 +1,66 @@
+{
+  "full_screenshot": {
+    "path": "evidence/screenshots/omniframe-vetted-decluttered-studio.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian": 2841.14,
+    "contrast_rms": 96.2,
+    "mean_brightness": 71.17,
+    "valid": true
+  },
+  "image_proof_canvas": {
+    "path": "evidence/cutouts/cut-omniframe-vetting-image-deliverable.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6542.63,
+    "contrast_rms": 85.82,
+    "mean_brightness": 212.29,
+    "valid": true
+  },
+  "frame_0": {
+    "path": "evidence/cutouts/cut-omniframe-vetting-frame0.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6456.28,
+    "contrast_rms": 85.5,
+    "mean_brightness": 212.47,
+    "valid": true
+  },
+  "frame_90_isolated": {
+    "path": "evidence/cutouts/cut-omniframe-vetting-frame90-isolated.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6528.41,
+    "contrast_rms": 86.5,
+    "mean_brightness": 211.08,
+    "valid": true
+  },
+  "frame_150_section": {
+    "path": "evidence/cutouts/cut-omniframe-vetting-frame150-section.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6111.56,
+    "contrast_rms": 81.96,
+    "mean_brightness": 216.37,
+    "valid": true
+  },
+  "infill_zero_ghost": {
+    "path": "evidence/cutouts/cut-omniframe-vetting-infill-zero-ghost.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 5219.76,
+    "contrast_rms": 66.06,
+    "mean_brightness": 229.77,
+    "valid": true
+  },
+  "zero_ghost_erasure_metric": {
+    "mean_pixel_diff": 22.49,
+    "zero_ghost_verified": true
+  }
+}

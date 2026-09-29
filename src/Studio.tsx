@@ -17,6 +17,9 @@ import {
   Mic,
   Music2,
   ChevronRight,
+  Layers,
+  FolderOutput,
+  FolderOpen,
 } from 'lucide-react'
 import { useEditor } from './store'
 import type { Clip, Transition } from './types'
@@ -32,7 +35,7 @@ type ContextTarget =
   | { type: 'MEDIA_PANEL' }
   | { type: 'TRACK_LANE'; trackId: string }
   | { type: 'TRANSITION'; transition: Transition }
-  | { type: 'VIDEO_CLIP' | 'AUDIO_CLIP' | 'IMAGE_CLIP'; clip: Clip }
+  | { type: 'VIDEO_CLIP' | 'AUDIO_CLIP' | 'IMAGE_CLIP' | 'COMPOUND_CLIP'; clip: Clip }
 
 type ContextState = ContextTarget & { x: number; y: number; anchorX: number; anchorY: number }
 import { TopBar } from './components/TopBar'
@@ -327,6 +330,40 @@ export default function Studio() {
               },
             },
           ] : []),
+          ...(contextMenu.type === 'COMPOUND_CLIP' ? [
+            {
+              id: 'open-compound-clip',
+              label: 'Open Compound Clip',
+              icon: FolderOpen,
+              primary: true,
+              run: () => {
+                if (contextMenu.clip.sourceSequenceId) {
+                  useEditor.getState().openSequence(contextMenu.clip.sourceSequenceId)
+                }
+              },
+            },
+            {
+              id: 'uncompound-clip',
+              label: 'Uncompound Clip (Decompose)',
+              icon: FolderOutput,
+              run: () => {
+                useEditor.getState().uncompoundClip(contextMenu.clip.id)
+              },
+            },
+          ] : [
+            {
+              id: 'create-compound-clip',
+              label: 'Create Compound Clip',
+              icon: Layers,
+              run: () => {
+                const selIds = useEditor.getState().selectedClipIds
+                const ids = selIds.length > 1 && selIds.includes(contextMenu.clip.id)
+                  ? selIds
+                  : [contextMenu.clip.id]
+                useEditor.getState().createCompoundClip(ids)
+              },
+            },
+          ]),
           { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
         ]
@@ -404,7 +441,16 @@ export default function Studio() {
         const target: ContextTarget = transition
           ? { type: 'TRANSITION', transition }
           : clip
-          ? { type: clip.kind === 'audio' ? 'AUDIO_CLIP' : clip.kind === 'image' ? 'IMAGE_CLIP' : 'VIDEO_CLIP', clip }
+          ? {
+              type: clip.kind === 'compound'
+                ? 'COMPOUND_CLIP'
+                : clip.kind === 'audio'
+                ? 'AUDIO_CLIP'
+                : clip.kind === 'image'
+                ? 'IMAGE_CLIP'
+                : 'VIDEO_CLIP',
+              clip,
+            }
           : trackId
           ? { type: 'TRACK_LANE', trackId }
           : element.closest('[data-testid="preview-stage"]')
@@ -413,7 +459,13 @@ export default function Studio() {
               ? { type: 'MEDIA_PANEL' }
               : { type: 'EMPTY_EDITOR' }
         const width = 224
-        const height = target.type === 'TRANSITION' ? 280 : 'clip' in target ? (target.type === 'VIDEO_CLIP' ? 280 : 220) : target.type === 'TRACK_LANE' ? 180 : 144
+        const height = target.type === 'TRANSITION'
+          ? 280
+          : 'clip' in target
+          ? (target.type === 'COMPOUND_CLIP' ? 240 : target.type === 'VIDEO_CLIP' ? 320 : 260)
+          : target.type === 'TRACK_LANE'
+          ? 180
+          : 144
         const margin = 8, offset = 4
         const x = event.clientX + width + offset <= window.innerWidth - margin ? event.clientX + offset : event.clientX - width - offset
         const y = event.clientY + height + offset <= window.innerHeight - margin ? event.clientY + offset : event.clientY - height - offset
