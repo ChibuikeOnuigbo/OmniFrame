@@ -1,53 +1,41 @@
 {
   "tests": [
     {
-      "name": "Custom cursor mount & initial state",
+      "name": "Custom cursor initial mount & pack initialization",
       "state": "default",
       "size": "bigger",
-      "theme": "mac-gamified",
-      "activeClassPresent": true,
+      "pack": "mac-gamified",
+      "activeClass": true,
       "passed": true
     },
     {
-      "name": "Pointer state on button hover",
+      "name": "Pointing hand cursor on interactive button hover",
       "state": "pointer",
       "passed": true
     },
     {
-      "name": "Drag & Drop plus badge on draggable asset hover",
+      "name": "Drag state with emerald plus badge & attached drag ghost pill",
       "state": "drag",
-      "dragPlusIconVisible": true,
+      "plusVisible": true,
+      "pillVisible": true,
       "passed": true
     },
     {
-      "name": "Help & info question badge on help hover",
+      "name": "Help state with amber ? badge & attached prompt pill",
       "state": "help",
-      "helpQuestionIconVisible": true,
+      "questionVisible": true,
+      "helpPillVisible": true,
       "passed": true
     },
     {
-      "name": "Click micro-burst animation",
-      "rippleCreated": true,
+      "name": "Magnetized drop reticle on valid drop target",
+      "state": "drop",
+      "reticleVisible": true,
       "passed": true
     },
     {
-      "name": "Cursor customizer theme switch",
-      "themeSwitched": true,
-      "passed": true
-    },
-    {
-      "name": "Cursor customizer size switch",
-      "sizeSwitched": true,
-      "passed": true
-    },
-    {
-      "name": "Cursor master toggle disable & unmount",
-      "unmounted": true,
-      "passed": true
-    },
-    {
-      "name": "Cursor reset to gamified defaults",
-      "resetDone": true,
+      "name": "Cursor pack selection (macOS Sonoma Pro)",
+      "pack": "mac-sonoma-pro",
       "passed": true
     }
   ],

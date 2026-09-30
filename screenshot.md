@@ -80,6 +80,12 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-074 | `evidence/screenshots/cursor-help-question-badge.png` | 1440x900 | Gamified Help Cursor with `?` Badge | Context-aware macOS cursor rendering an amber `?` question mark badge when hovering over specifications, help buttons, and inspector info icons. |
 | SS-075 | `evidence/screenshots/cursor-settings-customizer.png` | 1440x900 | Cursor & Pointer Customizer Settings Panel | Dedicated Cursor & Pointer tab in the Settings popup showing master toggle, scale options (Standard, Bigger, Mega), themes (Classic, Cyber Violet, Neo Stealth), and badge/burst toggles. |
 | SS-076 | `evidence/screenshots/cursor-click-burst.png` | 1440x900 | Click Micro-Burst Shockwave Ripple | Expanding animated micro-burst ripple emanating from the custom cursor tip on click with zero click-blocking. |
+| SS-077 | `evidence/screenshots/cursor-drag-ghost-pill.png` | 1440x900 | Attached Drag Ghost Pill & Emerald `+` Badge | Cursor during active drag operation displaying authentic macOS arrow, emerald green `+` circle badge, and attached floating Drag Ghost Pill showing active asset title and `+COPY` tag. |
+| SS-078 | `evidence/screenshots/cursor-help-info-pill.png` | 1440x900 | Attached Help Info Pill & Amber `?` Badge | Cursor hovering over specification and help buttons displaying amber `?` circular badge with attached glowing prompt pill displaying technical metadata target. |
+| SS-079 | `evidence/screenshots/cursor-magnetized-drop-reticle.png` | 1440x900 | Magnetized Drop Reticle on Valid Target | Cursor hovering over valid timeline lanes during drag transforming into magnetized target reticle with pulsating dashed circle, downward drop insertion pin, and `Release to Drop` lock indicator. |
+| SS-080 | `evidence/screenshots/cursor-mac-sonoma-pack.png` | 1440x900 | Downloaded Authentic macOS Sonoma Pro Pack | Settings Customizer with active macOS Sonoma Pro pack option selected, utilizing authentic downloaded vector curves from Apple SVGs. |
+| SS-081 | `evidence/screenshots/cursor-playground-settings.png` | 1440x900 | Interactive Cursor Playground in Settings | Dedicated testing sandbox inside the Settings modal allowing immediate interactive preview of draggable card (+ badge), drop zone (magnetized reticle), and specs help button (? badge). |
+
 
 
 

@@ -1568,6 +1568,7 @@ export function Timeline() {
             <div
               ref={lanesRef}
               data-testid="timeline-lanes"
+              data-drop-target="true"
               className="relative"
               style={{ height: totalHeight }}
               onDragOver={(e) => {

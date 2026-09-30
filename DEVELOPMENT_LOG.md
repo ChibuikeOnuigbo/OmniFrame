@@ -88,3 +88,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-30T11:00:09+00:00 — Drawing Run #16: [VERIFIED] Viewport Resize Vetting & Multi-Breakpoint Responsiveness — Vetted and screenshotted layout across 7 breakpoints (1920x1080, 1440x900, 1024x768, 768x1024, 390x844, 360x800, 320x640) with zero overflow, responsive settings popup, and drawer overlay
 
 - 2026-09-30T11:26:36+00:00 — Drawing Run #17: [VERIFIED] Custom Pointer Events & Gamified macOS-Style Cursor Subsystem — Engineered hardware-accelerated macOS vector cursor with bigger scale (1.15x), dynamic + drag badge, ? help badge, click ripple burst, and dedicated Cursor Customizer in Settings. Verified via Playwright and OpenCV.
+
+- 2026-09-30T11:35:46+00:00 — Drawing Run #18: [VERIFIED] Downloaded macOS Cursor Packs & Refined Drag/Drop Reticle Engine — Downloaded 40+ authentic macOS vector SVGs, engineered 16 cursor states including attached Drag Ghost Pills and Magnetized Drop Reticle, authentic pack selector (Sonoma Pro, Gamified, Cyber Violet, Neo Stealth), and an Interactive Cursor Playground in Settings.

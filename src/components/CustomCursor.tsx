@@ -5,6 +5,8 @@ export type CursorState =
   | 'default'
   | 'pointer'
   | 'drag'
+  | 'drop'
+  | 'no-drop'
   | 'help'
   | 'grab'
   | 'grabbing'
@@ -13,6 +15,8 @@ export type CursorState =
   | 'text'
   | 'resize-ew'
   | 'resize-ns'
+  | 'rotate'
+  | 'beachball'
 
 interface ClickRipple {
   id: number
@@ -20,14 +24,23 @@ interface ClickRipple {
   y: number
 }
 
+interface DragItemInfo {
+  label: string
+  kind: string
+}
+
 export function CustomCursor() {
   const cursorConfig = useEditor((s) => s.cursorConfig)
   const tool = useEditor((s) => s.tool)
   const drawingEnabled = useEditor((s) => s.drawingEnabled)
+  const viewMode = useEditor((s) => s.viewMode)
 
   const [pos, setPos] = useState({ x: -100, y: -100 })
   const [cursorState, setCursorState] = useState<CursorState>('default')
   const [isMouseDown, setIsMouseDown] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragItem, setDragItem] = useState<DragItemInfo | null>(null)
+  const [helpText, setHelpText] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [ripples, setRipples] = useState<ClickRipple[]>([])
   const nextRippleId = useRef(0)
@@ -36,50 +49,68 @@ export function CustomCursor() {
   const scale = useMemo(() => {
     switch (cursorConfig.size) {
       case 'standard':
-        return 0.9
+        return 0.95
       case 'mega':
-        return 1.35
+        return 1.4
       case 'bigger':
       default:
-        return 1.15 // "bugger" / enlarged gamified
+        return 1.2 // "bugger" enlarged gamified as requested
     }
   }, [cursorConfig.size])
 
-  // Theme styling colors
+  // Theme styling colors based on pack / theme
   const themeColors = useMemo(() => {
-    switch (cursorConfig.theme) {
+    const activePack = cursorConfig.pack || cursorConfig.theme
+    switch (activePack) {
       case 'cyber-violet':
         return {
           fill: '#0f051d',
           stroke: '#a855f7',
-          shadow: 'rgba(168, 85, 247, 0.6)',
+          shadow: 'rgba(168, 85, 247, 0.65)',
           accent: '#06b6d4',
           plusBg: '#8b5cf6',
           helpBg: '#06b6d4',
+          dropBg: '#06b6d4',
+          noDropBg: '#ef4444',
         }
       case 'neo-stealth':
         return {
           fill: '#18181b',
-          stroke: '#e4e4e7',
-          shadow: 'rgba(0, 0, 0, 0.7)',
+          stroke: '#f4f4f5',
+          shadow: 'rgba(0, 0, 0, 0.8)',
           accent: '#ffffff',
           plusBg: '#3f3f46',
           helpBg: '#52525b',
+          dropBg: '#3b82f6',
+          noDropBg: '#991b1b',
+        }
+      case 'mac-sonoma-pro':
+        return {
+          fill: '#000000',
+          stroke: '#ffffff',
+          shadow: 'rgba(0, 0, 0, 0.45)',
+          accent: '#3b82f6',
+          plusBg: '#22c55e',
+          helpBg: '#f59e0b',
+          dropBg: '#10b981',
+          noDropBg: '#ef4444',
         }
       case 'mac-gamified':
       default:
         return {
-          fill: '#09090b',
+          fill: '#050508',
           stroke: '#ffffff',
-          shadow: 'rgba(0, 0, 0, 0.55)',
-          accent: '#8b5cf6',
+          shadow: 'rgba(0, 0, 0, 0.6)',
+          accent: '#8b5cf6', // neon purple core
           plusBg: '#10b981', // vibrant emerald
           helpBg: '#f59e0b', // vibrant amber
+          dropBg: '#10b981', // magnetized emerald
+          noDropBg: '#ef4444',
         }
     }
-  }, [cursorConfig.theme])
+  }, [cursorConfig.pack, cursorConfig.theme])
 
-  // Track global pointer events & element targets
+  // Global pointer & drag event listeners
   useEffect(() => {
     if (!cursorConfig.enabled) {
       document.documentElement.classList.remove('of-custom-cursor-active')
@@ -88,64 +119,106 @@ export function CustomCursor() {
 
     document.documentElement.classList.add('of-custom-cursor-active')
 
-    const onPointerMove = (e: PointerEvent) => {
-      setPos({ x: e.clientX, y: e.clientY })
+    const updatePositionAndTarget = (clientX: number, clientY: number, target: HTMLElement | null) => {
+      setPos({ x: clientX, y: clientY })
       if (!isVisible) setIsVisible(true)
-
-      // Inspect target element for context-aware cursor states
-      const target = e.target as HTMLElement | null
       if (!target) return
 
-      // 1. Blade tool active
+      // 1. Blade tool active over timeline clips / lanes
       if (tool === 'blade' && target.closest('[data-testid="timeline-lanes"], [data-testid="timeline-clip"]')) {
         setCursorState('blade')
+        setHelpText(null)
         return
       }
 
-      // 2. Help / Info: "cursor with question mark"
+      // 2. Active Drag & Drop handling: "more refined form for drag, drop etc"
+      if (isDragging) {
+        // If over a valid drop target (timeline lanes or track lanes)
+        if (target.closest('[data-drop-target="true"], [data-testid="timeline-lanes"], [data-testid^="track-lane-"]')) {
+          setCursorState('drop') // Magnetized drop reticle!
+          return
+        }
+        // If over non-droppable forbidden area during drag
+        if (target.closest('[data-no-drop="true"], header, nav, [data-testid="top-bar"]')) {
+          setCursorState('no-drop') // Red forbidden circle-slash
+          return
+        }
+        // Default drag state
+        setCursorState('drag')
+        return
+      }
+
+      // 3. Hovering over draggable media asset or drag handle
+      if (
+        cursorConfig.showBadges &&
+        (target.closest('[draggable="true"]') ||
+          target.closest('[data-testid="media-asset"]') ||
+          target.closest('[data-testid="add-to-timeline-btn"]'))
+      ) {
+        const assetEl = target.closest('[data-testid="media-asset"]') as HTMLElement | null
+        if (assetEl) {
+          const name = assetEl.getAttribute('data-asset-name') || 'Media Asset'
+          const kind = assetEl.getAttribute('data-asset-kind') || 'video'
+          setDragItem({ label: name, kind })
+        }
+        setCursorState('drag')
+        setHelpText(null)
+        return
+      }
+
+      // 4. Help / Info: "cursor with question mark"
       if (
         cursorConfig.showBadges &&
         (target.closest('[data-testid="asset-info-btn"]') ||
           target.closest('[data-help="true"]') ||
           target.closest('button[title*="specifications"], button[title*="specs"], [title*="details"]'))
       ) {
+        const title = target.getAttribute('title') || 'Inspect details & specifications'
+        setHelpText(title.replace(/\s*\(.*?\)\s*/g, '').slice(0, 32))
         setCursorState('help')
         return
       }
+      setHelpText(null)
 
-      // 3. Dragging / Draggable: "cursor with plus for drag / day / drop"
-      if (
-        cursorConfig.showBadges &&
-        (target.closest('[draggable="true"]') ||
-          target.closest('[data-testid="media-asset"]') ||
-          target.closest('[data-testid="add-to-timeline-btn"]') ||
-          target.closest('[data-drop-target="true"]') ||
-          target.closest('.cursor-grab') ||
-          target.closest('.cursor-grabbing'))
-      ) {
-        setCursorState(isMouseDown ? 'drag' : 'drag')
+      // 5. 3D Rotation / Orbit in 3D mode
+      if (viewMode === '3d' && target.closest('[data-testid="three-canvas-wrapper"], canvas')) {
+        setCursorState('rotate')
         return
       }
 
-      // 4. Resize handles
+      // 6. Resize handles
       if (target.closest('[data-testid*="trim"], .cursor-ew-resize')) {
         setCursorState('resize-ew')
         return
       }
+      if (target.closest('[data-testid="timeline-splitter"], .cursor-row-resize')) {
+        setCursorState('resize-ns')
+        return
+      }
 
-      // 5. Drawing canvas crosshair
+      // 7. Drawing canvas crosshair
       if (drawingEnabled && target.closest('#drawing-paint-canvas, [data-testid="preview-stage"]')) {
         setCursorState('crosshair')
         return
       }
 
-      // 6. Text inputs & editable titles
+      // 8. Text inputs & editable titles
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
         setCursorState('text')
         return
       }
 
-      // 7. Clickable pointer
+      // 9. Active Grab / Grabbing
+      if (target.closest('.cursor-grabbing')) {
+        setCursorState('grabbing')
+        return
+      }
+      if (target.closest('.cursor-grab')) {
+        setCursorState('grab')
+        return
+      }
+
+      // 10. Clickable pointer for buttons & interactive elements
       if (
         target.closest('button') ||
         target.closest('a') ||
@@ -159,11 +232,15 @@ export function CustomCursor() {
         return
       }
 
-      // Default state
+      // Default macOS Arrow state
       setCursorState('default')
     }
 
-    const onPointerDown = (e: PointerEvent) => {
+    const onPointerMove = (e: PointerEvent | MouseEvent) => {
+      updatePositionAndTarget(e.clientX, e.clientY, e.target as HTMLElement | null)
+    }
+
+    const onPointerDown = (e: PointerEvent | MouseEvent) => {
       setIsMouseDown(true)
       if (cursorConfig.showClickBurst) {
         const id = nextRippleId.current++
@@ -176,6 +253,33 @@ export function CustomCursor() {
 
     const onPointerUp = () => {
       setIsMouseDown(false)
+      setIsDragging(false)
+    }
+
+    // HTML5 Drag and Drop event tracking to keep custom cursor active during dragging
+    const onDragStart = (e: DragEvent) => {
+      setIsDragging(true)
+      const target = e.target as HTMLElement | null
+      const assetEl = target?.closest('[data-testid="media-asset"]') as HTMLElement | null
+      if (assetEl) {
+        const name = assetEl.getAttribute('data-asset-name') || 'Media Asset'
+        const kind = assetEl.getAttribute('data-asset-kind') || 'video'
+        setDragItem({ label: name, kind })
+      }
+    }
+
+    const onDragOver = (e: DragEvent) => {
+      updatePositionAndTarget(e.clientX, e.clientY, e.target as HTMLElement | null)
+    }
+
+    const onDragEnd = () => {
+      setIsDragging(false)
+      setDragItem(null)
+    }
+
+    const onDrop = () => {
+      setIsDragging(false)
+      setDragItem(null)
     }
 
     const onPointerLeave = () => {
@@ -188,6 +292,10 @@ export function CustomCursor() {
     window.addEventListener('mousedown', onPointerDown, { passive: true })
     window.addEventListener('pointerup', onPointerUp, { passive: true })
     window.addEventListener('mouseup', onPointerUp, { passive: true })
+    window.addEventListener('dragstart', onDragStart)
+    window.addEventListener('dragover', onDragOver)
+    window.addEventListener('dragend', onDragEnd)
+    window.addEventListener('drop', onDrop)
     document.addEventListener('mouseleave', onPointerLeave)
 
     return () => {
@@ -197,10 +305,24 @@ export function CustomCursor() {
       window.removeEventListener('mousedown', onPointerDown)
       window.removeEventListener('pointerup', onPointerUp)
       window.removeEventListener('mouseup', onPointerUp)
+      window.removeEventListener('dragstart', onDragStart)
+      window.removeEventListener('dragover', onDragOver)
+      window.removeEventListener('dragend', onDragEnd)
+      window.removeEventListener('drop', onDrop)
       document.removeEventListener('mouseleave', onPointerLeave)
       document.documentElement.classList.remove('of-custom-cursor-active')
     }
-  }, [cursorConfig.enabled, cursorConfig.showBadges, cursorConfig.showClickBurst, isVisible, isMouseDown, tool, drawingEnabled])
+  }, [
+    cursorConfig.enabled,
+    cursorConfig.showBadges,
+    cursorConfig.showClickBurst,
+    isVisible,
+    isMouseDown,
+    isDragging,
+    tool,
+    drawingEnabled,
+    viewMode,
+  ])
 
   if (!cursorConfig.enabled || !isVisible) return null
 
@@ -210,6 +332,7 @@ export function CustomCursor() {
       data-cursor-state={cursorState}
       data-cursor-size={cursorConfig.size}
       data-cursor-theme={cursorConfig.theme}
+      data-cursor-pack={cursorConfig.pack}
       style={{
         position: 'fixed',
         left: 0,
@@ -220,26 +343,27 @@ export function CustomCursor() {
         willChange: 'transform',
       }}
     >
-      {/* Click Burst Particle Ripples */}
+      {/* Click Burst Shockwave Ripples */}
       {ripples.map((ripple) => (
         <div
           key={ripple.id}
           data-testid="cursor-click-burst"
           style={{
             position: 'absolute',
-            left: -12,
-            top: -12,
-            width: 24,
-            height: 24,
+            left: -14,
+            top: -14,
+            width: 28,
+            height: 28,
             borderRadius: '50%',
             border: `2px solid ${themeColors.accent}`,
+            boxShadow: `0 0 12px ${themeColors.accent}`,
             animation: 'ofCursorPing 0.5s cubic-bezier(0, 0, 0.2, 1) forwards',
             pointerEvents: 'none',
           }}
         />
       ))}
 
-      {/* SVG Vector Mac Cursors */}
+      {/* Primary SVG Vector macOS Cursors */}
       <div
         data-testid="custom-cursor-glyph"
         style={{
@@ -248,79 +372,158 @@ export function CustomCursor() {
           filter: `drop-shadow(0 3px 6px ${themeColors.shadow})`,
         }}
       >
+        {/* 1. DEFAULT: Authentic Apple macOS Sonoma Arrow */}
         {cursorState === 'default' && (
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            {/* Mac Arrow with crisp outline */}
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            {/* Crisp Apple White Backing */}
             <path
-              d="M2 2L2 22L7.5 17L12.5 26.5L16 24.5L11 15.5L18.5 15.5L2 2Z"
-              fill={themeColors.fill}
+              d="m6.148 18.473 1.863-1.003 1.615-.839-2.568-4.816h4.332l-11.379-11.408v16.015l3.316-3.221z"
+              fill={themeColors.stroke}
               stroke={themeColors.stroke}
-              strokeWidth="2"
+              strokeWidth="1.5"
               strokeLinejoin="round"
             />
-            {/* Gamified power core */}
-            <circle cx="6" cy="6" r="1.8" fill={themeColors.accent} />
+            {/* Crisp Apple Black Core */}
+            <path
+              d="m6.431 17 1.765-.941-2.775-5.202h3.604l-8.025-8.043v11.188l2.53-2.442z"
+              fill={themeColors.fill}
+            />
+            {/* Gamified Core Energy Dot */}
+            <circle cx="2.6" cy="3.6" r="1.3" fill={themeColors.accent} opacity="0.9" />
           </svg>
         )}
 
+        {/* 2. POINTER: Authentic Apple macOS Pointing Hand */}
         {cursorState === 'pointer' && (
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            {/* Sleek Mac Pointing Hand */}
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+            {/* Apple Pointing Hand White Backing */}
             <path
-              d="M9 2C8 2 7 3 7 4.5V13L5 13C3.5 13 2.5 14 2.5 15.5C2.5 16.5 3 17.5 4 18.5L9.5 24C10.5 25 12 26 14 26H19C21 26 22.5 24.5 22.5 22.5V14C22.5 12.5 21.5 11.5 20 11.5C19.5 11.5 19 11.7 18.5 12V10C18.5 8.5 17.5 7.5 16 7.5C15.5 7.5 15 7.7 14.5 8V6C14.5 4.5 13.5 3.5 12 3.5C11.5 3.5 11 3.7 10.5 4V4.5C10.5 3 9.5 2 9 2Z"
-              fill={themeColors.fill}
-              stroke={themeColors.stroke}
-              strokeWidth="1.8"
-              strokeLinejoin="round"
-            />
-            {/* Gamified Fingertip Glow */}
-            <circle cx="9" cy="4" r="1.5" fill={themeColors.accent} />
-          </svg>
-        )}
-
-        {cursorState === 'drag' && (
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" data-testid="cursor-drag-plus">
-            {/* Mac Arrow */}
-            <path
-              d="M2 2L2 22L7.5 17L12.5 26.5L16 24.5L11 15.5L18.5 15.5L2 2Z"
-              fill={themeColors.fill}
+              d="m9 2c-1.5 0-2.5 1-2.5 2.5v9.5h-1.5c-1.5 0-2.5 1-2.5 2.5 0 1 0.5 2 1.5 3l5.5 5.5c1 1 2.5 2 4.5 2h5c2 0 3.5-1.5 3.5-3.5v-8.5c0-1.5-1-2.5-2.5-2.5-0.5 0-1 0.2-1.5 0.5v-2c0-1.5-1-2.5-2.5-2.5-0.5 0-1 0.2-1.5 0.5v-2c0-1.5-1-2.5-2.5-2.5-0.5 0-1 0.2-1.5 0.5v-4c0-1.5-1-2.5-1.5-2.5z"
+              fill={themeColors.stroke}
               stroke={themeColors.stroke}
               strokeWidth="2"
               strokeLinejoin="round"
             />
-            {/* Gamified Plus Badge: "cursor with plus for drag" */}
-            <g transform="translate(14, 13)">
-              <circle cx="7" cy="7" r="7" fill={themeColors.plusBg} stroke="#ffffff" strokeWidth="1.6" />
+            {/* Apple Pointing Hand Core */}
+            <path
+              d="m9 2.8c-1 0-1.8 0.8-1.8 1.8v9.8h-2.2c-1 0-1.8 0.8-1.8 1.8 0 0.8 0.4 1.5 1.1 2.2l5.4 5.4c0.8 0.8 2 1.6 3.6 1.6h5c1.5 0 2.6-1.1 2.6-2.6v-8.7c0-1-0.8-1.8-1.8-1.8-0.4 0-0.8 0.1-1.1 0.4v-1.8c0-1-0.8-1.8-1.8-1.8-0.4 0-0.8 0.1-1.1 0.4v-1.8c0-1-0.8-1.8-1.8-1.8-0.4 0-0.8 0.1-1.1 0.4v-3.3c0-1-0.8-1.8-1.2-1.8z"
+              fill={themeColors.fill}
+            />
+            {/* Tactile Fingertip Glow */}
+            <circle cx="9" cy="4.2" r="1.4" fill={themeColors.accent} />
+          </svg>
+        )}
+
+        {/* 3. DRAG: Refined Apple Arrow + Vibrant Emerald `+` Badge */}
+        {cursorState === 'drag' && (
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" data-testid="cursor-drag-plus">
+            {/* Apple White Arrow */}
+            <path
+              d="m2 2 13 13h-7.5l2.8 5.4-2 1-2.8-5.4-3.5 3.5z"
+              fill={themeColors.stroke}
+              stroke={themeColors.stroke}
+              strokeWidth="2.5"
+              strokeLinejoin="round"
+            />
+            {/* Apple Black Arrow */}
+            <path
+              d="m2 2 13 13h-7.5l2.8 5.4-2 1-2.8-5.4-3.5 3.5z"
+              fill={themeColors.fill}
+            />
+            {/* Refined Emerald `+` Badge */}
+            <g transform="translate(16, 15)">
+              <circle cx="8" cy="8" r="8" fill={themeColors.plusBg} stroke="#ffffff" strokeWidth="1.8" />
               <path
-                d="M7 4V10M4 7H10"
+                d="M8 4.5V11.5M4.5 8H11.5"
                 stroke="#ffffff"
-                strokeWidth="2"
+                strokeWidth="2.2"
                 strokeLinecap="round"
               />
             </g>
           </svg>
         )}
 
-        {cursorState === 'help' && (
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" data-testid="cursor-help-question">
-            {/* Mac Arrow */}
+        {/* 4. DROP: Magnetized Drop Reticle */}
+        {cursorState === 'drop' && (
+          <div data-testid="cursor-drop-target" className="relative -left-4 -top-4">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              {/* Outer Magnetized Pulsing Circle */}
+              <circle
+                cx="20"
+                cy="20"
+                r="16"
+                stroke={themeColors.dropBg}
+                strokeWidth="2.2"
+                strokeDasharray="4 3"
+                className="animate-spin"
+                style={{ animationDuration: '6s', transformOrigin: 'center' }}
+              />
+              {/* Target Brackets */}
+              <path
+                d="M12 8H8V12M28 8H32V12M12 32H8V28M28 32H32V28"
+                stroke={themeColors.dropBg}
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              {/* Downward Drop Insertion Arrow */}
+              <path
+                d="M20 12V26M15 21L20 27L25 21"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle cx="20" cy="20" r="3" fill={themeColors.dropBg} />
+            </svg>
+          </div>
+        )}
+
+        {/* 5. NO-DROP / FORBIDDEN: Arrow + Red Circle-Slash */}
+        {cursorState === 'no-drop' && (
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" data-testid="cursor-no-drop">
             <path
-              d="M2 2L2 22L7.5 17L12.5 26.5L16 24.5L11 15.5L18.5 15.5L2 2Z"
-              fill={themeColors.fill}
+              d="m2 2 13 13h-7.5l2.8 5.4-2 1-2.8-5.4-3.5 3.5z"
+              fill={themeColors.stroke}
               stroke={themeColors.stroke}
-              strokeWidth="2"
+              strokeWidth="2.2"
               strokeLinejoin="round"
             />
-            {/* Gamified Question Mark Badge: "cursor with question mark" */}
-            <g transform="translate(14, 13)">
-              <circle cx="7" cy="7" r="7" fill={themeColors.helpBg} stroke="#ffffff" strokeWidth="1.6" />
+            <path
+              d="m2 2 13 13h-7.5l2.8 5.4-2 1-2.8-5.4-3.5 3.5z"
+              fill={themeColors.fill}
+            />
+            {/* Red Circle Slash Badge */}
+            <g transform="translate(16, 15)">
+              <circle cx="8" cy="8" r="8" fill={themeColors.noDropBg} stroke="#ffffff" strokeWidth="1.8" />
+              <line x1="4" y1="4" x2="12" y2="12" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
+            </g>
+          </svg>
+        )}
+
+        {/* 6. HELP: Authentic Apple Arrow + Amber `?` Badge */}
+        {cursorState === 'help' && (
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" data-testid="cursor-help-question">
+            <path
+              d="m2 2 13 13h-7.5l2.8 5.4-2 1-2.8-5.4-3.5 3.5z"
+              fill={themeColors.stroke}
+              stroke={themeColors.stroke}
+              strokeWidth="2.5"
+              strokeLinejoin="round"
+            />
+            <path
+              d="m2 2 13 13h-7.5l2.8 5.4-2 1-2.8-5.4-3.5 3.5z"
+              fill={themeColors.fill}
+            />
+            {/* Amber `?` Badge */}
+            <g transform="translate(16, 15)">
+              <circle cx="8" cy="8" r="8" fill={themeColors.helpBg} stroke="#ffffff" strokeWidth="1.8" />
               <text
-                x="7"
-                y="10.5"
+                x="8"
+                y="11.8"
                 textAnchor="middle"
                 fill="#ffffff"
-                fontSize="10"
-                fontWeight="bold"
+                fontSize="11"
+                fontWeight="900"
                 fontFamily="system-ui, -apple-system, sans-serif"
               >
                 ?
@@ -329,62 +532,155 @@ export function CustomCursor() {
           </svg>
         )}
 
-        {cursorState === 'blade' && (
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            {/* Scalpel / Blade Razor */}
+        {/* 7. OPEN HAND (Grab) */}
+        {cursorState === 'grab' && (
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <path
-              d="M4 24L18 10L24 4L22 2L16 8L2 22L4 24Z"
+              d="M10 4C9 4 8 5 8 6.5V14H6.5C5 14 4 15 4 16.5C4 17.5 4.5 18.5 5.5 19.5L10 24C11 25 12.5 26 14.5 26H19C21 26 22.5 24.5 22.5 22.5V15C22.5 13.5 21.5 12.5 20 12.5C19.5 12.5 19 12.7 18.5 13V11C18.5 9.5 17.5 8.5 16 8.5C15.5 8.5 15 8.7 14.5 9V7C14.5 5.5 13.5 4.5 12 4.5C11.5 4.5 11 4.7 10.5 5V6.5C10.5 5 9.5 4 9 4Z"
               fill={themeColors.fill}
               stroke={themeColors.stroke}
-              strokeWidth="1.8"
-            />
-            <line x1="2" y1="22" x2="26" y2="22" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" />
-          </svg>
-        )}
-
-        {cursorState === 'crosshair' && (
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            {/* Precision Crosshair */}
-            <circle cx="14" cy="14" r="8" stroke={themeColors.stroke} strokeWidth="1.6" />
-            <circle cx="14" cy="14" r="2" fill={themeColors.accent} />
-            <line x1="14" y1="2" x2="14" y2="9" stroke={themeColors.stroke} strokeWidth="1.6" />
-            <line x1="14" y1="19" x2="14" y2="26" stroke={themeColors.stroke} strokeWidth="1.6" />
-            <line x1="2" y1="14" x2="9" y2="14" stroke={themeColors.stroke} strokeWidth="1.6" />
-            <line x1="19" y1="14" x2="26" y2="14" stroke={themeColors.stroke} strokeWidth="1.6" />
-          </svg>
-        )}
-
-        {cursorState === 'text' && (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            {/* Mac I-Beam */}
-            <path
-              d="M9 4H15M12 4V20M9 20H15"
-              stroke={themeColors.stroke}
-              strokeWidth="2.2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M9 4H15M12 4V20M9 20H15"
-              stroke={themeColors.fill}
-              strokeWidth="1.2"
-              strokeLinecap="round"
-            />
-          </svg>
-        )}
-
-        {cursorState === 'resize-ew' && (
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            {/* Double-ended horizontal trim arrow */}
-            <path
-              d="M6 14L10 10V13H18V10L22 14L18 18V15H10V18L6 14Z"
-              fill={themeColors.fill}
-              stroke={themeColors.stroke}
-              strokeWidth="1.8"
+              strokeWidth="2"
               strokeLinejoin="round"
             />
           </svg>
         )}
+
+        {/* 8. CLENCHED FIST (Grabbing) */}
+        {cursorState === 'grabbing' && (
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+            <path
+              d="M8 12C7 12 6 13 6 14.5V18C6 22 9 25 13 25H18C21 25 23 23 23 20V15C23 13.5 22 12.5 20.5 12.5C20 12.5 19.5 12.7 19 13V12C19 10.5 18 9.5 16.5 9.5C16 9.5 15.5 9.7 15 10V9C15 7.5 14 6.5 12.5 6.5C11 6.5 10 7.5 10 9V12H8Z"
+              fill={themeColors.fill}
+              stroke={themeColors.stroke}
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+            <circle cx="14" cy="14" r="1.5" fill={themeColors.accent} />
+          </svg>
+        )}
+
+        {/* 9. BLADE TOOL: Razor Scalpel */}
+        {cursorState === 'blade' && (
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+            <path
+              d="M4 26L18 12L24 6L22 4L16 10L2 24L4 26Z"
+              fill={themeColors.fill}
+              stroke={themeColors.stroke}
+              strokeWidth="2"
+            />
+            <line x1="2" y1="24" x2="28" y2="24" stroke="#ef4444" strokeWidth="1.6" strokeDasharray="3 2" />
+          </svg>
+        )}
+
+        {/* 10. CROSSHAIR */}
+        {cursorState === 'crosshair' && (
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <circle cx="15" cy="15" r="9" stroke={themeColors.stroke} strokeWidth="1.8" />
+            <circle cx="15" cy="15" r="2" fill={themeColors.accent} />
+            <line x1="15" y1="2" x2="15" y2="10" stroke={themeColors.stroke} strokeWidth="1.8" />
+            <line x1="15" y1="20" x2="15" y2="28" stroke={themeColors.stroke} strokeWidth="1.8" />
+            <line x1="2" y1="15" x2="10" y2="15" stroke={themeColors.stroke} strokeWidth="1.8" />
+            <line x1="20" y1="15" x2="28" y2="15" stroke={themeColors.stroke} strokeWidth="1.8" />
+          </svg>
+        )}
+
+        {/* 11. TEXT I-BEAM */}
+        {cursorState === 'text' && (
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <path
+              d="M9 4H17M13 4V22M9 22H17"
+              stroke={themeColors.stroke}
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M9 4H17M13 4V22M9 22H17"
+              stroke={themeColors.fill}
+              strokeWidth="1.3"
+              strokeLinecap="round"
+            />
+          </svg>
+        )}
+
+        {/* 12. HORIZONTAL RESIZE */}
+        {cursorState === 'resize-ew' && (
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <path
+              d="M6 15L11 10V13H19V10L24 15L19 20V17H11V20L6 15Z"
+              fill={themeColors.fill}
+              stroke={themeColors.stroke}
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+
+        {/* 13. VERTICAL RESIZE */}
+        {cursorState === 'resize-ns' && (
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <path
+              d="M15 6L20 11H17V19H20L15 24L10 19H13V11H10L15 6Z"
+              fill={themeColors.fill}
+              stroke={themeColors.stroke}
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+
+        {/* 14. 3D ROTATION / ORBIT */}
+        {cursorState === 'rotate' && (
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="10" stroke={themeColors.stroke} strokeWidth="2" strokeDasharray="14 4" />
+            <path d="M22 6L26 8L22 12" fill={themeColors.accent} stroke={themeColors.stroke} strokeWidth="1.2" />
+            <path d="M10 26L6 24L10 20" fill={themeColors.accent} stroke={themeColors.stroke} strokeWidth="1.2" />
+            <circle cx="16" cy="16" r="3" fill={themeColors.fill} stroke={themeColors.stroke} strokeWidth="1.5" />
+          </svg>
+        )}
+
+        {/* 15. BEACHBALL: Authentic Spinning macOS Pinwheel */}
+        {cursorState === 'beachball' && (
+          <div className="animate-spin" style={{ animationDuration: '1.2s' }}>
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="14" fill="#000000" stroke="#ffffff" strokeWidth="2" />
+              <path d="M16 16L16 2A14 14 0 0 1 28 9Z" fill="#ff4332" />
+              <path d="M16 16L28 9A14 14 0 0 1 28 23Z" fill="#ffd305" />
+              <path d="M16 16L28 23A14 14 0 0 1 16 30Z" fill="#3bbd1c" />
+              <path d="M16 16L16 30A14 14 0 0 1 4 23Z" fill="#14adf6" />
+              <path d="M16 16L4 23A14 14 0 0 1 4 9Z" fill="#ca70e1" />
+              <path d="M16 16L4 9A14 14 0 0 1 16 2Z" fill="#fbb114" />
+            </svg>
+          </div>
+        )}
       </div>
+
+      {/* Gamified Attached Drag Ghost Pill */}
+      {cursorConfig.showDragPill && (cursorState === 'drag' || cursorState === 'drop') && (
+        <div
+          data-testid="cursor-drag-pill"
+          className="absolute left-6 top-5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink-900/95 border border-emerald-500/80 shadow-2xl backdrop-blur-md text-[11px] font-medium text-emerald-200 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150"
+        >
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>{cursorState === 'drop' ? 'Release to Drop at Playhead' : dragItem?.label || 'Dragging Media Asset'}</span>
+          <span className="px-1 py-0.2 rounded bg-emerald-950/80 border border-emerald-500/50 text-[9px] text-emerald-300 font-mono">
+            {cursorState === 'drop' ? 'LOCKED' : '+COPY'}
+          </span>
+        </div>
+      )}
+
+      {/* Gamified Attached Help Info Pill */}
+      {cursorState === 'help' && helpText && (
+        <div
+          data-testid="cursor-help-pill"
+          className="absolute left-6 top-5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink-900/95 border border-amber-500/80 shadow-2xl backdrop-blur-md text-[11px] font-medium text-amber-200 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150"
+        >
+          <span className="h-2 w-2 rounded-full bg-amber-400" />
+          <span>{helpText}</span>
+          <span className="px-1 py-0.2 rounded bg-amber-950/80 border border-amber-500/50 text-[9px] text-amber-300 font-mono">
+            ? INFO
+          </span>
+        </div>
+      )}
     </div>
   )
 }

@@ -646,7 +646,7 @@ export function TopBar() {
                 <div data-testid="settings-cursor-section" className="space-y-4">
                   <div className="flex items-center justify-between pb-2 border-b border-ink-800">
                     <p className="text-[11px] text-ink-400">
-                      Gamified macOS vector cursor with contextual + drag and ? help badges.
+                      Gamified macOS vector cursor with downloaded packs, + drag badges, ? help, and magnetized drop reticle.
                     </p>
                     <button
                       type="button"
@@ -663,7 +663,7 @@ export function TopBar() {
                     <div className="min-w-0 flex-1 pr-2">
                       <span className="text-xs font-medium text-ink-100 block">Custom Mac Cursor Follower</span>
                       <span className="text-[10px] text-ink-500 block">
-                        Hardware-accelerated zero-latency cursor with crisp drop shadow.
+                        Hardware-accelerated zero-latency cursor with crisp drop shadow and zero click-blocking.
                       </span>
                     </div>
                     <input
@@ -675,15 +675,50 @@ export function TopBar() {
                     />
                   </label>
 
+                  {/* Downloaded Cursor Packs */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-ink-300">Downloaded macOS Cursor Pack</span>
+                      <span className="text-[9px] font-mono text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-800/60">
+                        40+ Authentic SVGs
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(
+                        [
+                          { id: 'mac-gamified', label: 'macOS Gamified', desc: 'Enlarged + power core & glow' },
+                          { id: 'mac-sonoma-pro', label: 'macOS Sonoma Pro', desc: 'Authentic Apple vector curves' },
+                          { id: 'cyber-violet', label: 'Cyber Violet', desc: 'Neon violet & cyan reticles' },
+                          { id: 'neo-stealth', label: 'Neo Stealth', desc: 'Obsidian monochrome dark' },
+                        ] as const
+                      ).map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          data-testid={`cursor-pack-${item.id}`}
+                          onClick={() => setCursorConfig({ pack: item.id, theme: item.id })}
+                          className={`p-2 rounded-lg border text-left transition-all ${
+                            (cursorConfig.pack || cursorConfig.theme) === item.id
+                              ? 'border-brand bg-brand/20 text-violet-200 shadow-sm'
+                              : 'border-ink-700 bg-ink-850 text-ink-400 hover:bg-ink-800 hover:text-ink-200'
+                          }`}
+                        >
+                          <div className="text-xs font-semibold">{item.label}</div>
+                          <div className="text-[9px] text-ink-500">{item.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Cursor Size */}
                   <div className="space-y-1.5">
-                    <div className="text-[11px] font-medium text-ink-300">Cursor Scale & Size</div>
+                    <div className="text-[11px] font-medium text-ink-300">Cursor Scale Profile</div>
                     <div className="grid grid-cols-3 gap-2">
                       {(
                         [
-                          { id: 'standard', label: 'Standard', desc: '1.0x classic' },
-                          { id: 'bigger', label: 'Bigger (Gamified)', desc: '1.15x enlarged' },
-                          { id: 'mega', label: 'Mega', desc: '1.35x high-vis' },
+                          { id: 'standard', label: 'Standard', desc: '0.95x classic' },
+                          { id: 'bigger', label: 'Bigger (Gamified)', desc: '1.20x enlarged' },
+                          { id: 'mega', label: 'Mega', desc: '1.40x high-vis' },
                         ] as const
                       ).map((item) => (
                         <button
@@ -704,36 +739,7 @@ export function TopBar() {
                     </div>
                   </div>
 
-                  {/* Cursor Theme */}
-                  <div className="space-y-1.5">
-                    <div className="text-[11px] font-medium text-ink-300">Visual Theme & Palette</div>
-                    <div className="grid grid-cols-3 gap-2">
-                      {(
-                        [
-                          { id: 'mac-gamified', label: 'Mac Classic', desc: 'Crisp white & drop shadow' },
-                          { id: 'cyber-violet', label: 'Cyber Violet', desc: 'Violet outline & cyan core' },
-                          { id: 'neo-stealth', label: 'Neo Stealth', desc: 'Dark monochrome obsidian' },
-                        ] as const
-                      ).map((item) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          data-testid={`cursor-theme-${item.id}`}
-                          onClick={() => setCursorConfig({ theme: item.id })}
-                          className={`p-2 rounded-lg border text-left transition-all ${
-                            cursorConfig.theme === item.id
-                              ? 'border-brand bg-brand/20 text-violet-200 shadow-sm'
-                              : 'border-ink-700 bg-ink-850 text-ink-400 hover:bg-ink-800 hover:text-ink-200'
-                          }`}
-                        >
-                          <div className="text-xs font-semibold">{item.label}</div>
-                          <div className="text-[9px] text-ink-500">{item.desc}</div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Badges and Effects */}
+                  {/* Refined Contextual Feedback Toggles */}
                   <div className="space-y-2 pt-1">
                     <div className="text-[11px] font-medium text-ink-300">Gamified Interactive Feedback</div>
 
@@ -744,7 +750,7 @@ export function TopBar() {
                           Context Badges (+ on Drag, ? on Info)
                         </span>
                         <span className="text-[10px] text-ink-500 block">
-                          Shows green + badge over clips/assets and amber ? badge over help/inspect buttons.
+                          Emerald + badge over draggable assets, amber ? badge over help and specs buttons.
                         </span>
                       </div>
                       <input
@@ -756,12 +762,46 @@ export function TopBar() {
                       />
                     </label>
 
+                    {/* Magnetized Drop Reticle */}
+                    <label className="flex items-center justify-between p-2 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none">
+                      <div className="min-w-0 flex-1 pr-2">
+                        <span className="text-xs font-medium text-ink-200 block">Magnetized Drop Reticle</span>
+                        <span className="text-[10px] text-ink-500 block">
+                          Pulsating target lock ring with downward insertion pin when dragging over timeline tracks.
+                        </span>
+                      </div>
+                      <input
+                        data-testid="toggle-cursor-drop-reticle"
+                        type="checkbox"
+                        checked={cursorConfig.showDropReticle !== false}
+                        onChange={(e) => setCursorConfig({ showDropReticle: e.target.checked })}
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                      />
+                    </label>
+
+                    {/* Attached Drag Ghost Pill */}
+                    <label className="flex items-center justify-between p-2 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none">
+                      <div className="min-w-0 flex-1 pr-2">
+                        <span className="text-xs font-medium text-ink-200 block">Attached Drag Ghost Pill</span>
+                        <span className="text-[10px] text-ink-500 block">
+                          Floating metadata badge attached to cursor showing active asset title during dragging.
+                        </span>
+                      </div>
+                      <input
+                        data-testid="toggle-cursor-drag-pill"
+                        type="checkbox"
+                        checked={cursorConfig.showDragPill !== false}
+                        onChange={(e) => setCursorConfig({ showDragPill: e.target.checked })}
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                      />
+                    </label>
+
                     {/* Click Micro-Burst */}
                     <label className="flex items-center justify-between p-2 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none">
                       <div className="min-w-0 flex-1 pr-2">
                         <span className="text-xs font-medium text-ink-200 block">Click Micro-Burst Ripple</span>
                         <span className="text-[10px] text-ink-500 block">
-                          Ripples glowing accent shockwaves at the click point.
+                          Expanding shockwave ring at cursor tip on every click.
                         </span>
                       </div>
                       <input
@@ -772,6 +812,55 @@ export function TopBar() {
                         className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
                       />
                     </label>
+                  </div>
+
+                  {/* Interactive Cursor Test Playground */}
+                  <div
+                    data-testid="cursor-test-playground"
+                    className="p-3 rounded-lg border border-ink-700/80 bg-ink-900/90 space-y-2.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">
+                        Interactive Cursor Playground
+                      </span>
+                      <span className="text-[9px] text-ink-500">Test states live below</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      {/* Test Draggable Asset */}
+                      <div
+                        draggable
+                        data-testid="playground-drag-item"
+                        data-asset-name="Cyber_Clip.mp4"
+                        data-asset-kind="video"
+                        className="p-2 rounded bg-ink-800 border border-ink-700 text-center cursor-grab hover:border-emerald-500 transition-colors select-none"
+                      >
+                        <div className="text-[10px] font-medium text-emerald-400">Draggable Card</div>
+                        <div className="text-[8px] text-ink-500">Hover for + badge</div>
+                      </div>
+
+                      {/* Test Drop Zone */}
+                      <div
+                        data-drop-target="true"
+                        data-testid="playground-drop-target"
+                        className="p-2 rounded bg-emerald-950/30 border border-emerald-500/50 text-center select-none"
+                      >
+                        <div className="text-[10px] font-medium text-emerald-300">Drop Zone</div>
+                        <div className="text-[8px] text-emerald-500">Drag here for reticle</div>
+                      </div>
+
+                      {/* Test Info Button */}
+                      <button
+                        type="button"
+                        data-testid="playground-help-btn"
+                        data-help="true"
+                        title="OmniFrame Audio-Visual Codec & GPU Engine Specifications"
+                        className="p-2 rounded bg-ink-800 border border-ink-700 text-center hover:border-amber-500 transition-colors"
+                      >
+                        <div className="text-[10px] font-medium text-amber-400">Help / Specs (?)</div>
+                        <div className="text-[8px] text-ink-500">Hover for ? badge</div>
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}

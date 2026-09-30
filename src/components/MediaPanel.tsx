@@ -160,6 +160,7 @@ export function MediaPanel() {
                   data-testid="media-asset"
                   data-asset-kind={a.kind}
                   data-asset-id={a.id}
+                  data-asset-name={a.name}
                   onDragStart={(e) => {
                     e.dataTransfer.effectAllowed = 'copy'
                     e.dataTransfer.setData('application/x-omniframe-asset', a.id)

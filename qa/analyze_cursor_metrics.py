@@ -10,10 +10,19 @@ images = [
     ('cursor-help-question-badge', 'evidence/screenshots/cursor-help-question-badge.png'),
     ('cursor-settings-customizer', 'evidence/screenshots/cursor-settings-customizer.png'),
     ('cursor-click-burst', 'evidence/screenshots/cursor-click-burst.png'),
+    ('cursor-drag-ghost-pill', 'evidence/screenshots/cursor-drag-ghost-pill.png'),
+    ('cursor-help-info-pill', 'evidence/screenshots/cursor-help-info-pill.png'),
+    ('cursor-magnetized-drop-reticle', 'evidence/screenshots/cursor-magnetized-drop-reticle.png'),
+    ('cursor-mac-sonoma-pack', 'evidence/screenshots/cursor-mac-sonoma-pack.png'),
+    ('cursor-playground-settings', 'evidence/screenshots/cursor-playground-settings.png'),
     ('cut-cursor-drag-plus', 'evidence/cutouts/cut-cursor-drag-plus.png'),
     ('cut-cursor-help-question', 'evidence/cutouts/cut-cursor-help-question.png'),
     ('cut-cursor-settings-panel', 'evidence/cutouts/cut-cursor-settings-panel.png'),
     ('cut-cursor-click-burst', 'evidence/cutouts/cut-cursor-click-burst.png'),
+    ('cut-cursor-drag-ghost-pill', 'evidence/cutouts/cut-cursor-drag-ghost-pill.png'),
+    ('cut-cursor-help-info-pill', 'evidence/cutouts/cut-cursor-help-info-pill.png'),
+    ('cut-cursor-magnetized-drop-reticle', 'evidence/cutouts/cut-cursor-magnetized-drop-reticle.png'),
+    ('cut-cursor-playground', 'evidence/cutouts/cut-cursor-playground.png'),
 ]
 
 results = {}

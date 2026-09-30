@@ -202,10 +202,14 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
 
 export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
   enabled: true,
+  pack: 'mac-gamified',
   theme: 'mac-gamified',
   size: 'bigger', // "bugger" enlarged as requested by user
+  renderMode: 'follower',
   showClickBurst: true,
   showBadges: true, // + for drag, ? for help as requested by user
+  showDragPill: true, // ghost pill with info when dragging
+  showDropReticle: true, // magnetized drop target when over timeline tracks
   showTrail: true,
 }
 

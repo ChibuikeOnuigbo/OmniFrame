@@ -68,6 +68,8 @@ This register applies Failure Modes and Effects Analysis (FMEA) to OmniFrame's a
 | PF-0062 | Shortcut Collision with Native Browser Reserved Keybindings | Users assigning browser-native shortcuts (e.g. `Ctrl+W`, `Ctrl+T`, `Ctrl+N`) in the custom shortcuts editor leading to unexpected window or tab closures. | Medium | Low | Validate custom shortcut key inputs against a reserved key blacklist and display a gentle warning banner if a reserved key combination is attempted. |
 | PF-0063 | High-DPI Canvas Buffer Blurriness During Dynamic Window Resizing | Resizing the browser window rapidly on 2x or 3x Retina displays causing the canvas backing buffer dimensions to desynchronize from CSS display dimensions. | Medium | Low | Bind `devicePixelRatio` to the canvas resize observer in `Preview.tsx`, multiplying canvas width/height by `window.devicePixelRatio` and scaling the rendering context. |
 | PF-0064 | Custom Cursor Pointer Lock Collision During 3D Orbit Dragging | Engaging 3D viewport camera orbit (pointer lock / continuous dragging) while custom cursor is active causing cursor position jumps upon exit. | Medium | Low | Add pointer lock detection listener in `CustomCursor.tsx` to hide the custom follower during active pointer lock and restore smooth coordinates on unlock. |
+| PF-0065 | Drag Ghost Pill Boundary Clipping at Viewport Margins | Dragging a media asset near the extreme right or bottom edge of the browser window causing the attached drag ghost pill to extend past the viewport boundary. | Low | Low | Clamp pill offset coordinates inside `CustomCursor.tsx` based on `window.innerWidth` and `window.innerHeight`, flipping the pill position to the left if `clientX + pillWidth > innerWidth`. |
+
 
 
 

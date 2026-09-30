@@ -4,9 +4,9 @@
     "width": 1440,
     "height": 900,
     "channels": 3,
-    "sharpness_laplacian_var": 671.52,
-    "rms_contrast_std": 23.72,
-    "mean_brightness": 15.24,
+    "sharpness_laplacian_var": 669.74,
+    "rms_contrast_std": 23.63,
+    "mean_brightness": 15.22,
     "dynamic_range": [
       0.0,
       255.0
@@ -17,9 +17,9 @@
     "width": 1440,
     "height": 900,
     "channels": 3,
-    "sharpness_laplacian_var": 677.87,
-    "rms_contrast_std": 23.76,
-    "mean_brightness": 15.25,
+    "sharpness_laplacian_var": 676.07,
+    "rms_contrast_std": 23.75,
+    "mean_brightness": 15.24,
     "dynamic_range": [
       0.0,
       255.0
@@ -77,6 +77,71 @@
       255.0
     ]
   },
+  "cursor-drag-ghost-pill": {
+    "path": "evidence/screenshots/cursor-drag-ghost-pill.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 720.13,
+    "rms_contrast_std": 23.88,
+    "mean_brightness": 15.34,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-help-info-pill": {
+    "path": "evidence/screenshots/cursor-help-info-pill.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 734.02,
+    "rms_contrast_std": 23.98,
+    "mean_brightness": 15.31,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-magnetized-drop-reticle": {
+    "path": "evidence/screenshots/cursor-magnetized-drop-reticle.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 1015.49,
+    "rms_contrast_std": 24.64,
+    "mean_brightness": 17.17,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-mac-sonoma-pack": {
+    "path": "evidence/screenshots/cursor-mac-sonoma-pack.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 919.56,
+    "rms_contrast_std": 24.61,
+    "mean_brightness": 17.38,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-playground-settings": {
+    "path": "evidence/screenshots/cursor-playground-settings.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 917.2,
+    "rms_contrast_std": 24.98,
+    "mean_brightness": 17.46,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
   "cut-cursor-drag-plus": {
     "path": "evidence/cutouts/cut-cursor-drag-plus.png",
     "width": 62,
@@ -127,6 +192,58 @@
     "dynamic_range": [
       0.0,
       255.0
+    ]
+  },
+  "cut-cursor-drag-ghost-pill": {
+    "path": "evidence/cutouts/cut-cursor-drag-ghost-pill.png",
+    "width": 156,
+    "height": 76,
+    "channels": 3,
+    "sharpness_laplacian_var": 9078.54,
+    "rms_contrast_std": 81.44,
+    "mean_brightness": 58.2,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-help-info-pill": {
+    "path": "evidence/cutouts/cut-cursor-help-info-pill.png",
+    "width": 156,
+    "height": 76,
+    "channels": 3,
+    "sharpness_laplacian_var": 10191.83,
+    "rms_contrast_std": 49.88,
+    "mean_brightness": 38.02,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-magnetized-drop-reticle": {
+    "path": "evidence/cutouts/cut-cursor-magnetized-drop-reticle.png",
+    "width": 120,
+    "height": 100,
+    "channels": 3,
+    "sharpness_laplacian_var": 4602.03,
+    "rms_contrast_std": 35.25,
+    "mean_brightness": 28.25,
+    "dynamic_range": [
+      10.0,
+      255.0
+    ]
+  },
+  "cut-cursor-playground": {
+    "path": "evidence/cutouts/cut-cursor-playground.png",
+    "width": 342,
+    "height": 102,
+    "channels": 3,
+    "sharpness_laplacian_var": 2309.5,
+    "rms_contrast_std": 20.88,
+    "mean_brightness": 24.23,
+    "dynamic_range": [
+      13.0,
+      191.0
     ]
   }
 }

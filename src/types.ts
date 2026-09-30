@@ -546,16 +546,22 @@ export interface OmniframeOperation {
 // ---- Templates Subsystem ----
 export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
 
-// ---- Settings Customization: Shortcuts & Context Menu ----
-export type CursorTheme = 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+// ---- Settings Customization: Shortcuts, Context Menu & Cursors ----
+export type CursorPack = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorTheme = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
 export type CursorSize = 'standard' | 'bigger' | 'mega'
+export type CursorRenderMode = 'follower' | 'native-css'
 
 export interface CursorConfig {
   enabled: boolean
+  pack: CursorPack
   theme: CursorTheme
   size: CursorSize
+  renderMode: CursorRenderMode
   showClickBurst: boolean
   showBadges: boolean // + for drag, ? for help
+  showDragPill: boolean // ghost pill with clip/asset info when dragging
+  showDropReticle: boolean // magnetized green reticle when over drop target
   showTrail: boolean
 }
 
