@@ -13,6 +13,7 @@ import {
   Maximize,
   X,
   Sliders,
+  HelpCircle,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
@@ -49,6 +50,9 @@ export function TopBar() {
   const toggleContextMenuCommand = useEditor((s) => s.toggleContextMenuCommand)
   const setContextMenuCommand = useEditor((s) => s.setContextMenuCommand)
   const resetContextMenuCommands = useEditor((s) => s.resetContextMenuCommands)
+  const cursorConfig = useEditor((s) => s.cursorConfig)
+  const setCursorConfig = useEditor((s) => s.setCursorConfig)
+  const resetCursorConfig = useEditor((s) => s.resetCursorConfig)
   const [editingShortcutId, setEditingShortcutId] = useState<string | null>(null)
   const [editingKeyVal, setEditingKeyVal] = useState('')
 
@@ -288,6 +292,21 @@ export function TopBar() {
 
       <button
         type="button"
+        data-testid="help-info-button"
+        data-help="true"
+        title="Help and editor specifications (?)"
+        aria-label="Help and specifications"
+        onClick={() => {
+          setSettingsCategory('cursor')
+          setSettingsOpen(true)
+        }}
+        className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+      >
+        <HelpCircle size={15} />
+      </button>
+
+      <button
+        type="button"
         data-testid="settings-button"
         title="Settings"
         aria-label="Settings"
@@ -358,7 +377,11 @@ export function TopBar() {
                       : 'text-ink-400 hover:bg-ink-700 hover:text-white'
                   }`}
                 >
-                  {category === 'contextMenu' ? 'Context Menu' : category}
+                  {category === 'contextMenu'
+                    ? 'Context Menu'
+                    : category === 'cursor'
+                    ? 'Cursor & Pointer'
+                    : category}
                 </button>
               ))}
             </nav>
@@ -368,6 +391,8 @@ export function TopBar() {
                   ? 'Search results'
                   : settingsCategory === 'contextMenu'
                   ? 'Context Menu Actions'
+                  : settingsCategory === 'cursor'
+                  ? 'Cursor & Pointer Customizer'
                   : settingsCategory}
               </h3>
 
@@ -613,6 +638,140 @@ export function TopBar() {
                         </div>
                       )
                     })}
+                  </div>
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'cursor' && (
+                <div data-testid="settings-cursor-section" className="space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-ink-800">
+                    <p className="text-[11px] text-ink-400">
+                      Gamified macOS vector cursor with contextual + drag and ? help badges.
+                    </p>
+                    <button
+                      type="button"
+                      data-testid="reset-cursor-btn"
+                      onClick={resetCursorConfig}
+                      className="text-[10px] text-brand hover:underline shrink-0 ml-2"
+                    >
+                      Reset Defaults
+                    </button>
+                  </div>
+
+                  {/* Master Toggle */}
+                  <label className="flex items-center justify-between p-2.5 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none">
+                    <div className="min-w-0 flex-1 pr-2">
+                      <span className="text-xs font-medium text-ink-100 block">Custom Mac Cursor Follower</span>
+                      <span className="text-[10px] text-ink-500 block">
+                        Hardware-accelerated zero-latency cursor with crisp drop shadow.
+                      </span>
+                    </div>
+                    <input
+                      data-testid="toggle-custom-cursor"
+                      type="checkbox"
+                      checked={cursorConfig.enabled}
+                      onChange={(e) => setCursorConfig({ enabled: e.target.checked })}
+                      className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                    />
+                  </label>
+
+                  {/* Cursor Size */}
+                  <div className="space-y-1.5">
+                    <div className="text-[11px] font-medium text-ink-300">Cursor Scale & Size</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(
+                        [
+                          { id: 'standard', label: 'Standard', desc: '1.0x classic' },
+                          { id: 'bigger', label: 'Bigger (Gamified)', desc: '1.15x enlarged' },
+                          { id: 'mega', label: 'Mega', desc: '1.35x high-vis' },
+                        ] as const
+                      ).map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          data-testid={`cursor-size-${item.id}`}
+                          onClick={() => setCursorConfig({ size: item.id })}
+                          className={`p-2 rounded-lg border text-left transition-all ${
+                            cursorConfig.size === item.id
+                              ? 'border-brand bg-brand/20 text-violet-200 shadow-sm'
+                              : 'border-ink-700 bg-ink-850 text-ink-400 hover:bg-ink-800 hover:text-ink-200'
+                          }`}
+                        >
+                          <div className="text-xs font-semibold">{item.label}</div>
+                          <div className="text-[9px] text-ink-500">{item.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cursor Theme */}
+                  <div className="space-y-1.5">
+                    <div className="text-[11px] font-medium text-ink-300">Visual Theme & Palette</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(
+                        [
+                          { id: 'mac-gamified', label: 'Mac Classic', desc: 'Crisp white & drop shadow' },
+                          { id: 'cyber-violet', label: 'Cyber Violet', desc: 'Violet outline & cyan core' },
+                          { id: 'neo-stealth', label: 'Neo Stealth', desc: 'Dark monochrome obsidian' },
+                        ] as const
+                      ).map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          data-testid={`cursor-theme-${item.id}`}
+                          onClick={() => setCursorConfig({ theme: item.id })}
+                          className={`p-2 rounded-lg border text-left transition-all ${
+                            cursorConfig.theme === item.id
+                              ? 'border-brand bg-brand/20 text-violet-200 shadow-sm'
+                              : 'border-ink-700 bg-ink-850 text-ink-400 hover:bg-ink-800 hover:text-ink-200'
+                          }`}
+                        >
+                          <div className="text-xs font-semibold">{item.label}</div>
+                          <div className="text-[9px] text-ink-500">{item.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Badges and Effects */}
+                  <div className="space-y-2 pt-1">
+                    <div className="text-[11px] font-medium text-ink-300">Gamified Interactive Feedback</div>
+
+                    {/* Contextual Badges */}
+                    <label className="flex items-center justify-between p-2 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none">
+                      <div className="min-w-0 flex-1 pr-2">
+                        <span className="text-xs font-medium text-ink-200 block">
+                          Context Badges (+ on Drag, ? on Info)
+                        </span>
+                        <span className="text-[10px] text-ink-500 block">
+                          Shows green + badge over clips/assets and amber ? badge over help/inspect buttons.
+                        </span>
+                      </div>
+                      <input
+                        data-testid="toggle-cursor-badges"
+                        type="checkbox"
+                        checked={cursorConfig.showBadges}
+                        onChange={(e) => setCursorConfig({ showBadges: e.target.checked })}
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                      />
+                    </label>
+
+                    {/* Click Micro-Burst */}
+                    <label className="flex items-center justify-between p-2 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors cursor-pointer select-none">
+                      <div className="min-w-0 flex-1 pr-2">
+                        <span className="text-xs font-medium text-ink-200 block">Click Micro-Burst Ripple</span>
+                        <span className="text-[10px] text-ink-500 block">
+                          Ripples glowing accent shockwaves at the click point.
+                        </span>
+                      </div>
+                      <input
+                        data-testid="toggle-cursor-burst"
+                        type="checkbox"
+                        checked={cursorConfig.showClickBurst}
+                        onChange={(e) => setCursorConfig({ showClickBurst: e.target.checked })}
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                      />
+                    </label>
                   </div>
                 </div>
               )}

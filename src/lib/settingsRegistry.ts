@@ -1,4 +1,4 @@
-export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'accessibility' | 'ai'
+export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'cursor' | 'accessibility' | 'ai'
 export type SettingsScope = 'project' | 'user' | 'session'
 
 export interface SettingDefinition {
@@ -86,6 +86,13 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     description: 'Toggle actions and submenus displayed in clip and track right-click menus.', aliases: ['context menu', 'right click', 'actions'],
     controlType: 'toggle', defaultValue: true, scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.contextMenuEnabledCommands', testId: 'setting-context-menu', sourceRefs: [],
+  },
+  {
+    id: 'cursor.customizer', category: 'cursor', label: 'Custom Mac cursor & pointer events',
+    description: 'Enlarged gamified macOS vector cursor with dynamic + drag and ? help badges and click burst.',
+    aliases: ['cursor', 'mouse', 'pointer', 'mac cursor', 'drag plus', 'help question', 'pointer events'],
+    controlType: 'toggle', defaultValue: true, scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.cursorConfig.enabled', testId: 'setting-cursor-enabled', sourceRefs: [],
   },
 ]
 

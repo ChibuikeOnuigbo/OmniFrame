@@ -111,8 +111,15 @@
       "feature": "Viewport Resize Vetting & Multi-Breakpoint Responsiveness",
       "status": "verified",
       "details": "Vetted and screenshotted layout across 7 breakpoints (1920x1080, 1440x900, 1024x768, 768x1024, 390x844, 360x800, 320x640) with zero overflow, responsive settings popup, and drawer overlay"
+    },
+    {
+      "run": 17,
+      "timestamp": "2026-09-30T11:26:36+00:00",
+      "feature": "Custom Pointer Events & Gamified macOS-Style Cursor Subsystem",
+      "status": "verified",
+      "details": "Engineered hardware-accelerated macOS vector cursor with bigger scale (1.15x), dynamic + drag badge, ? help badge, click ripple burst, and dedicated Cursor Customizer in Settings. Verified via Playwright and OpenCV."
     }
   ],
-  "total_runs": 16,
-  "last_updated": "2026-09-30T11:00:09+00:00"
+  "total_runs": 17,
+  "last_updated": "2026-09-30T11:26:36+00:00"
 }

@@ -80402,3 +80402,12 @@
 - **Mathematical Invariant & Formulation**: `alpha = clamp(1.0 - (G - max(R, B) * key_weight) * sensitivity, 0.0, 1.0)`
 - **Validation Strategy**: Unit tested with Vitest and visually verified with headless Chromium WebGL render pipeline.
 
+### [FEAT-10051] Gamified macOS Vector Cursor with Context Badges & Pointer Events
+
+- **Architecture & Module**: `Pointer Events & Custom Cursor System`
+- **Technical Specification**: Hardware-accelerated macOS vector cursor subsystem with enlarged profile, contextual emerald `+` drag-and-drop badge, amber `?` help badge, click micro-burst shockwave animation, and dedicated Settings customizer panel.
+- **Algorithmic Complexity & Performance**: Zero layout thrashing using GPU `translate3d` transforms; strict `pointer-events: none` guarantees zero input latency or click-blocking.
+- **Mathematical Invariant & Formulation**: `Pos_cursor(t) = (P_x, P_y); Scale_cursor = S_config \in {0.9, 1.15, 1.35}`
+- **Validation Strategy**: Playwright E2E vetting (`qa/pointer-events-cursor-gamified-e2e.mjs`) and OpenCV quantitative measurements (`qa/analyze_cursor_metrics.py`).
+
+

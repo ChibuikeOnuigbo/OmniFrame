@@ -1,0 +1,56 @@
+{
+  "tests": [
+    {
+      "name": "Custom cursor mount & initial state",
+      "state": "default",
+      "size": "bigger",
+      "theme": "mac-gamified",
+      "activeClassPresent": true,
+      "passed": true
+    },
+    {
+      "name": "Pointer state on button hover",
+      "state": "pointer",
+      "passed": true
+    },
+    {
+      "name": "Drag & Drop plus badge on draggable asset hover",
+      "state": "drag",
+      "dragPlusIconVisible": true,
+      "passed": true
+    },
+    {
+      "name": "Help & info question badge on help hover",
+      "state": "help",
+      "helpQuestionIconVisible": true,
+      "passed": true
+    },
+    {
+      "name": "Click micro-burst animation",
+      "rippleCreated": true,
+      "passed": true
+    },
+    {
+      "name": "Cursor customizer theme switch",
+      "themeSwitched": true,
+      "passed": true
+    },
+    {
+      "name": "Cursor customizer size switch",
+      "sizeSwitched": true,
+      "passed": true
+    },
+    {
+      "name": "Cursor master toggle disable & unmount",
+      "unmounted": true,
+      "passed": true
+    },
+    {
+      "name": "Cursor reset to gamified defaults",
+      "resetDone": true,
+      "passed": true
+    }
+  ],
+  "cursorStates": {},
+  "passed": true
+}

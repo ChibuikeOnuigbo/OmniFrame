@@ -199,6 +199,7 @@ export function MediaPanel() {
                     <button
                       type="button"
                       data-testid="asset-info-btn"
+                      data-help="true"
                       title={`Media specifications for ${a.name}`}
                       aria-label={`Media specifications for ${a.name}`}
                       onClick={(e) => {

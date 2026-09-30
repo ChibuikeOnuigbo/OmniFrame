@@ -74,6 +74,13 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-068 | `evidence/screenshots/responsiveness-mobile_390x844.png` | 390x844 | Mobile iPhone Responsiveness (390x844) | Mobile iPhone viewport demonstrating 48px left rail, centered video stage, sequence indicator pill close to timeline, and zero page horizontal jitter. |
 | SS-069 | `evidence/screenshots/responsiveness-mobile_320x640.png` | 320x640 | Compact Mobile Viewport (320x640) | Ultra-compact 320px viewport test verifying zero horizontal overflow, responsive toolbar bounds, and accessible transport controls. |
 | SS-070 | `evidence/screenshots/responsiveness-mobile-drawer-open.png` | 390x844 | Mobile Media Drawer Overlay (390x844) | Mobile slide-out drawer overlay displaying media library with search, filter, and import in a unified row, with aspect-ratio-preserved cards. |
+| SS-071 | `evidence/screenshots/cursor-mac-default.png` | 1440x900 | macOS Gamified Vector Cursor Default State | Full desktop workstation with custom macOS-inspired vector cursor follower, crisp white stroke, drop shadow, and power core accent. |
+| SS-072 | `evidence/screenshots/cursor-pointer-hover.png` | 1440x900 | macOS Pointing Hand Hover State | Sleek macOS pointing hand cursor hovering over action buttons with fingertip glow accent and hardware-accelerated follow. |
+| SS-073 | `evidence/screenshots/cursor-drag-plus-badge.png` | 1440x900 | Gamified Drag & Drop Cursor with `+` Badge | Context-aware macOS cursor rendering an emerald green `+` circle badge when hovering over draggable media assets and timeline drop targets. |
+| SS-074 | `evidence/screenshots/cursor-help-question-badge.png` | 1440x900 | Gamified Help Cursor with `?` Badge | Context-aware macOS cursor rendering an amber `?` question mark badge when hovering over specifications, help buttons, and inspector info icons. |
+| SS-075 | `evidence/screenshots/cursor-settings-customizer.png` | 1440x900 | Cursor & Pointer Customizer Settings Panel | Dedicated Cursor & Pointer tab in the Settings popup showing master toggle, scale options (Standard, Bigger, Mega), themes (Classic, Cyber Violet, Neo Stealth), and badge/burst toggles. |
+| SS-076 | `evidence/screenshots/cursor-click-burst.png` | 1440x900 | Click Micro-Burst Shockwave Ripple | Expanding animated micro-burst ripple emanating from the custom cursor tip on click with zero click-blocking. |
+
 
 
 

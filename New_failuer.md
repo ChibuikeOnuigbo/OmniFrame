@@ -40402,3 +40402,12 @@
 - **Mitigation Architecture**: Compact 8px ping indicator with hover tooltip positioned cleanly adjacent to timeline. Validated with deterministic state clamping and non-blocking recovery.
 - **Verification Test Suite**: `qa/timeline-sequence-ping-position.mjs` (Automated Playwright E2E & OpenCV frame analysis).
 
+### [FAIL-05051] Custom Cursor Click-Blocking from Missing Passthrough Rules
+
+- **Subsystem**: `Pointer Events & Custom Cursor System` &rarr; `Event Passthrough & Overlay Architecture`
+- **Failure Mode**: Custom cursor DOM container intercepting mouse clicks, preventing underlying timeline clips, buttons, and canvas tools from receiving pointer events.
+- **Root Cause**: Omitting `pointer-events: none` or layering sub-elements with `pointer-events: auto` inside the follower overlay.
+- **Mitigation Architecture**: Enforce strict `pointer-events: none` on the root container and all child SVG nodes, with hardware-accelerated `translate3d` positioning.
+- **Verification Test Suite**: `qa/pointer-events-cursor-gamified-e2e.mjs` (Automated Playwright E2E & OpenCV frame analysis).
+
+

@@ -547,6 +547,18 @@ export interface OmniframeOperation {
 export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
 
 // ---- Settings Customization: Shortcuts & Context Menu ----
+export type CursorTheme = 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorSize = 'standard' | 'bigger' | 'mega'
+
+export interface CursorConfig {
+  enabled: boolean
+  theme: CursorTheme
+  size: CursorSize
+  showClickBurst: boolean
+  showBadges: boolean // + for drag, ? for help
+  showTrail: boolean
+}
+
 export interface ShortcutItem {
   id: string
   label: string

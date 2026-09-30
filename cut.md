@@ -88,6 +88,11 @@ This register catalogs pixel-level cutouts and zoomed component evaluations demo
 | CUT-082 | `evidence/cutouts/cut-inspector-unclustered-accordion.png` | `evidence/screenshots/cluster-fixer-settings-desktop.png` | 280x37 | Collapsible Inspector Section Header | Clip Inspector section header demonstrating collapsible interactive chevron toggle, uncluster button, and accordion group folding for 3D spatial properties. |
 | CUT-083 | `evidence/cutouts/cut-timeline-transport-responsive-tablet_768x1024.png` | `evidence/screenshots/responsiveness-tablet_768x1024.png` | 600x32 | Responsive Timeline Transport on Tablet | Timeline transport controls showing compact icon buttons for Split, Marker, Snap, and VU meter without wrapping or overflow at 768px. |
 | CUT-084 | `evidence/cutouts/cut-drawing-toolbar-responsive-mobile_390x844.png` | `evidence/screenshots/responsiveness-mobile_390x844.png` | 374x38 | Responsive Drawing Toolbar on Mobile | Floating drawing tool strip constrained to `max-w-[calc(100vw-16px)]` (374px on 390px phone) with smooth horizontal scrolling. |
+| CUT-085 | `evidence/cutouts/cut-cursor-drag-plus.png` | `evidence/screenshots/cursor-drag-plus-badge.png` | 62x62 | Gamified Drag & Drop Mac Cursor with `+` Badge | Cutout of the macOS vector cursor displaying an emerald circular badge with a crisp white `+` icon when hovering draggable media assets and drop zones. |
+| CUT-086 | `evidence/cutouts/cut-cursor-help-question.png` | `evidence/screenshots/cursor-help-question-badge.png` | 62x62 | Gamified Help Mac Cursor with `?` Badge | Cutout of the macOS vector cursor displaying a vibrant amber circular badge with a bold `?` icon when hovering over info buttons and tooltips. |
+| CUT-087 | `evidence/cutouts/cut-cursor-settings-panel.png` | `evidence/screenshots/cursor-settings-customizer.png` | 520x540 | Cursor & Pointer Customizer Settings Panel | Cutout of the Settings modal showing Cursor & Pointer customizer options: master toggle, size scale pills (Standard, Bigger, Mega), theme cards (Classic, Cyber Violet, Neo Stealth), and feedback toggles. |
+| CUT-088 | `evidence/cutouts/cut-cursor-click-burst.png` | `evidence/screenshots/cursor-click-burst.png` | 80x80 | Click Micro-Burst Shockwave Ripple | Cutout showing the glowing violet expanding shockwave ring emanating from the pointer tip upon user click. |
+
 
 
 

@@ -28,6 +28,7 @@ import type {
   LinkSet,
   ParentRelationship,
   GroupInstance,
+  CursorConfig,
   TrackingSession,
   TextureAsset,
   MaterialInstance,
@@ -197,6 +198,15 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
   omniframe: 'Alt+O',
   threed: '3',
   speed: 'Ctrl+R',
+}
+
+export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
+  enabled: true,
+  theme: 'mac-gamified',
+  size: 'bigger', // "bugger" enlarged as requested by user
+  showClickBurst: true,
+  showBadges: true, // + for drag, ? for help as requested by user
+  showTrail: true,
 }
 
 interface EditorState {
@@ -416,12 +426,15 @@ interface EditorState {
   customShortcuts: Record<string, string>
   contextMenuEnabledCommands: Record<string, boolean>
   unclusterInspector: boolean
+  cursorConfig: CursorConfig
   setCustomShortcut: (id: string, key: string) => void
   resetCustomShortcuts: () => void
   toggleContextMenuCommand: (id: string) => void
   setContextMenuCommand: (id: string, enabled: boolean) => void
   resetContextMenuCommands: () => void
   setUnclusterInspector: (enabled: boolean) => void
+  setCursorConfig: (patch: Partial<CursorConfig>) => void
+  resetCursorConfig: () => void
 
   // ---- history ----
   beginHistory: () => void
@@ -659,6 +672,7 @@ export const useEditor = create<EditorState>((set, get) => {
     customShortcuts: { ...DEFAULT_SHORTCUTS },
     contextMenuEnabledCommands: { ...DEFAULT_CONTEXT_COMMANDS },
     unclusterInspector: false,
+    cursorConfig: { ...DEFAULT_CURSOR_CONFIG },
 
     // ---- OmniFrame & Character Manipulation initial state ----
     omniframeMode: false,
@@ -1788,6 +1802,10 @@ export const useEditor = create<EditorState>((set, get) => {
     resetContextMenuCommands: () =>
       set({ contextMenuEnabledCommands: { ...DEFAULT_CONTEXT_COMMANDS } }),
     setUnclusterInspector: (unclusterInspector) => set({ unclusterInspector }),
+    setCursorConfig: (patch) =>
+      set((s) => ({ cursorConfig: { ...s.cursorConfig, ...patch } })),
+    resetCursorConfig: () =>
+      set({ cursorConfig: { ...DEFAULT_CURSOR_CONFIG } }),
 
     // ---- drawing actions ----
     addDrawingStroke: (stroke) => {

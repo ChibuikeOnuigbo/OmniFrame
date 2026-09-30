@@ -86,3 +86,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-29T23:24:16+00:00 — Drawing Run #15: [VERIFIED] Cluster Fixer, Space-Saving Icons, Settings Context Menu & Shortcuts Customizer — Replaced bulky text buttons with sleek icons+tooltips, added collapsible accordion groups in Inspector, implemented context menu & shortcuts customizers in responsive Settings popup down to 360px
 
 - 2026-09-30T11:00:09+00:00 — Drawing Run #16: [VERIFIED] Viewport Resize Vetting & Multi-Breakpoint Responsiveness — Vetted and screenshotted layout across 7 breakpoints (1920x1080, 1440x900, 1024x768, 768x1024, 390x844, 360x800, 320x640) with zero overflow, responsive settings popup, and drawer overlay
+
+- 2026-09-30T11:26:36+00:00 — Drawing Run #17: [VERIFIED] Custom Pointer Events & Gamified macOS-Style Cursor Subsystem — Engineered hardware-accelerated macOS vector cursor with bigger scale (1.15x), dynamic + drag badge, ? help badge, click ripple burst, and dedicated Cursor Customizer in Settings. Verified via Playwright and OpenCV.

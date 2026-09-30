@@ -1,0 +1,132 @@
+{
+  "cursor-mac-default": {
+    "path": "evidence/screenshots/cursor-mac-default.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 671.52,
+    "rms_contrast_std": 23.72,
+    "mean_brightness": 15.24,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-pointer-hover": {
+    "path": "evidence/screenshots/cursor-pointer-hover.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 677.87,
+    "rms_contrast_std": 23.76,
+    "mean_brightness": 15.25,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-drag-plus-badge": {
+    "path": "evidence/screenshots/cursor-drag-plus-badge.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 667.71,
+    "rms_contrast_std": 23.83,
+    "mean_brightness": 15.29,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-help-question-badge": {
+    "path": "evidence/screenshots/cursor-help-question-badge.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 678.86,
+    "rms_contrast_std": 23.88,
+    "mean_brightness": 15.28,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-settings-customizer": {
+    "path": "evidence/screenshots/cursor-settings-customizer.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 991.24,
+    "rms_contrast_std": 25.16,
+    "mean_brightness": 17.43,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-click-burst": {
+    "path": "evidence/screenshots/cursor-click-burst.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 674.83,
+    "rms_contrast_std": 23.74,
+    "mean_brightness": 15.26,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-drag-plus": {
+    "path": "evidence/cutouts/cut-cursor-drag-plus.png",
+    "width": 62,
+    "height": 62,
+    "channels": 3,
+    "sharpness_laplacian_var": 8585.22,
+    "rms_contrast_std": 64.82,
+    "mean_brightness": 44.96,
+    "dynamic_range": [
+      6.0,
+      255.0
+    ]
+  },
+  "cut-cursor-help-question": {
+    "path": "evidence/cutouts/cut-cursor-help-question.png",
+    "width": 62,
+    "height": 62,
+    "channels": 3,
+    "sharpness_laplacian_var": 9033.2,
+    "rms_contrast_std": 69.79,
+    "mean_brightness": 54.39,
+    "dynamic_range": [
+      8.0,
+      255.0
+    ]
+  },
+  "cut-cursor-settings-panel": {
+    "path": "evidence/cutouts/cut-cursor-settings-panel.png",
+    "width": 520,
+    "height": 540,
+    "channels": 3,
+    "sharpness_laplacian_var": 2328.06,
+    "rms_contrast_std": 25.5,
+    "mean_brightness": 26.11,
+    "dynamic_range": [
+      6.0,
+      255.0
+    ]
+  },
+  "cut-cursor-click-burst": {
+    "path": "evidence/cutouts/cut-cursor-click-burst.png",
+    "width": 80,
+    "height": 80,
+    "channels": 3,
+    "sharpness_laplacian_var": 2813.27,
+    "rms_contrast_std": 42.94,
+    "mean_brightness": 11.78,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  }
+}
