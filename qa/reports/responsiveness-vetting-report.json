@@ -1,0 +1,59 @@
+{
+  "viewportsTested": [
+    {
+      "name": "desktop_1920x1080",
+      "width": 1920,
+      "height": 1080,
+      "type": "desktop"
+    },
+    {
+      "name": "desktop_1440x900",
+      "width": 1440,
+      "height": 900,
+      "type": "desktop"
+    },
+    {
+      "name": "tablet_1024x768",
+      "width": 1024,
+      "height": 768,
+      "type": "tablet"
+    },
+    {
+      "name": "tablet_768x1024",
+      "width": 768,
+      "height": 1024,
+      "type": "tablet"
+    },
+    {
+      "name": "mobile_390x844",
+      "width": 390,
+      "height": 844,
+      "type": "mobile"
+    },
+    {
+      "name": "mobile_360x800",
+      "width": 360,
+      "height": 800,
+      "type": "mobile"
+    },
+    {
+      "name": "mobile_320x640",
+      "width": 320,
+      "height": 640,
+      "type": "mobile"
+    }
+  ],
+  "overflowZeroVerified": true,
+  "drawingToolbarResponsiveVerified": false,
+  "settingsModalResponsiveVerified": true,
+  "timelineTransportResponsiveVerified": true,
+  "screenshots": {
+    "desktop_1920x1080": "/home/user/OmniFrame/evidence/screenshots/responsiveness-desktop_1920x1080.png",
+    "desktop_1440x900": "/home/user/OmniFrame/evidence/screenshots/responsiveness-desktop_1440x900.png",
+    "tablet_1024x768": "/home/user/OmniFrame/evidence/screenshots/responsiveness-tablet_1024x768.png",
+    "tablet_768x1024": "/home/user/OmniFrame/evidence/screenshots/responsiveness-tablet_768x1024.png",
+    "mobile_390x844": "/home/user/OmniFrame/evidence/screenshots/responsiveness-mobile_390x844.png",
+    "mobile_360x800": "/home/user/OmniFrame/evidence/screenshots/responsiveness-mobile_360x800.png",
+    "mobile_320x640": "/home/user/OmniFrame/evidence/screenshots/responsiveness-mobile_320x640.png"
+  }
+}

@@ -84,3 +84,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-29T23:00:59+00:00 — Drawing Run #14: [VERIFIED] OmniFrame Mode Vetting & UI Decluttering — Vetted OmniFrame on image asset and multi-frame video across frames 0, 90, 105, 150 with clean inpainting zero-ghost and decluttered UI
 
 - 2026-09-29T23:24:16+00:00 — Drawing Run #15: [VERIFIED] Cluster Fixer, Space-Saving Icons, Settings Context Menu & Shortcuts Customizer — Replaced bulky text buttons with sleek icons+tooltips, added collapsible accordion groups in Inspector, implemented context menu & shortcuts customizers in responsive Settings popup down to 360px
+
+- 2026-09-30T11:00:09+00:00 — Drawing Run #16: [VERIFIED] Viewport Resize Vetting & Multi-Breakpoint Responsiveness — Vetted and screenshotted layout across 7 breakpoints (1920x1080, 1440x900, 1024x768, 768x1024, 390x844, 360x800, 320x640) with zero overflow, responsive settings popup, and drawer overlay
