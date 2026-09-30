@@ -323,5 +323,109 @@
       0.0,
       255.0
     ]
+  },
+  "cursor-frame-playhead-scrub": {
+    "path": "evidence/screenshots/cursor-frame-playhead-scrub.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 660.13,
+    "rms_contrast_std": 23.7,
+    "mean_brightness": 15.24,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-modal-overlay": {
+    "path": "evidence/screenshots/cursor-frame-modal-overlay.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 328.38,
+    "rms_contrast_std": 13.88,
+    "mean_brightness": 6.36,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-inspector-slider": {
+    "path": "evidence/screenshots/cursor-frame-inspector-slider.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 328.81,
+    "rms_contrast_std": 13.9,
+    "mean_brightness": 6.36,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-3d-orbit": {
+    "path": "evidence/screenshots/cursor-frame-3d-orbit.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 329.96,
+    "rms_contrast_std": 13.91,
+    "mean_brightness": 6.36,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-playhead-scrub": {
+    "path": "evidence/cutouts/cut-cursor-frame-playhead-scrub.png",
+    "width": 62,
+    "height": 62,
+    "channels": 3,
+    "sharpness_laplacian_var": 1973.39,
+    "rms_contrast_std": 50.18,
+    "mean_brightness": 32.37,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-modal-overlay": {
+    "path": "evidence/cutouts/cut-cursor-frame-modal-overlay.png",
+    "width": 58,
+    "height": 58,
+    "channels": 3,
+    "sharpness_laplacian_var": 4021.73,
+    "rms_contrast_std": 45.69,
+    "mean_brightness": 30.94,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-inspector-slider": {
+    "path": "evidence/cutouts/cut-cursor-frame-inspector-slider.png",
+    "width": 58,
+    "height": 58,
+    "channels": 3,
+    "sharpness_laplacian_var": 3935.62,
+    "rms_contrast_std": 37.29,
+    "mean_brightness": 10.25,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-3d-orbit": {
+    "path": "evidence/cutouts/cut-cursor-frame-3d-orbit.png",
+    "width": 58,
+    "height": 58,
+    "channels": 3,
+    "sharpness_laplacian_var": 5326.36,
+    "rms_contrast_std": 38.37,
+    "mean_brightness": 28.54,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
   }
 }

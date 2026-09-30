@@ -70,6 +70,8 @@ This register applies Failure Modes and Effects Analysis (FMEA) to OmniFrame's a
 | PF-0064 | Custom Cursor Pointer Lock Collision During 3D Orbit Dragging | Engaging 3D viewport camera orbit (pointer lock / continuous dragging) while custom cursor is active causing cursor position jumps upon exit. | Medium | Low | Add pointer lock detection listener in `CustomCursor.tsx` to hide the custom follower during active pointer lock and restore smooth coordinates on unlock. |
 | PF-0065 | Drag Ghost Pill Boundary Clipping at Viewport Margins | Dragging a media asset near the extreme right or bottom edge of the browser window causing the attached drag ghost pill to extend past the viewport boundary. | Low | Low | Clamp pill offset coordinates inside `CustomCursor.tsx` based on `window.innerWidth` and `window.innerHeight`, flipping the pill position to the left if `clientX + pillWidth > innerWidth`. |
 | PF-0066 | Cursor Stale Frame Artifact on High-Refresh ProMotion Displays (120Hz/144Hz) | Rendering cursor positions inside React component state causing 60Hz frame throttling on 120Hz or 144Hz high-refresh ProMotion monitors. | Low | Low | Bind mousemove directly to an un-throttled RAF (requestAnimationFrame) loop updating DOM `transform` inline via direct element ref rather than re-rendering React state tree on every mouse tick. |
+| PF-0067 | SVG Filter Shadow GPU Memory Accumulation on Extended Editing Sessions | Continuously rendering heavy SVG `filter="url(#dropShadow)"` on an active follower cursor causing incremental GPU memory pressure on resource-constrained devices. | Low | Low | Replace heavy SVG filter primitives with CSS `filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6))` which executes in hardware-accelerated compositor thread. |
+
 
 
 

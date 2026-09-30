@@ -29,6 +29,14 @@ images = [
     ('cut-cursor-canvas-visibility', 'evidence/cutouts/cut-cursor-canvas-visibility.png'),
     ('cut-cursor-timeline-visibility', 'evidence/cutouts/cut-cursor-timeline-visibility.png'),
     ('cut-cursor-boundary-entry', 'evidence/cutouts/cut-cursor-boundary-entry.png'),
+    ('cursor-frame-playhead-scrub', 'evidence/screenshots/cursor-frame-playhead-scrub.png'),
+    ('cursor-frame-modal-overlay', 'evidence/screenshots/cursor-frame-modal-overlay.png'),
+    ('cursor-frame-inspector-slider', 'evidence/screenshots/cursor-frame-inspector-slider.png'),
+    ('cursor-frame-3d-orbit', 'evidence/screenshots/cursor-frame-3d-orbit.png'),
+    ('cut-cursor-frame-playhead-scrub', 'evidence/cutouts/cut-cursor-frame-playhead-scrub.png'),
+    ('cut-cursor-frame-modal-overlay', 'evidence/cutouts/cut-cursor-frame-modal-overlay.png'),
+    ('cut-cursor-frame-inspector-slider', 'evidence/cutouts/cut-cursor-frame-inspector-slider.png'),
+    ('cut-cursor-frame-3d-orbit', 'evidence/cutouts/cut-cursor-frame-3d-orbit.png'),
 ]
 
 results = {}

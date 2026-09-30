@@ -88,6 +88,11 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-082 | `evidence/screenshots/cursor-visibility-canvas-inspection.png` | 1440x900 | Cursor Visibility & Bug Inspection (Video Canvas) | Full workstation view verifying continuous macOS vector cursor presence over video stage canvas with zero clipping, accurate sub-pixel coordinate follow, and 100% native cursor suppression. |
 | SS-083 | `evidence/screenshots/cursor-visibility-timeline-inspection.png` | 1440x900 | Cursor Visibility & Bug Inspection (Timeline) | Full workstation view verifying pointing hand state and exact fingertip hotspot alignment over timeline speed control and transport buttons. |
 | SS-084 | `evidence/screenshots/cursor-visibility-boundary-test.png` | 1440x900 | Cursor Boundary & Window Exit Restoration | Workstation capture verifying seamless cursor suppression upon window exit (`mouseleave` / blur) and instant restoration upon viewport re-entry. |
+| SS-085 | `evidence/screenshots/cursor-frame-playhead-scrub.png` | 1440x900 | Timeline Playhead Continuous Drag & Scrub | Workstation capture demonstrating open/grab hand cursor continuously tracking the playhead scrubber with zero flickering during active horizontal dragging. |
+| SS-086 | `evidence/screenshots/cursor-frame-modal-overlay.png` | 1440x900 | Cursor Floating over Modal Dialog Overlay | Workstation capture demonstrating enlarged macOS vector cursor floating on top of Marker Modal and dark backdrop overlay with zero occlusion. |
+| SS-087 | `evidence/screenshots/cursor-frame-inspector-slider.png` | 1440x900 | Cursor Floating over Inspector Range Sliders | Workstation capture demonstrating custom cursor tracking over Inspector transform sliders with continuous visibility. |
+| SS-088 | `evidence/screenshots/cursor-frame-3d-orbit.png` | 1440x900 | Cursor in 3D Mode Canvas Viewport | Workstation capture demonstrating custom vector cursor active over 3D spatial canvas grid and video plane. |
+
 
 
 

@@ -99,6 +99,11 @@ This register catalogs pixel-level cutouts and zoomed component evaluations demo
 | CUT-093 | `evidence/cutouts/cut-cursor-canvas-visibility.png` | `evidence/screenshots/cursor-visibility-canvas-inspection.png` | 78x78 | Custom Mac Cursor Visibility Frame on Video Canvas | High-definition cutout showing macOS Sonoma vector cursor over video preview canvas verifying crisp white border, power core accent, drop shadow, and zero clipping. |
 | CUT-094 | `evidence/cutouts/cut-cursor-timeline-visibility.png` | `evidence/screenshots/cursor-visibility-timeline-inspection.png` | 80x80 | Pointing Hand Hotspot Alignment on Timeline Speed Control | High-definition cutout showing macOS pointing hand over `1x` speed button verifying exact index finger fingertip alignment with the button target. |
 | CUT-095 | `evidence/cutouts/cut-cursor-boundary-entry.png` | `evidence/screenshots/cursor-visibility-boundary-test.png` | 78x78 | Cursor Restoration Frame on Viewport Re-entry | Cutout verifying instantaneous cursor restoration and smooth coordinate tracking upon pointer re-entry into the workspace. |
+| CUT-096 | `evidence/cutouts/cut-cursor-frame-playhead-scrub.png` | `evidence/screenshots/cursor-frame-playhead-scrub.png` | 62x62 | Open/Grab Hand Frame on Timeline Playhead Scrub | Close-up cutout showing the custom macOS open/grab hand tracking the red timeline playhead diamond during active mouse dragging. |
+| CUT-097 | `evidence/cutouts/cut-cursor-frame-modal-overlay.png` | `evidence/screenshots/cursor-frame-modal-overlay.png` | 58x58 | Vector Cursor Frame on Modal Dialog Overlay | Close-up cutout showing the enlarged macOS vector cursor floating on top of Marker Modal color picker button with deep drop shadow. |
+| CUT-098 | `evidence/cutouts/cut-cursor-frame-inspector-slider.png` | `evidence/screenshots/cursor-frame-inspector-slider.png` | 58x58 | Vector Cursor Frame on Inspector Range Sliders | Close-up cutout showing custom cursor over Inspector controls with crisp outline and zero pixel clipping. |
+| CUT-099 | `evidence/cutouts/cut-cursor-frame-3d-orbit.png` | `evidence/screenshots/cursor-frame-3d-orbit.png` | 58x58 | Vector Cursor Frame in 3D Mode Canvas Viewport | Close-up cutout showing custom vector cursor over 3D spatial canvas grid and video plane. |
+
 
 
 
