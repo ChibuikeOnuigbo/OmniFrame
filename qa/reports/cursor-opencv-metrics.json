@@ -245,5 +245,83 @@
       13.0,
       191.0
     ]
+  },
+  "cursor-visibility-canvas-inspection": {
+    "path": "evidence/screenshots/cursor-visibility-canvas-inspection.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 668.82,
+    "rms_contrast_std": 23.63,
+    "mean_brightness": 15.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-visibility-timeline-inspection": {
+    "path": "evidence/screenshots/cursor-visibility-timeline-inspection.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 656.89,
+    "rms_contrast_std": 23.68,
+    "mean_brightness": 15.24,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-visibility-boundary-test": {
+    "path": "evidence/screenshots/cursor-visibility-boundary-test.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 669.74,
+    "rms_contrast_std": 23.63,
+    "mean_brightness": 15.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-canvas-visibility": {
+    "path": "evidence/cutouts/cut-cursor-canvas-visibility.png",
+    "width": 78,
+    "height": 78,
+    "channels": 3,
+    "sharpness_laplacian_var": 3603.18,
+    "rms_contrast_std": 32.24,
+    "mean_brightness": 8.58,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-timeline-visibility": {
+    "path": "evidence/cutouts/cut-cursor-timeline-visibility.png",
+    "width": 80,
+    "height": 80,
+    "channels": 3,
+    "sharpness_laplacian_var": 3329.99,
+    "rms_contrast_std": 39.55,
+    "mean_brightness": 32.71,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-boundary-entry": {
+    "path": "evidence/cutouts/cut-cursor-boundary-entry.png",
+    "width": 78,
+    "height": 78,
+    "channels": 3,
+    "sharpness_laplacian_var": 2436.05,
+    "rms_contrast_std": 28.81,
+    "mean_brightness": 4.45,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
   }
 }

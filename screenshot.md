@@ -85,6 +85,10 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-079 | `evidence/screenshots/cursor-magnetized-drop-reticle.png` | 1440x900 | Magnetized Drop Reticle on Valid Target | Cursor hovering over valid timeline lanes during drag transforming into magnetized target reticle with pulsating dashed circle, downward drop insertion pin, and `Release to Drop` lock indicator. |
 | SS-080 | `evidence/screenshots/cursor-mac-sonoma-pack.png` | 1440x900 | Downloaded Authentic macOS Sonoma Pro Pack | Settings Customizer with active macOS Sonoma Pro pack option selected, utilizing authentic downloaded vector curves from Apple SVGs. |
 | SS-081 | `evidence/screenshots/cursor-playground-settings.png` | 1440x900 | Interactive Cursor Playground in Settings | Dedicated testing sandbox inside the Settings modal allowing immediate interactive preview of draggable card (+ badge), drop zone (magnetized reticle), and specs help button (? badge). |
+| SS-082 | `evidence/screenshots/cursor-visibility-canvas-inspection.png` | 1440x900 | Cursor Visibility & Bug Inspection (Video Canvas) | Full workstation view verifying continuous macOS vector cursor presence over video stage canvas with zero clipping, accurate sub-pixel coordinate follow, and 100% native cursor suppression. |
+| SS-083 | `evidence/screenshots/cursor-visibility-timeline-inspection.png` | 1440x900 | Cursor Visibility & Bug Inspection (Timeline) | Full workstation view verifying pointing hand state and exact fingertip hotspot alignment over timeline speed control and transport buttons. |
+| SS-084 | `evidence/screenshots/cursor-visibility-boundary-test.png` | 1440x900 | Cursor Boundary & Window Exit Restoration | Workstation capture verifying seamless cursor suppression upon window exit (`mouseleave` / blur) and instant restoration upon viewport re-entry. |
+
 
 
 

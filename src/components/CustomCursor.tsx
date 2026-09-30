@@ -286,6 +286,18 @@ export function CustomCursor() {
       setIsVisible(false)
     }
 
+    const onMouseEnter = () => {
+      setIsVisible(true)
+    }
+
+    const onWindowBlur = () => {
+      setIsVisible(false)
+    }
+
+    const onWindowFocus = () => {
+      setIsVisible(true)
+    }
+
     window.addEventListener('pointermove', onPointerMove, { passive: true })
     window.addEventListener('mousemove', onPointerMove, { passive: true })
     window.addEventListener('pointerdown', onPointerDown, { passive: true })
@@ -297,6 +309,9 @@ export function CustomCursor() {
     window.addEventListener('dragend', onDragEnd)
     window.addEventListener('drop', onDrop)
     document.addEventListener('mouseleave', onPointerLeave)
+    document.addEventListener('mouseenter', onMouseEnter)
+    window.addEventListener('blur', onWindowBlur)
+    window.addEventListener('focus', onWindowFocus)
 
     return () => {
       window.removeEventListener('pointermove', onPointerMove)
@@ -310,6 +325,9 @@ export function CustomCursor() {
       window.removeEventListener('dragend', onDragEnd)
       window.removeEventListener('drop', onDrop)
       document.removeEventListener('mouseleave', onPointerLeave)
+      document.removeEventListener('mouseenter', onMouseEnter)
+      window.removeEventListener('blur', onWindowBlur)
+      window.removeEventListener('focus', onWindowFocus)
       document.documentElement.classList.remove('of-custom-cursor-active')
     }
   }, [
@@ -323,6 +341,36 @@ export function CustomCursor() {
     drawingEnabled,
     viewMode,
   ])
+
+  // Hotspot offset based on cursor state
+  const hotspotOffset = useMemo(() => {
+    switch (cursorState) {
+      case 'pointer':
+        return { x: -9 * scale, y: -2 * scale }
+      case 'crosshair':
+        return { x: -15 * scale, y: -15 * scale }
+      case 'text':
+        return { x: -13 * scale, y: -13 * scale }
+      case 'resize-ew':
+      case 'resize-ns':
+        return { x: -15 * scale, y: -15 * scale }
+      case 'rotate':
+        return { x: -16 * scale, y: -16 * scale }
+      case 'drop':
+        return { x: -20 * scale, y: -20 * scale }
+      case 'beachball':
+        return { x: -14 * scale, y: -14 * scale }
+      case 'grab':
+      case 'grabbing':
+        return { x: -10 * scale, y: -6 * scale }
+      case 'default':
+      case 'drag':
+      case 'no-drop':
+      case 'help':
+      default:
+        return { x: 0, y: 0 }
+    }
+  }, [cursorState, scale])
 
   if (!cursorConfig.enabled || !isVisible) return null
 
@@ -338,8 +386,8 @@ export function CustomCursor() {
         left: 0,
         top: 0,
         pointerEvents: 'none',
-        zIndex: 99999,
-        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
+        zIndex: 9999999,
+        transform: `translate3d(${pos.x + hotspotOffset.x}px, ${pos.y + hotspotOffset.y}px, 0)`,
         willChange: 'transform',
       }}
     >

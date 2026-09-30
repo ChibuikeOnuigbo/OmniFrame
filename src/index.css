@@ -127,7 +127,15 @@ body {
 
 html.of-custom-cursor-active,
 html.of-custom-cursor-active body,
-html.of-custom-cursor-active * {
+html.of-custom-cursor-active *,
+html.of-custom-cursor-active *::before,
+html.of-custom-cursor-active *::after,
+html.of-custom-cursor-active input,
+html.of-custom-cursor-active button,
+html.of-custom-cursor-active select,
+html.of-custom-cursor-active textarea,
+html.of-custom-cursor-active canvas,
+html.of-custom-cursor-active svg {
   cursor: none !important;
 }
 

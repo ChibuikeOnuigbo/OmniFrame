@@ -23,6 +23,12 @@ images = [
     ('cut-cursor-help-info-pill', 'evidence/cutouts/cut-cursor-help-info-pill.png'),
     ('cut-cursor-magnetized-drop-reticle', 'evidence/cutouts/cut-cursor-magnetized-drop-reticle.png'),
     ('cut-cursor-playground', 'evidence/cutouts/cut-cursor-playground.png'),
+    ('cursor-visibility-canvas-inspection', 'evidence/screenshots/cursor-visibility-canvas-inspection.png'),
+    ('cursor-visibility-timeline-inspection', 'evidence/screenshots/cursor-visibility-timeline-inspection.png'),
+    ('cursor-visibility-boundary-test', 'evidence/screenshots/cursor-visibility-boundary-test.png'),
+    ('cut-cursor-canvas-visibility', 'evidence/cutouts/cut-cursor-canvas-visibility.png'),
+    ('cut-cursor-timeline-visibility', 'evidence/cutouts/cut-cursor-timeline-visibility.png'),
+    ('cut-cursor-boundary-entry', 'evidence/cutouts/cut-cursor-boundary-entry.png'),
 ]
 
 results = {}

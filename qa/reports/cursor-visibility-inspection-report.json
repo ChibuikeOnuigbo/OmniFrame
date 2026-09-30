@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "name": "Native OS cursor 100% suppressed (no double cursor leak)",
+      "styles": {
+        "elHtml": "none",
+        "elBody": "none",
+        "btnCursor": "none",
+        "canvasCursor": "none"
+      },
+      "passed": true
+    },
+    {
+      "name": "Continuous cursor visibility across all application zones (showing all time)",
+      "passed": true
+    },
+    {
+      "name": "Document boundary exit hiding & entry restoration",
+      "hiddenOnExit": true,
+      "restoredOnEntry": true,
+      "passed": true
+    }
+  ],
+  "coordinatesVerified": [
+    {
+      "zone": "Canvas Stage Center",
+      "targetPos": {
+        "x": 680,
+        "y": 320
+      },
+      "cursorVisible": true,
+      "state": "default",
+      "cursorBounds": {
+        "x": 680,
+        "y": 320,
+        "width": 28,
+        "height": 28
+      }
+    },
+    {
+      "zone": "Timeline Scrub Tracks",
+      "targetPos": {
+        "x": 700,
+        "y": 680
+      },
+      "cursorVisible": true,
+      "state": "pointer",
+      "cursorBounds": {
+        "x": 689.2000122070312,
+        "y": 677.5999755859375,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "zone": "Top Transport Bar",
+      "targetPos": {
+        "x": 720,
+        "y": 24
+      },
+      "cursorVisible": true,
+      "state": "default",
+      "cursorBounds": {
+        "x": 720,
+        "y": 24,
+        "width": 28,
+        "height": 28
+      }
+    },
+    {
+      "zone": "Media Library Dock",
+      "targetPos": {
+        "x": 120,
+        "y": 220
+      },
+      "cursorVisible": true,
+      "state": "drag",
+      "cursorBounds": {
+        "x": 120,
+        "y": 220,
+        "width": 36,
+        "height": 36
+      }
+    },
+    {
+      "zone": "Inspector Right Panel",
+      "targetPos": {
+        "x": 1320,
+        "y": 260
+      },
+      "cursorVisible": true,
+      "state": "default",
+      "cursorBounds": {
+        "x": 1320,
+        "y": 260,
+        "width": 28,
+        "height": 28
+      }
+    }
+  ],
+  "passed": true
+}

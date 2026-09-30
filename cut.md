@@ -96,6 +96,10 @@ This register catalogs pixel-level cutouts and zoomed component evaluations demo
 | CUT-090 | `evidence/cutouts/cut-cursor-help-info-pill.png` | `evidence/screenshots/cursor-help-info-pill.png` | 156x76 | Attached Help Info Pill with Target Specifications | Cutout showing the enlarged macOS cursor with amber `?` badge and attached floating Help Pill displaying `Inspect details & specifications` upon hovering info/help buttons. |
 | CUT-091 | `evidence/cutouts/cut-cursor-magnetized-drop-reticle.png` | `evidence/screenshots/cursor-magnetized-drop-reticle.png` | 120x100 | Magnetized Drop Reticle with Downward Insertion Pin | Cutout showing the cursor over a valid drop target transformed into a magnetized target ring with corner brackets, downward insertion arrow, and `Release to Drop` badge. |
 | CUT-092 | `evidence/cutouts/cut-cursor-playground.png` | `evidence/screenshots/cursor-playground-settings.png` | 342x102 | Interactive Cursor Playground Card in Settings | Cutout of the interactive test sandbox in Settings showing Draggable Card (+ badge test), Drop Zone (reticle test), and Help / Specs button (? badge test). |
+| CUT-093 | `evidence/cutouts/cut-cursor-canvas-visibility.png` | `evidence/screenshots/cursor-visibility-canvas-inspection.png` | 78x78 | Custom Mac Cursor Visibility Frame on Video Canvas | High-definition cutout showing macOS Sonoma vector cursor over video preview canvas verifying crisp white border, power core accent, drop shadow, and zero clipping. |
+| CUT-094 | `evidence/cutouts/cut-cursor-timeline-visibility.png` | `evidence/screenshots/cursor-visibility-timeline-inspection.png` | 80x80 | Pointing Hand Hotspot Alignment on Timeline Speed Control | High-definition cutout showing macOS pointing hand over `1x` speed button verifying exact index finger fingertip alignment with the button target. |
+| CUT-095 | `evidence/cutouts/cut-cursor-boundary-entry.png` | `evidence/screenshots/cursor-visibility-boundary-test.png` | 78x78 | Cursor Restoration Frame on Viewport Re-entry | Cutout verifying instantaneous cursor restoration and smooth coordinate tracking upon pointer re-entry into the workspace. |
+
 
 
 

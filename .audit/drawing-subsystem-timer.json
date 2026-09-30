@@ -125,8 +125,15 @@
       "feature": "Downloaded macOS Cursor Packs & Refined Drag/Drop Reticle Engine",
       "status": "verified",
       "details": "Downloaded 40+ authentic macOS vector SVGs, engineered 16 cursor states including attached Drag Ghost Pills and Magnetized Drop Reticle, authentic pack selector (Sonoma Pro, Gamified, Cyber Violet, Neo Stealth), and an Interactive Cursor Playground in Settings."
+    },
+    {
+      "run": 19,
+      "timestamp": "2026-09-30T21:01:30+00:00",
+      "feature": "Cursor Visibility Inspection, Hotspot Alignment & Bug Elimination",
+      "status": "verified",
+      "details": "Verified continuous cursor presence across all application zones (showing all time), 100% native cursor suppression, state-aware hotspot offsetting (fingertip, crosshair, drop reticle), and window boundary exit/re-entry restoration. Verified with Playwright and OpenCV."
     }
   ],
-  "total_runs": 18,
-  "last_updated": "2026-09-30T11:35:46+00:00"
+  "total_runs": 19,
+  "last_updated": "2026-09-30T21:01:30+00:00"
 }
