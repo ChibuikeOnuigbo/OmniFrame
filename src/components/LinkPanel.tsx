@@ -114,7 +114,8 @@ export function LinkPanel() {
                   return (
                     <span
                       key={mId}
-                      className={`px-2 py-0.5 rounded text-[10px] border ${
+                      title={memberClip?.name || mId}
+                      className={`px-2 py-0.5 rounded text-[10px] border truncate max-w-[140px] ${
                         mId === activeClip?.id
                           ? 'border-brand bg-brand/20 text-white font-medium'
                           : 'border-ink-700 bg-ink-900 text-ink-300'
@@ -148,15 +149,17 @@ export function LinkPanel() {
                       key={key}
                       type="button"
                       data-testid={`rule-toggle-${key}`}
+                      title={`Toggle ${label} synchronization rule`}
+                      aria-label={`Toggle ${label} rule`}
                       onClick={() => toggleLinkRule(activeLinkSet.id, key as LinkRuleType)}
-                      className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg border text-left text-[11px] transition-colors ${
+                      className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg border text-left text-[11px] transition-colors truncate ${
                         active
                           ? 'border-brand/60 bg-brand/15 text-white font-medium'
                           : 'border-ink-800 bg-ink-900 text-ink-400 hover:text-ink-200'
                       }`}
                     >
-                      <Icon size={12} className={active ? 'text-brand' : 'text-ink-500'} />
-                      <span>{label}</span>
+                      <Icon size={12} className={active ? 'text-brand shrink-0' : 'text-ink-500 shrink-0'} />
+                      <span className="truncate">{label}</span>
                     </button>
                   )
                 })}
@@ -169,11 +172,12 @@ export function LinkPanel() {
                 type="button"
                 data-testid="arrange-linked-btn"
                 onClick={() => handleArrange(activeLinkSet.id)}
-                className="w-full flex items-center justify-center gap-1.5 h-8 rounded-lg bg-ink-800 hover:bg-ink-700 border border-ink-700 text-ink-100 font-medium text-xs transition-colors"
+                className="w-full flex items-center justify-center gap-1.5 h-8 rounded-lg bg-ink-800 hover:bg-ink-700 border border-ink-700 text-ink-100 font-medium text-xs transition-colors truncate"
                 title="Horizontally aligns linked elements in time while preserving separate tracks and untouched unrelated clips"
+                aria-label="Arrange linked elements"
               >
-                <AlignLeft size={13} className="text-brand" />
-                <span>Arrange Linked Elements</span>
+                <AlignLeft size={13} className="text-brand shrink-0" />
+                <span className="truncate">Arrange Linked Elements</span>
               </button>
 
               {arrangedNotice && (

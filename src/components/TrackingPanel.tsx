@@ -352,19 +352,23 @@ export function TrackingPanel() {
               <button
                 type="button"
                 data-testid="convert-drawing-to-mask-btn"
+                title="Convert drawing strokes to vector mask"
+                aria-label="Convert drawing to mask"
                 onClick={handleConvertDrawingToMask}
-                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[10px] font-medium transition-colors"
+                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[10px] font-medium transition-colors truncate"
               >
-                <span>Drawing → Mask</span>
+                <span className="truncate">Drawing → Mask</span>
               </button>
 
               <button
                 type="button"
                 data-testid="convert-selection-to-mask-btn"
+                title="Convert selection boundary to vector mask"
+                aria-label="Convert selection to mask"
                 onClick={handleConvertSelectionToMask}
-                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[10px] font-medium transition-colors"
+                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[10px] font-medium transition-colors truncate"
               >
-                <span>Selection → Mask</span>
+                <span className="truncate">Selection → Mask</span>
               </button>
             </div>
 
@@ -373,19 +377,23 @@ export function TrackingPanel() {
                 <button
                   type="button"
                   data-testid="convert-mask-to-shape-selection-btn"
+                  title="Convert active mask to shape selection"
+                  aria-label="Convert mask to shape selection"
                   onClick={handleConvertMaskToShapeSelection}
-                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors"
+                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors truncate"
                 >
-                  <span>Mask → Shape Sel</span>
+                  <span className="truncate">Mask → Shape Sel</span>
                 </button>
 
                 <button
                   type="button"
                   data-testid="convert-mask-to-filled-selection-btn"
+                  title="Convert active mask to filled raster selection"
+                  aria-label="Convert mask to filled selection"
                   onClick={handleConvertMaskToFilledSelection}
-                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors"
+                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors truncate"
                 >
-                  <span>Mask → Filled Sel</span>
+                  <span className="truncate">Mask → Filled Sel</span>
                 </button>
               </div>
             )}

@@ -325,7 +325,7 @@ export function Preview() {
               <div className="w-16 h-16 rounded-full bg-brand/20 border border-brand/40 grid place-items-center mb-3">
                 <Volume2 size={32} className="text-brand" />
               </div>
-              <h3 className="text-sm font-semibold text-ink-100">{previewAsset.name}</h3>
+              <h3 className="text-sm font-semibold text-ink-100 max-w-[280px] truncate" title={previewAsset.name}>{previewAsset.name}</h3>
               <p className="text-xs text-ink-400 mt-1">Audio Track · {formatTimecode(assetDuration, projectFps)}</p>
             </div>
           )}
@@ -390,12 +390,12 @@ export function Preview() {
                     }`}
                   >
                     {/* Badge */}
-                    <div className={`absolute -top-5 left-0 px-1.5 py-0.5 rounded text-[9px] font-semibold tracking-wide whitespace-nowrap shadow-sm pointer-events-none z-10 flex items-center gap-1 ${
+                    <div className={`absolute -top-5 left-0 px-1.5 py-0.5 rounded text-[9px] font-semibold tracking-wide whitespace-nowrap shadow-sm pointer-events-none z-10 flex items-center gap-1 max-w-[200px] ${
                       isSelected ? 'bg-brand text-white font-bold' : 'bg-ink-900/90 text-ink-300 border border-ink-700'
                     }`}>
-                      <span>{char.name}</span>
+                      <span className="truncate max-w-[120px]" title={char.name}>{char.name}</span>
                       {(evalTransform.x !== 0 || evalTransform.y !== 0) && (
-                        <span className="text-[8px] opacity-90 font-mono text-amber-300">
+                        <span className="text-[8px] opacity-90 font-mono text-amber-300 shrink-0">
                           ({evalTransform.x > 0 ? `+${evalTransform.x}` : evalTransform.x}, {evalTransform.y > 0 ? `+${evalTransform.y}` : evalTransform.y})
                         </span>
                       )}

@@ -706,11 +706,14 @@ export function CustomCursor() {
       {cursorConfig.showDragPill && (cursorState === 'drag' || cursorState === 'drop') && (
         <div
           data-testid="cursor-drag-pill"
-          className="absolute left-6 top-5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink-900/95 border border-emerald-500/80 shadow-2xl backdrop-blur-md text-[11px] font-medium text-emerald-200 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150"
+          title={cursorState === 'drop' ? 'Release to Drop at Playhead' : dragItem?.label || 'Dragging Media Asset'}
+          className="absolute left-6 top-5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink-900/95 border border-emerald-500/80 shadow-2xl backdrop-blur-md text-[11px] font-medium text-emerald-200 max-w-[240px] sm:max-w-[320px] animate-in fade-in zoom-in-95 duration-150"
         >
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>{cursorState === 'drop' ? 'Release to Drop at Playhead' : dragItem?.label || 'Dragging Media Asset'}</span>
-          <span className="px-1 py-0.2 rounded bg-emerald-950/80 border border-emerald-500/50 text-[9px] text-emerald-300 font-mono">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="truncate">
+            {cursorState === 'drop' ? 'Release to Drop at Playhead' : dragItem?.label || 'Dragging Media Asset'}
+          </span>
+          <span className="px-1 py-0.2 rounded bg-emerald-950/80 border border-emerald-500/50 text-[9px] text-emerald-300 font-mono shrink-0">
             {cursorState === 'drop' ? 'LOCKED' : '+COPY'}
           </span>
         </div>
@@ -720,11 +723,12 @@ export function CustomCursor() {
       {cursorState === 'help' && helpText && (
         <div
           data-testid="cursor-help-pill"
-          className="absolute left-6 top-5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink-900/95 border border-amber-500/80 shadow-2xl backdrop-blur-md text-[11px] font-medium text-amber-200 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150"
+          title={helpText}
+          className="absolute left-6 top-5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink-900/95 border border-amber-500/80 shadow-2xl backdrop-blur-md text-[11px] font-medium text-amber-200 max-w-[240px] sm:max-w-[320px] animate-in fade-in zoom-in-95 duration-150"
         >
-          <span className="h-2 w-2 rounded-full bg-amber-400" />
-          <span>{helpText}</span>
-          <span className="px-1 py-0.2 rounded bg-amber-950/80 border border-amber-500/50 text-[9px] text-amber-300 font-mono">
+          <span className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+          <span className="truncate">{helpText}</span>
+          <span className="px-1 py-0.2 rounded bg-amber-950/80 border border-amber-500/50 text-[9px] text-amber-300 font-mono shrink-0">
             ? INFO
           </span>
         </div>

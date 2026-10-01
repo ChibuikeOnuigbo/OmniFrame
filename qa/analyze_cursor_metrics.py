@@ -37,6 +37,14 @@ images = [
     ('cut-cursor-frame-modal-overlay', 'evidence/cutouts/cut-cursor-frame-modal-overlay.png'),
     ('cut-cursor-frame-inspector-slider', 'evidence/cutouts/cut-cursor-frame-inspector-slider.png'),
     ('cut-cursor-frame-3d-orbit', 'evidence/cutouts/cut-cursor-frame-3d-orbit.png'),
+    ('boundary-clip-cursor-drag-pill', 'evidence/screenshots/boundary-clip-cursor-drag-pill.png'),
+    ('boundary-clip-timeline-labels', 'evidence/screenshots/boundary-clip-timeline-labels.png'),
+    ('boundary-clip-inspector-controls', 'evidence/screenshots/boundary-clip-inspector-controls.png'),
+    ('boundary-clip-mobile-viewport', 'evidence/screenshots/boundary-clip-mobile-viewport.png'),
+    ('cut-boundary-clip-cursor-drag-pill', 'evidence/cutouts/cut-boundary-clip-cursor-drag-pill.png'),
+    ('cut-boundary-clip-timeline-labels', 'evidence/cutouts/cut-boundary-clip-timeline-labels.png'),
+    ('cut-boundary-clip-inspector-controls', 'evidence/cutouts/cut-boundary-clip-inspector-controls.png'),
+    ('cut-boundary-clip-mobile-viewport', 'evidence/cutouts/cut-boundary-clip-mobile-viewport.png'),
 ]
 
 results = {}

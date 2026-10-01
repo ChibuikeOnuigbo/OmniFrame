@@ -90,11 +90,12 @@ export function ThreePanel() {
                 type="button"
                 data-testid="make-texture-unique-btn"
                 onClick={() => makeTextureUnique(currentMat.id)}
-                className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-brand hover:bg-brand/90 text-white font-medium text-[11px] transition-colors"
+                className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-brand hover:bg-brand/90 text-white font-medium text-[11px] transition-colors truncate"
                 title="Clone shared texture into independent asset so changes don't affect other objects"
+                aria-label="Make texture unique"
               >
-                <Scissors size={12} />
-                <span>Make Unique (Branch Texture)</span>
+                <Scissors size={12} className="shrink-0" />
+                <span className="truncate">Make Unique (Branch Texture)</span>
               </button>
             ) : (
               <div className="text-[10px] text-ink-500 text-center py-1">

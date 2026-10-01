@@ -272,7 +272,7 @@ function TrackHeader({
         {kindIcon}
       </span>
       <span className="text-[11px] font-semibold text-ink-200 truncate flex-1 flex items-center gap-1.5 min-w-0">
-        <span className="truncate">{track.name}</span>
+        <span className="truncate" title={track.name}>{track.name}</span>
         {kindBadge}
       </span>
 
@@ -1165,8 +1165,8 @@ export function Timeline() {
                       : 'text-ink-400 hover:text-ink-100 hover:bg-ink-850'
                   }`}
                 >
-                  {idx === 0 ? <Film size={12} className="text-brand" /> : <Layers size={12} className="text-indigo-400" />}
-                  <span className="truncate max-w-[160px]">{b.name}</span>
+                  {idx === 0 ? <Film size={12} className="text-brand shrink-0" /> : <Layers size={12} className="text-indigo-400 shrink-0" />}
+                  <span className="truncate max-w-[160px]" title={b.name}>{b.name}</span>
                 </button>
               </div>
             )
@@ -1177,12 +1177,13 @@ export function Timeline() {
           <button
             type="button"
             data-testid="breadcrumb-back-button"
+            aria-label="Back to parent timeline"
             onClick={() => navigateBreadcrumb(breadcrumbs[breadcrumbs.length - 2].id)}
-            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs shrink-0"
             title="Exit Compound Clip to Parent Timeline"
           >
-            <ArrowLeft size={12} />
-            <span>Back to Timeline</span>
+            <ArrowLeft size={12} className="shrink-0" />
+            <span className="hidden sm:inline">Back to Timeline</span>
           </button>
         )}
       </div>
@@ -1551,7 +1552,8 @@ export function Timeline() {
 
                     {/* Marker label pill */}
                     <span
-                      className="absolute top-4 left-1 text-[8px] font-semibold px-1 py-0.2 rounded text-white shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100"
+                      title={marker.label}
+                      className="absolute top-4 left-1 text-[8px] font-semibold px-1 py-0.2 rounded text-white shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
                       style={{ backgroundColor: colorHex }}
                     >
                       {marker.label}
@@ -1748,7 +1750,7 @@ export function Timeline() {
           >
             {contextMenu.type === 'clip' && contextMenu.clip && (
               <>
-                <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate">
+                <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={contextMenu.clip.name}>
                   {contextMenu.clip.name}
                 </div>
                 <button

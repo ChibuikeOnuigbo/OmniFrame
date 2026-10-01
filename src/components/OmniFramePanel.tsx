@@ -194,16 +194,16 @@ export function OmniFramePanel() {
       {selectedChar && (
         <div className="flex flex-col gap-3 p-2.5 rounded-xl bg-ink-900/90 border border-ink-800">
           <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
-            <span className="font-semibold text-ink-100 flex items-center gap-1">
-              <Move size={12} className="text-brand" />
-              Transform: {selectedChar.name}
+            <span className="font-semibold text-ink-100 flex items-center gap-1 truncate pr-1" title={selectedChar.name}>
+              <Move size={12} className="text-brand shrink-0" />
+              <span className="truncate">Transform: {selectedChar.name}</span>
             </span>
             <button
               type="button"
               data-testid="omniframe-reset-pos-btn"
               title="Reset Position"
               onClick={() => resetCharacterPosition(selectedChar.id)}
-              className="text-[10px] text-ink-400 hover:text-white flex items-center gap-1"
+              className="text-[10px] text-ink-400 hover:text-white flex items-center gap-1 shrink-0"
             >
               <RotateCcw size={10} />
               Reset
@@ -440,53 +440,63 @@ export function OmniFramePanel() {
               <button
                 type="button"
                 data-testid="omniframe-cut-to-track-btn"
+                title="Cut character to new timeline track"
+                aria-label="Cut character to track"
                 onClick={() => cutCharacterToNewTrack(selectedChar.id)}
-                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-brand/20 border border-brand/40 text-brand font-medium hover:bg-brand/30 transition-colors"
+                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-brand/20 border border-brand/40 text-brand font-medium hover:bg-brand/30 transition-colors truncate"
               >
-                <Scissors size={12} />
-                <span>Cut to Track</span>
+                <Scissors size={12} className="shrink-0" />
+                <span className="truncate">Cut to Track</span>
               </button>
 
               <button
                 type="button"
                 data-testid="omniframe-duplicate-btn"
+                title="Duplicate character instance"
+                aria-label="Duplicate character"
                 onClick={() => duplicateCharacter(selectedChar.id)}
-                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-ink-800 border border-ink-700 text-ink-200 hover:text-white hover:bg-ink-750 transition-colors"
+                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-ink-800 border border-ink-700 text-ink-200 hover:text-white hover:bg-ink-750 transition-colors truncate"
               >
-                <Copy size={12} />
-                <span>Duplicate</span>
+                <Copy size={12} className="shrink-0" />
+                <span className="truncate">Duplicate</span>
               </button>
 
               {selectedChar.transform.opacity === 0 ? (
                 <button
                   type="button"
                   data-testid="omniframe-restore-btn"
+                  title="Restore character visibility"
+                  aria-label="Restore character"
                   onClick={() => restoreCharacter(selectedChar.id)}
-                  className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-medium hover:bg-emerald-500/30 transition-colors"
+                  className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-medium hover:bg-emerald-500/30 transition-colors truncate"
                 >
-                  <Eye size={12} />
-                  <span>Restore</span>
+                  <Eye size={12} className="shrink-0" />
+                  <span className="truncate">Restore</span>
                 </button>
               ) : (
                 <button
                   type="button"
                   data-testid="omniframe-delete-infill-btn"
+                  title="Remove character and infill background cleanly"
+                  aria-label="Delete and infill character"
                   onClick={() => removeCharacterInfill(selectedChar.id)}
-                  className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium hover:bg-amber-500/30 transition-colors"
+                  className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium hover:bg-amber-500/30 transition-colors truncate"
                 >
-                  <Trash2 size={12} />
-                  <span>Delete / Infill</span>
+                  <Trash2 size={12} className="shrink-0" />
+                  <span className="truncate">Delete / Infill</span>
                 </button>
               )}
 
               <button
                 type="button"
                 data-testid="omniframe-delete-permanent-btn"
+                title="Permanently remove character track"
+                aria-label="Remove character"
                 onClick={() => deleteCharacter(selectedChar.id)}
-                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-300 font-medium hover:bg-red-500/30 transition-colors"
+                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-300 font-medium hover:bg-red-500/30 transition-colors truncate"
               >
-                <Trash2 size={12} />
-                <span>Remove</span>
+                <Trash2 size={12} className="shrink-0" />
+                <span className="truncate">Remove</span>
               </button>
             </div>
           </div>

@@ -384,7 +384,14 @@ export function AspectRatioSelector() {
         className="flex items-center gap-2 h-7 px-2.5 rounded-md bg-ink-950 hover:bg-ink-900 border border-ink-750 hover:border-ink-600 text-ink-200 hover:text-white shadow-lg transition-all text-xs font-medium"
       >
         {renderRepresentativeIcon()}
-        <span className="font-mono text-[11px] font-semibold tracking-tight">
+        <span
+          className="font-mono text-[11px] font-semibold tracking-tight truncate max-w-[120px]"
+          title={
+            sequenceSettings.isCustom
+              ? `${sequenceSettings.width} × ${sequenceSettings.height}`
+              : sequenceSettings.aspectRatio
+          }
+        >
           {sequenceSettings.isCustom
             ? `${sequenceSettings.width} × ${sequenceSettings.height}`
             : sequenceSettings.aspectRatio}

@@ -267,12 +267,14 @@ export function VoiceIsolationPanel() {
       <button
         type="button"
         data-testid="panel-execute-voice-btn"
+        title={mode === 'keep_vocal' ? 'Isolate Voice (Keep Vocal)' : 'Remove Vocal (Instrumental)'}
+        aria-label={mode === 'keep_vocal' ? 'Isolate voice' : 'Remove vocal'}
         onClick={handleExecute}
         disabled={processing || audioVideoClips.length === 0}
-        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-brand hover:bg-brand-600 text-white font-medium text-xs shadow-md transition-colors disabled:opacity-50"
+        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-brand hover:bg-brand-600 text-white font-medium text-xs shadow-md transition-colors disabled:opacity-50 truncate"
       >
-        {processing ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
-        <span>{mode === 'keep_vocal' ? 'Isolate Voice (Keep Vocal)' : 'Remove Vocal (Instrumental)'}</span>
+        {processing ? <Loader2 size={13} className="animate-spin shrink-0" /> : <Sparkles size={13} className="shrink-0" />}
+        <span className="truncate">{mode === 'keep_vocal' ? 'Isolate Voice (Keep Vocal)' : 'Remove Vocal (Instrumental)'}</span>
       </button>
 
       {/* Recent Isolated Audio Tracks in Project */}
@@ -289,7 +291,7 @@ export function VoiceIsolationPanel() {
                 className="flex items-center justify-between p-2 rounded-lg border border-ink-800 bg-ink-900/40 hover:bg-ink-850"
               >
                 <div className="min-w-0 flex-1 pr-2">
-                  <div className="text-[11px] font-medium text-ink-200 truncate">{asset.name}</div>
+                  <div className="text-[11px] font-medium text-ink-200 truncate" title={asset.name}>{asset.name}</div>
                   <div className="text-[10px] text-ink-500">{asset.duration.toFixed(1)}s</div>
                 </div>
                 <button

@@ -204,9 +204,9 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
                           rightOpen={ws.rightOpen}
                           focusMode={ws.focusMode}
                         />
-                        <div>
-                          <div className="text-xs font-semibold text-white">{ws.name}</div>
-                          <div className="text-[10px] text-ink-500 font-mono">
+                        <div className="min-w-0 pr-2">
+                          <div className="text-xs font-semibold text-white truncate max-w-[200px]" title={ws.name}>{ws.name}</div>
+                          <div className="text-[10px] text-ink-500 font-mono truncate">
                             Timeline: {ws.timelineHeight}px • Left Dock: {ws.leftDockWidth}px
                           </div>
                         </div>

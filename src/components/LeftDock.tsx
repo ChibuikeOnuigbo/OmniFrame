@@ -103,7 +103,10 @@ export function LeftDock() {
           className="h-full flex flex-col"
         >
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700">
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-300">
+            <span
+              className="text-xs font-semibold uppercase tracking-wider text-ink-300 truncate pr-2"
+              title={TABS.find((t) => t.id === leftTab)?.label}
+            >
               {TABS.find((t) => t.id === leftTab)?.label}
             </span>
             <button

@@ -566,11 +566,14 @@ export default function Studio() {
           role="menu"
           aria-label={`${contextMenu.type.toLowerCase().replace(/_/g, ' ')} actions`}
           className="fixed z-[70] w-56 max-h-[min(420px,calc(100vh-16px))] overflow-y-auto rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-2 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.42)] backdrop-blur-xl"
-          style={{ left: contextMenu.x, top: contextMenu.y }}
+          style={{
+            left: typeof window !== 'undefined' ? Math.min(contextMenu.x, window.innerWidth - 232) : contextMenu.x,
+            top: typeof window !== 'undefined' ? Math.min(contextMenu.y, window.innerHeight - 250) : contextMenu.y,
+          }}
           onContextMenu={(event) => event.preventDefault()}
           onPointerDown={(event) => event.stopPropagation()}
         >
-          <div className="px-2.5 pb-1.5 pt-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
+          <div className="px-2.5 pb-1.5 pt-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-500 truncate" title={contextMenu.type.replace(/_/g, ' ')}>
             {contextMenu.type.replace(/_/g, ' ')}
           </div>
           {filteredCommands.map((command, index) => {
@@ -581,6 +584,7 @@ export default function Studio() {
 
             if (hasSubmenu) {
               const isSubmenuOpen = activeSubmenuId === command.id
+              const openSubmenuLeft = typeof window !== 'undefined' && contextMenu.x + 460 > window.innerWidth
               return (
                 <div
                   key={command.id}
@@ -591,6 +595,8 @@ export default function Studio() {
                     type="button"
                     data-testid={`ctx-cmd-${command.id}`}
                     role="menuitem"
+                    title={command.label}
+                    aria-label={command.label}
                     aria-haspopup="true"
                     aria-expanded={isSubmenuOpen}
                     onClick={() => setActiveSubmenuId(isSubmenuOpen ? null : command.id)}
@@ -599,7 +605,7 @@ export default function Studio() {
                     }`}
                   >
                     <Icon size={15} aria-hidden="true" className="shrink-0 text-brand" />
-                    <span className="min-w-0 flex-1 truncate">{command.label}</span>
+                    <span className="min-w-0 flex-1 truncate" title={command.label}>{command.label}</span>
                     <ChevronRight size={13} className="text-ink-400 shrink-0" />
                   </button>
 
@@ -607,7 +613,7 @@ export default function Studio() {
                   {isSubmenuOpen && (
                     <div
                       data-testid={`ctx-submenu-${command.id}`}
-                      className="absolute left-full top-0 ml-1.5 w-56 rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.5)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95 duration-100"
+                      className={`absolute ${openSubmenuLeft ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-0 w-56 rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.5)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95 duration-100`}
                     >
                       {command.submenu?.map((subItem) => {
                         const SubIcon = subItem.icon
@@ -616,12 +622,14 @@ export default function Studio() {
                             key={subItem.id}
                             data-testid={`ctx-cmd-${subItem.id}`}
                             role="menuitem"
+                            title={subItem.label}
+                            aria-label={subItem.label}
                             onClick={() => {
                               subItem.run()
                               setContextMenu(null)
                               setActiveSubmenuId(null)
                             }}
-                            className="flex h-8 w-full items-center gap-2 rounded-lg px-2.5 text-left font-medium outline-none hover:bg-brand/20 hover:text-white transition-colors"
+                            className="flex h-8 w-full items-center gap-2 rounded-lg px-2.5 text-left font-medium outline-none hover:bg-brand/20 hover:text-white transition-colors truncate"
                           >
                             <SubIcon size={14} className="text-brand shrink-0" />
                             <span className="truncate">{subItem.label}</span>
@@ -639,6 +647,8 @@ export default function Studio() {
                 key={command.id}
                 data-testid={`ctx-cmd-${command.id}`}
                 role="menuitem"
+                title={command.label}
+                aria-label={command.label}
                 autoFocus={index === 0}
                 onClick={() => {
                   command.run?.()
@@ -654,7 +664,7 @@ export default function Studio() {
                 }`}
               >
                 <Icon size={15} aria-hidden="true" className="shrink-0" />
-                <span className="min-w-0 flex-1 truncate">{command.label}</span>
+                <span className="min-w-0 flex-1 truncate" title={command.label}>{command.label}</span>
                 {'shortcut' in command && command.shortcut && (
                   <span className="shrink-0 text-[10px] font-normal text-ink-500">
                     {command.shortcut}

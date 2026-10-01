@@ -187,10 +187,11 @@ export function TransitionsPanel() {
               type="button"
               data-testid={`apply-trans-btn-${tr.id}`}
               title={`Apply ${tr.name} to cut`}
+              aria-label={`Apply ${tr.name} transition`}
               onClick={() => handleApplyToSelected(tr.id)}
-              className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded bg-brand/20 hover:bg-brand text-brand hover:text-white text-[11px] font-medium transition-colors"
+              className="shrink-0 flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand hover:text-white text-[11px] font-medium transition-colors"
             >
-              <Plus size={12} />
+              <Plus size={12} className="shrink-0" />
               <span>Apply</span>
             </button>
           </div>

@@ -83,7 +83,7 @@ export function EffectsPanel() {
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <div className="min-w-0 pr-2">
           <span className="text-[10px] text-brand uppercase tracking-wider font-semibold block">Target Clip</span>
-          <span className="font-medium text-ink-100 truncate block text-[11px]">{activeClip.name}</span>
+          <span className="font-medium text-ink-100 truncate block text-[11px]" title={activeClip.name}>{activeClip.name}</span>
         </div>
         <button
           type="button"
@@ -115,10 +115,12 @@ export function EffectsPanel() {
               key={p.id}
               type="button"
               data-testid={`effect-preset-${p.id}`}
+              title={`Apply ${p.label} preset`}
+              aria-label={`Apply ${p.label} preset`}
               onClick={() => applyPreset(p.id as any)}
-              className="px-2 py-1.5 rounded-md bg-ink-900 border border-ink-800 hover:border-brand text-[11px] text-ink-300 hover:text-white transition-colors text-left"
+              className="px-2 py-1.5 rounded-md bg-ink-900 border border-ink-800 hover:border-brand text-[11px] text-ink-300 hover:text-white transition-colors text-left truncate"
             >
-              {p.label}
+              <span className="truncate">{p.label}</span>
             </button>
           ))}
         </div>

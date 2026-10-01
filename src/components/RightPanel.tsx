@@ -133,20 +133,26 @@ function ClipInspector({ clip }: { clip: Clip }) {
               <button
                 type="button"
                 data-testid="inspector-open-compound-btn"
+                title="Open Compound Clip Timeline"
+                aria-label="Open compound clip timeline"
                 onClick={() => {
                   if (clip.sourceSequenceId) useEditor.getState().openSequence(clip.sourceSequenceId)
                 }}
-                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 text-xs font-medium transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 text-xs font-medium transition-colors truncate"
               >
-                <FolderOpen size={12} /> Open Timeline
+                <FolderOpen size={12} className="shrink-0" />
+                <span className="truncate">Open Timeline</span>
               </button>
               <button
                 type="button"
                 data-testid="inspector-uncompound-btn"
+                title="Decompose Compound Clip into Individual Tracks"
+                aria-label="Decompose compound clip"
                 onClick={() => useEditor.getState().uncompoundClip(clip.id)}
-                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-medium transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-medium transition-colors truncate"
               >
-                <FolderOutput size={12} /> Decompose
+                <FolderOutput size={12} className="shrink-0" />
+                <span className="truncate">Decompose</span>
               </button>
             </div>
           </div>
@@ -154,10 +160,13 @@ function ClipInspector({ clip }: { clip: Clip }) {
         {clip.kind === 'video' && !assets.some((item) => item.extractedFromClipId === clip.id) && (
           <button
             type="button"
+            title="Extract audio stream to separate audio track"
+            aria-label="Extract audio track"
             onClick={() => void extractAudio(clip.id)}
-            className="mt-2 flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 text-xs hover:bg-ink-700"
+            className="mt-2 flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 text-xs hover:bg-ink-700 truncate"
           >
-            <AudioLines size={13} /> Extract audio
+            <AudioLines size={13} className="shrink-0" />
+            <span className="truncate">Extract audio</span>
           </button>
         )}
       </Section>
@@ -417,7 +426,9 @@ export function RightPanel() {
       {rightOpen && (
         <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-            <span>{selectedClipId ? 'Clip Inspector' : 'Project Inspector'}</span>
+            <span className="truncate pr-2" title={selectedClipId ? 'Clip Inspector' : 'Project Inspector'}>
+              {selectedClipId ? 'Clip Inspector' : 'Project Inspector'}
+            </span>
             <button
               type="button"
               data-testid="inspector-uncluster-btn"

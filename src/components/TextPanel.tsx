@@ -70,21 +70,23 @@ export function TextPanel() {
       {/* Selected Clip indicator if editing */}
       {isEditingTextClip ? (
         <div className="flex items-center justify-between pb-2 border-b border-ink-800">
-          <div>
+          <div className="truncate pr-2">
             <span className="text-[10px] text-brand uppercase tracking-wider font-semibold block">
               Editing Selected Title
             </span>
-            <span className="font-medium text-ink-100 truncate block text-[11px]">
+            <span className="font-medium text-ink-100 truncate block text-[11px]" title={selectedClip?.name}>
               {selectedClip?.name}
             </span>
           </div>
           <button
             type="button"
             data-testid="add-new-title-btn"
+            title="Create a new title clip at playhead"
+            aria-label="Add new title"
             onClick={() => handleAdd()}
-            className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-300 hover:text-white text-[10px] transition-colors"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-300 hover:text-white text-[10px] transition-colors shrink-0"
           >
-            <Plus size={11} />
+            <Plus size={11} className="shrink-0" />
             <span>New Title</span>
           </button>
         </div>

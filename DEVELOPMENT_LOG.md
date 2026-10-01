@@ -94,3 +94,5 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-30T21:01:30+00:00 — Drawing Run #19: [VERIFIED] Cursor Visibility Inspection, Hotspot Alignment & Bug Elimination — Verified continuous cursor presence across all application zones (showing all time), 100% native cursor suppression, state-aware hotspot offsetting (fingertip, crosshair, drop reticle), and window boundary exit/re-entry restoration. Verified with Playwright and OpenCV.
 
 - 2026-09-30T21:14:50+00:00 — Drawing Run #20: [VERIFIED] Frame-by-Frame Cursor Visibility Audit Across Modals & Scrubbing — Deep inspection verifying continuous cursor visibility over modal dialog overlays, playhead drag scrubbing, inspector range sliders, and 3D canvas planes. Verified with Playwright and OpenCV.
+
+- 2026-10-01T10:35:03+00:00 — Drawing Run #21: [VERIFIED] Boundary Clips, Text Overflow & Icon Consolidation — Fixed drag pill, track headers, markers, and buttons with ellipsis and tooltips; SS-089 to SS-092, CUT-100 to CUT-103, F-0082, PF-0068

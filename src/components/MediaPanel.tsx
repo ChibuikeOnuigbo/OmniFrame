@@ -226,7 +226,7 @@ export function MediaPanel() {
                   </div>
 
                   <div className="px-2 py-1.5">
-                    <div className="text-[11px] text-ink-200 truncate font-medium">{a.name}</div>
+                    <div className="text-[11px] text-ink-200 truncate font-medium" title={a.name}>{a.name}</div>
                     <div className="text-[10px] text-ink-500 flex items-center justify-between mt-0.5">
                       <span className="flex items-center gap-1 capitalize">
                         {a.kind === 'image' ? <ImageIcon size={10} /> : a.kind === 'video' ? <Film size={10} /> : <Music size={10} />}

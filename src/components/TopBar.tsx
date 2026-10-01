@@ -370,18 +370,21 @@ export function TopBar() {
                   data-testid="settings-category"
                   data-category-id={category}
                   aria-pressed={settingsCategory === category}
+                  title={category === 'contextMenu' ? 'Context Menu' : category === 'cursor' ? 'Cursor & Pointer' : category}
                   onClick={() => setSettingsCategory(category)}
-                  className={`h-8 sm:h-9 shrink-0 rounded-lg px-2.5 sm:px-3 text-left text-xs capitalize outline-none transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand ${
+                  className={`h-8 sm:h-9 shrink-0 rounded-lg px-2.5 sm:px-3 text-left text-xs capitalize outline-none transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand truncate ${
                     settingsCategory === category
                       ? 'bg-brand/20 text-violet-200 font-medium'
                       : 'text-ink-400 hover:bg-ink-700 hover:text-white'
                   }`}
                 >
-                  {category === 'contextMenu'
-                    ? 'Context Menu'
-                    : category === 'cursor'
-                    ? 'Cursor & Pointer'
-                    : category}
+                  <span className="truncate">
+                    {category === 'contextMenu'
+                      ? 'Context Menu'
+                      : category === 'cursor'
+                      ? 'Cursor & Pointer'
+                      : category}
+                  </span>
                 </button>
               ))}
             </nav>

@@ -1,0 +1,36 @@
+{
+  "scenarios": [
+    {
+      "name": "Cursor Attached Drag Pill Boundary & Ellipsis Truncation",
+      "passed": true,
+      "pillWidth": 320,
+      "titleAttr": "Cinematic_Ultra_High_Definition_Vocal_Take_Master_Stem_2026_Final_Render_Orchestral.mp4",
+      "screenshot": "evidence/screenshots/boundary-clip-cursor-drag-pill.png",
+      "cutout": "evidence/cutouts/cut-boundary-clip-cursor-drag-pill.png"
+    },
+    {
+      "name": "Timeline Track Headers, Markers & Breadcrumb Truncation",
+      "passed": true,
+      "trackTitle": "Primary Multi-Angle 4K Synchronized Master Video & Composite Track",
+      "markerTitle": "Dramatic Heavy Beat Drop Crescendo Accent Cue Marker (00:00:02:15)",
+      "screenshot": "evidence/screenshots/boundary-clip-timeline-labels.png",
+      "cutout": "evidence/cutouts/cut-boundary-clip-timeline-labels.png"
+    },
+    {
+      "name": "Media Panel Cards & Inspector Controls Tooltip Consolidation",
+      "passed": true,
+      "ratioTooltip": "16:9",
+      "screenshot": "evidence/screenshots/boundary-clip-inspector-controls.png",
+      "cutout": "evidence/cutouts/cut-boundary-clip-inspector-controls.png"
+    },
+    {
+      "name": "Mobile Viewport 414x896 Zero-Clip Responsive Boundary Check",
+      "passed": true,
+      "clientWidth": 414,
+      "scrollWidth": 414,
+      "screenshot": "evidence/screenshots/boundary-clip-mobile-viewport.png",
+      "cutout": "evidence/cutouts/cut-boundary-clip-mobile-viewport.png"
+    }
+  ],
+  "passed": true
+}

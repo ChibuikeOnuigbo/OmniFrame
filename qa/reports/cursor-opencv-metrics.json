@@ -427,5 +427,109 @@
       5.0,
       255.0
     ]
+  },
+  "boundary-clip-cursor-drag-pill": {
+    "path": "evidence/screenshots/boundary-clip-cursor-drag-pill.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 807.29,
+    "rms_contrast_std": 24.2,
+    "mean_brightness": 15.41,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "boundary-clip-timeline-labels": {
+    "path": "evidence/screenshots/boundary-clip-timeline-labels.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 708.77,
+    "rms_contrast_std": 24.04,
+    "mean_brightness": 15.38,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "boundary-clip-inspector-controls": {
+    "path": "evidence/screenshots/boundary-clip-inspector-controls.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 708.77,
+    "rms_contrast_std": 24.04,
+    "mean_brightness": 15.38,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "boundary-clip-mobile-viewport": {
+    "path": "evidence/screenshots/boundary-clip-mobile-viewport.png",
+    "width": 414,
+    "height": 896,
+    "channels": 3,
+    "sharpness_laplacian_var": 513.54,
+    "rms_contrast_std": 16.23,
+    "mean_brightness": 13.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-boundary-clip-cursor-drag-pill": {
+    "path": "evidence/cutouts/cut-boundary-clip-cursor-drag-pill.png",
+    "width": 360,
+    "height": 66,
+    "channels": 3,
+    "sharpness_laplacian_var": 6602.7,
+    "rms_contrast_std": 36.92,
+    "mean_brightness": 22.09,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-boundary-clip-timeline-labels": {
+    "path": "evidence/cutouts/cut-boundary-clip-timeline-labels.png",
+    "width": 420,
+    "height": 180,
+    "channels": 3,
+    "sharpness_laplacian_var": 1896.25,
+    "rms_contrast_std": 22.4,
+    "mean_brightness": 19.9,
+    "dynamic_range": [
+      9.0,
+      255.0
+    ]
+  },
+  "cut-boundary-clip-inspector-controls": {
+    "path": "evidence/cutouts/cut-boundary-clip-inspector-controls.png",
+    "width": 280,
+    "height": 180,
+    "channels": 3,
+    "sharpness_laplacian_var": 2886.99,
+    "rms_contrast_std": 30.69,
+    "mean_brightness": 26.15,
+    "dynamic_range": [
+      14.0,
+      232.0
+    ]
+  },
+  "cut-boundary-clip-mobile-viewport": {
+    "path": "evidence/cutouts/cut-boundary-clip-mobile-viewport.png",
+    "width": 398,
+    "height": 220,
+    "channels": 3,
+    "sharpness_laplacian_var": 504.0,
+    "rms_contrast_std": 20.62,
+    "mean_brightness": 15.69,
+    "dynamic_range": [
+      8.0,
+      255.0
+    ]
   }
 }

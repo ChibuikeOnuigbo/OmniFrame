@@ -92,6 +92,10 @@ This register tracks all full-frame screenshots and visual captures validating O
 | SS-086 | `evidence/screenshots/cursor-frame-modal-overlay.png` | 1440x900 | Cursor Floating over Modal Dialog Overlay | Workstation capture demonstrating enlarged macOS vector cursor floating on top of Marker Modal and dark backdrop overlay with zero occlusion. |
 | SS-087 | `evidence/screenshots/cursor-frame-inspector-slider.png` | 1440x900 | Cursor Floating over Inspector Range Sliders | Workstation capture demonstrating custom cursor tracking over Inspector transform sliders with continuous visibility. |
 | SS-088 | `evidence/screenshots/cursor-frame-3d-orbit.png` | 1440x900 | Cursor in 3D Mode Canvas Viewport | Workstation capture demonstrating custom vector cursor active over 3D spatial canvas grid and video plane. |
+| SS-089 | `evidence/screenshots/boundary-clip-cursor-drag-pill.png` | 1440x900 | Cursor Attached Drag Pill Boundary & Ellipsis Truncation | Workstation capture demonstrating 60+ char media filename cleanly constrained by max width and ellipsis truncation (`truncate max-w-[320px]`) with full text tooltip, preventing boundary clipping. |
+| SS-090 | `evidence/screenshots/boundary-clip-timeline-labels.png` | 1440x900 | Timeline Track Headers, Markers & Breadcrumbs Overflow Fix | Workstation capture demonstrating long track name and long timeline marker pill truncated with ellipsis inside track headers with complete hover tooltips. |
+| SS-091 | `evidence/screenshots/boundary-clip-inspector-controls.png` | 1440x900 | Media Cards & Inspector Controls Tooltip Consolidation | Workstation capture demonstrating media asset card and Inspector buttons consolidated with clean Lucide icons, responsive tooltips, and graceful truncation. |
+| SS-092 | `evidence/screenshots/boundary-clip-mobile-viewport.png` | 414x896 | Mobile Viewport 414x896 Zero-Clip Responsive Layout | Mobile viewport capture demonstrating zero horizontal body overflow (`scrollWidth === clientWidth`), topbar text collapsing to clean icon buttons with tooltips, and drawing toolbar bounded to viewport width. |
 
 
 
