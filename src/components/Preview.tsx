@@ -19,6 +19,7 @@ import { PreviewEngine } from '../lib/playback'
 import { useEditor } from '../store'
 import { IconButton } from './ui'
 import { DrawingToolbar } from './DrawingToolbar'
+import { SelectionSubToolBar } from './SelectionSubToolBar'
 import { DrawingCanvasOverlay } from './DrawingCanvasOverlay'
 import { AspectRatioSelector } from './AspectRatioSelector'
 import { ThreeViewer } from './ThreeViewer'
@@ -262,6 +263,7 @@ export function Preview() {
       </div>
 
       <DrawingToolbar />
+      <SelectionSubToolBar />
 
       {/* Bottom Left: Very small & short Sequence Ping Icon down close to timeline */}
       {!isPreviewingAsset && (

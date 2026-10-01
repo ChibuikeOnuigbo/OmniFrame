@@ -44,7 +44,13 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
 
   const currentFrame = Math.round(playhead * projectFps)
   const isSelectionTool =
-    drawingTool === 'select-rect' || drawingTool === 'select-ellipse' || drawingTool === 'select-lasso'
+    drawingTool === 'select-rect' ||
+    drawingTool === 'select-ellipse' ||
+    drawingTool === 'select-lasso' ||
+    drawingTool === 'select-polygon' ||
+    drawingTool === 'select-brush' ||
+    drawingTool === 'select-magic-wand' ||
+    drawingTool === 'select-character'
 
   // Global Escape key to clear active selection
   useEffect(() => {
@@ -291,7 +297,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       const endPt = currentPointsRef.current[currentPointsRef.current.length - 1] || startPt
       selectionStartPtRef.current = null
 
-      if (drawingTool === 'select-lasso') {
+      if (drawingTool === 'select-lasso' || drawingTool === 'select-polygon' || drawingTool === 'select-brush') {
         const pts = currentPointsRef.current
         if (pts.length > 2) {
           let minX = 1, minY = 1, maxX = 0, maxY = 0
@@ -302,11 +308,18 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
             if (p.y > maxY) maxY = p.y
           }
           setActiveSelection({
-            type: 'lasso',
+            type: drawingTool === 'select-polygon' ? 'polygon' : drawingTool === 'select-brush' ? 'brush' : 'lasso',
             bounds: { x: minX, y: minY, width: Math.max(0.01, maxX - minX), height: Math.max(0.01, maxY - minY) },
             points: pts,
           })
         }
+      } else if (drawingTool === 'select-magic-wand') {
+        const bX = Math.max(0, startPt.x - 0.1)
+        const bY = Math.max(0, startPt.y - 0.1)
+        setActiveSelection({
+          type: 'magic-wand',
+          bounds: { x: bX, y: bY, width: 0.2, height: 0.2 },
+        })
       } else {
         const minX = Math.min(startPt.x, endPt.x)
         const minY = Math.min(startPt.y, endPt.y)

@@ -77,10 +77,44 @@ function getImage(asset: MediaAsset): HTMLImageElement {
 }
 
 const urlImageCache = new Map<string, HTMLImageElement>()
+let activePreviewEngine: PreviewEngine | null = null
+
+export function preloadRoomAssets() {
+  const urls = [
+    '/assets/room/clean_room_background.png',
+    '/assets/room/obj_towel.png',
+    '/assets/room/obj_towel_blue.png',
+    '/assets/room/obj_towel_red.png',
+    '/assets/room/obj_towel_green.png',
+    '/assets/room/obj_towel_gold.png',
+    '/assets/room/obj_towel_purple.png',
+    '/assets/room/obj_chair.png',
+    '/assets/room/obj_curtain.png',
+    '/assets/death_note/clean_background.png',
+    '/assets/death_note/char_light.png',
+    '/assets/death_note/char_l.png',
+    '/assets/death_note/char_mello.png',
+    '/assets/death_note/char_near.png',
+    '/assets/death_note/char_ryuk.png',
+  ]
+  if (typeof window !== 'undefined') {
+    urls.forEach((u) => getUrlImage(u))
+  }
+}
+
+if (typeof window !== 'undefined') {
+  preloadRoomAssets()
+}
+
 function getUrlImage(url: string): HTMLImageElement {
   let img = urlImageCache.get(url)
   if (!img) {
     img = new Image()
+    img.onload = () => {
+      if (activePreviewEngine) {
+        activePreviewEngine.renderFrame(useEditor.getState().playhead)
+      }
+    }
     img.src = url
     urlImageCache.set(url, img)
   }
@@ -129,6 +163,7 @@ export class PreviewEngine {
     const backCtx = this.backCanvas.getContext('2d', { alpha: false })
     if (!backCtx) throw new Error('2D back-buffer context unavailable')
     this.backCtx = backCtx
+    activePreviewEngine = this
   }
 
   resize(width: number, height: number) {
@@ -607,10 +642,16 @@ export class PreviewEngine {
       clip.assetId === 'asset-death-note-vid' ||
       asset.id === 'asset-death-note-img' ||
       clip.assetId === 'asset-death-note-img' ||
+      asset.id === 'asset-room-chair-towel' ||
+      clip.assetId === 'asset-room-chair-towel' ||
       asset.name.toLowerCase().includes('death note') ||
-      clip.name.toLowerCase().includes('death note')
+      clip.name.toLowerCase().includes('death note') ||
+      asset.name.toLowerCase().includes('room') ||
+      clip.name.toLowerCase().includes('room') ||
+      asset.name.toLowerCase().includes('chair') ||
+      clip.name.toLowerCase().includes('chair')
     if (isOmniFrameEligible && st.omniframeCharacters && st.omniframeCharacters.length > 0) {
-      this.drawOmniframeCharacters(ctx, dw, dh, time, st)
+      this.drawOmniframeCharacters(ctx, dw, dh, time, st, asset)
     } else {
       try {
         ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
@@ -633,8 +674,19 @@ export class PreviewEngine {
     dh: number,
     time: number,
     st: ReturnType<typeof useEditor.getState>,
+    asset?: any,
   ) {
-    const bgImg = getUrlImage('/assets/death_note/clean_background.png')
+    const isRoom =
+      asset?.id === 'asset-room-chair-towel' ||
+      asset?.name?.toLowerCase()?.includes('room') ||
+      asset?.name?.toLowerCase()?.includes('chair') ||
+      st.omniframeCharacters?.some((c) => c.id.startsWith('char_towel') || c.id.startsWith('char_chair'))
+
+    const bgPath = isRoom
+      ? '/assets/room/clean_room_background.png'
+      : '/assets/death_note/clean_background.png'
+
+    const bgImg = getUrlImage(bgPath)
     if (bgImg.complete && bgImg.naturalWidth > 0) {
       ctx.drawImage(bgImg, -dw / 2, -dh / 2, dw, dh)
     } else {
@@ -647,7 +699,8 @@ export class PreviewEngine {
       const evalT = st.evaluateCharacterTransformAtTime(char.id, time)
       if ((evalT.opacity ?? 1) <= 0.01) continue
 
-      const charImg = getUrlImage(char.cutoutUrl)
+      const imgUrl = char.recolorUrl || char.cutoutUrl
+      const charImg = getUrlImage(imgUrl)
       if (!charImg.complete || charImg.naturalWidth === 0) continue
 
       const baseLeft = -dw / 2 + char.bounds.x * dw
@@ -668,6 +721,16 @@ export class PreviewEngine {
         ctx.rotate((evalT.rotation * Math.PI) / 180)
       }
       ctx.drawImage(charImg, -cw / 2, -ch / 2, cw, ch)
+
+      // Dynamic tint / recolor if set
+      if (char.recolorColor) {
+        ctx.save()
+        ctx.globalCompositeOperation = 'color'
+        ctx.fillStyle = char.recolorColor
+        ctx.fillRect(-cw / 2, -ch / 2, cw, ch)
+        ctx.restore()
+      }
+
       ctx.restore()
     }
   }
@@ -744,6 +807,7 @@ export class PreviewEngine {
     cancelAnimationFrame(this.raf)
     this.unsubscribe?.()
     this.unsubscribe = null
+    if (activePreviewEngine === this) activePreviewEngine = null
     videoCache.forEach((v) => v.pause())
     audioCache.forEach((a) => a.pause())
   }

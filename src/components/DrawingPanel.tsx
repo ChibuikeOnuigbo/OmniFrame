@@ -30,6 +30,7 @@ import {
   Shield,
   type LucideIcon,
 } from 'lucide-react'
+import { SelectionMaskSubTool } from './SelectionMaskSubTool'
 
 const COLOR_SWATCHES = [
   '#f59e0b',
@@ -275,6 +276,9 @@ export function DrawingPanel() {
           </div>
         ))}
       </div>
+
+      {/* Unified Selection & Masking Sub-Tool */}
+      <SelectionMaskSubTool />
 
       {/* Add Directly to Video (Attached vs Separate Track) */}
       <div className="p-2.5 rounded-lg bg-ink-900 border border-ink-800 flex flex-col gap-2">

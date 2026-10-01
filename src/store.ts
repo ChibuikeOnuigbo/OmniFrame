@@ -38,6 +38,7 @@ import type {
   Scene3DObject,
   OmniframeCharacter,
   OmniframeScopeType,
+  SelectionModeType,
   ClipMask,
   Sequence,
   TransparencyMask,
@@ -120,6 +121,27 @@ export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
     label: 'Character 5 (Far Right Shinigami)',
     bounds: { x: 0.723, y: 0.016, width: 0.263, height: 0.944 },
     cutoutUrl: '/assets/death_note/char_ryuk.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+]
+
+export const INITIAL_ROOM_OBJECTS: OmniframeCharacter[] = [
+  {
+    id: 'char_towel',
+    name: 'Draped Armchair Towel',
+    label: 'Real Object 1 (White Towel on Armrest)',
+    bounds: { x: 0.000, y: 0.1492, width: 0.5497, height: 0.8508 },
+    cutoutUrl: '/assets/room/obj_towel.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+  {
+    id: 'char_curtain',
+    name: 'Gold Pleated Curtain',
+    label: 'Real Object 2 (Right Window Curtain)',
+    bounds: { x: 0.58, y: 0.00, width: 0.42, height: 1.00 },
+    cutoutUrl: '/assets/room/obj_curtain.png',
     transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
     scope: 'all',
   },
@@ -233,6 +255,12 @@ interface EditorState {
   leftTab: LeftTab
   leftOpen: boolean
   rightOpen: boolean
+  activeSubMode: string | null
+  activeCategory: 'video' | '2d' | '3d' | 'all'
+  contextualSubModes: { id: string; parentTab: LeftTab; label: string; icon: string }[]
+  setActiveCategory: (cat: 'video' | '2d' | '3d' | 'all') => void
+  openSubMode: (parentTab: LeftTab, subModeId: string, label: string, icon?: string) => void
+  closeSubMode: () => void
   past: Doc[]
   future: Doc[]
   inInteraction: boolean
@@ -254,6 +282,14 @@ interface EditorState {
   drawingHoldFrames: number
   onionSkin: OnionSkinSettings
   activeSelection: ActiveSelection | null
+  selectionMode: SelectionModeType
+  setSelectionMode: (mode: SelectionModeType) => void
+  recolorActiveSelection: (color: string) => void
+  convertSelectionToOmniframeObject: (name?: string) => string
+  setSelectionMaskDisplayMode: (mode: 'rubylith' | 'matte' | 'cutout') => void
+  toggleSelectionMaskView: (showOnly?: boolean) => void
+  loadAssetObjects: (assetId: string) => void
+  setOmniframeCharacterRecolor: (charId: string, color: string, recolorUrl?: string) => void
 
   // ---- workspace layout & focus mode ----
   workspacePreset: WorkspacePreset
@@ -643,6 +679,16 @@ export const useEditor = create<EditorState>((set, get) => {
         height: 941,
         size: 158400,
       },
+      {
+        id: 'asset-room-chair-towel',
+        name: 'Room Leather Chair & Towel (Real Photo).jpg',
+        kind: 'image',
+        url: '/room_chair_towel.jpg',
+        duration: 5.0,
+        width: 1448,
+        height: 1086,
+        size: 384000,
+      },
     ],
     tracks: [],
     clips: [],
@@ -666,6 +712,9 @@ export const useEditor = create<EditorState>((set, get) => {
     leftTab: 'media',
     leftOpen: true,
     rightOpen: true,
+    activeSubMode: null,
+    activeCategory: 'all',
+    contextualSubModes: [],
     past: [],
     future: [],
     inInteraction: false,
@@ -913,6 +962,7 @@ export const useEditor = create<EditorState>((set, get) => {
       tintAfter: '#10b981',
     },
     activeSelection: null,
+    selectionMode: 'rect',
     activeMaskId: null,
     brushDynamics: {
       pressureSize: true,
@@ -1781,9 +1831,22 @@ export const useEditor = create<EditorState>((set, get) => {
     setScrubbing: (scrubbing) => set({ scrubbing }),
 
     setTool: (t) => set({ tool: t }),
-    setLeftTab: (t) => set({ leftTab: t, leftOpen: true }),
+    setLeftTab: (t) => set({ leftTab: t, leftOpen: true, activeSubMode: null }),
     setLeftOpen: (v) => set({ leftOpen: v }),
     setRightOpen: (v) => set({ rightOpen: v }),
+    setActiveCategory: (cat) => set({ activeCategory: cat }),
+    openSubMode: (parentTab, subModeId, label, icon = 'Layers') => {
+      set((s) => {
+        const filtered = s.contextualSubModes.filter((m) => m.id !== subModeId)
+        return {
+          leftTab: parentTab,
+          leftOpen: true,
+          activeSubMode: subModeId,
+          contextualSubModes: [...filtered, { id: subModeId, parentTab, label, icon }],
+        }
+      })
+    },
+    closeSubMode: () => set({ activeSubMode: null }),
 
     // ---- settings actions ----
     setCustomShortcut: (id, key) =>
@@ -1954,6 +2017,148 @@ export const useEditor = create<EditorState>((set, get) => {
           ? { ...s.activeSelection, feather: Math.max(0, Math.min(64, feather)) }
           : null,
       }))
+    },
+    setSelectionMode: (mode) => {
+      set({ selectionMode: mode })
+      const toolMap: Record<SelectionModeType, DrawingToolType> = {
+        rect: 'select-rect',
+        ellipse: 'select-ellipse',
+        freeform: 'select-lasso',
+        polygon: 'select-polygon',
+        painting: 'select-brush',
+        'magic-wand': 'select-magic-wand',
+        character: 'select-character',
+      }
+      if (toolMap[mode]) {
+        set({ drawingTool: toolMap[mode], drawingEnabled: true })
+      }
+    },
+    setSelectionMaskDisplayMode: (mode) => {
+      set((s) => {
+        const char = s.omniframeCharacters?.find((c) => c.id === s.selectedCharacterId)
+        const currentSel = s.activeSelection || (char ? {
+          type: 'character' as const,
+          bounds: { ...char.bounds },
+          characterName: char.name,
+          showMaskOnly: true,
+          maskDisplayMode: mode,
+        } : null)
+        if (!currentSel) return {}
+        return {
+          activeSelection: {
+            ...currentSel,
+            maskDisplayMode: mode,
+            showMaskOnly: mode !== 'cutout',
+          },
+        }
+      })
+    },
+    toggleSelectionMaskView: (showOnly) => {
+      set((s) => {
+        const char = s.omniframeCharacters?.find((c) => c.id === s.selectedCharacterId)
+        const currentSel = s.activeSelection || (char ? {
+          type: 'character' as const,
+          bounds: { ...char.bounds },
+          characterName: char.name,
+          showMaskOnly: false,
+          maskDisplayMode: 'rubylith' as const,
+        } : null)
+        if (!currentSel) return {}
+        const next = showOnly !== undefined ? showOnly : !currentSel.showMaskOnly
+        return {
+          activeSelection: {
+            ...currentSel,
+            showMaskOnly: next,
+            maskDisplayMode: next ? (currentSel.maskDisplayMode || 'rubylith') : 'cutout',
+          },
+        }
+      })
+    },
+    recolorActiveSelection: (color) => {
+      pushSnapshot()
+      const sel = get().activeSelection
+      const selectedCharId = get().selectedCharacterId
+      const char = get().omniframeCharacters.find((c) => c.id === selectedCharId)
+
+      // 1. If an OmniFrame character/object is active, apply recolor to it
+      if (char) {
+        let recolorUrl: string | undefined = undefined
+        if (char.id === 'char_towel') {
+          if (color.toLowerCase().includes('blue') || color === '#2563eb' || color === '#3b82f6') {
+            recolorUrl = '/assets/room/obj_towel_blue.png'
+          } else if (color.toLowerCase().includes('red') || color === '#dc2626' || color === '#ef4444') {
+            recolorUrl = '/assets/room/obj_towel_red.png'
+          } else if (color.toLowerCase().includes('green') || color === '#059669' || color === '#10b981') {
+            recolorUrl = '/assets/room/obj_towel_green.png'
+          } else if (color.toLowerCase().includes('gold') || color === '#d97706' || color === '#f59e0b') {
+            recolorUrl = '/assets/room/obj_towel_gold.png'
+          } else if (color.toLowerCase().includes('purple') || color === '#7c3aed' || color === '#8b5cf6') {
+            recolorUrl = '/assets/room/obj_towel_purple.png'
+          }
+        }
+        set((s) => ({
+          omniframeCharacters: s.omniframeCharacters.map((c) =>
+            c.id === selectedCharId ? { ...c, recolorColor: color, recolorUrl } : c,
+          ),
+        }))
+      }
+
+      // 2. Also tint active selection buffer
+      if (sel) {
+        set((s) => ({
+          activeSelection: s.activeSelection ? { ...s.activeSelection, fillColor: color } : null,
+        }))
+      }
+    },
+    setOmniframeCharacterRecolor: (charId, color, recolorUrl) => {
+      pushSnapshot()
+      set((s) => ({
+        omniframeCharacters: s.omniframeCharacters.map((c) =>
+          c.id === charId ? { ...c, recolorColor: color, recolorUrl } : c,
+        ),
+      }))
+    },
+    convertSelectionToOmniframeObject: (customName) => {
+      const sel = get().activeSelection
+      if (!sel) return ''
+      pushSnapshot()
+      const newId = `obj_sel_${Date.now()}`
+      const b = sel.bounds
+      const name = customName || sel.characterName || `Object ${get().omniframeCharacters.length + 1}`
+
+      const cutoutUrl = sel.maskDataUrl || createSelectionMask(sel, 1920, 1080)
+
+      const newChar: OmniframeCharacter = {
+        id: newId,
+        name,
+        label: `Selection Cutout (${sel.type})`,
+        bounds: { ...b },
+        cutoutUrl,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+        scope: 'all',
+        fillColor: sel.fillColor,
+      }
+
+      set((s) => ({
+        omniframeCharacters: [...s.omniframeCharacters, newChar],
+        selectedCharacterId: newId,
+        activeSelection: null,
+      }))
+      return newId
+    },
+    loadAssetObjects: (assetId) => {
+      pushSnapshot()
+      if (assetId === 'asset-room-chair-towel' || assetId.includes('room') || assetId.includes('chair')) {
+        set({
+          omniframeCharacters: INITIAL_ROOM_OBJECTS,
+          selectedCharacterId: 'char_towel',
+        })
+      } else {
+        set({
+          omniframeCharacters: INITIAL_DEATH_NOTE_CHARACTERS,
+          selectedCharacterId: 'char_light',
+        })
+      }
     },
 
     // ---- Krita-Style Transparency Mask Actions ----

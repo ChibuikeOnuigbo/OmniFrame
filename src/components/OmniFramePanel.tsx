@@ -14,11 +14,16 @@ import {
   Maximize2,
   Move,
   Film,
+  PaintBucket,
+  Image as ImageIcon,
+  BoxSelect,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { OmniframeScopeType } from '../types'
+import { SelectionMaskSubTool } from './SelectionMaskSubTool'
 
 export function OmniFramePanel() {
+  const assets = useEditor((s) => s.assets)
   const clips = useEditor((s) => s.clips)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const playhead = useEditor((s) => s.playhead)
@@ -34,6 +39,12 @@ export function OmniFramePanel() {
   const deleteCharacter = useEditor((s) => s.deleteCharacter)
   const restoreCharacter = useEditor((s) => s.restoreCharacter)
   const resetCharacterPosition = useEditor((s) => s.resetCharacterPosition)
+  const ensureTrack = useEditor((s) => s.ensureTrack)
+  const addClipToTrack = useEditor((s) => s.addClipToTrack)
+  const loadAssetObjects = useEditor((s) => s.loadAssetObjects)
+  const recolorActiveSelection = useEditor((s) => s.recolorActiveSelection)
+  const activeSubMode = useEditor((s) => s.activeSubMode)
+  const openSubMode = useEditor((s) => s.openSubMode)
 
   const activeClip = clips.find((c) => c.id === selectedClipId) || clips[0]
   const selectedChar = omniframeCharacters.find((c) => c.id === selectedCharacterId) || omniframeCharacters[0]
@@ -115,9 +126,109 @@ export function OmniFramePanel() {
         </span>
       </div>
 
-      {/* Detected Characters List */}
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
+      {/* Quick Sub-Mode Channels Bar */}
+      {(!activeSubMode || activeSubMode === 'omniframe-overview') && (
+        <div className="space-y-1">
+          <span className="text-[10px] font-semibold uppercase text-ink-400 tracking-wider">
+            OmniFrame Channels
+          </span>
+          <div className="grid grid-cols-3 gap-1.5">
+            <button
+              type="button"
+              data-testid="omniframe-submode-selection-btn"
+              onClick={() => openSubMode('omniframe', 'omniframe-selection', 'OmniFrame Selection Subtool', 'BoxSelect')}
+              className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
+            >
+              <BoxSelect size={16} className="text-brand mb-1" />
+              <div className="font-semibold text-[10px] text-ink-100">Selection</div>
+              <div className="text-[9px] text-ink-400">6 Subtools</div>
+            </button>
+
+            <button
+              type="button"
+              data-testid="omniframe-submode-shift-btn"
+              onClick={() => openSubMode('omniframe', 'omniframe-shift', 'AI Segmentation & Character Shift', 'Move')}
+              className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
+            >
+              <Move size={16} className="text-amber-400 mb-1" />
+              <div className="font-semibold text-[10px] text-ink-100">Shift & Infill</div>
+              <div className="text-[9px] text-ink-400">Multi-Frame</div>
+            </button>
+
+            <button
+              type="button"
+              data-testid="omniframe-submode-recolor-btn"
+              onClick={() => openSubMode('omniframe', 'omniframe-recolor', 'Recolor & Material Palette', 'PaintBucket')}
+              className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
+            >
+              <PaintBucket size={16} className="text-cyan-400 mb-1" />
+              <div className="font-semibold text-[10px] text-ink-100">Recolor</div>
+              <div className="text-[9px] text-ink-400">Hue & Presets</div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Target Asset / Media Switcher */}
+      {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
+            <span>Active Asset Mode</span>
+            <span className="text-[9px] text-brand font-mono">Image & Video Eligible</span>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              type="button"
+              data-testid="switch-asset-room-btn"
+              onClick={() => {
+                loadAssetObjects('asset-room-chair-towel')
+                const roomAsset = assets.find((a) => a.id === 'asset-room-chair-towel')
+                if (roomAsset) {
+                  const trkId = ensureTrack('video')
+                  if (!clips.some((c) => c.assetId === 'asset-room-chair-towel')) {
+                    addClipToTrack(trkId, roomAsset.id, 0)
+                  }
+                }
+              }}
+              className={`p-1.5 rounded-lg border text-left transition-all ${
+                omniframeCharacters.some((c) => c.id.startsWith('char_towel'))
+                  ? 'bg-brand/20 border-brand text-white shadow-xs'
+                  : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850 hover:text-white'
+              }`}
+            >
+              <div className="font-semibold text-[11px] truncate">Room Chair & Towel</div>
+              <div className="text-[9px] text-ink-400 truncate">Real Uploaded Photo</div>
+            </button>
+
+            <button
+              type="button"
+              data-testid="switch-asset-deathnote-btn"
+              onClick={() => {
+                loadAssetObjects('asset-death-note-vid')
+              }}
+              className={`p-1.5 rounded-lg border text-left transition-all ${
+                omniframeCharacters.some((c) => c.id.startsWith('char_light'))
+                  ? 'bg-brand/20 border-brand text-white shadow-xs'
+                  : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850 hover:text-white'
+              }`}
+            >
+              <div className="font-semibold text-[11px] truncate">Death Note 5 Chibi</div>
+              <div className="text-[9px] text-ink-400 truncate">Characters Video/Image</div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Unified Selection & Masking Sub-Tool */}
+      {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
+        <SelectionMaskSubTool />
+      )}
+
+      {/* Detected Characters List & Multi-Frame Shift */}
+      {(!activeSubMode || activeSubMode === 'omniframe-shift') && (
+        <>
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
           <span>Detected Characters ({omniframeCharacters.length})</span>
           <button
             type="button"
@@ -298,6 +409,47 @@ export function OmniFramePanel() {
                 onChange={(e) => handleUpdateTransform({ rotation: parseInt(e.target.value, 10) })}
                 className="of-range w-full"
               />
+            </div>
+          </div>
+
+          {/* Object Recolor & Tint (Photorealistic Luminance Preservation) */}
+          <div className="pt-2 border-t border-ink-800 space-y-1.5">
+            <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
+              <div className="flex items-center gap-1">
+                <PaintBucket size={11} className="text-amber-400" />
+                <span>Object Color & Recolor</span>
+              </div>
+              <span className="font-mono text-[9px] text-brand">
+                {selectedChar.recolorColor || 'Original'}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {[
+                { label: 'Original', hex: '' },
+                { label: 'Royal Blue', hex: '#2563eb' },
+                { label: 'Crimson Red', hex: '#dc2626' },
+                { label: 'Golden Amber', hex: '#d97706' },
+                { label: 'Emerald Green', hex: '#059669' },
+                { label: 'Purple Violet', hex: '#7c3aed' },
+              ].map((c) => (
+                <button
+                  key={c.label}
+                  type="button"
+                  data-testid={`char-recolor-${c.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  title={`${c.label} (${c.hex || 'Default'})`}
+                  onClick={() => {
+                    recolorActiveSelection(c.hex)
+                  }}
+                  className={`px-2 py-0.5 rounded text-[10px] border font-medium transition-all ${
+                    (selectedChar.recolorColor === c.hex || (!selectedChar.recolorColor && !c.hex))
+                      ? 'border-white bg-white/20 text-white font-bold'
+                      : 'border-ink-800 bg-ink-900 text-ink-300 hover:text-white'
+                  }`}
+                  style={c.hex ? { borderLeftColor: c.hex, borderLeftWidth: 3 } : undefined}
+                >
+                  {c.label}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -548,6 +700,8 @@ export function OmniFramePanel() {
             })}
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   )

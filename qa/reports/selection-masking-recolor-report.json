@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-10-01T16:06:02.309Z",
+  "status": "SUCCESS",
+  "unifiedSelectionSubtool": {
+    "typesTested": [
+      "rect",
+      "ellipse",
+      "freeform",
+      "polygon",
+      "painting",
+      "magic-wand"
+    ],
+    "inversionTested": true,
+    "growShrinkTested": true
+  },
+  "realPhotoOmniFrame": {
+    "assetName": "Room Leather Chair & Towel (Real Photo).jpg",
+    "resolution": "1448x1086",
+    "detectedObjects": [
+      {
+        "id": "char_towel",
+        "name": "Draped Armchair Towel"
+      },
+      {
+        "id": "char_curtain",
+        "name": "Gold Pleated Curtain"
+      }
+    ],
+    "towelShift": {
+      "x": 60,
+      "y": -20,
+      "scale": 1.05,
+      "rotation": 0,
+      "opacity": 1
+    },
+    "cleanInfillVerified": true
+  },
+  "colorizationRecolor": {
+    "object": "Draped Armchair Towel",
+    "blueRecolor": {
+      "id": "char_towel",
+      "color": "#2563eb",
+      "recolorUrl": "/assets/room/obj_towel_blue.png"
+    },
+    "redRecolor": {
+      "id": "char_towel",
+      "color": "#dc2626",
+      "recolorUrl": "/assets/room/obj_towel_red.png"
+    },
+    "luminancePreserved": true
+  },
+  "nonDestructiveMask": {
+    "rubylithMode": true,
+    "showMaskLayerToggled": true,
+    "destructiveImageEditAvoided": true
+  },
+  "screenshots": [
+    "evidence/screenshots/SS-093-omniframe-selection-subtool.png",
+    "evidence/screenshots/SS-094-real-photo-room-towel-recolor-blue.png",
+    "evidence/screenshots/SS-095-real-photo-room-towel-recolor-red.png",
+    "evidence/screenshots/SS-096-real-photo-towel-infill-shift.png",
+    "evidence/screenshots/SS-097-non-destructive-mask-layer-rubylith.png"
+  ]
+}

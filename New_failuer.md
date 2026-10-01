@@ -40410,4 +40410,13 @@
 - **Mitigation Architecture**: Enforce strict `pointer-events: none` on the root container and all child SVG nodes, with hardware-accelerated `translate3d` positioning.
 - **Verification Test Suite**: `qa/pointer-events-cursor-gamified-e2e.mjs` (Automated Playwright E2E & OpenCV frame analysis).
 
+### [FAIL-05052] Left Dock Clutter & Sub-Mode Channel Navigation Absence
+
+- **Subsystem**: `UI Workspace & Left Dock Navigation` &rarr; `Category Filtering & Contextual Rail Architecture`
+- **Failure Mode**: Left dock displaying all 10 tools simultaneously causing visual clutter across Video Editing, 2D Paint, and 3D Scene domains, with deep sub-modes requiring excessive scrolling and lacking focused breadcrumbs.
+- **Root Cause**: Flat tab listing without domain-aware category filtering (`ALL`, `VID`, `2D`, `3D`) and absence of temporary rail icons for isolated sub-modes.
+- **Mitigation Architecture**: Implement category filter pills on sidebar rail, contextual temporary sub-rail badges with dismissal handles, and focused sub-size section channeling with `‹ Back / [Title]` breadcrumb headers.
+- **Verification Test Suite**: `qa/ui-declutter-submode-channeling-e2e.mjs` (Automated Playwright E2E & OpenCV frame analysis).
+
+
 

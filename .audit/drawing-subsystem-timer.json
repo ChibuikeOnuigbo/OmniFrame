@@ -146,8 +146,15 @@
       "feature": "Boundary Clips, Text Overflow & Icon Consolidation",
       "status": "verified",
       "details": "Fixed drag pill, track headers, markers, and buttons with ellipsis and tooltips; SS-089 to SS-092, CUT-100 to CUT-103, F-0082, PF-0068"
+    },
+    {
+      "run": 22,
+      "timestamp": "2026-10-01T16:31:39+00:00",
+      "feature": "UI Clutter Reduction & Sub-Mode Channeling",
+      "status": "verified",
+      "details": "Implemented category filtering (ALL, VID, 2D, 3D), temporary sub-mode rail icons with dismissal badges, and focused breadcrumb navigation headers"
     }
   ],
-  "total_runs": 21,
-  "last_updated": "2026-10-01T10:35:03+00:00"
+  "total_runs": 22,
+  "last_updated": "2026-10-01T16:31:39+00:00"
 }

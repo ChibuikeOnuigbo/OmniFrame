@@ -544,7 +544,7 @@ export function createSelectionMask(
     ctx.beginPath()
     ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2)
     ctx.fill()
-  } else if (selection.type === 'lasso' && selection.points && selection.points.length > 2) {
+  } else if ((selection.type === 'lasso' || selection.type === 'polygon' || selection.type === 'brush') && selection.points && selection.points.length > 1) {
     ctx.beginPath()
     ctx.moveTo(selection.points[0].x * canvas.width, selection.points[0].y * canvas.height)
     for (let i = 1; i < selection.points.length; i++) {
@@ -564,7 +564,8 @@ export function createSelectionMask(
 }
 
 /**
- * Renders dual-phase marching ants along the perimeter of an active selection.
+ * Renders dual-phase marching ants along the perimeter of an active selection,
+ * and optional non-destructive mask preview / colorization fill.
  */
 export function renderSelectionMarchingAnts(
   ctx: CanvasRenderingContext2D,
@@ -574,8 +575,6 @@ export function renderSelectionMarchingAnts(
   timeMs: number,
 ) {
   ctx.save()
-  ctx.lineWidth = 1.5
-  const dashOffset = (timeMs / 40) % 8
 
   const drawBoundary = () => {
     ctx.beginPath()
@@ -591,7 +590,11 @@ export function renderSelectionMarchingAnts(
       const rx = Math.max(1, (selection.bounds.width / 2) * width)
       const ry = Math.max(1, (selection.bounds.height / 2) * height)
       ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2)
-    } else if (selection.type === 'lasso' && selection.points && selection.points.length > 1) {
+    } else if (
+      (selection.type === 'lasso' || selection.type === 'polygon' || selection.type === 'brush') &&
+      selection.points &&
+      selection.points.length > 1
+    ) {
       ctx.moveTo(selection.points[0].x * width, selection.points[0].y * height)
       for (let i = 1; i < selection.points.length; i++) {
         ctx.lineTo(selection.points[i].x * width, selection.points[i].y * height)
@@ -605,6 +608,38 @@ export function renderSelectionMarchingAnts(
       ctx.rect(rx, ry, rw, rh)
     }
   }
+
+  // Non-destructive Mask Visualization Mode (LumaCut / Photoshop Quick Mask)
+  if (selection.showMaskOnly || selection.maskDisplayMode === 'matte') {
+    ctx.save()
+    ctx.fillStyle = '#0a0a0f'
+    ctx.fillRect(0, 0, width, height)
+    ctx.fillStyle = '#ffffff'
+    drawBoundary()
+    ctx.fill()
+    ctx.restore()
+  } else if (selection.maskDisplayMode === 'rubylith') {
+    ctx.save()
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.42)'
+    ctx.fillRect(0, 0, width, height)
+    ctx.globalCompositeOperation = 'destination-out'
+    drawBoundary()
+    ctx.fill()
+    ctx.restore()
+  }
+
+  // Live Recolor / Tint Preview if fillColor is set
+  if (selection.fillColor) {
+    ctx.save()
+    ctx.fillStyle = selection.fillColor.length === 7 ? selection.fillColor + '99' : selection.fillColor
+    drawBoundary()
+    ctx.fill()
+    ctx.restore()
+  }
+
+  // Marching Ants Boundary Strokes
+  ctx.lineWidth = 1.5
+  const dashOffset = (timeMs / 40) % 8
 
   // Phase 1: Black dash
   ctx.strokeStyle = '#000000'

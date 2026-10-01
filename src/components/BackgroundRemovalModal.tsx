@@ -146,6 +146,18 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
     onClose()
   }
 
+  const handleApplyMaskLayer = () => {
+    if (!activeClip) return
+    const st = useEditor.getState()
+    st.setActiveSelection({
+      type: 'character',
+      bounds: { x: 0.15, y: 0.15, width: 0.7, height: 0.7 },
+      showMaskOnly: true,
+      maskDisplayMode: 'rubylith',
+    })
+    onClose()
+  }
+
   return (
     <div
       data-testid="bg-removal-modal"
@@ -216,18 +228,19 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
             <label className="block text-[11px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
               Replacement Mode
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {[
                 { id: 'transparent', label: 'Transparent Alpha' },
                 { id: 'solid', label: 'Solid Color' },
                 { id: 'blur', label: 'Bokeh Blur' },
+                { id: 'mask', label: 'Show Mask (Layer Mode)' },
               ].map((b) => (
                 <button
                   key={b.id}
                   type="button"
                   data-testid={`bg-mode-${b.id}`}
                   onClick={() => setBgMode(b.id as any)}
-                  className={`py-2 px-3 rounded-xl border text-center text-xs capitalize font-medium transition-colors ${
+                  className={`py-2 px-2 rounded-xl border text-center text-xs capitalize font-medium transition-colors ${
                     bgMode === b.id
                       ? 'border-brand bg-brand/20 text-white'
                       : 'border-ink-800 bg-ink-950/40 text-ink-400 hover:bg-ink-800'
@@ -360,6 +373,17 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
           </button>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              data-testid="apply-mask-layer-btn"
+              disabled={isProcessing}
+              onClick={handleApplyMaskLayer}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand/50 bg-brand/20 hover:bg-brand/30 text-brand font-medium text-xs transition-colors"
+              title="Create non-destructive mask layer rather than editing original image"
+            >
+              <Layers size={13} />
+              <span>Create Mask Layer</span>
+            </button>
             <button
               type="button"
               data-testid="cancel-bg-removal-btn"

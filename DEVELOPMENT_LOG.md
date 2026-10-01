@@ -96,3 +96,7 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - 2026-09-30T21:14:50+00:00 — Drawing Run #20: [VERIFIED] Frame-by-Frame Cursor Visibility Audit Across Modals & Scrubbing — Deep inspection verifying continuous cursor visibility over modal dialog overlays, playhead drag scrubbing, inspector range sliders, and 3D canvas planes. Verified with Playwright and OpenCV.
 
 - 2026-10-01T10:35:03+00:00 — Drawing Run #21: [VERIFIED] Boundary Clips, Text Overflow & Icon Consolidation — Fixed drag pill, track headers, markers, and buttons with ellipsis and tooltips; SS-089 to SS-092, CUT-100 to CUT-103, F-0082, PF-0068
+
+- 2026-10-01T16:30:54+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
+
+- 2026-10-01T16:31:39+00:00 — Drawing Run #22: [VERIFIED] UI Clutter Reduction & Sub-Mode Channeling — Implemented category filtering (ALL, VID, 2D, 3D), temporary sub-mode rail icons with dismissal badges, and focused breadcrumb navigation headers

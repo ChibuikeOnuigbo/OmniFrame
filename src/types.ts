@@ -172,8 +172,18 @@ export type SelectionToolType =
   | 'select-ellipse'
   | 'select-lasso'
   | 'select-polygon'
+  | 'select-brush'
   | 'select-magic-wand'
   | 'select-character'
+
+export type SelectionModeType =
+  | 'rect'
+  | 'ellipse'
+  | 'freeform'
+  | 'polygon'
+  | 'painting'
+  | 'magic-wand'
+  | 'character'
 
 export type DrawingToolType =
   | 'brush'
@@ -218,7 +228,7 @@ export interface OnionSkinSettings {
 }
 
 export interface ActiveSelection {
-  type: 'rectangle' | 'ellipse' | 'lasso' | 'polygon' | 'magic-wand' | 'character'
+  type: 'rectangle' | 'ellipse' | 'lasso' | 'polygon' | 'magic-wand' | 'character' | 'brush'
   bounds: { x: number; y: number; width: number; height: number } // normalized [0, 1]
   points?: StrokePoint[]
   maskDataUrl?: string
@@ -226,6 +236,9 @@ export interface ActiveSelection {
   feather?: number // px
   fillMode?: 'outline' | 'filled'
   characterName?: string
+  fillColor?: string
+  showMaskOnly?: boolean
+  maskDisplayMode?: 'rubylith' | 'matte' | 'cutout'
 }
 
 export interface DrawingStroke {
@@ -530,6 +543,8 @@ export interface OmniframeCharacter {
   sectionRange?: { start: number; end: number } // in seconds (e.g. 2.0s to 5.0s)
   frameNumber?: number // for 1-frame scope (e.g. frame 90)
   keyframeOffsets?: { frame: number; transform: ClipTransform }[]
+  recolorColor?: string
+  recolorUrl?: string
 }
 
 export interface OmniframeOperation {

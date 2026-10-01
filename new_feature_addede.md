@@ -80410,4 +80410,13 @@
 - **Mathematical Invariant & Formulation**: `Pos_cursor(t) = (P_x, P_y); Scale_cursor = S_config \in {0.9, 1.15, 1.35}`
 - **Validation Strategy**: Playwright E2E vetting (`qa/pointer-events-cursor-gamified-e2e.mjs`) and OpenCV quantitative measurements (`qa/analyze_cursor_metrics.py`).
 
+### [FEAT-10052] Categorized Tooling & Contextual Sub-Mode Navigation Rail
+
+- **Architecture & Module**: `UI Workspace & Left Dock Navigation Architecture`
+- **Technical Specification**: Domain-aware category filtering (`ALL`, `VID`, `2D`, `3D`) partitioning 10 workspace tools across Video NLE (Premiere/CapCut), 2D Creative & Paint (Photoshop/Krita), and 3D Scene (Blender). Contextual temporary sub-mode rail badges appearing on the sidebar rail when isolated tools (3D Materials, Text Presets, OmniFrame Selection) are invoked, channeling sidebar focus directly into that sub-section with a breadcrumb `‹ Back` header and dismissal button.
+- **Algorithmic Complexity & Performance**: O(1) state transitions using Zustand reactive store with zero layout shifts; smooth CSS transitions on sidebar width.
+- **Mathematical Invariant & Formulation**: `T_{visible} = \{ t \in T_{all} \mid C_{active} = \text{'all'} \lor t.category = C_{active} \}`
+- **Validation Strategy**: Playwright E2E vetting (`qa/ui-declutter-submode-channeling-e2e.mjs`) and OpenCV quantitative measurements (`qa/analyze_submode_metrics.py`).
+
+
 
