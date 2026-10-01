@@ -1,0 +1,67 @@
+{
+  "id": "premiere-add-edit-split",
+  "app": "Adobe Premiere Pro",
+  "title": "Add an edit at the playhead (Ctrl+K)",
+  "source": "https://www.redsharknews.com/10-essential-keyboard-shortcuts-for-faster-editing-in-premiere-pro",
+  "procedure": [
+    "Place a clip and park the playhead partway through it",
+    "Press Ctrl+K",
+    "The clip is cut into two pieces at the playhead"
+  ],
+  "verdict": "REPLICATED",
+  "counts": {
+    "PASS": 8,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 0, 6)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 0, 6)"
+    },
+    {
+      "kind": "store",
+      "label": "setPlayhead(3)",
+      "status": "PASS",
+      "detail": "setPlayhead(3)"
+    },
+    {
+      "kind": "assert",
+      "label": "one clip before the cut",
+      "status": "PASS",
+      "detail": "clips().length === 1"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"timeline-split-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"timeline-split-btn\"]"
+    },
+    {
+      "kind": "assert",
+      "label": "clip split into two at the playhead",
+      "status": "PASS",
+      "detail": "clips().length === 2"
+    },
+    {
+      "kind": "assert",
+      "label": "the two pieces are contiguous at 3s",
+      "status": "PASS",
+      "detail": "clips().length === 2 && clips().some(c => Math.abs(c.start + c.duration - 3) < 0.2)"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/premiere-add-edit-split-1.png"
+    }
+  ]
+}

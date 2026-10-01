@@ -1,0 +1,318 @@
+{
+ "ledger64": {
+  "Sobel Edge Tensor Extraction": [
+   "IMPLEMENTED",
+   "src/lib/trackingEngine.ts computeFrameMaps builds real Sobel gradient/direction maps"
+  ],
+  "Normalized Cross-Correlation Patch Matching": [
+   "IMPLEMENTED",
+   "src/lib/trackingEngine.ts matchPatch \u2014 zero-mean NCC over RGB/luma"
+  ],
+  "Bidirectional Consistency Validation": [
+   "IMPLEMENTED",
+   "src/lib/trackingEngine.ts forward/backward track consistency check"
+  ],
+  "Luminance-Preserving Flood Fill": [
+   "IMPLEMENTED",
+   "src/lib/drawingEngine.ts floodFillRegion, luminance-preserving recolor"
+  ],
+  "Temporal Cel Onion-Skinning": [
+   "IMPLEMENTED",
+   "src/lib/drawingEngine.ts renderOnionSkin + DrawingPanel exposure holds"
+  ],
+  "Frame-Rate Decoupled Exposure Holds": [
+   "IMPLEMENTED",
+   "cel exposure / 'on twos' in DrawingPanel"
+  ],
+  "Per-Layer Blend Mode Composition": [
+   "IMPLEMENTED",
+   "src/components/DrawingPanel.tsx setPaintLayerBlendMode -> canvas globalCompositeOperation"
+  ],
+  "Selection Mask Morphological Operations": [
+   "IMPLEMENTED",
+   "grow/shrink/feather in OmniFramePanel + drawingEngine"
+  ],
+  "Vector Stroke to Raster Mask Conversion": [
+   "IMPLEMENTED",
+   "convert-mask-layer -> createSelectionMask rasterisation"
+  ],
+  "Pressure-Sensitive Bezier Stroke Interpolation": [
+   "IMPLEMENTED",
+   "DrawingCanvasOverlay reads e.pressure + brushDynamics pressureSize"
+  ],
+  "Real-Time Clone Stamp Sampling": [
+   "IMPLEMENTED",
+   "clone tool with cloneSourcePoint in store/overlay"
+  ],
+  "Gaussian Spatial Alpha Feathering": [
+   "IMPLEMENTED",
+   "refineAlphaMask feather pass in src/lib/bgRemovalEngine.ts"
+  ],
+  "Morphological Alpha Choke and Dilation": [
+   "IMPLEMENTED",
+   "refineAlphaMask choke/expand in src/lib/bgRemovalEngine.ts"
+  ],
+  "Spherical Coordinates Orbit/Pan/Dolly Camera": [
+   "IMPLEMENTED",
+   "src/components/ThreeViewer.tsx sphericalRef radius/theta/phi"
+  ],
+  "Continuous Video Texture Streaming": [
+   "IMPLEMENTED",
+   "THREE.VideoTexture driven by the preview media element"
+  ],
+  "Three-Point Lighting Rig Simulation": [
+   "IMPLEMENTED",
+   "ThreeViewer ambient + key + rim directional lights"
+  ],
+  "Centralized Context Menu Target Resolver": [
+   "IMPLEMENTED",
+   "src/components/Timeline.tsx target-aware context resolver"
+  ],
+  "Policy-Based LinkSet Synchronization": [
+   "IMPLEMENTED",
+   "linkSets + rules in store, LinkPanel UI"
+  ],
+  "Arrange Linked Elements Time-Alignment": [
+   "IMPLEMENTED",
+   "LinkPanel time-alignment actions"
+  ],
+  "Directional DAG Parenting Resolution": [
+   "IMPLEMENTED",
+   "parentRelationships DAG resolution in store"
+  ],
+  "Cross-Track Group Instance Aggregation": [
+   "IMPLEMENTED",
+   "groups[] with memberIds across tracks in store"
+  ],
+  "Atomic Multi-Element Delete Cascade": [
+   "IMPLEMENTED",
+   "removeSelectedClips + linkSet cascade delete"
+  ],
+  "Automatic Empty Track Housekeeping": [
+   "IMPLEMENTED",
+   "cleanupEmptyTracks in store"
+  ],
+  "Invariant I-01 Non-Overlapping Track Lanes": [
+   "IMPLEMENTED",
+   "resolveSameTrackRipple in store"
+  ],
+  "Invariant I-10 Decoupled Media Ingestion": [
+   "IMPLEMENTED",
+   "MediaPanel import decoupled from timeline insertion"
+  ],
+  "SMPTE Drop-Frame Timecode Math": [
+   "IMPLEMENTED",
+   "dropFrameTimecode + formatTimecode in Timeline/time.ts"
+  ],
+  "Seamless Audio Gapless Loop Splicing": [
+   "IMPLEMENTED",
+   "per-track gapless flag, DEVELOPMENT_LOG gapless ripple slice"
+  ],
+  "Dynamic Aspect Ratio Popover Presentation": [
+   "IMPLEMENTED",
+   "src/components/AspectRatioSelector.tsx"
+  ],
+  "Source-Aware Duration Boundary Expansion": [
+   "IMPLEMENTED",
+   "source-aware trim bounds in Timeline"
+  ],
+  "Dynamic Range Compression & Limiting": [
+   "IMPLEMENTED",
+   "compressor/limiter nodes in voiceIsolation + AudioMeter"
+  ],
+  "Real-Time Peak Metering & Ballistics": [
+   "IMPLEMENTED",
+   "src/components/AudioMeter.tsx peak ballistics"
+  ],
+  "Speech Formant Bandpass Attenuation": [
+   "IMPLEMENTED",
+   "formant bandpass isolate in src/lib/voiceIsolation.ts"
+  ],
+  "3-Band State Variable Filter Crossover": [
+   "IMPLEMENTED",
+   "3-band crossover DSP in src/lib/voiceIsolation.ts"
+  ],
+  "Mid-Side Stereo Matrix Processing": [
+   "IMPLEMENTED",
+   "Mid/Side decomposition in src/lib/voiceIsolation.ts"
+  ],
+  "WAV RIFF PCM Encoding": [
+   "IMPLEMENTED",
+   "encodeAudioBufferToWav in src/lib/voiceIsolation.ts"
+  ],
+  "6-Pixel Deadzone Drag State Machine": [
+   "PARTIAL",
+   "real threshold state machine, but 5px not 6px (Timeline startClipDrag)"
+  ],
+  "Sub-Millisecond Playhead Scrub Responsiveness": [
+   "PARTIAL",
+   "scrub is responsive but no measured sub-ms budget; no evidence of the specified pipeline"
+  ],
+  "Shared Data-Block Texture Architecture": [
+   "PARTIAL",
+   "three.js materials shared, but no data-block instancing bookkeeping"
+  ],
+  "World-to-Local Transform Propagation": [
+   "PARTIAL",
+   "transform propagation exists for OmniFrame objects; no generic world/local matrix chain"
+  ],
+  "Safe Keyboard Shortcut Collision Avoidance": [
+   "PARTIAL",
+   "shortcut registry exists, no collision-avoidance solver"
+  ],
+  "Temporal Alpha History Smoothing": [
+   "PARTIAL",
+   "temporalSmoothing toggle exists in BackgroundRemovalModal; smoothing is per-request, not a persistent alpha history"
+  ],
+  "Camera View Projection Surface Paint": [
+   "PARTIAL",
+   "3D painting UI present; no camera-projection surface paint solver"
+  ],
+  "Preserve Apparent World Transform on Reparent": [
+   "PARTIAL",
+   "parenting exists; reparent world-transform preservation is not verified"
+  ],
+  "BiRefNet High-Resolution Boundary Refinement": [
+   "NAMED-ONLY",
+   "bgRemovalEngine 'birefnet-general' = centre-weight + contrast threshold, ~10 lines. No bilateral reference network, no weights, no inference."
+  ],
+  "MODNet Real-Time Portrait Matting": [
+   "NAMED-ONLY",
+   "'modnet-photographic' = skin-tone + centre-weight heuristic. No tripartite network, no inference."
+  ],
+  "ISNet Graphic Silhouette Extraction": [
+   "NAMED-ONLY",
+   "'isnet-anime' = saturation > 30 threshold. No intermediate-supervision network."
+  ],
+  "SlimSAM Interactive Segment Anything": [
+   "NAMED-ONLY",
+   "'slimsam-fast' = centreWeight > 0.35. No prompt encoder, no SAM variant."
+  ],
+  "WebGPU Compute Shader Tensor Execution": [
+   "NAMED-ONLY",
+   "detectBackend() reports a 'webgpu' string; the matting path is scalar CPU JS. No WGSL, no tensor kernels."
+  ],
+  "Hardware WebCodecs Acceleration": [
+   "NAMED-ONLY",
+   "the string appears as a MediaPanel label; decoding uses HTMLVideoElement, no WebCodecs API call"
+  ],
+  "Make Unique Deep Asset Branching": [
+   "NAMED-ONLY",
+   "no make-unique / deep asset branching implementation found"
+  ],
+  "Motion Vector Kalman Filtering": [
+   "ABSENT",
+   "no kalman filter anywhere in src/"
+  ],
+  "Active Contour Boundary Competition": [
+   "ABSENT",
+   "no level-set / active contour solver"
+  ],
+  "Multi-scale Gaussian Image Pyramids": [
+   "ABSENT",
+   "guidedMatting works at a single downscaled scale; no pyramid"
+  ],
+  "Deforming Triangular Mesh Tracking": [
+   "ABSENT",
+   "no triangular mesh / Delaunay tracking"
+  ],
+  "Dominant Global Affine Motion": [
+   "ABSENT",
+   "no RANSAC global affine estimation"
+  ],
+  "Decoded Frame Memory Pooling": [
+   "ABSENT",
+   "no ring-buffer frame cache"
+  ],
+  "GOP Boundary Keyframe Fast Seeking": [
+   "ABSENT",
+   "seeking is via HTMLMediaElement.currentTime"
+  ],
+  "PTS / DTS Presentation Clock": [
+   "ABSENT",
+   "no presentation timestamp queue; playback is media-element driven"
+  ],
+  "Variable Frame Rate (VFR) Normalization": [
+   "ABSENT",
+   "no VFR handling"
+  ],
+  "Sub-frame Scrubbing & Jitter Suppression": [
+   "ABSENT",
+   "no sub-frame interpolation"
+  ],
+  "Audio Buffer Resampling & Drift Correction": [
+   "ABSENT",
+   "no resampler / drift corrector"
+  ],
+  "Frustum Culling & Viewport Scalability": [
+   "ABSENT",
+   "no frustum culling"
+  ],
+  "Perspective-Correct Depth Testing": [
+   "ABSENT",
+   "no depth-test configuration"
+  ],
+  "Phase-Inverted Cancellation Matrix": [
+   "ABSENT",
+   "mid/side processing exists, no phase-inversion cancellation matrix"
+  ]
+ },
+ "session": {
+  "Unified selection sub-tool (rect/ellipse/lasso/polygon/brush/magic wand)": [
+   "IMPLEMENTED",
+   "src/components/SelectionMaskSubTool.tsx, 6 selection types, qa/towel-masking-workflow-e2e.mjs 28/28"
+  ],
+  "Selection invert, grow, shrink, feather": [
+   "IMPLEMENTED",
+   "subtool-invert/grow/shrink + feather, proven by towel workflow W4"
+  ],
+  "Fill and recolor inside a selection on images and video": [
+   "IMPLEMENTED",
+   "apply-recolor-btn + recolor swatches; towel workflow W1-W4"
+  ],
+  "Non-destructive background removal producing a mask layer": [
+   "IMPLEMENTED",
+   "guidedMatte attaches transparencyMask + maskDataUrl; qa/reports/guided-matte-opencv-metrics.json"
+  ],
+  "Guided-rectangle background removal (draw box, click remove, get layered mask)": [
+   "IMPLEMENTED",
+   "src/lib/guidedMatting.ts + runGuidedRectBackgroundRemoval; box_fill_ratio 0.505 proves it is not a crop"
+  ],
+  "OmniFrame object move with clean background infill": [
+   "IMPLEMENTED",
+   "omniframe-clean-infill-motion-e2e.mjs"
+  ],
+  "LumaCut multi-signal masking and tracking subsystem": [
+   "IMPLEMENTED",
+   "src/lib/trackingEngine.ts (Sobel + NCC + forward/backward) + drawingEngine mask modes"
+  ],
+  "Windows-style rubber-band right-drag timeline multi-select": [
+   "IMPLEMENTED",
+   "qa/timeline-rubber-band-e2e.mjs 25/25, alpha 0.45 dark translucent band"
+  ],
+  "Gripped group delete / drag / shorten on the timeline": [
+   "IMPLEMENTED",
+   "removeSelectedClips / moveSelectedClips / trimSelectedClips; uniform deltas proven"
+  ],
+  "Contextual sidebar that changes with the active tool": [
+   "IMPLEMENTED",
+   "qa/reports/contextual-sidebar-report.json 17/17"
+  ],
+  "Cursors and cursor fidelity per tool": [
+   "IMPLEMENTED",
+   "cursor-opencv-metrics.json / cursor-frame-inspection-report.json"
+  ],
+  "Feature parity audit against CapCut / Premiere / After Effects / Photoshop / Krita / DaVinci": [
+   "PARTIAL",
+   "qa/feature-parity-audit.mjs runs 123/123 on its own checklist; not a full per-app audit"
+  ],
+  "Recreations of canonical editor looks": [
+   "PARTIAL",
+   "RECREATIONS.md + recreations-runner 303/303 self-checks"
+  ],
+  "Layout gapping and overflow audit": [
+   "IMPLEMENTED",
+   "qa/layout-gapping-audit.mjs 0 overflow / 30 panels"
+  ]
+ }
+}

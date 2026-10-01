@@ -15,6 +15,11 @@ import {
   X,
   PaintBucket,
   Stamp,
+  Pentagon,
+  Spline,
+  Blend,
+  Scissors,
+  Pipette,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -51,6 +56,11 @@ export function DrawingToolbar() {
     { id: 'circle', label: 'Circle', icon: Circle },
     { id: 'arrow', label: 'Arrow', icon: MoveRight },
     { id: 'star', label: 'Star', icon: Star },
+    { id: 'polygon', label: 'Polygon', icon: Pentagon },
+    { id: 'polyline', label: 'Polyline', icon: Scissors },
+    { id: 'bezier', label: 'Bezier Path', icon: Spline },
+    { id: 'gradient', label: 'Gradient', icon: Blend },
+    { id: 'eyedropper', label: 'Color Sampler', icon: Pipette },
   ]
 
   return (

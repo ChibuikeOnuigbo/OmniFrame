@@ -1,0 +1,117 @@
+{
+  "id": "aftereffects-track-motion",
+  "app": "Adobe After Effects",
+  "title": "Track Motion — put a track point on a high-contrast feature and attach a layer",
+  "source": "https://premieregal.com/blog/2020/7/24/3-motion-tracking-effects-in-adobe-after-effects",
+  "procedure": [
+    "Add the footage to the composition",
+    "Open the Tracker panel and choose Track Motion",
+    "Drag the track point onto a high-contrast feature",
+    "Run the analysis",
+    "Apply the tracking data to the target layer (X and Y)"
+  ],
+  "verdict": "REPLICATED",
+  "counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 0, 5)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 0, 5)"
+    },
+    {
+      "kind": "store",
+      "label": "selectClip(0)",
+      "status": "PASS",
+      "detail": "selectClip(0)"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"left-tab-tracking\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"left-tab-tracking\"]"
+    },
+    {
+      "kind": "probe",
+      "label": "Masking & Tracking panel is reachable",
+      "status": "PASS",
+      "detail": "hasTestid('tracking-panel')"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"track-mode-main\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"track-mode-main\"]"
+    },
+    {
+      "kind": "probe",
+      "label": "Track Motion controls are reachable",
+      "status": "PASS",
+      "detail": "hasTestid('add-track-point-btn')"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"add-track-point-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"add-track-point-btn\"]"
+    },
+    {
+      "kind": "assert",
+      "label": "a track point was placed",
+      "status": "PASS",
+      "detail": "(parseInt((document.body.innerText.match(/track points \\((\\d+)\\)/i) || [0,'0'])[1], 10) >= 1)"
+    },
+    {
+      "kind": "probe",
+      "label": "analysis run control exists",
+      "status": "PASS",
+      "detail": "hasTestid('run-track-forward-btn')"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"run-track-forward-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"run-track-forward-btn\"]"
+    },
+    {
+      "kind": "wait",
+      "label": "",
+      "status": "PASS",
+      "detail": "4000ms"
+    },
+    {
+      "kind": "probe",
+      "label": "tracking result card reported a solved transform",
+      "status": "PASS",
+      "detail": "hasTestid('tracking-result-card')"
+    },
+    {
+      "kind": "probe",
+      "label": "apply-to-target control exists",
+      "status": "PASS",
+      "detail": "hasTestid('apply-tracking-transform-btn')"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"apply-tracking-transform-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"apply-tracking-transform-btn\"]"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/aftereffects-track-motion-1.png"
+    }
+  ]
+}

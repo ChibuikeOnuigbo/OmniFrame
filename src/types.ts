@@ -196,6 +196,10 @@ export type DrawingToolType =
   | 'circle'
   | 'arrow'
   | 'star'
+  | 'polygon'
+  | 'polyline'
+  | 'bezier'
+  | 'gradient'
   | 'fill'
   | 'clone'
   | 'eyedropper'
@@ -251,6 +255,9 @@ export interface DrawingStroke {
   opacity: number // 0..1
   points: StrokePoint[]
   temporalScope: TemporalScope
+  polygonSides?: number // 3..12 for the Krita Polygon Tool
+  gradientColor?: string // end colour of the linear gradient ramp
+  filled?: boolean // shape tools fill as well as stroke
   fillTolerance?: number // threshold 1..100 for flood fill
   preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
   maskDataUrl?: string // raster patch for flood fill
@@ -614,3 +621,25 @@ export interface TemplateDefinition {
   thumbnail?: string
 }
 
+export interface GuidedMatteRecord {
+  id: string
+  /** Rectangle the user dragged, normalised 0..1. */
+  rect: { x: number; y: number; width: number; height: number }
+  /** PNG matte (white = subject) produced by the coordinate-seeded matting pass. */
+  maskDataUrl: string
+  /** RGBA cutout premultiplied by the matte. */
+  cutoutDataUrl: string
+  width: number
+  height: number
+  /** Fraction of the rectangle that survived as foreground. */
+  coverage: number
+  confidence: number
+  iterations: number
+  seedStats: { foreground: number; background: number }
+  timings: { seed: number; gmm: number; classify: number; refine: number; encode: number; total: number }
+  /** OmniFrame object created from the matte (non-destructive layer). */
+  objectId?: string
+  /** Mask layer id created on the active paint layer. */
+  maskLayerId?: string
+  createdAt: number
+}

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useEditor } from '../store'
+import type { DrawingToolType } from '../types'
 import { uid } from '../lib/time'
 import {
   renderStroke,
@@ -17,6 +18,10 @@ interface DrawingCanvasOverlayProps {
 
 export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  /** Tool to return to after the eyedropper samples a colour (Krita behaviour). */
+  const previousToolBeforeEyedropperRef = useRef<DrawingToolType | null>(null)
+  /** Last non-utility paint tool, so the eyedropper can restore it. */
+  const lastPaintToolRef = useRef<DrawingToolType | null>(null)
   const isDrawingRef = useRef(false)
   const currentPointsRef = useRef<StrokePoint[]>([])
   const strokeStartTimeRef = useRef(0)
@@ -24,6 +29,10 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
 
   const drawingEnabled = useEditor((s) => s.drawingEnabled)
   const drawingTool = useEditor((s) => s.drawingTool)
+  useEffect(() => {
+    if (drawingTool !== 'eyedropper') lastPaintToolRef.current = drawingTool
+  }, [drawingTool])
+
   const drawingColor = useEditor((s) => s.drawingColor)
   const drawingSize = useEditor((s) => s.drawingSize)
   const drawingOpacity = useEditor((s) => s.drawingOpacity)
@@ -38,6 +47,17 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
   const activeSelection = useEditor((s) => s.activeSelection)
   const setActiveSelection = useEditor((s) => s.setActiveSelection)
   const activeMaskId = useEditor((s) => s.activeMaskId)
+  /**
+   * A stroke may only be attached to a transparency mask when that mask is
+   * genuinely mounted on the active paint layer. `activeMaskId` can point at a
+   * clip mask (or at a placeholder mask) that the paint layer knows nothing
+   * about; tagging a stroke with such an id makes it invisible, because
+   * renderAllPaintLayers then excludes it from both the base and mask passes.
+   */
+  const activeLayer = paintLayers.find((l) => l.id === (activePaintLayerId || 'default-paint-layer'))
+  const strokeMaskId =
+    activeMaskId && activeLayer?.transparencyMask?.id === activeMaskId ? activeMaskId : undefined
+
   const brushDynamics = useEditor((s) => s.brushDynamics)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
@@ -136,6 +156,9 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     }
 
     if (drawingTool === 'eyedropper') {
+      if (!previousToolBeforeEyedropperRef.current) {
+        previousToolBeforeEyedropperRef.current = lastPaintToolRef.current || 'brush'
+      }
       const previewCanvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
       if (previewCanvas) {
         const pCtx = previewCanvas.getContext('2d', { willReadFrequently: true })
@@ -146,6 +169,13 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
           const hex = '#' + ((1 << 24) + (pixel[0] << 16) + (pixel[1] << 8) + pixel[2]).toString(16).slice(1)
           useEditor.getState().setDrawingColor(hex)
         }
+      }
+      // Krita's Color Sampler Tool: after sampling, return to the tool that was
+      // active before the pick so the artist can carry on working.
+      const prev = previousToolBeforeEyedropperRef.current
+      if (prev) {
+        previousToolBeforeEyedropperRef.current = null
+        useEditor.getState().setDrawingTool(prev)
       }
       return
     }
@@ -199,7 +229,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       const liveStroke: DrawingStroke = {
         id: 'preview',
         layerId: activePaintLayerId,
-        maskId: activeMaskId || undefined,
+        maskId: strokeMaskId,
         tool: drawingTool,
         color: drawingColor,
         size: drawingSize,
@@ -207,6 +237,15 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
         points: currentPointsRef.current,
         temporalScope: drawingScope,
         cloneSource: useEditor.getState().cloneSourcePoint || undefined,
+        ...(drawingTool === 'polygon'
+          ? {
+              polygonSides: useEditor.getState().drawingPolygonSides,
+              filled: useEditor.getState().drawingShapeFilled,
+            }
+          : {}),
+        ...(drawingTool === 'gradient'
+          ? { gradientColor: useEditor.getState().drawingGradientColor }
+          : {}),
       }
       renderStroke(ctx, liveStroke, width, height)
     }
@@ -268,7 +307,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     const liveStroke: DrawingStroke = {
       id: 'preview',
       layerId: activePaintLayerId,
-      maskId: activeMaskId || undefined,
+      maskId: strokeMaskId,
       tool: drawingTool,
       color: drawingColor,
       size: drawingSize,
@@ -342,7 +381,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       const finalStroke: DrawingStroke = {
         id: uid('strk'),
         layerId: activePaintLayerId,
-        maskId: activeMaskId || undefined,
+        maskId: strokeMaskId,
         tool: drawingTool,
         color: drawingColor,
         size: drawingSize,
@@ -350,6 +389,15 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
         points: [...currentPointsRef.current],
         temporalScope: { ...drawingScope },
         cloneSource: useEditor.getState().cloneSourcePoint || undefined,
+        ...(drawingTool === 'polygon'
+          ? {
+              polygonSides: useEditor.getState().drawingPolygonSides,
+              filled: useEditor.getState().drawingShapeFilled,
+            }
+          : {}),
+        ...(drawingTool === 'gradient'
+          ? { gradientColor: useEditor.getState().drawingGradientColor }
+          : {}),
       }
       addDrawingStroke(finalStroke)
     }

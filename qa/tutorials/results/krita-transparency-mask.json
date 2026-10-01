@@ -1,0 +1,98 @@
+{
+  "id": "krita-transparency-mask",
+  "app": "Krita",
+  "title": "Add a transparency mask and paint on it non-destructively",
+  "source": "https://docs.krita.org/en/reference_manual/layers_and_masks/transparency_masks.html",
+  "procedure": [
+    "Select a paint layer",
+    "Add a Transparency Mask",
+    "Paint black to hide, white to reveal, grey for partial",
+    "The paint layer's own pixels are never destroyed"
+  ],
+  "verdict": "REPLICATED",
+  "counts": {
+    "PASS": 13,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-room-chair-towel', 0, 4)",
+      "status": "PASS",
+      "detail": "addClip('asset-room-chair-towel', 0, 4)"
+    },
+    {
+      "kind": "store",
+      "label": "selectClip(0)",
+      "status": "PASS",
+      "detail": "selectClip(0)"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"left-tab-tracking\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"left-tab-tracking\"]"
+    },
+    {
+      "kind": "probe",
+      "label": "Masking & Tracking panel is reachable",
+      "status": "PASS",
+      "detail": "hasTestid('add-mask-btn')"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"add-mask-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"add-mask-btn\"]"
+    },
+    {
+      "kind": "assert",
+      "label": "a mask was attached to the clip",
+      "status": "PASS",
+      "detail": "clipMasks().length >= 1"
+    },
+    {
+      "kind": "probe",
+      "label": "mask inversion exists (Krita: black hides / white reveals)",
+      "status": "PASS",
+      "detail": "hasTestid('mask-invert-toggle')"
+    },
+    {
+      "kind": "probe",
+      "label": "mask feather exists (Krita: grey = partial transparency)",
+      "status": "PASS",
+      "detail": "hasTestid('mask-feather-slider')"
+    },
+    {
+      "kind": "store",
+      "label": "selectionRect(0.03, 0.19, 0.41, 0.57)",
+      "status": "PASS",
+      "detail": "selectionRect(0.03, 0.19, 0.41, 0.57)"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"convert-selection-to-mask-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"convert-selection-to-mask-btn\"]"
+    },
+    {
+      "kind": "assert",
+      "label": "mask is stored as its own object, source pixels untouched",
+      "status": "PASS",
+      "detail": "clipMasks().length >= 1 && clipMasks().every(m => m.clipId || m.id)"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/krita-transparency-mask-1.png"
+    }
+  ]
+}

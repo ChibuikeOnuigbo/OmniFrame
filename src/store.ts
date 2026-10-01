@@ -43,7 +43,9 @@ import type {
   Sequence,
   TransparencyMask,
   BrushDynamics,
+  GuidedMatteRecord,
 } from './types'
+import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
@@ -279,6 +281,12 @@ interface EditorState {
   drawingEnabled: boolean
   drawingFillTolerance: number
   drawingPreserveLuminance: boolean
+  /** Number of sides for the Krita Polygon Tool, 3..12. */
+  drawingPolygonSides: number
+  /** Shape tools (polygon / star) fill as well as stroke. */
+  drawingShapeFilled: boolean
+  /** End colour of the linear gradient ramp. */
+  drawingGradientColor: string
   drawingHoldFrames: number
   onionSkin: OnionSkinSettings
   activeSelection: ActiveSelection | null
@@ -344,6 +352,12 @@ interface EditorState {
   trimClip: (id: string, edge: 'left' | 'right', value: number) => void
   splitAt: (time: number) => void
   removeClip: (id: string) => void
+  /** Remove every clip currently in the multi-selection (Windows-style lasso). */
+  removeSelectedClips: () => number
+  /** Shift the whole multi-selection in time, preserving relative offsets. */
+  moveSelectedClips: (deltaTime: number, trackId?: string | null) => number
+  /** Shorten/lengthen every clip in the multi-selection from one edge. */
+  trimSelectedClips: (edge: 'left' | 'right', deltaSeconds: number) => number
   toggleClipHidden: (id: string) => void
   insertClipCopy: (clip: Clip, start: number) => void
   extractAudio: (id: string) => Promise<void>
@@ -372,6 +386,9 @@ interface EditorState {
   setDrawingEnabled: (enabled: boolean) => void
   toggleDrawingEnabled: () => void
   setDrawingFillTolerance: (tolerance: number) => void
+  setDrawingPolygonSides: (sides: number) => void
+  setDrawingShapeFilled: (filled: boolean) => void
+  setDrawingGradientColor: (color: string) => void
   setDrawingPreserveLuminance: (preserve: boolean) => void
   createPaintLayer: (name?: string) => string
   togglePaintLayerVisibility: (layerId: string) => void
@@ -400,6 +417,14 @@ interface EditorState {
   setTransparencyMaskOpacity: (layerId: string, opacity: number) => void
   applyTransparencyMask: (layerId: string) => void
   setActiveMask: (maskId: string | null) => void
+  /**
+   * Clip masks live in the store, not in component state: they must survive
+   * panel unmount, participate in undo/redo, and be readable by the renderer
+   * and by tests. Keeping them in the panel meant every mask was lost as soon
+   * as the tab changed.
+   */
+  clipMasks: ClipMask[]
+  setClipMasks: (next: ClipMask[] | ((prev: ClipMask[]) => ClipMask[])) => void
   setBrushDynamics: (dynamics: Partial<BrushDynamics>) => void
 
   // ---- OmniFrame & Character Manipulation ----
@@ -522,6 +547,16 @@ interface EditorState {
   activeBgRemovalJob: BgRemovalJob | null
   setActiveBgRemovalJob: (job: BgRemovalJob | null) => void
 
+  // ---- guided rect background removal (draw a box → coordinate-seeded matte) ----
+  guidedMatte: GuidedMatteRecord | null
+  guidedMatteBusy: boolean
+  runGuidedRectBackgroundRemoval: (
+    rect?: { x: number; y: number; width: number; height: number },
+    hint?: { x: number; y: number; radius?: number },
+  ) => Promise<GuidedMatteRecord | null>
+  clearGuidedMatte: () => void
+
+
   // ---- master audio ----
   masterVolume: number
   setMasterVolume: (vol: number) => void
@@ -642,6 +677,56 @@ function resolveSameTrackRipple(
     }
     return c
   })
+}
+
+/**
+ * Resolves a media asset into something drawable on a canvas.
+ * Images decode directly; video draws the frame at the current playhead.
+ */
+async function loadDrawableSource(
+  asset: MediaAsset,
+): Promise<HTMLImageElement | HTMLCanvasElement | null> {
+  if (typeof document === 'undefined') return null
+  if (asset.kind === 'image') {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.src = asset.url
+    if (img.complete && img.naturalWidth > 0) return img
+    return await new Promise((resolve) => {
+      img.onload = () => resolve(img)
+      img.onerror = () => resolve(null)
+    })
+  }
+  const video = document.createElement('video')
+  video.crossOrigin = 'anonymous'
+  video.muted = true
+  video.preload = 'auto'
+  video.src = asset.url
+  const ready = await new Promise<boolean>((resolve) => {
+    video.onloadeddata = () => resolve(true)
+    video.onerror = () => resolve(false)
+    setTimeout(() => resolve(false), 2500)
+  })
+  if (!ready) return null
+  const canvas = document.createElement('canvas')
+  canvas.width = video.videoWidth || asset.width || 1920
+  canvas.height = video.videoHeight || asset.height || 1080
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return null
+  const st = useEditor.getState()
+  const clip = st.clips.find((c) => c.assetId === asset.id)
+  const target = Math.max(0, Math.min((video.duration || 0) - 0.05, clip ? st.playhead - clip.start + clip.inPoint : 0))
+  try {
+    video.currentTime = target
+    await new Promise<void>((resolve) => {
+      video.onseeked = () => resolve()
+      setTimeout(() => resolve(), 1200)
+    })
+  } catch {
+    /* seek unsupported — use the first decoded frame */
+  }
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+  return canvas
 }
 
 export const useEditor = create<EditorState>((set, get) => {
@@ -767,6 +852,8 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- background removal initial state ----
     activeBgRemovalJob: null,
+    guidedMatte: null,
+    guidedMatteBusy: false,
 
     // ---- 3D scene & Blender modes initial state ----
     is3DMode: false,
@@ -952,6 +1039,9 @@ export const useEditor = create<EditorState>((set, get) => {
     drawingEnabled: false,
     drawingFillTolerance: 32,
     drawingPreserveLuminance: false,
+    drawingPolygonSides: 5,
+    drawingShapeFilled: false,
+    drawingGradientColor: '#00000000',
     drawingHoldFrames: 1,
     onionSkin: {
       enabled: false,
@@ -964,6 +1054,25 @@ export const useEditor = create<EditorState>((set, get) => {
     activeSelection: null,
     selectionMode: 'rect',
     activeMaskId: null,
+    clipMasks: [
+      {
+        id: 'mask-1',
+        clipId: '',
+        name: 'Mask 1 (Subject)',
+        shapeType: 'rectangle',
+        points: [
+          { x: 0.25, y: 0.25 },
+          { x: 0.75, y: 0.25 },
+          { x: 0.75, y: 0.75 },
+          { x: 0.25, y: 0.75 },
+        ],
+        inverted: false,
+        feather: 4,
+        expansion: 0,
+        opacity: 1,
+        applyToAllFrames: true,
+      },
+    ],
     brushDynamics: {
       pressureSize: true,
       pressureOpacity: false,
@@ -1498,6 +1607,115 @@ export const useEditor = create<EditorState>((set, get) => {
       get().cleanupEmptyTracks()
     },
 
+    removeSelectedClips: () => {
+      const s = get()
+      const ids = (s.selectedClipIds.length ? s.selectedClipIds : s.selectedClipId ? [s.selectedClipId] : []).filter(
+        (id) => s.clips.some((c) => c.id === id),
+      )
+      if (ids.length === 0) return 0
+
+      pushSnapshot()
+      const lockedTrackIds = new Set(s.tracks.filter((t) => t.locked).map((t) => t.id))
+      const targetIds = new Set(ids.filter((id) => {
+        const c = s.clips.find((cl) => cl.id === id)
+        return c && !lockedTrackIds.has(c.trackId)
+      }))
+      if (targetIds.size === 0) return 0
+
+      set((st) => {
+        const clips = st.clips.filter((c) => !targetIds.has(c.id))
+        const transitions = (st.transitions || []).filter(
+          (tr) => !targetIds.has(tr.fromClipId) && !targetIds.has(tr.toClipId),
+        )
+        const linkSets = (st.linkSets || [])
+          .map((ls) => ({ ...ls, memberIds: ls.memberIds.filter((m) => !targetIds.has(m)) }))
+          .filter((ls) => ls.memberIds.length > 1)
+        const parentRelationships = (st.parentRelationships || []).filter(
+          (pr) => !targetIds.has(pr.childId) && !targetIds.has(pr.parentId),
+        )
+        const groups = (st.groups || [])
+          .map((g) => ({ ...g, memberIds: g.memberIds.filter((m) => !targetIds.has(m)) }))
+          .filter((g) => g.memberIds.length > 0)
+        return {
+          clips,
+          transitions,
+          linkSets,
+          parentRelationships,
+          groups,
+          selectedClipId: null,
+          selectedClipIds: [],
+          duration: recompute(clips),
+        }
+      })
+      get().cleanupEmptyTracks()
+      return targetIds.size
+    },
+
+    moveSelectedClips: (deltaTime, trackId) => {
+      const s = get()
+      const ids = (s.selectedClipIds.length ? s.selectedClipIds : s.selectedClipId ? [s.selectedClipId] : [])
+      if (ids.length === 0 || Math.abs(deltaTime) < 1e-6) return 0
+
+      const lockedTrackIds = new Set(s.tracks.filter((t) => t.locked).map((t) => t.id))
+      const movable = new Set(
+        ids.filter((id) => {
+          const c = s.clips.find((cl) => cl.id === id)
+          return c && !lockedTrackIds.has(c.trackId)
+        }),
+      )
+      if (movable.size === 0) return 0
+
+      pushSnapshot()
+      // Preserve relative offsets: the earliest clip is clamped to 0 and every
+      // other clip keeps its distance from it.
+      const selected = s.clips.filter((c) => movable.has(c.id))
+      const minStart = Math.min(...selected.map((c) => c.start))
+      const effectiveDelta = Math.max(-minStart, deltaTime)
+
+      set((st) => {
+        const clips = st.clips.map((c) =>
+          movable.has(c.id)
+            ? { ...c, start: Math.max(0, c.start + effectiveDelta), trackId: trackId || c.trackId }
+            : c,
+        )
+        return { clips, duration: recompute(clips) }
+      })
+      return movable.size
+    },
+
+    trimSelectedClips: (edge, deltaSeconds) => {
+      const s = get()
+      const ids = (s.selectedClipIds.length ? s.selectedClipIds : s.selectedClipId ? [s.selectedClipId] : [])
+      if (ids.length === 0 || Math.abs(deltaSeconds) < 1e-6) return 0
+
+      const lockedTrackIds = new Set(s.tracks.filter((t) => t.locked).map((t) => t.id))
+      const trimIds = new Set(
+        ids.filter((id) => {
+          const c = s.clips.find((cl) => cl.id === id)
+          return c && !lockedTrackIds.has(c.trackId)
+        }),
+      )
+      if (trimIds.size === 0) return 0
+
+      pushSnapshot()
+      set((st) => {
+        const clips = st.clips.map((c) => {
+          if (!trimIds.has(c.id)) return c
+          if (edge === 'left') {
+            // Moving the left edge right shortens, left lengthens (consuming in-point).
+            const maxDelta = c.duration - 0.05
+            const d = Math.min(Math.max(deltaSeconds, -c.inPoint), maxDelta)
+            return { ...c, start: c.start + d, duration: c.duration - d, inPoint: Math.max(0, c.inPoint + d) }
+          }
+          const d = Math.max(deltaSeconds, -(c.duration - 0.05))
+          return { ...c, duration: c.duration + d }
+        })
+        return { clips, duration: recompute(clips) }
+      })
+      return trimIds.size
+    },
+
+
     toggleClipHidden: (id) => {
       const clip = get().clips.find((item) => item.id === id)
       if (!clip || get().tracks.find((track) => track.id === clip.trackId)?.locked) return
@@ -1798,14 +2016,24 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
+    // Importing or clicking a media asset sets monitorMode to 'source', and the
+    // preview then tears down the engine that owns the playhead clock. Playing
+    // from that state left `playing: true` with a permanently frozen playhead
+    // and no error. Returning the monitor to 'program' on play keeps the
+    // transport alive; the source asset selection itself is untouched.
     play: () => set((s) => ({
       playhead: s.playhead >= s.duration - 0.001 ? 0 : s.playhead,
       playing: true,
+      monitorMode: s.monitorMode === 'source' ? 'program' : s.monitorMode,
     })),
     pause: () => set({ playing: false }),
     togglePlay: () => set((s) => s.playing
       ? { playing: false }
-      : { playing: true, playhead: s.playhead >= s.duration - 0.001 ? 0 : s.playhead },
+      : {
+          playing: true,
+          playhead: s.playhead >= s.duration - 0.001 ? 0 : s.playhead,
+          monitorMode: s.monitorMode === 'source' ? 'program' : s.monitorMode,
+        },
     ),
     setSpeed: (s) => {
       const sign = s < 0 ? -1 : 1
@@ -1919,6 +2147,9 @@ export const useEditor = create<EditorState>((set, get) => {
       }))
     },
     setDrawingFillTolerance: (tolerance) => set({ drawingFillTolerance: Math.max(1, Math.min(100, tolerance)) }),
+    setDrawingPolygonSides: (sides) => set({ drawingPolygonSides: Math.max(3, Math.min(12, Math.round(sides))) }),
+    setDrawingShapeFilled: (filled) => set({ drawingShapeFilled: filled }),
+    setDrawingGradientColor: (color) => set({ drawingGradientColor: color }),
     setDrawingPreserveLuminance: (preserve) => set({ drawingPreserveLuminance: preserve }),
     setPaintLayerBlendMode: (layerId, blendMode) => {
       pushSnapshot()
@@ -2260,6 +2491,8 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
     setActiveMask: (maskId) => set({ activeMaskId: maskId }),
+    setClipMasks: (next) =>
+      set((s) => ({ clipMasks: typeof next === 'function' ? next(s.clipMasks) : next })),
     setBrushDynamics: (dynamics) => set((s) => ({ brushDynamics: { ...s.brushDynamics, ...dynamics } })),
 
     // ---- OmniFrame & Character Manipulation actions ----
@@ -2929,6 +3162,108 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- background removal actions ----
     setActiveBgRemovalJob: (job) => set({ activeBgRemovalJob: job }),
+
+    runGuidedRectBackgroundRemoval: async (rectOverride, hint) => {
+      const sel = get().activeSelection
+      const rect = rectOverride || sel?.bounds
+      if (!rect || rect.width <= 0.01 || rect.height <= 0.01) return null
+
+      // Resolve the frame currently under the playhead as a drawable source.
+      const clip =
+        get().clips.find((c) => c.id === get().selectedClipId) ||
+        get().clips.find((c) => get().playhead >= c.start && get().playhead <= c.start + c.duration) ||
+        get().clips[0]
+      const asset = clip ? get().assets.find((a) => a.id === clip.assetId) : undefined
+      if (!asset) return null
+
+      set({ guidedMatteBusy: true })
+      try {
+        const source = await loadDrawableSource(asset)
+        if (!source) return null
+        const sw = (source as HTMLImageElement).naturalWidth || asset.width || 1920
+        const sh = (source as HTMLImageElement).naturalHeight || asset.height || 1080
+
+        const result: GuidedMattingResult = guidedRectMatting({
+          source,
+          sourceWidth: sw,
+          sourceHeight: sh,
+          rect,
+          iterations: 4,
+          borderBand: 12,
+          feather: 2,
+          components: 5,
+          maxWorkingEdge: 900,
+          hint,
+        })
+
+        pushSnapshot()
+
+        // 1. Non-destructive mask layer on the active paint layer
+        const layerId = get().activePaintLayerId || get().paintLayers[0]?.id
+        if (layerId) {
+          set((st) => ({
+            paintLayers: st.paintLayers.map((l) =>
+              l.id === layerId
+                ? {
+                    ...l,
+                    maskDataUrl: result.maskDataUrl,
+                    transparencyMask: {
+                      id: l.transparencyMask?.id || uid('mask'),
+                      parentLayerId: layerId,
+                      name: 'Guided Rect Matte',
+                      enabled: true,
+                      inverted: false,
+                      opacity: 1,
+                      dataUrl: result.maskDataUrl,
+                    },
+                  }
+                : l,
+            ),
+            activeMaskId: get().activeMaskId,
+          }))
+        }
+
+        // 2. OmniFrame object layered from the matte (movable, recolorable)
+        const objectId = `obj_guided_${Date.now()}`
+        const newChar: OmniframeCharacter = {
+          id: objectId,
+          name: 'Guided Cutout',
+          label: 'Guided Rect Background Removal',
+          bounds: { ...rect },
+          cutoutUrl: result.cutoutDataUrl,
+          transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+          scope: 'all',
+        }
+        set((st) => ({
+          omniframeCharacters: [...st.omniframeCharacters, newChar],
+          selectedCharacterId: objectId,
+        }))
+
+        const record: GuidedMatteRecord = {
+          id: uid('guided'),
+          rect: { ...rect },
+          maskDataUrl: result.maskDataUrl,
+          cutoutDataUrl: result.cutoutDataUrl,
+          width: result.width,
+          height: result.height,
+          coverage: result.coverage,
+          confidence: result.confidence,
+          iterations: result.iterations,
+          seedStats: result.seedStats,
+          timings: result.timings,
+          objectId,
+          maskLayerId: layerId,
+          createdAt: Date.now(),
+        }
+        set({ guidedMatte: record, guidedMatteBusy: false })
+        return record
+      } catch (err) {
+        set({ guidedMatteBusy: false })
+        return null
+      }
+    },
+
+    clearGuidedMatte: () => set({ guidedMatte: null }),
 
     newProject: () => {
       for (const asset of get().assets) URL.revokeObjectURL(asset.url)

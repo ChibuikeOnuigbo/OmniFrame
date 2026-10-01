@@ -72,6 +72,12 @@ export function DrawingPanel() {
   const setDrawingSize = useEditor((s) => s.setDrawingSize)
   const drawingFillTolerance = useEditor((s) => s.drawingFillTolerance)
   const setDrawingFillTolerance = useEditor((s) => s.setDrawingFillTolerance)
+  const drawingPolygonSides = useEditor((s) => s.drawingPolygonSides)
+  const setDrawingPolygonSides = useEditor((s) => s.setDrawingPolygonSides)
+  const drawingShapeFilled = useEditor((s) => s.drawingShapeFilled)
+  const setDrawingShapeFilled = useEditor((s) => s.setDrawingShapeFilled)
+  const drawingGradientColor = useEditor((s) => s.drawingGradientColor)
+  const setDrawingGradientColor = useEditor((s) => s.setDrawingGradientColor)
   const drawingPreserveLuminance = useEditor((s) => s.drawingPreserveLuminance)
   const setDrawingPreserveLuminance = useEditor((s) => s.setDrawingPreserveLuminance)
   const drawingScope = useEditor((s) => s.drawingScope)
@@ -430,7 +436,61 @@ export function DrawingPanel() {
       </div>
 
       {/* Tool Parameters */}
-      {drawingTool === 'fill' ? (
+      {(drawingTool === 'polygon' || drawingTool === 'gradient') ? (
+        <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
+          {drawingTool === 'polygon' ? (
+            <>
+              <div className="flex justify-between items-center text-[11px] font-medium text-ink-400">
+                <span>Polygon Sides</span>
+                <span className="font-mono text-ink-200">{drawingPolygonSides}</span>
+              </div>
+              <input
+                type="range"
+                data-testid="panel-polygon-sides-slider"
+                min={3}
+                max={12}
+                value={drawingPolygonSides}
+                onChange={(e) => setDrawingPolygonSides(Number(e.target.value))}
+                className="of-range w-full"
+              />
+              <label className="flex items-center gap-2 cursor-pointer pt-1 text-[11px] text-ink-300 hover:text-white select-none">
+                <input
+                  type="checkbox"
+                  data-testid="panel-shape-filled-checkbox"
+                  checked={drawingShapeFilled}
+                  onChange={(e) => setDrawingShapeFilled(e.target.checked)}
+                  className="accent-brand rounded cursor-pointer"
+                />
+                <Square size={13} className={drawingShapeFilled ? 'text-brand' : 'text-ink-400'} />
+                <span className={drawingShapeFilled ? 'text-brand font-medium' : ''}>Fill Shape</span>
+              </label>
+            </>
+          ) : (
+            <>
+              <div className="flex justify-between items-center text-[11px] font-medium text-ink-400">
+                <span>Gradient End Colour</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="color"
+                  data-testid="panel-gradient-color-input"
+                  value={drawingGradientColor.slice(0, 7)}
+                  onChange={(e) => setDrawingGradientColor(e.target.value)}
+                  className="w-8 h-7 rounded cursor-pointer bg-transparent border border-ink-700 p-0"
+                />
+                <button
+                  type="button"
+                  data-testid="panel-gradient-transparent-btn"
+                  onClick={() => setDrawingGradientColor('#00000000')}
+                  className="px-2 py-1 rounded border border-ink-700 text-[10px] hover:bg-ink-800"
+                >
+                  Fade to transparent
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      ) : drawingTool === 'fill' ? (
         <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
           <div className="flex justify-between items-center text-[11px] font-medium text-ink-400">
             <span>Fill Tolerance</span>
@@ -527,7 +587,11 @@ export function DrawingPanel() {
                 >
                   <ChevronLeft size={13} />
                 </button>
-                <span className="font-mono text-[11px] font-bold text-brand px-1.5 py-0.5 rounded bg-brand/10 border border-brand/30">
+                <span
+                  data-testid="current-cel-badge"
+                  data-cel-frame={currentFrame}
+                  className="font-mono text-[11px] font-bold text-brand px-1.5 py-0.5 rounded bg-brand/10 border border-brand/30"
+                >
                   Frame #{currentFrame}
                 </span>
                 <button

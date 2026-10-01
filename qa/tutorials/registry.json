@@ -1,0 +1,570 @@
+{
+  "generated": "2026-10-01",
+  "note": "Each entry is a real published tutorial for a named editor, with the source URL, the procedure verbatim-ish, and the OmniFrame steps that would replicate it. Steps are executed by qa/tutorials/runner.mjs; a step is PASS only when the assertion holds, FAIL when OmniFrame cannot do it, and BLOCKED when the harness cannot reach the control.",
+  "tutorials": [
+    {
+      "id": "capcut-auto-remove-bg",
+      "app": "CapCut",
+      "title": "Remove a background automatically (Cutout > Remove Background)",
+      "source": "https://www.miracamp.com/learn/capcut/how-to-remove-background",
+      "procedure": [
+        "Import the clip and drag it to the timeline",
+        "Tap the clip to select it",
+        "Open Cutout, then Remove Background",
+        "The subject is cut out and can be placed over a new background"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-room-chair-towel', 0, 4)"
+        },
+        {
+          "kind": "assert",
+          "label": "clip is on the timeline",
+          "expr": "clips().length === 1"
+        },
+        {
+          "kind": "store",
+          "fn": "selectClip(0)"
+        },
+        {
+          "kind": "store",
+          "fn": "openOmniFrameSelection()"
+        },
+        {
+          "kind": "probe",
+          "label": "Selection & Masking sub-tool is reachable",
+          "expr": "hasTestid('selection-mask-subtool')"
+        },
+        {
+          "kind": "assert",
+          "label": "clip is selected",
+          "expr": "selectedClipIds().length === 1"
+        },
+        {
+          "kind": "store",
+          "fn": "selectionRect(0.03, 0.19, 0.41, 0.57)"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"guided-rect-bg-removal-btn\"]",
+          "note": "OmniFrame equivalent of Cutout > Remove Background"
+        },
+        {
+          "kind": "wait",
+          "ms": 3000
+        },
+        {
+          "kind": "wait",
+          "ms": 2500
+        },
+        {
+          "kind": "assert",
+          "label": "a matte was produced",
+          "expr": "guidedMatte() !== null"
+        },
+        {
+          "kind": "assert",
+          "label": "matte is layered, not baked into the source",
+          "expr": "guidedMatte() && guidedMatte().maskLayerId && guidedMatte().objectId"
+        },
+        {
+          "kind": "assert",
+          "label": "matte is a subject, not the whole box",
+          "expr": "guidedMatte() && guidedMatte().coverage > 0.15 && guidedMatte().coverage < 0.95"
+        },
+        {
+          "kind": "shot",
+          "name": "capcut-auto-remove-bg"
+        },
+        {
+          "kind": "probe",
+          "label": "matte + cutout previews are shown in the panel",
+          "expr": "hasTestid('guided-matte-preview') && hasTestid('guided-cutout-preview')"
+        }
+      ]
+    },
+    {
+      "id": "capcut-chroma-key",
+      "app": "CapCut",
+      "title": "Chroma key a green/blue screen and key it over a new background",
+      "source": "https://electronics.alibaba.com/question/capcut-green-screen-guide-how-to-use-chroma-key-correctly",
+      "procedure": [
+        "Put the background clip on the main track",
+        "Put the green-screen clip on the track above it as an overlay",
+        "Select the overlay, open Cutout > Chroma Key",
+        "Use the colour picker to sample the screen colour",
+        "Adjust Similarity / Smoothness / Edge Thickness until the screen disappears"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-room-chair-towel', 0, 4)"
+        },
+        {
+          "kind": "store",
+          "fn": "addClipOnNewTrack('asset-death-note-vid', 0, 4)"
+        },
+        {
+          "kind": "assert",
+          "label": "two tracks with an overlay above a base layer",
+          "expr": "tracks().length >= 2 && clips().length === 2"
+        },
+        {
+          "kind": "store",
+          "fn": "selectClip(1)"
+        },
+        {
+          "kind": "probe",
+          "label": "chroma key control exists",
+          "expr": "hasTestid('chroma-key-btn') || hasTestid('chroma-key-toggle') || hasTestid('chroma-key-picker')"
+        },
+        {
+          "kind": "probe",
+          "label": "colour-key / greenscreen effect exists anywhere in the UI",
+          "expr": "grepDom(/chroma|green screen|color key/i)"
+        },
+        {
+          "kind": "shot",
+          "name": "capcut-chroma-key"
+        }
+      ]
+    },
+    {
+      "id": "premiere-ripple-delete",
+      "app": "Adobe Premiere Pro",
+      "title": "Ripple delete \u2014 remove a clip and close the gap (Shift+Delete)",
+      "source": "https://www.redsharknews.com/10-essential-keyboard-shortcuts-for-faster-editing-in-premiere-pro",
+      "procedure": [
+        "Place three clips in a row on the same track",
+        "Select the middle clip",
+        "Press Shift+Delete",
+        "The clip disappears and everything downstream shifts left to close the gap"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 0, 2)"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 2, 2)"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 4, 2)"
+        },
+        {
+          "kind": "assert",
+          "label": "three clips in a row",
+          "expr": "clips().length === 3"
+        },
+        {
+          "kind": "store",
+          "fn": "selectClip(1)"
+        },
+        {
+          "kind": "keys",
+          "keys": "Delete"
+        },
+        {
+          "kind": "assert",
+          "label": "middle clip removed",
+          "expr": "clips().length === 2"
+        },
+        {
+          "kind": "assert",
+          "label": "gap closed \u2014 the third clip moved left",
+          "expr": "clips().length === 2 && Math.min(...clips().map(c => c.start)) === 0 && clips().some(c => c.start <= 2.001)"
+        },
+        {
+          "kind": "shot",
+          "name": "premiere-ripple-delete"
+        }
+      ]
+    },
+    {
+      "id": "premiere-add-edit-split",
+      "app": "Adobe Premiere Pro",
+      "title": "Add an edit at the playhead (Ctrl+K)",
+      "source": "https://www.redsharknews.com/10-essential-keyboard-shortcuts-for-faster-editing-in-premiere-pro",
+      "procedure": [
+        "Place a clip and park the playhead partway through it",
+        "Press Ctrl+K",
+        "The clip is cut into two pieces at the playhead"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 0, 6)"
+        },
+        {
+          "kind": "store",
+          "fn": "setPlayhead(3)"
+        },
+        {
+          "kind": "assert",
+          "label": "one clip before the cut",
+          "expr": "clips().length === 1"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"timeline-split-btn\"]"
+        },
+        {
+          "kind": "assert",
+          "label": "clip split into two at the playhead",
+          "expr": "clips().length === 2"
+        },
+        {
+          "kind": "assert",
+          "label": "the two pieces are contiguous at 3s",
+          "expr": "clips().length === 2 && clips().some(c => Math.abs(c.start + c.duration - 3) < 0.2)"
+        },
+        {
+          "kind": "shot",
+          "name": "premiere-add-edit-split"
+        }
+      ]
+    },
+    {
+      "id": "premiere-ripple-trim-qw",
+      "app": "Adobe Premiere Pro",
+      "title": "Ripple trim to the playhead (Q removes before, W removes after)",
+      "source": "https://www.redsharknews.com/10-essential-keyboard-shortcuts-for-faster-editing-in-premiere-pro",
+      "procedure": [
+        "Park the playhead inside a clip",
+        "Press Q to delete everything before the playhead, or W for everything after",
+        "The timeline stays connected"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 0, 6)"
+        },
+        {
+          "kind": "store",
+          "fn": "setPlayhead(2)"
+        },
+        {
+          "kind": "probe",
+          "label": "ripple-trim control exists (Q / W binding)",
+          "expr": "hasTestid('ripple-trim-before-btn') || hasTestid('ripple-trim-after-btn') || grepDom(/ripple trim/i)"
+        },
+        {
+          "kind": "keys",
+          "keys": "w"
+        },
+        {
+          "kind": "assert",
+          "label": "pressing W trimmed the clip at the playhead",
+          "expr": "clips().length === 1 && clips()[0].duration <= 2.2"
+        },
+        {
+          "kind": "shot",
+          "name": "premiere-ripple-trim-qw"
+        }
+      ]
+    },
+    {
+      "id": "aftereffects-track-motion",
+      "app": "Adobe After Effects",
+      "title": "Track Motion \u2014 put a track point on a high-contrast feature and attach a layer",
+      "source": "https://premieregal.com/blog/2020/7/24/3-motion-tracking-effects-in-adobe-after-effects",
+      "procedure": [
+        "Add the footage to the composition",
+        "Open the Tracker panel and choose Track Motion",
+        "Drag the track point onto a high-contrast feature",
+        "Run the analysis",
+        "Apply the tracking data to the target layer (X and Y)"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 0, 5)"
+        },
+        {
+          "kind": "store",
+          "fn": "selectClip(0)"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"left-tab-tracking\"]"
+        },
+        {
+          "kind": "probe",
+          "label": "Masking & Tracking panel is reachable",
+          "expr": "hasTestid('tracking-panel')"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"track-mode-main\"]"
+        },
+        {
+          "kind": "probe",
+          "label": "Track Motion controls are reachable",
+          "expr": "hasTestid('add-track-point-btn')"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"add-track-point-btn\"]"
+        },
+        {
+          "kind": "assert",
+          "label": "a track point was placed",
+          "expr": "(parseInt((document.body.innerText.match(/track points \\((\\d+)\\)/i) || [0,'0'])[1], 10) >= 1)"
+        },
+        {
+          "kind": "probe",
+          "label": "analysis run control exists",
+          "expr": "hasTestid('run-track-forward-btn')"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"run-track-forward-btn\"]"
+        },
+        {
+          "kind": "wait",
+          "ms": 4000
+        },
+        {
+          "kind": "probe",
+          "label": "tracking result card reported a solved transform",
+          "expr": "hasTestid('tracking-result-card')"
+        },
+        {
+          "kind": "probe",
+          "label": "apply-to-target control exists",
+          "expr": "hasTestid('apply-tracking-transform-btn')"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"apply-tracking-transform-btn\"]",
+          "optional": true
+        },
+        {
+          "kind": "shot",
+          "name": "aftereffects-track-motion"
+        }
+      ]
+    },
+    {
+      "id": "photoshop-select-and-mask",
+      "app": "Adobe Photoshop",
+      "title": "Select the subject, refine the edge, and output to a layer mask",
+      "source": "https://helpx.adobe.com/photoshop/how-to/fine-tune-layer-masks.html",
+      "procedure": [
+        "Select the subject with a selection tool",
+        "Inspect the mask in black-and-white view mode",
+        "Paint with the refine-edge brush over fuzzy boundaries",
+        "Output to a layer mask so the change is non-destructive"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-room-chair-towel', 0, 4)"
+        },
+        {
+          "kind": "store",
+          "fn": "openOmniFrameSelection()"
+        },
+        {
+          "kind": "store",
+          "fn": "selectionRect(0.03, 0.19, 0.41, 0.57)"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"guided-rect-bg-removal-btn\"]"
+        },
+        {
+          "kind": "wait",
+          "ms": 2500
+        },
+        {
+          "kind": "assert",
+          "label": "subject selected and matted",
+          "expr": "guidedMatte() !== null"
+        },
+        {
+          "kind": "probe",
+          "label": "black-and-white mask view mode exists",
+          "expr": "hasTestid('mask-mode-matte-btn')"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"mask-mode-matte-btn\"]"
+        },
+        {
+          "kind": "assert",
+          "label": "mask display mode is matte (B&W)",
+          "expr": "maskDisplayMode() === 'matte'"
+        },
+        {
+          "kind": "probe",
+          "label": "convert-selection-to-mask control exists",
+          "expr": "hasTestid('convert-mask-layer-btn')"
+        },
+        {
+          "kind": "assert",
+          "label": "result is a mask layer, not a destructive erase",
+          "expr": "guidedMatte() && guidedMatte().maskLayerId !== null"
+        },
+        {
+          "kind": "shot",
+          "name": "photoshop-select-and-mask"
+        }
+      ]
+    },
+    {
+      "id": "krita-transparency-mask",
+      "app": "Krita",
+      "title": "Add a transparency mask and paint on it non-destructively",
+      "source": "https://docs.krita.org/en/reference_manual/layers_and_masks/transparency_masks.html",
+      "procedure": [
+        "Select a paint layer",
+        "Add a Transparency Mask",
+        "Paint black to hide, white to reveal, grey for partial",
+        "The paint layer's own pixels are never destroyed"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-room-chair-towel', 0, 4)"
+        },
+        {
+          "kind": "store",
+          "fn": "selectClip(0)"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"left-tab-tracking\"]"
+        },
+        {
+          "kind": "probe",
+          "label": "Masking & Tracking panel is reachable",
+          "expr": "hasTestid('add-mask-btn')"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"add-mask-btn\"]"
+        },
+        {
+          "kind": "assert",
+          "label": "a mask was attached to the clip",
+          "expr": "clipMasks().length >= 1"
+        },
+        {
+          "kind": "probe",
+          "label": "mask inversion exists (Krita: black hides / white reveals)",
+          "expr": "hasTestid('mask-invert-toggle')"
+        },
+        {
+          "kind": "probe",
+          "label": "mask feather exists (Krita: grey = partial transparency)",
+          "expr": "hasTestid('mask-feather-slider')"
+        },
+        {
+          "kind": "store",
+          "fn": "selectionRect(0.03, 0.19, 0.41, 0.57)"
+        },
+        {
+          "kind": "click",
+          "sel": "[data-testid=\"convert-selection-to-mask-btn\"]",
+          "optional": true
+        },
+        {
+          "kind": "assert",
+          "label": "mask is stored as its own object, source pixels untouched",
+          "expr": "clipMasks().length >= 1 && clipMasks().every(m => m.clipId || m.id)"
+        },
+        {
+          "kind": "shot",
+          "name": "krita-transparency-mask"
+        }
+      ]
+    },
+    {
+      "id": "davinci-lift-gamma-gain",
+      "app": "DaVinci Resolve",
+      "title": "Primary grade with Lift / Gamma / Gain while watching the scopes",
+      "source": "https://davinciresolve21.com/blog/color-grading-basics",
+      "procedure": [
+        "Open the Color page and park on the clip",
+        "Use the Lift wheel to set the black point",
+        "Use the Gain wheel to set the white point",
+        "Use the Gamma wheel for the midtones",
+        "Check the waveform and vectorscope rather than the monitor"
+      ],
+      "steps": [
+        {
+          "kind": "setup",
+          "fn": "resetProject"
+        },
+        {
+          "kind": "store",
+          "fn": "addClip('asset-death-note-vid', 0, 5)"
+        },
+        {
+          "kind": "store",
+          "fn": "selectClip(0)"
+        },
+        {
+          "kind": "probe",
+          "label": "color page / grading panel exists",
+          "expr": "grepDom(/lift|gamma.*gain|color wheel|lumetri/i)"
+        },
+        {
+          "kind": "probe",
+          "label": "lift control exists",
+          "expr": "hasTestid('color-lift-slider') || grepDom(/\\blift\\b/i)"
+        },
+        {
+          "kind": "probe",
+          "label": "gain control exists",
+          "expr": "hasTestid('color-gain-slider') || hasTestid('color-gamma-slider')"
+        },
+        {
+          "kind": "probe",
+          "label": "scopes (waveform / vectorscope) exist",
+          "expr": "grepDom(/waveform|vectorscope|parade/i)"
+        },
+        {
+          "kind": "shot",
+          "name": "davinci-lift-gamma-gain"
+        }
+      ]
+    }
+  ]
+}

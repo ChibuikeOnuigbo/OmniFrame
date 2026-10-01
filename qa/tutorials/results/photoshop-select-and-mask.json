@@ -1,0 +1,98 @@
+{
+  "id": "photoshop-select-and-mask",
+  "app": "Adobe Photoshop",
+  "title": "Select the subject, refine the edge, and output to a layer mask",
+  "source": "https://helpx.adobe.com/photoshop/how-to/fine-tune-layer-masks.html",
+  "procedure": [
+    "Select the subject with a selection tool",
+    "Inspect the mask in black-and-white view mode",
+    "Paint with the refine-edge brush over fuzzy boundaries",
+    "Output to a layer mask so the change is non-destructive"
+  ],
+  "verdict": "REPLICATED",
+  "counts": {
+    "PASS": 13,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-room-chair-towel', 0, 4)",
+      "status": "PASS",
+      "detail": "addClip('asset-room-chair-towel', 0, 4)"
+    },
+    {
+      "kind": "store",
+      "label": "openOmniFrameSelection()",
+      "status": "PASS",
+      "detail": "openOmniFrameSelection()"
+    },
+    {
+      "kind": "store",
+      "label": "selectionRect(0.03, 0.19, 0.41, 0.57)",
+      "status": "PASS",
+      "detail": "selectionRect(0.03, 0.19, 0.41, 0.57)"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"guided-rect-bg-removal-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"guided-rect-bg-removal-btn\"]"
+    },
+    {
+      "kind": "wait",
+      "label": "",
+      "status": "PASS",
+      "detail": "2500ms"
+    },
+    {
+      "kind": "assert",
+      "label": "subject selected and matted",
+      "status": "PASS",
+      "detail": "guidedMatte() !== null"
+    },
+    {
+      "kind": "probe",
+      "label": "black-and-white mask view mode exists",
+      "status": "PASS",
+      "detail": "hasTestid('mask-mode-matte-btn')"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"mask-mode-matte-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"mask-mode-matte-btn\"]"
+    },
+    {
+      "kind": "assert",
+      "label": "mask display mode is matte (B&W)",
+      "status": "PASS",
+      "detail": "maskDisplayMode() === 'matte'"
+    },
+    {
+      "kind": "probe",
+      "label": "convert-selection-to-mask control exists",
+      "status": "PASS",
+      "detail": "hasTestid('convert-mask-layer-btn')"
+    },
+    {
+      "kind": "assert",
+      "label": "result is a mask layer, not a destructive erase",
+      "status": "PASS",
+      "detail": "guidedMatte() && guidedMatte().maskLayerId !== null"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/photoshop-select-and-mask-1.png"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "generatedAt": "2026-10-01T23:42:13.398Z",
+  "passed": 25,
+  "failed": 0,
+  "pageErrors": [
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')"
+  ],
+  "checks": [
+    {
+      "name": "R1 rubber-band rectangle is painted during the right-drag",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R1 rectangle has measurable geometry",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R1 rectangle fill is translucent",
+      "ok": true,
+      "detail": "alpha 0.45"
+    },
+    {
+      "name": "R1 rectangle fill is dark",
+      "ok": true,
+      "detail": "luminance 0.051"
+    },
+    {
+      "name": "R1 rectangle spans the swept area",
+      "ok": true,
+      "detail": "229x128"
+    },
+    {
+      "name": "R2 every clip the band touches is highlighted",
+      "ok": true,
+      "detail": "4 selected"
+    },
+    {
+      "name": "R3 clips the band misses stay unselected",
+      "ok": true,
+      "detail": "selected 4, expected 4"
+    },
+    {
+      "name": "R4 no context menu after completing a lasso",
+      "ok": true,
+      "detail": "0 menus"
+    },
+    {
+      "name": "R4 context menu is suppressed inside the lasso-release window",
+      "ok": true,
+      "detail": "0 menus"
+    },
+    {
+      "name": "R4 selection survives pointer release",
+      "ok": true,
+      "detail": "4 clips"
+    },
+    {
+      "name": "R4 rectangle is removed after release",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R5 no rubber band is drawn for a press with no movement",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R5 right-clicking a group member keeps the group selected",
+      "ok": true,
+      "detail": "4 clips held"
+    },
+    {
+      "name": "R5 right-clicking an outsider selects just that clip",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "name": "R7 gripped group re-established",
+      "ok": true,
+      "detail": "4 clips"
+    },
+    {
+      "name": "R7 every member shifted by the same delta",
+      "ok": true,
+      "detail": "deltas [3,3,3,3]"
+    },
+    {
+      "name": "R7 group actually moved",
+      "ok": true,
+      "detail": "+3s"
+    },
+    {
+      "name": "R7 clips outside the group did not move",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "R8 gripped group re-established",
+      "ok": true,
+      "detail": "4 clips"
+    },
+    {
+      "name": "R8 every member shortened by the same delta",
+      "ok": true,
+      "detail": "deltas [-1.95,-1.95,-1.95,-1.95]"
+    },
+    {
+      "name": "R8 group actually got shorter",
+      "ok": true,
+      "detail": "-1.95s"
+    },
+    {
+      "name": "R6 gripped group re-established",
+      "ok": true,
+      "detail": "4 clips"
+    },
+    {
+      "name": "R6 every gripped clip was removed",
+      "ok": true,
+      "detail": "2 clips left"
+    },
+    {
+      "name": "R6 clips outside the band survived",
+      "ok": true,
+      "detail": "2 left: [\"C-back\",\"F-back\"]"
+    },
+    {
+      "name": "R6 selection cleared after delete",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

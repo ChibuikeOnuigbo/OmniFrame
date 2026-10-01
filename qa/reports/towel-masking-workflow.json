@@ -1,0 +1,174 @@
+{
+  "generatedAt": "2026-10-01T23:42:35.891Z",
+  "canvas": {
+    "w": 771,
+    "h": 434
+  },
+  "rectBounds": {
+    "x": 0.03000000633309014,
+    "y": 0.1899999873338197,
+    "width": 0.4099999810007296,
+    "height": 0.5700000323691273
+  },
+  "workflows": [
+    "W1-lasso",
+    "W2-brush",
+    "W3-brush-ring-fill",
+    "W4-brush-invert",
+    "W5-guided-rect-bg-removal"
+  ],
+  "passed": 28,
+  "failed": 0,
+  "pageErrors": [
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')"
+  ],
+  "checks": [
+    {
+      "name": "W1 freeform sets the lasso selection tool",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W1 lasso produced a lasso selection",
+      "ok": true,
+      "detail": "\"lasso\""
+    },
+    {
+      "name": "W1 lasso captured a traced point path",
+      "ok": true,
+      "detail": "21 points"
+    },
+    {
+      "name": "W1 lasso bounds wrap the towel",
+      "ok": true,
+      "detail": "w=0.360 h=0.520"
+    },
+    {
+      "name": "W1 fill applied to the lassoed area",
+      "ok": true,
+      "detail": "#2563eb"
+    },
+    {
+      "name": "W2 painting sets the paint-selection brush",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W2 brush produced a brush selection",
+      "ok": true,
+      "detail": "\"brush\""
+    },
+    {
+      "name": "W2 brush accumulated stroke points",
+      "ok": true,
+      "detail": "47 points"
+    },
+    {
+      "name": "W2 fill applied to the brush-painted area",
+      "ok": true,
+      "detail": "#dc2626"
+    },
+    {
+      "name": "W3 ring drawn with the brush",
+      "ok": true,
+      "detail": "\"brush\""
+    },
+    {
+      "name": "W3 ring bounds enclose the towel (outline, not a solid fill)",
+      "ok": true,
+      "detail": "w=0.460 h=0.586"
+    },
+    {
+      "name": "W3 fill closed the ring and coloured the inside",
+      "ok": true,
+      "detail": "#dc2626"
+    },
+    {
+      "name": "W4 background band painted with the brush",
+      "ok": true,
+      "detail": "\"brush\""
+    },
+    {
+      "name": "W4 invert flipped the selection boundary",
+      "ok": true,
+      "detail": "inverted false → true"
+    },
+    {
+      "name": "W4 fill applied after inversion",
+      "ok": true,
+      "detail": "#d97706"
+    },
+    {
+      "name": "W5 rectangle drawn with the real cursor",
+      "ok": true,
+      "detail": "\"rectangle\""
+    },
+    {
+      "name": "W5 guided removal button enabled once a box exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 guided rect removal produced a matte record",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 coverage is plausible (not empty, not whole box)",
+      "ok": true,
+      "detail": "0.489"
+    },
+    {
+      "name": "W5 confidence above noise floor",
+      "ok": true,
+      "detail": "0.779"
+    },
+    {
+      "name": "W5 both seed populations sampled",
+      "ok": true,
+      "detail": "{\"foreground\":6254,\"background\":8883}"
+    },
+    {
+      "name": "W5 matte PNG is non-trivial",
+      "ok": true,
+      "detail": "90038 b64 chars"
+    },
+    {
+      "name": "W5 cutout PNG is non-trivial",
+      "ok": true,
+      "detail": "256702 b64 chars"
+    },
+    {
+      "name": "W5 OmniFrame object created from the matte",
+      "ok": true,
+      "detail": "obj_guided_1790898152909"
+    },
+    {
+      "name": "W5 non-destructive mask layer attached",
+      "ok": true,
+      "detail": "default-paint-layer"
+    },
+    {
+      "name": "W5 status readout rendered in the panel",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 matte preview thumbnail rendered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 cutout preview thumbnail rendered",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

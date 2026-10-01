@@ -52,26 +52,12 @@ export function TrackingPanel() {
   const [mainType, setMainType] = useState<MainTrackingType>('point')
 
   // Masking state connected directly to tracking
-  const [masks, setMasks] = useState<ClipMask[]>([
-    {
-      id: 'mask-1',
-      clipId: activeClip?.id || 'clip-1',
-      name: 'Mask 1 (Subject)',
-      shapeType: 'rectangle',
-      points: [
-        { x: 0.25, y: 0.25 },
-        { x: 0.75, y: 0.25 },
-        { x: 0.75, y: 0.75 },
-        { x: 0.25, y: 0.75 },
-      ],
-      inverted: false,
-      feather: 4,
-      expansion: 0,
-      opacity: 1,
-      applyToAllFrames: true,
-    },
-  ])
-  const [activeMaskId, setActiveMaskId] = useState<string>('mask-1')
+  // Masks are store state so they persist across tab switches, take part in
+  // undo/redo, and are visible to the renderer and to tests.
+  const masks = useEditor((s) => s.clipMasks)
+  const setMasks = useEditor((s) => s.setClipMasks)
+  const activeMaskId = useEditor((s) => s.activeMaskId)
+  const setActiveMaskId = useEditor((s) => s.setActiveMask)
 
   // Main Tracking state
   const [trackPoints, setTrackPoints] = useState<TrackPoint[]>([

@@ -1,0 +1,69 @@
+{
+  "id": "davinci-lift-gamma-gain",
+  "app": "DaVinci Resolve",
+  "title": "Primary grade with Lift / Gamma / Gain while watching the scopes",
+  "source": "https://davinciresolve21.com/blog/color-grading-basics",
+  "procedure": [
+    "Open the Color page and park on the clip",
+    "Use the Lift wheel to set the black point",
+    "Use the Gain wheel to set the white point",
+    "Use the Gamma wheel for the midtones",
+    "Check the waveform and vectorscope rather than the monitor"
+  ],
+  "verdict": "PARTIAL",
+  "counts": {
+    "PASS": 5,
+    "FAIL": 3,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 0, 5)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 0, 5)"
+    },
+    {
+      "kind": "store",
+      "label": "selectClip(0)",
+      "status": "PASS",
+      "detail": "selectClip(0)"
+    },
+    {
+      "kind": "probe",
+      "label": "color page / grading panel exists",
+      "status": "PASS",
+      "detail": "grepDom(/lift|gamma.*gain|color wheel|lumetri/i)"
+    },
+    {
+      "kind": "probe",
+      "label": "lift control exists",
+      "status": "FAIL",
+      "detail": "hasTestid('color-lift-slider') || grepDom(/\\blift\\b/i)"
+    },
+    {
+      "kind": "probe",
+      "label": "gain control exists",
+      "status": "FAIL",
+      "detail": "hasTestid('color-gain-slider') || hasTestid('color-gamma-slider')"
+    },
+    {
+      "kind": "probe",
+      "label": "scopes (waveform / vectorscope) exist",
+      "status": "FAIL",
+      "detail": "grepDom(/waveform|vectorscope|parade/i)"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/davinci-lift-gamma-gain-1.png"
+    }
+  ]
+}

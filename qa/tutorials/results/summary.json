@@ -1,0 +1,125 @@
+{
+  "generatedAt": "2026-10-01T23:40:50.657Z",
+  "tutorials": 9,
+  "replicated": 6,
+  "partial": 3,
+  "notSupported": 0,
+  "stepTotals": {
+    "PASS": 92,
+    "FAIL": 7,
+    "BLOCKED": 0
+  },
+  "pageErrors": [
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')",
+    "TypeError: Cannot read properties of undefined (reading 'tracks')"
+  ],
+  "byApp": [
+    {
+      "id": "capcut-auto-remove-bg",
+      "app": "CapCut",
+      "title": "Remove a background automatically (Cutout > Remove Background)",
+      "verdict": "REPLICATED",
+      "counts": {
+        "PASS": 16,
+        "FAIL": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "capcut-chroma-key",
+      "app": "CapCut",
+      "title": "Chroma key a green/blue screen and key it over a new background",
+      "verdict": "PARTIAL",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 2,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "premiere-ripple-delete",
+      "app": "Adobe Premiere Pro",
+      "title": "Ripple delete — remove a clip and close the gap (Shift+Delete)",
+      "verdict": "REPLICATED",
+      "counts": {
+        "PASS": 10,
+        "FAIL": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "premiere-add-edit-split",
+      "app": "Adobe Premiere Pro",
+      "title": "Add an edit at the playhead (Ctrl+K)",
+      "verdict": "REPLICATED",
+      "counts": {
+        "PASS": 8,
+        "FAIL": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "premiere-ripple-trim-qw",
+      "app": "Adobe Premiere Pro",
+      "title": "Ripple trim to the playhead (Q removes before, W removes after)",
+      "verdict": "PARTIAL",
+      "counts": {
+        "PASS": 5,
+        "FAIL": 2,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "aftereffects-track-motion",
+      "app": "Adobe After Effects",
+      "title": "Track Motion — put a track point on a high-contrast feature and attach a layer",
+      "verdict": "REPLICATED",
+      "counts": {
+        "PASS": 16,
+        "FAIL": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "photoshop-select-and-mask",
+      "app": "Adobe Photoshop",
+      "title": "Select the subject, refine the edge, and output to a layer mask",
+      "verdict": "REPLICATED",
+      "counts": {
+        "PASS": 13,
+        "FAIL": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "krita-transparency-mask",
+      "app": "Krita",
+      "title": "Add a transparency mask and paint on it non-destructively",
+      "verdict": "REPLICATED",
+      "counts": {
+        "PASS": 13,
+        "FAIL": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "id": "davinci-lift-gamma-gain",
+      "app": "DaVinci Resolve",
+      "title": "Primary grade with Lift / Gamma / Gain while watching the scopes",
+      "verdict": "PARTIAL",
+      "counts": {
+        "PASS": 5,
+        "FAIL": 3,
+        "BLOCKED": 0
+      }
+    }
+  ]
+}

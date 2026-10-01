@@ -19,6 +19,8 @@ import {
   Check,
   X,
   Palette,
+  ScanFace,
+  Crosshair,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { SelectionModeType } from '../types'
@@ -39,6 +41,11 @@ interface SelectionMaskSubToolProps {
 
 export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: SelectionMaskSubToolProps) {
   const activeSelection = useEditor((s) => s.activeSelection)
+  const guidedMatte = useEditor((s) => s.guidedMatte)
+  const guidedMatteBusy = useEditor((s) => s.guidedMatteBusy)
+  const runGuidedRectBackgroundRemoval = useEditor((s) => s.runGuidedRectBackgroundRemoval)
+  const clearGuidedMatte = useEditor((s) => s.clearGuidedMatte)
+  const [guideHint, setGuideHint] = useState<{ x: number; y: number } | null>(null)
   const selectionMode = useEditor((s) => s.selectionMode)
   const setSelectionMode = useEditor((s) => s.setSelectionMode)
   const invertSelection = useEditor((s) => s.invertSelection)
@@ -378,6 +385,110 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             <span>Create Mask Layer</span>
           </button>
         </div>
+      </div>
+
+      {/* 5b. Guided Rect Background Removal — draw a box, click remove, get a mask layer */}
+      <div className="space-y-1.5 pt-1 border-t border-ink-800/80">
+        <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
+          <div className="flex items-center gap-1">
+            <ScanFace size={11} className="text-cyan-400" />
+            <span>Guided Rect BG Removal</span>
+          </div>
+          <span className="text-[9px] text-ink-500 font-mono">Coordinate-Seeded</span>
+        </div>
+
+        <p className="text-[9px] text-ink-500 leading-snug">
+          Draw a rectangle around the subject, then run. The box seeds the matte: its
+          eroded core is treated as subject, the surrounding ring as background.
+        </p>
+
+        <div className="grid grid-cols-2 gap-1">
+          <button
+            type="button"
+            data-testid="guided-rect-bg-removal-btn"
+            disabled={!activeSelection?.bounds || guidedMatteBusy}
+            onClick={async () => {
+              if (!activeSelection?.bounds) return
+              await runGuidedRectBackgroundRemoval(activeSelection.bounds, guideHint || undefined)
+            }}
+            title="Run coordinate-seeded background removal from the current rectangle"
+            className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-cyan-500/20 border border-cyan-500/50 text-cyan-200 hover:bg-cyan-500/30 text-[10px] font-medium transition-colors disabled:opacity-40 disabled:hover:bg-cyan-500/20 truncate"
+          >
+            <ScanFace size={11} className="shrink-0" />
+            <span className="truncate">{guidedMatteBusy ? 'Analyzing…' : 'Remove BG from Box'}</span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="guided-hint-center-btn"
+            disabled={!activeSelection?.bounds}
+            onClick={() => {
+              const b = activeSelection?.bounds
+              if (!b) return
+              setGuideHint({ x: b.x + b.width / 2, y: b.y + b.height / 2 })
+            }}
+            title="Mark the centre of the box as a definite subject hint"
+            className={`flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg border text-[10px] font-medium transition-colors truncate ${
+              guideHint
+                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-200'
+                : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white'
+            }`}
+          >
+            <Crosshair size={11} className="shrink-0" />
+            <span className="truncate">{guideHint ? 'Hint Set' : 'Mark Subject'}</span>
+          </button>
+        </div>
+
+        {guidedMatte && (
+          <div className="space-y-1 rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-1.5">
+            <div
+              data-testid="guided-matte-status"
+              className="text-[9px] font-mono text-cyan-200 leading-relaxed"
+              title={`coverage ${(guidedMatte.coverage * 100).toFixed(1)}% · confidence ${(guidedMatte.confidence * 100).toFixed(1)}%`}
+            >
+              cover {(guidedMatte.coverage * 100).toFixed(1)}% · conf{' '}
+              {(guidedMatte.confidence * 100).toFixed(1)}% · {guidedMatte.iterations} iters ·{' '}
+              {guidedMatte.timings.total.toFixed(0)}ms
+            </div>
+            <div className="grid grid-cols-2 gap-1">
+              <div className="relative rounded overflow-hidden border border-ink-800 bg-[repeating-conic-gradient(#222_0%_25%,#333_0%_50%)] bg-[length:8px_8px]">
+                <img
+                  data-testid="guided-matte-preview"
+                  src={guidedMatte.maskDataUrl}
+                  alt="Extracted matte"
+                  title="Alpha matte (white = subject)"
+                  className="w-full h-12 object-contain"
+                />
+                <span className="absolute bottom-0 left-0 right-0 text-[8px] text-center bg-black/60 text-ink-300">
+                  Matte
+                </span>
+              </div>
+              <div className="relative rounded overflow-hidden border border-ink-800 bg-[repeating-conic-gradient(#222_0%_25%,#333_0%_50%)] bg-[length:8px_8px]">
+                <img
+                  data-testid="guided-cutout-preview"
+                  src={guidedMatte.cutoutDataUrl}
+                  alt="Layered cutout"
+                  title="Cutout layered non-destructively"
+                  className="w-full h-12 object-contain"
+                />
+                <span className="absolute bottom-0 left-0 right-0 text-[8px] text-center bg-black/60 text-ink-300">
+                  Cutout
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              data-testid="clear-guided-matte-btn"
+              onClick={() => {
+                clearGuidedMatte()
+                setGuideHint(null)
+              }}
+              className="w-full py-1 rounded bg-ink-900 border border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white text-[10px] transition-colors"
+            >
+              Clear Guided Matte
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 6. Convert Selection to OmniFrame Object */}

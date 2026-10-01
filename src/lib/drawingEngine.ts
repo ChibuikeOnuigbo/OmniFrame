@@ -458,6 +458,87 @@ export function renderStroke(
     )
     ctx.closePath()
     ctx.fill()
+  } else if (stroke.tool === 'polygon') {
+    // Krita Polygon Tool: regular N-gon inscribed in the drag bounding box.
+    const start = pts[0]
+    const end = pts[pts.length - 1]
+    const cx = ((start.x + end.x) / 2) * width
+    const cy = ((start.y + end.y) / 2) * height
+    const rx = (Math.abs(end.x - start.x) / 2) * width
+    const ry = (Math.abs(end.y - start.y) / 2) * height
+    const sides = Math.max(3, Math.min(12, stroke.polygonSides ?? 5))
+    ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    ctx.beginPath()
+    for (let i = 0; i < sides; i++) {
+      const a = -Math.PI / 2 + (i / sides) * Math.PI * 2
+      const px = cx + Math.cos(a) * rx
+      const py = cy + Math.sin(a) * ry
+      if (i === 0) ctx.moveTo(px, py)
+      else ctx.lineTo(px, py)
+    }
+    ctx.closePath()
+    if (stroke.filled) {
+      ctx.fillStyle = stroke.color
+      ctx.globalAlpha = stroke.opacity
+      ctx.fill()
+      ctx.globalAlpha = 1
+    }
+    ctx.stroke()
+  } else if (stroke.tool === 'polyline') {
+    // Krita Polyline Tool: straight segments through every recorded vertex.
+    ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    ctx.lineJoin = 'round'
+    ctx.beginPath()
+    ctx.moveTo(pts[0].x * width, pts[0].y * height)
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x * width, pts[i].y * height)
+    ctx.stroke()
+  } else if (stroke.tool === 'bezier') {
+    // Krita Bezier Curve / Freehand Path Tool: Catmull-Rom spline converted to
+    // cubic beziers so the curve passes through every sampled point.
+    ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    ctx.lineJoin = 'round'
+    ctx.lineCap = 'round'
+    if (pts.length < 3) {
+      ctx.beginPath()
+      ctx.moveTo(pts[0].x * width, pts[0].y * height)
+      ctx.lineTo(pts[pts.length - 1].x * width, pts[pts.length - 1].y * height)
+      ctx.stroke()
+    } else {
+      const cl = (i: number) => Math.max(0, Math.min(pts.length - 1, i))
+      const X = (i: number) => pts[cl(i)].x * width
+      const Y = (i: number) => pts[cl(i)].y * height
+      ctx.beginPath()
+      ctx.moveTo(X(0), Y(0))
+      for (let i = 0; i < pts.length - 1; i++) {
+        const x0 = X(i - 1), y0 = Y(i - 1)
+        const x1 = X(i), y1 = Y(i)
+        const x2 = X(i + 1), y2 = Y(i + 1)
+        const x3 = X(i + 2), y3 = Y(i + 2)
+        const t = 6
+        ctx.bezierCurveTo(
+          x1 + (x2 - x0) / t, y1 + (y2 - y0) / t,
+          x2 - (x3 - x1) / t, y2 - (y3 - y1) / t,
+          x2, y2,
+        )
+      }
+      ctx.stroke()
+    }
+  } else if (stroke.tool === 'gradient') {
+    // Krita Gradient Tool: linear ramp between the stroke colour and the
+    // secondary colour across the drag vector.
+    const gStart = pts[0]
+    const gEnd = pts[pts.length - 1]
+    const grad = ctx.createLinearGradient(
+      gStart.x * width, gStart.y * height,
+      gEnd.x * width, gEnd.y * height,
+    )
+    grad.addColorStop(0, stroke.color)
+    grad.addColorStop(1, stroke.gradientColor || 'rgba(0,0,0,0)')
+    ctx.save()
+    ctx.globalAlpha = stroke.opacity
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, width, height)
+    ctx.restore()
   } else if (stroke.tool === 'clone') {
     if (stroke.cloneSource?.sampleDataUrl) {
       let img = imageCache.get(stroke.cloneSource.sampleDataUrl)
@@ -679,10 +760,16 @@ export function renderAllPaintLayers(
     const layerStrokes = strokes.filter((s) => (s.layerId || 'default-paint-layer') === layer.id)
     if (layerStrokes.length === 0) continue
 
-    const baseStrokes = layerStrokes.filter((s) => !s.maskId)
+    // A stroke belongs to the mask pass only when its mask id is the mask that
+    // is actually mounted on this layer. Any other maskId -- a clip-mask id, or
+    // one left behind by a mask that has since been removed -- must fall back to
+    // the layer base, otherwise the stroke is excluded from both passes and is
+    // rendered nowhere: it exists in the store but is invisible on canvas.
+    const mountedMaskId = layer.transparencyMask?.id
     const maskStrokes = layerStrokes.filter(
-      (s) => s.maskId && layer.transparencyMask && s.maskId === layer.transparencyMask.id,
+      (s) => s.maskId && mountedMaskId && s.maskId === mountedMaskId,
     )
+    const baseStrokes = layerStrokes.filter((s) => !maskStrokes.includes(s))
 
     // Krita-Style Transparency Mask: Non-destructive luminance-to-alpha masking
     if (

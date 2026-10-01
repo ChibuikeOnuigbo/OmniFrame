@@ -544,8 +544,21 @@ function ClipView({
   const trimRef = useRef<{ mode: 'left' | 'right'; startX: number; origStart: number; origDur: number } | null>(null)
 
   const onDown = (mode: 'move' | 'left' | 'right') => (e: React.PointerEvent) => {
+    const store = useEditor.getState()
+    const inGroup = store.selectedClipIds.length > 1 && store.selectedClipIds.includes(clip.id)
+
+    // Right button belongs to the timeline rubber-band lasso: keep a group
+    // selection intact, and let the event bubble so the marquee can start.
+    if (e.button === 2) {
+      if (!inGroup) selectClip(clip.id)
+      return
+    }
+    if (e.button !== 0) return
+
     e.stopPropagation()
-    selectClip(clip.id)
+    // Grabbing a member of a gripped group must not collapse the selection to
+    // that one clip, otherwise the whole point of the lasso is lost.
+    if (!inGroup) selectClip(clip.id)
     if (tool === 'blade' && mode === 'move') {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
       const time = clip.start + (e.clientX - rect.left) / px
@@ -566,6 +579,16 @@ function ClipView({
   const onTrimMove = (e: React.PointerEvent) => {
     if (!trimRef.current) return
     const d = (e.clientX - trimRef.current.startX) / px
+    // A gripped multi-selection shortens as one unit.
+    const trimStore = useEditor.getState()
+    const trimGroup =
+      trimStore.selectedClipIds.length > 1 && trimStore.selectedClipIds.includes(clip.id)
+        ? trimStore.selectedClipIds
+        : null
+    if (trimGroup) {
+      trimStore.trimSelectedClips(trimRef.current.mode, d)
+      return
+    }
     if (trimRef.current.mode === 'left') {
       trimClip(clip.id, 'left', snapTime(trimRef.current.origStart + d))
     } else {
@@ -805,6 +828,7 @@ export function Timeline() {
   const setZoom = useEditor((s) => s.setZoom)
   const zoomBy = useEditor((s) => s.zoomBy)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const selectedClipIds = useEditor((s) => s.selectedClipIds)
   const selectClip = useEditor((s) => s.selectClip)
   const removeClip = useEditor((s) => s.removeClip)
   const insertClipCopy = useEditor((s) => s.insertClipCopy)
@@ -834,6 +858,113 @@ export function Timeline() {
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const lanesRef = useRef<HTMLDivElement>(null)
+
+  // ---------------------------------------------------------------------------
+  // Windows-style rubber-band (right-drag) multi-selection.
+  // Hold the right button and sweep a rectangle across the lanes: everything the
+  // rectangle touches is highlighted, exactly like lassoing icons on a desktop.
+  // The resulting selection then behaves as one gripped group -- it can be
+  // deleted, dragged, or shortened as a unit.
+  // ---------------------------------------------------------------------------
+  const [marquee, setMarquee] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null)
+  const marqueeBoxRef = useRef<{ x0: number; y0: number; x1: number; y1: number } | null>(null)
+  const marqueeOriginRef = useRef<{ x: number; y: number } | null>(null)
+  const marqueeMovedRef = useRef(false)
+  const marqueeSuppressCtxRef = useRef(false)
+  const [marqueeCount, setMarqueeCount] = useState(0)
+
+  /** Windows rule: a clip counts as selected if the band overlaps it at all. */
+  const marqueeHitTest = (box: { x0: number; y0: number; x1: number; y1: number }) => {
+    const lanes = lanesRef.current
+    if (!lanes) return []
+    const base = lanes.getBoundingClientRect()
+    const left = Math.min(box.x0, box.x1) + base.left
+    const right = Math.max(box.x0, box.x1) + base.left
+    const top = Math.min(box.y0, box.y1) + base.top
+    const bottom = Math.max(box.y0, box.y1) + base.top
+    const hits: string[] = []
+    lanes.querySelectorAll<HTMLElement>('[data-clip-id]').forEach((node) => {
+      const r = node.getBoundingClientRect()
+      if (r.right >= left && r.left <= right && r.bottom >= top && r.top <= bottom) {
+        const id = node.getAttribute('data-clip-id')
+        if (id) hits.push(id)
+      }
+    })
+    return hits
+  }
+
+  const beginMarquee = (e: React.PointerEvent) => {
+    const lanes = lanesRef.current
+    if (!lanes) return
+    marqueeSuppressCtxRef.current = false
+    const rect = lanes.getBoundingClientRect()
+    const originX = e.clientX - rect.left
+    const originY = e.clientY - rect.top
+    marqueeOriginRef.current = { x: e.clientX, y: e.clientY }
+    marqueeMovedRef.current = false
+    const box = { x0: originX, y0: originY, x1: originX, y1: originY }
+    marqueeBoxRef.current = box
+    setMarquee(box)
+    setMarqueeCount(0)
+
+    const onMove = (ev: PointerEvent) => {
+      if (!marqueeBoxRef.current || !marqueeOriginRef.current) return
+      if (!marqueeMovedRef.current) {
+        const dist = Math.hypot(ev.clientX - marqueeOriginRef.current.x, ev.clientY - marqueeOriginRef.current.y)
+        if (dist < 4) return // below threshold this is a click, not a lasso
+        marqueeMovedRef.current = true
+      }
+      const lanesEl = lanesRef.current
+      if (!lanesEl) return
+      const r = lanesEl.getBoundingClientRect()
+      const next = { x0: originX, y0: originY, x1: ev.clientX - r.left, y1: ev.clientY - r.top }
+      marqueeBoxRef.current = next
+      setMarquee(next)
+      const hits = marqueeHitTest(next)
+      setMarqueeCount(hits.length)
+      useEditor.getState().selectClips(hits)
+    }
+
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      const box = marqueeBoxRef.current
+      if (marqueeMovedRef.current && box) {
+        const hits = marqueeHitTest(box)
+        useEditor.getState().selectClips(hits)
+        setMarqueeCount(hits.length)
+        // The browser raises `contextmenu` right after pointerup; swallow it so
+        // completing a lasso does not pop the menu open.
+        marqueeSuppressCtxRef.current = true
+        setTimeout(() => {
+          marqueeSuppressCtxRef.current = false
+        }, 350)
+      }
+      marqueeBoxRef.current = null
+      marqueeOriginRef.current = null
+      setMarquee(null)
+    }
+
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+  }
+
+  // Delete / Backspace removes the whole gripped selection, not just the anchor.
+  useEffect(() => {
+    const onDeleteKey = (ev: KeyboardEvent) => {
+      const target = ev.target as HTMLElement | null
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+      if (ev.key !== 'Delete' && ev.key !== 'Backspace') return
+      const st = useEditor.getState()
+      const ids = st.selectedClipIds || []
+      if (ids.length <= 1) return // single-clip delete is handled by Studio
+      ev.preventDefault()
+      ids.forEach((id) => st.removeClip(id))
+      st.selectClips([])
+    }
+    window.addEventListener('keydown', onDeleteKey)
+    return () => window.removeEventListener('keydown', onDeleteKey)
+  }, [])
   const [scrollLeft, setScrollLeft] = useState(0)
   const [viewW, setViewW] = useState(900)
   const seeking = useRef(false)
@@ -1063,6 +1194,14 @@ export function Timeline() {
 
       const { mode, trackId, referenceTrackId } = final.target
       const clipType: 'audio' | 'video' = final.kind === 'audio' ? 'audio' : 'video'
+
+      // Gripped group: shift every member by the same delta. Each clip stays on
+      // its own track so the arrangement survives the move.
+      const dragGroup = useEditor.getState().selectedClipIds
+      if (dragGroup.length > 1 && dragGroup.includes(final.clipId)) {
+        useEditor.getState().moveSelectedClips(final.curTime - final.origStart)
+        return
+      }
 
       if (mode === 'dock' && trackId) {
         moveClip(final.clipId, final.curTime, trackId)
@@ -1573,6 +1712,15 @@ export function Timeline() {
               data-drop-target="true"
               className="relative"
               style={{ height: totalHeight }}
+              onPointerDown={(e) => {
+                if (e.button === 2) beginMarquee(e)
+              }}
+              onContextMenuCapture={(e) => {
+                if (marqueeSuppressCtxRef.current) {
+                  e.preventDefault()
+                  e.stopPropagation()
+                }
+              }}
               onDragOver={(e) => {
                 if (e.dataTransfer.types.includes('application/x-omniframe-asset')) {
                   e.preventDefault()
@@ -1643,7 +1791,7 @@ export function Timeline() {
                         asset={assets.find((asset) => asset.id === c.assetId)}
                         px={px}
                         tool={tool}
-                        selected={c.id === selectedClipId}
+                        selected={c.id === selectedClipId || selectedClipIds.includes(c.id)}
                         onStartDrag={startClipDrag}
                         onContextMenu={(e, clp) => {
                           e.preventDefault()
@@ -1682,6 +1830,49 @@ export function Timeline() {
                   />
                 ))}
               </div>
+
+              {/* Windows-style rubber-band lasso drawn while right-dragging */}
+
+              {marquee && (
+
+                <div
+
+                  data-testid="timeline-marquee"
+
+                  data-marquee-count={marqueeCount}
+
+                  className="absolute z-40 pointer-events-none"
+
+                  style={{
+
+                    left: Math.min(marquee.x0, marquee.x1),
+
+                    top: Math.min(marquee.y0, marquee.y1),
+
+                    width: Math.abs(marquee.x1 - marquee.x0),
+
+                    height: Math.abs(marquee.y1 - marquee.y0),
+
+                    background: 'rgba(9,13,24,0.45)',
+
+                    border: '1px solid rgba(125,211,252,0.9)',
+
+                    boxShadow: 'inset 0 0 0 1px rgba(3,7,18,0.5)',
+
+                  }}
+
+                >
+
+                  <span className="absolute -top-4 left-0 px-1 rounded bg-sky-500 text-white font-mono text-[9px] whitespace-nowrap shadow">
+
+                    {marqueeCount} selected
+
+                  </span>
+
+                </div>
+
+              )}
+
 
               {/* Vertical Insertion Boundary Line (Ripple Push Guide) */}
               {dragState && dragState.target.mode === 'dock' && (
