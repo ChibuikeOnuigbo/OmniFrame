@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T23:41:59.709Z",
+  "generatedAt": "2026-10-02T13:14:22.502Z",
   "tools": [
     "brush",
     "pencil",
@@ -222,16 +222,7 @@
   "kritaFromElsewhere": 1,
   "kritaTotal": 38,
   "renderCoverage": null,
-  "pageErrors": [
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')"
-  ],
+  "pageErrors": [],
   "checks": [
     {
       "name": "D1 brush: control exists",
