@@ -77,22 +77,33 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   const st = useEditor.getState()
   if (st.clips.length === 0) throw new Error('Add a clip to the timeline before exporting.')
 
+  // Ensure Program monitor is active and canvas dimensions match authoritative sequence settings
+  if (st.monitorMode !== 'program') {
+    st.setMonitorMode('program')
+  }
+
+  const mime = pickMime()
+  if (!mime) throw new Error('MediaRecorder is not supported in this browser.')
+
+  // Look the canvas up only AFTER the monitor switch. In Source mode the
+  // program canvas is unmounted, so resolving it first always threw
+  // "Preview canvas not found" and exported nothing.
+  const initial = useEditor.getState()
+  if (initial.monitorMode !== 'program') {
+    initial.setMonitorMode('program')
+    // Let React commit the program monitor before we reach for its canvas.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+  }
+
   // If in 3D mode, record directly from the 3D WebGL canvas camera perspective
-  let canvas = (st.is3DMode
+  const live = useEditor.getState()
+  let canvas = (live.is3DMode
     ? (document.getElementById('of-three-canvas') as HTMLCanvasElement | null)
     : (document.getElementById('of-canvas') as HTMLCanvasElement | null))
   if (!canvas) {
     canvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
   }
   if (!canvas) throw new Error('Preview canvas not found')
-
-  const mime = pickMime()
-  if (!mime) throw new Error('MediaRecorder is not supported in this browser.')
-
-  // Ensure Program monitor is active and canvas dimensions match authoritative sequence settings
-  if (st.monitorMode !== 'program') {
-    st.setMonitorMode('program')
-  }
 
   const targetW = st.sequenceSettings?.width || 1920
   const targetH = st.sequenceSettings?.height || 1080

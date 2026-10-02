@@ -46,8 +46,8 @@ import { RightPanel } from './components/RightPanel'
 import { Timeline } from './components/Timeline'
 
 export default function Studio() {
-  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false)
-  const [voiceModalClipId, setVoiceModalClipId] = useState<string | undefined>(undefined)
+  const voiceModal = useEditor((s) => s.voiceModal)
+  const closeVoiceModal = useEditor((s) => s.closeVoiceModal)
   const [isBgModalOpen, setIsBgModalOpen] = useState(false)
   const [bgModalClipId, setBgModalClipId] = useState<string | undefined>(undefined)
   const importFiles = useEditor((s) => s.importFiles)
@@ -677,12 +677,9 @@ export default function Studio() {
       )}
 
       <VoiceIsolationModal
-        isOpen={isVoiceModalOpen}
-        onClose={() => {
-          setIsVoiceModalOpen(false)
-          setVoiceModalClipId(undefined)
-        }}
-        initialClipId={voiceModalClipId}
+        isOpen={voiceModal.open}
+        onClose={() => closeVoiceModal()}
+        initialClipId={voiceModal.clipId}
       />
 
       <BackgroundRemovalModal

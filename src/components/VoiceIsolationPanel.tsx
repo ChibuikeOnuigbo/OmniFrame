@@ -20,6 +20,7 @@ export function VoiceIsolationPanel() {
   const clips = useEditor((s) => s.clips)
   const assets = useEditor((s) => s.assets)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const openVoiceModal = useEditor((s) => s.openVoiceModal)
   const extractAudio = useEditor((s) => s.extractAudio)
   const audioVideoClips = clips.filter((c) => c.kind === 'audio' || c.kind === 'video')
 
@@ -275,6 +276,21 @@ export function VoiceIsolationPanel() {
       >
         {processing ? <Loader2 size={13} className="animate-spin shrink-0" /> : <Sparkles size={13} className="shrink-0" />}
         <span className="truncate">{mode === 'keep_vocal' ? 'Isolate Voice (Keep Vocal)' : 'Remove Vocal (Instrumental)'}</span>
+      </button>
+
+      {/* Settings modal launcher. Kept out of the context submenu, which is
+          intentionally a zero-popup flyout (commit c40cd2c). */}
+      <button
+        type="button"
+        data-testid="panel-voice-settings-btn"
+        title="Voice Isolation Settings"
+        aria-label="Voice isolation settings"
+        onClick={() => openVoiceModal(activeClipId || targetClipId || audioVideoClips[0]?.id)}
+        disabled={audioVideoClips.length === 0}
+        className="flex items-center justify-center gap-2 w-full py-2 rounded-lg border border-ink-700 hover:border-ink-600 hover:bg-ink-800/60 text-ink-300 font-medium text-xs transition-colors disabled:opacity-50"
+      >
+        <Sliders size={13} className="shrink-0" />
+        <span className="truncate">Voice Isolation Settings…</span>
       </button>
 
       {/* Recent Isolated Audio Tracks in Project */}

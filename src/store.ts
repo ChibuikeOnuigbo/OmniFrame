@@ -237,6 +237,41 @@ export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
   showTrail: true,
 }
 
+/**
+ * How far a universal timeline tool reaches.
+ *  - track    : just the one track that was right-clicked
+ *  - all      : every track in the sequence
+ *  - targeted : only the tracks the user has targeted (falls back to all)
+ */
+export type GapScope = 'track' | 'all' | 'targeted'
+
+export interface TimelineGap {
+  trackId: string
+  /** Index of the clip BEFORE the gap, in that track's left-to-right order. */
+  index: number
+  start: number
+  end: number
+  duration: number
+}
+
+/**
+ * Empty spans BETWEEN consecutive clips on one track. The space before the
+ * first clip is deliberately not a gap: "close gaps" preserves where the
+ * track starts, so that leading offset stays exactly where the user put it.
+ */
+export function gapsOnTrack(clips: Clip[], trackId: string): TimelineGap[] {
+  const own = clips.filter((c) => c.trackId === trackId).sort((a, b) => a.start - b.start)
+  const out: TimelineGap[] = []
+  for (let i = 0; i < own.length - 1; i++) {
+    const gapStart = own[i].start + own[i].duration
+    const gapEnd = own[i + 1].start
+    if (gapEnd - gapStart > 0.001) {
+      out.push({ trackId, index: i, start: gapStart, end: gapEnd, duration: gapEnd - gapStart })
+    }
+  }
+  return out
+}
+
 interface EditorState {
   assets: MediaAsset[]
   tracks: Track[]
@@ -324,6 +359,19 @@ interface EditorState {
   setInsertionMode: (mode: TimelineInsertionMode) => void
   closeTrackGaps: (trackId: string) => void
   cleanupEmptyTracks: () => void
+
+  // ---- track targeting & universal gap tools ----
+  /** Empty = every track behaves as targeted, so tools keep working universally. */
+  targetedTrackIds: string[]
+  toggleTrackTarget: (trackId: string) => void
+  targetTrackOnly: (trackId: string) => void
+  setTrackTargets: (ids: string[]) => void
+  /** Returns how many gaps were closed, so callers can tell "nothing to do". */
+  removeGaps: (scope?: GapScope, trackId?: string) => number
+  removeGapAt: (trackId: string, gapIndex: number) => void
+  gapSelectMode: boolean
+  setGapSelectMode: (on: boolean) => void
+  selectAllClipsInScope: (scope?: GapScope, trackId?: string) => void
 
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
@@ -486,6 +534,12 @@ interface EditorState {
   setLeftTab: (t: LeftTab) => void
   setLeftOpen: (v: boolean) => void
   setRightOpen: (v: boolean) => void
+
+  // Voice isolation settings modal. Lifted into the store so any surface can
+  // open it; the context submenu deliberately stays a zero-popup flyout.
+  voiceModal: { open: boolean; clipId?: string }
+  openVoiceModal: (clipId?: string) => void
+  closeVoiceModal: () => void
 
   // ---- settings: context menu, shortcuts, unclustering ----
   customShortcuts: Record<string, string>
@@ -733,6 +787,17 @@ export const useEditor = create<EditorState>((set, get) => {
   const pushSnapshot = () => {
     const snap = cloneDoc(get())
     set((s) => ({ past: [...s.past.slice(-49), snap], future: [] }))
+  }
+
+  /** Which tracks a universal tool should touch. Empty targeting means "all". */
+  const resolveTargetTracks = (
+    s: { tracks: Track[]; targetedTrackIds: string[] },
+    scope: GapScope,
+    trackId?: string,
+  ): string[] => {
+    if (scope === 'track') return trackId ? [trackId] : []
+    if (scope === 'targeted' && s.targetedTrackIds.length > 0) return s.targetedTrackIds
+    return s.tracks.map((t) => t.id)
   }
 
   const recompute = (clips: Clip[]) => {
@@ -1024,6 +1089,8 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- insertion mode ----
     insertionMode: 'insert',
+    targetedTrackIds: [],
+    gapSelectMode: false,
 
     // ---- drawing initial state ----
     paintLayers: [
@@ -1203,6 +1270,70 @@ export const useEditor = create<EditorState>((set, get) => {
           duration: recompute(newClips),
         }
       })
+    },
+
+    toggleTrackTarget: (trackId) =>
+      set((s) => ({
+        targetedTrackIds: s.targetedTrackIds.includes(trackId)
+          ? s.targetedTrackIds.filter((id) => id !== trackId)
+          : [...s.targetedTrackIds, trackId],
+      })),
+
+    targetTrackOnly: (trackId) => set({ targetedTrackIds: [trackId] }),
+
+    setTrackTargets: (ids) => set({ targetedTrackIds: ids }),
+
+    removeGaps: (scope = 'all', trackId) => {
+      const s0 = get()
+      const ids = resolveTargetTracks(s0, scope, trackId)
+      const gaps = ids.flatMap((id) => gapsOnTrack(s0.clips, id))
+      // Nothing to close: bail before pushing a snapshot so the undo stack
+      // never collects a step that did nothing.
+      if (gaps.length === 0) return 0
+
+      pushSnapshot()
+      set((s) => {
+        const moves = new Map<string, number>()
+        for (const tid of ids) {
+          const own = s.clips.filter((c) => c.trackId === tid).sort((a, b) => a.start - b.start)
+          if (own.length < 2) continue
+          // Anchor on the first clip's current start, so closing gaps never
+          // drags a deliberately placed clip back to 0.
+          let cursor = own[0].start
+          for (const c of own) {
+            if (Math.abs(c.start - cursor) > 0.0001) moves.set(c.id, cursor)
+            cursor += c.duration
+          }
+        }
+        if (moves.size === 0) return {}
+        const clips = s.clips.map((c) => (moves.has(c.id) ? { ...c, start: moves.get(c.id)! } : c))
+        return { clips, duration: recompute(clips) }
+      })
+      return gaps.length
+    },
+
+    removeGapAt: (trackId, gapIndex) => {
+      const s0 = get()
+      const gap = gapsOnTrack(s0.clips, trackId).find((g) => g.index === gapIndex)
+      if (!gap) return
+      pushSnapshot()
+      set((s) => {
+        const clips = s.clips.map((c) =>
+          c.trackId === trackId && c.start >= gap.end - 0.0001
+            ? { ...c, start: Math.max(0, c.start - gap.duration) }
+            : c,
+        )
+        return { clips, duration: recompute(clips) }
+      })
+    },
+
+    setGapSelectMode: (on) => set({ gapSelectMode: on }),
+
+    selectAllClipsInScope: (scope = 'all', trackId) => {
+      const s0 = get()
+      const ids = new Set(resolveTargetTracks(s0, scope, trackId))
+      const inScope = s0.clips.filter((c) => ids.has(c.trackId)).map((c) => c.id)
+      set({ selectedClipIds: inScope, selectedClipId: inScope[0] ?? null })
     },
 
     cleanupEmptyTracks: () => {
@@ -2063,6 +2194,9 @@ export const useEditor = create<EditorState>((set, get) => {
     setLeftOpen: (v) => set({ leftOpen: v }),
     setRightOpen: (v) => set({ rightOpen: v }),
     setActiveCategory: (cat) => set({ activeCategory: cat }),
+    voiceModal: { open: false, clipId: undefined },
+    openVoiceModal: (clipId) => set({ voiceModal: { open: true, clipId } }),
+    closeVoiceModal: () => set({ voiceModal: { open: false, clipId: undefined } }),
     openSubMode: (parentTab, subModeId, label, icon = 'Layers') => {
       set((s) => {
         const filtered = s.contextualSubModes.filter((m) => m.id !== subModeId)

@@ -74,7 +74,9 @@ try {
   await aimVideo.click()
   await page.waitForTimeout(300)
   let statusText = await statusEl.innerText()
-  assert(statusText.includes('2.5D Video Plane'), `Camera aim status correctly updated to Video Plane (got: "${statusText}")`)
+  // The status pill is a compact indicator ("Video Plane"); the longer
+  // "2.5D Video Plane" wording only appears in the aim button's tooltip.
+  assert(statusText.includes('Video Plane'), `Camera aim status correctly updated to Video Plane (got: "${statusText}")`)
   console.log('[PASS] Aim Video Plane verified')
 
   // Aim at 3D Object
@@ -88,7 +90,7 @@ try {
   await aimComposite.click()
   await page.waitForTimeout(300)
   statusText = await statusEl.innerText()
-  assert(statusText.includes('3D in 2D Composite'), `Camera aim status correctly updated to 3D in 2D Composite (got: "${statusText}")`)
+  assert(statusText.includes('3D in 2D'), `Camera aim status correctly updated to 3D in 2D (got: "${statusText}")`)
   console.log('[PASS] Aim 3D in 2D Composite verified')
 
   console.log('--- Step 4: Testing 3D Primitive Switches & Wireframe/Grid ---')
