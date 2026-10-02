@@ -418,18 +418,18 @@ function TrackHeader({
   const kindBadge = (() => {
     switch (primaryKind) {
       case 'audio':
-        return <span data-testid="track-kind-badge-audio" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">AUD</span>
+        return <span data-testid="track-kind-badge-audio" className="text-[10px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">AUD</span>
       case 'image':
-        return <span data-testid="track-kind-badge-image" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-purple-500/20 text-purple-400 border border-purple-500/30 shrink-0">IMG</span>
+        return <span data-testid="track-kind-badge-image" className="text-[10px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-purple-500/20 text-purple-400 border border-purple-500/30 shrink-0">IMG</span>
       case 'text':
-        return <span data-testid="track-kind-badge-text" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">TXT</span>
+        return <span data-testid="track-kind-badge-text" className="text-[10px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">TXT</span>
       case 'threed':
-        return <span data-testid="track-kind-badge-threed" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30 shrink-0">3D</span>
+        return <span data-testid="track-kind-badge-threed" className="text-[10px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30 shrink-0">3D</span>
       case 'compound':
-        return <span data-testid="track-kind-badge-compound" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-indigo-500/25 text-indigo-300 border border-indigo-400/40 shrink-0">CMP</span>
+        return <span data-testid="track-kind-badge-compound" className="text-[10px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-indigo-500/25 text-indigo-300 border border-indigo-400/40 shrink-0">CMP</span>
       case 'video':
       default:
-        return <span data-testid="track-kind-badge-video" className="text-[8px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-sky-500/20 text-sky-400 border border-sky-500/30 shrink-0">VID</span>
+        return <span data-testid="track-kind-badge-video" className="text-[10px] font-mono font-bold px-1 py-0.2 rounded uppercase bg-sky-500/20 text-sky-400 border border-sky-500/30 shrink-0">VID</span>
     }
   })()
 
@@ -982,7 +982,7 @@ function ClipView({
         )}
         <span className="truncate">{clip.name}</span>
         {isCompound && (
-          <span className="ml-auto text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 font-mono font-bold shrink-0">
+          <span className="ml-auto text-[10px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 font-mono font-bold shrink-0">
             NESTED ({clip.nestedClipCount || 2})
           </span>
         )}
@@ -2005,7 +2005,7 @@ export function Timeline() {
                     {/* Marker label pill */}
                     <span
                       title={marker.label}
-                      className="absolute top-4 left-1 text-[8px] font-semibold px-1 py-0.2 rounded shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
+                      className="absolute top-4 left-1 text-[10px] font-semibold px-1 py-0.2 rounded shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
                       style={{ backgroundColor: colorHex, color: readableTextColor(colorHex) }}
                     >
                       {marker.label}

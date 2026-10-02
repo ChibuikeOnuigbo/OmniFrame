@@ -400,7 +400,7 @@ export function Preview() {
                     }`}>
                       <span className="truncate max-w-[120px]" title={char.name}>{char.name}</span>
                       {(evalTransform.x !== 0 || evalTransform.y !== 0) && (
-                        <span className="text-[8px] opacity-90 font-mono text-amber-300 shrink-0">
+                        <span className="text-[10px] opacity-90 font-mono text-amber-300 shrink-0">
                           ({evalTransform.x > 0 ? `+${evalTransform.x}` : evalTransform.x}, {evalTransform.y > 0 ? `+${evalTransform.y}` : evalTransform.y})
                         </span>
                       )}

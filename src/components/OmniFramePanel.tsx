@@ -802,7 +802,7 @@ export function OmniFramePanel() {
                     <span>
                       Y: {evalTransform.y > 0 ? `+${evalTransform.y}` : evalTransform.y}px
                     </span>
-                    <span className={`text-[8px] px-1 py-0.2 rounded font-bold uppercase ${
+                    <span className={`text-[10px] px-1 py-0.2 rounded font-bold uppercase ${
                       evalTransform.opacity === 0
                         ? 'bg-amber-500/30 text-amber-300 border border-amber-500/40'
                         : isModified

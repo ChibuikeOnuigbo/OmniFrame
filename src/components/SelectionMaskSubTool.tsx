@@ -460,7 +460,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                   title="Alpha matte (white = subject)"
                   className="w-full h-12 object-contain"
                 />
-                <span className="absolute bottom-0 left-0 right-0 text-[8px] text-center bg-black/60 text-ink-300">
+                <span className="absolute bottom-0 left-0 right-0 text-[10px] text-center bg-black/60 text-ink-300">
                   Matte
                 </span>
               </div>
@@ -472,7 +472,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                   title="Cutout layered non-destructively"
                   className="w-full h-12 object-contain"
                 />
-                <span className="absolute bottom-0 left-0 right-0 text-[8px] text-center bg-black/60 text-ink-300">
+                <span className="absolute bottom-0 left-0 right-0 text-[10px] text-center bg-black/60 text-ink-300">
                   Cutout
                 </span>
               </div>

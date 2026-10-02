@@ -828,7 +828,7 @@ export function TopBar() {
                         className="p-2 rounded bg-ink-800 border border-ink-700 text-center cursor-grab hover:border-emerald-500 transition-colors select-none"
                       >
                         <div className="text-[10px] font-medium text-emerald-400">Draggable Card</div>
-                        <div className="text-[8px] text-ink-500">Hover for + badge</div>
+                        <div className="text-[10px] text-ink-500">Hover for + badge</div>
                       </div>
 
                       {/* Test Drop Zone */}
@@ -838,7 +838,7 @@ export function TopBar() {
                         className="p-2 rounded bg-emerald-950/30 border border-emerald-500/50 text-center select-none"
                       >
                         <div className="text-[10px] font-medium text-emerald-300">Drop Zone</div>
-                        <div className="text-[8px] text-emerald-500">Drag here for reticle</div>
+                        <div className="text-[10px] text-emerald-500">Drag here for reticle</div>
                       </div>
 
                       {/* Test Info Button */}
@@ -850,7 +850,7 @@ export function TopBar() {
                         className="p-2 rounded bg-ink-800 border border-ink-700 text-center hover:border-amber-500 transition-colors"
                       >
                         <div className="text-[10px] font-medium text-amber-400">Help / Specs (?)</div>
-                        <div className="text-[8px] text-ink-500">Hover for ? badge</div>
+                        <div className="text-[10px] text-ink-500">Hover for ? badge</div>
                       </button>
                     </div>
                   </div>

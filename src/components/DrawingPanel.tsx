@@ -31,6 +31,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
+import PanelSection from './PanelSection'
 
 const COLOR_SWATCHES = [
   '#f59e0b',
@@ -163,7 +164,7 @@ export function DrawingPanel() {
   const currentFrame = Math.round(playhead * projectFps)
 
   return (
-    <div data-testid="drawing-panel" className="p-3 text-xs text-ink-200 flex flex-col gap-4">
+    <div data-testid="drawing-panel" className="p-3 text-xs text-ink-200 flex flex-col gap-2">
       {/* Drawing Mode Toggle */}
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <span className="font-medium text-ink-100 flex items-center gap-1.5">
@@ -248,6 +249,7 @@ export function DrawingPanel() {
         </div>
       )}
 
+      <PanelSection title="Tool & Selection" defaultOpen={true} testId="tools">
       {/* Tools Selection */}
       <div className="flex flex-col gap-2.5">
         <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Drawing Tools</div>
@@ -325,6 +327,8 @@ export function DrawingPanel() {
         )}
       </div>
 
+      </PanelSection>
+      <PanelSection title="Colour & Frames" defaultOpen={false} testId="colour-frames">
       {/* Frame Attach Count Picker */}
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
@@ -435,6 +439,8 @@ export function DrawingPanel() {
         </div>
       </div>
 
+      </PanelSection>
+      <PanelSection title="Tool Parameters" defaultOpen={true} testId="tool-params">
       {/* Tool Parameters */}
       {(drawingTool === 'polygon' || drawingTool === 'gradient') ? (
         <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
@@ -536,6 +542,8 @@ export function DrawingPanel() {
         </div>
       )}
 
+      </PanelSection>
+      <PanelSection title="Timing & Onion Skin" defaultOpen={false} testId="timing">
       {/* Temporal Scope & Apply to All Frames */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
@@ -700,6 +708,8 @@ export function DrawingPanel() {
         )}
       </div>
 
+      </PanelSection>
+      <PanelSection title="Paint Layers" defaultOpen={false} testId="layers">
       {/* Paint Layers */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
@@ -791,12 +801,12 @@ export function DrawingPanel() {
                       <CornerDownRight size={11} className="text-indigo-400 shrink-0" />
                       <span className="truncate">Transparency Mask</span>
                       {layer.transparencyMask.inverted && (
-                        <span className="text-[8px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
+                        <span className="text-[10px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
                           INV
                         </span>
                       )}
                       {isMaskActive && (
-                        <span className="text-[8px] px-1 py-0.2 rounded bg-indigo-500 text-white font-bold">
+                        <span className="text-[10px] px-1 py-0.2 rounded bg-indigo-500 text-white font-bold">
                           EDITING
                         </span>
                       )}
@@ -843,6 +853,8 @@ export function DrawingPanel() {
         </div>
       </div>
 
+      </PanelSection>
+      <PanelSection title="Brush & Layer Properties" defaultOpen={false} testId="brush">
       {/* Krita Professional Brush Dynamics & Tablet Stylus */}
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-300">
@@ -967,6 +979,7 @@ export function DrawingPanel() {
           {drawingStrokes.length}
         </span>
       </div>
+      </PanelSection>
     </div>
   )
 }

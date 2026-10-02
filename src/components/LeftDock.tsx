@@ -97,7 +97,7 @@ export function LeftDock() {
                     : '3D Scene Tools (Blender)'
                 }
                 onClick={() => setActiveCategory(cat)}
-                className={`min-h-[24px] min-w-[24px] py-1 px-0.5 rounded text-[8px] font-mono font-bold uppercase transition-colors text-center ${
+                className={`min-h-[24px] min-w-[24px] py-1 px-0.5 rounded text-[10px] font-mono font-bold uppercase transition-colors text-center ${
                   activeCategory === cat
                     ? 'bg-brand text-white shadow-xs'
                     : 'bg-ink-950/60 text-ink-400 hover:text-ink-200 hover:bg-ink-800'
@@ -180,7 +180,7 @@ export function LeftDock() {
                         activeSubMode: s.activeSubMode === sub.id ? null : s.activeSubMode,
                       }))
                     }}
-                    className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-ink-800 hover:bg-red-500 text-ink-300 hover:text-white hidden group-hover:grid place-items-center text-[8px] transition-colors border border-ink-700 shadow-xs"
+                    className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-ink-800 hover:bg-red-500 text-ink-300 hover:text-white hidden group-hover:grid place-items-center text-[10px] transition-colors border border-ink-700 shadow-xs"
                   >
                     <X size={8} />
                   </button>
