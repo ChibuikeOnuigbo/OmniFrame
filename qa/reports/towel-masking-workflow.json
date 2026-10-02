@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T19:27:06.197Z",
+  "generatedAt": "2026-10-02T20:45:14.415Z",
   "canvas": {
     "w": 771,
     "h": 434
@@ -139,7 +139,7 @@
     {
       "name": "W5 OmniFrame object created from the matte",
       "ok": true,
-      "detail": "obj_guided_1790969223277"
+      "detail": "obj_guided_1790973911482"
     },
     {
       "name": "W5 non-destructive mask layer attached",
