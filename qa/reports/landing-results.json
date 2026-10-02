@@ -83,12 +83,12 @@
     {
       "name": "paper-cut edge moves across combined scenes",
       "status": "PASS",
-      "detail": "282"
+      "detail": "235"
     },
     {
       "name": "paper-cut edge is slim and 0.2s faster",
       "status": "PASS",
-      "detail": "{\"left\":282.2050476074219,\"width\":65.18365478515625,\"duration\":\"0.98s\",\"easing\":\"cubic-bezier(0.32, 0, 0.67, 0)\"}"
+      "detail": "{\"left\":235.41452026367188,\"width\":64.38970947265625,\"duration\":\"0.98s\",\"easing\":\"cubic-bezier(0.32, 0, 0.67, 0)\"}"
     },
     {
       "name": "landing reveal uses cubic-in easing",
@@ -98,7 +98,7 @@
     {
       "name": "landing uses a moving polygon mask",
       "status": "PASS",
-      "detail": "polygon(23.6964% 0px, 100% 0px, 100% 100%, 23.6964% 100%, 24.3438% 92%, 23.4121% 84%, 24.4438% 76%, 23.3647% 68%, 24.3438% 60%, 23.4121% 52%, 24.4438% 44%, 23.3647% 36%, 24.3438% 28%, 23.4121% 20%, 24.2438% 12%, 23.4595% 4%)"
+      "detail": "polygon(20.641% 0px, 100% 0px, 100% 100%, 20.641% 100%, 21.2823% 92%, 20.3933% 84%, 21.3823% 76%, 20.3521% 68%, 21.2823% 60%, 20.3933% 52%, 21.3823% 44%, 20.3521% 36%, 21.2823% 28%, 20.3933% 20%, 21.1823% 12%, 20.4346% 4%)"
     },
     {
       "name": "studio route updates hash",
