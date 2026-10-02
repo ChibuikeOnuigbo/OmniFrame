@@ -174,7 +174,7 @@ export function DrawingPanel() {
           type="button"
           data-testid="drawing-mode-toggle"
           onClick={() => setDrawingEnabled(!drawingEnabled)}
-          className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+          className={`min-h-[24px] px-2 py-1 rounded text-[11px] font-medium transition-colors ${
             drawingEnabled
               ? 'bg-brand text-white shadow-sm'
               : 'bg-ink-800 text-ink-400 hover:text-white'

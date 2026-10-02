@@ -147,7 +147,7 @@ export function TransitionsPanel() {
               type="button"
               data-testid={`transition-dur-${d}`}
               onClick={() => setDuration(d)}
-              className={`px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
+              className={`min-h-[24px] px-1.5 py-1 rounded text-[10px] font-mono transition-colors ${
                 duration === d ? 'bg-brand text-white font-semibold' : 'bg-ink-800 text-ink-400 hover:text-white'
               }`}
             >

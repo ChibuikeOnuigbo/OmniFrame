@@ -241,13 +241,14 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             <PaintBucket size={11} className="text-amber-400" />
             <span>Fill / Recolor Tool</span>
           </div>
-          <label className="flex items-center gap-1 text-[9px] text-ink-400 cursor-pointer">
+          <label className="flex items-center gap-1 min-h-[24px] text-[9px] text-ink-400 cursor-pointer">
             <input
               type="checkbox"
               data-testid="preserve-luminance-toggle"
+              aria-label="Preserve luminance"
               checked={preserveLuminance}
               onChange={(e) => setPreserveLuminance(e.target.checked)}
-              className="rounded border-ink-700 bg-ink-800 text-brand"
+              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand"
             />
             <span>Keep Texture/Shading</span>
           </label>

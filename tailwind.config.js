@@ -3,6 +3,17 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      // h-8.5 / w-6.5 / h-7.5 are used across LeftDock, RightPanel and
+      // CustomCursor, but 8.5, 7.5 and 6.5 are NOT in Tailwind's default
+      // spacing scale (which stops at .5 increments after 3.5). Those classes
+      // were silently never generated, so the elements collapsed to their
+      // content — the dock tab buttons were 17x17 hit targets instead of the
+      // intended 34x34. Defining them here makes the original intent work.
+      spacing: {
+        '6.5': '1.625rem', // 26px
+        '7.5': '1.875rem', // 30px
+        '8.5': '2.125rem', // 34px
+      },
       colors: {
         ink: {
           950: '#08090d',

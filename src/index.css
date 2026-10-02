@@ -29,11 +29,20 @@ body {
 .of-range {
   -webkit-appearance: none;
   appearance: none;
+  /* The visible track stays 4px, but the control itself is 18px tall so
+     there is a grabbable hit area. A 4px-tall target is very hard to hit
+     with a mouse and unusable on a touchscreen; the thumb alone is not
+     enough because the track between thumb and edge was unclickable. */
+  height: 18px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+/* Draw the thin track inside the taller box, so nothing looks different. */
+.of-range::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 999px;
   background: #2e374a;
-  outline: none;
-  cursor: pointer;
 }
 .of-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -45,8 +54,15 @@ body {
   border: 2px solid #0c0e13;
   cursor: pointer;
   transition: transform 0.08s ease;
+  /* Centre the 13px thumb on the 4px track: (4 - 13) / 2 = -4.5 */
+  margin-top: -4.5px;
 }
 .of-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.of-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: #2e374a;
+}
 .of-range::-moz-range-thumb {
   width: 13px;
   height: 13px;

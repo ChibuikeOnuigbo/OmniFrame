@@ -165,7 +165,7 @@ export function ThreePanel() {
               type="button"
               data-testid="camera-paint-toggle"
               onClick={() => setCameraPaintActive(!cameraPaintActive)}
-              className={`px-2 py-0.5 rounded text-[10px] font-medium border transition-colors ${
+              className={`px-2 py-1 min-h-[24px] rounded text-[10px] font-medium border transition-colors ${
                 cameraPaintActive
                   ? 'border-brand bg-brand/20 text-white'
                   : 'border-ink-700 bg-ink-900 text-ink-400'

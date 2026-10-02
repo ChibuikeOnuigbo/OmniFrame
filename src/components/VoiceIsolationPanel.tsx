@@ -199,6 +199,7 @@ export function VoiceIsolationPanel() {
         <input
           type="range"
           data-testid="panel-strength-slider"
+          aria-label="Isolation strength"
           min={0.1}
           max={1.0}
           step={0.01}
@@ -209,26 +210,28 @@ export function VoiceIsolationPanel() {
         />
 
         <div className="pt-2 border-t border-ink-800/80 space-y-1.5">
-          <label className="flex items-center gap-2 text-[11px] text-ink-300 cursor-pointer">
+          <label className="flex items-center gap-2 min-h-[24px] text-[11px] text-ink-300 cursor-pointer">
             <input
               type="checkbox"
               data-testid="panel-preserve-bass-toggle"
+              aria-label="Preserve bass"
               checked={preserveBass}
               disabled={processing}
               onChange={(e) => setPreserveBass(e.target.checked)}
-              className="rounded border-ink-700 bg-ink-800 text-brand"
+              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand"
             />
             <span>Preserve Bass & Kick Drum (&le; 140Hz)</span>
           </label>
 
-          <label className="flex items-center gap-2 text-[11px] text-ink-300 cursor-pointer">
+          <label className="flex items-center gap-2 min-h-[24px] text-[11px] text-ink-300 cursor-pointer">
             <input
               type="checkbox"
               data-testid="panel-speech-focus-toggle"
+              aria-label="Speech focus"
               checked={speechFocus}
               disabled={processing}
               onChange={(e) => setSpeechFocus(e.target.checked)}
-              className="rounded border-ink-700 bg-ink-800 text-brand"
+              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand"
             />
             <span>Speech Formant Bandpass Focus</span>
           </label>

@@ -97,7 +97,7 @@ export function LeftDock() {
                     : '3D Scene Tools (Blender)'
                 }
                 onClick={() => setActiveCategory(cat)}
-                className={`py-0.5 px-0.5 rounded text-[8px] font-mono font-bold uppercase transition-colors text-center ${
+                className={`min-h-[24px] min-w-[24px] py-1 px-0.5 rounded text-[8px] font-mono font-bold uppercase transition-colors text-center ${
                   activeCategory === cat
                     ? 'bg-brand text-white shadow-xs'
                     : 'bg-ink-950/60 text-ink-400 hover:text-ink-200 hover:bg-ink-800'

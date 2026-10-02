@@ -1583,7 +1583,7 @@ export function Timeline() {
                   type="button"
                   data-testid={`breadcrumb-item-${b.id}`}
                   onClick={() => navigateBreadcrumb(b.id)}
-                  className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-colors ${
+                  className={`flex items-center gap-1.5 px-2 py-1 min-h-[24px] rounded transition-colors ${
                     isLast
                       ? 'bg-indigo-600/30 text-indigo-300 font-semibold border border-indigo-500/40 shadow-xs'
                       : 'text-ink-400 hover:text-ink-100 hover:bg-ink-850'
@@ -1656,7 +1656,7 @@ export function Timeline() {
           title="Split at playhead (Ctrl+B / B)"
           aria-label="Split at playhead"
           onClick={() => splitAt(useEditor.getState().playhead)}
-          className="grid place-items-center h-8 w-8 rounded-md border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
         >
           <Scissors size={15} />
         </button>
@@ -1710,7 +1710,7 @@ export function Timeline() {
           title="Add Marker at playhead (M)"
           aria-label="Add marker"
           onClick={handleAddMarker}
-          className="grid place-items-center h-8 w-8 rounded-md border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
         >
           <Bookmark size={15} />
         </button>

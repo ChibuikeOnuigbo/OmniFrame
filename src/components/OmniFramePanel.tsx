@@ -386,7 +386,7 @@ export function OmniFramePanel() {
               data-testid="omniframe-reset-pos-btn"
               title="Reset Position"
               onClick={() => resetCharacterPosition(selectedChar.id)}
-              className="text-[10px] text-ink-400 hover:text-white flex items-center gap-1 shrink-0"
+              className="text-[10px] text-ink-400 hover:text-white flex items-center gap-1 shrink-0 px-1.5 py-1 rounded hover:bg-ink-800 min-h-[24px]"
             >
               <RotateCcw size={13} />
               Reset
@@ -405,6 +405,7 @@ export function OmniFramePanel() {
               <input
                 type="range"
                 data-testid="omniframe-pos-x-slider"
+                aria-label="Position X"
                 min={-400}
                 max={400}
                 value={selectedChar.transform.x}
@@ -414,9 +415,10 @@ export function OmniFramePanel() {
               <input
                 type="number"
                 data-testid="omniframe-pos-x-input"
+                aria-label="Position X (px)"
                 value={selectedChar.transform.x}
                 onChange={(e) => handleUpdateTransform({ x: Number(e.target.value) })}
-                className="w-14 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono text-center text-ink-100"
+                className="w-14 min-h-[24px] bg-ink-950 border border-ink-700 rounded px-1 py-1 text-[10px] font-mono text-center text-ink-100"
               />
             </div>
           </div>
@@ -433,6 +435,7 @@ export function OmniFramePanel() {
               <input
                 type="range"
                 data-testid="omniframe-pos-y-slider"
+                aria-label="Position Y"
                 min={-300}
                 max={300}
                 value={selectedChar.transform.y}
@@ -442,9 +445,10 @@ export function OmniFramePanel() {
               <input
                 type="number"
                 data-testid="omniframe-pos-y-input"
+                aria-label="Position Y (px)"
                 value={selectedChar.transform.y}
                 onChange={(e) => handleUpdateTransform({ y: Number(e.target.value) })}
-                className="w-14 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono text-center text-ink-100"
+                className="w-14 min-h-[24px] bg-ink-950 border border-ink-700 rounded px-1 py-1 text-[10px] font-mono text-center text-ink-100"
               />
             </div>
           </div>
@@ -459,6 +463,7 @@ export function OmniFramePanel() {
               <input
                 type="range"
                 data-testid="omniframe-scale-slider"
+                aria-label="Scale"
                 min={0.2}
                 max={2.5}
                 step={0.05}
@@ -475,6 +480,7 @@ export function OmniFramePanel() {
               <input
                 type="range"
                 data-testid="omniframe-rot-slider"
+                aria-label="Rotation"
                 min={-180}
                 max={180}
                 value={selectedChar.transform.rotation}
@@ -518,7 +524,7 @@ export function OmniFramePanel() {
                       recolorActiveSelection(c.hex, recolorBlend)
                     }
                   }}
-                  className={`px-2 py-0.5 rounded text-[10px] border font-medium transition-all ${
+                  className={`px-2 py-1 min-h-[24px] rounded text-[10px] border font-medium transition-all ${
                     (selectedChar.recolorColor === c.hex || (!selectedChar.recolorColor && !c.hex))
                       ? 'border-white bg-white/20 text-white font-bold'
                       : 'border-ink-800 bg-ink-900 text-ink-300 hover:text-white'
@@ -542,7 +548,7 @@ export function OmniFramePanel() {
                 value={recolorBlend}
                 onChange={(e) => setRecolorBlend(e.target.value as RecolorBlend)}
                 title="How the colour is applied to the object's pixels"
-                className="flex-1 min-w-0 bg-ink-950 border border-ink-800 rounded px-1.5 py-1 text-[10px] text-ink-200 outline-none focus:border-brand"
+                className="flex-1 min-w-0 min-h-[24px] bg-ink-950 border border-ink-800 rounded px-1.5 py-1 text-[10px] text-ink-200 outline-none focus:border-brand"
               >
                 {RECOLOR_BLENDS.map((b) => (
                   <option key={b.value} value={b.value}>

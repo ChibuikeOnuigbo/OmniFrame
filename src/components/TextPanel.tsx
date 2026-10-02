@@ -165,6 +165,7 @@ export function TextPanel() {
               </label>
               <input
                 type="range"
+                aria-label="Font size"
                 min={18}
                 max={120}
                 step={2}
@@ -224,6 +225,7 @@ export function TextPanel() {
                 <input
                   type="color"
                   data-testid="text-color-picker"
+                  aria-label="Text colour"
                   value={color}
                   onChange={(e) => {
                     setColor(e.target.value)

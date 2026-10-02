@@ -90,7 +90,7 @@ export function AudioMeter() {
         title={masterMuted ? 'Unmute Master Audio' : 'Mute Master Audio'}
         aria-label={masterMuted ? 'Unmute master' : 'Mute master'}
         onClick={() => setMasterMuted(!masterMuted)}
-        className="p-1 rounded text-ink-400 hover:text-white hover:bg-ink-800 transition-colors"
+        className="grid place-items-center h-6 w-6 shrink-0 rounded text-ink-400 hover:text-white hover:bg-ink-800 transition-colors"
       >
         {masterMuted ? <VolumeX size={13} className="text-red-400" /> : <Volume2 size={13} />}
       </button>
