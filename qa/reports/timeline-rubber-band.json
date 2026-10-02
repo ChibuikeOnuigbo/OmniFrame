@@ -1,17 +1,8 @@
 {
-  "generatedAt": "2026-10-01T23:42:13.398Z",
+  "generatedAt": "2026-10-02T01:55:24.715Z",
   "passed": 25,
   "failed": 0,
-  "pageErrors": [
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')"
-  ],
+  "pageErrors": [],
   "checks": [
     {
       "name": "R1 rubber-band rectangle is painted during the right-drag",
@@ -91,12 +82,12 @@
     {
       "name": "R7 every member shifted by the same delta",
       "ok": true,
-      "detail": "deltas [3,3,3,3]"
+      "detail": "deltas [2,2,2,2]"
     },
     {
       "name": "R7 group actually moved",
       "ok": true,
-      "detail": "+3s"
+      "detail": "+2s"
     },
     {
       "name": "R7 clips outside the group did not move",

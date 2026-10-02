@@ -96,6 +96,44 @@ function snapTime(value: number, excludeClipIds?: ReadonlySet<string> | string):
   return best
 }
 
+/**
+ * Snap a clip placement to nearby edges.
+ *
+ * Snapping must be evaluated on the clip's own edges, not on the pointer. The
+ * pointer sits wherever the user grabbed the clip, so aligning the pointer to
+ * a neighbour only lines the two clips up when the grab happened to be at the
+ * left edge. Try the leading and the trailing edge against every candidate
+ * target and take the smallest correction that falls inside the threshold.
+ */
+function snapPlacement(
+  start: number,
+  duration: number,
+  excludeClipIds?: ReadonlySet<string> | string,
+): number {
+  const st = useEditor.getState()
+  if (!st.snapping) return start
+  const thresh = 8 / st.pxPerSec
+  const excluded =
+    typeof excludeClipIds === 'string' ? new Set([excludeClipIds]) : excludeClipIds
+
+  const targets: number[] = [st.playhead]
+  for (const c of st.clips) {
+    if (excluded?.has(c.id)) continue
+    targets.push(c.start, c.start + c.duration)
+  }
+  for (const m of st.markers || []) targets.push(m.time)
+
+  let bestDelta: number | null = null
+  for (const t of targets) {
+    for (const delta of [t - start, t - (start + duration)]) {
+      if (Math.abs(delta) < thresh && (bestDelta === null || Math.abs(delta) < Math.abs(bestDelta))) {
+        bestDelta = delta
+      }
+    }
+  }
+  return bestDelta === null ? start : Math.max(0, start + bestDelta)
+}
+
 interface DragTargetInfo {
   mode: 'dock' | 'above' | 'below' | 'between'
   trackId: string | null
@@ -1158,7 +1196,7 @@ export function Timeline() {
 
           const lanesRect = lanesEl.getBoundingClientRect()
           const pointerTime = (latestClientX - lanesRect.left) / px
-          const candidateTime = Math.max(0, snapTime(pointerTime, dragGroupIds) - grabOffset)
+          const candidateTime = Math.max(0, snapPlacement(pointerTime - grabOffset, clip.duration, dragGroupIds))
           const evaluatedTarget = evaluateDragTarget(latestClientY, lanesEl, tracks, clip.kind)
 
           const updated: DragState = {
@@ -1193,7 +1231,7 @@ export function Timeline() {
 
       const lanesRect = lanes.getBoundingClientRect()
       const pointerTime = (moveEv.clientX - lanesRect.left) / px
-      const candidateTime = Math.max(0, snapTime(pointerTime, dragGroupIds) - grabOffset)
+      const candidateTime = Math.max(0, snapPlacement(pointerTime - grabOffset, clip.duration, dragGroupIds))
       const evaluatedTarget = evaluateDragTarget(moveEv.clientY, lanes, tracks, clip.kind)
       const updated: DragState = {
         clipId: clip.id,

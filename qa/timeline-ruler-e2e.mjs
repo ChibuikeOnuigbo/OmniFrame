@@ -19,6 +19,10 @@ const check = (value, name, detail = '') => { if (!value) throw Error(`${name}: 
 
 await page.goto(URL, { waitUntil: 'networkidle' })
 await page.getByTestId('panel-all-import-input').setInputFiles(join(ROOT, 'qa/fixtures/pexels-cinematic-8s.webm'))
+// I-10: import fills the library only, so place the clip explicitly.
+await page.evaluate(() => window.__omniframe_store.getState().setLeftOpen(true))
+await page.waitForTimeout(300)
+await page.getByRole('button', { name: /Add .*pexels-cinematic-8s\.webm.* to timeline/ }).click({ force: true })
 const clip = page.locator('[data-testid="timeline-clip"]').first()
 await clip.waitFor()
 const scale = page.getByTestId('timeline-scale')
@@ -67,7 +71,9 @@ for (const fps of ['23.976','24','25','29.97','30','50','59.94','60','120']) {
   await fpsSelect.selectOption(fps)
   check(await timeline.getAttribute('data-project-fps') === fps, `project ruler accepts ${fps} fps`)
   if (fps === '29.97') {
-    await page.getByLabel('Drop-frame timecode').check()
+    // The control's accessible name is "Drop frame timecode"; it only renders
+// for 29.97/59.94, which is why this sits inside the 29.97 branch.
+await page.getByLabel('Drop frame timecode').check()
     check(await timeline.getAttribute('data-drop-frame') === 'true', '29.97 drop-frame display can be enabled')
   }
   await scale.fill('8000')
