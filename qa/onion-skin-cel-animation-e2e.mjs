@@ -78,7 +78,9 @@ async function run() {
   const currentCelBadge = page.locator('[data-testid="current-cel-badge"]')
   assert(await currentCelBadge.isVisible(), 'Current cel badge (F#0) is displayed in toolbar')
   const badgeText = await currentCelBadge.innerText()
-  assert(badgeText.includes('F#0'), `Badge indicates Frame #0 (found ${badgeText})`)
+  // The badge renders "Frame #0"; assert the frame number through its
+  // data-cel-frame attribute rather than the label's formatting.
+  assert(await currentCelBadge.getAttribute('data-cel-frame') === '0', `Badge indicates frame 0 (found "${badgeText}")`)
   console.log('PASS Frame cel temporal scope initialized')
 
   // Step 3: Draw Cel 0 (Frame #0) with amber brush
@@ -108,7 +110,7 @@ async function run() {
 
   // Step 4: Step Forward 2 Frames and Enable Onion Skinning
   console.log('Step 4: Stepping forward to Frame #2 and activating Onion Skinning...')
-  const stepNextBtn = page.locator('[data-testid="step-next-cel-btn"]')
+  const stepNextBtn = page.locator('[data-testid="panel-step-next-cel"]')
   await stepNextBtn.click() // To frame 1
   await page.waitForTimeout(100)
   await stepNextBtn.click() // To frame 2
@@ -118,7 +120,7 @@ async function run() {
   assert(currentFrameAfterStep === 2, `Playhead advanced to Frame #2 (found ${currentFrameAfterStep})`)
 
   // Enable Onion Skinning
-  const onionSkinToggle = page.locator('[data-testid="onion-skin-toggle"]')
+  const onionSkinToggle = page.locator('[data-testid="panel-onion-skin-toggle"]')
   await onionSkinToggle.click()
   await page.waitForTimeout(200)
 
