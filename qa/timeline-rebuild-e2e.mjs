@@ -32,7 +32,8 @@ const browser = await pwChromium.launch({
   args: ['--no-sandbox', '--use-gl=swiftshader']
 })
 
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+// acceptDownloads is required for the export blob to surface as a download event.
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, acceptDownloads: true })
 const results = []
 const errors = []
 

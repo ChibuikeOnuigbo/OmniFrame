@@ -78,7 +78,7 @@
     {
       "name": "hidden clip gains hover glow",
       "status": "PASS",
-      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(56, 189, 248, 0.8) 0px 0px 0px 2px, rgba(56, 189, 248, 0.5) 0px 0px 14px 0px"
+      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(56, 189, 248, 0.8) 0px 0px 0px 2px, rgba(60, 187, 248, 0.5) 0px 0px 13.9341px 0px"
     },
     {
       "name": "hidden clip offers Unhide Clip",
@@ -303,7 +303,7 @@
     {
       "name": "mobile menu stays inside safe viewport bounds",
       "status": "PASS",
-      "detail": "{\"x\":132,\"y\":594,\"width\":224,\"height\":114}"
+      "detail": "{\"x\":132,\"y\":594,\"width\":224,\"height\":186}"
     },
     {
       "name": "zero runtime errors",

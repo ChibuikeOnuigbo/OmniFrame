@@ -18,6 +18,8 @@ import {
   Music2,
   ChevronRight,
   Layers,
+  MousePointer2,
+  Target,
   FolderOutput,
   FolderOpen,
   Bookmark,
@@ -69,6 +71,16 @@ export default function Studio() {
   const [contextMenu, setContextMenu] = useState<ContextState | null>(null)
   const [activeSubmenuId, setActiveSubmenuId] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  // A rubber-band lasso owns the right button: once it engages, any menu the
+  // initial press opened must go, or it sits over the timeline being dragged.
+  const lassoEngagedAt = useEditor((s) => s.lassoEngagedAt)
+  useEffect(() => {
+    if (lassoEngagedAt > 0) {
+      setContextMenu(null)
+      setActiveSubmenuId(null)
+    }
+  }, [lassoEngagedAt])
 
   useEffect(() => {
     if (!contextMenu) {
@@ -185,6 +197,18 @@ export default function Studio() {
           setSpeed(Math.abs(st().speed) || 1)
           st().play()
           break
+        case 'g':
+        case 'G': {
+          e.preventDefault()
+          const s = st()
+          if (e.shiftKey) {
+            // Honour targeting when it is active, otherwise sweep everything.
+            s.removeGaps(s.targetedTrackIds.length > 0 ? 'targeted' : 'all')
+          } else {
+            s.setGapSelectMode(!s.gapSelectMode)
+          }
+          break
+        }
         case 'm':
         case 'M': {
           e.preventDefault()
@@ -240,8 +264,16 @@ export default function Studio() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && useEditor.getState().focusMode !== 'none') {
-        useEditor.getState().setFocusMode('none')
+      if (e.key === 'Escape') {
+        // The gap picker is a mode, so Escape leaves it first — otherwise the
+        // user hits Escape and the overlays stay on screen.
+        if (useEditor.getState().gapSelectMode) {
+          useEditor.getState().setGapSelectMode(false)
+          return
+        }
+        if (useEditor.getState().focusMode !== 'none') {
+          useEditor.getState().setFocusMode('none')
+        }
       }
     }
     window.addEventListener('keydown', handleKeyDown)
@@ -400,10 +432,39 @@ export default function Studio() {
       : contextMenu.type === 'TRACK_LANE'
       ? [
           {
-            id: 'close-gaps',
-            label: 'Close Gaps on Track',
+            id: 'remove-all-gaps',
+            label: 'Remove All Gaps',
             icon: Minimize2,
-            run: () => useEditor.getState().closeTrackGaps(contextMenu.trackId),
+            submenu: [
+              {
+                id: 'gaps-this-track',
+                label: 'This Track',
+                icon: Minimize2,
+                run: () => useEditor.getState().removeGaps('track', contextMenu.trackId),
+              },
+              {
+                id: 'gaps-all-tracks',
+                label: 'All Tracks',
+                icon: Layers,
+                run: () => useEditor.getState().removeGaps('all'),
+              },
+              ...(useEditor.getState().targetedTrackIds.length > 0
+                ? [
+                    {
+                      id: 'gaps-targeted-tracks',
+                      label: 'Targeted Tracks',
+                      icon: Target,
+                      run: () => useEditor.getState().removeGaps('targeted'),
+                    },
+                  ]
+                : []),
+            ],
+          },
+          {
+            id: 'select-gaps',
+            label: 'Select Gaps…',
+            icon: Trash2,
+            run: () => useEditor.getState().setGapSelectMode(true),
           },
           {
             id: 'add-track-above',
@@ -437,6 +498,41 @@ export default function Studio() {
         ]
       : [
           { id: 'add-media', label: contextMenu.type === 'MEDIA_PANEL' ? 'Import media' : 'Add media', shortcut: 'Import', icon: Upload, primary: true, run: () => document.getElementById('topbar-import-input')?.click() },
+          // Universal timeline tools. Offered wherever a right-click lands on
+          // the timeline but has no clip under the cursor.
+          ...(contextMenu.type === 'CANVAS' || contextMenu.type === 'MEDIA_PANEL'
+            ? []
+            : [
+                {
+                  id: 'remove-all-gaps',
+                  label: 'Remove All Gaps',
+                  icon: Minimize2,
+                  submenu: [
+                    {
+                      id: 'gaps-all-tracks',
+                      label: 'All Tracks',
+                      icon: Layers,
+                      run: () => useEditor.getState().removeGaps('all'),
+                    },
+                    ...(useEditor.getState().targetedTrackIds.length > 0
+                      ? [
+                          {
+                            id: 'gaps-targeted-tracks',
+                            label: 'Targeted Tracks',
+                            icon: Target,
+                            run: () => useEditor.getState().removeGaps('targeted'),
+                          },
+                        ]
+                      : []),
+                  ],
+                },
+                {
+                  id: 'select-gaps',
+                  label: 'Select Gaps…',
+                  icon: Trash2,
+                  run: () => useEditor.getState().setGapSelectMode(true),
+                },
+              ]),
           ...(canUndo ? [{ id: 'undo', label: 'Undo', shortcut: 'Ctrl+Z', icon: Undo2, run: undo }] : []),
           ...(canRedo ? [{ id: 'redo', label: 'Redo', shortcut: 'Ctrl+Shift+Z', icon: Redo2, run: redo }] : []),
         ]

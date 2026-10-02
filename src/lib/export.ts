@@ -68,9 +68,10 @@ function download(blob: Blob, filename: string) {
   document.body.appendChild(a)
   a.click()
   a.remove()
-  // The download navigation has captured the blob synchronously; release our
-  // URL on the next task instead of retaining every export for four seconds.
-  setTimeout(() => URL.revokeObjectURL(url), 0)
+  // Give the browser a beat to actually start the download: revoking the blob
+  // URL on the next task can cancel it before it commits, which silently
+  // produces no file at all.
+  setTimeout(() => URL.revokeObjectURL(url), 1500)
 }
 
 export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
@@ -86,23 +87,30 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   if (!mime) throw new Error('MediaRecorder is not supported in this browser.')
 
   // Look the canvas up only AFTER the monitor switch. In Source mode the
-  // program canvas is unmounted, so resolving it first always threw
+  // program canvas is not mounted at all, so resolving it first always threw
   // "Preview canvas not found" and exported nothing.
   const initial = useEditor.getState()
   if (initial.monitorMode !== 'program') {
     initial.setMonitorMode('program')
-    // Let React commit the program monitor before we reach for its canvas.
-    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
   }
 
-  // If in 3D mode, record directly from the 3D WebGL canvas camera perspective
-  const live = useEditor.getState()
-  let canvas = (live.is3DMode
-    ? (document.getElementById('of-three-canvas') as HTMLCanvasElement | null)
-    : (document.getElementById('of-canvas') as HTMLCanvasElement | null))
-  if (!canvas) {
-    canvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
+  // React does not always mount the program monitor within a fixed number of
+  // frames, so poll for the canvas instead of assuming two rAF is enough.
+  const findCanvas = async (timeoutMs = 3000): Promise<HTMLCanvasElement | null> => {
+    const deadline = performance.now() + timeoutMs
+    for (;;) {
+      const live = useEditor.getState()
+      const preferred = live.is3DMode ? 'of-three-canvas' : 'of-canvas'
+      const el =
+        (document.getElementById(preferred) as HTMLCanvasElement | null) ??
+        (document.getElementById('of-canvas') as HTMLCanvasElement | null)
+      if (el) return el
+      if (performance.now() >= deadline) return null
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
   }
+
+  const canvas = await findCanvas()
   if (!canvas) throw new Error('Preview canvas not found')
 
   const targetW = st.sequenceSettings?.width || 1920

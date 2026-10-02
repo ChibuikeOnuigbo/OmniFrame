@@ -361,6 +361,13 @@ interface EditorState {
   cleanupEmptyTracks: () => void
 
   // ---- track targeting & universal gap tools ----
+  /**
+   * Bumped the moment a rubber-band lasso actually engages (the pointer moved
+   * past the click threshold). Context menus listen for it and close, so a
+   * right-drag never leaves a menu sitting over the timeline.
+   */
+  lassoEngagedAt: number
+  markLassoEngaged: () => void
   /** Empty = every track behaves as targeted, so tools keep working universally. */
   targetedTrackIds: string[]
   toggleTrackTarget: (trackId: string) => void
@@ -1091,6 +1098,7 @@ export const useEditor = create<EditorState>((set, get) => {
     insertionMode: 'insert',
     targetedTrackIds: [],
     gapSelectMode: false,
+    lassoEngagedAt: 0,
 
     // ---- drawing initial state ----
     paintLayers: [
@@ -1271,6 +1279,8 @@ export const useEditor = create<EditorState>((set, get) => {
         }
       })
     },
+
+    markLassoEngaged: () => set((s) => ({ lassoEngagedAt: s.lassoEngagedAt + 1 })),
 
     toggleTrackTarget: (trackId) =>
       set((s) => ({

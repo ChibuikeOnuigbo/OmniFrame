@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T23:42:35.891Z",
+  "generatedAt": "2026-10-02T10:32:36.545Z",
   "canvas": {
     "w": 771,
     "h": 434
@@ -19,16 +19,7 @@
   ],
   "passed": 28,
   "failed": 0,
-  "pageErrors": [
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')",
-    "TypeError: Cannot read properties of undefined (reading 'tracks')"
-  ],
+  "pageErrors": [],
   "checks": [
     {
       "name": "W1 freeform sets the lasso selection tool",
@@ -148,7 +139,7 @@
     {
       "name": "W5 OmniFrame object created from the matte",
       "ok": true,
-      "detail": "obj_guided_1790898152909"
+      "detail": "obj_guided_1790937153576"
     },
     {
       "name": "W5 non-destructive mask layer attached",

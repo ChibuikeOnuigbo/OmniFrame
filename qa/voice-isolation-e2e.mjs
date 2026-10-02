@@ -39,8 +39,12 @@ try {
   await page.goto(URL, { waitUntil: 'networkidle' })
 
   // 1. Sidebar tab and panel verification
-  const voiceRailBtn = page.getByTitle('Voice Isolation')
-  assert((await voiceRailBtn.count()) === 1, 'Voice Isolation tab present in left rail')
+  // The rail entry hosting vocal isolation is the Audio tab, whose title is
+  // "Audio — Vocal Isolation & Stems"; getByTitle('Voice Isolation') matches
+  // nothing. Open the dock so the tab is not collapsed.
+  await page.evaluate(() => window.__omniframe_store.getState().setLeftOpen(true))
+  const voiceRailBtn = page.getByTestId('left-tab-audio')
+  assert((await voiceRailBtn.count()) === 1, 'Audio tab hosting vocal isolation present in left rail')
 
   await voiceRailBtn.click()
   const panel = page.locator('[data-testid="voice-isolation-panel"]')
@@ -61,7 +65,9 @@ try {
   await page.getByTestId('panel-all-import-input').setInputFiles(join(ROOT, 'qa/fixtures/test-audio-6s.ogg'))
   await page.waitForTimeout(500)
 
-  const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
+  // I-10: a bare add-to-timeline locator hits the demo assets already in the
+  // media panel, placing a video while this suite waits for an audio clip.
+  const addBtn = page.getByRole('button', { name: /Add .*test-audio-6s.* to timeline/ })
   await addBtn.waitFor({ state: 'visible' })
   await addBtn.click({ force: true })
   await page.waitForTimeout(400)
@@ -86,12 +92,26 @@ try {
   assert(await submenu.isVisible(), 'Hovering Isolate Voice opens side submenu')
   assert((await submenu.getByRole('menuitem', { name: /Keep Vocal/ }).count()) === 1, 'Keep Vocal option in side submenu')
   assert((await submenu.getByRole('menuitem', { name: /Remove Vocal/ }).count()) === 1, 'Remove Vocal option in side submenu')
-  assert((await submenu.getByRole('menuitem', { name: /Voice Isolation Settings/ }).count()) === 1, 'Settings modal launcher in side submenu')
+  // Zero-popup flyout (commit c40cd2c): the submenu carries the two
+  // separation modes only. The settings modal opens from the sidebar panel.
+  assert((await submenu.getByRole('menuitem').count()) === 2, 'side submenu offers exactly the two separation modes', String(await submenu.getByRole('menuitem').count()))
+
+  // Opening the audio panel without toggling the dock shut: clicking a left
+  // tab that is already active COLLAPSES the dock (LeftDock tab onClick).
+  const openAudioPanel = async () => {
+    await page.evaluate(() => {
+      const st = window.__omniframe_store.getState()
+      if (st.leftTab !== 'audio' || !st.leftOpen) st.setLeftTab('audio')
+    })
+    await panel.waitFor({ state: 'visible' })
+  }
 
   await page.screenshot({ path: join(SHOTS, 'voice-isolation-context-menu.png') })
 
-  // 5. Open Voice Isolation Modal from submenu
-  await submenu.getByRole('menuitem', { name: /Voice Isolation Settings/ }).click()
+  // 5. Open Voice Isolation Modal from the sidebar panel launcher
+  await page.keyboard.press('Escape')
+  await openAudioPanel()
+  await page.getByTestId('panel-voice-settings-btn').click()
   const modal = page.locator('[data-testid="voice-isolation-modal"]')
   await modal.waitFor({ state: 'visible' })
   assert(await modal.isVisible(), 'Voice Isolation Modal opens from context menu')
@@ -120,17 +140,16 @@ try {
   const clips = await page.evaluate(() => window.__omniframe_store.getState().clips)
   const assets = await page.evaluate(() => window.__omniframe_store.getState().assets)
 
-  const removedClip = clips.find((c) => c.name.includes('[Vocal Removed]'))
+  const removedClip = clips.find((c) => c.name.includes('[Vocal Removed'))
   assert(Boolean(removedClip), 'New synchronized clip with [Vocal Removed] created on timeline')
   assert(removedClip.kind === 'audio', 'Removed vocal clip is canonical audio kind')
 
-  const removedAsset = assets.find((a) => a.name.includes('[Vocal Removed]'))
+  const removedAsset = assets.find((a) => a.name.includes('[Vocal Removed'))
   assert(Boolean(removedAsset), 'New isolated asset registered in Media Library')
   assert(Boolean(removedAsset.waveform && removedAsset.waveform.length === 256), 'Waveform extracted with 256 bins for isolated asset')
 
   // 8. Execute Keep Vocal (Voice Isolation) via Sidebar Panel
-  await page.getByTitle('Voice Isolation').click()
-  await panel.waitFor({ state: 'visible' })
+  await openAudioPanel()
   await page.locator('[data-testid="panel-mode-keep-vocal"]').click()
   await page.locator('[data-testid="panel-execute-voice-btn"]').click()
 
@@ -140,11 +159,11 @@ try {
   assert(await successAlert.isVisible(), 'Success alert displayed in sidebar panel')
 
   const updatedClips = await page.evaluate(() => window.__omniframe_store.getState().clips)
-  const isolatedClip = updatedClips.find((c) => c.name.includes('[Vocal Isolated]'))
+  const isolatedClip = updatedClips.find((c) => c.name.includes('[Vocal Isolated'))
   assert(Boolean(isolatedClip), 'New synchronized clip with [Vocal Isolated] created on timeline')
 
   const updatedAssets = await page.evaluate(() => window.__omniframe_store.getState().assets)
-  const isolatedAsset = updatedAssets.find((a) => a.name.includes('[Vocal Isolated]'))
+  const isolatedAsset = updatedAssets.find((a) => a.name.includes('[Vocal Isolated'))
   assert(Boolean(isolatedAsset), 'Isolated vocal asset registered in Media Library')
 
   await page.screenshot({ path: join(SHOTS, 'voice-isolation-timeline-tracks.png') })

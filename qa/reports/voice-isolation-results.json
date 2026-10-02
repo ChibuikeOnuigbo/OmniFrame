@@ -1,7 +1,7 @@
 {
   "results": [
     {
-      "name": "Voice Isolation tab present in left rail",
+      "name": "Audio tab hosting vocal isolation present in left rail",
       "status": "PASS",
       "detail": ""
     },
@@ -66,9 +66,9 @@
       "detail": ""
     },
     {
-      "name": "Settings modal launcher in side submenu",
+      "name": "side submenu offers exactly the two separation modes",
       "status": "PASS",
-      "detail": ""
+      "detail": "2"
     },
     {
       "name": "Voice Isolation Modal opens from context menu",

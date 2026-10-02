@@ -1,0 +1,160 @@
+{
+  "results": [
+    {
+      "name": "sequence seeded with 5 clips",
+      "status": "PASS",
+      "detail": "[2,8,14]"
+    },
+    {
+      "name": "repeated per-track Close Gaps button is gone from headers",
+      "status": "PASS",
+      "detail": "found 0"
+    },
+    {
+      "name": "every track header exposes a target control",
+      "status": "PASS",
+      "detail": "2 buttons / 2 headers"
+    },
+    {
+      "name": "clicking a target button targets that track",
+      "status": "PASS",
+      "detail": "[\"trk_ut6oi9rj1ns\"]"
+    },
+    {
+      "name": "targeted track shows an accent bar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "clicking again clears targeting",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Shift-click targets only that track",
+      "status": "PASS",
+      "detail": "[\"trk_7cfnjejj1nt\"]"
+    },
+    {
+      "name": "targeted scope closed the gap on the audio track only",
+      "status": "PASS",
+      "detail": "[0,4]"
+    },
+    {
+      "name": "untargeted video track was left alone",
+      "status": "PASS",
+      "detail": "[2,8,14]"
+    },
+    {
+      "name": "all-tracks scope preserves the first clip at 2s",
+      "status": "PASS",
+      "detail": "[2,5,8]"
+    },
+    {
+      "name": "removeGaps reports 0 gaps when there are none",
+      "status": "PASS",
+      "detail": "0"
+    },
+    {
+      "name": "a no-op gap removal pushes no undo entry",
+      "status": "PASS",
+      "detail": "4 -> 4"
+    },
+    {
+      "name": "Select Gaps shows a banner explaining the mode",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "one hatched block per gap on the timeline",
+      "status": "PASS",
+      "detail": "2 blocks"
+    },
+    {
+      "name": "gap blocks use diagonal hatch shading",
+      "status": "PASS",
+      "detail": "repeating-linear-gradient(45deg, rgba(251, 191, 36, 0.2) 0px"
+    },
+    {
+      "name": "clicking a gap closed only that gap",
+      "status": "PASS",
+      "detail": "[0,3,8]"
+    },
+    {
+      "name": "the remaining gap is still offered",
+      "status": "PASS",
+      "detail": "1 left"
+    },
+    {
+      "name": "Escape exits Select Gaps mode",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "gap blocks unmount when the mode ends",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "G opens the gap picker",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Shift+G removes all gaps in scope",
+      "status": "PASS",
+      "detail": "[0,3,5]"
+    },
+    {
+      "name": "Remove All Gaps appears in the track context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Select Gaps appears in the track context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "submenu offers This Track",
+      "status": "PASS",
+      "detail": "[\"This Track\",\"All Tracks\"]"
+    },
+    {
+      "name": "submenu offers All Tracks",
+      "status": "PASS",
+      "detail": "[\"This Track\",\"All Tracks\"]"
+    },
+    {
+      "name": "Targeted Tracks hidden while nothing is targeted",
+      "status": "PASS",
+      "detail": "[\"This Track\",\"All Tracks\"]"
+    },
+    {
+      "name": "three explicit scopes once a track is targeted",
+      "status": "PASS",
+      "detail": "[\"This Track\",\"All Tracks\",\"Targeted Tracks\"]"
+    },
+    {
+      "name": "submenu offers Targeted Tracks",
+      "status": "PASS",
+      "detail": "[\"This Track\",\"All Tracks\",\"Targeted Tracks\"]"
+    },
+    {
+      "name": "central target menu opens from the toolbar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "target menu offers an all-tracks default",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

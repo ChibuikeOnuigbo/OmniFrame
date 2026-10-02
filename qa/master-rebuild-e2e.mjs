@@ -201,9 +201,10 @@ async function run() {
     const transitionCmd = ctxMenu.locator('text=Add Transition')
     assert((await transitionCmd.count()) === 0, 'Context menu does NOT show transition commands on empty track')
 
-    // Verify it contains Close Gaps on Track and Track options
-    const ctxCloseGaps = ctxMenu.locator('[data-testid*="close-gaps"]')
-    assert((await ctxCloseGaps.count()) > 0, 'Context menu contains Close Gaps on Track')
+    // Verify it contains Remove All Gaps (renamed from "Close Gaps on Track"
+    // when it gained This Track / All Tracks / Targeted Tracks scopes).
+    const ctxCloseGaps = ctxMenu.locator('[data-testid*="remove-all-gaps"]')
+    assert((await ctxCloseGaps.count()) > 0, 'Context menu contains Remove All Gaps')
 
     // Dismiss context menu
     await page.keyboard.press('Escape')

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo} from 'react'
 import {
   ZoomIn,
   ZoomOut,
@@ -26,6 +26,9 @@ import {
   MoreVertical,
   Plus,
   Trash2,
+  Target,
+  Check,
+  X,
   Copy,
   Layers,
   ArrowRight,
@@ -42,7 +45,7 @@ import {
   ChevronRight,
   Film,
 } from 'lucide-react'
-import { useEditor } from '../store'
+import { useEditor, gapsOnTrack } from '../store'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { IconButton } from './ui'
@@ -250,6 +253,136 @@ function PlayheadMarker({ px, handle = false }: { px: number; handle?: boolean }
   )
 }
 
+/** Short code for a track (V1, A1, V2...) matching the header target buttons. */
+function trackShortCode(tracks: Track[], trackId: string): string {
+  const idx = tracks.findIndex((t) => t.id === trackId)
+  if (idx < 0) return '?'
+  const t = tracks[idx]
+  const prefix = t.type === 'audio' ? 'A' : 'V'
+  const nth = tracks.slice(0, idx + 1).filter((x) => x.type === t.type).length
+  return `${prefix}${nth}`
+}
+
+/**
+ * Central control for track targeting. Targeting is a refinement, never a
+ * gate: with nothing targeted every track stays in scope, so the universal
+ * tools keep working exactly as they did before targeting existed.
+ */
+function TrackTargetMenu() {
+  const tracks = useEditor((s) => s.tracks)
+  const targeted = useEditor((s) => s.targetedTrackIds)
+  const toggleTrackTarget = useEditor((s) => s.toggleTrackTarget)
+  const setTrackTargets = useEditor((s) => s.setTrackTargets)
+  const [open, setOpen] = useState(false)
+  const btnRef = useRef<HTMLButtonElement>(null)
+
+  const allInScope = targeted.length === 0
+  const label = allInScope
+    ? 'All tracks'
+    : tracks.filter((t) => targeted.includes(t.id)).map((t) => trackShortCode(tracks, t.id)).join(', ') || 'None'
+
+  return (
+    <>
+      <button
+        ref={btnRef}
+        type="button"
+        data-testid="track-target-menu-btn"
+        aria-expanded={open}
+        title={
+          allInScope
+            ? 'Tools apply to all tracks. Click to target specific ones.'
+            : `Tools apply to: ${label}. Click to change.`
+        }
+        aria-label="Track targeting"
+        onClick={() => setOpen((o) => !o)}
+        className={
+          'flex h-8 max-w-[132px] items-center justify-center gap-1 rounded-md border px-1.5 text-xs transition-colors ' +
+          (allInScope
+            ? 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white'
+            : 'border-brand bg-brand/20 text-white hover:bg-brand/30')
+        }
+      >
+        <Target size={14} className="shrink-0" />
+        {/* Only spell out the scope once it is narrowed: the default state is
+            "everything", which the tooltip already says, and the toolbar
+            already scrolls horizontally without extra text. */}
+        {!allInScope && <span className="truncate">{label}</span>}
+        <ChevronDown size={11} className="shrink-0" />
+      </button>
+
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div
+            data-testid="track-target-menu"
+            className="fixed z-50 w-52 rounded-md border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
+            style={{
+              left: btnRef.current ? btnRef.current.getBoundingClientRect().left : 0,
+              top: btnRef.current ? btnRef.current.getBoundingClientRect().bottom + 4 : 0,
+            }}
+          >
+            <div className="px-2 py-1 text-[9px] font-semibold uppercase tracking-wider text-ink-500">
+              Apply tools to
+            </div>
+            <button
+              type="button"
+              data-testid="track-target-all"
+              onClick={() => {
+                setTrackTargets([])
+                setOpen(false)
+              }}
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+            >
+              <Check size={12} className={allInScope ? 'opacity-100' : 'opacity-0'} />
+              <span>All tracks (default)</span>
+            </button>
+            <div className="my-1 border-t border-ink-700" />
+            {tracks.map((t) => {
+              const on = targeted.includes(t.id)
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  data-testid={`track-target-item-${t.id}`}
+                  onClick={() => toggleTrackTarget(t.id)}
+                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                >
+                  <span
+                    className={
+                      'grid place-items-center w-3.5 h-3.5 shrink-0 rounded-[3px] border ' +
+                      (on ? 'bg-brand border-brand text-white' : 'border-ink-600')
+                    }
+                  >
+                    {on && <Check size={10} />}
+                  </span>
+                  <span className="truncate">{t.name}</span>
+                </button>
+              )
+            })}
+            {!allInScope && (
+              <>
+                <div className="my-1 border-t border-ink-700" />
+                <button
+                  type="button"
+                  data-testid="track-target-clear"
+                  onClick={() => {
+                    setTrackTargets([])
+                    setOpen(false)
+                  }}
+                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                >
+                  <X size={12} />
+                  <span>Clear targeting</span>
+                </button>
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </>
+  )
+}
+
 function TrackHeader({
   track,
   tracks,
@@ -263,6 +396,9 @@ function TrackHeader({
   const toggleHidden = useEditor((s) => s.toggleTrackHidden)
   const toggleLock = useEditor((s) => s.toggleTrackLock)
   const toggleGapless = useEditor((s) => s.toggleTrackGapless)
+  const targetedTrackIds = useEditor((s) => s.targetedTrackIds)
+  const toggleTrackTarget = useEditor((s) => s.toggleTrackTarget)
+  const targetTrackOnly = useEditor((s) => s.targetTrackOnly)
   const createTrack = useEditor((s) => s.createTrack)
   const deleteTrack = useEditor((s) => s.deleteTrack)
   const setTrackHeight = useEditor((s) => s.setTrackHeight)
@@ -273,6 +409,10 @@ function TrackHeader({
 
   const trackClips = clips.filter((c) => c.trackId === track.id)
   const primaryKind = trackClips[0]?.kind || (track.type === 'audio' ? 'audio' : 'video')
+
+  const shortCode = trackShortCode(tracks, track.id)
+  const isTargeted = targetedTrackIds.includes(track.id)
+  const targetingActive = targetedTrackIds.length > 0
 
   const kindBadge = (() => {
     switch (primaryKind) {
@@ -318,6 +458,38 @@ function TrackHeader({
       className="shrink-0 flex items-center gap-1 px-2 border-b border-ink-800 bg-ink-850 relative group"
       style={{ height: effectiveHeight }}
     >
+      {/* Accent bar: the track is receiving universal tools. */}
+      {isTargeted && (
+        <span
+          data-testid={`track-scope-accent-${track.id}`}
+          className="absolute left-0 top-0 bottom-0 w-0.5 bg-brand"
+        />
+      )}
+      <button
+        type="button"
+        data-testid={`track-target-${track.id}`}
+        data-targeted={isTargeted}
+        aria-pressed={isTargeted}
+        title={
+          isTargeted
+            ? `${shortCode} is targeted. Click to untarget — tools then apply to all tracks.`
+            : `Target ${shortCode}. Targeted tracks are the only ones universal tools touch. Click to toggle, Shift-click to target only this track.`
+        }
+        onClick={(e) => {
+          if (e.shiftKey) targetTrackOnly(track.id)
+          else toggleTrackTarget(track.id)
+        }}
+        className={
+          'shrink-0 h-4 min-w-[20px] px-1 rounded-[3px] border font-mono text-[9px] font-bold leading-none grid place-items-center transition-colors ' +
+          (isTargeted
+            ? 'bg-brand border-brand text-white'
+            : targetingActive
+              ? 'border-ink-700 text-ink-600 hover:text-ink-300 hover:border-ink-600'
+              : 'border-ink-700 text-ink-400 hover:text-white hover:border-ink-500')
+        }
+      >
+        {shortCode}
+      </button>
       <span className="shrink-0">
         {kindIcon}
       </span>
@@ -335,13 +507,6 @@ function TrackHeader({
           {track.hidden ? <EyeOff size={13} /> : <Eye size={13} />}
         </IconButton>
       )}
-      <IconButton
-        title="Close Gaps on Track"
-        data-testid={`close-gaps-${track.id}`}
-        onClick={() => useEditor.getState().closeTrackGaps(track.id)}
-      >
-        <Minimize2 size={13} />
-      </IconButton>
       <IconButton
         title={track.gapless ? 'Disable gapless ripple' : 'Enable gapless ripple'}
         active={track.gapless}
@@ -864,6 +1029,20 @@ export function Timeline() {
   const setSpeed = useEditor((s) => s.setSpeed)
   const snapping = useEditor((s) => s.snapping)
   const toggleSnapping = useEditor((s) => s.toggleSnapping)
+  const gapSelectMode = useEditor((s) => s.gapSelectMode)
+
+  const setGapSelectMode = useEditor((s) => s.setGapSelectMode)
+  const removeGapAt = useEditor((s) => s.removeGapAt)
+  const targetedTrackIds = useEditor((s) => s.targetedTrackIds)
+
+  // Counted only while the picker is open, so the banner can tell the user
+  // whether there is anything to click before they hunt for it.
+  const gapCount = useMemo(() => {
+    if (!gapSelectMode) return 0
+    return tracks
+      .filter((t) => targetedTrackIds.length === 0 || targetedTrackIds.includes(t.id))
+      .reduce((n, t) => n + gapsOnTrack(clips, t.id).length, 0)
+  }, [gapSelectMode, tracks, clips, targetedTrackIds])
   const setScrubbing = useEditor((s) => s.setScrubbing)
   const splitAt = useEditor((s) => s.splitAt)
   const addClipToTrack = useEditor((s) => s.addClipToTrack)
@@ -921,6 +1100,7 @@ export function Timeline() {
   const marqueeOriginRef = useRef<{ x: number; y: number } | null>(null)
   const marqueeMovedRef = useRef(false)
   const marqueeSuppressCtxRef = useRef(false)
+  const marqueeActiveRef = useRef(false)
   const [marqueeCount, setMarqueeCount] = useState(0)
 
   /** Windows rule: a clip counts as selected if the band overlaps it at all. */
@@ -943,10 +1123,26 @@ export function Timeline() {
     return hits
   }
 
+  // Chromium raises `contextmenu` on right-button DOWN, so the menu is already
+  // open before a lasso has a chance to begin. Suppressing it here would also
+  // kill ordinary right-clicks, so instead we only swallow context menus that
+  // arrive while a lasso is genuinely dragging (pointer past the threshold);
+  // the menu opened by the initial press is closed via markLassoEngaged below.
+  useEffect(() => {
+    const onContextMenuCaptureWindow = (e: MouseEvent) => {
+      if (!marqueeMovedRef.current) return
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    window.addEventListener('contextmenu', onContextMenuCaptureWindow, true)
+    return () => window.removeEventListener('contextmenu', onContextMenuCaptureWindow, true)
+  }, [])
+
   const beginMarquee = (e: React.PointerEvent) => {
     const lanes = lanesRef.current
     if (!lanes) return
     marqueeSuppressCtxRef.current = false
+    marqueeActiveRef.current = true
     const rect = lanes.getBoundingClientRect()
     const originX = e.clientX - rect.left
     const originY = e.clientY - rect.top
@@ -954,7 +1150,9 @@ export function Timeline() {
     marqueeMovedRef.current = false
     const box = { x0: originX, y0: originY, x1: originX, y1: originY }
     marqueeBoxRef.current = box
-    setMarquee(box)
+    // Deliberately no setMarquee here: a press with no movement is a click, not
+    // a lasso, so nothing should be painted until the pointer actually travels.
+    setMarquee(null)
     setMarqueeCount(0)
 
     const onMove = (ev: PointerEvent) => {
@@ -963,6 +1161,9 @@ export function Timeline() {
         const dist = Math.hypot(ev.clientX - marqueeOriginRef.current.x, ev.clientY - marqueeOriginRef.current.y)
         if (dist < 4) return // below threshold this is a click, not a lasso
         marqueeMovedRef.current = true
+        // The right-press already opened a context menu; dismiss it now that
+        // this gesture is unambiguously a lasso.
+        useEditor.getState().markLassoEngaged()
       }
       const lanesEl = lanesRef.current
       if (!lanesEl) return
@@ -984,12 +1185,17 @@ export function Timeline() {
         useEditor.getState().selectClips(hits)
         setMarqueeCount(hits.length)
         // The browser raises `contextmenu` right after pointerup; swallow it so
-        // completing a lasso does not pop the menu open.
+        // completing a lasso does not pop the menu open. The flag is consumed
+        // by that event (see onContextMenuCapture) rather than expiring on a
+        // timer alone: a slow frame can push the event past any fixed window,
+        // which is exactly the bug this suppression is meant to prevent. The
+        // timeout is only a backstop for browsers that never raise the event.
         marqueeSuppressCtxRef.current = true
         setTimeout(() => {
           marqueeSuppressCtxRef.current = false
-        }, 350)
+        }, 1000)
       }
+      marqueeActiveRef.current = false
       marqueeBoxRef.current = null
       marqueeOriginRef.current = null
       setMarquee(null)
@@ -1470,7 +1676,34 @@ export function Timeline() {
           <ChevronDown size={11} />
         </button>
 
+        <div className="w-px h-6 bg-ink-700" />
+
+        {/* Universal tools: target tracks, then close or hand-pick gaps. */}
+        <TrackTargetMenu />
+
+        <button
+          type="button"
+          data-testid="gap-select-mode-btn"
+          title={
+            gapSelectMode
+              ? 'Exit Select Gaps (Esc)'
+              : 'Select Gaps — click any gap to remove it (Shift+G)'
+          }
+          aria-pressed={gapSelectMode}
+          onClick={() => setGapSelectMode(!gapSelectMode)}
+          className={
+            'flex h-8 items-center justify-center gap-1.5 rounded-md border px-2 text-xs transition-colors ' +
+            (gapSelectMode
+              ? 'border-amber-400 bg-amber-400/20 text-amber-200 hover:bg-amber-400/30'
+              : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white')
+          }
+        >
+          <Trash2 size={14} />
+          <span className="hidden lg:inline">Select Gaps</span>
+        </button>
+
         {/* marker button */}
+
         <button
           type="button"
           data-testid="add-marker-btn"
@@ -1784,6 +2017,30 @@ export function Timeline() {
               <PlayheadMarker px={px} handle />
             </div>
 
+            {/* Select Gaps mode banner */}
+            {gapSelectMode && (
+              <div
+                data-testid="gap-select-banner"
+                className="shrink-0 flex items-center gap-2 px-3 py-1.5 bg-amber-500/15 border-b border-amber-400/40 text-[11px] text-amber-100"
+              >
+                <Trash2 size={12} className="shrink-0 text-amber-300" />
+                <span className="font-semibold">Select Gaps</span>
+                <span className="text-amber-100/70 truncate">
+                  {gapCount > 0
+                    ? `Click any hatched gap to close it. ${gapCount} found.`
+                    : 'No gaps on the targeted tracks.'}
+                </span>
+                <button
+                  type="button"
+                  data-testid="gap-select-done"
+                  onClick={() => setGapSelectMode(false)}
+                  className="ml-auto shrink-0 px-2 py-0.5 rounded border border-amber-400/50 hover:bg-amber-400/20 text-amber-100 transition-colors"
+                >
+                  Done (Esc)
+                </button>
+              </div>
+            )}
+
             {/* lanes */}
             <div
               ref={lanesRef}
@@ -1792,12 +2049,17 @@ export function Timeline() {
               className="relative"
               style={{ height: totalHeight }}
               onPointerDown={(e) => {
+                // A new interaction always re-arms the menu; without this the
+                // suppression could linger and swallow a later, legitimate
+                // right-click.
+                marqueeSuppressCtxRef.current = false
                 if (e.button === 2) beginMarquee(e)
               }}
               onContextMenuCapture={(e) => {
                 if (marqueeSuppressCtxRef.current) {
                   e.preventDefault()
                   e.stopPropagation()
+                  marqueeSuppressCtxRef.current = false
                 }
               }}
               onDragOver={(e) => {
@@ -1887,6 +2149,59 @@ export function Timeline() {
                   )
                 })}
               </div>
+
+              {/* Gap picker overlay. Only mounted in Select Gaps mode, so the
+                  lanes stay uncluttered and unclickable the rest of the time. */}
+              {gapSelectMode && (
+                <div className="absolute inset-0 pointer-events-none z-20" data-testid="gap-select-overlay">
+                  {tracks.flatMap((tr) => {
+                    const idx = tracks.indexOf(tr)
+                    const top = tracks
+                      .slice(0, idx)
+                      .reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
+                    const laneHeight = new TrackModel(tr).getEffectiveHeight(clips)
+                    const inScope =
+                      targetedTrackIds.length === 0 || targetedTrackIds.includes(tr.id)
+                    if (!inScope) return []
+                    return gapsOnTrack(clips, tr.id).map((g) => {
+                      const w = Math.max(16, g.duration * px)
+                      return (
+                        <button
+                          key={`${tr.id}-${g.index}`}
+                          type="button"
+                          data-testid={`gap-block-${tr.id}-${g.index}`}
+                          title={`Remove this ${g.duration.toFixed(2)}s gap`}
+                          aria-label={`Remove ${g.duration.toFixed(2)} second gap`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            removeGapAt(tr.id, g.index)
+                          }}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          className="absolute group rounded-[3px] border border-dashed border-amber-400/50 overflow-hidden transition-colors hover:border-amber-300 hover:bg-amber-400/20 pointer-events-auto"
+                          style={{
+                            top: top + 4,
+                            height: Math.max(18, laneHeight - 8),
+                            left: g.start * px,
+                            width: w,
+                            backgroundColor: 'rgba(251,191,36,0.07)',
+                            backgroundImage:
+                              'repeating-linear-gradient(45deg, rgba(251,191,36,0.20) 0 5px, transparent 5px 10px)',
+                          }}
+                        >
+                          <span className="relative z-10 flex items-center justify-center gap-1 h-full text-amber-200 group-hover:text-amber-100">
+                            <Trash2 size={11} className="shrink-0" />
+                            {w > 54 && (
+                              <span className="font-mono text-[9px] leading-none">
+                                {g.duration.toFixed(2)}s
+                              </span>
+                            )}
+                          </span>
+                        </button>
+                      )
+                    })
+                  })}
+                </div>
+              )}
 
               {/* Transitions layer */}
               <div className="absolute inset-0 pointer-events-none">
