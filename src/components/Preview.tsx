@@ -331,7 +331,7 @@ export function Preview() {
                 onEnded={() => setAssetPlaying(false)}
               />
               <div className="w-16 h-16 rounded-full bg-brand/20 border border-brand/40 grid place-items-center mb-3">
-                <Volume2 size={32} className="text-brand" />
+                <Volume2 size={32} className="text-brand-400" />
               </div>
               <h3 className="text-sm font-semibold text-ink-100 max-w-[280px] truncate" title={previewAsset.name}>{previewAsset.name}</h3>
               <p className="text-xs text-ink-400 mt-1">Audio Track · {formatTimecode(assetDuration, projectFps)}</p>
@@ -434,7 +434,7 @@ export function Preview() {
           data-testid="preview-asset-detail"
           className="absolute bottom-16 left-4 z-30 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-950/90 border border-ink-700/80 shadow-xl text-xs backdrop-blur-xs animate-in fade-in duration-100 max-w-[280px] sm:max-w-md"
         >
-          <Film size={14} className="text-brand shrink-0" />
+          <Film size={14} className="text-brand-400 shrink-0" />
           <span
             data-testid="preview-asset-detail-name"
             title={previewAsset.name}
@@ -442,7 +442,7 @@ export function Preview() {
           >
             {previewAsset.name}
           </span>
-          <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-brand/20 text-brand font-semibold shrink-0">
+          <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-brand/20 text-brand-400 font-semibold shrink-0">
             {previewAsset.kind}
           </span>
           <button
@@ -469,7 +469,7 @@ export function Preview() {
             data-testid="asset-play-pause-btn"
             onClick={toggleAssetPlay}
             aria-label={assetPlaying ? 'Pause asset playback' : 'Play asset'}
-            className="h-8 w-8 rounded-lg bg-brand/20 hover:bg-brand/30 border border-brand/40 text-brand flex items-center justify-center transition-colors shrink-0"
+            className="h-8 w-8 rounded-lg bg-brand/20 hover:bg-brand/30 border border-brand/40 text-brand-400 flex items-center justify-center transition-colors shrink-0"
           >
             {assetPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
           </button>

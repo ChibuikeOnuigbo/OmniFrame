@@ -158,7 +158,7 @@ export function TopBar() {
       </button>
 
       <div className="flex items-center gap-2 pl-1 pr-1 sm:pr-2">
-        <Film size={18} className="text-brand" />
+        <Film size={18} className="text-brand-400" />
         <span className="hidden sm:inline font-semibold tracking-tight text-sm">OmniFrame</span>
       </div>
 
@@ -222,7 +222,7 @@ export function TopBar() {
                   setLayoutOpen(false)
                   setLayoutModalOpen(true)
                 }}
-                className="text-brand hover:underline capitalize"
+                className="text-brand-400 hover:underline capitalize"
               >
                 Manage...
               </button>
@@ -247,14 +247,14 @@ export function TopBar() {
                   setLayoutOpen(false)
                 }}
                 className={`flex items-center justify-between gap-2 px-2 py-1.5 rounded-md hover:bg-ink-700 transition-colors ${
-                  workspacePreset === p.id && focusMode === 'none' ? 'bg-brand/20 text-brand font-medium' : 'text-ink-300'
+                  workspacePreset === p.id && focusMode === 'none' ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <WorkspaceSchematic preset={p.id as WorkspacePreset} />
                   <span className="truncate">{p.label}</span>
                 </div>
-                {workspacePreset === p.id && focusMode === 'none' && <Check size={14} className="shrink-0 text-brand" />}
+                {workspacePreset === p.id && focusMode === 'none' && <Check size={14} className="shrink-0 text-brand-400" />}
               </button>
             ))}
 
@@ -279,11 +279,11 @@ export function TopBar() {
                   setLayoutOpen(false)
                 }}
                 className={`flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-ink-700 transition-colors ${
-                  focusMode === m.id ? 'bg-brand/20 text-brand font-medium' : 'text-ink-300'
+                  focusMode === m.id ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
                 }`}
               >
                 <span>{m.label}</span>
-                {focusMode === m.id && <Check size={14} className="text-brand" />}
+                {focusMode === m.id && <Check size={14} className="text-brand-400" />}
               </button>
             ))}
           </div>
@@ -498,7 +498,7 @@ export function TopBar() {
                       type="button"
                       data-testid="reset-context-menu-btn"
                       onClick={resetContextMenuCommands}
-                      className="text-[10px] text-brand hover:underline shrink-0 ml-2"
+                      className="text-[10px] text-brand-400 hover:underline shrink-0 ml-2"
                     >
                       Reset Defaults
                     </button>
@@ -563,7 +563,7 @@ export function TopBar() {
                       type="button"
                       data-testid="reset-shortcuts-btn"
                       onClick={resetCustomShortcuts}
-                      className="text-[10px] text-brand hover:underline shrink-0 ml-2"
+                      className="text-[10px] text-brand-400 hover:underline shrink-0 ml-2"
                     >
                       Reset All
                     </button>
@@ -644,7 +644,7 @@ export function TopBar() {
                       type="button"
                       data-testid="reset-cursor-btn"
                       onClick={resetCursorConfig}
-                      className="text-[10px] text-brand hover:underline shrink-0 ml-2"
+                      className="text-[10px] text-brand-400 hover:underline shrink-0 ml-2"
                     >
                       Reset Defaults
                     </button>

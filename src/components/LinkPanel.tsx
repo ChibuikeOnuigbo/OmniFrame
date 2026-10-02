@@ -68,7 +68,7 @@ export function LinkPanel() {
     <div data-testid="link-panel" className="p-3 text-xs text-ink-200 select-none space-y-4 overflow-y-auto h-full">
       {/* Overview Banner */}
       <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1">
-        <div className="flex items-center gap-1.5 font-semibold text-brand text-xs">
+        <div className="flex items-center gap-1.5 font-semibold text-brand-400 text-xs">
           <Link2 size={14} />
           <span>Universal Link & Relationships</span>
         </div>
@@ -158,7 +158,7 @@ export function LinkPanel() {
                           : 'border-ink-800 bg-ink-900 text-ink-400 hover:text-ink-200'
                       }`}
                     >
-                      <Icon size={12} className={active ? 'text-brand shrink-0' : 'text-ink-500 shrink-0'} />
+                      <Icon size={12} className={active ? 'text-brand-400 shrink-0' : 'text-ink-500 shrink-0'} />
                       <span className="truncate">{label}</span>
                     </button>
                   )
@@ -176,7 +176,7 @@ export function LinkPanel() {
                 title="Horizontally aligns linked elements in time while preserving separate tracks and untouched unrelated clips"
                 aria-label="Arrange linked elements"
               >
-                <AlignLeft size={13} className="text-brand shrink-0" />
+                <AlignLeft size={13} className="text-brand-400 shrink-0" />
                 <span className="truncate">Arrange Linked Elements</span>
               </button>
 
@@ -270,7 +270,7 @@ export function LinkPanel() {
         {activeGroup ? (
           <div data-testid="active-group-card" className="p-2.5 rounded-lg border border-ink-800 bg-ink-900/60 text-[11px] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Layers size={13} className="text-brand" />
+              <Layers size={13} className="text-brand-400" />
               <span className="font-medium text-ink-200">{activeGroup.name}</span>
               <span className="text-[10px] text-ink-500 font-mono">({activeGroup.memberIds.length} items)</span>
             </div>

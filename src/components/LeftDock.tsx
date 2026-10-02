@@ -145,7 +145,7 @@ export function LeftDock() {
         {/* Temporary Contextual Sub-Mode Rail Icons */}
         {contextualSubModes.length > 0 && (
           <div className="flex flex-col items-center gap-1 w-full pt-1.5 mt-1 border-t border-ink-800/80 px-1">
-            <span className="text-[7px] font-mono font-bold text-brand uppercase tracking-tight">
+            <span className="text-[7px] font-mono font-bold text-brand-400 uppercase tracking-tight">
               SUB
             </span>
             {contextualSubModes.map((sub) => {
@@ -166,7 +166,7 @@ export function LeftDock() {
                         : 'bg-ink-950 border-ink-800 text-ink-300 hover:text-white hover:border-ink-700'
                     }`}
                   >
-                    <Sparkles size={14} className={isSubActive ? 'text-brand animate-pulse' : 'text-amber-400'} />
+                    <Sparkles size={14} className={isSubActive ? 'text-brand-400 animate-pulse' : 'text-amber-400'} />
                   </button>
                   <button
                     type="button"
@@ -216,7 +216,7 @@ export function LeftDock() {
                   type="button"
                   data-testid="submode-back-btn"
                   onClick={closeSubMode}
-                  className="flex items-center gap-0.5 text-[11px] text-brand hover:text-white font-medium transition-colors shrink-0"
+                  className="flex items-center gap-0.5 text-[11px] text-brand-400 hover:text-white font-medium transition-colors shrink-0"
                   title="Return to main section overview"
                 >
                   <ChevronLeft size={14} />

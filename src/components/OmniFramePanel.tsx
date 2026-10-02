@@ -137,10 +137,10 @@ export function OmniFramePanel() {
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <div className="flex items-center gap-1.5">
-          <Scissors size={17} className="text-brand" />
+          <Scissors size={17} className="text-brand-400" />
           <span className="font-semibold text-ink-100">OmniFrame Mask</span>
         </div>
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand/15 text-brand font-mono font-medium">
+        <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand/15 text-brand-400 font-mono font-medium">
           Multi-Frame Cuts
         </span>
       </div>
@@ -148,7 +148,7 @@ export function OmniFramePanel() {
       {/* Target Video Banner */}
       <div className="px-2.5 py-1.5 rounded-lg bg-ink-900 border border-ink-800 flex items-center justify-between text-[11px]">
         <div className="flex items-center gap-1.5 truncate">
-          <Film size={15} className="text-brand shrink-0" />
+          <Film size={15} className="text-brand-400 shrink-0" />
           <span className="font-medium text-ink-200 truncate">
             {activeClip ? activeClip.name : 'Death Note Chibi - 5 Characters.mp4'}
           </span>
@@ -204,7 +204,7 @@ export function OmniFramePanel() {
               onClick={() => openSubMode('omniframe', 'omniframe-selection', 'OmniFrame Selection Subtool', 'BoxSelect')}
               className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
             >
-              <BoxSelect size={20} className="text-brand mb-1" />
+              <BoxSelect size={20} className="text-brand-400 mb-1" />
               <div className="font-semibold text-[10px] text-ink-100">Selection</div>
               <div className="text-[9px] text-ink-400">6 Subtools</div>
             </button>
@@ -304,7 +304,7 @@ export function OmniFramePanel() {
             type="button"
             data-testid="omniframe-auto-arrange-btn"
             onClick={handleAutoArrange}
-            className="flex items-center gap-1 text-[10px] text-brand hover:text-white px-2 py-0.5 rounded bg-brand/20 hover:bg-brand/30 border border-brand/40 font-semibold transition-colors"
+            className="flex items-center gap-1 text-[10px] text-brand-400 hover:text-white px-2 py-0.5 rounded bg-brand/20 hover:bg-brand/30 border border-brand/40 font-semibold transition-colors"
           >
             <Sparkles size={14} />
             <span>Rearrange Clean</span>
@@ -361,7 +361,7 @@ export function OmniFramePanel() {
                     {char.scope === 'all' ? 'All Frames' : char.scope === 'section' ? 'Section' : '1 Frame'}
                   </span>
                   {(char.transform.x !== 0 || char.transform.y !== 0) && (
-                    <span className="text-[9px] text-brand font-mono font-bold">
+                    <span className="text-[9px] text-brand-400 font-mono font-bold">
                       Δ ({char.transform.x > 0 ? `+${char.transform.x}` : char.transform.x}, {char.transform.y > 0 ? `+${char.transform.y}` : char.transform.y})
                     </span>
                   )}
@@ -378,7 +378,7 @@ export function OmniFramePanel() {
           <Section active={section === 'transform'}>
           <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
             <span className="font-semibold text-ink-100 flex items-center gap-1 truncate pr-1" title={selectedChar.name}>
-              <Move size={15} className="text-brand shrink-0" />
+              <Move size={15} className="text-brand-400 shrink-0" />
               <span className="truncate">Transform: {selectedChar.name}</span>
             </span>
             <button
@@ -499,7 +499,7 @@ export function OmniFramePanel() {
                 <PaintBucket size={14} className="text-amber-400" />
                 <span>Object Color & Recolor</span>
               </div>
-              <span className="font-mono text-[9px] text-brand">
+              <span className="font-mono text-[9px] text-brand-400">
                 {selectedChar.recolorColor || 'Original'}
               </span>
             </div>
@@ -711,7 +711,7 @@ export function OmniFramePanel() {
                 title="Cut character to new timeline track"
                 aria-label="Cut character to track"
                 onClick={() => cutCharacterToNewTrack(selectedChar.id)}
-                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-brand/20 border border-brand/40 text-brand font-medium hover:bg-brand/30 transition-colors truncate"
+                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-brand/20 border border-brand/40 text-brand-400 font-medium hover:bg-brand/30 transition-colors truncate"
               >
                 <Scissors size={15} className="shrink-0" />
                 <span className="truncate">Cut to Track</span>
@@ -777,7 +777,7 @@ export function OmniFramePanel() {
         <div data-testid="omniframe-verification-table" className="p-2.5 rounded-xl bg-ink-950 border border-ink-800 space-y-2">
           <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
             <span>Evaluated Position Verification</span>
-            <span className="font-mono text-brand font-bold">Scope: {selectedChar.scope}</span>
+            <span className="font-mono text-brand-400 font-bold">Scope: {selectedChar.scope}</span>
           </div>
 
           <div className="space-y-1">

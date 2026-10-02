@@ -97,7 +97,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
         {/* Header */}
         <div className="flex items-center justify-between border-b border-ink-800 px-5 py-4 bg-ink-950/60">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand/20 text-brand border border-brand/40">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand/20 text-brand-400 border border-brand/40">
               <Mic size={18} />
             </div>
             <div>
@@ -165,7 +165,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1.5 font-semibold text-xs">
-                  <Mic size={15} className={mode === 'keep_vocal' ? 'text-brand' : 'text-ink-400'} />
+                  <Mic size={15} className={mode === 'keep_vocal' ? 'text-brand-400' : 'text-ink-400'} />
                   <span>Keep Vocal</span>
                 </div>
                 <p className="text-[11px] text-ink-400 leading-snug">
@@ -185,7 +185,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1.5 font-semibold text-xs">
-                  <Music2 size={15} className={mode === 'remove_vocal' ? 'text-brand' : 'text-ink-400'} />
+                  <Music2 size={15} className={mode === 'remove_vocal' ? 'text-brand-400' : 'text-ink-400'} />
                   <span>Remove Vocal</span>
                 </div>
                 <p className="text-[11px] text-ink-400 leading-snug">
@@ -222,7 +222,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                   checked={preserveBass}
                   disabled={processing}
                   onChange={(e) => setPreserveBass(e.target.checked)}
-                  className="rounded border-ink-700 bg-ink-800 text-brand focus:ring-brand/40 h-4 w-4"
+                  className="rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand/40 h-4 w-4"
                 />
                 <div>
                   <span className="font-medium">Preserve Low Bass</span>
@@ -239,7 +239,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                   checked={speechFocus}
                   disabled={processing}
                   onChange={(e) => setSpeechFocus(e.target.checked)}
-                  className="rounded border-ink-700 bg-ink-800 text-brand focus:ring-brand/40 h-4 w-4"
+                  className="rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand/40 h-4 w-4"
                 />
                 <div>
                   <span className="font-medium">Speech Formant Bandpass</span>
@@ -256,7 +256,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
             <div data-testid="voice-isolation-progress-card" className="space-y-2 p-3.5 rounded-xl border border-brand/40 bg-brand/10 text-xs">
               <div className="flex items-center justify-between text-violet-200 font-medium">
                 <span className="flex items-center gap-2">
-                  <Loader2 size={14} className="animate-spin text-brand" />
+                  <Loader2 size={14} className="animate-spin text-brand-400" />
                   <span>{status}</span>
                 </span>
                 <span className="font-mono">{progress}%</span>

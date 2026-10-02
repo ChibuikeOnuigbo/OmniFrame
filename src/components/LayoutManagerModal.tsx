@@ -77,7 +77,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-ink-800">
           <div className="flex items-center gap-2">
-            <LayoutGrid size={18} className="text-brand" />
+            <LayoutGrid size={18} className="text-brand-400" />
             <h2 className="text-sm font-semibold text-white">Workspace Layout & Focus Mode</h2>
           </div>
           <button
@@ -97,7 +97,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
             data-testid="tab-presets"
             onClick={() => setActiveTab('presets')}
             className={`py-2.5 border-b-2 transition-colors ${
-              activeTab === 'presets' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-400 hover:text-ink-200'
+              activeTab === 'presets' ? 'border-brand text-brand-400 font-semibold' : 'border-transparent text-ink-400 hover:text-ink-200'
             }`}
           >
             Built-in Presets
@@ -107,7 +107,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
             data-testid="tab-custom"
             onClick={() => setActiveTab('custom')}
             className={`py-2.5 border-b-2 transition-colors ${
-              activeTab === 'custom' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-400 hover:text-ink-200'
+              activeTab === 'custom' ? 'border-brand text-brand-400 font-semibold' : 'border-transparent text-ink-400 hover:text-ink-200'
             }`}
           >
             My Workspaces ({customWorkspaces.length})
@@ -117,7 +117,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
             data-testid="tab-focus"
             onClick={() => setActiveTab('focus')}
             className={`py-2.5 border-b-2 transition-colors ${
-              activeTab === 'focus' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-400 hover:text-ink-200'
+              activeTab === 'focus' ? 'border-brand text-brand-400 font-semibold' : 'border-transparent text-ink-400 hover:text-ink-200'
             }`}
           >
             Focus Modes
@@ -156,7 +156,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
                       </div>
                       <p className="text-[11px] text-ink-400 truncate mt-0.5">{p.desc}</p>
                     </div>
-                    {isActive && <Check size={15} className="text-brand shrink-0" />}
+                    {isActive && <Check size={15} className="text-brand-400 shrink-0" />}
                   </div>
                 )
               })}
@@ -220,7 +220,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
                             applyCustomWorkspace(ws.id)
                             onClose()
                           }}
-                          className="px-2.5 py-1 rounded bg-brand/20 hover:bg-brand/30 text-brand text-xs font-medium transition-colors"
+                          className="px-2.5 py-1 rounded bg-brand/20 hover:bg-brand/30 text-brand-400 text-xs font-medium transition-colors"
                         >
                           Apply
                         </button>
@@ -263,7 +263,7 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
                       <span className="text-xs font-semibold">{f.label}</span>
                       <p className="text-[11px] text-ink-400 mt-0.5">{f.desc}</p>
                     </div>
-                    {isActive && <Check size={16} className="text-brand" />}
+                    {isActive && <Check size={16} className="text-brand-400" />}
                   </div>
                 )
               })}

@@ -364,7 +364,7 @@ export function GraphEditor() {
               title={isKeyAtPlayhead ? 'Remove Keyframe at Playhead' : 'Add Keyframe at Playhead'}
               onClick={handleToggleKeyframeAtPlayhead}
               className={`p-1 rounded transition-colors ${
-                isKeyAtPlayhead ? 'text-brand' : 'text-ink-500 hover:text-ink-200'
+                isKeyAtPlayhead ? 'text-brand-400' : 'text-ink-500 hover:text-ink-200'
               }`}
             >
               <Diamond size={13} fill={isKeyAtPlayhead ? 'currentColor' : 'none'} />

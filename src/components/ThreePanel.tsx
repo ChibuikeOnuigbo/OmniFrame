@@ -40,12 +40,12 @@ export function ThreePanel() {
       {(!activeSubMode || activeSubMode === 'threed-overview') && (
         <>
           <div className="p-2.5 rounded-lg bg-ink-900 border border-ink-800">
-            <div className="flex items-center justify-between font-semibold text-brand mb-1">
+            <div className="flex items-center justify-between font-semibold text-brand-400 mb-1">
               <div className="flex items-center gap-1.5">
                 <Box size={14} />
                 <span>3D & 2.5D Compositing</span>
               </div>
-              <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-brand/15 text-brand border border-brand/30">
+              <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-brand/15 text-brand-400 border border-brand/30">
                 Blender Mode
               </span>
             </div>
@@ -94,7 +94,7 @@ export function ThreePanel() {
               type="button"
               data-testid="activate-3d-preset-btn"
               onClick={() => setWorkspacePreset('3d')}
-              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-brand/20 hover:bg-brand/30 text-brand text-xs font-medium transition-colors border border-brand/30"
+              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-brand/20 hover:bg-brand/30 text-brand-400 text-xs font-medium transition-colors border border-brand/30"
             >
               <span>Open 3D Scene Workspace</span>
               <Box size={14} />

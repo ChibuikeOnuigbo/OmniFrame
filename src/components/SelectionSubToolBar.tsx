@@ -47,7 +47,7 @@ export function SelectionSubToolBar() {
       className="absolute z-30 max-sm:bottom-12 max-sm:top-auto sm:top-3 sm:bottom-auto left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1.5 rounded-xl bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[calc(100vw-300px)] min-w-0 w-auto overflow-x-auto scrollbar-none"
     >
       <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
-        <span className="text-[10px] font-mono uppercase font-bold text-brand px-1 py-0.5">
+        <span className="text-[10px] font-mono uppercase font-bold text-brand-400 px-1 py-0.5">
           MASK
         </span>
       </div>
@@ -136,7 +136,7 @@ export function SelectionSubToolBar() {
           title="Convert selection to movable OmniFrame Object with clean inpainting"
           aria-label="Convert to OmniFrame Object"
           onClick={() => convertSelectionToOmniframeObject()}
-          className="flex items-center gap-1 px-2 py-1 rounded-lg bg-brand/20 text-brand hover:bg-brand/30 border border-brand/40 text-[11px] font-medium transition-colors"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg bg-brand/20 text-brand-400 hover:bg-brand/30 border border-brand/40 text-[11px] font-medium transition-colors"
         >
           <Scissors size={12} />
           <span className="hidden sm:inline">To Object</span>

@@ -71,7 +71,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
           title={hasKey ? 'Remove Keyframe at Current Time' : 'Add Keyframe at Current Time'}
           onClick={handleToggle}
           className={`p-1 rounded transition-colors ${
-            hasKey ? 'text-brand' : 'text-ink-500 hover:text-ink-200'
+            hasKey ? 'text-brand-400' : 'text-ink-500 hover:text-ink-200'
           }`}
         >
           <Diamond size={13} fill={hasKey ? 'currentColor' : 'none'} />
@@ -81,7 +81,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
           data-testid={`open-curve-${propertyId}`}
           title="Open in Curve Graph Editor"
           onClick={handleOpenCurve}
-          className="p-1 rounded text-ink-500 hover:text-brand hover:bg-ink-800 transition-colors"
+          className="p-1 rounded text-ink-500 hover:text-brand-400 hover:bg-ink-800 transition-colors"
         >
           <Activity size={12} />
         </button>
@@ -244,7 +244,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                 data-testid="audio-voice-isolation-checkbox"
                 checked={isolationEnabled}
                 onChange={(e) => setIsolationEnabled(e.target.checked)}
-                className="h-3.5 w-3.5 rounded border-ink-700 bg-ink-800 text-brand focus:ring-brand focus:ring-offset-ink-900 cursor-pointer"
+                className="h-3.5 w-3.5 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand focus:ring-offset-ink-900 cursor-pointer"
               />
               <span className="text-xs font-medium text-ink-200">Voice Isolation</span>
             </label>

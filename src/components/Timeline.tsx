@@ -1783,7 +1783,7 @@ export function Timeline() {
               : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
           }`}
         >
-          <Activity size={15} className={graphEditorOpen ? 'text-brand' : ''} />
+          <Activity size={15} className={graphEditorOpen ? 'text-brand-400' : ''} />
           <span className="hidden xl:inline">Curves</span>
         </button>
         <span className="text-[10px] text-ink-500 whitespace-nowrap">

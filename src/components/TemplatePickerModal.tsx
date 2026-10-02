@@ -83,7 +83,7 @@ export function TemplatePickerModal({ isOpen, onClose }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-ink-800 bg-ink-950/60">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-brand/20 text-brand">
+            <div className="p-1.5 rounded-lg bg-brand/20 text-brand-400">
               <LayoutTemplate size={16} />
             </div>
             <div>
@@ -123,7 +123,7 @@ export function TemplatePickerModal({ isOpen, onClose }: Props) {
                 >
                   <div className="font-semibold text-xs text-ink-100">{tmpl.name}</div>
                   <div className="text-[11px] text-ink-400 mt-0.5 line-clamp-2">{tmpl.description}</div>
-                  <div className="text-[10px] text-brand font-mono mt-1.5">
+                  <div className="text-[10px] text-brand-400 font-mono mt-1.5">
                     {tmpl.slots.length} configured slots
                   </div>
                 </button>

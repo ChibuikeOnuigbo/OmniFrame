@@ -183,7 +183,7 @@ export function MediaPanel() {
                     ) : a.kind === 'video' ? (
                       <Film size={22} className="text-ink-500 pointer-events-none" />
                     ) : (
-                      <div className="flex items-center -space-x-1 rounded-full border border-brand/20 bg-brand/10 px-2.5 py-2 text-brand/80 shadow-[0_0_18px_rgba(108,76,255,0.12)] pointer-events-none">
+                      <div className="flex items-center -space-x-1 rounded-full border border-brand/20 bg-brand/10 px-2.5 py-2 text-brand-400/80 shadow-[0_0_18px_rgba(108,76,255,0.12)] pointer-events-none">
                         <Music size={20} />
                         <AudioLines size={15} />
                       </div>
@@ -219,7 +219,7 @@ export function MediaPanel() {
                       title={`Add “${a.name}” to Timeline at playhead`}
                       aria-label={`Add ${a.name} to timeline`}
                       onClick={(e) => addToTimeline(a, e)}
-                      className="absolute top-1 right-1 grid place-items-center h-6 w-6 rounded bg-ink-950/90 text-brand border border-brand/40 opacity-0 group-hover:opacity-100 hover:scale-110 transition-all shadow-md z-10"
+                      className="absolute top-1 right-1 grid place-items-center h-6 w-6 rounded bg-ink-950/90 text-brand-400 border border-brand/40 opacity-0 group-hover:opacity-100 hover:scale-110 transition-all shadow-md z-10"
                     >
                       <Plus size={14} />
                     </button>
@@ -253,7 +253,7 @@ export function MediaPanel() {
           <div className="w-full max-w-sm rounded-xl border border-ink-700 bg-ink-900 shadow-2xl p-4 space-y-3.5 text-xs text-ink-200 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-2 border-b border-ink-800">
               <div className="flex items-center gap-2">
-                <Info size={16} className="text-brand shrink-0" />
+                <Info size={16} className="text-brand-400 shrink-0" />
                 <span className="font-semibold text-white text-sm">Media File Details</span>
               </div>
               <button
@@ -275,7 +275,7 @@ export function MediaPanel() {
               <div className="grid grid-cols-2 gap-2 pt-1 border-t border-ink-800/80">
                 <div>
                   <span className="text-ink-500 block text-[10px] uppercase font-mono">Format / Type</span>
-                  <span className="capitalize text-brand font-medium">{infoAsset.kind}</span>
+                  <span className="capitalize text-brand-400 font-medium">{infoAsset.kind}</span>
                 </div>
                 <div>
                   <span className="text-ink-500 block text-[10px] uppercase font-mono">Duration</span>

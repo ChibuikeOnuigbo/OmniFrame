@@ -168,7 +168,7 @@ export function DrawingPanel() {
       {/* Drawing Mode Toggle */}
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <span className="font-medium text-ink-100 flex items-center gap-1.5">
-          <Palette size={14} className="text-brand" />
+          <Palette size={14} className="text-brand-400" />
           Drawing & Paint Mode
         </span>
         <button
@@ -271,7 +271,7 @@ export function DrawingPanel() {
                     }}
                     className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-left transition-colors ${
                       active
-                        ? 'bg-brand/20 border-brand text-brand font-medium'
+                        ? 'bg-brand/20 border-brand text-brand-400 font-medium'
                         : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white'
                     }`}
                   >
@@ -292,7 +292,7 @@ export function DrawingPanel() {
       <div className="p-2.5 rounded-lg bg-ink-900 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <span className="font-medium text-ink-200 text-[11px] flex items-center gap-1.5">
-            <Layers size={13} className="text-brand" />
+            <Layers size={13} className="text-brand-400" />
             Timeline Attachment
           </span>
           <label className="flex items-center gap-1.5 cursor-pointer text-[10px] text-ink-300">
@@ -303,7 +303,7 @@ export function DrawingPanel() {
               onChange={(e) => setAttachDirectlyToVideo(e.target.checked, selectedMergeSourceClipId)}
               className="accent-brand rounded cursor-pointer"
             />
-            <span className={attachDirectlyToVideo ? 'text-brand font-medium' : 'text-amber-400 font-medium'}>
+            <span className={attachDirectlyToVideo ? 'text-brand-400 font-medium' : 'text-amber-400 font-medium'}>
               {attachDirectlyToVideo ? 'Direct Video Overlay' : 'Separate Track'}
             </span>
           </label>
@@ -333,7 +333,7 @@ export function DrawingPanel() {
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
           <span>Attach Frame Count</span>
-          <span className="font-mono text-brand font-bold" data-testid="active-attach-frames-label">
+          <span className="font-mono text-brand-400 font-bold" data-testid="active-attach-frames-label">
             {drawingHoldFrames} {drawingHoldFrames === 1 ? 'frame' : 'frames'} ({(drawingHoldFrames / projectFps).toFixed(2)}s)
           </span>
         </div>
@@ -467,7 +467,7 @@ export function DrawingPanel() {
                   onChange={(e) => setDrawingShapeFilled(e.target.checked)}
                   className="accent-brand rounded cursor-pointer"
                 />
-                <Square size={13} className={drawingShapeFilled ? 'text-brand' : 'text-ink-400'} />
+                <Square size={13} className={drawingShapeFilled ? 'text-brand-400' : 'text-ink-400'} />
                 <span className={drawingShapeFilled ? 'text-brand-400 font-medium' : ''}>Fill Shape</span>
               </label>
             </>
@@ -519,8 +519,8 @@ export function DrawingPanel() {
               onChange={(e) => setDrawingPreserveLuminance(e.target.checked)}
               className="accent-brand rounded cursor-pointer"
             />
-            <Sparkles size={13} className={drawingPreserveLuminance ? 'text-brand' : 'text-ink-400'} />
-            <span className={drawingPreserveLuminance ? 'text-brand font-medium' : ''}>
+            <Sparkles size={13} className={drawingPreserveLuminance ? 'text-brand-400' : 'text-ink-400'} />
+            <span className={drawingPreserveLuminance ? 'text-brand-400 font-medium' : ''}>
               Preserve Hair/Cloth Shading (Luminance)
             </span>
           </label>
@@ -563,9 +563,9 @@ export function DrawingPanel() {
                   setDrawingScope({ type: 'frame', frame: currentFrame, holdFrames: drawingHoldFrames })
                 }
               }}
-              className="rounded border-ink-700 bg-ink-800 text-brand"
+              className="rounded border-ink-700 bg-ink-800 text-brand-400"
             />
-            <span className={drawingScope.type === 'global' ? 'text-brand font-medium' : 'text-ink-400'}>
+            <span className={drawingScope.type === 'global' ? 'text-brand-400 font-medium' : 'text-ink-400'}>
               Apply to All Frames
             </span>
           </label>
@@ -598,7 +598,7 @@ export function DrawingPanel() {
                 <span
                   data-testid="current-cel-badge"
                   data-cel-frame={currentFrame}
-                  className="font-mono text-[11px] font-bold text-brand px-1.5 py-0.5 rounded bg-brand/10 border border-brand/30"
+                  className="font-mono text-[11px] font-bold text-brand-400 px-1.5 py-0.5 rounded bg-brand/10 border border-brand/30"
                 >
                   Frame #{currentFrame}
                 </span>
@@ -718,7 +718,7 @@ export function DrawingPanel() {
             type="button"
             data-testid="add-paint-layer-btn"
             onClick={() => createPaintLayer()}
-            className="flex items-center gap-1 text-[11px] text-brand hover:underline"
+            className="flex items-center gap-1 text-[11px] text-brand-400 hover:underline"
           >
             <Plus size={12} />
             Add Layer
@@ -859,7 +859,7 @@ export function DrawingPanel() {
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-300">
           <span className="flex items-center gap-1">
-            <Sliders size={12} className="text-brand" />
+            <Sliders size={12} className="text-brand-400" />
             <span>Brush Dynamics & Stabilizer (Krita Engine)</span>
           </span>
           <span className="text-[9px] font-mono text-ink-400">Stylus / Pen</span>
@@ -872,7 +872,7 @@ export function DrawingPanel() {
               data-testid="brush-pressure-size-checkbox"
               checked={brushDynamics.pressureSize}
               onChange={(e) => setBrushDynamics({ pressureSize: e.target.checked })}
-              className="rounded border-ink-700 text-brand focus:ring-brand bg-ink-800"
+              className="rounded border-ink-700 text-brand-400 focus:ring-brand bg-ink-800"
             />
             <span className="text-[11px]">Pressure Size</span>
           </label>
@@ -883,7 +883,7 @@ export function DrawingPanel() {
               data-testid="brush-pressure-opacity-checkbox"
               checked={brushDynamics.pressureOpacity}
               onChange={(e) => setBrushDynamics({ pressureOpacity: e.target.checked })}
-              className="rounded border-ink-700 text-brand focus:ring-brand bg-ink-800"
+              className="rounded border-ink-700 text-brand-400 focus:ring-brand bg-ink-800"
             />
             <span className="text-[11px]">Pressure Opacity</span>
           </label>
@@ -892,7 +892,7 @@ export function DrawingPanel() {
         <div className="flex flex-col gap-1">
           <div className="flex justify-between items-center text-[10px] text-ink-400 uppercase font-mono">
             <span>Smoothing Mode</span>
-            <span className="text-brand font-semibold capitalize">{brushDynamics.smoothingMode}</span>
+            <span className="text-brand-400 font-semibold capitalize">{brushDynamics.smoothingMode}</span>
           </div>
           <div className="grid grid-cols-3 gap-1 bg-ink-950 p-0.5 rounded border border-ink-800">
             {(['none', 'smooth', 'stabilizer'] as const).map((mode) => (
@@ -918,7 +918,7 @@ export function DrawingPanel() {
       {activeLayer && (
         <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2.5">
           <div className="flex items-center gap-1 text-[11px] font-medium text-ink-300">
-            <Sliders size={12} className="text-brand" />
+            <Sliders size={12} className="text-brand-400" />
             <span>Layer Blend & Blur ({activeLayer.name})</span>
           </div>
 

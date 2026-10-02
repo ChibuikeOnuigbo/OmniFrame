@@ -103,11 +103,11 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
       {/* Header & Sub-tool Mode Indicator */}
       <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
         <div className="flex items-center gap-1.5 font-semibold text-ink-100">
-          <Sparkles size={13} className="text-brand" />
+          <Sparkles size={13} className="text-brand-400" />
           <span>Selection & Masking Sub-Tool</span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-[10px] px-1.5 py-0.2 rounded font-mono uppercase bg-brand/15 text-brand border border-brand/30">
+          <span className="text-[10px] px-1.5 py-0.2 rounded font-mono uppercase bg-brand/15 text-brand-400 border border-brand/30">
             LumaCut Mask Engine
           </span>
         </div>
@@ -248,7 +248,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
               aria-label="Preserve luminance"
               checked={preserveLuminance}
               onChange={(e) => setPreserveLuminance(e.target.checked)}
-              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand"
+              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand-400"
             />
             <span>Keep Texture/Shading</span>
           </label>
@@ -498,7 +498,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
           type="button"
           data-testid="convert-to-omniframe-obj-btn"
           onClick={() => convertSelectionToOmniframeObject()}
-          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg bg-brand/20 border border-brand/50 text-brand font-medium hover:bg-brand/30 hover:text-white text-xs transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg bg-brand/20 border border-brand/50 text-brand-400 font-medium hover:bg-brand/30 hover:text-white text-xs transition-colors"
           title="Extract active selection into an interactive OmniFrame object with clean background infill"
         >
           <Scissors size={13} className="shrink-0" />

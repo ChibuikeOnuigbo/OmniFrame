@@ -307,7 +307,7 @@ export function AspectRatioSelector() {
     if (ar === 'custom') {
       return <CustomRatioIcon size={14} />
     }
-    return <Tv size={14} className="text-brand shrink-0" />
+    return <Tv size={14} className="text-brand-400 shrink-0" />
   }
 
   // Specific icon for preset items
@@ -339,7 +339,7 @@ export function AspectRatioSelector() {
     if (presetId === 'custom') {
       return <CustomRatioIcon size={15} />
     }
-    return <Tv size={15} className="text-brand shrink-0" />
+    return <Tv size={15} className="text-brand-400 shrink-0" />
   }
 
   return (
@@ -356,7 +356,7 @@ export function AspectRatioSelector() {
             <span className="text-ink-500 font-mono text-[10px]">({sequenceSettings.width} × {sequenceSettings.height})</span>
           </div>
           <div className="text-ink-400 text-[10px]">{currentPreset.description}</div>
-          <div className="mt-1 flex items-center gap-1 text-[9px] text-brand">
+          <div className="mt-1 flex items-center gap-1 text-[9px] text-brand-400">
             {currentPreset.platforms.slice(0, 3).map((plat) => (
               <span key={plat} className="px-1 py-0.5 rounded bg-brand/10 border border-brand/30">
                 {plat}
@@ -412,7 +412,7 @@ export function AspectRatioSelector() {
             <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">
               Sequence Aspect Ratio
             </span>
-            <span className="font-mono text-[10px] text-brand">
+            <span className="font-mono text-[10px] text-brand-400">
               {sequenceSettings.width} × {sequenceSettings.height}
             </span>
           </div>
@@ -429,7 +429,7 @@ export function AspectRatioSelector() {
                   onClick={() => handleSelectPreset(preset.id)}
                   className={`w-full flex items-center justify-between px-2 py-1 rounded-md transition-colors text-left ${
                     active
-                      ? 'bg-brand/20 text-brand font-medium'
+                      ? 'bg-brand/20 text-brand-400 font-medium'
                       : 'hover:bg-ink-850 text-ink-300 hover:text-white'
                   }`}
                 >
@@ -449,7 +449,7 @@ export function AspectRatioSelector() {
                       </div>
                     </div>
                   </div>
-                  {active && <Check size={13} className="shrink-0 text-brand" />}
+                  {active && <Check size={13} className="shrink-0 text-brand-400" />}
                 </button>
               )
             })}
@@ -499,7 +499,7 @@ export function AspectRatioSelector() {
                   onClick={() => setRatioLocked(!ratioLocked)}
                   title={ratioLocked ? 'Ratio Locked' : 'Ratio Unlocked'}
                   className={`mt-3 p-1.5 rounded transition-colors ${
-                    ratioLocked ? 'bg-brand/20 text-brand' : 'text-ink-500 hover:text-ink-300'
+                    ratioLocked ? 'bg-brand/20 text-brand-400' : 'text-ink-500 hover:text-ink-300'
                   }`}
                 >
                   {ratioLocked ? <Lock size={13} /> : <Unlock size={13} />}

@@ -270,7 +270,7 @@ export function TrackingPanel() {
     <div data-testid="tracking-panel" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">
       {/* Overview Banner */}
       <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1">
-        <div className="flex items-center gap-1.5 font-semibold text-brand text-xs">
+        <div className="flex items-center gap-1.5 font-semibold text-brand-400 text-xs">
           <Target size={14} />
           <span>Masking & Tracking Subsystem</span>
         </div>
@@ -296,7 +296,7 @@ export function TrackingPanel() {
             }`}
           >
             <div className="flex items-center gap-1.5 font-medium text-xs mb-0.5">
-              <Layers size={13} className={mode === 'mask' ? 'text-brand' : 'text-ink-500'} />
+              <Layers size={13} className={mode === 'mask' ? 'text-brand-400' : 'text-ink-500'} />
               <span>Mask Track</span>
             </div>
             <p className="text-[10px] text-ink-500">Track spatial masks through time.</p>
@@ -313,7 +313,7 @@ export function TrackingPanel() {
             }`}
           >
             <div className="flex items-center gap-1.5 font-medium text-xs mb-0.5">
-              <Crosshair size={13} className={mode === 'main' ? 'text-brand' : 'text-ink-500'} />
+              <Crosshair size={13} className={mode === 'main' ? 'text-brand-400' : 'text-ink-500'} />
               <span>Main Track</span>
             </div>
             <p className="text-[10px] text-ink-500">Point, planar & motion vectors.</p>
@@ -328,7 +328,7 @@ export function TrackingPanel() {
           <div className="p-2.5 rounded-xl border border-ink-800 bg-ink-900/90 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-semibold text-ink-300 uppercase tracking-wider flex items-center gap-1">
-                <Sparkles size={11} className="text-brand" />
+                <Sparkles size={11} className="text-brand-400" />
                 Conversions (Drawing ↔ Mask ↔ Selection)
               </span>
               <span className="text-[9px] text-ink-500 font-mono">Krita Style</span>
@@ -366,7 +366,7 @@ export function TrackingPanel() {
                   title="Convert active mask to shape selection"
                   aria-label="Convert mask to shape selection"
                   onClick={handleConvertMaskToShapeSelection}
-                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors truncate"
+                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand-400 text-[10px] font-medium transition-colors truncate"
                 >
                   <span className="truncate">Mask → Shape Sel</span>
                 </button>
@@ -377,7 +377,7 @@ export function TrackingPanel() {
                   title="Convert active mask to filled raster selection"
                   aria-label="Convert mask to filled selection"
                   onClick={handleConvertMaskToFilledSelection}
-                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-medium transition-colors truncate"
+                  className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand-400 text-[10px] font-medium transition-colors truncate"
                 >
                   <span className="truncate">Mask → Filled Sel</span>
                 </button>
@@ -433,7 +433,7 @@ export function TrackingPanel() {
                   onClick={() => handleAddMask(type as MaskShapeType)}
                   className="flex flex-col items-center justify-center py-1.5 rounded-lg border border-ink-800 bg-ink-900 hover:bg-ink-800 text-ink-300 hover:text-white transition-colors"
                 >
-                  <Icon size={13} className="text-brand mb-0.5" />
+                  <Icon size={13} className="text-brand-400 mb-0.5" />
                   <span className="text-[10px]">{label}</span>
                 </button>
               ))}
@@ -450,7 +450,7 @@ export function TrackingPanel() {
                 type="button"
                 data-testid="add-mask-btn"
                 onClick={() => handleAddMask('rectangle')}
-                className="text-[10px] text-brand hover:underline flex items-center gap-1"
+                className="text-[10px] text-brand-400 hover:underline flex items-center gap-1"
               >
                 <Plus size={11} />
                 <span>Add Mask</span>
@@ -469,7 +469,7 @@ export function TrackingPanel() {
                   }`}
                 >
                   <div className="flex items-center gap-1.5">
-                    <Layers size={12} className={activeMaskId === mask.id ? 'text-brand' : 'text-ink-500'} />
+                    <Layers size={12} className={activeMaskId === mask.id ? 'text-brand-400' : 'text-ink-500'} />
                     <span>{mask.name}</span>
                   </div>
                   {masks.length > 1 && (
@@ -500,7 +500,7 @@ export function TrackingPanel() {
                     data-testid="mask-invert-toggle"
                     checked={activeMask.inverted}
                     onChange={(e) => handleUpdateActiveMask({ inverted: e.target.checked })}
-                    className="rounded border-ink-700 bg-ink-800 text-brand"
+                    className="rounded border-ink-700 bg-ink-800 text-brand-400"
                   />
                   <span>Invert</span>
                 </label>
@@ -567,9 +567,9 @@ export function TrackingPanel() {
                   data-testid="mask-apply-all-frames-toggle"
                   checked={activeMask.applyToAllFrames}
                   onChange={(e) => handleUpdateActiveMask({ applyToAllFrames: e.target.checked })}
-                  className="rounded border-ink-700 bg-ink-800 text-brand"
+                  className="rounded border-ink-700 bg-ink-800 text-brand-400"
                 />
-                <span className={activeMask.applyToAllFrames ? 'text-brand font-medium' : 'text-ink-400'}>
+                <span className={activeMask.applyToAllFrames ? 'text-brand-400 font-medium' : 'text-ink-400'}>
                   Apply to All Frames
                 </span>
               </label>
@@ -613,7 +613,7 @@ export function TrackingPanel() {
                   type="button"
                   data-testid="add-track-point-btn"
                   onClick={handleAddPoint}
-                  className="px-2 py-0.5 rounded bg-brand/20 text-brand hover:bg-brand/30 text-[10px] font-medium"
+                  className="px-2 py-0.5 rounded bg-brand/20 text-brand-400 hover:bg-brand/30 text-[10px] font-medium"
                 >
                   + Add Point
                 </button>
@@ -642,7 +642,7 @@ export function TrackingPanel() {
                       ({(pt.x * 100).toFixed(1)}%, {(pt.y * 100).toFixed(1)}%)
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] text-brand">
+                  <span className="font-mono text-[10px] text-brand-400">
                     {Math.round(pt.confidence * 100)}% conf
                   </span>
                 </div>
@@ -694,7 +694,7 @@ export function TrackingPanel() {
             data-testid="tracking-forward-backward-toggle"
             checked={forwardBackward}
             onChange={(e) => setForwardBackward(e.target.checked)}
-            className="rounded border-ink-700 bg-ink-800 text-brand"
+            className="rounded border-ink-700 bg-ink-800 text-brand-400"
           />
           <span>Forward-Backward Consistency Validation</span>
         </label>
@@ -730,7 +730,7 @@ export function TrackingPanel() {
         <div data-testid="tracking-progress-card" className="p-2.5 rounded-lg border border-brand/40 bg-brand/10 space-y-1.5">
           <div className="flex items-center justify-between text-violet-200 text-[11px] font-medium">
             <span className="flex items-center gap-1.5">
-              <RefreshCw size={12} className="animate-spin text-brand" />
+              <RefreshCw size={12} className="animate-spin text-brand-400" />
               <span>{mode === 'mask' ? 'Tracking & deforming mask contour...' : 'Matching Sobel gradients...'}</span>
             </span>
             <span className="font-mono">{progress}%</span>

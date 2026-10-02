@@ -630,7 +630,7 @@ export default function Studio() {
           data-testid="focus-mode-banner"
           className="absolute top-14 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-3 py-1.5 bg-ink-900/95 border border-brand/60 rounded-full shadow-2xl backdrop-blur-md text-xs text-ink-200"
         >
-          <span className="font-medium text-brand">Focus Mode: {focusMode}</span>
+          <span className="font-medium text-brand-400">Focus Mode: {focusMode}</span>
           <button
             type="button"
             data-testid="exit-focus-btn"
@@ -703,7 +703,7 @@ export default function Studio() {
                       isSubmenuOpen ? 'bg-ink-700 text-white' : 'hover:bg-ink-700 text-ink-200'
                     }`}
                   >
-                    <Icon size={15} aria-hidden="true" className="shrink-0 text-brand" />
+                    <Icon size={15} aria-hidden="true" className="shrink-0 text-brand-400" />
                     <span className="min-w-0 flex-1 truncate" title={command.label}>{command.label}</span>
                     <ChevronRight size={13} className="text-ink-400 shrink-0" />
                   </button>
@@ -730,7 +730,7 @@ export default function Studio() {
                             }}
                             className="flex h-8 w-full items-center gap-2 rounded-lg px-2.5 text-left font-medium outline-none hover:bg-brand/20 hover:text-white transition-colors truncate"
                           >
-                            <SubIcon size={14} className="text-brand shrink-0" />
+                            <SubIcon size={14} className="text-brand-400 shrink-0" />
                             <span className="truncate">{subItem.label}</span>
                           </button>
                         )

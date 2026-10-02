@@ -167,7 +167,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-ink-800 bg-ink-950/60">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-brand/20 text-brand">
+            <div className="p-1.5 rounded-lg bg-brand/20 text-brand-400">
               <Sparkles size={16} />
             </div>
             <div>
@@ -336,7 +336,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
                 data-testid="bg-temporal-smoothing-toggle"
                 checked={temporalSmoothing}
                 onChange={(e) => setTemporalSmoothing(e.target.checked)}
-                className="rounded border-ink-700 bg-ink-800 text-brand"
+                className="rounded border-ink-700 bg-ink-800 text-brand-400"
               />
               <span>Multi-Frame Temporal Smoothing (Reduces edge chatter)</span>
             </label>
@@ -351,7 +351,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               <canvas ref={previewCanvasRef} className="w-full h-full object-contain" />
               {isProcessing && (
                 <div className="absolute inset-0 bg-ink-950/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2">
-                  <RefreshCw size={24} className="animate-spin text-brand" />
+                  <RefreshCw size={24} className="animate-spin text-brand-400" />
                   <span className="text-xs font-mono text-white">Segmenting frames... {progress}%</span>
                 </div>
               )}
@@ -378,7 +378,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               data-testid="apply-mask-layer-btn"
               disabled={isProcessing}
               onClick={handleApplyMaskLayer}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand/50 bg-brand/20 hover:bg-brand/30 text-brand font-medium text-xs transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand/50 bg-brand/20 hover:bg-brand/30 text-brand-400 font-medium text-xs transition-colors"
               title="Create non-destructive mask layer rather than editing original image"
             >
               <Layers size={13} />

@@ -95,7 +95,7 @@ export function VoiceIsolationPanel() {
     <div data-testid="voice-isolation-panel" className="flex flex-col h-full p-3 space-y-3.5 text-xs select-none overflow-y-auto">
       {/* Overview & Concept Distinction Banner */}
       <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1.5">
-        <div className="flex items-center gap-2 font-semibold text-brand">
+        <div className="flex items-center gap-2 font-semibold text-brand-400">
           <Mic size={14} />
           <span>Voice Isolation & Vocal Separation</span>
         </div>
@@ -163,7 +163,7 @@ export function VoiceIsolationPanel() {
                 : 'border-ink-800 bg-ink-900 hover:bg-ink-800 text-ink-400'
             }`}
           >
-            <Mic size={14} className={mode === 'keep_vocal' ? 'text-brand' : ''} />
+            <Mic size={14} className={mode === 'keep_vocal' ? 'text-brand-400' : ''} />
             <div>
               <div className="font-medium text-[11px]">Keep Vocal</div>
               <div className="text-[9px] text-ink-400 opacity-80">Speech only</div>
@@ -181,7 +181,7 @@ export function VoiceIsolationPanel() {
                 : 'border-ink-800 bg-ink-900 hover:bg-ink-800 text-ink-400'
             }`}
           >
-            <Music2 size={14} className={mode === 'remove_vocal' ? 'text-brand' : ''} />
+            <Music2 size={14} className={mode === 'remove_vocal' ? 'text-brand-400' : ''} />
             <div>
               <div className="font-medium text-[11px]">Remove Vocal</div>
               <div className="text-[9px] text-ink-400 opacity-80">Instrumental</div>
@@ -218,7 +218,7 @@ export function VoiceIsolationPanel() {
               checked={preserveBass}
               disabled={processing}
               onChange={(e) => setPreserveBass(e.target.checked)}
-              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand"
+              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand-400"
             />
             <span>Preserve Bass & Kick Drum (&le; 140Hz)</span>
           </label>
@@ -231,7 +231,7 @@ export function VoiceIsolationPanel() {
               checked={speechFocus}
               disabled={processing}
               onChange={(e) => setSpeechFocus(e.target.checked)}
-              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand"
+              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand-400"
             />
             <span>Speech Formant Bandpass Focus</span>
           </label>
@@ -243,7 +243,7 @@ export function VoiceIsolationPanel() {
         <div data-testid="panel-processing-status" className="space-y-1.5 p-2.5 rounded-lg border border-brand/40 bg-brand/10 text-[11px]">
           <div className="flex items-center justify-between text-violet-200">
             <span className="flex items-center gap-1.5">
-              <Loader2 size={12} className="animate-spin text-brand" />
+              <Loader2 size={12} className="animate-spin text-brand-400" />
               <span>{status}</span>
             </span>
             <span className="font-mono">{progress}%</span>

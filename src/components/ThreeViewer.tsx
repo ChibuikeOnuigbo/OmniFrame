@@ -731,7 +731,7 @@ export function ThreeViewer({
                 : 'text-ink-400 hover:bg-ink-800 hover:text-white'
             }`}
           >
-            <Layers size={13} className="text-brand" />
+            <Layers size={13} className="text-brand-400" />
             <span>3D in 2D</span>
           </button>
 
@@ -779,7 +779,7 @@ export function ThreeViewer({
               onClick={() => setPrimitive(prim)}
               className={`px-1.5 py-0.5 rounded text-[10px] capitalize font-medium transition-colors ${
                 primitive === prim
-                  ? 'bg-brand/20 text-brand border border-brand/40 font-semibold'
+                  ? 'bg-brand/20 text-brand-400 border border-brand/40 font-semibold'
                   : 'text-ink-400 hover:bg-ink-800 hover:text-white'
               }`}
             >
@@ -808,7 +808,7 @@ export function ThreeViewer({
           title={`Wireframe: ${wireframe ? 'ON' : 'OFF'}`}
           onClick={() => setWireframe(!wireframe)}
           className={`p-1 rounded transition-colors shrink-0 ${
-            wireframe ? 'bg-brand/20 text-brand' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
+            wireframe ? 'bg-brand/20 text-brand-400' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
           }`}
         >
           <Eye size={14} />
@@ -821,7 +821,7 @@ export function ThreeViewer({
           title={`Grid: ${showGrid ? 'ON' : 'OFF'}`}
           onClick={() => setShowGrid(!showGrid)}
           className={`p-1 rounded transition-colors shrink-0 ${
-            showGrid ? 'bg-brand/20 text-brand' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
+            showGrid ? 'bg-brand/20 text-brand-400' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
           }`}
         >
           <Grid size={14} />

@@ -158,7 +158,7 @@ export function TransitionsPanel() {
       </div>
 
       {lastApplied && (
-        <div className="flex items-center gap-1.5 p-2 rounded-md bg-brand/10 border border-brand/30 text-brand text-[11px] animate-in fade-in duration-100">
+        <div className="flex items-center gap-1.5 p-2 rounded-md bg-brand/10 border border-brand/30 text-brand-400 text-[11px] animate-in fade-in duration-100">
           <CheckCircle2 size={13} />
           <span>Applied {lastApplied.replace(/_/g, ' ')} to timeline cut!</span>
         </div>
@@ -189,7 +189,7 @@ export function TransitionsPanel() {
               title={`Apply ${tr.name} to cut`}
               aria-label={`Apply ${tr.name} transition`}
               onClick={() => handleApplyToSelected(tr.id)}
-              className="shrink-0 flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand hover:text-white text-[11px] font-medium transition-colors"
+              className="shrink-0 flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand-400 hover:text-white text-[11px] font-medium transition-colors"
             >
               <Plus size={12} className="shrink-0" />
               <span>Apply</span>
