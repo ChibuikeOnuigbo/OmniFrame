@@ -226,8 +226,11 @@ export function Preview() {
       onPointerCancel={() => { dragRef.current = null }}
       onDoubleClick={() => setPan({ x: 0, y: 0 })}
     >
-      {/* Top Right: View & 3D Controls */}
-      <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
+      {/* Top Right: View & 3D Controls.
+          Must sit above preview-3d-stage (z-20), which is inset-0 and rendered
+          later in the DOM: at an equal z-index it won and swallowed clicks on
+          this bar, so turning 3D mode on made its own toggle unreachable. */}
+      <div className="absolute top-2 right-2 z-30 flex items-center gap-1">
         {/* 3D Orbit Viewer Toggle */}
         <button
           type="button"

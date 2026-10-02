@@ -199,9 +199,20 @@ async function run() {
   assert(selectionState.type === 'rectangle', 'Selection type is rectangle')
   assert(selectionState.bounds.width > 0.1 && selectionState.bounds.height > 0.1, 'Selection bounds are positive')
 
-  // Verify active selection badge on toolbar
-  const selBadge = page.locator('[data-testid="active-selection-badge"]')
-  assert(await selBadge.isVisible(), 'Active selection badge visible on toolbar')
+  // Verify the selection is surfaced in the UI. There is no badge on the
+  // toolbar; the app shows an active selection two ways — marching ants drawn
+  // on the canvas, and the selection sub-tool's controls. Assert both.
+  const selSubtool = page.locator('[data-testid="selection-mask-subtool"]')
+  assert(await selSubtool.isVisible(), 'Selection sub-tool is shown for the active selection')
+  for (const control of ['subtool-invert-btn', 'subtool-grow-btn', 'subtool-shrink-btn', 'subtool-clear-btn']) {
+    assert(await page.getByTestId(control).isVisible(), `Selection sub-tool exposes ${control}`)
+  }
+  // Marching ants animate, so the canvas overlay must change between frames
+  // while a selection is live and nothing else is moving.
+  const antsA = await page.locator('[data-testid="drawing-canvas"]').screenshot()
+  await page.waitForTimeout(260)
+  const antsB = await page.locator('[data-testid="drawing-canvas"]').screenshot()
+  assert(!antsA.equals(antsB), 'Active selection renders animated marching ants on the canvas')
 
   // Capture screenshot of active selection with animated marching ants
   const selectionShotPath = join(SHOTS_DIR, 'omniframe-selection-marching-ants.png')
@@ -215,18 +226,18 @@ async function run() {
 
   // Test Selection Inversion
   console.log('Testing Selection Invert...')
-  await page.locator('[data-testid="invert-selection-btn"]').click()
+  await page.locator('[data-testid="subtool-invert-btn"]').click()
   await page.waitForTimeout(300)
   const inverted = await page.evaluate(() => window.__omniframe_store.getState().activeSelection?.inverted)
   assert(inverted === true, 'Selection inverted state is true')
 
   // Toggle inversion back to normal mask
-  await page.locator('[data-testid="invert-selection-btn"]').click()
+  await page.locator('[data-testid="subtool-invert-btn"]').click()
   await page.waitForTimeout(300)
 
   // Convert Selection to Paint Layer Mask
   console.log('Converting Selection to Paint Layer Mask...')
-  await page.locator('[data-testid="convert-selection-mask-btn"]').click()
+  await page.locator('[data-testid="convert-mask-layer-btn"]').click()
   await page.waitForTimeout(400)
 
   const maskState = await page.evaluate(() => {
@@ -277,7 +288,7 @@ async function run() {
   assert(ellipseSel?.type === 'ellipse', 'Elliptical selection created successfully')
 
   // Clear selection with button
-  await page.locator('[data-testid="clear-selection-btn"]').click()
+  await page.locator('[data-testid="subtool-clear-btn"]').click()
   await page.waitForTimeout(300)
   assert(await page.evaluate(() => window.__omniframe_store.getState().activeSelection === null), 'Selection cleared')
 
