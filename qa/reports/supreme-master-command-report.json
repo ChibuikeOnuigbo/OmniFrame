@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-02T23:06:54.314Z",
-  "passed": 14,
+  "timestamp": "2026-10-02T23:24:32.552Z",
+  "passed": 16,
   "failed": 0,
-  "total": 14,
+  "total": 16,
   "results": [
     {
       "name": "01. Application Loaded",
@@ -68,6 +68,16 @@
       "name": "16. Drawing Subsystem Opened",
       "status": "PASS",
       "details": "Drawing & paint panel visible"
+    },
+    {
+      "name": "17. Apply to All Frames Toggled OFF",
+      "status": "PASS",
+      "details": "Cel animation exposure mode active"
+    },
+    {
+      "name": "18. Apply to All Frames Toggled ON",
+      "status": "PASS",
+      "details": "Global temporal scope active"
     },
     {
       "name": "19. Visual Evidence Screenshot Captured",

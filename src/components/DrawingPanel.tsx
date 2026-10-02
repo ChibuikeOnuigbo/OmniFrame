@@ -388,6 +388,7 @@ export function DrawingPanel() {
                 setDrawingHoldFrames(next)
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
               }}
+              aria-label="Adjust value"
               className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
             >
               -
@@ -395,6 +396,7 @@ export function DrawingPanel() {
             <input
               type="number"
               data-testid="attach-frame-count-input"
+              aria-label="Frames to attach"
               min={1}
               max={240}
               value={drawingHoldFrames}
@@ -413,6 +415,7 @@ export function DrawingPanel() {
                 setDrawingHoldFrames(next)
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
               }}
+              aria-label="Adjust value"
               className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
             >
               +
@@ -580,6 +583,7 @@ export function DrawingPanel() {
         <select
           value={drawingScope.type}
           onChange={(e) => handleScopeChange(e.target.value as TemporalScopeType)}
+          aria-label="Apply to frames"
           className="w-full bg-ink-900 text-ink-200 border border-ink-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-brand"
         >
           <option value="global">All Frames (Global Annotation)</option>
@@ -773,6 +777,8 @@ export function DrawingPanel() {
                     <button
                       type="button"
                       data-testid={`toggle-layer-visibility-${layer.id}`}
+                      aria-pressed={!!layer.visible}
+                      aria-label={layer.visible ? `Hide layer ${layer.name}` : `Show layer ${layer.name}`}
                       onClick={() => togglePaintLayerVisibility(layer.id)}
                       className="p-1 rounded text-ink-400 hover:text-white hover:bg-ink-750"
                     >
@@ -933,6 +939,7 @@ export function DrawingPanel() {
             <div className="text-[10px] text-ink-400 uppercase font-mono mb-1">Blend Mode</div>
             <select
               data-testid="layer-blend-mode-select"
+              aria-label="Layer blend mode"
               value={activeLayer.blendMode || 'source-over'}
               onChange={(e) => setPaintLayerBlendMode(activeLayer.id, e.target.value as GlobalCompositeOperation)}
               className="w-full bg-ink-800 text-ink-200 border border-ink-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-brand"

@@ -1,6 +1,6 @@
 {
   "totals": {
-    "files": 56,
+    "files": 58,
     "findings": 192
   },
   "byRule": {
@@ -552,56 +552,49 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 36,
+      "line": 37,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 37,
+      "line": 38,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 38,
+      "line": 39,
       "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 39,
+      "line": 40,
       "evidence": "hardcoded colour #10b981 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 40,
+      "line": 41,
       "evidence": "hardcoded colour #a855f7 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 41,
+      "line": 42,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 42,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 211,
+      "line": 43,
       "evidence": "hardcoded colour #000000 instead of a theme token"
     },
     {
@@ -615,8 +608,8 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 224,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 215,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
     },
     {
       "rule": "S04",
@@ -629,8 +622,8 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 237,
-      "evidence": "hardcoded colour #808080 instead of a theme token"
+      "line": 228,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
@@ -640,10 +633,17 @@
       "evidence": "hardcoded colour #808080 instead of a theme token"
     },
     {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 241,
+      "evidence": "hardcoded colour #808080 instead of a theme token"
+    },
+    {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 782,
+      "line": 799,
       "evidence": "1 non-null assertion(s)"
     },
     {
@@ -671,77 +671,77 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 531,
+      "line": 533,
       "evidence": "hardcoded colour #94a3b8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 537,
+      "line": 539,
       "evidence": "hardcoded colour #38bdf8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 538,
+      "line": 540,
       "evidence": "hardcoded colour #0f172a instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 556,
+      "line": 558,
       "evidence": "hardcoded colour #94a3b8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 562,
+      "line": 564,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 563,
+      "line": 565,
       "evidence": "hardcoded colour #0f172a instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 586,
+      "line": 588,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 587,
+      "line": 589,
       "evidence": "hardcoded colour #0f172a instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 601,
+      "line": 603,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 604,
+      "line": 606,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/GraphEditor.tsx",
-      "line": 676,
+      "line": 678,
       "evidence": "1 non-null assertion(s)"
     },
     {
@@ -832,35 +832,35 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 509,
+      "line": 513,
       "evidence": "hardcoded colour #2563eb instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 510,
+      "line": 514,
       "evidence": "hardcoded colour #dc2626 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 511,
+      "line": 515,
       "evidence": "hardcoded colour #d97706 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 512,
+      "line": 516,
       "evidence": "hardcoded colour #059669 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 513,
+      "line": 517,
       "evidence": "hardcoded colour #7c3aed instead of a theme token"
     },
     {
@@ -965,21 +965,21 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 288,
+      "line": 290,
       "evidence": "hardcoded colour #f8fafc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 293,
+      "line": 295,
       "evidence": "hardcoded colour #38bdf8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 298,
+      "line": 300,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
@@ -1021,147 +1021,147 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 936,
+      "line": 937,
       "evidence": "hardcoded colour #fef08a instead of a theme token"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1194,
+      "line": 1195,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1952,
+      "line": 1953,
       "evidence": "hardcoded colour #10b981 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1954,
+      "line": 1955,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1956,
+      "line": 1957,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1958,
+      "line": 1959,
       "evidence": "hardcoded colour #a855f7 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1960,
+      "line": 1961,
       "evidence": "hardcoded colour #f97316 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1961,
+      "line": 1962,
       "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 2275,
+      "line": 2276,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 2288,
+      "line": 2289,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2398,
+      "line": 2399,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2409,
+      "line": 2410,
       "evidence": "2 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2441,
+      "line": 2442,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2456,
+      "line": 2457,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2458,
+      "line": 2459,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2473,
+      "line": 2474,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2496,
+      "line": 2497,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2500,
+      "line": 2501,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2515,
+      "line": 2516,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2519,
+      "line": 2520,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2532,
+      "line": 2533,
       "evidence": "1 non-null assertion(s)"
     },
     {
