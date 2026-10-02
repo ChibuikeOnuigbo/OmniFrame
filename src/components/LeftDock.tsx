@@ -81,7 +81,7 @@ export function LeftDock() {
       <div className="w-12 shrink-0 bg-ink-900 border-r border-ink-700/80 flex flex-col items-center py-1.5 gap-1 overflow-y-auto scrollbar-none">
         {/* Category Filters: Reduces UI level across Video, 2D, 3D */}
         <div className="flex flex-col items-center gap-0.5 pb-1 mb-0.5 border-b border-ink-800 w-full px-1">
-          <div className="grid grid-cols-2 gap-0.5 w-full">
+          <div className="flex flex-col gap-0.5 w-full">
             {(['all', 'video', '2d', '3d'] as const).map((cat) => (
               <button
                 key={cat}

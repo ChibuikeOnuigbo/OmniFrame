@@ -260,7 +260,9 @@ function collectStrict() {
     if (!vis(el)) continue
     const p = el.parentElement
     const sib = p ? p.textContent || '' : ''
-    const hasNum = /-?\d+(\.\d+)?\s*(%|px|s|ms|deg|x)?/i.test(sib.replace(el.value || '', ''))
+    // Readouts usually sit in a sibling label row ("Brightness  100%"), so the
+    // number is rarely at the start of the string -- do not anchor the match.
+    const hasNum = /\d+(\.\d+)?\s*(%|px|s|ms|deg|°|x)?/i.test(sib.replace(el.value || '', ''))
     if (!hasNum) push('R03', 'medium', el, 'slider with no numeric readout next to it')
   }
 
@@ -416,22 +418,51 @@ function collectStrict() {
 
   // ---- D: more layout ---------------------------------------------------
 
-  // D05 interactive controls whose boxes overlap: the top one steals clicks.
-  {
-    const boxes = controls
-      .map((el) => ({ el, r: el.getBoundingClientRect() }))
-      .filter((b) => b.r.width > 2 && b.r.height > 2)
-    for (let i = 0; i < boxes.length; i++) {
-      for (let j = i + 1; j < boxes.length; j++) {
-        const a = boxes[i], b = boxes[j]
-        if (a.el.contains(b.el) || b.el.contains(a.el)) continue
-        const ox = Math.min(a.r.right, b.r.right) - Math.max(a.r.left, b.r.left)
-        const oy = Math.min(a.r.bottom, b.r.bottom) - Math.max(a.r.top, b.r.top)
-        if (ox > 2 && oy > 2) {
-          push('D05', 'high', b.el, `overlaps ${describe(a.el)} by ${Math.round(ox)}x${Math.round(oy)}px`)
-        }
+  // D05 a control you cannot actually click because something else is on top
+  // of it. Geometric overlap alone is a poor signal: a closed panel that is
+  // translated off-screen still reports a bounding box, and a popover is
+  // *meant* to cover the page. So this asks the browser directly -- if the
+  // element at the control's own centre point is not the control, something is
+  // stealing its clicks.
+  // A closed side panel is usually translated out of view rather than
+  // display:none, so it still reports a bounding box and its controls look
+  // like they are sitting on top of the timeline. Skip anything clipped out of
+  // its scrolling ancestor's visible box.
+  const clippedOut = (el, r) => {
+    let n = el.parentElement
+    while (n && n !== document.body) {
+      const cs = getComputedStyle(n)
+      if (cs.overflow !== 'visible' || cs.overflowX !== 'visible' || cs.overflowY !== 'visible') {
+        const pr = n.getBoundingClientRect()
+        const ix = Math.min(r.right, pr.right) - Math.max(r.left, pr.left)
+        const iy = Math.min(r.bottom, pr.bottom) - Math.max(r.top, pr.top)
+        // Less than half the control is inside the clip box -> effectively gone.
+        if (ix < r.width * 0.5 || iy < r.height * 0.5) return true
       }
+      n = n.parentElement
     }
+    return false
+  }
+
+  for (const el of controls) {
+    if (el.tagName === 'INPUT' && (el.type === 'hidden' || el.type === 'range')) continue
+    if (getComputedStyle(el).pointerEvents === 'none') continue
+    const r = el.getBoundingClientRect()
+    if (r.width < 4 || r.height < 4) continue
+    const cx = r.left + r.width / 2
+    const cy = r.top + r.height / 2
+    if (cx < 0 || cy < 0 || cx > innerWidth || cy > innerHeight) continue
+    if (clippedOut(el, r)) continue
+
+    const hit = document.elementFromPoint(cx, cy)
+    if (!hit) { push('D05', 'high', el, 'centre point hits nothing'); continue }
+    if (hit === el || el.contains(hit) || hit.contains(el)) continue
+    // A transparent wrapper (a layout div) between the point and the control
+    // still delivers the click, so only report real competing controls.
+    const blocker = hit.closest('button, a[href], input, select, textarea, [role="button"], [role="tab"]')
+    if (!blocker) continue
+    if (blocker === el || el.contains(blocker) || blocker.contains(el)) continue
+    push('D05', 'high', el, `clicks stolen by ${describe(blocker)}`)
   }
 
   // D06 a child painting outside its clipping parent: content is cut off.
@@ -538,10 +569,18 @@ async function run() {
       await page.waitForTimeout(420)
     }
     for (const tab of TABS) {
-      await page.evaluate((t) => {
+      // Studio.tsx auto-closes both side panels below 1080px. Forcing them
+      // open under that breakpoint would measure a state the app forbids, so
+      // follow the app's own rule instead.
+      await page.evaluate(({ t, w }) => {
         const st = window.__omniframe_store?.getState?.()
-        if (st) { st.setActiveCategory?.('all'); st.setLeftTab(t); st.setLeftOpen(true); st.setRightOpen?.(true) }
-      }, tab)
+        if (!st) return
+        st.setActiveCategory?.('all')
+        st.setLeftTab(t)
+        const allowOpen = w >= 1080
+        st.setLeftOpen(allowOpen)
+        st.setRightOpen?.(allowOpen)
+      }, { t: tab, w: vp.w })
       await page.waitForTimeout(450)
 
       const sections = await page.evaluate(() => {
