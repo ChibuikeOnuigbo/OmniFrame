@@ -149,12 +149,15 @@ export default function Studio() {
         case 'ArrowLeft':
           e.preventDefault()
           st().pause()
-          setPlayhead(st().playhead - (e.shiftKey ? 1 : f))
+          // Alt+Arrow steps between markers; plain Arrow steps frames/seconds.
+          if (e.altKey) st().jumpToPrevMarker()
+          else setPlayhead(st().playhead - (e.shiftKey ? 1 : f))
           break
         case 'ArrowRight':
           e.preventDefault()
           st().pause()
-          setPlayhead(st().playhead + (e.shiftKey ? 1 : f))
+          if (e.altKey) st().jumpToNextMarker()
+          else setPlayhead(st().playhead + (e.shiftKey ? 1 : f))
           break
         case 'h':
         case 'H':

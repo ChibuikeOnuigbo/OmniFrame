@@ -334,7 +334,6 @@ interface EditorState {
   setSelectionMaskDisplayMode: (mode: 'rubylith' | 'matte' | 'cutout') => void
   toggleSelectionMaskView: (showOnly?: boolean) => void
   loadAssetObjects: (assetId: string) => void
-  setOmniframeCharacterRecolor: (charId: string, color: string, recolorUrl?: string) => void
 
   // ---- workspace layout & focus mode ----
   workspacePreset: WorkspacePreset
@@ -2511,14 +2510,6 @@ export const useEditor = create<EditorState>((set, get) => {
           activeSelection: s.activeSelection ? { ...s.activeSelection, fillColor: color } : null,
         }))
       }
-    },
-    setOmniframeCharacterRecolor: (charId, color, recolorUrl) => {
-      pushSnapshot()
-      set((s) => ({
-        omniframeCharacters: s.omniframeCharacters.map((c) =>
-          c.id === charId ? { ...c, recolorColor: color, recolorUrl } : c,
-        ),
-      }))
     },
     convertSelectionToOmniframeObject: (customName) => {
       const sel = get().activeSelection

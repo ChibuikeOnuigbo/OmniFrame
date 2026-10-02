@@ -178,7 +178,7 @@ export function MediaPanel() {
                         src={a.kind === 'image' ? a.url : a.thumbnail}
                         alt={a.name}
                         draggable={false}
-                        className="w-full h-full object-contain bg-ink-950 pointer-events-none select-none"
+                        className="absolute inset-0 w-full h-full object-contain bg-ink-950 pointer-events-none select-none"
                       />
                     ) : a.kind === 'video' ? (
                       <Film size={22} className="text-ink-500 pointer-events-none" />

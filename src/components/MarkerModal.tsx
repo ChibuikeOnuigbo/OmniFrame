@@ -19,6 +19,7 @@ export function MarkerModal() {
   const markers = useEditor((s) => s.markers)
   const updateMarker = useEditor((s) => s.updateMarker)
   const removeMarker = useEditor((s) => s.removeMarker)
+  const jumpToMarker = useEditor((s) => s.jumpToMarker)
   const projectFps = useEditor((s) => s.projectFps)
 
   const activeMarker = markers.find((m) => m.id === activeMarkerModalId)
@@ -164,15 +165,27 @@ export function MarkerModal() {
 
         {/* Footer Actions */}
         <div className="flex items-center justify-between border-t border-ink-800 px-4 py-2.5 bg-ink-950/80">
-          <button
-            type="button"
-            data-testid="delete-marker-btn"
-            onClick={handleDelete}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-red-400 hover:bg-red-500/10 text-xs font-medium transition-colors"
-          >
-            <Trash2 size={13} />
-            <span>Delete</span>
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              data-testid="goto-marker-btn"
+              onClick={() => jumpToMarker(activeMarker.id)}
+              title="Move the playhead to this marker"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-ink-300 hover:bg-ink-800 hover:text-white text-xs font-medium transition-colors"
+            >
+              <Clock size={13} />
+              <span>Go to</span>
+            </button>
+            <button
+              type="button"
+              data-testid="delete-marker-btn"
+              onClick={handleDelete}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-red-400 hover:bg-red-500/10 text-xs font-medium transition-colors"
+            >
+              <Trash2 size={13} />
+              <span>Delete</span>
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
             <button
