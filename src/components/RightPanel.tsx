@@ -161,7 +161,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
           <button
             type="button"
             title="Extract audio stream to separate audio track"
-            aria-label="Extract audio track"
+            aria-label="Extract audio"
             onClick={() => void extractAudio(clip.id)}
             className="mt-2 flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 text-xs hover:bg-ink-700 truncate"
           >
@@ -445,7 +445,7 @@ export function RightPanel() {
               <SlidersHorizontal size={12} />
             </button>
           </div>
-          <div className={`flex-1 min-h-0 overflow-y-auto ${unclusterInspector ? 'space-y-0.5' : ''}`}>
+          <div data-testid="inspector-panel" className={`flex-1 min-h-0 overflow-y-auto ${unclusterInspector ? 'space-y-0.5' : ''}`}>
             {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
           </div>
         </div>

@@ -25,11 +25,32 @@ const drag=async(loc,dx,dy=0,steps=12)=>{const b=await loc.boundingBox(); if(!b)
 
 await page.goto(URL,{waitUntil:'networkidle'}); await shot('stress-01-empty')
 assert(await page.getByText('Your canvas is empty').isVisible(),'empty state visible')
-assert(await page.getByTestId('timeline').getByRole('button',{name:/Lock|Mute|Hide/}).count()===0,'empty project has no manual blank tracks')
+// Count only per-track controls. The timeline also shows a master "Mute
+// master" button, which the bare /Lock|Mute|Hide/ search matched and made
+// this look like a hand-made blank track.
+assert(await page.getByTestId('track-header').count()===0,'empty project has no manual blank tracks')
+assert(await page.evaluate(()=>window.__omniframe_store.getState().tracks.length)===0,'empty project has no tracks in state')
 await page.getByTestId('import-input').setInputFiles([
  join(ROOT,'qa/fixtures/pexels-cinematic-8s.webm'),
  join(ROOT,'qa/fixtures/pexels-landscape-962322.jpg'),
  join(ROOT,'qa/fixtures/test-audio-6s.ogg')])
+// Media import only adds to the project library — it deliberately places no
+// clip — so waiting for timeline clips here used to hang. Add each imported
+// asset explicitly, addressed by its own button's accessible name.
+// Add-to-timeline is an insert edit at the playhead: existing clips on that
+// track ripple right to make room. Park the playhead at the end of the track
+// the asset belongs to, so clips append instead of shunting each other.
+const seekToTrackEnd = (audio) => page.evaluate((isAudio) => {
+  const s = window.__omniframe_store.getState()
+  const end = s.clips.filter((c) => (c.kind === 'audio') === isAudio).reduce((m, c) => Math.max(m, c.start + c.duration), 0)
+  s.setPlayhead(end)
+}, audio)
+for (const [name, isAudio] of [['pexels-cinematic-8s.webm',false],['pexels-landscape-962322.jpg',false],['test-audio-6s.ogg',true]]) {
+  await seekToTrackEnd(isAudio)
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')
+  await page.getByRole('button',{name:new RegExp(`Add .*${escaped}.* to timeline`)}).click({force:true})
+  await page.waitForTimeout(350)
+}
 await page.waitForFunction(()=>document.querySelectorAll('[data-testid="timeline-clip"]').length===3)
 await page.waitForTimeout(700); await shot('stress-02-video-image-audio')
 let clips=page.getByTestId('timeline-clip')
@@ -46,7 +67,17 @@ assert(Math.abs(await num(page.locator('[data-kind="audio"]'),'data-start'))<.01
 
 // Track structure is inferred from media; users never create or classify tracks manually.
 for(const [fixture,expected] of [[join(ROOT,'qa/fixtures/pexels-cinematic-8s.webm'),'Video'],[join(ROOT,'qa/fixtures/test-audio-6s.ogg'),'Audio']]){
-  const probe=await browser.newPage({viewport:{width:1000,height:700}}); await probe.goto(URL,{waitUntil:'networkidle'}); await probe.getByTestId('import-input').setInputFiles(fixture); await probe.waitForFunction(()=>document.querySelectorAll('[data-testid="timeline-clip"]').length===1)
+  const probe=await browser.newPage({viewport:{width:1000,height:700}}); await probe.goto(URL,{waitUntil:'networkidle'})
+  // At 1000px the left dock auto-collapses to its rail; the panel is then 1px
+  // with overflow hidden, so its add buttons are clipped and unclickable. Open
+  // the dock before reaching for them.
+  await probe.evaluate(()=>window.__omniframe_store.getState().setLeftOpen(true)); await probe.waitForTimeout(300)
+  await probe.getByTestId('import-input').setInputFiles(fixture)
+  // Same I-10 rule here: import fills the library, so place the clip explicitly.
+  await probe.waitForTimeout(700)
+  const probeName = String(fixture).split('/').pop().replace(/[.*+?^${}()|[\]\\]/g,'\\$&')
+  await probe.getByRole('button',{name:new RegExp(`Add .*${probeName}.* to timeline`)}).click({force:true})
+  await probe.waitForFunction(()=>document.querySelectorAll('[data-testid="timeline-clip"]').length===1)
   assert(await probe.getByTestId('timeline-media-mode').textContent()===expected,`single ${expected.toLowerCase()} import creates automatic ${expected} timeline`)
   assert(await probe.getByTestId('timeline').getByRole('button',{name:'Lock'}).count()===1,`single ${expected.toLowerCase()} import creates one track`)
   if(expected==='Video'){
@@ -93,19 +124,37 @@ assert(Math.abs(movedImage-(imageStart-dragPx/dragScale))<.15,'image clip drag m
 await shot('stress-04-image-moved')
 
 // Trim video edges and verify against the measured timeline scale.
-let video=page.locator('[data-kind="video"]'); await video.click(); let d0=await num(video,'data-duration')
+let video=page.locator('[data-kind="video"]'); await video.click(); let d0=await num(video,'data-duration'), s0=await num(video,'data-start'), in0=await num(video,'data-in-point')
 const trimPx=50, trimSeconds=trimPx/dragScale
 await drag(video.getByTestId('trim-left'),trimPx); await page.waitForTimeout(100); video=page.locator('[data-kind="video"]')
 let s1=await num(video,'data-start'), d1=await num(video,'data-duration'), in1=await num(video,'data-in-point')
-assert(Math.abs(s1-trimSeconds)<.15 && Math.abs(in1-trimSeconds)<.15 && Math.abs(d1-(d0-trimSeconds))<.15,'video left trim preserves source timing',`start=${s1} in=${in1} dur=${d1}`)
+// A left trim advances start and in-point by the same amount and shortens the
+// duration, leaving the right edge where it was. Assert the deltas: the clip
+// is not at zero by this point in the run, so comparing start to trimSeconds
+// directly would be wrong.
+assert(Math.abs((s1-s0)-trimSeconds)<.15 && Math.abs((in1-in0)-trimSeconds)<.15 && Math.abs(d1-(d0-trimSeconds))<.15,'video left trim preserves source timing',`start ${s0}->${s1} in ${in0}->${in1} dur ${d0}->${d1} (trim ${trimSeconds.toFixed(3)}s)`)
 await drag(video.getByTestId('trim-right'),-trimPx); await page.waitForTimeout(100); video=page.locator('[data-kind="video"]'); let d2=await num(video,'data-duration')
 assert(Math.abs(d2-(d1-trimSeconds))<.15,'video right trim changes duration',`${d1}->${d2}`)
 await shot('stress-05-video-trimmed')
 
 // Scrub ruler to timeline time 3s, then split selected/active video.
-const ruler=page.getByTestId('timeline-ruler'), rb=await ruler.boundingBox(), px=Number(await page.getByTestId('timeline').getAttribute('data-px-per-second'))
-await page.mouse.click(rb.x+3*px,rb.y+rb.height/2); await page.waitForTimeout(150)
+// The ruler scrolls with the lanes and the sticky 168px track-header column
+// (z-40) covers the leftmost part of the scrollport, so a click computed from
+// the ruler's full box can land underneath the header and never reach it.
+// Park the scroller at zero and aim from the ruler's position there.
+const ruler=page.getByTestId('timeline-ruler')
+const px=Number(await page.getByTestId('timeline').getAttribute('data-px-per-second'))
+await page.evaluate(()=>{const sc=document.querySelector('div.flex-1.min-h-0.overflow-auto.relative'); if(sc) sc.scrollLeft=0})
+await page.waitForTimeout(200)
+const rb=await ruler.boundingBox()
+await page.mouse.click(rb.x+3*px, rb.y+rb.height/2); await page.waitForTimeout(150)
 assert((await page.getByTestId('current-time').textContent()).startsWith('00:00:03:'),'ruler scrub seeks to 3s')
+// Split has to land inside the clip. By now the trimmed video sits around
+// 12-18s, so the 3s playhead used for the ruler check above is outside it and
+// the split would be a no-op. Put the playhead mid-clip first.
+const vStart=await num(page.locator('[data-kind="video"]'),'data-start'), vDur=await num(page.locator('[data-kind="video"]'),'data-duration')
+await page.evaluate((t)=>window.__omniframe_store.getState().setPlayhead(t), vStart+vDur/2)
+await page.waitForTimeout(150)
 const beforeSplit=await page.locator('[data-kind="video"]').count(); await page.getByTitle(/Split at playhead/).click(); await page.waitForTimeout(100)
 assert(await page.locator('[data-kind="video"]').count()===beforeSplit+1,'video split creates two clips')
 const videoDurations=await page.locator('[data-kind="video"]').evaluateAll(xs=>xs.map(x=>Number(x.getAttribute('data-duration'))))
@@ -152,15 +201,28 @@ const videoLock=page.getByTestId('timeline').getByRole('button',{name:'Lock'}).f
 await page.getByRole('button',{name:'Delete',exact:true}).click()
 assert(await page.locator('[data-kind="video"]').count()===videoCountLocked,'locked track prevents clip deletion')
 await page.getByTestId('timeline').getByRole('button',{name:'Unlock'}).first().click(); pass('track unlock restores editability')
-await page.getByTitle('Mute').click(); await page.getByTitle('Mute').click(); pass('audio track mute toggle')
+// Only audio tracks render a Mute toggle, but the timeline also has a master
+// "Mute master" button, so the bare title matched two nodes. Scope to the
+// track header.
+const audioMute=page.getByTestId('track-header').getByTitle('Mute')
+await audioMute.click(); await audioMute.click(); pass('audio track mute toggle')
 await page.getByTestId('timeline').getByRole('button',{name:'Hide',exact:true}).click(); await page.getByTestId('timeline').getByRole('button',{name:'Hide',exact:true}).click(); pass('video track visibility toggle')
-for(const tab of ['Text','Effects','Transitions','Templates','Masks','Tracking','Omniframe','3D','Media library']) {await page.getByRole('button',{name:tab,exact:true}).click(); pass(`panel ${tab} opens`)}
+// Drive the rail by tab id. The labels in the old list no longer exist: there
+// is no Templates tab, and Masks and Tracking were the same Masking &
+// Tracking tab, so exact-name matching could not resolve them.
+await page.evaluate(()=>window.__omniframe_store.getState().setLeftOpen(true)); await page.waitForTimeout(250)
+for(const id of ['media','text','transitions','effects','audio','relationships','drawing','omniframe','tracking','threed']) {
+  await page.getByTestId(`left-tab-${id}`).click(); await page.waitForTimeout(150)
+  assert(await page.evaluate((t)=>window.__omniframe_store.getState().leftTab===t,id),`panel ${id} opens`)
+}
 await shot('stress-09-panels')
 
 // Transform controls: select image, change scale slider by keyboard.
 image=page.locator('[data-kind="image"]'); await image.click(); const sliders=page.locator('aside input[type=range], div.w-72 input[type=range]')
 // Right inspector is currently open at desktop; use labels via nearby fields.
-const inspectorRanges=page.locator('.w-72 input[type=range]'); assert(await inspectorRanges.count()>=5,'transform sliders visible')
+// The inspector's width is set inline, so the old .w-72 selector matched
+// nothing. Address it by its testid.
+const inspectorRanges=page.getByTestId('inspector-panel').locator('input[type=range]'); assert(await inspectorRanges.count()>=5,'transform sliders visible')
 await inspectorRanges.nth(2).focus(); await page.keyboard.press('ArrowRight'); pass('scale slider keyboard interaction')
 
 // Delete selected image, then undo/redo.
@@ -175,9 +237,9 @@ for(const [w,h] of sizes){await page.setViewportSize({width:w,height:h});await p
 // Hidden panels must remain recoverable at narrow widths without creating page overflow.
 await page.getByRole('button',{name:'Show inspector',exact:true}).click(); assert(await page.getByRole('button',{name:'Hide inspector',exact:true}).isVisible(),'hidden inspector recovers at narrow width')
 await page.getByRole('button',{name:'Hide inspector',exact:true}).click(); assert(await page.getByRole('button',{name:'Show inspector',exact:true}).isVisible(),'narrow inspector can hide again')
-await page.getByRole('button',{name:'Media',exact:true}).click(); await page.waitForTimeout(180); assert(await page.getByTestId('left-panel').getAttribute('data-open')==='true','hidden media panel recovers at narrow width')
+await page.getByTestId('left-tab-media').click(); await page.waitForTimeout(180); assert(await page.getByTestId('left-panel').getAttribute('data-open')==='true','hidden media panel recovers at narrow width')
 const narrowRecovered=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth); assert(narrowRecovered===0,'recovered narrow panel creates no page overflow',String(narrowRecovered))
-await page.getByRole('button',{name:'Media',exact:true}).click(); await page.waitForTimeout(180); assert(await page.getByTestId('left-panel').getAttribute('data-open')==='false','narrow media panel can hide again')
+await page.getByTestId('left-tab-media').click(); await page.waitForTimeout(180); assert(await page.getByTestId('left-panel').getAttribute('data-open')==='false','narrow media panel can hide again')
 // Resize back without reload and verify assets survive.
 await page.setViewportSize({width:1440,height:900}); assert(await clips.count()===countPreDelete,'resize preserves timeline state')
 
