@@ -53,6 +53,7 @@ import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { GraphEditor } from './GraphEditor'
 import { AudioMeter } from './AudioMeter'
 import { TimelineController, TrackModel } from '../lib/oop/TimelineController'
+import { readableTextColor } from '../lib/color'
 
 const RULER_H = 28
 const HEADER_W = 168
@@ -1589,7 +1590,7 @@ export function Timeline() {
                       : 'text-ink-400 hover:text-ink-100 hover:bg-ink-850'
                   }`}
                 >
-                  {idx === 0 ? <Film size={12} className="text-brand shrink-0" /> : <Layers size={12} className="text-indigo-400 shrink-0" />}
+                  {idx === 0 ? <Film size={12} className="text-brand-400 shrink-0" /> : <Layers size={12} className="text-indigo-400 shrink-0" />}
                   <span className="truncate max-w-[160px]" title={b.name}>{b.name}</span>
                 </button>
               </div>
@@ -2004,8 +2005,8 @@ export function Timeline() {
                     {/* Marker label pill */}
                     <span
                       title={marker.label}
-                      className="absolute top-4 left-1 text-[8px] font-semibold px-1 py-0.2 rounded text-white shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
-                      style={{ backgroundColor: colorHex }}
+                      className="absolute top-4 left-1 text-[8px] font-semibold px-1 py-0.2 rounded shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
+                      style={{ backgroundColor: colorHex, color: readableTextColor(colorHex) }}
                     >
                       {marker.label}
                     </span>

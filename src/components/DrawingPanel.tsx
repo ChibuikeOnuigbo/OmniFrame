@@ -462,7 +462,7 @@ export function DrawingPanel() {
                   className="accent-brand rounded cursor-pointer"
                 />
                 <Square size={13} className={drawingShapeFilled ? 'text-brand' : 'text-ink-400'} />
-                <span className={drawingShapeFilled ? 'text-brand font-medium' : ''}>Fill Shape</span>
+                <span className={drawingShapeFilled ? 'text-brand-400 font-medium' : ''}>Fill Shape</span>
               </label>
             </>
           ) : (

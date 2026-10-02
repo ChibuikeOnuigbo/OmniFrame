@@ -23,8 +23,16 @@ export default {
           750: '#1b2030',
           700: '#232a39',
           600: '#2e374a',
-          500: '#3c475d',
-          400: '#55617a',
+          // 300-500 are the TEXT ramp. The previous values (400 #55617a and
+          // 500 #3c475d) measured 2.8-3.2:1 and 1.9-2.1:1 against the dark
+          // surfaces, well under the WCAG AA 4.5:1 minimum for normal text,
+          // so nearly every secondary label in the app was unreadable to
+          // anyone with low contrast sensitivity. These keep the same hue and
+          // the same relative ordering, but all clear 4.5:1 on every surface
+          // from ink-950 through ink-800 (4.57 / 6.67 / 9.59 at worst).
+          500: '#77839c',
+          400: '#94a1b8',
+          300: '#b6c1d4',
         },
         brand: {
           DEFAULT: '#6d5efc',

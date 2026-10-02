@@ -73,7 +73,7 @@ export function TextPanel() {
       {isEditingTextClip ? (
         <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
           <div className="truncate pr-2">
-            <span className="text-[10px] text-brand uppercase tracking-wider font-semibold block">
+            <span className="text-[10px] text-brand-400 uppercase tracking-wider font-semibold block">
               Editing Selected Title
             </span>
             <span className="font-medium text-ink-100 truncate block text-[11px]" title={selectedClip?.name}>

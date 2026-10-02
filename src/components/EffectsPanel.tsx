@@ -82,7 +82,7 @@ export function EffectsPanel() {
       {/* Target clip badge & Reset */}
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <div className="min-w-0 pr-2">
-          <span className="text-[10px] text-brand uppercase tracking-wider font-semibold block">Target Clip</span>
+          <span className="text-[10px] text-brand-400 uppercase tracking-wider font-semibold block">Target Clip</span>
           <span className="font-medium text-ink-100 truncate block text-[11px]" title={activeClip.name}>{activeClip.name}</span>
         </div>
         <button

@@ -646,7 +646,7 @@ export function ThreeViewer({
         >
           <div className="flex items-center justify-between border-b border-ink-800 pb-1.5 font-semibold text-ink-100">
             <span>Material & Textures</span>
-            <span className="text-[10px] text-brand font-mono">PBR Shading</span>
+            <span className="text-[10px] text-brand-400 font-mono">PBR Shading</span>
           </div>
 
           <div className="space-y-1">

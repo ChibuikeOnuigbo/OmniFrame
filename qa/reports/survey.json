@@ -1,0 +1,75 @@
+[
+  {
+    "i": 0,
+    "controls": 63,
+    "sections": []
+  },
+  {
+    "i": 1,
+    "controls": 63,
+    "sections": []
+  },
+  {
+    "i": 2,
+    "controls": 63,
+    "sections": []
+  },
+  {
+    "i": 3,
+    "controls": 63,
+    "sections": []
+  },
+  {
+    "i": 4,
+    "controls": 78,
+    "sections": []
+  },
+  {
+    "i": 5,
+    "controls": 63,
+    "sections": []
+  },
+  {
+    "i": 6,
+    "controls": 73,
+    "sections": []
+  },
+  {
+    "i": 7,
+    "controls": 73,
+    "sections": []
+  },
+  {
+    "i": 8,
+    "controls": 63,
+    "sections": []
+  },
+  {
+    "i": 9,
+    "controls": 66,
+    "sections": [
+      "text-styling-section",
+      "text-presets-section"
+    ]
+  },
+  {
+    "i": 10,
+    "controls": 64,
+    "sections": []
+  },
+  {
+    "i": 11,
+    "controls": 53,
+    "sections": []
+  },
+  {
+    "i": 12,
+    "controls": 60,
+    "sections": []
+  },
+  {
+    "i": 13,
+    "controls": 53,
+    "sections": []
+  }
+]

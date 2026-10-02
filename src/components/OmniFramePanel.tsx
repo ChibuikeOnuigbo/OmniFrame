@@ -239,7 +239,7 @@ export function OmniFramePanel() {
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
             <span>Active Asset Mode</span>
-            <span className="text-[9px] text-brand font-mono">Image & Video Eligible</span>
+            <span className="text-[9px] text-brand-400 font-mono">Image & Video Eligible</span>
           </div>
           <div className="grid grid-cols-2 gap-1.5">
             <button

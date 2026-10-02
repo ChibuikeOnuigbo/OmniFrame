@@ -244,7 +244,7 @@ export function LinkPanel() {
         {activeParentRel ? (
           <div data-testid="parent-relationship-card" className="p-2.5 rounded-lg border border-ink-800 bg-ink-900/60 text-[11px] space-y-1">
             <div className="flex items-center gap-1.5 font-medium text-ink-200">
-              <span className="text-brand">Child:</span>
+              <span className="text-brand-400">Child:</span>
               <span>{clips.find((c) => c.id === activeParentRel.childId)?.name || activeParentRel.childId}</span>
               <span className="text-ink-500">→</span>
               <span className="text-emerald-400">Parent:</span>
