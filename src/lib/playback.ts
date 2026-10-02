@@ -112,7 +112,7 @@ function getUrlImage(url: string): HTMLImageElement {
     img = new Image()
     img.onload = () => {
       if (activePreviewEngine) {
-        activePreviewEngine.renderFrame(useEditor.getState().playhead)
+        activePreviewEngine.redraw()
       }
     }
     img.src = url
@@ -209,6 +209,16 @@ export class PreviewEngine {
     }
     this.renderFrame(time, st)
     this.raf = requestAnimationFrame(this.loop)
+  }
+
+  /**
+   * Repaint the preview from outside the engine. Used when an asset finishes
+   * decoding so a newly available frame is shown without waiting for the next
+   * tick of the loop.
+   */
+  public redraw() {
+    const st = useEditor.getState()
+    this.renderFrame(st.playhead, st)
   }
 
   private renderFrame(time: number, st: ReturnType<typeof useEditor.getState>) {

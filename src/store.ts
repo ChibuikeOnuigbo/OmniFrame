@@ -2367,7 +2367,7 @@ export const useEditor = create<EditorState>((set, get) => {
         cutoutUrl,
         transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
         scope: 'all',
-        fillColor: sel.fillColor,
+        recolorColor: sel.fillColor,
       }
 
       set((s) => ({

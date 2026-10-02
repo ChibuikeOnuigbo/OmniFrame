@@ -56,14 +56,26 @@ const HEADER_W = 168
 const MAX_PX = 8000 // continuous zoom remains usable through frame-level detail
 
 // Snap a time value to nearby clip edges, markers, and the playhead.
-function snapTime(value: number): number {
+/**
+ * Snap a time to nearby clip edges, markers and the playhead.
+ *
+ * `excludeClipIds` must contain the clips being manipulated. Without it a clip
+ * is offered its own edges as snap targets, so it snaps to itself: the dragged
+ * clip's start is rewritten every frame from a value derived from its own
+ * current position, which makes it stick or jump instead of following the
+ * pointer.
+ */
+function snapTime(value: number, excludeClipIds?: ReadonlySet<string> | string): number {
   const st = useEditor.getState()
   if (!st.snapping) return value
   const px = st.pxPerSec
   const thresh = 8 / px
   let best = value
   let bestDist = thresh
+  const excluded =
+    typeof excludeClipIds === 'string' ? new Set([excludeClipIds]) : excludeClipIds
   for (const c of st.clips) {
+    if (excluded?.has(c.id)) continue
     for (const t of [c.start, c.start + c.duration]) {
       const d = Math.abs(t - value)
       if (d < bestDist) {
@@ -590,9 +602,9 @@ function ClipView({
       return
     }
     if (trimRef.current.mode === 'left') {
-      trimClip(clip.id, 'left', snapTime(trimRef.current.origStart + d))
+      trimClip(clip.id, 'left', snapTime(trimRef.current.origStart + d, clip.id))
     } else {
-      trimClip(clip.id, 'right', snapTime(trimRef.current.origStart + trimRef.current.origDur + d))
+      trimClip(clip.id, 'right', snapTime(trimRef.current.origStart + trimRef.current.origDur + d, clip.id))
     }
   }
 
@@ -1097,12 +1109,39 @@ export function Timeline() {
     setPlayhead((clientX - rect.left) / px)
   }
 
+  // Keep the scroll position inside the content after a zoom change.
+  //
+  // Zooming out shrinks the scrollable width, but a scroll position set while
+  // zoomed in is kept as-is, so the clips end up far off to the left with no
+  // visible content on screen and no way back except manual scrolling. Anchor
+  // the left edge of the viewport to the same time it was showing before.
+  const prevPxRef = useRef(px)
+  useEffect(() => {
+    const el = scrollRef.current
+    const prevPx = prevPxRef.current
+    prevPxRef.current = px
+    if (!el || prevPx === px || prevPx <= 0) return
+    const anchoredLeft = (el.scrollLeft / prevPx) * px
+    el.scrollLeft = Math.max(0, Math.min(anchoredLeft, Math.max(0, el.scrollWidth - el.clientWidth)))
+  }, [px])
+
   // Active clip drag listeners with threshold-based click vs drag state machine & auto-scroll
   const startClipDrag = (clip: Clip, e: React.PointerEvent) => {
     const lanes = lanesRef.current
     if (!lanes) return
+    // Clips in the gripped group move together and must not be offered to the
+    // snapper: a clip that can snap to itself (or to a sibling it is being
+    // dragged along with) sticks instead of tracking the pointer.
+    const selected = useEditor.getState().selectedClipIds
+    const dragGroupIds: ReadonlySet<string> =
+      selected.length > 1 && selected.includes(clip.id) ? new Set(selected) : new Set([clip.id])
     const startX = e.clientX
     const startY = e.clientY
+    // Where inside the clip the pointer went down. Without this the clip's
+    // start is set to the pointer's absolute time, so grabbing a clip anywhere
+    // but its left edge teleports it sideways the moment you start dragging.
+    const lanesRectAtStart = lanes.getBoundingClientRect()
+    const grabOffset = (startX - lanesRectAtStart.left) / px - clip.start
     let hasMoved = false
     let autoScrollRaf: number | null = null
     let latestClientX = startX
@@ -1118,7 +1157,8 @@ export function Timeline() {
           scrollEl.scrollLeft += auto.deltaX
 
           const lanesRect = lanesEl.getBoundingClientRect()
-          const candidateTime = Math.max(0, snapTime((latestClientX - lanesRect.left) / px))
+          const pointerTime = (latestClientX - lanesRect.left) / px
+          const candidateTime = Math.max(0, snapTime(pointerTime, dragGroupIds) - grabOffset)
           const evaluatedTarget = evaluateDragTarget(latestClientY, lanesEl, tracks, clip.kind)
 
           const updated: DragState = {
@@ -1152,7 +1192,8 @@ export function Timeline() {
       }
 
       const lanesRect = lanes.getBoundingClientRect()
-      const candidateTime = Math.max(0, snapTime((moveEv.clientX - lanesRect.left) / px))
+      const pointerTime = (moveEv.clientX - lanesRect.left) / px
+      const candidateTime = Math.max(0, snapTime(pointerTime, dragGroupIds) - grabOffset)
       const evaluatedTarget = evaluateDragTarget(moveEv.clientY, lanes, tracks, clip.kind)
       const updated: DragState = {
         clipId: clip.id,

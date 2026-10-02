@@ -33,7 +33,8 @@ export function CustomCursor() {
   const cursorConfig = useEditor((s) => s.cursorConfig)
   const tool = useEditor((s) => s.tool)
   const drawingEnabled = useEditor((s) => s.drawingEnabled)
-  const viewMode = useEditor((s) => s.viewMode)
+  // `viewMode` never existed on the store; the 3D toggle is `is3DMode`.
+  const is3DMode = useEditor((s) => s.is3DMode)
 
   const [pos, setPos] = useState({ x: -100, y: -100 })
   const [cursorState, setCursorState] = useState<CursorState>('default')
@@ -181,7 +182,7 @@ export function CustomCursor() {
       setHelpText(null)
 
       // 5. 3D Rotation / Orbit in 3D mode
-      if (viewMode === '3d' && target.closest('[data-testid="three-canvas-wrapper"], canvas')) {
+      if (is3DMode && target.closest('[data-testid="three-canvas-wrapper"], canvas')) {
         setCursorState('rotate')
         return
       }
@@ -339,7 +340,7 @@ export function CustomCursor() {
     isDragging,
     tool,
     drawingEnabled,
-    viewMode,
+    is3DMode,
   ])
 
   // Hotspot offset based on cursor state

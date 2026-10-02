@@ -17,15 +17,42 @@ const num=async(l,a)=>Number(await l.getAttribute(a)); const px=async()=>Number(
 const drag=async(l,dx,dy=0,ratio=.5)=>{const b=await l.boundingBox();if(!b)throw Error('missing box');const x=b.x+b.width*ratio,y=b.y+b.height/2;await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+dx,y+dy,{steps:12});await page.mouse.up()}
 await page.goto(URL,{waitUntil:'networkidle'}); await page.evaluate(()=>{localStorage.setItem('ofCreates','0');localStorage.setItem('ofRevokes','0')})
 // Invalid input must be rejected and its temporary URL revoked.
-await page.getByTestId('import-input').setInputFiles('/tmp/invalid.txt'); await page.waitForTimeout(100)
+// The suite used to depend on a hand-made /tmp/invalid.txt; create it here so
+// the run is reproducible from a clean checkout.
+const invalidPath = join(tmpdir(), 'invalid.txt')
+writeFileSync(invalidPath, 'this is deliberately not a media file\n')
+await page.getByTestId('import-input').setInputFiles(invalidPath); await page.waitForTimeout(100)
 assert(await page.getByTestId('timeline-clip').count()===0,'invalid non-media import rejected')
 assert(lifecycle.some(x=>x.startsWith('OF_URL_REVOKE')),'invalid import object URL revoked')
 // Import all types, including repeated import.
 const video=join(ROOT,'qa/fixtures/pexels-cinematic-8s.webm'), image=join(ROOT,'qa/fixtures/pexels-landscape-962322.jpg'), audio=join(ROOT,'qa/fixtures/test-audio-6s.ogg')
-await page.getByTestId('import-input').setInputFiles([video,image,audio]); await page.waitForFunction(()=>document.querySelectorAll('[data-testid=timeline-clip]').length===3)
-await page.getByTestId('import-input').setInputFiles(image); await page.waitForFunction(()=>document.querySelectorAll('[data-testid=timeline-clip]').length===4); pass('repeated import creates independent asset and clip')
+// Invariant I-10: import adds to the project library ONLY and loads the asset
+// into the Source Monitor. It deliberately does NOT insert into the timeline,
+// so each asset has to be placed with its own add-to-timeline control.
+const addToTimeline = async (nameFragment) => {
+  const card = page.locator(`[data-asset-name*="${nameFragment}"]`).first()
+  await card.waitFor({ state: 'visible', timeout: 15000 })
+  await card.locator('[data-testid="add-to-timeline-btn"]').first().click()
+  await page.waitForTimeout(150)
+}
+await page.getByTestId('import-input').setInputFiles([video,image,audio])
+await page.waitForFunction(
+  (n) => document.querySelectorAll('[data-asset-name]').length >= n,
+  3,
+)
+await addToTimeline('pexels-cinematic')
+await addToTimeline('pexels-landscape')
+await addToTimeline('test-audio-6s')
+await page.waitForFunction(()=>document.querySelectorAll('[data-testid=timeline-clip]').length===3)
+// Re-importing the same file must still create a distinct asset.
+await page.getByTestId('import-input').setInputFiles(image)
+await page.waitForFunction(
+  (n) => document.querySelectorAll('[data-asset-name]').length >= n,
+  4,
+)
+pass('repeated import creates independent asset')
 // Library HTML5 drag to exact timeline position.
-await page.getByTitle('Fit').click(); const asset=page.getByTestId('media-asset').filter({hasText:'pexels-landscape'}).first(), lanes=page.getByTestId('timeline-lanes'); const lb=await lanes.boundingBox(); const before=await page.getByTestId('timeline-clip').count()
+await page.getByTitle('Fit', { exact: true }).click(); const asset=page.getByTestId('media-asset').filter({hasText:'pexels-landscape'}).first(), lanes=page.getByTestId('timeline-lanes'); const lb=await lanes.boundingBox(); const before=await page.getByTestId('timeline-clip').count()
 await asset.dragTo(lanes,{targetPosition:{x:Math.min(2*await px(),lb.width-10),y:20}}); await page.waitForTimeout(100)
 assert(await page.getByTestId('timeline-clip').count()===before+1,'library asset HTML5 drag/drop creates timeline clip')
 const images=page.locator('[data-kind=image]'); const dropped=images.last(); assert(Math.abs(await num(dropped,'data-start')-2)<.2,'library drop maps pointer X to timeline time',String(await num(dropped,'data-start')))
@@ -37,7 +64,37 @@ await drag(clip.getByTestId('trim-right'),-40); assert(await num(clip,'data-dura
 const ruler=page.getByTestId('timeline-ruler'),rb=await ruler.boundingBox(); await page.mouse.click(rb.x+3*await px(),rb.y+10); await page.getByTitle(/Split at playhead/).click(); assert(await page.locator('[data-kind=video]').count()===vc,'locked split rejected')
 await page.getByRole('button',{name:'Delete',exact:true}).click(); assert(await page.locator('[data-kind=video]').count()===vc,'locked inspector delete rejected'); await page.getByTestId('timeline').getByRole('button',{name:'Unlock'}).first().click(); pass('unlock after lock regressions')
 // Minimum and maximum zoom retain accurate drag mapping.
-const range=page.getByTestId('timeline').locator('input[type=range]'); for(const [z,delta] of [[8,32],[8000,40]]){await range.fill(String(z));assert(await px()===z,`${z===8?'minimum':'maximum'} timeline zoom reached`);clip=page.locator('[data-kind=audio]').first();const old=await num(clip,'data-start');await drag(clip,delta,0,z===8000?.01:.5);clip=page.locator('[data-kind=audio]').first();const now=await num(clip,'data-start');assert(Math.abs(now-Math.max(0,old+delta/z))<.06,`pointer move accurate at ${z}px/s`,`${old}->${now}`)}
+// `timeline` contains two range inputs (zoom and custom playback speed);
+// target the zoom slider by its own test id instead of matching both.
+// Snapping is on by default and deliberately pulls a dragged clip to nearby
+// edges, so it has to be off to assert an exact pointer-to-time mapping. Drag
+// accuracy itself is verified elsewhere with snapping on.
+const snapToggle = page.getByTestId('snapping-toggle')
+if (await snapToggle.getAttribute('aria-pressed') === 'true') await snapToggle.click()
+assert(await page.evaluate(()=>window.__omniframe_store.getState().snapping)===false,'snapping off for precision drag measurement')
+const range=page.getByTestId('timeline-scale')
+// The lanes scroll *under* a sticky 168px track-header column, so a clip near
+// t=0 can end up behind it. A synthetic pointer event at those coordinates
+// lands on the header (its track-menu button), not on the clip, and the drag
+// silently never starts. Park the scroller at the left edge before grabbing,
+// and assert the grab point really resolves to the clip.
+const revealClip=async(t,z)=>{await page.evaluate(([t,z])=>{const sc=document.querySelector('div.flex-1.min-h-0.overflow-auto.relative');if(sc)sc.scrollLeft=Math.max(0,t*z-32)},[t,z]);await page.waitForTimeout(150)}
+for(const [z,delta] of [[8,32],[8000,40]]){
+  await range.fill(String(z));assert(await px()===z,`${z===8?'minimum':'maximum'} timeline zoom reached`)
+  clip=page.locator('[data-kind=audio]').first()
+  const old=await num(clip,'data-start')
+  await revealClip(old,z)
+  clip=page.locator('[data-kind=audio]').first()
+  const cbox=await clip.boundingBox(); assert(cbox,`audio clip has a box at ${z}px/s`)
+  const grabRatio=z===8000?.01:.5
+  const gx=cbox.x+cbox.width*grabRatio, gy=cbox.y+cbox.height/2
+  const hitsClip=await page.evaluate(([x,y])=>{const el=document.elementFromPoint(x,y);return !!(el&&el.closest('[data-testid=timeline-clip]'))},[gx,gy])
+  assert(hitsClip,`audio clip grabbable at ${z}px/s`,`grab point ${Math.round(gx)},${Math.round(gy)}`)
+  await drag(clip,delta,0,grabRatio)
+  clip=page.locator('[data-kind=audio]').first();const now=await num(clip,'data-start')
+  assert(Math.abs(now-Math.max(0,old+delta/z))<.06,`pointer move accurate at ${z}px/s`,`${old}->${now} expect ${+(old+delta/z).toFixed(3)}`)
+}
+await snapToggle.click(); assert(await page.evaluate(()=>window.__omniframe_store.getState().snapping)===true,'snapping restored after measurement')
 // Scroll deeply at max zoom and verify timeline responds.
 await page.getByTestId('timeline').locator('.overflow-auto').evaluate(el=>{el.scrollLeft=12000;el.dispatchEvent(new Event('scroll'))}); const scroll=await page.getByTestId('timeline').locator('.overflow-auto').evaluate(el=>el.scrollLeft); assert(scroll>0,'timeline horizontal scrolling at maximum zoom',String(scroll))
 // Keyboard frame and one-second boundary stepping.
@@ -45,9 +102,24 @@ await page.mouse.click(700,24); await page.getByTitle(/Go to start/).click(); aw
 await page.getByTitle(/Go to end/).click();const end=await page.getByTestId('current-time').textContent();await page.keyboard.press('ArrowRight');assert(await page.getByTestId('current-time').textContent()===end,'frame step clamps at project duration')
 await page.keyboard.press('Shift+ArrowLeft'); assert(await page.getByTestId('current-time').textContent()!==end,'shift arrow steps one second backward')
 // Reverse playback must be reachable and stop at zero.
-await page.getByTitle('Fit').click(); await page.getByTitle(/Go to start/).click(); await page.mouse.click(700,24); await page.keyboard.press('Shift+ArrowRight'); await page.keyboard.press('j');await page.waitForTimeout(1400);assert((await page.getByTestId('current-time').textContent()).startsWith('00:00:00:00'),'reverse J playback stops at zero');assert(await page.getByTitle('Play (Space)').isVisible(),'reverse boundary pauses transport')
+await page.getByTitle('Fit', { exact: true }).click(); await page.getByTitle(/Go to start/).click(); await page.mouse.click(700,24); await page.keyboard.press('Shift+ArrowRight'); await page.keyboard.press('j');await page.waitForTimeout(1400);assert((await page.getByTestId('current-time').textContent()).startsWith('00:00:00:00'),'reverse J playback stops at zero');assert(await page.getByTitle('Play (Space)').isVisible(),'reverse boundary pauses transport')
 // Rapid split / undo / redo sequence remains coherent.
-clip=page.locator('[data-kind=video]').first();await clip.click({position:{x:(await clip.boundingBox()).width*.9,y:12}}); for(const t of [1,2,3,4]){const b=await ruler.boundingBox();await page.mouse.click(b.x+t*await px(),b.y+10);await page.getByTitle(/Split at playhead/).click()} const splitCount=await page.locator('[data-kind=video]').count();assert(splitCount>=4,'rapid repeated split creates stable segments',String(splitCount));for(let i=0;i<4;i++)await page.keyboard.press('Control+z');const undoCount=await page.locator('[data-kind=video]').count();assert(undoCount<splitCount,'rapid undo sequence restores earlier state',String(undoCount));for(let i=0;i<4;i++)await page.keyboard.press('Control+Shift+z');assert(await page.locator('[data-kind=video]').count()===splitCount,'rapid redo sequence restores split state')
+clip=page.locator('[data-kind=video]').first()
+// Split points have to land *inside* the selected clip and inside the
+// viewport. The previous zoom (8000px/s) put t=1..4 tens of thousands of
+// pixels off screen, and those times were outside the clip (which starts at
+// t=10) anyway, so every split was a no-op. Zoom out, then seek the ruler to
+// four points spread across the clip and verify each seek before splitting.
+await range.fill('8'); assert(await px()===8,'zoom reset for split sequence')
+const vst=await num(clip,'data-start'), vdur=await num(clip,'data-duration')
+await clip.click({position:{x:20,y:12}})
+for(let k=1;k<=4;k++){
+  const t=vst+vdur*(k/5)
+  const b=await ruler.boundingBox()
+  await page.mouse.click(b.x+t*await px(),b.y+10)
+  assert(Math.abs(await page.evaluate(()=>window.__omniframe_store.getState().playhead)-t)<0.3,`ruler seek to ${t.toFixed(2)}`)
+  await page.getByTitle(/Split at playhead/).click()
+} const splitCount=await page.locator('[data-kind=video]').count();assert(splitCount>=4,'rapid repeated split creates stable segments',String(splitCount));for(let i=0;i<4;i++)await page.keyboard.press('Control+z');const undoCount=await page.locator('[data-kind=video]').count();assert(undoCount<splitCount,'rapid undo sequence restores earlier state',String(undoCount));for(let i=0;i<4;i++)await page.keyboard.press('Control+Shift+z');assert(await page.locator('[data-kind=video]').count()===splitCount,'rapid redo sequence restores split state')
 // Layer/order overlap: dropped image added last in DOM and active at overlap.
 const activeAt2=await page.locator('[data-kind=image]').evaluateAll(xs=>xs.filter(x=>{const s=+x.dataset.start,d=+x.dataset.duration;return s<=2&&s+d>2}).map(x=>x.dataset.clipId));assert(activeAt2.length>=1,'multi-element overlap exists at two seconds',String(activeAt2.length));pass('timeline layer order is deterministic DOM insertion order')
 // Two independent exports.
