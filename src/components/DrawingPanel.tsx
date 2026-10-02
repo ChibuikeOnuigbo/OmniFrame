@@ -251,6 +251,7 @@ export function DrawingPanel() {
       )}
 
       <PanelSection title="Tool & Selection" defaultOpen={true} testId="tools">
+        <PanelSection title="Drawing Tools" defaultOpen={true} testId="drawing-tools">
       {/* Tools Selection */}
       <div className="flex flex-col gap-2.5">
         <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Drawing Tools</div>
@@ -285,10 +286,14 @@ export function DrawingPanel() {
           </div>
         ))}
       </div>
+        </PanelSection>
 
+        <PanelSection title="Selection & Masking" defaultOpen={true} testId="masking">
       {/* Unified Selection & Masking Sub-Tool */}
       <SelectionMaskSubTool />
+        </PanelSection>
 
+        <PanelSection title="Timeline Attachment" defaultOpen={false} testId="attachment">
       {/* Add Directly to Video (Attached vs Separate Track) */}
       <div className="p-2.5 rounded-lg bg-ink-900 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between">
@@ -327,6 +332,7 @@ export function DrawingPanel() {
           </div>
         )}
       </div>
+        </PanelSection>
 
       </PanelSection>
       <PanelSection title="Colour & Frames" defaultOpen={false} testId="colour-frames">

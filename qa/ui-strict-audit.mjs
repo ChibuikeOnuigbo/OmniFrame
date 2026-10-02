@@ -184,14 +184,24 @@ function collectStrict() {
     if (n > 14) push('D01', 'medium', g, `${n} controls in one group -> regroup candidate`)
   }
 
-  // D02 crammed row: many sibling controls sharing a too-small gap.
+  // D02 crammed row: many sibling controls packed too tightly. Measure the
+  // real space between consecutive siblings rather than reading `gap`, because
+  // the space-y-* utilities space with margins and would read as 0.
   for (const el of document.querySelectorAll('div, section')) {
     if (!vis(el)) continue
-    const kids = [...el.children].filter((k) => k.matches('button, input, select'))
+    const kids = [...el.children].filter((k) => vis(k) && k.matches('button, input, select'))
     if (kids.length < 6) continue
-    const cs = getComputedStyle(el)
-    const gap = parseFloat(cs.gap) || 0
-    if (gap < 4) push('D02', 'medium', el, `${kids.length} sibling controls with ${gap}px gap`)
+    let minGap = Infinity
+    for (let i = 1; i < kids.length; i++) {
+      const a = kids[i - 1].getBoundingClientRect()
+      const b = kids[i].getBoundingClientRect()
+      const horizontal = Math.abs(b.left - a.left) < 2
+      const g = horizontal ? b.left - a.right : b.top - a.bottom
+      if (g >= 0 && g < minGap) minGap = g
+    }
+    if (minGap !== Infinity && minGap < 4) {
+      push('D02', 'medium', el, `${kids.length} sibling controls with only ${Math.round(minGap)}px between them`)
+    }
   }
 
   // D03 text too small to read comfortably.
@@ -236,8 +246,12 @@ function collectStrict() {
     if (!vis(el)) continue
     const svgs = [...el.children].filter((k) => vis(k) && k.matches('button')).map((b) => b.querySelector('svg'))
       .filter(Boolean)
+      // Drop collapsed or zero-width svgs: they measure 0-1px and turn the
+      // rule into noise rather than a real size disagreement.
+      .map((s) => Math.round(s.getBoundingClientRect().width))
+      .filter((w) => w >= 6)
     if (svgs.length < 4) continue
-    const sizes = [...new Set(svgs.map((s) => Math.round(s.getBoundingClientRect().width)))]
+    const sizes = [...new Set(svgs)]
     if (sizes.length > 1) push('C02', 'low', el, `icon sizes in one row: ${sizes.join(',')}px`)
   }
 
@@ -297,7 +311,13 @@ function collectStrict() {
     const ti = (el.getAttribute('title') || '').trim()
     const txt = (el.textContent || '').trim()
     if (ti && txt && ti.toLowerCase() === txt.toLowerCase()) {
-      push('T01', 'low', el, `title duplicates visible text: "${ti.slice(0, 30)}"`)
+      // When the label is truncated the tooltip is the only way to read the
+      // full string, so repeating the text is doing real work there.
+      const trunc = el.classList.contains('truncate') || !!el.querySelector('.truncate')
+      const clipped = el.scrollWidth > el.clientWidth + 1
+      if (!trunc && !clipped) {
+        push('T01', 'low', el, `title duplicates visible text: "${ti.slice(0, 30)}"`)
+      }
     }
   }
 

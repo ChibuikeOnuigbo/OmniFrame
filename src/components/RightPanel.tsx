@@ -173,27 +173,27 @@ function ClipInspector({ clip }: { clip: Clip }) {
 
       <Section title="Transform">
         <Field label="Position X">
-          <Slider min={-960} max={960} value={t.x} onChange={(v) => setClipTransform(clip.id, { x: v })} />
+          <Slider label="Position X" min={-960} max={960} value={t.x} onChange={(v) => setClipTransform(clip.id, { x: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.x)}</span>
           {renderKeyframeControl('position_x', t.x)}
         </Field>
         <Field label="Position Y">
-          <Slider min={-540} max={540} value={t.y} onChange={(v) => setClipTransform(clip.id, { y: v })} />
+          <Slider label="Position Y" min={-540} max={540} value={t.y} onChange={(v) => setClipTransform(clip.id, { y: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.y)}</span>
           {renderKeyframeControl('position_y', t.y)}
         </Field>
         <Field label="Scale">
-          <Slider min={0.1} max={3} step={0.01} value={t.scale} onChange={(v) => setClipTransform(clip.id, { scale: v })} />
+          <Slider label="Scale" min={0.1} max={3} step={0.01} value={t.scale} onChange={(v) => setClipTransform(clip.id, { scale: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{t.scale.toFixed(2)}</span>
           {renderKeyframeControl('scale_x', t.scale)}
         </Field>
         <Field label={<span className="flex items-center gap-1.5"><BlenderRotationIcon size={13} /><span>Rotation</span></span>}>
-          <Slider min={-180} max={180} value={t.rotation} onChange={(v) => setClipTransform(clip.id, { rotation: v })} />
+          <Slider label="Rotation" min={-180} max={180} value={t.rotation} onChange={(v) => setClipTransform(clip.id, { rotation: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
           {renderKeyframeControl('rotation_z', t.rotation)}
         </Field>
         <Field label="Opacity">
-          <Slider min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
+          <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
           {renderKeyframeControl('opacity', t.opacity)}
         </Field>
@@ -204,17 +204,17 @@ function ClipInspector({ clip }: { clip: Clip }) {
           defaultOpen={Boolean(t.z || t.rotationX || t.rotationY)}
         >
           <Field label="3D Depth (Z)">
-            <Slider min={-1000} max={1000} value={t.z ?? 0} onChange={(v) => setClipTransform(clip.id, { z: v })} />
+            <Slider label="3D Depth (Z)" min={-1000} max={1000} value={t.z ?? 0} onChange={(v) => setClipTransform(clip.id, { z: v })} />
             <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.z ?? 0)}</span>
             {renderKeyframeControl('position_z', t.z ?? 0)}
           </Field>
           <Field label="Rotation X (Tilt)">
-            <Slider min={-180} max={180} value={t.rotationX ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationX: v })} />
+            <Slider label="Rotation X (Tilt)" min={-180} max={180} value={t.rotationX ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationX: v })} />
             <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationX ?? 0)}°</span>
             {renderKeyframeControl('rotation_x', t.rotationX ?? 0)}
           </Field>
           <Field label="Rotation Y (Pan)">
-            <Slider min={-180} max={180} value={t.rotationY ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationY: v })} />
+            <Slider label="Rotation Y (Pan)" min={-180} max={180} value={t.rotationY ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationY: v })} />
             <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationY ?? 0)}°</span>
             {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
           </Field>
@@ -224,7 +224,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       {(clip.kind === 'audio' || clip.kind === 'video') && (
         <Section title="Audio">
           <Field label="Volume">
-            <Slider
+            <Slider label="Volume"
               min={0}
               max={2}
               step={0.01}
@@ -337,7 +337,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
             />
           </Field>
           <Field label="Font Size">
-            <Slider
+            <Slider label="Font Size"
               min={16}
               max={128}
               step={2}
@@ -356,19 +356,19 @@ function ClipInspector({ clip }: { clip: Clip }) {
       {clip.effects && (
         <Section title="Effects">
           <Field label="Brightness">
-            <Slider min={0} max={2} step={0.05} value={clip.effects.brightness ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { brightness: v })} />
+            <Slider label="Brightness" min={0} max={2} step={0.05} value={clip.effects.brightness ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { brightness: v })} />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.brightness ?? 1).toFixed(2)}</span>
           </Field>
           <Field label="Contrast">
-            <Slider min={0} max={2} step={0.05} value={clip.effects.contrast ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { contrast: v })} />
+            <Slider label="Contrast" min={0} max={2} step={0.05} value={clip.effects.contrast ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { contrast: v })} />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.contrast ?? 1).toFixed(2)}</span>
           </Field>
           <Field label="Saturation">
-            <Slider min={0} max={2} step={0.05} value={clip.effects.saturation ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { saturation: v })} />
+            <Slider label="Saturation" min={0} max={2} step={0.05} value={clip.effects.saturation ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { saturation: v })} />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.saturation ?? 1).toFixed(2)}</span>
           </Field>
           <Field label="Blur">
-            <Slider min={0} max={20} step={0.5} value={clip.effects.blur ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { blur: v })} />
+            <Slider label="Blur" min={0} max={20} step={0.5} value={clip.effects.blur ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { blur: v })} />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.blur ?? 0).toFixed(0)}px</span>
           </Field>
         </Section>

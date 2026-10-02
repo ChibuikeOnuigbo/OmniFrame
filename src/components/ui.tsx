@@ -81,6 +81,7 @@ export function Slider({
   step = 1,
   onChange,
   className = '',
+  label,
 }: {
   value: number
   min: number
@@ -88,10 +89,14 @@ export function Slider({
   step?: number
   onChange: (v: number) => void
   className?: string
+  /** Accessible name. Every slider should pass one -- without it a screen
+   *  reader announces only "slider". */
+  label?: string
 }) {
   return (
     <input
       type="range"
+      aria-label={label}
       className={`of-range w-full ${className}`}
       value={value}
       min={min}

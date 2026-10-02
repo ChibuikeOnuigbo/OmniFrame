@@ -257,7 +257,7 @@ export function LeftDock() {
           </div>
 
           {/* Panel Views */}
-          <div className="flex-1 min-h-0 overflow-y-auto">
+          <div tabIndex={0} aria-label="Panel contents, scrollable" className="flex-1 min-h-0 overflow-y-auto">
             {leftTab === 'media' && <MediaPanel />}
             {leftTab === 'omniframe' && <OmniFramePanel />}
             {leftTab === 'audio' && <VoiceIsolationPanel />}
