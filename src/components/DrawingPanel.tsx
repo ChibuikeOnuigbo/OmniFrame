@@ -293,7 +293,7 @@ export function DrawingPanel() {
       <SelectionMaskSubTool />
         </PanelSection>
 
-        <PanelSection title="Timeline Attachment" defaultOpen={false} testId="attachment">
+        <PanelSection title="Timeline Attachment" defaultOpen={true} testId="attachment">
       {/* Add Directly to Video (Attached vs Separate Track) */}
       <div className="p-2.5 rounded-lg bg-ink-900 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between">
@@ -335,7 +335,7 @@ export function DrawingPanel() {
         </PanelSection>
 
       </PanelSection>
-      <PanelSection title="Colour & Frames" defaultOpen={false} testId="colour-frames">
+      <PanelSection title="Colour & Frames" defaultOpen={true} testId="colour-frames">
       {/* Frame Attach Count Picker */}
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
@@ -550,7 +550,7 @@ export function DrawingPanel() {
       )}
 
       </PanelSection>
-      <PanelSection title="Timing & Onion Skin" defaultOpen={false} testId="timing">
+      <PanelSection title="Timing & Onion Skin" defaultOpen={true} testId="timing">
       {/* Temporal Scope & Apply to All Frames */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
@@ -716,7 +716,7 @@ export function DrawingPanel() {
       </div>
 
       </PanelSection>
-      <PanelSection title="Paint Layers" defaultOpen={false} testId="layers">
+      <PanelSection title="Paint Layers" defaultOpen={true} testId="layers">
       {/* Paint Layers */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
@@ -861,7 +861,7 @@ export function DrawingPanel() {
       </div>
 
       </PanelSection>
-      <PanelSection title="Brush & Layer Properties" defaultOpen={false} testId="brush">
+      <PanelSection title="Brush & Layer Properties" defaultOpen={true} testId="brush">
       {/* Krita Professional Brush Dynamics & Tablet Stylus */}
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-300">

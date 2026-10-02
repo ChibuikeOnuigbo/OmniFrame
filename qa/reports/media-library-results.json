@@ -103,9 +103,8 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/b97c6945-0f4c-4837-852c-dd3ed00f57fe :: net::ERR_ABORTED",
-    "blob:http://localhost:5173/b97c6945-0f4c-4837-852c-dd3ed00f57fe :: net::ERR_ABORTED",
-    "blob:http://localhost:5173/b97c6945-0f4c-4837-852c-dd3ed00f57fe :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/6ed1b04f-67f1-4667-800b-76610f93756d :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/6ed1b04f-67f1-4667-800b-76610f93756d :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": []
 }
