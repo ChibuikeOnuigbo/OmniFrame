@@ -1,3 +1,4 @@
+import type { RecolorBlend } from './lib/recolor'
 // OmniFrame — core data model.
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
@@ -552,6 +553,8 @@ export interface OmniframeCharacter {
   keyframeOffsets?: { frame: number; transform: ClipTransform }[]
   recolorColor?: string
   recolorUrl?: string
+  /** Blend used to produce recolorUrl. Defaults to 'dye'. */
+  recolorBlend?: RecolorBlend
 }
 
 export interface OmniframeOperation {

@@ -21,6 +21,7 @@ import {
 import { useEditor } from '../store'
 import type { OmniframeScopeType } from '../types'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
+import { RECOLOR_BLENDS, type RecolorBlend } from '../lib/recolor'
 
 export function OmniFramePanel() {
   const assets = useEditor((s) => s.assets)
@@ -68,6 +69,9 @@ export function OmniFramePanel() {
   const [sectionStart, setSectionStart] = useState<number>(selectedChar?.sectionRange?.start ?? 2.0)
   const [sectionEnd, setSectionEnd] = useState<number>(selectedChar?.sectionRange?.end ?? 5.0)
   const [targetFrame, setTargetFrame] = useState<number>(selectedChar?.frameNumber ?? currentFrame)
+  const [recolorBlend, setRecolorBlend] = useState<RecolorBlend>(
+    selectedChar?.recolorBlend ?? 'dye',
+  )
 
   const handleUpdateTransform = (patch: { x?: number; y?: number; scale?: number; rotation?: number }) => {
     if (!selectedChar) return
@@ -438,7 +442,11 @@ export function OmniFramePanel() {
                   data-testid={`char-recolor-${c.label.toLowerCase().replace(/\s+/g, '-')}`}
                   title={`${c.label} (${c.hex || 'Default'})`}
                   onClick={() => {
-                    recolorActiveSelection(c.hex)
+                    if (!c.hex) {
+                      recolorActiveSelection('')
+                    } else {
+                      recolorActiveSelection(c.hex, recolorBlend)
+                    }
                   }}
                   className={`px-2 py-0.5 rounded text-[10px] border font-medium transition-all ${
                     (selectedChar.recolorColor === c.hex || (!selectedChar.recolorColor && !c.hex))
@@ -451,6 +459,34 @@ export function OmniFramePanel() {
                 </button>
               ))}
             </div>
+
+            {/* Blend mode — how the colour is applied to the object's pixels.
+                Flat compositing is what made the towel read as a coloured
+                layer; these keep the object's own lightness structure. */}
+            <div className="flex items-center gap-1.5 pt-1">
+              <span className="text-[9px] uppercase tracking-wider text-ink-500 shrink-0">
+                Blend
+              </span>
+              <select
+                data-testid="recolor-blend-select"
+                value={recolorBlend}
+                onChange={(e) => setRecolorBlend(e.target.value as RecolorBlend)}
+                title="How the colour is applied to the object's pixels"
+                className="flex-1 min-w-0 bg-ink-950 border border-ink-800 rounded px-1.5 py-1 text-[10px] text-ink-200 outline-none focus:border-brand"
+              >
+                {RECOLOR_BLENDS.map((b) => (
+                  <option key={b.value} value={b.value}>
+                    {b.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p
+              data-testid="recolor-blend-hint"
+              className="text-[9px] text-ink-500 leading-tight"
+            >
+              {RECOLOR_BLENDS.find((b) => b.value === recolorBlend)?.hint}
+            </p>
           </div>
 
           {/* Scope Selector: All Frames vs Section vs Only 1 Frame */}

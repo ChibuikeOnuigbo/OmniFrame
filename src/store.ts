@@ -1,3 +1,5 @@
+import { recolorImage } from './lib/recolor'
+import type { RecolorBlend } from './lib/recolor'
 import { create } from 'zustand'
 import type {
   Clip,
@@ -327,7 +329,7 @@ interface EditorState {
   activeSelection: ActiveSelection | null
   selectionMode: SelectionModeType
   setSelectionMode: (mode: SelectionModeType) => void
-  recolorActiveSelection: (color: string) => void
+  recolorActiveSelection: (color: string, blend?: RecolorBlend) => void
   convertSelectionToOmniframeObject: (name?: string) => string
   setSelectionMaskDisplayMode: (mode: 'rubylith' | 'matte' | 'cutout') => void
   toggleSelectionMaskView: (showOnly?: boolean) => void
@@ -2449,33 +2451,58 @@ export const useEditor = create<EditorState>((set, get) => {
         }
       })
     },
-    recolorActiveSelection: (color) => {
+    recolorActiveSelection: (color, blend = 'dye') => {
       pushSnapshot()
       const sel = get().activeSelection
       const selectedCharId = get().selectedCharacterId
       const char = get().omniframeCharacters.find((c) => c.id === selectedCharId)
 
-      // 1. If an OmniFrame character/object is active, apply recolor to it
+      // 1. If an OmniFrame character/object is active, recolor it for real.
+      //
+      // This used to swap in one of five pre-baked PNGs matched by colour
+      // name, so any other colour silently did nothing. Worse, those PNGs
+      // were flat composites: measured on the towel, a flat blue fill drops
+      // luminance std from 63 to 27 and crushes the p5..p95 range from
+      // 29..241 to 13..103, destroying every fold — which is exactly the
+      // "looks like a layer" effect. We now compute the recolor from the
+      // object's own cutout, preserving its lightness structure.
       if (char) {
-        let recolorUrl: string | undefined = undefined
-        if (char.id === 'char_towel') {
-          if (color.toLowerCase().includes('blue') || color === '#2563eb' || color === '#3b82f6') {
-            recolorUrl = '/assets/room/obj_towel_blue.png'
-          } else if (color.toLowerCase().includes('red') || color === '#dc2626' || color === '#ef4444') {
-            recolorUrl = '/assets/room/obj_towel_red.png'
-          } else if (color.toLowerCase().includes('green') || color === '#059669' || color === '#10b981') {
-            recolorUrl = '/assets/room/obj_towel_green.png'
-          } else if (color.toLowerCase().includes('gold') || color === '#d97706' || color === '#f59e0b') {
-            recolorUrl = '/assets/room/obj_towel_gold.png'
-          } else if (color.toLowerCase().includes('purple') || color === '#7c3aed' || color === '#8b5cf6') {
-            recolorUrl = '/assets/room/obj_towel_purple.png'
-          }
-        }
+        // "Original" / clearing: drop the dye and fall back to the cutout.
+        if (!color) {
+          set((s) => ({
+            omniframeCharacters: s.omniframeCharacters.map((c) =>
+              c.id === selectedCharId
+                ? { ...c, recolorColor: undefined, recolorUrl: undefined, recolorBlend: undefined }
+                : c,
+            ),
+          }))
+        } else {
         set((s) => ({
           omniframeCharacters: s.omniframeCharacters.map((c) =>
-            c.id === selectedCharId ? { ...c, recolorColor: color, recolorUrl } : c,
+            c.id === selectedCharId ? { ...c, recolorColor: color, recolorBlend: blend } : c,
           ),
         }))
+
+        const charId = char.id
+        // Always re-dye the pristine cutout, never the previous result, so
+        // repeated recolors don't compound into mud.
+        void recolorImage(char.cutoutUrl, { color, blend })
+          .then(({ dataUrl }) => {
+            set((s) => ({
+              omniframeCharacters: s.omniframeCharacters.map((c) =>
+                c.id === charId ? { ...c, recolorColor: color, recolorBlend: blend, recolorUrl: dataUrl } : c,
+              ),
+            }))
+          })
+          .catch(() => {
+            // Keep the requested colour recorded even if the pixel pass fails.
+            set((s) => ({
+              omniframeCharacters: s.omniframeCharacters.map((c) =>
+                c.id === charId ? { ...c, recolorColor: color, recolorBlend: blend } : c,
+              ),
+            }))
+          })
+        }
       }
 
       // 2. Also tint active selection buffer
