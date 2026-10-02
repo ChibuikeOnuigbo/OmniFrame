@@ -50,15 +50,20 @@ async function run() {
   const fileInput = page.locator('input[type="file"]').first()
   await fileInput.setInputFiles([characterFixture])
   await page.waitForTimeout(600)
-  const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
-  if (await addBtn.count() > 0) {
-    await addBtn.click({ force: true })
-  }
+  // Import only adds to the project library, so the clip has to be placed
+  // explicitly. The panel already holds demo assets, whose buttons match the
+  // bare locator first — filling one of those is why the exported hair check
+  // used to see almost no blue.
+  const addBtn = page.getByRole('button', { name: /Add .*character-hair-outline.* to timeline/ })
+  await addBtn.waitFor()
+  await addBtn.click({ force: true })
+  await page.waitForTimeout(400)
   await page.evaluate(() => window.__omniframe_store.getState().setMonitorMode('program'))
   await page.waitForTimeout(400)
 
-  const clipCount = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
-  assert(clipCount >= 1, `Expected character clip loaded on timeline, found ${clipCount}`)
+  const placed = await page.evaluate(() => window.__omniframe_store.getState().clips.map(c => c.name || c.assetId))
+  assert(placed.length >= 1, `Expected character clip loaded on timeline, found ${placed.length}`)
+  assert(placed.some(n => /character-hair-outline/i.test(String(n))), `character fixture is the clip on the timeline`, JSON.stringify(placed))
   console.log('PASS Character media clip ingested and placed on timeline')
 
   // Step 2: Open Drawing Mode and Drawing Panel
@@ -88,11 +93,11 @@ async function run() {
   await page.waitForTimeout(300)
 
   // Verify Tolerance slider is visible
-  const tolSlider = page.locator('[data-testid="drawing-fill-tolerance-slider"]').first()
+  const tolSlider = page.locator('[data-testid="panel-fill-tolerance-slider"]').first()
   assert(await tolSlider.isVisible(), 'Fill tolerance slider is visible in toolbar')
 
   // Enable Shading / Luminance Preservation
-  const shadingToggle = page.locator('[data-testid="drawing-preserve-luminance-toggle"] input')
+  const shadingToggle = page.locator('[data-testid="panel-preserve-luminance-checkbox"]')
   const isChecked = await shadingToggle.isChecked()
   if (!isChecked) {
     await shadingToggle.click()
