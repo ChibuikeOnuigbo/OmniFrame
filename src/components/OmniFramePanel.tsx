@@ -17,11 +17,38 @@ import {
   PaintBucket,
   Image as ImageIcon,
   BoxSelect,
+  Wand2,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { OmniframeScopeType } from '../types'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
 import { RECOLOR_BLENDS, type RecolorBlend } from '../lib/recolor'
+
+/**
+ * The panel used to render every control at once, which made it read as a
+ * wall of small icons. These are the sections it is split into; only the
+ * active one renders.
+ */
+const PANEL_SECTIONS = [
+  {
+    id: 'segments',
+    label: 'Segments',
+    icon: BoxSelect,
+    hint: 'Pick the asset and choose a detected segment',
+  },
+  { id: 'select', label: 'Mask', icon: Wand2, hint: 'Selection and masking sub-tools' },
+  { id: 'transform', label: 'Transform', icon: Move, hint: 'Position, scale and rotation' },
+  { id: 'color', label: 'Color', icon: PaintBucket, hint: 'Recolor the segment and pick a blend mode' },
+  { id: 'scope', label: 'Scope', icon: Clock, hint: 'All frames, a section, or a single frame' },
+  { id: 'actions', label: 'Actions', icon: Layers, hint: 'Duplicate, cut to track, remove, and verify' },
+] as const
+
+type PanelSection = (typeof PANEL_SECTIONS)[number]['id']
+
+/** Renders children only when its section is the active one. */
+function Section({ active, children }: { active: boolean; children: React.ReactNode }) {
+  return active ? <>{children}</> : null
+}
 
 export function OmniFramePanel() {
   const assets = useEditor((s) => s.assets)
@@ -69,6 +96,7 @@ export function OmniFramePanel() {
   const [sectionStart, setSectionStart] = useState<number>(selectedChar?.sectionRange?.start ?? 2.0)
   const [sectionEnd, setSectionEnd] = useState<number>(selectedChar?.sectionRange?.end ?? 5.0)
   const [targetFrame, setTargetFrame] = useState<number>(selectedChar?.frameNumber ?? currentFrame)
+  const [section, setSection] = useState<PanelSection>('segments')
   const [recolorBlend, setRecolorBlend] = useState<RecolorBlend>(
     selectedChar?.recolorBlend ?? 'dye',
   )
@@ -109,8 +137,8 @@ export function OmniFramePanel() {
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <div className="flex items-center gap-1.5">
-          <Scissors size={14} className="text-brand" />
-          <span className="font-semibold text-ink-100">OmniFrame AI</span>
+          <Scissors size={17} className="text-brand" />
+          <span className="font-semibold text-ink-100">OmniFrame Mask</span>
         </div>
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand/15 text-brand font-mono font-medium">
           Multi-Frame Cuts
@@ -120,7 +148,7 @@ export function OmniFramePanel() {
       {/* Target Video Banner */}
       <div className="px-2.5 py-1.5 rounded-lg bg-ink-900 border border-ink-800 flex items-center justify-between text-[11px]">
         <div className="flex items-center gap-1.5 truncate">
-          <Film size={12} className="text-brand shrink-0" />
+          <Film size={15} className="text-brand shrink-0" />
           <span className="font-medium text-ink-200 truncate">
             {activeClip ? activeClip.name : 'Death Note Chibi - 5 Characters.mp4'}
           </span>
@@ -130,6 +158,39 @@ export function OmniFramePanel() {
         </span>
       </div>
 
+      {/* Section navigation — the panel used to render every control at once,
+          which is what made it read as a wall of small icons. One section
+          at a time; the controls you are not using are not on screen. */}
+      <div
+        data-testid="omniframe-section-nav"
+        className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-ink-950 border border-ink-800"
+      >
+        {PANEL_SECTIONS.map((sec) => {
+          const Icon = sec.icon
+          const active = section === sec.id
+          return (
+            <button
+              key={sec.id}
+              type="button"
+              data-testid={`omniframe-section-${sec.id}`}
+              title={sec.hint}
+              aria-label={sec.label}
+              aria-pressed={active}
+              onClick={() => setSection(sec.id)}
+              className={`flex flex-col items-center justify-center gap-0.5 py-1.5 px-0.5 rounded-md transition-colors ${
+                active
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-ink-400 hover:text-ink-100 hover:bg-ink-800'
+              }`}
+            >
+              <Icon size={18} strokeWidth={active ? 2.2 : 1.8} />
+              <span className="text-[9px] font-medium leading-none">{sec.label}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      <Section active={section === 'segments'}>
       {/* Quick Sub-Mode Channels Bar */}
       {(!activeSubMode || activeSubMode === 'omniframe-overview') && (
         <div className="space-y-1">
@@ -143,7 +204,7 @@ export function OmniFramePanel() {
               onClick={() => openSubMode('omniframe', 'omniframe-selection', 'OmniFrame Selection Subtool', 'BoxSelect')}
               className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
             >
-              <BoxSelect size={16} className="text-brand mb-1" />
+              <BoxSelect size={20} className="text-brand mb-1" />
               <div className="font-semibold text-[10px] text-ink-100">Selection</div>
               <div className="text-[9px] text-ink-400">6 Subtools</div>
             </button>
@@ -154,7 +215,7 @@ export function OmniFramePanel() {
               onClick={() => openSubMode('omniframe', 'omniframe-shift', 'AI Segmentation & Character Shift', 'Move')}
               className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
             >
-              <Move size={16} className="text-amber-400 mb-1" />
+              <Move size={20} className="text-amber-400 mb-1" />
               <div className="font-semibold text-[10px] text-ink-100">Shift & Infill</div>
               <div className="text-[9px] text-ink-400">Multi-Frame</div>
             </button>
@@ -165,7 +226,7 @@ export function OmniFramePanel() {
               onClick={() => openSubMode('omniframe', 'omniframe-recolor', 'Recolor & Material Palette', 'PaintBucket')}
               className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
             >
-              <PaintBucket size={16} className="text-cyan-400 mb-1" />
+              <PaintBucket size={20} className="text-cyan-400 mb-1" />
               <div className="font-semibold text-[10px] text-ink-100">Recolor</div>
               <div className="text-[9px] text-ink-400">Hue & Presets</div>
             </button>
@@ -223,14 +284,19 @@ export function OmniFramePanel() {
         </div>
       )}
 
+      </Section>
+
+      <Section active={section === 'select'}>
       {/* Unified Selection & Masking Sub-Tool */}
       {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
         <SelectionMaskSubTool />
       )}
+      </Section>
 
       {/* Detected Characters List & Multi-Frame Shift */}
       {(!activeSubMode || activeSubMode === 'omniframe-shift') && (
         <>
+          <Section active={section === 'segments'}>
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
           <span>Detected Characters ({omniframeCharacters.length})</span>
@@ -240,7 +306,7 @@ export function OmniFramePanel() {
             onClick={handleAutoArrange}
             className="flex items-center gap-1 text-[10px] text-brand hover:text-white px-2 py-0.5 rounded bg-brand/20 hover:bg-brand/30 border border-brand/40 font-semibold transition-colors"
           >
-            <Sparkles size={11} />
+            <Sparkles size={14} />
             <span>Rearrange Clean</span>
           </button>
         </div>
@@ -305,12 +371,14 @@ export function OmniFramePanel() {
           })}
         </div>
       </div>
+          </Section>
 
       {selectedChar && (
         <div className="flex flex-col gap-3 p-2.5 rounded-xl bg-ink-900/90 border border-ink-800">
+          <Section active={section === 'transform'}>
           <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
             <span className="font-semibold text-ink-100 flex items-center gap-1 truncate pr-1" title={selectedChar.name}>
-              <Move size={12} className="text-brand shrink-0" />
+              <Move size={15} className="text-brand shrink-0" />
               <span className="truncate">Transform: {selectedChar.name}</span>
             </span>
             <button
@@ -320,7 +388,7 @@ export function OmniFramePanel() {
               onClick={() => resetCharacterPosition(selectedChar.id)}
               className="text-[10px] text-ink-400 hover:text-white flex items-center gap-1 shrink-0"
             >
-              <RotateCcw size={10} />
+              <RotateCcw size={13} />
               Reset
             </button>
           </div>
@@ -416,11 +484,13 @@ export function OmniFramePanel() {
             </div>
           </div>
 
+          </Section>
+          <Section active={section === 'color'}>
           {/* Object Recolor & Tint (Photorealistic Luminance Preservation) */}
           <div className="pt-2 border-t border-ink-800 space-y-1.5">
             <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
               <div className="flex items-center gap-1">
-                <PaintBucket size={11} className="text-amber-400" />
+                <PaintBucket size={14} className="text-amber-400" />
                 <span>Object Color & Recolor</span>
               </div>
               <span className="font-mono text-[9px] text-brand">
@@ -489,11 +559,13 @@ export function OmniFramePanel() {
             </p>
           </div>
 
+          </Section>
+          <Section active={section === 'scope'}>
           {/* Scope Selector: All Frames vs Section vs Only 1 Frame */}
           <div className="pt-2 border-t border-ink-800 space-y-2">
             <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
               <span>Propagation Scope</span>
-              <Clock size={11} />
+              <Clock size={14} />
             </div>
 
             <div className="grid grid-cols-3 gap-1 bg-ink-950 p-0.5 rounded-lg border border-ink-800">
@@ -619,6 +691,8 @@ export function OmniFramePanel() {
             )}
           </div>
 
+          </Section>
+          <Section active={section === 'actions'}>
           {/* Action Operations */}
           <div className="pt-2 border-t border-ink-800 flex flex-col gap-1.5">
             <div className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
@@ -633,7 +707,7 @@ export function OmniFramePanel() {
                 onClick={() => cutCharacterToNewTrack(selectedChar.id)}
                 className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-brand/20 border border-brand/40 text-brand font-medium hover:bg-brand/30 transition-colors truncate"
               >
-                <Scissors size={12} className="shrink-0" />
+                <Scissors size={15} className="shrink-0" />
                 <span className="truncate">Cut to Track</span>
               </button>
 
@@ -645,7 +719,7 @@ export function OmniFramePanel() {
                 onClick={() => duplicateCharacter(selectedChar.id)}
                 className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-ink-800 border border-ink-700 text-ink-200 hover:text-white hover:bg-ink-750 transition-colors truncate"
               >
-                <Copy size={12} className="shrink-0" />
+                <Copy size={15} className="shrink-0" />
                 <span className="truncate">Duplicate</span>
               </button>
 
@@ -658,7 +732,7 @@ export function OmniFramePanel() {
                   onClick={() => restoreCharacter(selectedChar.id)}
                   className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-medium hover:bg-emerald-500/30 transition-colors truncate"
                 >
-                  <Eye size={12} className="shrink-0" />
+                  <Eye size={15} className="shrink-0" />
                   <span className="truncate">Restore</span>
                 </button>
               ) : (
@@ -670,7 +744,7 @@ export function OmniFramePanel() {
                   onClick={() => removeCharacterInfill(selectedChar.id)}
                   className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium hover:bg-amber-500/30 transition-colors truncate"
                 >
-                  <Trash2 size={12} className="shrink-0" />
+                  <Trash2 size={15} className="shrink-0" />
                   <span className="truncate">Delete / Infill</span>
                 </button>
               )}
@@ -683,11 +757,12 @@ export function OmniFramePanel() {
                 onClick={() => deleteCharacter(selectedChar.id)}
                 className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-300 font-medium hover:bg-red-500/30 transition-colors truncate"
               >
-                <Trash2 size={12} className="shrink-0" />
+                <Trash2 size={15} className="shrink-0" />
                 <span className="truncate">Remove</span>
               </button>
             </div>
           </div>
+          </Section>
         </div>
       )}
 

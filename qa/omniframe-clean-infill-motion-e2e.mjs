@@ -60,10 +60,14 @@ async function runOmniFrameVerification() {
 
   // --- SUBTEST A: All Frame Scope ('all') ---
   console.log('=== Subtest A: All Frame Scope (Light Yagami moved across all frames) ===')
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
   await page.locator('[data-testid="character-card-char_light"]').click()
   await page.waitForTimeout(200)
 
   // Scope radio / button: all
+  await page.click('[data-testid="omniframe-section-scope"]')
+  await page.waitForTimeout(300)
   const scopeAllBtn = page.locator('[data-testid="scope-all-frames"]')
   if (await scopeAllBtn.isVisible()) {
     await scopeAllBtn.click()
@@ -93,6 +97,8 @@ async function runOmniFrameVerification() {
 
   // --- SUBTEST B: One Frame Scope ('frame') ---
   console.log('=== Subtest B: One Frame Scope (L moved ONLY on frame 90 / 3.0s) ===')
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
   await page.locator('[data-testid="character-card-char_l"]').click()
   await page.waitForTimeout(200)
 
@@ -134,6 +140,8 @@ async function runOmniFrameVerification() {
 
   // --- SUBTEST C: Section of Frames Scope ('section') ---
   console.log('=== Subtest C: Section Scope (Ryuk moved ONLY between 2.0s and 5.0s) ===')
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
   await page.locator('[data-testid="character-card-char_ryuk"]').click()
   await page.waitForTimeout(200)
 
@@ -173,9 +181,13 @@ async function runOmniFrameVerification() {
 
   // --- SUBTEST D: Duplicate Character ---
   console.log('=== Subtest D: Duplicate Character (Create 2nd Light Yagami) ===')
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
   await page.locator('[data-testid="character-card-char_light"]').click()
   await page.waitForTimeout(200)
 
+  await page.click('[data-testid="omniframe-section-actions"]')
+  await page.waitForTimeout(300)
   const dupBtn = page.locator('[data-testid="omniframe-duplicate-btn"]')
   await dupBtn.waitFor({ state: 'visible' })
   await dupBtn.click()
@@ -191,9 +203,13 @@ async function runOmniFrameVerification() {
 
   // --- SUBTEST E: Delete / Infill Character ---
   console.log('=== Subtest E: Delete / Infill Character (Remove Ryuk cleanly across all parts of clip) ===')
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
   await page.locator('[data-testid="character-card-char_ryuk"]').click()
   await page.waitForTimeout(200)
 
+  await page.click('[data-testid="omniframe-section-actions"]')
+  await page.waitForTimeout(250)
   const infillBtn = page.locator('[data-testid="omniframe-delete-infill-btn"]')
   await infillBtn.waitFor({ state: 'visible' })
   await infillBtn.click()
@@ -214,6 +230,8 @@ async function runOmniFrameVerification() {
   await previewCanvas.screenshot({ path: join(CUT_DIR, 'cut-omniframe-character-deleted-infilled.png') })
 
   // Verify Restore Character
+  await page.click('[data-testid="omniframe-section-actions"]')
+  await page.waitForTimeout(250)
   const restoreBtn = page.locator('[data-testid="omniframe-restore-btn"]')
   await restoreBtn.waitFor({ state: 'visible' })
   await restoreBtn.click()
@@ -261,6 +279,8 @@ async function runOmniFrameVerification() {
   })
   await page.waitForTimeout(300)
 
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
   const autoArrangeBtn = page.locator('[data-testid="omniframe-auto-arrange-btn"]')
   await autoArrangeBtn.waitFor({ state: 'visible' })
   await autoArrangeBtn.click()
@@ -290,6 +310,8 @@ async function runOmniFrameVerification() {
   console.log('  -> Saved rearranged preview cutout:', deliverableCutoutPath)
 
   // Capture verification inspector table cutout
+  await page.click('[data-testid="omniframe-section-actions"]')
+  await page.waitForTimeout(300)
   const verifTable = page.locator('[data-testid="omniframe-verification-table"]')
   if (await verifTable.isVisible()) {
     await verifTable.screenshot({ path: join(CUT_DIR, 'cut-omniframe-verification-table.png') })

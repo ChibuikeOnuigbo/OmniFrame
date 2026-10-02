@@ -58,6 +58,9 @@ async function run() {
 
     // 3. Verify Selection & Masking Sub-tool and All 6 Selection Types
     console.log('Verifying Selection & Masking Sub-tool...')
+    // The panel is sectioned; the masking sub-tool lives under "Mask".
+    await page.click('[data-testid="omniframe-section-select"]')
+    await page.waitForTimeout(300)
     const subtool = await page.waitForSelector('[data-testid="selection-mask-subtool"]', { timeout: 3000 })
     if (!subtool) throw new Error('SelectionMaskSubTool not found!')
 
@@ -82,6 +85,9 @@ async function run() {
 
     // 4. Switch to Real Uploaded Photo: Room Leather Chair & Towel
     console.log('Switching active asset to Room Leather Chair & Towel (Real Photo)...')
+    // The asset switcher lives in the Segments section.
+  await page.click('[data-testid="omniframe-section-segments"]')
+  await page.waitForTimeout(250)
     const roomBtn = await page.waitForSelector('[data-testid="switch-asset-room-btn"]', { timeout: 3000 })
     await roomBtn.click()
     await page.waitForTimeout(800)
@@ -103,6 +109,8 @@ async function run() {
     await page.waitForTimeout(400)
 
     // Click Royal Blue Recolor swatch
+    await page.click('[data-testid="omniframe-section-color"]')
+    await page.waitForTimeout(250)
     const blueBtn = await page.waitForSelector('[data-testid="char-recolor-royal-blue"]', { timeout: 3000 })
     await blueBtn.click()
     await page.waitForTimeout(600)
@@ -141,6 +149,8 @@ async function run() {
 
     // 6. Recolor Towel to Crimson Red
     console.log('Recoloring Towel to Crimson Red...')
+    await page.click('[data-testid="omniframe-section-color"]')
+    await page.waitForTimeout(250)
     const redBtn = await page.waitForSelector('[data-testid="char-recolor-crimson-red"]', { timeout: 3000 })
     await redBtn.click()
     await page.waitForTimeout(600)
@@ -194,6 +204,8 @@ async function run() {
 
     // 8. Test Non-Destructive Background Removal (Show Mask Layer / Rubylith Mode)
     console.log('Testing Non-Destructive Mask Layer (Rubylith & Matte Mode)...')
+    await page.click('[data-testid="omniframe-section-select"]')
+    await page.waitForTimeout(250)
     const rubylithBtn = await page.waitForSelector('[data-testid="mask-mode-rubylith-btn"]', { timeout: 3000 })
     await rubylithBtn.click()
     await page.waitForTimeout(300)

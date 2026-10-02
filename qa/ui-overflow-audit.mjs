@@ -103,11 +103,15 @@ function collectOverflow() {
    * which is nearly all the noise in an audit like this.
    */
   function hasScrollableAncestor(el) {
+    // Any positive scroll amount means the content is REACHABLE, so the
+    // threshold here is > 0 rather than the > 1 used for CLIP detection.
+    // A 1px scroll is still a scroll: treating it as unreachable reported a
+    // false SHEAR on a panel that simply sat 1px past its scroll box.
     let n = el.parentElement
     while (n && n !== document.documentElement) {
       const s = styleOf(n)
-      if (/(auto|scroll)/.test(s.overflowX) && n.scrollWidth - n.clientWidth > 1) return true
-      if (/(auto|scroll)/.test(s.overflowY) && n.scrollHeight - n.clientHeight > 1) return true
+      if (/(auto|scroll)/.test(s.overflowX) && n.scrollWidth - n.clientWidth > 0) return true
+      if (/(auto|scroll)/.test(s.overflowY) && n.scrollHeight - n.clientHeight > 0) return true
       n = n.parentElement
     }
     return false
@@ -202,11 +206,22 @@ function collectOverflow() {
   return out
 }
 
-/** Runs in the page: list submode testids reachable from the open panel. */
+/**
+ * Runs in the page: list submode testids reachable from the open panel, plus
+ * any panel section tabs. Sections matter because the OmniFrame panel only
+ * renders the active section, so auditing the default one alone would miss
+ * overflow in the other five.
+ */
 function listSubmodes() {
   const ids = []
   for (const el of document.querySelectorAll('[data-testid^="omniframe-submode-"], [data-testid$="-submode-btn"]')) {
     ids.push(el.getAttribute('data-testid'))
+  }
+  // Section tabs are not submodes (they stay put rather than opening a
+  // focused channel), so keep them addressable but distinct.
+  for (const el of document.querySelectorAll('[data-testid^="omniframe-section-"]')) {
+    const id = el.getAttribute('data-testid')
+    if (id && id !== 'omniframe-section-nav') ids.push(id)
   }
   return Array.from(new Set(ids))
 }
@@ -307,7 +322,12 @@ async function run() {
       await page.waitForTimeout(450)
 
       const submodes = await page.evaluate(listSubmodes)
-      const statesToVisit = [null, ...submodes.filter((s) => s.endsWith('-submode-btn'))]
+      const statesToVisit = [
+        null,
+        ...submodes.filter(
+          (s) => s.endsWith('-submode-btn') || s.startsWith('omniframe-section-'),
+        ),
+      ]
 
       for (const sm of statesToVisit) {
         if (sm) {

@@ -199,6 +199,9 @@ async function run() {
     if (!tempOmniBadge) throw new Error('Temporary sub-rail badge for omniframe selection not found!')
 
     // Verify Selection SubTool is focused
+    // The panel is sectioned; the masking sub-tool lives under "Mask".
+    await page.click('[data-testid="omniframe-section-select"]')
+    await page.waitForTimeout(300)
     const omniSelTool = await page.waitForSelector('[data-testid="selection-mask-subtool"]', { timeout: 3000 })
     if (!omniSelTool) throw new Error('Selection subtool not focused!')
 

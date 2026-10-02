@@ -51,7 +51,7 @@ const TABS: TabDef[] = [
 
   // 2. 2D CREATIVE & PAINT (Photoshop / Krita / LumaCut Style)
   { id: 'drawing', label: 'Drawing & Paint', icon: Palette, category: '2d', desc: 'Raster/Vector Brushes & Onion Skin' },
-  { id: 'omniframe', label: 'OmniFrame AI', icon: Scissors, category: '2d', desc: 'Segmentation & Clean Infill' },
+  { id: 'omniframe', label: 'OmniFrame Mask', icon: Scissors, category: '2d', desc: 'Segmentation & Clean Infill' },
   { id: 'tracking', label: 'Masking & Tracking', icon: Target, category: '2d', desc: 'Lucas-Kanade Tracking & Mattes' },
 
   // 3. 3D SCENE & COMPOSITING (Blender / After Effects 3D)

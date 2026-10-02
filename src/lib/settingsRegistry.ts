@@ -44,7 +44,7 @@ export const EDITABLE_SHORTCUTS: EditableShortcut[] = [
   { id: 'undo', label: 'Undo', defaultKey: 'Ctrl+Z' },
   { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Shift+Z' },
   { id: 'playPause', label: 'Play / Pause', defaultKey: 'Space' },
-  { id: 'omniframe', label: 'OmniFrame AI Tab', defaultKey: 'Alt+O' },
+  { id: 'omniframe', label: 'OmniFrame Mask Tab', defaultKey: 'Alt+O' },
   { id: 'threed', label: 'Toggle 3D Mode', defaultKey: '3' },
 ]
 

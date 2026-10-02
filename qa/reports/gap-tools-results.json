@@ -18,7 +18,7 @@
     {
       "name": "clicking a target button targets that track",
       "status": "PASS",
-      "detail": "[\"trk_chgrgtpl540\"]"
+      "detail": "[\"trk_all0mdw3kxm\"]"
     },
     {
       "name": "targeted track shows an accent bar",
@@ -33,7 +33,7 @@
     {
       "name": "Shift-click targets only that track",
       "status": "PASS",
-      "detail": "[\"trk_vppqv42l541\"]"
+      "detail": "[\"trk_xk3h4wi3kxn\"]"
     },
     {
       "name": "targeted scope closed the gap on the audio track only",

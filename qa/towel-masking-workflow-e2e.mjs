@@ -69,6 +69,8 @@ await page.waitForTimeout(900)
 
 // Enter selection mode through the real UI control first — that is what enables
 // the drawing/selection overlay the user actually drags on.
+await page.click('[data-testid="omniframe-section-select"]')
+await page.waitForTimeout(250)
 await page.click('[data-testid="sel-type-freeform"]')
 await page.waitForTimeout(400)
 const canvas = page.locator('[data-testid="drawing-canvas"]')
@@ -147,6 +149,8 @@ const towelOutline = [
 // ================================================================== W1: LASSO
 console.log('\n--- W1: Freeform lasso around the towel → fill ---')
 await resetSelection()
+await page.click('[data-testid="omniframe-section-select"]')
+await page.waitForTimeout(250)
 await page.click('[data-testid="sel-type-freeform"]')
 await page.waitForTimeout(150)
 ok(
@@ -173,6 +177,8 @@ await page.screenshot({ path: path.join(SHOTS, 'SS-102-towel-lasso-fill.png') })
 // ============================================================ W2: PAINT BRUSH
 console.log('\n--- W2: Paint-selection brush over the towel → fill ---')
 await resetSelection()
+await page.click('[data-testid="omniframe-section-select"]')
+await page.waitForTimeout(250)
 await page.click('[data-testid="sel-type-painting"]')
 await page.waitForTimeout(150)
 ok(
@@ -201,6 +207,8 @@ await page.screenshot({ path: path.join(SHOTS, 'SS-103-towel-brush-fill.png') })
 // ================================================ W3: BRUSH RING (OUTLINE+FILL)
 console.log('\n--- W3: Brush ring around the towel → fill inside the ring ---')
 await resetSelection()
+await page.click('[data-testid="omniframe-section-select"]')
+await page.waitForTimeout(250)
 await page.click('[data-testid="sel-type-painting"]')
 await page.waitForTimeout(150)
 const ring = ringPath(TOWEL.x + TOWEL.w / 2, TOWEL.y + TOWEL.h / 2, TOWEL.w / 2 + 0.02, TOWEL.h / 2 + 0.02, 26)
@@ -223,6 +231,8 @@ await page.screenshot({ path: path.join(SHOTS, 'SS-104-towel-brush-ring-fill.png
 // ============================================ W4: BRUSH BACKGROUND → INVERT
 console.log('\n--- W4: Brush the BACKGROUND → invert → fill ---')
 await resetSelection()
+await page.click('[data-testid="omniframe-section-select"]')
+await page.waitForTimeout(250)
 await page.click('[data-testid="sel-type-painting"]')
 await page.waitForTimeout(150)
 // paint the two background bands (right of the towel, and the lower floor)
@@ -258,6 +268,8 @@ await page.screenshot({ path: path.join(SHOTS, 'SS-105-towel-brush-invert-fill.p
 // ============================ W5: GUIDED RECT BACKGROUND REMOVAL (new feature)
 console.log('\n--- W5: Guided Rect background removal (draw box → matte → layer) ---')
 await resetSelection()
+await page.click('[data-testid="omniframe-section-select"]')
+await page.waitForTimeout(250)
 await page.click('[data-testid="sel-type-rect"]')
 await page.waitForTimeout(150)
 

@@ -214,6 +214,9 @@ async function run() {
     await page.waitForTimeout(400)
 
     // --- R2: blend selector is exposed with all six modes -------------------
+    // The panel is sectioned; recolor lives under "Color".
+    await page.click('[data-testid="omniframe-section-color"]')
+    await page.waitForTimeout(300)
     const sel = await page.waitForSelector('[data-testid="recolor-blend-select"]', { timeout: 5000 })
     const opts = await sel.evaluate((s) => Array.from(s.options).map((o) => o.value))
     const expected = ['dye', 'color', 'overlay', 'multiply', 'soft-light', 'hue']
