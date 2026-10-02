@@ -363,6 +363,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
           <button
             type="button"
             data-testid="toggle-show-mask-btn"
+            aria-pressed={!!activeSelection?.showMaskOnly}
             onClick={() => toggleSelectionMaskView()}
             className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[10px] font-medium transition-all ${
               activeSelection?.showMaskOnly

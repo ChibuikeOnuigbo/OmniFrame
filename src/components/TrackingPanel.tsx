@@ -267,7 +267,7 @@ export function TrackingPanel() {
   }
 
   return (
-    <div data-testid="tracking-panel" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">
+    <div data-testid="tracking-panel" tabIndex={0} aria-label="Masking and tracking controls, scrollable" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">
       {/* Overview Banner */}
       <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1">
         <div className="flex items-center gap-1.5 font-semibold text-brand-400 text-xs">

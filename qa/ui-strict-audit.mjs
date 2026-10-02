@@ -209,6 +209,9 @@ function collectStrict() {
     if (!vis(el)) continue
     const cs = getComputedStyle(el)
     if (cs.textOverflow === 'ellipsis' || cs.overflow === 'visible') continue
+    // sr-only is the standard visually-hidden pattern: clipping to 1px is the
+    // intent, so it is never a defect.
+    if (el.classList.contains('sr-only') || el.closest('.sr-only')) continue
     if (el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0) {
       if (!el.querySelector('button, input, select')) {
         push('D04', 'low', el, `text clipped: scrollWidth ${el.scrollWidth} > clientWidth ${el.clientWidth}`)
@@ -258,11 +261,25 @@ function collectStrict() {
   // R03 range slider with no visible numeric readout nearby.
   for (const el of document.querySelectorAll('input[type="range"]')) {
     if (!vis(el)) continue
-    const p = el.parentElement
-    const sib = p ? p.textContent || '' : ''
+    // The readout is often in a label row that is a sibling of the slider's
+    // wrapper, so check a couple of ancestors -- but stop once we reach a
+    // container holding several controls, where any number would be
+    // coincidental rather than this slider's value.
+    let p = el.parentElement
+    let sib = ''
+    for (let depth = 0; p && depth < 3; depth++) {
+      sib = p.textContent || ''
+      const nControls = p.querySelectorAll('input[type="range"], input, select').length
+      if (/\d/.test(sib)) break
+      if (nControls > 3) break
+      p = p.parentElement
+    }
     // Readouts usually sit in a sibling label row ("Brightness  100%"), so the
     // number is rarely at the start of the string -- do not anchor the match.
-    const hasNum = /\d+(\.\d+)?\s*(%|px|s|ms|deg|°|x)?/i.test(sib.replace(el.value || '', ''))
+    // Do not strip the slider's own value first: a range input is a void
+    // element and contributes no text, and stripping "0" would delete the very
+    // readout we are looking for.
+    const hasNum = /\d+(\.\d+)?\s*(%|px|s|ms|deg|°|x)?/i.test(sib)
     if (!hasNum) push('R03', 'medium', el, 'slider with no numeric readout next to it')
   }
 

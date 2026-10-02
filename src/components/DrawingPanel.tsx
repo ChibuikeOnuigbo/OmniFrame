@@ -174,6 +174,7 @@ export function DrawingPanel() {
         <button
           type="button"
           data-testid="drawing-mode-toggle"
+          aria-pressed={drawingEnabled}
           onClick={() => setDrawingEnabled(!drawingEnabled)}
           className={`min-h-[24px] px-2 py-1 rounded text-[11px] font-medium transition-colors ${
             drawingEnabled
@@ -724,7 +725,7 @@ export function DrawingPanel() {
             Add Layer
           </button>
         </div>
-        <div className="flex flex-col gap-1.5 max-h-56 overflow-y-auto">
+        <div tabIndex={0} aria-label="Paint layers, scrollable" className="flex flex-col gap-1.5 max-h-56 overflow-y-auto">
           {paintLayers.map((layer) => {
             const isLayerActive = layer.id === activePaintLayerId && !activeMaskId
             const isMaskActive = layer.transparencyMask && layer.transparencyMask.id === activeMaskId

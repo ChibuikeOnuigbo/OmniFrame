@@ -335,6 +335,7 @@ export function GraphEditor() {
           {/* Active Property Curve Selector Dropdown */}
           <select
             data-testid="graph-curve-selector"
+            aria-label="Animatable channel"
             value={activeCurve?.id || ''}
             onChange={(e) => setActivePropId(e.target.value)}
             className="bg-ink-800 border border-ink-700 rounded px-2 py-1 text-xs text-ink-100 outline-none focus:border-brand"
@@ -361,6 +362,7 @@ export function GraphEditor() {
             <button
               type="button"
               data-testid="graph-keyframe-toggle"
+              aria-pressed={isKeyAtPlayhead}
               title={isKeyAtPlayhead ? 'Remove Keyframe at Playhead' : 'Add Keyframe at Playhead'}
               onClick={handleToggleKeyframeAtPlayhead}
               className={`p-1 rounded transition-colors ${
@@ -409,7 +411,7 @@ export function GraphEditor() {
       {/* Main Workspace (Sidebar Channels + SVG Canvas Area) */}
       <div className="flex-1 flex min-h-0 relative">
         {/* Left Channel List Sidebar */}
-        <div className="w-44 border-r border-ink-800/80 bg-ink-900/60 p-2 overflow-y-auto space-y-1 shrink-0 text-xs">
+        <div tabIndex={0} aria-label="Animatable channels, scrollable" className="w-44 border-r border-ink-800/80 bg-ink-900/60 p-2 overflow-y-auto space-y-1 shrink-0 text-xs">
           <div className="text-[10px] uppercase font-semibold text-ink-400 px-1 py-0.5">
             Animatable Channels
           </div>

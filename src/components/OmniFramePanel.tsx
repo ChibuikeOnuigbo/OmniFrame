@@ -310,7 +310,7 @@ export function OmniFramePanel() {
             <span>Rearrange Clean</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 gap-1 max-h-48 overflow-y-auto pr-0.5">
+        <div tabIndex={0} aria-label="Character list, scrollable" className="grid grid-cols-1 gap-1 max-h-48 overflow-y-auto pr-0.5">
           {omniframeCharacters.map((char) => {
             const isSelected = char.id === selectedChar?.id
             return (
@@ -415,6 +415,8 @@ export function OmniFramePanel() {
               <input
                 type="number"
                 data-testid="omniframe-pos-x-input"
+                min={-4000}
+                max={4000}
                 aria-label="Position X (px)"
                 value={selectedChar.transform.x}
                 onChange={(e) => handleUpdateTransform({ x: Number(e.target.value) })}
@@ -445,6 +447,8 @@ export function OmniFramePanel() {
               <input
                 type="number"
                 data-testid="omniframe-pos-y-input"
+                min={-4000}
+                max={4000}
                 aria-label="Position Y (px)"
                 value={selectedChar.transform.y}
                 onChange={(e) => handleUpdateTransform({ y: Number(e.target.value) })}

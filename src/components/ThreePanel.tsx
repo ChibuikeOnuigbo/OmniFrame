@@ -164,6 +164,7 @@ export function ThreePanel() {
             <button
               type="button"
               data-testid="camera-paint-toggle"
+              aria-pressed={cameraPaintActive}
               onClick={() => setCameraPaintActive(!cameraPaintActive)}
               className={`px-2 py-1 min-h-[24px] rounded text-[10px] font-medium border transition-colors ${
                 cameraPaintActive

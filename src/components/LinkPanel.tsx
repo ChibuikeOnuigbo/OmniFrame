@@ -195,6 +195,7 @@ export function LinkPanel() {
               <div className="flex gap-2">
                 <select
                   data-testid="link-target-select"
+                  aria-label="Link target clip"
                   value={linkTargetId}
                   onChange={(e) => setLinkTargetId(e.target.value)}
                   className="flex-1 h-7 px-2 rounded bg-ink-900 border border-ink-700 text-[11px] text-ink-200"

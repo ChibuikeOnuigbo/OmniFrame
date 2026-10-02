@@ -148,6 +148,8 @@ export function TextPanel() {
             </label>
             <textarea
               data-testid="text-title-input"
+              maxLength={500}
+              aria-label="Text content"
               value={text}
               rows={2}
               onChange={(e) => {

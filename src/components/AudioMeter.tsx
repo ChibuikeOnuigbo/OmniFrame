@@ -87,6 +87,7 @@ export function AudioMeter() {
       <button
         type="button"
         data-testid="audio-master-mute-btn"
+        aria-pressed={masterMuted}
         title={masterMuted ? 'Unmute Master Audio' : 'Mute Master Audio'}
         aria-label={masterMuted ? 'Unmute master' : 'Mute master'}
         onClick={() => setMasterMuted(!masterMuted)}

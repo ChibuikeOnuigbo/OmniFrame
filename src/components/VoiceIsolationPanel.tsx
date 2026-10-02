@@ -117,6 +117,7 @@ export function VoiceIsolationPanel() {
           <div className="space-y-1.5">
             <select
               data-testid="panel-voice-clip-select"
+              aria-label="Clip to process"
               value={activeClipId || targetClipId}
               onChange={(e) => setActiveClipId(e.target.value)}
               disabled={processing}

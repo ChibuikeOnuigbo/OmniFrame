@@ -1878,7 +1878,7 @@ export function Timeline() {
       {graphEditorOpen ? (
         <GraphEditor />
       ) : (
-        <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto relative">
+        <div ref={scrollRef} tabIndex={0} aria-label="Timeline tracks, scrollable" className="flex-1 min-h-0 overflow-auto relative">
         <div className="flex min-w-max relative">
           {/* left: track headers */}
           <div className="w-[168px] shrink-0 sticky left-0 z-40 bg-ink-900 border-r border-ink-800 shadow-sm">
