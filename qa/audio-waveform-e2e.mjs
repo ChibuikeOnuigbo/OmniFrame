@@ -20,10 +20,14 @@ const assert = (value, name, detail = '') => { if (!value) throw Error(`${name}:
 await page.goto(URL, { waitUntil: 'networkidle' })
 await page.getByTestId('panel-all-import-input').setInputFiles(join(ROOT, 'qa/fixtures/test-audio-6s.ogg'))
 await page.waitForTimeout(400)
-const addBtn = page.locator('[data-testid="add-to-timeline-btn"]').first()
-if (await addBtn.count() > 0) {
-  await addBtn.click({ force: true })
-}
+// Media import adds to the project library only — it does not insert a clip.
+// The panel already holds demo assets, so the bare add-to-timeline locator
+// matches those first and would place a video clip on a video track. Click
+// *this* asset's own button, addressed by its accessible name.
+const addBtn = page.getByRole('button', { name: /Add .*test-audio-6s.* to timeline/ })
+await addBtn.waitFor()
+await addBtn.click({ force: true })
+await page.waitForTimeout(500)
 const clip = page.locator('[data-testid="timeline-clip"][data-kind="audio"]')
 await clip.waitFor()
 const waveform = clip.getByTestId('clip-waveform')

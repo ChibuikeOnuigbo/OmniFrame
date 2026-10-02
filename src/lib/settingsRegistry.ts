@@ -18,6 +18,36 @@ export interface SettingDefinition {
   sourceRefs: { editor: string; url: string; evidence: string }[]
 }
 
+export interface EditableShortcut {
+  id: string
+  label: string
+  defaultKey: string
+}
+
+/**
+ * Single source of truth for the keyboard shortcuts the Shortcuts settings
+ * category lets you rebind. The Settings search index and the Shortcuts
+ * panel previously carried their own hard-coded lists, so searching for
+ * "split" reported a different default binding than the panel showed.
+ */
+export const EDITABLE_SHORTCUTS: EditableShortcut[] = [
+  { id: 'split', label: 'Split at Playhead', defaultKey: 'B' },
+  { id: 'marker', label: 'Add Marker', defaultKey: 'M' },
+  { id: 'hide', label: 'Hide / Unhide Clip', defaultKey: 'H' },
+  { id: 'selectTool', label: 'Select Tool', defaultKey: 'V' },
+  { id: 'bladeTool', label: 'Blade Tool', defaultKey: 'B' },
+  { id: 'delete', label: 'Delete Clip', defaultKey: 'Delete' },
+  { id: 'duplicate', label: 'Duplicate Clip', defaultKey: 'Ctrl+D' },
+  { id: 'cut', label: 'Cut Clip', defaultKey: 'Ctrl+X' },
+  { id: 'copy', label: 'Copy Clip', defaultKey: 'Ctrl+C' },
+  { id: 'paste', label: 'Paste Clip', defaultKey: 'Ctrl+V' },
+  { id: 'undo', label: 'Undo', defaultKey: 'Ctrl+Z' },
+  { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Shift+Z' },
+  { id: 'playPause', label: 'Play / Pause', defaultKey: 'Space' },
+  { id: 'omniframe', label: 'OmniFrame AI Tab', defaultKey: 'Alt+O' },
+  { id: 'threed', label: 'Toggle 3D Mode', defaultKey: '3' },
+]
+
 export const SETTINGS_REGISTRY: SettingDefinition[] = [
   {
     id: 'project.frameRate', category: 'timeline', label: 'Project frame rate',
@@ -69,17 +99,13 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'ai.session.apiKey', testId: 'setting-ai-api-key', sourceRefs: [],
   },
-  ...[
-    ['shortcut.hideClip', 'Hide / unhide selected clip', 'H'],
-    ['shortcut.selectTool', 'Select tool', 'V'],
-    ['shortcut.bladeTool', 'Blade tool', 'B'],
-    ['shortcut.split', 'Split at playhead', 'Ctrl+B / B'],
-    ['shortcut.marker', 'Add Marker at playhead', 'M'],
-    ['shortcut.undo', 'Undo', 'Ctrl / Cmd + Z'],
-  ].map(([id, label, shortcut]): SettingDefinition => ({
-    id, category: 'shortcuts', label, description: shortcut, aliases: ['keyboard', 'key', shortcut], controlType: 'read-only',
-    defaultValue: shortcut, scope: 'session', persistent: false, requiresReload: false, capability: 'web-and-desktop',
-    runtimeBinding: id, testId: `setting-${id.replace(/\./g, '-')}`, sourceRefs: [],
+  ...EDITABLE_SHORTCUTS.map((shortcut): SettingDefinition => ({
+    id: `shortcut.${shortcut.id}`, category: 'shortcuts', label: shortcut.label,
+    description: `Rebindable shortcut, defaults to ${shortcut.defaultKey}.`,
+    aliases: ['keyboard', 'key', 'shortcut', shortcut.defaultKey, shortcut.label],
+    controlType: 'read-only', defaultValue: shortcut.defaultKey, scope: 'session', persistent: false,
+    requiresReload: false, capability: 'web-and-desktop', runtimeBinding: `shortcut.${shortcut.id}`,
+    testId: `setting-shortcut-${shortcut.id}`, sourceRefs: [],
   })),
   {
     id: 'contextMenu.customization', category: 'contextMenu', label: 'Context menu customization',

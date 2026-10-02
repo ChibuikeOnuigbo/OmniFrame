@@ -18,7 +18,7 @@ import {
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
 import { exportVideo } from '../lib/export'
-import { SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
+import { EDITABLE_SHORTCUTS, SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
 import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
 import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
@@ -567,21 +567,7 @@ export function TopBar() {
                   </div>
                   <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
                     {[
-                      { id: 'split', label: 'Split at Playhead', defaultKey: 'B' },
-                      { id: 'marker', label: 'Add Marker', defaultKey: 'M' },
-                      { id: 'hide', label: 'Hide / Unhide Clip', defaultKey: 'H' },
-                      { id: 'selectTool', label: 'Select Tool', defaultKey: 'V' },
-                      { id: 'bladeTool', label: 'Blade Tool', defaultKey: 'B' },
-                      { id: 'delete', label: 'Delete Clip', defaultKey: 'Delete' },
-                      { id: 'duplicate', label: 'Duplicate Clip', defaultKey: 'Ctrl+D' },
-                      { id: 'cut', label: 'Cut Clip', defaultKey: 'Ctrl+X' },
-                      { id: 'copy', label: 'Copy Clip', defaultKey: 'Ctrl+C' },
-                      { id: 'paste', label: 'Paste Clip', defaultKey: 'Ctrl+V' },
-                      { id: 'undo', label: 'Undo', defaultKey: 'Ctrl+Z' },
-                      { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Shift+Z' },
-                      { id: 'playPause', label: 'Play / Pause', defaultKey: 'Space' },
-                      { id: 'omniframe', label: 'OmniFrame AI Tab', defaultKey: 'Alt+O' },
-                      { id: 'threed', label: 'Toggle 3D Mode', defaultKey: '3' },
+                      ...EDITABLE_SHORTCUTS,
                     ].map((item) => {
                       const curKey = customShortcuts[item.id] || item.defaultKey
                       const isEditing = editingShortcutId === item.id
