@@ -1,25 +1,25 @@
 {
   "totals": {
-    "unique": 69,
-    "instances": 2528
+    "unique": 65,
+    "instances": 2500
   },
   "byRule": {
     "A04": 6,
     "D01": 34,
     "C01": 16,
-    "C02": 8,
+    "C02": 4,
     "A01": 4,
     "D06": 1
   },
   "bySev": {
     "medium": 41,
-    "low": 28
+    "low": 24
   },
   "byTab": {
     "media": 17,
     "text": 4,
     "drawing": 32,
-    "omniframe": 12,
+    "omniframe": 8,
     "tracking": 4
   },
   "unique": [
@@ -175,16 +175,6 @@
     },
     {
       "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1440",
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
@@ -355,16 +345,6 @@
     },
     {
       "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1280",
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
@@ -515,16 +495,6 @@
     },
     {
       "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1024",
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
@@ -672,16 +642,6 @@
       "sev": "low",
       "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
       "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "390-mobile",
@@ -1722,16 +1682,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -2942,16 +2892,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -3974,16 +3914,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1440",
@@ -5022,16 +4952,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -6054,16 +5974,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1440",
@@ -7102,16 +7012,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -8134,16 +8034,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1440",
@@ -9482,16 +9372,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -10702,16 +10582,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -11734,16 +11604,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1280",
@@ -12782,16 +12642,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -13814,16 +13664,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1280",
@@ -14862,16 +14702,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -15894,16 +15724,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1280",
@@ -16942,16 +16762,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -17682,16 +17492,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -18234,16 +18034,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1024",
@@ -18802,16 +18592,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -19354,16 +19134,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1024",
@@ -19922,16 +19692,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
     },
@@ -20474,16 +20234,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "1024",
@@ -21342,16 +21092,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
     },
@@ -22172,16 +21912,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
     },
@@ -22884,16 +22614,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "390-mobile",
@@ -23612,16 +23332,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
     },
@@ -24324,16 +24034,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "390-mobile",
@@ -25052,16 +24752,6 @@
       "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
     },
@@ -25764,16 +25454,6 @@
       "sev": "low",
       "el": "div.flex.items-center",
       "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C02",
-      "sev": "low",
-      "el": "div.grid.grid-cols-4 \"InvertGrowShrinkClear\"",
-      "evidence": "icon sizes in one row: 10,11,8px"
     },
     {
       "viewport": "390-mobile",

@@ -106,7 +106,11 @@ function collectStrict() {
     const hasIcon = !!el.querySelector('svg, img')
     const al = (el.getAttribute('aria-label') || '').trim()
     const ti = (el.getAttribute('title') || '').trim()
-    if (hasIcon && !txt && al && !ti) push('A01', 'low', el, 'icon-only, aria-label but no title -> no hover tooltip')
+    // A tooltip may be provided by the <Tooltip> component rather than the
+    // native title attribute; its trigger is wrapped in [data-of-tooltip].
+    const wrapped = !!el.closest('[data-of-tooltip]')
+    if (hasIcon && !txt && al && !ti && !wrapped)
+      push('A01', 'low', el, 'icon-only, aria-label but no title -> no hover tooltip')
   }
 
   // A02 clickable non-button: cursor pointer on a bare div/span, so it is
@@ -130,6 +134,9 @@ function collectStrict() {
     if (!/toggle|mute|loop|snap|solo|repeat|shuffle|lock|visible|enabled/i.test(tid)) continue
     if (el.hasAttribute('aria-pressed') || el.getAttribute('role') === 'switch') continue
     if (el.getAttribute('aria-checked') !== null) continue
+    // A collapse/expand control is a disclosure, correctly described by
+    // aria-expanded rather than aria-pressed.
+    if (el.hasAttribute('aria-expanded')) continue
     push('A03', 'medium', el, 'toggle-style control without aria-pressed/role=switch')
   }
 

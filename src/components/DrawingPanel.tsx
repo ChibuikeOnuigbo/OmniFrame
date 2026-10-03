@@ -780,6 +780,7 @@ export function DrawingPanel() {
                         + Mask
                       </button>
                     )}
+                    <Tooltip label={layer.visible ? `Hide layer ${layer.name}` : `Show layer ${layer.name}`}>
                     <button
                       type="button"
                       data-testid={`toggle-layer-visibility-${layer.id}`}
@@ -790,6 +791,7 @@ export function DrawingPanel() {
                     >
                       {layer.visible ? <Eye size={13} /> : <EyeOff size={13} className="text-ink-600" />}
                     </button>
+                    </Tooltip>
                     <button
                       type="button"
                       data-testid={`clear-layer-strokes-${layer.id}`}

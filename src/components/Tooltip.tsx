@@ -198,6 +198,7 @@ export function Tooltip({
     <>
       <span
         ref={anchorRef}
+        data-of-tooltip="true"
         className="contents"
         onPointerEnter={() => { holdRef.current = false; cancelHide(); show() }}
         onPointerLeave={hide}
