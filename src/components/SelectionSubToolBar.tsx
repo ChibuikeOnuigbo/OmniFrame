@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { SelectionModeType } from '../types'
+import { Tooltip } from './Tooltip'
 
 export function SelectionSubToolBar() {
   const leftTab = useEditor((s) => s.leftTab)
@@ -83,7 +84,8 @@ export function SelectionSubToolBar() {
 
       {/* Quick Action Tools */}
       <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1.5 shrink-0">
-        <button
+        <Tooltip label="Invert selection boundary">
+<button
           type="button"
           data-testid="floating-invert-btn"
           title="Invert Selection Boundary"
@@ -92,7 +94,7 @@ export function SelectionSubToolBar() {
           className="p-1.5 rounded-lg text-ink-300 hover:text-white hover:bg-ink-800 transition-colors"
         >
           <FlipHorizontal size={14} />
-        </button>
+        </button></Tooltip>
 
         <button
           type="button"
@@ -135,7 +137,8 @@ export function SelectionSubToolBar() {
 
       {/* Convert to OmniFrame Object & Clear */}
       <div className="flex items-center gap-0.5 shrink-0">
-        <button
+        <Tooltip label="Convert selection to a movable OmniFrame object (clean inpainting)">
+<button
           type="button"
           data-testid="floating-convert-omniframe-btn"
           title="Convert selection to movable OmniFrame Object with clean inpainting"
@@ -145,7 +148,7 @@ export function SelectionSubToolBar() {
         >
           <Scissors size={12} />
           <span className="hidden sm:inline">To Object</span>
-        </button>
+        </button></Tooltip>
 
         {activeSelection && (
           <button
