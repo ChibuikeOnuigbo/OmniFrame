@@ -130,7 +130,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                 title={st.label}
                 aria-label={st.label}
                 onClick={() => setSelectionMode(st.id)}
-                className={`flex flex-col items-center justify-center p-1.5 rounded-lg border transition-all text-center ${
+                className={`flex min-w-0 flex-col items-center justify-center p-1.5 rounded-lg border transition-all text-center ${
                   isActive
                     ? 'bg-brand text-white border-brand shadow-xs'
                     : 'bg-ink-900 border-ink-800 text-ink-300 hover:text-white hover:bg-ink-800'
@@ -236,7 +236,10 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
 
       {/* 4. Fill & Recolor Tool (Changing color of towel, chair seat, apple, shapes) */}
       <div className="space-y-1.5 pt-1 border-t border-ink-800/80">
-        <div className="flex items-center justify-between text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
+        {/* Title and toggle share a row until the panel is too narrow for
+            both, at which point the toggle drops to its own line rather
+            than pushing the section 21px past its container. */}
+        <div className="flex flex-wrap items-center justify-between gap-y-1 text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
           <div className="flex items-center gap-1">
             <PaintBucket size={11} className="text-amber-400" />
             <span>Fill / Recolor Tool</span>
