@@ -51,7 +51,7 @@
       "Give the copy more room or trim it"
     ]
   ],
-  "raw": 498,
+  "raw": 494,
   "roots": [
     {
       "viewport": "1440",
@@ -72,9 +72,9 @@
       "rule": "D06",
       "el": "div > div > div > div",
       "chars": 1758,
-      "runs": 89,
+      "runs": 65,
       "preview": "all | VID | 2d",
-      "detail": "89 runs at <=10px",
+      "detail": "65 runs at <=10px",
       "viewports": "1440,1280"
     },
     {
@@ -96,9 +96,9 @@
       "rule": "D06",
       "el": "div > div > div > div",
       "chars": 1533,
-      "runs": 92,
+      "runs": 68,
       "preview": "all | VID | 2d",
-      "detail": "92 runs at <=10px",
+      "detail": "68 runs at <=10px",
       "viewports": "1440,1280"
     },
     {
@@ -168,9 +168,9 @@
       "rule": "D06",
       "el": "[data-testid=\"drawing-panel\"]",
       "chars": 1315,
-      "runs": 68,
+      "runs": 44,
       "preview": "Tool & Selection | Drawing Tools | Freehand Paint",
-      "detail": "68 runs at <=10px",
+      "detail": "44 runs at <=10px",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -216,9 +216,9 @@
       "rule": "D06",
       "el": "[data-testid=\"omniframe-panel\"]",
       "chars": 1021,
-      "runs": 65,
+      "runs": 41,
       "preview": "Multi-Frame Cuts | F#0 (0.00s) | Segments",
-      "detail": "65 runs at <=10px",
+      "detail": "41 runs at <=10px",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -480,9 +480,9 @@
       "rule": "D06",
       "el": "#panel-section-body-tools",
       "chars": 813,
-      "runs": 42,
+      "runs": 18,
       "preview": "Drawing Tools | Freehand Paint | Shapes & Vectors",
-      "detail": "42 runs at <=10px",
+      "detail": "18 runs at <=10px",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -549,30 +549,18 @@
       "viewport": "1440",
       "tab": "drawing",
       "submode": "(root)",
-      "rule": "D01",
-      "el": "[data-testid=\"selection-mask-subtool\"]",
-      "chars": 667,
-      "runs": 37,
-      "preview": "Selection & Masking Sub-Tool | LumaCut Mask Engine | Selection Types",
-      "detail": "667 chars across 37 runs",
+      "rule": "D06",
+      "el": "[data-testid=\"panel-section-masking\"]",
+      "chars": 686,
+      "runs": 12,
+      "preview": "Selection & Masking | rect | ellipse",
+      "detail": "12 runs at <=10px",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
       "viewport": "1440",
       "tab": "drawing",
       "submode": "(root)",
-      "rule": "D06",
-      "el": "[data-testid=\"selection-mask-subtool\"]",
-      "chars": 667,
-      "runs": 35,
-      "preview": "LumaCut Mask Engine | Selection Types | rect",
-      "detail": "35 runs at <=10px",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-select",
       "rule": "D01",
       "el": "[data-testid=\"selection-mask-subtool\"]",
       "chars": 667,
@@ -585,12 +573,12 @@
       "viewport": "1440",
       "tab": "omniframe",
       "submode": "omniframe-section-select",
-      "rule": "D06",
+      "rule": "D01",
       "el": "[data-testid=\"selection-mask-subtool\"]",
       "chars": 667,
-      "runs": 35,
-      "preview": "LumaCut Mask Engine | Selection Types | rect",
-      "detail": "35 runs at <=10px",
+      "runs": 37,
+      "preview": "Selection & Masking Sub-Tool | LumaCut Mask Engine | Selection Types",
+      "detail": "667 chars across 37 runs",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
