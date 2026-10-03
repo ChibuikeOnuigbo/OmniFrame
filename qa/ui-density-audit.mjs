@@ -159,14 +159,25 @@ function collectDensity(thresholds) {
       if (isRow || isGrid) {
         const tops = new Set(kids.map((k) => Math.round(k.getBoundingClientRect().top)))
         const avgW = kids.reduce((n, k) => n + k.getBoundingClientRect().width, 0) / kids.length
-        // Wrapping (more than one row of tops) or children too narrow to hit.
-        if (tops.size > 1 || avgW < T.CRAMPED_CHILD_W) {
+        // A grid is *supposed* to span several rows: grid-cols-3 with six
+        // items giving two lines is correct by design, not a defect. Only
+        // cramped children are a problem there.
+        //
+        // For flex, wrapping is only unintended when the author asked for
+        // nowrap and the content spilled anyway, or when children are too
+        // small to hit. Deliberate flex-wrap is not a defect either.
+        const lines = tops.size
+        let problem = null
+        if (avgW < T.CRAMPED_CHILD_W) {
+          problem = `avg child ${Math.round(avgW)}px — too cramped, use flex-col or fewer columns`
+        } else if (isRow && lines > 1 && cs.flexWrap === 'nowrap') {
+          problem = `nowrap row spilling onto ${lines} lines — use flex-col or flex-wrap`
+        }
+        if (problem) {
           cands.push({ live: el, metric: kids.length,
             rule: 'D03', el: identify(el), chars, runs: kids.length,
-            preview: `${kids.length} children, avg ${Math.round(avgW)}px wide`,
-            detail: tops.size > 1
-              ? `wraps onto ${tops.size} lines — use flex-col or flex-wrap`
-              : `avg child ${Math.round(avgW)}px — too cramped, use flex-col`,
+            preview: `${kids.length} children, avg ${Math.round(avgW)}px wide, ${lines} line(s)`,
+            detail: problem,
           })
         }
       }

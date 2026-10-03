@@ -51,7 +51,7 @@
       "Give the copy more room or trim it"
     ]
   ],
-  "raw": 542,
+  "raw": 498,
   "roots": [
     {
       "viewport": "1440",
@@ -59,10 +59,10 @@
       "submode": "(root)",
       "rule": "D01",
       "el": "div > div > div > div",
-      "chars": 1827,
-      "runs": 160,
+      "chars": 1758,
+      "runs": 149,
       "preview": "all | VID | 2d",
-      "detail": "1827 chars across 160 runs",
+      "detail": "1758 chars across 149 runs",
       "viewports": "1440,1280"
     },
     {
@@ -71,10 +71,10 @@
       "submode": "(root)",
       "rule": "D06",
       "el": "div > div > div > div",
-      "chars": 1827,
-      "runs": 100,
+      "chars": 1758,
+      "runs": 89,
       "preview": "all | VID | 2d",
-      "detail": "100 runs at <=10px",
+      "detail": "89 runs at <=10px",
       "viewports": "1440,1280"
     },
     {
@@ -103,14 +103,62 @@
     },
     {
       "viewport": "1440",
+      "tab": "omniframe",
+      "submode": "(root)",
+      "rule": "D01",
+      "el": "div > div > div > div",
+      "chars": 1342,
+      "runs": 127,
+      "preview": "all | VID | 2d",
+      "detail": "1342 chars across 127 runs",
+      "viewports": "1440,1280"
+    },
+    {
+      "viewport": "1440",
+      "tab": "omniframe",
+      "submode": "(root)",
+      "rule": "D06",
+      "el": "div > div > div > div",
+      "chars": 1342,
+      "runs": 79,
+      "preview": "all | VID | 2d",
+      "detail": "79 runs at <=10px",
+      "viewports": "1440,1280"
+    },
+    {
+      "viewport": "1440",
+      "tab": "omniframe",
+      "submode": "omniframe-section-segments",
+      "rule": "D01",
+      "el": "div > div > div > div",
+      "chars": 1342,
+      "runs": 127,
+      "preview": "all | VID | 2d",
+      "detail": "1342 chars across 127 runs",
+      "viewports": "1440,1280"
+    },
+    {
+      "viewport": "1440",
+      "tab": "omniframe",
+      "submode": "omniframe-section-segments",
+      "rule": "D06",
+      "el": "div > div > div > div",
+      "chars": 1342,
+      "runs": 79,
+      "preview": "all | VID | 2d",
+      "detail": "79 runs at <=10px",
+      "viewports": "1440,1280"
+    },
+    {
+      "viewport": "1440",
       "tab": "drawing",
       "submode": "(root)",
       "rule": "D01",
       "el": "[data-testid=\"drawing-panel\"]",
-      "chars": 1384,
-      "runs": 102,
+      "chars": 1315,
+      "runs": 91,
       "preview": "Drawing & Paint Mode | Disabled | Tool & Selection",
-      "detail": "1384 chars across 102 runs",
+      "detail": "1315 chars across 91 runs",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -119,59 +167,11 @@
       "submode": "(root)",
       "rule": "D06",
       "el": "[data-testid=\"drawing-panel\"]",
-      "chars": 1384,
-      "runs": 79,
+      "chars": 1315,
+      "runs": 68,
       "preview": "Tool & Selection | Drawing Tools | Freehand Paint",
-      "detail": "79 runs at <=10px",
+      "detail": "68 runs at <=10px",
       "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "(root)",
-      "rule": "D01",
-      "el": "div > div > div > div",
-      "chars": 1342,
-      "runs": 127,
-      "preview": "all | VID | 2d",
-      "detail": "1342 chars across 127 runs",
-      "viewports": "1440,1280"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "(root)",
-      "rule": "D06",
-      "el": "div > div > div > div",
-      "chars": 1342,
-      "runs": 79,
-      "preview": "all | VID | 2d",
-      "detail": "79 runs at <=10px",
-      "viewports": "1440,1280"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-segments",
-      "rule": "D01",
-      "el": "div > div > div > div",
-      "chars": 1342,
-      "runs": 127,
-      "preview": "all | VID | 2d",
-      "detail": "1342 chars across 127 runs",
-      "viewports": "1440,1280"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "el": "div > div > div > div",
-      "chars": 1342,
-      "runs": 79,
-      "preview": "all | VID | 2d",
-      "detail": "79 runs at <=10px",
-      "viewports": "1440,1280"
     },
     {
       "viewport": "1440",
@@ -367,30 +367,6 @@
     },
     {
       "viewport": "1440",
-      "tab": "drawing",
-      "submode": "(root)",
-      "rule": "D01",
-      "el": "#panel-section-body-tools",
-      "chars": 882,
-      "runs": 57,
-      "preview": "Drawing Tools | Drawing Tools | Freehand Paint",
-      "detail": "882 chars across 57 runs",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "submode": "(root)",
-      "rule": "D06",
-      "el": "#panel-section-body-tools",
-      "chars": 882,
-      "runs": 53,
-      "preview": "Drawing Tools | Freehand Paint | Brush",
-      "detail": "53 runs at <=10px",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
       "tab": "audio",
       "submode": "(root)",
       "rule": "D01",
@@ -484,6 +460,30 @@
       "preview": "all | VID | 2d",
       "detail": "38 runs at <=10px",
       "viewports": "1440,1280"
+    },
+    {
+      "viewport": "1440",
+      "tab": "drawing",
+      "submode": "(root)",
+      "rule": "D01",
+      "el": "#panel-section-body-tools",
+      "chars": 813,
+      "runs": 46,
+      "preview": "Drawing Tools | Drawing Tools | Freehand Paint",
+      "detail": "813 chars across 46 runs",
+      "viewports": "1440,1280,1024,390-mobile"
+    },
+    {
+      "viewport": "1440",
+      "tab": "drawing",
+      "submode": "(root)",
+      "rule": "D06",
+      "el": "#panel-section-body-tools",
+      "chars": 813,
+      "runs": 42,
+      "preview": "Drawing Tools | Freehand Paint | Shapes & Vectors",
+      "detail": "42 runs at <=10px",
+      "viewports": "1440,1280,1024,390-mobile"
     },
     {
       "viewport": "1440",
@@ -759,18 +759,6 @@
       "runs": 21,
       "preview": "Cross Dissolve | Smooth opacity blend from outgoing to in | Apply",
       "detail": "488 chars across 21 runs",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "transitions",
-      "submode": "(root)",
-      "rule": "D03",
-      "el": "div > div:nth-of-type(2) > div > div:nth-of-type(3)",
-      "chars": 488,
-      "runs": 7,
-      "preview": "7 children, avg 248px wide",
-      "detail": "wraps onto 7 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1423,50 +1411,14 @@
     },
     {
       "viewport": "1440",
-      "tab": "drawing",
-      "submode": "(root)",
-      "rule": "D06",
-      "el": "#panel-section-body-drawing-tools > div",
-      "chars": 125,
-      "runs": 14,
-      "preview": "Freehand Paint | Brush | Pencil",
-      "detail": "14 runs at <=10px",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "effects",
-      "submode": "(root)",
-      "rule": "D03",
-      "el": "div:nth-of-type(2) > div > div:nth-of-type(2) > div",
-      "chars": 69,
-      "runs": 6,
-      "preview": "6 children, avg 121px wide",
-      "detail": "wraps onto 3 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-color",
-      "rule": "D03",
-      "el": "div > div:nth-of-type(4) > div > div:nth-of-type(2)",
-      "chars": 67,
-      "runs": 6,
-      "preview": "6 children, avg 81px wide",
-      "detail": "wraps onto 3 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
       "tab": "media",
       "submode": "(root)",
       "rule": "D03",
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1477,8 +1429,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1489,8 +1441,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1501,8 +1453,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1513,8 +1465,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1525,8 +1477,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1537,8 +1489,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1549,8 +1501,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1561,8 +1513,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1573,8 +1525,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1585,8 +1537,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1597,8 +1549,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1609,8 +1561,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1621,8 +1573,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1633,8 +1585,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1645,8 +1597,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1657,92 +1609,8 @@
       "el": "div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
       "chars": 62,
       "runs": 13,
-      "preview": "13 children, avg 97px wide",
-      "detail": "wraps onto 4 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "(root)",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-segments",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-select",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-transform",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-color",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-scope",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
-      "viewports": "1440,1280,1024,390-mobile"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "submode": "omniframe-section-actions",
-      "rule": "D03",
-      "el": "[data-testid=\"omniframe-section-nav\"]",
-      "chars": 38,
-      "runs": 6,
-      "preview": "6 children, avg 77px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "13 children, avg 97px wide, 4 line(s)",
+      "detail": "nowrap row spilling onto 4 lines — use flex-col or flex-wrap",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1753,8 +1621,8 @@
       "el": "#panel-section-body-masking > div > div:nth-of-type(2) > div:nth-of-type(2)",
       "chars": 35,
       "runs": 6,
-      "preview": "6 children, avg 28px wide",
-      "detail": "avg child 28px — too cramped, use flex-col",
+      "preview": "6 children, avg 28px wide, 1 line(s)",
+      "detail": "avg child 28px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1765,8 +1633,8 @@
       "el": "div > div:nth-of-type(4) > div:nth-of-type(2) > div:nth-of-type(2)",
       "chars": 35,
       "runs": 6,
-      "preview": "6 children, avg 34px wide",
-      "detail": "avg child 34px — too cramped, use flex-col",
+      "preview": "6 children, avg 34px wide, 1 line(s)",
+      "detail": "avg child 34px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024,390-mobile"
     },
     {
@@ -1777,8 +1645,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1789,8 +1657,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1801,8 +1669,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1813,8 +1681,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1825,8 +1693,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1837,8 +1705,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1849,8 +1717,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1861,8 +1729,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1873,8 +1741,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1885,8 +1753,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1897,8 +1765,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1909,8 +1777,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1921,8 +1789,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1933,8 +1801,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1945,8 +1813,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1957,8 +1825,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1969,8 +1837,8 @@
       "el": "div > div > div > header",
       "chars": 21,
       "runs": 8,
-      "preview": "8 children, avg 62px wide",
-      "detail": "wraps onto 2 lines — use flex-col or flex-wrap",
+      "preview": "8 children, avg 62px wide, 2 line(s)",
+      "detail": "avg child 62px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024"
     },
     {
@@ -1981,8 +1849,8 @@
       "el": "#panel-section-body-colour-frames > div:nth-of-type(1) > div:nth-of-type(2)",
       "chars": 15,
       "runs": 6,
-      "preview": "6 children, avg 31px wide",
-      "detail": "avg child 31px — too cramped, use flex-col",
+      "preview": "6 children, avg 31px wide, 1 line(s)",
+      "detail": "avg child 31px — too cramped, use flex-col or fewer columns",
       "viewports": "1440,1280,1024,390-mobile"
     }
   ]
