@@ -49,6 +49,8 @@ export interface RiggingSlice {
 
   createRig: (name?: string, characterId?: string, sourceUrl?: string) => string
   deleteRig: (rigId: string) => void
+  /** Seed a rig from an existing segmented cutout. The "rigged in 1 tap" path. */
+  createRigFromCharacter: (characterId: string) => string | null
 
   addRigPart: (
     rigId: string,
@@ -57,6 +59,8 @@ export interface RiggingSlice {
   removeRigPart: (rigId: string, partId: string) => void
   renameRigPart: (rigId: string, partId: string, name: string) => void
   setRigPartParent: (rigId: string, partId: string, parentId: string | null) => boolean
+  /** Swap which cutout a part draws. Empty string = placeholder rectangle. */
+  setRigPartCutout: (rigId: string, partId: string, cutoutUrl: string) => void
   setRigPartPivot: (rigId: string, partId: string, pivot: { x: number; y: number }) => void
   setRigPartTransform: (rigId: string, partId: string, transform: Partial<ClipTransform>) => void
   setRigPartBend: (rigId: string, partId: string, bend: Partial<RigBend> | null) => void
@@ -122,6 +126,49 @@ export function createRiggingSlice(
       }
       set((s: RiggingStoreState) => ({ rigs: [...s.rigs, rig], activeRigId: id, selectedPartId: null }))
       return id
+    },
+
+    createRigFromCharacter: (characterId) => {
+      const state = _get() as any
+      const character = (state.omniframeCharacters || []).find(
+        (c: any) => c.id === characterId,
+      )
+      if (!character) return null
+
+      deps.pushSnapshot()
+      const rigId = `rig_${uid()}`
+      const now = Date.now()
+      const rootId = `part_${uid()}`
+      // The segmented cutout becomes the torso: everything else hangs off it,
+      // which is the anatomical root a skeleton wants.
+      const root: RigPart = {
+        id: rootId,
+        name: character.name || 'Character',
+        kind: 'torso',
+        side: 'center',
+        cutoutUrl: character.cutoutUrl || '',
+        bounds: { ...character.bounds },
+        pivot: { ...DEFAULT_PIVOTS.torso },
+        parentId: null,
+        z: 0,
+        transform: { ...character.transform },
+        pins: [],
+      }
+      const rig: Rig = {
+        id: rigId,
+        name: `${character.name || 'Character'} rig`,
+        characterId,
+        sourceUrl: character.cutoutUrl,
+        parts: [root],
+        createdAt: now,
+        updatedAt: now,
+      }
+      set((s: RiggingStoreState) => ({
+        rigs: [...s.rigs, rig],
+        activeRigId: rigId,
+        selectedPartId: rootId,
+      }))
+      return rigId
     },
 
     deleteRig: (rigId) => {
@@ -193,6 +240,11 @@ export function createRiggingSlice(
       deps.pushSnapshot()
       updatePart(set, rigId, partId, (p) => ({ ...p, parentId }))
       return true
+    },
+
+    setRigPartCutout: (rigId, partId, cutoutUrl) => {
+      deps.pushSnapshot()
+      updatePart(set, rigId, partId, (p) => ({ ...p, cutoutUrl }))
     },
 
     setRigPartPivot: (rigId, partId, pivot) => {

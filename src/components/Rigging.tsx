@@ -362,7 +362,10 @@ export default function Rigging() {
   const setActiveRig = useEditor((s) => s.setActiveRig)
   const setSelectedPart = useEditor((s) => s.setSelectedPart)
   const createRig = useEditor((s) => s.createRig)
+  const createRigFromCharacter = useEditor((s) => s.createRigFromCharacter)
   const deleteRig = useEditor((s) => s.deleteRig)
+  const setRigPartCutout = useEditor((s) => s.setRigPartCutout)
+  const characters = useEditor((s) => s.omniframeCharacters)
   const addRigPart = useEditor((s) => s.addRigPart)
   const removeRigPart = useEditor((s) => s.removeRigPart)
   const renameRigPart = useEditor((s) => s.renameRigPart)
@@ -580,6 +583,41 @@ export default function Rigging() {
               <p className="text-[11px] text-white/40">Create a rig first.</p>
             ) : (
               <>
+                {/* The one-tap path: an already-segmented cutout becomes a rig. */}
+                {characters.length > 0 && (
+                  <div className="mb-2 flex flex-wrap items-end gap-1.5" id="rig-from-character">
+                    <label className="block min-w-0 flex-1" htmlFor="rig-source-character">
+                      <span className="mb-0.5 block text-[10px] text-white/45">
+                        Rig from a segmented cutout
+                      </span>
+                      <select
+                        id="rig-source-character"
+                        className="h-7 w-full rounded border border-white/15 bg-black/40 px-1 text-[11px] text-white/85"
+                        defaultValue={characters[0]?.id}
+                      >
+                        {characters.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <button
+                      type="button"
+                      id="rig-from-character-go"
+                      className="h-7 rounded border border-brand-400 bg-brand px-2 text-[11px] text-white hover:bg-brand-400"
+                      onClick={() => {
+                        const sel = document.getElementById(
+                          'rig-source-character',
+                        ) as HTMLSelectElement | null
+                        if (sel?.value) createRigFromCharacter(sel.value)
+                      }}
+                    >
+                      Rig in 1 tap
+                    </button>
+                  </div>
+                )}
+
                 <div className="mb-2 flex flex-wrap items-end gap-1.5" id="rig-add-part">
                   <label className="block" htmlFor="rig-new-kind">
                     <span className="mb-0.5 block text-[10px] text-white/45">Kind</span>
@@ -710,6 +748,25 @@ export default function Rigging() {
                     value={part.name}
                     onChange={(e) => renameRigPart(rig.id, part.id, e.target.value)}
                   />
+                </div>
+
+                <div className="mb-1.5">
+                  <label className="mb-0.5 block text-[10px] text-white/45" htmlFor="rig-part-cutout">
+                    Cutout
+                  </label>
+                  <select
+                    id="rig-part-cutout"
+                    className="h-7 w-full rounded border border-white/15 bg-black/40 px-1 text-[11px] text-white/85"
+                    value={part.cutoutUrl}
+                    onChange={(e) => setRigPartCutout(rig.id, part.id, e.target.value)}
+                  >
+                    <option value="">— no artwork (placeholder) —</option>
+                    {characters.map((c) => (
+                      <option key={c.id} value={c.cutoutUrl}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="mb-1.5">

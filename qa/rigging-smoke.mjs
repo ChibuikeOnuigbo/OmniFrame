@@ -105,6 +105,39 @@ if (visible) {
   await page.locator('#rig-part-list button[id^="rig-select-"]').first().click()
   await page.waitForTimeout(200)
   ok('transform controls present', await page.locator('#rig-rot').count() === 1)
+
+  // --- "Rigged in 1 tap": seed a rig from an existing segmented cutout ---
+  const hasChars = await page.locator('#rig-from-character-go').count()
+  ok('one-tap path offered when cutouts exist', hasChars === 1)
+
+  if (hasChars) {
+    const nameBefore = await page
+      .locator('#rig-source-character option')
+      .first()
+      .textContent()
+    await page.click('#rig-from-character-go')
+    await page.waitForTimeout(400)
+
+    const seeded = await page.evaluate(() => {
+      const st = window.__omniframe_store.getState()
+      const rig = st.rigs.find((r) => r.id === st.activeRigId)
+      const root = rig?.parts?.[0]
+      return {
+        parts: rig?.parts?.length ?? 0,
+        cutout: root?.cutoutUrl ?? '',
+        kind: root?.kind ?? '',
+        parent: root ? root.parentId : 'MISSING',
+        hasBounds: !!root?.bounds?.width,
+      }
+    })
+    ok('one-tap creates a rig', seeded.parts >= 1, JSON.stringify(seeded))
+    ok('seeded root carries real artwork, not a placeholder',
+       seeded.cutout.length > 0, `cutoutUrl = "${seeded.cutout}"`)
+    ok('seeded root is the torso (anatomical root)', seeded.kind === 'torso', seeded.kind)
+    ok('seeded root has no parent', seeded.parent === null, String(seeded.parent))
+    ok('seeded root has real bounds', seeded.hasBounds === true)
+    ok('seeded from the character shown in the picker', !!nameBefore)
+  }
 }
 
 ok('no console errors', errors.length === 0, errors.slice(0, 3).join(' / '))

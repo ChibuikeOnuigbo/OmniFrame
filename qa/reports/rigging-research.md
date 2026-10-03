@@ -93,3 +93,88 @@ what rigging actually requires:
 4. **Bend** deformation so limbs curve instead of hinging.
 5. **Puppet pins** for free-form deformation.
 6. **Secondary motion** (wind/follow-through) for hair and cloth.
+
+---
+
+## Round 2 — additional sources (Oct 2026)
+
+### New source: launch video `youtube.com/watch?v=xrqZVRkxnuA`
+*"New BEST (Easy) Way to create Manga Animation"* — MugiwarHaki, 12 May 2026,
+2:36, 4.6K views / 154 likes. This is the video linked as "Watch Demo" from
+mangacut.com, i.e. the canonical pitch. **Full transcript retrieved.**
+
+It states the problem MangaCut exists to solve, in the author's own words:
+
+- "You open Ibis Paint to cut your character parts, your gallery gets spammed
+  with 30 masks, you import everything in CapCut, waste time putting your
+  character back together, and then finally you can animate."
+- **"So, you move one part, and then you manually need to readjust every other
+  part."** ← this is the whole thesis. Rigging = never doing that again.
+- "And if you want to go further with **hair effects**, luckily you'll have all
+  the time you need during the next decade." ← wind/hair is positioned as the
+  thing that is prohibitively slow in every other tool.
+- On rigging: *"you basically create a skeleton of your character, so that each
+  part of the body is linked to another part. For example, this arm — if I move
+  the [hand], in CapCut I would need to adjust the other part, like the
+  forearm."*
+- **"The skeleton you just built is working inside your timeline."** ← the rig
+  is not a side artefact; it is live during animation.
+- Masking has **"a secret tool to click on a body part, and it gets instantly
+  detected"** — tap-to-segment, no lasso needed for the common case.
+- He tested "all the workflows, including Blender, Vegas Pro, or After Effects"
+  before building it.
+
+### mangacut.com (re-fetched, now with full copy)
+Headline is **"Rigged in 1 tap"**. Three value props, in order:
+1. Mask Layers & Body Parts — "Isolate any limb. Inpaint seamlessly."
+2. **Auto Body Rigging** — "Move one part. The skeleton adapts the rest. Don't
+   waste time readjusting other body parts."
+3. Smart Easing & FX — "Smooth motion, dynamic wind on hair and clothes."
+
+Confirms iOS + Android + web. Demo video is `xrqZVRkxnuA` (above).
+
+### The TikTok (recovered via discover pages, direct fetch still 403)
+The target video is captioned: *"i tried making toji manga animation with this
+app 🤯 app is called mangacut #manga #animation #manganimation #mangaedit
+#capcut | jjk manga animation tutorial | that one toji manga edit"*.
+It is a **step-by-step Toji (Jujutsu Kaisen) tutorial** — "animate manga panels
+and moving body parts with the MangaCut app".
+
+The same author's other tutorials, all following the identical shape:
+- **Gojo** manga animation, one app (1.2K likes)
+- **Makima / Chainsaw Man** (17.5K likes) — "manga speed effects"
+- **Bachira headbop** — explicitly "timing, frames, and export tips"
+- **CSM / Chainsaw Man** (6.2K likes)
+- A feature video: *"why Mangacut beats CapCut for manga animation and how to
+  use its **bend and puppet tools** to animate panels and characters."*
+
+So the repeatable recipe being taught is: pick a character panel → mask the
+parts → auto-rig → animate a specific motion (headbop, speed lines, limb
+movement) → export.
+
+### User-reported friction (Play Store reviews, worth not repeating)
+- "I would like to have **cursor offset** too cuz it still is a bit hard to see
+  even when using the assistants already there" — on-screen controls obscure
+  the pointer during precise work.
+- "it's good but not for me … the ad made it look easy" — the gap between
+  marketing and the learning curve is real; onboarding should teach the
+  hierarchy concept, not just expose the controls.
+
+### Consolidated workflow (now confirmed from 4 independent sources)
+```
+1. MASK      tap-to-detect or lasso each part; inpaint the hole behind it
+2. REPAINT   extend edges beyond the mask so gaps never open when parts move
+3. RIG       one-tap auto-skeleton; fix layer order; set pivot per part
+4. ANIMATE   per-part keyframes on the timeline, skeleton live
+5. EASE      graph editor
+6. FX        wind on hair/clothes
+7. EXPORT    MP4
+```
+
+### What this changed about the build
+- **"Rigged in 1 tap"** is the headline feature, so auto-rig must be the
+  primary action on screen, not a utility button tucked in a sub-panel.
+- **"Each part linked to another part"** means the parent/child tree is the
+  product. The skeleton overlay and the parent picker are the core UI.
+- **"Working inside your timeline"** → the rig must drive keyframes on the
+  timeline, not live in an isolated preview.
