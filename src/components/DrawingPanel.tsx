@@ -258,7 +258,10 @@ export function DrawingPanel() {
         {toolGroups.map((grp) => (
           <div key={grp.group} className="space-y-1">
             <span className="text-[10px] text-ink-500 font-semibold uppercase">{grp.group}</span>
-            <div className="grid grid-cols-3 gap-1">
+            {/* Icon-first, like Krita/Photoshop toolbars: at three columns a
+                10px label truncates to noise, so the name moves to the
+                tooltip and the accessible name instead of being shown. */}
+            <div className="grid grid-cols-4 gap-1">
               {grp.items.map((t) => {
                 const Icon = t.icon
                 const active = drawingTool === t.id
@@ -267,18 +270,20 @@ export function DrawingPanel() {
                     key={t.id}
                     type="button"
                     data-testid={`panel-tool-${t.id}`}
+                    aria-label={t.label}
+                    aria-pressed={active}
+                    title={t.label}
                     onClick={() => {
                       setDrawingTool(t.id)
                       if (!drawingEnabled) setDrawingEnabled(true)
                     }}
-                    className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-left transition-colors ${
+                    className={`flex h-8 items-center justify-center rounded-md border transition-colors ${
                       active
-                        ? 'bg-brand/20 border-brand text-brand-400 font-medium'
+                        ? 'bg-brand/20 border-brand text-brand-400'
                         : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white'
                     }`}
                   >
-                    <Icon size={12} className="shrink-0" />
-                    <span className="truncate text-[10px]">{t.label}</span>
+                    <Icon size={14} className="shrink-0" />
                   </button>
                 )
               })}
