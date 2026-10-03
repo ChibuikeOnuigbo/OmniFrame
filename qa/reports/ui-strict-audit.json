@@ -1,21 +1,21 @@
 {
   "totals": {
-    "unique": 61,
-    "instances": 2416
+    "unique": 57,
+    "instances": 2160
   },
   "byRule": {
     "A04": 6,
     "D01": 34,
-    "C01": 16,
     "C02": 4,
+    "C01": 12,
     "D06": 1
   },
   "bySev": {
     "medium": 41,
-    "low": 20
+    "low": 16
   },
   "byTab": {
-    "media": 17,
+    "media": 13,
     "text": 4,
     "drawing": 28,
     "omniframe": 8,
@@ -47,16 +47,6 @@
       "tab": "media",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -207,16 +197,6 @@
       "tab": "media",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -347,16 +327,6 @@
       "tab": "media",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -481,16 +451,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -669,46 +629,6 @@
       "tab": "media",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -759,46 +679,6 @@
       "tab": "text",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -833,46 +713,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1440",
@@ -929,46 +769,6 @@
       "tab": "effects",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1009,46 +809,6 @@
       "tab": "audio",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1083,46 +843,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1440",
@@ -1249,46 +969,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1359,46 +1039,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1463,46 +1103,6 @@
       "sev": "low",
       "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
       "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1440",
@@ -1569,46 +1169,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1643,46 +1203,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1440",
@@ -1729,46 +1249,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1809,46 +1289,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1883,46 +1323,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1440",
@@ -1989,46 +1389,6 @@
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -2063,46 +1423,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1440",
@@ -8149,46 +7469,6 @@
       "tab": "media",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8239,46 +7519,6 @@
       "tab": "text",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8313,46 +7553,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1280",
@@ -8409,46 +7609,6 @@
       "tab": "effects",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8489,46 +7649,6 @@
       "tab": "audio",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8563,46 +7683,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1280",
@@ -8729,46 +7809,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8839,46 +7879,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8943,46 +7943,6 @@
       "sev": "low",
       "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
       "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1280",
@@ -9049,46 +8009,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -9123,46 +8043,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1280",
@@ -9209,46 +8089,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -9289,46 +8129,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -9363,46 +8163,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1280",
@@ -9469,46 +8229,6 @@
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -9543,46 +8263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1280",
@@ -15599,46 +14279,6 @@
       "tab": "media",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -15659,90 +14299,10 @@
       "tab": "text",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1024",
@@ -15769,46 +14329,6 @@
       "tab": "effects",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -15819,90 +14339,10 @@
       "tab": "audio",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1024",
@@ -15999,46 +14439,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -16079,46 +14479,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -16153,46 +14513,6 @@
       "sev": "low",
       "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
       "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1024",
@@ -16229,90 +14549,10 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1024",
@@ -16329,46 +14569,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -16379,90 +14579,10 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1024",
@@ -16499,90 +14619,10 @@
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "1024",
@@ -19713,46 +17753,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -19779,90 +17779,10 @@
       "tab": "text",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -19889,46 +17809,6 @@
       "tab": "effects",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -19939,90 +17819,10 @@
       "tab": "audio",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -20119,46 +17919,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -20199,46 +17959,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -20273,46 +17993,6 @@
       "sev": "low",
       "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
       "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -20349,90 +18029,10 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-transform",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -20449,46 +18049,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-color",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -20499,90 +18059,10 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-scope",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-actions",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",
@@ -20619,90 +18099,10 @@
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "[testid=track-header]",
-      "evidence": "sibling control heights 16..32px (16,32,32,32)"
     },
     {
       "viewport": "390-mobile",

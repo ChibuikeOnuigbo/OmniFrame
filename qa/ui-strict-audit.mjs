@@ -245,7 +245,13 @@ function collectStrict() {
   // C01 same row, different control heights.
   for (const el of document.querySelectorAll('div')) {
     if (!vis(el)) continue
-    const kids = [...el.children].filter((k) => vis(k) && k.matches('button, input, select'))
+    // A range input's height is its hit area, not its visual size: the track
+    // is drawn separately at 4px inside a transparent 24px box. It is a
+    // different shape from a button by design, so comparing the two is a
+    // false positive -- a slider padded to button height would be worse.
+    const kids = [...el.children].filter(
+      (k) => vis(k) && k.matches('button, input, select') && !(k instanceof HTMLInputElement && k.type === 'range'),
+    )
     if (kids.length < 3) continue
     const hs = kids.map((k) => Math.round(k.getBoundingClientRect().height))
     const lo = Math.min(...hs), hi = Math.max(...hs)

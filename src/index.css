@@ -29,11 +29,13 @@ body {
 .of-range {
   -webkit-appearance: none;
   appearance: none;
-  /* The visible track stays 4px, but the control itself is 18px tall so
+  /* The visible track stays 4px, but the control itself is 24px tall so
      there is a grabbable hit area. A 4px-tall target is very hard to hit
      with a mouse and unusable on a touchscreen; the thumb alone is not
-     enough because the track between thumb and edge was unclickable. */
-  height: 18px;
+     enough because the track between thumb and edge was unclickable.
+     24px is the accepted minimum target size -- it used to be 18px, which
+     was under it. */
+  height: 24px;
   background: transparent;
   outline: none;
   cursor: pointer;

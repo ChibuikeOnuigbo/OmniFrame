@@ -481,7 +481,7 @@ function TrackHeader({
           else toggleTrackTarget(track.id)
         }}
         className={
-          'shrink-0 h-4 min-w-[20px] px-1 rounded-[3px] border font-mono text-[9px] font-bold leading-none grid place-items-center transition-colors ' +
+          'shrink-0 h-8 min-w-[20px] px-1.5 rounded-[3px] border font-mono text-[9px] font-bold leading-none grid place-items-center transition-colors ' +
           (isTargeted
             ? 'bg-brand border-brand text-white'
             : targetingActive
