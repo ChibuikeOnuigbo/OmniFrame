@@ -1,0 +1,100 @@
+{
+  "results": [
+    {
+      "name": "Audio VU Meter is visible in transport bar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Left channel LED bar mounted in DOM",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Right channel LED bar mounted in DOM",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Master volume slider visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Master volume updated in store",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Master mute toggled to true",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Master mute toggled back to false",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Add Marker button visible in timeline toolbar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Marker Modal opened upon clicking Add Marker",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Marker Modal closed on save",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Marker pin rendered on timeline ruler",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Marker rendered with green color flag",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Marker positioned at exact playhead time",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Clicking marker seeks playhead to marker time",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Pressing M shortcut opened Marker Modal at 5.0s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Two markers rendered on ruler",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Double clicking marker opens edit modal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Marker deleted successfully",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

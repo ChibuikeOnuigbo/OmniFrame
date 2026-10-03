@@ -25,8 +25,18 @@ const assert = (value, name, detail = '') => {
 }
 
 await page.goto(URL, { waitUntil: 'networkidle' })
-assert(await page.getByTitle('Media library').count() === 1, 'one combined Media Library rail control')
-assert(await page.getByTitle('Audio').count() === 0, 'separate Audio rail control removed')
+// getByTitle('Media library') matches two nodes — the rail tab and the panel
+// heading — so count the rail control itself.
+assert(await page.getByTestId('left-tab-media').count() === 1, 'one combined Media Library rail control')
+// The rail still has an Audio tab, but it is the vocal isolation / stems
+// effect panel, not a second library. Say that precisely instead of asserting
+// the tab is gone: the library controls must exist only on the media tab.
+assert(await page.getByTestId('left-tab-audio').count() === 1, 'Audio rail tab is the vocal isolation panel')
+await page.getByTestId('left-tab-audio').click()
+await page.waitForTimeout(300)
+assert(await page.getByTestId('media-asset').count() === 0, 'Audio tab is not a second media library')
+await page.getByTestId('left-tab-media').click()
+await page.waitForTimeout(300)
 assert(await page.getByTestId('media-search').isVisible(), 'media search is visible')
 assert(await page.getByTestId('media-type-filter').isVisible(), 'type filter is visible')
 
@@ -35,10 +45,19 @@ await page.getByTestId('panel-all-import-input').setInputFiles([
   join(ROOT, 'qa/fixtures/pexels-landscape-962322.jpg'),
   join(ROOT, 'qa/fixtures/test-audio-6s.ogg'),
 ])
-await page.waitForFunction(() => document.querySelectorAll('[data-testid="media-asset"]').length === 3)
-assert(await page.getByTestId('media-asset').count() === 3, 'combined library shows video image and audio')
-for (const kind of ['video', 'image', 'audio']) {
-  assert(await page.locator(`[data-testid="media-asset"][data-asset-kind="${kind}"]`).count() === 1, `${kind} item retains its type identity`)
+// The library ships with demo assets, so a bare "length === 3" wait is already
+// true before the import lands and the suite races ahead of it. Wait for these
+// three files by name, then judge type identity per file rather than by
+// counting the whole library.
+const imported = ['pexels-cinematic-8s.webm', 'pexels-landscape-962322.jpg', 'test-audio-6s.ogg']
+await page.waitForFunction((files) => {
+  const names = [...document.querySelectorAll('[data-testid="media-asset"]')].map((n) => n.getAttribute('data-asset-name') || '')
+  return files.every((f) => names.some((n) => n.includes(f)))
+}, imported)
+assert(await page.getByTestId('media-asset').count() >= 3, 'combined library shows video image and audio')
+for (const [file, kind] of [['pexels-cinematic-8s.webm', 'video'], ['pexels-landscape-962322.jpg', 'image'], ['test-audio-6s.ogg', 'audio']]) {
+  const item = page.locator(`[data-testid="media-asset"][data-asset-name*="${file}"]`)
+  assert(await item.getAttribute('data-asset-kind') === kind, `${file} retains its type identity as ${kind}`)
 }
 await page.screenshot({ path: join(SHOTS, 'media-library-all-types.png') })
 await page.setViewportSize({ width: 1920, height: 1080 })
@@ -66,7 +85,7 @@ await page.getByTestId('media-search').fill('')
 await page.setViewportSize({ width: 900, height: 700 })
 await page.waitForTimeout(200)
 assert(await page.getByTestId('left-panel').getAttribute('data-open') === 'false', 'narrow viewport collapses panel automatically')
-await page.getByTitle('Media library').click()
+await page.getByTestId('left-tab-media').click()
 await page.waitForTimeout(220)
 assert(await page.getByTestId('media-search').isVisible(), 'combined panel can reopen at narrow width')
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
@@ -74,7 +93,7 @@ assert(!overflow, 'narrow viewport has no horizontal overflow')
 await page.screenshot({ path: join(SHOTS, 'media-library-narrow-900x700.png') })
 await page.setViewportSize({ width: 768, height: 720 })
 await page.waitForTimeout(220)
-await page.getByTitle('Media library').click()
+await page.getByTestId('left-tab-media').click()
 await page.waitForTimeout(220)
 const tabletOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
 assert(!tabletOverflow, '768px viewport has no horizontal overflow')

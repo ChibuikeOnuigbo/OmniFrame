@@ -1,0 +1,58 @@
+{
+  "video_preview_characters_shifted": {
+    "sharpness_laplacian_variance": 7309.62,
+    "contrast_std": 92.78,
+    "mean_brightness": 185.51,
+    "width": 771,
+    "height": 434,
+    "status": "VERIFIED"
+  },
+  "omniframe_characters_shifted_full": {
+    "sharpness_laplacian_variance": 3082.36,
+    "contrast_std": 88.29,
+    "mean_brightness": 64.11,
+    "width": 1440,
+    "height": 900,
+    "status": "VERIFIED"
+  },
+  "color_coded_tracks_clips": {
+    "sharpness_laplacian_variance": 2984.84,
+    "contrast_std": 31.22,
+    "mean_brightness": 26.54,
+    "width": 803,
+    "height": 280,
+    "status": "VERIFIED"
+  },
+  "compound_clip_created": {
+    "sharpness_laplacian_variance": 1978.12,
+    "contrast_std": 28.41,
+    "mean_brightness": 25.79,
+    "width": 803,
+    "height": 280,
+    "status": "VERIFIED"
+  },
+  "compound_clip_breadcrumbs": {
+    "sharpness_laplacian_variance": 2962.75,
+    "contrast_std": 31.43,
+    "mean_brightness": 23.25,
+    "width": 803,
+    "height": 31,
+    "status": "VERIFIED"
+  },
+  "compound_context_menu": {
+    "sharpness_laplacian_variance": 4687.74,
+    "contrast_std": 30.42,
+    "mean_brightness": 26.89,
+    "width": 224,
+    "height": 402,
+    "status": "VERIFIED"
+  },
+  "uncompound_restored": {
+    "sharpness_laplacian_variance": 1848.06,
+    "contrast_std": 27.64,
+    "mean_brightness": 24.47,
+    "width": 803,
+    "height": 280,
+    "status": "VERIFIED"
+  }
+}

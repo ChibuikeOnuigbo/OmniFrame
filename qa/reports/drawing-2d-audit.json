@@ -1,0 +1,733 @@
+{
+  "generatedAt": "2026-10-02T23:40:20.765Z",
+  "tools": [
+    "brush",
+    "pencil",
+    "marker",
+    "calligraphy",
+    "clone",
+    "fill",
+    "eraser",
+    "line",
+    "rectangle",
+    "circle",
+    "arrow",
+    "star",
+    "polygon",
+    "polyline",
+    "bezier",
+    "gradient",
+    "eyedropper",
+    "select-rect",
+    "select-ellipse",
+    "select-lasso",
+    "select-polygon",
+    "select-magic-wand"
+  ],
+  "kritaParity": [
+    {
+      "krita": "Freehand Brush Tool",
+      "omiframe": "brush, pencil, marker",
+      "has": true
+    },
+    {
+      "krita": "Calligraphy Tool",
+      "omiframe": "calligraphy",
+      "has": true
+    },
+    {
+      "krita": "Straight Line Tool",
+      "omiframe": "line",
+      "has": true
+    },
+    {
+      "krita": "Rectangle Tool",
+      "omiframe": "rectangle",
+      "has": true
+    },
+    {
+      "krita": "Ellipse Tool",
+      "omiframe": "circle",
+      "has": true
+    },
+    {
+      "krita": "Fill Tool",
+      "omiframe": "fill",
+      "has": true
+    },
+    {
+      "krita": "Clone Brush Engine",
+      "omiframe": "clone",
+      "has": true
+    },
+    {
+      "krita": "Color Sampler Tool",
+      "omiframe": "eyedropper",
+      "has": true
+    },
+    {
+      "krita": "Rectangular Selection Tool",
+      "omiframe": "select-rect",
+      "has": true
+    },
+    {
+      "krita": "Elliptical Selection Tool",
+      "omiframe": "select-ellipse",
+      "has": true
+    },
+    {
+      "krita": "Freehand Selection Tool",
+      "omiframe": "select-lasso",
+      "has": true
+    },
+    {
+      "krita": "Polygonal Selection Tool",
+      "omiframe": "select-polygon",
+      "has": true
+    },
+    {
+      "krita": "Contiguous Selection Tool",
+      "omiframe": "select-magic-wand",
+      "has": true
+    },
+    {
+      "krita": "Polygon Tool",
+      "omiframe": "polygon",
+      "has": true
+    },
+    {
+      "krita": "Polyline Tool",
+      "omiframe": "polyline",
+      "has": true
+    },
+    {
+      "krita": "Bezier Curve Tool",
+      "omiframe": "bezier",
+      "has": true
+    },
+    {
+      "krita": "Freehand Path Tool",
+      "omiframe": "bezier",
+      "has": true
+    },
+    {
+      "krita": "Gradient Tool",
+      "omiframe": "gradient",
+      "has": true
+    },
+    {
+      "krita": "Dynamic Brush Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Multibrush Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Crop Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Move Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Transform Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Enclose and Fill Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Colorize Mask",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Smart Patch Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Assistant Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Reference Images Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Measure Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Path Selection Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Similar Color Selection Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Magnetic Selection Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Shape Selection Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Shape Edit Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Text Tool",
+      "omiframe": "—",
+      "has": true,
+      "elsewhere": "text"
+    },
+    {
+      "krita": "Comic Panel Editing Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Zoom Tool",
+      "omiframe": "—",
+      "has": false
+    },
+    {
+      "krita": "Pan Tool",
+      "omiframe": "—",
+      "has": false
+    }
+  ],
+  "kritaCovered": 19,
+  "kritaFromDrawingToolbox": 18,
+  "kritaFromElsewhere": 1,
+  "kritaTotal": 38,
+  "renderCoverage": null,
+  "pageErrors": [],
+  "checks": [
+    {
+      "name": "D1 brush: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 brush: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=brush"
+    },
+    {
+      "name": "D1 brush: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 pencil: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 pencil: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=pencil"
+    },
+    {
+      "name": "D1 pencil: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 marker: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 marker: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=marker"
+    },
+    {
+      "name": "D1 marker: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 calligraphy: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 calligraphy: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=calligraphy"
+    },
+    {
+      "name": "D1 calligraphy: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 eraser: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 eraser: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=eraser"
+    },
+    {
+      "name": "D1 eraser: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 line: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 line: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=line"
+    },
+    {
+      "name": "D1 line: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 rectangle: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 rectangle: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=rectangle"
+    },
+    {
+      "name": "D1 rectangle: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 circle: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 circle: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=circle"
+    },
+    {
+      "name": "D1 circle: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 arrow: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 arrow: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=arrow"
+    },
+    {
+      "name": "D1 arrow: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 star: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 star: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=star"
+    },
+    {
+      "name": "D1 star: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 polygon: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 polygon: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=polygon"
+    },
+    {
+      "name": "D1 polygon: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 polyline: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 polyline: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=polyline"
+    },
+    {
+      "name": "D1 polyline: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 bezier: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 bezier: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=bezier"
+    },
+    {
+      "name": "D1 bezier: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 gradient: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 gradient: clicking selects it",
+      "ok": true,
+      "detail": "drawingTool=gradient"
+    },
+    {
+      "name": "D1 gradient: produced a stroke",
+      "ok": true,
+      "detail": "13 pts, size 6"
+    },
+    {
+      "name": "D1 fill: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 fill: produced a fill stroke",
+      "ok": true,
+      "detail": "tol 32"
+    },
+    {
+      "name": "D1 clone: control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 clone: first press samples a source point",
+      "ok": true,
+      "detail": "(0.25, 0.30)"
+    },
+    {
+      "name": "D1 clone: second drag produced a clone stroke",
+      "ok": true,
+      "detail": "pts 13"
+    },
+    {
+      "name": "D2 pressure-size control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D2 pressure-opacity control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D2 brush dynamics state is exposed",
+      "ok": true,
+      "detail": "{\"pressureSize\":false,\"pressureOpacity\":false,\"pressureFlow\":false,\"smoothingMode\":\"smooth\",\"stabilizerRadius\":30}"
+    },
+    {
+      "name": "D2 smoothing mode is one of Krita none/smooth/stabilizer",
+      "ok": true,
+      "detail": "smooth"
+    },
+    {
+      "name": "D3 fill tolerance slider exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D3 preserve-luminance checkbox exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D3 fill recorded",
+      "ok": true,
+      "detail": "tol 32 lum false"
+    },
+    {
+      "name": "D4 add-paint-layer control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D4 adding a paint layer works",
+      "ok": true,
+      "detail": "1 -> 2"
+    },
+    {
+      "name": "D4 layer opacity control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D4 layer blend mode control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D4 layer blur control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D5 onion skin control exists",
+      "ok": true,
+      "detail": "via panel-onion-skin-toggle"
+    },
+    {
+      "name": "D5 step next cel control exists",
+      "ok": true,
+      "detail": "via panel-step-next-cel"
+    },
+    {
+      "name": "D5 step prev cel control exists",
+      "ok": true,
+      "detail": "via panel-step-prev-cel"
+    },
+    {
+      "name": "D5 cel hold frames control exists",
+      "ok": true,
+      "detail": "via panel-cel-hold-frames"
+    },
+    {
+      "name": "D5 current cel badge control exists",
+      "ok": true,
+      "detail": "via current-cel-badge"
+    },
+    {
+      "name": "D5 onion skin toggles",
+      "ok": true,
+      "detail": "false -> true (via panel-onion-skin-toggle)"
+    },
+    {
+      "name": "D6 stroke recorded with scope global",
+      "ok": true,
+      "detail": "scope=global"
+    },
+    {
+      "name": "D6 stroke recorded with scope span",
+      "ok": true,
+      "detail": "scope=span"
+    },
+    {
+      "name": "D6 stroke recorded with scope frame",
+      "ok": true,
+      "detail": "scope=frame"
+    },
+    {
+      "name": "D7 clone stroke carries a sampled source point",
+      "ok": true,
+      "detail": "clone=true"
+    },
+    {
+      "name": "D8 eraser strokes are recorded",
+      "ok": true,
+      "detail": "1 -> 2"
+    },
+    {
+      "name": "D8 an eraser stroke is present in the stroke list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D9 undo removes the stroke",
+      "ok": true,
+      "detail": "1 -> 0"
+    },
+    {
+      "name": "D9 redo restores without losing data",
+      "ok": true,
+      "detail": "0 -> 1"
+    },
+    {
+      "name": "D10 Krita parity measured",
+      "ok": true,
+      "detail": "19/38"
+    },
+    {
+      "name": "D12 color sampler control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D12 colour sampler can be selected",
+      "ok": true,
+      "detail": "eyedropper"
+    },
+    {
+      "name": "D12 sampling changed the active colour",
+      "ok": true,
+      "detail": "#211b1e"
+    },
+    {
+      "name": "D12 returns to the previous tool after sampling",
+      "ok": true,
+      "detail": "brush"
+    },
+    {
+      "name": "D11 polygon sides control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D11 shape fill control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D11 polygon stroke recorded with side count",
+      "ok": true,
+      "detail": "pts 13"
+    },
+    {
+      "name": "D11 gradient end colour control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D11 fade to transparent control exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D11 gradient stroke recorded",
+      "ok": true,
+      "detail": "pts 13"
+    },
+    {
+      "name": "D11 bezier path stroke recorded",
+      "ok": true,
+      "detail": "pts 13"
+    },
+    {
+      "name": "D11 polyline stroke recorded",
+      "ok": true,
+      "detail": "pts 13"
+    },
+    {
+      "name": "D13 overlay is empty with no strokes",
+      "ok": true,
+      "detail": "0 px"
+    },
+    {
+      "name": "D13 brush: paints visible pixels",
+      "ok": true,
+      "detail": "15732 px"
+    },
+    {
+      "name": "D13 pencil: paints visible pixels",
+      "ok": true,
+      "detail": "6592 px"
+    },
+    {
+      "name": "D13 marker: paints visible pixels",
+      "ok": true,
+      "detail": "31426 px"
+    },
+    {
+      "name": "D13 calligraphy: paints visible pixels",
+      "ok": true,
+      "detail": "2033 px"
+    },
+    {
+      "name": "D13 line: paints visible pixels",
+      "ok": true,
+      "detail": "13572 px"
+    },
+    {
+      "name": "D13 rectangle: paints visible pixels",
+      "ok": true,
+      "detail": "27656 px"
+    },
+    {
+      "name": "D13 circle: paints visible pixels",
+      "ok": true,
+      "detail": "26269 px"
+    },
+    {
+      "name": "D13 arrow: paints visible pixels",
+      "ok": true,
+      "detail": "14020 px"
+    },
+    {
+      "name": "D13 star: paints visible pixels",
+      "ok": true,
+      "detail": "40674 px"
+    },
+    {
+      "name": "D13 polygon: paints visible pixels",
+      "ok": true,
+      "detail": "29076 px"
+    },
+    {
+      "name": "D13 polyline: paints visible pixels",
+      "ok": true,
+      "detail": "15933 px"
+    },
+    {
+      "name": "D13 bezier: paints visible pixels",
+      "ok": true,
+      "detail": "15994 px"
+    },
+    {
+      "name": "D13 gradient: paints visible pixels",
+      "ok": true,
+      "detail": "878639 px"
+    },
+    {
+      "name": "D13 eraser removes painted pixels",
+      "ok": true,
+      "detail": "20950 -> 0"
+    }
+  ]
+}

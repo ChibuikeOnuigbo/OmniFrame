@@ -1,0 +1,28 @@
+{
+  "full_screenshot": {
+    "path": "evidence/screenshots/krita-transparency-mask-drawing-studio.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian": 2931.87,
+    "contrast_rms": 95.2,
+    "mean_brightness": 69.83,
+    "valid": true
+  },
+  "mask_canvas": {
+    "path": "evidence/cutouts/cut-krita-transparency-mask-canvas.png",
+    "width": 771,
+    "height": 434,
+    "channels": 3,
+    "sharpness_laplacian": 6698.62,
+    "contrast_rms": 88.98,
+    "mean_brightness": 207.19,
+    "valid": true
+  },
+  "mask_cutout_analysis": {
+    "stroke_start_col": 104,
+    "stroke_end_col": 667,
+    "center_gap_erased": true,
+    "non_destructive_mask_verified": true
+  }
+}

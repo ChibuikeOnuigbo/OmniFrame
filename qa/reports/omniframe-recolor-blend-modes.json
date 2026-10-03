@@ -1,0 +1,97 @@
+[
+  {
+    "name": "R1 chair & towel asset loads with char_towel detected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "R2 blend selector exposes all six modes",
+    "pass": true,
+    "detail": "dye,color,overlay,multiply,soft-light,hue"
+  },
+  {
+    "name": "R2b overlay offered among the blend modes (user request)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "R3 dye recolour commits and produces a data URL",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "R3a dye retains fold contrast (>=75% of original)",
+    "pass": true,
+    "detail": "85.2%"
+  },
+  {
+    "name": "R3b dye preserves luminance structure (corr >= 0.98)",
+    "pass": true,
+    "detail": "0.9991"
+  },
+  {
+    "name": "R3c dye beats the old flat-composite baseline (43%)",
+    "pass": true,
+    "detail": "85.2% vs 43%"
+  },
+  {
+    "name": "R3d dye lands on the requested hue (blue ~205-245)",
+    "pass": true,
+    "detail": "hue=230"
+  },
+  {
+    "name": "R3e dye keeps the object bright enough to read as lit fabric (>=55%)",
+    "pass": true,
+    "detail": "82%"
+  },
+  {
+    "name": "R4 arbitrary colour teal (#0d9488) applies with correct hue",
+    "pass": true,
+    "detail": "hue=172 contrast=90%"
+  },
+  {
+    "name": "R4 arbitrary colour magenta (#db2777) applies with correct hue",
+    "pass": true,
+    "detail": "hue=335 contrast=88%"
+  },
+  {
+    "name": "R4 arbitrary colour olive (#4d7c0f) applies with correct hue",
+    "pass": true,
+    "detail": "hue=86 contrast=85%"
+  },
+  {
+    "name": "R5 overlay applies and boosts contrast (as its hint says)",
+    "pass": true,
+    "detail": "105% vs dye 85%"
+  },
+  {
+    "name": "R5b overlay hint warns about crushed highlights",
+    "pass": true,
+    "detail": "Boosts contrast, can crush highlights"
+  },
+  {
+    "name": "R6 chosen blend mode is recorded on the character",
+    "pass": true,
+    "detail": "multiply / #dc2626"
+  },
+  {
+    "name": "R6b multiply darkens while keeping structure (corr >= 0.9, darker)",
+    "pass": true,
+    "detail": "corr=0.997 bright=31%"
+  },
+  {
+    "name": "R7 \"Original\" clears the recolour back to the pristine cutout",
+    "pass": true,
+    "detail": "color=(none)"
+  },
+  {
+    "name": "R8 re-dyeing after an intermediate colour is idempotent (no compounding)",
+    "pass": true,
+    "detail": "brightness drift 0.00%, contrast drift 0.00%"
+  },
+  {
+    "name": "R9 no uncaught page errors",
+    "pass": true,
+    "detail": ""
+  }
+]

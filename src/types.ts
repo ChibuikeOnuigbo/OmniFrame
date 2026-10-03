@@ -1,8 +1,44 @@
+import type { RecolorBlend } from './lib/recolor'
 // OmniFrame — core data model.
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound'
+
+export interface Sequence {
+  id: string
+  name: string
+  duration: number
+  tracks: Track[]
+  clips: Clip[]
+  parentSequenceId?: string | null
+  compoundClipId?: string | null
+}
+
+export type TransitionType =
+  | 'cross_dissolve'
+  | 'dip_to_black'
+  | 'dip_to_white'
+  | 'wipe_left'
+  | 'wipe_right'
+  | 'wipe_up'
+  | 'wipe_down'
+  | 'slide_left'
+  | 'slide_right'
+  | 'zoom'
+
+export interface Transition {
+  id: string
+  type: TransitionType
+  fromClipId: string
+  toClipId: string
+  trackId: string
+  startTime: number // timeline start timestamp (seconds)
+  duration: number // transition duration (seconds)
+  alignment: 'centered' | 'start_at_cut' | 'end_at_cut'
+  parameters?: Record<string, any>
+  enabled: boolean
+}
 
 export interface MediaAsset {
   id: string
@@ -19,6 +55,17 @@ export interface MediaAsset {
 }
 
 export type TrackType = 'video' | 'audio'
+
+export type MarkerColor = 'blue' | 'green' | 'red' | 'yellow' | 'purple' | 'orange'
+
+export interface TimelineMarker {
+  id: string
+  time: number // Time in seconds
+  duration?: number // Optional duration span for range markers (0 for single-point)
+  label: string
+  notes?: string
+  color: MarkerColor
+}
 
 export interface Track {
   id: string
@@ -37,6 +84,231 @@ export interface ClipTransform {
   scale: number
   rotation: number // degrees
   opacity: number // 0..1
+  z?: number
+  rotationX?: number
+  rotationY?: number
+  scaleX?: number
+  scaleY?: number
+  scaleZ?: number
+}
+
+export interface ClipEffect {
+  brightness?: number // 0..2 (default 1)
+  contrast?: number // 0..2 (default 1)
+  saturation?: number // 0..2 (default 1)
+  blur?: number // 0..20 px (default 0)
+  grayscale?: number // 0..1 (default 0)
+  invert?: number // 0..1 (default 0)
+  sepia?: number // 0..1 (default 0)
+  hueRotate?: number // 0..360 deg (default 0)
+}
+
+export interface TextTitleStyle {
+  text: string
+  fontSize?: number
+  color?: string
+  backgroundColor?: string
+  fontFamily?: string
+  bold?: boolean
+  italic?: boolean
+}
+
+export type TextStyle = TextTitleStyle
+
+// ---- Aspect Ratio & Sequence Settings ----
+export type AspectRatioType =
+  | '16:9'
+  | '9:16'
+  | '1:1'
+  | '4:5'
+  | '3:4'
+  | '4:3'
+  | '3:2'
+  | '2:3'
+  | '5:4'
+  | '21:9'
+  | 'custom'
+  | 'source'
+
+export interface SequenceSettings {
+  aspectRatio: AspectRatioType
+  width: number
+  height: number
+  fps: number
+  label: string
+  pixelAspectRatio?: number
+  isCustom?: boolean
+}
+
+export interface RatioPreset {
+  id: AspectRatioType
+  label: string
+  aspectRatio: string
+  width: number
+  height: number
+  platforms: string[]
+  description: string
+  platformIcon?: 'youtube' | 'tiktok' | 'youtube-tiktok' | 'instagram' | 'pinterest' | 'tv' | 'camera' | 'source' | 'film' | 'custom' | 'generic'
+}
+
+// ---- Source Monitor vs Program Monitor ----
+export type MonitorMode = 'program' | 'source'
+
+export interface SourcePreviewState {
+  assetId: string | null
+  playing: boolean
+  currentTime: number
+  volume: number
+  muted: boolean
+  playbackRate: number
+  zoom: number
+  pan: { x: number; y: number }
+}
+
+export type TimelineInsertionMode = 'insert' | 'overwrite'
+
+// ---- Drawing & Paint Subsystem Types ----
+export type SelectionToolType =
+  | 'select-rect'
+  | 'select-ellipse'
+  | 'select-lasso'
+  | 'select-polygon'
+  | 'select-brush'
+  | 'select-magic-wand'
+  | 'select-character'
+
+export type SelectionModeType =
+  | 'rect'
+  | 'ellipse'
+  | 'freeform'
+  | 'polygon'
+  | 'painting'
+  | 'magic-wand'
+  | 'character'
+
+export type DrawingToolType =
+  | 'brush'
+  | 'pencil'
+  | 'marker'
+  | 'calligraphy'
+  | 'eraser'
+  | 'line'
+  | 'rectangle'
+  | 'circle'
+  | 'arrow'
+  | 'star'
+  | 'polygon'
+  | 'polyline'
+  | 'bezier'
+  | 'gradient'
+  | 'fill'
+  | 'clone'
+  | 'eyedropper'
+  | SelectionToolType
+
+export interface StrokePoint {
+  x: number // Normalized [0, 1] relative to stage width
+  y: number // Normalized [0, 1] relative to stage height
+  pressure?: number // 0..1
+  timestamp: number // ms from stroke start
+}
+
+export type TemporalScopeType = 'global' | 'span' | 'frame'
+
+export interface TemporalScope {
+  type: TemporalScopeType
+  startTime?: number // seconds
+  duration?: number // seconds
+  frame?: number // frame index
+  holdFrames?: number // number of frames to hold/expose cel without duplicate data
+}
+
+export interface OnionSkinSettings {
+  enabled: boolean
+  beforeFrames: number // default 1
+  afterFrames: number // default 1
+  opacity: number // default 0.35
+  tintBefore?: string // default #ef4444
+  tintAfter?: string // default #10b981
+}
+
+export interface ActiveSelection {
+  type: 'rectangle' | 'ellipse' | 'lasso' | 'polygon' | 'magic-wand' | 'character' | 'brush'
+  bounds: { x: number; y: number; width: number; height: number } // normalized [0, 1]
+  points?: StrokePoint[]
+  maskDataUrl?: string
+  inverted?: boolean
+  feather?: number // px
+  fillMode?: 'outline' | 'filled'
+  characterName?: string
+  fillColor?: string
+  showMaskOnly?: boolean
+  maskDisplayMode?: 'rubylith' | 'matte' | 'cutout'
+}
+
+export interface DrawingStroke {
+  id: string
+  layerId: string
+  maskId?: string // If present, stroke belongs to transparency mask attached to layerId
+  tool: DrawingToolType
+  color: string
+  size: number // base size in stage pixels
+  opacity: number // 0..1
+  points: StrokePoint[]
+  temporalScope: TemporalScope
+  polygonSides?: number // 3..12 for the Krita Polygon Tool
+  gradientColor?: string // end colour of the linear gradient ramp
+  filled?: boolean // shape tools fill as well as stroke
+  fillTolerance?: number // threshold 1..100 for flood fill
+  preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
+  maskDataUrl?: string // raster patch for flood fill
+  cloneSource?: { x: number; y: number; sampleDataUrl?: string } // normalized source anchor for clone stamp
+}
+
+export interface TransparencyMask {
+  id: string
+  parentLayerId: string
+  name: string
+  enabled: boolean // whether mask is active or bypassed
+  inverted: boolean // if true, mask values are inverted (black <-> white)
+  opacity: number // 0..1 mask strength
+  dataUrl?: string // raster 1-channel / grayscale mask buffer
+}
+
+export interface BrushDynamics {
+  pressureSize: boolean // Stylus pressure scales brush diameter
+  pressureOpacity: boolean // Stylus pressure scales opacity
+  pressureFlow: boolean // Stylus pressure scales flow
+  smoothingMode: 'none' | 'smooth' | 'stabilizer' // Krita smoothing algorithms
+  stabilizerRadius: number // Leash delay radius in px (10..100)
+}
+
+export interface PaintLayer {
+  id: string
+  name: string
+  visible: boolean
+  locked: boolean
+  opacity: number
+  blendMode?: GlobalCompositeOperation
+  blur?: number // Gaussian blur radius in px
+  maskDataUrl?: string // raster restriction / legacy mask
+  transparencyMask?: TransparencyMask // Krita-style non-destructive child transparency mask
+}
+
+// ---- Workspace Layout & Focus Mode Types ----
+export type WorkspacePreset = 'default' | 'edit' | 'timeline-focus' | 'preview-focus' | 'drawing' | 'color' | '3d' | 'minimal' | 'full-canvas'
+export type FocusMode = 'none' | 'preview' | 'timeline' | 'canvas-only' | 'one-panel'
+
+export interface CustomWorkspace {
+  id: string
+  name: string
+  createdAt: number
+  leftOpen: boolean
+  rightOpen: boolean
+  leftDockWidth: number
+  rightPanelWidth: number
+  timelineHeight: number
+  focusMode: FocusMode
 }
 
 export interface Clip {
@@ -51,6 +323,32 @@ export interface Clip {
   volume: number // 0..1 (audio)
   hidden: boolean // clip-level visibility; distinct from track visibility
   transform: ClipTransform
+  effects?: ClipEffect
+  textStyle?: TextTitleStyle
+  animation?: import('./lib/animation/CurveEngine').ClipAnimation
+  // Compound Clip / Nested Sequence references
+  sourceSequenceId?: string
+  originalChildClips?: Clip[]
+  originalChildTracks?: Track[]
+  nestedTrackCount?: number
+  nestedClipCount?: number
+}
+
+// ---- 3D Scene Architecture & Blender Modes ----
+export type BlenderMode = 'object' | 'camera' | 'texturing' | 'animation'
+export type Primitive3D = 'wheel' | 'cube' | 'sphere' | 'torus' | 'diamond' | 'plane'
+
+export interface Scene3DObject {
+  id: string
+  name: string
+  type: Primitive3D
+  position: { x: number; y: number; z: number }
+  rotation: { x: number; y: number; z: number }
+  scale: { x: number; y: number; z: number }
+  color: string
+  wireframe?: boolean
+  materialId?: string
+  animation?: import('./lib/animation/CurveEngine').ClipAnimation
 }
 
 export interface ProjectSettings {
@@ -65,4 +363,400 @@ export const DEFAULT_PROJECT: ProjectSettings = {
   height: 1080,
   fps: 30,
   sampleRate: 48000,
+}
+
+// ---- Universal Link System, Parenting & Groups ----
+export type LinkRuleType = 'motion' | 'duration' | 'delete' | 'selection' | 'visibility' | 'lock' | 'property'
+
+export interface LinkSet {
+  id: string
+  name: string
+  memberIds: string[] // Clip IDs
+  rules: Record<LinkRuleType, boolean>
+  propertyLinks?: Record<string, string> // e.g. { 'effects.blur': 'effects.blur' }
+  createdAt?: number
+}
+
+export interface ParentRelationship {
+  childId: string
+  parentId: string
+  inheritPosition: boolean
+  inheritRotation: boolean
+  inheritScale: boolean
+  localOffset: ClipTransform
+}
+
+export interface GroupInstance {
+  id: string
+  name: string
+  memberIds: string[]
+  collapsed: boolean
+  locked: boolean
+  hidden: boolean
+}
+
+// ---- 3D Textures, Materials & Camera Paint ----
+export type TextureMapType = 'baseColor' | 'normal' | 'roughness' | 'metallic' | 'emission' | 'opacity'
+
+export interface TextureAsset {
+  id: string
+  name: string
+  url?: string
+  width: number
+  height: number
+  mapType?: TextureMapType
+  sharedAssetIds?: string[] // 3D models or objects sharing this texture
+  usersCount?: number
+  colorSpace?: string
+}
+
+export interface MaterialInstance {
+  id: string
+  name: string
+  textureId?: string
+  color?: string
+  normalMapId?: string
+  roughnessMapId?: string
+  roughness?: number
+  metalness?: number
+  metallic?: number
+  emission?: string
+  opacity?: number
+  usersCount?: number
+}
+
+export type CameraPaintMode = 'CAMERA_LOCKED' | 'SURFACE_PROJECTED' | 'WORLD_ANCHORED' | 'TEXTURE_BAKED'
+
+export interface CameraPaintPoint {
+  x: number
+  y: number
+  z?: number
+  surfaceU?: number
+  surfaceV?: number
+}
+
+export interface CameraPaintStroke {
+  id: string
+  mode: CameraPaintMode
+  points: CameraPaintPoint[]
+  color: string
+  size: number
+  bakedTextureId?: string
+}
+
+// ---- Masking & Tracking Subsystem (LumaCut Multi-Signal Architecture) ----
+export type TrackingMode = 'mask' | 'main'
+export type MainTrackingType = 'point' | 'multipoint' | 'motion' | 'planar' | 'camera'
+export type MaskShapeType = 'rectangle' | 'ellipse' | 'polygon' | 'lasso' | 'brush'
+
+export interface ClipMask {
+  id: string
+  clipId: string
+  name: string
+  shapeType: MaskShapeType
+  points: { x: number; y: number }[] // normalized 0..1 coordinates
+  inverted: boolean
+  feather: number // pixels
+  expansion: number // pixels
+  opacity: number // 0..1
+  applyToAllFrames: boolean
+  trackingSessionId?: string
+}
+
+export interface TrackPoint {
+  x: number // normalized 0..1
+  y: number // normalized 0..1
+  frame: number
+  confidence: number
+}
+
+export interface TrackingFrameResult {
+  frame: number
+  points: TrackPoint[]
+  maskDataUrl?: string
+  transform?: ClipTransform
+  confidence: number
+}
+
+export interface TrackingSession {
+  id: string
+  targetClipId: string
+  mode: TrackingMode
+  mainType?: MainTrackingType
+  points: TrackPoint[]
+  frameResults: TrackingFrameResult[]
+  isTracking: boolean
+  competitionEnabled: boolean // competing foreground vs background boundary analysis
+}
+
+// ---- Background Removal Multi-Model Subsystem ----
+export type BgRemovalModelId =
+  | 'birefnet-general'
+  | 'modnet-photographic'
+  | 'isnet-anime'
+  | 'slimsam-fast'
+  | 'birefnet-lite-512'
+  | 'modnet'
+  | 'isnet-onnx'
+  | 'slimsam-77'
+
+export interface BgRemovalOptions {
+  modelId: BgRemovalModelId
+  mode?: 'transparent' | 'solid' | 'blur'
+  solidColor?: string
+  blurRadius?: number
+  chokeExpand?: number
+  featherRadius?: number
+  edgeFeather?: number
+  threshold?: number
+  temporalSmoothing?: boolean
+}
+
+export interface BgRemovalJob {
+  id: string
+  clipId: string
+  modelId: BgRemovalModelId
+  device: 'webgpu' | 'wasm'
+  progress: number
+  status: 'idle' | 'loading' | 'processing' | 'done' | 'error'
+  error?: string
+}
+
+// ---- OmniFrame Edit Mode & Propagation ----
+export type OmniframeOperationType =
+  | 'move'
+  | 'cut'
+  | 'duplicate'
+  | 'remove'
+  | 'fill'
+  | 'resize'
+  | 'scale'
+  | 'rotate'
+  | 'translate'
+  | 'recolor'
+  | 'blur'
+  | 'sharpen'
+  | 'isolate'
+
+export type OmniframeScopeType = 'all' | 'section' | 'frame'
+
+export interface OmniframeCharacter {
+  id: string
+  name: string
+  label: string
+  bounds: { x: number; y: number; width: number; height: number } // normalized [0, 1]
+  cutoutUrl: string
+  transform: ClipTransform
+  scope: OmniframeScopeType
+  sectionRange?: { start: number; end: number } // in seconds (e.g. 2.0s to 5.0s)
+  frameNumber?: number // for 1-frame scope (e.g. frame 90)
+  keyframeOffsets?: { frame: number; transform: ClipTransform }[]
+  recolorColor?: string
+  recolorUrl?: string
+  /** Blend used to produce recolorUrl. Defaults to 'dye'. */
+  recolorBlend?: RecolorBlend
+}
+
+export interface OmniframeOperation {
+  id: string
+  type: OmniframeOperationType
+  referenceFrame: number
+  targetRange: { start: number; end: number }
+  selectionMaskUrl: string
+  transformDelta: ClipTransform
+  confidence: number
+  applyToAllFrames: boolean
+}
+
+// ---- Templates Subsystem ----
+export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
+
+// ---- Settings Customization: Shortcuts, Context Menu & Cursors ----
+export type CursorPack = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorTheme = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorSize = 'standard' | 'bigger' | 'mega'
+export type CursorRenderMode = 'follower' | 'native-css'
+
+export interface CursorConfig {
+  enabled: boolean
+  pack: CursorPack
+  theme: CursorTheme
+  size: CursorSize
+  renderMode: CursorRenderMode
+  showClickBurst: boolean
+  showBadges: boolean // + for drag, ? for help
+  showDragPill: boolean // ghost pill with clip/asset info when dragging
+  showDropReticle: boolean // magnetized green reticle when over drop target
+  showTrail: boolean
+}
+
+export interface ShortcutItem {
+  id: string
+  label: string
+  key: string
+  description: string
+  defaultKey: string
+}
+
+export interface ContextMenuItemConfig {
+  id: string
+  label: string
+  enabled: boolean
+  shortcut?: string
+  description: string
+}
+
+export interface TemplateSlot {
+  id: string
+  name: string
+  type: TemplateSlotType
+  clipId?: string
+  required: boolean
+  defaultContent?: string
+  durationConstraint?: number
+}
+
+export interface TemplateDefinition {
+  id: string
+  name: string
+  description: string
+  slots: TemplateSlot[]
+  thumbnail?: string
+}
+
+export interface GuidedMatteRecord {
+  id: string
+  /** Rectangle the user dragged, normalised 0..1. */
+  rect: { x: number; y: number; width: number; height: number }
+  /** PNG matte (white = subject) produced by the coordinate-seeded matting pass. */
+  maskDataUrl: string
+  /** RGBA cutout premultiplied by the matte. */
+  cutoutDataUrl: string
+  width: number
+  height: number
+  /** Fraction of the rectangle that survived as foreground. */
+  coverage: number
+  confidence: number
+  iterations: number
+  seedStats: { foreground: number; background: number }
+  timings: { seed: number; gmm: number; classify: number; refine: number; encode: number; total: number }
+  /** OmniFrame object created from the matte (non-destructive layer). */
+  objectId?: string
+  /** Mask layer id created on the active paint layer. */
+  maskLayerId?: string
+  createdAt: number
+}
+
+/* ---------------------------------------------------------------------------
+ * Rigging
+ * -------------------------------------------------------------------------
+ * A rig turns one flat character cutout into a set of named parts joined by a
+ * parent/child skeleton, so moving a shoulder carries the arm, forearm and
+ * hand with it instead of the animator repositioning each piece.
+ *
+ * Modelled on the MangaCut pipeline (mask -> rig -> animate). See
+ * qa/reports/rigging-research.md for the source material.
+ */
+
+/** Default part taxonomy, following the ten-part export of manga segmenters. */
+export type RigPartKind =
+  | 'hair'
+  | 'face'
+  | 'head'
+  | 'neck'
+  | 'torso'
+  | 'armUpper'
+  | 'armLower'
+  | 'hand'
+  | 'legUpper'
+  | 'legLower'
+  | 'foot'
+  | 'clothing'
+  | 'accessory'
+  | 'custom'
+
+export type RigSide = 'left' | 'right' | 'center'
+
+/** A deformation pin, in the manner of After Effects' puppet tool. */
+export interface RigPin {
+  id: string
+  /** Position within the part's own bounds, normalised 0..1. */
+  x: number
+  y: number
+  /** Influence radius, normalised against the part's larger dimension. */
+  radius: number
+  /** Current displacement from the rest position, in part-local px. */
+  dx: number
+  dy: number
+}
+
+/** Bend deformation: curves a limb instead of hinging it at a joint. */
+export interface RigBend {
+  /** Rotation applied at the far end of the part, degrees. */
+  angle: number
+  /** Where along the part the bend starts, 0..1 from the pivot. */
+  start: number
+  /** How far along the part the bend reaches, 0..1 from the pivot. */
+  end: number
+}
+
+/** Secondary motion — hair and cloth trailing behind the part that drives it. */
+export interface RigWind {
+  enabled: boolean
+  /** Peak sway in degrees. */
+  amplitude: number
+  /** Oscillations per second. */
+  frequency: number
+  /** 0..1, how much of the motion lags the parent. Higher = floppier. */
+  lag: number
+  /** Constant directional push in degrees, for wind from one side. */
+  bias: number
+}
+
+export interface RigPart {
+  id: string
+  name: string
+  kind: RigPartKind
+  side: RigSide
+  /** Transparent cutout for this part. */
+  cutoutUrl: string
+  /** Bounds in character-normalised space, 0..1. */
+  bounds: { x: number; y: number; width: number; height: number }
+  /** Rotation origin, normalised within this part's own bounds. */
+  pivot: { x: number; y: number }
+  /** Parent part id. Moving the parent carries this part. Null = root. */
+  parentId: string | null
+  /** Paint order. Higher draws on top. */
+  z: number
+  /** Local transform, relative to the parent's world transform. */
+  transform: ClipTransform
+  bend?: RigBend
+  wind?: RigWind
+  pins?: RigPin[]
+  hidden?: boolean
+  locked?: boolean
+  sourceMaskId?: string
+}
+
+export interface Rig {
+  id: string
+  name: string
+  /** The OmniFrame character this rig was built from, if any. */
+  characterId?: string
+  /** Source panel, kept so the rig can be rebuilt. */
+  sourceUrl?: string
+  parts: RigPart[]
+  createdAt: number
+  updatedAt: number
+}
+
+/** A resolved part position after walking the parent chain. */
+export interface RigResolvedPart {
+  part: RigPart
+  /** Accumulated transform in character space. */
+  world: ClipTransform
+  /** Absolute pivot position in character-normalised space. */
+  pivotWorld: { x: number; y: number }
+  /** Chain of ancestor ids, root first. Used to detect cycles. */
+  chain: string[]
 }

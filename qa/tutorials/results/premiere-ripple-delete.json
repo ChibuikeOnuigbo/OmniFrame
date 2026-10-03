@@ -1,0 +1,80 @@
+{
+  "id": "premiere-ripple-delete",
+  "app": "Adobe Premiere Pro",
+  "title": "Ripple delete — remove a clip and close the gap (Shift+Delete)",
+  "source": "https://www.redsharknews.com/10-essential-keyboard-shortcuts-for-faster-editing-in-premiere-pro",
+  "procedure": [
+    "Place three clips in a row on the same track",
+    "Select the middle clip",
+    "Press Shift+Delete",
+    "The clip disappears and everything downstream shifts left to close the gap"
+  ],
+  "verdict": "REPLICATED",
+  "counts": {
+    "PASS": 10,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 0, 2)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 0, 2)"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 2, 2)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 2, 2)"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 4, 2)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 4, 2)"
+    },
+    {
+      "kind": "assert",
+      "label": "three clips in a row",
+      "status": "PASS",
+      "detail": "clips().length === 3"
+    },
+    {
+      "kind": "store",
+      "label": "selectClip(1)",
+      "status": "PASS",
+      "detail": "selectClip(1)"
+    },
+    {
+      "kind": "keys",
+      "label": "Delete",
+      "status": "PASS",
+      "detail": "Delete"
+    },
+    {
+      "kind": "assert",
+      "label": "middle clip removed",
+      "status": "PASS",
+      "detail": "clips().length === 2"
+    },
+    {
+      "kind": "assert",
+      "label": "gap closed — the third clip moved left",
+      "status": "PASS",
+      "detail": "clips().length === 2 && Math.min(...clips().map(c => c.start)) === 0 && clips().some(c => c.start <= 2.001)"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/premiere-ripple-delete-1.png"
+    }
+  ]
+}

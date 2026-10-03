@@ -1,8 +1,24 @@
-import { PanelRightClose, PanelRightOpen, Trash2, Scissors, AudioLines } from 'lucide-react'
+import React, { useState } from 'react'
+import {
+  PanelRightClose,
+  PanelRightOpen,
+  Trash2,
+  Scissors,
+  AudioLines,
+  Volume2,
+  Diamond,
+  Activity,
+  FolderOpen,
+  FolderOutput,
+  Layers,
+  SlidersHorizontal,
+} from 'lucide-react'
+import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
-import { Field, Section, Slider } from './ui'
+import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
+import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
 
 function ClipInspector({ clip }: { clip: Clip }) {
   const assets = useEditor((s) => s.assets)
@@ -11,8 +27,67 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const removeClip = useEditor((s) => s.removeClip)
   const splitAt = useEditor((s) => s.splitAt)
   const extractAudio = useEditor((s) => s.extractAudio)
+  const defaultModel = useEditor((s) => s.audioIsolationModel)
+  const playhead = useEditor((s) => s.playhead)
+  const setClipKeyframe = useEditor((s) => s.setClipKeyframe)
+  const removeClipKeyframe = useEditor((s) => s.removeClipKeyframe)
+  const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
+  const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
   const asset = assets.find((a) => a.id === clip.assetId)
   const t = clip.transform
+
+  const [isolationEnabled, setIsolationEnabled] = useState(false)
+  const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
+  const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [isolationStatus, setIsolationStatus] = useState<string | null>(null)
+
+  const clipTime = Math.max(0, playhead - clip.start)
+
+  // Helper to render keyframe toggle diamond and curve button
+  const renderKeyframeControl = (propertyId: string, currentValue: number) => {
+    const curve = clip.animation?.curves?.[propertyId]
+    const existingKey = curve?.keyframes?.find((k) => Math.abs(k.time - clipTime) < 0.05)
+    const hasKey = !!existingKey
+
+    const handleToggle = () => {
+      if (hasKey && existingKey) {
+        removeClipKeyframe(clip.id, propertyId, existingKey.id)
+      } else {
+        setClipKeyframe(clip.id, propertyId, clipTime, currentValue, 'bezier')
+      }
+    }
+
+    const handleOpenCurve = () => {
+      setActiveCurveProperty(propertyId)
+      setGraphEditorOpen(true)
+    }
+
+    return (
+      <div className="flex items-center gap-1 shrink-0 ml-1">
+        <button
+          type="button"
+          data-testid={`keyframe-diamond-${propertyId}`}
+          title={hasKey ? 'Remove Keyframe at Current Time' : 'Add Keyframe at Current Time'}
+          onClick={handleToggle}
+          className={`p-1 rounded transition-colors ${
+            hasKey ? 'text-brand-400' : 'text-ink-500 hover:text-ink-200'
+          }`}
+        >
+          <Diamond size={13} fill={hasKey ? 'currentColor' : 'none'} />
+        </button>
+        <button
+          type="button"
+          data-testid={`open-curve-${propertyId}`}
+          title="Open in Curve Graph Editor"
+          onClick={handleOpenCurve}
+          className="p-1 rounded text-ink-500 hover:text-brand-400 hover:bg-ink-800 transition-colors"
+        >
+          <Activity size={12} />
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -43,45 +118,258 @@ function ClipInspector({ clip }: { clip: Clip }) {
             <Trash2 size={13} /> Delete
           </button>
         </div>
+        {clip.kind === 'compound' && (
+          <div className="mt-2 p-2 rounded bg-indigo-950/60 border border-indigo-500/30 flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-xs text-indigo-200">
+              <span className="font-semibold flex items-center gap-1.5">
+                <Layers size={13} className="text-indigo-400" />
+                <span>Compound Sequence</span>
+              </span>
+              <span className="text-[10px] font-mono text-indigo-300">
+                {clip.nestedTrackCount || 1} Tracks · {clip.nestedClipCount || 1} Clips
+              </span>
+            </div>
+            <div className="flex gap-2 mt-1">
+              <button
+                type="button"
+                data-testid="inspector-open-compound-btn"
+                title="Open Compound Clip Timeline"
+                aria-label="Open compound clip timeline"
+                onClick={() => {
+                  if (clip.sourceSequenceId) useEditor.getState().openSequence(clip.sourceSequenceId)
+                }}
+                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 text-xs font-medium transition-colors truncate"
+              >
+                <FolderOpen size={12} className="shrink-0" />
+                <span className="truncate">Open Timeline</span>
+              </button>
+              <button
+                type="button"
+                data-testid="inspector-uncompound-btn"
+                title="Decompose Compound Clip into Individual Tracks"
+                aria-label="Decompose compound clip"
+                onClick={() => useEditor.getState().uncompoundClip(clip.id)}
+                className="flex-1 flex items-center justify-center gap-1.5 h-7 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-medium transition-colors truncate"
+              >
+                <FolderOutput size={12} className="shrink-0" />
+                <span className="truncate">Decompose</span>
+              </button>
+            </div>
+          </div>
+        )}
         {clip.kind === 'video' && !assets.some((item) => item.extractedFromClipId === clip.id) && (
           <button
             type="button"
+            title="Extract audio stream to separate audio track"
+            aria-label="Extract audio"
             onClick={() => void extractAudio(clip.id)}
-            className="mt-2 flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 text-xs hover:bg-ink-700"
+            className="mt-2 flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-ink-700 bg-ink-800 text-xs hover:bg-ink-700 truncate"
           >
-            <AudioLines size={13} /> Extract audio
+            <AudioLines size={13} className="shrink-0" />
+            <span className="truncate">Extract audio</span>
           </button>
         )}
       </Section>
 
       <Section title="Transform">
         <Field label="Position X">
-          <Slider min={-960} max={960} value={t.x} onChange={(v) => setClipTransform(clip.id, { x: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.x)}</span>
+          <Slider label="Position X" min={-960} max={960} value={t.x} onChange={(v) => setClipTransform(clip.id, { x: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.x)}</span>
+          {renderKeyframeControl('position_x', t.x)}
         </Field>
         <Field label="Position Y">
-          <Slider min={-540} max={540} value={t.y} onChange={(v) => setClipTransform(clip.id, { y: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.y)}</span>
+          <Slider label="Position Y" min={-540} max={540} value={t.y} onChange={(v) => setClipTransform(clip.id, { y: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.y)}</span>
+          {renderKeyframeControl('position_y', t.y)}
         </Field>
         <Field label="Scale">
-          <Slider min={0.1} max={3} step={0.01} value={t.scale} onChange={(v) => setClipTransform(clip.id, { scale: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{t.scale.toFixed(2)}</span>
+          <Slider label="Scale" min={0.1} max={3} step={0.01} value={t.scale} onChange={(v) => setClipTransform(clip.id, { scale: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{t.scale.toFixed(2)}</span>
+          {renderKeyframeControl('scale_x', t.scale)}
         </Field>
-        <Field label="Rotation">
-          <Slider min={-180} max={180} value={t.rotation} onChange={(v) => setClipTransform(clip.id, { rotation: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
+        <Field label={<span className="flex items-center gap-1.5"><BlenderRotationIcon size={13} /><span>Rotation</span></span>}>
+          <Slider label="Rotation" min={-180} max={180} value={t.rotation} onChange={(v) => setClipTransform(clip.id, { rotation: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
+          {renderKeyframeControl('rotation_z', t.rotation)}
         </Field>
         <Field label="Opacity">
-          <Slider min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
-          <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
+          <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
+          {renderKeyframeControl('opacity', t.opacity)}
         </Field>
+
+        {/* 3D Spatial Properties: Clean Accordion Sub-Group */}
+        <AccordionGroup
+          title="3D Spatial (Depth, Tilt, Pan)"
+          defaultOpen={Boolean(t.z || t.rotationX || t.rotationY)}
+        >
+          <Field label="3D Depth (Z)">
+            <Slider label="3D Depth (Z)" min={-1000} max={1000} value={t.z ?? 0} onChange={(v) => setClipTransform(clip.id, { z: v })} />
+            <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.z ?? 0)}</span>
+            {renderKeyframeControl('position_z', t.z ?? 0)}
+          </Field>
+          <Field label="Rotation X (Tilt)">
+            <Slider label="Rotation X (Tilt)" min={-180} max={180} value={t.rotationX ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationX: v })} />
+            <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationX ?? 0)}°</span>
+            {renderKeyframeControl('rotation_x', t.rotationX ?? 0)}
+          </Field>
+          <Field label="Rotation Y (Pan)">
+            <Slider label="Rotation Y (Pan)" min={-180} max={180} value={t.rotationY ?? 0} onChange={(v) => setClipTransform(clip.id, { rotationY: v })} />
+            <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotationY ?? 0)}°</span>
+            {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
+          </Field>
+        </AccordionGroup>
       </Section>
 
-      {clip.kind === 'audio' && (
+      {(clip.kind === 'audio' || clip.kind === 'video') && (
         <Section title="Audio">
           <Field label="Volume">
-            <Slider min={0} max={1} step={0.01} value={clip.volume} onChange={(v) => setClipProp(clip.id, { volume: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(clip.volume * 100)}</span>
+            <Slider label="Volume"
+              min={0}
+              max={2}
+              step={0.01}
+              value={clip.volume ?? 1}
+              onChange={(v) => setClipProp(clip.id, { volume: v })}
+            />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">
+              {Math.round((clip.volume ?? 1) * 100)}%
+            </span>
+          </Field>
+
+          {/* Voice Isolation Checkbox */}
+          <div className="pt-2 border-t border-ink-800 space-y-2">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                data-testid="audio-voice-isolation-checkbox"
+                checked={isolationEnabled}
+                onChange={(e) => setIsolationEnabled(e.target.checked)}
+                className="h-3.5 w-3.5 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand focus:ring-offset-ink-900 cursor-pointer"
+              />
+              <span className="text-xs font-medium text-ink-200">Voice Isolation</span>
+            </label>
+
+            {/* Custom dropdown underneath when checkbox is selected */}
+            {isolationEnabled && (
+              <div
+                data-testid="audio-isolation-controls"
+                className="p-2.5 rounded-lg border border-ink-800 bg-ink-900/60 space-y-2.5 animate-in fade-in duration-150"
+              >
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold uppercase text-ink-400 block">
+                    Mode
+                  </label>
+                  <select
+                    data-testid="audio-isolation-mode-dropdown"
+                    value={isolationMode}
+                    onChange={(e) => setIsolationMode(e.target.value as 'remove_vocal' | 'keep_vocal')}
+                    className="w-full h-7 rounded border border-ink-700 bg-ink-800 px-2 text-xs text-ink-100 outline-none focus:border-brand"
+                  >
+                    <option value="remove_vocal">Remove Vocal (Instrumental)</option>
+                    <option value="keep_vocal">Keep Vocal (Dialogue Only)</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold uppercase text-ink-400 block">
+                    AI Neural Model
+                  </label>
+                  <select
+                    data-testid="audio-isolation-model-dropdown"
+                    value={isolationModel}
+                    onChange={(e) => setIsolationModel(e.target.value as VoiceIsolationModel)}
+                    className="w-full h-7 rounded border border-ink-700 bg-ink-800 px-2 text-xs text-ink-100 outline-none focus:border-brand"
+                  >
+                    <option value="omni-voicetarget">omni-voicetarget (20K+ Neural Stems)</option>
+                    <option value="htdemucs-v4">HTDemucs v4 (Meta Hybrid Transformer)</option>
+                    <option value="bs-roformer-lite">BS-Roformer Lite (Band-Split Web)</option>
+                    <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
+                  </select>
+                </div>
+
+                {isolationStatus && (
+                  <p className="text-[10px] text-ink-400 font-mono truncate">{isolationStatus}</p>
+                )}
+
+                <button
+                  type="button"
+                  data-testid="apply-audio-isolation-btn"
+                  disabled={isProcessing}
+                  onClick={async () => {
+                    setIsProcessing(true)
+                    setIsolationStatus('Processing isolation…')
+                    try {
+                      await executeVoiceIsolationForClip(
+                        clip.id,
+                        { mode: isolationMode, model: isolationModel },
+                        (pct, msg) => setIsolationStatus(`${pct}%: ${msg}`),
+                      )
+                      setIsolationStatus('Completed!')
+                      setTimeout(() => setIsolationStatus(null), 3000)
+                    } catch (err) {
+                      setIsolationStatus(`Error: ${(err as Error).message}`)
+                    } finally {
+                      setIsProcessing(false)
+                    }
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 h-7.5 rounded-md bg-brand hover:bg-brand-600 disabled:opacity-50 text-white text-xs font-medium transition-colors shadow-sm"
+                >
+                  {isProcessing ? 'Processing Audio…' : 'Isolate Audio Track'}
+                </button>
+              </div>
+            )}
+          </div>
+        </Section>
+      )}
+
+      {clip.textStyle && (
+        <Section title="Text & Title">
+          <Field label="Text">
+            <input
+              value={clip.textStyle.text}
+              onChange={(e) => {
+                const text = e.target.value
+                useEditor.setState((s) => ({
+                  clips: s.clips.map((c) => (c.id === clip.id ? { ...c, name: text, textStyle: { ...c.textStyle!, text } } : c)),
+                }))
+              }}
+              className="bg-ink-800 border border-ink-700 rounded px-2 h-7 text-xs text-ink-100 outline-none focus:border-brand w-full"
+            />
+          </Field>
+          <Field label="Font Size">
+            <Slider label="Font Size"
+              min={16}
+              max={128}
+              step={2}
+              value={clip.textStyle.fontSize ?? 32}
+              onChange={(v) => {
+                useEditor.setState((s) => ({
+                  clips: s.clips.map((c) => (c.id === clip.id ? { ...c, textStyle: { ...c.textStyle!, fontSize: v } } : c)),
+                }))
+              }}
+            />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.textStyle.fontSize ?? 32)}px</span>
+          </Field>
+        </Section>
+      )}
+
+      {clip.effects && (
+        <Section title="Effects">
+          <Field label="Brightness">
+            <Slider label="Brightness" min={0} max={2} step={0.05} value={clip.effects.brightness ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { brightness: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.brightness ?? 1).toFixed(2)}</span>
+          </Field>
+          <Field label="Contrast">
+            <Slider label="Contrast" min={0} max={2} step={0.05} value={clip.effects.contrast ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { contrast: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.contrast ?? 1).toFixed(2)}</span>
+          </Field>
+          <Field label="Saturation">
+            <Slider label="Saturation" min={0} max={2} step={0.05} value={clip.effects.saturation ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { saturation: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.saturation ?? 1).toFixed(2)}</span>
+          </Field>
+          <Field label="Blur">
+            <Slider label="Blur" min={0} max={20} step={0.5} value={clip.effects.blur ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { blur: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.blur ?? 0).toFixed(0)}px</span>
           </Field>
         </Section>
       )}
@@ -100,11 +388,12 @@ function ClipInspector({ clip }: { clip: Clip }) {
 
 function ProjectInspector() {
   const projectFps = useEditor((s) => s.projectFps)
+  const sequenceSettings = useEditor((s) => s.sequenceSettings)
   return (
     <div>
       <Section title="Project">
         <Field label="Resolution">
-          <span className="text-[11px] text-ink-300">1920 × 1080</span>
+          <span className="text-[11px] text-ink-300">{sequenceSettings.width} × {sequenceSettings.height} ({sequenceSettings.aspectRatio})</span>
         </Field>
         <Field label="Frame rate">
           <span className="text-[11px] text-ink-300">{projectFps} fps</span>
@@ -127,16 +416,36 @@ export function RightPanel() {
   const rightOpen = useEditor((s) => s.rightOpen)
   const setRightOpen = useEditor((s) => s.setRightOpen)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const rightPanelWidth = useEditor((s) => s.rightPanelWidth)
+  const unclusterInspector = useEditor((s) => s.unclusterInspector)
+  const setUnclusterInspector = useEditor((s) => s.setUnclusterInspector)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
   return (
     <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
       {rightOpen && (
-        <div className="w-72 shrink-0 bg-ink-850 flex flex-col h-full">
-          <div className="h-9 shrink-0 flex items-center px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-            {selectedClipId ? 'Clip' : 'Inspector'}
+        <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
+          <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
+            <span className="truncate pr-2" title={selectedClipId ? 'Clip Inspector' : 'Project Inspector'}>
+              {selectedClipId ? 'Clip Inspector' : 'Project Inspector'}
+            </span>
+            <button
+              type="button"
+              data-testid="inspector-uncluster-btn"
+              title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+              aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+              aria-pressed={unclusterInspector}
+              onClick={() => setUnclusterInspector(!unclusterInspector)}
+              className={`grid h-6 w-6 place-items-center rounded transition-colors ${
+                unclusterInspector
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-ink-400 hover:text-white hover:bg-ink-750'
+              }`}
+            >
+              <SlidersHorizontal size={12} />
+            </button>
           </div>
-          <div className="flex-1 min-h-0 overflow-y-auto">
+          <div data-testid="inspector-panel" className={`flex-1 min-h-0 overflow-y-auto ${unclusterInspector ? 'space-y-0.5' : ''}`}>
             {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
           </div>
         </div>

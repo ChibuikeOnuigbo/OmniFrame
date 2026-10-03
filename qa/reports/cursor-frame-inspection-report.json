@@ -1,0 +1,27 @@
+{
+  "scenarios": [
+    {
+      "name": "Timeline playhead scrub continuous visibility",
+      "visible": true,
+      "passed": true
+    },
+    {
+      "name": "Cursor visibility on top of modal dialog",
+      "visible": true,
+      "state": "default",
+      "passed": true
+    },
+    {
+      "name": "Cursor visibility over inspector controls",
+      "visible": true,
+      "passed": true
+    },
+    {
+      "name": "3D mode rotation arc cursor",
+      "state": "default",
+      "visible": true,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

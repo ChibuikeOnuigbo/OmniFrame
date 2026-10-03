@@ -1,0 +1,23 @@
+{
+  "left_dock_tabs": {
+    "laplacian_variance_sharpness": 3910.14,
+    "contrast_std": 34.96,
+    "mean_brightness": 27.49,
+    "width": 320,
+    "height": 510
+  },
+  "topbar_templates_button": {
+    "laplacian_variance_sharpness": 3139.79,
+    "contrast_std": 40.34,
+    "mean_brightness": 34.67,
+    "width": 500,
+    "height": 50
+  },
+  "apply_to_all_frames_toggle": {
+    "laplacian_variance_sharpness": 5496.16,
+    "contrast_std": 34.29,
+    "mean_brightness": 26.63,
+    "width": 272,
+    "height": 310
+  }
+}

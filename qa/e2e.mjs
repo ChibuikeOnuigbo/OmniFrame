@@ -87,6 +87,16 @@ if (!media) {
   }
 }
 await page.getByTestId('import-input').setInputFiles(media)
+// Importing registers the asset in the media library; it deliberately does not
+// place a clip on the timeline. Click the asset's own add-to-timeline control
+// (scoped by asset name -- the project ships demo assets, so counting the whole
+// grid would pick the wrong one).
+{
+  const name = basename(media)
+  const card = page.locator(`[data-asset-name="${name}"]`).first()
+  await card.waitFor({ state: 'visible', timeout: 15000 })
+  await card.locator('[data-testid="add-to-timeline-btn"]').first().click()
+}
 await page.getByTestId('timeline-clip').first().waitFor({ state: 'visible' })
 await page.waitForTimeout(600)
 await page.screenshot({ path: `${OUT}/02-imported.png` })
@@ -106,6 +116,18 @@ await page.getByRole('button', { name: 'Frames' }).click().catch(() => log('Fram
 await page.waitForTimeout(400)
 await page.screenshot({ path: `${OUT}/04-frames-zoom.png` })
 log('zoomed to frame level')
+
+// Pause the transport before editing. Leaving it running lets the playhead
+// drift past the clip while later steps wait, and splitAt is a deliberate no-op
+// outside a clip's range — the split would then look broken when the test is at
+// fault.
+await page.keyboard.press('Space')
+await page.waitForTimeout(300)
+if (await page.evaluate(() => window.__omniframe_store?.getState?.().playing)) {
+  await page.keyboard.press('Space')
+  await page.waitForTimeout(300)
+}
+log('transport paused before edits')
 
 // Split at playhead — prove one clip became two.
 const clipsBefore = await page.getByTestId('timeline-clip').count()

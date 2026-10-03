@@ -6,7 +6,12 @@
       "detail": ""
     },
     {
-      "name": "separate Audio rail control removed",
+      "name": "Audio rail tab is the vocal isolation panel",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Audio tab is not a second media library",
       "status": "PASS",
       "detail": ""
     },
@@ -26,17 +31,17 @@
       "detail": ""
     },
     {
-      "name": "video item retains its type identity",
+      "name": "pexels-cinematic-8s.webm retains its type identity as video",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "image item retains its type identity",
+      "name": "pexels-landscape-962322.jpg retains its type identity as image",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "audio item retains its type identity",
+      "name": "test-audio-6s.ogg retains its type identity as audio",
       "status": "PASS",
       "detail": ""
     },
@@ -98,7 +103,8 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/75a922de-a330-42a6-8787-6887b6e5f1bd :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/ffe09bbe-9642-455c-b1da-da925909aee4 :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/ffe09bbe-9642-455c-b1da-da925909aee4 :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": []
 }

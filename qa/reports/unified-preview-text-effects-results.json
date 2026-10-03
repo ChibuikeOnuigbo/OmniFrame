@@ -1,0 +1,110 @@
+{
+  "results": [
+    {
+      "name": "Program monitor button pill removed from UI",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Source monitor button pill removed from UI",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Media asset plays directly in unified Preview stage",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Asset transport controls (Play/Pause, Seek) visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Returned to timeline sequence canvas",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "3D Orbit Viewer active in preview canvas",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Three.js 3D WebGL canvas interactive",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Text Title clip created on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Text clip content initialized to EPISODE ONE",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Text clip updated in store dynamically",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cyberpunk effect applied with hueRotate 280deg",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cyberpunk effect applied with contrast 1.35",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cross Dissolve transition registered on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Only single Isolate Voice item in main context menu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Side submenu opened on hover",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Remove Vocal option in submenu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Keep Vocal option in submenu",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No horizontal document overflow on 390px mobile viewport",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "LeftDock panel slides out cleanly on mobile",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Preview canvas scales responsively on mobile screen",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zero runtime errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

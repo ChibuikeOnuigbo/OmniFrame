@@ -78,7 +78,7 @@
     {
       "name": "hidden clip gains hover glow",
       "status": "PASS",
-      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(109, 94, 252) 0px 0px 0px 1px, rgba(167, 139, 250, 0.5) 0px 0px 12px 0px"
+      "detail": "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(56, 189, 248, 0.8) 0px 0px 0px 2px, rgba(56, 189, 248, 0.5) 0px 0px 14px 0px"
     },
     {
       "name": "hidden clip offers Unhide Clip",
@@ -186,7 +186,32 @@
       "detail": ""
     },
     {
-      "name": "settings popup contains five real categories",
+      "name": "settings popup contains a real Playback category",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup contains a real Timeline category",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup contains a real Shortcuts category",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup contains a real AI category",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup contains a real Accessibility category",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings popup renders the registry categories",
       "status": "PASS",
       "detail": ""
     },
@@ -241,6 +266,16 @@
       "detail": ""
     },
     {
+      "name": "Hide Clip shortcut uses the label shown in the Shortcuts panel",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "settings search reports the Shortcuts panel label for Hide Clip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "AI settings warn users to enter keys, not code",
       "status": "PASS",
       "detail": ""
@@ -268,7 +303,7 @@
     {
       "name": "mobile menu stays inside safe viewport bounds",
       "status": "PASS",
-      "detail": "{\"x\":132,\"y\":612,\"width\":224,\"height\":114}"
+      "detail": "{\"x\":132,\"y\":594,\"width\":224,\"height\":186}"
     },
     {
       "name": "zero runtime errors",

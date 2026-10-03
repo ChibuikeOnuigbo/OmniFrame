@@ -31,11 +31,17 @@ function pickMime(forceWebm = false): string {
 
 function mixAudio(): MediaStream | null {
   try {
+    const elements = allMediaElements().filter((el) => {
+      if (el instanceof HTMLAudioElement) return true
+      if (el instanceof HTMLVideoElement && !el.muted && el.volume > 0) return true
+      return false
+    })
+    if (elements.length === 0) return null
+
     const Ctx =
       (window as any).AudioContext || (window as any).webkitAudioContext
     const ctx: AudioContext = new Ctx()
     const dest = ctx.createMediaStreamDestination()
-    const elements = allMediaElements()
     const seen = new Set<HTMLMediaElement>()
     for (const el of elements) {
       if (seen.has(el)) continue
@@ -47,8 +53,8 @@ function mixAudio(): MediaStream | null {
         // element already routed elsewhere — skip
       }
     }
-    if (dest.stream.getAudioTracks().length === 0) return null
-    return dest.stream
+    const tracks = dest.stream.getAudioTracks()
+    return tracks.length > 0 ? dest.stream : null
   } catch {
     return null
   }
@@ -62,46 +68,70 @@ function download(blob: Blob, filename: string) {
   document.body.appendChild(a)
   a.click()
   a.remove()
-  // The download navigation has captured the blob synchronously; release our
-  // URL on the next task instead of retaining every export for four seconds.
-  setTimeout(() => URL.revokeObjectURL(url), 0)
+  // Give the browser a beat to actually start the download: revoking the blob
+  // URL on the next task can cancel it before it commits, which silently
+  // produces no file at all.
+  setTimeout(() => URL.revokeObjectURL(url), 1500)
 }
 
 export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
-  const canvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
-  if (!canvas) throw new Error('Preview canvas not found')
   const st = useEditor.getState()
   if (st.clips.length === 0) throw new Error('Add a clip to the timeline before exporting.')
 
-  // Packaged Chromium's MP4 encoder can emit a truncated stream when started
-  // twice in one document. Keep the first-class MP4 export, then use its
-  // standards-based WebM encoder for subsequent exports in the same session.
+  // Ensure Program monitor is active and canvas dimensions match authoritative sequence settings
+  if (st.monitorMode !== 'program') {
+    st.setMonitorMode('program')
+  }
+
   const mime = pickMime()
   if (!mime) throw new Error('MediaRecorder is not supported in this browser.')
 
-  opts.onStatus?.('Preparing recorder…')
-  if (!recorderCache) {
-    recorderCanvas = document.createElement('canvas')
-    recorderCanvas.width = canvas.width
-    recorderCanvas.height = canvas.height
-    const captureCtx = recorderCanvas.getContext('2d', { alpha: false })
-    if (!captureCtx) throw new Error('Export canvas context unavailable')
-    const copyFrame = () => {
-      captureCtx.drawImage(canvas, 0, 0)
-      recorderRaf = requestAnimationFrame(copyFrame)
-    }
-    copyFrame()
-    recorderStream = recorderCanvas.captureStream(30)
-    const audio = mixAudio()
-    if (audio) audio.getAudioTracks().forEach((t) => recorderStream!.addTrack(t))
-    recorderCache = new MediaRecorder(recorderStream, {
-      mimeType: mime,
-      videoBitsPerSecond: 8_000_000,
-    })
+  // Look the canvas up only AFTER the monitor switch. In Source mode the
+  // program canvas is not mounted at all, so resolving it first always threw
+  // "Preview canvas not found" and exported nothing.
+  const initial = useEditor.getState()
+  if (initial.monitorMode !== 'program') {
+    initial.setMonitorMode('program')
   }
 
+  // React does not always mount the program monitor within a fixed number of
+  // frames, so poll for the canvas instead of assuming two rAF is enough.
+  const findCanvas = async (timeoutMs = 3000): Promise<HTMLCanvasElement | null> => {
+    const deadline = performance.now() + timeoutMs
+    for (;;) {
+      const live = useEditor.getState()
+      const preferred = live.is3DMode ? 'of-three-canvas' : 'of-canvas'
+      const el =
+        (document.getElementById(preferred) as HTMLCanvasElement | null) ??
+        (document.getElementById('of-canvas') as HTMLCanvasElement | null)
+      if (el) return el
+      if (performance.now() >= deadline) return null
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+
+  const canvas = await findCanvas()
+  if (!canvas) throw new Error('Preview canvas not found')
+
+  const targetW = st.sequenceSettings?.width || 1920
+  const targetH = st.sequenceSettings?.height || 1080
+  if (canvas.width !== targetW || canvas.height !== targetH) {
+    canvas.width = targetW
+    canvas.height = targetH
+  }
+
+  opts.onStatus?.('Preparing recorder…')
+  const stream = canvas.captureStream(30)
+  const audio = mixAudio()
+  if (audio) {
+    audio.getAudioTracks().forEach((t) => stream.addTrack(t))
+  }
+
+  const recorder = new MediaRecorder(stream, {
+    mimeType: mime,
+    videoBitsPerSecond: 8_000_000,
+  })
   const chunks: BlobPart[] = []
-  const recorder = recorderCache
   recorder.ondataavailable = (e) => {
     if (e.data && e.data.size > 0) chunks.push(e.data)
   }

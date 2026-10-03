@@ -1,0 +1,7 @@
+{
+  "laplacian_variance_sharpness": 209.23,
+  "contrast_std": 37.73,
+  "mean_brightness": 41.54,
+  "file": "evidence/test_edit_composite.png",
+  "cutout": "evidence/cutouts/cut-test-edit-3d-in-2d.png"
+}
