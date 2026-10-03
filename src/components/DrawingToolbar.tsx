@@ -1,4 +1,5 @@
 import { useEditor } from '../store'
+import { SlideDock } from './SlideDock'
 import type { DrawingToolType, TemporalScopeType } from '../types'
 import {
   Paintbrush,
@@ -64,9 +65,12 @@ export function DrawingToolbar() {
   ]
 
   return (
+    <SlideDock id="drawing-toolbar" label="drawing tools" direction="down"
+      className="absolute z-30 max-sm:bottom-10 max-sm:top-auto sm:top-12 sm:bottom-auto left-1/2 -translate-x-1/2"
+    >
     <div
       data-testid="drawing-toolbar"
-      className="absolute z-30 max-sm:bottom-10 max-sm:top-auto sm:top-12 sm:bottom-auto left-1/2 -translate-x-1/2 flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-ink-900/95 border border-ink-700 shadow-xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[max(180px,calc(100%-2rem))] w-auto overflow-x-auto scrollbar-none"
+      className="flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-ink-900/95 border border-ink-700 shadow-xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[max(180px,calc(100%-2rem))] w-auto overflow-x-auto scrollbar-none"
     >
       {/* Tool Selector */}
       <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
@@ -162,5 +166,6 @@ export function DrawingToolbar() {
         <X size={12} />
       </button>
     </div>
+    </SlideDock>
   )
 }

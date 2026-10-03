@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
 import PanelSection from './PanelSection'
+import { Tooltip } from './Tooltip'
 
 const COLOR_SWATCHES = [
   '#f59e0b',
@@ -266,13 +267,13 @@ export function DrawingPanel() {
                 const Icon = t.icon
                 const active = drawingTool === t.id
                 return (
+                  <Tooltip label={t.label}>
                   <button
                     key={t.id}
                     type="button"
                     data-testid={`panel-tool-${t.id}`}
                     aria-label={t.label}
                     aria-pressed={active}
-                    title={t.label}
                     onClick={() => {
                       setDrawingTool(t.id)
                       if (!drawingEnabled) setDrawingEnabled(true)
@@ -284,7 +285,7 @@ export function DrawingPanel() {
                     }`}
                   >
                     <Icon size={14} className="shrink-0" />
-                  </button>
+                  </button></Tooltip>
                 )
               })}
             </div>

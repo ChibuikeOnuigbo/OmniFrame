@@ -1,4 +1,5 @@
 import React from 'react'
+import { SlideDock } from './SlideDock'
 import {
   Square,
   Circle,
@@ -42,9 +43,12 @@ export function SelectionSubToolBar() {
   ]
 
   return (
+    <SlideDock id="selection-toolbar" label="selection tools" direction="down"
+      className="absolute z-30 bottom-3 top-auto left-1/2 -translate-x-1/2"
+    >
     <div
       data-testid="selection-floating-toolbar"
-      className="absolute z-30 bottom-3 top-auto left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1.5 rounded-xl bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[max(180px,calc(100%-18rem))] min-w-0 w-auto overflow-x-auto scrollbar-none"
+      className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[max(180px,calc(100%-18rem))] min-w-0 w-auto overflow-x-auto scrollbar-none"
     >
       <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
         <span className="text-[10px] font-mono uppercase font-bold text-brand-400 px-1 py-0.5">
@@ -157,5 +161,6 @@ export function SelectionSubToolBar() {
         )}
       </div>
     </div>
+    </SlideDock>
   )
 }
