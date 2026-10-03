@@ -646,3 +646,117 @@ export interface GuidedMatteRecord {
   maskLayerId?: string
   createdAt: number
 }
+
+/* ---------------------------------------------------------------------------
+ * Rigging
+ * -------------------------------------------------------------------------
+ * A rig turns one flat character cutout into a set of named parts joined by a
+ * parent/child skeleton, so moving a shoulder carries the arm, forearm and
+ * hand with it instead of the animator repositioning each piece.
+ *
+ * Modelled on the MangaCut pipeline (mask -> rig -> animate). See
+ * qa/reports/rigging-research.md for the source material.
+ */
+
+/** Default part taxonomy, following the ten-part export of manga segmenters. */
+export type RigPartKind =
+  | 'hair'
+  | 'face'
+  | 'head'
+  | 'neck'
+  | 'torso'
+  | 'armUpper'
+  | 'armLower'
+  | 'hand'
+  | 'legUpper'
+  | 'legLower'
+  | 'foot'
+  | 'clothing'
+  | 'accessory'
+  | 'custom'
+
+export type RigSide = 'left' | 'right' | 'center'
+
+/** A deformation pin, in the manner of After Effects' puppet tool. */
+export interface RigPin {
+  id: string
+  /** Position within the part's own bounds, normalised 0..1. */
+  x: number
+  y: number
+  /** Influence radius, normalised against the part's larger dimension. */
+  radius: number
+  /** Current displacement from the rest position, in part-local px. */
+  dx: number
+  dy: number
+}
+
+/** Bend deformation: curves a limb instead of hinging it at a joint. */
+export interface RigBend {
+  /** Rotation applied at the far end of the part, degrees. */
+  angle: number
+  /** Where along the part the bend starts, 0..1 from the pivot. */
+  start: number
+  /** How far along the part the bend reaches, 0..1 from the pivot. */
+  end: number
+}
+
+/** Secondary motion — hair and cloth trailing behind the part that drives it. */
+export interface RigWind {
+  enabled: boolean
+  /** Peak sway in degrees. */
+  amplitude: number
+  /** Oscillations per second. */
+  frequency: number
+  /** 0..1, how much of the motion lags the parent. Higher = floppier. */
+  lag: number
+  /** Constant directional push in degrees, for wind from one side. */
+  bias: number
+}
+
+export interface RigPart {
+  id: string
+  name: string
+  kind: RigPartKind
+  side: RigSide
+  /** Transparent cutout for this part. */
+  cutoutUrl: string
+  /** Bounds in character-normalised space, 0..1. */
+  bounds: { x: number; y: number; width: number; height: number }
+  /** Rotation origin, normalised within this part's own bounds. */
+  pivot: { x: number; y: number }
+  /** Parent part id. Moving the parent carries this part. Null = root. */
+  parentId: string | null
+  /** Paint order. Higher draws on top. */
+  z: number
+  /** Local transform, relative to the parent's world transform. */
+  transform: ClipTransform
+  bend?: RigBend
+  wind?: RigWind
+  pins?: RigPin[]
+  hidden?: boolean
+  locked?: boolean
+  sourceMaskId?: string
+}
+
+export interface Rig {
+  id: string
+  name: string
+  /** The OmniFrame character this rig was built from, if any. */
+  characterId?: string
+  /** Source panel, kept so the rig can be rebuilt. */
+  sourceUrl?: string
+  parts: RigPart[]
+  createdAt: number
+  updatedAt: number
+}
+
+/** A resolved part position after walking the parent chain. */
+export interface RigResolvedPart {
+  part: RigPart
+  /** Accumulated transform in character space. */
+  world: ClipTransform
+  /** Absolute pivot position in character-normalised space. */
+  pivotWorld: { x: number; y: number }
+  /** Chain of ancestor ids, root first. Used to detect cycles. */
+  chain: string[]
+}

@@ -255,8 +255,9 @@ import {
   type TimelineGap,
 } from './store/gapTools'
 import { createOmniframeCharacterSlice } from './store/omniframeCharacters'
+import { createRiggingSlice, type RiggingSlice } from './store/rigging'
 
-interface EditorState {
+interface EditorState extends RiggingSlice {
   assets: MediaAsset[]
   tracks: Track[]
   clips: Clip[]
@@ -1071,6 +1072,8 @@ export const useEditor = create<EditorState>((set, get) => {
     // Universal gap tools + track targeting (see ./store/gapTools.ts).
     ...createGapToolsSlice(set, get, { pushSnapshot, recompute }),
     ...createOmniframeCharacterSlice(set, get, { pushSnapshot }),
+    // Character rigging: named parts joined by a parent/child skeleton.
+    ...createRiggingSlice(set, get, { pushSnapshot }),
     lassoEngagedAt: 0,
 
     // ---- drawing initial state ----
