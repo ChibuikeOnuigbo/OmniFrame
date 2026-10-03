@@ -81,6 +81,7 @@ export type LeftTab =
   | 'effects'
   | 'text'
   | 'threed'
+  | 'rigging'
 
 export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
   {

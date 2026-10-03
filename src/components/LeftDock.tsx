@@ -3,6 +3,7 @@ import {
   LibraryBig,
   Palette,
   Type,
+  Bone,
   Wand2,
   Shuffle,
   Box,
@@ -29,6 +30,7 @@ import { TransitionsPanel } from './TransitionsPanel'
 import { EffectsPanel } from './EffectsPanel'
 import { TextPanel } from './TextPanel'
 import { ThreePanel } from './ThreePanel'
+import Rigging from './Rigging'
 
 export type ToolCategory = 'video' | '2d' | '3d'
 
@@ -53,6 +55,7 @@ const TABS: TabDef[] = [
   { id: 'drawing', label: 'Drawing & Paint', icon: Palette, category: '2d', desc: 'Raster/Vector Brushes & Onion Skin' },
   { id: 'omniframe', label: 'OmniFrame Mask', icon: Scissors, category: '2d', desc: 'Segmentation & Clean Infill' },
   { id: 'tracking', label: 'Masking & Tracking', icon: Target, category: '2d', desc: 'Lucas-Kanade Tracking & Mattes' },
+  { id: 'rigging', label: 'Rigging', icon: Bone, category: '2d', desc: 'Bones, Pivots & Puppet Pins' },
 
   // 3. 3D SCENE & COMPOSITING (Blender / After Effects 3D)
   { id: 'threed', label: '3D Scene', icon: Box, category: '3d', desc: '3D Viewport, Materials & Camera' },
@@ -268,6 +271,7 @@ export function LeftDock() {
             {leftTab === 'effects' && <EffectsPanel />}
             {leftTab === 'text' && <TextPanel />}
             {leftTab === 'threed' && <ThreePanel />}
+            {leftTab === 'rigging' && <Rigging />}
           </div>
         </div>
       </div>
