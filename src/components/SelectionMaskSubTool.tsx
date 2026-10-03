@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { SelectionModeType } from '../types'
+import PanelSection from './PanelSection'
 
 const PRESET_COLORS = [
   { id: 'blue', label: 'Towel Royal Blue', hex: '#2563eb' },
@@ -114,10 +115,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
       </div>
 
       {/* 1. Selection Types */}
-      <div className="space-y-1">
-        <div className="text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
-          Selection Types
-        </div>
+      <PanelSection title="Selection Types" testId="mask-selection-types" defaultOpen={true}>
         <div className="grid grid-cols-6 gap-1">
           {selectionTypes.map((st) => {
             const Icon = st.icon
@@ -144,7 +142,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             )
           })}
         </div>
-      </div>
+      </PanelSection>
 
       {/* 2. Detected Object Quick-Select (Towel, Chair, Light, etc.) */}
       {omniframeCharacters.length > 0 && (
@@ -182,10 +180,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
       )}
 
       {/* 3. Sub-Tool Actions: Invert, Feather, Grow, Shrink */}
-      <div className="space-y-1 pt-1 border-t border-ink-800/80">
-        <div className="text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
-          Boundary & Inversion Tools
-        </div>
+      <PanelSection title="Detected Object Selectors" testId="mask-detected" defaultOpen={false}>
         <div className="grid grid-cols-4 gap-1">
           <button
             type="button"
@@ -232,30 +227,13 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             <span>Clear</span>
           </button>
         </div>
-      </div>
+      </PanelSection>
 
       {/* 4. Fill & Recolor Tool (Changing color of towel, chair seat, apple, shapes) */}
-      <div className="space-y-1.5 pt-1 border-t border-ink-800/80">
+      <PanelSection title="Boundary & Inversion Tools" testId="mask-boundary" defaultOpen={false}>
         {/* Title and toggle share a row until the panel is too narrow for
             both, at which point the toggle drops to its own line rather
             than pushing the section 21px past its container. */}
-        <div className="flex flex-wrap items-center justify-between gap-y-1 text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
-          <div className="flex items-center gap-1">
-            <PaintBucket size={11} className="text-amber-400" />
-            <span>Fill / Recolor Tool</span>
-          </div>
-          <label className="flex items-center gap-1 min-h-[24px] text-[10px] text-ink-400 cursor-pointer">
-            <input
-              type="checkbox"
-              data-testid="preserve-luminance-toggle"
-              aria-label="Preserve luminance"
-              checked={preserveLuminance}
-              onChange={(e) => setPreserveLuminance(e.target.checked)}
-              className="w-4 h-4 rounded border-ink-700 bg-ink-800 text-brand-400"
-            />
-            <span>Keep Texture/Shading</span>
-          </label>
-        </div>
 
         {/* Preset Palette Swatches */}
         <div className="flex items-center gap-1.5">
@@ -308,17 +286,10 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             </button>
           </div>
         </div>
-      </div>
+      </PanelSection>
 
       {/* 5. Non-Destructive Background Removal (Show Mask vs Cutout) */}
-      <div className="space-y-1.5 pt-1 border-t border-ink-800/80">
-        <div className="flex items-center justify-between text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
-          <div className="flex items-center gap-1">
-            <Eye size={11} className="text-emerald-400" />
-            <span>Non-Destructive Mask Layer (LumaCut Mode)</span>
-          </div>
-          <span className="text-[10px] text-ink-500 font-mono">Non-Destructive</span>
-        </div>
+      <PanelSection title="Fill / Recolor Tool" testId="mask-fill" defaultOpen={false}>
 
         <div className="grid grid-cols-3 gap-1">
           <button
@@ -390,17 +361,10 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             <span>Create Mask Layer</span>
           </button>
         </div>
-      </div>
+      </PanelSection>
 
       {/* 5b. Guided Rect Background Removal — draw a box, click remove, get a mask layer */}
-      <div className="space-y-1.5 pt-1 border-t border-ink-800/80">
-        <div className="flex items-center justify-between text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
-          <div className="flex items-center gap-1">
-            <ScanFace size={11} className="text-cyan-400" />
-            <span>Guided Rect BG Removal</span>
-          </div>
-          <span className="text-[10px] text-ink-500 font-mono">Coordinate-Seeded</span>
-        </div>
+      <PanelSection title="Mask Layer" testId="mask-layer" defaultOpen={false}>
 
         <p className="text-[10px] text-ink-500 leading-snug">
           Draw a rectangle around the subject, then run. The box seeds the matte: its
@@ -494,7 +458,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             </button>
           </div>
         )}
-      </div>
+      </PanelSection>
 
       {/* 6. Convert Selection to OmniFrame Object */}
       <div className="pt-1 border-t border-ink-800/80">

@@ -187,7 +187,11 @@ function collectStrict() {
   const groups = [...document.querySelectorAll('[data-testid$="-section"], [data-testid$="-panel"], section, fieldset')]
   for (const g of groups) {
     if (!vis(g)) continue
-    const n = g.querySelectorAll('button, input, select, textarea').length
+    // Only controls a person actually has to scan count. Content inside a
+    // collapsed section is not on screen, so it is not a density problem.
+    const n = [...g.querySelectorAll('button, input, select, textarea')]
+      .filter((c) => c.offsetParent !== null || c.getClientRects().length)
+      .length
     if (n > 14) push('D01', 'medium', g, `${n} controls in one group -> regroup candidate`)
   }
 

@@ -1,24 +1,23 @@
 {
   "totals": {
-    "unique": 65,
-    "instances": 2500
+    "unique": 61,
+    "instances": 2416
   },
   "byRule": {
     "A04": 6,
     "D01": 34,
     "C01": 16,
     "C02": 4,
-    "A01": 4,
     "D06": 1
   },
   "bySev": {
     "medium": 41,
-    "low": 24
+    "low": 20
   },
   "byTab": {
     "media": 17,
     "text": 4,
-    "drawing": 32,
+    "drawing": 28,
     "omniframe": 8,
     "tracking": 4
   },
@@ -78,16 +77,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -101,7 +90,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -111,7 +100,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -121,7 +110,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -140,8 +129,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
+      "el": "div.flex.items-center \"-+\"",
+      "evidence": "sibling control heights 22..24px (24,22,24)"
     },
     {
       "viewport": "1440",
@@ -150,8 +139,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center \"-+\"",
-      "evidence": "sibling control heights 22..24px (24,22,24)"
+      "el": "div.flex.items-center",
+      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -248,16 +237,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -271,7 +250,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -281,7 +260,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -291,7 +270,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -310,8 +289,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
+      "el": "div.flex.items-center \"-+\"",
+      "evidence": "sibling control heights 22..24px (24,22,24)"
     },
     {
       "viewport": "1280",
@@ -320,8 +299,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center \"-+\"",
-      "evidence": "sibling control heights 22..24px (24,22,24)"
+      "el": "div.flex.items-center",
+      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -398,16 +377,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -421,7 +390,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -431,7 +400,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -441,7 +410,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -460,8 +429,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
+      "el": "div.flex.items-center \"-+\"",
+      "evidence": "sibling control heights 22..24px (24,22,24)"
     },
     {
       "viewport": "1024",
@@ -470,8 +439,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center \"-+\"",
-      "evidence": "sibling control heights 22..24px (24,22,24)"
+      "el": "div.flex.items-center",
+      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -548,16 +517,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -571,7 +530,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -581,7 +540,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -591,7 +550,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -610,8 +569,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
+      "el": "div.flex.items-center \"-+\"",
+      "evidence": "sibling control heights 22..24px (24,22,24)"
     },
     {
       "viewport": "390-mobile",
@@ -620,8 +579,8 @@
       "submode": "(root)",
       "rule": "C01",
       "sev": "low",
-      "el": "div.flex.items-center \"-+\"",
-      "evidence": "sibling control heights 22..24px (24,22,24)"
+      "el": "div.flex.items-center",
+      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -1180,16 +1139,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -1223,7 +1172,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -1233,7 +1182,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -1243,7 +1192,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -1253,7 +1202,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -1274,16 +1223,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -1603,7 +1542,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -1613,7 +1552,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -1624,16 +1563,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -2510,16 +2439,6 @@
       "tab": "drawing",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -2553,7 +2472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -2563,7 +2482,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -2573,7 +2492,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -2583,7 +2502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -2614,16 +2533,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -2843,7 +2752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -2853,7 +2762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -2874,16 +2783,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -3540,16 +3439,6 @@
       "tab": "drawing",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -3583,7 +3472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -3593,7 +3482,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -3603,7 +3492,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -3613,7 +3502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -3644,16 +3533,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -3873,7 +3752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -3883,7 +3762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -3904,16 +3783,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -4570,16 +4439,6 @@
       "tab": "drawing",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -4613,7 +4472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -4623,7 +4482,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -4633,7 +4492,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -4643,7 +4502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -4674,16 +4533,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -4903,7 +4752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -4913,7 +4762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -4934,16 +4783,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -5600,16 +5439,6 @@
       "tab": "drawing",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -5643,7 +5472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -5653,7 +5482,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -5663,7 +5492,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -5673,7 +5502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -5704,16 +5533,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -5933,7 +5752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -5943,7 +5762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -5964,16 +5783,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -6630,16 +6439,6 @@
       "tab": "drawing",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -6673,7 +6472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -6683,7 +6482,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -6693,7 +6492,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -6703,7 +6502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -6734,16 +6533,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -6963,7 +6752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -6973,7 +6762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -6994,16 +6783,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -7660,16 +7439,6 @@
       "tab": "drawing",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -7703,7 +7472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -7713,7 +7482,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -7723,7 +7492,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -7733,7 +7502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -7764,16 +7533,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -7993,7 +7752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -8003,7 +7762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1440",
@@ -8024,16 +7783,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1440",
@@ -8870,16 +8619,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -8913,7 +8652,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -8923,7 +8662,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -8933,7 +8672,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -8943,7 +8682,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -8964,16 +8703,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -9293,7 +9022,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -9303,7 +9032,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -9314,16 +9043,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -10200,16 +9919,6 @@
       "tab": "drawing",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -10243,7 +9952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -10253,7 +9962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -10263,7 +9972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -10273,7 +9982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -10304,16 +10013,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -10533,7 +10232,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -10543,7 +10242,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -10564,16 +10263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -11230,16 +10919,6 @@
       "tab": "drawing",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -11273,7 +10952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -11283,7 +10962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -11293,7 +10972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -11303,7 +10982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -11334,16 +11013,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -11563,7 +11232,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -11573,7 +11242,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -11594,16 +11263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -12260,16 +11919,6 @@
       "tab": "drawing",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -12303,7 +11952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -12313,7 +11962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -12323,7 +11972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -12333,7 +11982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -12364,16 +12013,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -12593,7 +12232,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -12603,7 +12242,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -12624,16 +12263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -13290,16 +12919,6 @@
       "tab": "drawing",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -13333,7 +12952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -13343,7 +12962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -13353,7 +12972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -13363,7 +12982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -13394,16 +13013,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -13623,7 +13232,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -13633,7 +13242,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -13654,16 +13263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -14320,16 +13919,6 @@
       "tab": "drawing",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -14363,7 +13952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -14373,7 +13962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -14383,7 +13972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -14393,7 +13982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -14424,16 +14013,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -14653,7 +14232,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -14663,7 +14242,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -14684,16 +14263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -15350,16 +14919,6 @@
       "tab": "drawing",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -15393,7 +14952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -15403,7 +14962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -15413,7 +14972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -15423,7 +14982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -15454,16 +15013,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -15683,7 +15232,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -15693,7 +15242,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1280",
@@ -15714,16 +15263,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1280",
@@ -16380,16 +15919,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -16403,7 +15932,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -16413,7 +15942,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -16423,7 +15952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -16433,7 +15962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -16444,16 +15973,6 @@
       "sev": "medium",
       "el": "[testid=panel-section-colour-frames]",
       "evidence": "18 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -16693,7 +16212,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -16703,17 +16222,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17230,16 +16739,6 @@
       "tab": "drawing",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -17253,7 +16752,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17263,7 +16762,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17273,7 +16772,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17283,7 +16782,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17304,16 +16803,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -17453,7 +16942,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17463,7 +16952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17474,16 +16963,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -17780,16 +17259,6 @@
       "tab": "drawing",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -17803,7 +17272,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17813,7 +17282,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17823,7 +17292,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17833,7 +17302,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -17854,16 +17323,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -18003,7 +17462,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18013,7 +17472,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18024,16 +17483,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -18330,16 +17779,6 @@
       "tab": "drawing",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -18353,7 +17792,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18363,7 +17802,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18373,7 +17812,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18383,7 +17822,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18404,16 +17843,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -18553,7 +17982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18563,7 +17992,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18574,16 +18003,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -18880,16 +18299,6 @@
       "tab": "drawing",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -18903,7 +18312,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18913,7 +18322,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18923,7 +18332,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18933,7 +18342,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -18954,16 +18363,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -19103,7 +18502,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19113,7 +18512,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19124,16 +18523,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -19430,16 +18819,6 @@
       "tab": "drawing",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -19453,7 +18832,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19463,7 +18842,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19473,7 +18852,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19483,7 +18862,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19504,16 +18883,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -19653,7 +19022,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19663,7 +19032,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -19674,16 +19043,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -19980,16 +19339,6 @@
       "tab": "drawing",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -20003,7 +19352,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -20013,7 +19362,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -20023,7 +19372,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -20033,7 +19382,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -20054,16 +19403,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -20203,7 +19542,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -20213,7 +19552,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "1024",
@@ -20224,16 +19563,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "1024",
@@ -20710,16 +20039,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -20733,7 +20052,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -20743,7 +20062,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -20753,7 +20072,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -20763,7 +20082,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -20774,16 +20093,6 @@
       "sev": "medium",
       "el": "[testid=panel-section-colour-frames]",
       "evidence": "18 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -21023,7 +20332,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21033,17 +20342,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21620,16 +20919,6 @@
       "tab": "drawing",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -21643,7 +20932,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21653,7 +20942,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21663,7 +20952,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21673,7 +20962,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21694,16 +20983,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -21873,7 +21152,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21883,7 +21162,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -21894,16 +21173,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -22330,16 +21599,6 @@
       "tab": "drawing",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -22353,7 +21612,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -22363,7 +21622,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -22373,7 +21632,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -22383,7 +21642,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -22404,16 +21663,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -22583,7 +21832,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -22593,7 +21842,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -22604,16 +21853,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -23040,16 +22279,6 @@
       "tab": "drawing",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -23063,7 +22292,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23073,7 +22302,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23083,7 +22312,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23093,7 +22322,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23114,16 +22343,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -23293,7 +22512,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23303,7 +22522,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23314,16 +22533,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -23750,16 +22959,6 @@
       "tab": "drawing",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -23773,7 +22972,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23783,7 +22982,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23793,7 +22992,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23803,7 +23002,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -23824,16 +23023,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -24003,7 +23192,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24013,7 +23202,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24024,16 +23213,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -24460,16 +23639,6 @@
       "tab": "drawing",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -24483,7 +23652,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24493,7 +23662,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24503,7 +23672,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24513,7 +23682,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24534,16 +23703,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -24713,7 +23872,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24723,7 +23882,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -24734,16 +23893,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -25170,16 +24319,6 @@
       "tab": "drawing",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "A01",
-      "sev": "low",
-      "el": "[testid=toggle-layer-visibility-default-paint-layer]",
-      "evidence": "icon-only, aria-label but no title -> no hover tooltip"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
       "el": "input.w-6.h-6",
@@ -25193,7 +24332,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "87 controls in one group -> regroup candidate"
+      "evidence": "72 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -25203,7 +24342,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
-      "evidence": "86 controls in one group -> regroup candidate"
+      "evidence": "71 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -25213,7 +24352,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-tools]",
-      "evidence": "48 controls in one group -> regroup candidate"
+      "evidence": "33 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -25223,7 +24362,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=panel-section-masking]",
-      "evidence": "33 controls in one group -> regroup candidate"
+      "evidence": "18 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -25244,16 +24383,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
@@ -25423,7 +24552,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
-      "evidence": "39 controls in one group -> regroup candidate"
+      "evidence": "24 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -25433,7 +24562,7 @@
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
-      "evidence": "38 controls in one group -> regroup candidate"
+      "evidence": "23 controls in one group -> regroup candidate"
     },
     {
       "viewport": "390-mobile",
@@ -25444,16 +24573,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.flex.items-center",
-      "evidence": "sibling control heights 24..26px (26,24,24,24,24,24)"
     },
     {
       "viewport": "390-mobile",
