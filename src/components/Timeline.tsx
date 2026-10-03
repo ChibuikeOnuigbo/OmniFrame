@@ -526,7 +526,7 @@ function TrackHeader({
         data-testid={`track-menu-${track.id}`}
         title="Track options"
         onClick={() => setMenuOpen((o) => !o)}
-        className="p-1 rounded text-ink-400 hover:text-white hover:bg-ink-750 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="grid h-8 w-8 place-items-center rounded text-ink-400 hover:text-white hover:bg-ink-750 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         <MoreVertical size={12} />
       </button>

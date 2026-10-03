@@ -328,13 +328,13 @@ export function OmniFramePanel() {
                     setTargetFrame(char.frameNumber)
                   }
                 }}
-                className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all ${
+                className={`flex min-h-[46px] items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all ${
                   isSelected
                     ? 'bg-brand/15 border-brand text-white shadow-xs ring-1 ring-brand/40'
                     : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850 hover:text-white'
                 }`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2">
                   <div className="w-6 h-6 rounded-md bg-ink-950 border border-ink-700 overflow-hidden flex items-center justify-center shrink-0">
                     <img
                       src={char.cutoutUrl}
@@ -345,12 +345,12 @@ export function OmniFramePanel() {
                       }}
                     />
                   </div>
-                  <div>
-                    <div className="font-semibold text-[11px] leading-tight">{char.name}</div>
-                    <div className="text-[9px] text-ink-400">{char.label}</div>
+                  <div className="min-w-0">
+                    <div className="truncate font-semibold text-[11px] leading-tight">{char.name}</div>
+                    <div className="truncate text-[9px] text-ink-400">{char.label}</div>
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-0.5">
+                <div className="flex min-w-0 flex-row items-center justify-end gap-1">
                   <span className={`text-[9px] px-1 py-0.2 rounded font-mono uppercase ${
                     char.scope === 'all'
                       ? 'bg-indigo-500/20 text-indigo-300'

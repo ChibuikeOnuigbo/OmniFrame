@@ -1,24 +1,24 @@
 {
   "totals": {
-    "unique": 57,
-    "instances": 2160
+    "unique": 53,
+    "instances": 2104
   },
   "byRule": {
     "A04": 6,
     "D01": 34,
     "C02": 4,
-    "C01": 12,
+    "C01": 8,
     "D06": 1
   },
   "bySev": {
     "medium": 41,
-    "low": 16
+    "low": 12
   },
   "byTab": {
     "media": 13,
     "text": 4,
     "drawing": 28,
-    "omniframe": 8,
+    "omniframe": 4,
     "tracking": 4
   },
   "unique": [
@@ -144,16 +144,6 @@
     },
     {
       "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
@@ -294,16 +284,6 @@
     },
     {
       "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
@@ -424,16 +404,6 @@
     },
     {
       "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
       "tab": "tracking",
       "overlay": "(none)",
       "submode": "(root)",
@@ -551,16 +521,6 @@
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
       "evidence": "17 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -1029,16 +989,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -1093,16 +1043,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -1949,16 +1889,6 @@
       "tab": "omniframe",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -2023,16 +1953,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -2949,16 +2869,6 @@
       "tab": "omniframe",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -3023,16 +2933,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -3949,16 +3849,6 @@
       "tab": "omniframe",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -4023,16 +3913,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -4949,16 +4829,6 @@
       "tab": "omniframe",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -5023,16 +4893,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -5949,16 +5809,6 @@
       "tab": "omniframe",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -6023,16 +5873,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -6949,16 +6789,6 @@
       "tab": "omniframe",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -7023,16 +6853,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1440",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1440",
@@ -7869,16 +7689,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -7933,16 +7743,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -8789,16 +8589,6 @@
       "tab": "omniframe",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -8863,16 +8653,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -9789,16 +9569,6 @@
       "tab": "omniframe",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -9863,16 +9633,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -10789,16 +10549,6 @@
       "tab": "omniframe",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -10863,16 +10613,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -11789,16 +11529,6 @@
       "tab": "omniframe",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -11863,16 +11593,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -12789,16 +12509,6 @@
       "tab": "omniframe",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -12863,16 +12573,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -13789,16 +13489,6 @@
       "tab": "omniframe",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -13863,16 +13553,6 @@
       "sev": "medium",
       "el": "[testid=inspector-panel]",
       "evidence": "21 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1280",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1280",
@@ -14469,16 +14149,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -14503,16 +14173,6 @@
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
       "evidence": "17 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -14909,16 +14569,6 @@
       "tab": "omniframe",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -14953,16 +14603,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -15429,16 +15069,6 @@
       "tab": "omniframe",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -15473,16 +15103,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -15949,16 +15569,6 @@
       "tab": "omniframe",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -15993,16 +15603,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -16469,16 +16069,6 @@
       "tab": "omniframe",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -16513,16 +16103,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -16989,16 +16569,6 @@
       "tab": "omniframe",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -17033,16 +16603,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -17509,16 +17069,6 @@
       "tab": "omniframe",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -17553,16 +17103,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "1024",
@@ -17949,16 +17489,6 @@
       "tab": "omniframe",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -17983,16 +17513,6 @@
       "sev": "medium",
       "el": "[testid=omniframe-panel]",
       "evidence": "17 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "(none)",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -18459,16 +17979,6 @@
       "tab": "omniframe",
       "overlay": "graph-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -18513,16 +18023,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -19139,16 +18639,6 @@
       "tab": "omniframe",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -19193,16 +18683,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -19819,16 +19299,6 @@
       "tab": "omniframe",
       "overlay": "voice-modal",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -19873,16 +19343,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -20499,16 +19959,6 @@
       "tab": "omniframe",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -20553,16 +20003,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -21179,16 +20619,6 @@
       "tab": "omniframe",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -21233,16 +20663,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
@@ -21859,16 +21279,6 @@
       "tab": "omniframe",
       "overlay": "voice-isolation",
       "submode": "(root)",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
       "rule": "C02",
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
@@ -21913,16 +21323,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-segments",
-      "rule": "C01",
-      "sev": "low",
-      "el": "div.grid.grid-cols-1 \"Light YagamiCharacter 1 (Far\"",
-      "evidence": "sibling control heights 44..60px (44,44,44,44,60)"
     },
     {
       "viewport": "390-mobile",
