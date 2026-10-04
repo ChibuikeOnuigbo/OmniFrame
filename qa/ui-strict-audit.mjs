@@ -196,7 +196,18 @@ function collectStrict() {
     // to the panel hides which section is actually crowded, so measure the
     // disclosures instead. Recognised generically by the disclosure pattern:
     // a direct child holding a role=button that reports aria-expanded.
-    const subs = [...g.children].filter((c) => c.querySelector(':scope > [role="button"][aria-expanded]'))
+    // The disclosures are not always direct children -- a panel often wraps
+    // its sections in one layout div -- so find them at any depth, then keep
+    // only the outermost so the same controls are not charged twice.
+    // A real <button aria-expanded> has the role implicitly, so matching only
+    // [role="button"] would miss every section that uses a native button as
+    // its disclosure trigger. Match either shape.
+    const isDisc = (c) =>
+      c.querySelector(':scope > button[aria-expanded], :scope > [role="button"][aria-expanded]') !== null
+    const subs = [...g.querySelectorAll('div, section')].filter(isDisc).filter((c) => {
+      for (let p = c.parentElement; p && p !== g; p = p.parentElement) if (isDisc(p)) return false
+      return true
+    })
     const flag = (unit, n) => { if (n > 14) push('D01', 'medium', unit, `${n} controls in one group -> regroup candidate`) }
     if (subs.length) {
       for (const sub of subs) flag(sub, [...sub.querySelectorAll(CTRL)].filter(shown).length)
