@@ -1,0 +1,152 @@
+{
+  "generatedAt": "2026-10-04T20:10:04.424Z",
+  "mixture": {
+    "file": "/home/user/OmniFrame/qa/assets/voice/mix-showcase.wav",
+    "duration": 20
+  },
+  "metrics": {
+    "sideRmsDb": {
+      "mix": -28.471855,
+      "isolated": -200
+    },
+    "sub80RmsDb": {
+      "mix": -18.506774,
+      "isolated": -26.364778
+    },
+    "speechBandRmsDb": {
+      "mix": -18.999599,
+      "isolated": -19.122705
+    },
+    "airBandRmsDb": {
+      "mix": -33.564324,
+      "isolated": -35.470205
+    },
+    "air10kRmsDb": {
+      "mix": -36.019995,
+      "isolated": -39.112548
+    }
+  },
+  "results": [
+    {
+      "name": "TTS+music mixture built with production WAV encoder",
+      "status": "PASS",
+      "detail": "20.0s -> /home/user/OmniFrame/qa/assets/voice/mix-showcase.wav"
+    },
+    {
+      "name": "Mixture clip placed on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Music bed clip placed on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Both clips are audio kind",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Audio track exists for the combined session",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Voice Isolation panel opens from the Audio tab",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Voice Isolation modal opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Speech formant bandpass enabled by default",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolation executed and modal closed on completion",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolation produced a clip on the timeline",
+      "status": "PASS",
+      "detail": "[\"mix-showcase.wav\",\"full-band.wav\",\"[Vocal Isolated · omni-voicetarget] mix-showcase.wav\"]"
+    },
+    {
+      "name": "Isolated clip created on timeline",
+      "status": "PASS",
+      "detail": "[Vocal Isolated · omni-voicetarget] mix-showcase.wav"
+    },
+    {
+      "name": "Isolated asset registered in media library",
+      "status": "PASS",
+      "detail": "[Vocal Isolated · omni-voicetarget] mix-showcase.wav"
+    },
+    {
+      "name": "Isolated asset has 256-bin waveform",
+      "status": "PASS",
+      "detail": "256"
+    },
+    {
+      "name": "Source mixture clip muted to volume 0 after isolation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolated clip is sample-synced with the source clip",
+      "status": "PASS",
+      "detail": "start 20s duration 20s"
+    },
+    {
+      "name": "Timeline combines music bed + mixture + isolated voice",
+      "status": "PASS",
+      "detail": "3 audio clips"
+    },
+    {
+      "name": "Isolated WAV retrieved from the app",
+      "status": "PASS",
+      "detail": "/home/user/OmniFrame/evidence/voice/mix-showcase-isolated.wav"
+    },
+    {
+      "name": "Isolated duration preserved",
+      "status": "PASS",
+      "detail": "20.00s vs 20.00s"
+    },
+    {
+      "name": "Stereo side (instrument) channel collapsed to silence in isolated output",
+      "status": "PASS",
+      "detail": "mix side -28.5dB -> isolated side -200.0dB"
+    },
+    {
+      "name": "Sub-80Hz rumble/kick reduced by the 130Hz speech highpass",
+      "status": "PASS",
+      "detail": "mix -18.5dB -> isolated -26.4dB"
+    },
+    {
+      "name": "Speech band (300Hz-3kHz) preserved",
+      "status": "PASS",
+      "detail": "mix -19.0dB -> isolated -19.1dB"
+    },
+    {
+      "name": ">7.5kHz air band attenuated by the speech lowpass",
+      "status": "PASS",
+      "detail": "mix -33.6dB -> isolated -35.5dB"
+    },
+    {
+      "name": ">10kHz band attenuated further up the rolloff slope",
+      "status": "PASS",
+      "detail": "mix -36.0dB -> isolated -39.1dB"
+    },
+    {
+      "name": "Zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "pageErrors": []
+}
