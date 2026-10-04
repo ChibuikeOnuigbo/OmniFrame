@@ -585,9 +585,9 @@ export interface OmniframeOperation {
 export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
 
 // ---- Settings Customization: Shortcuts, Context Menu & Cursors ----
-export type CursorPack = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
-export type CursorTheme = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
-export type CursorSize = 'standard' | 'bigger' | 'mega'
+export type CursorPack = 'pro-precision' | 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorTheme = 'pro-precision' | 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorSize = 'compact' | 'standard' | 'bigger' | 'mega'
 export type CursorRenderMode = 'follower' | 'native-css'
 
 export interface CursorConfig {

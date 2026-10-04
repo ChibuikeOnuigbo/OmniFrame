@@ -739,6 +739,7 @@ export function TopBar() {
                     <div className="grid grid-cols-2 gap-2">
                       {(
                         [
+                          { id: 'pro-precision', label: 'Pro Precision', desc: 'Compact NLE-style, zero glow' },
                           { id: 'mac-gamified', label: 'macOS Gamified', desc: 'Enlarged + power core & glow' },
                           { id: 'mac-sonoma-pro', label: 'macOS Sonoma Pro', desc: 'Authentic Apple vector curves' },
                           { id: 'cyber-violet', label: 'Cyber Violet', desc: 'Neon violet & cyan reticles' },
@@ -766,12 +767,13 @@ export function TopBar() {
                   {/* Cursor Size */}
                   <div className="space-y-1.5">
                     <div className="text-[11px] font-medium text-ink-300">Cursor Scale Profile</div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                       {(
                         [
-                          { id: 'standard', label: 'Standard', desc: '0.95x classic' },
-                          { id: 'bigger', label: 'Bigger (Gamified)', desc: '1.20x enlarged' },
-                          { id: 'mega', label: 'Mega', desc: '1.40x high-vis' },
+                          { id: 'compact', label: 'Compact', desc: '0.70x precision work' },
+                          { id: 'standard', label: 'Standard', desc: '0.85x native size' },
+                          { id: 'bigger', label: 'Bigger', desc: '1.10x enlarged' },
+                          { id: 'mega', label: 'Mega', desc: '1.35x high-vis' },
                         ] as const
                       ).map((item) => (
                         <button

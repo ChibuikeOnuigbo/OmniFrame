@@ -115,7 +115,7 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
   },
   {
     id: 'cursor.customizer', category: 'cursor', label: 'Custom Mac cursor & pointer events',
-    description: 'Enlarged gamified macOS vector cursor with dynamic + drag and ? help badges and click burst.',
+    description: 'Vector cursor follower with Pro Precision (compact NLE-style) and gamified packs, + drag and ? help badges.',
     aliases: ['cursor', 'mouse', 'pointer', 'mac cursor', 'drag plus', 'help question', 'pointer events'],
     controlType: 'toggle', defaultValue: true, scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.cursorConfig.enabled', testId: 'setting-cursor-enabled', sourceRefs: [],

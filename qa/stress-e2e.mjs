@@ -185,8 +185,8 @@ assert(previewOverflow.overflow==='hidden','zoomed preview is clipped without sc
 await page.mouse.move(previewBox.x+previewBox.width/2,previewBox.y+previewBox.height/2); await page.mouse.down(); await page.mouse.move(previewBox.x+previewBox.width/2+100,previewBox.y+previewBox.height/2+60,{steps:10}); await page.mouse.up()
 assert(Math.abs(Number(await previewViewport.getAttribute('data-preview-pan-x')))>1,'200% preview supports bounded pointer pan',await previewViewport.getAttribute('data-preview-pan-x'))
 await shot('stress-08-preview-200-panned')
-await page.getByTitle('Auto fit preview',{exact:true}).click(); await page.waitForTimeout(100); const fitPan=await previewViewport.getAttribute('data-preview-pan-x'); assert(Math.abs(Number(fitPan))<.01,'Fit recenters preview canvas',fitPan)
-await page.getByTitle('Safe areas').click(); await page.getByTitle('Grid').click(); await shot('stress-08-preview-zoom')
+await page.getByRole('button',{name:'Auto fit preview',exact:true}).click(); await page.waitForTimeout(100); const fitPan=await previewViewport.getAttribute('data-preview-pan-x'); assert(Math.abs(Number(fitPan))<.01,'Fit recenters preview canvas',fitPan)
+await page.getByTitle('Toggle safe areas').click(); await page.getByTitle('Toggle composition grid').click(); await shot('stress-08-preview-zoom')
 
 // Inspector has one persistent edge control; no duplicate remains beside Export.
 assert(await page.locator('header').getByRole('button',{name:/inspector/i}).count()===0,'top bar has no duplicate inspector toggle')

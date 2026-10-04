@@ -241,15 +241,15 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
 
 export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
   enabled: true,
-  pack: 'mac-gamified',
-  theme: 'mac-gamified',
-  size: 'bigger', // "bugger" enlarged as requested by user
+  pack: 'pro-precision',
+  theme: 'pro-precision',
+  size: 'standard', // native-feeling cursor size (see CustomCursor scale map)
   renderMode: 'follower',
-  showClickBurst: true,
+  showClickBurst: false, // ripple on every click is visual noise for pro editing
   showBadges: true, // + for drag, ? for help as requested by user
   showDragPill: true, // ghost pill with info when dragging
   showDropReticle: true, // magnetized drop target when over timeline tracks
-  showTrail: true,
+  showTrail: false,
 }
 
 /**
@@ -337,6 +337,8 @@ interface EditorState extends RiggingSlice {
   timelineHeight: number
   leftDockWidth: number
   rightPanelWidth: number
+  rightPanelFloating: boolean
+  rightPanelFloat: { x: number; y: number; w: number; h: number }
   customWorkspaces: CustomWorkspace[]
 
   // ---- sequence & aspect ratio ----
@@ -514,6 +516,8 @@ interface EditorState extends RiggingSlice {
   setTimelineHeight: (height: number) => void
   setLeftDockWidth: (width: number) => void
   setRightPanelWidth: (width: number) => void
+  setRightPanelFloating: (v: boolean) => void
+  setRightPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
   saveCustomWorkspace: (name: string) => string
   applyCustomWorkspace: (id: string) => void
   deleteCustomWorkspace: (id: string) => void
@@ -1196,6 +1200,8 @@ export const useEditor = create<EditorState>((set, get) => {
     timelineHeight: 280,
     leftDockWidth: 320,
     rightPanelWidth: 280,
+    rightPanelFloating: false,
+    rightPanelFloat: { x: 0, y: 0, w: 340, h: 560 },
     customWorkspaces: (() => {
       try {
         const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.customWorkspaces') : null
@@ -2764,6 +2770,31 @@ export const useEditor = create<EditorState>((set, get) => {
     setTimelineHeight: (height) => set({ timelineHeight: Math.max(120, Math.min(600, height)) }),
     setLeftDockWidth: (width) => set({ leftDockWidth: Math.max(220, Math.min(600, width)) }),
     setRightPanelWidth: (width) => set({ rightPanelWidth: Math.max(220, Math.min(500, width)) }),
+    setRightPanelFloating: (v) => {
+      if (!v) {
+        set({ rightPanelFloating: false })
+        return
+      }
+      // First float: place the window over the right side of the preview.
+      const cur = get().rightPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.min(cur.w || 340, vw - 32)
+      const h = Math.min(cur.h || 560, vh - 120)
+      const x = cur.x > 0 ? cur.x : Math.max(16, vw - w - 64)
+      const y = cur.y > 0 ? cur.y : 88
+      set({ rightPanelFloating: true, rightPanelFloat: { x, y, w, h } })
+    },
+    setRightPanelFloat: (patch) => {
+      const cur = get().rightPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.max(280, Math.min(patch.w ?? cur.w, vw - 24))
+      const h = Math.max(320, Math.min(patch.h ?? cur.h, vh - 96))
+      const x = Math.max(0, Math.min(patch.x ?? cur.x, vw - w))
+      const y = Math.max(40, Math.min(patch.y ?? cur.y, vh - 48))
+      set({ rightPanelFloat: { x, y, w, h } })
+    },
     saveCustomWorkspace: (name) => {
       const s = get()
       const id = uid('ws')

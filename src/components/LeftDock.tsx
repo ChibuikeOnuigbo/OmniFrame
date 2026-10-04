@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   LibraryBig,
   Palette,
@@ -67,6 +67,28 @@ export function LeftDock() {
   const setLeftTab = useEditor((s) => s.setLeftTab)
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
   const leftDockWidth = useEditor((s) => s.leftDockWidth)
+  const setLeftDockWidth = useEditor((s) => s.setLeftDockWidth)
+  // Width-drag state: suppress the width transition while the user slides the edge.
+  const [dockResizing, setDockResizing] = useState(false)
+  const dockDrag = React.useRef<{ startX: number; startW: number } | null>(null)
+  const onDockResizeDown = (e: React.PointerEvent) => {
+    dockDrag.current = { startX: e.clientX, startW: leftDockWidth }
+    setDockResizing(true)
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onDockResizeMove = (e: React.PointerEvent) => {
+    const d = dockDrag.current
+    if (d) setLeftDockWidth(d.startW + (e.clientX - d.startX))
+  }
+  const onDockResizeUp = (e: React.PointerEvent) => {
+    dockDrag.current = null
+    setDockResizing(false)
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer already released
+    }
+  }
   const activeCategory = useEditor((s) => s.activeCategory)
   const setActiveCategory = useEditor((s) => s.setActiveCategory)
   const activeSubMode = useEditor((s) => s.activeSubMode)
@@ -218,14 +240,29 @@ export function LeftDock() {
             ? `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`
             : '0px',
         }}
-        className="shrink-0 bg-ink-850 border-r border-ink-700/80 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:shadow-2xl"
+        className={`shrink-0 bg-ink-850 border-r border-ink-700/80 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:shadow-2xl ${dockResizing ? 'transition-none' : ''}`}
       >
         <div
           style={{
             width: `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`,
           }}
-          className="h-full flex flex-col"
+          className="h-full flex flex-col relative"
         >
+          {/* Width drag handle: slide the panel edge to resize */}
+          {leftOpen && (
+            <div
+              data-testid="left-panel-resize-handle"
+              role="separator"
+              aria-label="Resize media panel width"
+              aria-orientation="vertical"
+              onPointerDown={onDockResizeDown}
+              onPointerMove={onDockResizeMove}
+              onPointerUp={onDockResizeUp}
+              onPointerCancel={onDockResizeUp}
+              title="Drag to resize panel"
+              className="absolute right-0 top-0 bottom-0 w-1.5 z-30 cursor-col-resize bg-transparent hover:bg-brand/60 transition-colors touch-none"
+            />
+          )}
           {/* Header & Sub-Mode Channel Navigation */}
           <div className="h-8.5 shrink-0 flex items-center justify-between px-2.5 border-b border-ink-700/80 bg-ink-900/60">
             {activeSubMode && currentSubMode ? (

@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
+  PanelRight,
   PanelRightClose,
   PanelRightOpen,
+  PictureInPicture2,
+  X,
   Trash2,
   Scissors,
   AudioLines,
@@ -424,40 +427,229 @@ export function RightPanel() {
   const setRightOpen = useEditor((s) => s.setRightOpen)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const rightPanelWidth = useEditor((s) => s.rightPanelWidth)
+  const setRightPanelWidth = useEditor((s) => s.setRightPanelWidth)
+  const rightPanelFloating = useEditor((s) => s.rightPanelFloating)
+  const setRightPanelFloating = useEditor((s) => s.setRightPanelFloating)
+  const rightPanelFloat = useEditor((s) => s.rightPanelFloat)
+  const setRightPanelFloat = useEditor((s) => s.setRightPanelFloat)
   const unclusterInspector = useEditor((s) => s.unclusterInspector)
   const setUnclusterInspector = useEditor((s) => s.setUnclusterInspector)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
+  const dragState = useRef<{ kind: 'width' | 'move' | 'resize'; startX: number; startY: number; startW: number; startH: number; baseX: number; baseY: number } | null>(null)
+
+  // Shared pointer-drag helper: width (docked), move (float header), resize (float corner).
+  const beginDrag = (
+    kind: 'width' | 'move' | 'resize',
+    e: React.PointerEvent,
+  ) => {
+    const float = useEditor.getState().rightPanelFloat
+    dragState.current = {
+      kind,
+      startX: e.clientX,
+      startY: e.clientY,
+      startW: kind === 'width' ? useEditor.getState().rightPanelWidth : float.w,
+      startH: float.h,
+      baseX: float.x,
+      baseY: float.y,
+    }
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+
+  const onDragMove = (e: React.PointerEvent) => {
+    const d = dragState.current
+    if (!d) return
+    if (d.kind === 'width') {
+      // Dragging the left edge outward (negative dx) widens the panel.
+      setRightPanelWidth(d.startW + (d.startX - e.clientX))
+    } else if (d.kind === 'move') {
+      setRightPanelFloat({
+        x: d.baseX + (e.clientX - d.startX),
+        y: d.baseY + (e.clientY - d.startY),
+      })
+    } else if (d.kind === 'resize') {
+      setRightPanelFloat({
+        w: d.startW + (e.clientX - d.startX),
+        h: d.startH + (e.clientY - d.startY),
+      })
+    }
+  }
+
+  const endDrag = (e: React.PointerEvent) => {
+    dragState.current = null
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer already released
+    }
+  }
+
+  const inspectorTitle = selectedClipId ? 'Clip Inspector' : 'Project Inspector'
+
+  const inspectorBody = (
+    <div
+      id="inspector-panel"
+      data-testid="inspector-panel"
+      role="region"
+      aria-labelledby="inspector-heading"
+      tabIndex={0}
+      className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
+    >
+      {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+    </div>
+  )
+
+  // ---- Floating window mode: draggable + resizable inspector overlay ----
+  if (rightPanelFloating) {
+    return (
+      <>
+        <div
+          data-testid="right-panel-float-window"
+          role="dialog"
+          aria-label={inspectorTitle}
+          style={{
+            position: 'fixed',
+            left: rightPanelFloat.x,
+            top: rightPanelFloat.y,
+            width: rightPanelFloat.w,
+            height: rightPanelFloat.h,
+            zIndex: 60,
+          }}
+          className="flex flex-col rounded-xl border border-ink-600 bg-ink-850 shadow-[0_24px_64px_rgba(0,0,0,0.55)] overflow-hidden"
+        >
+          <div
+            data-testid="right-panel-float-header"
+            onPointerDown={(e) => {
+              if ((e.target as HTMLElement).closest('button')) return
+              beginDrag('move', e)
+            }}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title="Drag to move the inspector"
+            className="h-9 shrink-0 flex items-center justify-between gap-2 px-3 border-b border-ink-700 bg-ink-900/90 text-xs font-semibold uppercase tracking-wider text-ink-300 cursor-grab active:cursor-grabbing select-none touch-none"
+          >
+            <h2 id="inspector-heading" className="truncate" title={inspectorTitle}>
+              {inspectorTitle}
+            </h2>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                data-testid="inspector-uncluster-btn"
+                title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-pressed={unclusterInspector}
+                onClick={() => setUnclusterInspector(!unclusterInspector)}
+                className={`grid h-7 w-7 place-items-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  unclusterInspector ? 'bg-brand text-white shadow-xs' : 'text-ink-400 hover:text-white hover:bg-ink-750'
+                }`}
+              >
+                <SlidersHorizontal size={12} />
+              </button>
+              <button
+                type="button"
+                data-testid="inspector-dock-btn"
+                title="Dock inspector back into the layout"
+                aria-label="Dock inspector"
+                onClick={() => setRightPanelFloating(false)}
+                className="grid h-7 w-7 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <PanelRight size={13} />
+              </button>
+              <button
+                type="button"
+                title="Hide inspector"
+                aria-label="Hide inspector"
+                onClick={() => setRightOpen(false)}
+                className="grid h-7 w-7 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <X size={13} />
+              </button>
+            </div>
+          </div>
+          {inspectorBody}
+          <div
+            data-testid="right-panel-float-resize"
+            onPointerDown={(e) => beginDrag('resize', e)}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title="Drag to resize"
+            aria-label="Resize inspector window"
+            className="absolute bottom-0 right-0 h-4 w-4 cursor-nwse-resize touch-none"
+          >
+            <div className="absolute bottom-1 right-1 h-2 w-2 border-b-2 border-r-2 border-ink-500" />
+          </div>
+        </div>
+        {/* Rail keeps dock-side controls available while floating */}
+        <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2">
+          <button
+            type="button"
+            data-testid="inspector-dock-btn-rail"
+            title="Dock inspector back into the layout"
+            aria-label="Dock inspector"
+            onClick={() => setRightPanelFloating(false)}
+            className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <PanelRight size={18} />
+          </button>
+        </div>
+      </>
+    )
+  }
+
+  // ---- Docked mode (collapsible + width-draggable) ----
   return (
     <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
       {rightOpen && (
-        <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
+        <div style={{ width: `${rightPanelWidth}px` }} className="relative shrink-0 bg-ink-850 flex flex-col h-full">
+          {/* Width drag handle: slide the inspector edge to resize */}
+          <div
+            data-testid="right-panel-resize-handle"
+            role="separator"
+            aria-label="Resize inspector width"
+            aria-orientation="vertical"
+            onPointerDown={(e) => beginDrag('width', e)}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title="Drag to resize inspector"
+            className="absolute left-0 top-0 bottom-0 w-1.5 z-10 cursor-col-resize bg-transparent hover:bg-brand/60 transition-colors touch-none"
+          />
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-            <h2 id="inspector-heading" className="truncate pr-2" title={selectedClipId ? 'Clip Inspector' : 'Project Inspector'}>
-              {selectedClipId ? 'Clip Inspector' : 'Project Inspector'}
+            <h2 id="inspector-heading" className="truncate pr-2" title={inspectorTitle}>
+              {inspectorTitle}
             </h2>
-            <button
-              type="button"
-              data-testid="inspector-uncluster-btn"
-              title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
-              aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
-              aria-pressed={unclusterInspector}
-              onClick={() => setUnclusterInspector(!unclusterInspector)}
-              className={`grid h-8 w-8 place-items-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
-                unclusterInspector
-                  ? 'bg-brand text-white shadow-xs'
-                  : 'text-ink-400 hover:text-white hover:bg-ink-750'
-              }`}
-            >
-              <SlidersHorizontal size={12} />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                data-testid="inspector-uncluster-btn"
+                title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-pressed={unclusterInspector}
+                onClick={() => setUnclusterInspector(!unclusterInspector)}
+                className={`grid h-8 w-8 place-items-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  unclusterInspector ? 'bg-brand text-white shadow-xs' : 'text-ink-400 hover:text-white hover:bg-ink-750'
+                }`}
+              >
+                <SlidersHorizontal size={12} />
+              </button>
+              <button
+                type="button"
+                data-testid="inspector-float-btn"
+                title="Float inspector into a movable window"
+                aria-label="Float inspector into a movable window"
+                onClick={() => setRightPanelFloating(true)}
+                className="grid h-8 w-8 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <PictureInPicture2 size={13} />
+              </button>
+            </div>
           </div>
-          <div id="inspector-panel" data-testid="inspector-panel" role="region" aria-labelledby="inspector-heading" tabIndex={0} className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}>
-            {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
-          </div>
+          {inspectorBody}
         </div>
       )}
-      <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2">
+      <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2 gap-1">
         <button
           type="button"
           title={rightOpen ? 'Hide inspector' : 'Show inspector'}
@@ -469,6 +661,18 @@ export function RightPanel() {
         >
           {rightOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
         </button>
+        {rightOpen && (
+          <button
+            type="button"
+            data-testid="inspector-float-btn"
+            title="Float inspector into a movable window"
+            aria-label="Float inspector into a movable window"
+            onClick={() => setRightPanelFloating(true)}
+            className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <PictureInPicture2 size={16} />
+          </button>
+        )}
       </div>
     </div>
   )
