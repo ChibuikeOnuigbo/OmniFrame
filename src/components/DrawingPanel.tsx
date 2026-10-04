@@ -394,7 +394,7 @@ export function DrawingPanel() {
                 setDrawingHoldFrames(next)
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
               }}
-              aria-label="Adjust value"
+              aria-label="Decrease frames to attach"
               className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
             >
               -
@@ -411,7 +411,7 @@ export function DrawingPanel() {
                 setDrawingHoldFrames(val)
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: val })
               }}
-              className="w-12 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono text-center text-ink-100"
+              className="h-6 w-12 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono text-center text-ink-100"
             />
             <button
               type="button"
@@ -421,7 +421,7 @@ export function DrawingPanel() {
                 setDrawingHoldFrames(next)
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
               }}
-              aria-label="Adjust value"
+              aria-label="Increase frames to attach"
               className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
             >
               +

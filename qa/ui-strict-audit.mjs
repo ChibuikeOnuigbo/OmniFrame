@@ -253,7 +253,12 @@ function collectStrict() {
       (k) => vis(k) && k.matches('button, input, select') && !(k instanceof HTMLInputElement && k.type === 'range'),
     )
     if (kids.length < 3) continue
-    const hs = kids.map((k) => Math.round(k.getBoundingClientRect().height))
+    // offsetHeight, not getBoundingClientRect: the latter includes CSS
+    // transforms, so a control that scales to show selection or hover
+    // state measures a few px larger and reads as a sizing bug when it
+    // is a deliberate visual state. Layout height is what alignment
+    // actually depends on.
+    const hs = kids.map((k) => k.offsetHeight)
     const lo = Math.min(...hs), hi = Math.max(...hs)
     if (hi - lo >= 2) push('C01', 'low', el, `sibling control heights ${lo}..${hi}px (${hs.join(',')})`)
   }
