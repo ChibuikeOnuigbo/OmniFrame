@@ -611,7 +611,7 @@ export function GraphEditor() {
           </svg>
 
           {/* Current Keyframe Info & Easing Bar */}
-          <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between gap-2 p-1.5 rounded-lg bg-ink-900/90 border border-ink-800/90 backdrop-blur-md text-xs">
+          <div className="absolute bottom-2 left-3 right-3 flex max-h-[calc(100%-1rem)] flex-wrap items-center justify-between gap-2 overflow-y-auto rounded-lg border border-ink-800/90 bg-ink-900/90 p-1.5 text-xs backdrop-blur-md">
             {selectedKeyframe ? (
               <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none w-full">
                 <span className="font-semibold text-ink-200 shrink-0">
