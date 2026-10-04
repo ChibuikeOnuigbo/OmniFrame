@@ -448,6 +448,7 @@ export function DrawingPanel() {
           ))}
           <input
             type="color"
+            aria-label="Drawing colour"
             value={drawingColor}
             onChange={(e) => setDrawingColor(e.target.value)}
             className="w-6 h-6 rounded-full border border-ink-700 cursor-pointer bg-transparent p-0 overflow-hidden"
@@ -495,6 +496,7 @@ export function DrawingPanel() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
+                  aria-label="Gradient colour"
                   data-testid="panel-gradient-color-input"
                   value={drawingGradientColor.slice(0, 7)}
                   onChange={(e) => setDrawingGradientColor(e.target.value)}

@@ -654,6 +654,7 @@ export function ThreeViewer({
             <div className="flex items-center gap-2">
               <input
                 type="color"
+                aria-label="Material diffuse colour"
                 data-testid="material-color-picker"
                 value={materialColor}
                 onChange={(e) => setMaterialColor(e.target.value)}

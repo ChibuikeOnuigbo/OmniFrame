@@ -258,6 +258,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               <label className="text-xs text-ink-300">Background Color:</label>
               <input
                 type="color"
+                aria-label="Background colour"
                 data-testid="bg-solid-color-picker"
                 value={solidColor}
                 onChange={(e) => setSolidColor(e.target.value)}
