@@ -14,17 +14,36 @@ import {
   X,
   Sliders,
   HelpCircle,
+  Monitor,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
 import { exportVideo } from '../lib/export'
 import { EDITABLE_SHORTCUTS, SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
 import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
+import {
+  getDesktopInfo,
+  toggleDesktopFullscreen,
+  type DesktopInfo,
+} from '../lib/desktop'
 import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
 import { LayoutManagerModal } from './LayoutManagerModal'
 
 export function TopBar() {
+  // Native desktop (Tauri) info — null in the plain browser build, so the
+  // Desktop badge only renders when the app runs inside the Rust shell.
+  const [desktopInfo, setDesktopInfo] = useState<DesktopInfo | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    getDesktopInfo().then((info) => {
+      if (!cancelled) setDesktopInfo(info)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const undo = useEditor((s) => s.undo)
   const redo = useEditor((s) => s.redo)
   const canUndo = useEditor((s) => s.past.length > 0)
@@ -163,6 +182,24 @@ export function TopBar() {
       <div className="flex items-center gap-2 pl-1 pr-1 sm:pr-2">
         <Film size={18} className="text-brand-400" />
         <span className="hidden sm:inline font-semibold tracking-tight text-sm">OmniFrame</span>
+        {desktopInfo && (
+          <button
+            type="button"
+            data-testid="desktop-badge"
+            aria-label={`Desktop build ${desktopInfo.appVersion} on ${desktopInfo.os} ${desktopInfo.arch}. Toggle fullscreen.`}
+            title={`Desktop build ${desktopInfo.appVersion} · ${desktopInfo.os}/${desktopInfo.arch} — click to toggle fullscreen`}
+            onClick={async () => {
+              const fullscreen = await toggleDesktopFullscreen()
+              if (fullscreen !== null) {
+                setDesktopInfo((d) => (d ? { ...d, fullscreen } : d))
+              }
+            }}
+            className="hidden md:inline-flex items-center gap-1 rounded border border-ok/40 bg-ok/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ok transition-colors hover:bg-ok/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <Monitor size={10} aria-hidden="true" />
+            Desktop · {desktopInfo.os}
+          </button>
+        )}
       </div>
 
       <div className="flex-1" />
