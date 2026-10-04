@@ -193,12 +193,6 @@ function ClipInspector({ clip }: { clip: Clip }) {
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
           {renderKeyframeControl('rotation_z', t.rotation)}
         </Field>
-        <Field label="Opacity">
-          <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
-          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
-          {renderKeyframeControl('opacity', t.opacity)}
-        </Field>
-
         {/* 3D Spatial Properties: Clean Accordion Sub-Group */}
         <AccordionGroup
           title="3D Spatial (Depth, Tilt, Pan)"
@@ -220,6 +214,14 @@ function ClipInspector({ clip }: { clip: Clip }) {
             {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
           </Field>
         </AccordionGroup>
+      </Section>
+
+      <Section title="Appearance">
+        <Field label="Opacity">
+          <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
+          {renderKeyframeControl('opacity', t.opacity)}
+        </Field>
       </Section>
 
       {(clip.kind === 'audio' || clip.kind === 'video') && (

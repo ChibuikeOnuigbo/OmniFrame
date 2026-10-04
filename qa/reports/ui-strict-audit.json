@@ -1,19 +1,18 @@
 {
   "totals": {
-    "unique": 39,
-    "instances": 1572
+    "unique": 38,
+    "instances": 1476
   },
   "byRule": {
     "D01": 34,
-    "C02": 4,
-    "D06": 1
+    "C02": 4
   },
   "bySev": {
-    "medium": 35,
+    "medium": 34,
     "low": 4
   },
   "byTab": {
-    "media": 11,
+    "media": 10,
     "text": 4,
     "drawing": 16,
     "omniframe": 4,
@@ -399,16 +398,6 @@
       "sev": "medium",
       "el": "[testid=graph-editor-panel]",
       "evidence": "20 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     }
   ],
   "all": [
@@ -12374,16 +12363,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "text",
       "overlay": "graph-editor",
       "submode": "(root)",
@@ -12414,16 +12393,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "transitions",
       "overlay": "graph-editor",
       "submode": "(root)",
@@ -12441,16 +12410,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -12484,16 +12443,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "audio",
       "overlay": "graph-editor",
       "submode": "(root)",
@@ -12514,16 +12463,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "relationships",
       "overlay": "graph-editor",
       "submode": "(root)",
@@ -12541,16 +12480,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -12624,16 +12553,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "graph-editor",
       "submode": "(root)",
@@ -12676,16 +12595,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
       "submode": "omniframe-section-segments",
       "rule": "D01",
       "sev": "medium",
@@ -12721,16 +12630,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -12776,16 +12675,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "graph-editor",
-      "submode": "omniframe-section-select",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
       "submode": "omniframe-section-transform",
       "rule": "D01",
       "sev": "medium",
@@ -12801,16 +12690,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-transform",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -12836,16 +12715,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "graph-editor",
-      "submode": "omniframe-section-color",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
       "submode": "omniframe-section-scope",
       "rule": "D01",
       "sev": "medium",
@@ -12866,16 +12735,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "graph-editor",
-      "submode": "omniframe-section-scope",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
       "submode": "omniframe-section-actions",
       "rule": "D01",
       "sev": "medium",
@@ -12891,16 +12750,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "graph-editor",
-      "submode": "omniframe-section-actions",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -12944,16 +12793,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "threed",
       "overlay": "graph-editor",
       "submode": "(root)",
@@ -12974,16 +12813,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "media",
       "overlay": "right-panel",
       "submode": "(root)",
@@ -13001,16 +12830,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13044,16 +12863,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "transitions",
       "overlay": "right-panel",
       "submode": "(root)",
@@ -13071,16 +12880,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13114,16 +12913,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "audio",
       "overlay": "right-panel",
       "submode": "(root)",
@@ -13144,16 +12933,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "relationships",
       "overlay": "right-panel",
       "submode": "(root)",
@@ -13171,16 +12950,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13254,16 +13023,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "right-panel",
       "submode": "(root)",
@@ -13306,16 +13065,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
       "submode": "omniframe-section-segments",
       "rule": "D01",
       "sev": "medium",
@@ -13351,16 +13100,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13406,16 +13145,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "right-panel",
-      "submode": "omniframe-section-select",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
       "submode": "omniframe-section-transform",
       "rule": "D01",
       "sev": "medium",
@@ -13431,16 +13160,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-transform",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13466,16 +13185,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "right-panel",
-      "submode": "omniframe-section-color",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
       "submode": "omniframe-section-scope",
       "rule": "D01",
       "sev": "medium",
@@ -13496,16 +13205,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "right-panel",
-      "submode": "omniframe-section-scope",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
       "submode": "omniframe-section-actions",
       "rule": "D01",
       "sev": "medium",
@@ -13521,16 +13220,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "right-panel",
-      "submode": "omniframe-section-actions",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13574,16 +13263,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "threed",
       "overlay": "right-panel",
       "submode": "(root)",
@@ -13604,16 +13283,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "media",
       "overlay": "voice-modal",
       "submode": "(root)",
@@ -13631,16 +13300,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13674,16 +13333,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "transitions",
       "overlay": "voice-modal",
       "submode": "(root)",
@@ -13701,16 +13350,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13744,16 +13383,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "audio",
       "overlay": "voice-modal",
       "submode": "(root)",
@@ -13774,16 +13403,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "relationships",
       "overlay": "voice-modal",
       "submode": "(root)",
@@ -13801,16 +13420,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -13884,16 +13493,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-modal",
       "submode": "(root)",
@@ -13936,16 +13535,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
       "submode": "omniframe-section-segments",
       "rule": "D01",
       "sev": "medium",
@@ -13981,16 +13570,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14036,16 +13615,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-modal",
-      "submode": "omniframe-section-select",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
       "submode": "omniframe-section-transform",
       "rule": "D01",
       "sev": "medium",
@@ -14061,16 +13630,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-transform",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14096,16 +13655,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-modal",
-      "submode": "omniframe-section-color",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
       "submode": "omniframe-section-scope",
       "rule": "D01",
       "sev": "medium",
@@ -14126,16 +13675,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-modal",
-      "submode": "omniframe-section-scope",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
       "submode": "omniframe-section-actions",
       "rule": "D01",
       "sev": "medium",
@@ -14151,16 +13690,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-modal",
-      "submode": "omniframe-section-actions",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14204,16 +13733,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "threed",
       "overlay": "voice-modal",
       "submode": "(root)",
@@ -14234,16 +13753,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "media",
       "overlay": "curve-editor",
       "submode": "(root)",
@@ -14261,16 +13770,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14304,16 +13803,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "transitions",
       "overlay": "curve-editor",
       "submode": "(root)",
@@ -14331,16 +13820,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14374,16 +13853,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "audio",
       "overlay": "curve-editor",
       "submode": "(root)",
@@ -14404,16 +13873,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "relationships",
       "overlay": "curve-editor",
       "submode": "(root)",
@@ -14431,16 +13890,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14514,16 +13963,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "curve-editor",
       "submode": "(root)",
@@ -14566,16 +14005,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
       "submode": "omniframe-section-segments",
       "rule": "D01",
       "sev": "medium",
@@ -14611,16 +14040,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14666,16 +14085,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "curve-editor",
-      "submode": "omniframe-section-select",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
       "submode": "omniframe-section-transform",
       "rule": "D01",
       "sev": "medium",
@@ -14691,16 +14100,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-transform",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14726,16 +14125,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "curve-editor",
-      "submode": "omniframe-section-color",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
       "submode": "omniframe-section-scope",
       "rule": "D01",
       "sev": "medium",
@@ -14756,16 +14145,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "curve-editor",
-      "submode": "omniframe-section-scope",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
       "submode": "omniframe-section-actions",
       "rule": "D01",
       "sev": "medium",
@@ -14781,16 +14160,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "curve-editor",
-      "submode": "omniframe-section-actions",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14834,16 +14203,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "threed",
       "overlay": "curve-editor",
       "submode": "(root)",
@@ -14864,16 +14223,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "media",
       "overlay": "compound-inspector",
       "submode": "(root)",
@@ -14891,16 +14240,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -14934,16 +14273,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "transitions",
       "overlay": "compound-inspector",
       "submode": "(root)",
@@ -14961,16 +14290,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15004,16 +14323,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "audio",
       "overlay": "compound-inspector",
       "submode": "(root)",
@@ -15034,16 +14343,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "relationships",
       "overlay": "compound-inspector",
       "submode": "(root)",
@@ -15061,16 +14360,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15144,16 +14433,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "compound-inspector",
       "submode": "(root)",
@@ -15196,16 +14475,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
       "submode": "omniframe-section-segments",
       "rule": "D01",
       "sev": "medium",
@@ -15241,16 +14510,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15296,16 +14555,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "compound-inspector",
-      "submode": "omniframe-section-select",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
       "submode": "omniframe-section-transform",
       "rule": "D01",
       "sev": "medium",
@@ -15321,16 +14570,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-transform",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15356,16 +14595,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "compound-inspector",
-      "submode": "omniframe-section-color",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
       "submode": "omniframe-section-scope",
       "rule": "D01",
       "sev": "medium",
@@ -15386,16 +14615,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "compound-inspector",
-      "submode": "omniframe-section-scope",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
       "submode": "omniframe-section-actions",
       "rule": "D01",
       "sev": "medium",
@@ -15411,16 +14630,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "compound-inspector",
-      "submode": "omniframe-section-actions",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15464,16 +14673,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "threed",
       "overlay": "compound-inspector",
       "submode": "(root)",
@@ -15494,16 +14693,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "media",
       "overlay": "voice-isolation",
       "submode": "(root)",
@@ -15521,16 +14710,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "media",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15564,16 +14743,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "text",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "transitions",
       "overlay": "voice-isolation",
       "submode": "(root)",
@@ -15591,16 +14760,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "transitions",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15634,16 +14793,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "effects",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "audio",
       "overlay": "voice-isolation",
       "submode": "(root)",
@@ -15664,16 +14813,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "audio",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "relationships",
       "overlay": "voice-isolation",
       "submode": "(root)",
@@ -15691,16 +14830,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "relationships",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15774,16 +14903,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-isolation",
       "submode": "(root)",
@@ -15826,16 +14945,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
       "submode": "omniframe-section-segments",
       "rule": "D01",
       "sev": "medium",
@@ -15871,16 +14980,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-segments",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15926,16 +15025,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-isolation",
-      "submode": "omniframe-section-select",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
       "submode": "omniframe-section-transform",
       "rule": "D01",
       "sev": "medium",
@@ -15951,16 +15040,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-transform",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -15986,16 +15065,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-isolation",
-      "submode": "omniframe-section-color",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
       "submode": "omniframe-section-scope",
       "rule": "D01",
       "sev": "medium",
@@ -16016,16 +15085,6 @@
       "viewport": "390-mobile",
       "tab": "omniframe",
       "overlay": "voice-isolation",
-      "submode": "omniframe-section-scope",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
       "submode": "omniframe-section-actions",
       "rule": "D01",
       "sev": "medium",
@@ -16041,16 +15100,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "omniframe",
-      "overlay": "voice-isolation",
-      "submode": "omniframe-section-actions",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     },
     {
       "viewport": "390-mobile",
@@ -16094,16 +15143,6 @@
     },
     {
       "viewport": "390-mobile",
-      "tab": "tracking",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
       "tab": "threed",
       "overlay": "voice-isolation",
       "submode": "(root)",
@@ -16121,16 +15160,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "threed",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "D06",
-      "sev": "medium",
-      "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
-      "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
     }
   ]
 }

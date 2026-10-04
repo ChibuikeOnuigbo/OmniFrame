@@ -184,15 +184,28 @@ function collectStrict() {
 
   // D01 over-dense section: a group holding more controls than a human can
   // scan at a glance. These are the regroup candidates.
+  const CTRL = 'button, input, select, textarea'
+  // Only controls a person actually has to scan count. Content inside a
+  // collapsed section is not on screen, so it is not a density problem.
+  const shown = (c) => c.offsetParent !== null || c.getClientRects().length
   const groups = [...document.querySelectorAll('[data-testid$="-section"], [data-testid$="-panel"], section, fieldset')]
   for (const g of groups) {
     if (!vis(g)) continue
-    // Only controls a person actually has to scan count. Content inside a
-    // collapsed section is not on screen, so it is not a density problem.
-    const n = [...g.querySelectorAll('button, input, select, textarea')]
-      .filter((c) => c.offsetParent !== null || c.getClientRects().length)
-      .length
-    if (n > 14) push('D01', 'medium', g, `${n} controls in one group -> regroup candidate`)
+    // A container built out of collapsible sub-groups is not the group a
+    // person scans -- the sub-groups are. Charging every control in a panel
+    // to the panel hides which section is actually crowded, so measure the
+    // disclosures instead. Recognised generically by the disclosure pattern:
+    // a direct child holding a role=button that reports aria-expanded.
+    const subs = [...g.children].filter((c) => c.querySelector(':scope > [role="button"][aria-expanded]'))
+    const flag = (unit, n) => { if (n > 14) push('D01', 'medium', unit, `${n} controls in one group -> regroup candidate`) }
+    if (subs.length) {
+      for (const sub of subs) flag(sub, [...sub.querySelectorAll(CTRL)].filter(shown).length)
+      // Anything the sub-groups do not cover is still the container's own.
+      const rest = [...g.querySelectorAll(CTRL)].filter(shown).filter((c) => !subs.some((s) => s.contains(c))).length
+      flag(g, rest)
+    } else {
+      flag(g, [...g.querySelectorAll(CTRL)].filter(shown).length)
+    }
   }
 
   // D02 crammed row: many sibling controls packed too tightly. Measure the
