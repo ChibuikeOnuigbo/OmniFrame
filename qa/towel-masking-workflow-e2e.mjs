@@ -11,7 +11,7 @@
  *   W2  Paint-selection brush over the towel   → fill / recolor
  *   W3  Brush ring (outline) around the towel  → fill  (fill the inside of a ring)
  *   W4  Brush over the BACKGROUND              → invert → fill (towel ends up filled)
- *   W5  Guided Rect background removal         → coordinate-seeded matte + mask layer
+ *   W5  Guided Rect background removal         → workflow matte → explicit Drawing-layer apply
  *
  * Every workflow captures evidence screenshots and OpenCV metrics.
  */
@@ -71,6 +71,10 @@ await page.waitForTimeout(900)
 // the drawing/selection overlay the user actually drags on.
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
+const fillRecolorDisclosure = page.locator('[data-testid="panel-section-mask-boundary"] > button')
+if (await fillRecolorDisclosure.getAttribute('aria-expanded') === 'false') {
+  await fillRecolorDisclosure.click()
+}
 await page.click('[data-testid="sel-type-freeform"]')
 await page.waitForTimeout(400)
 const canvas = page.locator('[data-testid="drawing-canvas"]')
@@ -266,7 +270,7 @@ ok(!!w4Fill?.fillColor, 'W4 fill applied after inversion', String(w4Fill?.fillCo
 await page.screenshot({ path: path.join(SHOTS, 'SS-105-towel-brush-invert-fill.png') })
 
 // ============================ W5: GUIDED RECT BACKGROUND REMOVAL (new feature)
-console.log('\n--- W5: Guided Rect background removal (draw box → matte → layer) ---')
+console.log('\n--- W5: Guided Rect background removal (draw box → workflow matte → explicit Drawing layer) ---')
 await resetSelection()
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
@@ -286,6 +290,10 @@ ok(w5rect?.type === 'rectangle', 'W5 rectangle drawn with the real cursor', JSON
 console.log(`   rect bounds: ${JSON.stringify(w5rect?.bounds)}`)
 
 // mark the subject hint inside the box, then run guided removal
+const guidedMatteDisclosure = page.locator('[data-testid="panel-section-mask-layer"] > button')
+if (await guidedMatteDisclosure.getAttribute('aria-expanded') === 'false') {
+  await guidedMatteDisclosure.click()
+}
 await page.click('[data-testid="guided-hint-center-btn"]')
 await page.waitForTimeout(150)
 const runBtn = page.locator('[data-testid="guided-rect-bg-removal-btn"]')
@@ -311,7 +319,7 @@ const w5 = await page.evaluate(() => {
     maskBytes: g.maskDataUrl.length,
     cutoutBytes: g.cutoutDataUrl.length,
     objectCreated: s.omniframeCharacters.some((c) => c.id === g.objectId),
-    layerHasMatte: s.paintLayers.some((l) => l.id === g.maskLayerId && !!l.maskDataUrl),
+    matteAppliedAnywhere: s.paintLayers.some((l) => l.maskDataUrl === g.maskDataUrl),
   }
 })
 
@@ -322,7 +330,8 @@ if (ok(!!w5, 'W5 guided rect removal produced a matte record')) {
   ok(w5.maskBytes > 2000, 'W5 matte PNG is non-trivial', `${w5.maskBytes} b64 chars`)
   ok(w5.cutoutBytes > 2000, 'W5 cutout PNG is non-trivial', `${w5.cutoutBytes} b64 chars`)
   ok(w5.objectCreated, 'W5 OmniFrame object created from the matte', w5.objectId)
-  ok(w5.layerHasMatte, 'W5 non-destructive mask layer attached', w5.maskLayerId)
+  ok(!w5.maskLayerId, 'W5 OmniFrame matte remains workflow-only by default')
+  ok(!w5.matteAppliedAnywhere, 'W5 matte does not affect Drawing layers before explicit conversion')
   console.log(`   timings: ${JSON.stringify(w5.timings)}`)
 }
 
@@ -332,7 +341,78 @@ const mattePrev = page.locator('[data-testid="guided-matte-preview"]')
 ok((await mattePrev.count()) > 0, 'W5 matte preview thumbnail rendered')
 const cutoutPrev = page.locator('[data-testid="guided-cutout-preview"]')
 ok((await cutoutPrev.count()) > 0, 'W5 cutout preview thumbnail rendered')
+const matteScopeNote = page.locator('[data-testid="guided-matte-export-scope-note"]')
+ok((await matteScopeNote.innerText()).includes('Editing-only matte'), 'W5 UI explains the matte is not exported yet')
+const applyMatteBtn = page.locator('[data-testid="apply-guided-matte-to-drawing-btn"]')
+ok(await applyMatteBtn.isEnabled(), 'W5 explicit Drawing-layer matte conversion is available')
 await page.screenshot({ path: path.join(SHOTS, 'SS-106-guided-rect-bg-removal.png') })
+
+await applyMatteBtn.click()
+await page.waitForTimeout(350)
+const appliedMatteState = await page.evaluate(() => {
+  const s = window.__omniframe_store.getState()
+  const matte = s.guidedMatte
+  const layer = matte ? s.paintLayers.find((item) => item.id === matte.maskLayerId) : null
+  return {
+    maskLayerId: matte?.maskLayerId,
+    layerHasExactMatte: !!layer && layer.maskDataUrl === matte?.maskDataUrl,
+  }
+})
+ok(!!appliedMatteState.maskLayerId, 'W5 matte conversion records its Drawing-layer target', appliedMatteState.maskLayerId)
+ok(appliedMatteState.layerHasExactMatte, 'W5 exact generated alpha matte is applied to the Drawing layer')
+ok(await applyMatteBtn.isDisabled(), 'W5 duplicate apply is prevented on the same active layer')
+
+// Drawing mode is allowed to apply a newly generated matte directly, since the
+// operation is already scoped to the Drawing paint layer.
+await page.locator('[data-testid="left-tab-drawing"]').click()
+await page.waitForTimeout(350)
+const drawingGuidedDisclosure = page.locator('[data-testid="panel-section-mask-layer"] > button')
+if (await drawingGuidedDisclosure.getAttribute('aria-expanded') === 'false') {
+  await drawingGuidedDisclosure.click()
+}
+ok(
+  (await page.locator('[data-testid="guided-matte-export-scope-note"]').innerText()).includes('Applied to'),
+  'W5 Drawing context explains that its matte is applied to the paint layer',
+)
+const omniObjectsBeforeDrawingRun = await page.evaluate(
+  () => window.__omniframe_store.getState().omniframeCharacters.length,
+)
+await page.locator('[data-testid="guided-rect-bg-removal-btn"]').click()
+await page.waitForTimeout(2600)
+const drawingContextMatte = await page.evaluate(() => {
+  const s = window.__omniframe_store.getState()
+  const matte = s.guidedMatte
+  const layer = matte ? s.paintLayers.find((item) => item.id === matte.maskLayerId) : null
+  return {
+    matteLayerId: matte?.maskLayerId,
+    activeLayerId: s.activePaintLayerId,
+    layerHasExactMatte: !!layer && layer.maskDataUrl === matte?.maskDataUrl,
+    objectId: matte?.objectId,
+    objectCount: s.omniframeCharacters.length,
+  }
+})
+ok(
+  drawingContextMatte.matteLayerId === drawingContextMatte.activeLayerId && drawingContextMatte.layerHasExactMatte,
+  'W5 Drawing-mode matte is applied directly to the active paint layer',
+  JSON.stringify(drawingContextMatte),
+)
+ok(
+  drawingContextMatte.objectCount === omniObjectsBeforeDrawingRun && !drawingContextMatte.objectId,
+  'W5 Drawing-mode matte does not create an OmniFrame object',
+  `${omniObjectsBeforeDrawingRun} → ${drawingContextMatte.objectCount}; objectId=${drawingContextMatte.objectId || 'none'}`,
+)
+const clearRasterMaskBtn = page.locator(
+  `[data-testid="clear-paint-layer-raster-mask-${drawingContextMatte.activeLayerId}"]`,
+)
+ok(await clearRasterMaskBtn.isVisible(), 'W5 Drawing layer exposes a clear action for its raster mask')
+await clearRasterMaskBtn.click()
+const clearedMatte = await page.evaluate(() => {
+  const s = window.__omniframe_store.getState()
+  const matte = s.guidedMatte
+  const layer = s.paintLayers.find((item) => item.id === s.activePaintLayerId)
+  return { hasRasterMask: !!layer?.maskDataUrl, matteLayerId: matte?.maskLayerId }
+})
+ok(!clearedMatte.hasRasterMask && !clearedMatte.matteLayerId, 'W5 clear action removes the applied raster mask without deleting the matte preview')
 
 // save the matte + cutout as standalone evidence files
 const mattePng = await page.evaluate(() => window.__omniframe_store.getState().guidedMatte?.maskDataUrl || '')

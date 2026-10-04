@@ -84,7 +84,7 @@ export function LeftDock() {
       <div className="w-12 shrink-0 bg-ink-900 border-r border-ink-700/80 flex flex-col items-center py-1.5 gap-1 overflow-y-auto scrollbar-none">
         {/* Category Filters: Reduces UI level across Video, 2D, 3D */}
         <div className="flex flex-col items-center gap-0.5 pb-1 mb-0.5 border-b border-ink-800 w-full px-1">
-          <div className="flex flex-col gap-0.5 w-full">
+          <div role="group" aria-label="Tool categories" data-testid="category-filters" className="flex flex-col gap-0.5 w-full">
             {(['all', 'video', '2d', '3d'] as const).map((cat) => (
               <button
                 key={cat}
@@ -99,8 +99,18 @@ export function LeftDock() {
                     ? '2D Creative & Paint Tools (Photoshop/Krita)'
                     : '3D Scene Tools (Blender)'
                 }
+                aria-label={
+                  cat === 'all'
+                    ? 'Show all tool categories'
+                    : cat === 'video'
+                    ? 'Show video tools'
+                    : cat === '2d'
+                    ? 'Show 2D tools'
+                    : 'Show 3D tools'
+                }
+                aria-pressed={activeCategory === cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`min-h-[24px] min-w-[24px] py-1 px-0.5 rounded text-[10px] font-mono font-bold uppercase transition-colors text-center ${
+                className={`min-h-[28px] min-w-[28px] py-1 px-0.5 rounded text-[10px] font-mono font-bold uppercase transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                   activeCategory === cat
                     ? 'bg-brand text-white shadow-xs'
                     : 'bg-ink-950/60 text-ink-400 hover:text-ink-200 hover:bg-ink-800'
@@ -113,7 +123,11 @@ export function LeftDock() {
         </div>
 
         {/* Primary Tool Icons */}
-        <div className="flex flex-col items-center gap-1 w-full px-1">
+        <div
+          role="group"
+          aria-label={`${activeCategory === 'all' ? 'All' : activeCategory === 'video' ? 'Video' : activeCategory === '2d' ? '2D' : '3D'} tool panels`}
+          className="flex flex-col items-center gap-1 w-full px-1"
+        >
           {filteredTabs.map((t) => {
             const Icon = t.icon
             const active = leftTab === t.id && leftOpen
@@ -196,6 +210,7 @@ export function LeftDock() {
 
       {/* Expandable Content Panel */}
       <div
+        id="left-panel"
         data-testid="left-panel"
         data-open={leftOpen}
         style={{

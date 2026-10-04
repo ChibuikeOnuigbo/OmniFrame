@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
-import type { BlenderMode, Primitive3D } from '../types'
+import type { BlenderMode, Primitive3D, ThreeMaskSelection } from '../types'
 import { evaluateCurve } from '../lib/animation/CurveEngine'
 
 export type CameraAimTarget = 'video' | 'object' | 'composite' | 'camera_view' | 'free'
@@ -59,6 +59,14 @@ export function ThreeViewer({
   const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
   const clips = useEditor((s) => s.clips)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const leftTab = useEditor((s) => s.leftTab)
+  const activeSubMode = useEditor((s) => s.activeSubMode)
+  const threeMaskMode = useEditor((s) => s.threeMaskMode)
+  const threeMaskTargetKind = useEditor((s) => s.threeMaskTargetKind)
+  const threeMaskSelection = useEditor((s) => s.threeMaskSelection)
+  const setThreeMaskSelection = useEditor((s) => s.setThreeMaskSelection)
+  const clearThreeMaskSelection = useEditor((s) => s.clearThreeMaskSelection)
+  const threeMaskToolActive = leftTab === 'threed' && activeSubMode === 'threed-mask' && threeMaskMode !== 'off'
 
   // Component UI state
   const [primitive, setPrimitive] = useState<Primitive3D>('wheel')
@@ -82,6 +90,9 @@ export function ThreeViewer({
   const targetRef = useRef(new THREE.Vector3(objectPosition.current.x * 0.4, 0.1, 0.3))
   const isPointerDownRef = useRef(false)
   const lastPointerRef = useRef({ x: 0, y: 0, button: 0 })
+  const pointerStartRef = useRef({ x: 0, y: 0, button: 0 })
+  const viewportMaskStartRef = useRef<{ x: number; y: number } | null>(null)
+  const [viewportMaskDraft, setViewportMaskDraft] = useState<ThreeMaskSelection['bounds'] | null>(null)
 
   // Active clip animation for keyframed 3D wheel/object rotation
   const activeClip = clips.find((c) => c.id === selectedClipId) || clips[0]
@@ -99,6 +110,89 @@ export function ThreeViewer({
     cam.position.y = targetRef.current.y + s.radius * Math.cos(s.phi)
     cam.position.z = targetRef.current.z + sinPhiRadius * Math.cos(s.theta)
     cam.lookAt(targetRef.current)
+  }
+
+  const projectTargetsToViewport = (targets: THREE.Object3D[]) => {
+    const camera = cameraRef.current
+    if (!camera || targets.length === 0) return null
+    camera.updateMatrixWorld(true)
+    const bounds3D = new THREE.Box3()
+    targets.forEach((target) => bounds3D.expandByObject(target))
+    if (bounds3D.isEmpty()) return null
+
+    const { min, max } = bounds3D
+    const corners = [
+      new THREE.Vector3(min.x, min.y, min.z), new THREE.Vector3(min.x, min.y, max.z),
+      new THREE.Vector3(min.x, max.y, min.z), new THREE.Vector3(min.x, max.y, max.z),
+      new THREE.Vector3(max.x, min.y, min.z), new THREE.Vector3(max.x, min.y, max.z),
+      new THREE.Vector3(max.x, max.y, min.z), new THREE.Vector3(max.x, max.y, max.z),
+    ].map((corner) => corner.project(camera))
+    const visibleCorners = corners.filter((corner) => corner.z >= -1 && corner.z <= 1)
+    const points = visibleCorners.length > 0 ? visibleCorners : corners
+    const xs = points.map((point) => Math.max(0, Math.min(1, (point.x + 1) / 2)))
+    const ys = points.map((point) => Math.max(0, Math.min(1, (1 - point.y) / 2)))
+    const x = Math.min(...xs)
+    const y = Math.min(...ys)
+    const right = Math.max(...xs)
+    const bottom = Math.max(...ys)
+    if (right - x < 0.005 || bottom - y < 0.005) return null
+    return { x, y, width: right - x, height: bottom - y }
+  }
+
+  const selectSceneMaskTarget = (clientX: number, clientY: number) => {
+    const renderer = rendererRef.current
+    const camera = cameraRef.current
+    if (!renderer || !camera) return
+
+    const rect = renderer.domElement.getBoundingClientRect()
+    if (!rect.width || !rect.height) return
+    const pointer = new THREE.Vector2(
+      ((clientX - rect.left) / rect.width) * 2 - 1,
+      -((clientY - rect.top) / rect.height) * 2 + 1,
+    )
+    const raycaster = new THREE.Raycaster()
+    raycaster.setFromCamera(pointer, camera)
+    const roots: THREE.Object3D[] = [videoPlaneMeshRef.current, objectMeshRef.current].filter(
+      (root) => root !== null,
+    )
+    const hit = raycaster.intersectObjects(roots, true).find((item) => item.object instanceof THREE.Mesh)
+    if (!hit || !(hit.object instanceof THREE.Mesh)) {
+      clearThreeMaskSelection()
+      return
+    }
+
+    const hitMesh = hit.object
+    const materials = Array.isArray(hitMesh.material) ? hitMesh.material : [hitMesh.material]
+    const pickedMaterial = materials[hit.face?.materialIndex ?? 0] || materials[0]
+    const targetObjects: THREE.Object3D[] = []
+    let targetName = hitMesh.name || `${primitive} mesh`
+
+    if (threeMaskTargetKind === 'material' && pickedMaterial) {
+      for (const root of roots) {
+        root.traverse((child) => {
+          if (!(child instanceof THREE.Mesh)) return
+          const childMaterials = Array.isArray(child.material) ? child.material : [child.material]
+          if (childMaterials.includes(pickedMaterial)) targetObjects.push(child)
+        })
+      }
+      targetName = `${pickedMaterial.name || `${hitMesh.name || primitive} material`} (${targetObjects.length} mesh${targetObjects.length === 1 ? '' : 'es'})`
+    } else {
+      targetObjects.push(hitMesh)
+    }
+
+    const bounds = projectTargetsToViewport(targetObjects)
+    if (!bounds) {
+      clearThreeMaskSelection()
+      return
+    }
+    setThreeMaskSelection({
+      id: `three-scene-mask-${Date.now()}`,
+      mode: 'scene',
+      targetKind: threeMaskTargetKind,
+      targetName,
+      targetIds: targetObjects.map((target) => target.uuid),
+      bounds,
+    })
   }
 
   // Handle Aim / Camera transitions
@@ -381,6 +475,7 @@ export function ThreeViewer({
     edgeLines.position.z = 0.002
     planeGroup.add(edgeLines)
 
+    videoMesh.name = 'video-plane'
     videoPlaneMeshRef.current = videoMesh
     scene.add(planeGroup)
   }, [sourceCanvas, videoElement, planeW, planeH])
@@ -417,6 +512,7 @@ export function ThreeViewer({
         wireframe,
       })
       const tireMesh = new THREE.Mesh(tireGeom, tireMat)
+      tireMesh.name = 'wheel-tire'
       wheelGroup.add(tireMesh)
 
       // Inner Metallic Rim
@@ -428,6 +524,7 @@ export function ThreeViewer({
         wireframe,
       })
       const rimMesh = new THREE.Mesh(rimGeom, rimMat)
+      rimMesh.name = 'wheel-rim'
       wheelGroup.add(rimMesh)
 
       // 6 Spokes
@@ -448,6 +545,7 @@ export function ThreeViewer({
         wireframe,
       })
       const hubMesh = new THREE.Mesh(hubGeom, hubMat)
+      hubMesh.name = 'wheel-hub'
       wheelGroup.add(hubMesh)
 
       wheelGroup.position.copy(objectPosition.current)
@@ -470,6 +568,7 @@ export function ThreeViewer({
       }
 
       const mesh = new THREE.Mesh(geom, mat)
+      mesh.name = `${primitive}-object`
       mesh.position.copy(objectPosition.current)
       objectMeshRef.current = mesh
       scene.add(mesh)
@@ -484,9 +583,78 @@ export function ThreeViewer({
     if (grid) grid.visible = showGrid
   }, [showGrid])
 
-  // Pointer Event Handlers for Free Orbit, Pan, and Dolly
+  const pointInViewport = (e: React.PointerEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    return {
+      x: Math.max(0, Math.min(1, (e.clientX - rect.left) / Math.max(1, rect.width))),
+      y: Math.max(0, Math.min(1, (e.clientY - rect.top) / Math.max(1, rect.height))),
+    }
+  }
+
+  const handleViewportMaskPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!threeMaskToolActive || threeMaskMode !== 'viewport' || e.button !== 0) return
+    e.preventDefault()
+    e.stopPropagation()
+    const start = pointInViewport(e)
+    viewportMaskStartRef.current = start
+    setViewportMaskDraft({ x: start.x, y: start.y, width: 0, height: 0 })
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+
+  const handleViewportMaskPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const start = viewportMaskStartRef.current
+    if (!start) return
+    e.preventDefault()
+    e.stopPropagation()
+    const end = pointInViewport(e)
+    setViewportMaskDraft({
+      x: Math.min(start.x, end.x),
+      y: Math.min(start.y, end.y),
+      width: Math.abs(end.x - start.x),
+      height: Math.abs(end.y - start.y),
+    })
+  }
+
+  const handleViewportMaskPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const start = viewportMaskStartRef.current
+    if (!start) return
+    e.preventDefault()
+    e.stopPropagation()
+    const end = pointInViewport(e)
+    const bounds = {
+      x: Math.min(start.x, end.x),
+      y: Math.min(start.y, end.y),
+      width: Math.abs(end.x - start.x),
+      height: Math.abs(end.y - start.y),
+    }
+    viewportMaskStartRef.current = null
+    setViewportMaskDraft(null)
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    } catch {}
+    if (bounds.width < 0.01 || bounds.height < 0.01) return
+    setThreeMaskSelection({
+      id: `three-viewport-mask-${Date.now()}`,
+      mode: 'viewport',
+      targetName: 'Camera-space rectangle',
+      bounds,
+    })
+  }
+
+  const handleViewportMaskPointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    viewportMaskStartRef.current = null
+    setViewportMaskDraft(null)
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    } catch {}
+  }
+
+  // Pointer Event Handlers for Free Orbit, Pan, Dolly, and scene-space selection.
   const handlePointerDown = (e: React.PointerEvent) => {
     isPointerDownRef.current = true
+    pointerStartRef.current = { x: e.clientX, y: e.clientY, button: e.button }
     lastPointerRef.current = { x: e.clientX, y: e.clientY, button: e.button }
     ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
   }
@@ -497,8 +665,11 @@ export function ThreeViewer({
     const dy = e.clientY - lastPointerRef.current.y
     lastPointerRef.current = { x: e.clientX, y: e.clientY, button: e.button }
 
-    const s = sphericalRef.current
+    if ((Math.abs(dx) > 2 || Math.abs(dy) > 2) && threeMaskSelection) {
+      clearThreeMaskSelection()
+    }
 
+    const s = sphericalRef.current
     if (e.button === 2 || e.shiftKey) {
       // Pan camera target and position together
       const cam = cameraRef.current
@@ -519,14 +690,24 @@ export function ThreeViewer({
   }
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    const dx = e.clientX - pointerStartRef.current.x
+    const dy = e.clientY - pointerStartRef.current.y
+    const shouldPick =
+      threeMaskToolActive &&
+      threeMaskMode === 'scene' &&
+      pointerStartRef.current.button === 0 &&
+      Math.hypot(dx, dy) < 4
     isPointerDownRef.current = false
     try {
       ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
     } catch {}
+    if (shouldPick) selectSceneMaskTarget(e.clientX, e.clientY)
   }
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault()
+    if (threeMaskSelection) clearThreeMaskSelection()
+    if (threeMaskToolActive && threeMaskMode === 'viewport') return
     const factor = e.deltaY < 0 ? 0.88 : 1.12
     sphericalRef.current.radius = Math.max(1.0, Math.min(35, sphericalRef.current.radius * factor))
     updateCameraPosition()
@@ -540,7 +721,13 @@ export function ThreeViewer({
       <div
         ref={containerRef}
         data-testid="three-canvas-wrapper"
-        className="w-full h-full cursor-grab active:cursor-grabbing relative"
+        className={`w-full h-full relative ${
+          threeMaskToolActive && threeMaskMode === 'viewport'
+            ? 'cursor-crosshair'
+            : threeMaskToolActive
+              ? 'cursor-cell'
+              : 'cursor-grab active:cursor-grabbing'
+        }`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -548,6 +735,52 @@ export function ThreeViewer({
         onWheel={handleWheel}
         onContextMenu={(e) => e.preventDefault()}
       />
+
+      {/* Camera-space mask capture layer. Pointer events land here first so a
+          drag never orbits the camera while a viewport selection is drawn. */}
+      {threeMaskToolActive && threeMaskMode === 'viewport' && (
+        <div
+          data-testid="three-viewport-mask-layer"
+          className="absolute inset-0 z-10 cursor-crosshair"
+          onPointerDown={handleViewportMaskPointerDown}
+          onPointerMove={handleViewportMaskPointerMove}
+          onPointerUp={handleViewportMaskPointerUp}
+          onPointerCancel={handleViewportMaskPointerCancel}
+        >
+          {viewportMaskDraft && (
+            <div
+              data-testid="three-viewport-mask-draft"
+              className="pointer-events-none absolute border-2 border-cyan-400/80 bg-cyan-400/10"
+              style={{
+                left: `${viewportMaskDraft.x * 100}%`,
+                top: `${viewportMaskDraft.y * 100}%`,
+                width: `${viewportMaskDraft.width * 100}%`,
+                height: `${viewportMaskDraft.height * 100}%`,
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Active 3D mask selection outline (scene target or camera-space) */}
+      {threeMaskToolActive && threeMaskSelection && (
+        <div
+          data-testid="three-mask-selection-outline"
+          className="pointer-events-none absolute z-10 border-2 border-dashed border-cyan-300/90 bg-cyan-300/5"
+          style={{
+            left: `${threeMaskSelection.bounds.x * 100}%`,
+            top: `${threeMaskSelection.bounds.y * 100}%`,
+            width: `${threeMaskSelection.bounds.width * 100}%`,
+            height: `${threeMaskSelection.bounds.height * 100}%`,
+          }}
+        >
+          <span className="absolute -top-5 left-0 whitespace-nowrap rounded bg-ink-950/80 px-1.5 py-0.5 font-mono text-[9px] text-cyan-200">
+            {threeMaskSelection.mode === 'viewport'
+              ? 'CAMERA MASK'
+              : `${threeMaskSelection.targetKind === 'material' ? 'MATERIAL' : 'GEOMETRY'} MASK`}
+          </span>
+        </div>
+      )}
 
       {/* Unreal / Unity Style Camera Safe Frame Perspective Overlay */}
       <div

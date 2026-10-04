@@ -101,6 +101,7 @@ export function DrawingPanel() {
   const setPaintLayerBlendMode = useEditor((s) => s.setPaintLayerBlendMode)
   const setPaintLayerBlur = useEditor((s) => s.setPaintLayerBlur)
   const setPaintLayerOpacity = useEditor((s) => s.setPaintLayerOpacity)
+  const clearPaintLayerRasterMask = useEditor((s) => s.clearPaintLayerRasterMask)
   const drawingStrokes = useEditor((s) => s.drawingStrokes)
   const clearDrawingStrokes = useEditor((s) => s.clearDrawingStrokes)
   const activeMaskId = useEditor((s) => s.activeMaskId)
@@ -267,9 +268,8 @@ export function DrawingPanel() {
                 const Icon = t.icon
                 const active = drawingTool === t.id
                 return (
-                  <Tooltip label={t.label}>
+                  <Tooltip key={t.id} label={t.label}>
                   <button
-                    key={t.id}
                     type="button"
                     data-testid={`panel-tool-${t.id}`}
                     aria-label={t.label}
@@ -296,7 +296,7 @@ export function DrawingPanel() {
 
         <PanelSection title="Selection & Masking" defaultOpen={true} testId="masking">
       {/* Unified Selection & Masking Sub-Tool */}
-      <SelectionMaskSubTool />
+      <SelectionMaskSubTool context="drawing" />
         </PanelSection>
 
         <PanelSection title="Timeline Attachment" defaultOpen={true} testId="attachment">
@@ -342,6 +342,12 @@ export function DrawingPanel() {
 
       </PanelSection>
       <PanelSection title="Colour & Frames" defaultOpen={true} testId="colour-frames">
+        <PanelSection
+          title="Frame Hold"
+          hint={`${drawingHoldFrames} ${drawingHoldFrames === 1 ? 'frame' : 'frames'}`}
+          defaultOpen={true}
+          testId="frame-hold"
+        >
       {/* Frame Attach Count Picker */}
       <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
@@ -352,7 +358,7 @@ export function DrawingPanel() {
         </div>
 
         {/* Presets */}
-        <div className="grid grid-cols-6 gap-1">
+        <div role="group" aria-label="Frame hold presets" className="grid grid-cols-2 gap-1.5">
           {[
             { f: 1, label: '1f' },
             { f: 2, label: '2f' },
@@ -365,13 +371,14 @@ export function DrawingPanel() {
               key={preset.label}
               type="button"
               data-testid={`attach-preset-${preset.label.toLowerCase()}`}
+              aria-pressed={drawingHoldFrames === preset.f}
               onClick={() => {
                 setDrawingHoldFrames(preset.f)
                 if (drawingScope.type === 'frame') {
                   setDrawingScope({ ...drawingScope, holdFrames: preset.f })
                 }
               }}
-              className={`py-1 rounded text-[10px] font-mono font-medium border text-center transition-colors ${
+              className={`min-h-8 rounded text-[11px] font-mono font-medium border text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 drawingHoldFrames === preset.f
                   ? 'bg-brand text-white border-brand shadow-xs'
                   : 'bg-ink-950 border-ink-800 text-ink-400 hover:text-white hover:bg-ink-850'
@@ -395,7 +402,7 @@ export function DrawingPanel() {
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
               }}
               aria-label="Decrease frames to attach"
-              className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
+              className="grid h-7 w-7 place-items-center rounded bg-ink-800 text-ink-200 font-bold hover:bg-ink-750 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               -
             </button>
@@ -411,7 +418,7 @@ export function DrawingPanel() {
                 setDrawingHoldFrames(val)
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: val })
               }}
-              className="h-6 w-12 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[10px] font-mono text-center text-ink-100"
+              className="h-7 w-12 bg-ink-950 border border-ink-700 rounded px-1 py-0.5 text-[11px] font-mono text-center text-ink-100"
             />
             <button
               type="button"
@@ -422,14 +429,16 @@ export function DrawingPanel() {
                 if (drawingScope.type === 'frame') setDrawingScope({ ...drawingScope, holdFrames: next })
               }}
               aria-label="Increase frames to attach"
-              className="w-6 h-6 rounded bg-ink-800 hover:bg-ink-750 text-ink-200 flex items-center justify-center font-bold"
+              className="grid h-7 w-7 place-items-center rounded bg-ink-800 text-ink-200 font-bold hover:bg-ink-750 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               +
             </button>
           </div>
         </div>
       </div>
+        </PanelSection>
 
+        <PanelSection title="Drawing Colour" defaultOpen={true} testId="drawing-colour">
       {/* Color Selection */}
       <div>
         <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider mb-1.5">Color</div>
@@ -439,8 +448,11 @@ export function DrawingPanel() {
               key={hex}
               type="button"
               data-testid={`panel-color-${hex.replace('#', '')}`}
+              aria-label={`Set drawing colour to ${hex}`}
+              aria-pressed={drawingColor === hex}
+              title={`Drawing colour ${hex}`}
               onClick={() => setDrawingColor(hex)}
-              className={`w-6 h-6 rounded-full border transition-transform ${
+              className={`h-7 w-7 rounded-full border transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 drawingColor === hex ? 'border-white scale-110 shadow-sm' : 'border-ink-700 hover:scale-105'
               }`}
               style={{ backgroundColor: hex }}
@@ -451,11 +463,11 @@ export function DrawingPanel() {
             aria-label="Drawing colour"
             value={drawingColor}
             onChange={(e) => setDrawingColor(e.target.value)}
-            className="w-6 h-6 rounded-full border border-ink-700 cursor-pointer bg-transparent p-0 overflow-hidden"
+            className="h-7 w-7 rounded-full border border-ink-700 cursor-pointer bg-transparent p-0 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           />
         </div>
       </div>
-
+        </PanelSection>
       </PanelSection>
       <PanelSection title="Tool Parameters" defaultOpen={true} testId="tool-params">
       {/* Tool Parameters */}
@@ -762,11 +774,20 @@ export function DrawingPanel() {
                       : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850'
                   }`}
                 >
-                  <div className="flex items-center gap-1.5 truncate">
-                    <span className="truncate">{layer.name}</span>
+                  <div className="flex min-w-0 flex-1 items-center gap-1.5 truncate">
+                    <span className="min-w-0 flex-1 truncate">{layer.name}</span>
                     {layer.transparencyMask && (
-                      <span className="text-[9px] px-1 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono">
+                      <span className="shrink-0 text-[9px] px-1 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono">
                         +Mask
+                      </span>
+                    )}
+                    {layer.maskDataUrl && (
+                      <span
+                        data-testid={`paint-layer-raster-mask-${layer.id}`}
+                        title="Raster Drawing mask applied to this paint layer"
+                        className="shrink-0 text-[9px] px-1 py-0.2 rounded bg-cyan-500/15 text-cyan-200 font-mono"
+                      >
+                        Raster Mask
                       </span>
                     )}
                   </div>
@@ -794,6 +815,19 @@ export function DrawingPanel() {
                       {layer.visible ? <Eye size={13} /> : <EyeOff size={13} className="text-ink-600" />}
                     </button>
                     </Tooltip>
+                    {layer.maskDataUrl && (
+                      <Tooltip label={`Remove raster mask from ${layer.name}`}>
+                        <button
+                          type="button"
+                          data-testid={`clear-paint-layer-raster-mask-${layer.id}`}
+                          aria-label={`Clear raster mask from ${layer.name}`}
+                          onClick={() => clearPaintLayerRasterMask(layer.id)}
+                          className="p-1 rounded text-cyan-300 hover:text-red-300 hover:bg-ink-750 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                        >
+                          <Trash2 size={11} />
+                        </button>
+                      </Tooltip>
+                    )}
                     <button
                       type="button"
                       data-testid={`clear-layer-strokes-${layer.id}`}
@@ -939,17 +973,24 @@ export function DrawingPanel() {
 
       {/* Active Layer Properties: Blend Mode & Blur */}
       {activeLayer && (
-        <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2.5">
+        <div className="p-2.5 rounded-lg border border-ink-800 bg-ink-900/80 flex flex-col gap-2.5">
           <div className="flex items-center gap-1 text-[11px] font-medium text-ink-300">
             <Sliders size={12} className="text-brand-400" />
-            <span>Layer Blend & Blur ({activeLayer.name})</span>
+            <span>Drawing Layer Properties ({activeLayer.name})</span>
           </div>
+          <p
+            role="note"
+            data-testid="drawing-layer-compositing-note"
+            className="text-[10px] leading-relaxed text-ink-400"
+          >
+            Blend mode, blur, opacity, and an applied mask affect this Drawing layer only. Its strokes and mask are composited into preview and final export.
+          </p>
 
           <div>
-            <div className="text-[10px] text-ink-400 uppercase font-mono mb-1">Blend Mode</div>
+            <div className="text-[10px] text-ink-400 uppercase font-mono mb-1">Paint Layer Blend Mode</div>
             <select
               data-testid="layer-blend-mode-select"
-              aria-label="Layer blend mode"
+              aria-label="Drawing paint layer blend mode"
               value={activeLayer.blendMode || 'source-over'}
               onChange={(e) => setPaintLayerBlendMode(activeLayer.id, e.target.value as GlobalCompositeOperation)}
               className="w-full bg-ink-800 text-ink-200 border border-ink-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-brand"

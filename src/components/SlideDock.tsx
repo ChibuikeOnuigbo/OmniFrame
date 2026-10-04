@@ -111,9 +111,9 @@ export function SlideDock({
         id={contentId}
         aria-hidden={!open}
         className={[
-          'flex items-center gap-1 overflow-hidden transition-all duration-200 ease-out',
+          'flex w-max min-w-0 items-center gap-1 overflow-hidden transition-all duration-200 ease-out',
           open
-            ? 'max-w-[720px] max-h-40 translate-x-0 translate-y-0 opacity-100'
+            ? 'max-w-[720px] max-sm:max-w-[calc(100vw_-_3rem)] max-h-40 translate-x-0 translate-y-0 opacity-100'
             : `max-w-0 max-h-0 opacity-0 ${TRANSFORM[direction]}`,
         ].join(' ')}
         style={{ pointerEvents: open ? 'auto' : 'none' }}

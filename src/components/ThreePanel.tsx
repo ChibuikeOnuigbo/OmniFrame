@@ -20,12 +20,25 @@ import { useEditor } from '../store'
 
 export function ThreePanel() {
   const setWorkspacePreset = useEditor((s) => s.setWorkspacePreset)
+  const setIs3DMode = useEditor((s) => s.setIs3DMode)
+  const setLeftTab = useEditor((s) => s.setLeftTab)
+  const setDrawingEnabled = useEditor((s) => s.setDrawingEnabled)
+  const setDrawingTool = useEditor((s) => s.setDrawingTool)
   const textures = useEditor((s) => s.textures)
   const materials = useEditor((s) => s.materials)
   const shareTexture = useEditor((s) => s.shareTexture)
   const makeTextureUnique = useEditor((s) => s.makeTextureUnique)
   const activeSubMode = useEditor((s) => s.activeSubMode)
   const openSubMode = useEditor((s) => s.openSubMode)
+  const threeMaskMode = useEditor((s) => s.threeMaskMode)
+  const setThreeMaskMode = useEditor((s) => s.setThreeMaskMode)
+  const threeMaskTargetKind = useEditor((s) => s.threeMaskTargetKind)
+  const setThreeMaskTargetKind = useEditor((s) => s.setThreeMaskTargetKind)
+  const threeMaskSelection = useEditor((s) => s.threeMaskSelection)
+  const setThreeMaskSelection = useEditor((s) => s.setThreeMaskSelection)
+  const clearThreeMaskSelection = useEditor((s) => s.clearThreeMaskSelection)
+  const useThreeMaskSelectionInDrawing = useEditor((s) => s.useThreeMaskSelectionInDrawing)
+  const setActiveBlenderMode = useEditor((s) => s.setActiveBlenderMode)
 
   const [cameraPaintActive, setCameraPaintActive] = useState(false)
   const [targetMatId, setTargetMatId] = useState<string>(materials[0]?.id || '')
@@ -59,7 +72,7 @@ export function ThreePanel() {
             <span className="text-[10px] font-semibold uppercase text-ink-400 tracking-wider">
               Focused 3D Channels
             </span>
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-3 gap-1.5">
               <button
                 type="button"
                 data-testid="threed-submode-materials-btn"
@@ -84,6 +97,24 @@ export function ThreePanel() {
                   <div className="text-[9px] text-ink-400">Surface Stencils</div>
                 </div>
                 <ChevronRight size={13} className="text-ink-400" />
+              </button>
+              <button
+                type="button"
+                data-testid="threed-submode-mask-btn"
+                aria-label="Open 3D mask and selection tools"
+                onClick={() => {
+                  setThreeMaskMode('scene')
+                  setThreeMaskSelection(null)
+                  // The texturing drawer overlays the viewport; the mask tool
+                  // needs an unobstructed canvas for picking and dragging.
+                  setActiveBlenderMode('object')
+                  openSubMode('threed', 'threed-mask', '3D Mask & Selection', 'Layers')
+                }}
+                className="flex min-h-[74px] flex-col items-center justify-center gap-1 rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-2 text-center transition-colors hover:border-cyan-400/60 hover:bg-cyan-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              >
+                <Layers size={17} className="text-cyan-300" aria-hidden="true" />
+                <span className="font-semibold text-[11px] text-ink-100">Mask</span>
+                <span className="text-[9px] leading-tight text-ink-400">Scene + camera</span>
               </button>
             </div>
           </div>
@@ -180,6 +211,168 @@ export function ThreePanel() {
           </p>
         </div>
       )}
+
+      {activeSubMode === 'threed-mask' && (
+        <section
+          aria-labelledby="threed-mask-subtool-heading"
+          data-testid="threed-mask-subtool"
+          className="rounded-lg border border-cyan-500/30 bg-ink-950/50 p-2.5 space-y-2"
+        >
+          <div>
+            <h3 id="threed-mask-subtool-heading" className="text-[11px] font-semibold uppercase tracking-wider text-cyan-200">
+              3D Mask & Selection
+            </h3>
+            <p className="mt-1 text-[10px] leading-relaxed text-ink-400">
+              Choose a scene target or draw a camera-space selection. Both are editing selections, not 3D texture edits.
+            </p>
+          </div>
+
+          <div role="group" aria-label="3D mask selection mode" className="grid grid-cols-3 gap-1">
+            <button
+              type="button"
+              data-testid="three-mask-mode-scene"
+              aria-pressed={threeMaskMode === 'scene'}
+              onClick={() => {
+                setThreeMaskMode('scene')
+                clearThreeMaskSelection()
+              }}
+              className={`min-h-8 rounded border px-1 py-1 text-[10px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 ${threeMaskMode === 'scene' ? 'border-cyan-400 bg-cyan-500/20 text-cyan-100' : 'border-ink-700 bg-ink-900 text-ink-300 hover:bg-ink-800'}`}
+            >
+              Scene target
+            </button>
+            <button
+              type="button"
+              data-testid="three-mask-mode-viewport"
+              aria-pressed={threeMaskMode === 'viewport'}
+              onClick={() => {
+                setThreeMaskMode('viewport')
+                clearThreeMaskSelection()
+              }}
+              className={`min-h-8 rounded border px-1 py-1 text-[10px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 ${threeMaskMode === 'viewport' ? 'border-cyan-400 bg-cyan-500/20 text-cyan-100' : 'border-ink-700 bg-ink-900 text-ink-300 hover:bg-ink-800'}`}
+            >
+              Camera-space
+            </button>
+            <button
+              type="button"
+              data-testid="three-mask-mode-off"
+              aria-pressed={threeMaskMode === 'off'}
+              onClick={() => setThreeMaskMode('off')}
+              className={`min-h-8 rounded border px-1 py-1 text-[10px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 ${threeMaskMode === 'off' ? 'border-ink-500 bg-ink-800 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:bg-ink-800'}`}
+            >
+              Off
+            </button>
+          </div>
+
+          {threeMaskMode === 'scene' && (
+            <>
+              <div role="group" aria-label="Scene mask target type" className="grid grid-cols-2 gap-1">
+                <button
+                  type="button"
+                  data-testid="three-mask-target-geometry"
+                  aria-pressed={threeMaskTargetKind === 'geometry'}
+                  onClick={() => {
+                    setThreeMaskTargetKind('geometry')
+                    clearThreeMaskSelection()
+                  }}
+                  className={`min-h-8 rounded border px-2 py-1 text-[10px] transition-colors ${threeMaskTargetKind === 'geometry' ? 'border-brand/60 bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:bg-ink-800'}`}
+                >
+                  Geometry / mesh
+                </button>
+                <button
+                  type="button"
+                  data-testid="three-mask-target-material"
+                  aria-pressed={threeMaskTargetKind === 'material'}
+                  onClick={() => {
+                    setThreeMaskTargetKind('material')
+                    clearThreeMaskSelection()
+                  }}
+                  className={`min-h-8 rounded border px-2 py-1 text-[10px] transition-colors ${threeMaskTargetKind === 'material' ? 'border-brand/60 bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:bg-ink-800'}`}
+                >
+                  Material / texture
+                </button>
+              </div>
+              <p className="text-[10px] leading-relaxed text-ink-400">
+                Click a visible mesh in the viewport. Geometry selects the hit mesh; Material selects visible meshes sharing its material.
+              </p>
+            </>
+          )}
+
+          {threeMaskMode === 'viewport' && (
+            <p className="text-[10px] leading-relaxed text-ink-400">
+              Drag a rectangle over the current camera view. Drawing transfer uses that 2D screen-space rectangle, not a 3D surface projection.
+            </p>
+          )}
+
+          {threeMaskSelection && (
+            <div
+              data-testid="three-mask-selection-status"
+              className="flex items-start justify-between gap-2 rounded border border-cyan-500/20 bg-cyan-500/5 px-2 py-1.5 text-[10px]"
+            >
+              <div className="min-w-0">
+                <div className="font-semibold text-cyan-100">
+                  {threeMaskSelection.mode === 'viewport'
+                    ? 'Camera-space selection'
+                    : `${threeMaskSelection.targetKind === 'material' ? 'Material' : 'Geometry'} target`}
+                </div>
+                <div className="truncate text-ink-300">{threeMaskSelection.targetName}</div>
+                <div className="text-ink-500">
+                  Bounds {Math.round(threeMaskSelection.bounds.x * 100)}%, {Math.round(threeMaskSelection.bounds.y * 100)}% · {Math.round(threeMaskSelection.bounds.width * 100)}% × {Math.round(threeMaskSelection.bounds.height * 100)}%
+                </div>
+              </div>
+              <button
+                type="button"
+                data-testid="clear-three-mask-selection"
+                aria-label="Clear 3D mask selection"
+                onClick={clearThreeMaskSelection}
+                className="shrink-0 rounded px-1.5 py-1 text-ink-400 hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              >
+                Clear
+              </button>
+            </div>
+          )}
+
+          <p data-testid="threed-mask-transfer-note" className="text-[10px] leading-relaxed text-cyan-100/80">
+            The selection does not change a 3D material or export. Transfer its projected bounds to Drawing, then use To Drawing Mask to clip Drawing-layer strokes.
+          </p>
+          <button
+            type="button"
+            data-testid="three-mask-to-drawing-selection"
+            disabled={!threeMaskSelection}
+            onClick={useThreeMaskSelectionInDrawing}
+            className="min-h-8 w-full rounded border border-cyan-500/40 bg-cyan-500/10 px-2 py-1.5 text-[10px] font-semibold text-cyan-100 transition-colors hover:bg-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Use projected bounds in Drawing
+          </button>
+        </section>
+      )}
+
+      <section
+        aria-labelledby="threed-mask-export-heading"
+        data-testid="threed-mask-export-note"
+        className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 p-2.5 space-y-2"
+      >
+        <div id="threed-mask-export-heading" className="text-[10px] font-semibold uppercase tracking-wider text-cyan-200">
+          Mask & export scope
+        </div>
+        <p className="text-[11px] leading-relaxed text-ink-300">
+          3D materials and camera work stay in the scene context. A mask enters the final video only after it is applied to a Drawing paint layer.
+        </p>
+        <button
+          type="button"
+          data-testid="open-drawing-mask-tools"
+          onClick={() => {
+            setThreeMaskMode('off')
+            setIs3DMode(false)
+            setDrawingEnabled(true)
+            setDrawingTool('select-rect')
+            setLeftTab('drawing')
+          }}
+          className="flex min-h-8 w-full items-center justify-center gap-1.5 rounded-md border border-cyan-500/30 bg-cyan-500/10 px-2 text-[11px] font-medium text-cyan-100 transition-colors hover:bg-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+        >
+          <Paintbrush size={13} aria-hidden="true" />
+          Open Drawing Mask Tools
+        </button>
+      </section>
 
       {/* Camera Controls Guide */}
       {(!activeSubMode || activeSubMode === 'threed-overview') && (

@@ -302,7 +302,11 @@ export function GraphEditor() {
       className="flex flex-col h-full w-full bg-ink-950 border-t border-ink-800 select-none overflow-hidden"
     >
       {/* Top Header Controls Bar */}
-      <div className="flex items-center justify-between px-3 py-1.5 border-b border-ink-800/80 bg-ink-900/95 text-xs text-ink-200">
+      <section
+        aria-label="Graph editor toolbar"
+        data-testid="graph-editor-toolbar"
+        className="flex items-center justify-between px-3 py-1.5 border-b border-ink-800/80 bg-ink-900/95 text-xs text-ink-200"
+      >
         <div className="flex items-center gap-2 flex-wrap">
           {/* Mode Switcher: Value Graph vs Speed Graph */}
           <div className="flex items-center bg-ink-950 p-0.5 rounded border border-ink-800">
@@ -310,7 +314,8 @@ export function GraphEditor() {
               type="button"
               data-testid="graph-mode-value"
               onClick={() => setGraphMode('value')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+              aria-pressed={graphMode === 'value'}
+              className={`min-h-7 rounded px-2 py-0.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 graphMode === 'value'
                   ? 'bg-brand text-white shadow-xs'
                   : 'text-ink-400 hover:text-ink-200'
@@ -322,7 +327,8 @@ export function GraphEditor() {
               type="button"
               data-testid="graph-mode-speed"
               onClick={() => setGraphMode('speed')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+              aria-pressed={graphMode === 'speed'}
+              className={`min-h-7 rounded px-2 py-0.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 graphMode === 'speed'
                   ? 'bg-amber-500 text-ink-950 font-semibold shadow-xs'
                   : 'text-ink-400 hover:text-ink-200'
@@ -338,7 +344,7 @@ export function GraphEditor() {
             aria-label="Animatable channel"
             value={activeCurve?.id || ''}
             onChange={(e) => setActivePropId(e.target.value)}
-            className="bg-ink-800 border border-ink-700 rounded px-2 py-1 text-xs text-ink-100 outline-none focus:border-brand"
+            className="min-h-8 rounded border border-ink-700 bg-ink-800 px-2 py-1 text-xs text-ink-100 outline-none focus:border-brand focus-visible:ring-2 focus-visible:ring-brand"
           >
             {Object.values(curves).map((c) => (
               <option key={c.id} value={c.id}>
@@ -354,7 +360,7 @@ export function GraphEditor() {
               data-testid="graph-nav-prev"
               title="Previous Keyframe"
               onClick={() => handleNavKeyframe('prev')}
-              className="p-1 rounded hover:bg-ink-800 text-ink-400 hover:text-white"
+              className="flex min-h-8 min-w-8 items-center justify-center rounded text-ink-400 hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <ChevronLeft size={13} />
             </button>
@@ -365,7 +371,7 @@ export function GraphEditor() {
               aria-pressed={isKeyAtPlayhead}
               title={isKeyAtPlayhead ? 'Remove Keyframe at Playhead' : 'Add Keyframe at Playhead'}
               onClick={handleToggleKeyframeAtPlayhead}
-              className={`p-1 rounded transition-colors ${
+              className={`flex min-h-8 min-w-8 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 isKeyAtPlayhead ? 'text-brand-400' : 'text-ink-500 hover:text-ink-200'
               }`}
             >
@@ -377,7 +383,7 @@ export function GraphEditor() {
               data-testid="graph-nav-next"
               title="Next Keyframe"
               onClick={() => handleNavKeyframe('next')}
-              className="p-1 rounded hover:bg-ink-800 text-ink-400 hover:text-white"
+              className="flex min-h-8 min-w-8 items-center justify-center rounded text-ink-400 hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <ChevronRight size={13} />
             </button>
@@ -389,7 +395,7 @@ export function GraphEditor() {
             data-testid="curve-fit-btn"
             title="Fit All Curves into View"
             onClick={handleFit}
-            className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-ink-700 text-ink-300 text-[11px] font-medium transition-colors"
+            className="flex min-h-8 items-center gap-1 rounded bg-ink-800 px-2 py-1 text-[11px] font-medium text-ink-300 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <Maximize2 size={12} />
             <span>Fit View</span>
@@ -402,16 +408,16 @@ export function GraphEditor() {
           data-testid="close-graph-editor-btn"
           title="Close Graph Editor"
           onClick={() => setGraphEditorOpen(false)}
-          className="p-1.5 rounded hover:bg-ink-800 text-ink-400 hover:text-white"
+          className="flex min-h-8 min-w-8 items-center justify-center rounded text-ink-400 hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <X size={15} />
         </button>
-      </div>
+      </section>
 
       {/* Main Workspace (Sidebar Channels + SVG Canvas Area) */}
       <div className="flex-1 flex min-h-0 relative">
         {/* Left Channel List Sidebar */}
-        <div tabIndex={0} aria-label="Animatable channels, scrollable" className="w-44 border-r border-ink-800/80 bg-ink-900/60 p-2 overflow-y-auto space-y-1 shrink-0 text-xs">
+        <section aria-label="Animatable channels" data-testid="graph-editor-channels" tabIndex={0} className="w-44 border-r border-ink-800/80 bg-ink-900/60 p-2 overflow-y-auto space-y-1 shrink-0 text-xs">
           <div className="text-[10px] uppercase font-semibold text-ink-400 px-1 py-0.5">
             Animatable Channels
           </div>
@@ -424,7 +430,8 @@ export function GraphEditor() {
                 type="button"
                 data-testid={`channel-item-${curve.id}`}
                 onClick={() => setActivePropId(curve.id)}
-                className={`w-full flex items-center justify-between px-2 py-1 rounded text-left transition-colors ${
+                aria-pressed={isActive}
+                className={`min-h-8 w-full flex items-center justify-between rounded px-2 py-1 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
                   isActive
                     ? 'bg-ink-800 text-white font-medium shadow-xs'
                     : 'text-ink-400 hover:bg-ink-800/50 hover:text-ink-200'
@@ -443,7 +450,7 @@ export function GraphEditor() {
               </button>
             )
           })}
-        </div>
+        </section>
 
         {/* SVG Curve Canvas */}
         <div className="flex-1 min-w-0 min-h-0 relative bg-ink-950 overflow-hidden">
@@ -611,7 +618,11 @@ export function GraphEditor() {
           </svg>
 
           {/* Current Keyframe Info & Easing Bar */}
-          <div className="absolute bottom-2 left-3 right-3 flex max-h-[calc(100%-1rem)] flex-wrap items-center justify-between gap-2 overflow-y-auto rounded-lg border border-ink-800/90 bg-ink-900/90 p-1.5 text-xs backdrop-blur-md">
+          <section
+            aria-label="Keyframe editing controls"
+            data-testid="graph-editor-keyframe-controls"
+            className="absolute bottom-2 left-3 right-3 flex max-h-[calc(100%-1rem)] flex-wrap items-center justify-between gap-2 overflow-y-auto rounded-lg border border-ink-800/90 bg-ink-900/90 p-1.5 text-xs backdrop-blur-md"
+          >
             {selectedKeyframe ? (
               <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none w-full">
                 <span className="font-semibold text-ink-200 shrink-0">
@@ -634,7 +645,7 @@ export function GraphEditor() {
                 </button>
 
                 {/* Tangent Handle Modes */}
-                <div className="flex items-center gap-0.5 bg-ink-950 px-1 py-0.5 rounded border border-ink-800 shrink-0">
+                <section aria-label="Tangent handle mode" className="flex items-center gap-0.5 rounded border border-ink-800 bg-ink-950 px-1 py-0.5 shrink-0">
                   {(['free', 'aligned', 'mirrored', 'auto'] as const).map((m) => (
                     <button
                       key={m}
@@ -645,7 +656,8 @@ export function GraphEditor() {
                         if (!activeClip || !activeCurve) return
                         updateClipKeyframe(activeClip.id, activeCurve.id, selectedKeyframe.id, { handleMode: m })
                       }}
-                      className={`px-1.5 py-0.5 rounded text-[9px] uppercase font-mono font-medium transition-colors ${
+                      aria-pressed={(selectedKeyframe.handleMode || 'aligned') === m}
+                      className={`min-h-7 rounded px-1.5 py-0.5 text-[9px] uppercase font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                         (selectedKeyframe.handleMode || 'aligned') === m
                           ? 'bg-brand text-white font-semibold'
                           : 'text-ink-400 hover:text-white hover:bg-ink-800'
@@ -654,10 +666,10 @@ export function GraphEditor() {
                       {m}
                     </button>
                   ))}
-                </div>
+                </section>
 
                 {/* Easing Preset Selectors */}
-                <div className="flex items-center gap-1 shrink-0">
+                <section aria-label="Easing presets" className="flex items-center gap-1 shrink-0">
                   {EASING_PRESETS.map((p) => (
                     <button
                       key={p.id}
@@ -684,7 +696,8 @@ export function GraphEditor() {
                           ),
                         }))
                       }}
-                      className={`px-2 py-0.5 rounded text-[10px] font-medium transition-colors ${
+                      aria-pressed={selectedKeyframe.interpolation === p.id}
+                      className={`min-h-7 rounded px-2 py-0.5 text-[10px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                         selectedKeyframe.interpolation === p.id
                           ? 'bg-brand text-white font-semibold shadow-xs'
                           : 'bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white'
@@ -693,7 +706,7 @@ export function GraphEditor() {
                       {p.label}
                     </button>
                   ))}
-                </div>
+                </section>
 
                 {/* Extrapolation Mode Dropdown */}
                 <div className="flex items-center gap-1 shrink-0 ml-auto">
@@ -710,7 +723,8 @@ export function GraphEditor() {
                         e.target.value as ExtrapolationMode
                       )
                     }}
-                    className="bg-ink-800 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] text-ink-100 outline-none"
+                    aria-label="Curve extrapolation mode"
+                    className="min-h-8 rounded border border-ink-700 bg-ink-800 px-1.5 py-0.5 text-[10px] text-ink-100 outline-none focus-visible:ring-2 focus-visible:ring-brand"
                   >
                     <option value="constant">Hold (Constant)</option>
                     <option value="linear">Linear Extrapolation</option>
@@ -724,7 +738,7 @@ export function GraphEditor() {
                 Click a keyframe node or double-click curve to add keyframes. Drag handles to reshape Bezier tangents.
               </div>
             )}
-          </div>
+          </section>
         </div>
       </div>
     </div>

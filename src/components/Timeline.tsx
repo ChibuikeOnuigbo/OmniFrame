@@ -1615,42 +1615,54 @@ export function Timeline() {
 
       {/* transport + tools + zoom */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
-        {/* transport */}
-        <div className="flex items-center gap-1">
-          <IconButton title="Go to start (Home)" onClick={() => setPlayhead(0)}>
-            <SkipBack size={16} />
-          </IconButton>
-          <IconButton title={playing ? 'Pause (Space)' : 'Play (Space)'} onClick={togglePlay}>
-            {playing ? <Pause size={18} /> : <Play size={18} />}
-          </IconButton>
-          <IconButton title="Go to end (End)" onClick={() => setPlayhead(duration)}>
-            <SkipForward size={16} />
-          </IconButton>
-        </div>
-        <div className="px-2 font-mono text-sm tabular-nums whitespace-nowrap">
-          <LiveTimecode />
-          <span className="text-ink-500"> / {formatTimecode(duration)}</span>
-        </div>
-        <button
-          ref={speedButtonRef}
-          type="button"
-          data-testid="speed-menu-button"
-          title="Playback speed"
-          aria-expanded={speedMenuOpen}
-          onClick={() => {
-            setToolMenuOpen(false)
-            setSpeedMenuOpen((open) => !open)
-          }}
-          className="flex h-8 min-w-[66px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
+        {/* Playback controls: transport, timecode and speed stay together. */}
+        <div
+          role="group"
+          aria-label="Playback transport"
+          data-testid="timeline-transport-group"
+          className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 px-1"
         >
-          <Gauge size={15} />
-          <span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span>
-          <ChevronDown size={12} />
-        </button>
+          <div className="flex items-center gap-0.5" role="group" aria-label="Playback navigation">
+            <IconButton title="Go to start (Home)" onClick={() => setPlayhead(0)}>
+              <SkipBack size={16} />
+            </IconButton>
+            <IconButton title={playing ? 'Pause (Space)' : 'Play (Space)'} onClick={togglePlay}>
+              {playing ? <Pause size={18} /> : <Play size={18} />}
+            </IconButton>
+            <IconButton title="Go to end (End)" onClick={() => setPlayhead(duration)}>
+              <SkipForward size={16} />
+            </IconButton>
+          </div>
+          <div
+            aria-label="Current playhead time and sequence duration"
+            className="px-1 font-mono text-xs sm:text-sm tabular-nums whitespace-nowrap"
+          >
+            <LiveTimecode />
+            <span className="hidden text-ink-500 sm:inline"> / {formatTimecode(duration)}</span>
+          </div>
+          <button
+            ref={speedButtonRef}
+            type="button"
+            data-testid="speed-menu-button"
+            title="Playback speed"
+            aria-label="Playback speed"
+            aria-expanded={speedMenuOpen}
+            onClick={() => {
+              setToolMenuOpen(false)
+              setSpeedMenuOpen((open) => !open)
+            }}
+            className="flex h-8 min-w-[62px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
+          >
+            <Gauge size={15} />
+            <span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span>
+            <ChevronDown size={12} />
+          </button>
+        </div>
 
         <div className="w-px h-6 bg-ink-700" />
 
         {/* edit tools */}
+        <div role="group" aria-label="Timeline edit tools" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 px-1">
         <button
           type="button"
           data-testid="timeline-split-btn"
@@ -1676,10 +1688,12 @@ export function Timeline() {
           {tool === 'select' ? <MousePointer2 size={15} /> : <Slash size={15} />}
           <ChevronDown size={12} />
         </button>
+        </div>
 
         <div className="w-px h-6 bg-ink-700" />
 
         {/* Universal tools: target tracks, then close or hand-pick gaps. */}
+        <div role="group" aria-label="Track targeting and gap tools" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 px-1">
         <TrackTargetMenu />
 
         <button
@@ -1702,9 +1716,10 @@ export function Timeline() {
           <Trash2 size={15} />
           <span className="hidden lg:inline">Select Gaps</span>
         </button>
+        </div>
 
-        {/* marker button */}
-
+        {/* Marker placement */}
+        <div role="group" aria-label="Timeline markers" className="flex shrink-0 items-center rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         <button
           type="button"
           data-testid="add-marker-btn"
@@ -1715,12 +1730,17 @@ export function Timeline() {
         >
           <Bookmark size={15} />
         </button>
+        </div>
 
         <div className="flex-1 min-w-[12px]" />
 
         {/* Audio VU Meter & Master Volume */}
+        <div role="group" aria-label="Master audio level" className="flex shrink-0 items-center rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         <AudioMeter />
+        </div>
 
+        {/* View and snapping controls */}
+        <div role="group" aria-label="Timeline zoom and snapping" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         {/* zoom group */}
         <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-md border border-ink-700 bg-ink-800">
           <IconButton title="Zoom out" onClick={() => zoomBy(0.8)} className="rounded-none border-r border-ink-700">
@@ -1789,6 +1809,7 @@ export function Timeline() {
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
           {px.toFixed(0)} px/s{frameMode ? ' · frame' : ''}
         </span>
+        </div>
       </div>
 
       {toolMenuOpen && (

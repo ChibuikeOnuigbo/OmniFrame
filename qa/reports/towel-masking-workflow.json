@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T23:47:35.340Z",
+  "generatedAt": "2026-10-04T16:20:37.396Z",
   "canvas": {
     "w": 771,
     "h": 434
@@ -17,7 +17,7 @@
     "W4-brush-invert",
     "W5-guided-rect-bg-removal"
   ],
-  "passed": 28,
+  "passed": 39,
   "failed": 0,
   "pageErrors": [],
   "checks": [
@@ -139,12 +139,17 @@
     {
       "name": "W5 OmniFrame object created from the matte",
       "ok": true,
-      "detail": "obj_guided_1790984852590"
+      "detail": "obj_guided_1791130829236"
     },
     {
-      "name": "W5 non-destructive mask layer attached",
+      "name": "W5 OmniFrame matte remains workflow-only by default",
       "ok": true,
-      "detail": "default-paint-layer"
+      "detail": ""
+    },
+    {
+      "name": "W5 matte does not affect Drawing layers before explicit conversion",
+      "ok": true,
+      "detail": ""
     },
     {
       "name": "W5 status readout rendered in the panel",
@@ -158,6 +163,56 @@
     },
     {
       "name": "W5 cutout preview thumbnail rendered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 UI explains the matte is not exported yet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 explicit Drawing-layer matte conversion is available",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 matte conversion records its Drawing-layer target",
+      "ok": true,
+      "detail": "default-paint-layer"
+    },
+    {
+      "name": "W5 exact generated alpha matte is applied to the Drawing layer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 duplicate apply is prevented on the same active layer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 Drawing context explains that its matte is applied to the paint layer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 Drawing-mode matte is applied directly to the active paint layer",
+      "ok": true,
+      "detail": "{\"matteLayerId\":\"default-paint-layer\",\"activeLayerId\":\"default-paint-layer\",\"layerHasExactMatte\":true,\"objectCount\":4}"
+    },
+    {
+      "name": "W5 Drawing-mode matte does not create an OmniFrame object",
+      "ok": true,
+      "detail": "4 → 4; objectId=none"
+    },
+    {
+      "name": "W5 Drawing layer exposes a clear action for its raster mask",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "W5 clear action removes the applied raster mask without deleting the matte preview",
       "ok": true,
       "detail": ""
     }

@@ -831,6 +831,24 @@ export function renderAllPaintLayers(
           }
           layerCtx.putImageData(lImgData, 0, 0)
 
+          // A raster selection/AI matte can coexist with a painted transparency
+          // mask. Apply its PNG alpha after the child-mask luminance pass so
+          // converting an external matte does not get silently ignored.
+          if (layer.maskDataUrl) {
+            let rasterMask = imageCache.get(layer.maskDataUrl)
+            if (!rasterMask) {
+              rasterMask = new Image()
+              rasterMask.src = layer.maskDataUrl
+              imageCache.set(layer.maskDataUrl, rasterMask)
+            }
+            if (rasterMask.complete && rasterMask.naturalWidth > 0) {
+              layerCtx.save()
+              layerCtx.globalCompositeOperation = 'destination-in'
+              layerCtx.drawImage(rasterMask, 0, 0, width, height)
+              layerCtx.restore()
+            }
+          }
+
           // 4. Composite masked layer result
           ctx.save()
           if (layer.blendMode) ctx.globalCompositeOperation = layer.blendMode

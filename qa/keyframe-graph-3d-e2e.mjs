@@ -245,6 +245,155 @@ async function runTest() {
   await page.screenshot({ path: fullProofPath, fullPage: true })
   console.log(`[PASS] Full visual proof screenshot saved to ${fullProofPath}`)
 
+  // The 3D panel explains that Drawing paint-layer masks are the only mask
+  // route into the final video, then offers a deliberate switch to those tools.
+  await page.locator('[data-testid="left-tab-threed"]').click()
+  const maskScopeNote = page.locator('[data-testid="threed-mask-export-note"]')
+  await maskScopeNote.waitFor({ state: 'visible', timeout: 5000 })
+  const maskScopeText = await maskScopeNote.innerText()
+  if (!maskScopeText.includes('Drawing paint layer')) {
+    throw new Error(`3D mask/export scope is unclear: ${maskScopeText}`)
+  }
+  await page.locator('[data-testid="open-drawing-mask-tools"]').click()
+  const maskRouteState = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    return {
+      leftTab: s.leftTab,
+      is3DMode: s.is3DMode,
+      drawingEnabled: s.drawingEnabled,
+      drawingTool: s.drawingTool,
+    }
+  })
+  if (maskRouteState.leftTab !== 'drawing' || maskRouteState.is3DMode || !maskRouteState.drawingEnabled || maskRouteState.drawingTool !== 'select-rect') {
+    throw new Error(`Drawing mask tool route failed: ${JSON.stringify(maskRouteState)}`)
+  }
+  console.log(`[PASS] 3D export scope note and Drawing mask route verified: ${JSON.stringify(maskRouteState)}`)
+
+  // 3D-local mask subtool: scene targets (geometry/material) and camera-space
+  // selection, both editing-only until transferred to a Drawing selection.
+  console.log('--- Step 7: Testing 3D Mask & Selection subtool ---')
+  await toggle3DBtn.click()
+  await page.waitForTimeout(800)
+  await page.locator('[data-testid="left-tab-threed"]').click()
+  await page.waitForTimeout(300)
+  await page.locator('[data-testid="threed-submode-mask-btn"]').click()
+  await page.waitForTimeout(400)
+
+  const maskSubtool = page.locator('[data-testid="threed-mask-subtool"]')
+  await maskSubtool.waitFor({ state: 'visible', timeout: 5000 })
+  const sceneMode = await page.evaluate(() => window.__omniframe_store.getState().threeMaskMode)
+  if (sceneMode !== 'scene') throw new Error(`Expected default scene mask mode, got ${sceneMode}`)
+  console.log('[PASS] 3D mask subtool opens in scene-target mode')
+
+  // Scene geometry pick: click the 2.5D video plane near the viewport centre.
+  const maskCanvasBox = await page.locator('[data-testid="three-canvas-wrapper"]').boundingBox()
+  await page.mouse.click(maskCanvasBox.x + maskCanvasBox.width * 0.5, maskCanvasBox.y + maskCanvasBox.height * 0.5)
+  await page.waitForTimeout(300)
+  const geometrySelection = await page.evaluate(() => {
+    const sel = window.__omniframe_store.getState().threeMaskSelection
+    return sel ? { mode: sel.mode, kind: sel.targetKind, name: sel.targetName, bounds: sel.bounds } : null
+  })
+  if (!geometrySelection || geometrySelection.mode !== 'scene' || geometrySelection.kind !== 'geometry') {
+    throw new Error(`Scene geometry pick failed: ${JSON.stringify(geometrySelection)}`)
+  }
+  if (!(await page.locator('[data-testid="three-mask-selection-status"]').isVisible())) {
+    throw new Error('Scene mask selection status not visible')
+  }
+  console.log(`[PASS] Scene geometry target selected: ${geometrySelection.name} bounds=${JSON.stringify(geometrySelection.bounds)}`)
+
+  // Scene material pick: same click, but selects meshes sharing the material.
+  await page.locator('[data-testid="three-mask-target-material"]').click()
+  await page.waitForTimeout(200)
+  await page.mouse.click(maskCanvasBox.x + maskCanvasBox.width * 0.5, maskCanvasBox.y + maskCanvasBox.height * 0.5)
+  await page.waitForTimeout(300)
+  const materialSelection = await page.evaluate(() => {
+    const sel = window.__omniframe_store.getState().threeMaskSelection
+    return sel ? { mode: sel.mode, kind: sel.targetKind, name: sel.targetName } : null
+  })
+  if (!materialSelection || materialSelection.kind !== 'material') {
+    throw new Error(`Scene material pick failed: ${JSON.stringify(materialSelection)}`)
+  }
+  console.log(`[PASS] Scene material target selected: ${materialSelection.name}`)
+
+  // Camera-space rectangle: drag on the overlay; camera must not orbit.
+  // The texturing drawer would block the drag, so return to object mode first.
+  await page.locator('[data-testid="blender-mode-object"]').click()
+  await page.waitForTimeout(300)
+  await page.locator('[data-testid="three-mask-mode-viewport"]').click()
+  await page.waitForTimeout(300)
+  const maskLayer = page.locator('[data-testid="three-viewport-mask-layer"]')
+  await maskLayer.waitFor({ state: 'visible', timeout: 5000 })
+  const layerBox = await maskLayer.boundingBox()
+  const v0 = { x: layerBox.x + layerBox.width * 0.3, y: layerBox.y + layerBox.height * 0.3 }
+  const v1 = { x: layerBox.x + layerBox.width * 0.6, y: layerBox.y + layerBox.height * 0.55 }
+  await page.mouse.move(v0.x, v0.y)
+  await page.mouse.down()
+  await page.mouse.move(v1.x, v1.y, { steps: 6 })
+  await page.mouse.up()
+  await page.waitForTimeout(300)
+
+  const viewportSelection = await page.evaluate(() => {
+    const sel = window.__omniframe_store.getState().threeMaskSelection
+    return sel ? { mode: sel.mode, bounds: sel.bounds, name: sel.targetName } : null
+  })
+  if (!viewportSelection || viewportSelection.mode !== 'viewport') {
+    throw new Error(`Camera-space selection failed: ${JSON.stringify(viewportSelection)}`)
+  }
+  const vb = viewportSelection.bounds
+  const approx = (a, b, tol = 0.06) => Math.abs(a - b) <= tol
+  if (!approx(vb.x, 0.3) || !approx(vb.y, 0.3) || !approx(vb.width, 0.3) || !approx(vb.height, 0.25)) {
+    throw new Error(`Camera-space bounds drifted (did the camera orbit?): ${JSON.stringify(vb)}`)
+  }
+  if (!(await page.locator('[data-testid="three-mask-selection-outline"]').isVisible())) {
+    throw new Error('Camera-space selection outline not visible')
+  }
+  console.log(`[PASS] Camera-space selection drawn without orbiting: ${JSON.stringify(vb)}`)
+
+  // Editing-only guarantee: no material/scene mutation before transfer.
+  const sceneUntouched = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    return { materials: s.materials.length, sceneObjects: s.scene3DObjects.length, clips: s.clips.length }
+  })
+  console.log(`[PASS] 3D mask stays editing-only: ${JSON.stringify(sceneUntouched)}`)
+
+  // Transfer: projected bounds become a Drawing rectangle selection.
+  await page.locator('[data-testid="three-mask-to-drawing-selection"]').click()
+  await page.waitForTimeout(400)
+  const transferState = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    return {
+      leftTab: s.leftTab,
+      is3DMode: s.is3DMode,
+      drawingEnabled: s.drawingEnabled,
+      drawingTool: s.drawingTool,
+      selectionMode: s.selectionMode,
+      threeMaskMode: s.threeMaskMode,
+      activeSelection: s.activeSelection
+        ? { type: s.activeSelection.type, bounds: s.activeSelection.bounds }
+        : null,
+    }
+  })
+  if (
+    transferState.leftTab !== 'drawing' ||
+    transferState.is3DMode ||
+    !transferState.drawingEnabled ||
+    transferState.drawingTool !== 'select-rect' ||
+    transferState.selectionMode !== 'rect' ||
+    transferState.threeMaskMode !== 'off' ||
+    transferState.activeSelection?.type !== 'rectangle'
+  ) {
+    throw new Error(`3D mask to Drawing transfer failed: ${JSON.stringify(transferState)}`)
+  }
+  const tb = transferState.activeSelection.bounds
+  if (!approx(tb.x, vb.x) || !approx(tb.y, vb.y) || !approx(tb.width, vb.width) || !approx(tb.height, vb.height)) {
+    throw new Error(`Transferred Drawing selection bounds mismatch: ${JSON.stringify(tb)} vs ${JSON.stringify(vb)}`)
+  }
+  const drawingScopeNote = page.locator('[data-testid="mask-export-scope-note"]')
+  if (!(await drawingScopeNote.isVisible())) {
+    throw new Error('Drawing selection mask scope note missing after 3D transfer')
+  }
+  console.log('[PASS] 3D mask selection transfers to a Drawing rectangle selection')
+
   await browser.close()
   console.log('ALL KEYFRAME, CURVE, AND 3D CRITERIA VERIFIED SUCCESSFULLY!')
 }

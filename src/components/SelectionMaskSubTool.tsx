@@ -35,17 +35,40 @@ const PRESET_COLORS = [
   { id: 'burgundy', label: 'Leather Burgundy', hex: '#831843' },
 ]
 
+const SHORT_SELECTION_LABELS: Record<SelectionModeType, string> = {
+  rect: 'Rect',
+  ellipse: 'Ellipse',
+  freeform: 'Lasso',
+  polygon: 'Polygon',
+  painting: 'Brush',
+  'magic-wand': 'Wand',
+  character: 'Object',
+}
+
+type SelectionMaskContext = 'drawing' | 'omniframe'
+
 interface SelectionMaskSubToolProps {
   onOpenBgModal?: () => void
   compact?: boolean
+  context?: SelectionMaskContext
 }
 
-export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: SelectionMaskSubToolProps) {
+export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context = 'drawing' }: SelectionMaskSubToolProps) {
   const activeSelection = useEditor((s) => s.activeSelection)
   const guidedMatte = useEditor((s) => s.guidedMatte)
   const guidedMatteBusy = useEditor((s) => s.guidedMatteBusy)
   const runGuidedRectBackgroundRemoval = useEditor((s) => s.runGuidedRectBackgroundRemoval)
+  const applyGuidedMatteToDrawingLayer = useEditor((s) => s.applyGuidedMatteToDrawingLayer)
   const clearGuidedMatte = useEditor((s) => s.clearGuidedMatte)
+  const paintLayers = useEditor((s) => s.paintLayers)
+  const activePaintLayerId = useEditor((s) => s.activePaintLayerId)
+  const activePaintLayer = paintLayers.find((layer) => layer.id === activePaintLayerId)
+  const guidedMatteLayer = guidedMatte?.maskLayerId
+    ? paintLayers.find(
+        (layer) => layer.id === guidedMatte.maskLayerId && layer.maskDataUrl === guidedMatte.maskDataUrl,
+      )
+    : undefined
+  const guidedMatteAppliedToActiveLayer = !!guidedMatteLayer && guidedMatteLayer.id === activePaintLayerId
   const [guideHint, setGuideHint] = useState<{ x: number; y: number } | null>(null)
   const selectionMode = useEditor((s) => s.selectionMode)
   const setSelectionMode = useEditor((s) => s.setSelectionMode)
@@ -114,9 +137,24 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
         </div>
       </div>
 
+      <div
+        role="note"
+        data-testid="mask-export-scope-note"
+        className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-2.5 py-2 text-[10px] leading-relaxed text-ink-300"
+      >
+        <div className="mb-0.5 font-semibold uppercase tracking-wide text-cyan-200">
+          {context === 'omniframe' ? 'OmniFrame selection mask' : 'Drawing selection mask'}
+        </div>
+        <p>
+          {context === 'omniframe'
+            ? 'OmniFrame masks are selection and segmentation data, not final-video effects. Convert the selection to a Drawing mask to include it in export.'
+            : 'A selection mask is an editing guide until converted. Only masks applied to a Drawing paint layer are composited into the final video.'}
+        </p>
+      </div>
+
       {/* 1. Selection Types */}
-      <PanelSection title="Selection Types" testId="mask-selection-types" defaultOpen={true}>
-        <div className="grid grid-cols-6 gap-1">
+      <PanelSection title="Selection Types" hint="Choose a tool" testId="mask-selection-types" defaultOpen={true}>
+        <div role="group" aria-label="Selection tools" className="grid grid-cols-2 gap-1.5">
           {selectionTypes.map((st) => {
             const Icon = st.icon
             const isActive = selectionMode === st.id
@@ -127,16 +165,17 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                 data-testid={`sel-type-${st.id}`}
                 title={st.label}
                 aria-label={st.label}
+                aria-pressed={isActive}
                 onClick={() => setSelectionMode(st.id)}
-                className={`flex min-w-0 flex-col items-center justify-center p-1.5 rounded-lg border transition-all text-center ${
+                className={`flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-lg border p-1.5 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                   isActive
                     ? 'bg-brand text-white border-brand shadow-xs'
                     : 'bg-ink-900 border-ink-800 text-ink-300 hover:text-white hover:bg-ink-800'
                 }`}
               >
-                <Icon size={14} className="shrink-0" />
-                <span className="text-[10px] mt-0.5 truncate max-w-full font-mono capitalize">
-                  {st.id === 'magic-wand' ? 'Wand' : st.id === 'freeform' ? 'Lasso' : st.id}
+                <Icon size={16} className="shrink-0" />
+                <span className="max-w-full truncate text-[11px] font-medium leading-tight">
+                  {SHORT_SELECTION_LABELS[st.id]}
                 </span>
               </button>
             )
@@ -146,12 +185,13 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
 
       {/* 2. Detected Object Quick-Select (Towel, Chair, Light, etc.) */}
       {omniframeCharacters.length > 0 && (
-        <div className="space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
-            <span>Detected Object Selectors</span>
-            <span className="text-[10px] text-ink-500 font-normal">Click to isolate</span>
-          </div>
-          <div className="flex flex-wrap gap-1">
+        <PanelSection
+          title="Detected Objects"
+          hint={`${omniframeCharacters.length} found`}
+          testId="mask-objects"
+          defaultOpen={true}
+        >
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label="Detected objects">
             {omniframeCharacters.map((char) => {
               const isSelected = selectedCharacterId === char.id
               return (
@@ -161,13 +201,15 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                   data-testid={`quick-select-${char.id}`}
                   onClick={() => handleSelectObjectPreset(char.id)}
                   title={`Select ${char.name}`}
-                  className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium border transition-all truncate max-w-[170px] ${
+                  aria-pressed={isSelected}
+                  className={`flex min-h-7 items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-medium transition-all truncate max-w-[170px] ${
                     isSelected
                       ? 'bg-brand/20 border-brand text-white shadow-xs'
                       : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-850 hover:text-white'
                   }`}
                 >
                   <div
+                    aria-hidden="true"
                     className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: char.recolorColor || '#a855f7' }}
                   />
@@ -176,22 +218,28 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
               )
             })}
           </div>
-        </div>
+        </PanelSection>
       )}
 
-      {/* 3. Sub-Tool Actions: Invert, Feather, Grow, Shrink */}
-      <PanelSection title="Detected Object Selectors" testId="mask-detected" defaultOpen={false}>
-        <div className="grid grid-cols-4 gap-1">
+      {/* 3. Selection operations: invert, grow, shrink and clear. */}
+      <PanelSection
+        key={activeSelection ? 'selection-adjustments-active' : 'selection-adjustments-idle'}
+        title="Selection Adjustments"
+        hint={activeSelection ? 'Ready' : undefined}
+        testId="mask-detected"
+        defaultOpen={Boolean(activeSelection)}
+      >
+        <div role="group" aria-label="Selection adjustment actions" className="grid grid-cols-4 gap-1">
           <button
             type="button"
             data-testid="subtool-invert-btn"
             title="Invert Selection boundary (outside vs inside)"
             aria-label="Invert Selection"
             onClick={invertSelection}
-            className="flex items-center justify-center gap-1 py-1 px-1 rounded-lg bg-ink-900 border border-ink-800 hover:bg-ink-800 hover:text-white text-ink-300 transition-colors text-[11px]"
+            className="flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-lg border border-ink-800 bg-ink-900 px-1 py-1 text-[11px] text-ink-300 transition-colors hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            <FlipHorizontal size={11} />
-            <span>Invert</span>
+            <FlipHorizontal size={13} />
+            <span className="min-w-0 truncate">Invert</span>
           </button>
           <button
             type="button"
@@ -199,10 +247,10 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             title="Grow Selection boundary by 8px"
             aria-label="Grow Selection"
             onClick={() => growSelection(8)}
-            className="flex items-center justify-center gap-1 py-1 px-1 rounded-lg bg-ink-900 border border-ink-800 hover:bg-ink-800 hover:text-white text-ink-300 transition-colors text-[11px]"
+            className="flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-lg border border-ink-800 bg-ink-900 px-1 py-1 text-[11px] text-ink-300 transition-colors hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            <Expand size={11} />
-            <span>Grow</span>
+            <Expand size={13} />
+            <span className="min-w-0 truncate">Grow</span>
           </button>
           <button
             type="button"
@@ -210,10 +258,10 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             title="Shrink Selection boundary by 8px"
             aria-label="Shrink Selection"
             onClick={() => shrinkSelection(8)}
-            className="flex items-center justify-center gap-1 py-1 px-1 rounded-lg bg-ink-900 border border-ink-800 hover:bg-ink-800 hover:text-white text-ink-300 transition-colors text-[11px]"
+            className="flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-lg border border-ink-800 bg-ink-900 px-1 py-1 text-[11px] text-ink-300 transition-colors hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            <Shrink size={11} />
-            <span>Shrink</span>
+            <Shrink size={13} />
+            <span className="min-w-0 truncate">Shrink</span>
           </button>
           <button
             type="button"
@@ -221,16 +269,16 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             title="Clear Active Selection"
             aria-label="Clear Selection"
             onClick={clearSelection}
-            className="flex items-center justify-center gap-1 py-1 px-1 rounded-lg bg-ink-900 border border-ink-800 hover:bg-red-500/20 hover:border-red-500/40 hover:text-red-300 text-ink-300 transition-colors text-[11px]"
+            className="flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-lg border border-ink-800 bg-ink-900 px-1 py-1 text-[11px] text-ink-300 transition-colors hover:border-red-500/40 hover:bg-red-500/20 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            <X size={11} />
-            <span>Clear</span>
+            <X size={13} />
+            <span className="min-w-0 truncate">Clear</span>
           </button>
         </div>
       </PanelSection>
 
       {/* 4. Fill & Recolor Tool (Changing color of towel, chair seat, apple, shapes) */}
-      <PanelSection title="Boundary & Inversion Tools" testId="mask-boundary" defaultOpen={false}>
+      <PanelSection title="Fill & Recolor" testId="mask-boundary" defaultOpen={false}>
         {/* Title and toggle share a row until the panel is too narrow for
             both, at which point the toggle drops to its own line rather
             than pushing the section 21px past its container. */}
@@ -246,6 +294,8 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                   type="button"
                   data-testid={`recolor-swatch-${c.id}`}
                   title={`${c.label} (${c.hex})`}
+                  aria-label={`Apply ${c.label} recolor`}
+                  aria-pressed={isPicked}
                   onClick={() => {
                     setSelectedColor(c.hex)
                     setCustomHex(c.hex)
@@ -266,6 +316,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             <input
               type="color"
               data-testid="recolor-custom-picker"
+              aria-label="Choose custom recolor"
               value={customHex}
               onChange={(e) => {
                 setCustomHex(e.target.value)
@@ -289,12 +340,13 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
       </PanelSection>
 
       {/* 5. Non-Destructive Background Removal (Show Mask vs Cutout) */}
-      <PanelSection title="Fill / Recolor Tool" testId="mask-fill" defaultOpen={false}>
+      <PanelSection title="Mask Preview" testId="mask-fill" defaultOpen={false}>
 
         <div className="grid grid-cols-3 gap-1">
           <button
             type="button"
             data-testid="mask-mode-rubylith-btn"
+            aria-pressed={activeSelection?.maskDisplayMode === 'rubylith'}
             onClick={() => setSelectionMaskDisplayMode('rubylith')}
             className={`py-1 px-1 rounded text-[11px] border transition-colors ${
               activeSelection?.maskDisplayMode === 'rubylith'
@@ -308,6 +360,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
           <button
             type="button"
             data-testid="mask-mode-matte-btn"
+            aria-pressed={activeSelection?.maskDisplayMode === 'matte'}
             onClick={() => setSelectionMaskDisplayMode('matte')}
             className={`py-1 px-1 rounded text-[11px] border transition-colors ${
               activeSelection?.maskDisplayMode === 'matte'
@@ -321,6 +374,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
           <button
             type="button"
             data-testid="mask-mode-cutout-btn"
+            aria-pressed={!activeSelection?.maskDisplayMode || activeSelection?.maskDisplayMode === 'cutout'}
             onClick={() => setSelectionMaskDisplayMode('cutout')}
             className={`py-1 px-1 rounded text-[11px] border transition-colors ${
               !activeSelection?.maskDisplayMode || activeSelection?.maskDisplayMode === 'cutout'
@@ -353,22 +407,29 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
           <button
             type="button"
             data-testid="convert-mask-layer-btn"
+            aria-label="Convert selection to Drawing paint-layer mask"
+            disabled={!activeSelection}
             onClick={() => convertSelectionToMask()}
-            className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-ink-900 border border-ink-800 text-ink-200 hover:bg-ink-800 hover:text-white text-[11px] font-medium transition-colors"
-            title="Convert selection boundary into permanent non-destructive mask layer"
+            className="flex min-h-8 items-center justify-center gap-1.5 rounded-lg border border-ink-800 bg-ink-900 px-2 py-1.5 text-[10px] font-medium text-ink-200 transition-colors hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-40"
+            title="Apply the current selection to the active Drawing paint layer; the mask then appears in preview and final export."
           >
             <Layers size={12} className="shrink-0" />
-            <span>Create Mask Layer</span>
+            <span className="min-w-0 truncate">To Drawing Mask</span>
           </button>
         </div>
       </PanelSection>
 
       {/* 5b. Guided Rect Background Removal — draw a box, click remove, get a mask layer */}
-      <PanelSection title="Mask Layer" testId="mask-layer" defaultOpen={false}>
+      <PanelSection title="Guided Background Removal" testId="mask-layer" defaultOpen={false}>
 
         <p className="text-[10px] text-ink-500 leading-snug">
           Draw a rectangle around the subject, then run. The box seeds the matte: its
           eroded core is treated as subject, the surrounding ring as background.
+        </p>
+        <p className="text-[10px] leading-snug text-cyan-200/80">
+          {context === 'drawing'
+            ? 'In Drawing mode, the matte is applied to the active paint layer.'
+            : 'In OmniFrame, this creates an OmniFrame cutout object. Its matte stays separate from Drawing layers unless you apply it there.'}
         </p>
 
         <div className="grid grid-cols-2 gap-1">
@@ -378,7 +439,11 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
             disabled={!activeSelection?.bounds || guidedMatteBusy}
             onClick={async () => {
               if (!activeSelection?.bounds) return
-              await runGuidedRectBackgroundRemoval(activeSelection.bounds, guideHint || undefined)
+              await runGuidedRectBackgroundRemoval(
+                activeSelection.bounds,
+                guideHint || undefined,
+                context === 'drawing' ? 'drawing' : 'omniframe',
+              )
             }}
             title="Run coordinate-seeded background removal from the current rectangle"
             className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-cyan-500/20 border border-cyan-500/50 text-cyan-200 hover:bg-cyan-500/30 text-[11px] font-medium transition-colors disabled:opacity-40 disabled:hover:bg-cyan-500/20 truncate"
@@ -445,9 +510,39 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false }: Selecti
                 </span>
               </div>
             </div>
+            <p
+              role="note"
+              data-testid="guided-matte-export-scope-note"
+              className="text-[10px] leading-snug text-ink-400"
+            >
+              {guidedMatteLayer
+                ? `Applied to ${guidedMatteLayer.name}; it masks that Drawing layer's strokes in preview/export.`
+                : 'Editing-only matte. Apply it to a Drawing paint layer to mask its strokes in preview/export.'}
+            </p>
+            <button
+              type="button"
+              data-testid="apply-guided-matte-to-drawing-btn"
+              aria-label={
+                guidedMatteAppliedToActiveLayer
+                  ? 'Guided matte is applied to the active Drawing layer'
+                  : `Apply guided matte to ${activePaintLayer?.name || 'active Drawing layer'}`
+              }
+              disabled={!activePaintLayer || guidedMatteAppliedToActiveLayer || guidedMatteBusy}
+              onClick={() => applyGuidedMatteToDrawingLayer()}
+              title="Apply this matte to the active Drawing paint layer so it can mask that layer's strokes in preview/export."
+              className="flex min-h-8 w-full items-center justify-center gap-1.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-2 py-1.5 text-[11px] font-medium text-cyan-100 transition-colors hover:bg-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-default disabled:opacity-60"
+            >
+              {guidedMatteAppliedToActiveLayer ? <Check size={12} /> : <Layers size={12} />}
+              <span>
+                {guidedMatteAppliedToActiveLayer
+                  ? 'Applied to Active Drawing Layer'
+                  : `Apply Matte to ${activePaintLayer?.name || 'Drawing Layer'}`}
+              </span>
+            </button>
             <button
               type="button"
               data-testid="clear-guided-matte-btn"
+              title="Clear the matte preview and workflow record; this does not remove masks already applied to Drawing layers or the OmniFrame cutout object"
               onClick={() => {
                 clearGuidedMatte()
                 setGuideHint(null)

@@ -69,8 +69,10 @@ function ClipInspector({ clip }: { clip: Clip }) {
           type="button"
           data-testid={`keyframe-diamond-${propertyId}`}
           title={hasKey ? 'Remove Keyframe at Current Time' : 'Add Keyframe at Current Time'}
+          aria-label={hasKey ? 'Remove keyframe at current time' : 'Add keyframe at current time'}
+          aria-pressed={hasKey}
           onClick={handleToggle}
-          className={`p-1 rounded transition-colors ${
+          className={`flex min-h-8 min-w-8 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             hasKey ? 'text-brand-400' : 'text-ink-500 hover:text-ink-200'
           }`}
         >
@@ -80,8 +82,9 @@ function ClipInspector({ clip }: { clip: Clip }) {
           type="button"
           data-testid={`open-curve-${propertyId}`}
           title="Open in Curve Graph Editor"
+          aria-label={`Open ${propertyId.replace(/_/g, ' ')} in curve graph editor`}
           onClick={handleOpenCurve}
-          className="p-1 rounded text-ink-500 hover:text-brand-400 hover:bg-ink-800 transition-colors"
+          className="flex min-h-8 min-w-8 items-center justify-center rounded text-ink-500 transition-colors hover:bg-ink-800 hover:text-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Activity size={12} />
         </button>
@@ -430,9 +433,9 @@ export function RightPanel() {
       {rightOpen && (
         <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-            <span className="truncate pr-2" title={selectedClipId ? 'Clip Inspector' : 'Project Inspector'}>
+            <h2 id="inspector-heading" className="truncate pr-2" title={selectedClipId ? 'Clip Inspector' : 'Project Inspector'}>
               {selectedClipId ? 'Clip Inspector' : 'Project Inspector'}
-            </span>
+            </h2>
             <button
               type="button"
               data-testid="inspector-uncluster-btn"
@@ -440,7 +443,7 @@ export function RightPanel() {
               aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
               aria-pressed={unclusterInspector}
               onClick={() => setUnclusterInspector(!unclusterInspector)}
-              className={`grid h-6 w-6 place-items-center rounded transition-colors ${
+              className={`grid h-8 w-8 place-items-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 unclusterInspector
                   ? 'bg-brand text-white shadow-xs'
                   : 'text-ink-400 hover:text-white hover:bg-ink-750'
@@ -449,7 +452,7 @@ export function RightPanel() {
               <SlidersHorizontal size={12} />
             </button>
           </div>
-          <div data-testid="inspector-panel" className={`flex-1 min-h-0 overflow-y-auto ${unclusterInspector ? 'space-y-0.5' : ''}`}>
+          <div id="inspector-panel" data-testid="inspector-panel" role="region" aria-labelledby="inspector-heading" tabIndex={0} className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}>
             {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
           </div>
         </div>
@@ -460,8 +463,9 @@ export function RightPanel() {
           title={rightOpen ? 'Hide inspector' : 'Show inspector'}
           aria-label={rightOpen ? 'Hide inspector' : 'Show inspector'}
           aria-expanded={rightOpen}
+          aria-controls={rightOpen ? 'inspector-panel' : undefined}
           onClick={() => setRightOpen(!rightOpen)}
-          className="grid place-items-center h-8 w-8 rounded-md text-ink-400 hover:text-white hover:bg-ink-700"
+          className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           {rightOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
         </button>

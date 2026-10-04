@@ -30,6 +30,7 @@ import type {
   ClipTransform,
 } from '../types'
 import { TrackingEngine, computeFrameMaps } from '../lib/trackingEngine'
+import { PanelSection } from './PanelSection'
 
 export function TrackingPanel() {
   const clips = useEditor((s) => s.clips)
@@ -280,16 +281,19 @@ export function TrackingPanel() {
       </div>
 
       {/* Mode Selection (Mask Tracking vs Main Tracking) */}
-      <div>
-        <label className="block text-[10px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
-          Tracking Mode
-        </label>
-        <div className="grid grid-cols-2 gap-2">
+      <PanelSection
+        title="Tracking Mode"
+        hint={mode === 'mask' ? 'Mask contour' : 'Motion points'}
+        defaultOpen={true}
+        testId="tracking-mode"
+      >
+        <div role="group" aria-label="Tracking mode" className="grid grid-cols-2 gap-2">
           <button
             type="button"
             data-testid="track-mode-mask"
+            aria-pressed={mode === 'mask'}
             onClick={() => setMode('mask')}
-            className={`p-2 rounded-lg border text-left transition-colors ${
+            className={`min-h-[72px] p-2 rounded-lg border text-left transition-colors ${
               mode === 'mask'
                 ? 'border-brand bg-brand/20 text-white font-medium'
                 : 'border-ink-800 bg-ink-900 hover:bg-ink-800 text-ink-400'
@@ -305,8 +309,9 @@ export function TrackingPanel() {
           <button
             type="button"
             data-testid="track-mode-main"
+            aria-pressed={mode === 'main'}
             onClick={() => setMode('main')}
-            className={`p-2 rounded-lg border text-left transition-colors ${
+            className={`min-h-[72px] p-2 rounded-lg border text-left transition-colors ${
               mode === 'main'
                 ? 'border-brand bg-brand/20 text-white font-medium'
                 : 'border-ink-800 bg-ink-900 hover:bg-ink-800 text-ink-400'
@@ -319,22 +324,14 @@ export function TrackingPanel() {
             <p className="text-[10px] text-ink-500">Point, planar & motion vectors.</p>
           </button>
         </div>
-      </div>
+      </PanelSection>
 
       {/* Mode A: Mask Tracking & Dedicated Mask Controls */}
       {mode === 'mask' && (
-        <div className="space-y-3 pt-1 border-t border-ink-800 animate-in fade-in duration-100">
-          {/* Mask & Selection Conversions (LumaCut / Krita Architecture) */}
-          <div className="p-2.5 rounded-xl border border-ink-800 bg-ink-900/90 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold text-ink-300 uppercase tracking-wider flex items-center gap-1">
-                <Sparkles size={11} className="text-brand-400" />
-                Conversions (Drawing ↔ Mask ↔ Selection)
-              </span>
-              <span className="text-[9px] text-ink-500 font-mono">Krita Style</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-1.5">
+        <div className="space-y-3 animate-in fade-in duration-100">
+          {/* Drawing, mask, and selection conversion tools */}
+          <PanelSection title="Mask & Selection Conversion" defaultOpen={true} testId="tracking-conversions">
+            <div role="group" aria-label="Mask and selection conversions" className="grid grid-cols-2 gap-1.5">
               <button
                 type="button"
                 data-testid="convert-drawing-to-mask-btn"
@@ -383,14 +380,11 @@ export function TrackingPanel() {
                 </button>
               </div>
             )}
-          </div>
+          </PanelSection>
 
           {/* Spatial Selection Tools */}
-          <div className="space-y-1">
-            <span className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider block">
-              Selection Shapes (Krita)
-            </span>
-            <div className="grid grid-cols-5 gap-1">
+          <PanelSection title="Selection Shapes" defaultOpen={true} testId="tracking-shapes">
+            <div role="group" aria-label="Selection shape tools" className="grid grid-cols-3 gap-1.5">
               {[
                 { type: 'select-rect', label: 'Box' },
                 { type: 'select-ellipse', label: 'Circle' },
@@ -412,14 +406,11 @@ export function TrackingPanel() {
                 </button>
               ))}
             </div>
-          </div>
+          </PanelSection>
 
           {/* Mask Creation Tools */}
-          <div>
-            <label className="block text-[10px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
-              Create Mask Shape
-            </label>
-            <div className="grid grid-cols-4 gap-1">
+          <PanelSection title="Create Mask Shape" defaultOpen={true} testId="tracking-create-mask">
+            <div role="group" aria-label="Mask shapes" className="grid grid-cols-2 gap-1.5">
               {[
                 { type: 'rectangle', label: 'Box', icon: Square },
                 { type: 'ellipse', label: 'Circle', icon: Circle },
@@ -438,26 +429,28 @@ export function TrackingPanel() {
                 </button>
               ))}
             </div>
-          </div>
+          </PanelSection>
 
           {/* Active Masks List */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
-                Clip Masks ({masks.length})
-              </span>
+          <PanelSection
+            title="Clip Masks"
+            hint={`${masks.length} ${masks.length === 1 ? 'mask' : 'masks'}`}
+            defaultOpen={true}
+            testId="tracking-mask-list"
+          >
+            <div className="flex justify-end">
               <button
                 type="button"
                 data-testid="add-mask-btn"
                 onClick={() => handleAddMask('rectangle')}
-                className="text-[10px] text-brand-400 hover:underline flex items-center gap-1"
+                className="flex min-h-7 items-center gap-1 rounded px-2 text-[11px] text-brand-400 hover:bg-ink-800 hover:text-white"
               >
-                <Plus size={11} />
+                <Plus size={12} />
                 <span>Add Mask</span>
               </button>
             </div>
 
-            <div className="space-y-1">
+            <div role="group" aria-label="Clip masks" className="space-y-1">
               {masks.map((mask) => (
                 <div
                   key={mask.id}
@@ -475,23 +468,25 @@ export function TrackingPanel() {
                   {masks.length > 1 && (
                     <button
                       type="button"
+                      aria-label={`Remove ${mask.name}`}
                       onClick={(e) => {
                         e.stopPropagation()
                         handleRemoveMask(mask.id)
                       }}
-                      className="p-1 rounded text-ink-500 hover:text-red-400"
+                      className="grid h-7 w-7 place-items-center rounded text-ink-500 hover:text-red-400 hover:bg-red-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                     >
-                      <Trash2 size={11} />
+                      <Trash2 size={13} />
                     </button>
                   )}
                 </div>
               ))}
             </div>
-          </div>
+          </PanelSection>
 
           {/* Active Mask Property Controls */}
           {activeMask && (
-            <div className="p-2.5 rounded-xl border border-ink-800 bg-ink-950/40 space-y-2.5">
+            <PanelSection title="Mask Properties" defaultOpen={true} testId="tracking-mask-properties">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-ink-100 text-[11px]">{activeMask.name}</span>
                 <label className="flex items-center gap-1.5 text-[10px] cursor-pointer">
@@ -574,13 +569,14 @@ export function TrackingPanel() {
                 </span>
               </label>
             </div>
+            </PanelSection>
           )}
         </div>
       )}
 
       {/* Mode B: Main Tracking Pattern Controls */}
       {mode === 'main' && (
-        <div className="space-y-2 pt-1 border-t border-ink-800 animate-in fade-in duration-100">
+        <PanelSection title="Point Track Setup" defaultOpen={true} testId="tracking-point-setup">
           <label className="block text-[10px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
             Track Pattern
           </label>
@@ -590,6 +586,7 @@ export function TrackingPanel() {
                 key={t}
                 type="button"
                 data-testid={`track-pattern-${t}`}
+                aria-pressed={mainType === t}
                 onClick={() => setMainType(t)}
                 className={`py-1 px-2 rounded border text-center capitalize text-[10px] transition-colors ${
                   mainType === t
@@ -649,15 +646,11 @@ export function TrackingPanel() {
               ))}
             </div>
           </div>
-        </div>
+        </PanelSection>
       )}
 
       {/* Optical Flow Tracking Engine Settings */}
-      <div className="space-y-2 pt-2 border-t border-ink-800">
-        <span className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider block">
-          Optical Flow Parameters
-        </span>
-
+      <PanelSection title="Optical Flow Parameters" defaultOpen={true} testId="tracking-flow-settings">
         <div className="flex justify-between text-[11px] text-ink-400">
           <span>Search Window</span>
           <span className="font-mono">{searchWindow} px</span>
@@ -698,10 +691,11 @@ export function TrackingPanel() {
           />
           <span>Forward-Backward Consistency Validation</span>
         </label>
-      </div>
+      </PanelSection>
 
       {/* Tracking Actions */}
-      <div className="grid grid-cols-2 gap-2 pt-1">
+      <PanelSection title="Run Tracking" defaultOpen={true} testId="tracking-actions">
+      <div role="group" aria-label="Track forward or backward" className="grid grid-cols-2 gap-2">
         <button
           type="button"
           data-testid="run-track-backward-btn"
@@ -724,6 +718,7 @@ export function TrackingPanel() {
           <ArrowRight size={13} />
         </button>
       </div>
+      </PanelSection>
 
       {/* Progress Card */}
       {isTracking && (

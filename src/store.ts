@@ -38,6 +38,9 @@ import type {
   BlenderMode,
   Primitive3D,
   Scene3DObject,
+  ThreeMaskMode,
+  ThreeMaskTargetKind,
+  ThreeMaskSelection,
   OmniframeCharacter,
   OmniframeScopeType,
   SelectionModeType,
@@ -444,6 +447,7 @@ interface EditorState extends RiggingSlice {
   setPaintLayerBlendMode: (layerId: string, blendMode: GlobalCompositeOperation) => void
   setPaintLayerBlur: (layerId: string, blur: number) => void
   setPaintLayerOpacity: (layerId: string, opacity: number) => void
+  clearPaintLayerRasterMask: (layerId: string) => void
   setOnionSkin: (partial: Partial<OnionSkinSettings>) => void
   toggleOnionSkin: () => void
   setDrawingHoldFrames: (frames: number) => void
@@ -608,7 +612,9 @@ interface EditorState extends RiggingSlice {
   runGuidedRectBackgroundRemoval: (
     rect?: { x: number; y: number; width: number; height: number },
     hint?: { x: number; y: number; radius?: number },
+    destination?: 'omniframe' | 'drawing',
   ) => Promise<GuidedMatteRecord | null>
+  applyGuidedMatteToDrawingLayer: (layerId?: string) => void
   clearGuidedMatte: () => void
 
 
@@ -633,6 +639,14 @@ interface EditorState extends RiggingSlice {
   addScene3DObject: (object: Scene3DObject) => void
   updateScene3DObject: (id: string, updates: Partial<Scene3DObject>) => void
   removeScene3DObject: (id: string) => void
+  threeMaskMode: ThreeMaskMode
+  setThreeMaskMode: (mode: ThreeMaskMode) => void
+  threeMaskTargetKind: ThreeMaskTargetKind
+  setThreeMaskTargetKind: (kind: ThreeMaskTargetKind) => void
+  threeMaskSelection: ThreeMaskSelection | null
+  setThreeMaskSelection: (selection: ThreeMaskSelection | null) => void
+  clearThreeMaskSelection: () => void
+  useThreeMaskSelectionInDrawing: () => void
 
   // ---- Graph Editor & Keyframing System ----
   graphEditorOpen: boolean
@@ -944,6 +958,40 @@ export const useEditor = create<EditorState>((set, get) => {
         scene3DObjects: s.scene3DObjects.filter((o) => o.id !== id),
         selected3DObjectId: s.selected3DObjectId === id ? (s.scene3DObjects[0]?.id || null) : s.selected3DObjectId,
       }))
+    },
+    threeMaskMode: 'off',
+    setThreeMaskMode: (mode) => set({ threeMaskMode: mode }),
+    threeMaskTargetKind: 'geometry',
+    setThreeMaskTargetKind: (kind) => set({ threeMaskTargetKind: kind }),
+    threeMaskSelection: null,
+    setThreeMaskSelection: (selection) => set({ threeMaskSelection: selection }),
+    clearThreeMaskSelection: () => set({ threeMaskSelection: null }),
+    useThreeMaskSelectionInDrawing: () => {
+      const selection = get().threeMaskSelection
+      if (!selection) return
+      const x = clamp(selection.bounds.x, 0, 1)
+      const y = clamp(selection.bounds.y, 0, 1)
+      const width = clamp(selection.bounds.width, 0, 1 - x)
+      const height = clamp(selection.bounds.height, 0, 1 - y)
+      if (width < 0.005 || height < 0.005) return
+
+      set({
+        activeSelection: {
+          type: 'rectangle',
+          bounds: { x, y, width, height },
+          characterName: selection.targetName,
+          showMaskOnly: false,
+          maskDisplayMode: 'cutout',
+        },
+        selectionMode: 'rect',
+        drawingTool: 'select-rect',
+        drawingEnabled: true,
+        leftTab: 'drawing',
+        leftOpen: true,
+        activeSubMode: null,
+        is3DMode: false,
+        threeMaskMode: 'off',
+      })
     },
 
     // ---- Graph Editor & Keyframing System ----
@@ -2241,6 +2289,20 @@ export const useEditor = create<EditorState>((set, get) => {
         ),
       }))
     },
+    clearPaintLayerRasterMask: (layerId) => {
+      const layer = get().paintLayers.find((item) => item.id === layerId)
+      if (!layer?.maskDataUrl) return
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((item) =>
+          item.id === layerId ? { ...item, maskDataUrl: undefined } : item,
+        ),
+        guidedMatte:
+          s.guidedMatte?.maskLayerId === layerId && s.guidedMatte.maskDataUrl === layer.maskDataUrl
+            ? { ...s.guidedMatte, maskLayerId: undefined }
+            : s.guidedMatte,
+      }))
+    },
     setOnionSkin: (partial) => set((s) => ({ onionSkin: { ...s.onionSkin, ...partial } })),
     toggleOnionSkin: () => set((s) => ({ onionSkin: { ...s.onionSkin, enabled: !s.onionSkin.enabled } })),
     setDrawingHoldFrames: (frames) => set({ drawingHoldFrames: Math.max(1, Math.min(120, frames)) }),
@@ -3022,7 +3084,7 @@ export const useEditor = create<EditorState>((set, get) => {
     // ---- background removal actions ----
     setActiveBgRemovalJob: (job) => set({ activeBgRemovalJob: job }),
 
-    runGuidedRectBackgroundRemoval: async (rectOverride, hint) => {
+    runGuidedRectBackgroundRemoval: async (rectOverride, hint, destination = 'omniframe') => {
       const sel = get().activeSelection
       const rect = rectOverride || sel?.bounds
       if (!rect || rect.width <= 0.01 || rect.height <= 0.01) return null
@@ -3057,46 +3119,40 @@ export const useEditor = create<EditorState>((set, get) => {
 
         pushSnapshot()
 
-        // 1. Non-destructive mask layer on the active paint layer
-        const layerId = get().activePaintLayerId || get().paintLayers[0]?.id
-        if (layerId) {
-          set((st) => ({
-            paintLayers: st.paintLayers.map((l) =>
-              l.id === layerId
-                ? {
-                    ...l,
-                    maskDataUrl: result.maskDataUrl,
-                    transparencyMask: {
-                      id: l.transparencyMask?.id || uid('mask'),
-                      parentLayerId: layerId,
-                      name: 'Guided Rect Matte',
-                      enabled: true,
-                      inverted: false,
-                      opacity: 1,
-                      dataUrl: result.maskDataUrl,
-                    },
-                  }
-                : l,
-            ),
-            activeMaskId: get().activeMaskId,
-          }))
+        // A guided matte created in OmniFrame stays detached from Drawing paint
+        // layers by default. Drawing mode may apply it directly to its active
+        // layer; cross-mode application uses the explicit apply action.
+        let layerId: string | undefined
+        if (destination === 'drawing') {
+          layerId = get().activePaintLayerId || get().paintLayers[0]?.id
+          if (layerId) {
+            set((st) => ({
+              paintLayers: st.paintLayers.map((l) =>
+                l.id === layerId ? { ...l, maskDataUrl: result.maskDataUrl } : l,
+              ),
+            }))
+          }
         }
 
-        // 2. OmniFrame object layered from the matte (movable, recolorable)
-        const objectId = `obj_guided_${Date.now()}`
-        const newChar: OmniframeCharacter = {
-          id: objectId,
-          name: 'Guided Cutout',
-          label: 'Guided Rect Background Removal',
-          bounds: { ...rect },
-          cutoutUrl: result.cutoutDataUrl,
-          transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
-          scope: 'all',
+        // OmniFrame owns the movable cutout object. Drawing mode gets only a
+        // Drawing-layer matte, rather than creating cross-mode content too.
+        let objectId: string | undefined
+        if (destination === 'omniframe') {
+          objectId = `obj_guided_${Date.now()}`
+          const newChar: OmniframeCharacter = {
+            id: objectId,
+            name: 'Guided Cutout',
+            label: 'Guided Rect Background Removal',
+            bounds: { ...rect },
+            cutoutUrl: result.cutoutDataUrl,
+            transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+            scope: 'all',
+          }
+          set((st) => ({
+            omniframeCharacters: [...st.omniframeCharacters, newChar],
+            selectedCharacterId: objectId,
+          }))
         }
-        set((st) => ({
-          omniframeCharacters: [...st.omniframeCharacters, newChar],
-          selectedCharacterId: objectId,
-        }))
 
         const record: GuidedMatteRecord = {
           id: uid('guided'),
@@ -3122,6 +3178,22 @@ export const useEditor = create<EditorState>((set, get) => {
       }
     },
 
+    applyGuidedMatteToDrawingLayer: (layerId) => {
+      const matte = get().guidedMatte
+      if (!matte) return
+      const targetLayerId = layerId || get().activePaintLayerId || get().paintLayers[0]?.id
+      if (!targetLayerId || !get().paintLayers.some((layer) => layer.id === targetLayerId)) return
+
+      pushSnapshot()
+      set((state) => ({
+        paintLayers: state.paintLayers.map((layer) =>
+          layer.id === targetLayerId ? { ...layer, maskDataUrl: matte.maskDataUrl } : layer,
+        ),
+        guidedMatte: state.guidedMatte
+          ? { ...state.guidedMatte, maskLayerId: targetLayerId }
+          : null,
+      }))
+    },
     clearGuidedMatte: () => set({ guidedMatte: null }),
 
     newProject: () => {

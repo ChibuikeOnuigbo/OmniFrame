@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 
 export function IconButton({
@@ -25,7 +25,7 @@ export function IconButton({
       disabled={disabled}
       onClick={onClick}
       className={[
-        'grid place-items-center h-8 w-8 rounded-md transition-colors',
+        'grid place-items-center h-8 w-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900',
         active ? 'bg-brand text-white' : 'text-ink-400 hover:text-white hover:bg-ink-700',
         disabled ? 'opacity-40 cursor-not-allowed hover:bg-transparent hover:text-ink-400' : '',
         className,
@@ -132,35 +132,54 @@ export function Section({
   action?: ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
+  const headerId = useId()
+  const bodyId = useId()
+  const headerTestId = `section-header-${title.toLowerCase().replace(/\s+/g, '-')}`
+
+  const heading = (
+    <span className="flex min-w-0 items-center gap-1.5 text-left">
+      {collapsible && (
+        <ChevronDown
+          size={13}
+          aria-hidden="true"
+          className={`shrink-0 text-ink-400 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
+        />
+      )}
+      <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
+        {title}
+      </span>
+      {badge}
+    </span>
+  )
+
   return (
-    <div className="border-b border-ink-800">
-      <div
-        data-testid={`section-header-${title.toLowerCase().replace(/\s+/g, '-')}`}
-        role={collapsible ? 'button' : undefined}
-        tabIndex={collapsible ? 0 : undefined}
-        aria-expanded={collapsible ? open : undefined}
-        onClick={collapsible ? () => setOpen(!open) : undefined}
-        onKeyDown={collapsible ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(!open) } } : undefined}
-        className={`px-3 py-2.5 flex items-center justify-between select-none ${
-          collapsible ? 'cursor-pointer hover:bg-ink-800/50 transition-colors' : ''
-        }`}
-      >
-        <div className="flex items-center gap-1.5 min-w-0">
-          {collapsible && (
-            <ChevronDown
-              size={13}
-              className={`text-ink-400 shrink-0 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
-            />
-          )}
-          <span className="text-[11px] uppercase tracking-wider text-ink-300 font-semibold truncate">
-            {title}
-          </span>
-          {badge}
-        </div>
-        {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
+    <section aria-labelledby={headerId} className="border-b border-ink-800">
+      <div className="flex items-center justify-between gap-2 px-3 py-0.5">
+        {collapsible ? (
+          <button
+            id={headerId}
+            type="button"
+            data-testid={headerTestId}
+            aria-expanded={open}
+            aria-controls={open ? bodyId : undefined}
+            onClick={() => setOpen((value) => !value)}
+            className="flex min-h-8 min-w-0 flex-1 items-center rounded text-left transition-colors hover:bg-ink-800/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+          >
+            {heading}
+          </button>
+        ) : (
+          <div id={headerId} data-testid={headerTestId} className="flex min-h-8 min-w-0 flex-1 items-center">
+            {heading}
+          </div>
+        )}
+        {action ? <div className="shrink-0">{action}</div> : null}
       </div>
-      {open && <div className="px-3 pb-3 pt-0.5">{children}</div>}
-    </div>
+      {open ? (
+        <div id={bodyId} aria-labelledby={headerId} className="px-3 pb-3 pt-0.5">
+          {children}
+        </div>
+      ) : null}
+    </section>
   )
 }
 
@@ -176,18 +195,23 @@ export function AccordionGroup({
   badge?: ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
+  const bodyId = useId()
+  const triggerId = `${bodyId}-trigger`
   return (
-    <div className="mt-2 rounded-lg border border-ink-800 bg-ink-900/40 overflow-hidden">
+    <section aria-labelledby={triggerId} className="mt-2 overflow-hidden rounded-lg border border-ink-800 bg-ink-900/40">
       <button
+        id={triggerId}
         type="button"
         data-testid={`accordion-${title.toLowerCase().replace(/\s+/g, '-')}`}
         aria-expanded={open}
-        onClick={() => setOpen(!open)}
-        className="w-full px-2.5 py-1.5 flex items-center justify-between text-left text-xs font-medium text-ink-300 hover:text-white hover:bg-ink-800/60 transition-colors"
+        aria-controls={open ? bodyId : undefined}
+        onClick={() => setOpen((value) => !value)}
+        className="flex min-h-8 w-full items-center justify-between px-2.5 py-1.5 text-left text-xs font-medium text-ink-300 transition-colors hover:bg-ink-800/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
       >
         <div className="flex items-center gap-1.5">
           <ChevronDown
             size={12}
+            aria-hidden="true"
             className={`text-ink-500 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
           />
           <span className="text-[11px] font-semibold">{title}</span>
@@ -195,8 +219,12 @@ export function AccordionGroup({
         </div>
         <span className="text-[10px] text-ink-500">{open ? 'Hide' : 'Show'}</span>
       </button>
-      {open && <div className="p-2 border-t border-ink-800 space-y-1.5">{children}</div>}
-    </div>
+      {open && (
+        <div id={bodyId} aria-labelledby={triggerId} className="space-y-1.5 border-t border-ink-800 p-2">
+          {children}
+        </div>
+      )}
+    </section>
   )
 }
 

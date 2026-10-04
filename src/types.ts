@@ -351,6 +351,19 @@ export interface Scene3DObject {
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
 }
 
+export type ThreeMaskMode = 'off' | 'scene' | 'viewport'
+export type ThreeMaskTargetKind = 'geometry' | 'material'
+
+/** Editing-only 3D selection, projected into the current viewport for optional Drawing transfer. */
+export interface ThreeMaskSelection {
+  id: string
+  mode: Exclude<ThreeMaskMode, 'off'>
+  bounds: { x: number; y: number; width: number; height: number }
+  targetName: string
+  targetKind?: ThreeMaskTargetKind
+  targetIds?: string[]
+}
+
 export interface ProjectSettings {
   width: number
   height: number
@@ -640,9 +653,9 @@ export interface GuidedMatteRecord {
   iterations: number
   seedStats: { foreground: number; background: number }
   timings: { seed: number; gmm: number; classify: number; refine: number; encode: number; total: number }
-  /** OmniFrame object created from the matte (non-destructive layer). */
+  /** OmniFrame cutout object created when the matte is run in OmniFrame context. */
   objectId?: string
-  /** Mask layer id created on the active paint layer. */
+  /** Drawing paint layer receiving this matte; absent until it is applied. */
   maskLayerId?: string
   createdAt: number
 }

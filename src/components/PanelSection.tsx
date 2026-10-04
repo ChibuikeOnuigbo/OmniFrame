@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useId, useState } from 'react'
 import { ChevronRight } from 'lucide-react'
 
 /**
@@ -33,38 +33,43 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
   testId,
 }) => {
   const [open, setOpen] = useState(defaultOpen)
+  const id = useId()
+  const triggerId = `panel-section-trigger-${testId ?? id}`
+  const bodyId = `panel-section-body-${testId ?? id}`
 
   return (
     <section
       data-testid={testId ? `panel-section-${testId}` : undefined}
-      className="border border-ink-800 rounded-lg overflow-hidden"
+      aria-labelledby={triggerId}
+      className="overflow-hidden rounded-lg border border-ink-800 bg-ink-950/20"
     >
       <button
+        id={triggerId}
         type="button"
         aria-expanded={open}
-        aria-controls={testId ? `panel-section-body-${testId}` : undefined}
+        aria-controls={open ? bodyId : undefined}
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center gap-1.5 px-2 py-1.5 bg-ink-850 hover:bg-ink-800 transition-colors text-left min-h-[24px]"
+        className="group w-full flex min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
       >
         <ChevronRight
-          size={12}
+          size={14}
           aria-hidden="true"
           className={`shrink-0 text-ink-400 transition-transform ${open ? 'rotate-90' : ''}`}
         />
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-ink-300 flex-1 truncate">
+        <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wider text-ink-200">
           {title}
         </span>
         {hint ? (
-          <span className="text-[10px] text-ink-500 font-mono shrink-0">{hint}</span>
+          <span className="shrink-0 font-mono text-[10px] text-ink-400">{hint}</span>
         ) : null}
       </button>
 
-      {alwaysVisible ? <div className="px-2 pt-2">{alwaysVisible}</div> : null}
+      {alwaysVisible ? <div className="px-2.5 pt-2">{alwaysVisible}</div> : null}
 
       {open ? (
         <div
-          id={testId ? `panel-section-body-${testId}` : undefined}
-          className="px-2 py-2 flex flex-col gap-3"
+          id={bodyId}
+          className="flex flex-col gap-3 border-t border-ink-800/80 px-2.5 py-2.5"
         >
           {children}
         </div>

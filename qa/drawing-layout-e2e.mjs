@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
+import { hasOpenCvPython, validateVideoFrames } from './video-validation.mjs'
 
 const ROOT = '/home/user/OmniFrame'
 const SHOTS_DIR = join(ROOT, 'evidence', 'drawing')
@@ -224,7 +225,7 @@ async function run() {
   console.log('PASS Exported video file verified on disk')
 
   // Step 8: Python OpenCV Frame Decoding & Verification
-  console.log('Step 8: Decoding exported video frames with Python OpenCV...')
+  console.log('Step 8: Decoding exported video frames...')
   const pyCode = `
 import cv2, sys, os, numpy as np
 
@@ -252,10 +253,18 @@ if frames >= 10 and avg_lum > 10.0:
 else:
     sys.exit(1)
 `
-  const pyOut = execSync(`python3 -c '${pyCode}'`).toString()
-  console.log(pyOut)
-  assert(pyOut.includes('OPENCV EXPORT CHECKS PASSED'), 'OpenCV verified valid video frames')
-  console.log('PASS OpenCV decoded non-blank video frames with drawing strokes composited')
+  const frameCheckName = hasOpenCvPython() ? 'OpenCV' : 'FFmpeg'
+  if (frameCheckName === 'OpenCV') {
+    const pyOut = execSync(`python3 -c '${pyCode}'`).toString()
+    console.log(pyOut)
+    assert(pyOut.includes('OPENCV EXPORT CHECKS PASSED'), 'OpenCV verified valid video frames')
+  } else {
+    const fallback = validateVideoFrames(exportFile)
+    const detail = `${fallback.frameCount} decoded frames; average luma ${fallback.averageLuma.toFixed(2)}`
+    console.warn(`OpenCV Python dependencies are unavailable; FFmpeg is checking frame count and average luma instead. ${detail}.`)
+    assert(fallback.frameCount >= 10 && fallback.averageLuma > 10, 'FFmpeg verified a non-blank decodable export', detail)
+  }
+  console.log(`PASS ${frameCheckName} decoded non-blank video frames${frameCheckName === 'FFmpeg' ? ' (FFmpeg frame/luma fallback)' : ' with drawing strokes composited'}`)
 
   await browser.close()
 
@@ -268,7 +277,7 @@ else:
   console.log('5. Color Swatches & Stroke Attributes: VERIFIED')
   console.log('6. Paint Layer Management & Left Dock Panel: VERIFIED')
   console.log('7. Real Video Export with Live Drawing Compositing: VERIFIED')
-  console.log('8. Python OpenCV Frame Verification: VERIFIED')
+  console.log(`8. ${frameCheckName === 'OpenCV' ? 'Python OpenCV frame verification' : 'FFmpeg decode and average-luma fallback (Python OpenCV unavailable)'}: VERIFIED`)
   console.log('==============================================\n')
 }
 

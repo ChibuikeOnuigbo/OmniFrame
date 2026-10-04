@@ -312,10 +312,12 @@ async function runOmniFrameVerification() {
   // Capture verification inspector table cutout
   await page.click('[data-testid="omniframe-section-actions"]')
   await page.waitForTimeout(300)
+  const verificationDisclosure = page.locator('[data-testid="panel-section-omniframe-verification"] > button')
+  await verificationDisclosure.click()
+  await page.waitForTimeout(100)
   const verifTable = page.locator('[data-testid="omniframe-verification-table"]')
-  if (await verifTable.isVisible()) {
-    await verifTable.screenshot({ path: join(CUT_DIR, 'cut-omniframe-verification-table.png') })
-  }
+  if (!(await verifTable.isVisible())) throw new Error('Frame verification details did not expand')
+  await verifTable.screenshot({ path: join(CUT_DIR, 'cut-omniframe-verification-table.png') })
 
   // Write results JSON
   writeFileSync(join(REPORT_DIR, 'omniframe-infill-motion-results.json'), JSON.stringify(testResults, null, 2))

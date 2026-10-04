@@ -63,6 +63,11 @@ async function run() {
     await page.waitForTimeout(300)
     const subtool = await page.waitForSelector('[data-testid="selection-mask-subtool"]', { timeout: 3000 })
     if (!subtool) throw new Error('SelectionMaskSubTool not found!')
+    const maskScopeNote = await page.textContent('[data-testid="mask-export-scope-note"]')
+    if (!/OmniFrame masks are selection and segmentation data/i.test(maskScopeNote || '') || !/Drawing mask/i.test(maskScopeNote || '')) {
+      throw new Error(`OmniFrame mask export scope is unclear: ${maskScopeNote}`)
+    }
+    console.log('✓ OmniFrame mask scope explains selection-only behavior and Drawing-mask conversion.')
 
     const selectionTypes = ['rect', 'ellipse', 'freeform', 'polygon', 'painting', 'magic-wand']
     for (const st of selectionTypes) {
@@ -206,6 +211,8 @@ async function run() {
     console.log('Testing Non-Destructive Mask Layer (Rubylith & Matte Mode)...')
     await page.click('[data-testid="omniframe-section-select"]')
     await page.waitForTimeout(250)
+    const maskPreviewDisclosure = page.locator('[data-testid="panel-section-mask-fill"] > button')
+    await maskPreviewDisclosure.click()
     const rubylithBtn = await page.waitForSelector('[data-testid="mask-mode-rubylith-btn"]', { timeout: 3000 })
     await rubylithBtn.click()
     await page.waitForTimeout(300)
