@@ -133,6 +133,15 @@ export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
 
 export const INITIAL_ROOM_OBJECTS: OmniframeCharacter[] = [
   {
+    id: 'char_chair',
+    name: 'Leather Armchair',
+    label: 'Detected Object (Chair)',
+    bounds: { x: 0.020, y: 0.180, width: 0.560, height: 0.820 },
+    cutoutUrl: '/assets/room/obj_chair.png',
+    transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    scope: 'all',
+  },
+  {
     id: 'char_towel',
     name: 'Draped Armchair Towel',
     label: 'Real Object 1 (White Towel on Armrest)',
