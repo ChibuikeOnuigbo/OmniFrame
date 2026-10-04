@@ -1,23 +1,23 @@
 {
   "totals": {
-    "unique": 53,
-    "instances": 2104
+    "unique": 49,
+    "instances": 2076
   },
   "byRule": {
-    "A04": 6,
+    "A04": 2,
     "D01": 34,
     "C02": 4,
     "C01": 8,
     "D06": 1
   },
   "bySev": {
-    "medium": 41,
+    "medium": 37,
     "low": 12
   },
   "byTab": {
     "media": 13,
     "text": 4,
-    "drawing": 28,
+    "drawing": 24,
     "omniframe": 4,
     "tracking": 4
   },
@@ -67,16 +67,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
@@ -207,16 +197,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=drawing-panel]",
@@ -321,16 +301,6 @@
       "sev": "medium",
       "el": "[testid=left-panel]",
       "evidence": "15 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1024",
@@ -441,16 +411,6 @@
       "sev": "medium",
       "el": "[testid=left-panel]",
       "evidence": "15 controls in one group -> regroup candidate"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "390-mobile",
@@ -821,16 +781,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -1693,16 +1643,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1440",
@@ -2681,16 +2621,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -3653,16 +3583,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1440",
@@ -4641,16 +4561,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -5613,16 +5523,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1440",
@@ -6601,16 +6501,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1440",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -7521,16 +7411,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -8393,16 +8273,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1280",
@@ -9381,16 +9251,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -10353,16 +10213,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1280",
@@ -11341,16 +11191,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -12313,16 +12153,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1280",
@@ -13301,16 +13131,6 @@
       "submode": "(root)",
       "rule": "A04",
       "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1280",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
       "el": "input.bg-ink-800.border",
       "evidence": "no label at all"
     },
@@ -14039,16 +13859,6 @@
       "tab": "drawing",
       "overlay": "(none)",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -14433,16 +14243,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1024",
@@ -14939,16 +14739,6 @@
       "tab": "drawing",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -15433,16 +15223,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1024",
@@ -15939,16 +15719,6 @@
       "tab": "drawing",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -16439,16 +16209,6 @@
       "tab": "drawing",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -16933,16 +16693,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14,8px"
-    },
-    {
-      "viewport": "1024",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "1024",
@@ -17373,16 +17123,6 @@
       "sev": "low",
       "el": "div.shrink-0.flex \"00:00:00:00 / 00:00:08:001×S\"",
       "evidence": "icon sizes in one row: 12,15,10,14px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "(none)",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "390-mobile",
@@ -17833,16 +17573,6 @@
       "sev": "medium",
       "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
       "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "graph-editor",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "390-mobile",
@@ -18499,16 +18229,6 @@
       "tab": "drawing",
       "overlay": "right-panel",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "right-panel",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -19153,16 +18873,6 @@
       "sev": "medium",
       "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
       "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-modal",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "390-mobile",
@@ -19819,16 +19529,6 @@
       "tab": "drawing",
       "overlay": "curve-editor",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "curve-editor",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -20479,16 +20179,6 @@
       "tab": "drawing",
       "overlay": "compound-inspector",
       "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "compound-inspector",
-      "submode": "(root)",
       "rule": "D01",
       "sev": "medium",
       "el": "[testid=left-panel]",
@@ -21133,16 +20823,6 @@
       "sev": "medium",
       "el": "div.flex-1.min-w-0 \"Click a keyframe node or dou\"",
       "evidence": "child div.absolute.bottom-2 \"Click a keyframe node or dou\" overflows clip parent by 63px"
-    },
-    {
-      "viewport": "390-mobile",
-      "tab": "drawing",
-      "overlay": "voice-isolation",
-      "submode": "(root)",
-      "rule": "A04",
-      "sev": "medium",
-      "el": "input.w-6.h-6",
-      "evidence": "no label at all"
     },
     {
       "viewport": "390-mobile",

@@ -94,6 +94,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       <Section title="Clip">
         <div className="flex items-center justify-between gap-2">
           <input
+            aria-label="Clip name"
             value={clip.name}
             onChange={(e) => setClipProp(clip.id, { name: e.target.value })}
             className="bg-ink-800 border border-ink-700 rounded px-2 h-7 text-xs text-ink-100 outline-none focus:border-brand w-full"
@@ -333,6 +334,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   clips: s.clips.map((c) => (c.id === clip.id ? { ...c, name: text, textStyle: { ...c.textStyle!, text } } : c)),
                 }))
               }}
+              aria-label="Clip name"
               className="bg-ink-800 border border-ink-700 rounded px-2 h-7 text-xs text-ink-100 outline-none focus:border-brand w-full"
             />
           </Field>
