@@ -188,35 +188,32 @@ function collectStrict() {
   // Only controls a person actually has to scan count. Content inside a
   // collapsed section is not on screen, so it is not a density problem.
   const shown = (c) => c.offsetParent !== null || c.getClientRects().length
-  const groups = [...document.querySelectorAll('[data-testid$="-section"], [data-testid$="-panel"], section, fieldset')]
+  // A real <button aria-expanded> has the role implicitly, so matching only
+  // [role="button"] would miss every section that uses a native button as
+  // its disclosure trigger. Match either shape.
+  const isDisc = (c) =>
+    c.querySelector(':scope > button[aria-expanded], :scope > [role="button"][aria-expanded]') !== null
+
+  // Every collapsible sub-group is a group in its own right, whether or not
+  // it was declared with a testid. Without adding them, a panel is charged
+  // for controls that belong to the sections inside it and the crowded
+  // section goes unnamed -- the drawing panel's Tools section looked like 33
+  // controls when it owns 1 and merely contains eight sub-sections.
+  const declared = [...document.querySelectorAll('[data-testid$="-section"], [data-testid$="-panel"], section, fieldset')]
+  const collapsible = [...document.querySelectorAll('div, section')].filter(isDisc)
+  const groups = [...new Set([...declared, ...collapsible])].filter(vis)
+
   for (const g of groups) {
-    if (!vis(g)) continue
-    // A container built out of collapsible sub-groups is not the group a
-    // person scans -- the sub-groups are. Charging every control in a panel
-    // to the panel hides which section is actually crowded, so measure the
-    // disclosures instead. Recognised generically by the disclosure pattern:
-    // a direct child holding a role=button that reports aria-expanded.
-    // The disclosures are not always direct children -- a panel often wraps
-    // its sections in one layout div -- so find them at any depth, then keep
-    // only the outermost so the same controls are not charged twice.
-    // A real <button aria-expanded> has the role implicitly, so matching only
-    // [role="button"] would miss every section that uses a native button as
-    // its disclosure trigger. Match either shape.
-    const isDisc = (c) =>
-      c.querySelector(':scope > button[aria-expanded], :scope > [role="button"][aria-expanded]') !== null
-    const subs = [...g.querySelectorAll('div, section')].filter(isDisc).filter((c) => {
-      for (let p = c.parentElement; p && p !== g; p = p.parentElement) if (isDisc(p)) return false
-      return true
-    })
-    const flag = (unit, n) => { if (n > 14) push('D01', 'medium', unit, `${n} controls in one group -> regroup candidate`) }
-    if (subs.length) {
-      for (const sub of subs) flag(sub, [...sub.querySelectorAll(CTRL)].filter(shown).length)
-      // Anything the sub-groups do not cover is still the container's own.
-      const rest = [...g.querySelectorAll(CTRL)].filter(shown).filter((c) => !subs.some((s) => s.contains(c))).length
-      flag(g, rest)
-    } else {
-      flag(g, [...g.querySelectorAll(CTRL)].filter(shown).length)
-    }
+    // Charge a group only for the controls it holds itself, not for those
+    // belonging to groups nested inside it. Otherwise every ancestor of a
+    // crowded section reports the same crowding, and the container -- which
+    // is nothing but a list of headings to scan -- looks like the problem.
+    const nested = groups.filter((o) => o !== g && g.contains(o))
+    const own = [...g.querySelectorAll(CTRL)]
+      .filter(shown)
+      .filter((c) => !nested.some((o) => o.contains(c)))
+      .length
+    if (own > 14) push('D01', 'medium', g, `${own} controls in one group -> regroup candidate`)
   }
 
   // D02 crammed row: many sibling controls packed too tightly. Measure the
