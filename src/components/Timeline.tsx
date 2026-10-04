@@ -1674,7 +1674,7 @@ export function Timeline() {
           className="flex h-8 min-w-[36px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-1.5 text-ink-200 hover:bg-ink-700"
         >
           {tool === 'select' ? <MousePointer2 size={15} /> : <Slash size={15} />}
-          <ChevronDown size={11} />
+          <ChevronDown size={12} />
         </button>
 
         <div className="w-px h-6 bg-ink-700" />
@@ -1699,7 +1699,7 @@ export function Timeline() {
               : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white')
           }
         >
-          <Trash2 size={14} />
+          <Trash2 size={15} />
           <span className="hidden lg:inline">Select Gaps</span>
         </button>
 
@@ -2476,7 +2476,7 @@ export function Timeline() {
                   }}
                   className="flex items-center gap-2 w-full px-2 py-1.5 rounded text-red-400 hover:bg-red-500/20 text-left"
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={15} />
                   <span>Delete</span>
                   <kbd className="ml-auto text-[10px] text-red-400">Del</kbd>
                 </button>
@@ -2535,7 +2535,7 @@ export function Timeline() {
                   }}
                   className="flex items-center gap-2 w-full px-2 py-1.5 rounded text-red-400 hover:bg-red-500/20 text-left"
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={15} />
                   <span>Delete Transition</span>
                 </button>
               </>
@@ -2596,7 +2596,7 @@ export function Timeline() {
                       }}
                       className="flex items-center gap-2 w-full px-2 py-1.5 rounded text-red-400 hover:bg-red-500/20 text-left"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={15} />
                       <span>Delete Track</span>
                     </button>
                   </>
