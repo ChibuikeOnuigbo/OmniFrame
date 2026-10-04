@@ -1,0 +1,18 @@
+SOURCE_ID,NAME,CATEGORY,URL,LICENSE,CORE_ARCHITECTURE_STUDIED,OMNIFRAME_APPLICATION
+SRC-001,Kdenlive,NLE Engine,https://github.com/KDE/kdenlive,GPL-2.0-or-later,Track mixes compositions and ripple editing,Same-track transitions and non-overlap model
+SRC-002,OpenShot,NLE Engine,https://github.com/OpenShot/openshot-qt,GPL-3.0-or-later,Timeline strip intervals and keyframe curves,Temporal block representation
+SRC-003,Shotcut,NLE Engine,https://github.com/mltframework/shotcut,GPL-3.0-or-later,Dockable panels and MLT filter pipelines,Flexible left/right docks and filters
+SRC-004,Olive Video Editor,NLE Engine,https://github.com/olive-editor/olive,GPL-3.0-or-later,Node-based compositing and OCIO color,Separation of compositing from intervals
+SRC-005,Blender VSE,NLE Engine,https://projects.blender.org/blender/blender,GPL-2.0-or-later,Channel strips and workspace area layouts,Workspace presets and Focus Mode
+SRC-006,CapCut Desktop,Commercial NLE,https://www.youtube.com/watch?v=C5O353fpPwM,Proprietary,Magnetic primary track and transition glyphs,Cut-point transition pills and ripple push
+SRC-007,Adobe Premiere Pro,Commercial NLE,https://helpx.adobe.com/premiere/desktop/edit-projects/intro-to-editing/set-the-aspect-ratio-of-a-sequence.html,Proprietary,Sequence settings ratio and clip handles,Compact aspect ratio selector and transitions
+SRC-008,Three.js,3D WebGL Engine,https://github.com/mrdoob/three.js,MIT,OrbitControls and camera projection,3D scene viewer and gizmo controls
+SRC-009,Audacity,Audio DSP,https://github.com/audacity/audacity,GPL-2.0-or-later,Vocal Reduction & Isolation mid-side DSP,Voice Isolation clean-room SVF crossover DSP
+SRC-010,Krita,Digital Painting,https://github.com/KDE/krita,GPL-3.0-or-later,Brush engines layer masks and animation cels,Drawing subsystem and onion skinning
+SRC-011,GIMP,Image Manipulation,https://gitlab.gnome.org/GNOME/gimp,GPL-3.0-or-later,Clone/Heal tool and contiguous flood fill,Hair recolor with preserved shading
+SRC-012,PlayCanvas Engine,3D Engine,https://github.com/playcanvas/engine,MIT,Camera controls and fly/focus navigation,Viewport focus and dolly math
+SRC-013,GL-Transitions,Shader Transitions,https://github.com/gl-transitions/gl-transitions,MIT,GLSL transition shader algorithms,Canvas cross dissolve and dip to color
+SRC-014,Toast UI Image Editor,Image Editor,https://github.com/nhn/tui.image-editor,MIT,Vector annotations and selection filters,Interactive drawing canvas overlay
+SRC-015,OpenCut,Web NLE,https://github.com/OpenCut-app/OpenCut,MIT,Browser-based timeline and track lanes,HTML5 canvas video compositing
+SRC-016,DaVinci Resolve Studio,Commercial NLE,https://www.blackmagicdesign.com/products/davinciresolve/fairlight,Proprietary,Fairlight Voice Isolation and Dialogue Leveler neural network,Adaptive vocal formant filtering and stem track splitting
+SRC-017,Demucs / Hybrid Transformer,Audio AI,https://github.com/facebookresearch/demucs,MIT,HTDemucs dual-domain spectrogram and waveform separation,Client-side Web Audio vocal extraction with mid-side phase filtering

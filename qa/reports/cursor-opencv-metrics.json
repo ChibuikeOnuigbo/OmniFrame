@@ -1,0 +1,535 @@
+{
+  "cursor-mac-default": {
+    "path": "evidence/screenshots/cursor-mac-default.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 669.74,
+    "rms_contrast_std": 23.63,
+    "mean_brightness": 15.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-pointer-hover": {
+    "path": "evidence/screenshots/cursor-pointer-hover.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 676.07,
+    "rms_contrast_std": 23.75,
+    "mean_brightness": 15.24,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-drag-plus-badge": {
+    "path": "evidence/screenshots/cursor-drag-plus-badge.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 667.71,
+    "rms_contrast_std": 23.83,
+    "mean_brightness": 15.29,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-help-question-badge": {
+    "path": "evidence/screenshots/cursor-help-question-badge.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 678.86,
+    "rms_contrast_std": 23.88,
+    "mean_brightness": 15.28,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-settings-customizer": {
+    "path": "evidence/screenshots/cursor-settings-customizer.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 991.24,
+    "rms_contrast_std": 25.16,
+    "mean_brightness": 17.43,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-click-burst": {
+    "path": "evidence/screenshots/cursor-click-burst.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 674.83,
+    "rms_contrast_std": 23.74,
+    "mean_brightness": 15.26,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-drag-ghost-pill": {
+    "path": "evidence/screenshots/cursor-drag-ghost-pill.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 720.13,
+    "rms_contrast_std": 23.88,
+    "mean_brightness": 15.34,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-help-info-pill": {
+    "path": "evidence/screenshots/cursor-help-info-pill.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 734.02,
+    "rms_contrast_std": 23.98,
+    "mean_brightness": 15.31,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-magnetized-drop-reticle": {
+    "path": "evidence/screenshots/cursor-magnetized-drop-reticle.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 1015.49,
+    "rms_contrast_std": 24.64,
+    "mean_brightness": 17.17,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-mac-sonoma-pack": {
+    "path": "evidence/screenshots/cursor-mac-sonoma-pack.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 919.56,
+    "rms_contrast_std": 24.61,
+    "mean_brightness": 17.38,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-playground-settings": {
+    "path": "evidence/screenshots/cursor-playground-settings.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 917.2,
+    "rms_contrast_std": 24.98,
+    "mean_brightness": 17.46,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-drag-plus": {
+    "path": "evidence/cutouts/cut-cursor-drag-plus.png",
+    "width": 62,
+    "height": 62,
+    "channels": 3,
+    "sharpness_laplacian_var": 8585.22,
+    "rms_contrast_std": 64.82,
+    "mean_brightness": 44.96,
+    "dynamic_range": [
+      6.0,
+      255.0
+    ]
+  },
+  "cut-cursor-help-question": {
+    "path": "evidence/cutouts/cut-cursor-help-question.png",
+    "width": 62,
+    "height": 62,
+    "channels": 3,
+    "sharpness_laplacian_var": 9033.2,
+    "rms_contrast_std": 69.79,
+    "mean_brightness": 54.39,
+    "dynamic_range": [
+      8.0,
+      255.0
+    ]
+  },
+  "cut-cursor-settings-panel": {
+    "path": "evidence/cutouts/cut-cursor-settings-panel.png",
+    "width": 520,
+    "height": 540,
+    "channels": 3,
+    "sharpness_laplacian_var": 2328.06,
+    "rms_contrast_std": 25.5,
+    "mean_brightness": 26.11,
+    "dynamic_range": [
+      6.0,
+      255.0
+    ]
+  },
+  "cut-cursor-click-burst": {
+    "path": "evidence/cutouts/cut-cursor-click-burst.png",
+    "width": 80,
+    "height": 80,
+    "channels": 3,
+    "sharpness_laplacian_var": 2813.27,
+    "rms_contrast_std": 42.94,
+    "mean_brightness": 11.78,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-drag-ghost-pill": {
+    "path": "evidence/cutouts/cut-cursor-drag-ghost-pill.png",
+    "width": 156,
+    "height": 76,
+    "channels": 3,
+    "sharpness_laplacian_var": 9078.54,
+    "rms_contrast_std": 81.44,
+    "mean_brightness": 58.2,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-help-info-pill": {
+    "path": "evidence/cutouts/cut-cursor-help-info-pill.png",
+    "width": 156,
+    "height": 76,
+    "channels": 3,
+    "sharpness_laplacian_var": 10191.83,
+    "rms_contrast_std": 49.88,
+    "mean_brightness": 38.02,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-magnetized-drop-reticle": {
+    "path": "evidence/cutouts/cut-cursor-magnetized-drop-reticle.png",
+    "width": 120,
+    "height": 100,
+    "channels": 3,
+    "sharpness_laplacian_var": 4602.03,
+    "rms_contrast_std": 35.25,
+    "mean_brightness": 28.25,
+    "dynamic_range": [
+      10.0,
+      255.0
+    ]
+  },
+  "cut-cursor-playground": {
+    "path": "evidence/cutouts/cut-cursor-playground.png",
+    "width": 342,
+    "height": 102,
+    "channels": 3,
+    "sharpness_laplacian_var": 2309.5,
+    "rms_contrast_std": 20.88,
+    "mean_brightness": 24.23,
+    "dynamic_range": [
+      13.0,
+      191.0
+    ]
+  },
+  "cursor-visibility-canvas-inspection": {
+    "path": "evidence/screenshots/cursor-visibility-canvas-inspection.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 668.82,
+    "rms_contrast_std": 23.63,
+    "mean_brightness": 15.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-visibility-timeline-inspection": {
+    "path": "evidence/screenshots/cursor-visibility-timeline-inspection.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 656.89,
+    "rms_contrast_std": 23.68,
+    "mean_brightness": 15.24,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-visibility-boundary-test": {
+    "path": "evidence/screenshots/cursor-visibility-boundary-test.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 669.74,
+    "rms_contrast_std": 23.63,
+    "mean_brightness": 15.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-canvas-visibility": {
+    "path": "evidence/cutouts/cut-cursor-canvas-visibility.png",
+    "width": 78,
+    "height": 78,
+    "channels": 3,
+    "sharpness_laplacian_var": 3603.18,
+    "rms_contrast_std": 32.24,
+    "mean_brightness": 8.58,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-timeline-visibility": {
+    "path": "evidence/cutouts/cut-cursor-timeline-visibility.png",
+    "width": 80,
+    "height": 80,
+    "channels": 3,
+    "sharpness_laplacian_var": 3329.99,
+    "rms_contrast_std": 39.55,
+    "mean_brightness": 32.71,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-boundary-entry": {
+    "path": "evidence/cutouts/cut-cursor-boundary-entry.png",
+    "width": 78,
+    "height": 78,
+    "channels": 3,
+    "sharpness_laplacian_var": 2436.05,
+    "rms_contrast_std": 28.81,
+    "mean_brightness": 4.45,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-playhead-scrub": {
+    "path": "evidence/screenshots/cursor-frame-playhead-scrub.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 660.13,
+    "rms_contrast_std": 23.7,
+    "mean_brightness": 15.24,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-modal-overlay": {
+    "path": "evidence/screenshots/cursor-frame-modal-overlay.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 328.38,
+    "rms_contrast_std": 13.88,
+    "mean_brightness": 6.36,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-inspector-slider": {
+    "path": "evidence/screenshots/cursor-frame-inspector-slider.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 328.81,
+    "rms_contrast_std": 13.9,
+    "mean_brightness": 6.36,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cursor-frame-3d-orbit": {
+    "path": "evidence/screenshots/cursor-frame-3d-orbit.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 329.96,
+    "rms_contrast_std": 13.91,
+    "mean_brightness": 6.36,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-playhead-scrub": {
+    "path": "evidence/cutouts/cut-cursor-frame-playhead-scrub.png",
+    "width": 62,
+    "height": 62,
+    "channels": 3,
+    "sharpness_laplacian_var": 1973.39,
+    "rms_contrast_std": 50.18,
+    "mean_brightness": 32.37,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-modal-overlay": {
+    "path": "evidence/cutouts/cut-cursor-frame-modal-overlay.png",
+    "width": 58,
+    "height": 58,
+    "channels": 3,
+    "sharpness_laplacian_var": 4021.73,
+    "rms_contrast_std": 45.69,
+    "mean_brightness": 30.94,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-inspector-slider": {
+    "path": "evidence/cutouts/cut-cursor-frame-inspector-slider.png",
+    "width": 58,
+    "height": 58,
+    "channels": 3,
+    "sharpness_laplacian_var": 3935.62,
+    "rms_contrast_std": 37.29,
+    "mean_brightness": 10.25,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-cursor-frame-3d-orbit": {
+    "path": "evidence/cutouts/cut-cursor-frame-3d-orbit.png",
+    "width": 58,
+    "height": 58,
+    "channels": 3,
+    "sharpness_laplacian_var": 5326.36,
+    "rms_contrast_std": 38.37,
+    "mean_brightness": 28.54,
+    "dynamic_range": [
+      5.0,
+      255.0
+    ]
+  },
+  "boundary-clip-cursor-drag-pill": {
+    "path": "evidence/screenshots/boundary-clip-cursor-drag-pill.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 807.29,
+    "rms_contrast_std": 24.2,
+    "mean_brightness": 15.41,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "boundary-clip-timeline-labels": {
+    "path": "evidence/screenshots/boundary-clip-timeline-labels.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 708.77,
+    "rms_contrast_std": 24.04,
+    "mean_brightness": 15.38,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "boundary-clip-inspector-controls": {
+    "path": "evidence/screenshots/boundary-clip-inspector-controls.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian_var": 708.77,
+    "rms_contrast_std": 24.04,
+    "mean_brightness": 15.38,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "boundary-clip-mobile-viewport": {
+    "path": "evidence/screenshots/boundary-clip-mobile-viewport.png",
+    "width": 414,
+    "height": 896,
+    "channels": 3,
+    "sharpness_laplacian_var": 513.54,
+    "rms_contrast_std": 16.23,
+    "mean_brightness": 13.22,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-boundary-clip-cursor-drag-pill": {
+    "path": "evidence/cutouts/cut-boundary-clip-cursor-drag-pill.png",
+    "width": 360,
+    "height": 66,
+    "channels": 3,
+    "sharpness_laplacian_var": 6602.7,
+    "rms_contrast_std": 36.92,
+    "mean_brightness": 22.09,
+    "dynamic_range": [
+      0.0,
+      255.0
+    ]
+  },
+  "cut-boundary-clip-timeline-labels": {
+    "path": "evidence/cutouts/cut-boundary-clip-timeline-labels.png",
+    "width": 420,
+    "height": 180,
+    "channels": 3,
+    "sharpness_laplacian_var": 1896.25,
+    "rms_contrast_std": 22.4,
+    "mean_brightness": 19.9,
+    "dynamic_range": [
+      9.0,
+      255.0
+    ]
+  },
+  "cut-boundary-clip-inspector-controls": {
+    "path": "evidence/cutouts/cut-boundary-clip-inspector-controls.png",
+    "width": 280,
+    "height": 180,
+    "channels": 3,
+    "sharpness_laplacian_var": 2886.99,
+    "rms_contrast_std": 30.69,
+    "mean_brightness": 26.15,
+    "dynamic_range": [
+      14.0,
+      232.0
+    ]
+  },
+  "cut-boundary-clip-mobile-viewport": {
+    "path": "evidence/cutouts/cut-boundary-clip-mobile-viewport.png",
+    "width": 398,
+    "height": 220,
+    "channels": 3,
+    "sharpness_laplacian_var": 504.0,
+    "rms_contrast_std": 20.62,
+    "mean_brightness": 15.69,
+    "dynamic_range": [
+      8.0,
+      255.0
+    ]
+  }
+}

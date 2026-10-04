@@ -3,7 +3,7 @@
     {
       "name": "ruler labels do not overlap at 40 px/s",
       "status": "PASS",
-      "detail": "9 labels"
+      "detail": "8 labels"
     },
     {
       "name": "major tick times strictly increase at 40 px/s",
@@ -13,12 +13,12 @@
     {
       "name": "major tick density is bounded at 40 px/s",
       "status": "PASS",
-      "detail": "9"
+      "detail": "8"
     },
     {
       "name": "ruler labels do not overlap at 160 px/s",
       "status": "PASS",
-      "detail": "9 labels"
+      "detail": "8 labels"
     },
     {
       "name": "major tick times strictly increase at 160 px/s",
@@ -28,7 +28,7 @@
     {
       "name": "major tick density is bounded at 160 px/s",
       "status": "PASS",
-      "detail": "9"
+      "detail": "8"
     },
     {
       "name": "ruler labels do not overlap at 640 px/s",
@@ -48,7 +48,7 @@
     {
       "name": "ruler labels do not overlap at 2400 px/s",
       "status": "PASS",
-      "detail": "10 labels"
+      "detail": "9 labels"
     },
     {
       "name": "major tick times strictly increase at 2400 px/s",
@@ -73,7 +73,7 @@
     {
       "name": "wheel zoom preserves pointer time anchor",
       "status": "PASS",
-      "detail": "2.0840 -> 2.0839"
+      "detail": "2.0200 -> 2.0212"
     },
     {
       "name": "project ruler accepts 23.976 fps",

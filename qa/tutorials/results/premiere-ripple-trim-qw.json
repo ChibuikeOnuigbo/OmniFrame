@@ -1,0 +1,61 @@
+{
+  "id": "premiere-ripple-trim-qw",
+  "app": "Adobe Premiere Pro",
+  "title": "Ripple trim to the playhead (Q removes before, W removes after)",
+  "source": "https://www.redsharknews.com/10-essential-keyboard-shortcuts-for-faster-editing-in-premiere-pro",
+  "procedure": [
+    "Park the playhead inside a clip",
+    "Press Q to delete everything before the playhead, or W for everything after",
+    "The timeline stays connected"
+  ],
+  "verdict": "PARTIAL",
+  "counts": {
+    "PASS": 5,
+    "FAIL": 2,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-death-note-vid', 0, 6)",
+      "status": "PASS",
+      "detail": "addClip('asset-death-note-vid', 0, 6)"
+    },
+    {
+      "kind": "store",
+      "label": "setPlayhead(2)",
+      "status": "PASS",
+      "detail": "setPlayhead(2)"
+    },
+    {
+      "kind": "probe",
+      "label": "ripple-trim control exists (Q / W binding)",
+      "status": "FAIL",
+      "detail": "hasTestid('ripple-trim-before-btn') || hasTestid('ripple-trim-after-btn') || grepDom(/ripple trim/i)"
+    },
+    {
+      "kind": "keys",
+      "label": "w",
+      "status": "PASS",
+      "detail": "w"
+    },
+    {
+      "kind": "assert",
+      "label": "pressing W trimmed the clip at the playhead",
+      "status": "FAIL",
+      "detail": "clips().length === 1 && clips()[0].duration <= 2.2"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/premiere-ripple-trim-qw-1.png"
+    }
+  ]
+}

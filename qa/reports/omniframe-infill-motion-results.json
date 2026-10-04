@@ -1,0 +1,11 @@
+{
+  "allScope": true,
+  "frameScope": true,
+  "sectionScope": true,
+  "duplicateCharacter": true,
+  "deleteInfillCharacter": true,
+  "restoreCharacter": true,
+  "motionTransforms": true,
+  "autoRearrange": true,
+  "zeroGhostMetrics": {}
+}

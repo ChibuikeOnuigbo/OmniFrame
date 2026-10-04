@@ -29,11 +29,22 @@ body {
 .of-range {
   -webkit-appearance: none;
   appearance: none;
+  /* The visible track stays 4px, but the control itself is 24px tall so
+     there is a grabbable hit area. A 4px-tall target is very hard to hit
+     with a mouse and unusable on a touchscreen; the thumb alone is not
+     enough because the track between thumb and edge was unclickable.
+     24px is the accepted minimum target size -- it used to be 18px, which
+     was under it. */
+  height: 24px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+/* Draw the thin track inside the taller box, so nothing looks different. */
+.of-range::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 999px;
   background: #2e374a;
-  outline: none;
-  cursor: pointer;
 }
 .of-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -45,8 +56,15 @@ body {
   border: 2px solid #0c0e13;
   cursor: pointer;
   transition: transform 0.08s ease;
+  /* Centre the 13px thumb on the 4px track: (4 - 13) / 2 = -4.5 */
+  margin-top: -4.5px;
 }
 .of-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.of-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: #2e374a;
+}
 .of-range::-moz-range-thumb {
   width: 13px;
   height: 13px;
@@ -113,3 +131,29 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+@keyframes ofCursorPing {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+html.of-custom-cursor-active,
+html.of-custom-cursor-active body,
+html.of-custom-cursor-active *,
+html.of-custom-cursor-active *::before,
+html.of-custom-cursor-active *::after,
+html.of-custom-cursor-active input,
+html.of-custom-cursor-active button,
+html.of-custom-cursor-active select,
+html.of-custom-cursor-active textarea,
+html.of-custom-cursor-active canvas,
+html.of-custom-cursor-active svg {
+  cursor: none !important;
+}
+

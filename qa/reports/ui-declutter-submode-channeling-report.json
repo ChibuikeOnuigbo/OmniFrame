@@ -1,0 +1,39 @@
+{
+  "testTimestamp": "2026-10-02T23:47:45.419Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "categoryFilters": {
+    "all": 10,
+    "video": 6,
+    "twoD": 3,
+    "threeD": 1
+  },
+  "subModeChanneling": {
+    "threeDMaterials": {
+      "badgeCreated": true,
+      "breadcrumbMatches": true,
+      "focusedSection": "threed-materials-section"
+    },
+    "textPresets": {
+      "badgeCreated": true,
+      "breadcrumbMatches": true,
+      "focusedSection": "text-presets-section"
+    },
+    "omniframeSelection": {
+      "badgeCreated": true,
+      "breadcrumbMatches": true,
+      "focusedSection": "selection-mask-subtool"
+    },
+    "temporaryDismissalVerified": true
+  },
+  "screenshots": [
+    "evidence/screenshots/SS-098-ui-declutter-category-filters.png",
+    "evidence/screenshots/SS-099-submode-3d-materials-channel.png",
+    "evidence/screenshots/SS-100-submode-text-presets-channel.png",
+    "evidence/screenshots/SS-101-submode-omniframe-selection-channel.png",
+    "evidence/screenshots/SS-102-demo-edits-ledger-200-recreation.png"
+  ],
+  "passed": true
+}

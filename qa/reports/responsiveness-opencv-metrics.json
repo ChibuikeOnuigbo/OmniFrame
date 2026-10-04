@@ -1,0 +1,92 @@
+{
+  "desktop_1920x1080": {
+    "path": "evidence/screenshots/responsiveness-desktop_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "channels": 3,
+    "sharpness_laplacian": 1637.02,
+    "contrast_rms": 111.41,
+    "mean_brightness": 101.21,
+    "responsive_valid": true
+  },
+  "desktop_1440x900": {
+    "path": "evidence/screenshots/responsiveness-desktop_1440x900.png",
+    "width": 1440,
+    "height": 900,
+    "channels": 3,
+    "sharpness_laplacian": 2734.21,
+    "contrast_rms": 97.01,
+    "mean_brightness": 70.81,
+    "responsive_valid": true
+  },
+  "tablet_1024x768": {
+    "path": "evidence/screenshots/responsiveness-tablet_1024x768.png",
+    "width": 1024,
+    "height": 768,
+    "channels": 3,
+    "sharpness_laplacian": 3673.13,
+    "contrast_rms": 108.02,
+    "mean_brightness": 87.77,
+    "responsive_valid": true
+  },
+  "tablet_768x1024": {
+    "path": "evidence/screenshots/responsiveness-tablet_768x1024.png",
+    "width": 768,
+    "height": 1024,
+    "channels": 3,
+    "sharpness_laplacian": 3321.33,
+    "contrast_rms": 103.05,
+    "mean_brightness": 74.99,
+    "responsive_valid": true
+  },
+  "mobile_390x844": {
+    "path": "evidence/screenshots/responsiveness-mobile_390x844.png",
+    "width": 390,
+    "height": 844,
+    "channels": 3,
+    "sharpness_laplacian": 3312.49,
+    "contrast_rms": 73.86,
+    "mean_brightness": 40.48,
+    "responsive_valid": true
+  },
+  "mobile_360x800": {
+    "path": "evidence/screenshots/responsiveness-mobile_360x800.png",
+    "width": 360,
+    "height": 800,
+    "channels": 3,
+    "sharpness_laplacian": 3460.11,
+    "contrast_rms": 70.88,
+    "mean_brightness": 38.37,
+    "responsive_valid": true
+  },
+  "mobile_320x640": {
+    "path": "evidence/screenshots/responsiveness-mobile_320x640.png",
+    "width": 320,
+    "height": 640,
+    "channels": 3,
+    "sharpness_laplacian": 3960.53,
+    "contrast_rms": 70.48,
+    "mean_brightness": 39.31,
+    "responsive_valid": true
+  },
+  "mobile_drawer_open": {
+    "path": "evidence/screenshots/responsiveness-mobile-drawer-open.png",
+    "width": 390,
+    "height": 844,
+    "channels": 3,
+    "sharpness_laplacian": 1289.33,
+    "contrast_rms": 39.54,
+    "mean_brightness": 25.95,
+    "responsive_valid": true
+  },
+  "mobile_settings_open": {
+    "path": "evidence/screenshots/responsiveness-mobile-settings-open.png",
+    "width": 390,
+    "height": 844,
+    "channels": 3,
+    "sharpness_laplacian": 1919.65,
+    "contrast_rms": 45.8,
+    "mean_brightness": 28.93,
+    "responsive_valid": true
+  }
+}

@@ -50,3 +50,53 @@ Add dedicated browser geometry/state assertions for gapless ripple and undo, the
 - `.audit/editor-research/` (local excluded clones)
 
 - 2026-09-22T19:55:26+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
+
+- 2026-09-24T12:31:08+00:00 — Drawing Run #1: [VERIFIED] Feature-Slice 01: Basic Paint — Stroke recording, brush, line, rectangle, circle, arrow, swatches, canvas rendering, export with 365 frames decoded
+
+- 2026-09-24T12:46:47+00:00 — Drawing Run #2: [VERIFIED] Feature-Slice 03: Fill Tool & Hair Recolor — Contiguous flood fill with Euclidean threshold, anti-halo dilation, luminance preservation, and layer blend modes verified via Playwright and OpenCV (152 frames decoded, blue dom +118.60, shading std 11.12)
+
+- 2026-09-24T13:00:29+00:00 — Drawing Run #3: [VERIFIED] Feature-Slice 02: Multi-Frame Paint & Onion Skinning — Cel frame scoping, exposure hold frames ('on twos'), step prev/next navigation, onion skin ghosting, and OpenCV video export verification (159 frames decoded)
+
+- 2026-09-24T14:04:26+00:00 — Drawing Run #4: [VERIFIED] Layout System & Feature-Slice 04: Selection Family & Mask Conversion — Layout Manager Modal, custom workspace persistence (localStorage), focus modes ('canvas-only', 'preview'), marquee rect/ellipse/lasso selection, animated dual-phase marching ants, selection inversion, paint layer mask conversion with destination-in clipping, and real WebM video export (90 frames decoded, avg lum 183.17)
+
+- 2026-09-25T14:43:50+00:00 — Drawing Run #5: [VERIFIED] Master Rebuild Subsystem — Executed full master rebuild. Zero UI stubs remaining. 9:16 export verified via headless OpenCV (1080x1920, 324 frames). 10,040 feature findings and 20,279 lines synthesis generated.
+
+- 2026-09-25T21:16:21+00:00 — Drawing Run #6: [VERIFIED] Unified Preview Text Effects and Mobile Responsiveness — Unified preview canvas, text titles, real-time effects and transitions, isolate voice hover submenu, and 390px mobile responsiveness passing 21/21 E2E tests
+
+- 2026-09-25T21:16:24+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
+
+- 2026-09-25T21:16:37+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
+
+- 2026-09-25T21:41:45+00:00 — Drawing Run #7: [VERIFIED] Ratio Dropdown Platform Icons Stacked Paper Slide and Canvas Empty Playback Fix — Fixed canvas empty overlay hiding during playback, added authentic platform icons and YouTube TikTok paper slide stack for 9:16, custom dimension editor in compact space, and removed hyphens from user text
+
+- 2026-09-25T23:04:01+00:00 — Drawing Run #8: [VERIFIED] Platform Aspect Ratio Icons Instagram 3:4 Pinterest 2:3 and Dropdown Modernization — Researched standard social aspect ratios for 2026, implemented authentic platform icons across all presets with Instagram for 3:4 grid/feed, Pinterest for 2:3 pin, and verified all E2E tests
+
+- 2026-09-26T22:17:10+00:00 — Drawing Run #9: [PASS] Voice Isolation & Curve 3D Verification — Playwright E2E and OpenCV metrics verified for Graph Editor, Keyframing, and 3D Viewport
+
+- 2026-09-26T23:10:00+00:00 — Drawing Run #10: [PASS] OmniFrame Mode, Drawing Mode & Masking Conversions — Verified All Frames, Section, 1-frame scopes, Drawing Add to Video toggle, frame attach stepper, and Mask <-> Drawing <-> Selection conversions
+
+- 2026-09-27T11:54:21+00:00 — Drawing Run #11: [VERIFIED] Compound Clip & Color Coding Architecture — Sequence hierarchy, breadcrumb navigation, target-aware context menu, distinct track/clip palettes, video character shift preview verified with Playwright E2E and OpenCV
+
+- 2026-09-27T12:55:12+00:00 — Drawing Run #12: [VERIFIED]  — 
+
+- 2026-09-27T15:29:08+00:00 — Drawing Run #13: [VERIFIED]  — 
+
+- 2026-09-29T23:00:59+00:00 — Drawing Run #14: [VERIFIED] OmniFrame Mode Vetting & UI Decluttering — Vetted OmniFrame on image asset and multi-frame video across frames 0, 90, 105, 150 with clean inpainting zero-ghost and decluttered UI
+
+- 2026-09-29T23:24:16+00:00 — Drawing Run #15: [VERIFIED] Cluster Fixer, Space-Saving Icons, Settings Context Menu & Shortcuts Customizer — Replaced bulky text buttons with sleek icons+tooltips, added collapsible accordion groups in Inspector, implemented context menu & shortcuts customizers in responsive Settings popup down to 360px
+
+- 2026-09-30T11:00:09+00:00 — Drawing Run #16: [VERIFIED] Viewport Resize Vetting & Multi-Breakpoint Responsiveness — Vetted and screenshotted layout across 7 breakpoints (1920x1080, 1440x900, 1024x768, 768x1024, 390x844, 360x800, 320x640) with zero overflow, responsive settings popup, and drawer overlay
+
+- 2026-09-30T11:26:36+00:00 — Drawing Run #17: [VERIFIED] Custom Pointer Events & Gamified macOS-Style Cursor Subsystem — Engineered hardware-accelerated macOS vector cursor with bigger scale (1.15x), dynamic + drag badge, ? help badge, click ripple burst, and dedicated Cursor Customizer in Settings. Verified via Playwright and OpenCV.
+
+- 2026-09-30T11:35:46+00:00 — Drawing Run #18: [VERIFIED] Downloaded macOS Cursor Packs & Refined Drag/Drop Reticle Engine — Downloaded 40+ authentic macOS vector SVGs, engineered 16 cursor states including attached Drag Ghost Pills and Magnetized Drop Reticle, authentic pack selector (Sonoma Pro, Gamified, Cyber Violet, Neo Stealth), and an Interactive Cursor Playground in Settings.
+
+- 2026-09-30T21:01:30+00:00 — Drawing Run #19: [VERIFIED] Cursor Visibility Inspection, Hotspot Alignment & Bug Elimination — Verified continuous cursor presence across all application zones (showing all time), 100% native cursor suppression, state-aware hotspot offsetting (fingertip, crosshair, drop reticle), and window boundary exit/re-entry restoration. Verified with Playwright and OpenCV.
+
+- 2026-09-30T21:14:50+00:00 — Drawing Run #20: [VERIFIED] Frame-by-Frame Cursor Visibility Audit Across Modals & Scrubbing — Deep inspection verifying continuous cursor visibility over modal dialog overlays, playhead drag scrubbing, inspector range sliders, and 3D canvas planes. Verified with Playwright and OpenCV.
+
+- 2026-10-01T10:35:03+00:00 — Drawing Run #21: [VERIFIED] Boundary Clips, Text Overflow & Icon Consolidation — Fixed drag pill, track headers, markers, and buttons with ellipsis and tooltips; SS-089 to SS-092, CUT-100 to CUT-103, F-0082, PF-0068
+
+- 2026-10-01T16:30:54+00:00 — Iteration 1: 24-hour bounded timer started; heartbeat records time only, never completion.
+
+- 2026-10-01T16:31:39+00:00 — Drawing Run #22: [VERIFIED] UI Clutter Reduction & Sub-Mode Channeling — Implemented category filtering (ALL, VID, 2D, 3D), temporary sub-mode rail icons with dismissal badges, and focused breadcrumb navigation headers

@@ -1,0 +1,9 @@
+{
+  "addTransparencyMask": true,
+  "indentedMaskTree": true,
+  "maskEditingBanner": true,
+  "nonDestructiveMaskErase": true,
+  "maskBypassRestore": true,
+  "maskInvert": true,
+  "brushDynamicsConfig": true
+}

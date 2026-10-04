@@ -11,7 +11,7 @@
       "detail": ""
     },
     {
-      "name": "repeated import creates independent asset and clip",
+      "name": "repeated import creates independent asset",
       "status": "PASS",
       "detail": ""
     },
@@ -23,7 +23,7 @@
     {
       "name": "library drop maps pointer X to timeline time",
       "status": "PASS",
-      "detail": "1.9792"
+      "detail": "1.9887"
     },
     {
       "name": "locked clip pointer move rejected",
@@ -56,14 +56,29 @@
       "detail": ""
     },
     {
+      "name": "snapping off for precision drag measurement",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "minimum timeline zoom reached",
       "status": "PASS",
       "detail": ""
     },
     {
+      "name": "audio clip has a box at 8px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio clip grabbable at 8px/s",
+      "status": "PASS",
+      "detail": "grab point 512,816"
+    },
+    {
       "name": "pointer move accurate at 8px/s",
       "status": "PASS",
-      "detail": "0->4"
+      "detail": "0->4 expect 4"
     },
     {
       "name": "maximum timeline zoom reached",
@@ -71,9 +86,24 @@
       "detail": ""
     },
     {
+      "name": "audio clip has a box at 8000px/s",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio clip grabbable at 8000px/s",
+      "status": "PASS",
+      "detail": "grab point 1000,816"
+    },
+    {
       "name": "pointer move accurate at 8000px/s",
       "status": "PASS",
-      "detail": "4->4"
+      "detail": "4->4.005 expect 4.005"
+    },
+    {
+      "name": "snapping restored after measurement",
+      "status": "PASS",
+      "detail": ""
     },
     {
       "name": "timeline horizontal scrolling at maximum zoom",
@@ -102,6 +132,31 @@
     },
     {
       "name": "reverse boundary pauses transport",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "zoom reset for split sequence",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "ruler seek to 11.60",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "ruler seek to 13.20",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "ruler seek to 14.80",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "ruler seek to 16.40",
       "status": "PASS",
       "detail": ""
     },
@@ -143,7 +198,7 @@
     {
       "name": "pagehide revokes all created object URLs",
       "status": "PASS",
-      "detail": "7/7"
+      "detail": "10/7"
     },
     {
       "name": "reload clean state after lifecycle release",
@@ -163,20 +218,21 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/a828bc71-5fa6-4195-8da3-70df0358c2e1 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/15134584-5e6f-4a50-b38b-e7dfc4c4e998 :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/15134584-5e6f-4a50-b38b-e7dfc4c4e998 :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "lifecycle": [
-    "OF_URL_CREATE blob:http://localhost:5173/905a273a-bb78-4a12-b766-b3f19003f1fd",
-    "OF_URL_REVOKE blob:http://localhost:5173/905a273a-bb78-4a12-b766-b3f19003f1fd",
-    "OF_URL_CREATE blob:http://localhost:5173/a828bc71-5fa6-4195-8da3-70df0358c2e1",
-    "OF_URL_CREATE blob:http://localhost:5173/161a4ee8-c323-4391-b898-523edd6ffcaf",
-    "OF_URL_CREATE blob:http://localhost:5173/74e7b480-5e60-4724-8f61-c5e0ed9ab31c",
-    "OF_URL_CREATE blob:http://localhost:5173/743e5468-b7fd-4e76-8a0a-c8e33057a9cf",
-    "OF_URL_CREATE blob:http://localhost:5173/5e27b443-3ab0-403f-a41b-10b2c749f2e0",
-    "OF_URL_REVOKE blob:http://localhost:5173/5e27b443-3ab0-403f-a41b-10b2c749f2e0",
-    "OF_URL_CREATE blob:http://localhost:5173/91b863ca-ee09-4828-b417-3a030521983b",
-    "OF_URL_REVOKE blob:http://localhost:5173/91b863ca-ee09-4828-b417-3a030521983b"
+    "OF_URL_CREATE blob:http://localhost:5173/67df3e8b-f224-4fc9-8145-ad73ce251a29",
+    "OF_URL_REVOKE blob:http://localhost:5173/67df3e8b-f224-4fc9-8145-ad73ce251a29",
+    "OF_URL_CREATE blob:http://localhost:5173/15134584-5e6f-4a50-b38b-e7dfc4c4e998",
+    "OF_URL_CREATE blob:http://localhost:5173/9e7a9cfa-3881-4bec-974d-29da7471ab73",
+    "OF_URL_CREATE blob:http://localhost:5173/52b891e3-fc41-43a9-9566-784e0e096db0",
+    "OF_URL_CREATE blob:http://localhost:5173/58e89ac8-fdde-46e4-8657-56d7b0bc79cc",
+    "OF_URL_CREATE blob:http://localhost:5173/807475c8-3247-4f0e-910f-aceece6370dd",
+    "OF_URL_REVOKE blob:http://localhost:5173/807475c8-3247-4f0e-910f-aceece6370dd",
+    "OF_URL_CREATE blob:http://localhost:5173/76ce018e-0d45-41cb-82ce-e2bbba881330",
+    "OF_URL_REVOKE blob:http://localhost:5173/76ce018e-0d45-41cb-82ce-e2bbba881330"
   ],
   "exports": [
     "/home/user/OmniFrame/qa/exports/advanced-export-1-omniframe-export.mp4",

@@ -1,0 +1,76 @@
+{
+  "screenshots": {
+    "SS-093": {
+      "sharpness": 1273.4,
+      "contrast": 22.84,
+      "brightness": 15.81,
+      "dimensions": "1440x900",
+      "desc": "OmniFrame Selection & Masking Sub-Tool with 6 Selection Types, Invert, Grow/Shrink"
+    },
+    "SS-094": {
+      "sharpness": 1455.6,
+      "contrast": 49.78,
+      "brightness": 39.39,
+      "dimensions": "1440x900",
+      "desc": "Real Photo Room Towel recolored to Royal Blue with luminance-preserving folds"
+    },
+    "SS-095": {
+      "sharpness": 1456.68,
+      "contrast": 49.27,
+      "brightness": 38.88,
+      "dimensions": "1440x900",
+      "desc": "Real Photo Room Towel recolored to Crimson Red on dark brown armchair"
+    },
+    "SS-096": {
+      "sharpness": 1459.96,
+      "contrast": 49.52,
+      "brightness": 39.46,
+      "dimensions": "1440x900",
+      "desc": "Real Photo Towel shifted (+60, -20) with clean background infill behind it"
+    },
+    "SS-097": {
+      "sharpness": 1460.48,
+      "contrast": 79.63,
+      "brightness": 49.64,
+      "dimensions": "1440x900",
+      "desc": "Non-destructive Rubylith Mask Layer overlay (LumaCut mode) protecting background"
+    }
+  },
+  "cutouts": {
+    "CUT-104": {
+      "sharpness": 3302.91,
+      "contrast": 35.25,
+      "brightness": 26.4,
+      "dimensions": "360x340",
+      "desc": "Close-up of Selection & Masking Sub-Tool bar with Rect, Ellipse, Lasso, Polygon, Brush, Wand"
+    },
+    "CUT-105": {
+      "sharpness": 544.06,
+      "contrast": 47.85,
+      "brightness": 50.46,
+      "dimensions": "600x580",
+      "desc": "Close-up of Real Photo Royal Blue Draped Towel with fabric texture and lighting preserved"
+    },
+    "CUT-106": {
+      "sharpness": 531.23,
+      "contrast": 46.39,
+      "brightness": 48.81,
+      "dimensions": "600x580",
+      "desc": "Close-up of Real Photo Crimson Red Draped Towel on Leather Armchair"
+    },
+    "CUT-107": {
+      "sharpness": 509.58,
+      "contrast": 64.3,
+      "brightness": 63.53,
+      "dimensions": "680x580",
+      "desc": "Close-up of shifted towel and clean infilled armchair background showing no ghosting"
+    },
+    "CUT-108": {
+      "sharpness": 571.29,
+      "contrast": 115.05,
+      "brightness": 93.94,
+      "dimensions": "680x580",
+      "desc": "Close-up of Non-Destructive Rubylith mask preview overlay in preview canvas"
+    }
+  }
+}

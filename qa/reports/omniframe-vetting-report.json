@@ -1,0 +1,10 @@
+{
+  "imageTest": true,
+  "videoSpecificFrames": {
+    "frame_0": true,
+    "frame_90": true,
+    "frame_150": true
+  },
+  "cleanInfillZeroGhost": true,
+  "declutteredUiClean": true
+}

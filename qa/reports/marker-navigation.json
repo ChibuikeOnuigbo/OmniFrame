@@ -1,0 +1,62 @@
+[
+  {
+    "name": "R1 seeded four markers at 1s/3s/6s/9s",
+    "pass": true,
+    "detail": "4 markers"
+  },
+  {
+    "name": "R1b store holds exactly the seeded markers",
+    "pass": true,
+    "detail": "4 in store"
+  },
+  {
+    "name": "R2 Alt+ArrowRight walks forward 1 -> 3 -> 6 -> 9",
+    "pass": true,
+    "detail": "[1,3,6,9]"
+  },
+  {
+    "name": "R3 Alt+ArrowRight past the last marker holds position",
+    "pass": true,
+    "detail": "playhead=9"
+  },
+  {
+    "name": "R4 Alt+ArrowLeft walks backward 9 -> 6 -> 3 -> 1",
+    "pass": true,
+    "detail": "[6,3,1]"
+  },
+  {
+    "name": "R5 Alt+ArrowLeft before the first marker holds position",
+    "pass": true,
+    "detail": "playhead=1"
+  },
+  {
+    "name": "R6 plain ArrowRight still steps one frame (Alt did not hijack it)",
+    "pass": true,
+    "detail": "4.0333 vs expected 4.0333"
+  },
+  {
+    "name": "R6b Shift+ArrowRight still steps one second",
+    "pass": true,
+    "detail": "5.0000 vs expected 5"
+  },
+  {
+    "name": "R7 marker dialog opens",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "R8 dialog exposes a \"Go to\" button",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "R9 \"Go to\" moves the playhead to that marker (9s)",
+    "pass": true,
+    "detail": "playhead=9"
+  },
+  {
+    "name": "R10 no uncaught page errors",
+    "pass": true,
+    "detail": ""
+  }
+]

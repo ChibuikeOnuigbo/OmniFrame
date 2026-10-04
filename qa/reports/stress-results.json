@@ -13,6 +13,11 @@
       "detail": ""
     },
     {
+      "name": "empty project has no tracks in state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "three media clips imported",
       "status": "PASS",
       "detail": ""
@@ -100,12 +105,12 @@
     {
       "name": "Space starts playback",
       "status": "PASS",
-      "detail": "00:00:00:00->00:00:00:28"
+      "detail": "00:00:00:00->00:00:00:27"
     },
     {
       "name": "playback does not rerender timeline clip tree",
       "status": "PASS",
-      "detail": "11"
+      "detail": "17"
     },
     {
       "name": "Space pauses playback",
@@ -135,7 +140,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "15.5ms"
+      "detail": "9.9ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -145,27 +150,27 @@
     {
       "name": "rapid playhead drag retains a valid composite",
       "status": "PASS",
-      "detail": "4106,4106,4106,4106,4106"
+      "detail": "4088,4088,4088,4088,4088"
     },
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "405.4ms"
+      "detail": "171.7ms"
     },
     {
       "name": "image clip drag maps pixels to time",
       "status": "PASS",
-      "detail": "8.003->6 at 48.2196px/s"
+      "detail": "8.003->5.8176 at 45.7587px/s"
     },
     {
       "name": "video left trim preserves source timing",
       "status": "PASS",
-      "detail": "start=1.0369 in=1.0369 dur=6.9661"
+      "detail": "start 10.8176->11.9103 in 0->1.0927 dur 8.003->6.9103 (trim 1.093s)"
     },
     {
       "name": "video right trim changes duration",
       "status": "PASS",
-      "detail": "6.9661->5.9292"
+      "detail": "6.9103->5.8176"
     },
     {
       "name": "ruler scrub seeks to 3s",
@@ -180,7 +185,7 @@
     {
       "name": "split conserves duration",
       "status": "PASS",
-      "detail": "1.9631+3.9661"
+      "detail": "2.9088+2.9088"
     },
     {
       "name": "undo restores pre-split state",
@@ -193,7 +198,7 @@
       "detail": ""
     },
     {
-      "name": "frame mode sets 2400 px/s",
+      "name": "continuous zoom reaches 2400 px/s",
       "status": "PASS",
       "detail": ""
     },
@@ -240,7 +245,7 @@
     {
       "name": "zoomed preview is clipped without scrollbars",
       "status": "PASS",
-      "detail": "{\"overflow\":\"hidden\",\"clientW\":835,\"clientH\":572}"
+      "detail": "{\"overflow\":\"hidden\",\"clientW\":803,\"clientH\":566}"
     },
     {
       "name": "200% preview supports bounded pointer pan",
@@ -293,52 +298,52 @@
       "detail": ""
     },
     {
-      "name": "panel Audio opens",
+      "name": "panel media opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Text opens",
+      "name": "panel text opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Effects opens",
+      "name": "panel transitions opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Transitions opens",
+      "name": "panel effects opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Templates opens",
+      "name": "panel audio opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Masks opens",
+      "name": "panel relationships opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Tracking opens",
+      "name": "panel drawing opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Omniframe opens",
+      "name": "panel omniframe opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel 3D opens",
+      "name": "panel tracking opens",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "panel Media opens",
+      "name": "panel threed opens",
       "status": "PASS",
       "detail": ""
     },
@@ -540,12 +545,13 @@
     {
       "name": "expected reload-time blob aborts classified",
       "status": "PASS",
-      "detail": "1"
+      "detail": "2"
     }
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/bc830517-fc07-464f-939f-07901fe78802 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/eb3a106d-107a-4af4-9cb4-6e73103ad39e :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/eb3a106d-107a-4af4-9cb4-6e73103ad39e :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"

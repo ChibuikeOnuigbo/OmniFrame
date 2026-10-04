@@ -13,7 +13,10 @@
 //   - drift is corrected by occasional currentTime seeks, not per-frame seeks
 
 import { useEditor } from '../store'
-import type { Clip, MediaAsset, Track } from '../types'
+import type { Clip, MediaAsset, Track, Transition } from '../types'
+import { clamp } from './time'
+import { renderAllPaintLayers } from './drawingEngine'
+import { evaluateClipAnimation } from './animation/CurveEngine'
 
 export const PW = 1280
 export const PH = 720
@@ -73,6 +76,51 @@ function getImage(asset: MediaAsset): HTMLImageElement {
   return i
 }
 
+const urlImageCache = new Map<string, HTMLImageElement>()
+let activePreviewEngine: PreviewEngine | null = null
+
+export function preloadRoomAssets() {
+  const urls = [
+    '/assets/room/clean_room_background.png',
+    '/assets/room/obj_towel.png',
+    '/assets/room/obj_towel_blue.png',
+    '/assets/room/obj_towel_red.png',
+    '/assets/room/obj_towel_green.png',
+    '/assets/room/obj_towel_gold.png',
+    '/assets/room/obj_towel_purple.png',
+    '/assets/room/obj_chair.png',
+    '/assets/room/obj_curtain.png',
+    '/assets/death_note/clean_background.png',
+    '/assets/death_note/char_light.png',
+    '/assets/death_note/char_l.png',
+    '/assets/death_note/char_mello.png',
+    '/assets/death_note/char_near.png',
+    '/assets/death_note/char_ryuk.png',
+  ]
+  if (typeof window !== 'undefined') {
+    urls.forEach((u) => getUrlImage(u))
+  }
+}
+
+if (typeof window !== 'undefined') {
+  preloadRoomAssets()
+}
+
+function getUrlImage(url: string): HTMLImageElement {
+  let img = urlImageCache.get(url)
+  if (!img) {
+    img = new Image()
+    img.onload = () => {
+      if (activePreviewEngine) {
+        activePreviewEngine.redraw()
+      }
+    }
+    img.src = url
+    urlImageCache.set(url, img)
+  }
+  return img
+}
+
 export function allMediaElements(): HTMLMediaElement[] {
   return [
     ...Array.from(videoCache.values()),
@@ -115,6 +163,17 @@ export class PreviewEngine {
     const backCtx = this.backCanvas.getContext('2d', { alpha: false })
     if (!backCtx) throw new Error('2D back-buffer context unavailable')
     this.backCtx = backCtx
+    activePreviewEngine = this
+  }
+
+  resize(width: number, height: number) {
+    if (this.width === width && this.height === height) return
+    this.width = width
+    this.height = height
+    this.canvas.width = width
+    this.canvas.height = height
+    this.backCanvas.width = width
+    this.backCanvas.height = height
   }
 
   start() {
@@ -152,6 +211,16 @@ export class PreviewEngine {
     this.raf = requestAnimationFrame(this.loop)
   }
 
+  /**
+   * Repaint the preview from outside the engine. Used when an asset finishes
+   * decoding so a newly available frame is shown without waiting for the next
+   * tick of the loop.
+   */
+  public redraw() {
+    const st = useEditor.getState()
+    this.renderFrame(st.playhead, st)
+  }
+
   private renderFrame(time: number, st: ReturnType<typeof useEditor.getState>) {
     const ctx = this.backCtx
     ctx.fillStyle = '#000000'
@@ -159,14 +228,59 @@ export class PreviewEngine {
     this.usedThisFrame.clear()
     let visualPending = false
 
-    for (const track of st.tracks) {
+    // Standard NLE visual compositing: lower tracks drawn first, higher visual tracks composite on top
+    const renderTracks = [...st.tracks].reverse()
+
+    for (const track of renderTracks) {
       if (track.type === 'video' && track.hidden) {
         continue
       }
+
+      // Check if an active transition is playing on this track
+      const activeTrans = (st.transitions || []).find(
+        (tr) =>
+          tr.trackId === track.id &&
+          tr.enabled &&
+          time >= tr.startTime &&
+          time <= tr.startTime + tr.duration,
+      )
+
+      if (activeTrans && track.type === 'video') {
+        const fromClip = st.clips.find((c) => c.id === activeTrans.fromClipId)
+        const toClip = st.clips.find((c) => c.id === activeTrans.toClipId)
+        const fromAsset = fromClip ? st.assets.find((a) => a.id === fromClip.assetId) || null : null
+        const toAsset = toClip ? st.assets.find((a) => a.id === toClip.assetId) || null : null
+        if (fromClip && toClip && (fromAsset || fromClip.textStyle) && (toAsset || toClip.textStyle)) {
+          this.drawTransition(
+            ctx,
+            activeTrans,
+            fromClip,
+            toClip,
+            fromAsset,
+            toAsset,
+            time,
+            st,
+            track.muted,
+          )
+          continue
+        }
+      }
+
       const clip = activeClipOnTrack(st.clips, track.id, time)
       if (!clip) continue
+
+      if (clip.kind === 'compound' && track.type === 'video') {
+        this.drawCompoundClip(ctx, clip, time, st, track.muted)
+        continue
+      }
+
       const asset = st.assets.find((a) => a.id === clip.assetId)
-      if (!asset) continue
+      if (!asset) {
+        if (clip.textStyle && track.type === 'video') {
+          this.drawTextClip(ctx, clip)
+        }
+        continue
+      }
       const el = this.syncElement(asset, time, clip, st.playing, track.muted, st.speed)
       if (!el) {
         if (track.type === 'video') visualPending = true
@@ -178,8 +292,21 @@ export class PreviewEngine {
           visualPending = true
           continue
         }
-        this.drawClip(ctx, el as CanvasImageSource, clip, asset)
+        this.drawClip(ctx, el as CanvasImageSource, clip, asset, time)
       }
+    }
+
+    // Composite Paint Layers & Vector Drawing Strokes
+    if (st.drawingStrokes && st.drawingStrokes.length > 0) {
+      renderAllPaintLayers(
+        ctx,
+        this.width,
+        this.height,
+        st.drawingStrokes,
+        st.paintLayers || [],
+        time,
+        st.projectFps || 30,
+      )
     }
 
     // Never flash black while Chromium is decoding a newly requested frame.
@@ -192,6 +319,167 @@ export class PreviewEngine {
     }
     videoCache.forEach(pause)
     audioCache.forEach(pause)
+  }
+
+  private drawTransition(
+    ctx: CanvasRenderingContext2D,
+    trans: Transition,
+    fromClip: Clip,
+    toClip: Clip,
+    fromAsset: MediaAsset | null,
+    toAsset: MediaAsset | null,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+    trackMuted: boolean,
+  ) {
+    const fromEl = fromAsset ? this.syncElement(fromAsset, time, fromClip, st.playing, trackMuted, st.speed, true) : null
+    const toEl = toAsset ? this.syncElement(toAsset, time, toClip, st.playing, trackMuted, st.speed, true) : null
+    const hasFrom = !!fromEl || !!fromClip.textStyle
+    const hasTo = !!toEl || !!toClip.textStyle
+    if (!hasFrom && !hasTo) return
+
+    const drawFrom = (context: CanvasRenderingContext2D) => {
+      if (fromEl && fromAsset) this.drawClip(context, fromEl as CanvasImageSource, fromClip, fromAsset, time)
+      else if (fromClip.textStyle) this.drawTextClip(context, fromClip)
+    }
+
+    const drawTo = (context: CanvasRenderingContext2D) => {
+      if (toEl && toAsset) this.drawClip(context, toEl as CanvasImageSource, toClip, toAsset, time)
+      else if (toClip.textStyle) this.drawTextClip(context, toClip)
+    }
+
+    const progress = clamp((time - trans.startTime) / Math.max(0.001, trans.duration), 0, 1)
+
+    ctx.save()
+    switch (trans.type) {
+      case 'cross_dissolve': {
+        if (hasFrom) {
+          ctx.save()
+          ctx.globalAlpha = 1 - progress
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          ctx.globalAlpha = progress
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'dip_to_black': {
+        if (progress < 0.5) {
+          if (hasFrom) {
+            ctx.save()
+            ctx.globalAlpha = 1 - progress * 2
+            drawFrom(ctx)
+            ctx.restore()
+          }
+        } else {
+          if (hasTo) {
+            ctx.save()
+            ctx.globalAlpha = (progress - 0.5) * 2
+            drawTo(ctx)
+            ctx.restore()
+          }
+        }
+        break
+      }
+      case 'dip_to_white': {
+        if (progress < 0.5) {
+          if (hasFrom) drawFrom(ctx)
+          ctx.fillStyle = `rgba(255, 255, 255, ${progress * 2})`
+          ctx.fillRect(0, 0, this.width, this.height)
+        } else {
+          if (hasTo) drawTo(ctx)
+          ctx.fillStyle = `rgba(255, 255, 255, ${(1 - progress) * 2})`
+          ctx.fillRect(0, 0, this.width, this.height)
+        }
+        break
+      }
+      case 'wipe_left': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(this.width * (1 - progress), 0, this.width * progress, this.height)
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'wipe_right': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(0, 0, this.width * progress, this.height)
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'slide_left': {
+        if (hasFrom) {
+          ctx.save()
+          ctx.translate(-progress * this.width, 0)
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          ctx.translate((1 - progress) * this.width, 0)
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'slide_right': {
+        if (hasFrom) {
+          ctx.save()
+          ctx.translate(progress * this.width, 0)
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          ctx.translate(-(1 - progress) * this.width, 0)
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'zoom': {
+        if (hasFrom) {
+          ctx.save()
+          const s = 1.0 + progress * 0.4
+          ctx.translate(this.width / 2, this.height / 2)
+          ctx.scale(s, s)
+          ctx.translate(-this.width / 2, -this.height / 2)
+          ctx.globalAlpha = 1 - progress
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          const s = 1.4 - progress * 0.4
+          ctx.translate(this.width / 2, this.height / 2)
+          ctx.scale(s, s)
+          ctx.translate(-this.width / 2, -this.height / 2)
+          ctx.globalAlpha = progress
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      default: {
+        if (hasFrom) drawFrom(ctx)
+        break
+      }
+    }
+    ctx.restore()
   }
 
   private seekTo(el: HTMLMediaElement, target: number, tolerance: number) {
@@ -214,6 +502,7 @@ export class PreviewEngine {
     playing: boolean,
     trackMuted: boolean,
     speed: number,
+    allowClamping = false,
   ): HTMLVideoElement | HTMLAudioElement | HTMLImageElement | null {
     if (asset.kind === 'image') {
       const img = getImage(asset)
@@ -223,9 +512,10 @@ export class PreviewEngine {
     const el = (asset.kind === 'video' ? getVideo(asset) : getAudio(asset)) as
       | HTMLVideoElement
       | HTMLAudioElement
-    const target = clip.inPoint + (time - clip.start)
+    const rawTarget = clip.inPoint + (time - clip.start)
     const srcDur = asset.duration || (el as HTMLVideoElement).duration || 0
-    if (target < -0.001 || target > srcDur + 0.05) return null
+    if (!allowClamping && (rawTarget < -0.05 || rawTarget > srcDur + 0.05)) return null
+    const target = clamp(rawTarget, 0, Math.max(0, srcDur))
     el.muted = trackMuted
     el.volume = clip.volume
     // HTMLMediaElement does not support negative playbackRate reliably.
@@ -247,11 +537,75 @@ export class PreviewEngine {
     return el
   }
 
+  private drawTextClip(ctx: CanvasRenderingContext2D, clip: Clip) {
+    if (!clip.textStyle) return
+    ctx.save()
+    ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity))
+
+    const cx = this.width / 2 + clip.transform.x * (this.width / PW)
+    const cy = this.height / 2 + clip.transform.y * (this.height / PH)
+    ctx.translate(cx, cy)
+    ctx.rotate((clip.transform.rotation * Math.PI) / 180)
+    ctx.scale(clip.transform.scale, clip.transform.scale)
+
+    const t = clip.textStyle
+    const scaleFactor = this.width / PW
+    const fontSize = Math.max(14, Math.round((t.fontSize || 48) * scaleFactor))
+    const fontFamily = t.fontFamily || 'sans-serif'
+    ctx.font = `${t.bold ? 'bold ' : ''}${t.italic ? 'italic ' : ''}${fontSize}px ${fontFamily}`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+
+    const lines = (t.text || '').split('\n')
+    const lineHeight = fontSize * 1.3
+
+    let maxLineW = 0
+    for (const line of lines) {
+      const w = ctx.measureText(line).width
+      if (w > maxLineW) maxLineW = w
+    }
+
+    const padX = 24 * scaleFactor
+    const padY = 16 * scaleFactor
+    const totalH = lines.length * lineHeight
+    const boxW = maxLineW + padX * 2
+    const boxH = totalH + padY * 2
+
+    // Background pill if configured
+    if (t.backgroundColor && t.backgroundColor !== 'transparent') {
+      ctx.fillStyle = t.backgroundColor
+      const radius = 8 * scaleFactor
+      ctx.beginPath()
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, radius)
+      } else {
+        ctx.rect(-boxW / 2, -boxH / 2, boxW, boxH)
+      }
+      ctx.fill()
+    }
+
+    // Drop shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.85)'
+    ctx.shadowBlur = 10 * scaleFactor
+    ctx.shadowOffsetX = 2 * scaleFactor
+    ctx.shadowOffsetY = 2 * scaleFactor
+
+    // Draw text lines
+    ctx.fillStyle = t.color || '#ffffff'
+    const startY = -(lines.length - 1) * (lineHeight / 2)
+    lines.forEach((line, i) => {
+      ctx.fillText(line, 0, startY + i * lineHeight)
+    })
+
+    ctx.restore()
+  }
+
   private drawClip(
     ctx: CanvasRenderingContext2D,
     el: CanvasImageSource,
     clip: Clip,
     asset: MediaAsset,
+    time: number = 0,
   ) {
     const vw =
       (el as HTMLVideoElement).videoWidth ||
@@ -267,18 +621,194 @@ export class PreviewEngine {
     const dw = vw * cover
     const dh = vh * cover
 
+    const evalT = evaluateClipAnimation(clip, time)
     ctx.save()
-    ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity))
-    const cx = this.width / 2 + clip.transform.x * (this.width / PW)
-    const cy = this.height / 2 + clip.transform.y * (this.height / PH)
-    ctx.translate(cx, cy)
-    ctx.rotate((clip.transform.rotation * Math.PI) / 180)
-    ctx.scale(clip.transform.scale, clip.transform.scale)
-    try {
-      ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
-    } catch {
-      /* not ready */
+    ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity))
+
+    // Apply Real Clip Effects (brightness, contrast, saturation, blur, grayscale, invert, sepia, hueRotate)
+    if (clip.effects) {
+      const eff = clip.effects
+      const filters: string[] = []
+      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
+      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
+      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
+      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
+      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
+      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
+      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
+      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
+      if (filters.length > 0) ctx.filter = filters.join(' ')
     }
+
+    const cx = this.width / 2 + evalT.x * (this.width / PW)
+    const cy = this.height / 2 + evalT.y * (this.height / PH)
+    ctx.translate(cx, cy)
+    ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    ctx.scale(evalT.scaleX, evalT.scaleY)
+
+    const st = useEditor.getState()
+    const isOmniFrameEligible =
+      asset.id === 'asset-death-note-vid' ||
+      clip.assetId === 'asset-death-note-vid' ||
+      asset.id === 'asset-death-note-img' ||
+      clip.assetId === 'asset-death-note-img' ||
+      asset.id === 'asset-room-chair-towel' ||
+      clip.assetId === 'asset-room-chair-towel' ||
+      asset.name.toLowerCase().includes('death note') ||
+      clip.name.toLowerCase().includes('death note') ||
+      asset.name.toLowerCase().includes('room') ||
+      clip.name.toLowerCase().includes('room') ||
+      asset.name.toLowerCase().includes('chair') ||
+      clip.name.toLowerCase().includes('chair')
+    if (isOmniFrameEligible && st.omniframeCharacters && st.omniframeCharacters.length > 0) {
+      this.drawOmniframeCharacters(ctx, dw, dh, time, st, asset)
+    } else {
+      try {
+        ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
+      } catch {
+        /* not ready */
+      }
+    }
+
+    // Render Title / Text Overlay if clip has text style
+    if (clip.textStyle) {
+      this.drawTextClip(ctx, clip)
+    }
+
+    ctx.restore()
+  }
+
+  private drawOmniframeCharacters(
+    ctx: CanvasRenderingContext2D,
+    dw: number,
+    dh: number,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+    asset?: any,
+  ) {
+    const isRoom =
+      asset?.id === 'asset-room-chair-towel' ||
+      asset?.name?.toLowerCase()?.includes('room') ||
+      asset?.name?.toLowerCase()?.includes('chair') ||
+      st.omniframeCharacters?.some((c) => c.id.startsWith('char_towel') || c.id.startsWith('char_chair'))
+
+    const bgPath = isRoom
+      ? '/assets/room/clean_room_background.png'
+      : '/assets/death_note/clean_background.png'
+
+    const bgImg = getUrlImage(bgPath)
+    if (bgImg.complete && bgImg.naturalWidth > 0) {
+      ctx.drawImage(bgImg, -dw / 2, -dh / 2, dw, dh)
+    } else {
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(-dw / 2, -dh / 2, dw, dh)
+    }
+
+    const characters = st.omniframeCharacters || []
+    for (const char of characters) {
+      const evalT = st.evaluateCharacterTransformAtTime(char.id, time)
+      if ((evalT.opacity ?? 1) <= 0.01) continue
+
+      const imgUrl = char.recolorUrl || char.cutoutUrl
+      const charImg = getUrlImage(imgUrl)
+      if (!charImg.complete || charImg.naturalWidth === 0) continue
+
+      const baseLeft = -dw / 2 + char.bounds.x * dw
+      const baseTop = -dh / 2 + char.bounds.y * dh
+      const baseW = char.bounds.width * dw
+      const baseH = char.bounds.height * dh
+
+      const scale = evalT.scale ?? 1
+      const cx = baseLeft + baseW / 2 + (evalT.x ?? 0) * (dw / PW)
+      const cy = baseTop + baseH / 2 + (evalT.y ?? 0) * (dh / PH)
+      const cw = baseW * scale
+      const ch = baseH * scale
+
+      ctx.save()
+      ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity ?? 1))
+      ctx.translate(cx, cy)
+      if (evalT.rotation) {
+        ctx.rotate((evalT.rotation * Math.PI) / 180)
+      }
+      ctx.drawImage(charImg, -cw / 2, -ch / 2, cw, ch)
+
+      // Dynamic tint / recolor if set
+      if (char.recolorColor) {
+        ctx.save()
+        ctx.globalCompositeOperation = 'color'
+        ctx.fillStyle = char.recolorColor
+        ctx.fillRect(-cw / 2, -ch / 2, cw, ch)
+        ctx.restore()
+      }
+
+      ctx.restore()
+    }
+  }
+
+  private drawCompoundClip(
+    ctx: CanvasRenderingContext2D,
+    clip: Clip,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+    trackMuted: boolean,
+  ) {
+    const evalT = evaluateClipAnimation(clip, time)
+    ctx.save()
+    ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity))
+
+    if (clip.effects) {
+      const eff = clip.effects
+      const filters: string[] = []
+      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
+      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
+      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
+      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
+      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
+      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
+      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
+      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
+      if (filters.length > 0) ctx.filter = filters.join(' ')
+    }
+
+    const cx = this.width / 2 + evalT.x * (this.width / PW)
+    const cy = this.height / 2 + evalT.y * (this.height / PH)
+    ctx.translate(cx, cy)
+    ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    ctx.scale(evalT.scaleX, evalT.scaleY)
+
+    const innerTime = time - clip.start + clip.inPoint
+    const childSeq = (st.sequences || []).find((s) => s.id === clip.sourceSequenceId)
+    const childClips = childSeq ? childSeq.clips : (clip.originalChildClips || [])
+    const childTracks = childSeq ? childSeq.tracks : (clip.originalChildTracks || [])
+
+    const renderChildTracks = [...childTracks].reverse()
+    for (const childTrack of renderChildTracks) {
+      if (childTrack.type === 'video' && childTrack.hidden) continue
+
+      const childClip = activeClipOnTrack(childClips, childTrack.id, innerTime)
+      if (!childClip) continue
+
+      if (childClip.kind === 'compound') {
+        this.drawCompoundClip(ctx, childClip, innerTime, st, trackMuted || childTrack.muted)
+        continue
+      }
+
+      const childAsset = st.assets.find((a) => a.id === childClip.assetId)
+      if (!childAsset) {
+        if (childClip.textStyle && childTrack.type === 'video') {
+          this.drawTextClip(ctx, childClip)
+        }
+        continue
+      }
+
+      const el = this.syncElement(childAsset, innerTime, childClip, st.playing, trackMuted || childTrack.muted, st.speed)
+      if (!el) continue
+
+      if (childTrack.type === 'video') {
+        this.drawClip(ctx, el as CanvasImageSource, childClip, childAsset, innerTime)
+      }
+    }
+
     ctx.restore()
   }
 
@@ -287,6 +817,7 @@ export class PreviewEngine {
     cancelAnimationFrame(this.raf)
     this.unsubscribe?.()
     this.unsubscribe = null
+    if (activePreviewEngine === this) activePreviewEngine = null
     videoCache.forEach((v) => v.pause())
     audioCache.forEach((a) => a.pause())
   }

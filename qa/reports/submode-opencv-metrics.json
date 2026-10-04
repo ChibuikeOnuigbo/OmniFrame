@@ -1,0 +1,106 @@
+{
+  "screenshots": {
+    "SS-098": {
+      "file": "evidence/screenshots/SS-098-ui-declutter-category-filters.png",
+      "desc": "Left Dock with Category Filter Pills (ALL, VID, 2D, 3D) reducing UI clutter across video, 2D paint, and 3D compositing",
+      "metrics": {
+        "dimensions": "1440x900",
+        "sharpness": 712.24,
+        "contrast": 25.59,
+        "brightness": 15.78
+      }
+    },
+    "SS-099": {
+      "file": "evidence/screenshots/SS-099-submode-3d-materials-channel.png",
+      "desc": "3D Scene Materials Sub-Mode Channel with temporary sub-rail icon and breadcrumb header navigation",
+      "metrics": {
+        "dimensions": "1440x900",
+        "sharpness": 614.76,
+        "contrast": 17.18,
+        "brightness": 14.06
+      }
+    },
+    "SS-100": {
+      "file": "evidence/screenshots/SS-100-submode-text-presets-channel.png",
+      "desc": "Text & Titles Presets Sub-Mode Channel focused on title templates with temporary rail badge",
+      "metrics": {
+        "dimensions": "1440x900",
+        "sharpness": 1024.07,
+        "contrast": 23.89,
+        "brightness": 15.75
+      }
+    },
+    "SS-101": {
+      "file": "evidence/screenshots/SS-101-submode-omniframe-selection-channel.png",
+      "desc": "OmniFrame AI Selection Subtool Channel focused with sub-rail badge and non-destructive masking",
+      "metrics": {
+        "dimensions": "1440x900",
+        "sharpness": 1638.54,
+        "contrast": 28.13,
+        "brightness": 17.6
+      }
+    },
+    "SS-102": {
+      "file": "evidence/screenshots/SS-102-demo-edits-ledger-200-recreation.png",
+      "desc": "OmniFrame 200 Demo Edits recreation verification combining 3D in 2D video plane, 2D segmentation, and NLE timeline",
+      "metrics": {
+        "dimensions": "1440x900",
+        "sharpness": 936.32,
+        "contrast": 20.78,
+        "brightness": 17.89
+      }
+    }
+  },
+  "cutouts": {
+    "CUT-109": {
+      "file": "evidence/cutouts/CUT-109-category-filter-rail.png",
+      "desc": "Close-up of Left Dock Icon Rail with Category Filter Pills (ALL, VID, 2D, 3D)",
+      "metrics": {
+        "dimensions": "52x445",
+        "sharpness": 1252.08,
+        "contrast": 29.58,
+        "brightness": 22.14
+      }
+    },
+    "CUT-110": {
+      "file": "evidence/cutouts/CUT-110-3d-materials-focused-panel.png",
+      "desc": "Close-up of focused 3D Materials section with PBR roughness, metallic, and emission controls",
+      "metrics": {
+        "dimensions": "272x445",
+        "sharpness": 1736.28,
+        "contrast": 23.58,
+        "brightness": 22.51
+      }
+    },
+    "CUT-111": {
+      "file": "evidence/cutouts/CUT-111-text-presets-focused-panel.png",
+      "desc": "Close-up of focused Title Presets channel with Cinematic, Lower Third, and Glow styles",
+      "metrics": {
+        "dimensions": "272x445",
+        "sharpness": 2839.24,
+        "contrast": 26.2,
+        "brightness": 22.91
+      }
+    },
+    "CUT-112": {
+      "file": "evidence/cutouts/CUT-112-omniframe-selection-focused-panel.png",
+      "desc": "Close-up of focused OmniFrame AI Selection Subtool with 6 selection geometries and towel recolor",
+      "metrics": {
+        "dimensions": "272x445",
+        "sharpness": 4187.82,
+        "contrast": 37.5,
+        "brightness": 28.66
+      }
+    },
+    "CUT-113": {
+      "file": "evidence/cutouts/CUT-113-submode-breadcrumb-header.png",
+      "desc": "Close-up of Contextual Sub-Mode Breadcrumb Header (\u2039 Back / 3D Materials & PBR Shaders)",
+      "metrics": {
+        "dimensions": "272x45",
+        "sharpness": 5146.0,
+        "contrast": 44.18,
+        "brightness": 29.38
+      }
+    }
+  }
+}

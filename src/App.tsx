@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Landing } from './components/Landing'
 import Studio from './Studio'
+import { CustomCursor } from './components/CustomCursor'
 
 function isStudioRoute() {
   return window.location.hash === '#studio'
@@ -53,6 +54,7 @@ export default function App() {
           <div className="absolute inset-y-0 right-0 w-1.5 bg-gradient-to-r from-brand-400 to-violet-200/80 shadow-[0_0_16px_rgba(144,131,255,.55)]" />
         </div>
       )}
+      <CustomCursor />
     </div>
   )
 }

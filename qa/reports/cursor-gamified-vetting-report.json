@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "Custom cursor initial mount & pack initialization",
+      "state": "default",
+      "size": "bigger",
+      "pack": "mac-gamified",
+      "activeClass": true,
+      "passed": true
+    },
+    {
+      "name": "Pointing hand cursor on interactive button hover",
+      "state": "pointer",
+      "passed": true
+    },
+    {
+      "name": "Drag state with emerald plus badge & attached drag ghost pill",
+      "state": "drag",
+      "plusVisible": true,
+      "pillVisible": true,
+      "passed": true
+    },
+    {
+      "name": "Help state with amber ? badge & attached prompt pill",
+      "state": "help",
+      "questionVisible": true,
+      "helpPillVisible": true,
+      "passed": true
+    },
+    {
+      "name": "Magnetized drop reticle on valid drop target",
+      "state": "drop",
+      "reticleVisible": true,
+      "passed": true
+    },
+    {
+      "name": "Cursor pack selection (macOS Sonoma Pro)",
+      "pack": "mac-sonoma-pro",
+      "passed": true
+    }
+  ],
+  "cursorStates": {},
+  "passed": true
+}

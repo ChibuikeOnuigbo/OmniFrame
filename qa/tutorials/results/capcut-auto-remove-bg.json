@@ -1,0 +1,116 @@
+{
+  "id": "capcut-auto-remove-bg",
+  "app": "CapCut",
+  "title": "Remove a background automatically (Cutout > Remove Background)",
+  "source": "https://www.miracamp.com/learn/capcut/how-to-remove-background",
+  "procedure": [
+    "Import the clip and drag it to the timeline",
+    "Tap the clip to select it",
+    "Open Cutout, then Remove Background",
+    "The subject is cut out and can be placed over a new background"
+  ],
+  "verdict": "REPLICATED",
+  "counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "steps": [
+    {
+      "kind": "setup",
+      "label": "resetProject",
+      "status": "PASS",
+      "detail": "resetProject"
+    },
+    {
+      "kind": "store",
+      "label": "addClip('asset-room-chair-towel', 0, 4)",
+      "status": "PASS",
+      "detail": "addClip('asset-room-chair-towel', 0, 4)"
+    },
+    {
+      "kind": "assert",
+      "label": "clip is on the timeline",
+      "status": "PASS",
+      "detail": "clips().length === 1"
+    },
+    {
+      "kind": "store",
+      "label": "selectClip(0)",
+      "status": "PASS",
+      "detail": "selectClip(0)"
+    },
+    {
+      "kind": "store",
+      "label": "openOmniFrameSelection()",
+      "status": "PASS",
+      "detail": "openOmniFrameSelection()"
+    },
+    {
+      "kind": "probe",
+      "label": "Selection & Masking sub-tool is reachable",
+      "status": "PASS",
+      "detail": "hasTestid('selection-mask-subtool')"
+    },
+    {
+      "kind": "assert",
+      "label": "clip is selected",
+      "status": "PASS",
+      "detail": "selectedClipIds().length === 1"
+    },
+    {
+      "kind": "store",
+      "label": "selectionRect(0.03, 0.19, 0.41, 0.57)",
+      "status": "PASS",
+      "detail": "selectionRect(0.03, 0.19, 0.41, 0.57)"
+    },
+    {
+      "kind": "click",
+      "label": "[data-testid=\"guided-rect-bg-removal-btn\"]",
+      "status": "PASS",
+      "detail": "[data-testid=\"guided-rect-bg-removal-btn\"]"
+    },
+    {
+      "kind": "wait",
+      "label": "",
+      "status": "PASS",
+      "detail": "3000ms"
+    },
+    {
+      "kind": "wait",
+      "label": "",
+      "status": "PASS",
+      "detail": "2500ms"
+    },
+    {
+      "kind": "assert",
+      "label": "a matte was produced",
+      "status": "PASS",
+      "detail": "guidedMatte() !== null"
+    },
+    {
+      "kind": "assert",
+      "label": "matte is layered, not baked into the source",
+      "status": "PASS",
+      "detail": "guidedMatte() && guidedMatte().maskLayerId && guidedMatte().objectId"
+    },
+    {
+      "kind": "assert",
+      "label": "matte is a subject, not the whole box",
+      "status": "PASS",
+      "detail": "guidedMatte() && guidedMatte().coverage > 0.15 && guidedMatte().coverage < 0.95"
+    },
+    {
+      "kind": "shot",
+      "label": "",
+      "status": "PASS",
+      "detail": "evidence/tutorials/capcut-auto-remove-bg-1.png"
+    },
+    {
+      "kind": "probe",
+      "label": "matte + cutout previews are shown in the panel",
+      "status": "PASS",
+      "detail": "hasTestid('guided-matte-preview') && hasTestid('guided-cutout-preview')"
+    }
+  ]
+}

@@ -109,7 +109,7 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
         </section>
 
         <footer className="flex shrink-0 items-center justify-between border-t border-white/[0.06] py-5 text-[11px] text-ink-500">
-          <span>Built in the open.</span><span>Local-first · Cross-platform</span>
+          <span>Built in the open.</span><span>Local first · Cross platform</span>
         </footer>
       </div>
     </main>

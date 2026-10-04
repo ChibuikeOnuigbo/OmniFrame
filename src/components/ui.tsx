@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
+import { ChevronDown } from 'lucide-react'
 
 export function IconButton({
   active,
@@ -80,6 +81,7 @@ export function Slider({
   step = 1,
   onChange,
   className = '',
+  label,
 }: {
   value: number
   min: number
@@ -87,10 +89,14 @@ export function Slider({
   step?: number
   onChange: (v: number) => void
   className?: string
+  /** Accessible name. Every slider should pass one -- without it a screen
+   *  reader announces only "slider". */
+  label?: string
 }) {
   return (
     <input
       type="range"
+      aria-label={label}
       className={`of-range w-full ${className}`}
       value={value}
       min={min}
@@ -101,7 +107,7 @@ export function Slider({
   )
 }
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+export function Field({ label, children }: { label: ReactNode; children: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3 py-1.5">
       <span className="text-ink-400 text-xs shrink-0">{label}</span>
@@ -110,13 +116,86 @@ export function Field({ label, children }: { label: string; children: ReactNode 
   )
 }
 
-export function Section({ title, children }: { title: string; children: ReactNode }) {
+export function Section({
+  title,
+  children,
+  collapsible = true,
+  defaultOpen = true,
+  badge,
+  action,
+}: {
+  title: string
+  children: ReactNode
+  collapsible?: boolean
+  defaultOpen?: boolean
+  badge?: ReactNode
+  action?: ReactNode
+}) {
+  const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="px-3 py-3 border-b border-ink-800">
-      <div className="text-[11px] uppercase tracking-wider text-ink-400 mb-2 font-semibold">
-        {title}
+    <div className="border-b border-ink-800">
+      <div
+        data-testid={`section-header-${title.toLowerCase().replace(/\s+/g, '-')}`}
+        role={collapsible ? 'button' : undefined}
+        tabIndex={collapsible ? 0 : undefined}
+        aria-expanded={collapsible ? open : undefined}
+        onClick={collapsible ? () => setOpen(!open) : undefined}
+        onKeyDown={collapsible ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(!open) } } : undefined}
+        className={`px-3 py-2.5 flex items-center justify-between select-none ${
+          collapsible ? 'cursor-pointer hover:bg-ink-800/50 transition-colors' : ''
+        }`}
+      >
+        <div className="flex items-center gap-1.5 min-w-0">
+          {collapsible && (
+            <ChevronDown
+              size={13}
+              className={`text-ink-400 shrink-0 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
+            />
+          )}
+          <span className="text-[11px] uppercase tracking-wider text-ink-300 font-semibold truncate">
+            {title}
+          </span>
+          {badge}
+        </div>
+        {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
       </div>
-      {children}
+      {open && <div className="px-3 pb-3 pt-0.5">{children}</div>}
+    </div>
+  )
+}
+
+export function AccordionGroup({
+  title,
+  children,
+  defaultOpen = false,
+  badge,
+}: {
+  title: string
+  children: ReactNode
+  defaultOpen?: boolean
+  badge?: ReactNode
+}) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className="mt-2 rounded-lg border border-ink-800 bg-ink-900/40 overflow-hidden">
+      <button
+        type="button"
+        data-testid={`accordion-${title.toLowerCase().replace(/\s+/g, '-')}`}
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="w-full px-2.5 py-1.5 flex items-center justify-between text-left text-xs font-medium text-ink-300 hover:text-white hover:bg-ink-800/60 transition-colors"
+      >
+        <div className="flex items-center gap-1.5">
+          <ChevronDown
+            size={12}
+            className={`text-ink-500 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
+          />
+          <span className="text-[11px] font-semibold">{title}</span>
+          {badge}
+        </div>
+        <span className="text-[10px] text-ink-500">{open ? 'Hide' : 'Show'}</span>
+      </button>
+      {open && <div className="p-2 border-t border-ink-800 space-y-1.5">{children}</div>}
     </div>
   )
 }
