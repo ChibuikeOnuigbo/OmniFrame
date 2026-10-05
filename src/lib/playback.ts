@@ -147,8 +147,10 @@ export class PreviewEngine {
   private unsubscribe: (() => void) | null = null
   private usedThisFrame = new Set<HTMLMediaElement>()
   private requestedTime = new WeakMap<HTMLMediaElement, number>()
+  private sampling = false
+  private samplePool = new Map<string, HTMLVideoElement | HTMLAudioElement>()
 
-  constructor(canvas: HTMLCanvasElement, width = PW, height = PH) {
+  constructor(canvas: HTMLCanvasElement, width = PW, height = PH, opts: { sampling?: boolean } = {}) {
     this.canvas = canvas
     this.width = width
     this.height = height
@@ -163,7 +165,8 @@ export class PreviewEngine {
     const backCtx = this.backCanvas.getContext('2d', { alpha: false })
     if (!backCtx) throw new Error('2D back-buffer context unavailable')
     this.backCtx = backCtx
-    activePreviewEngine = this
+    this.sampling = !!opts.sampling
+    if (!this.sampling) activePreviewEngine = this
   }
 
   resize(width: number, height: number) {
@@ -482,6 +485,84 @@ export class PreviewEngine {
     ctx.restore()
   }
 
+  /** Live preview: shared per-asset pool. Sampling: dedicated muted elements. */
+  private pickVideo(asset: MediaAsset): HTMLVideoElement {
+    if (!this.sampling) return getVideo(asset)
+    let v = this.samplePool.get(asset.id) as HTMLVideoElement | undefined
+    if (!v) {
+      if (this.samplePool.size >= 8) {
+        const firstKey = this.samplePool.keys().next().value
+        if (firstKey !== undefined) {
+          const dropped = this.samplePool.get(firstKey)
+          dropped?.pause()
+          dropped?.removeAttribute('src')
+          this.samplePool.delete(firstKey)
+        }
+      }
+      v = document.createElement('video')
+      v.src = asset.url
+      v.preload = 'auto'
+      v.muted = true
+      v.playsInline = true
+      v.loop = false
+      mediaHost().appendChild(v)
+      this.samplePool.set(asset.id, v)
+    }
+    return v
+  }
+
+  private pickAudio(asset: MediaAsset): HTMLAudioElement {
+    if (!this.sampling) return getAudio(asset)
+    let a = this.samplePool.get(asset.id) as HTMLAudioElement | undefined
+    if (!a) {
+      a = document.createElement('audio')
+      a.src = asset.url
+      a.preload = 'auto'
+      a.muted = true
+      a.loop = false
+      mediaHost().appendChild(a)
+      this.samplePool.set(asset.id, a)
+    }
+    return a
+  }
+
+  public renderClipTile(
+    clip: Clip,
+    time: number,
+    st: ReturnType<typeof useEditor.getState> = useEditor.getState(),
+  ): boolean {
+    const ctx = this.backCtx
+    this.usedThisFrame.clear()
+    ctx.filter = 'none'
+    ctx.fillStyle = '#000000'
+    ctx.fillRect(0, 0, this.width, this.height)
+    if (clip.kind === 'compound') {
+      this.drawCompoundClip(ctx, clip, time, st, true)
+      return true
+    }
+    const asset = st.assets.find((a) => a.id === clip.assetId)
+    if (!asset) {
+      if (clip.textStyle) {
+        this.drawTextClip(ctx, clip)
+        return true
+      }
+      return false
+    }
+    if (asset.kind === 'audio') return false
+    const el = this.syncElement(asset, time, clip, false, true, 1, true)
+    if (!el) return false
+    this.drawClip(ctx, el as CanvasImageSource, clip, asset, time)
+    return true
+  }
+
+  public sampleCanvas(): HTMLCanvasElement {
+    return this.backCanvas
+  }
+
+  public sampleElements(): HTMLMediaElement[] {
+    return [...this.usedThisFrame]
+  }
+
   private seekTo(el: HTMLMediaElement, target: number, tolerance: number) {
     const clamped = Math.max(0, target)
     this.requestedTime.set(el, clamped)
@@ -509,9 +590,9 @@ export class PreviewEngine {
       if (!img.complete || img.naturalWidth === 0) return null
       return img
     }
-    const el = (asset.kind === 'video' ? getVideo(asset) : getAudio(asset)) as
-      | HTMLVideoElement
-      | HTMLAudioElement
+    const el = (asset.kind === 'video'
+      ? this.pickVideo(asset)
+      : this.pickAudio(asset)) as HTMLVideoElement | HTMLAudioElement
     const rawTarget = clip.inPoint + (time - clip.start)
     const srcDur = asset.duration || (el as HTMLVideoElement).duration || 0
     if (!allowClamping && (rawTarget < -0.05 || rawTarget > srcDur + 0.05)) return null
@@ -818,6 +899,14 @@ export class PreviewEngine {
     this.unsubscribe?.()
     this.unsubscribe = null
     if (activePreviewEngine === this) activePreviewEngine = null
+    if (this.sampling) {
+      this.samplePool.forEach((el) => {
+        el.pause()
+        el.removeAttribute('src')
+      })
+      this.samplePool.clear()
+      return
+    }
     videoCache.forEach((v) => v.pause())
     audioCache.forEach((a) => a.pause())
   }

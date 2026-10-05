@@ -49,6 +49,7 @@ import {
 } from 'lucide-react'
 import { useEditor, gapsOnTrack } from '../store'
 import { CollapseChip } from './CollapseChip'
+import { ClipFilmstrip } from './ClipFilmstrip'
 import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
@@ -914,23 +915,16 @@ function ClipView({
       style={{ left, width }}
       title={clip.name}
     >
-      {isCompound && (
-        <div className="pointer-events-none absolute inset-0 opacity-15 flex flex-col justify-around py-1 px-1">
-          <div className="h-1.5 w-3/4 rounded bg-indigo-400" />
-          <div className="h-1.5 w-1/2 rounded bg-purple-400 ml-4" />
-          <div className="h-1.5 w-2/3 rounded bg-sky-400" />
-        </div>
-      )}
-      {!isCompound && !isAudio && !isText && (asset?.thumbnail || asset?.kind === 'image') && (
-        <div
-          data-testid="clip-filmstrip"
-          className="pointer-events-none absolute inset-0 opacity-55"
-          style={{
-            backgroundImage: `linear-gradient(90deg,rgba(8,9,13,.15),rgba(8,9,13,.15)),url(${asset.kind === 'image' ? asset.url : asset.thumbnail})`,
-            backgroundRepeat: 'repeat-x',
-            backgroundPosition: 'center',
-            backgroundSize: 'auto 100%',
-          }}
+      {/* Frame-accurate filmstrip: each section of the clip shows the frame
+          the project will show there — decoded source frames for video
+          clips, the rendered nested composite for compound clips. Falls
+          back to the single poster frame while tiles render. */}
+      {!isAudio && !isText && (isCompound || asset?.kind === 'video' || asset?.kind === 'image') && (
+        <ClipFilmstrip
+          clip={clip}
+          widthPx={width}
+          posterUrl={asset ? (asset.kind === 'image' ? asset.url : asset.thumbnail) : undefined}
+          isCompound={isCompound}
         />
       )}
       {isText && (
