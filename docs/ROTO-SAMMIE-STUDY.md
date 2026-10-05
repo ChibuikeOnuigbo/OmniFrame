@@ -102,8 +102,57 @@ Same workflow shape, sized for a browser-resident editor:
 - The RotoMask brush refine reuses the same engine (add/subtract strokes on
   the live mask).
 
+## Isolation-model test results (2026-10-05)
+
+Two new suites test the isolation engines against real ground truth
+(`qa/roto-isolation-models-test.py` offline matrix against the exact sidecar
+contract; `qa/roto-isolation-browser-e2e.mjs` driving the real in-app
+pipeline). GT tiers: **EXACT** (in-repo RGBA cutouts composited — pasted alpha
+is pixel-exact GT), **APPROX** (held-out studio portrait, border-calibrated
+background suppression), **QUALITATIVE** (hair close-up, coverage only).
+
+**Offline raw-map matrix** (IoU@0.5 / best-IoU over thresholds, native
+onnxruntime): anime model 70.6/73.9% on char_mello, 58.2/58.8% on char_ryuk;
+human model 60.5/77.0% on the held-out studio person; hair + human models
+light up the held-out hair close-up (96.5% / 98.6% coverage) while the anime
+model correctly stays at 2.5% — domain specialisation is real. Win counts
+across the exact tier: anime 6, hair 5, general 2, human 0 (the human cutouts
+in-repo are anime-styled; the human model's win is the held-out photo).
+
+**In-app pipeline** (`qa/reports/roto-isolation-browser.json`, 14/14 PASS):
+mello 5.4% vs GT 2.8% and ryuk 3.9% vs GT 3.1% with tight localisation;
+held-out person 24.0% vs approx-GT 16.4%; hair close-up 87.6%; anime/hair
+specialisation ratio 0.07; Extract→`obj_roto_` layer works from a model mask;
+click accumulation 2.5%→6.5% (GT union 5.4%); negative-click trim 52.4%→24.3%
+with the chair still covered.
+
+**Engine fix found by the test**: a negative right-click inside a picked blob
+used to veto the *whole connected component* — on model over-coverage that
+erased the subject along with the background (52.4%→0.1%). It now subtracts
+the colour-seeded region around the negative click (Sammie "this pixel is
+background" semantics) and only vetoes whole blobs the negative owns outright.
+
+**Honest limitations** (documented, not hidden):
+- *Pale/small subjects*: char_light at ~1% of frame on white isolates poorly
+  (anime recall 0.13 in-app) — at 128px input the subject is ~20px and nearly
+  white-on-white. Mitigation: more positive clicks (accumulation verified),
+  brush refine, or framing the subject larger.
+- *Busy real photos*: the general model over-covers (raw map 53% vs chair GT
+  9.4%; in-app precision 0.18, recall 1.0). Mitigation: negative clicks
+  (verified −54% with subject survival) or a stronger imported model.
+- *White-on-white*: the colour-based smart engine cannot separate white
+  clothing from a white background (15.3% from a 1.2% subject) — inherent to
+  colour tolerance; models or brush refine are the answer there.
+
+The held-out stock previews are not redistributable and are git-ignored; the
+browser suite skips cases 05–07 with a recorded SKIPPED status when they are
+absent, everything else is reproducible from in-repo assets.
+
 ## Verification status (2026-10-05)
 
+- `qa/roto-isolation-models-test.py` (offline matrix, native onnxruntime) and
+  `qa/roto-isolation-browser-e2e.mjs` (in-app, 14/14 PASS incl. the two
+  correction loops) — see the isolation results section above.
 - `qa/rotomask-e2e.mjs`: **19/19 PASS** (sub-tool section, smart click,
   right-click remove, clicks summary + undo, model family served, anime model
   loads in onnxruntime-web, model-driven segmentation, brush refine, track

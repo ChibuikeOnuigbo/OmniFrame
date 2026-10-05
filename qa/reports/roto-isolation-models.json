@@ -1,0 +1,494 @@
+{
+  "results": [
+    {
+      "case": "char_light@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "RGBA cutout composited on clean scene bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.0023,
+          "iouBest": 0.0079,
+          "predCover": 0.2459,
+          "gtCover": 0.0119
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0395,
+          "iouBest": 0.09,
+          "predCover": 0.2861,
+          "gtCover": 0.0119
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.044,
+          "iouBest": 0.2547,
+          "predCover": 0.0006,
+          "gtCover": 0.0119
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.291,
+          "iouBest": 0.3992,
+          "predCover": 0.0251,
+          "gtCover": 0.0119
+        }
+      }
+    },
+    {
+      "case": "char_l@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "RGBA cutout composited on clean scene bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.0343,
+          "iouBest": 0.0811,
+          "predCover": 0.2593,
+          "gtCover": 0.0237
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0905,
+          "iouBest": 0.2042,
+          "predCover": 0.2118,
+          "gtCover": 0.0237
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.034,
+          "iouBest": 0.0994,
+          "predCover": 0.0023,
+          "gtCover": 0.0237
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.2165,
+          "iouBest": 0.2188,
+          "predCover": 0.0597,
+          "gtCover": 0.0237
+        }
+      }
+    },
+    {
+      "case": "char_mello@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "RGBA cutout composited on clean scene bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.1367,
+          "iouBest": 0.3541,
+          "predCover": 0.139,
+          "gtCover": 0.0282
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.1156,
+          "iouBest": 0.2154,
+          "predCover": 0.2334,
+          "gtCover": 0.0282
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.7061,
+          "iouBest": 0.7386,
+          "predCover": 0.0315,
+          "gtCover": 0.0282
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.5105,
+          "iouBest": 0.6299,
+          "predCover": 0.0472,
+          "gtCover": 0.0282
+        }
+      }
+    },
+    {
+      "case": "char_near@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "RGBA cutout composited on clean scene bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.0287,
+          "iouBest": 0.0317,
+          "predCover": 0.2441,
+          "gtCover": 0.0216
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0892,
+          "iouBest": 0.204,
+          "predCover": 0.1415,
+          "gtCover": 0.0216
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.1873,
+          "iouBest": 0.2819,
+          "predCover": 0.0101,
+          "gtCover": 0.0216
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.2361,
+          "iouBest": 0.3036,
+          "predCover": 0.0133,
+          "gtCover": 0.0216
+        }
+      }
+    },
+    {
+      "case": "char_ryuk@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "RGBA cutout composited on clean scene bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.141,
+          "iouBest": 0.3108,
+          "predCover": 0.1079,
+          "gtCover": 0.0308
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0849,
+          "iouBest": 0.1714,
+          "predCover": 0.363,
+          "gtCover": 0.0308
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.5821,
+          "iouBest": 0.588,
+          "predCover": 0.0284,
+          "gtCover": 0.0308
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.4376,
+          "iouBest": 0.5692,
+          "predCover": 0.0692,
+          "gtCover": 0.0308
+        }
+      }
+    },
+    {
+      "case": "char_light-large@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "bigger paste, off-centre",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.0106,
+          "iouBest": 0.0216,
+          "predCover": 0.2229,
+          "gtCover": 0.0193
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0629,
+          "iouBest": 0.1205,
+          "predCover": 0.2826,
+          "gtCover": 0.0193
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.362,
+          "iouBest": 0.4123,
+          "predCover": 0.0088,
+          "gtCover": 0.0193
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.3029,
+          "iouBest": 0.372,
+          "predCover": 0.0467,
+          "gtCover": 0.0193
+        }
+      }
+    },
+    {
+      "case": "char_light@solid-teal",
+      "tier": "EXACT",
+      "gtNote": "flat synthetic background",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.032,
+          "iouBest": 0.1375,
+          "predCover": 0.0006,
+          "gtCover": 0.0121
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0298,
+          "iouBest": 0.1351,
+          "predCover": 0.2559,
+          "gtCover": 0.0121
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.0126,
+          "iouBest": 0.0149,
+          "predCover": 0.9606,
+          "gtCover": 0.0121
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.1813,
+          "iouBest": 0.259,
+          "predCover": 0.006,
+          "gtCover": 0.0121
+        }
+      }
+    },
+    {
+      "case": "char_light@gradient",
+      "tier": "EXACT",
+      "gtNote": "synthetic gradient background",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.0134,
+          "iouBest": 0.0149,
+          "predCover": 0.7989,
+          "gtCover": 0.0121
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0185,
+          "iouBest": 0.0188,
+          "predCover": 0.5986,
+          "gtCover": 0.0121
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.0193,
+          "iouBest": 0.0209,
+          "predCover": 0.6147,
+          "gtCover": 0.0121
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.0116,
+          "iouBest": 0.0126,
+          "predCover": 0.7312,
+          "gtCover": 0.0121
+        }
+      }
+    },
+    {
+      "case": "char_light@room-photo",
+      "tier": "EXACT",
+      "gtNote": "anime cutout on real photo room bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.0319,
+          "iouBest": 0.0344,
+          "predCover": 0.495,
+          "gtCover": 0.0159
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0182,
+          "iouBest": 0.0185,
+          "predCover": 0.86,
+          "gtCover": 0.0159
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.0387,
+          "iouBest": 0.0754,
+          "predCover": 0.1885,
+          "gtCover": 0.0159
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.0199,
+          "iouBest": 0.0217,
+          "predCover": 0.7984,
+          "gtCover": 0.0159
+        }
+      }
+    },
+    {
+      "case": "mello+ryuk@white-canvas",
+      "tier": "EXACT",
+      "gtNote": "two cutouts for the positive-click accumulation loop",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.3578,
+          "iouBest": 0.4921,
+          "predCover": 0.1008,
+          "gtCover": 0.0543
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.1223,
+          "iouBest": 0.1997,
+          "predCover": 0.4374,
+          "gtCover": 0.0543
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.7172,
+          "iouBest": 0.7182,
+          "predCover": 0.051,
+          "gtCover": 0.0543
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.3073,
+          "iouBest": 0.5972,
+          "predCover": 0.1726,
+          "gtCover": 0.0543
+        }
+      }
+    },
+    {
+      "case": "obj_chair@room-photo",
+      "tier": "EXACT",
+      "gtNote": "real object on its clean room bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.176,
+          "iouBest": 0.1905,
+          "predCover": 0.5333,
+          "gtCover": 0.0938
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0775,
+          "iouBest": 0.0841,
+          "predCover": 0.8509,
+          "gtCover": 0.0938
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.0149,
+          "iouBest": 0.0618,
+          "predCover": 0.1675,
+          "gtCover": 0.0938
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.1138,
+          "iouBest": 0.1158,
+          "predCover": 0.7906,
+          "gtCover": 0.0938
+        }
+      }
+    },
+    {
+      "case": "obj_towel@room-photo",
+      "tier": "EXACT",
+      "gtNote": "real object on clean room bg",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.1787,
+          "iouBest": 0.1817,
+          "predCover": 0.4815,
+          "gtCover": 0.0904
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.0881,
+          "iouBest": 0.0893,
+          "predCover": 0.8648,
+          "gtCover": 0.0904
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.0494,
+          "iouBest": 0.0715,
+          "predCover": 0.2159,
+          "gtCover": 0.0904
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.1131,
+          "iouBest": 0.1228,
+          "predCover": 0.7989,
+          "gtCover": 0.0904
+        }
+      }
+    },
+    {
+      "case": "heldout-studio-person",
+      "tier": "APPROX",
+      "gtNote": "border-calibrated split (lum>171, sat<70, largest CC)",
+      "models": {
+        "omni-roto-general-v1": {
+          "iouHalf": 0.5881,
+          "iouBest": 0.9105,
+          "predCover": 0.2769,
+          "gtCover": 0.1639
+        },
+        "omni-roto-human-v1": {
+          "iouHalf": 0.6051,
+          "iouBest": 0.7705,
+          "predCover": 0.2705,
+          "gtCover": 0.1639
+        },
+        "omni-roto-anime-v1": {
+          "iouHalf": 0.4027,
+          "iouBest": 0.451,
+          "predCover": 0.2015,
+          "gtCover": 0.1639
+        },
+        "omni-roto-hair-v1": {
+          "iouHalf": 0.742,
+          "iouBest": 0.8024,
+          "predCover": 0.1947,
+          "gtCover": 0.1639
+        }
+      }
+    },
+    {
+      "case": "heldout-hair-closeup",
+      "tier": "QUALITATIVE",
+      "gtNote": "no derivable GT; coverage only",
+      "models": {
+        "omni-roto-general-v1": {
+          "predCover": 0.952
+        },
+        "omni-roto-human-v1": {
+          "predCover": 0.986
+        },
+        "omni-roto-anime-v1": {
+          "predCover": 0.0255
+        },
+        "omni-roto-hair-v1": {
+          "predCover": 0.9649
+        }
+      }
+    }
+  ],
+  "summary": {
+    "winners": {
+      "char_light@white-canvas": {
+        "winner": "omni-roto-hair-v1",
+        "iouHalf": 0.291
+      },
+      "char_l@white-canvas": {
+        "winner": "omni-roto-hair-v1",
+        "iouHalf": 0.2165
+      },
+      "char_mello@white-canvas": {
+        "winner": "omni-roto-anime-v1",
+        "iouHalf": 0.7061
+      },
+      "char_near@white-canvas": {
+        "winner": "omni-roto-hair-v1",
+        "iouHalf": 0.2361
+      },
+      "char_ryuk@white-canvas": {
+        "winner": "omni-roto-anime-v1",
+        "iouHalf": 0.5821
+      },
+      "char_light-large@white-canvas": {
+        "winner": "omni-roto-anime-v1",
+        "iouHalf": 0.362
+      },
+      "char_light@solid-teal": {
+        "winner": "omni-roto-hair-v1",
+        "iouHalf": 0.1813
+      },
+      "char_light@gradient": {
+        "winner": "omni-roto-anime-v1",
+        "iouHalf": 0.0193
+      },
+      "char_light@room-photo": {
+        "winner": "omni-roto-anime-v1",
+        "iouHalf": 0.0387
+      },
+      "mello+ryuk@white-canvas": {
+        "winner": "omni-roto-anime-v1",
+        "iouHalf": 0.7172
+      },
+      "obj_chair@room-photo": {
+        "winner": "omni-roto-general-v1",
+        "iouHalf": 0.176
+      },
+      "obj_towel@room-photo": {
+        "winner": "omni-roto-general-v1",
+        "iouHalf": 0.1787
+      },
+      "heldout-studio-person": {
+        "winner": "omni-roto-hair-v1",
+        "iouHalf": 0.742
+      }
+    },
+    "exactMeanIouHalf": {
+      "omni-roto-general-v1": 0.0953,
+      "omni-roto-human-v1": 0.0697,
+      "omni-roto-anime-v1": 0.2306,
+      "omni-roto-hair-v1": 0.2285
+    },
+    "winCounts": {
+      "omni-roto-general-v1": 2,
+      "omni-roto-human-v1": 0,
+      "omni-roto-anime-v1": 6,
+      "omni-roto-hair-v1": 5
+    }
+  }
+}

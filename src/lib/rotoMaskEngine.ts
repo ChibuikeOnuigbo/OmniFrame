@@ -388,10 +388,50 @@ async function segmentWithModel(
       if (inside) (p.positive ? picks : vetoes).add(ci)
     }
   }
+  // A negative click inside a picked blob must subtract the background
+  // region it points at, not veto the whole component (the model often
+  // over-covers, making subject + surroundings one blob — a whole-component
+  // veto would erase the subject too, Sammie semantics are "this pixel is
+  // background"). Whole-component vetoes stay for blobs the negative owns
+  // outright (background blobs that were not picked).
+  for (const ci of picks) vetoes.delete(ci)
   if (picks.size > 0 || pos.length === 0) {
     const out = new Uint8Array(w * h)
     for (const [ci, c] of comps.entries()) {
       if (picks.has(ci) && !vetoes.has(ci)) for (const idx of c.pixels) out[idx] = 255
+    }
+    if (picks.size > 0) {
+      const data = frame.imageData.data
+      const negTol = 26 * 1.15
+      for (const n of neg) {
+        const sx = Math.max(0, Math.min(w - 1, Math.round(n.x * w)))
+        const sy = Math.max(0, Math.min(h - 1, Math.round(n.y * h)))
+        const seed = sy * w + sx
+        if (!out[seed]) continue
+        const r0 = data[seed * 4]
+        const g0 = data[seed * 4 + 1]
+        const b0 = data[seed * 4 + 2]
+        // Colour-seeded flood inside the mask: removes the clicked
+        // background region, stops at the subject's colour boundary.
+        const queue: number[] = [seed]
+        out[seed] = 0
+        let head = 0
+        while (head < queue.length) {
+          const idx = queue[head++]
+          const x = idx % w
+          const y = (idx - x) / w
+          for (let k = 0; k < 4; k++) {
+            const nx = x + (k === 0 ? 1 : k === 1 ? -1 : 0)
+            const ny = y + (k === 2 ? 1 : k === 3 ? -1 : 0)
+            if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue
+            const nIdx = ny * w + nx
+            if (!out[nIdx]) continue
+            if (colorDistance(data, nIdx * 4, r0, g0, b0) > negTol) continue
+            out[nIdx] = 0
+            queue.push(nIdx)
+          }
+        }
+      }
     }
     if (picks.size > 0) bitmap = { width: w, height: h, data: out }
   }

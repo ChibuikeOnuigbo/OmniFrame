@@ -26,3 +26,10 @@ ort-runtime/
 training_data/
 __pycache__/
 *.pyc
+
+# Isolation-model test: fetched stock previews are not redistributable; the
+# held-out browser cases skip gracefully when these are absent.
+image-search/
+qa/assets/roto/composites/heldout-*.png
+evidence/rotomask-isolation/in-app--heldout-*
+evidence/screenshots/roto-isolation-*heldout*

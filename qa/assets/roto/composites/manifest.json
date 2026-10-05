@@ -1,0 +1,130 @@
+[
+  {
+    "name": "char_light@white-canvas",
+    "file": "qa/assets/roto/composites/char_light@white-canvas.png",
+    "gtCover": 0.0119,
+    "gtCentroid": [
+      0.4992,
+      0.5762
+    ]
+  },
+  {
+    "name": "char_l@white-canvas",
+    "file": "qa/assets/roto/composites/char_l@white-canvas.png",
+    "gtCover": 0.0237,
+    "gtCentroid": [
+      0.4975,
+      0.5792
+    ]
+  },
+  {
+    "name": "char_mello@white-canvas",
+    "file": "qa/assets/roto/composites/char_mello@white-canvas.png",
+    "gtCover": 0.0282,
+    "gtCentroid": [
+      0.5015,
+      0.6076
+    ]
+  },
+  {
+    "name": "char_near@white-canvas",
+    "file": "qa/assets/roto/composites/char_near@white-canvas.png",
+    "gtCover": 0.0216,
+    "gtCentroid": [
+      0.4976,
+      0.6593
+    ]
+  },
+  {
+    "name": "char_ryuk@white-canvas",
+    "file": "qa/assets/roto/composites/char_ryuk@white-canvas.png",
+    "gtCover": 0.0308,
+    "gtCentroid": [
+      0.5149,
+      0.5762
+    ]
+  },
+  {
+    "name": "char_light-large@white-canvas",
+    "file": "qa/assets/roto/composites/char_light-large@white-canvas.png",
+    "gtCover": 0.0193,
+    "gtCentroid": [
+      0.3494,
+      0.4958
+    ]
+  },
+  {
+    "name": "char_light@solid-teal",
+    "file": "qa/assets/roto/composites/char_light@solid-teal.png",
+    "gtCover": 0.0121,
+    "gtCentroid": [
+      0.4998,
+      0.5754
+    ]
+  },
+  {
+    "name": "char_light@gradient",
+    "file": "qa/assets/roto/composites/char_light@gradient.png",
+    "gtCover": 0.0121,
+    "gtCentroid": [
+      0.4998,
+      0.5754
+    ]
+  },
+  {
+    "name": "char_light@room-photo",
+    "file": "qa/assets/roto/composites/char_light@room-photo.png",
+    "gtCover": 0.0159,
+    "gtCentroid": [
+      0.4996,
+      0.5772
+    ]
+  },
+  {
+    "name": "mello+ryuk@white-canvas",
+    "file": "qa/assets/roto/composites/mello+ryuk@white-canvas.png",
+    "gtCover": 0.0543,
+    "gtCentroid": [
+      0.5462,
+      0.5796
+    ]
+  },
+  {
+    "name": "obj_chair@room-photo",
+    "file": "qa/assets/roto/composites/obj_chair@room-photo.png",
+    "gtCover": 0.0938,
+    "gtCentroid": [
+      0.5427,
+      0.7112
+    ]
+  },
+  {
+    "name": "obj_towel@room-photo",
+    "file": "qa/assets/roto/composites/obj_towel@room-photo.png",
+    "gtCover": 0.0904,
+    "gtCentroid": [
+      0.404,
+      0.6164
+    ]
+  },
+  {
+    "name": "heldout-studio-person",
+    "file": "qa/assets/roto/composites/heldout-studio-person.png",
+    "tier": "APPROX",
+    "gtCover": 0.1639,
+    "gtCentroid": [
+      0.5595,
+      0.5003
+    ]
+  },
+  {
+    "name": "heldout-hair-closeup",
+    "file": "qa/assets/roto/composites/heldout-hair-closeup.png",
+    "tier": "QUALITATIVE",
+    "gtCover": null,
+    "gtCentroid": [
+      0.5,
+      0.45
+    ]
+  }
+]
