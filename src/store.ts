@@ -342,6 +342,10 @@ interface EditorState extends RiggingSlice {
   rightPanelFloat: { x: number; y: number; w: number; h: number }
   leftPanelFloating: boolean
   leftPanelFloat: { x: number; y: number; w: number; h: number }
+  /** Timeline folded to a thin strip (−) — + restores the previous height. */
+  timelineCollapsed: boolean
+  timelineFloating: boolean
+  timelineFloat: { x: number; y: number; w: number; h: number }
   /** Rising z-index allocator so popped-out windows stack in click order. */
   floatZ: number
   bumpFloatZ: () => number
@@ -527,6 +531,9 @@ interface EditorState extends RiggingSlice {
   setRightPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
   setLeftPanelFloating: (v: boolean) => void
   setLeftPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
+  setTimelineCollapsed: (v: boolean) => void
+  setTimelineFloating: (v: boolean) => void
+  setTimelineFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
   setSidebarSectionMode: (mode: SidebarSectionMode) => void
   saveCustomWorkspace: (name: string) => string
   applyCustomWorkspace: (id: string) => void
@@ -1214,6 +1221,9 @@ export const useEditor = create<EditorState>((set, get) => {
     rightPanelFloat: { x: 0, y: 0, w: 340, h: 560 },
     leftPanelFloating: false,
     leftPanelFloat: { x: 0, y: 0, w: 380, h: 560 },
+    timelineCollapsed: false,
+    timelineFloating: false,
+    timelineFloat: { x: 0, y: 0, w: 900, h: 380 },
     floatZ: 70,
     sidebarSectionMode: 'tabs',
     customWorkspaces: (() => {
@@ -2662,6 +2672,14 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- layout actions ----
     setWorkspacePreset: (preset) => {
+      // Applying a preset is a full layout reset: every popped-out panel
+      // returns to its dock and the timeline strip expands.
+      set({
+        leftPanelFloating: false,
+        rightPanelFloating: false,
+        timelineFloating: false,
+        timelineCollapsed: false,
+      })
       switch (preset) {
         case 'default':
           set({
@@ -2854,7 +2872,7 @@ export const useEditor = create<EditorState>((set, get) => {
         get().setWorkspacePreset(currentPreset)
         return
       }
-      set({ focusMode: mode })
+      set({ focusMode: mode, timelineCollapsed: false, timelineFloating: false })
       if (mode === 'canvas-only') {
         set({ leftOpen: false, rightOpen: false, timelineHeight: 0 })
       } else if (mode === 'preview') {
@@ -2865,7 +2883,8 @@ export const useEditor = create<EditorState>((set, get) => {
         set({ leftOpen: false, rightOpen: true, timelineHeight: 160 })
       }
     },
-    setTimelineHeight: (height) => set({ timelineHeight: Math.max(120, Math.min(600, height)) }),
+    setTimelineHeight: (height) =>
+      set({ timelineHeight: Math.max(120, Math.min(600, height)), timelineCollapsed: false }),
     setLeftDockWidth: (width) => set({ leftDockWidth: Math.max(220, Math.min(600, width)) }),
     setRightPanelWidth: (width) => set({ rightPanelWidth: Math.max(220, Math.min(500, width)) }),
     setRightPanelFloating: (v) => {
@@ -2882,6 +2901,32 @@ export const useEditor = create<EditorState>((set, get) => {
       const x = cur.x > 0 ? cur.x : Math.max(16, vw - w - 64)
       const y = cur.y > 0 ? cur.y : 88
       set({ rightPanelFloating: true, rightPanelFloat: { x, y, w, h } })
+    },
+    setTimelineCollapsed: (v) => set({ timelineCollapsed: v }),
+    setTimelineFloating: (v) => {
+      if (!v) {
+        set({ timelineFloating: false })
+        return
+      }
+      // First float: a wide, timeline-shaped window over the lower half.
+      const cur = get().timelineFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.min(cur.w || 900, vw - 32)
+      const h = Math.min(cur.h || 380, vh - 160)
+      const x = cur.x > 0 ? cur.x : Math.max(16, (vw - w) / 2)
+      const y = cur.y > 0 ? cur.y : Math.max(64, vh - h - 48)
+      set({ timelineFloating: true, timelineCollapsed: false, timelineFloat: { x, y, w, h } })
+    },
+    setTimelineFloat: (patch) => {
+      const cur = get().timelineFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.max(420, Math.min(patch.w ?? cur.w, vw - 24))
+      const h = Math.max(200, Math.min(patch.h ?? cur.h, vh - 96))
+      const x = Math.max(0, Math.min(patch.x ?? cur.x, vw - w))
+      const y = Math.max(40, Math.min(patch.y ?? cur.y, vh - 48))
+      set({ timelineFloat: { x, y, w, h } })
     },
     bumpFloatZ: () => {
       const z = get().floatZ + 1
@@ -2955,6 +3000,10 @@ export const useEditor = create<EditorState>((set, get) => {
         rightPanelWidth: ws.rightPanelWidth,
         timelineHeight: ws.timelineHeight,
         focusMode: ws.focusMode,
+        leftPanelFloating: false,
+        rightPanelFloating: false,
+        timelineFloating: false,
+        timelineCollapsed: false,
       })
     },
     deleteCustomWorkspace: (id) => {

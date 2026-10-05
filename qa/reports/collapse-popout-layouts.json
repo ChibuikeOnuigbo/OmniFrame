@@ -1,6 +1,6 @@
 {
   "suite": "collapse-popout-layouts",
-  "pass": 36,
+  "pass": 49,
   "fail": 0,
   "results": [
     {
@@ -137,6 +137,71 @@
       "name": "dragging the dock header ≥24px tears the panel out",
       "status": "PASS",
       "detail": "float windows=1"
+    },
+    {
+      "name": "timeline has a − / + collapse chip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "timeline starts expanded",
+      "status": "PASS",
+      "detail": "280px"
+    },
+    {
+      "name": "− collapses the timeline to a thin strip",
+      "status": "PASS",
+      "detail": "data-collapsed=true, 32px"
+    },
+    {
+      "name": "collapsed strip hides the transport bar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "+ restores the timeline height",
+      "status": "PASS",
+      "detail": "280px vs 280px"
+    },
+    {
+      "name": "timeline pop-out creates a floating window",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "timeline dock slot shows the floating strip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "floating timeline window contains the real timeline",
+      "status": "PASS",
+      "detail": "2 bar(s)"
+    },
+    {
+      "name": "timeline docks back into the layout",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "timeline height preserved across the float round-trip",
+      "status": "PASS",
+      "detail": "280 → 280"
+    },
+    {
+      "name": "dragging the breadcrumbs bar tears the timeline out",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "splitter drag expands a collapsed timeline",
+      "status": "PASS",
+      "detail": "data-collapsed=null"
+    },
+    {
+      "name": "preset apply re-docks every panel and expands the timeline",
+      "status": "PASS",
+      "detail": "{\"tc\":false,\"tf\":false,\"lf\":false,\"rf\":false}"
     },
     {
       "name": "TopBar quick menu lists CapCut Studio",

@@ -2,6 +2,8 @@ import { useRef, useState, useEffect, useMemo} from 'react'
 import {
   ZoomIn,
   ZoomOut,
+  PictureInPicture2,
+  PanelBottom,
   Maximize,
   Magnet,
   Eye,
@@ -46,6 +48,8 @@ import {
   Film,
 } from 'lucide-react'
 import { useEditor, gapsOnTrack } from '../store'
+import { CollapseChip } from './CollapseChip'
+import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { IconButton } from './ui'
@@ -1021,6 +1025,44 @@ export function Timeline() {
   const dropFrameTimecode = useEditor((s) => s.dropFrameTimecode)
   const duration = useEditor((s) => s.duration)
   const timelineHeight = useEditor((s) => s.timelineHeight)
+  const timelineCollapsed = useEditor((s) => s.timelineCollapsed)
+  const setTimelineCollapsed = useEditor((s) => s.setTimelineCollapsed)
+  const timelineFloating = useEditor((s) => s.timelineFloating)
+  const setTimelineFloating = useEditor((s) => s.setTimelineFloating)
+  const timelineFloat = useEditor((s) => s.timelineFloat)
+  const setTimelineFloat = useEditor((s) => s.setTimelineFloat)
+  // Breadcrumbs-bar drag-out: dragging the bar ≥24px tears the whole timeline
+  // out into a floating window (same gesture as the left dock header).
+  const tlHeaderDrag = useRef<{ startX: number; startY: number } | null>(null)
+  const onTlHeaderDragDown = (e: React.PointerEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return
+    tlHeaderDrag.current = { startX: e.clientX, startY: e.clientY }
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onTlHeaderDragMove = (e: React.PointerEvent) => {
+    const d = tlHeaderDrag.current
+    if (!d || useEditor.getState().timelineFloating) return
+    if (Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 24) return
+    tlHeaderDrag.current = null
+    const cur = useEditor.getState().timelineFloat
+    const w = cur.w || 900
+    const h = cur.h || 380
+    setTimelineFloat({
+      x: Math.max(8, Math.min(e.clientX - 120, window.innerWidth - w - 8)),
+      y: Math.max(40, Math.min(e.clientY - 16, window.innerHeight - h - 16)),
+      w,
+      h,
+    })
+    setTimelineFloating(true)
+  }
+  const onTlHeaderDragUp = (e: React.PointerEvent) => {
+    tlHeaderDrag.current = null
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer already released
+    }
+  }
   const tool = useEditor((s) => s.tool)
   const setPlayhead = useEditor((s) => s.setPlayhead)
   const setTool = useEditor((s) => s.setTool)
@@ -1554,27 +1596,37 @@ export function Timeline() {
     }
   }
 
-  return (
-    <div
-      data-testid="timeline"
-      data-px-per-second={px.toFixed(4)}
-      data-project-fps={FPS}
-      data-drop-frame={dropFrameTimecode ? 'true' : 'false'}
-      data-render-count={renderCount.current}
-      style={{
-        height: timelineHeight > 0 ? `${timelineHeight}px` : '0px',
-        display: timelineHeight === 0 ? 'none' : 'flex',
-      }}
-      className={`shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none ${
-        tool === 'blade' ? 'of-blade-tool' : 'of-select-tool'
-      }`}
-    >
+  // Root attributes shared by every render path (docked, collapsed, floating
+  // placeholder) so E2E instrumentation keeps working in all states.
+  const timelineRootAttrs: Record<string, string> = {
+    'data-testid': 'timeline',
+    'data-px-per-second': px.toFixed(4),
+    'data-project-fps': String(FPS),
+    'data-drop-frame': dropFrameTimecode ? 'true' : 'false',
+    'data-render-count': String(renderCount.current),
+  }
+
+  const timelineBody = (
+    <>
       {/* Sequence Breadcrumbs Bar */}
       <div
         data-testid="sequence-breadcrumbs-bar"
-        className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none"
+        onPointerDown={onTlHeaderDragDown}
+        onPointerMove={onTlHeaderDragMove}
+        onPointerUp={onTlHeaderDragUp}
+        onPointerCancel={onTlHeaderDragUp}
+        title="Drag to pop the timeline out into a window · − folds it to a strip"
+        className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none touch-none"
       >
         <div className="flex items-center gap-1.5 flex-wrap">
+          {!timelineFloating && (
+            <CollapseChip
+              open={!timelineCollapsed}
+              onToggle={() => setTimelineCollapsed(!timelineCollapsed)}
+              label="timeline"
+              testId="timeline-collapse-toggle"
+            />
+          )}
           {breadcrumbs.map((b, idx) => {
             const isLast = idx === breadcrumbs.length - 1
             return (
@@ -1598,19 +1650,33 @@ export function Timeline() {
           })}
         </div>
 
-        {breadcrumbs.length > 1 && (
-          <button
-            type="button"
-            data-testid="breadcrumb-back-button"
-            aria-label="Back to parent timeline"
-            onClick={() => navigateBreadcrumb(breadcrumbs[breadcrumbs.length - 2].id)}
-            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs shrink-0"
-            title="Exit Compound Clip to Parent Timeline"
-          >
-            <ArrowLeft size={12} className="shrink-0" />
-            <span className="hidden sm:inline">Back to Timeline</span>
-          </button>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {!timelineFloating && (
+            <button
+              type="button"
+              data-testid="timeline-popout-btn"
+              title="Pop timeline out into a floating window (or drag the breadcrumbs bar)"
+              aria-label="Pop timeline out into a floating window"
+              onClick={() => setTimelineFloating(true)}
+              className="grid h-6.5 w-6.5 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-750 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              <PictureInPicture2 size={13} />
+            </button>
+          )}
+          {breadcrumbs.length > 1 && (
+            <button
+              type="button"
+              data-testid="breadcrumb-back-button"
+              aria-label="Back to parent timeline"
+              onClick={() => navigateBreadcrumb(breadcrumbs[breadcrumbs.length - 2].id)}
+              className="flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs shrink-0"
+              title="Exit Compound Clip to Parent Timeline"
+            >
+              <ArrowLeft size={12} className="shrink-0" />
+              <span className="hidden sm:inline">Back to Timeline</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* transport + tools + zoom */}
@@ -2627,6 +2693,102 @@ export function Timeline() {
           </div>
         </>
       )}
+    </>
+  )
+
+  // ---- Popped-out timeline: slim dock strip + the full timeline in a
+  //      draggable, resizable floating window. ----
+  if (timelineFloating) {
+    return (
+      <>
+        <div
+          {...timelineRootAttrs}
+          data-floating="true"
+          style={{ height: '32px' }}
+          className="shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none"
+        >
+          <div className="flex h-full items-center gap-2 px-2">
+            <PanelBottom size={14} className="text-ink-500" aria-hidden="true" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">
+              Timeline is floating
+            </span>
+            <div className="flex-1" />
+            <button
+              type="button"
+              data-testid="timeline-dock-back-btn"
+              onClick={() => setTimelineFloating(false)}
+              className="rounded-md border border-ink-700 bg-ink-800 px-2 py-0.5 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              Dock back
+            </button>
+          </div>
+        </div>
+        <FloatingWindow
+          testId="timeline-float-window"
+          title="Timeline"
+          rect={timelineFloat}
+          setRect={setTimelineFloat}
+          onDock={() => setTimelineFloating(false)}
+          onClose={() => {
+            setTimelineFloating(false)
+            setTimelineCollapsed(true)
+          }}
+          dockIcon={<PanelBottom size={13} />}
+          dockLabel="Dock timeline back into the layout"
+        >
+          <div className="flex h-full min-h-0 flex-col">{timelineBody}</div>
+        </FloatingWindow>
+      </>
+    )
+  }
+
+  // ---- Collapsed strip: − folds the whole timeline down to one rail; +
+  //      brings it back, and the splitter drag expands it too. ----
+  if (timelineCollapsed && timelineHeight > 0) {
+    return (
+      <div
+        {...timelineRootAttrs}
+        data-collapsed="true"
+        style={{ height: '32px' }}
+        className="shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none"
+      >
+        <div className="flex h-full items-center gap-2 px-2">
+          <CollapseChip
+            open={false}
+            onToggle={() => setTimelineCollapsed(false)}
+            label="timeline"
+            testId="timeline-collapse-toggle"
+          />
+          <Film size={12} className="text-brand-400" aria-hidden="true" />
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">Timeline</span>
+          <div className="flex-1" />
+          <button
+            type="button"
+            data-testid="timeline-popout-btn"
+            title="Pop timeline out into a floating window (or drag the breadcrumbs bar)"
+            aria-label="Pop timeline out into a floating window"
+            onClick={() => setTimelineFloating(true)}
+            className="grid h-6.5 w-6.5 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-750 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <PictureInPicture2 size={13} />
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      {...timelineRootAttrs}
+      style={{
+        height: timelineHeight > 0 ? `${timelineHeight}px` : '0px',
+        display: timelineHeight === 0 ? 'none' : 'flex',
+      }}
+      className={`shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none ${
+        tool === 'blade' ? 'of-blade-tool' : 'of-select-tool'
+      }`}
+    >
+      {timelineBody}
     </div>
   )
 }

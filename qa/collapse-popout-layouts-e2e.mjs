@@ -274,7 +274,93 @@ await page.waitForTimeout(1200)
   await page.waitForTimeout(300)
 }
 
-// ---------- 4. Layout gallery: CapCut + Cinema presets ----------
+// ---------- 4. Timeline dock: − / + collapse strip + pop-out ----------
+{
+  const tl = page.locator('[data-testid="timeline"]')
+  const tlChip = page.locator('[data-testid="timeline-collapse-toggle"]')
+  assert('timeline has a − / + collapse chip', (await tlChip.count()) === 1)
+  const expandedH = (await tl.boundingBox())?.height ?? 0
+  assert('timeline starts expanded', expandedH > 120, `${Math.round(expandedH)}px`)
+
+  // − folds the whole timeline to a 32px strip.
+  await tlChip.click()
+  await page.waitForTimeout(400)
+  const collapsed = await tl.getAttribute('data-collapsed')
+  const collapsedH = (await tl.boundingBox())?.height ?? 0
+  assert('− collapses the timeline to a thin strip', collapsed === 'true' && collapsedH <= 40, `data-collapsed=${collapsed}, ${Math.round(collapsedH)}px`)
+  assert('collapsed strip hides the transport bar', (await page.locator('[data-testid="timeline-transport-group"]').count()) === 0)
+
+  // + restores the previous height.
+  await tlChip.click()
+  await page.waitForTimeout(400)
+  const restoredH = (await tl.boundingBox())?.height ?? 0
+  assert('+ restores the timeline height', (await tl.getAttribute('data-collapsed')) === null && Math.abs(restoredH - expandedH) < 8, `${Math.round(restoredH)}px vs ${Math.round(expandedH)}px`)
+
+  // Pop out via the breadcrumbs-bar button.
+  await page.click('[data-testid="timeline-popout-btn"]')
+  await page.waitForTimeout(500)
+  const tlw = page.locator('[data-testid="timeline-float-window"]')
+  assert('timeline pop-out creates a floating window', (await tlw.count()) === 1)
+  assert('timeline dock slot shows the floating strip', (await page.locator('[data-testid="timeline-dock-back-btn"]').count()) === 1)
+  const bodyHasTimeline = await tlw.locator('[data-testid="sequence-breadcrumbs-bar"], [data-testid="timeline-transport-group"]').count()
+  assert('floating timeline window contains the real timeline', bodyHasTimeline >= 2, `${bodyHasTimeline} bar(s)`)
+  const tlHBefore = await page.evaluate(() => window.__omniframe_store.getState().timelineHeight)
+
+  await page.screenshot({ path: join(EVIDENCE, 'popout-timeline-window.png') })
+
+  // Dock back → timeline returns to the layout with its height intact.
+  await page.click('[data-testid="timeline-float-window-dock-btn"]')
+  await page.waitForTimeout(400)
+  assert('timeline docks back into the layout', (await page.locator('[data-testid="timeline-float-window"]').count()) === 0)
+  const tlHAfter = await page.evaluate(() => window.__omniframe_store.getState().timelineHeight)
+  assert('timeline height preserved across the float round-trip', tlHAfter === tlHBefore, `${tlHBefore} → ${tlHAfter}`)
+
+  // Drag-out gesture on the breadcrumbs bar.
+  const bar = page.locator('[data-testid="sequence-breadcrumbs-bar"]')
+  const barBox = await bar.boundingBox()
+  await page.mouse.move(barBox.x + barBox.width / 2, barBox.y + barBox.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(barBox.x + 40, barBox.y - 220, { steps: 10 })
+  await page.mouse.up()
+  await page.waitForTimeout(500)
+  assert('dragging the breadcrumbs bar tears the timeline out', (await page.locator('[data-testid="timeline-float-window"]').count()) === 1)
+  await page.click('[data-testid="timeline-dock-back-btn"]')
+  await page.waitForTimeout(400)
+
+  // Splitter drag on a collapsed timeline expands it again.
+  await tlChip.click()
+  await page.waitForTimeout(300)
+  const splitter = page.locator('[data-testid="timeline-splitter"]')
+  const sb = await splitter.boundingBox()
+  await page.mouse.move(sb.x + sb.width / 2, sb.y + sb.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(sb.x + sb.width / 2, sb.y - 120, { steps: 6 })
+  await page.mouse.up()
+  await page.waitForTimeout(400)
+  const afterSplitter = await tl.getAttribute('data-collapsed')
+  assert('splitter drag expands a collapsed timeline', afterSplitter !== 'true', `data-collapsed=${afterSplitter}`)
+}
+
+// ---------- 5. Preset apply resets every popped/collapsed docker ----------
+{
+  await page.evaluate(() => {
+    const st = window.__omniframe_store.getState()
+    st.setTimelineCollapsed(true)
+    st.setLeftPanelFloating(true)
+    st.setRightPanelFloating(true)
+  })
+  await page.waitForTimeout(400)
+  await page.evaluate(() => window.__omniframe_store.getState().setWorkspacePreset('default'))
+  await page.waitForTimeout(500)
+  const reset = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    return { tc: s.timelineCollapsed, tf: s.timelineFloating, lf: s.leftPanelFloating, rf: s.rightPanelFloating }
+  })
+  assert('preset apply re-docks every panel and expands the timeline',
+    !reset.tc && !reset.tf && !reset.lf && !reset.rf, JSON.stringify(reset))
+}
+
+// ---------- 6. Layout gallery: CapCut + Cinema presets ----------
 {
   await page.evaluate(() => window.__omniframe_store.getState().setLeftOpen(true))
   await page.waitForTimeout(300)
@@ -322,7 +408,7 @@ await page.waitForTimeout(1200)
   await page.waitForTimeout(300)
 }
 
-// ---------- 5. Mini-icon audit: −/+ chips uniformly sized, sane hit areas ----------
+// ---------- 7. Mini-icon audit: −/+ chips uniformly sized, sane hit areas ----------
 {
   const chips = await page.evaluate(() => {
     const nodes = [...document.querySelectorAll('button[aria-expanded][data-testid*="toggle"], [data-testid="slide-dock-preview-view-controls-toggle"]')]
