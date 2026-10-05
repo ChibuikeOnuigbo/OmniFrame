@@ -340,6 +340,11 @@ interface EditorState extends RiggingSlice {
   rightPanelWidth: number
   rightPanelFloating: boolean
   rightPanelFloat: { x: number; y: number; w: number; h: number }
+  leftPanelFloating: boolean
+  leftPanelFloat: { x: number; y: number; w: number; h: number }
+  /** Rising z-index allocator so popped-out windows stack in click order. */
+  floatZ: number
+  bumpFloatZ: () => number
   sidebarSectionMode: SidebarSectionMode
   customWorkspaces: CustomWorkspace[]
 
@@ -520,6 +525,8 @@ interface EditorState extends RiggingSlice {
   setRightPanelWidth: (width: number) => void
   setRightPanelFloating: (v: boolean) => void
   setRightPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
+  setLeftPanelFloating: (v: boolean) => void
+  setLeftPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
   setSidebarSectionMode: (mode: SidebarSectionMode) => void
   saveCustomWorkspace: (name: string) => string
   applyCustomWorkspace: (id: string) => void
@@ -1205,6 +1212,9 @@ export const useEditor = create<EditorState>((set, get) => {
     rightPanelWidth: 280,
     rightPanelFloating: false,
     rightPanelFloat: { x: 0, y: 0, w: 340, h: 560 },
+    leftPanelFloating: false,
+    leftPanelFloat: { x: 0, y: 0, w: 380, h: 560 },
+    floatZ: 70,
     sidebarSectionMode: 'tabs',
     customWorkspaces: (() => {
       try {
@@ -2807,6 +2817,35 @@ export const useEditor = create<EditorState>((set, get) => {
             drawingEnabled: true,
           })
           break
+        case 'capcut':
+          // CapCut-style: media-first left dock, right inspector, tall timeline.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'media',
+            leftDockWidth: 300,
+            rightOpen: true,
+            rightPanelWidth: 300,
+            timelineHeight: 320,
+            drawingEnabled: false,
+            leftPanelFloating: false,
+            rightPanelFloating: false,
+          })
+          break
+        case 'cinema':
+          // Cinema: everything docked away for a pure clean-screen review pass.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: false,
+            rightOpen: false,
+            timelineHeight: 180,
+            drawingEnabled: false,
+            leftPanelFloating: false,
+            rightPanelFloating: false,
+          })
+          break
       }
     },
     setFocusMode: (mode) => {
@@ -2843,6 +2882,36 @@ export const useEditor = create<EditorState>((set, get) => {
       const x = cur.x > 0 ? cur.x : Math.max(16, vw - w - 64)
       const y = cur.y > 0 ? cur.y : 88
       set({ rightPanelFloating: true, rightPanelFloat: { x, y, w, h } })
+    },
+    bumpFloatZ: () => {
+      const z = get().floatZ + 1
+      set({ floatZ: z })
+      return z
+    },
+    setLeftPanelFloating: (v) => {
+      if (!v) {
+        set({ leftPanelFloating: false })
+        return
+      }
+      // First float: place the window over the left side of the preview.
+      const cur = get().leftPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.min(cur.w || 380, vw - 32)
+      const h = Math.min(cur.h || 560, vh - 120)
+      const x = cur.x > 0 ? cur.x : Math.max(16, (vw - w) / 2 - 120)
+      const y = cur.y > 0 ? cur.y : 88
+      set({ leftPanelFloating: true, leftPanelFloat: { x, y, w, h } })
+    },
+    setLeftPanelFloat: (patch) => {
+      const cur = get().leftPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.max(240, Math.min(patch.w ?? cur.w, vw - 24))
+      const h = Math.max(280, Math.min(patch.h ?? cur.h, vh - 96))
+      const x = Math.max(0, Math.min(patch.x ?? cur.x, vw - w))
+      const y = Math.max(40, Math.min(patch.y ?? cur.y, vh - 48))
+      set({ leftPanelFloat: { x, y, w, h } })
     },
     setSidebarSectionMode: (mode) => set({ sidebarSectionMode: mode }),
     setRightPanelFloat: (patch) => {

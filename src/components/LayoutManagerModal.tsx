@@ -53,6 +53,8 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
     { id: 'vfx', label: 'VFX & Tracking', desc: 'Tracking panel beside a wide inspector for mattes and clean plates' },
     { id: 'rig', label: 'Rig & Animate', desc: 'Rigging panel, inspector and curve graph editor side by side' },
     { id: 'manga', label: 'Manga / MMV Edit', desc: 'Drawing canvas overlay with a wide media dock for layered PSD rigs' },
+    { id: 'capcut', label: 'CapCut Studio', desc: 'Media-first left dock, right inspector, tall timeline — consumer NLE style' },
+    { id: 'cinema', label: 'Cinema Review', desc: 'Docks closed, thin timeline strip — a clean screen for watching the cut' },
   ]
 
   const FOCUS_OPTIONS: { id: FocusMode; label: string; desc: string }[] = [

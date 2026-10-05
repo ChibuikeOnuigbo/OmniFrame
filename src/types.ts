@@ -310,6 +310,8 @@ export type WorkspacePreset =
   | 'vfx'
   | 'rig'
   | 'manga'
+  | 'capcut'
+  | 'cinema'
 
 /** How side-panel sections are presented: tab panels or single-open accordion. */
 export type SidebarSectionMode = 'tabs' | 'accordion'

@@ -58,6 +58,16 @@ export const WorkspaceSchematic: React.FC<WorkspaceSchematicProps> = ({
     showLeft = false
     showRight = false
     timelineRatio = 'h-[22%]'
+  } else if (preset === 'capcut') {
+    // CapCut-style: slim media dock, inspector, generous timeline.
+    showLeft = true
+    showRight = true
+    timelineRatio = 'h-[38%]'
+  } else if (preset === 'cinema') {
+    // Cinema: clean screen, thin transport strip only.
+    showLeft = false
+    showRight = false
+    timelineRatio = 'h-[14%]'
   }
 
   return (

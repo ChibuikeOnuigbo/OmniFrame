@@ -22,6 +22,7 @@ import { DrawingToolbar } from './DrawingToolbar'
 import { SelectionSubToolBar } from './SelectionSubToolBar'
 import { DrawingCanvasOverlay } from './DrawingCanvasOverlay'
 import { SlideDock } from './SlideDock'
+import { CollapseChip } from './CollapseChip'
 import { Tooltip } from './Tooltip'
 import { AspectRatioSelector } from './AspectRatioSelector'
 import { ThreeViewer } from './ThreeViewer'
@@ -86,6 +87,8 @@ export function Preview() {
   const canvasH = Math.round(canvasW / (sequenceSettings.width / sequenceSettings.height))
 
   const [display, setDisplay] = useState<'fit' | number>('fit')
+  // − / + collapse for the view/zoom cluster (chip lives top-left; cluster top-right).
+  const [viewControlsOpen, setViewControlsOpen] = useState(true)
   const [safe, setSafe] = useState(false)
   const [grid, setGrid] = useState(false)
   const [viewport, setViewport] = useState({ width: 1, height: 1 })
@@ -235,8 +238,27 @@ export function Preview() {
           z-40 also clears the selection floating toolbar (z-30), which is
           centred and wide enough to reach this corner once several tools are
           shown -- it used to bury the 3D and drawing toggles. */}
+      {/* Top Left: the −/+ chip that collapses the whole view & zoom cluster.
+          Placed in the stage corner so it never competes with the controls
+          themselves and stays discoverable when the cluster is gone. */}
+      <div className="absolute top-2 left-2 z-40">
+        <CollapseChip
+          open={viewControlsOpen}
+          onToggle={() => setViewControlsOpen((v) => !v)}
+          label="preview view & zoom controls"
+          testId="slide-dock-preview-view-controls-toggle"
+        />
+      </div>
+
       <div className="absolute top-2 right-2 z-40 flex items-center gap-1">
-        <SlideDock id="preview-view-controls" label="view controls" direction="up">
+        <SlideDock
+          id="preview-view-controls"
+          label="view controls"
+          direction="up"
+          toggle="none"
+          open={viewControlsOpen}
+          onOpenChange={setViewControlsOpen}
+        >
         {/* 3D Orbit Viewer Toggle */}
         <Tooltip label={is3DMode ? '3D Mode: on (orbit & drag to view)' : '3D Mode: off'}>
         <button

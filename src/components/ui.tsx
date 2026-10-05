@@ -1,5 +1,5 @@
 import { useEffect, useId, useState, type ReactNode } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { CollapseGlyph } from './CollapseChip'
 import { NestedSectionContext, sectionIdFor, useSectionsNav, useIsNestedSection } from './SectionsNav'
 
 export function IconButton({
@@ -187,11 +187,7 @@ export function Section({
             className="flex min-h-8 min-w-0 flex-1 items-center rounded text-left transition-colors hover:bg-ink-800/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
           >
             <span className="flex min-w-0 items-center gap-1.5 text-left">
-              <ChevronDown
-                size={13}
-                aria-hidden="true"
-                className={`shrink-0 text-ink-400 transition-transform duration-150 ${isActive ? '' : '-rotate-90'}`}
-              />
+              <CollapseGlyph open={isActive} className="!h-4 !w-4" />
               <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
                 {title}
               </span>
@@ -211,13 +207,7 @@ export function Section({
 
   const heading = (
     <span className="flex min-w-0 items-center gap-1.5 text-left">
-      {collapsible && (
-        <ChevronDown
-          size={13}
-          aria-hidden="true"
-          className={`shrink-0 text-ink-400 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
-        />
-      )}
+      {collapsible ? <CollapseGlyph open={open} className="!h-4 !w-4" /> : null}
       <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
         {title}
       </span>
@@ -282,11 +272,7 @@ export function AccordionGroup({
         className="flex min-h-8 w-full items-center justify-between px-2.5 py-1.5 text-left text-xs font-medium text-ink-300 transition-colors hover:bg-ink-800/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
       >
         <div className="flex items-center gap-1.5">
-          <ChevronDown
-            size={12}
-            aria-hidden="true"
-            className={`text-ink-500 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
-          />
+          <CollapseGlyph open={open} className="!h-4 !w-4" />
           <span className="text-[11px] font-semibold">{title}</span>
           {badge}
         </div>

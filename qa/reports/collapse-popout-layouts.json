@@ -1,0 +1,187 @@
+{
+  "suite": "collapse-popout-layouts",
+  "pass": 36,
+  "fail": 0,
+  "results": [
+    {
+      "name": "preview −/+ chip renders in the stage top-left corner",
+      "status": "PASS",
+      "detail": "chip at 328,56 vs stage 320,48"
+    },
+    {
+      "name": "view-controls cluster expanded on load",
+      "status": "PASS",
+      "detail": "aria-expanded=true"
+    },
+    {
+      "name": "− collapses the view-controls cluster",
+      "status": "PASS",
+      "detail": "aria-expanded=false"
+    },
+    {
+      "name": "collapsed cluster is dramatically narrower",
+      "status": "PASS",
+      "detail": "358px → 0px"
+    },
+    {
+      "name": "cluster content is aria-hidden while collapsed",
+      "status": "PASS",
+      "detail": "2 hidden node(s)"
+    },
+    {
+      "name": "+ restores the view-controls cluster",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "inspector open section header shows − (minus) glyph",
+      "status": "PASS",
+      "detail": "glyph=minus"
+    },
+    {
+      "name": "inspector section header click collapses it (toggle-close)",
+      "status": "PASS",
+      "detail": "→ false"
+    },
+    {
+      "name": "collapsed inspector section header shows + (plus) glyph",
+      "status": "PASS",
+      "detail": "glyph=plus"
+    },
+    {
+      "name": "+ reopens the inspector section",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "left panel accordion header uses − / + dialect",
+      "status": "PASS",
+      "detail": "glyph=minus"
+    },
+    {
+      "name": "no chevron glyphs remain in section headers",
+      "status": "PASS",
+      "detail": "0 chevron(s)"
+    },
+    {
+      "name": "left dock has a pop-out button",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "pop-out creates a floating window",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "dock slot shows a floating placeholder",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "store marks the left panel floating",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "floating window renders the panel content",
+      "status": "PASS",
+      "detail": "113 nodes"
+    },
+    {
+      "name": "header drag moves the floating window",
+      "status": "PASS",
+      "detail": "x 410 → 590"
+    },
+    {
+      "name": "corner handle resizes the floating window",
+      "status": "PASS",
+      "detail": "w 380 → 512px"
+    },
+    {
+      "name": "double-click header maximizes the window",
+      "status": "PASS",
+      "detail": "data-maximized=true"
+    },
+    {
+      "name": "double-click again restores the window",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "− collapses the floating window body",
+      "status": "PASS",
+      "detail": "body nodes=0"
+    },
+    {
+      "name": "+ restores the floating window body",
+      "status": "PASS",
+      "detail": "634 → 634px"
+    },
+    {
+      "name": "click-to-front: left float window stacks above inspector float",
+      "status": "PASS",
+      "detail": "left=87 right=60"
+    },
+    {
+      "name": "dock-back button returns the panel to its slot",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "store marks the left panel docked again",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "dragging the dock header ≥24px tears the panel out",
+      "status": "PASS",
+      "detail": "float windows=1"
+    },
+    {
+      "name": "TopBar quick menu lists CapCut Studio",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "layout gallery lists CapCut Studio preset",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "layout gallery lists Cinema Review preset",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "preset cards show wireframe thumbnails",
+      "status": "PASS",
+      "detail": "1 schematic(s)"
+    },
+    {
+      "name": "CapCut preset applies media-first geometry",
+      "status": "PASS",
+      "detail": "{\"preset\":\"capcut\",\"leftTab\":\"media\",\"leftOpen\":true,\"rightOpen\":true,\"tl\":320,\"lf\":false,\"rf\":false}"
+    },
+    {
+      "name": "Cinema preset closes docks for a clean screen",
+      "status": "PASS",
+      "detail": "{\"preset\":\"cinema\",\"leftOpen\":false,\"rightOpen\":false,\"tl\":180}"
+    },
+    {
+      "name": "−/+ slide-dock chips present for audit",
+      "status": "PASS",
+      "detail": "1 chip(s)"
+    },
+    {
+      "name": "−/+ chips are uniformly square ~18–20px (small but clickable)",
+      "status": "PASS",
+      "detail": "[{\"id\":\"slide-dock-preview-view-controls-toggle\",\"w\":20,\"h\":20}]"
+    },
+    {
+      "name": "zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ]
+}

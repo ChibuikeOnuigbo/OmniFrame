@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useState } from 'react'
-import { ChevronRight } from 'lucide-react'
+import { CollapseGlyph } from './CollapseChip'
 import { NestedSectionContext, sectionIdFor, useSectionsNav, useIsNestedSection } from './SectionsNav'
 
 /**
@@ -95,11 +95,7 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
           onClick={() => nav.activate(id)}
           className="group w-full flex min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
         >
-          <ChevronRight
-            size={14}
-            aria-hidden="true"
-            className={`shrink-0 text-ink-400 transition-transform ${isActive ? 'rotate-90' : ''}`}
-          />
+          <CollapseGlyph open={isActive} />
           <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wider text-ink-200">
             {title}
           </span>
@@ -133,11 +129,7 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
         onClick={() => setStandaloneOpen((v) => !v)}
         className="group w-full flex min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
       >
-        <ChevronRight
-          size={14}
-          aria-hidden="true"
-          className={`shrink-0 text-ink-400 transition-transform ${open ? 'rotate-90' : ''}`}
-        />
+        <CollapseGlyph open={open} />
         <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wider text-ink-200">
           {title}
         </span>

@@ -94,8 +94,10 @@ export function SectionsNavigator({
 
   const activate = useCallback((id: string) => {
     touched.current = true
-    setActiveId(id)
-  }, [])
+    // In accordion mode, clicking the open header collapses it (− → closed),
+    // so the user can fold every section away; + on a closed one reopens it.
+    setActiveId((cur) => (mode === 'accordion' && cur === id ? null : id))
+  }, [mode])
 
   // First registered section wins the initial active slot.
   useEffect(() => {

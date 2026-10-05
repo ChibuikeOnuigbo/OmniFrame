@@ -1,16 +1,19 @@
 /**
- * SlideDock — a control cluster that slides out of the way.
+ * SlideDock — a control cluster that collapses out of the way.
  *
  * Overlays like the preview's view/3D/zoom cluster float above the canvas and
  * permanently eat a strip of it. This lets the user collapse any such cluster
- * down to a single handle, sliding the controls away to reclaim the space.
+ * down to nothing, sliding the controls away to reclaim the space.
  *
- * The toggle is a real button with aria-expanded/aria-controls, and the
- * collapsed state is remembered per dock id so the choice survives a reload.
+ * The toggle is the editor-wide − / + CollapseChip (minus while open, plus
+ * while collapsed) with aria-expanded/aria-controls, and the collapsed state
+ * is remembered per dock id so the choice survives a reload. Owners can also
+ * drive it controlled (toggle="none") and place the chip elsewhere — the
+ * preview keeps its chip in the stage's top-left corner.
  */
 
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react'
+import { CollapseChip } from './CollapseChip'
 
 export type SlideDirection = 'up' | 'down' | 'left' | 'right'
 
@@ -42,21 +45,6 @@ const TRANSFORM: Record<SlideDirection, string> = {
   right: 'translate-x-3',
 }
 
-const HANDLE_ICON: Record<SlideDirection, typeof ChevronUp> = {
-  up: ChevronUp,
-  down: ChevronDown,
-  left: ChevronLeft,
-  right: ChevronRight,
-}
-
-/** When collapsed, the handle rotates to point where the content went. */
-const HANDLE_ROTATION: Record<SlideDirection, string> = {
-  up: 'rotate-180',
-  down: '',
-  left: 'rotate-90',
-  right: '-rotate-90',
-}
-
 export function SlideDock({
   id,
   label,
@@ -64,6 +52,9 @@ export function SlideDock({
   direction = 'up',
   defaultOpen = true,
   className = '',
+  toggle = 'leading',
+  open: openProp,
+  onOpenChange,
 }: {
   /** Stable id: used for aria wiring and for remembering the collapsed state. */
   id: string
@@ -72,8 +63,19 @@ export function SlideDock({
   direction?: SlideDirection
   defaultOpen?: boolean
   className?: string
+  /** 'leading' renders the −/+ chip inline; 'none' for owners that place the chip themselves. */
+  toggle?: 'leading' | 'none'
+  /** Controlled open state (with onOpenChange). Uncontrolled otherwise. */
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
-  const [open, setOpen] = useState(() => readStored(id, defaultOpen))
+  const [storedOpen, setStoredOpen] = useState(() => readStored(id, defaultOpen))
+  const open = openProp ?? storedOpen
+  const setOpen = (v: boolean | ((prev: boolean) => boolean)) => {
+    const next = typeof v === 'function' ? v(open) : v
+    if (onOpenChange) onOpenChange(next)
+    else setStoredOpen(next)
+  }
   const contentId = useId()
   const first = useRef(true)
 
@@ -81,10 +83,9 @@ export function SlideDock({
     // Skip the initial render so we don't write the default over a stored
     // value before it has been read.
     if (first.current) { first.current = false; return }
-    writeStored(id, open)
-  }, [id, open])
+    if (openProp === undefined) writeStored(id, storedOpen)
+  }, [id, storedOpen, openProp])
 
-  const Icon = HANDLE_ICON[direction]
   const vertical = direction === 'up' || direction === 'down'
 
   return (
@@ -93,19 +94,17 @@ export function SlideDock({
       data-open={open ? 'true' : 'false'}
       className={`flex items-center gap-1 ${vertical ? 'flex-row' : 'flex-col'} ${className}`}
     >
-      {/* The handle stays put so the dock is always recoverable. */}
-      <button
-        type="button"
-        data-testid={`slide-dock-${id}-toggle`}
-        aria-expanded={open}
-        aria-controls={contentId}
-        aria-label={`${open ? 'Collapse' : 'Expand'} ${label}`}
-        title={`${open ? 'Collapse' : 'Expand'} ${label}`}
-        onClick={() => setOpen((v) => !v)}
-        className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white"
-      >
-        <Icon size={13} className={`transition-transform duration-150 ${open ? HANDLE_ROTATION[direction] : ''}`} />
-      </button>
+      {/* The −/+ chip stays put so the dock is always recoverable. */}
+      {toggle === 'leading' ? (
+        <span aria-controls={contentId} className="contents">
+          <CollapseChip
+            open={open}
+            onToggle={() => setOpen((v) => !v)}
+            label={label}
+            testId={`slide-dock-${id}-toggle`}
+          />
+        </span>
+      ) : null}
 
       <div
         id={contentId}

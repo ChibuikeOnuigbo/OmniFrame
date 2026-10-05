@@ -286,6 +286,8 @@ export function TopBar() {
                 { id: 'vfx', label: 'VFX & Tracking' },
                 { id: 'rig', label: 'Rig & Animate' },
                 { id: 'manga', label: 'Manga / MMV Edit' },
+                { id: 'capcut', label: 'CapCut Studio' },
+                { id: 'cinema', label: 'Cinema Review' },
               ].map((p) => (
                 <button
                   key={p.id}

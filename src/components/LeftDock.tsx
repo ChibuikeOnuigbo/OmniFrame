@@ -20,8 +20,11 @@ import {
   type LucideIcon,
   LayoutGrid,
   List,
+  PictureInPicture2,
+  PanelLeft,
 } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
+import { FloatingWindow } from './FloatingWindow'
 import { SectionsNavigator } from './SectionsNav'
 import { MediaPanel } from './MediaPanel'
 import { OmniFramePanel } from './OmniFramePanel'
@@ -73,6 +76,47 @@ export function LeftDock() {
   const setLeftDockWidth = useEditor((s) => s.setLeftDockWidth)
   const sidebarSectionMode = useEditor((s) => s.sidebarSectionMode)
   const setSidebarSectionMode = useEditor((s) => s.setSidebarSectionMode)
+  // Pop-out floating window state: the panel can leave its dock slot entirely.
+  const leftPanelFloating = useEditor((s) => s.leftPanelFloating)
+  const setLeftPanelFloating = useEditor((s) => s.setLeftPanelFloating)
+  const leftPanelFloat = useEditor((s) => s.leftPanelFloat)
+  const setLeftPanelFloat = useEditor((s) => s.setLeftPanelFloat)
+  // Header drag-out: dragging the dock header ≥24px pops the panel out into a
+  // floating window centered on the pointer — CapCut-style tear-off.
+  const headerDrag = React.useRef<{ startX: number; startY: number } | null>(null)
+  const onHeaderDragDown = (e: React.PointerEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return
+    headerDrag.current = { startX: e.clientX, startY: e.clientY }
+    // Capture so the 34px-tall header keeps receiving moves once the pointer
+    // leaves its bounds — without this the tear-off dies on the first step.
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onHeaderDragMove = (e: React.PointerEvent) => {
+    const d = headerDrag.current
+    if (!d || useEditor.getState().leftPanelFloating) return
+    const dx = e.clientX - d.startX
+    const dy = e.clientY - d.startY
+    if (Math.hypot(dx, dy) < 24) return
+    headerDrag.current = null
+    const cur = useEditor.getState().leftPanelFloat
+    const w = cur.w || 380
+    const h = cur.h || 560
+    setLeftPanelFloat({
+      x: Math.max(8, Math.min(e.clientX - w / 2, window.innerWidth - w - 8)),
+      y: Math.max(40, Math.min(e.clientY - 18, window.innerHeight - 120)),
+      w,
+      h,
+    })
+    setLeftPanelFloating(true)
+  }
+  const onHeaderDragUp = (e: React.PointerEvent) => {
+    headerDrag.current = null
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer already released
+    }
+  }
   // Width-drag state: suppress the width transition while the user slides the edge.
   const [dockResizing, setDockResizing] = useState(false)
   const dockDrag = React.useRef<{ startX: number; startW: number } | null>(null)
@@ -254,7 +298,7 @@ export function LeftDock() {
           className="h-full flex flex-col relative"
         >
           {/* Width drag handle: slide the panel edge to resize */}
-          {leftOpen && (
+          {leftOpen && !leftPanelFloating && (
             <div
               data-testid="left-panel-resize-handle"
               role="separator"
@@ -268,8 +312,15 @@ export function LeftDock() {
               className="absolute right-0 top-0 bottom-0 w-1.5 z-30 cursor-col-resize bg-transparent hover:bg-brand/60 transition-colors touch-none"
             />
           )}
-          {/* Header & Sub-Mode Channel Navigation */}
-          <div className="h-8.5 shrink-0 flex items-center justify-between px-2.5 border-b border-ink-700/80 bg-ink-900/60">
+          {/* Header & Sub-Mode Channel Navigation — dragging it out of the dock
+              tears the panel off into a floating window. */}
+          <div
+            onPointerDown={onHeaderDragDown}
+            onPointerMove={onHeaderDragMove}
+            onPointerUp={onHeaderDragUp}
+            onPointerCancel={onHeaderDragUp}
+            className="h-8.5 shrink-0 flex items-center justify-between px-2.5 border-b border-ink-700/80 bg-ink-900/60 touch-none select-none"
+          >
             {activeSubMode && currentSubMode ? (
               <div className="flex items-center gap-1 min-w-0 pr-2">
                 <button
@@ -327,6 +378,18 @@ export function LeftDock() {
               >
                 {sidebarSectionMode === 'tabs' ? <LayoutGrid size={13} /> : <List size={13} />}
               </button>
+              {!leftPanelFloating && (
+                <button
+                  type="button"
+                  data-testid="left-panel-popout-btn"
+                  title="Pop out into floating window (or drag the panel header)"
+                  aria-label="Pop panel out into a floating window"
+                  onClick={() => setLeftPanelFloating(true)}
+                  className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                >
+                  <PictureInPicture2 size={13} />
+                </button>
+              )}
               <button
                 type="button"
                 title="Collapse"
@@ -340,7 +403,28 @@ export function LeftDock() {
           </div>
 
           {/* Panel Views — SectionsNavigator presents the panel's sections as
-              tabs (default) or a single-open accordion, per the header toggle */}
+              tabs (default) or a single-open accordion, per the header toggle.
+              While the panel is popped out, the dock slot shows a slim
+              placeholder instead; the real content lives in the window. */}
+          {leftPanelFloating ? (
+            <div
+              data-testid="left-panel-float-placeholder"
+              className="flex flex-1 min-h-0 flex-col items-center justify-center gap-2 border-r border-ink-700/80 bg-ink-900/40 px-2 text-center"
+            >
+              <PanelLeft size={20} className="text-ink-500" aria-hidden="true" />
+              <p className="text-[10px] leading-tight text-ink-400">
+                {activeTabDef?.label ?? 'Panel'} is floating
+              </p>
+              <button
+                type="button"
+                data-testid="left-panel-dock-back-btn"
+                onClick={() => setLeftPanelFloating(false)}
+                className="rounded-md border border-ink-700 bg-ink-800 px-2 py-1 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                Dock back
+              </button>
+            </div>
+          ) : (
           <SectionsNavigator mode={sidebarSectionMode} label={`${activeTabDef?.label ?? 'Panel'} sections`}>
             <div tabIndex={0} aria-label="Panel contents, scrollable" className="flex-1 min-h-0 overflow-y-auto">
               {leftTab === 'media' && <MediaPanel />}
@@ -356,8 +440,44 @@ export function LeftDock() {
               {leftTab === 'rigging' && <Rigging />}
             </div>
           </SectionsNavigator>
+          )}
         </div>
       </div>
+
+      {/* Popped-out panel: the same panel content in a draggable,
+          resizable floating window (drag its header to the left screen
+          edge or hit the dock button to slot it back in). */}
+      {leftPanelFloating ? (
+        <FloatingWindow
+          testId="left-panel-float-window"
+          title={activeTabDef?.label ?? 'Panel'}
+          rect={leftPanelFloat}
+          setRect={setLeftPanelFloat}
+          onDock={() => setLeftPanelFloating(false)}
+          onClose={() => {
+            setLeftPanelFloating(false)
+            setLeftOpen(false)
+          }}
+          dockIcon={<PanelLeft size={13} />}
+          dockLabel="Dock panel back into the layout"
+        >
+          <SectionsNavigator mode={sidebarSectionMode} label={`${activeTabDef?.label ?? 'Panel'} sections`}>
+            <div tabIndex={0} aria-label="Panel contents, scrollable" className="flex-1 min-h-0 overflow-y-auto">
+              {leftTab === 'media' && <MediaPanel />}
+              {leftTab === 'omniframe' && <OmniFramePanel />}
+              {leftTab === 'audio' && <VoiceIsolationPanel />}
+              {leftTab === 'tracking' && <TrackingPanel />}
+              {leftTab === 'relationships' && <LinkPanel />}
+              {leftTab === 'drawing' && <DrawingPanel />}
+              {leftTab === 'transitions' && <TransitionsPanel />}
+              {leftTab === 'effects' && <EffectsPanel />}
+              {leftTab === 'text' && <TextPanel />}
+              {leftTab === 'threed' && <ThreePanel />}
+              {leftTab === 'rigging' && <Rigging />}
+            </div>
+          </SectionsNavigator>
+        </FloatingWindow>
+      ) : null}
     </div>
   )
 }
