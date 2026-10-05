@@ -19,6 +19,7 @@ import {
   Trash2,
   Move,
   Scissors,
+  HelpCircle,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type {
@@ -269,15 +270,10 @@ export function TrackingPanel() {
 
   return (
     <div data-testid="tracking-panel" tabIndex={0} aria-label="Masking and tracking controls, scrollable" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">
-      {/* Overview Banner */}
-      <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1">
-        <div className="flex items-center gap-1.5 font-semibold text-brand-400 text-xs">
-          <Target size={14} />
-          <span>Masking & Tracking Subsystem</span>
-        </div>
-        <p className="text-[11px] text-ink-300 leading-relaxed">
-          Spatial mask generation connected directly to LumaCut optical flow tracking and deformation.
-        </p>
+      {/* Compact hint (full description on hover) */}
+      <div className="flex items-center justify-between gap-2 text-[10px] text-ink-400" title="Spatial mask generation connected directly to LumaCut optical flow tracking and deformation.">
+        <span className="truncate">Spatial masks + LumaCut optical-flow tracking</span>
+        <HelpCircle size={12} className="shrink-0 text-ink-500" aria-hidden="true" />
       </div>
 
       {/* Mode Selection (Mask Tracking vs Main Tracking) */}

@@ -12,6 +12,7 @@ import {
   Plus,
   AudioLines,
   Info,
+  HelpCircle,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import { executeVoiceIsolationForClip, type VoiceIsolationOptions } from '../lib/voiceIsolation'
@@ -93,15 +94,10 @@ export function VoiceIsolationPanel() {
 
   return (
     <div data-testid="voice-isolation-panel" className="flex flex-col h-full p-3 space-y-3.5 text-xs select-none overflow-y-auto">
-      {/* Overview & Concept Distinction Banner */}
-      <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1.5">
-        <div className="flex items-center gap-2 font-semibold text-brand-400">
-          <Mic size={14} />
-          <span>Voice Isolation & Vocal Separation</span>
-        </div>
-        <p className="text-[11px] text-ink-300 leading-relaxed">
-          Separates dialogue/vocals from music backing tracks. (Distinct from <em>Separate Audio</em> which extracts audio streams from video).
-        </p>
+      {/* Compact hint (full description on hover) */}
+      <div className="flex items-center justify-between gap-2 text-[10px] text-ink-400" title="Separates dialogue/vocals from music backing tracks. (Distinct from Separate Audio, which extracts audio streams from video).">
+        <span className="truncate">Dialogue & vocals vs music backing</span>
+        <HelpCircle size={12} className="shrink-0 text-ink-500" aria-hidden="true" />
       </div>
 
       {/* Target Clip Selection */}

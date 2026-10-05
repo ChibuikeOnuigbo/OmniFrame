@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-02T23:43:25.545Z",
-  "passed": 11,
+  "timestamp": "2026-10-05T00:24:28.209Z",
+  "passed": 12,
   "failed": 0,
-  "total": 11,
+  "total": 12,
   "results": [
     {
       "name": "01. LeftDock Masking & Tracking Tab",
@@ -40,22 +40,27 @@
       "details": "Drawing toolbar contains zero selection/marquee masks"
     },
     {
-      "name": "08. Drawing Toolbar Width Fits Mobile Screen",
+      "name": "08. Mobile Drawer Takes Precedence Over Floating Toolbars",
       "status": "PASS",
-      "details": "Toolbar width is 273px <= 390px phone width"
+      "details": "Floating palettes yield while the drawer is open"
     },
     {
-      "name": "09. Zero Page Horizontal Overflow on Phone",
+      "name": "09. Drawing Toolbar Width Fits Mobile Screen",
+      "status": "PASS",
+      "details": "Toolbar width is 342px <= 390px phone width"
+    },
+    {
+      "name": "10. Zero Page Horizontal Overflow on Phone",
       "status": "PASS",
       "details": "document.scrollWidth <= document.clientWidth"
     },
     {
-      "name": "10. Drawing Tooltip / Title Length Compact",
+      "name": "11. Drawing Tooltip / Title Length Compact",
       "status": "PASS",
       "details": "Longest title is \"Color Sampler\" (13 chars <= 22)"
     },
     {
-      "name": "11. Mobile Evidence Screenshot Saved",
+      "name": "12. Mobile Evidence Screenshot Saved",
       "status": "PASS",
       "details": "evidence/screenshots/mobile-drawing-toolbar-responsive.png"
     }

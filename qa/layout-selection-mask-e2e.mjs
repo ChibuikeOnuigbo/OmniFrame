@@ -43,6 +43,12 @@ async function run() {
   })
 
   await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
   await page.waitForTimeout(1000)
 
   // Step 1: Ingest Test Asset

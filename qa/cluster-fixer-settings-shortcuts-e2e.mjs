@@ -40,6 +40,12 @@ async function runClusterFixerVerification() {
   const page = await desktopContext.newPage()
 
   await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
   await page.waitForTimeout(1000)
 
   // Subtest 1A: Check Space-Saving Icon + Tooltip Buttons on Timeline
@@ -83,6 +89,9 @@ async function runClusterFixerVerification() {
 
   const transformHeader = page.locator('[data-testid="section-header-transform"]')
   await transformHeader.waitFor({ state: 'visible' })
+  // Sections are single-open now: expand Transform before inspecting it.
+  await transformHeader.click()
+  await page.waitForTimeout(300)
 
   // 3D Spatial Accordion Sub-group
   const accordion3D = page.locator('[data-testid="accordion-3d-spatial-(depth,-tilt,-pan)"]')

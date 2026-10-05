@@ -48,7 +48,7 @@ export function ThreePanel() {
   const isShared = currentTex ? (currentTex.usersCount ?? 1) > 1 : false
 
   return (
-    <div data-testid="three-panel" className="p-2.5 text-xs text-ink-200 select-none space-y-2.5 overflow-y-auto h-full">
+    <div data-testid="three-panel" tabIndex={0} aria-label="3D scene controls, scrollable" className="p-2.5 text-xs text-ink-200 select-none space-y-2.5 overflow-y-auto h-full focus:outline-none">
       {/* Overview & Sub-Mode Quick Channel Bar */}
       {(!activeSubMode || activeSubMode === 'threed-overview') && (
         <>

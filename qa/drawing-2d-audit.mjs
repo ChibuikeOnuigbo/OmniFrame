@@ -205,12 +205,35 @@ await page.waitForTimeout(150)
   ok(!!last && last.tool === 'clone', 'D1 clone: second drag produced a clone stroke', last ? `pts ${last.points}` : 'none')
 }
 
+
+/**
+ * The drawing panel presents its sections as tabs (single-open in accordion
+ * mode). Bring the section owning the next control on screen, either way.
+ */
+const activateSection = async (id) => {
+  const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+  if ((await chip.count()) > 0) {
+    if ((await chip.getAttribute('aria-selected')) !== 'true') {
+      await chip.click()
+      await page.waitForTimeout(250)
+    }
+    return
+  }
+  const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+  if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+    await btn.click()
+    await page.waitForTimeout(200)
+  }
+}
+
+
 await page.screenshot({ path: path.join(SHOTS, 'SS-112-drawing-all-tools.png') })
 
 // ================================================== D2: BRUSH DYNAMICS
 console.log('\n--- D2: brush dynamics ---')
 await clearAll()
 await page.locator('[data-testid="drawing-tool-brush"]').first().click()
+await activateSection('brush')
 const psize = page.locator('[data-testid="brush-pressure-size-checkbox"]')
 const popacity = page.locator('[data-testid="brush-pressure-opacity-checkbox"]')
 ok((await psize.count()) > 0, 'D2 pressure-size control exists')
@@ -229,6 +252,7 @@ ok(
 
 // ================================================ D3: FILL TOOL BEHAVIOUR
 console.log('\n--- D3: fill tolerance and preserve-luminance ---')
+await activateSection('tool-params')
 await clearAll()
 await page.evaluate(() => {
   const g = window.__omniframe_store.getState
@@ -252,6 +276,7 @@ ok((await lumBox.count()) > 0, 'D3 preserve-luminance checkbox exists')
 
 // ====================================================== D4: PAINT LAYERS
 console.log('\n--- D4: paint layers ---')
+await activateSection('layers')
 const layersBefore = await page.evaluate(() => window.__omniframe_store.getState().paintLayers.length)
 const addLayer = page.locator('[data-testid="add-paint-layer-btn"]')
 ok((await addLayer.count()) > 0, 'D4 add-paint-layer control exists')
@@ -262,6 +287,8 @@ if (await addLayer.count()) {
 const layersAfter = await page.evaluate(() => window.__omniframe_store.getState().paintLayers.length)
 ok(layersAfter === layersBefore + 1, 'D4 adding a paint layer works', `${layersBefore} -> ${layersAfter}`)
 
+// Opacity / blend / blur live under Brush & Layer Properties.
+await activateSection('brush')
 for (const [tid, label] of [
   ['layer-opacity-slider', 'opacity'],
   ['layer-blend-mode-select', 'blend mode'],
@@ -272,6 +299,7 @@ for (const [tid, label] of [
 
 // ============================================= D5: CEL ANIMATION / ONION SKIN
 console.log('\n--- D5: cel animation and onion skin ---')
+await activateSection('timing')
 // The cel-animation controls live on the drawing toolbar in some layouts and in
 // the drawing panel in others; accept either surface, but require one of them.
 const CEL_CONTROLS = [
@@ -505,6 +533,7 @@ if (await sampleBtn.count()) {
 
 // ============================================ D11: NEW SHAPE TOOL OPTIONS
 console.log('\n--- D11: polygon / gradient options ---')
+await activateSection('tool-params')
 await page.evaluate(() => window.__omniframe_store.getState().setDrawingTool('polygon'))
 await page.waitForTimeout(250)
 for (const [tid, label] of [

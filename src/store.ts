@@ -49,6 +49,7 @@ import type {
   TransparencyMask,
   BrushDynamics,
   GuidedMatteRecord,
+  SidebarSectionMode,
 } from './types'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
@@ -339,6 +340,7 @@ interface EditorState extends RiggingSlice {
   rightPanelWidth: number
   rightPanelFloating: boolean
   rightPanelFloat: { x: number; y: number; w: number; h: number }
+  sidebarSectionMode: SidebarSectionMode
   customWorkspaces: CustomWorkspace[]
 
   // ---- sequence & aspect ratio ----
@@ -518,6 +520,7 @@ interface EditorState extends RiggingSlice {
   setRightPanelWidth: (width: number) => void
   setRightPanelFloating: (v: boolean) => void
   setRightPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
+  setSidebarSectionMode: (mode: SidebarSectionMode) => void
   saveCustomWorkspace: (name: string) => string
   applyCustomWorkspace: (id: string) => void
   deleteCustomWorkspace: (id: string) => void
@@ -1202,6 +1205,7 @@ export const useEditor = create<EditorState>((set, get) => {
     rightPanelWidth: 280,
     rightPanelFloating: false,
     rightPanelFloat: { x: 0, y: 0, w: 340, h: 560 },
+    sidebarSectionMode: 'tabs',
     customWorkspaces: (() => {
       try {
         const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.customWorkspaces') : null
@@ -2748,6 +2752,61 @@ export const useEditor = create<EditorState>((set, get) => {
             drawingEnabled: false,
           })
           break
+        case 'audio':
+          // Audio Suite: stems panel open, tall timeline for waveforms.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'audio',
+            rightOpen: false,
+            leftDockWidth: 300,
+            timelineHeight: 460,
+            drawingEnabled: false,
+          })
+          break
+        case 'vfx':
+          // VFX & Tracking: tracking panel + wide inspector for matte params.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'tracking',
+            leftDockWidth: 320,
+            rightOpen: true,
+            rightPanelWidth: 320,
+            timelineHeight: 200,
+            drawingEnabled: false,
+          })
+          break
+        case 'rig':
+          // Rig & Animate: rigging panel, inspector, graph editor open.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'rigging',
+            leftDockWidth: 320,
+            rightOpen: true,
+            rightPanelWidth: 300,
+            timelineHeight: 240,
+            graphEditorOpen: true,
+            drawingEnabled: false,
+          })
+          break
+        case 'manga':
+          // Manga / MMV edit: drawing canvas + wide media dock, clean sides.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'drawing',
+            leftDockWidth: 340,
+            rightOpen: false,
+            timelineHeight: 300,
+            drawingEnabled: true,
+          })
+          break
       }
     },
     setFocusMode: (mode) => {
@@ -2785,6 +2844,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const y = cur.y > 0 ? cur.y : 88
       set({ rightPanelFloating: true, rightPanelFloat: { x, y, w, h } })
     },
+    setSidebarSectionMode: (mode) => set({ sidebarSectionMode: mode }),
     setRightPanelFloat: (patch) => {
       const cur = get().rightPanelFloat
       const vw = window.innerWidth

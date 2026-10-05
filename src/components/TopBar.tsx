@@ -282,6 +282,10 @@ export function TopBar() {
                 { id: '3d', label: '3D Scene & Compositing' },
                 { id: 'minimal', label: 'Minimal' },
                 { id: 'full-canvas', label: 'Full Canvas' },
+                { id: 'audio', label: 'Audio Suite' },
+                { id: 'vfx', label: 'VFX & Tracking' },
+                { id: 'rig', label: 'Rig & Animate' },
+                { id: 'manga', label: 'Manga / MMV Edit' },
               ].map((p) => (
                 <button
                   key={p.id}

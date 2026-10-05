@@ -49,6 +49,10 @@ export const LayoutManagerModal: React.FC<LayoutManagerModalProps> = ({ isOpen, 
     { id: '3d', label: '3D Scene & Compositing', desc: '3D viewport integration with camera and 2.5D video planes', shortcut: 'Alt+7' },
     { id: 'minimal', label: 'Minimal', desc: 'Zen editing workspace with sidebars hidden until requested', shortcut: 'Alt+8' },
     { id: 'full-canvas', label: 'Full Canvas', desc: 'Canvas-only presentation mode filling the entire studio window', shortcut: 'Alt+9' },
+    { id: 'audio', label: 'Audio Suite', desc: 'Stems & voice panel with a tall waveform timeline for mixing' },
+    { id: 'vfx', label: 'VFX & Tracking', desc: 'Tracking panel beside a wide inspector for mattes and clean plates' },
+    { id: 'rig', label: 'Rig & Animate', desc: 'Rigging panel, inspector and curve graph editor side by side' },
+    { id: 'manga', label: 'Manga / MMV Edit', desc: 'Drawing canvas overlay with a wide media dock for layered PSD rigs' },
   ]
 
   const FOCUS_OPTIONS: { id: FocusMode; label: string; desc: string }[] = [

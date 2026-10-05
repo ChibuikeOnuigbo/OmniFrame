@@ -82,6 +82,26 @@ async function run() {
   const drawingPanel = page.locator('[data-testid="drawing-panel"]')
   assert(await drawingPanel.isVisible(), 'Left dock drawing panel is visible')
 
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
   // Step 3: Select Fill Tool, Blue Color, and Enable Shading/Luminance Preservation
   console.log('Step 3: Selecting Fill Tool, Blue (#3b82f6), and enabling Shading Preservation...')
   await page.evaluate(() => {
@@ -92,7 +112,8 @@ async function run() {
   })
   await page.waitForTimeout(300)
 
-  // Verify Tolerance slider is visible
+  // Verify Tolerance slider is visible (Fill parameters live in Tool Parameters)
+  await activateSection('tool-params')
   const tolSlider = page.locator('[data-testid="panel-fill-tolerance-slider"]').first()
   assert(await tolSlider.isVisible(), 'Fill tolerance slider is visible in toolbar')
 

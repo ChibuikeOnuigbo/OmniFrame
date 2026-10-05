@@ -50,7 +50,29 @@ async function runTest() {
 
   await page.waitForTimeout(500)
 
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
   console.log('--- Step 2: Testing Keyframing in RightPanel ---')
+  // Keyframe diamonds live in the inspector's Transform section.
+  await activateSection('transform')
   const keyDiamondPosX = page.locator('[data-testid="keyframe-diamond-position_x"]')
   await keyDiamondPosX.waitFor({ state: 'visible', timeout: 5000 })
   console.log('[PASS] Position X keyframe diamond visible')
@@ -179,6 +201,7 @@ async function runTest() {
   await safeFrame.screenshot({ path: cutSafeFramePath })
 
   // Capture RightPanel Keyframe Diamonds Cutout
+  await activateSection('transform')
   const rightPanelTransform = page.locator('[data-testid="keyframe-diamond-position_x"]').locator('xpath=../../..')
   const cutDiamondsPath = resolve('evidence/cutouts/cut-rightpanel-keyframe-diamonds.png')
   if (await rightPanelTransform.isVisible()) {

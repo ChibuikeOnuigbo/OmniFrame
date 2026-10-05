@@ -52,6 +52,12 @@ const ok = (v, name, detail = '') => {
 }
 
 await page.goto(`${BASE}/#studio`, { waitUntil: 'domcontentloaded' })
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
 await page.waitForTimeout(1200)
 
 // ---------------------------------------------------------------- 0. SCENE SETUP
@@ -67,14 +73,23 @@ await page.evaluate(() => {
 })
 await page.waitForTimeout(900)
 
+/**
+ * Sidebar sections are single-open now. Before touching a control, expand the
+ * PanelSection that owns it (no-ops when already expanded).
+ */
+const ensureSectionOpen = async (id) => {
+  const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+  if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+    await btn.click()
+    await page.waitForTimeout(200)
+  }
+}
+
 // Enter selection mode through the real UI control first — that is what enables
 // the drawing/selection overlay the user actually drags on.
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
-const fillRecolorDisclosure = page.locator('[data-testid="panel-section-mask-boundary"] > button')
-if (await fillRecolorDisclosure.getAttribute('aria-expanded') === 'false') {
-  await fillRecolorDisclosure.click()
-}
+await ensureSectionOpen('mask-selection-types')
 await page.click('[data-testid="sel-type-freeform"]')
 await page.waitForTimeout(400)
 const canvas = page.locator('[data-testid="drawing-canvas"]')
@@ -155,6 +170,7 @@ console.log('\n--- W1: Freeform lasso around the towel → fill ---')
 await resetSelection()
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
+await ensureSectionOpen('mask-selection-types')
 await page.click('[data-testid="sel-type-freeform"]')
 await page.waitForTimeout(150)
 ok(
@@ -172,6 +188,7 @@ if (ok(w1 && w1.type === 'lasso', 'W1 lasso produced a lasso selection', JSON.st
     `w=${w1.bounds.width.toFixed(3)} h=${w1.bounds.height.toFixed(3)}`,
   )
 }
+await ensureSectionOpen('mask-boundary')
 await page.click('[data-testid="recolor-swatch-blue"]')
 await page.waitForTimeout(350)
 const w1Fill = await getSelection()
@@ -183,6 +200,7 @@ console.log('\n--- W2: Paint-selection brush over the towel → fill ---')
 await resetSelection()
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
+await ensureSectionOpen('mask-selection-types')
 await page.click('[data-testid="sel-type-painting"]')
 await page.waitForTimeout(150)
 ok(
@@ -202,6 +220,7 @@ const w2 = await getSelection()
 if (ok(w2 && w2.type === 'brush', 'W2 brush produced a brush selection', JSON.stringify(w2?.type))) {
   ok(w2.pointCount > 12, 'W2 brush accumulated stroke points', `${w2.pointCount} points`)
 }
+await ensureSectionOpen('mask-boundary')
 await page.click('[data-testid="recolor-swatch-red"]')
 await page.waitForTimeout(350)
 const w2Fill = await getSelection()
@@ -213,6 +232,7 @@ console.log('\n--- W3: Brush ring around the towel → fill inside the ring ---'
 await resetSelection()
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
+await ensureSectionOpen('mask-selection-types')
 await page.click('[data-testid="sel-type-painting"]')
 await page.waitForTimeout(150)
 const ring = ringPath(TOWEL.x + TOWEL.w / 2, TOWEL.y + TOWEL.h / 2, TOWEL.w / 2 + 0.02, TOWEL.h / 2 + 0.02, 26)
@@ -226,6 +246,7 @@ if (ok(w3 && w3.type === 'brush', 'W3 ring drawn with the brush', JSON.stringify
   )
 }
 // The ring is an outline: fill it, i.e. colour everything the ring encloses.
+await ensureSectionOpen('mask-boundary')
 await page.click('[data-testid="apply-recolor-btn"]')
 await page.waitForTimeout(350)
 const w3Fill = await getSelection()
@@ -237,6 +258,7 @@ console.log('\n--- W4: Brush the BACKGROUND → invert → fill ---')
 await resetSelection()
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
+await ensureSectionOpen('mask-selection-types')
 await page.click('[data-testid="sel-type-painting"]')
 await page.waitForTimeout(150)
 // paint the two background bands (right of the towel, and the lower floor)
@@ -255,6 +277,7 @@ const w4a = await getSelection()
 ok(w4a?.type === 'brush', 'W4 background band painted with the brush', JSON.stringify(w4a?.type))
 
 const beforeInvert = w4a?.inverted
+await ensureSectionOpen('mask-detected')
 await page.click('[data-testid="subtool-invert-btn"]')
 await page.waitForTimeout(250)
 const w4b = await getSelection()
@@ -263,6 +286,7 @@ ok(
   'W4 invert flipped the selection boundary',
   `inverted ${beforeInvert} → ${w4b?.inverted}`,
 )
+await ensureSectionOpen('mask-boundary')
 await page.click('[data-testid="recolor-swatch-amber"]')
 await page.waitForTimeout(350)
 const w4Fill = await getSelection()
@@ -274,6 +298,7 @@ console.log('\n--- W5: Guided Rect background removal (draw box → workflow mat
 await resetSelection()
 await page.click('[data-testid="omniframe-section-select"]')
 await page.waitForTimeout(250)
+await ensureSectionOpen('mask-selection-types')
 await page.click('[data-testid="sel-type-rect"]')
 await page.waitForTimeout(150)
 
@@ -401,6 +426,8 @@ ok(
   'W5 Drawing-mode matte does not create an OmniFrame object',
   `${omniObjectsBeforeDrawingRun} → ${drawingContextMatte.objectCount}; objectId=${drawingContextMatte.objectId || 'none'}`,
 )
+// The clear action lives in the top-level Paint Layers section (single-open).
+await ensureSectionOpen('layers')
 const clearRasterMaskBtn = page.locator(
   `[data-testid="clear-paint-layer-raster-mask-${drawingContextMatte.activeLayerId}"]`,
 )

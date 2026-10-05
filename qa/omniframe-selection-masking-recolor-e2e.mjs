@@ -39,6 +39,26 @@ async function run() {
     // 1. Navigate to Studio
     console.log(`Navigating to ${BASE_URL}/#studio...`)
     await page.goto(`${BASE_URL}/#studio`, { waitUntil: 'networkidle' })
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
+
+    /**
+     * Sidebar sections are single-open now. Before touching a control, expand
+     * the PanelSection that owns it (no-ops when already expanded).
+     */
+    await page.evaluate(() => {
+      window.__ensureSectionOpen = async (id) => {
+        const btn = document.querySelector(`[data-testid="panel-section-${id}"] > button`)
+        if (btn && btn.getAttribute('aria-expanded') !== 'true') {
+          btn.click()
+          await new Promise((r) => setTimeout(r, 200))
+        }
+      }
+    })
     await page.waitForTimeout(1000)
 
     // 2. Open OmniFrame Tab in Left Dock
@@ -70,6 +90,7 @@ async function run() {
     console.log('✓ OmniFrame mask scope explains selection-only behavior and Drawing-mask conversion.')
 
     const selectionTypes = ['rect', 'ellipse', 'freeform', 'polygon', 'painting', 'magic-wand']
+    await page.evaluate(() => window.__ensureSectionOpen('mask-selection-types'))
     for (const st of selectionTypes) {
       const btn = await page.waitForSelector(`[data-testid="sel-type-${st}"]`, { timeout: 2000 })
       await btn.click()
@@ -211,8 +232,7 @@ async function run() {
     console.log('Testing Non-Destructive Mask Layer (Rubylith & Matte Mode)...')
     await page.click('[data-testid="omniframe-section-select"]')
     await page.waitForTimeout(250)
-    const maskPreviewDisclosure = page.locator('[data-testid="panel-section-mask-fill"] > button')
-    await maskPreviewDisclosure.click()
+    await page.evaluate(() => window.__ensureSectionOpen('mask-fill'))
     const rubylithBtn = await page.waitForSelector('[data-testid="mask-mode-rubylith-btn"]', { timeout: 3000 })
     await rubylithBtn.click()
     await page.waitForTimeout(300)

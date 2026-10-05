@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T16:20:37.396Z",
+  "generatedAt": "2026-10-05T00:14:27.628Z",
   "canvas": {
     "w": 771,
     "h": 434
@@ -139,7 +139,7 @@
     {
       "name": "W5 OmniFrame object created from the matte",
       "ok": true,
-      "detail": "obj_guided_1791130829236"
+      "detail": "obj_guided_1791159257232"
     },
     {
       "name": "W5 OmniFrame matte remains workflow-only by default",

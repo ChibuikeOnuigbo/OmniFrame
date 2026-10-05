@@ -44,6 +44,14 @@ assert(initial.maxPeak > initial.minPeak, 'loud and quiet source regions differ'
 assert(initial.volume === '1.000', 'waveform starts at full clip gain')
 
 await clip.click()
+// The clip inspector's sections are tabbed now; Volume lives in the Audio tab.
+{
+  const chip = page.locator('[data-testid="section-tab-audio"]')
+  if ((await chip.count()) > 0 && (await chip.getAttribute('aria-selected')) !== 'true') {
+    await chip.click()
+    await page.waitForTimeout(250)
+  }
+}
 const volumeField = page.getByText('Volume', { exact: true }).locator('..')
 const volumeSlider = volumeField.locator('input[type="range"]')
 await volumeSlider.evaluate(input => {

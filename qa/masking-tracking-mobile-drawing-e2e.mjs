@@ -60,12 +60,33 @@ try {
   await trackingTab.click()
   await desktopPage.waitForTimeout(300)
 
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = desktopPage.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await desktopPage.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = desktopPage.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await desktopPage.waitForTimeout(200)
+    }
+  }
+
   // 2. Verify TrackingPanel provides dedicated Mask Tracking mode connected to Tracking
   const maskModeBtn = desktopPage.locator('[data-testid="track-mode-mask"]')
   await maskModeBtn.click()
   await desktopPage.waitForTimeout(200)
 
-  // Verify Mask Shape creation tools
+  // Verify Mask Shape creation tools (Create Mask Shape section)
+  await activateSection('tracking-create-mask')
   const rectMaskBtn = desktopPage.locator('[data-testid="create-mask-rectangle"]')
   const circleMaskBtn = desktopPage.locator('[data-testid="create-mask-ellipse"]')
   const polyMaskBtn = desktopPage.locator('[data-testid="create-mask-polygon"]')
@@ -83,6 +104,7 @@ try {
   }
 
   // Verify Mask property controls: Invert, Feather, Expansion, Opacity, Apply to All Frames
+  await activateSection('tracking-mask-properties')
   const invertToggle = desktopPage.locator('[data-testid="mask-invert-toggle"]')
   const featherSlider = desktopPage.locator('[data-testid="mask-feather-slider"]')
   const expansionSlider = desktopPage.locator('[data-testid="mask-expansion-slider"]')
@@ -102,6 +124,7 @@ try {
   }
 
   // 3. Verify Mask Tracking optical flow execution
+  await activateSection('tracking-actions')
   const trackMaskFwdBtn = desktopPage.locator('[data-testid="run-track-forward-btn"]')
   const fwdText = await trackMaskFwdBtn.innerText()
   if (fwdText.includes('Track Mask Forward')) {

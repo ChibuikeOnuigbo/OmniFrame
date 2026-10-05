@@ -296,7 +296,23 @@ export interface PaintLayer {
 }
 
 // ---- Workspace Layout & Focus Mode Types ----
-export type WorkspacePreset = 'default' | 'edit' | 'timeline-focus' | 'preview-focus' | 'drawing' | 'color' | '3d' | 'minimal' | 'full-canvas'
+export type WorkspacePreset =
+  | 'default'
+  | 'edit'
+  | 'timeline-focus'
+  | 'preview-focus'
+  | 'drawing'
+  | 'color'
+  | '3d'
+  | 'minimal'
+  | 'full-canvas'
+  | 'audio'
+  | 'vfx'
+  | 'rig'
+  | 'manga'
+
+/** How side-panel sections are presented: tab panels or single-open accordion. */
+export type SidebarSectionMode = 'tabs' | 'accordion'
 export type FocusMode = 'none' | 'preview' | 'timeline' | 'canvas-only' | 'one-panel'
 
 export interface CustomWorkspace {

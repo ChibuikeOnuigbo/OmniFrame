@@ -24,6 +24,12 @@ const shot=async(name)=>page.screenshot({path:join(SHOTS,`${name}.png`)})
 const drag=async(loc,dx,dy=0,steps=12)=>{const b=await loc.boundingBox(); if(!b)throw Error('no box'); await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+dx,b.y+b.height/2+dy,{steps});await page.mouse.up()}
 
 await page.goto(URL,{waitUntil:'networkidle'}); await shot('stress-01-empty')
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
 assert(await page.getByText('Your canvas is empty').isVisible(),'empty state visible')
 // Count only per-track controls. The timeline also shows a master "Mute
 // master" button, which the bare /Lock|Mute|Hide/ search matched and made
@@ -221,8 +227,11 @@ await shot('stress-09-panels')
 image=page.locator('[data-kind="image"]'); await image.click(); const sliders=page.locator('aside input[type=range], div.w-72 input[type=range]')
 // Right inspector is currently open at desktop; use labels via nearby fields.
 // The inspector's width is set inline, so the old .w-72 selector matched
-// nothing. Address it by its testid.
-const inspectorRanges=page.getByTestId('inspector-panel').locator('input[type=range]'); assert(await inspectorRanges.count()>=5,'transform sliders visible')
+// nothing. Address it by its testid. Sections are single-open now: expand
+// Transform (home of the sliders) first.
+const transformHeader=page.locator('[data-testid="section-header-transform"]');
+if(await transformHeader.count()){const exp=await transformHeader.getAttribute('aria-expanded');if(exp!=='true'){await transformHeader.click();await page.waitForTimeout(250)}}
+const inspectorRanges=page.getByTestId('inspector-panel').locator('input[type=range]'); assert(await inspectorRanges.count()>=4,'transform sliders visible')
 await inspectorRanges.nth(2).focus(); await page.keyboard.press('ArrowRight'); pass('scale slider keyboard interaction')
 
 // Delete selected image, then undo/redo.

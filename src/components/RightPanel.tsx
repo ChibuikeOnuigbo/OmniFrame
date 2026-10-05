@@ -22,6 +22,7 @@ import type { Clip } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
+import { SectionsNavigator } from './SectionsNav'
 
 function ClipInspector({ clip }: { clip: Clip }) {
   const assets = useEditor((s) => s.assets)
@@ -434,6 +435,7 @@ export function RightPanel() {
   const setRightPanelFloat = useEditor((s) => s.setRightPanelFloat)
   const unclusterInspector = useEditor((s) => s.unclusterInspector)
   const setUnclusterInspector = useEditor((s) => s.setUnclusterInspector)
+  const sidebarSectionMode = useEditor((s) => s.sidebarSectionMode)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
   const dragState = useRef<{ kind: 'width' | 'move' | 'resize'; startX: number; startY: number; startW: number; startH: number; baseX: number; baseY: number } | null>(null)
@@ -487,16 +489,18 @@ export function RightPanel() {
   const inspectorTitle = selectedClipId ? 'Clip Inspector' : 'Project Inspector'
 
   const inspectorBody = (
-    <div
-      id="inspector-panel"
-      data-testid="inspector-panel"
-      role="region"
-      aria-labelledby="inspector-heading"
-      tabIndex={0}
-      className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
-    >
-      {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
-    </div>
+    <SectionsNavigator mode={sidebarSectionMode} label="Inspector sections">
+      <div
+        id="inspector-panel"
+        data-testid="inspector-panel"
+        role="region"
+        aria-labelledby="inspector-heading"
+        tabIndex={0}
+        className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
+      >
+        {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+      </div>
+    </SectionsNavigator>
   )
 
   // ---- Floating window mode: draggable + resizable inspector overlay ----

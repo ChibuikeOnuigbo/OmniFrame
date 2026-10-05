@@ -1,5 +1,6 @@
-import { useId, useState, type ReactNode } from 'react'
+import { useEffect, useId, useState, type ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { NestedSectionContext, sectionIdFor, useSectionsNav, useIsNestedSection } from './SectionsNav'
 
 export function IconButton({
   active,
@@ -134,7 +135,79 @@ export function Section({
   const [open, setOpen] = useState(defaultOpen)
   const headerId = useId()
   const bodyId = useId()
-  const headerTestId = `section-header-${title.toLowerCase().replace(/\s+/g, '-')}`
+  const navCtx = useSectionsNav()
+  const nested = useIsNestedSection()
+  const nav = nested ? null : navCtx
+  const navId = sectionIdFor(undefined, title)
+  const headerTestId = `section-header-${navId}`
+
+  // Depend on the stable register/unregister callbacks, NOT the whole nav
+  // object (its identity changes with activeId/sections and would re-run
+  // registration forever).
+  const registerSection = nav?.register
+  const unregisterSection = nav?.unregister
+  useEffect(() => {
+    if (!registerSection || !collapsible) return
+    registerSection(navId, { title, defaultOpen })
+    return () => unregisterSection?.(navId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerSection, unregisterSection, navId, collapsible, title, defaultOpen])
+
+  // Inside a SectionsNavigator: 'tabs' renders only the active section (the
+  // tab chip replaces the header); 'accordion' is single-open.
+  if (nav && collapsible) {
+    const isActive = nav.activeId === navId
+    if (nav.mode === 'tabs') {
+      if (!isActive) return null
+      return (
+        <section aria-labelledby={headerId} className="px-3 pb-3 pt-1">
+          <div id={headerId} data-testid={headerTestId} className="flex min-h-8 items-center justify-between gap-2">
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">{title}</span>
+              {badge}
+            </span>
+            {action ? <div className="shrink-0">{action}</div> : null}
+          </div>
+          <div id={bodyId} aria-labelledby={headerId}>
+            <NestedSectionContext.Provider value={true}>{children}</NestedSectionContext.Provider>
+          </div>
+        </section>
+      )
+    }
+    return (
+      <section aria-labelledby={headerId} className="border-b border-ink-800">
+        <div className="flex items-center justify-between gap-2 px-3 py-0.5">
+          <button
+            id={headerId}
+            type="button"
+            data-testid={headerTestId}
+            aria-expanded={isActive}
+            aria-controls={isActive ? bodyId : undefined}
+            onClick={() => nav.activate(navId)}
+            className="flex min-h-8 min-w-0 flex-1 items-center rounded text-left transition-colors hover:bg-ink-800/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+          >
+            <span className="flex min-w-0 items-center gap-1.5 text-left">
+              <ChevronDown
+                size={13}
+                aria-hidden="true"
+                className={`shrink-0 text-ink-400 transition-transform duration-150 ${isActive ? '' : '-rotate-90'}`}
+              />
+              <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
+                {title}
+              </span>
+              {badge}
+            </span>
+          </button>
+          {action ? <div className="shrink-0">{action}</div> : null}
+        </div>
+        {isActive ? (
+          <div id={bodyId} aria-labelledby={headerId} className="px-3 pb-3 pt-0.5">
+            <NestedSectionContext.Provider value={true}>{children}</NestedSectionContext.Provider>
+          </div>
+        ) : null}
+      </section>
+    )
+  }
 
   const heading = (
     <span className="flex min-w-0 items-center gap-1.5 text-left">
@@ -176,7 +249,7 @@ export function Section({
       </div>
       {open ? (
         <div id={bodyId} aria-labelledby={headerId} className="px-3 pb-3 pt-0.5">
-          {children}
+          <NestedSectionContext.Provider value={true}>{children}</NestedSectionContext.Provider>
         </div>
       ) : null}
     </section>
@@ -217,7 +290,6 @@ export function AccordionGroup({
           <span className="text-[11px] font-semibold">{title}</span>
           {badge}
         </div>
-        <span className="text-[10px] text-ink-500">{open ? 'Hide' : 'Show'}</span>
       </button>
       {open && (
         <div id={bodyId} aria-labelledby={triggerId} className="space-y-1.5 border-t border-ink-800 p-2">

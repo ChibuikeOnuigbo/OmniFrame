@@ -15,6 +15,7 @@ import {
   Layers,
   GitCommit,
   Plus,
+  HelpCircle,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { LinkRuleType, LinkSet, ParentRelationship, GroupInstance } from '../types'
@@ -67,14 +68,10 @@ export function LinkPanel() {
   return (
     <div data-testid="link-panel" className="p-3 text-xs text-ink-200 select-none space-y-4 overflow-y-auto h-full">
       {/* Overview Banner */}
-      <div className="p-3 rounded-xl border border-brand/30 bg-brand/10 space-y-1">
-        <div className="flex items-center gap-1.5 font-semibold text-brand-400 text-xs">
-          <Link2 size={14} />
-          <span>Universal Link & Relationships</span>
-        </div>
-        <p className="text-[11px] text-ink-300 leading-relaxed">
-          Policy-based multi-element linking, directional parenting hierarchies, and spatial groups.
-        </p>
+      {/* Compact hint (full description on hover) */}
+      <div className="flex items-center justify-between gap-2 text-[10px] text-ink-400" title="Policy-based multi-element linking, directional parenting hierarchies, and spatial groups.">
+        <span className="truncate">Policy-based links, parenting & groups</span>
+        <HelpCircle size={12} className="shrink-0 text-ink-500" aria-hidden="true" />
       </div>
 
       {/* Active LinkSet Section */}

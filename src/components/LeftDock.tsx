@@ -18,8 +18,11 @@ import {
   Camera,
   Paintbrush,
   type LucideIcon,
+  LayoutGrid,
+  List,
 } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
+import { SectionsNavigator } from './SectionsNav'
 import { MediaPanel } from './MediaPanel'
 import { OmniFramePanel } from './OmniFramePanel'
 import { VoiceIsolationPanel } from './VoiceIsolationPanel'
@@ -68,6 +71,8 @@ export function LeftDock() {
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
   const leftDockWidth = useEditor((s) => s.leftDockWidth)
   const setLeftDockWidth = useEditor((s) => s.setLeftDockWidth)
+  const sidebarSectionMode = useEditor((s) => s.sidebarSectionMode)
+  const setSidebarSectionMode = useEditor((s) => s.setSidebarSectionMode)
   // Width-drag state: suppress the width transition while the user slides the edge.
   const [dockResizing, setDockResizing] = useState(false)
   const dockDrag = React.useRef<{ startX: number; startW: number } | null>(null)
@@ -300,31 +305,57 @@ export function LeftDock() {
               </div>
             )}
 
-            <button
-              type="button"
-              title="Collapse"
-              aria-label="Collapse panel"
-              onClick={() => setLeftOpen(false)}
-              className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors"
-            >
-              <X size={14} />
-            </button>
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                type="button"
+                data-testid="sidebar-section-mode-btn"
+                title={
+                  sidebarSectionMode === 'tabs'
+                    ? 'Section style: Tabs — switch to single-open Accordion'
+                    : 'Section style: Accordion — switch to Tabs'
+                }
+                aria-label={
+                  sidebarSectionMode === 'tabs'
+                    ? 'Section style Tabs. Activate to use single-open accordion sections.'
+                    : 'Section style Accordion. Activate to use tabbed sections.'
+                }
+                aria-pressed={sidebarSectionMode === 'tabs'}
+                onClick={() => setSidebarSectionMode(sidebarSectionMode === 'tabs' ? 'accordion' : 'tabs')}
+                className={`grid place-items-center h-6.5 w-6.5 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  sidebarSectionMode === 'tabs' ? 'text-brand-400 hover:text-white hover:bg-ink-750' : 'text-ink-400 hover:text-white hover:bg-ink-750'
+                }`}
+              >
+                {sidebarSectionMode === 'tabs' ? <LayoutGrid size={13} /> : <List size={13} />}
+              </button>
+              <button
+                type="button"
+                title="Collapse"
+                aria-label="Collapse panel"
+                onClick={() => setLeftOpen(false)}
+                className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <X size={14} />
+              </button>
+            </div>
           </div>
 
-          {/* Panel Views */}
-          <div tabIndex={0} aria-label="Panel contents, scrollable" className="flex-1 min-h-0 overflow-y-auto">
-            {leftTab === 'media' && <MediaPanel />}
-            {leftTab === 'omniframe' && <OmniFramePanel />}
-            {leftTab === 'audio' && <VoiceIsolationPanel />}
-            {leftTab === 'tracking' && <TrackingPanel />}
-            {leftTab === 'relationships' && <LinkPanel />}
-            {leftTab === 'drawing' && <DrawingPanel />}
-            {leftTab === 'transitions' && <TransitionsPanel />}
-            {leftTab === 'effects' && <EffectsPanel />}
-            {leftTab === 'text' && <TextPanel />}
-            {leftTab === 'threed' && <ThreePanel />}
-            {leftTab === 'rigging' && <Rigging />}
-          </div>
+          {/* Panel Views — SectionsNavigator presents the panel's sections as
+              tabs (default) or a single-open accordion, per the header toggle */}
+          <SectionsNavigator mode={sidebarSectionMode} label={`${activeTabDef?.label ?? 'Panel'} sections`}>
+            <div tabIndex={0} aria-label="Panel contents, scrollable" className="flex-1 min-h-0 overflow-y-auto">
+              {leftTab === 'media' && <MediaPanel />}
+              {leftTab === 'omniframe' && <OmniFramePanel />}
+              {leftTab === 'audio' && <VoiceIsolationPanel />}
+              {leftTab === 'tracking' && <TrackingPanel />}
+              {leftTab === 'relationships' && <LinkPanel />}
+              {leftTab === 'drawing' && <DrawingPanel />}
+              {leftTab === 'transitions' && <TransitionsPanel />}
+              {leftTab === 'effects' && <EffectsPanel />}
+              {leftTab === 'text' && <TextPanel />}
+              {leftTab === 'threed' && <ThreePanel />}
+              {leftTab === 'rigging' && <Rigging />}
+            </div>
+          </SectionsNavigator>
         </div>
       </div>
     </div>
