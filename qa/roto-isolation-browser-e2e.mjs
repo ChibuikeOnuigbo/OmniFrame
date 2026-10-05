@@ -72,12 +72,12 @@ async function openSection(pg, sectionId, targetSelector) {
   }
 }
 
-async function waitStoreIdle(pg, timeout = 20000) {
+async function waitStoreIdle(pg, timeout = 240000) {
   await pg.waitForFunction(() => !window.__omniframe_store?.getState()?.rotoBusy, { timeout })
 }
 
 const byName = Object.fromEntries(MANIFEST.map((m) => [m.name, m]))
-const existsLocally = (name) => existsSync(join(ROOT, byName[name].file))
+const existsLocally = (name) => !!byName[name] && existsSync(join(ROOT, byName[name].file))
 const dataUrlOf = (name) => {
   const entry = byName[name]
   const b = readFileSync(join(ROOT, entry.file))
@@ -334,6 +334,74 @@ let extractOk = null
       if (trimmed.cutout) writeFileSync(join(OUT, 'in-app--obj_chair@room-photo--omni-roto-general-v1--negtrim.png'), Buffer.from(trimmed.cutout.split(',')[1], 'base64'))
     } else {
       fail('11. Correction loop · negative right-click trims over-coverage (subject survives)', `coverage ${(r.coverage * 100).toFixed(1)}% -> ${(trimmed.coverage * 100).toFixed(1)}% (drop ${(drop * 100).toFixed(0)}%, survival ${(trimmed.coverage / gtChair * 100).toFixed(0)}% of GT)`)
+    }
+  }
+}
+
+// ============================================================
+// 12-14. SAM Mobile (Segment Anything) — the promptable engine.
+//      The user's clicks ARE the prompt; this is the reference
+//      tool's headline model and it must beat the saliency family
+//      exactly where they struggle (busy photos, pale subjects).
+// ============================================================
+{
+  // 12. obj_chair on the busy room photo — 2 clicks, STRICT bounds
+  await setupCase('obj_chair@room-photo')
+  if (await pickEngine('sam-mobile-v1', '12. SAM · obj_chair on busy photo (2 clicks)')) {
+    const t0 = Date.now()
+    await clickAt(0.552, 0.62) // upper chair body
+    const first = await measure()
+    const t1 = Date.now()
+    await clickAt(0.552, 0.85) // lower chair body
+    const second = await measure()
+    const t2 = Date.now()
+    const gtChair = byName['obj_chair@room-photo'].gtCover
+    const ok = second.hasMask && second.engine === 'sam-mobile-v1'
+      && second.coverage >= gtChair * 0.5 && second.coverage <= gtChair * 1.6
+      && second.centroid && Math.hypot(second.centroid.cx - 0.5427, second.centroid.cy - 0.7112) < 0.15
+    if (ok) {
+      pass('12. SAM · obj_chair on busy photo (2 clicks, strict)', `cover=${(second.coverage * 100).toFixed(1)}% (gt ${(gtChair * 100).toFixed(1)}%), centroid ok, click1 ${t1 - t0}ms (encode), click2 ${t2 - t1}ms (cached decoder)`)
+      if (second.cutout) writeFileSync(join(OUT, 'in-app--obj_chair@room-photo--sam-mobile-v1.png'), Buffer.from(second.cutout.split(',')[1], 'base64'))
+    } else {
+      fail('12. SAM · obj_chair on busy photo (2 clicks, strict)', `cover=${second.coverage * 100}% engine=${second.engine} want [${(gtChair * 0.5).toFixed(3)}, ${(gtChair * 1.6).toFixed(3)}]`)
+    }
+  }
+
+  // 13. char_light pale-on-white — single click must localise + bound
+  const lightEntry = byName['char_light@white-canvas']
+  await setupCase('char_light@white-canvas')
+  if (await pickEngine('sam-mobile-v1', '13. SAM · char_light pale-on-white')) {
+    await clickAt(lightEntry.samClicks[0][0], lightEntry.samClicks[0][1])
+    const m = await measure()
+    const gt = lightEntry.gtCover
+    const ok = m.hasMask && m.engine === 'sam-mobile-v1'
+      && m.coverage >= gt * 0.2 && m.coverage <= gt * 3
+      && m.centroid && Math.hypot(m.centroid.cx - lightEntry.gtCentroid[0], m.centroid.cy - lightEntry.gtCentroid[1]) < 0.15
+    if (ok) {
+      pass('13. SAM · char_light pale-on-white', `cover=${(m.coverage * 100).toFixed(2)}% (gt ${(gt * 100).toFixed(2)}%), localised — saliency engines score IoU 0.04-0.36 here`)
+      if (m.cutout) writeFileSync(join(OUT, 'in-app--char_light@white-canvas--sam-mobile-v1.png'), Buffer.from(m.cutout.split(',')[1], 'base64'))
+    } else {
+      fail('13. SAM · char_light pale-on-white', `cover=${m.coverage * 100}% engine=${m.engine} centroid=${JSON.stringify(m.centroid)}`)
+    }
+  }
+
+  // 14. mello+ryuk — two prompts accumulate both subjects
+  const duoEntry = byName['mello+ryuk@white-canvas']
+  await setupCase('mello+ryuk@white-canvas')
+  if (await pickEngine('sam-mobile-v1', '14. SAM · two subjects accumulate')) {
+    await clickAt(duoEntry.samClicks[0][0], duoEntry.samClicks[0][1])
+    const first = await measure()
+    await clickAt(duoEntry.samClicks[1][0], duoEntry.samClicks[1][1])
+    const both = await measure()
+    const gtUnion = duoEntry.gtCover
+    const ok = first.hasMask && both.hasMask && both.engine === 'sam-mobile-v1'
+      && both.coverage >= first.coverage * 1.3
+      && both.coverage >= gtUnion * 0.5 && both.coverage <= gtUnion * 1.7
+    if (ok) {
+      pass('14. SAM · two subjects accumulate', `coverage ${(first.coverage * 100).toFixed(1)}% -> ${(both.coverage * 100).toFixed(1)}% (gt union ${(gtUnion * 100).toFixed(1)}%)`)
+      if (both.cutout) writeFileSync(join(OUT, 'in-app--mello+ryuk@white-canvas--sam-mobile-v1.png'), Buffer.from(both.cutout.split(',')[1], 'base64'))
+    } else {
+      fail('14. SAM · two subjects accumulate', `coverage ${first.coverage * 100}% -> ${both.coverage * 100}% (gt union ${gtUnion * 100}%)`)
     }
   }
 }

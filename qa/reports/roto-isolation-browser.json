@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-05T17:48:01.964Z",
+  "timestamp": "2026-10-05T18:21:53.189Z",
   "results": [
     {
       "name": "01. Anime model · char_light pale-on-white (STRESS: under-segments, must still localise)",
@@ -22,29 +22,24 @@
       "details": "engine=omni-roto-general-v1 cover=52.4% (gt 9.4%), centroid off by 0.216"
     },
     {
-      "name": "05. Human model · held-out studio person (approx GT)",
-      "status": "PASS",
-      "details": "engine=omni-roto-human-v1 cover=24.0% (gt 16.4%), centroid off by 0.061"
+      "name": "05. Human model · held-out studio person",
+      "status": "SKIPPED",
+      "reason": "held-out preview not present locally (not redistributable)"
     },
     {
-      "name": "06. Hair model · held-out hair close-up (qualitative)",
-      "status": "PASS",
-      "details": "engine=omni-roto-hair-v1 cover=87.6% (gt n/a), centroid off by 0.019"
+      "name": "06. Hair model · held-out hair close-up",
+      "status": "SKIPPED",
+      "reason": "held-out preview not present locally (not redistributable)"
     },
     {
-      "name": "07. Specialisation · anime model on photo must not flood (vs hair model)",
-      "status": "PASS",
-      "details": "engine=omni-roto-anime-v1 cover=5.8% (gt n/a), centroid off by 0.087"
+      "name": "07. Specialisation · anime model on photo",
+      "status": "SKIPPED",
+      "reason": "held-out preview not present locally (not redistributable)"
     },
     {
       "name": "08. Smart engine (no model) · char_light pale-on-white (STRESS: colour-grow cannot separate white-on-white)",
       "status": "PASS",
       "details": "engine=smart cover=15.3% (gt 1.2%), centroid off by 0.089"
-    },
-    {
-      "name": "07b. Specialisation ratio",
-      "status": "PASS",
-      "details": "anime/hair coverage on the photo = 0.07 (<0.5, anime model correctly reluctant)"
     },
     {
       "name": "09a. General model re-run for Extract (setup)",
@@ -70,6 +65,21 @@
       "name": "11. Correction loop · negative right-click trims over-coverage (subject survives)",
       "status": "PASS",
       "details": "coverage 52.4% -> 24.3% (-54%), chair GT 9.4% still covered"
+    },
+    {
+      "name": "12. SAM · obj_chair on busy photo (2 clicks, strict)",
+      "status": "PASS",
+      "details": "cover=10.0% (gt 9.4%), centroid ok, click1 6071ms (encode), click2 975ms (cached decoder)"
+    },
+    {
+      "name": "13. SAM · char_light pale-on-white",
+      "status": "PASS",
+      "details": "cover=3.12% (gt 1.19%), localised — saliency engines score IoU 0.04-0.36 here"
+    },
+    {
+      "name": "14. SAM · two subjects accumulate",
+      "status": "PASS",
+      "details": "coverage 2.5% -> 6.1% (gt union 5.4%)"
     }
   ]
 }

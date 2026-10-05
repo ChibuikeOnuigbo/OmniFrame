@@ -139,6 +139,29 @@ def approx_gt_studio(rgb: np.ndarray) -> tuple[np.ndarray, str]:
     return holes, f"border-calibrated split (lum>{thr:.0f}, sat<70, largest CC)"
 
 
+def sam_clicks(gt: np.ndarray, split: bool = False) -> list:
+    """Prompt points for the SAM engine: deepest interior point of the
+    largest component (per half when the case has two subjects)."""
+    h, w = gt.shape
+    out = []
+    regions = []
+    if split:
+        regions = [(gt[:, : w // 2], 0), (gt[:, w // 2:], w // 2)]
+    else:
+        regions = [(gt, 0)]
+    for reg, x0 in regions:
+        n, labels = cv2.connectedComponents((reg > 127).astype(np.uint8), 8)
+        if n < 2:
+            continue
+        biggest = 1 + int(np.bincount(labels.ravel())[1:].argmax())
+        comp = labels == biggest
+        er = cv2.erode(comp.astype(np.uint8), np.ones((41, 41), np.uint8))
+        ys, xs = np.nonzero(er if er.any() else comp)
+        if len(xs):
+            out.append((float(xs.mean() + x0) / w, float(ys.mean()) / h))
+    return out
+
+
 def checker(h: int, w: int) -> np.ndarray:
     yy, xx = np.mgrid[0:h, 0:w]
     c = (((yy // 16 + xx // 16) % 2) * 40 + 200).astype(np.uint8)
@@ -163,6 +186,36 @@ def isolated(rgb: np.ndarray, prob: np.ndarray) -> np.ndarray:
     a = (prob > 127).astype(np.float32)
     out = (rgb * a[:, :, None] + checker(*rgb.shape[:2]) * (1 - a[:, :, None])).astype(np.uint8)
     return out
+
+
+SAM_ENC = None
+SAM_DEC = None
+SAM_MEAN = np.array([123.675, 116.28, 103.53], dtype=np.float32)
+SAM_STD = np.array([58.395, 57.12, 57.375], dtype=np.float32)
+
+
+def sam_segment(rgb: np.ndarray, clicks: list) -> np.ndarray:
+    """MobileSAM promptable segmentation (mirrors the in-app engine):
+    normalise -> pad to 1024, encode once, decode with iterative refinement."""
+    global SAM_ENC, SAM_DEC
+    if SAM_ENC is None:
+        SAM_ENC = ort.InferenceSession(str(ROOT / "public/models/sam-mobile-encoder.onnx"), providers=["CPUExecutionProvider"])
+        SAM_DEC = ort.InferenceSession(str(ROOT / "public/models/sam-mobile-decoder.onnx"), providers=["CPUExecutionProvider"])
+    H, W = rgb.shape[:2]
+    scale = 1024 / max(H, W)
+    rw, rh = int(W * scale), int(H * scale)
+    small = ((cv2.resize(rgb, (rw, rh)) - SAM_MEAN) / SAM_STD).astype(np.float32)
+    x = np.zeros((1, 3, 1024, 1024), np.float32)
+    x[0, :, :rh, :rw] = small.transpose(2, 0, 1)
+    emb = SAM_ENC.run(None, {"image": x})[0]
+    coords = np.array([[[c[0] * W * scale, c[1] * H * scale] for c in clicks]], np.float32)
+    labels = np.array([[1.0] * len(clicks)], np.float32)
+    common = {"image_embedding": emb, "point_coords": coords, "point_labels": labels,
+              "orig_im_size": np.array([H, W], np.float32)}
+    masks, _, logits = SAM_DEC.run(None, {**common, "mask_input": np.zeros((1, 1, 256, 256), np.float32),
+                                          "has_mask_input": np.zeros(1, np.float32)})
+    masks, _, _ = SAM_DEC.run(None, {**common, "mask_input": logits, "has_mask_input": np.ones(1, np.float32)})
+    return np.asarray(masks).squeeze() > 0
 
 
 def main() -> None:
@@ -196,6 +249,7 @@ def main() -> None:
                 "name": name, "file": f"qa/assets/roto/composites/{name}.png",
                 "gtCover": round(float((gt > 127).mean()), 4),
                 "gtCentroid": [round(float(xs.mean()) / comp.shape[1], 4), round(float(ys.mean()) / comp.shape[0], 4)],
+                "samClicks": [[round(x, 4), round(y, 4)] for x, y in sam_clicks(gt, split="+" in name)],
             })
 
     # --- EXACT tier: composites with pasted-alpha ground truth -----------------
@@ -255,9 +309,31 @@ def main() -> None:
 
     # --- run the matrix ---------------------------------------------------------
     results = []
-    print(f"{'case':34s} {'tier':10s} " + " ".join(f"{m.split('-')[2]:>13s}" for m in MODELS))
+    cols = MODELS + ["sam-mobile-v1"]
+    print(f"{'case':34s} {'tier':10s} " + " ".join(f"{(m.split('-')[2] if m != 'sam-mobile-v1' else 'sam'):>13s}" for m in cols))
     for case in cases:
         row = {"case": case["name"], "tier": case["tier"], "gtNote": case["note"], "models": {}}
+        # SAM (promptable): use the recorded per-case prompt points
+        man = next((m for m in manifest if m["name"] == case["name"]), None)
+        sam_pts = man.get("samClicks") if man else None
+        if not sam_pts and case.get("gtCentroid"):
+            sam_pts = [case["gtCentroid"]]
+        sam_cell = ""
+        if sam_pts and len(clicks_ok := [c for c in sam_pts if c]):
+            try:
+                sam_mask = sam_segment(case["rgb"], clicks_ok)
+                if case["gt"] is not None:
+                    iou_s = iou(sam_mask, case["gt"] > 127)
+                    row["models"]["sam-mobile-v1"] = {"iouHalf": round(iou_s, 4), "iouBest": round(iou_s, 4),
+                                                      "predCover": round(float(sam_mask.mean()), 4),
+                                                      "gtCover": round(float((case["gt"] > 127).mean()), 4)}
+                    sam_cell = f"{iou_s*100:5.1f}/{iou_s*100:4.1f}%"
+                else:
+                    row["models"]["sam-mobile-v1"] = {"predCover": round(float(sam_mask.mean()), 4)}
+                    sam_cell = f"{sam_mask.mean()*100:11.1f}%"
+            except Exception as e:  # noqa: BLE001
+                row["models"]["sam-mobile-v1"] = {"error": str(e)}
+                sam_cell = "        error"
         cells = []
         for m in MODELS:
             prob = predict(m, case["rgb"])
@@ -275,6 +351,7 @@ def main() -> None:
                 tag = case["name"].replace("@", "-at-").replace(" ", "_")
                 cv2.imwrite(str(OUT / f"{tag}--{m}.png"), cv2.cvtColor(overlay(case["rgb"], prob, case["gt"] if case["gt"] is not None else np.zeros_like(prob), m), cv2.COLOR_RGB2BGR))
                 cv2.imwrite(str(OUT / f"{tag}--{m}--isolated.png"), cv2.cvtColor(isolated(case["rgb"], prob), cv2.COLOR_RGB2BGR))
+        cells.append(sam_cell if sam_cell else "             ")
         results.append(row)
         print(f"{case['name']:34s} {case['tier']:10s} " + " ".join(f"{c:>13s}" for c in cells))
 
@@ -288,8 +365,8 @@ def main() -> None:
             winner = max(scored, key=scored.get)
             summary.setdefault("winners", {})[row["case"]] = {"winner": winner, "iouHalf": scored[winner]}
     exact_rows = [r for r in results if r["tier"] == "EXACT"]
-    for m in MODELS:
-        ious = [r["models"][m]["iouHalf"] for r in exact_rows]
+    for m in MODELS + ["sam-mobile-v1"]:
+        ious = [r["models"][m]["iouHalf"] for r in exact_rows if m in r["models"] and "iouHalf" in r["models"][m]]
         summary.setdefault("exactMeanIouHalf", {})[m] = round(sum(ious) / len(ious), 4) if ious else None
     wins = [v["winner"] for v in summary.get("winners", {}).values() if "heldout" not in [k for k in summary["winners"] if summary["winners"][k] is v]]
     summary["winCounts"] = {m: wins.count(m) for m in MODELS}

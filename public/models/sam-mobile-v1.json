@@ -1,0 +1,22 @@
+{
+  "id": "sam-mobile-v1",
+  "kind": "sam",
+  "domain": "general",
+  "inputSize": 1024,
+  "encoder": "sam-mobile-encoder.onnx",
+  "decoder": "sam-mobile-decoder.onnx",
+  "encoderParams": 5708537,
+  "decoderParams": 4106453,
+  "architecture": "MobileSAM (TinyViT image encoder + SAM mask decoder, return_single_mask ONNX export)",
+  "promptable": true,
+  "inputs": "image [1,3,1024,1024]; decoder: image_embedding [1,256,64,64], point_coords [1,N,2] in 1024-space, point_labels [1,N] (1=pos,0=neg), mask_input [1,1,256,256], has_mask_input [1], orig_im_size [2]",
+  "outputs": "masks (thresholded, orig size), scores (IoU), logits (256x256, for iterative refinement)",
+  "source": "ONNX export via SAMExporter; files from Kazuhito00/MobileSAM-ONNX-Sample",
+  "upstream": "MobileSAM (ChaoningZhang/MobileSAM, Apache-2.0) built on Segment Anything (facebookresearch/segment-anything, Apache-2.0)",
+  "verifiedIoU": {
+    "obj_chair@room-photo (2 clicks + refine)": 0.910,
+    "mello+ryuk@white-canvas (2 clicks)": 0.842,
+    "char_mello@white-canvas (1 click)": 0.833
+  },
+  "license": "Apache-2.0 (MobileSAM + Segment Anything)"
+}

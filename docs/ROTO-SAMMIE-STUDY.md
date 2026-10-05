@@ -102,6 +102,40 @@ Same workflow shape, sized for a browser-resident editor:
 - The RotoMask brush refine reuses the same engine (add/subtract strokes on
   the live mask).
 
+## SAM Mobile — the promptable Segment Anything engine (2026-10-05)
+
+The reference tool's headline model is now built in: **SAM Mobile
+(MobileSAM)** — TinyViT image encoder + SAM mask decoder, ONNX export via
+SAMExporter (files from Kazuhito00/MobileSAM-ONNX-Sample; MobileSAM and
+Segment Anything are Apache-2.0). Unlike the saliency family (whole-image
+subject map), SAM is **promptable**: the user's accumulated clicks are the
+prompt — positives are label-1 points, right-click negatives are label-0
+points — with one iterative refinement pass feeding the decoder logits back
+in for cleaner boundaries.
+
+- Browser: both sessions load in onnxruntime-web (44.5 MB fp32; the int8
+  quantisation was tested and rejected — it collapses on busy photos,
+  0.910 → 0.094 IoU on the chair case). First click on a frame runs the
+  encoder (~6 s in headless WASM here), and the embedding is cached per
+  asset+frame, so every further click only runs the decoder (~1 s). The
+  desktop sidecar (`roto_onnx.py --sam`) runs the same contract natively
+  (~1.5 s encode, IoU 0.910 on the chair) with its own embedding cache; the
+  Tauri command still needs click passthrough, so desktop in-app falls back
+  to the WASM path until then.
+- Isolation quality vs the OmniRoto family (exact-GT composites, same click
+  protocol): SAM exact-tier mean IoU **0.485** vs 0.231 for the best
+  OmniRoto model — and it wins precisely where saliency struggles: busy
+  photo obj_chair **0.463 single-click / 0.910 with the natural 2-click
+  workflow** (OmniRoto general: 0.178), mello+ryuk two subjects 0.842,
+  ryuk 0.842, towel 0.748, mello 0.835.
+- In-app E2E (`roto-isolation-browser-e2e.mjs` cases 12-14): chair 10.0%
+  coverage vs GT 9.4% with strict bounds and localisation; pale-on-white
+  char_light localised and bounded where colour engines cannot separate;
+  two prompts accumulate both subjects 2.5% → 6.1% (GT union 5.4%).
+- The model registry entry `sam-mobile-v1` is the first builtin in the
+  picker; descriptor sidecar `public/models/sam-mobile-v1.json` documents
+  the promptable contract.
+
 ## Isolation-model test results (2026-10-05)
 
 Two new suites test the isolation engines against real ground truth
@@ -150,9 +184,10 @@ absent, everything else is reproducible from in-repo assets.
 
 ## Verification status (2026-10-05)
 
-- `qa/roto-isolation-models-test.py` (offline matrix, native onnxruntime) and
-  `qa/roto-isolation-browser-e2e.mjs` (in-app, 14/14 PASS incl. the two
-  correction loops) — see the isolation results section above.
+- `qa/roto-isolation-models-test.py` (offline matrix, native onnxruntime,
+  5 engines incl. SAM) and `qa/roto-isolation-browser-e2e.mjs` (in-app,
+  16 checks: 13 PASS + 3 SKIPPED without the local-only held-out previews —
+  incl. SAM cases 12-14 and the two correction loops).
 - `qa/rotomask-e2e.mjs`: **19/19 PASS** (sub-tool section, smart click,
   right-click remove, clicks summary + undo, model family served, anime model
   loads in onnxruntime-web, model-driven segmentation, brush refine, track

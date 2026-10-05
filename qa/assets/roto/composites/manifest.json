@@ -6,6 +6,12 @@
     "gtCentroid": [
       0.4992,
       0.5762
+    ],
+    "samClicks": [
+      [
+        0.4987,
+        0.575
+      ]
     ]
   },
   {
@@ -15,6 +21,12 @@
     "gtCentroid": [
       0.4975,
       0.5792
+    ],
+    "samClicks": [
+      [
+        0.4893,
+        0.4128
+      ]
     ]
   },
   {
@@ -24,6 +36,12 @@
     "gtCentroid": [
       0.5015,
       0.6076
+    ],
+    "samClicks": [
+      [
+        0.4891,
+        0.5536
+      ]
     ]
   },
   {
@@ -33,6 +51,12 @@
     "gtCentroid": [
       0.4976,
       0.6593
+    ],
+    "samClicks": [
+      [
+        0.4975,
+        0.6554
+      ]
     ]
   },
   {
@@ -42,6 +66,12 @@
     "gtCentroid": [
       0.5149,
       0.5762
+    ],
+    "samClicks": [
+      [
+        0.5356,
+        0.4781
+      ]
     ]
   },
   {
@@ -51,6 +81,12 @@
     "gtCentroid": [
       0.3494,
       0.4958
+    ],
+    "samClicks": [
+      [
+        0.3086,
+        0.3649
+      ]
     ]
   },
   {
@@ -60,6 +96,12 @@
     "gtCentroid": [
       0.4998,
       0.5754
+    ],
+    "samClicks": [
+      [
+        0.4992,
+        0.5733
+      ]
     ]
   },
   {
@@ -69,6 +111,12 @@
     "gtCentroid": [
       0.4998,
       0.5754
+    ],
+    "samClicks": [
+      [
+        0.4992,
+        0.5733
+      ]
     ]
   },
   {
@@ -78,6 +126,12 @@
     "gtCentroid": [
       0.4996,
       0.5772
+    ],
+    "samClicks": [
+      [
+        0.454,
+        0.4686
+      ]
     ]
   },
   {
@@ -87,6 +141,16 @@
     "gtCentroid": [
       0.5462,
       0.5796
+    ],
+    "samClicks": [
+      [
+        0.3413,
+        0.5475
+      ],
+      [
+        0.715,
+        0.4589
+      ]
     ]
   },
   {
@@ -96,6 +160,12 @@
     "gtCentroid": [
       0.5427,
       0.7112
+    ],
+    "samClicks": [
+      [
+        0.5522,
+        0.7136
+      ]
     ]
   },
   {
@@ -105,26 +175,12 @@
     "gtCentroid": [
       0.404,
       0.6164
-    ]
-  },
-  {
-    "name": "heldout-studio-person",
-    "file": "qa/assets/roto/composites/heldout-studio-person.png",
-    "tier": "APPROX",
-    "gtCover": 0.1639,
-    "gtCentroid": [
-      0.5595,
-      0.5003
-    ]
-  },
-  {
-    "name": "heldout-hair-closeup",
-    "file": "qa/assets/roto/composites/heldout-hair-closeup.png",
-    "tier": "QUALITATIVE",
-    "gtCover": null,
-    "gtCentroid": [
-      0.5,
-      0.45
+    ],
+    "samClicks": [
+      [
+        0.4196,
+        0.6334
+      ]
     ]
   }
 ]

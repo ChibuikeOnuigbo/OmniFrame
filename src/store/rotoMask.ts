@@ -251,8 +251,14 @@ export function createRotoMaskSlice(
         return
       }
       const model = findRotoModel(get(), get().rotoModelId)
+      // SAM: same frame + model reuses the (expensive) encoder embedding, so
+      // every click after the first only runs the fast decoder pass.
+      const samCacheKey = model?.kind === 'sam'
+        ? `${asset.id}|${frame}|${fs.width}x${fs.height}|${model.id}`
+        : undefined
       const result = await runRotoSegmentation(fs.source, fs.width, fs.height, clicks, model, {
         tolerance: get().rotoTolerance,
+        samCacheKey,
       })
       set({
         rotoResult: {
@@ -290,11 +296,21 @@ export function createRotoMaskSlice(
       }
       set({ rotoStatus: { state: 'loading', message: `Loading ${model.label}…` } })
       try {
-        const { getRotoSession } = await import('../lib/rotoModels')
-        await getRotoSession(model)
-        set({
-          rotoStatus: { state: 'ready', message: `${model.label} loaded (${model.inputSize}px)` },
-        })
+        const { getRotoSession, getRotoSamSessions } = await import('../lib/rotoModels')
+        if (model.kind === 'sam') {
+          await getRotoSamSessions(model)
+          set({
+            rotoStatus: {
+              state: 'ready',
+              message: `${model.label} loaded (1024px encoder · decoder — first click encodes, then it's fast)`,
+            },
+          })
+        } else {
+          await getRotoSession(model)
+          set({
+            rotoStatus: { state: 'ready', message: `${model.label} loaded (${model.inputSize}px)` },
+          })
+        }
       } catch (err) {
         set({
           rotoStatus: {

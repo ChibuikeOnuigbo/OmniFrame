@@ -70,3 +70,10 @@ This file contains the licenses and notices for open source software used in Omn
 - **Origin**: reference photographs collected via image search (people, anime characters, hair portraits) plus in-repo sample assets; pseudo-labelled with OpenCV GrabCut. The corpus lives in training_data/ which is git-ignored and NOT redistributed.
 - **Models**: trained in-repo, MIT, ~560 KB each; metadata in public/models/omni-roto-*-v1.json.
 - **Catalog models** (U2-Net, IS-Net, Silueta, etc.) are NOT bundled — RotoMask links them by URL at the user's request; their licences remain those of the upstream projects (Apache-2.0 / non-commercial research depending on the model).
+
+## SAM Mobile (RotoMask isolation engine)
+- `public/models/sam-mobile-encoder.onnx`, `public/models/sam-mobile-decoder.onnx`
+- MobileSAM — Apache-2.0 — https://github.com/ChaoningZhang/MobileSAM
+  (built on Segment Anything, Apache-2.0 — https://github.com/facebookresearch/segment-anything)
+- ONNX export produced with SAMExporter (https://github.com/vietanhdev/samexporter);
+  model files sourced from Kazuhito00/MobileSAM-ONNX-Sample (MIT).

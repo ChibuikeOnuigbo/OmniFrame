@@ -39,6 +39,7 @@ import {
   maskCoverage,
 } from './rotoBrush'
 import {
+  getRotoSamSessions,
   getRotoSession,
   postprocessSaliency,
   preprocessSaliency,
@@ -58,6 +59,9 @@ export interface RotoClick {
 }
 
 export interface RotoSegmentOptions {
+  /** Cache key for the SAM image embedding (e.g. `asset|frame|model`). Same
+   * key reuses the encoder pass, so extra clicks only run the fast decoder. */
+  samCacheKey?: string
   /** 0..100 tolerance for the Smart engine colour scoring. Default 26. */
   tolerance?: number
   /** Feather in working px. Default 2. */
@@ -494,6 +498,114 @@ async function runModelDesktop(frame: WorkingFrame, model: RotoModelDescriptor):
 }
 
 // ---------------------------------------------------------------------------
+// SAM engine — promptable encoder/decoder (MobileSAM)
+// ---------------------------------------------------------------------------
+
+/** SAM pixel normalisation (ImageNet mean/std, applied before padding). */
+const SAM_MEAN = [123.675, 116.28, 103.53]
+const SAM_STD = [58.395, 57.12, 57.375]
+
+/** Encoder-embedding cache: clicks after the first only run the decoder. */
+const samEmbeddingCache = new Map<string, Ort.Tensor>()
+
+function samPreprocess(
+  source: CanvasImageSource,
+  sourceWidth: number,
+  sourceHeight: number,
+): { input: Float32Array; scale: number } {
+  const scale = 1024 / Math.max(sourceWidth, sourceHeight)
+  const rw = Math.max(1, Math.round(sourceWidth * scale))
+  const rh = Math.max(1, Math.round(sourceHeight * scale))
+  const c = document.createElement('canvas')
+  c.width = rw
+  c.height = rh
+  const ctx = c.getContext('2d', { willReadFrequently: true })
+  if (!ctx) throw new Error('2d context unavailable')
+  ctx.drawImage(source, 0, 0, sourceWidth, sourceHeight, 0, 0, rw, rh)
+  const img = ctx.getImageData(0, 0, rw, rh)
+  // NCHW 1x3x1024x1024, zero-padded right/bottom, ImageNet-normalised.
+  const input = new Float32Array(3 * 1024 * 1024)
+  const plane = 1024 * 1024
+  for (let y = 0; y < rh; y++) {
+    const rowIn = y * rw
+    const rowOut = y * 1024
+    for (let x = 0; x < rw; x++) {
+      const i = (rowIn + x) * 4
+      const o = rowOut + x
+      input[o] = (img.data[i] - SAM_MEAN[0]) / SAM_STD[0]
+      input[plane + o] = (img.data[i + 1] - SAM_MEAN[1]) / SAM_STD[1]
+      input[2 * plane + o] = (img.data[i + 2] - SAM_MEAN[2]) / SAM_STD[2]
+    }
+  }
+  return { input, scale }
+}
+
+async function segmentWithSAM(
+  frame: WorkingFrame,
+  clicks: RotoClick[],
+  model: RotoModelDescriptor,
+  cacheKey?: string,
+): Promise<MaskBitmap> {
+  const { encoder, decoder } = await getRotoSamSessions(model)
+  const ort = await import('onnxruntime-web')
+  const { width: w, height: h } = frame
+  const scale = 1024 / Math.max(w, h)
+
+  let embedding = cacheKey ? samEmbeddingCache.get(cacheKey) : undefined
+  if (!embedding) {
+    const { input } = samPreprocess(frame.source, frame.sourceWidth, frame.sourceHeight)
+    const feeds: Record<string, Ort.Tensor> = {}
+    feeds[encoder.inputNames[0]] = new ort.Tensor('float32', input, [1, 3, 1024, 1024])
+    const encOut = await encoder.run(feeds)
+    embedding = encOut[encoder.outputNames[0]]
+    if (cacheKey) {
+      samEmbeddingCache.set(cacheKey, embedding)
+      while (samEmbeddingCache.size > 4) {
+        const oldest = samEmbeddingCache.keys().next().value
+        if (oldest === undefined) break
+        samEmbeddingCache.delete(oldest)
+      }
+    }
+  }
+
+  // The user's clicks ARE the prompt: positive -> label 1, negative -> 0.
+  const pos = clicks.filter((c) => c.positive)
+  if (pos.length === 0) throw new Error('SAM needs at least one positive click')
+  const coords = new Float32Array(clicks.length * 2)
+  const labels = new Float32Array(clicks.length)
+  clicks.forEach((c, i) => {
+    coords[i * 2] = c.x * w * scale
+    coords[i * 2 + 1] = c.y * h * scale
+    labels[i] = c.positive ? 1 : 0
+  })
+
+  const runDecoder = (maskInput: Ort.Tensor | null) => {
+    const feeds: Record<string, Ort.Tensor> = {
+      image_embedding: embedding as unknown as Ort.Tensor,
+      point_coords: new ort.Tensor('float32', coords, [1, clicks.length, 2]),
+      point_labels: new ort.Tensor('float32', labels, [1, clicks.length]),
+      mask_input: maskInput ?? new ort.Tensor('float32', new Float32Array(256 * 256), [1, 1, 256, 256]),
+      has_mask_input: new ort.Tensor('float32', maskInput ? [1] : [0], [1]),
+      orig_im_size: new ort.Tensor('float32', [h, w], [2]),
+    }
+    return decoder.run(feeds)
+  }
+
+  // First pass picks the object; the second feeds the logits back in
+  // (SAM's iterative refinement) for cleaner boundaries.
+  const out1 = await runDecoder(null)
+  const logits1 = out1[decoder.outputNames[2]] ?? Object.values(out1)[2]
+  const out = logits1
+    ? await runDecoder(logits1 as Ort.Tensor)
+    : out1
+  const masks = (out[decoder.outputNames[0]] ?? Object.values(out)[0]) as { data: Float32Array }
+
+  const data = new Uint8Array(w * h)
+  for (let i = 0; i < w * h; i++) data[i] = masks.data[i] > 0 ? 255 : 0
+  return { width: w, height: h, data }
+}
+
+// ---------------------------------------------------------------------------
 // Unified entry
 // ---------------------------------------------------------------------------
 
@@ -506,13 +618,22 @@ export async function runRotoSegmentation(
   opts: RotoSegmentOptions = {},
 ): Promise<RotoSegmentResult> {
   const t0 = performance.now()
-  const { tolerance = 26, feather = 2, maxWorkingEdge = 720 } = opts
+  const { tolerance = 26, feather = 2, maxWorkingEdge = 720, samCacheKey } = opts
   const frame = rasterizeWorkingFrame(source, sourceWidth, sourceHeight, maxWorkingEdge)
 
   let mask: MaskBitmap
   let engine: string
   let modelMs: number | undefined
-  if (model) {
+  if (model?.kind === 'sam') {
+    mask = await segmentWithSAM(frame, clicks, model, samCacheKey)
+    engine = model.id
+    if (maskCoverage(mask) < 0.0005) {
+      // Nothing usable from the prompt — fall back to Smart so the click
+      // still produces a mask the user can refine.
+      mask = segmentSmart(frame, clicks, tolerance)
+      engine = `${model.id}+smart-fallback`
+    }
+  } else if (model) {
     const r = await segmentWithModel(frame, clicks, model)
     mask = r.mask
     engine = model.id

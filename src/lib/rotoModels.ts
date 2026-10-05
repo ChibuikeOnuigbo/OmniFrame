@@ -37,10 +37,35 @@ export interface RotoModelDescriptor {
   notes?: string
   /** Filled after a successful load. */
   loadedAt?: number
+  /** Runner contract. 'saliency' (default) = whole-image subject map;
+   * 'sam' = promptable encoder/decoder driven by the user's clicks. */
+  kind?: 'saliency' | 'sam'
+  /** SAM only: decoder ONNX url (url is the encoder). */
+  decoderUrl?: string
+}
+
+/**
+ * SAM Mobile — the promptable Segment Anything engine (MobileSAM: TinyViT
+ * encoder + SAM decoder). The reference tool's headline model, now the
+ * RotoMask default recommendation: the user's accumulated clicks are the
+ * prompt, so it isolates precisely what was clicked (pale-on-white, busy
+ * photos — the cases saliency models struggle with).
+ */
+export const SAM_MOBILE_MODEL: RotoModelDescriptor = {
+  id: 'sam-mobile-v1',
+  label: 'SAM Mobile · Segment Anything',
+  domain: 'general',
+  inputSize: 1024,
+  url: '/models/sam-mobile-encoder.onnx',
+  decoderUrl: '/models/sam-mobile-decoder.onnx',
+  kind: 'sam',
+  source: 'builtin',
+  notes: 'Promptable: your clicks drive the mask. Apache-2.0 (MobileSAM/SAM).',
 }
 
 /** The OmniRoto family — trained in scripts/python/train_roto_models.py. */
 export const BUILTIN_ROTO_MODELS: RotoModelDescriptor[] = [
+  SAM_MOBILE_MODEL,
   {
     id: 'omni-roto-general-v1',
     label: 'OmniRoto · General',
@@ -171,6 +196,38 @@ export async function getRotoSession(model: RotoModelDescriptor): Promise<Ort.In
 
 export function dropRotoSession(modelId: string): void {
   sessionCache.delete(modelId)
+  samSessionCache.delete(modelId)
+}
+
+/** SAM sessions: encoder (image -> embedding) + decoder (embedding + points -> mask). */
+export interface RotoSamSessions {
+  encoder: Ort.InferenceSession
+  decoder: Ort.InferenceSession
+}
+
+const samSessionCache = new Map<string, Promise<RotoSamSessions>>()
+
+/** Lazily create (and cache) the encoder+decoder session pair for a SAM model. */
+export async function getRotoSamSessions(model: RotoModelDescriptor): Promise<RotoSamSessions> {
+  let p = samSessionCache.get(model.id)
+  if (!p) {
+    p = (async () => {
+      const ort = await getOrt()
+      ort.env.wasm.numThreads = 1
+      ort.env.wasm.simd = true
+      ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
+      const encoderUrl = model.url
+      const decoderUrl = model.decoderUrl ?? model.url.replace('encoder', 'decoder')
+      const [encoder, decoder] = await Promise.all([
+        ort.InferenceSession.create(encoderUrl, { executionProviders: ['wasm'] }),
+        ort.InferenceSession.create(decoderUrl, { executionProviders: ['wasm'] }),
+      ])
+      return { encoder, decoder }
+    })()
+    samSessionCache.set(model.id, p)
+    p.catch(() => samSessionCache.delete(model.id))
+  }
+  return p
 }
 
 /**
