@@ -36,6 +36,12 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
+    ],
+    "resources": [
+      "../public/models/*.onnx",
+      "../public/models/*.json",
+      "../scripts/python/denoise_onnx.py",
+      "../scripts/python/denoise_common.py"
     ]
   }
 }

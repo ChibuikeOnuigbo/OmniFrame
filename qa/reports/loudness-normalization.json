@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-10-05T02:42:13.570Z",
+  "anchorLufs": -23.00361307661696,
+  "measuredLufs": -12.1,
+  "effectiveLufsAtTarget": -15.999999998784462,
+  "volumeAfterMinus16": 0.6393634973966302,
+  "volumeAfterMinus24": 0.2545351929037607,
+  "results": [
+    {
+      "name": "BS.1770 anchor: 1 kHz @ -20 dBFS measures ~ -23 LUFS",
+      "status": "PASS",
+      "detail": "-23.00 LUFS"
+    },
+    {
+      "name": "Loud speech measured as loud (> -14 LUFS)",
+      "status": "PASS",
+      "detail": "-12.1 LUFS (fixture was -24.1 before +12 dB)"
+    },
+    {
+      "name": "Normalize to -16 LUFS reduces the clip volume below 1",
+      "status": "PASS",
+      "detail": "volume 0.639"
+    },
+    {
+      "name": "Status reports the applied gain",
+      "status": "PASS",
+      "detail": "-12.1 → -16.0 LUFS (gain -3.9 dB)"
+    },
+    {
+      "name": "Effective loudness lands near -16 LUFS",
+      "status": "PASS",
+      "detail": "-16.0 LUFS"
+    },
+    {
+      "name": "Normalize to -24 LUFS reduces volume further",
+      "status": "PASS",
+      "detail": "0.639 -> 0.255"
+    },
+    {
+      "name": "Zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "pageErrors": []
+}

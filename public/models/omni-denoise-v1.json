@@ -1,0 +1,11 @@
+{
+  "name": "omni-denoise-v1",
+  "architecture": "gru-spectral-masker",
+  "sr": 16000,
+  "nFft": 512,
+  "hop": 128,
+  "hidden": 96,
+  "block": 64,
+  "mu": -2.6,
+  "std": 0.55
+}

@@ -1,0 +1,61 @@
+{
+  "model": {
+    "name": "omni-denoise-v1",
+    "architecture": "gru-spectral-masker",
+    "sr": 16000,
+    "nFft": 512,
+    "hop": 128,
+    "hidden": 96,
+    "block": 64,
+    "mu": -2.6,
+    "std": 0.55
+  },
+  "onnxSizeKb": 588,
+  "parityMaxAbsDiff": 8.369069721680944e-07,
+  "noiseDefinition": "Acoustic noise is any unwanted sound \u2014 it does not have to be random. Hum, hiss, clicks, other people's conversations, or a song are all noise when the wanted signal is the speaker's voice; a song padded on heavily enough becomes broadband interference, i.e. functionally noise.",
+  "cases": [
+    {
+      "case": "white_noise_0db",
+      "interference": "white",
+      "snrDb": 0.0,
+      "siSdrBeforeDb": 0.07,
+      "siSdrAfterDb": 7.27,
+      "deltaSiSdrDb": 7.2,
+      "noiseSuppressionDb": 5.3,
+      "voiceCorrelation": 0.918
+    },
+    {
+      "case": "babble_+6db",
+      "interference": "babble",
+      "snrDb": 6.0,
+      "siSdrBeforeDb": 5.99,
+      "siSdrAfterDb": 6.3,
+      "deltaSiSdrDb": 0.31,
+      "noiseSuppressionDb": -1.3,
+      "voiceCorrelation": 0.9
+    },
+    {
+      "case": "song_-3db",
+      "interference": "song",
+      "snrDb": -3.0,
+      "siSdrBeforeDb": -3.02,
+      "siSdrAfterDb": -2.93,
+      "deltaSiSdrDb": 0.08,
+      "noiseSuppressionDb": 4.8,
+      "voiceCorrelation": 0.581
+    },
+    {
+      "case": "heavily_padded_song_-8db",
+      "interference": "song_stack",
+      "snrDb": -8.0,
+      "siSdrBeforeDb": -7.86,
+      "siSdrAfterDb": -3.22,
+      "deltaSiSdrDb": 4.64,
+      "noiseSuppressionDb": 9.1,
+      "voiceCorrelation": 0.568
+    }
+  ],
+  "meanDeltaSiSdrDb": 3.06,
+  "passed": true,
+  "failures": []
+}

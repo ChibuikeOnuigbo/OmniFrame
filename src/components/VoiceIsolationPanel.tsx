@@ -77,6 +77,7 @@ export function VoiceIsolationPanel() {
         strength,
         preserveBass,
         speechFormantFocus: speechFocus,
+        model: mode === 'keep_vocal' && algorithm === 'neural' ? 'omni-denoise-onnx' : undefined,
       }
 
       await executeVoiceIsolationForClip(clipIdToProcess, options, (pct, msg) => {
@@ -185,6 +186,25 @@ export function VoiceIsolationPanel() {
             </div>
           </button>
         </div>
+      </div>
+
+      {/* Engine */}
+      <div>
+        <label className="block text-[10px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
+          Engine
+        </label>
+        <select
+          data-testid="panel-engine-select"
+          value={algorithm}
+          disabled={processing || mode !== 'keep_vocal'}
+          onChange={(e) => setAlgorithm(e.target.value as 'crossover' | 'spectral' | 'neural')}
+          title={mode !== 'keep_vocal' ? 'Engine applies to Keep Vocal (vocal removal always uses the DSP crossover)' : 'Neural = in-house omni-denoise-v1 ONNX GRU spectral masker'}
+          className="w-full h-7 rounded border border-ink-700 bg-ink-800 px-2 text-[11px] text-ink-100 outline-none focus:border-brand disabled:opacity-50"
+        >
+          <option value="crossover">Mid/Side Crossover DSP (fast)</option>
+          <option value="spectral">Spectral Formant Focus</option>
+          <option value="neural">AI Denoise — omni-denoise-v1 ONNX (trained in-house)</option>
+        </select>
       </div>
 
       {/* DSP Engine Parameters */}

@@ -18,8 +18,17 @@
 import { useEditor } from '../store'
 import type { MediaAsset, Clip } from '../types'
 import { uid } from './time'
+import { denoiseAudioBuffer, denoiseViaDesktop, isDesktopMode } from './aiDenoise'
 
-export type VoiceIsolationModel = 'omni-voicetarget' | 'htdemucs-v4' | 'bs-roformer-lite' | 'dsp-crossover-fast'
+export type VoiceIsolationModel =
+  | 'omni-voicetarget'
+  | 'htdemucs-v4'
+  | 'bs-roformer-lite'
+  | 'dsp-crossover-fast'
+  /** In-house GRU spectral masker trained with scripts/python/train_denoiser.py,
+   * exported to ONNX; runs in-browser (onnxruntime-web) or natively in the
+   * desktop shell (python sidecar + onnxruntime). */
+  | 'omni-denoise-onnx'
 
 export interface VoiceIsolationOptions {
   mode: 'keep_vocal' | 'remove_vocal'
@@ -95,6 +104,12 @@ export function encodeAudioBufferToWav(buffer: AudioBuffer): Blob {
   }
 
   return new Blob([view], { type: 'audio/wav' })
+}
+
+/** AudioBuffer -> WAV ArrayBuffer (for the desktop sidecar pipe). */
+export async function encodeAudioBufferToWavArrayBuffer(buffer: AudioBuffer): Promise<ArrayBuffer> {
+  const blob = encodeAudioBufferToWav(buffer)
+  return await blob.arrayBuffer()
 }
 
 /**
@@ -310,11 +325,30 @@ export async function processVoiceIsolation(
     }
 
     const modelTag = options.model || 'omni-voicetarget'
-    onProgress?.(55, options.mode === 'keep_vocal'
-      ? `Isolating vocal formants using ${modelTag}…`
-      : `Removing vocal stems using ${modelTag}…`)
 
-    const processedBuffer = isolateVoiceFromAudioBuffer(audioCtx, inputBuffer, options)
+    let processedBuffer: AudioBuffer
+    if (modelTag === 'omni-denoise-onnx' && options.mode === 'keep_vocal') {
+      // Neural path: the ONNX GRU masker extracts the main voice and treats
+      // everything else (hiss, hum, SFX, songs — even heavily padded song
+      // stacks that turn to noise) as interference to suppress.
+      onProgress?.(50, `AI Denoise: loading omni-denoise-v1 (${isDesktopMode() ? 'native desktop runtime' : 'WASM'})…`)
+      const alpha = 1.08 - 0.55 * (options.strength ?? 0.92) // strength 1 -> 0.53 gentle, 0 -> full
+      if (isDesktopMode()) {
+        const wavBytes = await encodeAudioBufferToWavArrayBuffer(inputBuffer)
+        const result = await denoiseViaDesktop(wavBytes, alpha)
+        processedBuffer = await audioCtx.decodeAudioData(result)
+      } else {
+        const res = await denoiseAudioBuffer(inputBuffer, alpha)
+        processedBuffer = audioCtx.createBuffer(1, res.samples.length, inputBuffer.sampleRate)
+        processedBuffer.copyToChannel(res.samples as Float32Array<ArrayBuffer>, 0)
+      }
+      onProgress?.(85, 'AI Denoise complete')
+    } else {
+      onProgress?.(55, options.mode === 'keep_vocal'
+        ? `Isolating vocal formants using ${modelTag}…`
+        : `Removing vocal stems using ${modelTag}…`)
+      processedBuffer = isolateVoiceFromAudioBuffer(audioCtx, inputBuffer, options)
+    }
     onProgress?.(80, 'Encoding to WAV format…')
 
     const blob = encodeAudioBufferToWav(processedBuffer)

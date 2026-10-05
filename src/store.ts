@@ -3322,6 +3322,17 @@ export const useEditor = create<EditorState>((set, get) => {
 
 if (typeof window !== 'undefined') {
   ;(window as any).__omniframe_store = useEditor
+  // Test hooks (qa/*.mjs): BS.1770 loudness measurement and the ONNX denoiser.
+  ;(window as any).__omniframe_lufs = async (channels: Float32Array[], sampleRate: number) => {
+    const { measureIntegratedLufs } = await import('./lib/loudness')
+    return measureIntegratedLufs(channels, sampleRate)
+  }
+  ;(window as any).__omniframe_denoise = {
+    runBuffer: async (buffer: AudioBuffer, alpha = 1) => {
+      const { denoiseAudioBuffer } = await import('./lib/aiDenoise')
+      return denoiseAudioBuffer(buffer, alpha)
+    },
+  }
 }
 
 async function decodeWaveform(file: File, bins = 256): Promise<number[] | undefined> {

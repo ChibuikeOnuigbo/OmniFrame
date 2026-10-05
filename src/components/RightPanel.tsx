@@ -22,6 +22,7 @@ import type { Clip } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
+import { loudnessGain, measureIntegratedLufs } from '../lib/loudness'
 import { SectionsNavigator } from './SectionsNav'
 
 function ClipInspector({ clip }: { clip: Clip }) {
@@ -45,6 +46,39 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
   const [isProcessing, setIsProcessing] = useState(false)
   const [isolationStatus, setIsolationStatus] = useState<string | null>(null)
+
+  // Loudness normalization (BS.1770-4 integrated LUFS)
+  const [loudnessEnabled, setLoudnessEnabled] = useState(false)
+  const [targetLufs, setTargetLufs] = useState(-16)
+  const [measuredLufs, setMeasuredLufs] = useState<number | null>(null)
+  const [loudnessBusy, setLoudnessBusy] = useState(false)
+  const [loudnessStatus, setLoudnessStatus] = useState<string | null>(null)
+
+  const measureClipLoudness = async (): Promise<number | null> => {
+    if (!asset) return null
+    setLoudnessBusy(true)
+    try {
+      const res = await fetch(asset.url)
+      const buf = await res.arrayBuffer()
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const ctx = new Ctx()
+      const audio = await ctx.decodeAudioData(buf)
+      const mono = new Float32Array(audio.length)
+      for (let ch = 0; ch < audio.numberOfChannels; ch++) {
+        const d = audio.getChannelData(ch)
+        for (let i = 0; i < audio.length; i++) mono[i] += d[i] / audio.numberOfChannels
+      }
+      await ctx.close()
+      const lufs = measureIntegratedLufs([mono], audio.sampleRate)
+      setMeasuredLufs(lufs)
+      return lufs
+    } catch {
+      setLoudnessStatus('Could not decode audio for measurement')
+      return null
+    } finally {
+      setLoudnessBusy(false)
+    }
+  }
 
   const clipTime = Math.max(0, playhead - clip.start)
 
@@ -246,6 +280,86 @@ function ClipInspector({ clip }: { clip: Clip }) {
             </span>
           </Field>
 
+          {/* Loudness Normalization (BS.1770-4 LUFS) */}
+          <div className="pt-2 border-t border-ink-800 space-y-2">
+            <label className="flex items-center gap-2 cursor-pointer select-none" title="Measure integrated loudness (ITU-R BS.1770-4) and apply gain to hit the target LUFS">
+              <input
+                type="checkbox"
+                data-testid="audio-loudness-checkbox"
+                checked={loudnessEnabled}
+                onChange={(e) => {
+                  setLoudnessEnabled(e.target.checked)
+                  if (e.target.checked && measuredLufs === null) void measureClipLoudness()
+                }}
+                className="h-3.5 w-3.5 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand focus:ring-offset-ink-900 cursor-pointer"
+              />
+              <span className="text-xs font-medium text-ink-200">Loudness Normalization</span>
+              <span className="ml-auto font-mono text-[10px] text-ink-400" data-testid="audio-loudness-measured">
+                {measuredLufs === null ? '' : `${measuredLufs.toFixed(1)} LUFS`}
+              </span>
+            </label>
+
+            {loudnessEnabled && (
+              <div data-testid="audio-loudness-controls" className="p-2.5 rounded-lg border border-ink-800 bg-ink-900/60 space-y-2.5 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-[10px] font-semibold uppercase text-ink-400">Target</label>
+                  <span className="font-mono text-[11px] text-brand-400" data-testid="audio-loudness-target-label">
+                    {targetLufs.toFixed(1)} LUFS
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  data-testid="audio-loudness-target-slider"
+                  aria-label="Target loudness in LUFS"
+                  min={-24}
+                  max={-10}
+                  step={0.5}
+                  value={targetLufs}
+                  onChange={(e) => setTargetLufs(parseFloat(e.target.value))}
+                  className="of-range w-full"
+                />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    data-testid="audio-loudness-remasure-btn"
+                    disabled={loudnessBusy}
+                    onClick={() => void measureClipLoudness()}
+                    className="flex-1 h-7.5 rounded-md bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[11px] font-medium transition-colors disabled:opacity-50"
+                  >
+                    {loudnessBusy ? 'Measuring…' : 'Measure'}
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="audio-loudness-apply-btn"
+                    disabled={loudnessBusy}
+                    onClick={async () => {
+                      const lufs = measuredLufs ?? (await measureClipLoudness())
+                      if (lufs === null || !isFinite(lufs)) {
+                        setLoudnessStatus('No measurable audio')
+                        return
+                      }
+                      const gain = loudnessGain(lufs, targetLufs)
+                      const clamped = Math.max(0.02, Math.min(2, gain))
+                      setClipProp(clip.id, { volume: clamped })
+                      const db = 20 * Math.log10(clamped)
+                      setLoudnessStatus(
+                        `${lufs.toFixed(1)} → ${targetLufs.toFixed(1)} LUFS (gain ${db >= 0 ? '+' : ''}${db.toFixed(1)} dB` +
+                          `${clamped !== gain ? `, capped at ${(20 * Math.log10(clamped)).toFixed(1)} dB` : ''})`,
+                      )
+                    }}
+                    className="flex-1 h-7.5 rounded-md bg-brand hover:bg-brand-600 text-white text-[11px] font-medium transition-colors disabled:opacity-50"
+                  >
+                    Normalize
+                  </button>
+                </div>
+                {loudnessStatus && <p className="text-[10px] text-ink-400 font-mono truncate" data-testid="audio-loudness-status">{loudnessStatus}</p>}
+                <p className="text-[9px] leading-relaxed text-ink-500">
+                  Streaming target −16 LUFS (podcast), −14 for music platforms. Gain above +0 dB is capped by browser playback.
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* Voice Isolation Checkbox */}
           <div className="pt-2 border-t border-ink-800 space-y-2">
             <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -294,6 +408,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     <option value="htdemucs-v4">HTDemucs v4 (Meta Hybrid Transformer)</option>
                     <option value="bs-roformer-lite">BS-Roformer Lite (Band-Split Web)</option>
                     <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
+                    <option value="omni-denoise-onnx">AI Denoise ONNX (in-house GRU masker)</option>
                   </select>
                 </div>
 
