@@ -1,0 +1,132 @@
+[
+  {
+    "file": "research/capcut/01-full-layout.jpg",
+    "caption": "CapCut desktop full editor layout \u2014 left media panel, center preview, right inspector, bottom timeline",
+    "source": "https://diyvideoeditor.com/capcut-review/"
+  },
+  {
+    "file": "research/capcut/02-top-right-bar.jpg",
+    "caption": "Top-right bar: window/layout presets, shortcuts, share, export",
+    "source": "https://techpp.com/2025/05/27/capcut-desktop-icons-symbols-meaning/"
+  },
+  {
+    "file": "research/capcut/03-interface-top.png",
+    "caption": "Interface review hero image",
+    "source": "https://diyvideoeditor.com/capcut-review/"
+  },
+  {
+    "file": "research/capcut/04-fullscreen-button.png",
+    "caption": "Full-screen button location in preview area",
+    "source": "https://www.createthat.ai/blog/how-to-take-a-screenshot-in-capcut"
+  },
+  {
+    "file": "research/capcut/05-mobile-ui.jpg",
+    "caption": "CapCut mobile app UI (for cross-platform comparison)",
+    "source": "https://diyvideoeditor.com/capcut-review/"
+  },
+  {
+    "file": "research/capcut/06-transitions-tab.png",
+    "caption": "Transitions tab in the left media panel with thumbnail grid",
+    "source": "https://www.contentcreatortemplates.com/learn/capcut/how-to-add-transitions-in-capcut"
+  },
+  {
+    "file": "research/capcut/07-transition-on-clip.png",
+    "caption": "Transition applied between clips on the timeline",
+    "source": "https://www.contentcreatortemplates.com/learn/capcut/how-to-add-transitions-in-capcut"
+  },
+  {
+    "file": "research/capcut/08-apply-to-all.png",
+    "caption": "Apply-to-all transition button",
+    "source": "https://www.contentcreatortemplates.com/learn/capcut/how-to-add-transitions-in-capcut"
+  },
+  {
+    "file": "research/capcut/09-tv-noise-effect.png",
+    "caption": "TV noise transition effect preview",
+    "source": "https://www.capcut.com/resource/free-video-overlay-effects"
+  },
+  {
+    "file": "research/capcut/10-left-rail-tabs-and-categories.png",
+    "caption": "Left rail tab order (Text, Media, Audio, Stickers, Effects, Transitions, Captions, Filters) + effect category chips (Trending, Lumin, Flash, Glare II, Classic, Hits, Overlay, Dark, Camera Glow, Blur, Scorched, Dynamic, Smear, Basic, Mask, Slide)",
+    "source": "https://reddit.com/r/CapCut/comments/1q3y6bj/i_cant_believe_the_capcut_desktop_version_doesnt"
+  },
+  {
+    "file": "research/capcut/11-keyframe-animations.png",
+    "caption": "Keyframe animations on a clip (inspector diamonds + timeline markers)",
+    "source": "https://www.createthat.ai/blog/how-to-add-keyframes-in-capcut"
+  },
+  {
+    "file": "research/capcut/12-graph-empty.png",
+    "caption": "Keyframe graph panel \u2014 empty until two keyframes exist",
+    "source": "https://videowizardtools.com/capcut-keyframe-graph-is-not-showing/"
+  },
+  {
+    "file": "research/capcut/13-graph-linear.png",
+    "caption": "Graph showing straight linear motion between keys",
+    "source": "https://videowizardtools.com/capcut-keyframe-graph-is-not-showing/"
+  },
+  {
+    "file": "research/capcut/14-graph-button.png",
+    "caption": "The graph button that opens the curve panel",
+    "source": "https://videowizardtools.com/capcut-keyframe-graph-is-not-showing/"
+  },
+  {
+    "file": "research/capcut/15-right-panel-video-tab.jpg",
+    "caption": "Right panel (Video tab) icon functions: alignment, reset, keyframe, distribute",
+    "source": "https://techpp.com/2025/05/27/capcut-desktop-icons-symbols-meaning/"
+  },
+  {
+    "file": "research/capcut/16-right-panel-top.jpg",
+    "caption": "Right panel top bar (duplicate of top-right bar shot)",
+    "source": "https://techpp.com/2025/05/27/capcut-desktop-icons-symbols-meaning/"
+  },
+  {
+    "file": "research/capcut/17-transform-controls.png",
+    "caption": "Official CapCut screenshot: position/scale/rotation controls beside preview above populated timeline",
+    "source": "https://www.capcut.com/resource/how-to-use-capcut"
+  },
+  {
+    "file": "research/capcut/18-crop-mobile.png",
+    "caption": "Crop controls (mobile variant, for comparison)",
+    "source": "https://www.createthat.ai/blog/how-to-crop-a-video-in-capcut"
+  },
+  {
+    "file": "research/capcut/19-timeline-toolbar.jpg",
+    "caption": "Timeline toolbar: select modes, undo/redo, split tools, markers, freeze, reverse, mirror, rotate, crop",
+    "source": "https://filmora.wondershare.com/advanced-video-editing/capcut-timeline.html"
+  },
+  {
+    "file": "research/capcut/20-shortcut-settings.png",
+    "caption": "Keyboard shortcut settings (export still frames)",
+    "source": "https://www.createthat.ai/blog/how-to-take-a-screenshot-in-capcut"
+  },
+  {
+    "file": "research/capcut/21-timeline-zoom.jpg",
+    "caption": "Timeline zoom controls (fit / in / out at the right end)",
+    "source": "https://www.tourboxtech.com/en/news/how-to-zoom-in-on-capcut.html"
+  },
+  {
+    "file": "research/capcut/22-zoom-effect-edit.jpg",
+    "caption": "Editing zoom-in effects on the timeline",
+    "source": "https://www.tourboxtech.com/en/news/how-to-zoom-in-on-capcut.html"
+  },
+  {
+    "file": "research/capcut/23-export-frame-dialog.webp",
+    "caption": "Export still-frames dialog: destination, resolution, JPEG format",
+    "source": "https://capcutguide.com/export-frame-image-capcut/"
+  },
+  {
+    "file": "research/capcut/24-shortcut-panel.png",
+    "caption": "Shortcut panel (duplicate reference)",
+    "source": "https://www.createthat.ai/blog/how-to-take-a-screenshot-in-capcut"
+  },
+  {
+    "file": "research/capcut/25-frame-format-choices.webp",
+    "caption": "PNG/JPEG frame-export choices with compression + transparency options",
+    "source": "https://capcutguide.com/export-frame-image-capcut/"
+  },
+  {
+    "file": "research/capcut/26-frame-from-timeline.webp",
+    "caption": "Turning a timeline moment into a still image",
+    "source": "https://capcutguide.com/export-frame-image-capcut/"
+  }
+]
