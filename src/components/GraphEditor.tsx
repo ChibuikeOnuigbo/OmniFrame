@@ -29,18 +29,38 @@ import {
 } from '../lib/animation/CurveEngine'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 
-const EASING_PRESETS: { id: InterpolationType; label: string; desc: string }[] = [
-  { id: 'linear', label: 'Linear', desc: 'Constant rate of change' },
-  { id: 'cubic-in', label: 'Cubic In', desc: 'Accelerating curve (t³)' },
-  { id: 'cubic-out', label: 'Cubic Out', desc: 'Decelerating curve' },
-  { id: 'ease-in-out', label: 'Ease In-Out', desc: 'Smooth S-curve acceleration & deceleration' },
-  { id: 'ease-in', label: 'Ease In', desc: 'Quadratic ease in' },
-  { id: 'ease-out', label: 'Ease Out', desc: 'Quadratic ease out' },
-  { id: 'back', label: 'Back', desc: 'Overshoot anticipatory curve' },
-  { id: 'bounce', label: 'Bounce', desc: 'Elastic bouncy settling' },
-  { id: 'elastic', label: 'Elastic', desc: 'Damped spring oscillation' },
-  { id: 'constant', label: 'Step / Hold', desc: 'Instantaneous value jump' },
+/**
+ * Easing presets, CapCut-graph style: four primary curve thumbnails always
+ * visible (the video's "four different presets"), the exotic shapes behind
+ * a More toggle. Each thumbnail is the actual curve shape in a 24x16 box —
+ * you pick by shape, not by reading text chips.
+ */
+const EASING_PRESETS: {
+  id: InterpolationType
+  label: string
+  desc: string
+  primary?: boolean
+  thumb: string
+}[] = [
+  { id: 'linear', label: 'Linear', desc: 'Constant rate of change', primary: true, thumb: 'M2 14 L22 2' },
+  { id: 'ease-in', label: 'Ease In', desc: 'Quadratic ease in (accelerate)', primary: true, thumb: 'M2 14 C 12 14, 18 10, 22 2' },
+  { id: 'ease-out', label: 'Ease Out', desc: 'Quadratic ease out (decelerate)', primary: true, thumb: 'M2 14 C 6 6, 12 2, 22 2' },
+  { id: 'ease-in-out', label: 'Ease In-Out', desc: 'Smooth S-curve acceleration & deceleration', primary: true, thumb: 'M2 14 C 10 14, 14 2, 22 2' },
+  { id: 'cubic-in', label: 'Cubic In', desc: 'Accelerating curve (t³)', thumb: 'M2 14 C 14 14, 20 9, 22 2' },
+  { id: 'cubic-out', label: 'Cubic Out', desc: 'Decelerating curve', thumb: 'M2 14 C 4 9, 10 2, 22 2' },
+  { id: 'back', label: 'Back', desc: 'Overshoot anticipatory curve', thumb: 'M2 14 C 12 15, 24 -3, 22 2' },
+  { id: 'bounce', label: 'Bounce', desc: 'Elastic bouncy settling', thumb: 'M2 14 C 6 2, 10 12, 14 6 C 17 2, 20 6, 22 2' },
+  { id: 'elastic', label: 'Elastic', desc: 'Damped spring oscillation', thumb: 'M2 14 C 5 -2, 9 18, 13 6 C 16 -1, 19 8, 22 2' },
+  { id: 'constant', label: 'Step / Hold', desc: 'Instantaneous value jump', thumb: 'M2 14 L15 14 L15 2 L22 2' },
 ]
+
+const PRIMARY_PRESETS = EASING_PRESETS.filter((p) => p.primary)
+const SECONDARY_PRESETS = EASING_PRESETS.filter((p) => !p.primary)
+
+/** Diamond keyframe marker points (CapCut/AE style, not circles). */
+function diamondPoints(x: number, y: number, r: number): string {
+  return `${x},${y - r} ${x + r},${y} ${x},${y + r} ${x - r},${y}`
+}
 
 export function GraphEditor() {
   const clips = useEditor((s) => s.clips)
@@ -63,6 +83,7 @@ export function GraphEditor() {
   const [viewTimeRange, setViewTimeRange] = useState<[number, number]>([0, 5])
   const [viewValRange, setViewValRange] = useState<[number, number]>([-100, 100])
   const [selectedKeyframeId, setSelectedKeyframeId] = useState<string | null>(null)
+  const [morePresetsOpen, setMorePresetsOpen] = useState(false)
   const [draggingTarget, setDraggingTarget] = useState<
     { type: 'key'; keyId: string; startPointer: { x: number; y: number }; startT: number; startV: number }
     | { type: 'inHandle' | 'outHandle'; keyId: string; startPointer: { x: number; y: number }; startDt: number; startDv: number }
@@ -497,6 +518,48 @@ export function GraphEditor() {
               />
             )}
 
+            {/* Axis semantics, CapCut-graph style: X = time between
+                keyframes, Y = the value of the motion. */}
+            <text x="8" y="16" fontSize="10" fill="#64748b" aria-hidden="true">
+              Y · value ({activeCurve?.unit || 'units'})
+            </text>
+            <text
+              x={dims.width - 8}
+              y={dims.height - 8}
+              fontSize="10"
+              fill="#64748b"
+              textAnchor="end"
+              aria-hidden="true"
+            >
+              X · time (s)
+            </text>
+
+            {/* Selected-segment band: CapCut edits the graph keyframe-pair by
+                keyframe-pair — highlight the span the selected key drives. */}
+            {(() => {
+              if (!activeCurve || !selectedKeyframe) return null
+              const keys = [...activeCurve.keyframes].sort((a, b) => a.time - b.time)
+              const idx = keys.findIndex((k) => k.id === selectedKeyframe.id)
+              if (idx < 0) return null
+              const next = keys[idx + 1]
+              const x1 = timeToX(selectedKeyframe.time)
+              const x2 = next ? timeToX(next.time) : dims.width
+              if (x2 - x1 < 2) return null
+              return (
+                <rect
+                  data-testid="curve-segment-band"
+                  x={x1}
+                  y={0}
+                  width={x2 - x1}
+                  height={dims.height}
+                  fill="rgba(99,102,241,0.07)"
+                  stroke="rgba(129,140,248,0.25)"
+                  strokeDasharray="3 3"
+                  strokeWidth="1"
+                />
+              )
+            })()}
+
             {/* Inactive Curves (Faint background lines) */}
             {Object.values(curves).map((c) => {
               if (c.id === activeCurve?.id) return null
@@ -538,17 +601,14 @@ export function GraphEditor() {
                   return (
                     <>
                       <line x1={kx} y1={ky} x2={hx} y2={hy} stroke="#94a3b8" strokeWidth="1.5" />
-                      <circle
+                      <g
                         data-testid="curve-tangent-in"
-                        cx={hx}
-                        cy={hy}
-                        r="5"
-                        fill="#38bdf8"
-                        stroke="#0f172a"
-                        strokeWidth="1.5"
-                        className="cursor-pointer hover:scale-125 transition-transform"
+                        className="cursor-pointer"
                         onPointerDown={(e) => handlePointerDownHandle(e, selectedKeyframe, 'inHandle')}
-                      />
+                      >
+                        <rect x={hx - 8} y={hy - 8} width="16" height="16" fill="transparent" />
+                        <rect x={hx - 4} y={hy - 4} width="8" height="8" rx="1.5" fill="#38bdf8" stroke="#0f172a" strokeWidth="1.5" />
+                      </g>
                     </>
                   )
                 })()}
@@ -563,42 +623,45 @@ export function GraphEditor() {
                   return (
                     <>
                       <line x1={kx} y1={ky} x2={hx} y2={hy} stroke="#94a3b8" strokeWidth="1.5" />
-                      <circle
+                      <g
                         data-testid="curve-tangent-out"
-                        cx={hx}
-                        cy={hy}
-                        r="5"
-                        fill="#f59e0b"
-                        stroke="#0f172a"
-                        strokeWidth="1.5"
-                        className="cursor-pointer hover:scale-125 transition-transform"
+                        className="cursor-pointer"
                         onPointerDown={(e) => handlePointerDownHandle(e, selectedKeyframe, 'outHandle')}
-                      />
+                      >
+                        <rect x={hx - 8} y={hy - 8} width="16" height="16" fill="transparent" />
+                        <rect x={hx - 4} y={hy - 4} width="8" height="8" rx="1.5" fill="#f59e0b" stroke="#0f172a" strokeWidth="1.5" />
+                      </g>
                     </>
                   )
                 })()}
               </g>
             )}
 
-            {/* Keyframe Nodes on Active Curve */}
+            {/* Keyframe Nodes on Active Curve — diamond markers (NLE
+                standard, matching the inspector's keyframe diamonds). */}
             {activeCurve?.keyframes.map((key) => {
               const kx = timeToX(key.time)
               const ky = valToY(key.value)
               const isSelected = key.id === selectedKeyframeId
               return (
-                <circle
+                <g
                   key={key.id}
                   data-testid="curve-keyframe-node"
-                  cx={kx}
-                  cy={ky}
-                  r={isSelected ? 6.5 : 5}
-                  fill={isSelected ? '#ffffff' : activeCurve.color}
-                  stroke="#0f172a"
-                  strokeWidth="2"
-                  className="cursor-pointer hover:scale-125 transition-transform"
+                  data-key-time={key.time.toFixed(2)}
+                  data-key-value={key.value.toFixed(1)}
+                  className="cursor-pointer"
                   onClick={() => setSelectedKeyframeId(key.id)}
                   onPointerDown={(e) => handlePointerDownKey(e, key)}
-                />
+                >
+                  {/* generous invisible grab area */}
+                  <polygon points={diamondPoints(kx, ky, 12)} fill="transparent" />
+                  <polygon
+                    points={diamondPoints(kx, ky, isSelected ? 8 : 6.5)}
+                    fill={isSelected ? '#ffffff' : activeCurve.color}
+                    stroke="#0f172a"
+                    strokeWidth="2"
+                  />
+                </g>
               )
             })}
 
@@ -626,7 +689,22 @@ export function GraphEditor() {
             {selectedKeyframe ? (
               <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none w-full">
                 <span className="font-semibold text-ink-200 shrink-0">
-                  Key: {selectedKeyframe.time.toFixed(2)}s | {selectedKeyframe.value.toFixed(1)}{activeCurve?.unit || ''}
+                  Key {selectedKeyframe.time.toFixed(2)}s · {selectedKeyframe.value.toFixed(1)}{activeCurve?.unit || ''}
+                  {(() => {
+                    // CapCut graphs think in keyframe pairs — show where this
+                    // key's segment ends.
+                    if (!activeCurve) return null
+                    const keys = [...activeCurve.keyframes].sort((a, b) => a.time - b.time)
+                    const idx = keys.findIndex((k) => k.id === selectedKeyframe.id)
+                    const next = keys[idx + 1]
+                    if (!next) return <span className="text-ink-500"> · last key</span>
+                    return (
+                      <span className="text-ink-500">
+                        {' '}→ {next.time.toFixed(2)}s · {next.value.toFixed(1)}
+                        {activeCurve.unit || ''}
+                      </span>
+                    )
+                  })()}
                 </span>
 
                 {/* Delete selected keyframe */}
@@ -668,14 +746,16 @@ export function GraphEditor() {
                   ))}
                 </section>
 
-                {/* Easing Preset Selectors */}
+                {/* Easing presets — CapCut style: four curve thumbnails
+                    always visible, exotic shapes behind a More toggle. */}
                 <section aria-label="Easing presets" className="flex items-center gap-1 shrink-0">
-                  {EASING_PRESETS.map((p) => (
+                  {[...PRIMARY_PRESETS, ...(!morePresetsOpen ? [] : SECONDARY_PRESETS)].map((p) => (
                     <button
                       key={p.id}
                       type="button"
                       data-testid={`preset-${p.id}`}
-                      title={p.desc}
+                      title={`${p.label} — ${p.desc}`}
+                      aria-label={`${p.label}: ${p.desc}`}
                       onClick={() => {
                         if (!activeClip || !activeCurve) return
                         const updated = applyEasingPreset(activeCurve, selectedKeyframe.id, p.id)
@@ -697,15 +777,38 @@ export function GraphEditor() {
                         }))
                       }}
                       aria-pressed={selectedKeyframe.interpolation === p.id}
-                      className={`min-h-7 rounded px-2 py-0.5 text-[10px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                      className={`grid h-7 w-9 place-items-center rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                         selectedKeyframe.interpolation === p.id
-                          ? 'bg-brand text-white font-semibold shadow-xs'
-                          : 'bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white'
+                          ? 'border-brand bg-brand/25 shadow-xs'
+                          : 'border-ink-700 bg-ink-800 hover:border-ink-600 hover:bg-ink-700'
                       }`}
                     >
-                      {p.label}
+                      <svg width="24" height="16" viewBox="0 0 24 16" aria-hidden="true">
+                        <path
+                          d={p.thumb}
+                          fill="none"
+                          stroke={selectedKeyframe.interpolation === p.id ? '#a5b4fc' : '#94a3b8'}
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                      </svg>
                     </button>
                   ))}
+                  <button
+                    type="button"
+                    data-testid="preset-more-toggle"
+                    title={morePresetsOpen ? 'Hide more easing curves' : 'More easing curves (Cubic, Back, Bounce, Elastic, Step)'}
+                    aria-label={morePresetsOpen ? 'Hide more easing curves' : 'More easing curves'}
+                    aria-expanded={morePresetsOpen}
+                    onClick={() => setMorePresetsOpen((v) => !v)}
+                    className={`grid h-7 min-w-7 place-items-center rounded border px-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                      morePresetsOpen
+                        ? 'border-brand/60 bg-ink-700 text-white'
+                        : 'border-ink-700 bg-ink-800 text-ink-400 hover:border-ink-600 hover:text-white'
+                    }`}
+                  >
+                    <Sliders size={12} />
+                  </button>
                 </section>
 
                 {/* Extrapolation Mode Dropdown */}
@@ -735,7 +838,8 @@ export function GraphEditor() {
               </div>
             ) : (
               <div className="text-ink-400 text-[11px]">
-                Click a keyframe node or double-click curve to add keyframes. Drag handles to reshape Bezier tangents.
+                X = time between keys · Y = value of the motion. Double-click the curve to add a
+                point, drag diamonds to move keys, drag handle squares to reshape the segment.
               </div>
             )}
           </section>

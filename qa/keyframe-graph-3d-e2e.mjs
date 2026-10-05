@@ -125,12 +125,28 @@ async function runTest() {
     await keyNodes.first().click({ force: true })
     await page.waitForTimeout(300)
 
-    // Verify cubic-in preset button and click it
+    // Primary presets (Linear / Ease In / Ease Out / Ease In-Out) are always
+    // visible as curve thumbnails; exotic ones live behind the More toggle.
+    const easeInOutBtn = page.locator('[data-testid="preset-ease-in-out"]')
+    if (await easeInOutBtn.isVisible()) {
+      await easeInOutBtn.click()
+      await page.waitForTimeout(250)
+      console.log('[PASS] Applied ease-in-out primary preset thumbnail to keyframe')
+    }
+
+    const moreToggle = page.locator('[data-testid="preset-more-toggle"]')
+    await moreToggle.waitFor({ state: 'visible', timeout: 4000 })
+    await moreToggle.click()
+    await page.waitForTimeout(250)
+
+    // Verify cubic-in preset button (in the More set) and click it
     const cubicInBtn = page.locator('[data-testid="preset-cubic-in"]')
     if (await cubicInBtn.isVisible()) {
       await cubicInBtn.click()
       await page.waitForTimeout(300)
       console.log('[PASS] Applied cubic-in easing preset to keyframe')
+    } else {
+      throw new Error('preset-cubic-in not visible after opening More')
     }
 
     // Verify handle modes and delete button
