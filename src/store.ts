@@ -269,9 +269,37 @@ import {
   type TimelineGap,
 } from './store/gapTools'
 import { createOmniframeCharacterSlice } from './store/omniframeCharacters'
+import { createRotoMaskSlice } from './store/rotoMask'
+import type {
+  RotoMaskSlice,
+  RotoMaskFrameResult,
+  RotoMaskRecord,
+  RotoStatus,
+  RotoFrameScope,
+  RotoToolMode,
+} from './store/rotoMask'
+import type { RotoModelDescriptor } from './lib/rotoModels'
+import type { RotoClick } from './lib/rotoMaskEngine'
 import { createRiggingSlice, type RiggingSlice } from './store/rigging'
 
-interface EditorState extends RiggingSlice {
+interface EditorState extends RiggingSlice, RotoMaskSlice {
+  selectionBrushAuto: boolean
+  selectionBrushTolerance: number
+  selectionWandTolerance: number
+  // ---- RotoMask (click-to-segment rotoscoping) state ----
+  rotoModelId: string
+  rotoImportedModels: RotoModelDescriptor[]
+  rotoStatus: RotoStatus
+  rotoClicks: RotoClick[]
+  rotoResult: RotoMaskRecord | null
+  rotoBusy: boolean
+  rotoScope: RotoFrameScope
+  rotoFrames: RotoMaskFrameResult[]
+  rotoTracking: { running: boolean; done: number; total: number }
+  rotoTool: RotoToolMode
+  rotoTolerance: number
+  rotoBrushRadius: number
+  rotoLumaExport: { url: string; frame: number; at: number } | null
   assets: MediaAsset[]
   tracks: Track[]
   clips: Clip[]
@@ -469,6 +497,13 @@ interface EditorState extends RiggingSlice {
   clearSelection: () => void
   convertSelectionToMask: (layerId?: string) => void
   invertSelection: () => void
+  /** Auto-brush: compute a real edge-snapped mask for the painted selection. */
+  refineBrushSelectionMask: (points: { x: number; y: number }[]) => Promise<void>
+  /** Real magic wand: colour-region selection from the clicked pixel. */
+  setWandSelectionAt: (point: { x: number; y: number }) => Promise<void>
+  setSelectionBrushAuto: (v: boolean) => void
+  setSelectionBrushTolerance: (n: number) => void
+  setSelectionWandTolerance: (n: number) => void
   growSelection: (pixels?: number) => void
   shrinkSelection: (pixels?: number) => void
   setSelectionFeather: (feather: number) => void
@@ -1151,6 +1186,21 @@ export const useEditor = create<EditorState>((set, get) => {
     // Universal gap tools + track targeting (see ./store/gapTools.ts).
     ...createGapToolsSlice(set, get, { pushSnapshot, recompute }),
     ...createOmniframeCharacterSlice(set, get, { pushSnapshot }),
+    // RotoMask: click-to-segment rotoscoping (see ./store/rotoMask.ts).
+    ...createRotoMaskSlice(set, get, { pushSnapshot }),
+    rotoModelId: 'smart',
+    rotoImportedModels: [],
+    rotoStatus: { state: 'idle', message: 'Smart engine ready - no model needed' },
+    rotoClicks: [],
+    rotoResult: null,
+    rotoBusy: false,
+    rotoScope: { mode: 'current', start: 0, end: 2, step: 1 },
+    rotoFrames: [],
+    rotoTracking: { running: false, done: 0, total: 0 },
+    rotoTool: null,
+    rotoTolerance: 26,
+    rotoBrushRadius: 24,
+    rotoLumaExport: null,
     // Character rigging: named parts joined by a parent/child skeleton.
     ...createRiggingSlice(set, get, { pushSnapshot }),
     lassoEngagedAt: 0,
@@ -1183,6 +1233,9 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     activeSelection: null,
     selectionMode: 'rect',
+    selectionBrushAuto: true,
+    selectionBrushTolerance: 26,
+    selectionWandTolerance: 24,
     activeMaskId: null,
     clipMasks: [
       {
@@ -2407,6 +2460,80 @@ export const useEditor = create<EditorState>((set, get) => {
           : null,
       }))
     },
+    // ---- Auto Brush & real Magic Wand (Selection & Masking sub-tool) ----
+    setSelectionBrushAuto: (v) => set({ selectionBrushAuto: v }),
+    setSelectionBrushTolerance: (n) => set({ selectionBrushTolerance: Math.max(1, Math.min(100, n)) }),
+    setSelectionWandTolerance: (n) => set({ selectionWandTolerance: Math.max(1, Math.min(100, n)) }),
+
+    /**
+     * Auto Brush: after the user paints a selection stroke, grow the painted
+     * band to the subject's real edges (colour model + gradient stop) using
+     * the pixels of the live preview canvas. Replaces the old hard-circle
+     * brush that ignored what was under it.
+     */
+    refineBrushSelectionMask: async (points) => {
+      const sel = get().activeSelection
+      if (!sel || sel.type !== 'brush' || points.length < 2) return
+      if (typeof document === 'undefined') return
+      const preview = document.getElementById('of-canvas') as HTMLCanvasElement | null
+      if (!preview) return
+      const ctx = preview.getContext('2d', { willReadFrequently: true })
+      if (!ctx) return
+      const img = ctx.getImageData(0, 0, preview.width, preview.height)
+      const radiusPx = Math.max(4, (get().drawingSize / 2) * (preview.width / Math.max(1, preview.clientWidth || preview.width)))
+      const { autoBrushMaskFromStroke, maskToDataUrl } = await import('./lib/rotoBrush')
+      const auto = autoBrushMaskFromStroke({
+        source: img,
+        stroke: points.map((p) => ({ x: p.x * img.width, y: p.y * img.height })),
+        radius: radiusPx,
+        tolerance: get().selectionBrushTolerance,
+        maxGrow: Math.round(radiusPx * 3),
+        feather: 1.5,
+      })
+      set((s) =>
+        s.activeSelection
+          ? { activeSelection: { ...s.activeSelection, maskDataUrl: maskToDataUrl(auto.mask) } }
+          : {},
+      )
+    },
+
+    /**
+     * Real Magic Wand: flood the clicked colour region from the preview
+     * canvas pixels (the old implementation faked a fixed 0.2x0.2 rectangle).
+     */
+    setWandSelectionAt: async (point) => {
+      if (typeof document === 'undefined') return
+      const preview = document.getElementById('of-canvas') as HTMLCanvasElement | null
+      if (!preview) return
+      const ctx = preview.getContext('2d', { willReadFrequently: true })
+      if (!ctx) return
+      const img = ctx.getImageData(0, 0, preview.width, preview.height)
+      const { magicWandMask, maskToDataUrl, maskBounds } = await import('./lib/rotoBrush')
+      const wand = magicWandMask({
+        source: img,
+        seed: { x: point.x * img.width, y: point.y * img.height },
+        tolerance: get().selectionWandTolerance,
+        contiguous: true,
+        feather: 1,
+      })
+      const b = maskBounds(wand.mask)
+      // Keep the bounds visible even for tiny selections (min 6% box).
+      const nb = {
+        x: b.width ? Math.max(0, b.x / img.width) : Math.max(0, point.x - 0.03),
+        y: b.height ? Math.max(0, b.y / img.height) : Math.max(0, point.y - 0.03),
+        width: b.width ? Math.max(0.06, b.width / img.width) : 0.06,
+        height: b.height ? Math.max(0.06, b.height / img.height) : 0.06,
+      }
+      set({
+        activeSelection: {
+          type: 'magic-wand',
+          bounds: nb,
+          points: [{ ...point, timestamp: 0 }],
+          maskDataUrl: maskToDataUrl(wand.mask),
+        },
+      })
+    },
+
     setSelectionMode: (mode) => {
       set({ selectionMode: mode })
       const toolMap: Record<SelectionModeType, DrawingToolType> = {

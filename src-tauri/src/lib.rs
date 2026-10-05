@@ -116,6 +116,78 @@ fn ai_denoise_wav(wav: Vec<u8>, strength: f64, app: tauri::AppHandle) -> Result<
     Ok(out.stdout)
 }
 
+/// Native RotoMask segmentation: pipes the current frame (PNG bytes)
+/// through the Python sidecar (scripts/python/roto_onnx.py) running any
+/// saliency-contract ONNX model with onnxruntime, so desktop users get
+/// native inference instead of the browser WASM path. Returns a base64
+/// grayscale mask PNG at the frame resolution.
+#[tauri::command]
+fn roto_segment(frame_png: Vec<u8>, model_file: String, app: tauri::AppHandle) -> Result<String, String> {
+    use std::io::Write;
+    use std::process::{Command, Stdio};
+
+    if model_file.contains("..") || model_file.contains('/') || model_file.contains('\\') {
+        return Err("invalid model file".into());
+    }
+
+    // Model ships as a bundled resource next to the app; fall back to the
+    // repo checkout in dev mode (mirrors ai_denoise_wav).
+    let model_path = app
+        .path()
+        .resource_dir()
+        .ok()
+        .map(|d| d.join("models").join(&model_file))
+        .filter(|p| p.exists())
+        .or_else(|| {
+            std::env::current_dir()
+                .ok()
+                .map(|d| d.join("../public/models").join(&model_file))
+                .filter(|p| p.exists())
+        })
+        .ok_or_else(|| format!("model {model_file} not found (resource or public/models)"))?;
+
+    let script = std::env::current_dir()
+        .ok()
+        .map(|d| d.join("scripts/python/roto_onnx.py"))
+        .filter(|p| p.exists())
+        .or_else(|| {
+            app.path()
+                .resource_dir()
+                .ok()
+                .map(|d| d.join("scripts/roto_onnx.py"))
+                .filter(|p| p.exists())
+        })
+        .ok_or_else(|| "roto_onnx.py sidecar not found".to_string())?;
+
+    let mut child = Command::new("python3")
+        .arg(script)
+        .arg("--model")
+        .arg(&model_path)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|e| format!("failed to spawn python3 sidecar: {e}"))?;
+
+    child
+        .stdin
+        .as_mut()
+        .ok_or("sidecar stdin unavailable")?
+        .write_all(&frame_png)
+        .map_err(|e| format!("sidecar write failed: {e}"))?;
+
+    let out = child
+        .wait_with_output()
+        .map_err(|e| format!("sidecar wait failed: {e}"))?;
+    if !out.status.success() {
+        return Err(format!(
+            "roto sidecar failed: {}",
+            String::from_utf8_lossy(&out.stderr)
+        ));
+    }
+    Ok(String::from_utf8_lossy(&out.stdout).trim().to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -123,7 +195,8 @@ pub fn run() {
             omniframe_ping,
             omniframe_desktop_info,
             omniframe_toggle_fullscreen,
-            ai_denoise_wav
+            ai_denoise_wav,
+            roto_segment
         ])
         .run(tauri::generate_context!())
         .expect("error while running OmniFrame");

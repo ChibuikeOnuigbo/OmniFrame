@@ -1,0 +1,104 @@
+{
+  "suite": "rotomask-e2e",
+  "date": "2026-10-05T11:46:08.309Z",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "results": [
+    {
+      "name": "01. RotoMask sub-tool section",
+      "status": "PASS",
+      "details": "omniframe-section-rotomask renders rotomask-subtool"
+    },
+    {
+      "name": "02. Export-scope note present",
+      "status": "PASS",
+      "details": "workflow-data semantics stated"
+    },
+    {
+      "name": "03. Smart click segments subject",
+      "status": "PASS",
+      "details": "cover 2.1%"
+    },
+    {
+      "name": "04. Right-click removes background",
+      "status": "PASS",
+      "details": "2 clicks: 1 subject + 1 background"
+    },
+    {
+      "name": "05. Clicks summary + undo",
+      "status": "PASS",
+      "details": "summary \"2 clicks · +1 subject · −1 background\" -> 1 click after undo"
+    },
+    {
+      "name": "06. OmniRoto family served",
+      "status": "PASS",
+      "details": "4 ONNX models + sidecars (e.g. anime valIoU 0.7224)"
+    },
+    {
+      "name": "07. OmniRoto anime model loads in onnxruntime-web",
+      "status": "PASS",
+      "details": "OmniRoto · Anime loaded (128px)"
+    },
+    {
+      "name": "08. Model-driven segmentation",
+      "status": "PASS",
+      "details": "engine=omni-roto-anime-v1"
+    },
+    {
+      "name": "09. RotoMask brush refine",
+      "status": "PASS",
+      "details": "mask updated (19998 -> 24422 bytes)"
+    },
+    {
+      "name": "10. Track propagates across chosen frames",
+      "status": "PASS",
+      "details": "9/9 frames"
+    },
+    {
+      "name": "11. Extract to OmniFrame layer",
+      "status": "PASS",
+      "details": "scope=section label=\"RotoMask (omni-roto-anime-v1)\""
+    },
+    {
+      "name": "12. Cut Out + Patch BG (copy-paste workflow)",
+      "status": "PASS",
+      "details": "patch asset + clip above video + character layer on top"
+    },
+    {
+      "name": "13. Remove from Video (object removal)",
+      "status": "PASS",
+      "details": "subject hidden, background patched"
+    },
+    {
+      "name": "14. To Drawing Mask (export path)",
+      "status": "PASS",
+      "details": "roto matte applied to active paint layer"
+    },
+    {
+      "name": "15. Export Luma Matte",
+      "status": "PASS",
+      "details": "frame 6 PNG data URL"
+    },
+    {
+      "name": "16. Auto Brush edge-snapped mask",
+      "status": "PASS",
+      "details": "brush selection carries a computed maskDataUrl"
+    },
+    {
+      "name": "17. Auto Brush toggle respected",
+      "status": "PASS",
+      "details": "manual mode: no auto mask computed"
+    },
+    {
+      "name": "18. Real Magic Wand",
+      "status": "PASS",
+      "details": "flooded region bounds 1.000x1.000 (was fixed 0.2x0.2)"
+    },
+    {
+      "name": "19. Model picker offers family",
+      "status": "PASS",
+      "details": "4 OmniRoto engines + Smart + import/catalog"
+    }
+  ]
+}

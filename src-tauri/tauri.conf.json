@@ -41,7 +41,8 @@
       "../public/models/*.onnx",
       "../public/models/*.json",
       "../scripts/python/denoise_onnx.py",
-      "../scripts/python/denoise_common.py"
+      "../scripts/python/denoise_common.py",
+      "../scripts/python/roto_onnx.py"
     ]
   }
 }

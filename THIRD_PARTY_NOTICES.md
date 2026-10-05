@@ -49,3 +49,24 @@ This file contains the licenses and notices for open source software used in Omn
 ### NumPy
 - **Copyright**: (c) 2005-2026 NumPy Developers.
 - **License**: BSD 3-Clause "New" or "Revised" License.
+
+---
+
+### JAX / jaxlib (OmniRoto training toolchain)
+- **Copyright**: (c) 2021 Google LLC.
+- **License**: Apache-2.0
+- **Use**: offline training of the OmniRoto ONNX models in scripts/python/train_roto_models.py. Not shipped in the app.
+
+---
+
+### ONNX / onnxruntime (training export + desktop sidecar)
+- **Copyright**: (c) ONNX Contributors.
+- **License**: MIT (onnx), MIT (onnxruntime)
+- **Use**: ONNX graph export during training and native inference in the desktop roto sidecar (scripts/python/roto_onnx.py). onnxruntime-web ships in the browser bundle as before.
+
+---
+
+### OmniRoto training corpus (omni-roto-*-v1.onnx)
+- **Origin**: reference photographs collected via image search (people, anime characters, hair portraits) plus in-repo sample assets; pseudo-labelled with OpenCV GrabCut. The corpus lives in training_data/ which is git-ignored and NOT redistributed.
+- **Models**: trained in-repo, MIT, ~560 KB each; metadata in public/models/omni-roto-*-v1.json.
+- **Catalog models** (U2-Net, IS-Net, Silueta, etc.) are NOT bundled — RotoMask links them by URL at the user's request; their licences remain those of the upstream projects (Apache-2.0 / non-commercial research depending on the model).

@@ -21,3 +21,8 @@ qa/recordings/*.webm
 qa/assets/voice/*.wav
 public/ort/
 ort-runtime/
+
+# RotoMask training corpus (collected reference photos, not redistributable in-repo)
+training_data/
+__pycache__/
+*.pyc

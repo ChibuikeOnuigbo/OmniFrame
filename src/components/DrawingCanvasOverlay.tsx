@@ -61,6 +61,14 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
   const brushDynamics = useEditor((s) => s.brushDynamics)
   const playhead = useEditor((s) => s.playhead)
   const projectFps = useEditor((s) => s.projectFps)
+  const rotoTool = useEditor((s) => s.rotoTool)
+  const rotoClicks = useEditor((s) => s.rotoClicks)
+  const rotoResult = useEditor((s) => s.rotoResult)
+  const rotoBusy = useEditor((s) => s.rotoBusy)
+  const rotoMaskImgRef = useRef<HTMLImageElement | null>(null)
+  const rotoMaskUrlRef = useRef<string>('')
+  /** Active RotoMask brush stroke (working in normalised coords). */
+  const rotoStrokeRef = useRef<StrokePoint[] | null>(null)
 
   const currentFrame = Math.round(playhead * projectFps)
   const isSelectionTool =
@@ -83,6 +91,62 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  /**
+   * RotoMask overlay: tint the live roto matte and draw the +/- click
+   * markers, exactly like the reference tool's dots on the preview.
+   */
+  const renderRotoOverlay = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
+    if (!rotoResult && rotoClicks.length === 0) return
+    if (rotoResult?.maskDataUrl) {
+      if (rotoMaskUrlRef.current !== rotoResult.maskDataUrl || !rotoMaskImgRef.current) {
+        const img = new Image()
+        img.src = rotoResult.maskDataUrl
+        rotoMaskImgRef.current = img
+        rotoMaskUrlRef.current = rotoResult.maskDataUrl
+      }
+      const img = rotoMaskImgRef.current
+      if (img.complete && img.naturalWidth > 0) {
+        ctx.save()
+        ctx.globalAlpha = 0.32
+        ctx.globalCompositeOperation = 'source-over'
+        ctx.drawImage(img, 0, 0, w, h)
+        ctx.restore()
+      }
+    }
+    for (const c of rotoClicks) {
+      const cx = c.x * w
+      const cy = c.y * h
+      const r = 7
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(cx, cy, r, 0, Math.PI * 2)
+      ctx.fillStyle = c.positive ? 'rgba(16,185,129,0.85)' : 'rgba(239,68,68,0.85)'
+      ctx.fill()
+      ctx.lineWidth = 2
+      ctx.strokeStyle = '#ffffff'
+      ctx.stroke()
+      // + or - glyph
+      ctx.beginPath()
+      ctx.moveTo(cx - 3.5, cy)
+      ctx.lineTo(cx + 3.5, cy)
+      if (c.positive) {
+        ctx.moveTo(cx, cy - 3.5)
+        ctx.lineTo(cx, cy + 3.5)
+      }
+      ctx.strokeStyle = '#ffffff'
+      ctx.lineWidth = 1.6
+      ctx.stroke()
+      ctx.restore()
+    }
+    if (rotoBusy) {
+      ctx.save()
+      ctx.font = '11px ui-monospace, monospace'
+      ctx.fillStyle = 'rgba(232,121,249,0.95)'
+      ctx.fillText('roto\u2026', 8, h - 8)
+      ctx.restore()
+    }
+  }
+
   // Static re-render whenever state changes (when no marching ants anim loop is active)
   useEffect(() => {
     if (activeSelection) return // Handled by continuous animation loop below
@@ -99,7 +163,8 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     }
 
     renderAllPaintLayers(ctx, width, height, drawingStrokes, paintLayers, playhead, projectFps)
-  }, [activeSelection, drawingStrokes, paintLayers, playhead, projectFps, onionSkin, drawingScope, currentFrame, width, height])
+    renderRotoOverlay(ctx, width, height)
+  }, [activeSelection, drawingStrokes, paintLayers, playhead, projectFps, onionSkin, drawingScope, currentFrame, width, height, rotoClicks, rotoResult, rotoBusy])
 
   // Continuous animation loop for active selection marching ants
   useEffect(() => {
@@ -116,15 +181,18 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
           }
           renderAllPaintLayers(ctx, width, height, drawingStrokes, paintLayers, playhead, projectFps)
           renderSelectionMarchingAnts(ctx, activeSelection, width, height, timeMs)
+          renderRotoOverlay(ctx, width, height)
         }
       }
       animId = requestAnimationFrame(renderLoop)
     }
     animId = requestAnimationFrame(renderLoop)
     return () => cancelAnimationFrame(animId)
-  }, [activeSelection, drawingStrokes, paintLayers, playhead, projectFps, onionSkin, drawingScope, currentFrame, width, height])
+  }, [activeSelection, drawingStrokes, paintLayers, playhead, projectFps, onionSkin, drawingScope, currentFrame, width, height, rotoClicks, rotoResult, rotoBusy])
 
-  if (!drawingEnabled) return null
+  // The overlay also mounts for RotoMask work (clicks / brush refine) even
+  // when Drawing mode itself is off — the roto tools own the preview then.
+  if (!drawingEnabled && !rotoTool) return null
 
   const getCanvasCoords = (e: React.PointerEvent<HTMLCanvasElement>): StrokePoint => {
     const canvas = canvasRef.current
@@ -141,9 +209,29 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
   }
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (e.button !== 0) return
     const canvas = canvasRef.current
     if (!canvas) return
+
+    // ---- RotoMask interception ----
+    // Click mode: left-click adds subject, right-click / Alt-click removes
+    // background (Sammie-Roto 2 semantics). Brush modes refine the live mask.
+    if (rotoTool === 'click') {
+      const pt = getCanvasCoords(e)
+      const positive = e.button !== 2 && !e.altKey
+      void useEditor.getState().addRotoClick(pt.x, pt.y, positive)
+      return
+    }
+    if (rotoTool === 'brush-add' || rotoTool === 'brush-remove') {
+      if (e.button !== 0) return
+      const pt = getCanvasCoords(e)
+      canvas.setPointerCapture(e.pointerId)
+      isDrawingRef.current = true
+      rotoStrokeRef.current = [pt]
+      currentPointsRef.current = [pt]
+      return
+    }
+
+    if (e.button !== 0) return
 
     const pt = getCanvasCoords(e)
 
@@ -270,6 +358,34 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Live RotoMask brush stroke: accumulate and draw the stroke band.
+    if (rotoStrokeRef.current) {
+      rotoStrokeRef.current.push(pt)
+      currentPointsRef.current.push(pt)
+      ctx.clearRect(0, 0, width, height)
+      renderAllPaintLayers(ctx, width, height, drawingStrokes, paintLayers, playhead, projectFps)
+      const st = useEditor.getState()
+      ctx.save()
+      ctx.strokeStyle = st.rotoTool === 'brush-remove' ? 'rgba(239,68,68,0.8)' : 'rgba(16,185,129,0.8)'
+      ctx.lineWidth = Math.max(3, st.rotoBrushRadius * (width / Math.max(1, canvas.clientWidth || width)))
+      ctx.lineJoin = 'round'
+      ctx.lineCap = 'round'
+      ctx.beginPath()
+      const pts = rotoStrokeRef.current
+      if (pts.length === 1) {
+        ctx.arc(pts[0].x * width, pts[0].y * height, ctx.lineWidth / 2, 0, Math.PI * 2)
+        ctx.fillStyle = ctx.strokeStyle
+        ctx.fill()
+      } else {
+        ctx.moveTo(pts[0].x * width, pts[0].y * height)
+        for (const p of pts.slice(1)) ctx.lineTo(p.x * width, p.y * height)
+        ctx.stroke()
+      }
+      ctx.restore()
+      renderRotoOverlay(ctx, width, height)
+      return
+    }
+
     if (isSelectionTool && selectionStartPtRef.current) {
       const startPt = selectionStartPtRef.current
       currentPointsRef.current.push(pt)
@@ -331,6 +447,18 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       }
     }
 
+    // RotoMask brush stroke finished — apply add/remove refine.
+    if (rotoStrokeRef.current) {
+      const pts = rotoStrokeRef.current
+      rotoStrokeRef.current = null
+      const mode = useEditor.getState().rotoTool
+      currentPointsRef.current = []
+      if (pts.length > 0 && (mode === 'brush-add' || mode === 'brush-remove')) {
+        void useEditor.getState().rotoBrushApply(pts, mode === 'brush-add' ? 'add' : 'subtract')
+      }
+      return
+    }
+
     if (isSelectionTool && selectionStartPtRef.current) {
       const startPt = selectionStartPtRef.current
       const endPt = currentPointsRef.current[currentPointsRef.current.length - 1] || startPt
@@ -351,14 +479,15 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
             bounds: { x: minX, y: minY, width: Math.max(0.01, maxX - minX), height: Math.max(0.01, maxY - minY) },
             points: pts,
           })
+          // Auto Brush: grow the painted band to the subject's real edges.
+          if (drawingTool === 'select-brush' && useEditor.getState().selectionBrushAuto) {
+            void useEditor.getState().refineBrushSelectionMask(pts)
+          }
         }
       } else if (drawingTool === 'select-magic-wand') {
-        const bX = Math.max(0, startPt.x - 0.1)
-        const bY = Math.max(0, startPt.y - 0.1)
-        setActiveSelection({
-          type: 'magic-wand',
-          bounds: { x: bX, y: bY, width: 0.2, height: 0.2 },
-        })
+        // Real wand: colour-region flood from the clicked pixel (was a fake
+        // fixed 0.2x0.2 rectangle before the auto-brush upgrade).
+        void useEditor.getState().setWandSelectionAt(startPt)
       } else {
         const minX = Math.min(startPt.x, endPt.x)
         const minY = Math.min(startPt.y, endPt.y)
@@ -418,6 +547,10 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
+      onContextMenu={(e) => {
+        // Right-click is a Remove click while the RotoMask click tool is armed.
+        if (useEditor.getState().rotoTool === 'click') e.preventDefault()
+      }}
     />
   )
 }

@@ -77,7 +77,13 @@ export function SectionsNavigator({
   const touched = useRef(false)
 
   const register = useCallback((id: string, meta: { title: string; hint?: string; defaultOpen?: boolean }) => {
-    setSections((prev) => (prev.some((s) => s.id === id) ? prev : [...prev, { id, title: meta.title, hint: meta.hint }]))
+    // Re-registering (e.g. a hint change on a mounted section) updates the
+    // meta in place — it must NOT reorder the strip or disturb the active id.
+    setSections((prev) =>
+      prev.some((s) => s.id === id)
+        ? prev.map((s) => (s.id === id ? { ...s, title: meta.title, hint: meta.hint } : s))
+        : [...prev, { id, title: meta.title, hint: meta.hint }],
+    )
     if (meta.defaultOpen && !touched.current) {
       setActiveId((cur) => {
         // Only claim the initial slot if nothing was picked yet.

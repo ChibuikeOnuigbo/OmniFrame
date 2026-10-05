@@ -18,10 +18,12 @@ import {
   Image as ImageIcon,
   BoxSelect,
   Wand2,
+  Crosshair,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { OmniframeScopeType } from '../types'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
+import { RotoMaskSubTool } from './RotoMaskSubTool'
 import { RECOLOR_BLENDS, type RecolorBlend } from '../lib/recolor'
 import { PanelSection } from './PanelSection'
 
@@ -38,6 +40,7 @@ const PANEL_SECTIONS = [
     hint: 'Pick the asset and choose a detected segment',
   },
   { id: 'select', label: 'Mask', icon: Wand2, hint: 'Selection and masking sub-tools' },
+  { id: 'rotomask', label: 'Roto', icon: Crosshair, hint: 'Click-to-segment rotoscoping (RotoMask)' },
   { id: 'transform', label: 'Transform', icon: Move, hint: 'Position, scale and rotation' },
   { id: 'color', label: 'Color', icon: PaintBucket, hint: 'Recolor the segment; separate from Drawing layer blending' },
   { id: 'scope', label: 'Scope', icon: Clock, hint: 'All frames, a section, or a single frame' },
@@ -303,6 +306,11 @@ export function OmniFramePanel() {
       {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
         <SelectionMaskSubTool context="omniframe" />
       )}
+      </Section>
+
+      <Section active={section === 'rotomask'}>
+      {/* RotoMask Sub-Tool - click-to-segment rotoscoping */}
+      <RotoMaskSubTool context="omniframe" />
       </Section>
 
       {/* Detected Characters List & Multi-Frame Shift */}

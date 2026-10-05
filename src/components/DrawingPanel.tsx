@@ -31,6 +31,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
+import { RotoMaskSubTool } from './RotoMaskSubTool'
 import PanelSection from './PanelSection'
 import { Tooltip } from './Tooltip'
 
@@ -297,6 +298,11 @@ export function DrawingPanel() {
         <PanelSection title="Selection & Masking" defaultOpen={true} testId="masking">
       {/* Unified Selection & Masking Sub-Tool */}
       <SelectionMaskSubTool context="drawing" />
+        </PanelSection>
+
+        <PanelSection title="RotoMask" defaultOpen={false} testId="rotomask">
+      {/* Click-to-segment rotoscoping combo sub-tool */}
+      <RotoMaskSubTool context="drawing" />
         </PanelSection>
 
         <PanelSection title="Timeline Attachment" defaultOpen={true} testId="attachment">

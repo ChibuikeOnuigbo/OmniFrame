@@ -72,6 +72,12 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context =
   const [guideHint, setGuideHint] = useState<{ x: number; y: number } | null>(null)
   const selectionMode = useEditor((s) => s.selectionMode)
   const setSelectionMode = useEditor((s) => s.setSelectionMode)
+  const selectionBrushAuto = useEditor((s) => s.selectionBrushAuto)
+  const selectionBrushTolerance = useEditor((s) => s.selectionBrushTolerance)
+  const selectionWandTolerance = useEditor((s) => s.selectionWandTolerance)
+  const setSelectionBrushAuto = useEditor((s) => s.setSelectionBrushAuto)
+  const setSelectionBrushTolerance = useEditor((s) => s.setSelectionBrushTolerance)
+  const setSelectionWandTolerance = useEditor((s) => s.setSelectionWandTolerance)
   const invertSelection = useEditor((s) => s.invertSelection)
   const growSelection = useEditor((s) => s.growSelection)
   const shrinkSelection = useEditor((s) => s.shrinkSelection)
@@ -181,6 +187,56 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context =
             )
           })}
         </div>
+      </PanelSection>
+
+      {/* 1b. Auto Brush & Wand assist — strokes snap to real object edges */}
+      <PanelSection title="Auto Brush & Wand" hint={selectionBrushAuto ? 'Auto-snap on' : 'Manual'} testId="mask-autobrush" defaultOpen={true}>
+        <label
+          className="flex items-center justify-between gap-2 rounded-lg border border-emerald-500/25 bg-emerald-500/5 px-2 py-1.5 cursor-pointer"
+          title="When on, painted selection strokes grow to the subject's real edges (colour + gradient stop) instead of staying a hard circle"
+        >
+          <span className="text-[11px] font-medium text-emerald-200">Edge-snapping Auto Brush</span>
+          <input
+            type="checkbox"
+            data-testid="autobrush-toggle"
+            checked={selectionBrushAuto}
+            onChange={(e) => setSelectionBrushAuto(e.target.checked)}
+            className="accent-emerald-400 rounded cursor-pointer"
+          />
+        </label>
+        <div className="grid grid-cols-2 gap-2 pt-1.5">
+          <label className="flex flex-col gap-0.5 text-[10px] text-ink-400">
+            Brush tolerance ({selectionBrushTolerance})
+            <input
+              type="range"
+              data-testid="autobrush-tolerance"
+              min={2}
+              max={80}
+              value={selectionBrushTolerance}
+              onChange={(e) => setSelectionBrushTolerance(Number(e.target.value))}
+              className="accent-emerald-400"
+              title="How far the brush grows beyond the stroke before colour/edges stop it"
+            />
+          </label>
+          <label className="flex flex-col gap-0.5 text-[10px] text-ink-400">
+            Wand tolerance ({selectionWandTolerance})
+            <input
+              type="range"
+              data-testid="wand-tolerance"
+              min={2}
+              max={80}
+              value={selectionWandTolerance}
+              onChange={(e) => setSelectionWandTolerance(Number(e.target.value))}
+              className="accent-emerald-400"
+              title="Colour range the Magic Wand floods from the clicked pixel"
+            />
+          </label>
+        </div>
+        <p className="pt-1 text-[10px] leading-snug text-ink-500">
+          The wand now floods the real colour region under your click (it used to produce a fixed
+          rectangle). The brush samples the pixels you paint over and snaps to the subject edge —
+          same engine the RotoMask sub-tool refines with.
+        </p>
       </PanelSection>
 
       {/* 2. Detected Object Quick-Select (Towel, Chair, Light, etc.) */}

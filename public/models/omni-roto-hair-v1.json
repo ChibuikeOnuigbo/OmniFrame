@@ -1,0 +1,14 @@
+{
+  "id": "omni-roto-hair-v1",
+  "domain": "hair",
+  "inputSize": 128,
+  "params": 142001,
+  "valIoU": 0.8878,
+  "trainSamples": 240,
+  "rawImages": 5,
+  "epochs": 12,
+  "trainedAt": "2026-10-05",
+  "teacher": "opencv-grabcut pseudo-labels + heavy augmentation",
+  "runner": "onnxruntime-web saliency (input 1x3xHxW 0..1, output map)",
+  "license": "MIT (trained in-repo on collected reference photos)"
+}

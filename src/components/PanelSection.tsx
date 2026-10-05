@@ -53,12 +53,22 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
   // registration forever).
   const registerSection = nav?.register
   const unregisterSection = nav?.unregister
+  // Register once per section id; unregister only on real unmount. The
+  // register() itself updates meta in place, so hint/title changes flow
+  // through the second effect without ever tearing the section down (a
+  // unregister would kill its active tab and move it to the strip's end).
   useEffect(() => {
     if (!registerSection) return
     registerSection(id, { title, hint, defaultOpen })
     return () => unregisterSection?.(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registerSection, unregisterSection, id, title, hint, defaultOpen])
+  }, [registerSection, unregisterSection, id])
+
+  // Meta refresh (title/hint/defaultOpen) for an already-registered section.
+  useEffect(() => {
+    registerSection?.(id, { title, hint, defaultOpen })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, hint, defaultOpen])
 
   // ---- SectionsNavigator modes ----
   if (nav) {

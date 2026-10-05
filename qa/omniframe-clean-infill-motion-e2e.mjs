@@ -319,8 +319,11 @@ try {
   await page.click('[data-testid="omniframe-section-actions"]')
   await page.waitForTimeout(300)
   const verificationDisclosure = page.locator('[data-testid="panel-section-omniframe-verification"] > button')
-  await verificationDisclosure.click()
-  await page.waitForTimeout(100)
+  // The accordion auto-activates the only live section, so only click when collapsed.
+  if ((await verificationDisclosure.getAttribute('aria-expanded')) !== 'true') {
+    await verificationDisclosure.click()
+    await page.waitForTimeout(100)
+  }
   const verifTable = page.locator('[data-testid="omniframe-verification-table"]')
   if (!(await verifTable.isVisible())) throw new Error('Frame verification details did not expand')
   await verifTable.screenshot({ path: join(CUT_DIR, 'cut-omniframe-verification-table.png') })
