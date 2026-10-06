@@ -94,7 +94,7 @@ async function withPage(fn) {
 async function runCase(name, caseBody) {
   // let the OS reclaim the previous case's ~2 GB of freed WASM pages before
   // the next renderer starts (consecutive heavy browsers OOM otherwise)
-  await new Promise((r) => setTimeout(r, 10000))
+  await new Promise((r) => setTimeout(r, 12000))
   for (let attempt = 1; ; attempt++) {
     try {
       const t0 = Date.now()
@@ -102,11 +102,27 @@ async function runCase(name, caseBody) {
       console.log(`  ${name} done in ${((Date.now() - t0) / 1000).toFixed(0)}s`)
       return result
     } catch (err) {
-      if (attempt >= 3) throw err
+      if (attempt >= 4) throw err
       console.log(`  ${name} attempt ${attempt} failed (${String(err.message).split('\n')[0]}); retrying…`)
-      await new Promise((r) => setTimeout(r, 8000))
+      await new Promise((r) => setTimeout(r, 10000))
     }
   }
+}
+
+/**
+ * Resumable case: results are persisted to the tmp dir as they complete, so
+ * a crashed run (renderer OOMs are stochastic in the CI sandbox) resumes
+ * where it stopped instead of repeating ~2-minute separations.
+ */
+async function persisted(name, caseBody) {
+  const p = join(TMP, `case-${name}.json`)
+  if (existsSync(p)) {
+    console.log(`  ${name}: cached`)
+    return JSON.parse(readFileSync(p, 'utf8'))
+  }
+  const r = await runCase(name, caseBody)
+  writeFileSync(p, JSON.stringify(r))
+  return r
 }
 
 /** Build the mono edge-case mix + both ground-truth stems. */
@@ -225,19 +241,19 @@ async function separateAt48k({ mixB64, want }) {
 }
 
 // ---------- keep_vocal cases -------------------------------------------------
-const mono = await runCase('mono keep_vocal', async (page) => {
+const mono = await persisted('mono keep_vocal', async (page) => {
   const built = await buildMono(page)
   const out = await page.evaluate(isolateAction, { mixB64: built.mixB64, assetId: 'rob-mono', mode: 'keep_vocal' })
   return { input: built.mixB64, gtV: built.gtVB64, gtM: built.gtMB64, output: out }
 })
 
-const hz48 = await runCase('48kHz keep_vocal', async (page) => {
+const hz48 = await persisted('48kHz keep_vocal', async (page) => {
   const built = await build48k(page)
   const out = await page.evaluate(separateAt48k, { mixB64: built.mixB64, want: 'vocals' })
   return { input: built.mixB64, gtV: built.gtVB64, gtM: built.gtMB64, output: out.b64, meta: { inRate: out.inRate, outCh: out.outCh } }
 })
 
-const short = await runCase('short', async (page) => {
+const short = await persisted('short', async (page) => {
   const out = await page.evaluate(async () => {
     const { load, norm, b64 } = window.__mix
     const AC = window.AudioContext || window.webkitAudioContext
@@ -259,26 +275,26 @@ const short = await runCase('short', async (page) => {
   return { output: out.b64, meta: { duration: out.duration, nonFinite: out.nonFinite, rms: out.rms } }
 })
 
-const duo = await runCase('two-speakers keep_vocal', async (page) => {
+const duo = await persisted('two-speakers keep_vocal', async (page) => {
   const built = await buildDuo(page)
   const out = await page.evaluate(isolateAction, { mixB64: built.mixB64, assetId: 'rob-duo', mode: 'keep_vocal' })
   return { input: built.mixB64, gtV: built.gtVB64, output: out }
 })
 
 // ---------- remove_vocal cases (instrumental extraction) ---------------------
-const monoRmv = await runCase('mono remove_vocal', async (page) => {
+const monoRmv = await persisted('mono remove_vocal', async (page) => {
   const built = await buildMono(page)
   const out = await page.evaluate(isolateAction, { mixB64: built.mixB64, assetId: 'rob-mono-r', mode: 'remove_vocal' })
   return { output: out }
 })
 
-const hz48Rmv = await runCase('48kHz remove_vocal', async (page) => {
+const hz48Rmv = await persisted('48kHz remove_vocal', async (page) => {
   const built = await build48k(page)
   const out = await page.evaluate(separateAt48k, { mixB64: built.mixB64, want: 'instrumental' })
   return { output: out.b64, meta: { duration: out.duration } }
 })
 
-const duoRmv = await runCase('voice-only remove_vocal', async (page) => {
+const duoRmv = await persisted('voice-only remove_vocal', async (page) => {
   const built = await buildDuo(page)
   const out = await page.evaluate(isolateAction, { mixB64: built.mixB64, assetId: 'rob-duo-r', mode: 'remove_vocal' })
   return { input: built.mixB64, output: out }

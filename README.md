@@ -43,8 +43,9 @@ npm run qa:advanced # recording/trace/repeat-export workflow
   (WebGPU, WASM fallback). 3 passes with shifted chunk windows averaged per-sample (worker per
   pass), LS cross-talk removal, plus a Silero-VAD pause gate. Scored on a deterministic mix
   against ground truth: **+20.4 dB SI-SDR, music bleed −56 dB, pauses −37 dB** (previous DSP
-  engine: +0.4 dB — see
-  `evidence/voice/listen/`). Weights download once: `npm run fetch:demucs`
+  engine: +0.4 dB — see the [listen pack](evidence/voice/listen/README.md) and the
+  [robustness suite](evidence/voice/robustness/README.md) for input↔output pairs you can play).
+  Weights download once: `npm run fetch:demucs`
   (174 MB, git-ignored; personal/research use per Meta's license). Fast DSP and
   the in-house AI-Denoise ONNX engines remain selectable.
 - **Responsive shell** with always-visible icon rail; panels collapse to an arrow instead of hiding.
