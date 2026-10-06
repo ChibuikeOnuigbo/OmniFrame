@@ -33,3 +33,4 @@ image-search/
 qa/assets/roto/composites/heldout-*.png
 evidence/rotomask-isolation/in-app--heldout-*
 evidence/screenshots/roto-isolation-*heldout*
+public/models/htdemucs.onnx

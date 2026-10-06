@@ -38,6 +38,13 @@ npm run qa:advanced # recording/trace/repeat-export workflow
   volume, source in/out, rename, split, delete.
 - **Transport**: play/pause, go-to-start/end, live timecode, speed (0.5× / 1× / 2×, plus J/K/L), undo/redo.
 - **Export**: records the live preview with `MediaRecorder` to `.mp4`/`.webm` (best-effort audio mix).
+- **Voice isolation (real neural model)**: per-clip **Keep Vocal / Remove Vocal** powered by
+  **Meta's Demucs v4 Hybrid Transformer (htdemucs)** running fully in-browser via ONNX Runtime Web
+  (WebGPU, WASM fallback). Scored on a deterministic mix against ground truth:
+  **+17.4 dB SI-SDR, music bleed −43 dB** (previous DSP engine: +0.4 dB — see
+  `evidence/voice/listen/`). Weights download once: `npm run fetch:demucs`
+  (174 MB, git-ignored; personal/research use per Meta's license). Fast DSP and
+  the in-house AI-Denoise ONNX engines remain selectable.
 - **Responsive shell** with always-visible icon rail; panels collapse to an arrow instead of hiding.
 
 ## Layout
@@ -54,6 +61,7 @@ RightPanel ── contextual Inspector (collapses to a reopen arrow)
 - `src/store.ts` — Zustand store: assets, tracks, clips, transport, zoom, undo/redo (state snapshots).
 - `src/lib/playback.ts` — `PreviewEngine`: rAF loop, media caching, frame-accurate compositing.
 - `src/lib/export.ts` — timeline capture + audio mix → downloadable file.
+- `src/lib/demucs/` — vendored Demucs v4 (htdemucs) ONNX inference glue (MIT, npm `demucs` package).
 - `src/lib/time.ts` — timecode, tick intervals, snapping, ids.
 - `src/components/*` — pure React UI bound to the store.
 

@@ -1,8 +1,15 @@
 /**
  * OmniFrame Voice Isolation & Vocal Removal Subsystem
  *
- * Implements professional stereo Mid/Side phase cancellation, 3-band crossover,
- * and speech formant bandpass isolation in pure Web Audio PCM DSP.
+ * Engines:
+ *  A. 'htdemucs-v4' — REAL neural separation with Meta's Demucs v4 Hybrid
+ *     Transformer (htdemucs) via ONNX Runtime Web (src/lib/demucs). Vocals
+ *     stem for keep_vocal, drums+bass+other for remove_vocal. Requires
+ *     public/models/htdemucs.onnx (`npm run fetch:demucs`).
+ *  B. 'omni-denoise-onnx' — in-house GRU spectral masker (src/lib/aiDenoise).
+ *  C. Everything else — fast local DSP fallback: stereo Mid/Side phase
+ *     cancellation, 3-band crossover, and speech formant bandpass isolation
+ *     in pure Web Audio PCM. (Fast, but cannot fully remove broadband music.)
  *
  * Modes:
  * 1. 'remove_vocal' (Instrumental / Karaoke):
@@ -19,6 +26,7 @@ import { useEditor } from '../store'
 import type { MediaAsset, Clip } from '../types'
 import { uid } from './time'
 import { denoiseAudioBuffer, denoiseViaDesktop, isDesktopMode } from './aiDenoise'
+import { separateWithDemucs } from './demucs/index.ts'
 
 export type VoiceIsolationModel =
   | 'omni-voicetarget'
@@ -327,7 +335,15 @@ export async function processVoiceIsolation(
     const modelTag = options.model || 'omni-voicetarget'
 
     let processedBuffer: AudioBuffer
-    if (modelTag === 'omni-denoise-onnx' && options.mode === 'keep_vocal') {
+    if (modelTag === 'htdemucs-v4') {
+      // REAL neural separation: Meta Demucs v4 Hybrid Transformer (htdemucs)
+      // via ONNX Runtime Web. Vocals stem for keep_vocal; drums+bass+other
+      // (instrumental) for remove_vocal. Downloads /models/htdemucs.onnx once
+      // (npm run fetch:demucs), runs on WebGPU with WASM CPU fallback.
+      const separation = await separateWithDemucs(audioCtx, inputBuffer, onProgress)
+      processedBuffer = options.mode === 'keep_vocal' ? separation.vocals : separation.instrumental
+      onProgress?.(90, `Demucs v4 ${options.mode === 'keep_vocal' ? 'vocals' : 'instrumental'} ready`)
+    } else if (modelTag === 'omni-denoise-onnx' && options.mode === 'keep_vocal') {
       // Neural path: the ONNX GRU masker extracts the main voice and treats
       // everything else (hiss, hum, SFX, songs — even heavily padded song
       // stacks that turn to noise) as interference to suppress.

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T06:43:42.216Z",
+  "generatedAt": "2026-10-06T08:37:13.103Z",
   "results": [
     {
       "name": "video: inspector Audio section present",
@@ -24,7 +24,7 @@
     {
       "name": "video: AI Denoise ONNX model offered",
       "status": "PASS",
-      "detail": "omni-voicetarget (20K+ Neural Stems) | HTDemucs v4 (Meta Hybrid Transformer) | BS-Roformer Lite (Band-Split Web) | Fast Crossover DSP (Offline) | AI Denoise ONNX (in-house GRU masker)"
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (in-house GRU masker)"
     },
     {
       "name": "video: loudness target slider visible",
@@ -59,7 +59,7 @@
     {
       "name": "audio: AI Denoise ONNX model offered",
       "status": "PASS",
-      "detail": "omni-voicetarget (20K+ Neural Stems) | HTDemucs v4 (Meta Hybrid Transformer) | BS-Roformer Lite (Band-Split Web) | Fast Crossover DSP (Offline) | AI Denoise ONNX (in-house GRU masker)"
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (in-house GRU masker)"
     },
     {
       "name": "audio: loudness target slider visible",

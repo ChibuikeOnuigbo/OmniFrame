@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   PanelRight,
   PanelRightClose,
@@ -22,6 +22,7 @@ import type { Clip } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
+import { isDemucsModelAvailable } from '../lib/demucs/index.ts'
 import { loudnessGain, measureIntegratedLufs } from '../lib/loudness'
 import { SectionsNavigator } from './SectionsNav'
 
@@ -44,6 +45,18 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [isolationEnabled, setIsolationEnabled] = useState(false)
   const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
+  const [demucsReady, setDemucsReady] = useState<boolean | null>(null)
+  useEffect(() => {
+    let alive = true
+    isDemucsModelAvailable().then((ok) => {
+      if (!alive) return
+      setDemucsReady(ok)
+      // Auto-select the real neural model when its weights are downloaded
+      // (public/models/htdemucs.onnx via `npm run fetch:demucs`).
+      if (ok) setIsolationModel((m) => (m === 'omni-voicetarget' ? 'htdemucs-v4' : m))
+    })
+    return () => { alive = false }
+  }, [])
   const [isProcessing, setIsProcessing] = useState(false)
   const [isolationStatus, setIsolationStatus] = useState<string | null>(null)
 
@@ -401,12 +414,15 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   <select
                     data-testid="audio-isolation-model-dropdown"
                     value={isolationModel}
-                    onChange={(e) => setIsolationModel(e.target.value as VoiceIsolationModel)}
+                    onChange={(e) => {
+                      setIsolationModel(e.target.value as VoiceIsolationModel)
+                      useEditor.getState().setAudioIsolationModel(e.target.value as VoiceIsolationModel)
+                    }}
                     className="w-full h-7 rounded border border-ink-700 bg-ink-800 px-2 text-xs text-ink-100 outline-none focus:border-brand"
                   >
-                    <option value="omni-voicetarget">omni-voicetarget (20K+ Neural Stems)</option>
-                    <option value="htdemucs-v4">HTDemucs v4 (Meta Hybrid Transformer)</option>
-                    <option value="bs-roformer-lite">BS-Roformer Lite (Band-Split Web)</option>
+                    <option value="htdemucs-v4">Demucs v4 · real neural{demucsReady === false ? ' (weights not downloaded)' : ' — best quality'}</option>
+                    <option value="omni-voicetarget">omni-voicetarget · fast DSP (mid/side crossover)</option>
+                    <option value="bs-roformer-lite">BS-Roformer Lite (planned)</option>
                     <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
                     <option value="omni-denoise-onnx">AI Denoise ONNX (in-house GRU masker)</option>
                   </select>
