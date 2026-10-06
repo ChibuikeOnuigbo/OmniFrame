@@ -14,6 +14,7 @@ Every path below is clickable:
 |---|---|
 | **This pack** — edge-case pairs, both modes | this folder ([file list](..)) |
 | Main listen pack — showcase A/B, DSP comparison, variant | [`evidence/voice/listen/`](../listen/) |
+| Real tracks (full songs, both modes) | [`evidence/voice/realworld/`](../realworld/README.md) |
 | Full-fidelity WAVs of the main study (input + ground-truth stems) | [`evidence/voice/`](..) — e.g. [`mix-showcase-input.wav`](../mix-showcase-input.wav), [`mix-showcase-clean-voice.wav`](../mix-showcase-clean-voice.wav), [`mix-showcase-clean-music.wav`](../mix-showcase-clean-music.wav) |
 | Robustness scores (PASS/FAIL + numbers) | [`qa/reports/voice-demucs-robustness.json`](../../../qa/reports/voice-demucs-robustness.json) |
 | Main study scores | [`qa/reports/voice-tts-mix-isolation.json`](../../../qa/reports/voice-tts-mix-isolation.json) (run [`qa/voice-demucs-model-e2e.mjs`](../../../qa/voice-demucs-model-e2e.mjs) to reprint the neural scores) |
