@@ -5,7 +5,7 @@
  * collapse, band energies); this script additionally exports the produced
  * audio and arranges listenable MP3 pairs so a human can A/B them:
  *
- *   qa/exports/voice-isolation-listen/
+ *   evidence/voice/listen/  (tracked in git)
  *     input_mix-showcase.mp3              TTS narration + full-band music bed (0 dB SNR)
  *     output_mix-showcase.mp3             Keep Vocal on the mix (the study case)
  *     input_test-audio-6s.mp3             the shared E2E audio fixture
@@ -26,8 +26,10 @@ import { join } from 'node:path'
 
 const ROOT = process.cwd()
 const URL = process.env.TEST_URL || 'http://localhost:5173/#studio'
-const OUT_DIR = join(ROOT, 'qa/exports/voice-isolation-listen')
-const TMP = join(ROOT, 'qa/exports/voice-isolation-listen/_wav')
+// Written to evidence/ (tracked in git) so the repo carries the actual
+// input/output pairs a human can play — qa/exports is git-ignored.
+const OUT_DIR = join(ROOT, 'evidence/voice/listen')
+const TMP = join(ROOT, 'evidence/voice/listen/_wav')
 mkdirSync(OUT_DIR, { recursive: true })
 mkdirSync(TMP, { recursive: true })
 
@@ -117,6 +119,9 @@ for (const f of [
   'output_test-audio-6s-keep-vocal.wav',
   'output_test-audio-6s-remove-vocal.wav',
 ]) mp3(f)
+
+// keep the exact study input alongside its output for full-fidelity checks
+writeFileSync(join(ROOT, 'evidence/voice/mix-showcase-input.wav'), readFileSync(join(ROOT, 'qa/assets/voice/mix-showcase.wav')))
 
 // drop the intermediate WAVs, keep the MP3 pack clean
 spawnSync('rm', ['-rf', TMP])
