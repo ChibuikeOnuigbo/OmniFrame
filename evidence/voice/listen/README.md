@@ -60,6 +60,10 @@ drives the real UI.
 | A/B | `input_mix-showcase.mp3` | `output_mix-showcase-keep-vocal-dsp-old.mp3` | The previous DSP output on the same input — hear the difference. |
 | A/B | `input_test-audio-6s.mp3` | `output_test-audio-6s-*-dsp-old.mp3` | Previous DSP outputs on the fixture. |
 
+Edge cases (mono / 48 kHz / 0.5 s / two speakers) and a generalization
+matrix over more voices × beds live in `evidence/voice/robustness/` next
+door.
+
 Full-fidelity sources for the study case sit one level up:
 
 - Input: `evidence/voice/mix-showcase-input.wav`

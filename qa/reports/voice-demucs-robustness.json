@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-06T19:46:03.442Z",
+  "results": [
+    {
+      "name": "mono input: separation succeeds and keeps the voice",
+      "ok": true,
+      "detail": "SI-SDR 16.38 dB vs clean mono voice (bar 14)"
+    },
+    {
+      "name": "mono input: output is stereo",
+      "ok": true,
+      "detail": "2 channels"
+    },
+    {
+      "name": "48 kHz input: resample path correct",
+      "ok": true,
+      "detail": "SI-SDR 25.94 dB (input decoded at 48000 Hz)"
+    },
+    {
+      "name": "48 kHz input: duration preserved",
+      "ok": true,
+      "detail": "output 6.000s (input 6.000s)"
+    },
+    {
+      "name": "0.5 s clip: separation succeeds",
+      "ok": true,
+      "detail": "duration 0.500s, non-finite 0, rms 0.1597"
+    },
+    {
+      "name": "two overlapping speakers: both survive isolation",
+      "ok": true,
+      "detail": "SI-SDR 32.51 dB vs both-voices reference (bar 14)"
+    },
+    {
+      "name": "zero runtime page errors",
+      "ok": true,
+      "detail": "clean"
+    }
+  ],
+  "summary": "7/7 PASS"
+}
