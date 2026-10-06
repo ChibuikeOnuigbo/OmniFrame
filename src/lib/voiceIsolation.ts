@@ -347,7 +347,8 @@ export async function processVoiceIsolation(
       // (instrumental) for remove_vocal. Downloads /models/htdemucs.onnx once
       // (npm run fetch:demucs), runs on WebGPU with WASM CPU fallback.
       // strength drives shift-averaging passes (measured SI-SDR on the
-      // showcase study: 1 pass 17.4 dB → 2 passes 18.8 dB → 3 passes 19.6 dB).
+      // showcase study: 1 pass 17.5 dB → 2 passes 20.5 dB → 3 passes 20.6 dB,
+      // finite-aware averaging + LS cross-talk removal).
       // Each pass runs in a throwaway Web Worker, so memory stays flat on
       // every backend (the wasm heap dies with the worker).
       const strength = options.strength ?? 0.92

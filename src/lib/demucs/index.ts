@@ -101,8 +101,8 @@ export interface DemucsOptions {
    * Number of shift-averaged passes. Each pass separates a copy of the mix
    * pre-padded by k × 100 ms and the results are averaged, cancelling
    * chunk-boundary artifacts. Measured on the showcase study (SI-SDR vs
-   * ground truth): 1 pass 17.35 dB, 2 passes 18.80 dB, 3 passes 19.60 dB,
-   * 4 passes 19.80 dB. Default 3.
+   * ground truth, finite-aware averaging): 1 pass 17.5 dB, 2 passes 20.5 dB,
+   * 3 passes 20.6 dB. Default 3.
    *
    * Every pass runs in a dedicated Web Worker that is terminated afterwards:
    * the onnxruntime-web WASM heap grows per session.run and is only fully
@@ -236,11 +236,45 @@ export async function separateWithDemucs(
     }
   }
 
-  const vocals = rawAudioToBuffer(ctx, stems.vocals)
-  const instrumental = rawAudioToBuffer(
-    ctx,
-    sumStems([stems.drums, stems.bass, stems.other], samples, raw.sampleRate),
-  )
+  // Cross-talk clean-up between the two products. After separation the vocal
+  // and instrumental estimates are near-orthogonal, so the least-squares
+  // projection of one onto the other is almost pure leakage from the other
+  // stem. Subtracting it costs ≈0.02 dB SI-SDR and cuts music bleed in the
+  // vocals by ~10 dB (showcase study: −42.3 → −52.8 dB; neutral on easy mixes
+  // where leakage already sits at the noise floor). Guarded both ways: a
+  // silent reference (e.g. instrumental-only input) skips the subtraction,
+  // and the coefficient is capped so a degenerate correlation can never eat
+  // the stem.
+  const vocalsRaw = stems.vocals
+  const instrumentalRaw = sumStems([stems.drums, stems.bass, stems.other], samples, raw.sampleRate)
+  removeLsLeakage(vocalsRaw.channelData, instrumentalRaw.channelData)
+  removeLsLeakage(instrumentalRaw.channelData, vocalsRaw.channelData)
+
+  const vocals = rawAudioToBuffer(ctx, vocalsRaw)
+  const instrumental = rawAudioToBuffer(ctx, instrumentalRaw)
   onProgress?.(92, 'Demucs v4 separation complete')
   return { stems, vocals, instrumental, backend: 'onnxruntime-web worker (webgpu → wasm fallback)' }
+}
+
+/**
+ * In-place least-squares leakage removal: for each channel subtracts
+ * `a · ref` from `target`, where `a = <target,ref> / <ref,ref>` clamped to
+ * ±0.5. Skips silent reference channels.
+ */
+function removeLsLeakage(target: Float32Array[], ref: Float32Array[]): void {
+  const CAP = 0.5
+  for (let c = 0; c < target.length && c < ref.length; c++) {
+    const t = target[c]
+    const r = ref[c]
+    let dot = 0
+    let rr = 0
+    for (let i = 0; i < t.length; i++) {
+      dot += t[i] * r[i]
+      rr += r[i] * r[i]
+    }
+    if (rr < 1e-12) continue // reference is silent — nothing to remove
+    const a = Math.min(CAP, Math.max(-CAP, dot / rr))
+    if (a === 0) continue
+    for (let i = 0; i < t.length; i++) t[i] -= a * r[i]
+  }
 }

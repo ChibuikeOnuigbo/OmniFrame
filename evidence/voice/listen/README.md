@@ -20,6 +20,13 @@ in its own worker so the WASM heap is reclaimed between passes, plus a
 (no musical noise in pauses). A finite-aware average scrubs the rare NaN a
 browser WASM pass emits, so multi-pass never degrades the output.
 
+**Update 3 (cross-talk removal):** after separation the vocal and instrumental
+estimates are near-orthogonal, so the least-squares projection of one onto the
+other is almost pure leakage. Subtracting it (both directions, capped) costs
+≈0.02 dB SI-SDR and cuts the music bleeding into the isolated voice by another
+**13 dB** (−43 → −56 dB on this study; neutral on easy mixes where leakage
+already sits at the noise floor).
+
 ## Objective scores (ground truth = exact stems used to build the mix)
 
 The showcase mix is deterministic (TTS narration + synthesized music bed at
@@ -31,12 +38,13 @@ Scoring the engines' vocal outputs against them:
 |---|---|---|---|
 | raw mixture (baseline) | −0.3 dB | −2.9 dB | — |
 | old DSP (mid/side + bandpass) | +0.4 dB | −24.8 dB | music clearly audible, voice artifacts |
-| Demucs v4, single pass (previous) | +17.4 dB | −43.3 dB | music inaudible, voice intact |
-| **Demucs v4, 3-pass averaged + VAD gate (in-app)** | **+20.4 dB** | **−42.7 dB** | music inaudible, voice intact, pauses silent |
+| Demucs v4, single pass | +17.4 dB | −43.3 dB | music inaudible, voice intact |
+| Demucs v4, 3-pass averaged + VAD gate | +20.4 dB | −42.7 dB | as above, pauses silent |
+| **+ LS cross-talk removal (current)** | **+20.4 dB** | **−56.2 dB** | music at the noise floor, voice intact, pauses silent |
 
 The instrumental output (`remove_vocal`) scores **+19.5 dB** against the clean
 music stem (measured on the committed MP3 itself). In the gated keep-vocal
-output, pause segments sit **22.5 dB below** speech segments (VAD gate
+output, pause segments sit **21.5 dB below** speech segments (VAD gate
 engaged). Measured by `qa/voice-demucs-model-e2e.mjs` (6/6 PASS), which
 drives the real UI.
 

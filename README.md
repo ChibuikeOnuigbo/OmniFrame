@@ -40,9 +40,10 @@ npm run qa:advanced # recording/trace/repeat-export workflow
 - **Export**: records the live preview with `MediaRecorder` to `.mp4`/`.webm` (best-effort audio mix).
 - **Voice isolation (real neural model)**: per-clip **Keep Vocal / Remove Vocal** powered by
   **Meta's Demucs v4 Hybrid Transformer (htdemucs)** running fully in-browser via ONNX Runtime Web
-  (WebGPU, WASM fallback). 3 passes with shifted chunk windows, averaged per-sample (worker per
-  pass), plus a Silero-VAD pause gate. Scored on a deterministic mix against ground truth:
-  **+20.4 dB SI-SDR, music bleed −43 dB, pauses −38 dB** (previous DSP engine: +0.4 dB — see
+  (WebGPU, WASM fallback). 3 passes with shifted chunk windows averaged per-sample (worker per
+  pass), LS cross-talk removal, plus a Silero-VAD pause gate. Scored on a deterministic mix
+  against ground truth: **+20.4 dB SI-SDR, music bleed −56 dB, pauses −37 dB** (previous DSP
+  engine: +0.4 dB — see
   `evidence/voice/listen/`). Weights download once: `npm run fetch:demucs`
   (174 MB, git-ignored; personal/research use per Meta's license). Fast DSP and
   the in-house AI-Denoise ONNX engines remain selectable.
