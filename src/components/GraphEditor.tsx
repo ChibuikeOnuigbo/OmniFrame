@@ -389,7 +389,7 @@ export function GraphEditor() {
             <button
               type="button"
               data-testid="graph-keyframe-toggle"
-              aria-pressed={isKeyAtPlayhead}
+              aria-pressed={!!isKeyAtPlayhead}
               title={isKeyAtPlayhead ? 'Remove Keyframe at Playhead' : 'Add Keyframe at Playhead'}
               onClick={handleToggleKeyframeAtPlayhead}
               className={`flex min-h-8 min-w-8 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${

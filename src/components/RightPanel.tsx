@@ -46,6 +46,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
   const [demucsReady, setDemucsReady] = useState<boolean | null>(null)
+  const [vadCleanup, setVadCleanup] = useState(true)
   useEffect(() => {
     let alive = true
     isDemucsModelAvailable().then((ok) => {
@@ -428,6 +429,18 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   </select>
                 </div>
 
+                {isolationModel === 'htdemucs-v4' && (
+                  <label className="flex items-center gap-2 cursor-pointer select-none" data-testid="audio-isolation-vad-toggle">
+                    <input
+                      type="checkbox"
+                      checked={vadCleanup}
+                      onChange={(e) => setVadCleanup(e.target.checked)}
+                      className="h-3 w-3 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand cursor-pointer"
+                    />
+                    <span className="text-[10px] text-ink-300">Silero VAD pause cleanup <span className="text-ink-500">(mutes residual noise between phrases)</span></span>
+                  </label>
+                )}
+
                 {isolationStatus && (
                   <p className="text-[10px] text-ink-400 font-mono truncate">{isolationStatus}</p>
                 )}
@@ -442,7 +455,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     try {
                       await executeVoiceIsolationForClip(
                         clip.id,
-                        { mode: isolationMode, model: isolationModel },
+                        { mode: isolationMode, model: isolationModel, vadGate: isolationModel === 'htdemucs-v4' ? vadCleanup : undefined },
                         (pct, msg) => setIsolationStatus(`${pct}%: ${msg}`),
                       )
                       setIsolationStatus('Completed!')

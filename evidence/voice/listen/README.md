@@ -12,6 +12,14 @@ WASM fallback). The previous mid/side DSP engine could not remove
 center-panned/broadband music and made the voice crack; its outputs are kept
 below as `-dsp-old` for A/B comparison.
 
+**Update 2 (quality pass):** separation now runs **3 passes with shifted
+chunk windows, averaged per-sample** (the classic Demucs shift-trick: removes
+chunk-boundary artifacts and adds ~3 dB SI-SDR over a single pass), each pass
+in its own worker so the WASM heap is reclaimed between passes, plus a
+**Silero-VAD pause gate** that attenuates everything between speech segments
+(no musical noise in pauses). A finite-aware average scrubs the rare NaN a
+browser WASM pass emits, so multi-pass never degrades the output.
+
 ## Objective scores (ground truth = exact stems used to build the mix)
 
 The showcase mix is deterministic (TTS narration + synthesized music bed at
@@ -23,11 +31,14 @@ Scoring the engines' vocal outputs against them:
 |---|---|---|---|
 | raw mixture (baseline) | −0.3 dB | −2.9 dB | — |
 | old DSP (mid/side + bandpass) | +0.4 dB | −24.8 dB | music clearly audible, voice artifacts |
-| **Demucs v4 (htdemucs, in-app)** | **+17.4 dB** | **−43.3 dB** | music inaudible, voice intact |
+| Demucs v4, single pass (previous) | +17.4 dB | −43.3 dB | music inaudible, voice intact |
+| **Demucs v4, 3-pass averaged + VAD gate (in-app)** | **+20.4 dB** | **−42.7 dB** | music inaudible, voice intact, pauses silent |
 
-The instrumental output (`remove_vocal`) scores **+19.3 dB** against the clean
-music stem with voice residue at −43 dB. Measured by
-`qa/voice-demucs-model-e2e.mjs` (5/5 PASS), which drives the real UI.
+The instrumental output (`remove_vocal`) scores **+19.5 dB** against the clean
+music stem (measured on the committed MP3 itself). In the gated keep-vocal
+output, pause segments sit **22.5 dB below** speech segments (VAD gate
+engaged). Measured by `qa/voice-demucs-model-e2e.mjs` (6/6 PASS), which
+drives the real UI.
 
 ## The pairs
 

@@ -12,11 +12,14 @@
  *   3. downloads the produced asset and scores it against ground truth
  *      (SI-SDR + music-bleed), comparing with the previous DSP engine
  *
- * PASS bar: SI-SDR(vocals) > 10 dB and music bleed < -35 dB (the old DSP
- * scores ~0.6 dB / -25 dB; Demucs measures ~17 dB / -43 dB).
+ * The engine runs 3 shift-averaged Demucs passes (17.35 dB single-pass →
+ * 19.60 dB 3-pass on this study) plus the Silero-VAD pause cleanup gate.
+ *
+ * PASS bar: SI-SDR(vocals) > 14 dB, music bleed < -35 dB, pauses >= 20 dB
+ * below speech level (old DSP scores ~0.6 dB / -25 dB).
  *
  * Requires: dev server :5173, public/models/htdemucs.onnx (npm run fetch:demucs).
- * Runtime: ~2-3 min (model load + WASM separation of a 20 s clip).
+ * Runtime: ~6-8 min in headless WASM (model load + 3 separation passes).
  */
 import { chromium as pwChromium } from 'playwright'
 import serverlessChromium, { inflate } from '@sparticuz/chromium'
@@ -158,7 +161,7 @@ await page.waitForFunction(() => {
   const s = document.querySelector('[data-testid="audio-isolation-status"], [data-testid="isolation-status"]')
   const txt = s ? s.textContent : ''
   return /Error|Completed/.test(txt) || window.__omniframe_store.getState().assets.some((a) => a.name.includes('Vocal Isolated · htdemucs-v4'))
-}, null, { timeout: 420_000 })
+}, null, { timeout: 900_000 })
 console.log(`  UI isolation finished in ${((Date.now() - t0) / 1000).toFixed(0)}s`)
 
 const outInfo = await page.evaluate(async () => {
@@ -170,23 +173,60 @@ const outInfo = await page.evaluate(async () => {
   for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000))
   return { name: asset.name, duration: asset.duration, b64: btoa(bin) }
 })
-await browser.close()
 if (!outInfo) throw new Error('no Demucs-isolated asset produced by the UI')
 
 const outWav = join(TMP, 'demucs-isolated.wav')
 writeFileSync(outWav, Buffer.from(outInfo.b64, 'base64'))
 console.log(`  asset: ${outInfo.name} (${outInfo.duration.toFixed(2)}s, ${(outWav.length / 1e6).toFixed(1)} MB)`)
 
+// speech regions of the ground-truth voice, via the app's own Silero VAD
+const voiceB64 = readFileSync(join(TMP, 'clean-voice.wav')).toString('base64')
+const vadProbs = await page.evaluate(async (b64) => {
+  const AC = window.AudioContext || window.webkitAudioContext
+  const ctx = new AC({ sampleRate: 44100 })
+  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))
+  const buf = await ctx.decodeAudioData(bytes.buffer)
+  const vad = await import('/src/lib/vad.ts')
+  const { probs } = await vad.detectSpeech(buf)
+  await ctx.close()
+  return Array.from(probs)
+}, voiceB64)
+await browser.close()
+
 // ---- 4. score the model output -------------------------------------------
 console.log('--- Step 4: Scoring Demucs output against ground truth ---')
 const demucsScore = scoreOutput(outWav, join(TMP, 'clean-voice.wav'), join(TMP, 'clean-music.wav'), '  Demucs v4 (app UI)')
 
+// pause-region levels (VAD gate check): how quiet is the output between phrases?
+{
+  const out = readWav(outWav)
+  const N = Math.min(out.data.length / out.ch, vadProbs.length * 512 * (44100 / 16000))
+  const frameDur = 0.032
+  const speechRms = [], pauseRms = []
+  for (let c = 0; c < 2; c++) {
+    const ch = channel(out, c)
+    let sE = 0, sN = 0, pE = 0, pN = 0
+    for (let i = 0; i < ch.length; i++) {
+      const f = Math.min(Math.floor((i / 44100) / frameDur), vadProbs.length - 1)
+      const e = ch[i] * ch[i]
+      if (vadProbs[f] > 0.5) { sE += e; sN++ } else { pE += e; pN++ }
+    }
+    speechRms.push(10 * Math.log10(sE / Math.max(1, sN) + 1e-12))
+    pauseRms.push(10 * Math.log10(pE / Math.max(1, pN) + 1e-12))
+  }
+  const speechDb = (speechRms[0] + speechRms[1]) / 2
+  const pauseDb = (pauseRms[0] + pauseRms[1]) / 2
+  console.log(`  pause cleanup: speech ${speechDb.toFixed(1)} dB, pauses ${pauseDb.toFixed(1)} dB (${(pauseDb - speechDb).toFixed(1)} dB below speech)`)
+  globalThis.__pauseDelta = pauseDb - speechDb
+}
+
 // ---- 5. verdict -----------------------------------------------------------
 let pass = 0, total = 0
 const check = (name, ok) => { total++; console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`); if (ok) pass++ }
-check('Demucs SI-SDR > 10 dB (real separation)', demucsScore.sdr > 10)
+check('Demucs SI-SDR > 14 dB (3-pass shift-averaged separation)', demucsScore.sdr > 14)
 check('Demucs music-bleed < -35 dB (music inaudible)', demucsScore.bleed < -35)
-check('Demucs at least 8 dB better than old DSP', demucsScore.sdr > dspScore.sdr + 8)
+check('Demucs at least 10 dB better than old DSP', demucsScore.sdr > dspScore.sdr + 10)
+check('VAD pause cleanup: pauses >= 20 dB below speech', (globalThis.__pauseDelta ?? 0) < -20)
 check('Duration preserved (20.00s ± 0.05)', Math.abs(outInfo.duration - 20) < 0.05)
 check('Zero runtime page errors', pageErrors.length === 0)
 
