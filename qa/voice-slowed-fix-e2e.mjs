@@ -231,8 +231,12 @@ const caseR = await persisted('R resampler fidelity', async (page) => {
 // ---------- case B: synthetic slowed mix, forced fix, SI-SDR ------------------
 // Sandbox memory is razor-thin: each case must do its build AND its (single)
 // separation in ONE evaluate with ONE closed AudioContext — a second
-// separation, or leftover open contexts, OOM the renderer (probed: 6 s x2
-// passes fits with ~3.9 GB total RAM; 8 s or 3 passes does not).
+// separation, or leftover open contexts, OOM the renderer. Re-probed on the
+// current 3.94 GB instance: 6 s x1 pass fits with ~0 MB headroom; the 2-pass
+// peak (pass-2 heap on top of un-reclaimed pass-1 pages) OOMs, so B runs at
+// passes:1 here. 2-pass native averaging parity is asserted bit-exactly by
+// case N (no model needed); the 2-pass end-to-end run is in the committed
+// Req-13 report.
 const caseB1 = await persisted('B1 synthetic direct', async (page) => {
   return page.evaluate(async () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 })
@@ -265,7 +269,7 @@ const caseB1 = await persisted('B1 synthetic direct', async (page) => {
     const gtB64 = await enc(slowedGT)
     // round-trip the mix through wav bytes like a real asset upload
     const mixBack = await ctx.decodeAudioData(window.__h.fromB64(mixB64))
-    const direct = await demucs.separateWithDemucs(ctx, mixBack, null, { passes: 2 })
+    const direct = await demucs.separateWithDemucs(ctx, mixBack, null, { passes: 1 })
     const directB64 = await enc(direct.vocals)
     const res = { mixB64, gtB64, directB64, directLen: direct.vocals.length, inLen: mixBack.length, nativeLen: len }
     await ctx.close()
@@ -279,7 +283,7 @@ const caseB2 = await persisted('B2 synthetic fixed', async (page) => {
     const lib = await import('/src/lib/voiceIsolation.ts')
     const demucs = await import('/src/lib/demucs/index.ts')
     const slowedMix = await ctx.decodeAudioData(window.__h.fromB64(mixB64))
-    const fixed = await demucs.separateWithDemucs(ctx, slowedMix, null, { passes: 2, speedFactor: 4 / 3 })
+    const fixed = await demucs.separateWithDemucs(ctx, slowedMix, null, { passes: 1, speedFactor: 4 / 3 })
     const fixedB64 = await window.__h.wavB64(lib, fixed.vocals)
     const res = { fixedB64, fixedLen: fixed.vocals.length }
     await ctx.close()

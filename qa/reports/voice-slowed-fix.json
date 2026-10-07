@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T16:53:41.727Z",
+  "date": "2026-10-07T19:08:08.439Z",
   "results": [
     {
       "name": "A: real slowed track detected",
@@ -14,7 +14,7 @@
     {
       "name": "B: speed-corrected separation beats direct (SI-SDR)",
       "ok": true,
-      "detail": "fixed 19.64 dB vs direct 18.58 dB (1.06 dB gain)"
+      "detail": "fixed 19.48 dB vs direct 18.46 dB (1.01 dB gain)"
     },
     {
       "name": "B: output restored to exact input length",
@@ -72,6 +72,16 @@
       "detail": "output -75.1 dBFS vs mix -11.6 dBFS (63.5 dB below, bar 20), length 264600 === 264600"
     },
     {
+      "name": "N: native DSP core active in-browser",
+      "ok": true,
+      "detail": "wasm module (public/wasm/omni-dsp.wasm, compiled from native/dsp-core/omni_dsp.cpp) instantiated via the app pipeline; all DSP ops above ran natively with the JS modules as fallback"
+    },
+    {
+      "name": "N: native core numerically identical to JS fallback",
+      "ok": true,
+      "detail": "max|diff| vs JS — resample 0.00e+0 (bar 1e-5), LS de-leak 0.00e+0, pass average 0.00e+0, peak scale 0.00e+0 (bar 1e-6)"
+    },
+    {
       "name": "zero runtime page errors",
       "ok": true,
       "detail": "clean"
@@ -111,8 +121,8 @@
       ]
     },
     "synthetic": {
-      "siSdrDirect": 18.58,
-      "siSdrFixed": 19.64
+      "siSdrDirect": 18.46,
+      "siSdrFixed": 19.48
     },
     "realSegment": {
       "detection": {
@@ -227,6 +237,16 @@
     "resamplerFidelity": {
       "x145": 67.23794815297738,
       "x133": 76.62340923083053,
+      "errors": []
+    },
+    "nativeDsp": {
+      "active": true,
+      "resampleMaxDiff": 0,
+      "resampleLenOk": true,
+      "lsMaxDiff": 0,
+      "avgMaxDiff": 0,
+      "peakMaxDiff": 0,
+      "avgMissing": 0,
       "errors": []
     },
     "naturalPitch": {

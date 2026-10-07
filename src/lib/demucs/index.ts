@@ -217,8 +217,10 @@ export async function separateWithDemucs(
       }
       completed++
       // let the renderer reclaim the terminated worker's WASM heap before the
-      // next pass starts (its high-water pages are released asynchronously)
-      await new Promise((r) => setTimeout(r, 200))
+      // next pass starts (its high-water pages are released asynchronously;
+      // 200 ms was too tight on memory-constrained machines — the next pass
+      // then OOMs on top of the un-reclaimed pages, so wait longer)
+      await new Promise((r) => setTimeout(r, 1500))
     } catch (err) {
       if (k === 0) throw err // the first pass must succeed
       onProgress?.(46, `Demucs v4: pass ${k + 1} failed (${(err as Error).message}); averaging ${completed} pass(es)`)

@@ -87,6 +87,23 @@ function ensureCapacity(m: DspExports, byteEnd: number): number {
 }
 
 /**
+ * Runs `fn` natively, degrading to null (JS fallback) if the linear memory
+ * can't be grown to fit — e.g. a very long clip on a memory-tight machine.
+ * The fallback is bit-identical, so this never changes the audio.
+ */
+function tryNative<T>(fn: () => T): T | null {
+  try {
+    return fn()
+  } catch (err) {
+    if (err instanceof RangeError) {
+      console.warn('[dspNative] native op out of memory, using JS fallback')
+      return null
+    }
+    throw err
+  }
+}
+
+/**
  * Native resample — drop-in for resampleChannels() from
  * src/lib/demucs/resample.js (same 32-tap Blackman-windowed sinc, 2048
  * phases, per-phase DC normalization; length = ceil(len / rate)).
@@ -98,6 +115,7 @@ export function nativeResampleChannels(
 ): { channelData: Float32Array[]; length: number } | null {
   const m = loaded()
   if (!m || channels.length === 0) return null
+  return tryNative(() => {
   const n = channels[0].length
   if (channels.some((c) => c.length !== n)) return null
   if (!Number.isFinite(rate) || rate <= 0) return null
@@ -113,6 +131,7 @@ export function nativeResampleChannels(
     out.push(Float32Array.from(outView))
   }
   return { channelData: out, length: outLen }
+  })
 }
 
 /**
@@ -125,6 +144,7 @@ export function nativeResampleChannels(
 export function nativeRemoveLsLeakage(target: Float32Array[], ref: Float32Array[]): number[] | null {
   const m = loaded()
   if (!m) return null
+  return tryNative(() => {
   const pairs: number[] = []
   const count = Math.min(target.length, ref.length)
   let maxLen = 0
@@ -148,6 +168,7 @@ export function nativeRemoveLsLeakage(target: Float32Array[], ref: Float32Array[
     }
   }
   return pairs
+  })
 }
 
 /**
@@ -163,6 +184,7 @@ export function nativeAveragePasses(
 ): { out: Float32Array; missing: Uint8Array; missingCount: number } | null {
   const m = loaded()
   if (!m || passes.length === 0 || len <= 0) return null
+  return tryNative(() => {
   if (passes.some((p) => p.length !== len)) return null
 
   const base = ensureCapacity(m, passes.length * len * 4 + len * 4 + len)
@@ -176,6 +198,7 @@ export function nativeAveragePasses(
     missing: Uint8Array.from(new Uint8Array(m.memory.buffer, missingPtr, len)),
     missingCount,
   }
+  })
 }
 
 /**
@@ -187,6 +210,7 @@ export function nativeAveragePasses(
 export function nativePeakScale(a: Float32Array, b: Float32Array, threshold = 0.999, target = 0.98): number | null {
   const m = loaded()
   if (!m) return null
+  return tryNative(() => {
   const len = Math.min(a.length, b.length)
   if (len === 0) return 1
   const base = ensureCapacity(m, a.length * 4 + b.length * 4)
@@ -200,4 +224,5 @@ export function nativePeakScale(a: Float32Array, b: Float32Array, threshold = 0.
     b.set(bView)
   }
   return g
+  })
 }
