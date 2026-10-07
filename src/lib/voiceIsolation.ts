@@ -27,7 +27,7 @@ import type { MediaAsset, Clip } from '../types'
 import { uid } from './time'
 import { denoiseAudioBuffer, denoiseViaDesktop, isDesktopMode } from './aiDenoise'
 import { separateWithDemucs } from './demucs/index.ts'
-import { computeSpeechGate, applyGainEnvelope } from './vad.ts'
+import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor } from './vad.ts'
 
 export type VoiceIsolationModel =
   | 'omni-voicetarget'
@@ -52,6 +52,12 @@ export interface VoiceIsolationOptions {
    *  closes where VAD probability is low AND the level is ≥18 dB below the
    *  speech reference, so breaths and sung vocals are preserved. */
   vadGate?: boolean
+  /** Auto speed-normalization for slowed productions (default true, htdemucs-v4
+   *  only). Detects "slowed + reverb" edits (vocals pitched below the model's
+   *  learned range) via Silero VAD, separates at the corrected speed, then
+   *  restores the original timing. Normal and instrumental tracks pass through
+   *  untouched after one cheap detection pass. */
+  speedNormalize?: boolean
 }
 
 /**
@@ -353,7 +359,19 @@ export async function processVoiceIsolation(
       // every backend (the wasm heap dies with the worker).
       const strength = options.strength ?? 0.92
       const passes = strength >= 0.85 ? 3 : strength >= 0.6 ? 2 : 1
-      const separation = await separateWithDemucs(audioCtx, inputBuffer, onProgress, { passes })
+      // Slowed-production detection (cheap: one Silero pass on normal tracks).
+      // Separating at the corrected speed then slowing the stems back restores
+      // vocals that "slowed + reverb" edits pitch out of the model's range.
+      let speedFactor = 1
+      if (options.speedNormalize !== false) {
+        onProgress?.(40, 'Checking for slowed production…')
+        const detection = await detectSlowedFactor(inputBuffer)
+        speedFactor = detection.factor
+        if (speedFactor > 1) {
+          onProgress?.(42, `Slowed production detected (×${speedFactor.toFixed(2)}) — separating at corrected speed`)
+        }
+      }
+      const separation = await separateWithDemucs(audioCtx, inputBuffer, onProgress, { passes, speedFactor })
       if (options.mode === 'keep_vocal') {
         processedBuffer = separation.vocals
         if (options.vadGate !== false) {

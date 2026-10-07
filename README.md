@@ -41,10 +41,16 @@ npm run qa:advanced # recording/trace/repeat-export workflow
 - **Voice isolation (real neural model)**: per-clip **Keep Vocal / Remove Vocal** powered by
   **Meta's Demucs v4 Hybrid Transformer (htdemucs)** running fully in-browser via ONNX Runtime Web
   (WebGPU, WASM fallback). 3 passes with shifted chunk windows averaged per-sample (worker per
-  pass), LS cross-talk removal, plus a Silero-VAD pause gate. Scored on a deterministic mix
+  pass), LS cross-talk removal, plus a Silero-VAD pause gate. **"Slowed + reverb" edits are
+  auto-fixed**: slowed productions are detected (Silero can't hear the vocals at native speed
+  but clearly can when sped back up), separated at the corrected speed, and restored to the
+  exact original timing — on by default, toggleable per isolation. Scored on a deterministic mix
   against ground truth: **+20.4 dB SI-SDR, music bleed −56 dB, pauses −37 dB** (previous DSP
   engine: +0.4 dB — see the [listen pack](evidence/voice/listen/README.md) and the
-  [robustness suite](evidence/voice/robustness/README.md) for input↔output pairs you can play).
+  [robustness suite](evidence/voice/robustness/README.md) for input↔output pairs you can play);
+  on a real "ultra slowed" track the auto-fix recovers buried vocals the direct pass misses
+  (voice-like energy 52% → 78% on the worst window — [slowed-track pack](evidence/voice/slowed/README.md),
+  [full-track study](evidence/voice/realworld/README.md)).
   Weights download once: `npm run fetch:demucs`
   (174 MB, git-ignored; personal/research use per Meta's license). Fast DSP and
   the in-house AI-Denoise ONNX engines remain selectable.

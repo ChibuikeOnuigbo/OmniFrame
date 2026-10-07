@@ -1,0 +1,213 @@
+{
+  "date": "2026-10-07T13:57:19.044Z",
+  "results": [
+    {
+      "name": "A: real slowed track detected",
+      "ok": true,
+      "detail": "factor x1.45 on 108s track (grid x1=0.000 x1.15=0.002 x1.3=0.274 x1.45=0.445 x1.6=0.335), native voice-detectability 0.0005"
+    },
+    {
+      "name": "C: normal-speed mix is a no-op",
+      "ok": true,
+      "detail": "factor 1 after 1 Silero pass(es), baseline 0.823 (>0.08 = clearly voiced at native speed)"
+    },
+    {
+      "name": "B: speed-corrected separation beats direct (SI-SDR)",
+      "ok": true,
+      "detail": "fixed 19.19 dB vs direct 18.43 dB (0.76 dB gain)"
+    },
+    {
+      "name": "B: output restored to exact input length",
+      "ok": true,
+      "detail": "fixed 264600 samples vs input 264600 (direct 264600, native mix 198450)"
+    },
+    {
+      "name": "D: auto-detection fired in the action",
+      "ok": true,
+      "detail": "factor x1.45, action log: \"40: Checking for slowed production…\"; old path log had 0 speed messages"
+    },
+    {
+      "name": "D: fixed acapella keeps the input timing",
+      "ok": true,
+      "detail": "fixed 264600 samples vs input 264600"
+    },
+    {
+      "name": "D: auto fix never degrades the output",
+      "ok": true,
+      "detail": "voice-like energy 0.981 → 0.992, recovery 0.405 → 0.419 on this prominent-vocal window (both approaches already work here — the fix's big win is on buried vocals, see E and the full-track evidence)"
+    },
+    {
+      "name": "E: speed-corrected separation recovers buried vocals",
+      "ok": true,
+      "detail": "Silero at natural pitch — direct mean 0.444 / voice-like energy 51.9% vs fixed mean 0.679 / voice-like energy 78.3% (recovery 123% → 386%)"
+    },
+    {
+      "name": "E: fixed acapella keeps the input timing",
+      "ok": true,
+      "detail": "fixed 264600 samples vs input 264600"
+    },
+    {
+      "name": "F: instrumental track not flagged",
+      "ok": true,
+      "detail": "factor 1 after scanning 4 factors (x1=0.025 x1.15=0.048 x1.3=0.046 x1.45=0.021 x1.6=0.039) — the harmonic pad scores 0.02-0.05 on Silero at every speed but never decisively, so the gate declines; action log shows the routine check and no detection"
+    },
+    {
+      "name": "F: instrumental keep_vocal output stays near-silent",
+      "ok": true,
+      "detail": "output -75.1 dBFS vs mix -11.6 dBFS (63.5 dB below, bar 20), length 264600 === 264600"
+    },
+    {
+      "name": "zero runtime page errors",
+      "ok": true,
+      "detail": "clean"
+    }
+  ],
+  "detail": {
+    "realTrackDetection": {
+      "factor": 1.45,
+      "baselineMean": 0.000477876455905936,
+      "bestMean": 0.4445935554452752,
+      "scanned": [
+        {
+          "factor": 1,
+          "mean": 0.000477876455905936,
+          "frames": 0
+        },
+        {
+          "factor": 1.15,
+          "mean": 0.0021485814043836846,
+          "frames": 0.0008179959100204499
+        },
+        {
+          "factor": 1.3,
+          "mean": 0.2744612055165427,
+          "frames": 0.2621359223300971
+        },
+        {
+          "factor": 1.45,
+          "mean": 0.4445935554452752,
+          "frames": 0.4332129963898917
+        },
+        {
+          "factor": 1.6,
+          "mean": 0.33536001052718034,
+          "frames": 0.3494593056346044
+        }
+      ]
+    },
+    "synthetic": {
+      "siSdrDirect": 18.43,
+      "siSdrFixed": 19.19
+    },
+    "realSegment": {
+      "detection": {
+        "factor": 1.45,
+        "baselineMean": 0.01227138020138052,
+        "bestMean": 0.8401689016541769,
+        "scanned": [
+          {
+            "factor": 1,
+            "mean": 0.01227138020138052,
+            "frames": 0
+          },
+          {
+            "factor": 1.15,
+            "mean": 0.495812692159524,
+            "frames": 0.49079754601226994
+          },
+          {
+            "factor": 1.3,
+            "mean": 0.7844036405699121,
+            "frames": 0.8541666666666666
+          },
+          {
+            "factor": 1.45,
+            "mean": 0.8401689016541769,
+            "frames": 0.8992248062015504
+          },
+          {
+            "factor": 1.6,
+            "mean": 0.8306049029541831,
+            "frames": 0.8803418803418803
+          }
+        ]
+      },
+      "actionLog": [
+        "40: Checking for slowed production…",
+        "42: Slowed production detected (×1.45) — separating at corrected speed",
+        "6: Demucs v4: speed-normalizing ×1.45 (slowed production)…"
+      ],
+      "richVet": {
+        "direct": {
+          "voiceLikeFrac": 0.9812743819994765,
+          "voiceEnergy": 21132.534386692227,
+          "spedMean": 0.8993818704472032,
+          "spedFrames": 0.8914728682170543,
+          "rms": 0.34424721060988644
+        },
+        "fixed": {
+          "voiceLikeFrac": 0.9922662860389019,
+          "voiceEnergy": 21886.651437905948,
+          "spedMean": 0.9400343081747838,
+          "spedFrames": 0.9612403100775194,
+          "rms": 0.3481612697704383
+        },
+        "directRecovery": 0.40470010568437575,
+        "fixedRecovery": 0.4191418780122973
+      }
+    },
+    "buriedWindow": {
+      "direct": {
+        "voiceLikeFrac": 0.5190733180049913,
+        "voiceEnergy": 3507.6055012644683,
+        "spedMean": 0.4440898289976194,
+        "spedFrames": 0.4496124031007752,
+        "rms": 0.19266494899210887
+      },
+      "fixed": {
+        "voiceLikeFrac": 0.7828722835293868,
+        "voiceEnergy": 11032.148355815518,
+        "spedMean": 0.6789765069188998,
+        "spedFrames": 0.7286821705426356,
+        "rms": 0.2781783912955632
+      },
+      "directRecovery": 1.2270999735010768,
+      "fixedRecovery": 3.859484468877978
+    },
+    "instrumentalNoOp": {
+      "detection": {
+        "factor": 1,
+        "baselineMean": 0.024711543225987072,
+        "scanned": [
+          {
+            "factor": 1,
+            "mean": 0.024711543225987072,
+            "frames": 0
+          },
+          {
+            "factor": 1.15,
+            "mean": 0.04789317623237891,
+            "frames": 0
+          },
+          {
+            "factor": 1.3,
+            "mean": 0.0459808808647924,
+            "frames": 0
+          },
+          {
+            "factor": 1.45,
+            "mean": 0.02144121892692507,
+            "frames": 0
+          },
+          {
+            "factor": 1.6,
+            "mean": 0.038804050694164045,
+            "frames": 0
+          }
+        ]
+      },
+      "mixLvl": -11.590919605724348,
+      "outLvl": -75.102799401297
+    }
+  }
+}

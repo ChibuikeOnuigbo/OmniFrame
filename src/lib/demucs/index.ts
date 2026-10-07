@@ -20,6 +20,7 @@
  */
 
 import type { RawAudio } from './wav-utils.js'
+import { renderAtRate } from '../vad'
 
 export const DEMUCS_MODEL_ID = 'htdemucs-v4'
 export const DEMUCS_MODEL_URL = '/models/htdemucs.onnx'
@@ -112,6 +113,16 @@ export interface DemucsOptions {
    * averages and stays free for the UI.
    */
   passes?: number
+  /**
+   * Speed normalization for slowed productions ("slowed + reverb" edits).
+   * When > 1, the input is resampled to play `speedFactor`x faster before
+   * separation and both outputs are slowed back to the original time
+   * afterwards. Slowed edits pitch vocals below the range Demucs learned
+   * as "vocals"; separating at the corrected speed recovers them (measured
+   * on a real "ultra slowed" track: acapella vocal-like energy 23% -> 45%).
+   * `src/lib/vad.ts#detectSlowedFactor` finds the right value.
+   */
+  speedFactor?: number
 }
 
 interface WorkerStems {
@@ -157,6 +168,12 @@ export async function separateWithDemucs(
   options: DemucsOptions = {},
 ): Promise<DemucsSeparationResult> {
   const passes = Math.max(1, Math.min(4, options.passes ?? 3))
+  const speedFactor = Math.max(1, Math.min(2, options.speedFactor ?? 1))
+  const originalLength = buffer.length
+  if (speedFactor > 1.001) {
+    onProgress?.(6, `Demucs v4: speed-normalizing ×${speedFactor.toFixed(2)} (slowed production)…`)
+    buffer = await renderAtRate(buffer, speedFactor)
+  }
   const raw = await bufferToRawAudio(buffer)
   const samples = raw.channelData[0].length
 
@@ -250,8 +267,27 @@ export async function separateWithDemucs(
   removeLsLeakage(vocalsRaw.channelData, instrumentalRaw.channelData)
   removeLsLeakage(instrumentalRaw.channelData, vocalsRaw.channelData)
 
-  const vocals = rawAudioToBuffer(ctx, vocalsRaw)
-  const instrumental = rawAudioToBuffer(ctx, instrumentalRaw)
+  let vocals = rawAudioToBuffer(ctx, vocalsRaw)
+  let instrumental = rawAudioToBuffer(ctx, instrumentalRaw)
+  if (speedFactor > 1.001) {
+    // restore the original time base: slow both outputs back and pad/trim to
+    // the exact input length so the isolated clip stays frame-aligned
+    const restore = async (b: AudioBuffer): Promise<AudioBuffer> => {
+      const slowed = await renderAtRate(b, 1 / speedFactor)
+      if (slowed.length === originalLength) return slowed
+      // pad/trim to the exact input length so the clip stays frame-aligned
+      const out = ctx.createBuffer(slowed.numberOfChannels, originalLength, slowed.sampleRate)
+      const n = Math.min(slowed.length, originalLength)
+      for (let c = 0; c < slowed.numberOfChannels; c++) {
+        const dst = new Float32Array(originalLength)
+        dst.set(slowed.getChannelData(c).subarray(0, n))
+        out.copyToChannel(dst as Float32Array<ArrayBuffer>, c)
+      }
+      return out
+    }
+    vocals = await restore(vocals)
+    instrumental = await restore(instrumental)
+  }
   onProgress?.(92, 'Demucs v4 separation complete')
   return { stems, vocals, instrumental, backend: 'onnxruntime-web worker (webgpu → wasm fallback)' }
 }

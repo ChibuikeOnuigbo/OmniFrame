@@ -90,6 +90,105 @@ export async function detectSpeech(
   return { probs, frameSamples: CHUNK, sr: VAD_SR }
 }
 
+// ---------------------------------------------------------------------------
+// Slowed-production detection
+//
+// "Slowed + reverb" edits pitch the whole song down (often 0.6–0.85x). The
+// vocals then sit below the pitch range Demucs learned as "vocals" and the
+// separation silently degrades (measured on a real user track: acapella
+// vocal-like energy 23% instead of 45%). Silero VAD is pitch-sensitive in
+// exactly the right way: if the voice becomes clearly MORE detectable when
+// the mix is sped back up, the track was slowed — and separation should run
+// at the corrected speed, with the stems slowed back afterwards.
+// ---------------------------------------------------------------------------
+
+/** Renders `buffer` playing `rate`x faster/slower (browser resampler). */
+export async function renderAtRate(buffer: AudioBuffer, rate: number): Promise<AudioBuffer> {
+  const length = Math.max(1, Math.ceil(buffer.length / rate))
+  const offline = new OfflineAudioContext(buffer.numberOfChannels, length, buffer.sampleRate)
+  const src = offline.createBufferSource()
+  src.buffer = buffer
+  src.playbackRate.value = rate
+  src.connect(offline.destination)
+  src.start()
+  return offline.startRendering()
+}
+
+/** At most this many seconds of the input are analyzed for slowed-ness. */
+const SLOWED_DETECT_MAX_SECONDS = 90
+
+async function capTo90s(buffer: AudioBuffer): Promise<AudioBuffer> {
+  const cap = Math.floor(buffer.sampleRate * SLOWED_DETECT_MAX_SECONDS)
+  if (buffer.length <= cap) return buffer
+  const offline = new OfflineAudioContext(buffer.numberOfChannels, cap, buffer.sampleRate)
+  const src = offline.createBufferSource()
+  src.buffer = buffer
+  src.connect(offline.destination)
+  src.start(0, 0, cap / buffer.sampleRate)
+  return offline.startRendering()
+}
+
+async function speechScore(buffer: AudioBuffer): Promise<{ mean: number; frames: number }> {
+  const { probs } = await detectSpeech(await capTo90s(buffer))
+  if (probs.length === 0) return { mean: 0, frames: 0 }
+  let sum = 0
+  let hot = 0
+  for (let i = 0; i < probs.length; i++) {
+    sum += probs[i]
+    if (probs[i] > 0.5) hot++
+  }
+  return { mean: sum / probs.length, frames: hot / probs.length }
+}
+
+export interface SlowedDetection {
+  /** speed-up factor to apply before separation (1 = not slowed) */
+  factor: number
+  /** Silero voice-detectability at native speed */
+  baselineMean: number
+  /** voice-detectability at the chosen factor */
+  bestMean: number
+  scanned: { factor: number; mean: number; frames: number }[]
+}
+
+/**
+ * Detects slowed productions. Cheap-first: if the voice is already clearly
+ * detectable at native speed the track is in-distribution and we stop after
+ * one Silero pass. Otherwise candidate speed-ups are scanned; a factor is
+ * accepted only when voice detectability jumps decisively (>=3x mean and
+ * >=5x voiced frames), so normal and instrumental tracks return 1.
+ */
+export async function detectSlowedFactor(buffer: AudioBuffer): Promise<SlowedDetection> {
+  const base = await speechScore(buffer)
+  const scanned: SlowedDetection['scanned'] = [{ factor: 1, mean: base.mean, frames: base.frames }]
+  if (base.mean > 0.08 || buffer.duration < 4) {
+    return { factor: 1, baselineMean: base.mean, bestMean: base.mean, scanned }
+  }
+  let best = { factor: 1, mean: base.mean, frames: base.frames }
+  let lowScores = 0
+  for (const factor of [1.15, 1.3, 1.45, 1.6]) {
+    const rendered = await renderAtRate(await capTo90s(buffer), factor)
+    const score = await speechScore(rendered)
+    scanned.push({ factor, mean: score.mean, frames: score.frames })
+    if (score.mean > best.mean) best = { factor, ...score }
+    if (score.mean < 0.015) {
+      if (++lowScores >= 2) break // instrumental: no voice at any speed
+    } else {
+      lowScores = 0
+    }
+  }
+  const decisive =
+    best.factor > 1 &&
+    best.mean > 0.06 &&
+    best.mean > 3 * base.mean &&
+    best.frames > 5 * Math.max(base.frames, 0.005)
+  return {
+    factor: decisive ? best.factor : 1,
+    baselineMean: base.mean,
+    bestMean: best.mean,
+    scanned,
+  }
+}
+
 export interface SpeechGateOptions {
   /** 0..1 — how deep the gate closes in pauses (maps to −12…−56 dB floor) */
   strength?: number

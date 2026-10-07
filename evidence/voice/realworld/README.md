@@ -94,5 +94,9 @@ Audit reports from this study: [track1](../../../qa/reports/voice-realtrack-stud
 - Synthetic studies with exact ground-truth scoring:
   [`evidence/voice/listen/`](../listen/README.md) (main),
   [`evidence/voice/robustness/`](../robustness/README.md) (edge cases).
-- Speed normalization is currently an offline technique (documented here);
-  the in-app pipeline runs at native speed.
+- **Update — the fix is now in-app and automatic.** The app detects slowed
+  productions (Silero-based, one cheap pass on normal tracks), separates at
+  the corrected speed and restores the original timing, on by default.
+  End-to-end proof on this very track (plus a buried-vocal window and a
+  ground-truth synthetic): [`evidence/voice/slowed/`](../slowed/README.md) —
+  12/12 checks, [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs).
