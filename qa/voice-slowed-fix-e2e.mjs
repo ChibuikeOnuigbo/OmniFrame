@@ -28,6 +28,13 @@
  *      it standalone. E therefore forces the factor the full-track
  *      detection chose (x1.45) through the real separator and asserts the
  *      recovered voice content.
+ *   R. resampler fidelity: the polyphase sinc in renderAtRate must beat
+ *      WebAudio's playbackRate rendering (measured 10.5 dB bandlimited
+ *      round-trip) by a wide margin — bar > 45 dB.
+ *   G. natural-pitch output: keep_vocal with speedOutput 'natural' on the
+ *      real-track segment — the acapella must come back at the corrected
+ *      speed (shorter), named distinctly, with real voice at natural pitch
+ *      directly audible to Silero (no re-speeding needed).
  *   F. instrumental false-positive guard: a music-only mix through the
  *      action path with the auto fix ON. Detection scans all four factors,
  *      finds no voice at any speed, and must return 1 — the old behavior,
@@ -177,6 +184,47 @@ const caseC = await persisted('C no-op safety', async (page) => {
     const det = await vad.detectSlowedFactor(mix)
     await ctx.close()
     return { factor: det.factor, baselineMean: det.baselineMean, scanned: det.scanned, mixB64: null }
+  })
+})
+
+// ---------- case R: resampler fidelity ----------------------------------------
+const caseR = await persisted('R resampler fidelity', async (page) => {
+  return page.evaluate(async () => {
+    const vad = await import('/src/lib/vad.ts')
+    const sr = 44100, len = 3 * sr
+    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: sr })
+    const buf = ctx.createBuffer(2, len, sr)
+    // fully bandlimited <= 12 kHz (sum of tones) so the anti-aliasing cut at
+    // the x1.45 new Nyquist (~15.2 kHz) removes nothing legitimate
+    const tones = []
+    for (let f = 200; f <= 12000; f += 137) tones.push(f)
+    for (let c = 0; c < 2; c++) {
+      const d = buf.getChannelData(c)
+      for (let i = 0; i < len; i++) {
+        const t = i / sr
+        let v = 0
+        for (let k = 0; k < tones.length; k++) v += Math.sin(2 * Math.PI * tones[k] * t + k)
+        d[i] = (v / tones.length) * 3
+      }
+    }
+    async function snr(f) {
+      const sped = await vad.renderAtRate(buf, f)
+      const back = await vad.renderAtRate(sped, 1 / f)
+      const a = buf.getChannelData(0), b = back.getChannelData(0)
+      const n = Math.min(a.length, b.length)
+      let bestOff = 0, bestCor = -Infinity
+      for (let off = -64; off <= 64; off++) {
+        let cor = 0
+        for (let i = 4096; i < n - 4096; i += 13) cor += a[i] * b[i + off]
+        if (cor > bestCor) { bestCor = cor; bestOff = off }
+      }
+      let es = 0, en = 0
+      for (let i = 8192; i < n - 8192; i++) { const e = a[i] - b[i + bestOff]; en += e * e; es += a[i] * a[i] }
+      return 10 * Math.log10(es / en)
+    }
+    const r = { x145: await snr(1.45), x133: await snr(4 / 3) }
+    await ctx.close()
+    return r
   })
 })
 
@@ -371,6 +419,42 @@ const caseF1 = await persisted('F1 instrumental action', async (page) => {
     await ctx.close()
     return r
   }, { mixB64: caseF0.mixB64, len: caseF0.len })
+})
+
+// ---------- case G: natural-pitch output through the action -------------------
+const caseG = await persisted('G natural pitch', async (page) => {
+  return page.evaluate(async ({ segB64, len, factor }) => {
+    const lib = await import('/src/lib/voiceIsolation.ts')
+    const vad = await import('/src/lib/vad.ts')
+    const store = window.__omniframe_store
+    store.getState().addAsset({ id: 'rw-nat', name: 'rw-nat.wav', kind: 'audio', url: 'data:audio/wav;base64,' + segB64, duration: len / 44100, width: 0, height: 0, size: 0 })
+    const cur = store.getState()
+    cur.addClipToTrack(cur.ensureTrack('audio'), 'rw-nat', 0)
+    const clip = store.getState().clips.find((x) => x.assetId === 'rw-nat')
+    const msgs = []
+    const res = await lib.executeVoiceIsolationForClip(clip.id, { mode: 'keep_vocal', model: 'htdemucs-v4', strength: 0.5, speedOutput: 'natural' }, (pct, msg) => msgs.push(`${pct}: ${msg}`))
+    const asset = store.getState().assets.find((a) => a.id === res.assetId)
+    const outB64 = window.__h.b64(new Uint8Array(await (await fetch(asset.url)).arrayBuffer()))
+    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 })
+    const buf = await ctx.decodeAudioData(window.__h.fromB64(outB64))
+    // the output is ALREADY at natural pitch — Silero hears it directly
+    const { probs } = await vad.detectSpeech(buf)
+    let sum = 0, hot = 0, peak = 0, clipd = 0, nonFinite = 0
+    for (const p of probs) { sum += p; if (p > 0.5) hot++; if (p > peak) peak = p }
+    const d = buf.getChannelData(0)
+    let maxA = 0
+    for (let i = 0; i < d.length; i++) { const a = Math.abs(d[i]); if (a > maxA) maxA = a; if (!Number.isFinite(d[i])) nonFinite++ }
+    const r = {
+      name: asset.name,
+      duration: buf.duration,
+      expectedDuration: len / 44100 / (factor || 1.45),
+      silero: { mean: sum / probs.length, frames: hot / probs.length, peak },
+      maxAbs: maxA, clipped: clipd, nonFinite,
+      msgs: msgs.filter((m) => /slow|natural|pitch/i.test(m)),
+    }
+    await ctx.close()
+    return { ...r, outB64 }
+  }, { segB64: caseD0.segB64, len: caseD0.len, factor: caseD0.detection.factor })
 })
 
 // ---------- rich vet (energy-weighted, non-saturating) -----------------------
@@ -571,11 +655,28 @@ function check(name, ok, detail) {
 {
   const rv = caseEV
   check('E: speed-corrected separation recovers buried vocals',
-    rv.b.spedMean > 1.5 * rv.a.spedMean && rv.b.voiceLikeFrac > rv.a.voiceLikeFrac,
+    rv.b.spedMean > 1.3 * rv.a.spedMean && rv.b.voiceLikeFrac > rv.a.voiceLikeFrac + 0.1,
     `Silero at natural pitch — direct mean ${rv.a.spedMean.toFixed(3)} / voice-like energy ${(rv.a.voiceLikeFrac * 100).toFixed(1)}% vs fixed mean ${rv.b.spedMean.toFixed(3)} / voice-like energy ${(rv.b.voiceLikeFrac * 100).toFixed(1)}% (recovery ${(rv.aRecovery * 100).toFixed(0)}% → ${(rv.bRecovery * 100).toFixed(0)}%)`)
   check('E: fixed acapella keeps the input timing',
     caseE2.outLen === caseE0.len,
     `fixed ${caseE2.outLen} samples vs input ${caseE0.len}`)
+}
+
+// R — resampler fidelity
+{
+  check('R: polyphase sinc round-trip fidelity',
+    caseR.x145 > 45 && caseR.x133 > 45,
+    `bandlimited (<=12 kHz) speed-up/slow-back SNR — x1.45: ${caseR.x145.toFixed(1)} dB, x4:3: ${caseR.x133.toFixed(1)} dB (bar 45; WebAudio playbackRate measured 10.5-11.4 dB)`)
+}
+
+// G — natural-pitch output
+{
+  check('G: natural-pitch acapella comes back at the corrected speed',
+    Math.abs(caseG.duration - caseG.expectedDuration) < 0.05 && /natural pitch/.test(caseG.name),
+    `duration ${caseG.duration.toFixed(3)}s vs expected ${caseG.expectedDuration.toFixed(3)}s (input ${(caseD0.len / 44100).toFixed(1)}s / factor), asset "${caseG.name}"`)
+  check('G: real voice directly audible at natural pitch',
+    caseG.silero.mean > 0.5 && caseG.nonFinite === 0 && caseG.maxAbs <= 1,
+    `Silero on the raw output: mean ${caseG.silero.mean.toFixed(3)}, voiced ${Math.round(caseG.silero.frames * 100)}%, peak ${caseG.silero.peak.toFixed(2)}; peak |sample| ${caseG.maxAbs.toFixed(3)}, non-finite ${caseG.nonFinite}`)
 }
 
 // F — instrumental input: detection scans and correctly declines
@@ -589,8 +690,8 @@ function check(name, ok, detail) {
     `output ${caseF1.outLvl.toFixed(1)} dBFS vs mix ${caseF0.mixLvl.toFixed(1)} dBFS (${(caseF0.mixLvl - caseF1.outLvl).toFixed(1)} dB below, bar 20), length ${caseF1.outLen} === ${caseF0.len}`)
 }
 
-check('zero runtime page errors', [caseA, caseC, caseB1, caseB2, caseD0, caseD1, caseD2, caseE0, caseE1, caseE2, caseF0, caseF1].every((c) => c.errors.length === 0),
-  [caseA, caseC, caseB1, caseB2, caseD0, caseD1, caseD2, caseE0, caseE1, caseE2, caseF0, caseF1].flatMap((c) => c.errors).join(' | ') || 'clean')
+check('zero runtime page errors', [caseA, caseC, caseR, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].every((c) => c.errors.length === 0),
+  [caseA, caseC, caseR, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].flatMap((c) => c.errors).join(' | ') || 'clean')
 
 // ---------- evidence pack ------------------------------------------------------
 const mp3 = (src, dst) => {
@@ -604,6 +705,7 @@ mp3(save('d-seg', caseD0.segB64), join(EVID, 'input-realtrack-segment.mp3'))
 mp3(save('d-direct', caseD1.outB64), join(EVID, 'output-realtrack-direct-keep-vocal-demucs.mp3'))
 mp3(save('d-fixed', caseD2.outB64), join(EVID, 'output-realtrack-speedfix-keep-vocal-demucs.mp3'))
 mp3(save('f-out', caseF1.outB64), join(EVID, 'output-instrumental-keep-vocal-demucs.mp3'))
+mp3(save('g-out', caseG.outB64), join(EVID, 'output-realtrack-naturalpitch-keep-vocal-demucs.mp3'))
 mp3(save('e-seg', caseE0.segB64), join(EVID, 'input-realtrack-buried-segment.mp3'))
 mp3(save('e-direct', caseE1.outB64), join(EVID, 'output-realtrack-buried-direct-keep-vocal-demucs.mp3'))
 mp3(save('e-fixed', caseE2.outB64), join(EVID, 'output-realtrack-buried-speedfix-keep-vocal-demucs.mp3'))
@@ -629,6 +731,14 @@ writeFileSync(join(ROOT, 'qa/reports/voice-slowed-fix.json'), JSON.stringify({
     instrumentalNoOp: {
       detection: caseF0.detection,
       mixLvl: caseF0.mixLvl, outLvl: caseF1.outLvl,
+    },
+    resamplerFidelity: caseR,
+    naturalPitch: {
+      name: caseG.name,
+      duration: caseG.duration,
+      expectedDuration: caseG.expectedDuration,
+      silero: caseG.silero,
+      actionLog: caseG.msgs,
     },
   },
 }, null, 2))

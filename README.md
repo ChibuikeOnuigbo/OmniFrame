@@ -44,7 +44,9 @@ npm run qa:advanced # recording/trace/repeat-export workflow
   pass), LS cross-talk removal, plus a Silero-VAD pause gate. **"Slowed + reverb" edits are
   auto-fixed**: slowed productions are detected (Silero can't hear the vocals at native speed
   but clearly can when sped back up), separated at the corrected speed, and restored to the
-  exact original timing — on by default, toggleable per isolation. Scored on a deterministic mix
+  exact original timing — on by default, toggleable per isolation — or kept at
+  **natural pitch** (the corrected-speed acapella: 88% vs 43% voice-like energy
+  on the reference slowed track, the usable form for sampling/remixing). Scored on a deterministic mix
   against ground truth: **+20.4 dB SI-SDR, music bleed −56 dB, pauses −37 dB** (previous DSP
   engine: +0.4 dB — see the [listen pack](evidence/voice/listen/README.md) and the
   [robustness suite](evidence/voice/robustness/README.md) for input↔output pairs you can play);

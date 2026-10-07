@@ -58,6 +58,15 @@ export interface VoiceIsolationOptions {
    *  restores the original timing. Normal and instrumental tracks pass through
    *  untouched after one cheap detection pass. */
   speedNormalize?: boolean
+  /**
+   * 'timeline' (default): the isolated acapella is slowed back to the input's
+   * time base so it stays frame-aligned on the timeline. 'natural'
+   * (keep_vocal only, when a slowed track was detected): the acapella stays
+   * at the corrected speed — natural pitch and tempo, the most usable form
+   * (88% vs 43% voice-like energy on the reference slowed track), at the
+   * cost of no longer matching the timeline.
+   */
+  speedOutput?: 'timeline' | 'natural'
 }
 
 /**
@@ -326,12 +335,13 @@ export async function processVoiceIsolation(
   sourceUrl: string,
   options: VoiceIsolationOptions,
   onProgress?: (percent: number, status: string) => void,
-): Promise<{ blob: Blob; url: string; duration: number; waveform: number[] }> {
+): Promise<{ blob: Blob; url: string; duration: number; waveform: number[]; naturalPitch?: boolean }> {
   onProgress?.(10, 'Fetching audio stream…')
 
   const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
   const audioCtx = new AudioCtxClass()
 
+  let naturalPitch = false
   try {
     let inputBuffer: AudioBuffer
     try {
@@ -381,7 +391,17 @@ export async function processVoiceIsolation(
           onProgress?.(42, `Slowed production detected (×${speedFactor.toFixed(2)}) — separating at corrected speed`)
         }
       }
-      const separation = await separateWithDemucs(audioCtx, inputBuffer, onProgress, { passes, speedFactor })
+      // natural pitch: keep the acapella at the corrected speed (shorter,
+      // natural-pitch output — only meaningful when a fix actually fired)
+      naturalPitch = speedFactor > 1 && options.speedOutput === 'natural' && options.mode === 'keep_vocal'
+      if (naturalPitch) {
+        onProgress?.(44, `Keeping the vocals at natural pitch (×${speedFactor.toFixed(2)} speed, not slowed back)`)
+      }
+      const separation = await separateWithDemucs(audioCtx, inputBuffer, onProgress, {
+        passes,
+        speedFactor,
+        speedRestoreVocals: !naturalPitch,
+      })
       if (options.mode === 'keep_vocal') {
         processedBuffer = separation.vocals
         if (options.vadGate !== false) {
@@ -430,7 +450,7 @@ export async function processVoiceIsolation(
     const waveform = computeBufferWaveform(processedBuffer, 256)
 
     onProgress?.(100, 'Voice isolation complete')
-    return { blob, url, duration, waveform }
+    return { blob, url, duration, waveform, naturalPitch }
   } finally {
     await audioCtx.close()
   }
@@ -459,9 +479,12 @@ export async function executeVoiceIsolationForClip(
   const activeModel = options.model || (store as any).audioIsolationModel || 'omni-voicetarget'
   const labelPrefix = options.mode === 'keep_vocal' ? `[Vocal Isolated · ${activeModel}]` : `[Vocal Removed · ${activeModel}]`
   const baseName = asset.name.replace(/\.[^/.]+$/, '')
-  const newAssetName = `${labelPrefix} ${baseName}.wav`
 
   const result = await processVoiceIsolation(asset.url, { ...options, model: activeModel }, onProgress)
+
+  const newAssetName = result.naturalPitch
+    ? `${labelPrefix} ${baseName} · natural pitch.wav`
+    : `${labelPrefix} ${baseName}.wav`
 
   const newAssetId = uid('asset_voice')
   const newAsset: MediaAsset = {

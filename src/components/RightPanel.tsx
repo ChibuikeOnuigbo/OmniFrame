@@ -48,6 +48,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [demucsReady, setDemucsReady] = useState<boolean | null>(null)
   const [vadCleanup, setVadCleanup] = useState(true)
   const [speedFix, setSpeedFix] = useState(true)
+  const [speedNatural, setSpeedNatural] = useState(false)
   useEffect(() => {
     let alive = true
     isDemucsModelAvailable().then((ok) => {
@@ -454,6 +455,18 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   </label>
                 )}
 
+                {isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && (
+                  <label className="flex items-center gap-2 cursor-pointer select-none ml-3" data-testid="audio-isolation-naturalpitch-toggle">
+                    <input
+                      type="checkbox"
+                      checked={speedNatural}
+                      onChange={(e) => setSpeedNatural(e.target.checked)}
+                      className="h-3 w-3 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand cursor-pointer"
+                    />
+                    <span className="text-[10px] text-ink-300">Vocals at natural pitch <span className="text-ink-500">(skip the slow-back — usable acapella, no longer timeline-aligned)</span></span>
+                  </label>
+                )}
+
                 {isolationStatus && (
                   <p className="text-[10px] text-ink-400 font-mono truncate">{isolationStatus}</p>
                 )}
@@ -468,7 +481,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     try {
                       await executeVoiceIsolationForClip(
                         clip.id,
-                        { mode: isolationMode, model: isolationModel, vadGate: isolationModel === 'htdemucs-v4' ? vadCleanup : undefined, speedNormalize: isolationModel === 'htdemucs-v4' ? speedFix : undefined },
+                        { mode: isolationMode, model: isolationModel, vadGate: isolationModel === 'htdemucs-v4' ? vadCleanup : undefined, speedNormalize: isolationModel === 'htdemucs-v4' ? speedFix : undefined, speedOutput: isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && speedNatural ? 'natural' : 'timeline' },
                         (pct, msg) => setIsolationStatus(`${pct}%: ${msg}`),
                       )
                       setIsolationStatus('Completed!')

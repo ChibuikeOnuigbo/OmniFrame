@@ -24,7 +24,7 @@ fires.
 
 Everything below ran through the real app pipeline (dev server + the app's own
 modules and actions) by [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs) —
-**12/12 PASS**, report: [`qa/reports/voice-slowed-fix.json`](../../../qa/reports/voice-slowed-fix.json).
+**15/15 PASS**, report: [`qa/reports/voice-slowed-fix.json`](../../../qa/reports/voice-slowed-fix.json).
 
 ## Results
 
@@ -36,6 +36,8 @@ modules and actions) by [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed
 | D | real track through the user-facing action | detection fired in the action log (×1.45), timing exact, and the fix **never degraded** the output on a prominent-vocal window (voice-like energy 0.981→0.992, recovery 0.405→0.419) |
 | E | real track, buried-vocal window (78–84 s), forced ×1.45 | voice-like energy **51.9% → 78.3%**, Silero mean at natural pitch 0.444 → 0.679, voice recovery vs the mix **123% → 386%**, timing exact |
 | F | instrumental mix (harmonic pad) through the auto action | detection scans all 4 factors — the pad scores 0.02–0.05 on Silero at every speed but never decisively — and correctly returns **factor 1**; acapella stays near-silent (**−63.5 dB** below the mix), timing exact |
+| R | resampler fidelity | the polyphase sinc in `renderAtRate` measures **67.2 dB** (×1.45) / **76.6 dB** (×4/3) bandlimited round-trip SNR — WebAudio's `playbackRate` rendering, which the feature originally used, measures **10.5–11.4 dB** (audible grit on every speed-fixed output) |
+| G | **natural-pitch output** (new option) | keep_vocal with `speedOutput: 'natural'` returns the acapella at the corrected speed — duration **exactly** input ÷ factor, asset named `… · natural pitch`, and Silero hears the voice **directly** on the raw output (mean 0.934, 96% voiced, peak-safe 0.98, zero non-finite) |
 
 ## The honest picture (what the fix does and does not do)
 
@@ -65,6 +67,19 @@ detection standalone (the mix buries the voice even when sped up); it fires on
 hook-bearing material — in practice on whole tracks, which is exactly what the
 app processes. Case E therefore forces the factor the full-track detection
 chose (×1.45) to demonstrate the recovery on a buried-vocal window.
+
+**The natural-pitch finding (why "still horrible" was right).** Measured on
+the full track with the committed v3 artifacts: the SAME separated stems
+score **87.7%** voice-like energy at natural pitch but only **43–45%** at the
+slowed time base — the vocals were always in there; playing them back at the
+edit's slowed pitch (deep, muddy, reverb-smeared) is what sounds bad. The
+acapella *cannot* be both timeline-aligned and natural-pitched — so the app
+now offers both: **restore timing** (default, frame-aligned) or **Vocals at
+natural pitch** (toggle; the output comes back at the track's original
+tempo, e.g. 6.0 s → 4.14 s at ×1.45). Full-track proof:
+[output-track2-keep-vocal-naturalpitch-v3.mp3](../realworld/output-track2-keep-vocal-naturalpitch-v3.mp3)
+(88% voice-like energy, +2.9 dB, zero clipping —
+[vet report](../../../qa/reports/voice-realtrack-vet-track2-v3.json)).
 
 **CI limits, stated plainly.** The test sandbox (~3.9 GB RAM) OOMs the
 renderer above ~6 s of separation at 2 passes (or 3 passes at any length), so
@@ -112,6 +127,13 @@ case B):
 | Input (slowed ×0.75) | [`input-showcase-slowed-x075.mp3`](input-showcase-slowed-x075.mp3) |
 | Direct separation | [`output-showcase-slowed-direct-keep-vocal-demucs.mp3`](output-showcase-slowed-direct-keep-vocal-demucs.mp3) |
 | **Speed-fixed (×4/3, timing restored)** | [`output-showcase-slowed-speedfix-keep-vocal-demucs.mp3`](output-showcase-slowed-speedfix-keep-vocal-demucs.mp3) |
+
+Real track: **natural-pitch acapella** (case G, 6 s window at 1-pass; the
+full-track production-strength version is linked above):
+
+| | File |
+| --- | --- |
+| **Vocals at natural pitch (×1.45, not slowed back)** | [`output-realtrack-naturalpitch-keep-vocal-demucs.mp3`](output-realtrack-naturalpitch-keep-vocal-demucs.mp3) |
 
 The full-track before/after pairs (all 108 s, production strength) live in
 [`evidence/voice/realworld/`](../realworld/README.md).

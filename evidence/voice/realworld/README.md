@@ -99,4 +99,27 @@ Audit reports from this study: [track1](../../../qa/reports/voice-realtrack-stud
   the corrected speed and restores the original timing, on by default.
   End-to-end proof on this very track (plus a buried-vocal window and a
   ground-truth synthetic): [`evidence/voice/slowed/`](../slowed/README.md) —
-  12/12 checks, [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs).
+  15/15 checks, [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs).
+- **Update 2 — v3: the app's exact algorithm at production strength.**
+  [`qa/voice-fulltrack-v3.mjs`](../../../qa/voice-fulltrack-v3.mjs) runs the
+  full 108 s at 3 passes with the app's own polyphase-sinc resampler
+  (WebAudio `playbackRate` resampling measured only **10.5 dB** fidelity —
+  audible grit — the sinc measures **67–77 dB**):
+  [keep vocal v3](output-track2-keep-vocal-demucs-v3.mp3) ·
+  [remove vocal v3](output-track2-remove-vocal-demucs-v3.mp3).
+  Vetting ([report](../../../qa/reports/voice-realtrack-vet-track2-v3.json)):
+  vocal yield 43.2% vs v2's 45.0% — **equivalent, the model's ceiling on
+  this material** — but clipping 2452 → **0**, and factor ×1.45 (the
+  detector's pick) beats ×1.36 at 3-pass (43.2% vs 32.9%).
+- **The natural-pitch acapella — the usable form.** The same v3 stems
+  WITHOUT the slow-back:
+  [output-track2-keep-vocal-naturalpitch-v3.mp3](output-track2-keep-vocal-naturalpitch-v3.mp3) —
+  **87.7% voice-like energy, 65% voiced frames (+2.9 dB), zero clipping**,
+  74.7 s at the original ~160 BPM. At the slowed time base the identical
+  stems measure 43–45%: the separation was never the problem — the slowed
+  playback base is. Now a toggle in the app (**Vocals at natural pitch**).
+- **The honest ceiling.** On a *slowed + reverb* edit, ~55% of the
+  timeline-aligned acapella's energy is non-vocal (bleed + the edit's own
+  reverb tails). No separator fully undoes reverb that was baked into the
+  mix; the numbers above are what the model ceiling looks like on this
+  material, stated plainly rather than hidden.

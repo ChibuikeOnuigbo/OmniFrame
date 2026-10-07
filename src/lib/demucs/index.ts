@@ -123,6 +123,15 @@ export interface DemucsOptions {
    * `src/lib/vad.ts#detectSlowedFactor` finds the right value.
    */
   speedFactor?: number
+  /**
+   * When false (with speedFactor > 1) the VOCALS output is NOT slowed back —
+   * it stays at the corrected speed (natural pitch and tempo). The
+   * instrumental is always restored. The natural-pitch acapella is the most
+   * usable form (measured on a real slowed track: 88% voice-like energy at
+   * natural pitch vs 43% at the slowed time base) but it no longer matches
+   * the timeline.
+   */
+  speedRestoreVocals?: boolean
 }
 
 interface WorkerStems {
@@ -285,8 +294,12 @@ export async function separateWithDemucs(
       }
       return out
     }
-    vocals = await restore(vocals)
     instrumental = await restore(instrumental)
+    if (options.speedRestoreVocals !== false) {
+      vocals = await restore(vocals)
+    }
+    // else: keep the sped-domain vocals — natural pitch, deliberately a
+    // different (shorter) length than the input
   }
   onProgress?.(92, 'Demucs v4 separation complete')
   return { stems, vocals, instrumental, backend: 'onnxruntime-web worker (webgpu → wasm fallback)' }
