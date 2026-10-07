@@ -42,7 +42,16 @@ Recovery: all code was pushed; the trainer now also writes a
 model-only snapshot (1.7 MB) that gets COMMITTED, so future resets resume
 from the last committed weights instead of restarting.
 
-### Run 2 — fixed corpus, sandbox CPU (2 cores), started 2026-10-07 (post-reset)
+### Run 2 — ABORTED at 30,000 steps (loss upgrade)
+
+Oracle analysis on the E2E mix: the ideal-ratio mask (|V|/|X|, mix phase)
+reaches **+9.74 dB SI-SNR**, but the magnitude-L1-only objective left the
+model's mask 0.39 L1 away from oracle after 30k steps (+1.7 dB SI-SNR,
+plateauing). Run 3 adds a direct L1(mask, oracle_IRM) supervision term —
+the standard strongest signal for ratio masking — and restarts (the 30k
+steps were ~25 min of compute).
+
+### Run 3 — oracle-IRM loss, sandbox CPU (2 cores), started 2026-10-07
 
 - Command: `python3 scripts/python/train_unified.py --steps 1000000
   --save-every 10000 --threads 2`
@@ -53,4 +62,6 @@ from the last committed weights instead of restarting.
   - step 10,000: mask loss 0.337, gain loss 2.54 dB; +2.6 dB SI-SNR on the
     hard E2E mix, +3.4..+7.2 dB on training-distribution mixes; browser
     runner bit-faithful vs torch (mask parity 2.1e-6).
-  - (run 2 in progress — final counts recorded at completion)
+  - run 2 reference points (magnitude-L1 only): step 10k +0.5 dB / 30k
+    +1.7 dB SI-SNR on the E2E mix, mask-vs-oracle L1 0.385.
+  - (run 3 in progress — final counts recorded at completion)
