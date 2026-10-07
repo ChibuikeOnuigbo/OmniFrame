@@ -27,6 +27,9 @@ import type { MediaAsset, Clip } from '../types'
 import { uid } from './time'
 import { denoiseAudioBuffer, denoiseViaDesktop, isDesktopMode } from './aiDenoise'
 import { rnnoiseDenoiseBuffer } from './rnnoise'
+import { unifiedIsolateBuffer } from './omniUnified'
+
+const UNIFIED_WASM_NOTE = 'onnxruntime-web WASM'
 import { separateWithDemucs, isDemucsModelAvailable } from './demucs/index.ts'
 import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor } from './vad.ts'
 import { nativePeakScale } from './native/dspNative.js'
@@ -46,6 +49,11 @@ export type VoiceIsolationModel =
    * noise around the voice. Bit-verified against a native gcc build of the
    * same sources (qa/rnnoise-parity.mjs). */
   | 'rnnoise-xiph'
+  /** omni-unified-v1 — the in-house UNIFIED model (isolation + denoise +
+   * loudness normalization in one graph, scripts/python/train_unified.py).
+   * keep_vocal: masked voice + the model's own gain head; remove_vocal:
+   * the instrumental as the mask's complement. */
+  | 'omni-unified'
 
 export interface VoiceIsolationOptions {
   mode: 'keep_vocal' | 'remove_vocal'
@@ -449,6 +457,17 @@ export async function processVoiceIsolation(
         processedBuffer.copyToChannel(res.samples as Float32Array<ArrayBuffer>, 0)
       }
       onProgress?.(85, 'AI Denoise complete')
+    } else if (modelTag === 'omni-unified') {
+      // Self-made unified model: one graph isolates the voice, denoises it,
+      // and predicts its loudness-normalizing gain (applied in-graph output;
+      // finalizeIsolationOutput then verifies the landing window).
+      onProgress?.(50, `Unified model: loading omni-unified-v1 (${UNIFIED_WASM_NOTE})…`)
+      const res = await unifiedIsolateBuffer(inputBuffer, options.mode, options.strength ?? 0.92)
+      processedBuffer = audioCtx.createBuffer(1, res.samples.length, inputBuffer.sampleRate)
+      processedBuffer.copyToChannel(res.samples as Float32Array<ArrayBuffer>, 0)
+      onProgress?.(85, options.mode === 'keep_vocal'
+        ? `Unified isolation complete (mean mask ${(res.meanMask * 100).toFixed(0)}%, gain ${res.gainDb >= 0 ? '+' : ''}${res.gainDb.toFixed(1)} dB)`
+        : `Instrumental (mask complement) complete`)
     } else if (modelTag === 'rnnoise-xiph' && options.mode === 'keep_vocal') {
       // Imported neural denoiser: Xiph RNNoise (trained GRU, wasm build of the
       // official C sources). Suppresses broadband/hiss/hum noise around

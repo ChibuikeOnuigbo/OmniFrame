@@ -433,6 +433,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     {isolationMode === 'keep_vocal' && (
                       <option value="rnnoise-xiph">RNNoise (Xiph) · trained speech denoiser</option>
                     )}
+                    <option value="omni-unified">omni-unified-v1 · isolation + denoise + normalize (both modes)</option>
                   </select>
                 </div>
 

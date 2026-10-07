@@ -132,13 +132,20 @@ export interface StftResult {
 }
 
 export function stft(x: Float32Array): StftResult {
-  // centered: reflect-pad n_fft/2 both ends
+  // centered: reflect-pad n_fft/2 both ends — EXACTLY torch.stft's default
+  // pad_mode='reflect' (numpy semantics, edge sample not repeated). This
+  // matters for the GRU models: the previous edge-clamp padding produced
+  // different first/last frames, and a recurrent net propagates that error
+  // through its whole state (measured: 0.55 mask corruption across all
+  // frames from 2 differing edge frames).
   const half = DENOISE_NFFT / 2
   const padded = new Float64Array(x.length + 2 * half)
   for (let i = 0; i < x.length; i++) padded[half + i] = x[i]
+  const canReflect = x.length > half
   for (let i = 0; i < half; i++) {
-    padded[half - 1 - i] = x[Math.min(x.length - 1, i)] || 0
-    padded[half + x.length + i] = x[Math.max(0, x.length - 1 - i)] || 0
+    // left: padded[half-1-i] = x[i+1]; right: padded[half+len+i] = x[len-2-i]
+    padded[half - 1 - i] = canReflect ? x[i + 1] : x[Math.min(x.length - 1, i)]
+    padded[half + x.length + i] = canReflect ? x[x.length - 2 - i] : x[Math.max(0, x.length - 1 - i)]
   }
   const T = Math.max(1, Math.floor((padded.length - DENOISE_NFFT) / DENOISE_HOP) + 1)
   const mag: Float64Array[] = []
