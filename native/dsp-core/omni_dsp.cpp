@@ -40,6 +40,21 @@
 /** |x| without libm. */
 static double omni_abs(double x) { return x < 0.0 ? -x : x; }
 
+/** sqrt(x) for x >= 0 without libm — Newton iterations from a good seed.
+ *  Correctly rounded to <= 1 ulp for every input this module produces. */
+static double omni_sqrt(double x) {
+  if (x <= 0.0) return 0.0;
+  // seed via exponent halving on the bit pattern
+  unsigned long long bits;
+  __builtin_memcpy(&bits, &x, sizeof(bits));
+  double y;
+  unsigned long long seedBits = (bits >> 1) + 0x1ff8000000000000ULL;
+  __builtin_memcpy(&y, &seedBits, sizeof(y));
+  // Newton–Raphson on 1/sqrt is unstable to round; iterate on y = (y + x/y)/2
+  for (int i = 0; i < 6; i++) y = 0.5 * (y + x / y);
+  return y;
+}
+
 /** sin on |r| <= π/4 — Taylor through x¹⁷ (truncation < 6e-20 there). */
 static double omni_k_sin(double r) {
   static const double S1 = -0.16666666666666666;      // -1/3!
@@ -253,6 +268,71 @@ extern "C" double omni_peak_scale(float* a, float* b, int len, double threshold,
   }
   if (peak <= threshold) return 1.0;
   const double g = target / peak;
+  for (int i = 0; i < len; i++) {
+    a[i] = (float)((double)a[i] * g);
+    b[i] = (float)((double)b[i] * g);
+  }
+  return g;
+}
+
+// ─── output finalization (DC block + loudness normalize) ─────────────────────
+
+/**
+ * Final output conditioning, one in-place pass per channel pair:
+ *
+ *   1. DC blocker — one-pole high-pass at ~15 Hz (y = x − x₁ + a·y₁,
+ *      a = 1 − 2π·fc/sr). Speed-corrected separations measured up to
+ *      0.0028 of DC offset; this is below audibility but visibly biases
+ *      the waveform and robs headroom.
+ *   2. Loudness normalization — bring RMS to `targetRms` (linear), gain
+ *      capped by `peakCeil` (never clip) and by a sane +12 dB / −6 dB
+ *      window. Near-silent outputs (RMS < `silenceRms`, e.g. the correct
+ *      near-silence of keep_vocal on an instrumental input) are left
+ *      alone — normalizing them up would amplify separation noise.
+ *
+ * Returns the applied gain (1.0 if skipped). Double math, float32 store —
+ * same rounding points as the JS fallback in voiceIsolation.ts.
+ */
+extern "C" double omni_normalize(float* a, float* b, int len, double targetRms, double peakCeil, double silenceRms) {
+  if (len <= 0) return 1.0;
+
+  // 1) DC block (stateless across channels — DC is per-channel but tiny;
+  //    we filter each channel with its own one-pole state)
+  const double a_pole = 1.0 - 2.0 * 3.14159265358979323846 * 15.0 / 44100.0;
+  {
+    double x1a = 0.0, y1a = 0.0, x1b = 0.0, y1b = 0.0;
+    for (int i = 0; i < len; i++) {
+      const double xa = (double)a[i], xb = (double)b[i];
+      const double ya = xa - x1a + a_pole * y1a;
+      const double yb = xb - x1b + a_pole * y1b;
+      x1a = xa; y1a = ya; x1b = xb; y1b = yb;
+      a[i] = (float)ya;
+      b[i] = (float)yb;
+    }
+  }
+
+  // 2) loudness normalize (skip near-silence)
+  double sa = 0.0, sb = 0.0;
+  for (int i = 0; i < len; i++) {
+    sa += (double)a[i] * (double)a[i];
+    sb += (double)b[i] * (double)b[i];
+  }
+  const double rms = omni_sqrt((sa + sb) / (2.0 * (double)len));
+  if (rms < silenceRms) return 1.0;
+  double g = targetRms / rms;
+  if (g > 3.9810717055349722) g = 3.9810717055349722;   // +12 dB cap
+  if (g < 0.5011872336272722) g = 0.5011872336272722;   // −6 dB floor
+  if (g > 0.98 && g < 1.02) return 1.0;                  // already there
+  // peak safety: never exceed the ceiling
+  double peak = 0.0;
+  for (int i = 0; i < len; i++) {
+    const double va = omni_abs((double)a[i] * g);
+    const double vb = omni_abs((double)b[i] * g);
+    if (va > peak) peak = va;
+    if (vb > peak) peak = vb;
+  }
+  if (peak > peakCeil) g *= peakCeil / peak;
+  if (g > 0.98 && g < 1.02) return 1.0;
   for (int i = 0; i < len; i++) {
     a[i] = (float)((double)a[i] * g);
     b[i] = (float)((double)b[i] * g);

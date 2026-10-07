@@ -196,6 +196,64 @@ for (const rate of [1.45, 4 / 3, 0.75, 1.15, 1.6]) {
     `gain JS ${jsG.toFixed(9)} vs native ${natG.toFixed(9)}, max|diff| A ${maxDiff(jsA, natA).toExponential(2)} B ${maxDiff(jsB, natB).toExponential(2)}`)
 }
 
+// normalize parity (DC block + loudness normalize + skip-near-silence)
+{
+  const n = 44100
+  const a = signal(n, 31), b = signal(n, 32)
+  for (let i = 0; i < n; i++) a[i] += 0.0028 // the DC offset the grader found on speed-fixed outputs
+  a[500] = 0.95; b[900] = -0.9               // peaks that must survive the ceiling
+
+  // JS reference — verbatim copy of the fallback in voiceIsolation.ts
+  const jsA = Float32Array.from(a), jsB = Float32Array.from(b)
+  const TARGET_RMS = Math.pow(10, -18 / 20), PEAK_CEIL = 0.98, SILENCE_RMS = Math.pow(10, -50 / 20)
+  const POLE = 1 - 2 * Math.PI * 15 / 44100
+  {
+    let x1a = 0, y1a = 0, x1b = 0, y1b = 0
+    for (let i = 0; i < n; i++) {
+      const xa = jsA[i], xb = jsB[i]
+      const ya = xa - x1a + POLE * y1a
+      const yb = xb - x1b + POLE * y1b
+      x1a = xa; y1a = ya; x1b = xb; y1b = yb
+      jsA[i] = ya; jsB[i] = yb
+    }
+  }
+  let sa = 0, sb = 0
+  for (let i = 0; i < n; i++) { sa += jsA[i] * jsA[i]; sb += jsB[i] * jsB[i] }
+  const rms = Math.sqrt((sa + sb) / (2 * n))
+  let jsGain = 1
+  if (rms >= SILENCE_RMS) {
+    let g = TARGET_RMS / rms
+    g = Math.min(g, 3.9810717055349722)
+    g = Math.max(g, 0.5011872336272722)
+    if (!(g > 0.98 && g < 1.02)) {
+      let peak = 0
+      for (const ch of [jsA, jsB]) for (let i = 0; i < n; i++) { const v = Math.abs(ch[i] * g); if (v > peak) peak = v }
+      if (peak > PEAK_CEIL) g *= PEAK_CEIL / peak
+      jsGain = g
+      if (!(g > 0.98 && g < 1.02)) for (const ch of [jsA, jsB]) for (let i = 0; i < n; i++) ch[i] *= g
+    }
+  }
+
+  cursor = 0
+  const aP = alloc(n), bP = alloc(n)
+  ensureCapacity()
+  view(aP, n).set(a); view(bP, n).set(b)
+  const natGain = W.omni_normalize(aP, bP, n, TARGET_RMS, PEAK_CEIL, SILENCE_RMS)
+  const natA = new Float32Array(W.memory.buffer, aP, n)
+  const natB = new Float32Array(W.memory.buffer, bP, n)
+
+  // near-silence skip: quiet input must be left untouched
+  const q = new Float32Array(n).fill(1e-5)
+  const qP = alloc(n), qP2 = alloc(n)
+  ensureCapacity()
+  view(qP, n).set(q); view(qP2, n).set(q)
+  const skipGain = W.omni_normalize(qP, qP2, n, TARGET_RMS, PEAK_CEIL, SILENCE_RMS)
+
+  check('normalize parity (DC block + loudness, silence-skipping)',
+    Math.abs(jsGain - natGain) < 1e-9 && maxDiff(jsA, natA) <= 1e-6 && maxDiff(jsB, natB) <= 1e-6 && skipGain === 1,
+    `gain JS ${jsGain.toFixed(6)} vs native ${natGain.toFixed(6)}, max|diff| A ${maxDiff(jsA, natA).toExponential(2)} B ${maxDiff(jsB, natB).toExponential(2)}, near-silence skip gain ${skipGain}`)
+}
+
 // benchmark: full-track-scale resample (both channels, JS vs native)
 {
   const n = 4773888 // the 108 s reference track

@@ -427,7 +427,9 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     <option value="omni-voicetarget">omni-voicetarget · fast DSP (mid/side crossover)</option>
                     <option value="bs-roformer-lite">BS-Roformer Lite (planned)</option>
                     <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
-                    <option value="omni-denoise-onnx">AI Denoise ONNX (in-house GRU masker)</option>
+                    {isolationMode === 'keep_vocal' && (
+                      <option value="omni-denoise-onnx">AI Denoise ONNX (voice extractor · keep-vocal only)</option>
+                    )}
                   </select>
                 </div>
 

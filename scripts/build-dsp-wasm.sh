@@ -36,7 +36,7 @@ mkdir -p public/wasm
   -Wl,--export=omni_resample \
   -Wl,--export=omni_ls_leakage \
   -Wl,--export=omni_average_passes \
-  -Wl,--export=omni_peak_scale \
+  -Wl,--export=omni_peak_scale -Wl,--export=omni_normalize \
   native/dsp-core/omni_dsp.cpp \
   -o public/wasm/omni-dsp.wasm
 

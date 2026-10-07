@@ -35,6 +35,7 @@ interface DspExports {
   omni_ls_leakage: (targetPtr: number, refPtr: number, len: number) => number
   omni_average_passes: (passesPtr: number, passCount: number, len: number, outPtr: number, missingPtr: number) => number
   omni_peak_scale: (aPtr: number, bPtr: number, len: number, threshold: number, target: number) => number
+  omni_normalize: (aPtr: number, bPtr: number, len: number, targetRms: number, peakCeil: number, silenceRms: number) => number
   __heap_base: WebAssembly.Global
 }
 
@@ -51,7 +52,7 @@ export function initNativeDsp(): Promise<boolean> {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const { instance } = await WebAssembly.instantiate(await res.arrayBuffer(), {})
         const e = instance.exports as unknown as DspExports
-        if (!e.memory || !e.omni_resample || !e.omni_ls_leakage || !e.omni_average_passes || !e.omni_peak_scale || !e.__heap_base) {
+        if (!e.memory || !e.omni_resample || !e.omni_ls_leakage || !e.omni_average_passes || !e.omni_peak_scale || !e.omni_normalize || !e.__heap_base) {
           throw new Error('missing expected exports')
         }
         mod = e
@@ -224,5 +225,37 @@ export function nativePeakScale(a: Float32Array, b: Float32Array, threshold = 0.
     b.set(bView)
   }
   return g
+  })
+}
+
+/**
+ * Native output finalization — DC block (one-pole ~15 Hz) + loudness
+ * normalization to `targetRms` with a `peakCeil` guard, +12/−6 dB gain
+ * window, and near-silence skipping (`silenceRms`): keep_vocal of an
+ * instrumental input must stay near-silent instead of being amplified
+ * into separation noise. Mutates both channels in place; returns the
+ * applied gain (1 = untouched). Null if the native core isn't loaded.
+ */
+export function nativeNormalize(
+  a: Float32Array,
+  b: Float32Array,
+  targetRms: number,
+  peakCeil: number,
+  silenceRms: number,
+): number | null {
+  const m = loaded()
+  if (!m) return null
+  return tryNative(() => {
+    const len = Math.min(a.length, b.length)
+    if (len === 0) return 1
+    const base = ensureCapacity(m, a.length * 4 + b.length * 4)
+    const aView = new Float32Array(m.memory.buffer, base, a.length)
+    const bView = new Float32Array(m.memory.buffer, base + a.length * 4, b.length)
+    aView.set(a)
+    bView.set(b)
+    const g = m.omni_normalize(base, base + a.length * 4, len, targetRms, peakCeil, silenceRms)
+    a.set(aView)
+    b.set(bView)
+    return g
   })
 }

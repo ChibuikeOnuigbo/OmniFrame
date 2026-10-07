@@ -26,7 +26,7 @@ import { useEditor } from '../store'
 import type { MediaAsset, Clip } from '../types'
 import { uid } from './time'
 import { denoiseAudioBuffer, denoiseViaDesktop, isDesktopMode } from './aiDenoise'
-import { separateWithDemucs } from './demucs/index.ts'
+import { separateWithDemucs, isDemucsModelAvailable } from './demucs/index.ts'
 import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor } from './vad.ts'
 import { nativePeakScale } from './native/dspNative.js'
 
