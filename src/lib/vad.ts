@@ -104,16 +104,22 @@ export async function detectSpeech(
 
 /**
  * Renders `buffer` playing `rate`x faster/slower (asetrate semantics: pitch
- * and time scale together). Uses the polyphase windowed-sinc resampler in
- * `src/lib/demucs/resample.js` — WebAudio's `playbackRate` rendering is
+ * and time scale together). Uses the polyphase windowed-sinc resampler —
+ * natively via the compiled wasm core (native/dsp-core/omni_dsp.cpp, 2-3x
+ * faster) with the pure-JS implementation in src/lib/demucs/resample.js as
+ * a bit-identical fallback. WebAudio's `playbackRate` rendering is
  * linear-interpolation grade (~22 dB round-trip SNR, audible grit); this
  * measures ~70 dB. Same length contract as before: ceil(length / rate).
  */
 export async function renderAtRate(buffer: AudioBuffer, rate: number): Promise<AudioBuffer> {
-  const { resampleChannels } = await import('./demucs/resample.js')
+  const [{ resampleChannels }, { initNativeDsp, nativeResampleChannels }] = await Promise.all([
+    import('./demucs/resample.js'),
+    import('./native/dspNative.js'),
+  ])
   const inChannels: Float32Array[] = []
   for (let c = 0; c < buffer.numberOfChannels; c++) inChannels.push(buffer.getChannelData(c))
-  const res = resampleChannels(inChannels, rate)
+  await initNativeDsp()
+  const res = nativeResampleChannels(inChannels, rate) ?? resampleChannels(inChannels, rate)
   const out = new AudioBuffer({
     length: res.length,
     numberOfChannels: buffer.numberOfChannels,

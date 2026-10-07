@@ -571,6 +571,78 @@ const caseEV = await richVetCase('E vet rich', {
   aB64: caseE1.outB64, bB64: caseE2.outB64,
 })
 
+// ---------- case N: the compiled DSP core is live and numerically identical ----
+const caseN = await persisted('N native dsp core', async (page) => {
+  return page.evaluate(async () => {
+    const { initNativeDsp, nativeDspActive, nativeResampleChannels, nativeRemoveLsLeakage, nativeAveragePasses, nativePeakScale } = await import('/src/lib/native/dspNative.js')
+    const { resampleChannels } = await import('/src/lib/demucs/resample.js')
+    const warmed = await initNativeDsp()
+    if (!warmed || !nativeDspActive()) throw new Error('native DSP core did not load')
+
+    // deterministic test signal (music-ish: sweep + low-passed noise)
+    const n = 44100, sr = 44100
+    const x = new Float32Array(n)
+    let lp = 0, seed = 7
+    for (let i = 0; i < n; i++) {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff
+      lp += 0.2 * (seed / 0x7fffffff - 0.5 - lp)
+      x[i] = 0.8 * lp + 0.2 * Math.sin(2 * Math.PI * (220 + 900 * i / n) * (i / sr))
+    }
+
+    // resample: native vs JS, several rates incl. the auto-detected x1.45
+    let resampleMaxDiff = 0, resampleLenOk = true
+    for (const rate of [1.45, 4 / 3, 0.75, 1.15, 1.6]) {
+      const js = resampleChannels([x, x], rate)
+      const nat = nativeResampleChannels([x, x], rate)
+      if (!nat || nat.length !== js.length || js.channelData[0].length !== nat.channelData[0].length) resampleLenOk = false
+      for (let i = 0; i < js.channelData[0].length; i++) {
+        const d = Math.abs(js.channelData[0][i] - nat.channelData[0][i])
+        if (d > resampleMaxDiff) resampleMaxDiff = d
+      }
+    }
+
+    // least-squares de-leak
+    const t = Float32Array.from(x), r = new Float32Array(n)
+    for (let i = 0; i < n; i++) r[i] = x[i] * 0.3 + 0.05 * Math.sin(i * 0.01)
+    const jsT = Float32Array.from(t), jsR = Float32Array.from(r)
+    let dot = 0, rr = 0
+    for (let i = 0; i < n; i++) { dot += jsT[i] * jsR[i]; rr += jsR[i] * jsR[i] }
+    const jsA = Math.min(0.5, Math.max(-0.5, dot / rr))
+    for (let i = 0; i < n; i++) jsT[i] -= jsA * jsR[i]
+    const natCoef = nativeRemoveLsLeakage([t], [r])[0]
+    let lsMaxDiff = Math.abs(jsA - natCoef)
+    for (let i = 0; i < n; i++) { const d = Math.abs(jsT[i] - t[i]); if (d > lsMaxDiff) lsMaxDiff = d }
+
+    // pass averaging with a NaN hole
+    const p0 = Float32Array.from(x), p1 = Float32Array.from(x)
+    p0[1000] = NaN; p1[1000] = 0.25
+    const jsAvg = new Float32Array(n)
+    for (let i = 0; i < n; i++) jsAvg[i] = (p0[i] + p1[i]) / 2
+    jsAvg[1000] = 0.25
+    const natAvg = nativeAveragePasses([p0, p1], n)
+    let avgMaxDiff = 0
+    for (let i = 0; i < n; i++) { const d = Math.abs(jsAvg[i] - natAvg.out[i]); if (d > avgMaxDiff) avgMaxDiff = d }
+
+    // peak scale
+    const a = Float32Array.from(x), b = Float32Array.from(x)
+    a[123] = 1.37
+    const jsA2 = Float32Array.from(a), jsB2 = Float32Array.from(b)
+    let peak = 0
+    for (const ch of [jsA2, jsB2]) for (let i = 0; i < ch.length; i++) { const v = Math.abs(ch[i]); if (v > peak) peak = v }
+    const jsG = peak > 0.999 ? 0.98 / peak : 1
+    for (const ch of [jsA2, jsB2]) for (let i = 0; i < ch.length; i++) ch[i] *= jsG
+    const natG = nativePeakScale(a, b)
+    let peakMaxDiff = Math.abs(jsG - natG)
+    for (let i = 0; i < n; i++) { const d = Math.abs(jsA2[i] - a[i]); if (d > peakMaxDiff) peakMaxDiff = d }
+
+    return {
+      active: nativeDspActive(),
+      resampleMaxDiff, resampleLenOk, lsMaxDiff, avgMaxDiff, peakMaxDiff,
+      avgMissing: natAvg.missingCount,
+    }
+  })
+})
+
 // ---------- scoring ----------------------------------------------------------
 function wav(p) {
   const b = readFileSync(p); const d = new DataView(b.buffer, b.byteOffset, b.byteLength)
@@ -690,8 +762,17 @@ function check(name, ok, detail) {
     `output ${caseF1.outLvl.toFixed(1)} dBFS vs mix ${caseF0.mixLvl.toFixed(1)} dBFS (${(caseF0.mixLvl - caseF1.outLvl).toFixed(1)} dB below, bar 20), length ${caseF1.outLen} === ${caseF0.len}`)
 }
 
-check('zero runtime page errors', [caseA, caseC, caseR, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].every((c) => c.errors.length === 0),
-  [caseA, caseC, caseR, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].flatMap((c) => c.errors).join(' | ') || 'clean')
+// N — compiled DSP core active in the real app, numerically identical
+{
+  check('N: native DSP core active in-browser', caseN.active === true,
+    'wasm module (public/wasm/omni-dsp.wasm, compiled from native/dsp-core/omni_dsp.cpp) instantiated via the app pipeline; all DSP ops above ran natively with the JS modules as fallback')
+  check('N: native core numerically identical to JS fallback',
+    caseN.resampleLenOk && caseN.resampleMaxDiff < 1e-5 && caseN.lsMaxDiff < 1e-6 && caseN.avgMaxDiff < 1e-6 && caseN.peakMaxDiff < 1e-6 && caseN.avgMissing === 0,
+    `max|diff| vs JS — resample ${caseN.resampleMaxDiff.toExponential(2)} (bar 1e-5), LS de-leak ${caseN.lsMaxDiff.toExponential(2)}, pass average ${caseN.avgMaxDiff.toExponential(2)}, peak scale ${caseN.peakMaxDiff.toExponential(2)} (bar 1e-6)`)
+}
+
+check('zero runtime page errors', [caseA, caseC, caseR, caseN, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].every((c) => c.errors.length === 0),
+  [caseA, caseC, caseR, caseN, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].flatMap((c) => c.errors).join(' | ') || 'clean')
 
 // ---------- evidence pack ------------------------------------------------------
 const mp3 = (src, dst) => {
@@ -733,6 +814,7 @@ writeFileSync(join(ROOT, 'qa/reports/voice-slowed-fix.json'), JSON.stringify({
       mixLvl: caseF0.mixLvl, outLvl: caseF1.outLvl,
     },
     resamplerFidelity: caseR,
+    nativeDsp: caseN,
     naturalPitch: {
       name: caseG.name,
       duration: caseG.duration,

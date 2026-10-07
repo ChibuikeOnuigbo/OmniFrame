@@ -28,6 +28,7 @@ import { uid } from './time'
 import { denoiseAudioBuffer, denoiseViaDesktop, isDesktopMode } from './aiDenoise'
 import { separateWithDemucs } from './demucs/index.ts'
 import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor } from './vad.ts'
+import { nativePeakScale } from './native/dspNative.js'
 
 export type VoiceIsolationModel =
   | 'omni-voicetarget'
@@ -122,11 +123,16 @@ export function encodeAudioBufferToWav(buffer: AudioBuffer): Blob {
   // int16 encode below would hard-clip (audible crackle). If any channel
   // exceeds the ceiling, scale ALL channels by the same factor — no limiter
   // pumping, no per-channel image shift.
-  let peak = 0
-  for (const ch of channelData) for (let i = 0; i < ch.length; i++) { const a = Math.abs(ch[i]); if (a > peak) peak = a }
-  if (peak > 0.999) {
-    const g = 0.98 / peak
-    for (const ch of channelData) for (let i = 0; i < ch.length; i++) ch[i] *= g
+  // native core first (same policy in one wasm call — native/dsp-core/
+  // omni_dsp.cpp); this loop is the fallback when it isn't loaded yet
+  // (the core is warmed at app startup, see main.tsx)
+  if (channelData.length !== 2 || nativePeakScale(channelData[0] as Float32Array<ArrayBuffer>, channelData[1] as Float32Array<ArrayBuffer>) === null) {
+    let peak = 0
+    for (const ch of channelData) for (let i = 0; i < ch.length; i++) { const a = Math.abs(ch[i]); if (a > peak) peak = a }
+    if (peak > 0.999) {
+      const g = 0.98 / peak
+      for (const ch of channelData) for (let i = 0; i < ch.length; i++) ch[i] *= g
+    }
   }
 
   let offset = 44

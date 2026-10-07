@@ -21,6 +21,7 @@
 
 import type { RawAudio } from './wav-utils.js'
 import { renderAtRate } from '../vad'
+import { initNativeDsp, nativeRemoveLsLeakage, nativeAveragePasses } from '../native/dspNative.js'
 
 export const DEMUCS_MODEL_ID = 'htdemucs-v4'
 export const DEMUCS_MODEL_URL = '/models/htdemucs.onnx'
@@ -185,6 +186,7 @@ export async function separateWithDemucs(
   }
   const raw = await bufferToRawAudio(buffer)
   const samples = raw.channelData[0].length
+  await initNativeDsp() // warm the compiled DSP core (JS fallback if unavailable)
 
   // Per-pass stem storage. Passes are averaged per-sample over FINITE values
   // only: on some WASM builds the ONNX inference intermittently emits NaN in a
@@ -227,7 +229,15 @@ export async function separateWithDemucs(
   const stems: Record<string, RawAudio> = {}
   for (const [name, channels] of Object.entries(passStems)) {
     stems[name] = {
+      // native path first (identical finite-aware arithmetic in one wasm
+      // call — see native/dsp-core/omni_dsp.cpp); the JS loop below is the
+      // fallback for when the compiled core isn't loaded
       channelData: channels.map((perChannel) => {
+        const native = nativeAveragePasses(perChannel, samples)
+        if (native) {
+          if (native.missingCount > 0) interpolateMissing(native.out, native.missing, samples, name)
+          return native.out
+        }
         const out = new Float32Array(samples)
         const missing = new Uint8Array(samples)
         for (let i = 0; i < samples; i++) {
@@ -242,20 +252,7 @@ export async function separateWithDemucs(
         }
         let m = 0
         for (let i = 0; i < samples; i++) m += missing[i]
-        if (m > 0) {
-          // every pass was non-finite here — bridge the gap by interpolation
-          console.warn(`[demucs] ${name}: ${m} samples had no finite pass value; interpolated`)
-          for (let i = 0; i < samples; i++) {
-            if (!missing[i]) continue
-            let a = i - 1
-            while (a >= 0 && missing[a]) a--
-            let b = i + 1
-            while (b < samples && missing[b]) b++
-            const va = a >= 0 ? out[a] : 0
-            const vb = b < samples ? out[b] : 0
-            out[i] = va + ((vb - va) * (i - a)) / Math.max(1, b - a)
-          }
-        }
+        if (m > 0) interpolateMissing(out, missing, samples, name)
         return out
       }),
       sampleRate: raw.sampleRate,
@@ -305,12 +302,32 @@ export async function separateWithDemucs(
   return { stems, vocals, instrumental, backend: 'onnxruntime-web worker (webgpu → wasm fallback)' }
 }
 
+/** Bridges samples where every pass was non-finite by linear interpolation. */
+function interpolateMissing(out: Float32Array, missing: Uint8Array, samples: number, stem: string): void {
+  console.warn(`[demucs] ${stem}: ${missing.reduce((a, b) => a + b, 0)} samples had no finite pass value; interpolated`)
+  for (let i = 0; i < samples; i++) {
+    if (!missing[i]) continue
+    let a = i - 1
+    while (a >= 0 && missing[a]) a--
+    let b = i + 1
+    while (b < samples && missing[b]) b++
+    const va = a >= 0 ? out[a] : 0
+    const vb = b < samples ? out[b] : 0
+    out[i] = va + ((vb - va) * (i - a)) / Math.max(1, b - a)
+  }
+}
+
 /**
  * In-place least-squares leakage removal: for each channel subtracts
  * `a · ref` from `target`, where `a = <target,ref> / <ref,ref>` clamped to
- * ±0.5. Skips silent reference channels.
+ * ±0.5. Skips silent reference channels. Runs in the native wasm core
+ * (native/dsp-core/omni_dsp.cpp) when loaded — identical arithmetic — with
+ * this pure-JS loop as the fallback.
  */
 function removeLsLeakage(target: Float32Array[], ref: Float32Array[]): void {
+  // opportunistic native path (returns null only when the core isn't loaded)
+  if (nativeRemoveLsLeakage(target, ref) !== null) return
+
   const CAP = 0.5
   for (let c = 0; c < target.length && c < ref.length; c++) {
     const t = target[c]
