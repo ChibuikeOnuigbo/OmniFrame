@@ -42,4 +42,11 @@ trainer, the JS runner and the E2E.
 - Throughput: ~20 optimizer steps/s (measured on run 0; same config).
 - **Progress** (updated per checkpoint; `step` is optimizer updates, each
   consuming 16 × 63 = 1,008 labeled frames):
-  - (in training — final counts recorded at completion)
+  - step 10,000: mask loss 0.337, gain loss 2.54 dB. Measured (fixed-corpus
+    model): +2.6 dB SI-SNR on the hard E2E mix (0 dB voice/bed SNR,
+    pad-chords, first exposure), +3.4..+7.2 dB on training-distribution
+    mixes; browser runner verified bit-faithful vs torch (mask parity
+    2.1e-6). Bars in qa/omni-unified-e2e.mjs (+6 dB keep_vocal, music
+    preservation) are expected to pass as the run progresses — the final
+    numbers are recorded at completion.
+  - (training continues — final counts recorded at completion)
