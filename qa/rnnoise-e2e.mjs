@@ -65,7 +65,8 @@ try {
   const result = await page.evaluate(async () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)()
     const lib = await import('/src/lib/voiceIsolation.ts')
-    const clean = await window.__load(ctx, 'qa/fixtures/test-audio-6s.ogg')
+    // NOTE: test-audio-6s.ogg is MUSIC (0% speech) — use the TTS speech fixture
+    const clean = await window.__load(ctx, 'qa/assets/voice/tts-m1-numbers.mp3')
     const sr = clean.sampleRate
     const len = Math.min(clean.length, Math.round(6 * sr))
     // deterministic LCG white noise at 0 dB SNR, mixed at the NATIVE rate —

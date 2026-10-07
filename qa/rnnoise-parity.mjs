@@ -102,11 +102,14 @@ check('fixture: noise segments suppressed (>= 18 dB)', -nsDb >= 18, `${nsDb.toFi
 check('fixture: model engaged (mean VAD > 0.3 on speech fixture)', meanVad > 0.3, `mean VAD ${meanVad.toFixed(3)}`)
 
 // ---- Part 2b: real speech at 0 dB SNR --------------------------------------
+// NOTE: qa/fixtures/test-audio-6s.ogg is MUSIC (grader: 0% speech / 80%
+// music) — it must never be used as a speech source. The TTS fixture is
+// real speech.
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
 const tmp = `${REPO}/tmp`
 import { mkdirSync } from 'node:fs'
 mkdirSync(tmp, { recursive: true })
-execFileSync(ffmpegPath, ['-i', `${REPO}/qa/fixtures/test-audio-6s.ogg`, '-ar', '48000', '-ac', '1', '-f', 'f32le', '-y', `${tmp}/rnnoise-speech48k.f32`], { stdio: 'ignore' })
+execFileSync(ffmpegPath, ['-i', `${REPO}/qa/assets/voice/tts-m1-numbers.mp3`, '-ar', '48000', '-ac', '1', '-f', 'f32le', '-y', `${tmp}/rnnoise-speech48k.f32`], { stdio: 'ignore' })
 const clean = Array.from(new Float32Array(readFileSync(`${tmp}/rnnoise-speech48k.f32`).buffer))
 
 // deterministic LCG white noise, 0 dB SNR (same generator the corpus scripts use)

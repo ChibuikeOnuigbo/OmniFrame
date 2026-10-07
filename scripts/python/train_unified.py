@@ -281,6 +281,7 @@ def main():
     best = float('inf')
 
     Path(args.ckpt).parent.mkdir(parents=True, exist_ok=True)
+    model_only = Path(args.ckpt).with_name('model-only.pt')
     if Path(args.ckpt).exists() and not args.smoke:
         ck = torch.load(args.ckpt, map_location=device, weights_only=False)
         model.load_state_dict(ck['model'])
@@ -288,6 +289,14 @@ def main():
         start_step = ck['step']
         best = ck.get('best', float('inf'))
         print(f'resumed at step {start_step:,} (best {best:.4f})')
+    elif model_only.exists() and not args.smoke:
+        # sandbox resets wipe gitignored files; the model-only snapshot is
+        # small enough to COMMIT, so it survives — resume weights exactly,
+        # optimizer state cold (small, quickly-recovered bump)
+        ck = torch.load(model_only, map_location=device, weights_only=False)
+        model.load_state_dict(ck['model'])
+        start_step = ck['step']
+        print(f'resumed MODEL-ONLY at step {start_step:,} (fresh optimizer)')
     elif Path(args.ckpt).exists() and args.smoke:
         print('smoke run ignores the existing checkpoint')
 
@@ -345,6 +354,10 @@ def main():
         if (step + 1) % args.save_every == 0 or (step + 1) == args.steps:
             torch.save({'model': model.state_dict(), 'opt': opt.state_dict(),
                         'step': step + 1, 'best': min(best, running)}, args.ckpt)
+            # model-only snapshot: 1.7 MB vs 5.1 MB — small enough to commit
+            # so training survives sandbox resets (see resume path above)
+            torch.save({'model': model.state_dict(), 'step': step + 1},
+                       Path(args.ckpt).with_name('model-only.pt'))
             if running < best:
                 best = running
             # sidecar metrics for the run log

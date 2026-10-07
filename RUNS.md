@@ -35,18 +35,22 @@ verified: no energy above 7.9 kHz after resampling). Checkpoint discarded;
 MU/STD re-measured on the fixed corpus (-0.3685 / 0.7878) and synced to the
 trainer, the JS runner and the E2E.
 
-### Run 1 — fixed corpus, sandbox CPU (2 cores), started 2026-10-07
+### Run 1 — fixed corpus, INTERRUPTED by a sandbox reset at ~20,000 steps
+
+The workspace reset (gitignored files wiped) discarded the checkpoint.
+Recovery: all code was pushed; the trainer now also writes a
+model-only snapshot (1.7 MB) that gets COMMITTED, so future resets resume
+from the last committed weights instead of restarting.
+
+### Run 2 — fixed corpus, sandbox CPU (2 cores), started 2026-10-07 (post-reset)
 
 - Command: `python3 scripts/python/train_unified.py --steps 1000000
   --save-every 10000 --threads 2`
 - Throughput: ~20 optimizer steps/s (measured on run 0; same config).
 - **Progress** (updated per checkpoint; `step` is optimizer updates, each
-  consuming 16 × 63 = 1,008 labeled frames):
-  - step 10,000: mask loss 0.337, gain loss 2.54 dB. Measured (fixed-corpus
-    model): +2.6 dB SI-SNR on the hard E2E mix (0 dB voice/bed SNR,
-    pad-chords, first exposure), +3.4..+7.2 dB on training-distribution
-    mixes; browser runner verified bit-faithful vs torch (mask parity
-    2.1e-6). Bars in qa/omni-unified-e2e.mjs (+6 dB keep_vocal, music
-    preservation) are expected to pass as the run progresses — the final
-    numbers are recorded at completion.
-  - (training continues — final counts recorded at completion)
+  consuming 16 × 63 = 1,008 labeled frames). Reference points from run 1
+  (same fixed corpus, same seed):
+  - step 10,000: mask loss 0.337, gain loss 2.54 dB; +2.6 dB SI-SNR on the
+    hard E2E mix, +3.4..+7.2 dB on training-distribution mixes; browser
+    runner bit-faithful vs torch (mask parity 2.1e-6).
+  - (run 2 in progress — final counts recorded at completion)

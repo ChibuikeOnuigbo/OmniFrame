@@ -1,0 +1,26 @@
+{
+  "when": "2026-10-07T21:58:57.010Z",
+  "sampleRate": 44100,
+  "jobs": [
+    {
+      "name": "rnnoise-noisy-speech",
+      "engine": "rnnoise-xiph",
+      "mode": "keep_vocal",
+      "bytes": 528362,
+      "ms": 493,
+      "notes": [
+        "10:Fetching audio stream…",
+        "30:Decoding audio samples…",
+        "50:RNNoise: loading the trained denoiser module…",
+        "55:RNNoise: resampling to 48 kHz…",
+        "61:RNNoise: running the trained GRU denoiser…",
+        "82:RNNoise: restoring original sample rate…",
+        "85:RNNoise denoising…",
+        "85:RNNoise complete (mean VAD 66%)",
+        "80:Encoding to WAV format…",
+        "100:Voice isolation complete"
+      ]
+    }
+  ],
+  "pageErrors": []
+}

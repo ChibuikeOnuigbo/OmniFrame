@@ -1,12 +1,12 @@
 {
-  "when": "2026-10-07T20:35:35.006Z",
+  "when": "2026-10-07T21:58:53.599Z",
   "engine": "rnnoise-xiph",
   "checks": "ALL PASS",
   "measurements": {
     "inputSnrDb": 0,
-    "outputSnrDb": 13.54,
-    "outRmsDbfs": -24.26,
-    "elapsedMs": 304,
+    "outputSnrDb": 10.97,
+    "outRmsDbfs": -20.34,
+    "elapsedMs": 489,
     "sampleRate": 44100,
     "outDurationS": 5.99,
     "notes": [
@@ -17,7 +17,7 @@
       "61:RNNoise: running the trained GRU denoiser…",
       "82:RNNoise: restoring original sample rate…",
       "85:RNNoise denoising…",
-      "85:RNNoise complete (mean VAD 98%)",
+      "85:RNNoise complete (mean VAD 66%)",
       "80:Encoding to WAV format…",
       "100:Voice isolation complete"
     ],
