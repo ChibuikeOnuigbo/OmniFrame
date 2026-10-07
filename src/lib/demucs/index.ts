@@ -147,20 +147,61 @@ function runPassInWorker(
 ): Promise<WorkerStems> {
   return new Promise((resolve, reject) => {
     const worker = new Worker(new URL('./demucs-worker.ts', import.meta.url), { type: 'module' })
+    // the 174 MB weights download streams its byte counts through the
+    // worker boundary; drive the model-load progress card from here (the
+    // store lives on the main thread)
+    let modelCardStarted = false
+    const modelCard = async (fn: 'begin' | 'bytes' | 'compile' | 'ready' | 'fail', arg?: unknown) => {
+      const store = await import('../modelLoadStore.js')
+      const s = store.useModelLoadStore.getState()
+      if (fn === 'begin') s.begin('htdemucs-v4', 'Demucs v4 neural network', { approxMb: 174 })
+      else if (fn === 'bytes') {
+        const [loaded, total] = arg as [number, number | null]
+        s.reportBytes('htdemucs-v4', loaded, total)
+      } else if (fn === 'compile') s.markCompiling('htdemucs-v4')
+      else if (fn === 'ready') s.markReady('htdemucs-v4')
+      else if (fn === 'fail') s.markFailed('htdemucs-v4', String(arg))
+    }
     worker.onmessage = (ev: MessageEvent) => {
-      const d = ev.data as { type: string; stems?: WorkerStems; message?: string; pct?: number; msg?: string }
-      if (d.type === 'progress') {
+      const d = ev.data as {
+        type: string
+        stems?: WorkerStems
+        message?: string
+        pct?: number
+        msg?: string
+        loaded?: number
+        total?: number | null
+      }
+      if (d.type === 'model-progress') {
+        if (!modelCardStarted) {
+          modelCardStarted = true
+          void modelCard('begin')
+        }
+        void modelCard('bytes', [d.loaded ?? 0, d.total ?? null] as [number, number | null])
+        // coarse mapping into the separation progress line (5 -> 20 %)
+        const frac = d.total ? Math.min(1, (d.loaded ?? 0) / d.total) : 0
+        onProgress?.(5 + Math.round(frac * 15), 'Loading Demucs v4 weights…')
+      } else if (d.type === 'progress') {
+        if ((d.pct ?? 0) >= 20 && modelCardStarted && (d.pct ?? 0) < 30) {
+          // weights fetched — the worker is compiling the session now
+          void modelCard('compile')
+        } else if ((d.pct ?? 0) >= 30 && modelCardStarted) {
+          // session live — separation is running
+          void modelCard('ready')
+        }
         onProgress?.(d.pct ?? 0, d.msg ?? '')
       } else if (d.type === 'done') {
         worker.terminate()
         resolve(d.stems as WorkerStems)
       } else if (d.type === 'error') {
         worker.terminate()
+        if (modelCardStarted) void modelCard('fail', d.message)
         reject(new Error(d.message))
       }
     }
     worker.onerror = (e) => {
       worker.terminate()
+      if (modelCardStarted) void modelCard('fail', e.message)
       reject(new Error(`Demucs worker failed: ${e.message}`))
     }
     worker.postMessage({ id: 1, channelData, sampleRate })

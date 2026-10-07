@@ -647,6 +647,35 @@ const caseN = await persisted('N native dsp core', async (page) => {
   })
 })
 
+// ---------- case M: model-load progress (web) -------------------------------
+const caseM = await persisted('M model progress', async (page) => {
+  return page.evaluate(async () => {
+    const store = await import('/src/lib/modelLoadStore.ts')
+    const denoise = await import('/src/lib/aiDenoise.ts')
+    const out = { phases: [], maxPct: 0, finalPct: 0, monodrome: true, byteUpdates: 0, sessionOk: false, cardInDom: false, dismissed: false }
+    let last = 0
+    const unsub = store.useModelLoadStore.subscribe((s) => {
+      const e = s.entries.find((x) => x.id === 'omni-denoise')
+      if (!e) return
+      if (!out.phases.includes(e.phase)) out.phases.push(e.phase)
+      if (e.displayPct < last - 0.001) out.monodrome = false
+      last = e.displayPct
+      out.maxPct = Math.max(out.maxPct, e.displayPct)
+      out.finalPct = e.displayPct
+      if (e.phase === 'download') out.byteUpdates++
+      if (e.phase === 'download' || e.phase === 'compile') {
+        out.cardInDom = out.cardInDom || !!document.querySelector('[data-testid="model-load-card"][data-model="omni-denoise"]')
+      }
+    })
+    const sess = await denoise.getDenoiseSession()
+    out.sessionOk = !!sess && sess.inputNames.length > 0
+    await new Promise((r) => setTimeout(r, 2600)) // past the ready-linger
+    out.dismissed = !document.querySelector('[data-testid="model-load-card"][data-model="omni-denoise"]')
+    unsub()
+    return out
+  })
+})
+
 // ---------- scoring ----------------------------------------------------------
 function wav(p) {
   const b = readFileSync(p); const d = new DataView(b.buffer, b.byteOffset, b.byteLength)
@@ -775,8 +804,16 @@ function check(name, ok, detail) {
     `max|diff| vs JS — resample ${caseN.resampleMaxDiff.toExponential(2)} (bar 1e-5), LS de-leak ${caseN.lsMaxDiff.toExponential(2)}, pass average ${caseN.avgMaxDiff.toExponential(2)}, peak scale ${caseN.peakMaxDiff.toExponential(2)} (bar 1e-6)`)
 }
 
-check('zero runtime page errors', [caseA, caseC, caseR, caseN, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].every((c) => c.errors.length === 0),
-  [caseA, caseC, caseR, caseN, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].flatMap((c) => c.errors).join(' | ') || 'clean')
+// M — model-load progress: real bytes, monotonic smooth bar, auto-dismiss
+{
+  const ok = caseM.sessionOk && caseM.phases.includes('download') && caseM.phases.includes('compile') && caseM.phases.includes('ready')
+    && caseM.monodrome && caseM.maxPct === 100 && caseM.finalPct === 100 && caseM.byteUpdates >= 2 && caseM.cardInDom && caseM.dismissed
+  check('M: model load shows smooth real progress and auto-dismisses', ok,
+    `phases ${caseM.phases.join(' -> ')}, ${caseM.byteUpdates} byte updates, monotonic ${caseM.monodrome}, final ${caseM.finalPct}%, card rendered ${caseM.cardInDom}, auto-dismissed ${caseM.dismissed}, session usable ${caseM.sessionOk}`)
+}
+
+check('zero runtime page errors', [caseA, caseC, caseR, caseN, caseM, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].every((c) => c.errors.length === 0),
+  [caseA, caseC, caseR, caseN, caseM, caseB1, caseB2, caseD0, caseD1, caseD2, caseG, caseE0, caseE1, caseE2, caseF0, caseF1].flatMap((c) => c.errors).join(' | ') || 'clean')
 
 // ---------- evidence pack ------------------------------------------------------
 const mp3 = (src, dst) => {
@@ -819,6 +856,7 @@ writeFileSync(join(ROOT, 'qa/reports/voice-slowed-fix.json'), JSON.stringify({
     },
     resamplerFidelity: caseR,
     nativeDsp: caseN,
+    modelLoadProgress: caseM,
     naturalPitch: {
       name: caseG.name,
       duration: caseG.duration,

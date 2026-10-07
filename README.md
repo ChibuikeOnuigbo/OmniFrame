@@ -75,6 +75,8 @@ RightPanel ── contextual Inspector (collapses to a reopen arrow)
 - `src/lib/demucs/` — vendored Demucs v4 (htdemucs) ONNX inference glue (MIT, npm `demucs` package).
 - `src/lib/time.ts` — timecode, tick intervals, snapping, ids.
 - `src/components/*` — pure React UI bound to the store.
+- `native/dsp-core/` — the compiled DSP core (C++ → wasm32, ~11 KB): resampler, stem de-leak, pass averaging, peak safety. 2-3× faster than the JS fallbacks and **bit-identical** to them; every op falls back transparently. Build + parity policy: `native/dsp-core/README.md`.
+- `src/lib/modelLoadStore.ts` + `src/components/ModelLoadOverlay.tsx` — every web model download/compile gets a live progress card (real byte counts when the server sends them, smooth monotonic simulation when it can't). Desktop loads the same models from disk, so its cards just flash by.
 
 ## Roadmap (from the master spec — not yet implemented)
 

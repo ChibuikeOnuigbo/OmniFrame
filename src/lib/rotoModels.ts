@@ -28,6 +28,8 @@ export type RotoModelDomain = 'human' | 'anime' | 'hair' | 'general' | 'imported
 export interface RotoModelDescriptor {
   id: string
   label: string
+  /** Rough download size for the progress card's simulated phase. */
+  approxMb?: number | null
   domain: RotoModelDomain
   /** Square input resolution the model expects. */
   inputSize: number
@@ -186,7 +188,14 @@ export async function getRotoSession(model: RotoModelDescriptor): Promise<Ort.In
       ort.env.wasm.numThreads = 1
       ort.env.wasm.simd = true
       ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
-      return await ort.InferenceSession.create(model.url, { executionProviders: ['wasm'] })
+      // streamed download with the live progress card (modelLoadStore) —
+      // catalog models are 4-170 MB and the default create(url) is silent
+      const { withModelLoadProgress } = await import('./modelLoadStore.js')
+      return await withModelLoadProgress(
+        model.url,
+        { id: `roto-${model.id}`, label: model.label, approxMb: model.approxMb ?? null },
+        (bytes) => ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] }),
+      )
     })()
     sessionCache.set(model.id, p)
     p.catch(() => sessionCache.delete(model.id))
@@ -218,9 +227,18 @@ export async function getRotoSamSessions(model: RotoModelDescriptor): Promise<Ro
       ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
       const encoderUrl = model.url
       const decoderUrl = model.decoderUrl ?? model.url.replace('encoder', 'decoder')
+      const { withModelLoadProgress } = await import('./modelLoadStore.js')
       const [encoder, decoder] = await Promise.all([
-        ort.InferenceSession.create(encoderUrl, { executionProviders: ['wasm'] }),
-        ort.InferenceSession.create(decoderUrl, { executionProviders: ['wasm'] }),
+        withModelLoadProgress(
+          encoderUrl,
+          { id: `roto-${model.id}-encoder`, label: `${model.label} — encoder`, approxMb: model.approxMb ?? null },
+          (bytes) => ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] }),
+        ),
+        withModelLoadProgress(
+          decoderUrl,
+          { id: `roto-${model.id}-decoder`, label: `${model.label} — decoder`, approxMb: null },
+          (bytes) => ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] }),
+        ),
       ])
       return { encoder, decoder }
     })()

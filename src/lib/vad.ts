@@ -29,10 +29,12 @@ let vadSession: Promise<ort.InferenceSession> | null = null
 function loadVadSession(): Promise<ort.InferenceSession> {
   if (!vadSession) {
     vadSession = (async () => {
-      const res = await fetch(VAD_MODEL_URL)
-      if (!res.ok) throw new Error(`Silero VAD model unavailable (HTTP ${res.status})`)
-      const bytes = await res.arrayBuffer()
-      return ort.InferenceSession.create(bytes, { executionProviders: ['webgpu', 'wasm'] })
+      const { withModelLoadProgress } = await import('./modelLoadStore.js')
+      return await withModelLoadProgress(
+        VAD_MODEL_URL,
+        { id: 'silero-vad', label: 'Voice activity detector (Silero)' },
+        (bytes) => ort.InferenceSession.create(bytes, { executionProviders: ['webgpu', 'wasm'] }),
+      )
     })()
   }
   return vadSession

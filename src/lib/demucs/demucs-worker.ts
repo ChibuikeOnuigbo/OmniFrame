@@ -14,9 +14,44 @@ import type { RawAudio } from './wav-utils.js'
 
 const MODEL_URL = '/models/htdemucs.onnx'
 
-async function loadWeights(): Promise<ArrayBuffer> {
+/**
+ * Streams the weights with live byte counts. Each ~120 ms the worker posts
+ * a `model-progress` message so the host can drive the model-load progress
+ * card (src/lib/modelLoadStore.ts) — 174 MB with zero feedback is the most
+ * annoying load in the app. On a warm HTTP cache this completes almost
+ * instantly, so cached passes don't spam the UI.
+ */
+async function loadWeights(onBytes: (loaded: number, total: number | null) => void): Promise<ArrayBuffer> {
   const res = await fetch(MODEL_URL)
   if (!res.ok) throw new Error(`Demucs weights not available (HTTP ${res.status})`)
+  const totalHeader = res.headers.get('content-length')
+  const total = totalHeader ? parseInt(totalHeader, 10) : null
+  if (res.body && typeof res.body.getReader === 'function') {
+    const reader = res.body.getReader()
+    const chunks: Uint8Array[] = []
+    let received = 0
+    let lastPost = 0
+    for (;;) {
+      const { done, value } = await reader.read()
+      if (done) break
+      chunks.push(value)
+      received += value.byteLength
+      const now = performance.now()
+      if (now - lastPost > 120 || received === total) {
+        lastPost = now
+        onBytes(received, total)
+      }
+    }
+    onBytes(received, received)
+    const bytes = new Uint8Array(received)
+    let off = 0
+    for (const c of chunks) {
+      bytes.set(c, off)
+      off += c.byteLength
+    }
+    return bytes.buffer
+  }
+  onBytes(0, total)
   return res.arrayBuffer()
 }
 
@@ -32,7 +67,7 @@ self.onmessage = async (ev: MessageEvent<SeparationRequest>) => {
     (self as unknown as Worker).postMessage({ id, ...msg })
   try {
     post({ type: 'progress', pct: 5, msg: 'Loading Demucs v4 weights…' })
-    const weights = await loadWeights()
+    const weights = await loadWeights((loaded, total) => post({ type: 'model-progress', loaded, total }))
     post({ type: 'progress', pct: 20, msg: 'Initializing Demucs v4 neural network…' })
     const model = await ONNXHTDemucs.init(weights)
     post({ type: 'progress', pct: 30, msg: 'Demucs v4: separating…' })

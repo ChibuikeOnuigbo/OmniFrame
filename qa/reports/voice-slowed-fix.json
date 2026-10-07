@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T19:08:08.439Z",
+  "date": "2026-10-07T19:25:27.189Z",
   "results": [
     {
       "name": "A: real slowed track detected",
@@ -80,6 +80,11 @@
       "name": "N: native core numerically identical to JS fallback",
       "ok": true,
       "detail": "max|diff| vs JS — resample 0.00e+0 (bar 1e-5), LS de-leak 0.00e+0, pass average 0.00e+0, peak scale 0.00e+0 (bar 1e-6)"
+    },
+    {
+      "name": "M: model load shows smooth real progress and auto-dismisses",
+      "ok": true,
+      "detail": "phases download -> compile -> ready, 3 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
     },
     {
       "name": "zero runtime page errors",
@@ -247,6 +252,21 @@
       "avgMaxDiff": 0,
       "peakMaxDiff": 0,
       "avgMissing": 0,
+      "errors": []
+    },
+    "modelLoadProgress": {
+      "phases": [
+        "download",
+        "compile",
+        "ready"
+      ],
+      "maxPct": 100,
+      "finalPct": 100,
+      "monodrome": true,
+      "byteUpdates": 3,
+      "sessionOk": true,
+      "cardInDom": true,
+      "dismissed": true,
       "errors": []
     },
     "naturalPitch": {

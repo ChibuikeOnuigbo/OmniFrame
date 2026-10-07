@@ -49,9 +49,12 @@ export async function getDenoiseSession(): Promise<Ort.InferenceSession> {
       // Runtime files live in /ort-runtime/ during dev (importable through
       // vite's transform pipeline) and /ort/ in production builds.
       ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
-      return await ort.InferenceSession.create(DENOISE_MODEL_URL, {
-        executionProviders: ['wasm'],
-      })
+      const { withModelLoadProgress } = await import('./modelLoadStore.js')
+      return await withModelLoadProgress(
+        DENOISE_MODEL_URL,
+        { id: 'omni-denoise', label: 'AI Denoise (OmniFrame v1)' },
+        (bytes) => ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] }),
+      )
     })()
   }
   return sessionPromise
