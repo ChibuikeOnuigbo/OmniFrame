@@ -109,6 +109,16 @@ export function encodeAudioBufferToWav(buffer: AudioBuffer): Blob {
   for (let ch = 0; ch < numChannels; ch++) {
     channelData.push(buffer.getChannelData(ch))
   }
+  // Peak safety: separation / EQ stages can push peaks past ±1.0, which the
+  // int16 encode below would hard-clip (audible crackle). If any channel
+  // exceeds the ceiling, scale ALL channels by the same factor — no limiter
+  // pumping, no per-channel image shift.
+  let peak = 0
+  for (const ch of channelData) for (let i = 0; i < ch.length; i++) { const a = Math.abs(ch[i]); if (a > peak) peak = a }
+  if (peak > 0.999) {
+    const g = 0.98 / peak
+    for (const ch of channelData) for (let i = 0; i < ch.length; i++) ch[i] *= g
+  }
 
   let offset = 44
   for (let i = 0; i < buffer.length; i++) {

@@ -102,16 +102,25 @@ export async function detectSpeech(
 // at the corrected speed, with the stems slowed back afterwards.
 // ---------------------------------------------------------------------------
 
-/** Renders `buffer` playing `rate`x faster/slower (browser resampler). */
+/**
+ * Renders `buffer` playing `rate`x faster/slower (asetrate semantics: pitch
+ * and time scale together). Uses the polyphase windowed-sinc resampler in
+ * `src/lib/demucs/resample.js` — WebAudio's `playbackRate` rendering is
+ * linear-interpolation grade (~22 dB round-trip SNR, audible grit); this
+ * measures ~70 dB. Same length contract as before: ceil(length / rate).
+ */
 export async function renderAtRate(buffer: AudioBuffer, rate: number): Promise<AudioBuffer> {
-  const length = Math.max(1, Math.ceil(buffer.length / rate))
-  const offline = new OfflineAudioContext(buffer.numberOfChannels, length, buffer.sampleRate)
-  const src = offline.createBufferSource()
-  src.buffer = buffer
-  src.playbackRate.value = rate
-  src.connect(offline.destination)
-  src.start()
-  return offline.startRendering()
+  const { resampleChannels } = await import('./demucs/resample.js')
+  const inChannels: Float32Array[] = []
+  for (let c = 0; c < buffer.numberOfChannels; c++) inChannels.push(buffer.getChannelData(c))
+  const res = resampleChannels(inChannels, rate)
+  const out = new AudioBuffer({
+    length: res.length,
+    numberOfChannels: buffer.numberOfChannels,
+    sampleRate: buffer.sampleRate,
+  })
+  for (let c = 0; c < res.channelData.length; c++) out.copyToChannel(res.channelData[c] as Float32Array<ArrayBuffer>, c)
+  return out
 }
 
 /** At most this many seconds of the input are analyzed for slowed-ness. */
