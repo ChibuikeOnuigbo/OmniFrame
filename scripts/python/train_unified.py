@@ -71,14 +71,17 @@ GAIN_WINDOW_DB = 12.0      # +- clamp, same as the DSP finalizer
 # model
 # ---------------------------------------------------------------------------
 class UnifiedNet(nn.Module):
-    """Encoder GRU -> (mask head, loudness head). Default 0.43M params
-    (hidden 192, 1 GRU layer) — sized for this 2-core training sandbox:
-    ~20 steps/s at batch 16 x 0.5 s snippets, so 1M optimizer updates is
-    reachable in ~14 h of checkpointed background training."""
+    """Encoder GRU -> (mask head, loudness head). Default ~0.68M params
+    (hidden 224, 1 GRU layer, 5-frame context) — sized for this 2-core
+    training sandbox: ~17 steps/s at batch 16 x 0.5 s snippets, so 1M
+    optimizer updates is reachable in ~16 h of checkpointed background
+    training. (Run-5 sizing: hidden 192/ctx 3 plateaued on the harmonic
+    beds — arp-synth +2.9 dB, pad-chords +3.6 dB at 30k steps while
+    percussive reached +9.)"""
 
-    CTX = 3  # stacked frames of context
+    CTX = 5  # stacked frames of context
 
-    def __init__(self, hidden=192, layers=1):
+    def __init__(self, hidden=224, layers=1):
         super().__init__()
         self.hidden = hidden
         self.enc = nn.Linear(BINS * self.CTX, hidden)

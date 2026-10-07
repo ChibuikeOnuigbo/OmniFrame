@@ -59,7 +59,14 @@ arp-synth +2.5 dB / pad-chords +3.1 dB vs drums-groove +8.8 dB /
 full-band +8.2 dB at 0 dB SNR. Only 2 of 5 bed draws are harmonic, so the
 hard cases were under-sampled.
 
-### Run 4 — oracle-IRM loss + bed augmentation, started 2026-10-07
+### Run 4 — ABORTED at 35,000 steps (architecture sizing)
+
+Bed augmentation improved the easy beds (ambient +5.2 -> +6.1) but the
+harmonic ceiling held (arp-synth +2.9, pad-chords +3.6 at 30k; E2E mix
++3.45 dB) — the 426K model is capacity-limited on voice-vs-pad harmonic
+discrimination, not data-limited.
+
+### Run 5 — FINAL architecture (hidden 224, ctx 5, 655K params), started 2026-10-07
 
 - Same as run 3 plus: 80% of bed crops get a random pitch/speed factor
   (0.72-1.4, FFT-domain bandlimited resample) and 50% random time-reversal
@@ -81,4 +88,7 @@ hard cases were under-sampled.
     training-distribution mean improvement +6.37 dB at 20k; per-bed at 0 dB
     SNR: drums +8.8, full-band +8.2, ambient +5.2, pad-chords +3.1,
     arp-synth +2.5.
-  - (run 4 in progress — final counts recorded at completion)
+  - run 4 reference points (30k, warm-started from run 3's 20k): ambient
+    +6.1, arp-synth +2.9, drums +9.0, full-band +8.5, pad-chords +3.6;
+    E2E mix +3.45 dB.
+  - (run 5 in progress — final counts recorded at completion)
