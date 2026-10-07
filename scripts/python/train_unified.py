@@ -210,6 +210,24 @@ def make_mix(corpus, batch, seg_samples, rng, device):
     for b in range(batch):
         v = corpus.crop(corpus.voices[rng.integers(0, len(corpus.voices))], n, rng)
         m = corpus.crop(corpus.beds[rng.integers(0, len(corpus.beds))], n, rng)
+        # bed augmentation (run 4): the harmonic beds (pad-chords, arp-synth)
+        # are the hard interference — measured +2.5/+3.1 dB SI-SNR at 0 dB
+        # vs +8.2/+8.8 for percussive/full-band at 20k steps. Random
+        # pitch/speed resampling (FFT-domain, bandlimited) multiplies the
+        # effective harmonic-interference variety; random reversal decorates
+        # the envelope. The VOICE is never augmented (it is the target).
+        if rng.random() < 0.8:
+            factor = float(rng.uniform(0.72, 1.4))
+            n_out = max(n, int(round(len(m) / factor)))
+            M = np.fft.rfft(m)
+            k = min(len(M), n_out // 2 + 1)
+            Mr = M[:k]
+            if len(Mr) < n_out // 2 + 1:
+                Mr = np.pad(Mr, (0, n_out // 2 + 1 - len(Mr)))
+            m = (np.fft.irfft(Mr, n_out) * (n_out / len(m))).astype(np.float32)
+            m = m[:n] if len(m) >= n else np.pad(m, (0, n - len(m)))
+        if rng.random() < 0.5:
+            m = m[::-1].copy()
         # voice at a healthy level, music at -5..+15 dB relative SNR
         v_rms = np.sqrt(np.mean(v ** 2) + 1e-12)
         m_rms = np.sqrt(np.mean(m ** 2) + 1e-12)

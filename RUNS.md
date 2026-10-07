@@ -51,7 +51,20 @@ plateauing). Run 3 adds a direct L1(mask, oracle_IRM) supervision term —
 the standard strongest signal for ratio masking — and restarts (the 30k
 steps were ~25 min of compute).
 
-### Run 3 — oracle-IRM loss, sandbox CPU (2 cores), started 2026-10-07
+### Run 3 — ABORTED at 25,000 steps (bed augmentation)
+
+Oracle-IRM supervision worked (+3.07 dB at 10k vs +0.5 dB run 2) but a
+per-bed breakdown at 20k showed the harmonic beds are the bottleneck:
+arp-synth +2.5 dB / pad-chords +3.1 dB vs drums-groove +8.8 dB /
+full-band +8.2 dB at 0 dB SNR. Only 2 of 5 bed draws are harmonic, so the
+hard cases were under-sampled.
+
+### Run 4 — oracle-IRM loss + bed augmentation, started 2026-10-07
+
+- Same as run 3 plus: 80% of bed crops get a random pitch/speed factor
+  (0.72-1.4, FFT-domain bandlimited resample) and 50% random time-reversal
+  — multiplies effective harmonic-interference variety. The voice (target)
+  is never augmented.
 
 - Command: `python3 scripts/python/train_unified.py --steps 1000000
   --save-every 10000 --threads 2`
@@ -64,4 +77,8 @@ steps were ~25 min of compute).
     runner bit-faithful vs torch (mask parity 2.1e-6).
   - run 2 reference points (magnitude-L1 only): step 10k +0.5 dB / 30k
     +1.7 dB SI-SNR on the E2E mix, mask-vs-oracle L1 0.385.
-  - (run 3 in progress — final counts recorded at completion)
+  - run 3 reference points: 10k +3.07 dB / 20k +3.28 dB on the E2E mix;
+    training-distribution mean improvement +6.37 dB at 20k; per-bed at 0 dB
+    SNR: drums +8.8, full-band +8.2, ambient +5.2, pad-chords +3.1,
+    arp-synth +2.5.
+  - (run 4 in progress — final counts recorded at completion)
