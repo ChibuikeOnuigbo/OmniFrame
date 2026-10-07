@@ -1,0 +1,44 @@
+{
+  "old": {
+    "vocal_like_energy_frac": 0.23209050545693588,
+    "vocal_like_energy_frac_dsp": 0.9999999980598568,
+    "vocal_like_frames_frac": 0.1301825993555317,
+    "silero_mean": 0.1533106565475464,
+    "silero_frames_over_50": 0.13157894736842105,
+    "silero_peak": 0.9995699524879456,
+    "peak_vocal_window_start_s": 54.05605442176871,
+    "rms_dbfs": -14.46764466679507,
+    "seconds": 108.25142857142858,
+    "side_fraction": 0.006643339525908232,
+    "nonfinite_samples": 0,
+    "model_vocal_share": 0.9675617615469388
+  },
+  "new": {
+    "vocal_like_energy_frac": 0.4496844478532974,
+    "vocal_like_energy_frac_dsp": 0.9984904811838666,
+    "vocal_like_frames_frac": 0.3005370569280344,
+    "silero_mean": 0.31405818462371826,
+    "silero_frames_over_50": 0.29952690715552927,
+    "silero_peak": 0.9993060827255249,
+    "peak_vocal_window_start_s": 23.26639455782313,
+    "rms_dbfs": -12.240183208647437,
+    "seconds": 108.25301587301587,
+    "side_fraction": 0.00698926392942667,
+    "nonfinite_samples": 0,
+    "model_vocal_share": 0.9233181340067045
+  },
+  "gain_db": 2.872504926758908,
+  "artifacts": {
+    "old": {
+      "flux_outliers": 0,
+      "clipped_samples": 1394,
+      "nonfinite": 0
+    },
+    "new": {
+      "flux_outliers": 0,
+      "clipped_samples": 2452,
+      "nonfinite": 0
+    }
+  },
+  "verdict": "IMPROVED"
+}
