@@ -59,6 +59,8 @@
     "maxHeight": 2.875
   },
   "errors": [],
-  "failed": [],
+  "failed": [
+    "HEAD http://localhost:5173/models/htdemucs.onnx :: net::ERR_ABORTED"
+  ],
   "unexpectedFailed": []
 }

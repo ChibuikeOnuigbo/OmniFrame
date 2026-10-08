@@ -28,14 +28,25 @@ export const DEMUCS_MODEL_ID = 'htdemucs-v4'
 export const DEMUCS_MODEL_URL = '/models/htdemucs.onnx'
 const DEMUCS_SAMPLE_RATE = 44100
 
-/** True when the weights file is served (used by the UI to enable the model). */
-export async function isDemucsModelAvailable(): Promise<boolean> {
-  try {
-    const res = await fetch(DEMUCS_MODEL_URL, { method: 'HEAD' })
-    return res.ok
-  } catch {
-    return false
+/** True when the weights file is served (used by the UI to enable the model).
+ * The probe is cached for the session: the inspector panel re-mounts on
+ * every clip selection (and React StrictMode double-mounts it in dev), so
+ * an uncached probe would HEAD the 174 MB asset's metadata over and over —
+ * and rapid duplicate HEADs are exactly what chromium dedup-aborts
+ * (net::ERR_ABORTED, visible as request-failure noise in E2E runs). */
+let demucsAvailableProbe: Promise<boolean> | null = null
+export function isDemucsModelAvailable(): Promise<boolean> {
+  if (!demucsAvailableProbe) {
+    demucsAvailableProbe = (async () => {
+      try {
+        const res = await fetch(DEMUCS_MODEL_URL, { method: 'HEAD' })
+        return res.ok
+      } catch {
+        return false
+      }
+    })()
   }
+  return demucsAvailableProbe
 }
 
 async function bufferToRawAudio(buffer: AudioBuffer): Promise<RawAudio> {
@@ -359,8 +370,14 @@ export async function separateWithDemucs(
       // let the renderer reclaim the terminated worker's WASM heap before the
       // next pass starts (its high-water pages are released asynchronously;
       // 200 ms was too tight on memory-constrained machines — the next pass
-      // then OOMs on top of the un-reclaimed pages, so wait longer)
-      await new Promise((r) => setTimeout(r, 1500))
+      // then OOMs on top of the un-reclaimed pages, so wait longer). RSS
+      // profiling (qa evidence, 2026-10-08): a ~3 GB WASM heap is mostly
+      // back ~3 s after terminate, but keeps settling for several more
+      // seconds; a 1.5 s gap let pass 2 OOM the whole renderer on a 4 GB
+      // machine, so the WASM path now waits 8 s. WebGPU keeps the short
+      // gap — its heap lives in GPU/quarantined memory, not the renderer.
+      const reclaimWaitMs = webGPU ? 1500 : 8000
+      await new Promise((r) => setTimeout(r, reclaimWaitMs))
     } catch (err) {
       if (k === 0) throw err // the first pass must succeed
       onProgress?.(46, `Demucs v4: pass ${k + 1} failed (${(err as Error).message}); averaging ${completed} pass(es)`)

@@ -75,7 +75,15 @@ const MIX_LIB = `
 async function withPage(fn) {
   const browser = await pwChromium.launch({
     executablePath: await serverlessChromium.executablePath(),
-    args: ['--no-sandbox', '--use-gl=swiftshader'],
+    args: [
+      '--no-sandbox',
+      // WASM separation peaks ~3.1 GB in the renderer; the software-GL GPU
+      // process (~100 MB) is pure overhead for these audio-only cases —
+      // disabling it buys the second shift-averaging pass enough headroom
+      // on memory-tight CI boxes (the renderer OOM-kills otherwise).
+      '--disable-gpu',
+      '--disable-software-rasterizer',
+    ],
   })
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
@@ -207,6 +215,11 @@ async function buildDuo(page) {
 
 /** Isolate/Remove through the real app action (asset + clip on timeline). */
 async function isolateAction({ mixB64, assetId, mode }) {
+  // speedNormalize:false — the fixtures here are synthetic TTS+bed mixes, never
+  // slowed productions, and loading Silero into the MAIN renderer before the
+  // passes inflates the baseline the ~3.1 GB WASM pass heaps stack on (the
+  // renderer OOM-kills on memory-tight boxes). The slowed-detection path is
+  // covered end-to-end by qa/voice-slowed-fix-e2e.mjs (18/18).
   const { b64 } = window.__mix
   const lib = await import('/src/lib/voiceIsolation.ts')
   const store = window.__omniframe_store
@@ -214,7 +227,7 @@ async function isolateAction({ mixB64, assetId, mode }) {
   const cur = store.getState()
   cur.addClipToTrack(cur.ensureTrack('audio'), assetId, 0)
   const clip = store.getState().clips.find((x) => x.assetId === assetId)
-  const res = await lib.executeVoiceIsolationForClip(clip.id, { mode, model: 'htdemucs-v4', strength: 0.75 })
+  const res = await lib.executeVoiceIsolationForClip(clip.id, { mode, model: 'htdemucs-v4', strength: 0.75, speedNormalize: false })
   const st = store.getState()
   const asset = st.assets.find((a) => a.id === res.assetId)
   const buf = new Uint8Array(await (await fetch(asset.url)).arrayBuffer())

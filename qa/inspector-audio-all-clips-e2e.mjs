@@ -106,15 +106,50 @@ const checkAudioSection = async (kind) => {
   assert(`${kind}: Voice Isolation option present`, (await page.locator('[data-testid="audio-voice-isolation-checkbox"]').count()) === 1)
   assert(`${kind}: Loudness Normalization present`, (await page.locator('[data-testid="audio-loudness-checkbox"]').count()) === 1)
 
-  // Voice isolation controls: engine dropdown offers the ONNX AI Denoise model
+  // Voice isolation controls: the engine dropdown is mode-gated — the
+  // keep_vocal-only engines (AI Denoise ONNX, RNNoise) render only in
+  // keep_vocal mode, while Demucs v4 and omni-unified-v1 work in both
+  // modes. Default mode is remove_vocal, so check the gating both ways.
   await page.locator('[data-testid="audio-voice-isolation-checkbox"]').check()
   await page.waitForTimeout(300)
-  const modelOptions = await page.locator('[data-testid="audio-isolation-model-dropdown"] option').allTextContents()
+  const modeDropdown = page.locator('[data-testid="audio-isolation-mode-dropdown"]')
+  const dropdown = page.locator('[data-testid="audio-isolation-model-dropdown"]')
+  const optionsInMode = async () => (await dropdown.locator('option').allTextContents()).join(' | ')
+
+  await modeDropdown.selectOption('remove_vocal')
+  await page.waitForTimeout(300)
+  const keepOnlyTexts = await optionsInMode()
   assert(
-    `${kind}: AI Denoise ONNX model offered`,
-    modelOptions.some((t) => t.includes('AI Denoise ONNX')),
-    modelOptions.join(' | '),
+    `${kind}: keep-only engines hidden in remove_vocal`,
+    !keepOnlyTexts.includes('AI Denoise ONNX') && !keepOnlyTexts.includes('RNNoise'),
+    keepOnlyTexts,
   )
+  assert(
+    `${kind}: both-mode engines offered in remove_vocal`,
+    keepOnlyTexts.includes('Demucs v4') && keepOnlyTexts.includes('omni-unified-v1'),
+    keepOnlyTexts,
+  )
+
+  await modeDropdown.selectOption('keep_vocal')
+  await page.waitForTimeout(300)
+  const keepVocalTexts = await optionsInMode()
+  assert(
+    `${kind}: AI Denoise ONNX model offered in keep_vocal`,
+    keepVocalTexts.includes('AI Denoise ONNX'),
+    keepVocalTexts,
+  )
+  assert(
+    `${kind}: RNNoise offered in keep_vocal`,
+    keepVocalTexts.includes('RNNoise'),
+    keepVocalTexts,
+  )
+  assert(
+    `${kind}: Demucs v4 + omni-unified offered in keep_vocal`,
+    keepVocalTexts.includes('Demucs v4') && keepVocalTexts.includes('omni-unified-v1'),
+    keepVocalTexts,
+  )
+  // restore the default mode for the rest of the sweep
+  await modeDropdown.selectOption('remove_vocal')
 
   // Loudness controls expand with target slider + measured readout
   const loudBox = page.locator('[data-testid="audio-loudness-checkbox"]')

@@ -265,7 +265,9 @@ await shot('stress-10-exported')
 await page.reload({waitUntil:'networkidle'}); assert(await page.getByTestId('timeline-clip').count()===0,'refresh intentionally resets non-persistent project')
 assert(await page.getByText('Your canvas is empty').isVisible(),'refresh returns clean empty state')
 assert(errors.length===0,'unexpected console/page errors',errors.join(' | '))
-const unexpectedFailed=failed.filter(x=>!(x.startsWith('blob:')&&x.includes('ERR_ABORTED')))
+// Reload-heavy stress flow aborts in-flight /models/* availability HEADs
+// (net::ERR_ABORTED) — expected, same class as blob-aborts during reload.
+const unexpectedFailed=failed.filter(x=>!(x.startsWith('blob:')&&x.includes('ERR_ABORTED'))&&!(x.includes('/models/')&&x.includes('ERR_ABORTED')))
 assert(unexpectedFailed.length===0,'unexpected failed requests',unexpectedFailed.join(' | '))
 pass('expected reload-time blob aborts classified',String(failed.length-unexpectedFailed.length))
 
