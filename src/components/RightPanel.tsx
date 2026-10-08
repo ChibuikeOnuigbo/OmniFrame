@@ -45,6 +45,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [isolationEnabled, setIsolationEnabled] = useState(false)
   const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
+  const [isolationStrength, setIsolationStrength] = useState(0.92)
   const [demucsReady, setDemucsReady] = useState<boolean | null>(null)
   const [vadCleanup, setVadCleanup] = useState(true)
   const [speedFix, setSpeedFix] = useState(true)
@@ -461,6 +462,23 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   </label>
                 )}
 
+                <div className="flex items-center justify-between gap-2" data-testid="audio-isolation-strength-row">
+                  <span className="text-[10px] text-ink-300 shrink-0">Strength</span>
+                  <input
+                    type="range"
+                    data-testid="audio-isolation-strength-slider"
+                    aria-label="Isolation strength"
+                    min={0.1}
+                    max={1.0}
+                    step={0.01}
+                    value={isolationStrength}
+                    disabled={isProcessing}
+                    onChange={(e) => setIsolationStrength(parseFloat(e.target.value))}
+                    className="w-full h-1 accent-brand cursor-pointer"
+                  />
+                  <span className="text-[10px] font-mono text-ink-400 shrink-0 w-8 text-right">{Math.round(isolationStrength * 100)}%</span>
+                </div>
+
                 {isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && (
                   <label className="flex items-center gap-2 cursor-pointer select-none ml-3" data-testid="audio-isolation-naturalpitch-toggle">
                     <input
@@ -487,7 +505,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     try {
                       await executeVoiceIsolationForClip(
                         clip.id,
-                        { mode: isolationMode, model: isolationModel, vadGate: isolationModel === 'htdemucs-v4' ? vadCleanup : undefined, speedNormalize: isolationModel === 'htdemucs-v4' ? speedFix : undefined, speedOutput: isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && speedNatural ? 'natural' : 'timeline' },
+                        { mode: isolationMode, model: isolationModel, strength: isolationStrength, vadGate: isolationModel === 'htdemucs-v4' ? vadCleanup : undefined, speedNormalize: isolationModel === 'htdemucs-v4' ? speedFix : undefined, speedOutput: isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && speedNatural ? 'natural' : 'timeline' },
                         (pct, msg) => setIsolationStatus(`${pct}%: ${msg}`),
                       )
                       setIsolationStatus('Completed!')

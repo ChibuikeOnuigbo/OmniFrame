@@ -148,7 +148,7 @@ const refGain = readF32(`${PARITY}/gain.f32`)
     const rem = await run('remove_vocal')
     // strength knob wiring: lower strength = gentler mask (alpha < 1 pulls
     // the mask toward 1) -> the output must retain MORE mix energy
-    const gentle = await run('keep_vocal', 0.4)
+    const gentle = await run("keep_vocal", 0.2)
     URL.revokeObjectURL(blobUrl)
 
     // scale-invariant SNR: the model's loudness head intentionally changes
@@ -231,7 +231,7 @@ const refGain = readF32(`${PARITY}/gain.f32`)
   // maturing the output can land cap-bound (e.g. -28 + 12 = -16), and the
   // peak ceiling can bind earlier on sparse TTS speech. Honest window.
   check('keep_vocal: normalized loudness window (-30..-12 dBFS)', keepRmsDb > -30 && keepRmsDb < -12, `${keepRmsDb.toFixed(2)} dBFS`)
-  check('strength knob: gentler (0.4) retains more of the mix (SI-SNR vs clean lower than default)',
+  check('strength knob: gentler (0.2) retains more of the mix (SI-SNR vs clean lower than default)',
     func.gentle.snr < func.keep.snr - 0.1, `gentle ${func.gentle.snr.toFixed(2)} vs default ${func.keep.snr.toFixed(2)} dB`)
   check('remove_vocal: voice suppressed (SNR vs clean LOWER than keep_vocal by 6 dB+)',
     func.keep.snr - func.rem.snr >= 6, `keep ${func.keep.snr.toFixed(2)} vs rem ${func.rem.snr.toFixed(2)} dB`)

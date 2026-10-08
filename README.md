@@ -72,9 +72,13 @@ npm run qa:advanced # recording/trace/repeat-export workflow
      beds × white/pink/hum noise at random SNRs; direct oracle-IRM mask
      supervision + bed augmentation). keep_vocal = masked voice + the model's
      own normalization gain; remove_vocal = phase-coherent subtraction
-     (mix − voice estimate). Browser runner verified **bit-faithful to torch**
-     (mask parity ≤ 5e-6 across checkpoints). Training log with every run's
-     honest numbers: `RUNS.md`.
+     (mix − voice estimate). **Trained 1,020,000 optimizer steps** (run 5,
+     checkpoint-resumed across 8 sandbox resets — every segment honest in
+     `RUNS.md`): keep_vocal +4.3 dB SI-SNR over the 0 dB-SNR mix bar,
+     remove_vocal 0.00% residual speech under the strict grader, all outputs
+     GRADE A. Browser runner verified **bit-faithful to torch** (mask parity
+     ≤ 5e-6 across checkpoints). Training log with every run's honest
+     numbers: `RUNS.md`.
   All three engines share the same finalization (DC block, −18 dBFS RMS
   loudness normalize with peak ceiling, near-silence skip) and are graded by
   the strict sample-level Python grader (`qa/strict_output_grader.py`).

@@ -1,17 +1,17 @@
 {
-  "when": "2026-10-08T01:29:22.605Z",
+  "when": "2026-10-08T16:18:37.199Z",
   "engine": "omni-unified",
   "checks": "ALL PASS",
   "parity": {
-    "step": 160000,
-    "maskMaxDiff": 0.0000031739473342895508,
+    "step": 1020000,
+    "maskMaxDiff": 0.000007539987564086914,
     "gainDiff": 0
   },
   "measurements": {
     "mixSnrDb": -2.01,
-    "keepSnrDb": 4.04,
-    "keepRmsDbfs": -19.89,
-    "remSnrDb": -15.08,
+    "keepSnrDb": 4.28,
+    "keepRmsDbfs": -20.11,
+    "remSnrDb": -13.93,
     "remRmsDbfs": -18,
     "sr": 44100
   },

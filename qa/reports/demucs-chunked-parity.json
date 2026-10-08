@@ -1,0 +1,40 @@
+{
+  "when": "2026-10-08T16:27:17.942Z",
+  "test": "demucs-chunked-parity",
+  "claim": "per-chunk workers + host overlap-add === vendored full-track applySplits",
+  "seconds": 12,
+  "chunks": 3,
+  "checks": "ALL PASS",
+  "checks_detail": [
+    {
+      "name": "reference: 4 stems at full length",
+      "ok": true,
+      "detail": "drums,bass,other,vocals len 529200"
+    },
+    {
+      "name": "reference: stems are per-source distinct (mock sanity)",
+      "ok": true,
+      "detail": "max|drums−vocals| 1.200"
+    },
+    {
+      "name": "triangleWeights: peak 1.0 at the center, ~0 at both ends",
+      "ok": true,
+      "detail": "w[0] 5.81e-6 w[mid] 1.000000 w[end] 5.81e-6"
+    },
+    {
+      "name": "chunked: 3 chunks cover the track (12 s on the 5.85 s stride grid)",
+      "ok": true,
+      "detail": "3 chunks, stride 5.85 s"
+    },
+    {
+      "name": "chunked accumulation === full-track separateTracks (max|diff| <= 1e-6)",
+      "ok": true,
+      "detail": "max|diff| 1.19e-7 at other[0]@277772, reference 4004 ms"
+    },
+    {
+      "name": "overlap-add: interior samples keep >= 0.4 accumulated weight",
+      "ok": true,
+      "detail": "min interior sumWeight 0.500"
+    }
+  ]
+}

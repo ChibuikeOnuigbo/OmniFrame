@@ -147,3 +147,18 @@ discrimination, not data-limited.
     steps (>1000k requirement). Recovery: fetch+reset --hard, pip/npm
     reinstall, beds+voice fixtures regenerated, htdemucs.onnx refetched
     (3rd time), vite + trainer restarted.
+  - **step 1,020,000 — RUN 5 COMPLETE (2026-10-08 ~16:15 UTC).** The final
+    weights' path consumed 700k (segments 1–2) + 320k (re-run) =
+    **1,020,000 optimizer updates**. Final numbers: keep SI-SNR
+    **+4.28 dB** (bar mix+6 = +3.99, margin +0.29), music content 7.20 dB
+    vs mix 0.5 (+6.7 over mix), remove separation 18.2 dB (keep −4.28 vs
+    remove −13.93), loudness −20.11 dBFS (finalizer −18 target window),
+    remove lands exactly −18.00, parity mask 7.5e-6 / gain 0.0000 dB,
+    self-check 14.20 dB. **E2E 18/18 ALL PASS.** Strict grader @1.02M:
+    keep noisy-speech 83.96% speech +79.6 (GRADE A), keep song 85.71%
+    +80.9 (GRADE A), **remove_vocal 0.00% residual speech / 79.57% music /
+    +79.6 (GRADE A)**, RNNoise 81.28% +78.1 (GRADE A). The re-run's final
+    numbers sit ~0.3 dB under the lost pre-reset 1.02M export (+4.64) —
+    the honest cost of the reset #8 warm restart; every bar still passes.
+  - Run 5 total wall time: ~16.5 h across 8 sandbox resets/restarts;
+    irm_loss 0.297 (10k) → 0.121 (best, 160k) → 0.128 (final).

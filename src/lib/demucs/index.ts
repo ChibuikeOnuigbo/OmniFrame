@@ -22,6 +22,7 @@
 import type { RawAudio } from './wav-utils.js'
 import { renderAtRate } from '../vad'
 import { initNativeDsp, nativeRemoveLsLeakage, nativeAveragePasses } from '../native/dspNative.js'
+import { triangleWeights, accumulateChunk, normalizeChunked } from './chunked.js'
 
 export const DEMUCS_MODEL_ID = 'htdemucs-v4'
 export const DEMUCS_MODEL_URL = '/models/htdemucs.onnx'
@@ -261,13 +262,9 @@ async function runChunkedPassInWorker(
   const length = channelData[0].length
   const segment = DEMUCS_SEGMENT
   const stride = Math.floor((1 - DEMUCS_OVERLAP) * segment)
-  // triangle window — verbatim from apply.js applySplits
-  const weight = new Float32Array(segment)
-  for (let i = 0; i < Math.floor(segment / 2) + 1; i++) weight[i] = i + 1
-  for (let i = Math.floor(segment / 2) + 1; i < segment; i++) weight[i] = segment - i
-  let maxWeight = -Infinity
-  for (let i = 0; i < segment; i++) if (weight[i] > maxWeight) maxWeight = weight[i]
-  for (let i = 0; i < segment; i++) weight[i] /= maxWeight
+  // triangle window — shared with the Node parity test
+  // (qa/demucs-chunked-parity.mjs proves chunked === full-track)
+  const weight = triangleWeights(segment)
   const total = Math.ceil(length / stride)
 
   // accumulated [stem][channel] buffers + the weight-sum for normalization
@@ -288,18 +285,7 @@ async function runChunkedPassInWorker(
         `chunk ${chunkIndex + 1}/${total} · ${msg}`,
       )
     }, { overlap: 0 })
-    const chunkLength = end - offset
-    for (const [name, stem] of Object.entries(stems)) {
-      const channels = acc[name]
-      if (!channels) continue
-      for (let c = 0; c < channels.length; c++) {
-        const src = stem.channelData[c]
-        if (!src || src.length < chunkLength) continue
-        const dst = channels[c]
-        for (let t = 0; t < chunkLength; t++) dst[offset + t] += weight[t] * src[t]
-      }
-    }
-    for (let t = 0; t < chunkLength; t++) sumWeight[offset + t] += weight[t]
+    accumulateChunk(acc, sumWeight, offset, stems, weight)
     offset += stride
     chunkIndex++
     // let the renderer reclaim the terminated worker's WASM heap before the
@@ -307,12 +293,7 @@ async function runChunkedPassInWorker(
     // tight there; the next worker OOMs on top of the un-reclaimed pages)
     await new Promise((r) => setTimeout(r, 1500))
   }
-  // normalize by the accumulated weights — verbatim from apply.js applySplits
-  for (const name of DEMUCS_SOURCES) {
-    for (const ch of acc[name]) {
-      for (let i = 0; i < length; i++) ch[i] /= sumWeight[i]
-    }
-  }
+  normalizeChunked(acc, sumWeight)
   const out: WorkerStems = {}
   for (const name of DEMUCS_SOURCES) out[name] = { channelData: acc[name], sampleRate }
   return out

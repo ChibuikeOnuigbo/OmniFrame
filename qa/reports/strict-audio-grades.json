@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08T01:30:47.104679",
+  "date": "2026-10-08T16:19:48.692655",
   "grades": [
     {
       "file": "/home/user/OmniFrame/evidence/voice/slowed/input-realtrack-buried-segment.mp3",
@@ -1152,6 +1152,47 @@
       "verdict": "remove_vocal: residual speech 0.0% vs music 79.68% (needs speech <5%, music >5%, music dominance >5pts)"
     },
     {
+      "file": "/home/user/OmniFrame/evidence/voice/engines/rnnoise-noisy-speech.wav",
+      "expected": "keep_vocal",
+      "integrity": {
+        "samples": 264159,
+        "duration_s": 5.99,
+        "nonfinite_samples": 0,
+        "clipped_samples": 0,
+        "peak_dbfs": -0.18,
+        "rms_dbfs": -19.08,
+        "dc_offset": 0.0,
+        "silent_fraction": 0.0,
+        "noise_floor_db": -59.5
+      },
+      "speech": {
+        "voiced_fraction": 0.8128,
+        "mean": 0.8243,
+        "peak": 1.0,
+        "longest_voiced_run_s": 1.41,
+        "longest_gap_s": 0.32
+      },
+      "music": {
+        "music_fraction": 0.032,
+        "harmonic_fraction": 0.7972,
+        "percussive_fraction": 0.2645,
+        "onsets_per_s": 1.38,
+        "beat_regularity": 0.0,
+        "bpm_estimate": 0.0,
+        "content_ratings": {
+          "song_with_vocals_pct": 100.0,
+          "instrumental_pct": 0.0,
+          "beat_percussive_pct": 0.0
+        }
+      },
+      "speech_pct": 81.28,
+      "music_pct": 3.2,
+      "dominance_pts": 78.08,
+      "grade": "A",
+      "pass_": true,
+      "verdict": "keep_vocal: speech 81.28% vs music 3.2% (needs speech >5% and dominance >5pts)"
+    },
+    {
       "file": "/home/user/OmniFrame/evidence/voice/engines/unified-noisy-speech.wav",
       "expected": "keep_vocal",
       "integrity": {
@@ -1160,22 +1201,22 @@
         "nonfinite_samples": 0,
         "clipped_samples": 0,
         "peak_dbfs": -0.18,
-        "rms_dbfs": -18.77,
-        "dc_offset": 3e-06,
+        "rms_dbfs": -18.92,
+        "dc_offset": 2e-06,
         "silent_fraction": 0.0,
-        "noise_floor_db": -56.1
+        "noise_floor_db": -65.3
       },
       "speech": {
-        "voiced_fraction": 0.8342,
-        "mean": 0.8424,
+        "voiced_fraction": 0.8396,
+        "mean": 0.8392,
         "peak": 1.0,
         "longest_voiced_run_s": 2.18,
-        "longest_gap_s": 0.26
+        "longest_gap_s": 0.29
       },
       "music": {
-        "music_fraction": 0.0558,
-        "harmonic_fraction": 0.8119,
-        "percussive_fraction": 0.2536,
+        "music_fraction": 0.0438,
+        "harmonic_fraction": 0.8091,
+        "percussive_fraction": 0.2566,
         "onsets_per_s": 1.54,
         "beat_regularity": 0.0,
         "bpm_estimate": 95.7,
@@ -1185,12 +1226,12 @@
           "beat_percussive_pct": 0.0
         }
       },
-      "speech_pct": 83.42,
-      "music_pct": 5.58,
-      "dominance_pts": 77.84,
+      "speech_pct": 83.96,
+      "music_pct": 4.38,
+      "dominance_pts": 79.58,
       "grade": "A",
       "pass_": true,
-      "verdict": "keep_vocal: speech 83.42% vs music 5.58% (needs speech >5% and dominance >5pts)"
+      "verdict": "keep_vocal: speech 83.96% vs music 4.38% (needs speech >5% and dominance >5pts)"
     },
     {
       "file": "/home/user/OmniFrame/evidence/voice/engines/unified-song-keepvocal.wav",
@@ -1201,22 +1242,22 @@
         "nonfinite_samples": 0,
         "clipped_samples": 0,
         "peak_dbfs": -0.18,
-        "rms_dbfs": -19.1,
-        "dc_offset": 3e-06,
-        "silent_fraction": 0.0104,
-        "noise_floor_db": -59.3
+        "rms_dbfs": -19.3,
+        "dc_offset": 0.0,
+        "silent_fraction": 0.0674,
+        "noise_floor_db": -66.0
       },
       "speech": {
-        "voiced_fraction": 0.8643,
-        "mean": 0.8599,
+        "voiced_fraction": 0.8571,
+        "mean": 0.8614,
         "peak": 1.0,
         "longest_voiced_run_s": 2.18,
-        "longest_gap_s": 0.22
+        "longest_gap_s": 0.26
       },
       "music": {
-        "music_fraction": 0.0376,
-        "harmonic_fraction": 0.8159,
-        "percussive_fraction": 0.2491,
+        "music_fraction": 0.0484,
+        "harmonic_fraction": 0.8116,
+        "percussive_fraction": 0.2521,
         "onsets_per_s": 1.62,
         "beat_regularity": 0.0,
         "bpm_estimate": 0.0,
@@ -1226,12 +1267,12 @@
           "beat_percussive_pct": 0.0
         }
       },
-      "speech_pct": 86.43,
-      "music_pct": 3.76,
-      "dominance_pts": 82.67,
+      "speech_pct": 85.71,
+      "music_pct": 4.84,
+      "dominance_pts": 80.87,
       "grade": "A",
       "pass_": true,
-      "verdict": "keep_vocal: speech 86.43% vs music 3.76% (needs speech >5% and dominance >5pts)"
+      "verdict": "keep_vocal: speech 85.71% vs music 4.84% (needs speech >5% and dominance >5pts)"
     },
     {
       "file": "/home/user/OmniFrame/evidence/voice/engines/unified-song-removevocal.wav",
@@ -1241,29 +1282,29 @@
         "duration_s": 4.5,
         "nonfinite_samples": 0,
         "clipped_samples": 0,
-        "peak_dbfs": -5.01,
+        "peak_dbfs": -5.28,
         "rms_dbfs": -18.0,
-        "dc_offset": 3e-06,
+        "dc_offset": 2e-06,
         "silent_fraction": 0.0,
-        "noise_floor_db": -27.9
+        "noise_floor_db": -27.5
       },
       "speech": {
         "voiced_fraction": 0.0,
-        "mean": 0.0809,
-        "peak": 0.4471,
+        "mean": 0.0876,
+        "peak": 0.4589,
         "longest_voiced_run_s": 0.0,
         "longest_gap_s": 4.48
       },
       "music": {
         "music_fraction": 0.7957,
-        "harmonic_fraction": 0.948,
-        "percussive_fraction": 0.1381,
-        "onsets_per_s": 2.08,
+        "harmonic_fraction": 0.9491,
+        "percussive_fraction": 0.1347,
+        "onsets_per_s": 1.16,
         "beat_regularity": 0.0,
-        "bpm_estimate": 323.0,
+        "bpm_estimate": 0.0,
         "content_ratings": {
           "song_with_vocals_pct": 0.0,
-          "instrumental_pct": 94.8,
+          "instrumental_pct": 94.9,
           "beat_percussive_pct": 0.0
         }
       },

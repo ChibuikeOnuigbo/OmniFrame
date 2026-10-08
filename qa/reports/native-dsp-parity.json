@@ -1,37 +1,37 @@
 {
-  "date": "2026-10-07T23:57:54.834Z",
+  "date": "2026-10-08T16:38:07.014Z",
   "module": "public/wasm/omni-dsp.wasm",
   "source": "native/dsp-core/omni_dsp.cpp",
   "results": [
     {
       "name": "resample parity x1.450 n=1000",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 690 === 690; JS 21 ms (2ch) vs native 7 ms (2ch est) — 2.9x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 690 === 690; JS 13 ms (2ch) vs native 10 ms (2ch est) — 1.3x"
     },
     {
       "name": "resample parity x1.450 n=44100",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 30414 === 30414; JS 17 ms (2ch) vs native 2 ms (2ch est) — 7.0x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 30414 === 30414; JS 11 ms (2ch) vs native 3 ms (2ch est) — 4.3x"
     },
     {
       "name": "resample parity x1.450 n=264600",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 182483 === 182483; JS 51 ms (2ch) vs native 15 ms (2ch est) — 3.4x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 182483 === 182483; JS 43 ms (2ch) vs native 15 ms (2ch est) — 2.9x"
     },
     {
       "name": "resample parity x1.333 n=1000",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 750 === 750; JS 13 ms (2ch) vs native 4 ms (2ch est) — 3.2x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 750 === 750; JS 5 ms (2ch) vs native 4 ms (2ch est) — 1.3x"
     },
     {
       "name": "resample parity x1.333 n=44100",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 33075 === 33075; JS 36 ms (2ch) vs native 3 ms (2ch est) — 13.6x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 33075 === 33075; JS 6 ms (2ch) vs native 3 ms (2ch est) — 2.4x"
     },
     {
       "name": "resample parity x1.333 n=264600",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 198450 === 198450; JS 36 ms (2ch) vs native 16 ms (2ch est) — 2.3x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 198450 === 198450; JS 37 ms (2ch) vs native 16 ms (2ch est) — 2.3x"
     },
     {
       "name": "resample parity x0.750 n=1000",
@@ -41,32 +41,32 @@
     {
       "name": "resample parity x0.750 n=44100",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 58800 === 58800; JS 11 ms (2ch) vs native 5 ms (2ch est) — 2.0x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 58800 === 58800; JS 11 ms (2ch) vs native 5 ms (2ch est) — 2.4x"
     },
     {
       "name": "resample parity x0.750 n=264600",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 352800 === 352800; JS 66 ms (2ch) vs native 28 ms (2ch est) — 2.3x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 352800 === 352800; JS 67 ms (2ch) vs native 32 ms (2ch est) — 2.1x"
     },
     {
       "name": "resample parity x1.150 n=1000",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 870 === 870; JS 3 ms (2ch) vs native 4 ms (2ch est) — 0.7x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 870 === 870; JS 5 ms (2ch) vs native 8 ms (2ch est) — 0.7x"
     },
     {
       "name": "resample parity x1.150 n=44100",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 38348 === 38348; JS 7 ms (2ch) vs native 3 ms (2ch est) — 2.4x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 38348 === 38348; JS 10 ms (2ch) vs native 3 ms (2ch est) — 3.3x"
     },
     {
       "name": "resample parity x1.150 n=264600",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 230087 === 230087; JS 42 ms (2ch) vs native 18 ms (2ch est) — 2.3x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 230087 === 230087; JS 45 ms (2ch) vs native 19 ms (2ch est) — 2.4x"
     },
     {
       "name": "resample parity x1.600 n=1000",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 625 === 625; JS 3 ms (2ch) vs native 4 ms (2ch est) — 0.6x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 625 === 625; JS 3 ms (2ch) vs native 4 ms (2ch est) — 0.7x"
     },
     {
       "name": "resample parity x1.600 n=44100",
@@ -76,7 +76,7 @@
     {
       "name": "resample parity x1.600 n=264600",
       "ok": true,
-      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 165375 === 165375; JS 30 ms (2ch) vs native 13 ms (2ch est) — 2.4x"
+      "detail": "max|diff| 0.00e+0 (bar 1e-5), length 165375 === 165375; JS 32 ms (2ch) vs native 13 ms (2ch est) — 2.4x"
     },
     {
       "name": "ls_leakage parity",
@@ -101,7 +101,7 @@
     {
       "name": "benchmark: 108 s stereo speed-up x1.45",
       "ok": true,
-      "detail": "JS 632 ms vs native 267 ms — 2.4x"
+      "detail": "JS 580 ms vs native 244 ms — 2.4x"
     }
   ]
 }
