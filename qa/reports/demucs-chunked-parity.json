@@ -1,5 +1,5 @@
 {
-  "when": "2026-10-08T16:27:17.942Z",
+  "when": "2026-10-08T22:23:14.564Z",
   "test": "demucs-chunked-parity",
   "claim": "per-chunk workers + host overlap-add === vendored full-track applySplits",
   "seconds": 12,
@@ -29,7 +29,7 @@
     {
       "name": "chunked accumulation === full-track separateTracks (max|diff| <= 1e-6)",
       "ok": true,
-      "detail": "max|diff| 1.19e-7 at other[0]@277772, reference 4004 ms"
+      "detail": "max|diff| 1.19e-7 at other[0]@277772, reference 3993 ms"
     },
     {
       "name": "overlap-add: interior samples keep >= 0.4 accumulated weight",

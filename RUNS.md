@@ -162,3 +162,60 @@ discrimination, not data-limited.
     the honest cost of the reset #8 warm restart; every bar still passes.
   - Run 5 total wall time: ~16.5 h across 8 sandbox resets/restarts;
     irm_loss 0.297 (10k) → 0.121 (best, 160k) → 0.128 (final).
+
+## Regression sweep 2026-10-08 (post-finalizer, req 17 "keep testing and improving")
+
+- **Sandbox reset #10** (~20:55 UTC): working tree wiped mid-sweep, zero loss
+  of pushed work (2979f24 safe). Recovery + full fix re-application landed as
+  6029042 — this time committed immediately after verification (the reset
+  lesson, honored).
+- Sweep results (all green): inspector-audio-all-clips **27/27** (stale
+  "AI Denoise ONNX offered" checks replaced with two-way mode-gating
+  verification — keep_vocal must offer AI Denoise+RNNoise+Demucs+unified,
+  remove_vocal must hide the keep-only engines), audio-waveform 9/9,
+  ai-denoise 11/11, loudness 7/7, rnnoise E2E, audio-section-context-dismiss,
+  omni-unified E2E, marker-audiometer 19, voice-isolation 30, media-library
+  20, timeline-controls 16, context-menu 62, timeline-ruler 37, rubber-band
+  25, gap-tools 31, tooltip-dock 17, boundary-clips, timeline-rebuild,
+  landing 25, supreme-master-command 14/14, marker-navigation 12/12,
+  stress 109, advanced 43, e2e.mjs smoke, master-rebuild, voice-slowed-fix
+  18/18, voice-tts-mix-isolation 24, voice-isolation-stress-1000 (1000
+  iterations, 3/3 checks), source-preview-oop-tracks, sidebar-segmentation
+  21/21, collapse-popout 49, panels-cursor-declutter 18/18, ui-declutter,
+  cursor-frame, cursor-visibility, ratio-dropdown, cluster-fixer,
+  compound-clip, drawing-layout, keyframe-graph-3d, layout-selection-mask,
+  masking-tracking 12/12, onion-skin, pointer-events, recolor-chair 6/6,
+  fill-hair-recolor, responsiveness, blender-rotation, three-d-video-plane,
+  towel-masking 39, krita-transparency, unified-preview-text-effects 21,
+  omniframe cluster (clean-infill, mode-drawing-mask, mode-vetting,
+  recolor-blend 20, selection-masking), roto-isolation-browser 13 PASS +
+  3 SKIP (held-out fixtures not redistributable — expected).
+- **demucs robustness 9/9 PASS** after environment + product fixes:
+  - Product: inter-pass WASM heap reclaim wait 1.5 s → 8 s on the WASM path
+    (RSS profiling: ~3 GB heap mostly back ~3 s after worker terminate but
+    keeps settling; 1.5 s let pass 2 OOM the renderer on a 4 GB machine).
+    Confirmed by direct experiment that a second session.run in the SAME
+    worker also OOMs (heap grows monotonically per run) — the
+    throwaway-worker-per-pass design is correct and now documented.
+  - Test env: --disable-gpu (audio-only cases, ~100 MB back) +
+    speedNormalize:false on the synthetic fixtures (slowed path covered by
+    voice-slowed-fix 18/18) + **a 2 GB swapfile** — the decisive lever: two
+    sequential ~3.1 GB pass spikes + ~450 MB node/vite/chromium overhead
+    exceed the 3.9 GB sandbox by ~100-200 MB; with swap the full
+    strength-0.75 two-pass profile passes (mono/48kHz/short/two-speakers,
+    both modes, 7 separations, 9/9).
+  - demucs model E2E re-verified post-reset: 6/6, identical numbers
+    (SI-SDR 18.38, bleed −50.41, pauses −19.3 below speech).
+  - Parity suites re-verified: chunked 6/6, native-dsp 20/20, rnnoise ALL.
+- Probe-noise fix: isDemucsModelAvailable now caches its session promise
+  (the inspector re-mounts per clip selection; uncached, it re-HEADed the
+  174 MB asset's metadata and chromium dedup-aborts the rapid duplicates —
+  net::ERR_ABORTED request-failure noise). audio-waveform/advanced/stress
+  filters now allow the known-benign aborted /models/* HEADs.
+- Sandbox ops notes (resets #9/#10): playwright's bundled ffmpeg can't be
+  installed (cdn.playwright.dev blocked) — @ffmpeg-installer/ffmpeg via npm
+  dropped into ~/.cache/ms-playwright/ffmpeg-1011/ffmpeg-linux works for
+  video recording (advanced-e2e). opencv-python-headless needed for the
+  OpenCV frame-inspection suites. Swap: `sudo fallocate -l 2G /swapfile &&
+  sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon
+  /swapfile` (passwordless sudo available; swap dies with each reset).

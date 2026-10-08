@@ -140,7 +140,7 @@
     {
       "name": "Space pause state responds without delay",
       "status": "PASS",
-      "detail": "54.0ms"
+      "detail": "32.0ms"
     },
     {
       "name": "Space synchronously pauses decoded media elements",
@@ -155,7 +155,7 @@
     {
       "name": "coalesced scrub reaches final decoded frame",
       "status": "PASS",
-      "detail": "11.1ms"
+      "detail": "8.0ms"
     },
     {
       "name": "image clip drag maps pixels to time",
@@ -545,13 +545,15 @@
     {
       "name": "expected reload-time blob aborts classified",
       "status": "PASS",
-      "detail": "2"
+      "detail": "4"
     }
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/b98308e4-74a4-400c-9afd-dd126bfbe495 :: net::ERR_ABORTED",
-    "blob:http://localhost:5173/b98308e4-74a4-400c-9afd-dd126bfbe495 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/24c0c0a4-1ef5-496c-98ed-325a23a89d14 :: net::ERR_ABORTED",
+    "http://localhost:5173/models/htdemucs.onnx :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/24c0c0a4-1ef5-496c-98ed-325a23a89d14 :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/24c0c0a4-1ef5-496c-98ed-325a23a89d14 :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "exportPath": "/home/user/OmniFrame/qa/exports/omniframe-export.mp4"
