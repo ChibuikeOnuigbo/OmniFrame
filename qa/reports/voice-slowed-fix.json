@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08T22:36:44.208Z",
+  "date": "2026-10-08T23:51:16.244Z",
   "results": [
     {
       "name": "A: real slowed track detected",
@@ -84,7 +84,7 @@
     {
       "name": "M: model load shows smooth real progress and auto-dismisses",
       "ok": true,
-      "detail": "phases download -> compile -> ready, 4 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
+      "detail": "phases download -> compile -> ready, 3 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
     },
     {
       "name": "zero runtime page errors",
@@ -263,7 +263,7 @@
       "maxPct": 100,
       "finalPct": 100,
       "monodrome": true,
-      "byteUpdates": 4,
+      "byteUpdates": 3,
       "sessionOk": true,
       "cardInDom": true,
       "dismissed": true,

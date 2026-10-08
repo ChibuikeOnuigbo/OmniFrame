@@ -1,12 +1,12 @@
 {
-  "when": "2026-10-08T21:57:50.527Z",
+  "when": "2026-10-08T23:32:21.752Z",
   "engine": "rnnoise-xiph",
   "checks": "ALL PASS",
   "measurements": {
     "inputSnrDb": 0,
     "outputSnrDb": 9.35,
     "outRmsDbfs": -19.08,
-    "elapsedMs": 231,
+    "elapsedMs": 357,
     "sampleRate": 44100,
     "outDurationS": 5.99,
     "notes": [

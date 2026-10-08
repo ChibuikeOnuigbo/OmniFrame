@@ -17,18 +17,29 @@
  *   outputs: output [1, 1] speech probability, stateN [2, 1, 128]
  */
 
-import * as ort from 'onnxruntime-web'
+import type * as OrtTypes from 'onnxruntime-web'
+
+let ortModule: Promise<typeof OrtTypes> | null = null
+/** onnxruntime-web (404 KB minified) is the single biggest JS dependency in
+ * the graph. Loading it lazily keeps it out of the initial bundle — it is
+ * only needed once a neural feature (VAD / denoise / isolation / roto)
+ * actually runs. Cached so every caller shares one module instance. */
+function loadOrt(): Promise<typeof OrtTypes> {
+  if (!ortModule) ortModule = import('onnxruntime-web')
+  return ortModule
+}
 
 export const VAD_MODEL_URL = '/models/silero-vad-v5.onnx'
 const VAD_SR = 16000
 const CHUNK = 512
 const CONTEXT = 64
 
-let vadSession: Promise<ort.InferenceSession> | null = null
+let vadSession: Promise<OrtTypes.InferenceSession> | null = null
 
-function loadVadSession(): Promise<ort.InferenceSession> {
+function loadVadSession(): Promise<OrtTypes.InferenceSession> {
   if (!vadSession) {
     vadSession = (async () => {
+      const ort = await loadOrt()
       const { withModelLoadProgress } = await import('./modelLoadStore.js')
       return await withModelLoadProgress(
         VAD_MODEL_URL,
@@ -70,10 +81,11 @@ export async function detectSpeech(
   onProgress?: (fraction: number) => void,
 ): Promise<{ probs: Float32Array; frameSamples: number; sr: number }> {
   const session = await loadVadSession()
+  const ort = await loadOrt()
   const x = await toMono16k(buffer)
   const nFrames = Math.max(1, Math.floor(x.length / CHUNK))
   const probs = new Float32Array(nFrames)
-  let state: ort.Tensor = new ort.Tensor('float32', new Float32Array(2 * 1 * 128), [2, 1, 128])
+  let state: OrtTypes.Tensor = new ort.Tensor('float32', new Float32Array(2 * 1 * 128), [2, 1, 128])
   let context = new Float32Array(CONTEXT)
   const srTensor = new ort.Tensor('int64', BigInt64Array.from([16000n]), [])
   const inputNames = session.inputNames

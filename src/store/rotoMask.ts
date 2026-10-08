@@ -19,6 +19,8 @@
 
 import {
   BUILTIN_ROTO_MODELS,
+  getRotoSamSessions,
+  getRotoSession,
   importRotoModelFromFile,
   rotoModelFromUrl,
   ROTO_MODEL_CATALOG,
@@ -296,7 +298,6 @@ export function createRotoMaskSlice(
       }
       set({ rotoStatus: { state: 'loading', message: `Loading ${model.label}…` } })
       try {
-        const { getRotoSession, getRotoSamSessions } = await import('../lib/rotoModels')
         if (model.kind === 'sam') {
           await getRotoSamSessions(model)
           set({

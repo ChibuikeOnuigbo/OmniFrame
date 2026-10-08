@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-05T18:21:53.189Z",
+  "timestamp": "2026-10-08T23:37:47.439Z",
   "results": [
     {
       "name": "01. Anime model · char_light pale-on-white (STRESS: under-segments, must still localise)",
@@ -69,7 +69,7 @@
     {
       "name": "12. SAM · obj_chair on busy photo (2 clicks, strict)",
       "status": "PASS",
-      "details": "cover=10.0% (gt 9.4%), centroid ok, click1 6071ms (encode), click2 975ms (cached decoder)"
+      "details": "cover=10.0% (gt 9.4%), centroid ok, click1 8573ms (encode), click2 1114ms (cached decoder)"
     },
     {
       "name": "13. SAM · char_light pale-on-white",

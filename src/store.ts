@@ -281,6 +281,16 @@ import type {
 import type { RotoModelDescriptor } from './lib/rotoModels'
 import type { RotoClick } from './lib/rotoMaskEngine'
 import { createRiggingSlice, type RiggingSlice } from './store/rigging'
+// Statically imported (not dynamically in the test hook below): RightPanel
+// already pulls this 4 KB module into the main bundle, so a dynamic import
+// here only triggered rolldown's INEFFECTIVE_DYNAMIC_IMPORT warning.
+import { measureIntegratedLufs } from './lib/loudness'
+// Statically imported (not dynamically at the use sites): rotoBrush and
+// aiDenoise are already statically imported by rotoMaskEngine/omniUnified/
+// voiceIsolation, so dynamic imports here only triggered rolldown's
+// INEFFECTIVE_DYNAMIC_IMPORT warnings without moving any chunk.
+import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } from './lib/rotoBrush'
+import { denoiseAudioBuffer } from './lib/aiDenoise'
 
 interface EditorState extends RiggingSlice, RotoMaskSlice {
   selectionBrushAuto: boolean
@@ -2481,7 +2491,6 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!ctx) return
       const img = ctx.getImageData(0, 0, preview.width, preview.height)
       const radiusPx = Math.max(4, (get().drawingSize / 2) * (preview.width / Math.max(1, preview.clientWidth || preview.width)))
-      const { autoBrushMaskFromStroke, maskToDataUrl } = await import('./lib/rotoBrush')
       const auto = autoBrushMaskFromStroke({
         source: img,
         stroke: points.map((p) => ({ x: p.x * img.width, y: p.y * img.height })),
@@ -2508,7 +2517,6 @@ export const useEditor = create<EditorState>((set, get) => {
       const ctx = preview.getContext('2d', { willReadFrequently: true })
       if (!ctx) return
       const img = ctx.getImageData(0, 0, preview.width, preview.height)
-      const { magicWandMask, maskToDataUrl, maskBounds } = await import('./lib/rotoBrush')
       const wand = magicWandMask({
         source: img,
         seed: { x: point.x * img.width, y: point.y * img.height },
@@ -3569,12 +3577,10 @@ if (typeof window !== 'undefined') {
   ;(window as any).__omniframe_store = useEditor
   // Test hooks (qa/*.mjs): BS.1770 loudness measurement and the ONNX denoiser.
   ;(window as any).__omniframe_lufs = async (channels: Float32Array[], sampleRate: number) => {
-    const { measureIntegratedLufs } = await import('./lib/loudness')
     return measureIntegratedLufs(channels, sampleRate)
   }
   ;(window as any).__omniframe_denoise = {
     runBuffer: async (buffer: AudioBuffer, alpha = 1) => {
-      const { denoiseAudioBuffer } = await import('./lib/aiDenoise')
       return denoiseAudioBuffer(buffer, alpha)
     },
   }

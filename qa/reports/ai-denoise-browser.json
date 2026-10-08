@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-08T21:57:27.393Z",
+  "generatedAt": "2026-10-08T23:32:19.367Z",
   "browser": {
     "samples": 264600,
     "maskMean": 0.02471633138029314,
-    "inferenceMs": 229.40000000002328,
-    "wallMs": 2307.1999999999534,
+    "inferenceMs": 272.70000000001164,
+    "wallMs": 3729.5,
     "sdrBefore": -0.007177023060193024,
     "sdrAfter": 6.998798582962683,
     "clipPeak": 0.11998151242733002
@@ -99,7 +99,7 @@
     {
       "name": "Browser inference completes in reasonable time",
       "status": "PASS",
-      "detail": "2.3s wall (229 ms onnx)"
+      "detail": "3.7s wall (273 ms onnx)"
     },
     {
       "name": "AI Denoise engine selectable in the isolation UI",
