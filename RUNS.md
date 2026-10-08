@@ -130,3 +130,6 @@ discrimination, not data-limited.
   - **step 510k (halfway):** keep +4.31 dB, music 7.23 dB, self-check
     15.97 dB (steady climb: 13.92 @160k → 14.14 @310k → 15.97 @510k),
     E2E 17/17 PASS. Bars stable above the contract.
+  - step 700k: keep **+4.40 dB** (best yet; +0.41 over bar), music 7.39
+    dB, self-check 15.54 dB, E2E 17/17 PASS. Trajectory 160k→700k:
+    +4.04 → +4.34 → +4.31 → +4.40.
