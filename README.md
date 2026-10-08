@@ -56,6 +56,28 @@ npm run qa:advanced # recording/trace/repeat-export workflow
   Weights download once: `npm run fetch:demucs`
   (174 MB, git-ignored; personal/research use per Meta's license). Fast DSP and
   the in-house AI-Denoise ONNX engines remain selectable.
+- **3-model audio stack (isolation + denoise + normalization per engine)**:
+  1. **Demucs v4 htdemucs** (imported, isolation) — the flagship separator above.
+  2. **RNNoise (Xiph)** (imported, denoise) — the classic trained GRU speech
+     denoiser compiled from the official C sources (weights embedded, int8 +
+     1/256) to a 1 MB freestanding wasm module. **Bit-identical to a native gcc
+     build** of the same sources (max|diff| = 0 over the fixture), noise-only
+     segments suppressed −24.6 dB, real speech at 0 dB SNR → **+13.3 dB SNR**,
+     strict grader **GRADE A** (81% speech, +78 dominance) on the in-app
+     evidence output. 48 kHz-native model; the engine resamples with the
+     polyphase sinc core. `native/rnnoise/`, `scripts/build-rnnoise-wasm.sh`.
+  3. **omni-unified-v1** (self-made, all three jobs in ONE graph) — 655K-param
+     GRU masker + loudness head trained in-repo (`scripts/python/train_unified.py`)
+     on synthesized mixes with known clean components (repo TTS voices × music
+     beds × white/pink/hum noise at random SNRs; direct oracle-IRM mask
+     supervision + bed augmentation). keep_vocal = masked voice + the model's
+     own normalization gain; remove_vocal = phase-coherent subtraction
+     (mix − voice estimate). Browser runner verified **bit-faithful to torch**
+     (mask parity ≤ 2.1e-6). Training log with every run's honest numbers:
+     `RUNS.md`.
+  All three engines share the same finalization (DC block, −18 dBFS RMS
+  loudness normalize with peak ceiling, near-silence skip) and are graded by
+  the strict sample-level Python grader (`qa/strict_output_grader.py`).
 - **Responsive shell** with always-visible icon rail; panels collapse to an arrow instead of hiding.
 
 ## Layout
