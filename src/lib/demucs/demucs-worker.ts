@@ -59,10 +59,15 @@ export interface SeparationRequest {
   id: number
   channelData: Float32Array[]
   sampleRate: number
+  /** Spectrogram-split overlap (default 0.25). The chunked WASM fallback
+   *  (src/lib/demucs/index.ts#runChunkedPassInWorker) sends 0 so the worker
+   *  processes exactly ONE chunk — its heap dies with the worker right
+   *  after, keeping memory flat on arbitrarily long tracks. */
+  overlap?: number
 }
 
 self.onmessage = async (ev: MessageEvent<SeparationRequest>) => {
-  const { id, channelData, sampleRate } = ev.data
+  const { id, channelData, sampleRate, overlap } = ev.data
   const post = (msg: Record<string, unknown>) =>
     (self as unknown as Worker).postMessage({ id, ...msg })
   try {
@@ -79,7 +84,7 @@ self.onmessage = async (ev: MessageEvent<SeparationRequest>) => {
         last = pct
         post({ type: 'progress', pct, msg: `Demucs v4: chunk ${step}/${total}` })
       }
-    }, 0.25)
+    }, overlap ?? 0.25)
     // detach the views from the result buffer so they are transferable
     const out: Record<string, { channelData: Float32Array[]; sampleRate: number }> = {}
     const transfer: ArrayBuffer[] = []

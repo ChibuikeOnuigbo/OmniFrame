@@ -144,6 +144,7 @@ function runPassInWorker(
   channelData: Float32Array[],
   sampleRate: number,
   onProgress?: (pct: number, msg: string) => void,
+  opts: { overlap?: number } = {},
 ): Promise<WorkerStems> {
   return new Promise((resolve, reject) => {
     const worker = new Worker(new URL('./demucs-worker.ts', import.meta.url), { type: 'module' })
@@ -204,8 +205,117 @@ function runPassInWorker(
       if (modelCardStarted) void modelCard('fail', e.message)
       reject(new Error(`Demucs worker failed: ${e.message}`))
     }
-    worker.postMessage({ id: 1, channelData, sampleRate })
+    worker.postMessage({ id: 1, channelData, sampleRate, overlap: opts.overlap ?? 0.25 })
   })
+}
+
+/** htdemucs training segment (7.8 s @ 44.1 kHz) — the model's chunk size. */
+const DEMUCS_SEGMENT = Math.floor(7.8 * DEMUCS_SAMPLE_RATE)
+const DEMUCS_OVERLAP = 0.25
+/** Stem order of the htdemucs output head (ONNXHTDemucs.sources). */
+const DEMUCS_SOURCES = ['drums', 'bass', 'other', 'vocals'] as const
+
+/**
+ * True when WebGPU actually has an adapter (navigator.gpu can exist while
+ * requestAdapter() returns null — headless chromium, locked-down GPUs). The
+ * result is cached; the probe is cheap and ort re-requests the adapter when
+ * it builds the session.
+ */
+let webGPUProbe: Promise<boolean> | null = null
+function hasWebGPUAdapter(): Promise<boolean> {
+  if (!webGPUProbe) {
+    webGPUProbe = (async () => {
+      try {
+        const nav = navigator as Navigator & { gpu?: { requestAdapter(): Promise<unknown> } }
+        if (!nav.gpu) return false
+        const adapter = await nav.gpu.requestAdapter()
+        return !!adapter
+      } catch {
+        return false
+      }
+    })()
+  }
+  return webGPUProbe
+}
+
+/**
+ * WASM-fallback pass runner for long tracks. Without WebGPU the
+ * onnxruntime-web WASM heap grows monotonically per session.run and only
+ * worker termination frees it — measured in CI: ONE 7.8 s chunk fits, two
+ * chunks OOM-crash the renderer (session release does NOT reclaim). This
+ * runner keeps the vendored overlap-add math (apply.js #applySplits) on the
+ * host but executes EACH CHUNK in its own throwaway worker with overlap 0
+ * (a ≤-segment slice is exactly one internal chunk), so the heap dies with
+ * every chunk and memory stays flat on any track length. Same chunk grid,
+ * same triangle weights, same weight-sum normalization — a fresh
+ * deterministic session per chunk yields the same stems as the in-worker
+ * path. (A single 7.8 s chunk spikes the renderer ~2.6 GB in the WASM
+ * backend — the ONNX export's input length is fixed, so per-chunk workers
+ * are the only lever; validated by qa/voice-demucs-model-e2e.mjs.)
+ */
+async function runChunkedPassInWorker(
+  channelData: Float32Array[],
+  sampleRate: number,
+  onProgress?: (pct: number, msg: string) => void,
+): Promise<WorkerStems> {
+  const length = channelData[0].length
+  const segment = DEMUCS_SEGMENT
+  const stride = Math.floor((1 - DEMUCS_OVERLAP) * segment)
+  // triangle window — verbatim from apply.js applySplits
+  const weight = new Float32Array(segment)
+  for (let i = 0; i < Math.floor(segment / 2) + 1; i++) weight[i] = i + 1
+  for (let i = Math.floor(segment / 2) + 1; i < segment; i++) weight[i] = segment - i
+  let maxWeight = -Infinity
+  for (let i = 0; i < segment; i++) if (weight[i] > maxWeight) maxWeight = weight[i]
+  for (let i = 0; i < segment; i++) weight[i] /= maxWeight
+  const total = Math.ceil(length / stride)
+
+  // accumulated [stem][channel] buffers + the weight-sum for normalization
+  const acc: Record<string, Float32Array[]> = {}
+  for (const name of DEMUCS_SOURCES) acc[name] = channelData.map(() => new Float32Array(length))
+  const sumWeight = new Float32Array(length)
+
+  let chunkIndex = 0
+  let offset = 0
+  while (offset < length) {
+    const end = Math.min(offset + segment, length)
+    // standalone copies (structured clone would duplicate the whole
+    // underlying buffer for a subarray view)
+    const slice = channelData.map((c) => c.slice(offset, end))
+    const stems = await runPassInWorker(slice, sampleRate, (pct, msg) => {
+      onProgress?.(
+        5 + Math.round((chunkIndex / total) * 90) + Math.round((pct / 100) * (90 / total)),
+        `chunk ${chunkIndex + 1}/${total} · ${msg}`,
+      )
+    }, { overlap: 0 })
+    const chunkLength = end - offset
+    for (const [name, stem] of Object.entries(stems)) {
+      const channels = acc[name]
+      if (!channels) continue
+      for (let c = 0; c < channels.length; c++) {
+        const src = stem.channelData[c]
+        if (!src || src.length < chunkLength) continue
+        const dst = channels[c]
+        for (let t = 0; t < chunkLength; t++) dst[offset + t] += weight[t] * src[t]
+      }
+    }
+    for (let t = 0; t < chunkLength; t++) sumWeight[offset + t] += weight[t]
+    offset += stride
+    chunkIndex++
+    // let the renderer reclaim the terminated worker's WASM heap before the
+    // next chunk spawns — same policy as the inter-pass gap (200 ms was too
+    // tight there; the next worker OOMs on top of the un-reclaimed pages)
+    await new Promise((r) => setTimeout(r, 1500))
+  }
+  // normalize by the accumulated weights — verbatim from apply.js applySplits
+  for (const name of DEMUCS_SOURCES) {
+    for (const ch of acc[name]) {
+      for (let i = 0; i < length; i++) ch[i] /= sumWeight[i]
+    }
+  }
+  const out: WorkerStems = {}
+  for (const name of DEMUCS_SOURCES) out[name] = { channelData: acc[name], sampleRate }
+  return out
 }
 
 /**
@@ -236,6 +346,11 @@ export async function separateWithDemucs(
   // values recovers the exact result of the healthy passes.
   const passStems: Record<string, Float32Array[][]> = {} // [stem][channel][pass]
   let completed = 0
+  // Without a real WebGPU adapter (Firefox, Safari < 18.4, headless CI
+  // chromium where navigator.gpu exists but requestAdapter() is null) the
+  // WASM heap cannot survive multi-chunk tracks — route long passes through
+  // the per-chunk worker recycler instead. WebGPU browsers keep the fast path.
+  const webGPU = await hasWebGPUAdapter()
   for (let k = 0; k < passes; k++) {
     const pad = k * SHIFT_STEP_SAMPLES
     const padded = raw.channelData.map((c) => {
@@ -245,9 +360,12 @@ export async function separateWithDemucs(
       return p
     })
     try {
-      const stems = await runPassInWorker(padded, raw.sampleRate, (pct, msg) => {
+      const passProgress = (pct: number, msg: string) => {
         onProgress?.(46 + Math.round(((k + pct / 100) / passes) * 46), `Demucs v4: pass ${k + 1}/${passes} · ${msg}`)
-      })
+      }
+      const stems = !webGPU && padded[0].length > DEMUCS_SEGMENT
+        ? await runChunkedPassInWorker(padded, raw.sampleRate, passProgress)
+        : await runPassInWorker(padded, raw.sampleRate, passProgress)
       for (const [name, stem] of Object.entries(stems)) {
         if (!passStems[name]) passStems[name] = stem.channelData.map(() => [] as Float32Array[])
         for (let c = 0; c < passStems[name].length; c++) {
