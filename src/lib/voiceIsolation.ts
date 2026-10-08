@@ -32,7 +32,7 @@ import { unifiedIsolateBuffer } from './omniUnified'
 const UNIFIED_WASM_NOTE = 'onnxruntime-web WASM'
 import { separateWithDemucs, isDemucsModelAvailable } from './demucs/index.ts'
 import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor } from './vad.ts'
-import { nativePeakScale } from './native/dspNative.js'
+import { nativePeakScale, nativeNormalize } from './native/dspNative.js'
 
 export type VoiceIsolationModel =
   | 'omni-voicetarget'
@@ -350,6 +350,71 @@ export function isolateVoiceFromAudioBuffer(
 }
 
 /**
+ * Isolation-output finalization shared by EVERY engine (demucs, DSP,
+ * ai-denoise, RNNoise, omni-unified): DC block (one-pole ~15 Hz) + loudness
+ * normalization to -18 dBFS RMS with a 0.98 peak ceiling, gain clamped to
+ * +12/-6 dB, and near-silence (< -50 dBFS RMS) skipped — keep_vocal of an
+ * instrumental input stays near-silent instead of being amplified into
+ * separation noise. Mutates the buffer in place and returns it.
+ *
+ * Runs the native wasm core first (`omni_normalize` in native/dsp-core);
+ * the JS fallback below is a verbatim, bit-verified copy (qa/native-dsp-parity.mjs
+ * runs both against the same inputs — max|diff| <= 1e-6).
+ */
+const FINALIZE_TARGET_RMS = Math.pow(10, -18 / 20) // -18 dBFS
+const FINALIZE_PEAK_CEIL = 0.98
+const FINALIZE_SILENCE_RMS = Math.pow(10, -50 / 20) // below this: leave untouched
+
+function jsIsolationNormalize(a: Float32Array, b: Float32Array): number {
+  const n = a.length
+  if (n <= 0) return 1
+  const POLE = 1 - 2 * Math.PI * 15 / 44100
+  // 1) DC block (double state, float32 store — same rounding points as omni_dsp.cpp)
+  {
+    let x1a = 0, y1a = 0, x1b = 0, y1b = 0
+    for (let i = 0; i < n; i++) {
+      const xa = a[i], xb = b[i]
+      const ya = xa - x1a + POLE * y1a
+      const yb = xb - x1b + POLE * y1b
+      x1a = xa; y1a = ya; x1b = xb; y1b = yb
+      a[i] = ya; b[i] = yb
+    }
+  }
+  // 2) loudness normalize (skip near-silence)
+  let sa = 0, sb = 0
+  for (let i = 0; i < n; i++) { sa += a[i] * a[i]; sb += b[i] * b[i] }
+  const rms = Math.sqrt((sa + sb) / (2 * n))
+  if (rms < FINALIZE_SILENCE_RMS) return 1
+  let g = FINALIZE_TARGET_RMS / rms
+  g = Math.min(g, 3.9810717055349722) // +12 dB cap
+  g = Math.max(g, 0.5011872336272722) // -6 dB floor
+  if (!(g > 0.98 && g < 1.02)) {
+    // peak safety: never exceed the ceiling
+    let peak = 0
+    for (const ch of [a, b]) for (let i = 0; i < n; i++) { const v = Math.abs(ch[i] * g); if (v > peak) peak = v }
+    if (peak > FINALIZE_PEAK_CEIL) g *= FINALIZE_PEAK_CEIL / peak
+    if (!(g > 0.98 && g < 1.02)) {
+      for (const ch of [a, b]) for (let i = 0; i < n; i++) ch[i] *= g
+      return g
+    }
+  }
+  return 1
+}
+
+export function finalizeIsolationOutput(buffer: AudioBuffer): AudioBuffer {
+  if (buffer.length === 0) return buffer
+  const a = buffer.getChannelData(0) as Float32Array<ArrayBuffer>
+  // mono: run a copy through the 2-channel core (bit-identical to the stereo
+  // path — the copy keeps the fallback's per-channel loops alias-free)
+  const b = buffer.numberOfChannels > 1
+    ? buffer.getChannelData(1) as Float32Array<ArrayBuffer>
+    : new Float32Array(a)
+  const g = nativeNormalize(a, b, FINALIZE_TARGET_RMS, FINALIZE_PEAK_CEIL, FINALIZE_SILENCE_RMS)
+  if (g === null) jsIsolationNormalize(a, b)
+  return buffer
+}
+
+/**
  * Downloads audio from URL, processes voice isolation, and returns WAV blob + metadata.
  */
 export async function processVoiceIsolation(
@@ -487,6 +552,10 @@ export async function processVoiceIsolation(
         : `Removing vocal stems using ${modelTag}…`)
       processedBuffer = isolateVoiceFromAudioBuffer(audioCtx, inputBuffer, options)
     }
+    // Shared finalization — every engine lands the same output contract:
+    // DC-blocked, -18 dBFS RMS (0.98 peak ceiling, +12/-6 dB gain window),
+    // near-silence left untouched.
+    processedBuffer = finalizeIsolationOutput(processedBuffer)
     onProgress?.(80, 'Encoding to WAV format…')
 
     const blob = encodeAudioBufferToWav(processedBuffer)

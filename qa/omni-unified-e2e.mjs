@@ -19,6 +19,8 @@
  *      complement). Asserts: voice removed (voice-band correlation with
  *      the clean voice drops vs the mix) and music energy preserved
  *      (RMS >= 25% of the bed's RMS in the mix).
+ *   E. edge cases: too-short input (passthrough), pure silence, 48 kHz
+ *      native input, stereo input — no crashes, sane lengths/rates.
  *
  * Run: node qa/omni-unified-e2e.mjs  (dev server up; TEST_URL overrides)
  */
@@ -172,8 +174,35 @@ const refGain = readF32(`${PARITY}/gain.f32`)
       return 10 * Math.log10(sn / se)
     }
     const snrVs = siSnrVs
+    // bed reference for the remove_vocal music-preservation bar: the exact
+    // bed component mixed in (bg-scaled), lowpassed the same way. The app
+    // finalizer normalizes every output to -18 dBFS, so "music preserved"
+    // is a CONTENT question — how much better an instrumental the engine
+    // produced than the raw mix already is (scale-invariant).
+    const bedClean = ctx.createBuffer(1, len, sr)
+    const bc = bedClean.getChannelData(0)
+    for (let i = 0; i < len; i++) bc[i] = bL[i] * bg
+    const lpBed = await (() => {
+      const off = new OfflineAudioContext(1, len, sr)
+      const src = off.createBufferSource(); src.buffer = bedClean
+      const f = off.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 7500; f.Q.value = 0.7071
+      src.connect(f); f.connect(off.destination); src.start()
+      return off.startRendering()
+    })()
+    const lbed = lpBed.getChannelData(0)
+    const siSnrBed = (buf) => {
+      const d = buf.getChannelData(0)
+      let dc = 0, cc2 = 0
+      for (let i = sr; i < Math.min(d.length, len) - sr; i++) { dc += d[i] * lbed[i]; cc2 += lbed[i] * lbed[i] }
+      const a = dc / cc2
+      let sn = 0, se = 0
+      for (let i = sr; i < Math.min(d.length, len) - sr; i++) { sn += (a * lbed[i]) ** 2; se += (d[i] - a * lbed[i]) ** 2 }
+      return 10 * Math.log10(sn / se)
+    }
     // mix baseline SNR vs clean voice (same lowpassed reference — fair)
     const mixSnr = siSnrVs(mix)
+    // mix baseline as a music estimate (remove_vocal must beat this)
+    const mixBedSnr = siSnrBed(mix)
     const rms = (buf) => {
       const d = buf.getChannelData(0)
       let s = 0
@@ -182,10 +211,10 @@ const refGain = readF32(`${PARITY}/gain.f32`)
     }
     await ctx.close()
     return {
-      sr, len, mixSnr,
+      sr, len, mixSnr, mixBedSnr,
       keep: { sr: keep.buf.sampleRate, ch: keep.buf.numberOfChannels, len: keep.buf.length, snr: snrVs(keep.buf), rms: rms(keep.buf), notes: keep.notes },
-      rem: { sr: rem.buf.sampleRate, ch: rem.buf.numberOfChannels, len: rem.buf.length, rms: rms(rem.buf), snr: snrVs(rem.buf) },
-      gentleRms: rms(gentle.buf),
+      rem: { sr: rem.buf.sampleRate, ch: rem.buf.numberOfChannels, len: rem.buf.length, rms: rms(rem.buf), snr: snrVs(rem.buf), musicSnr: siSnrBed(rem.buf) },
+      gentle: { snr: snrVs(gentle.buf), rms: rms(gentle.buf) },
     }
   })
 
@@ -197,16 +226,105 @@ const refGain = readF32(`${PARITY}/gain.f32`)
   check(`keep_vocal: SNR vs clean improves >= 6 dB (mix ${func.mixSnr.toFixed(1)} dB)`,
     func.keep.snr >= func.mixSnr + 6, `${func.keep.snr.toFixed(2)} dB`)
   const keepRmsDb = 20 * Math.log10(func.keep.rms)
-  // sparse TTS speech (bursts + pauses) has a high peak/RMS ratio, so the
-  // finalizer's 0.98 peak ceiling binds before the -18 dBFS RMS target:
-  // measured landings -25..-29 dBFS on this fixture. Honest window.
+  // finalizeIsolationOutput targets -18 dBFS RMS but caps applied gain at
+  // +12 dB and peaks at 0.98 — while the model's loudness head is still
+  // maturing the output can land cap-bound (e.g. -28 + 12 = -16), and the
+  // peak ceiling can bind earlier on sparse TTS speech. Honest window.
   check('keep_vocal: normalized loudness window (-30..-12 dBFS)', keepRmsDb > -30 && keepRmsDb < -12, `${keepRmsDb.toFixed(2)} dBFS`)
-  check('strength knob: gentler (0.4) retains more energy than default (0.92)',
-    func.gentleRms > func.keep.rms, `gentle RMS ${func.gentleRms.toFixed(4)} vs default ${func.keep.rms.toFixed(4)}`)
+  check('strength knob: gentler (0.4) retains more of the mix (SI-SNR vs clean lower than default)',
+    func.gentle.snr < func.keep.snr - 0.1, `gentle ${func.gentle.snr.toFixed(2)} vs default ${func.keep.snr.toFixed(2)} dB`)
   check('remove_vocal: voice suppressed (SNR vs clean LOWER than keep_vocal by 6 dB+)',
     func.keep.snr - func.rem.snr >= 6, `keep ${func.keep.snr.toFixed(2)} vs rem ${func.rem.snr.toFixed(2)} dB`)
   const remRmsDb = 20 * Math.log10(func.rem.rms)
-  check('remove_vocal: music energy preserved (>= -14 dBFS)', remRmsDb > -14, `${remRmsDb.toFixed(2)} dBFS`)
+  check('remove_vocal: output at the finalizer target level (-18 dBFS, silence-skipped only below -50)',
+    remRmsDb > -30 && remRmsDb < -12, `${remRmsDb.toFixed(2)} dBFS`)
+  check(`remove_vocal: music preserved (SI-SNR vs bed improves >= 3 dB over the mix ${func.mixBedSnr.toFixed(1)} dB)`,
+    func.rem.musicSnr >= func.mixBedSnr + 3, `${func.rem.musicSnr.toFixed(2)} dB`)
+
+  // ---------- E: edge cases -------------------------------------------------
+  const edge = await page.evaluate(async () => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 })
+    const un = await import('/src/lib/omniUnified.ts')
+    const mk = (len, sr, fill) => {
+      const b = ctx.createBuffer(1, Math.max(1, len), sr)
+      const d = b.getChannelData(0)
+      for (let i = 0; i < d.length; i++) d[i] = fill ? fill(i, d.length) : 0
+      return b
+    }
+    const cases = {}
+    // 1. too-short (< 4 STFT frames -> 128 samples @48k): passthrough
+    const tiny = mk(100, 48000, () => 0.1 * Math.sin(Math.random() * 6.28))
+    const r1 = await un.unifiedIsolateBuffer(tiny, 'keep_vocal', 0.92)
+    cases.tiny = { len: r1.samples.length, inLen: 100 }
+    // 2. pure silence at 44.1k: finite, no NaN
+    const sil = ctx.createBuffer(1, 44100, 44100)
+    const r2 = await un.unifiedIsolateBuffer(sil, 'keep_vocal', 0.92)
+    let finite = true
+    for (let i = 0; i < r2.samples.length; i++) if (!Number.isFinite(r2.samples[i])) finite = false
+    cases.silence = { len: r2.samples.length, finite, rms: Math.sqrt(r2.samples.reduce((s, v) => s + v * v, 0) / r2.samples.length) }
+    // 3. 48k native (no resample path)
+    const n48 = mk(48000, 48000, (i) => 0.2 * Math.sin(2 * Math.PI * 300 * i / 48000))
+    const r3 = await un.unifiedIsolateBuffer(n48, 'keep_vocal', 0.92)
+    cases.sr48k = { len: r3.samples.length, finite: r3.samples.every(Number.isFinite) }
+    // 4. stereo 44.1k input
+    const st = ctx.createBuffer(2, 44100, 44100)
+    for (let ch = 0; ch < 2; ch++) {
+      const d = st.getChannelData(ch)
+      for (let i = 0; i < d.length; i++) d[i] = 0.2 * Math.sin(2 * Math.PI * 300 * i / 44100 + ch)
+    }
+    const r4 = await un.unifiedIsolateBuffer(st, 'remove_vocal', 0.92)
+    cases.stereo = { len: r4.samples.length, finite: r4.samples.every(Number.isFinite) }
+    // 5. shared finalizer on a STEREO engine output (fast DSP engine — the
+    //    demucs path is too heavy for the shared-CPU CI run): both channels
+    //    DC-blocked and RMS-normalized to the -18 dBFS target together
+    const lib = await import('/src/lib/voiceIsolation.ts')
+    const st2 = ctx.createBuffer(2, 44100, 44100)
+    for (let ch = 0; ch < 2; ch++) {
+      const d = st2.getChannelData(ch)
+      for (let i = 0; i < d.length; i++) d[i] = 0.1 * Math.sin(2 * Math.PI * 220 * i / 44100 + ch) + 0.01
+    }
+    const fin = lib.finalizeIsolationOutput(st2)
+    const rmsDb = (ch) => {
+      const d = fin.getChannelData(ch)
+      let s = 0
+      for (let i = 0; i < d.length; i++) s += d[i] * d[i]
+      return 20 * Math.log10(Math.sqrt(s / d.length))
+    }
+    const mean = (ch) => {
+      const d = fin.getChannelData(ch)
+      let s = 0
+      for (let i = 0; i < d.length; i++) s += d[i]
+      return s / d.length
+    }
+    cases.finalizer = { l: rmsDb(0), r: rmsDb(1), dcL: Math.abs(mean(0)), dcR: Math.abs(mean(1)) }
+    // 6. near-silence (< -50 dBFS) must be left untouched (no noise blow-up)
+    const quiet = ctx.createBuffer(2, 44100, 44100)
+    for (let ch = 0; ch < 2; ch++) {
+      const d = quiet.getChannelData(ch)
+      for (let i = 0; i < d.length; i++) d[i] = 1e-5 * Math.sin(2 * Math.PI * 220 * i / 44100 + ch)
+    }
+    const finQ = lib.finalizeIsolationOutput(quiet)
+    const qrms = (ch) => {
+      const d = finQ.getChannelData(ch)
+      let s = 0
+      for (let i = 0; i < d.length; i++) s += d[i] * d[i]
+      return 20 * Math.log10(Math.sqrt(s / d.length))
+    }
+    cases.finalizerSilent = { l: qrms(0), r: qrms(1) }
+    await ctx.close()
+    return cases
+  })
+  check('edge: too-short input passes through unchanged length', edge.tiny.len === edge.tiny.inLen, `${edge.tiny.len} vs ${edge.tiny.inLen}`)
+  check('edge: silence -> finite near-silent output', edge.silence.finite && edge.silence.rms < 1e-3, `rms ${edge.silence.rms.toExponential(2)}`)
+  check('edge: 48 kHz native processes without resampling', edge.sr48k.len === 48000 && edge.sr48k.finite, `len ${edge.sr48k.len}`)
+  check('edge: stereo input handled (mono out, full length)', edge.stereo.len === 44100 && edge.stereo.finite, `len ${edge.stereo.len}`)
+  check('edge: finalizer normalizes stereo engine output to -18 dBFS on both channels',
+    Math.abs(edge.finalizer.l + 18) < 0.5 && Math.abs(edge.finalizer.r + 18) < 0.5,
+    `L ${edge.finalizer.l.toFixed(2)} R ${edge.finalizer.r.toFixed(2)} dBFS`)
+  check('edge: finalizer DC-blocks the output (|mean| < 1e-3)', edge.finalizer.dcL < 1e-3 && edge.finalizer.dcR < 1e-3,
+    `L ${edge.finalizer.dcL.toExponential(2)} R ${edge.finalizer.dcR.toExponential(2)}`)
+  check('edge: finalizer leaves near-silence untouched (< -50 dBFS skip)', edge.finalizerSilent.l < -50 && edge.finalizerSilent.r < -50,
+    `L ${edge.finalizerSilent.l.toFixed(1)} R ${edge.finalizerSilent.r.toFixed(1)} dBFS`)
 
   const report = {
     when: new Date().toISOString(),

@@ -98,7 +98,16 @@ discrimination, not data-limited.
     step 20k E2E +2.35 dB (ambient +5.28, arp +2.03, drums +8.64,
     full-band +7.93, pad +3.81), irm 0.160, keep_vocal GRADE A on both
     strict-grader evidence mixes (87.2% / 86.4% speech, +82.8 / +83.2
-    content dominance); step 70k E2E **+3.15 dB**, music bed −22.16 dBFS,
-    remove_vocal separation keep−remove 20.4 dB, irm 0.137, gain 1.76 dB,
-    parity mask 3.2e-6 / gain 0.0000 dB, loudness −28.14 dBFS. Remaining
-    bars at 70k: keep ≥ +3.99 (mix+6) and music ≥ −14 dBFS.
+    content dominance); step 70k E2E **+3.15 dB**, irm 0.137, gain 1.76 dB,
+    parity mask 3.2e-6 / gain 0.0000 dB.
+  - **finalizer wired @70k** (was designed in commit 1c3e2f3 — wasm
+    `omni_normalize` + bit-verified JS fallback — but the pipeline call
+    site was never committed): every engine's output is now DC-blocked and
+    RMS-normalized to −18 dBFS (0.98 peak ceiling, +12/−6 dB gain window,
+    <−50 dBFS skipped). E2E bars updated to the post-normalization
+    contract: keep loudness −19.60 dBFS (window −30..−12), remove lands
+    exactly −18.00, music preservation is now CONTENT-based (SI-SNR vs the
+    bed: 5.75 dB vs mix baseline 0.5 dB, bar +3 dB over mix), strength
+    knob gain-invariant (gentle 2.61 < default 3.10 dB SI-SNR). 16/17
+    PASS; remaining fail is the training bar: keep SI-SNR +3.10 vs
+    mix+6 = +3.99.
