@@ -117,6 +117,10 @@ discrimination, not data-limited.
   - **step 160k: the E2E keep bar CROSSED — 17/17 ALL PASS.** keep SI-SNR
     **+4.04 dB ≥ mix+6 (−2.01+6 = +3.99)**, music content 7.01 dB vs mix
     0.5 (+6.5 over mix), remove −18.00 exact, irm 0.121. Self-check SNR
-    13.92 dB. Remaining training-pending item: the strict grader's
-    remove_vocal residual-speech bar (<5%; was 16.4% at 20k — re-grade
-    at a later checkpoint).
+    13.92 dB.
+  - **step 160k strict-grader evidence: all three unified outputs GRADE
+    A.** keep noisy-speech 83.4% speech +77.8; keep song 86.4% +82.7;
+    **remove_vocal residual speech 0.00%** (<5% bar; 16.4% at 20k),
+    music 79.6% +79.6 dominance. Pack 17/28 — every remaining fail is a
+    documented pre-finalizer historical artifact, none from the current
+    3-engine stack.
