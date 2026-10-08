@@ -420,6 +420,10 @@ def export(model, out, seg_samples, steps=None):
     _m = _onnx.load(out)
     _inline(_m)
     _onnx.save(_m, out, save_as_external_data=False)
+    # the inlining re-save leaves the orphaned companion file behind
+    _data = Path(out + '.data')
+    if _data.exists():
+        _data.unlink()
     note = f' after {steps:,} steps' if steps else ''
     print(f'exported {out} ({os.path.getsize(out):,} bytes, weights inlined){note}', flush=True)
 
