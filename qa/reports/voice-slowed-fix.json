@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T20:18:36.862Z",
+  "date": "2026-10-08T22:36:44.208Z",
   "results": [
     {
       "name": "A: real slowed track detected",
@@ -34,7 +34,7 @@
     {
       "name": "D: auto fix never degrades the output",
       "ok": true,
-      "detail": "voice-like energy 0.981 → 0.982, recovery 0.236 → 0.229 on this prominent-vocal window (both approaches already work here — the fix's big win is on buried vocals, see E and the full-track evidence)"
+      "detail": "voice-like energy 0.982 → 0.981, recovery 0.101 → 0.106 on this prominent-vocal window (both approaches already work here — the fix's big win is on buried vocals, see E and the full-track evidence)"
     },
     {
       "name": "E: speed-corrected separation recovers buried vocals",
@@ -59,7 +59,7 @@
     {
       "name": "G: real voice directly audible at natural pitch",
       "ok": true,
-      "detail": "Silero on the raw output: mean 0.934, voiced 96%, peak 1.00; peak |sample| 0.980, non-finite 0"
+      "detail": "Silero on the raw output: mean 0.929, voiced 95%, peak 1.00; peak |sample| 0.664, non-finite 0"
     },
     {
       "name": "F: instrumental track not flagged",
@@ -69,7 +69,7 @@
     {
       "name": "F: instrumental keep_vocal output stays near-silent",
       "ok": true,
-      "detail": "output -75.1 dBFS vs mix -11.6 dBFS (63.5 dB below, bar 20), length 264600 === 264600"
+      "detail": "output -75.6 dBFS vs mix -11.6 dBFS (64.0 dB below, bar 20), length 264600 === 264600"
     },
     {
       "name": "N: native DSP core active in-browser",
@@ -84,7 +84,7 @@
     {
       "name": "M: model load shows smooth real progress and auto-dismisses",
       "ok": true,
-      "detail": "phases download -> compile -> ready, 3 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
+      "detail": "phases download -> compile -> ready, 4 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
     },
     {
       "name": "zero runtime page errors",
@@ -169,21 +169,21 @@
       ],
       "richVet": {
         "direct": {
-          "voiceLikeFrac": 0.9811410549855997,
-          "voiceEnergy": 11950.545767175241,
-          "spedMean": 0.9022899346296177,
-          "spedFrames": 0.8992248062015504,
-          "rms": 0.2584921088729563
+          "voiceLikeFrac": 0.982476261311023,
+          "voiceEnergy": 5131.480039476745,
+          "spedMean": 0.9061736808728802,
+          "spedFrames": 0.9224806201550387,
+          "rms": 0.16926864649908513
         },
         "fixed": {
-          "voiceLikeFrac": 0.9815545287513414,
-          "voiceEnergy": 11584.58073222636,
-          "spedMean": 0.9251095779644426,
+          "voiceLikeFrac": 0.9809586489213283,
+          "voiceEnergy": 5339.358843289041,
+          "spedMean": 0.9210167305414066,
           "spedFrames": 0.9534883720930233,
-          "rms": 0.25442960460181563
+          "rms": 0.1727841391486706
         },
-        "directRecovery": 0.23625349283581892,
-        "fixedRecovery": 0.22901863348739168
+        "directRecovery": 0.10144558301877675,
+        "fixedRecovery": 0.10555519394734905
       }
     },
     "buriedWindow": {
@@ -237,7 +237,7 @@
         ]
       },
       "mixLvl": -11.590919605724348,
-      "outLvl": -75.102799401297
+      "outLvl": -75.59214622885113
     },
     "resamplerFidelity": {
       "x145": 67.23794815297738,
@@ -263,7 +263,7 @@
       "maxPct": 100,
       "finalPct": 100,
       "monodrome": true,
-      "byteUpdates": 3,
+      "byteUpdates": 4,
       "sessionOk": true,
       "cardInDom": true,
       "dismissed": true,
@@ -274,9 +274,9 @@
       "duration": 4.137936507936508,
       "expectedDuration": 4.137931034482759,
       "silero": {
-        "mean": 0.9340926854647407,
-        "frames": 0.9612403100775194,
-        "peak": 0.9999648332595825
+        "mean": 0.9290762668432191,
+        "frames": 0.9534883720930233,
+        "peak": 0.9999606609344482
       },
       "actionLog": [
         "40: Checking for slowed production…",

@@ -1,29 +1,29 @@
 {
-  "generatedAt": "2026-10-06T18:10:16.508Z",
+  "generatedAt": "2026-10-08T22:24:37.417Z",
   "mixture": {
     "file": "/home/user/OmniFrame/qa/assets/voice/mix-showcase.wav",
     "duration": 20
   },
   "metrics": {
     "sideRmsDb": {
-      "mix": -28.471855,
+      "mix": -30.852316,
       "isolated": -200
     },
     "sub80RmsDb": {
-      "mix": -18.506774,
-      "isolated": -26.364778
+      "mix": -20.887624,
+      "isolated": -30.447288
     },
     "speechBandRmsDb": {
-      "mix": -18.999599,
-      "isolated": -19.122705
+      "mix": -21.37934,
+      "isolated": -23.127124
     },
     "airBandRmsDb": {
-      "mix": -33.564324,
-      "isolated": -35.470205
+      "mix": -35.946354,
+      "isolated": -39.465775
     },
     "air10kRmsDb": {
-      "mix": -36.019995,
-      "isolated": -39.112548
+      "mix": -38.402285,
+      "isolated": -43.109244
     }
   },
   "results": [
@@ -120,27 +120,27 @@
     {
       "name": "Stereo side (instrument) channel collapsed to silence in isolated output",
       "status": "PASS",
-      "detail": "mix side -28.5dB -> isolated side -200.0dB"
+      "detail": "mix side -30.9dB -> isolated side -200.0dB"
     },
     {
       "name": "Sub-80Hz rumble/kick reduced by the 130Hz speech highpass",
       "status": "PASS",
-      "detail": "mix -18.5dB -> isolated -26.4dB"
+      "detail": "mix -20.9dB -> isolated -30.4dB"
     },
     {
       "name": "Speech band (300Hz-3kHz) preserved",
       "status": "PASS",
-      "detail": "mix -19.0dB -> isolated -19.1dB"
+      "detail": "mix -21.4dB -> isolated -23.1dB"
     },
     {
       "name": ">7.5kHz air band attenuated by the speech lowpass",
       "status": "PASS",
-      "detail": "mix -33.6dB -> isolated -35.5dB"
+      "detail": "mix -35.9dB -> isolated -39.5dB"
     },
     {
       "name": ">10kHz band attenuated further up the rolloff slope",
       "status": "PASS",
-      "detail": "mix -36.0dB -> isolated -39.1dB"
+      "detail": "mix -38.4dB -> isolated -43.1dB"
     },
     {
       "name": "Zero runtime page errors",
