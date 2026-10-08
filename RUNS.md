@@ -127,3 +127,6 @@ discrimination, not data-limited.
   - step 310k: keep SI-SNR **+4.34 dB** (margin +0.35 over the mix+6
     bar), music content 7.38 dB (+6.9 over mix), self-check 14.14 dB,
     E2E 17/17 PASS. All bars holding with growing margin.
+  - **step 510k (halfway):** keep +4.31 dB, music 7.23 dB, self-check
+    15.97 dB (steady climb: 13.92 @160k → 14.14 @310k → 15.97 @510k),
+    E2E 17/17 PASS. Bars stable above the contract.
