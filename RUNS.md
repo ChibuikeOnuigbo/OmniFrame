@@ -111,3 +111,6 @@ discrimination, not data-limited.
     knob gain-invariant (gentle 2.61 < default 3.10 dB SI-SNR). 16/17
     PASS; remaining fail is the training bar: keep SI-SNR +3.10 vs
     mix+6 = +3.99.
+  - step 110k: keep SI-SNR **+3.82 dB** (0.17 dB under the mix+6 bar),
+    music content 6.70 dB vs mix 0.5 (+6.2 over mix), loudness −19.83,
+    remove −18.00 exact, parity mask 4.0e-6 / gain 0.0000 dB, irm 0.150.
