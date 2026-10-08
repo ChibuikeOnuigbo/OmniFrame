@@ -352,6 +352,16 @@ def grade_evidence() -> list[Grade]:
                 plan.append((p, "keep_vocal"))
             elif base.startswith("input-"):
                 plan.append((p, "mix"))
+    # engines pack (Req 17): per-engine outputs through the real app path;
+    # expected modes come from the collector's manifest.json
+    manifest = os.path.join(ev, "engines", "manifest.json")
+    if os.path.exists(manifest):
+        import json as _json
+        with open(manifest) as f:
+            for job in _json.load(f).get("jobs", []):
+                p = os.path.join(ev, "engines", job["name"] + ".wav")
+                if os.path.exists(p):
+                    plan.append((p, job["mode"]))
     return [grade_file(p, e) for p, e in plan]
 
 

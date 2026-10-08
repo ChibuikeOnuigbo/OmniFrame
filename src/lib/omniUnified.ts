@@ -14,8 +14,13 @@
  *               predicted gain is applied (finalizeIsolationOutput then
  *               verifies/finishes normalization — its gain converges to
  *               ~0 dB when the model already landed the target).
- * remove_vocal: |S_i| = (1 - mask^alpha) * |S_mix| — the instrumental is the
- *               model's own complement; the voice gain head is NOT applied.
+ * remove_vocal: TIME-DOMAIN SUBTRACTION y_inst = x - s * y_voice, where
+ *               y_voice = ISTFT(mask * |S_mix|, mix phase). Spectral
+ *               complement ((1-mask)*|S|) keeps the mix phase in the
+ *               residual and leaks voice; subtracting the reconstructed
+ *               voice cancels its phase contribution too, and music is
+ *               preserved wherever the mask is low. s scales with
+ *               strength (1.0 at the default 0.92).
  *
  * The model is trained on synthesized mixes with KNOWN clean components
  * (repo TTS voice fixtures x music beds x white/pink/hum noise at random
@@ -140,13 +145,15 @@ export async function unifiedIsolateBuffer(
   const { mask, gainDb } = await runUnifiedOnFeatures(feats, T)
   const inferenceMs = performance.now() - t0
 
-  // strength -> mask sharpness. The model is trained with NO shaping
+  // strength -> processing amount. The model is trained with NO shaping
   // (mask applied directly), so the DEFAULT strength 0.92 maps to exactly
-  // alpha 1.0. Higher strength = more aggressive:
-  //   keep_vocal  : alpha up   (m^a smaller -> more suppression)
-  //   remove_vocal: alpha down (m^a bigger  -> more voice subtracted)
+  // full processing:
+  //   keep_vocal  : alpha = 0.5 + 0.5*s (s=1 -> 1.0 native; lower strength
+  //                 pulls the mask toward 1 = gentler)
+  //   remove_vocal: subtract s of the reconstructed voice (s=1 at default;
+  //                 lower strength subtracts less)
   const s = Math.min(1, Math.max(0, strength)) / 0.92
-  const alpha = mode === 'keep_vocal' ? 0.5 + 0.5 * s : 1.5 - 0.5 * s
+  const alpha = 0.5 + 0.5 * s
   const outMag: Float64Array[] = new Array(T)
   let maskSum = 0
   for (let t = 0; t < T; t++) {
@@ -155,17 +162,22 @@ export async function unifiedIsolateBuffer(
     for (let f = 0; f < UNIFIED_BINS; f++) {
       const mk = mask[t * UNIFIED_BINS + f]
       maskSum += mk
-      const shaped = Math.pow(mk, alpha)
-      m[f] = (mode === 'keep_vocal' ? shaped : 1 - shaped) * src[f]
+      m[f] = Math.pow(mk, alpha) * src[f]
     }
     outMag[t] = m
   }
 
-  let y = istft(outMag, phase, length)
-  // the loudness head's gain applies to the VOICE output only
+  const yVoice = istft(outMag, phase, length)
+  let y: Float32Array
   if (mode === 'keep_vocal') {
+    // the loudness head's gain applies to the VOICE output only
     const g = Math.pow(10, Math.max(-12, Math.min(12, gainDb)) / 20)
-    for (let i = 0; i < y.length; i++) y[i] *= g
+    y = new Float32Array(yVoice.length)
+    for (let i = 0; i < yVoice.length; i++) y[i] = yVoice[i] * g
+  } else {
+    // instrumental = mix - s * voice (phase-coherent cancellation)
+    y = new Float32Array(yVoice.length)
+    for (let i = 0; i < yVoice.length; i++) y[i] = x[i] - s * yVoice[i]
   }
   const back = resampleTo(y, UNIFIED_SR, buffer.sampleRate)
   return { samples: back, meanMask: maskSum / (T * UNIFIED_BINS), gainDb, inferenceMs }

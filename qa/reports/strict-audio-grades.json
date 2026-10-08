@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T20:19:55.373757",
+  "date": "2026-10-08T00:08:30.624355",
   "grades": [
     {
       "file": "/home/user/OmniFrame/evidence/voice/slowed/input-realtrack-buried-segment.mp3",
@@ -1150,6 +1150,129 @@
       "grade": "A",
       "pass_": true,
       "verdict": "remove_vocal: residual speech 0.0% vs music 79.68% (needs speech <5%, music >5%, music dominance >5pts)"
+    },
+    {
+      "file": "/home/user/OmniFrame/evidence/voice/engines/unified-noisy-speech.wav",
+      "expected": "keep_vocal",
+      "integrity": {
+        "samples": 264600,
+        "duration_s": 6.0,
+        "nonfinite_samples": 0,
+        "clipped_samples": 0,
+        "peak_dbfs": -10.5,
+        "rms_dbfs": -29.04,
+        "dc_offset": 0.000174,
+        "silent_fraction": 0.0,
+        "noise_floor_db": -56.3
+      },
+      "speech": {
+        "voiced_fraction": 0.8717,
+        "mean": 0.8709,
+        "peak": 1.0,
+        "longest_voiced_run_s": 2.24,
+        "longest_gap_s": 0.22
+      },
+      "music": {
+        "music_fraction": 0.0438,
+        "harmonic_fraction": 0.8172,
+        "percussive_fraction": 0.2516,
+        "onsets_per_s": 1.54,
+        "beat_regularity": 0.0,
+        "bpm_estimate": 95.7,
+        "content_ratings": {
+          "song_with_vocals_pct": 100.0,
+          "instrumental_pct": 0.0,
+          "beat_percussive_pct": 0.0
+        }
+      },
+      "speech_pct": 87.17,
+      "music_pct": 4.38,
+      "dominance_pts": 82.79,
+      "grade": "A",
+      "pass_": true,
+      "verdict": "keep_vocal: speech 87.17% vs music 4.38% (needs speech >5% and dominance >5pts)"
+    },
+    {
+      "file": "/home/user/OmniFrame/evidence/voice/engines/unified-song-keepvocal.wav",
+      "expected": "keep_vocal",
+      "integrity": {
+        "samples": 198450,
+        "duration_s": 4.5,
+        "nonfinite_samples": 0,
+        "clipped_samples": 0,
+        "peak_dbfs": -9.74,
+        "rms_dbfs": -28.21,
+        "dc_offset": 4e-06,
+        "silent_fraction": 0.0311,
+        "noise_floor_db": -65.5
+      },
+      "speech": {
+        "voiced_fraction": 0.8643,
+        "mean": 0.8549,
+        "peak": 1.0,
+        "longest_voiced_run_s": 2.18,
+        "longest_gap_s": 0.22
+      },
+      "music": {
+        "music_fraction": 0.0323,
+        "harmonic_fraction": 0.8217,
+        "percussive_fraction": 0.243,
+        "onsets_per_s": 1.62,
+        "beat_regularity": 0.0,
+        "bpm_estimate": 0.0,
+        "content_ratings": {
+          "song_with_vocals_pct": 100.0,
+          "instrumental_pct": 0.0,
+          "beat_percussive_pct": 0.0
+        }
+      },
+      "speech_pct": 86.43,
+      "music_pct": 3.23,
+      "dominance_pts": 83.2,
+      "grade": "A",
+      "pass_": true,
+      "verdict": "keep_vocal: speech 86.43% vs music 3.23% (needs speech >5% and dominance >5pts)"
+    },
+    {
+      "file": "/home/user/OmniFrame/evidence/voice/engines/unified-song-removevocal.wav",
+      "expected": "remove_vocal",
+      "integrity": {
+        "samples": 198450,
+        "duration_s": 4.5,
+        "nonfinite_samples": 0,
+        "clipped_samples": 0,
+        "peak_dbfs": -11.71,
+        "rms_dbfs": -26.11,
+        "dc_offset": 1.9e-05,
+        "silent_fraction": 0.0,
+        "noise_floor_db": -38.8
+      },
+      "speech": {
+        "voiced_fraction": 0.1643,
+        "mean": 0.2479,
+        "peak": 0.9566,
+        "longest_voiced_run_s": 0.7,
+        "longest_gap_s": 1.79
+      },
+      "music": {
+        "music_fraction": 0.6613,
+        "harmonic_fraction": 0.9431,
+        "percussive_fraction": 0.1491,
+        "onsets_per_s": 1.62,
+        "beat_regularity": 0.0,
+        "bpm_estimate": 0.0,
+        "content_ratings": {
+          "song_with_vocals_pct": 49.3,
+          "instrumental_pct": 32.3,
+          "beat_percussive_pct": 0.0
+        }
+      },
+      "speech_pct": 16.43,
+      "music_pct": 66.13,
+      "dominance_pts": 49.7,
+      "grade": "F",
+      "pass_": false,
+      "verdict": "remove_vocal: residual speech 16.43% vs music 66.13% (needs speech <5%, music >5%, music dominance >5pts)"
     }
   ]
 }
