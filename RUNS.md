@@ -133,3 +133,17 @@ discrimination, not data-limited.
   - step 700k: keep **+4.40 dB** (best yet; +0.41 over bar), music 7.39
     dB, self-check 15.54 dB, E2E 17/17 PASS. Trajectory 160k→700k:
     +4.04 → +4.34 → +4.31 → +4.40.
+  - **sandbox reset #8** (2026-10-08 ~11:45 UTC) destroyed the on-disk
+    700k→1.02M segment: the optimizer state, the two unpushed snapshot
+    commits (@800k, @910k) and the finished 1.02M export were lost; the
+    last PUSHED snapshot (@700k, d8f4d55) survived. Pre-reset reference
+    numbers (measured before the loss, same run/seed/architecture):
+    @800k keep +4.37, @910k keep **+4.56**, @1.02M keep **+4.64** with
+    E2E 18/18 ALL PASS and strict-grader evidence all GRADE A (keep
+    84.5/87.1% speech; remove 0.00% residual speech, 79.6% music) —
+    the re-run below must re-earn those numbers.
+  - **re-run from the @700k snapshot** (warm start, fresh optimizer, same
+    discipline as the 10k restart): target 1,020,000 total optimizer
+    steps (>1000k requirement). Recovery: fetch+reset --hard, pip/npm
+    reinstall, beds+voice fixtures regenerated, htdemucs.onnx refetched
+    (3rd time), vite + trainer restarted.
