@@ -1,18 +1,18 @@
 {
-  "when": "2026-10-08T00:06:25.628Z",
+  "when": "2026-10-08T01:29:22.605Z",
   "engine": "omni-unified",
-  "checks": "2 FAIL: keep_vocal: SNR vs clean improves >= 6 dB (mix -2.0 dB), remove_vocal: music energy preserved (>= -14 dBFS)",
+  "checks": "ALL PASS",
   "parity": {
-    "step": 20000,
-    "maskMaxDiff": 0.0000033974647521972656,
+    "step": 160000,
+    "maskMaxDiff": 0.0000031739473342895508,
     "gainDiff": 0
   },
   "measurements": {
     "mixSnrDb": -2.01,
-    "keepSnrDb": 2.35,
-    "keepRmsDbfs": -28.09,
-    "remSnrDb": -16.16,
-    "remRmsDbfs": -22.77,
+    "keepSnrDb": 4.04,
+    "keepRmsDbfs": -19.89,
+    "remSnrDb": -15.08,
+    "remRmsDbfs": -18,
     "sr": 44100
   },
   "pageErrors": []

@@ -1,0 +1,14 @@
+{
+  "T": 376,
+  "bins": 257,
+  "ctx": 5,
+  "step": 160000,
+  "voices_sorted_index": 4,
+  "beds_sorted_index": 4,
+  "seed": 424242,
+  "seg_samples": 48000,
+  "sr": 16000,
+  "voice_rms": 0.1,
+  "music_rms": 0.1,
+  "noise_snr_db": 12
+}
