@@ -92,3 +92,13 @@ discrimination, not data-limited.
     +6.1, arp-synth +2.9, drums +9.0, full-band +8.5, pad-chords +3.6;
     E2E mix +3.45 dB.
   - (run 5 in progress — final counts recorded at completion)
+  - **run 5 live**: step 10k E2E +3.19 dB (per-bed @0 dB: drums +9.83,
+    full-band +8.91, ambient +5.40, pad-chords +3.01, arp +1.69); sandbox
+    reset #7 forced a model-only warm restart (fresh optimizer) at 10k —
+    step 20k E2E +2.35 dB (ambient +5.28, arp +2.03, drums +8.64,
+    full-band +7.93, pad +3.81), irm 0.160, keep_vocal GRADE A on both
+    strict-grader evidence mixes (87.2% / 86.4% speech, +82.8 / +83.2
+    content dominance); step 70k E2E **+3.15 dB**, music bed −22.16 dBFS,
+    remove_vocal separation keep−remove 20.4 dB, irm 0.137, gain 1.76 dB,
+    parity mask 3.2e-6 / gain 0.0000 dB, loudness −28.14 dBFS. Remaining
+    bars at 70k: keep ≥ +3.99 (mix+6) and music ≥ −14 dBFS.
