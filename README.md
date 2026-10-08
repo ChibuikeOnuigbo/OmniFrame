@@ -73,8 +73,8 @@ npm run qa:advanced # recording/trace/repeat-export workflow
      supervision + bed augmentation). keep_vocal = masked voice + the model's
      own normalization gain; remove_vocal = phase-coherent subtraction
      (mix − voice estimate). Browser runner verified **bit-faithful to torch**
-     (mask parity ≤ 2.1e-6). Training log with every run's honest numbers:
-     `RUNS.md`.
+     (mask parity ≤ 5e-6 across checkpoints). Training log with every run's
+     honest numbers: `RUNS.md`.
   All three engines share the same finalization (DC block, −18 dBFS RMS
   loudness normalize with peak ceiling, near-silence skip) and are graded by
   the strict sample-level Python grader (`qa/strict_output_grader.py`).
