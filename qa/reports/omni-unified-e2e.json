@@ -1,0 +1,19 @@
+{
+  "when": "2026-10-08T00:04:38.933Z",
+  "engine": "omni-unified",
+  "checks": "2 FAIL: keep_vocal: SNR vs clean improves >= 6 dB (mix -2.0 dB), remove_vocal: music energy preserved (>= -14 dBFS)",
+  "parity": {
+    "step": 20000,
+    "maskMaxDiff": 0.0000033974647521972656,
+    "gainDiff": 0
+  },
+  "measurements": {
+    "mixSnrDb": -2.01,
+    "keepSnrDb": 2.35,
+    "keepRmsDbfs": -28.09,
+    "remSnrDb": -16.16,
+    "remRmsDbfs": -22.77,
+    "sr": 44100
+  },
+  "pageErrors": []
+}

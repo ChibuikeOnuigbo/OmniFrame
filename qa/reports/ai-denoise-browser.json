@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-06T18:43:53.023Z",
+  "generatedAt": "2026-10-07T23:58:12.600Z",
   "browser": {
     "samples": 264600,
-    "maskMean": 0.02484278809645832,
-    "inferenceMs": 241.60000000009313,
-    "wallMs": 2715.899999999907,
+    "maskMean": 0.02471633138029314,
+    "inferenceMs": 353.70000000001164,
+    "wallMs": 3743.5,
     "sdrBefore": -0.007177023060193024,
-    "sdrAfter": 7.0717769782034186,
-    "clipPeak": 0.11996253579854965
+    "sdrAfter": 6.998798582962683,
+    "clipPeak": 0.11998151242733002
   },
   "python": {
     "model": {
@@ -89,7 +89,7 @@
     {
       "name": "SI-SDR improves after AI denoise (+3 dB minimum)",
       "status": "PASS",
-      "detail": "-0.01 -> 7.07 dB (Δ +7.08 dB)"
+      "detail": "-0.01 -> 7.00 dB (Δ +7.01 dB)"
     },
     {
       "name": "Output is not clipped garbage",
@@ -99,7 +99,7 @@
     {
       "name": "Browser inference completes in reasonable time",
       "status": "PASS",
-      "detail": "2.7s wall (242 ms onnx)"
+      "detail": "3.7s wall (354 ms onnx)"
     },
     {
       "name": "AI Denoise engine selectable in the isolation UI",
