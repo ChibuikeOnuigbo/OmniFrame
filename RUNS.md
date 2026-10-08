@@ -124,3 +124,6 @@ discrimination, not data-limited.
     music 79.6% +79.6 dominance. Pack 17/28 — every remaining fail is a
     documented pre-finalizer historical artifact, none from the current
     3-engine stack.
+  - step 310k: keep SI-SNR **+4.34 dB** (margin +0.35 over the mix+6
+    bar), music content 7.38 dB (+6.9 over mix), self-check 14.14 dB,
+    E2E 17/17 PASS. All bars holding with growing margin.
