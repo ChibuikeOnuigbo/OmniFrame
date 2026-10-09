@@ -1,0 +1,35 @@
+{
+  "when": "2026-10-09T21:46:50.651Z",
+  "results": [
+    {
+      "name": "blocked weights: option says \"(weights not downloaded)\"",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural (weights not downloaded)"
+    },
+    {
+      "name": "failed isolation shows an Error: status line",
+      "status": "PASS",
+      "detail": "Error: Demucs weights could not be downloaded (Failed to fetch) — check your connection, or pick another engine below."
+    },
+    {
+      "name": "no page errors during the failure",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "omni-unified-v1 completes after the Demucs failure",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "no page errors after the recovery run",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "weights reachable again after unblock (HTTP 200)",
+      "status": "PASS",
+      "detail": "HEAD 200"
+    }
+  ]
+}

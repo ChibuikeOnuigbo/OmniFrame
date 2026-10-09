@@ -22,7 +22,16 @@ const MODEL_URL = '/models/htdemucs.onnx'
  * instantly, so cached passes don't spam the UI.
  */
 async function loadWeights(onBytes: (loaded: number, total: number | null) => void): Promise<ArrayBuffer> {
-  const res = await fetch(MODEL_URL)
+  let res: Response
+  try {
+    res = await fetch(MODEL_URL)
+  } catch (err) {
+    // A raw TypeError("Failed to fetch") tells the user nothing — surface
+    // WHAT failed (the 174 MB Demucs weights) and the likely remedies.
+    throw new Error(
+      `Demucs weights could not be downloaded (${(err as Error).message}) — check your connection, or pick another engine below.`,
+    )
+  }
   if (!res.ok) throw new Error(`Demucs weights not available (HTTP ${res.status})`)
   const totalHeader = res.headers.get('content-length')
   const total = totalHeader ? parseInt(totalHeader, 10) : null
