@@ -247,3 +247,22 @@ discrimination, not data-limited.
   39/39, voice-slowed-fix 18/18 (VAD-heavy path through lazy ORT),
   panels-cursor-declutter 18/18, collapse-popout 49, sidebar-segmentation
   21/21, tooltip-dock 17, e2e smoke, tsc clean.
+
+## Guard + a11y round 2026-10-09 (post-reset #12)
+
+- **Sandbox reset #12**: recovery via the new one-command
+  `scripts/recover-sandbox.sh` (git reset, swap, pip, npm, fixtures, model,
+  ffmpeg workaround) — idempotent, wrote it after 12 resets.
+- **New guards**: qa/demucs-model-unavailable-e2e.mjs (weights blocked →
+  graceful degradation, 6/6) with an actionable download-error message in
+  demucs-worker.ts; qa/bundle-budget-e2e.mjs (production build + preview:
+  exactly one initial JS file, 1.6 MB/480 KB decoded/compressed budgets,
+  ORT must stay deferred, FCP recorded — 6/6, currently 1401 KB/364 KB,
+  FCP 328 ms).
+- **axe-core accessibility** (new qa/axe-a11y-e2e.mjs): 14 surfaces
+  scanned. First run found real issues on 13/14; fixed all ten classes —
+  pinch-zoom was blocked (viewport meta), 7 effect sliders unlabeled
+  (critical), aria-label on non-interactive trim divs, 7 accessible-name
+  mismatches (visible text not in the name), title-only select label,
+  low-contrast 9px subtitles. Now 14/14 clean; touched-component E2Es
+  re-verified green.
