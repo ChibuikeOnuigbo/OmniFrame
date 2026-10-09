@@ -1,10 +1,20 @@
 {
-  "date": "2026-10-08T22:21:39.539Z",
+  "date": "2026-10-09T23:25:32.195Z",
   "results": [
     {
       "name": "mono keep_vocal: keeps the voice",
       "ok": true,
       "detail": "SI-SDR 16.15 dB vs clean mono voice (bar 14)"
+    },
+    {
+      "name": "mono default strength (3-pass): keeps the voice",
+      "ok": true,
+      "detail": "SI-SDR 16.21 dB vs clean mono voice (bar 14)"
+    },
+    {
+      "name": "mono default strength (3-pass): duration preserved",
+      "ok": true,
+      "detail": "output 6.000s (input 6.000s)"
     },
     {
       "name": "48 kHz keep_vocal: resample path correct",
@@ -47,5 +57,5 @@
       "detail": "clean"
     }
   ],
-  "summary": "9/9 PASS"
+  "summary": "11/11 PASS"
 }

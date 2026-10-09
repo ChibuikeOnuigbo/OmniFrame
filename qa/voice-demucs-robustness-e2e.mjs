@@ -313,6 +313,35 @@ const duoRmv = await persisted('voice-only remove_vocal', async (page) => {
   return { input: built.mixB64, output: out }
 })
 
+// The DEFAULT panel strength (0.92) drives the 3-pass shift-averaging path —
+// the exact configuration every user gets on a fresh install. No other case
+// exercises 3 passes (isolateAction pins 0.75 = 2 passes). First verified by
+// direct probe on 2026-10-09 (WASM + swap: 211 s, duration preserved).
+// Deliberately LAST so the resumable cache already holds every cheaper case
+// before the longest, most memory-hungry run.
+const monoDefault = await persisted('mono default-strength 3-pass', async (page) => {
+  const built = await buildMono(page)
+  const out = await page.evaluate(
+    (args) => {
+      const { b64 } = window.__mix
+      const lib = import('/src/lib/voiceIsolation.ts')
+      return lib.then(async (l) => {
+        const store = window.__omniframe_store
+        store.getState().addAsset({ id: args.assetId, name: args.assetId + '.wav', kind: 'audio', url: 'data:audio/wav;base64,' + args.mixB64, duration: 6, width: 0, height: 0, size: 0 })
+        const cur = store.getState()
+        cur.addClipToTrack(cur.ensureTrack('audio'), args.assetId, 0)
+        const clip = store.getState().clips.find((x) => x.assetId === args.assetId)
+        const res = await l.executeVoiceIsolationForClip(clip.id, { mode: args.mode, model: 'htdemucs-v4', strength: 0.92, speedNormalize: false })
+        const asset = store.getState().assets.find((a) => a.id === res.assetId)
+        const buf = new Uint8Array(await (await fetch(asset.url)).arrayBuffer())
+        return b64(buf)
+      })
+    },
+    { mixB64: built.mixB64, assetId: 'rob-mono-default', mode: 'keep_vocal' },
+  )
+  return { gtV: built.gtVB64, output: out }
+})
+
 // ---------- persist + score ---------------------------------------------------
 function wav(p) {
   const b = readFileSync(p); const d = new DataView(b.buffer, b.byteOffset, b.byteLength)
@@ -358,6 +387,13 @@ function check(name, ok, detail) {
   save('mono-input', mono.input); save('mono-gt-voice', mono.gtV); save('mono-gt-music', mono.gtM); save('mono-output', mono.output)
   const s = score(wav(join(TMP, 'mono-output.wav')), wav(join(TMP, 'mono-gt-voice.wav')))
   check('mono keep_vocal: keeps the voice', s > 14, `SI-SDR ${s.toFixed(2)} dB vs clean mono voice (bar 14)`)
+}
+{
+  save('mono-default-output', monoDefault.output); save('mono-default-gt-voice', monoDefault.gtV)
+  const s = score(wav(join(TMP, 'mono-default-output.wav')), wav(join(TMP, 'mono-default-gt-voice.wav')))
+  const dur = wav(join(TMP, 'mono-default-output.wav'))[0].length / 44100
+  check('mono default strength (3-pass): keeps the voice', s > 14, `SI-SDR ${s.toFixed(2)} dB vs clean mono voice (bar 14)`)
+  check('mono default strength (3-pass): duration preserved', Math.abs(dur - 6) < 0.02, `output ${dur.toFixed(3)}s (input 6.000s)`)
 }
 {
   save('48k-input', hz48.input); save('48k-gt-voice', hz48.gtV); save('48k-gt-music', hz48.gtM); save('48k-output', hz48.output)

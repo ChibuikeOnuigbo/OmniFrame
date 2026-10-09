@@ -291,3 +291,9 @@ discrimination, not data-limited.
   future.
 - Post-reset battery re-verified: ai-denoise 11/11, loudness 7/7,
   inspector-audio-all-clips 27/27.
+- **Default-strength coverage**: the panel default (0.92 → 3-pass
+  shift-averaging) had never run in CI — only 1- and 2-pass cases existed.
+  Direct probe first (WASM + swap: 211 s, 3 demucs workers + Silero, duration
+  preserved), then added as a resumable case to the robustness suite:
+  **11/11 PASS** (mono default-strength SI-SDR 16.21 dB vs bar 14, duration
+  6.000 s; the suite now runs 8 separations, ~20 min).
