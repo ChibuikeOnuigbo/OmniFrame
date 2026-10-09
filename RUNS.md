@@ -219,3 +219,31 @@ discrimination, not data-limited.
   OpenCV frame-inspection suites. Swap: `sudo fallocate -l 2G /swapfile &&
   sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon
   /swapfile` (passwordless sudo available; swap dies with each reset).
+
+## Audit + bundle round 2026-10-09 (post-reset #11)
+
+- **Sandbox reset #11** (~1 h after #10, mid-build): recovery via the
+  documented sequence — reset --hard to 6f22ae2, pip/npm install, fixtures +
+  htdemucs.onnx regenerated, ffmpeg workaround, `sudo bash
+  scripts/ensure-swap.sh`, vite restart. Zero loss.
+- **Bundle**: production build verified (first time in the sweep). Lazy-load
+  onnxruntime-web (vad.ts was its only static importer): main JS 1840 ->
+  1435 KB (-22%, gzip 485 -> 375 KB); ORT now splits into its own chunk and
+  is NOT fetched on initial load (verified against vite preview: single
+  index-*.js request, app renders, zero errors). 5 ineffective dynamic
+  imports fixed (loudness/rotoBrush/aiDenoise in store.ts, self-importing
+  rotoModels in store/rotoMask.ts); 8 warnings -> 4 (rest intentional).
+- **UI audits all clean** (first zero-findings state): affordance 0 (was 84
+  TINY + 1 dup-testid) via CollapseChip 20 -> 24 px hit target + unique
+  inspector-rail-float-btn testid; overflow 0 (was 13 CLIP) — the CLIP rule
+  now honors scrollable descendants (reachability), the left-panel finding
+  was a false positive (probe: column sums exactly; inner scroller scrolls);
+  strict audit 0 findings; density 0; drawing-2d 101/101.
+- Non-E2E qa scripts all run: rigging-unit 43/43, rigging-smoke 15/15,
+  source-scan, chair probes.
+- Post-change verification: ai-denoise 11/11, rnnoise E2E, loudness 7/7,
+  omni-unified E2E, voice-isolation 30, demucs model E2E 6/6 (18.4 dB),
+  rotomask 19/19, roto-isolation 13 PASS + 3 known SKIPs, towel-masking
+  39/39, voice-slowed-fix 18/18 (VAD-heavy path through lazy ORT),
+  panels-cursor-declutter 18/18, collapse-popout 49, sidebar-segmentation
+  21/21, tooltip-dock 17, e2e smoke, tsc clean.
