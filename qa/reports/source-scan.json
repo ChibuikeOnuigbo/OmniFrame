@@ -1,26 +1,28 @@
 {
   "totals": {
-    "files": 58,
-    "findings": 192
+    "files": 97,
+    "findings": 212
   },
   "byRule": {
-    "S04": 155,
-    "S09": 18,
-    "S07": 19
+    "S04": 164,
+    "S09": 25,
+    "S07": 19,
+    "S03": 1,
+    "S01": 3
   },
   "findings": [
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/Studio.tsx",
-      "line": 667,
+      "line": 669,
       "evidence": "hardcoded colour #11131d instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/Studio.tsx",
-      "line": 715,
+      "line": 717,
       "evidence": "hardcoded colour #11131d instead of a theme token"
     },
     {
@@ -244,504 +246,560 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/BackgroundRemovalModal.tsx",
-      "line": 269,
+      "line": 270,
       "evidence": "hardcoded colour #00FF00 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 68,
-      "evidence": "hardcoded colour #0f051d instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 69,
-      "evidence": "hardcoded colour #a855f7 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 71,
-      "evidence": "hardcoded colour #06b6d4 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 72,
-      "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 73,
-      "evidence": "hardcoded colour #06b6d4 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 74,
-      "evidence": "hardcoded colour #06b6d4 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 75,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 79,
-      "evidence": "hardcoded colour #18181b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 80,
-      "evidence": "hardcoded colour #f4f4f5 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 82,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 83,
-      "evidence": "hardcoded colour #3f3f46 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 84,
-      "evidence": "hardcoded colour #52525b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 85,
-      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 86,
-      "evidence": "hardcoded colour #991b1b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 90,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 91,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 93,
-      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 94,
-      "evidence": "hardcoded colour #22c55e instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 95,
-      "evidence": "hardcoded colour #f59e0b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 96,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 97,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 102,
-      "evidence": "hardcoded colour #050508 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 103,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 105,
-      "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 106,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 107,
-      "evidence": "hardcoded colour #f59e0b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 108,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 109,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S09",
       "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 249,
+      "file": "src/components/ClipFilmstrip.tsx",
+      "line": 58,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 484,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 75,
+      "evidence": "hardcoded colour #0b0d13 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 487,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 76,
+      "evidence": "hardcoded colour #f8fafc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 520,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 78,
+      "evidence": "hardcoded colour #6d5efc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 546,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 79,
+      "evidence": "hardcoded colour #6d5efc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 547,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 80,
+      "evidence": "hardcoded colour #d97706 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 568,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 81,
+      "evidence": "hardcoded colour #059669 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 573,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "line": 82,
+      "evidence": "hardcoded colour #dc2626 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 620,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+      "line": 86,
+      "evidence": "hardcoded colour #0f051d instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/CustomCursor.tsx",
-      "line": 695,
-      "evidence": "hardcoded colour #ff4332 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 696,
-      "evidence": "hardcoded colour #ffd305 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 697,
-      "evidence": "hardcoded colour #3bbd1c instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 698,
-      "evidence": "hardcoded colour #14adf6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 699,
-      "evidence": "hardcoded colour #ca70e1 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/CustomCursor.tsx",
-      "line": 700,
-      "evidence": "hardcoded colour #fbb114 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 37,
-      "evidence": "hardcoded colour #f59e0b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 38,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 39,
-      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 40,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 41,
+      "line": 87,
       "evidence": "hardcoded colour #a855f7 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 42,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 89,
+      "evidence": "hardcoded colour #06b6d4 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 43,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 90,
+      "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 213,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 91,
+      "evidence": "hardcoded colour #06b6d4 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 215,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 92,
+      "evidence": "hardcoded colour #06b6d4 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 226,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 228,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 239,
-      "evidence": "hardcoded colour #808080 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 241,
-      "evidence": "hardcoded colour #808080 instead of a theme token"
-    },
-    {
-      "rule": "S07",
-      "sev": "low",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 799,
-      "evidence": "1 non-null assertion(s)"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingToolbar.tsx",
-      "line": 27,
-      "evidence": "hardcoded colour #f59e0b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/DrawingToolbar.tsx",
-      "line": 28,
+      "file": "src/components/CustomCursor.tsx",
+      "line": 93,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingToolbar.tsx",
-      "line": 29,
+      "file": "src/components/CustomCursor.tsx",
+      "line": 97,
+      "evidence": "hardcoded colour #18181b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 98,
+      "evidence": "hardcoded colour #f4f4f5 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 100,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 101,
+      "evidence": "hardcoded colour #3f3f46 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 102,
+      "evidence": "hardcoded colour #52525b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 103,
       "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 533,
-      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 104,
+      "evidence": "hardcoded colour #991b1b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 539,
-      "evidence": "hardcoded colour #38bdf8 instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 108,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 540,
-      "evidence": "hardcoded colour #0f172a instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 109,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 558,
-      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 111,
+      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 564,
+      "file": "src/components/CustomCursor.tsx",
+      "line": 112,
+      "evidence": "hardcoded colour #22c55e instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 113,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 565,
-      "evidence": "hardcoded colour #0f172a instead of a theme token"
+      "file": "src/components/CustomCursor.tsx",
+      "line": 114,
+      "evidence": "hardcoded colour #10b981 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 115,
+      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 120,
+      "evidence": "hardcoded colour #050508 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 121,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 123,
+      "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 124,
+      "evidence": "hardcoded colour #10b981 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 125,
+      "evidence": "hardcoded colour #f59e0b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 126,
+      "evidence": "hardcoded colour #10b981 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 127,
+      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 267,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 504,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 507,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 540,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 566,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 567,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
       "line": 588,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 593,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 640,
+      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 715,
+      "evidence": "hardcoded colour #ff4332 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 716,
+      "evidence": "hardcoded colour #ffd305 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 717,
+      "evidence": "hardcoded colour #3bbd1c instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 718,
+      "evidence": "hardcoded colour #14adf6 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 719,
+      "evidence": "hardcoded colour #ca70e1 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/CustomCursor.tsx",
+      "line": 720,
+      "evidence": "hardcoded colour #fbb114 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingCanvasOverlay.tsx",
+      "line": 126,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingCanvasOverlay.tsx",
+      "line": 136,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 39,
+      "evidence": "hardcoded colour #f59e0b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 40,
+      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 41,
+      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 42,
+      "evidence": "hardcoded colour #10b981 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 43,
+      "evidence": "hardcoded colour #a855f7 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 44,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 45,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 216,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 218,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 229,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 231,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 242,
+      "evidence": "hardcoded colour #808080 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 244,
+      "evidence": "hardcoded colour #808080 instead of a theme token"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 855,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingToolbar.tsx",
+      "line": 28,
+      "evidence": "hardcoded colour #f59e0b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingToolbar.tsx",
+      "line": 29,
+      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingToolbar.tsx",
+      "line": 30,
+      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 589,
-      "evidence": "hardcoded colour #0f172a instead of a theme token"
+      "line": 523,
+      "evidence": "hardcoded colour #64748b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 530,
+      "evidence": "hardcoded colour #64748b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
       "line": 603,
+      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 625,
+      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 660,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 661,
+      "evidence": "hardcoded colour #0f172a instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 673,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 606,
+      "line": 676,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/GraphEditor.tsx",
-      "line": 678,
+      "line": 770,
       "evidence": "1 non-null assertion(s)"
     },
     {
@@ -762,7 +820,7 @@
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/LinkPanel.tsx",
-      "line": 64,
+      "line": 65,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
@@ -811,140 +869,154 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 130,
+      "line": 134,
       "evidence": "hardcoded colour #105 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 131,
+      "line": 135,
       "evidence": "hardcoded colour #150 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 132,
+      "line": 136,
       "evidence": "hardcoded colour #210 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 513,
+      "line": 536,
       "evidence": "hardcoded colour #2563eb instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 514,
+      "line": 537,
       "evidence": "hardcoded colour #dc2626 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 515,
+      "line": 538,
       "evidence": "hardcoded colour #d97706 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 516,
+      "line": 539,
       "evidence": "hardcoded colour #059669 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
-      "line": 517,
+      "line": 540,
       "evidence": "hardcoded colour #7c3aed instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/Rigging.tsx",
+      "line": 230,
+      "evidence": "hardcoded colour #9083ff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/Rigging.tsx",
+      "line": 457,
+      "evidence": "hardcoded colour #0f0f11 instead of a theme token"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/RightPanel.tsx",
-      "line": 308,
+      "line": 512,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
-      "line": 29,
-      "evidence": "hardcoded colour #2563eb instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/SelectionMaskSubTool.tsx",
       "line": 30,
-      "evidence": "hardcoded colour #dc2626 instead of a theme token"
+      "evidence": "hardcoded colour #2563eb instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
       "line": 31,
-      "evidence": "hardcoded colour #d97706 instead of a theme token"
+      "evidence": "hardcoded colour #dc2626 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
       "line": 32,
-      "evidence": "hardcoded colour #059669 instead of a theme token"
+      "evidence": "hardcoded colour #d97706 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
       "line": 33,
-      "evidence": "hardcoded colour #7c3aed instead of a theme token"
+      "evidence": "hardcoded colour #059669 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
       "line": 34,
+      "evidence": "hardcoded colour #7c3aed instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/SelectionMaskSubTool.tsx",
+      "line": 35,
       "evidence": "hardcoded colour #831843 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
-      "line": 66,
+      "line": 96,
       "evidence": "hardcoded colour #2563eb instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
-      "line": 67,
+      "line": 97,
       "evidence": "hardcoded colour #2563eb instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionMaskSubTool.tsx",
-      "line": 174,
+      "line": 270,
       "evidence": "hardcoded colour #a855f7 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionSubToolBar.tsx",
-      "line": 98,
+      "line": 107,
       "evidence": "hardcoded colour #2563eb instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/SelectionSubToolBar.tsx",
-      "line": 109,
+      "line": 118,
       "evidence": "hardcoded colour #dc2626 instead of a theme token"
     },
     {
@@ -986,217 +1058,217 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 70,
+      "line": 78,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 333,
+      "line": 427,
       "evidence": "hardcoded colour #0f172a instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 335,
+      "line": 429,
       "evidence": "hardcoded colour #38bdf8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 338,
+      "line": 432,
       "evidence": "hardcoded colour #f8fafc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 342,
+      "line": 436,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 937,
+      "line": 935,
       "evidence": "hardcoded colour #fef08a instead of a theme token"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1195,
+      "line": 1231,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1953,
+      "line": 2034,
       "evidence": "hardcoded colour #10b981 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1955,
+      "line": 2036,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1957,
+      "line": 2038,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1959,
+      "line": 2040,
       "evidence": "hardcoded colour #a855f7 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1961,
+      "line": 2042,
       "evidence": "hardcoded colour #f97316 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1962,
+      "line": 2043,
       "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 2276,
+      "line": 2357,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 2289,
+      "line": 2370,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2399,
+      "line": 2480,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2410,
+      "line": 2491,
       "evidence": "2 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2442,
+      "line": 2523,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2457,
+      "line": 2538,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2459,
+      "line": 2540,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2474,
+      "line": 2555,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2497,
+      "line": 2578,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2501,
+      "line": 2582,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2516,
+      "line": 2597,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2520,
+      "line": 2601,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2533,
+      "line": 2614,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 143,
+      "line": 162,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 146,
+      "line": 165,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 214,
+      "line": 258,
       "evidence": "hardcoded colour #11131d instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 340,
+      "line": 406,
       "evidence": "hardcoded colour #11131d instead of a theme token"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/TrackingPanel.tsx",
-      "line": 217,
+      "line": 219,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
@@ -1210,7 +1282,7 @@
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/VoiceIsolationModal.tsx",
-      "line": 76,
+      "line": 82,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
@@ -1254,6 +1326,41 @@
       "file": "src/components/icons/BlenderRotationIcon.tsx",
       "line": 74,
       "evidence": "hardcoded colour #F8FAFC instead of a theme token"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/lib/clipFilmstrip.ts",
+      "line": 130,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S03",
+      "sev": "low",
+      "file": "src/lib/demucs/apply.js",
+      "line": 274,
+      "evidence": "// TODO: implement random shifts"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/lib/demucs/index.ts",
+      "line": 305,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/lib/demucs/index.ts",
+      "line": 380,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S01",
+      "sev": "medium",
+      "file": "src/lib/demucs/index.ts",
+      "line": 466,
+      "evidence": "console.warn(`[demucs] ${stem}: ${missing.reduce((a, b) => a + b, 0)} samples had no finit"
     },
     {
       "rule": "S09",
@@ -1321,36 +1428,71 @@
     {
       "rule": "S09",
       "sev": "medium",
-      "file": "src/store.ts",
-      "line": 752,
+      "file": "src/lib/modelLoadStore.ts",
+      "line": 134,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S01",
+      "sev": "medium",
+      "file": "src/lib/native/dspNative.ts",
+      "line": 61,
+      "evidence": "console.warn('[dspNative] native DSP core unavailable, using JS fallback:', (err as Error)"
+    },
+    {
+      "rule": "S01",
+      "sev": "medium",
+      "file": "src/lib/native/dspNative.ts",
+      "line": 100,
+      "evidence": "console.warn('[dspNative] native op out of memory, using JS fallback')"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/store/rotoMask.ts",
+      "line": 199,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/store/rotoMask.ts",
+      "line": 212,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 767,
+      "line": 843,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 3182,
+      "line": 858,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 3242,
+      "line": 3620,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 3267,
+      "line": 3680,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/store.ts",
+      "line": 3705,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     }
   ]

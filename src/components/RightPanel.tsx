@@ -862,7 +862,7 @@ export function RightPanel() {
         {rightOpen && (
           <button
             type="button"
-            data-testid="inspector-float-btn"
+            data-testid="inspector-rail-float-btn"
             title="Float inspector into a movable window"
             aria-label="Float inspector into a movable window"
             onClick={() => setRightPanelFloating(true)}

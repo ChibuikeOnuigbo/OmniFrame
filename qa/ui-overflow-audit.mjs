@@ -128,6 +128,24 @@ function collectOverflow() {
     return null
   }
 
+  /** True if the element itself (or any descendant) scrolls on an axis: an
+   *  overflow-hidden panel that WRAPS a scroll container is a legitimate
+   *  layout (left-panel wraps the panel-contents scroller) — its content is
+   *  reachable by scrolling, so it is not a CLIP. Mirrors the reachability
+   *  logic hasScrollableAncestor already applies to SHEAR. */
+  function hasScrollableDescendant(el, axis) {
+    const walk = (n) => {
+      if (n !== el) {
+        const s = styleOf(n)
+        const over = axis === 'y' ? n.scrollHeight - n.clientHeight : n.scrollWidth - n.clientWidth
+        if (new RegExp(`(auto|scroll)`).test(axis === 'y' ? s.overflowY : s.overflowX) && over > 0) return true
+      }
+      for (const c of n.children) if (walk(c)) return true
+      return false
+    }
+    return walk(el)
+  }
+
   const INTERACTIVE = new Set(['BUTTON', 'A', 'INPUT', 'SELECT', 'TEXTAREA'])
 
   for (const el of document.querySelectorAll('body *')) {
@@ -142,8 +160,8 @@ function collectOverflow() {
     // ---- A. CLIP: own content exceeds own box, box hides overflow, no ellipsis.
     const overflowsX = el.scrollWidth - el.clientWidth > 1
     const overflowsY = el.scrollHeight - el.clientHeight > 1
-    const clippedX = overflowsX && s.overflowX === 'hidden' && !intentionalTruncate(el)
-    const clippedY = overflowsY && s.overflowY === 'hidden' && s.webkitLineClamp === 'none'
+    const clippedX = overflowsX && s.overflowX === 'hidden' && !intentionalTruncate(el) && !hasScrollableDescendant(el, 'x')
+    const clippedY = overflowsY && s.overflowY === 'hidden' && s.webkitLineClamp === 'none' && !hasScrollableDescendant(el, 'y')
 
     // ---- B. SHEAR: clipped by an ancestor, so unreachable even by scrolling.
     let shear = null

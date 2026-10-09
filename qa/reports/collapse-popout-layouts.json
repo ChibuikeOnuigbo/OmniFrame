@@ -241,7 +241,7 @@
     {
       "name": "−/+ chips are uniformly square ~18–20px (small but clickable)",
       "status": "PASS",
-      "detail": "[{\"id\":\"slide-dock-preview-view-controls-toggle\",\"w\":20,\"h\":20}]"
+      "detail": "[{\"id\":\"slide-dock-preview-view-controls-toggle\",\"w\":24,\"h\":24}]"
     },
     {
       "name": "zero runtime page errors",

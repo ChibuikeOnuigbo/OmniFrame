@@ -5,7 +5,9 @@
  * collapsed one back. One consistent glyph pair everywhere (panel sections,
  * preview control clusters, floating windows) so the UI reads the same way
  * in every corner of the editor, instead of a different chevron dialect per
- * area. Sized to stay clickable without shouting (20px hit area, 12px glyph).
+ * area. Sized to stay clickable without shouting (24px hit area — the
+ * recommended minimum, enforced by qa/ui-affordance-audit.mjs — with a
+ * 13px glyph).
  */
 
 import { Minus, Plus } from 'lucide-react'
@@ -39,10 +41,10 @@ export function CollapseChip({
         onToggle()
       }}
       className={`grid shrink-0 place-items-center rounded-md border border-ink-700 bg-ink-800/90 text-ink-300 transition-all hover:border-ink-600 hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand active:scale-95 ${
-        compact ? 'h-[18px] w-[18px]' : 'h-5 w-5'
+        compact ? 'h-[18px] w-[18px]' : 'h-6 w-6'
       }`}
     >
-      <Icon size={compact ? 11 : 12} strokeWidth={2.4} aria-hidden="true" />
+      <Icon size={compact ? 11 : 13} strokeWidth={2.4} aria-hidden="true" />
     </button>
   )
 }

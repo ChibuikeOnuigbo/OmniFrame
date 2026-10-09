@@ -2,19 +2,11 @@
   "totals": {
     "issues": 0,
     "unique": 0,
-    "dupes": 1
+    "dupes": 0
   },
   "byKind": {},
   "byTab": {},
-  "duplicates": [
-    {
-      "testid": "inspector-float-btn",
-      "count": 2,
-      "viewports": [
-        "1440"
-      ]
-    }
-  ],
+  "duplicates": [],
   "unique": [],
   "all": []
 }
