@@ -989,6 +989,8 @@ function ClipView({
 
       {/* trim handles */}
       <div
+        role="separator"
+        aria-orientation="vertical"
         onPointerDown={onDown('left')}
         onPointerMove={onTrimMove}
         onPointerUp={onTrimUp}
@@ -997,6 +999,8 @@ function ClipView({
         className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-white/0 hover:bg-white/40 z-20"
       />
       <div
+        role="separator"
+        aria-orientation="vertical"
         onPointerDown={onDown('right')}
         onPointerMove={onTrimMove}
         onPointerUp={onTrimUp}
@@ -1705,7 +1709,7 @@ export function Timeline() {
             type="button"
             data-testid="speed-menu-button"
             title="Playback speed"
-            aria-label="Playback speed"
+            aria-label={`Playback speed ${Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×`}
             aria-expanded={speedMenuOpen}
             onClick={() => {
               setToolMenuOpen(false)

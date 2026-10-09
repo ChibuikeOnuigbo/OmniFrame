@@ -145,7 +145,7 @@ export function SelectionSubToolBar() {
           type="button"
           data-testid="floating-convert-omniframe-btn"
           title="Convert selection to movable OmniFrame Object with clean inpainting"
-          aria-label="Convert to OmniFrame Object"
+          aria-label="To Object: convert selection to a movable OmniFrame object"
           onClick={() => convertSelectionToOmniframeObject()}
           className="flex min-h-8 min-w-8 items-center gap-1 rounded-lg border border-brand/40 bg-brand/20 px-2 py-1 text-[11px] font-medium text-brand-400 transition-colors hover:bg-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >

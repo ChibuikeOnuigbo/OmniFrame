@@ -172,12 +172,12 @@ export function LeftDock() {
                 }
                 aria-label={
                   cat === 'all'
-                    ? 'Show all tool categories'
+                    ? 'all — every tool category'
                     : cat === 'video'
-                    ? 'Show video tools'
+                    ? 'VID — video editing tools'
                     : cat === '2d'
-                    ? 'Show 2D tools'
-                    : 'Show 3D tools'
+                    ? '2d — paint tools'
+                    : '3d — scene tools'
                 }
                 aria-pressed={activeCategory === cat}
                 onClick={() => setActiveCategory(cat)}

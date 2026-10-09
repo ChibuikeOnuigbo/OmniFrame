@@ -373,7 +373,11 @@ export function AspectRatioSelector() {
         data-testid="ratio-selector-btn"
         id="aspect-ratio-selector-trigger"
         title="Sequence Aspect Ratio and Output Format"
-        aria-label="Aspect Ratio Selector"
+        aria-label={`Aspect ratio: ${
+          sequenceSettings.isCustom
+            ? `${sequenceSettings.width} × ${sequenceSettings.height}`
+            : sequenceSettings.aspectRatio
+        }`}
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}

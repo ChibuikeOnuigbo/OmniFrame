@@ -101,7 +101,7 @@ export function ThreePanel() {
               <button
                 type="button"
                 data-testid="threed-submode-mask-btn"
-                aria-label="Open 3D mask and selection tools"
+                title="Open 3D mask and selection tools"
                 onClick={() => {
                   setThreeMaskMode('scene')
                   setThreeMaskSelection(null)

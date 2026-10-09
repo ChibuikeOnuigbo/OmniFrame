@@ -164,7 +164,7 @@ export function VoiceIsolationPanel() {
             <Mic size={14} className={mode === 'keep_vocal' ? 'text-brand-400' : ''} />
             <div>
               <div className="font-medium text-[11px]">Keep Vocal</div>
-              <div className="text-[9px] text-ink-400 opacity-80">Speech only</div>
+              <div className="text-[10px] text-ink-300">Speech only</div>
             </div>
           </button>
 
@@ -182,7 +182,7 @@ export function VoiceIsolationPanel() {
             <Music2 size={14} className={mode === 'remove_vocal' ? 'text-brand-400' : ''} />
             <div>
               <div className="font-medium text-[11px]">Remove Vocal</div>
-              <div className="text-[9px] text-ink-400 opacity-80">Instrumental</div>
+              <div className="text-[10px] text-ink-300">Instrumental</div>
             </div>
           </button>
         </div>
@@ -194,6 +194,7 @@ export function VoiceIsolationPanel() {
           Engine
         </label>
         <select
+          aria-label="Isolation engine"
           data-testid="panel-engine-select"
           value={algorithm}
           disabled={processing || mode !== 'keep_vocal'}

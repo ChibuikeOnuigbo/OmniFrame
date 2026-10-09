@@ -1,0 +1,82 @@
+{
+  "when": "2026-10-09T22:07:44.385Z",
+  "disabledRules": [
+    "region",
+    "landmark-one-nested",
+    "page-has-heading-one",
+    "canvas-name",
+    "focus-order-semantics"
+  ],
+  "results": [
+    {
+      "name": "studio boot: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "project with selected clip: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: media: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: text: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: transitions: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: effects: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: audio: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: relationships: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: drawing: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: omniframe: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: tracking: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "left tab: threed: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "name": "desktop sweep: zero page errors",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "mobile 390 boot: zero critical/serious axe violations",
+      "status": "PASS",
+      "detail": "clean"
+    }
+  ]
+}

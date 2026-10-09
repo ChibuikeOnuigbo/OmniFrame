@@ -170,7 +170,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context =
                 type="button"
                 data-testid={`sel-type-${st.id}`}
                 title={st.label}
-                aria-label={st.label}
+                aria-label={`${SHORT_SELECTION_LABELS[st.id]}: ${st.label}`}
                 aria-pressed={isActive}
                 onClick={() => setSelectionMode(st.id)}
                 className={`flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-lg border p-1.5 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${

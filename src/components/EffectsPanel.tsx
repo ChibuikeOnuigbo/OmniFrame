@@ -136,6 +136,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-brightness"
+            aria-label="Brightness"
             min={0}
             max={2}
             step={0.05}
@@ -153,6 +154,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-contrast"
+            aria-label="Contrast"
             min={0}
             max={2}
             step={0.05}
@@ -170,6 +172,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-saturation"
+            aria-label="Saturation"
             min={0}
             max={2}
             step={0.05}
@@ -187,6 +190,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-huerotate"
+            aria-label="Hue rotate"
             min={0}
             max={360}
             step={5}
@@ -204,6 +208,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-blur"
+            aria-label="Blur"
             min={0}
             max={20}
             step={0.5}
@@ -221,6 +226,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-grayscale"
+            aria-label="Grayscale"
             min={0}
             max={1}
             step={0.05}
@@ -238,6 +244,7 @@ export function EffectsPanel() {
           <input
             type="range"
             data-testid="effect-slider-sepia"
+            aria-label="Sepia"
             min={0}
             max={1}
             step={0.05}

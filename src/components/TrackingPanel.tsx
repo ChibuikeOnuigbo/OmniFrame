@@ -299,7 +299,7 @@ export function TrackingPanel() {
               <Layers size={13} className={mode === 'mask' ? 'text-brand-400' : 'text-ink-500'} />
               <span>Mask Track</span>
             </div>
-            <p className="text-[10px] text-ink-500">Track spatial masks through time.</p>
+            <p className="text-[10px] text-ink-300">Track spatial masks through time.</p>
           </button>
 
           <button
@@ -317,7 +317,7 @@ export function TrackingPanel() {
               <Crosshair size={13} className={mode === 'main' ? 'text-brand-400' : 'text-ink-500'} />
               <span>Main Track</span>
             </div>
-            <p className="text-[10px] text-ink-500">Point, planar & motion vectors.</p>
+            <p className="text-[10px] text-ink-300">Point, planar & motion vectors.</p>
           </button>
         </div>
       </PanelSection>
@@ -631,7 +631,7 @@ export function TrackingPanel() {
                   <div className="flex items-center gap-1.5 font-mono">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     <span className="text-ink-200">PT #{idx + 1}</span>
-                    <span className="text-[10px] text-ink-500">
+                    <span className="text-[10px] text-ink-300">
                       ({(pt.x * 100).toFixed(1)}%, {(pt.y * 100).toFixed(1)}%)
                     </span>
                   </div>
