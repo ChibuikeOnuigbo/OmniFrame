@@ -1,0 +1,100 @@
+{
+  "when": "2026-10-09T22:58:45.724Z",
+  "results": [
+    {
+      "name": "seeded one audio clip",
+      "status": "PASS",
+      "detail": "1 clips"
+    },
+    {
+      "name": "space starts playback",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "space pauses playback",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "L forward-plays at positive speed",
+      "status": "PASS",
+      "detail": "playing=true speed=1"
+    },
+    {
+      "name": "K pauses",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "J reverse-plays at negative speed",
+      "status": "PASS",
+      "detail": "playing=true speed=-1"
+    },
+    {
+      "name": "b switches to the blade tool",
+      "status": "PASS",
+      "detail": "blade"
+    },
+    {
+      "name": "v switches back to the select tool",
+      "status": "PASS",
+      "detail": "select"
+    },
+    {
+      "name": "+ zooms the timeline in",
+      "status": "PASS",
+      "detail": "100 -> 125 px/s"
+    },
+    {
+      "name": "- zooms the timeline out",
+      "status": "PASS",
+      "detail": "125 -> 100 px/s"
+    },
+    {
+      "name": "clip visible before h",
+      "status": "PASS",
+      "detail": "false"
+    },
+    {
+      "name": "h toggles the selected clip hidden",
+      "status": "PASS",
+      "detail": "true"
+    },
+    {
+      "name": "Ctrl+B splits the selected clip at the playhead",
+      "status": "PASS",
+      "detail": "1 -> 2 clips"
+    },
+    {
+      "name": "Delete removes the selected clip",
+      "status": "PASS",
+      "detail": "2 -> 1 clips"
+    },
+    {
+      "name": "Ctrl+Z restores the deleted clip",
+      "status": "PASS",
+      "detail": "1 -> 2 clips"
+    },
+    {
+      "name": "Ctrl+Shift+Z redoes the deletion",
+      "status": "PASS",
+      "detail": "2 -> 1 clips"
+    },
+    {
+      "name": "g toggles gap-select mode",
+      "status": "PASS",
+      "detail": "false -> true"
+    },
+    {
+      "name": "typing in an input does not switch tools",
+      "status": "PASS",
+      "detail": "tool stayed blade"
+    },
+    {
+      "name": "zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ]
+}
