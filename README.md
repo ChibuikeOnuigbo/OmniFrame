@@ -104,18 +104,29 @@ RightPanel ── contextual Inspector (collapses to a reopen arrow)
 - `native/dsp-core/` — the compiled DSP core (C++ → wasm32, ~11 KB): resampler, stem de-leak, pass averaging, peak safety. 2-3× faster than the JS fallbacks and **bit-identical** to them; every op falls back transparently. Build + parity policy: `native/dsp-core/README.md`.
 - `src/lib/modelLoadStore.ts` + `src/components/ModelLoadOverlay.tsx` — every web model download/compile gets a live progress card (real byte counts when the server sends them, smooth monotonic simulation when it can't). Desktop loads the same models from disk, so its cards just flash by.
 
-## Roadmap (from the master spec — not yet implemented)
+## Shipped (formerly the master-spec roadmap)
 
-These are deliberately listed as **future phases**, not hidden behind fake buttons:
+Every phase below started as a roadmap bullet and now ships with E2E coverage
+(each `qa/*-e2e.mjs` runs against the real app in a headless browser):
 
-1. **Masking mode** — brush / lasso / magic / flood-fill, per-frame + tracked propagation.
-2. **Mask tracking** — draw a mask, track it forward/backward with confidence + correction.
-3. **Tracking engine** — point / object / planar / camera motion (optical-flow + segmentation hybrid).
-4. **Omniframe mode** — edits that propagate across all frames (cut/move/fill/recolor).
-5. **3D / 2.5D** — GLB/GLTF, lighting, materials, 3D↔2D transitions.
-6. **Local AI** — background removal (BiRefNet-lite / MODNet, Apache/MIT only) with license audit.
-7. **Templates** — typed, validated slot system.
-8. **Desktop native processing** — the Tauri 2 shell now exists; future Rust work moves encoding and project persistence behind native commands.
+1. **Masking mode** — brush / lasso / magic / flood-fill selection with
+   per-frame masks (`qa/layout-selection-mask-e2e.mjs`, `qa/krita-transparency-mask-paint-e2e.mjs`).
+2. **Mask tracking** — tracked propagation with correction
+   (`qa/masking-tracking-mobile-drawing-e2e.mjs`, `qa/towel-masking-workflow-e2e.mjs`).
+3. **Tracking engine** — the Tracking panel with mask/main track modes
+   (`src/components/TrackingPanel.tsx`).
+4. **Omniframe mode** — selection-driven edits that propagate across frames
+   (`qa/omniframe-*-e2e.mjs`, five suites).
+5. **3D / 2.5D** — 3D-in-2D compositing, Blender-style rotation, video planes
+   (`qa/three-d-video-plane-e2e.mjs`, `qa/blender-rotation-e2e.mjs`, `qa/keyframe-graph-3d-e2e.mjs`).
+6. **Local AI** — background removal modal, RotoMask click-to-segment with
+   SAM (`qa/rotomask-e2e.mjs`, `qa/roto-isolation-browser-e2e.mjs`), plus the
+   voice-isolation stack below.
+7. **Templates** — typed template picker (`src/components/TemplatePickerModal.tsx`).
+8. **Desktop shell** — the Tauri 2 crate exists (`src-tauri/`), deliberately
+   minimal: it packages the web editor and exposes OS-level capabilities.
+   Deeper native work (encoding, project persistence behind commands) stays
+   future work.
 
 ## License
 

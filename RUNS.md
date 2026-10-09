@@ -266,3 +266,28 @@ discrimination, not data-limited.
   mismatches (visible text not in the name), title-only select label,
   low-contrast 9px subtitles. Now 14/14 clean; touched-component E2Es
   re-verified green.
+
+## Shortcuts + docs + security round 2026-10-09 (post-reset #13)
+
+- **Sandbox reset #13**: `scripts/recover-sandbox.sh` used for the first time
+  end-to-end (plus the manual `git fetch && git reset --hard` it cannot do
+  for itself after a base reset — noted here for future recoveries).
+- **Keyboard-shortcuts E2E** (new, 19/19): space play/pause, J/K/L shuttle
+  (reverse/pause/forward), v/b tool keys, +/- timeline zoom, h hide clip,
+  Ctrl+B split at playhead, Delete, Ctrl+Z / Ctrl+Shift+Z undo/redo
+  round-trip, g gap-select toggle, and the input-focus guard (typing must
+  not trigger shortcuts). Covers the keymap no other suite exercised.
+- **Security round**: npm audit's two findings (braces DoS via
+  chokidar→tailwindcss 3, postcss-selector-parser quadratic parse) are
+  BUILD-TIME ONLY — verified zero references to chokidar/micromatch/braces
+  in the shipped dist bundle. Fixing requires the tailwind 3→4 major;
+  accepted as dev-only risk (no untrusted glob patterns at build time).
+  Source scan clean: zero dangerouslySetInnerHTML / innerHTML / eval /
+  new Function in src/.
+- **README accuracy**: the "Roadmap (not yet implemented)" section was fully
+  stale — masking, mask tracking, tracking engine, omniframe mode, 3D/2.5D,
+  local AI, and templates are ALL shipped with E2E coverage. Rewritten as
+  "Shipped" with suite pointers; only deep desktop-native work remains
+  future.
+- Post-reset battery re-verified: ai-denoise 11/11, loudness 7/7,
+  inspector-audio-all-clips 27/27.
