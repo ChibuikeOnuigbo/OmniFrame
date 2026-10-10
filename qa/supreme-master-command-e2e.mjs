@@ -74,7 +74,28 @@ try {
     await page.waitForTimeout(200)
     pass('04. Tracking Modes Toggled', 'Main Tracking and Mask Tracking modes operational')
 
-    // Add point
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
+    // Add point (Point Track Setup section)
+    await activateSection('tracking-point-setup')
     const addPtBtn = page.locator('[data-testid="add-track-point-btn"]')
     await addPtBtn.click()
     const ptCount = await page.locator('[data-testid="track-point-item"]').count()
@@ -84,7 +105,8 @@ try {
       fail('05. Add Track Point', `Expected >= 2 points, found ${ptCount}`)
     }
 
-    // Run forward tracking simulation
+    // Run forward tracking simulation (Run Tracking section)
+    await activateSection('tracking-actions')
     const trackFwdBtn = page.locator('[data-testid="run-track-forward-btn"]')
     await trackFwdBtn.click()
     await page.waitForTimeout(1200)

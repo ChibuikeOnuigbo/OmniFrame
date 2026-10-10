@@ -1,0 +1,141 @@
+{
+  "generatedAt": "2026-10-09T23:00:03.025Z",
+  "results": [
+    {
+      "name": "video: inspector Audio section present",
+      "status": "PASS",
+      "detail": "1 surfaces"
+    },
+    {
+      "name": "video: Volume slider visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video: Voice Isolation option present",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video: Loudness Normalization present",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video: keep-only engines hidden in remove_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "video: both-mode engines offered in remove_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "video: AI Denoise ONNX model offered in keep_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (voice extractor · keep-vocal only) | RNNoise (Xiph) · trained speech denoiser | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "video: RNNoise offered in keep_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (voice extractor · keep-vocal only) | RNNoise (Xiph) · trained speech denoiser | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "video: Demucs v4 + omni-unified offered in keep_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (voice extractor · keep-vocal only) | RNNoise (Xiph) · trained speech denoiser | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "video: loudness target slider visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "video: loudness apply button visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio: inspector Audio section present",
+      "status": "PASS",
+      "detail": "2 surfaces"
+    },
+    {
+      "name": "audio: Volume slider visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio: Voice Isolation option present",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio: Loudness Normalization present",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio: keep-only engines hidden in remove_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "audio: both-mode engines offered in remove_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "audio: AI Denoise ONNX model offered in keep_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (voice extractor · keep-vocal only) | RNNoise (Xiph) · trained speech denoiser | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "audio: RNNoise offered in keep_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (voice extractor · keep-vocal only) | RNNoise (Xiph) · trained speech denoiser | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "audio: Demucs v4 + omni-unified offered in keep_vocal",
+      "status": "PASS",
+      "detail": "Demucs v4 · real neural — best quality | omni-voicetarget · fast DSP (mid/side crossover) | BS-Roformer Lite (planned) | Fast Crossover DSP (Offline) | AI Denoise ONNX (voice extractor · keep-vocal only) | RNNoise (Xiph) · trained speech denoiser | omni-unified-v1 · isolation + denoise + normalize (both modes)"
+    },
+    {
+      "name": "audio: loudness target slider visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "audio: loudness apply button visible",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Loudness measured for the selected clip",
+      "status": "PASS",
+      "detail": "-24.1 LUFS"
+    },
+    {
+      "name": "Audio panel has an engine selector",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Audio panel engine can select the ONNX AI Denoise",
+      "status": "PASS",
+      "detail": "neural"
+    },
+    {
+      "name": "Voice Isolation panel visible with clip picker (user selects the media)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "pageErrors": []
+}

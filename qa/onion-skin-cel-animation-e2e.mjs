@@ -72,6 +72,28 @@ async function run() {
   })
   await page.waitForTimeout(400)
 
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
+  // Cel badge & onion skin controls live in the Timing & Onion Skin section.
+  await activateSection('timing')
   const drawingToolbar = page.locator('[data-testid="drawing-toolbar"]')
   assert(await drawingToolbar.isVisible(), 'Drawing floating toolbar visible')
 

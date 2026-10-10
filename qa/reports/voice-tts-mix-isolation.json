@@ -1,0 +1,152 @@
+{
+  "generatedAt": "2026-10-09T23:33:42.069Z",
+  "mixture": {
+    "file": "/home/user/OmniFrame/qa/assets/voice/mix-showcase.wav",
+    "duration": 20
+  },
+  "metrics": {
+    "sideRmsDb": {
+      "mix": -30.852316,
+      "isolated": -200
+    },
+    "sub80RmsDb": {
+      "mix": -20.887624,
+      "isolated": -30.447288
+    },
+    "speechBandRmsDb": {
+      "mix": -21.37934,
+      "isolated": -23.127124
+    },
+    "airBandRmsDb": {
+      "mix": -35.946354,
+      "isolated": -39.465775
+    },
+    "air10kRmsDb": {
+      "mix": -38.402285,
+      "isolated": -43.109244
+    }
+  },
+  "results": [
+    {
+      "name": "TTS+music mixture built with production WAV encoder",
+      "status": "PASS",
+      "detail": "20.0s -> /home/user/OmniFrame/qa/assets/voice/mix-showcase.wav"
+    },
+    {
+      "name": "Mixture clip placed on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Music bed clip placed on timeline",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Both clips are audio kind",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Audio track exists for the combined session",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Voice Isolation panel opens from the Audio tab",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Voice Isolation modal opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Speech formant bandpass enabled by default",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolation executed and modal closed on completion",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolation produced a clip on the timeline",
+      "status": "PASS",
+      "detail": "[\"mix-showcase.wav\",\"full-band.wav\",\"[Vocal Isolated · omni-voicetarget] mix-showcase.wav\"]"
+    },
+    {
+      "name": "Isolated clip created on timeline",
+      "status": "PASS",
+      "detail": "[Vocal Isolated · omni-voicetarget] mix-showcase.wav"
+    },
+    {
+      "name": "Isolated asset registered in media library",
+      "status": "PASS",
+      "detail": "[Vocal Isolated · omni-voicetarget] mix-showcase.wav"
+    },
+    {
+      "name": "Isolated asset has 256-bin waveform",
+      "status": "PASS",
+      "detail": "256"
+    },
+    {
+      "name": "Source mixture clip muted to volume 0 after isolation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Isolated clip is sample-synced with the source clip",
+      "status": "PASS",
+      "detail": "start 20s duration 20s"
+    },
+    {
+      "name": "Timeline combines music bed + mixture + isolated voice",
+      "status": "PASS",
+      "detail": "3 audio clips"
+    },
+    {
+      "name": "Isolated WAV retrieved from the app",
+      "status": "PASS",
+      "detail": "/home/user/OmniFrame/evidence/voice/mix-showcase-isolated.wav"
+    },
+    {
+      "name": "Isolated duration preserved",
+      "status": "PASS",
+      "detail": "20.00s vs 20.00s"
+    },
+    {
+      "name": "Stereo side (instrument) channel collapsed to silence in isolated output",
+      "status": "PASS",
+      "detail": "mix side -30.9dB -> isolated side -200.0dB"
+    },
+    {
+      "name": "Sub-80Hz rumble/kick reduced by the 130Hz speech highpass",
+      "status": "PASS",
+      "detail": "mix -20.9dB -> isolated -30.4dB"
+    },
+    {
+      "name": "Speech band (300Hz-3kHz) preserved",
+      "status": "PASS",
+      "detail": "mix -21.4dB -> isolated -23.1dB"
+    },
+    {
+      "name": ">7.5kHz air band attenuated by the speech lowpass",
+      "status": "PASS",
+      "detail": "mix -35.9dB -> isolated -39.5dB"
+    },
+    {
+      "name": ">10kHz band attenuated further up the rolloff slope",
+      "status": "PASS",
+      "detail": "mix -38.4dB -> isolated -43.1dB"
+    },
+    {
+      "name": "Zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "pageErrors": []
+}

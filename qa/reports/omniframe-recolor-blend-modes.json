@@ -15,6 +15,11 @@
     "detail": ""
   },
   {
+    "name": "R2c OmniFrame recolor blend is distinguished from Drawing layer blend",
+    "pass": true,
+    "detail": "Keeps folds and shadows; recommended · Applies to this OmniFrame segment only; Drawing layer blend is separate."
+  },
+  {
     "name": "R3 dye recolour commits and produces a data URL",
     "pass": true,
     "detail": ""
@@ -67,7 +72,7 @@
   {
     "name": "R5b overlay hint warns about crushed highlights",
     "pass": true,
-    "detail": "Boosts contrast, can crush highlights"
+    "detail": "Boosts contrast, can crush highlights · Applies to this OmniFrame segment only; Drawing layer blend is separate."
   },
   {
     "name": "R6 chosen blend mode is recorded on the character",

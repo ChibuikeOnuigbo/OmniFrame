@@ -14,17 +14,36 @@ import {
   X,
   Sliders,
   HelpCircle,
+  Monitor,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
 import { exportVideo } from '../lib/export'
 import { EDITABLE_SHORTCUTS, SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
 import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
+import {
+  getDesktopInfo,
+  toggleDesktopFullscreen,
+  type DesktopInfo,
+} from '../lib/desktop'
 import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
 import { LayoutManagerModal } from './LayoutManagerModal'
 
 export function TopBar() {
+  // Native desktop (Tauri) info — null in the plain browser build, so the
+  // Desktop badge only renders when the app runs inside the Rust shell.
+  const [desktopInfo, setDesktopInfo] = useState<DesktopInfo | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    getDesktopInfo().then((info) => {
+      if (!cancelled) setDesktopInfo(info)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const undo = useEditor((s) => s.undo)
   const redo = useEditor((s) => s.redo)
   const canUndo = useEditor((s) => s.past.length > 0)
@@ -151,8 +170,11 @@ export function TopBar() {
       <button
         type="button"
         title={leftOpen ? 'Hide panel' : 'Show panel'}
+        aria-label={leftOpen ? 'Hide tool panels' : 'Show tool panels'}
+        aria-expanded={leftOpen}
+        aria-controls="left-panel"
         onClick={() => setLeftOpen(!leftOpen)}
-        className="grid place-items-center h-8 w-8 rounded-md text-ink-400 hover:text-white hover:bg-ink-700"
+        className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
         {leftOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
       </button>
@@ -160,12 +182,30 @@ export function TopBar() {
       <div className="flex items-center gap-2 pl-1 pr-1 sm:pr-2">
         <Film size={18} className="text-brand-400" />
         <span className="hidden sm:inline font-semibold tracking-tight text-sm">OmniFrame</span>
+        {desktopInfo && (
+          <button
+            type="button"
+            data-testid="desktop-badge"
+            aria-label={`Desktop build ${desktopInfo.appVersion} on ${desktopInfo.os} ${desktopInfo.arch}. Toggle fullscreen.`}
+            title={`Desktop build ${desktopInfo.appVersion} · ${desktopInfo.os}/${desktopInfo.arch} — click to toggle fullscreen`}
+            onClick={async () => {
+              const fullscreen = await toggleDesktopFullscreen()
+              if (fullscreen !== null) {
+                setDesktopInfo((d) => (d ? { ...d, fullscreen } : d))
+              }
+            }}
+            className="hidden md:inline-flex items-center gap-1 rounded border border-ok/40 bg-ok/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ok transition-colors hover:bg-ok/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <Monitor size={10} aria-hidden="true" />
+            Desktop · {desktopInfo.os}
+          </button>
+        )}
       </div>
 
       <div className="flex-1" />
 
       {/* history group */}
-      <div className="flex items-center gap-1">
+      <div role="group" aria-label="History actions" className="flex items-center gap-1">
         <IconButton title="Undo (Ctrl+Z)" onClick={undo} disabled={!canUndo}>
           <Undo2 size={16} />
         </IconButton>
@@ -174,28 +214,31 @@ export function TopBar() {
         </IconButton>
       </div>
 
-      <div className="w-px h-6 bg-ink-700" />
+      <div role="separator" aria-orientation="vertical" className="h-6 w-px bg-ink-700" />
 
-      {/* actions group */}
-      <button
-        type="button"
-        onClick={() => fileInput.current?.click()}
-        title="Import media"
-        aria-label="Import media"
-        className="flex items-center gap-2 h-8 px-2 sm:px-3 rounded-md bg-brand text-white text-xs font-medium hover:bg-brand-600 transition-colors"
-      >
-        <Upload size={15} />
-        <span className="hidden sm:inline">Import</span>
-      </button>
-      <input id="topbar-import-input" data-testid="import-input" aria-label="Import media files" ref={fileInput} type="file" accept="video/*,image/*,audio/*" multiple hidden onChange={onPickFiles} />
+      <div role="group" aria-label="Import media">
+        <button
+          type="button"
+          onClick={() => fileInput.current?.click()}
+          title="Import media"
+          aria-label="Import media"
+          className="flex h-8 items-center gap-2 rounded-md bg-brand px-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 sm:px-3"
+        >
+          <Upload size={15} aria-hidden="true" />
+          <span className="hidden sm:inline">Import</span>
+        </button>
+        <input id="topbar-import-input" data-testid="import-input" aria-label="Import media files" ref={fileInput} type="file" accept="video/*,image/*,audio/*" multiple hidden onChange={onPickFiles} />
+      </div>
 
-      <div className="relative">
+      <div role="group" aria-label="Workspace layout" className="relative">
         <button
           type="button"
           data-testid="workspace-layout-btn"
           title="Workspace Layout & Focus Mode"
           aria-label="Workspace Layout"
+          aria-haspopup="dialog"
           aria-expanded={layoutOpen}
+          aria-controls={layoutOpen ? 'layout-popup' : undefined}
           onPointerDown={(event) => event.stopPropagation()}
           onClick={() => setLayoutOpen((open) => !open)}
           className={`grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
@@ -208,144 +251,168 @@ export function TopBar() {
         {layoutOpen && (
           <div
             ref={layoutRef}
+            id="layout-popup"
             data-testid="layout-popup"
             role="dialog"
             aria-label="Workspace Layouts"
             className="fixed right-16 top-12 z-[80] flex w-72 flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.5)] backdrop-blur-xl p-2 text-xs text-ink-200"
           >
-            <div className="flex items-center justify-between px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
-              <span>Workspace Presets</span>
-              <button
-                type="button"
-                data-testid="open-layout-manager-btn"
-                onClick={() => {
-                  setLayoutOpen(false)
-                  setLayoutModalOpen(true)
-                }}
-                className="text-brand-400 hover:underline capitalize"
-              >
-                Manage...
-              </button>
+            <div role="group" aria-labelledby="workspace-presets-heading">
+              <div className="flex items-center justify-between px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
+                <span id="workspace-presets-heading">Workspace Presets</span>
+                <button
+                  type="button"
+                  data-testid="open-layout-manager-btn"
+                  onClick={() => {
+                    setLayoutOpen(false)
+                    setLayoutModalOpen(true)
+                  }}
+                  className="min-h-8 rounded px-1 capitalize text-brand-400 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                >
+                  Manage...
+                </button>
+              </div>
+              {[
+                { id: 'default', label: 'Default' },
+                { id: 'edit', label: 'Edit' },
+                { id: 'timeline-focus', label: 'Timeline Focus' },
+                { id: 'preview-focus', label: 'Preview Focus' },
+                { id: 'drawing', label: 'Drawing & Paint' },
+                { id: 'color', label: 'Color Grading' },
+                { id: '3d', label: '3D Scene & Compositing' },
+                { id: 'minimal', label: 'Minimal' },
+                { id: 'full-canvas', label: 'Full Canvas' },
+                { id: 'audio', label: 'Audio Suite' },
+                { id: 'vfx', label: 'VFX & Tracking' },
+                { id: 'rig', label: 'Rig & Animate' },
+                { id: 'manga', label: 'Manga / MMV Edit' },
+                { id: 'capcut', label: 'CapCut Studio' },
+                { id: 'cinema', label: 'Cinema Review' },
+              ].map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  data-testid={`preset-${p.id}`}
+                  aria-pressed={workspacePreset === p.id && focusMode === 'none'}
+                  onClick={() => {
+                    setWorkspacePreset(p.id as WorkspacePreset)
+                    setLayoutOpen(false)
+                  }}
+                  className={`flex min-h-8 items-center justify-between gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
+                    workspacePreset === p.id && focusMode === 'none' ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <WorkspaceSchematic preset={p.id as WorkspacePreset} />
+                    <span className="truncate">{p.label}</span>
+                  </div>
+                  {workspacePreset === p.id && focusMode === 'none' && <Check size={14} className="shrink-0 text-brand-400" />}
+                </button>
+              ))}
             </div>
-            {[
-              { id: 'default', label: 'Default' },
-              { id: 'edit', label: 'Edit' },
-              { id: 'timeline-focus', label: 'Timeline Focus' },
-              { id: 'preview-focus', label: 'Preview Focus' },
-              { id: 'drawing', label: 'Drawing & Paint' },
-              { id: 'color', label: 'Color Grading' },
-              { id: '3d', label: '3D Scene & Compositing' },
-              { id: 'minimal', label: 'Minimal' },
-              { id: 'full-canvas', label: 'Full Canvas' },
-            ].map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                data-testid={`preset-${p.id}`}
-                onClick={() => {
-                  setWorkspacePreset(p.id as WorkspacePreset)
-                  setLayoutOpen(false)
-                }}
-                className={`flex items-center justify-between gap-2 px-2 py-1.5 rounded-md hover:bg-ink-700 transition-colors ${
-                  workspacePreset === p.id && focusMode === 'none' ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <WorkspaceSchematic preset={p.id as WorkspacePreset} />
-                  <span className="truncate">{p.label}</span>
-                </div>
-                {workspacePreset === p.id && focusMode === 'none' && <Check size={14} className="shrink-0 text-brand-400" />}
-              </button>
-            ))}
 
             <div className="my-1 border-t border-ink-700" />
 
-            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
-              Focus Mode
+            <div role="group" aria-labelledby="workspace-focus-heading">
+              <div id="workspace-focus-heading" className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
+                Focus Mode
+              </div>
+              {[
+                { id: 'none', label: 'Normal Workspace' },
+                { id: 'preview', label: 'Preview Focus' },
+                { id: 'timeline', label: 'Timeline Focus' },
+                { id: 'one-panel', label: 'One Panel Only (Inspector)' },
+                { id: 'canvas-only', label: 'Hide Everything (Zen)' },
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  data-testid={`focus-${m.id}`}
+                  aria-pressed={focusMode === m.id}
+                  onClick={() => {
+                    setFocusMode(m.id as FocusMode)
+                    setLayoutOpen(false)
+                  }}
+                  className={`flex min-h-8 items-center justify-between rounded-md px-2 py-1.5 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
+                    focusMode === m.id ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
+                  }`}
+                >
+                  <span>{m.label}</span>
+                  {focusMode === m.id && <Check size={14} className="text-brand-400" />}
+                </button>
+              ))}
             </div>
-            {[
-              { id: 'none', label: 'Normal Workspace' },
-              { id: 'preview', label: 'Preview Focus' },
-              { id: 'timeline', label: 'Timeline Focus' },
-              { id: 'one-panel', label: 'One Panel Only (Inspector)' },
-              { id: 'canvas-only', label: 'Hide Everything (Zen)' },
-            ].map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                data-testid={`focus-${m.id}`}
-                onClick={() => {
-                  setFocusMode(m.id as FocusMode)
-                  setLayoutOpen(false)
-                }}
-                className={`flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-ink-700 transition-colors ${
-                  focusMode === m.id ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
-                }`}
-              >
-                <span>{m.label}</span>
-                {focusMode === m.id && <Check size={14} className="text-brand-400" />}
-              </button>
-            ))}
           </div>
         )}
       </div>
 
-      <button
-        type="button"
-        data-testid="help-info-button"
-        data-help="true"
-        title="Help and editor specifications (?)"
-        aria-label="Help and specifications"
-        onClick={() => {
-          setSettingsCategory('cursor')
-          setSettingsOpen(true)
-        }}
-        className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-      >
-        <HelpCircle size={15} />
-      </button>
+      <div role="group" aria-label="Help and settings" className="flex items-center gap-1">
+        <button
+          type="button"
+          data-testid="help-info-button"
+          data-help="true"
+          title="Help and editor specifications (?)"
+            aria-label="Help and specifications"
+            aria-haspopup="dialog"
+            aria-expanded={settingsOpen}
+          aria-controls={settingsOpen ? 'settings-popup' : undefined}
+          onClick={() => {
+            setSettingsCategory('cursor')
+            setSettingsOpen(true)
+          }}
+          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          <HelpCircle size={15} />
+        </button>
 
-      <button
-        type="button"
-        data-testid="settings-button"
-        title="Settings"
-        aria-label="Settings"
-        aria-expanded={settingsOpen}
-        onPointerDown={(event) => event.stopPropagation()}
-        onClick={() => setSettingsOpen((open) => !open)}
-        className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-      >
-        <Settings size={15} />
-      </button>
+        <button
+          type="button"
+          data-testid="settings-button"
+          title="Settings"
+            aria-label="Settings"
+            aria-haspopup="dialog"
+            aria-expanded={settingsOpen}
+          aria-controls={settingsOpen ? 'settings-popup' : undefined}
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => setSettingsOpen((open) => !open)}
+          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          <Settings size={15} />
+        </button>
+      </div>
 
-      <button
-        type="button"
-        data-testid="export-video-btn"
-        onClick={onExport}
-        disabled={exporting}
-        title={exporting ? 'Exporting video' : 'Export video'}
-        aria-label={exporting ? 'Exporting video' : 'Export video'}
-        className="flex items-center gap-2 h-8 px-2 sm:px-3 rounded-md bg-ink-800 border border-ink-700 text-xs font-medium hover:bg-ink-700 transition-colors disabled:opacity-50"
-      >
-        <Download size={15} />
-        <span className="hidden sm:inline">{exporting ? 'Exporting…' : 'Export'}</span>
-      </button>
+      <div role="group" aria-label="Export video">
+        <button
+          type="button"
+          data-testid="export-video-btn"
+          onClick={onExport}
+          disabled={exporting}
+          title={exporting ? 'Exporting video' : 'Export video'}
+          aria-label={exporting ? 'Exporting video' : 'Export video'}
+          className="flex h-8 items-center gap-2 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs font-medium transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 disabled:opacity-50 sm:px-3"
+        >
+          <Download size={15} />
+          <span className="hidden sm:inline">{exporting ? 'Exporting…' : 'Export'}</span>
+        </button>
+      </div>
 
       {settingsOpen && (
         <div
           ref={settingsRef}
+          id="settings-popup"
           data-testid="settings-popup"
           role="dialog"
-          aria-label="Settings"
+          aria-labelledby="settings-heading"
           className="fixed inset-x-2 top-14 sm:inset-auto sm:right-3 sm:top-12 z-[80] flex w-auto sm:w-[min(520px,calc(100vw-24px))] max-h-[min(540px,calc(100vh-64px))] flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.6)] backdrop-blur-xl"
         >
           <header className="border-b border-ink-700 p-3">
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-sm font-semibold">Settings</h2>
+              <h2 id="settings-heading" className="text-sm font-semibold">Settings</h2>
               <button
+                type="button"
                 aria-label="Close settings"
                 onClick={() => setSettingsOpen(false)}
-                className="grid h-7 w-7 place-items-center rounded-md text-ink-400 hover:bg-ink-700 hover:text-white"
+                className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 <X size={14} />
               </button>
@@ -678,6 +745,7 @@ export function TopBar() {
                     <div className="grid grid-cols-2 gap-2">
                       {(
                         [
+                          { id: 'pro-precision', label: 'Pro Precision', desc: 'Compact NLE-style, zero glow' },
                           { id: 'mac-gamified', label: 'macOS Gamified', desc: 'Enlarged + power core & glow' },
                           { id: 'mac-sonoma-pro', label: 'macOS Sonoma Pro', desc: 'Authentic Apple vector curves' },
                           { id: 'cyber-violet', label: 'Cyber Violet', desc: 'Neon violet & cyan reticles' },
@@ -705,12 +773,13 @@ export function TopBar() {
                   {/* Cursor Size */}
                   <div className="space-y-1.5">
                     <div className="text-[11px] font-medium text-ink-300">Cursor Scale Profile</div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                       {(
                         [
-                          { id: 'standard', label: 'Standard', desc: '0.95x classic' },
-                          { id: 'bigger', label: 'Bigger (Gamified)', desc: '1.20x enlarged' },
-                          { id: 'mega', label: 'Mega', desc: '1.40x high-vis' },
+                          { id: 'compact', label: 'Compact', desc: '0.70x precision work' },
+                          { id: 'standard', label: 'Standard', desc: '0.85x native size' },
+                          { id: 'bigger', label: 'Bigger', desc: '1.10x enlarged' },
+                          { id: 'mega', label: 'Mega', desc: '1.35x high-vis' },
                         ] as const
                       ).map((item) => (
                         <button

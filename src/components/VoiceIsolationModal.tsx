@@ -35,13 +35,19 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
   const [error, setError] = useState<string | null>(null)
   const [completed, setCompleted] = useState<boolean>(false)
 
+  // Sync the target clip only when the modal (re)opens or is opened with a
+  // new initial clip. Re-running on selectedClipId changes would immediately
+  // clobber the user's dropdown selection back to the initial clip, making
+  // the selector a no-op whenever the modal was opened from a specific clip.
   React.useEffect(() => {
+    if (!isOpen) return
     if (initialClipId) {
       setSelectedClipId(initialClipId)
     } else if (audioVideoClips.length > 0 && !selectedClipId) {
       setSelectedClipId(audioVideoClips[0].id)
     }
-  }, [initialClipId, audioVideoClips, selectedClipId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialClipId])
 
   if (!isOpen) return null
 

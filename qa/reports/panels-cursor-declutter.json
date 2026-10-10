@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-10-09T00:17:44.303Z",
+  "results": [
+    {
+      "name": "Default cursor size is Standard (0.85x)",
+      "status": "PASS",
+      "detail": "standard"
+    },
+    {
+      "name": "Default cursor pack is Pro Precision",
+      "status": "PASS",
+      "detail": "pro-precision"
+    },
+    {
+      "name": "Standard scale = 0.85",
+      "status": "PASS",
+      "detail": "scale(0.85)"
+    },
+    {
+      "name": "Pro Precision arrow has no gamified energy dot",
+      "status": "PASS",
+      "detail": "0 circles"
+    },
+    {
+      "name": "Compact size applies live",
+      "status": "PASS",
+      "detail": "compact"
+    },
+    {
+      "name": "Compact scale = 0.7",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Pack switch applies live",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Gamified pack restores the energy dot",
+      "status": "PASS",
+      "detail": "1 circles"
+    },
+    {
+      "name": "Restored Pro Precision / Standard defaults",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Inspector starts docked & open",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Edge drag widens inspector (280 → ~360)",
+      "status": "PASS",
+      "detail": "width 360px"
+    },
+    {
+      "name": "Float window opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Header drag moves the float window",
+      "status": "PASS",
+      "detail": "x 1036→916, y 88→178"
+    },
+    {
+      "name": "Corner grip resizes the float window",
+      "status": "PASS",
+      "detail": "w 340→410, h 560→609"
+    },
+    {
+      "name": "Dock button returns the inspector to the layout",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Docked inspector keeps the dragged width",
+      "status": "PASS",
+      "detail": "360px"
+    },
+    {
+      "name": "Left dock edge drag widens panel",
+      "status": "PASS",
+      "detail": "320→400px"
+    },
+    {
+      "name": "Zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "pageErrors": []
+}

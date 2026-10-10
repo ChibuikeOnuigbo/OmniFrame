@@ -1,0 +1,58 @@
+{
+  "input": {
+    "vocal_like_energy_frac": 0.6955359542495645,
+    "vocal_like_frames_frac": 0.6530868854520306,
+    "peak_vocal_window_start_s": 124.08743764172335,
+    "rms_dbfs": -3.9214098706648643,
+    "seconds": 184.84244897959184,
+    "side_fraction": 0.32404375076293945,
+    "model_vocal_share": 0.6435481372474566
+  },
+  "stems": [
+    {
+      "vocal_like_energy_frac": 0.7629676552195033,
+      "vocal_like_frames_frac": 0.331698730038979,
+      "peak_vocal_window_start_s": 7.4071655328798185,
+      "rms_dbfs": -22.69148006294385,
+      "seconds": 184.84244897959184,
+      "side_fraction": 0.9605544209480286,
+      "model_vocal_share": 0.3363858446259858,
+      "capture_db_vs_input": 0.4018654224089717,
+      "file": "bass.f32"
+    },
+    {
+      "vocal_like_energy_frac": 0.6006446055408716,
+      "vocal_like_frames_frac": 0.4672450647554382,
+      "peak_vocal_window_start_s": 62.85641723356009,
+      "rms_dbfs": -9.088313229560258,
+      "seconds": 184.84244897959184,
+      "side_fraction": 0.07733768969774246,
+      "model_vocal_share": 0.47093433829021936,
+      "capture_db_vs_input": -0.6370200375974711,
+      "file": "drums.f32"
+    },
+    {
+      "vocal_like_energy_frac": 0.9386649834039436,
+      "vocal_like_frames_frac": 0.8213252860555765,
+      "peak_vocal_window_start_s": 37.268027210884355,
+      "rms_dbfs": -6.580898824874421,
+      "seconds": 184.84244897959184,
+      "side_fraction": 0.4368743896484375,
+      "model_vocal_share": 0.8096618437593135,
+      "capture_db_vs_input": 1.3019103195352602,
+      "file": "other.f32"
+    },
+    {
+      "vocal_like_energy_frac": NaN,
+      "vocal_like_frames_frac": 0.0,
+      "peak_vocal_window_start_s": 0.09287981859410431,
+      "rms_dbfs": -33.96185437384992,
+      "seconds": 184.84244897959184,
+      "side_fraction": NaN,
+      "model_vocal_share": NaN,
+      "capture_db_vs_input": NaN,
+      "file": "vocals.f32"
+    }
+  ],
+  "verdict": "OK: vocals stem captured the vocal-like content"
+}

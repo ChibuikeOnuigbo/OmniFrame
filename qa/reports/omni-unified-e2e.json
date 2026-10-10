@@ -1,0 +1,19 @@
+{
+  "when": "2026-10-09T23:33:24.439Z",
+  "engine": "omni-unified",
+  "checks": "ALL PASS",
+  "parity": {
+    "step": 1020000,
+    "maskMaxDiff": 0.000007539987564086914,
+    "gainDiff": 0
+  },
+  "measurements": {
+    "mixSnrDb": -2.01,
+    "keepSnrDb": 4.28,
+    "keepRmsDbfs": -20.11,
+    "remSnrDb": -13.93,
+    "remRmsDbfs": -18,
+    "sr": 44100
+  },
+  "pageErrors": []
+}

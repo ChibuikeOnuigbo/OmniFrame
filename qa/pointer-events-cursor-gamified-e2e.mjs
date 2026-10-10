@@ -71,7 +71,7 @@ async function run() {
       size: size1,
       pack: pack1,
       activeClass: hasCursorClass,
-      passed: state1 === 'default' && size1 === 'bigger' && hasCursorClass,
+      passed: state1 === 'default' && size1 === 'standard' && hasCursorClass,
     })
 
     const ssDefault = path.join(EVIDENCE_DIR, 'cursor-mac-default.png')

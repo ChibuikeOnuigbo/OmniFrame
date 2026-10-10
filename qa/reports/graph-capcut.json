@@ -1,0 +1,117 @@
+{
+  "suite": "graph-capcut",
+  "pass": 22,
+  "fail": 0,
+  "results": [
+    {
+      "name": "two keyframes render on the active curve",
+      "status": "PASS",
+      "detail": "2 nodes"
+    },
+    {
+      "name": "keyframe nodes are DIAMONDS (polygons), not circles",
+      "status": "PASS",
+      "detail": "{\"count\":2,\"diamonds\":2,\"circles\":0,\"hitAreas\":2}"
+    },
+    {
+      "name": "every diamond has an invisible grab area",
+      "status": "PASS",
+      "detail": "2/2"
+    },
+    {
+      "name": "diamond markers are square and properly sized",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "canvas labels state Y · value (CapCut semantics)",
+      "status": "PASS",
+      "detail": "Y · value (px) | X · time (s)"
+    },
+    {
+      "name": "canvas labels state X · time (CapCut semantics)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "segment band visible for the auto-selected key",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "selecting a key keeps its segment band",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "segment band spans a real width",
+      "status": "PASS",
+      "detail": "252px"
+    },
+    {
+      "name": "readout shows the keyframe-pair destination",
+      "status": "PASS",
+      "detail": "Key 0.00s · 0.0px → 2.00s · 0.0px FREE ALIGNED MIRRORED AUTO Extrapolation: Hold (Constant"
+    },
+    {
+      "name": "primary preset linear visible as thumbnail",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "primary preset ease-in visible as thumbnail",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "primary preset ease-out visible as thumbnail",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "primary preset ease-in-out visible as thumbnail",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "presets render curve thumbnails (shape, not text)",
+      "status": "PASS",
+      "detail": "4 thumbnails"
+    },
+    {
+      "name": "exotic presets hidden until More opens",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "More reveals all six exotic presets",
+      "status": "PASS",
+      "detail": "cubic-in,cubic-out,back,bounce,elastic,constant"
+    },
+    {
+      "name": "applying a preset marks it active",
+      "status": "PASS",
+      "detail": "aria-pressed=true"
+    },
+    {
+      "name": "double-click adds a custom point on the curve",
+      "status": "PASS",
+      "detail": "3 nodes"
+    },
+    {
+      "name": "tangent handles are squares with hit areas",
+      "status": "PASS",
+      "detail": "{\"inRect\":true,\"outRect\":true,\"inCircle\":false}"
+    },
+    {
+      "name": "dragging a diamond updates the keyframe time",
+      "status": "PASS",
+      "detail": "0.00s → 0.96s"
+    },
+    {
+      "name": "zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ]
+}

@@ -46,23 +46,41 @@ export function CustomCursor() {
   const [ripples, setRipples] = useState<ClickRipple[]>([])
   const nextRippleId = useRef(0)
 
-  // Determine size scale factor
+  // Determine size scale factor. Real OS cursors render ~13-22 CSS px tall;
+  // the base SVGs are 26-40px boxes, so "standard" is 0.85 to land near
+  // native size and "compact" goes smaller for precision work (blade/drawing).
   const scale = useMemo(() => {
     switch (cursorConfig.size) {
-      case 'standard':
-        return 0.95
+      case 'compact':
+        return 0.7
       case 'mega':
-        return 1.4
+        return 1.35
       case 'bigger':
+        return 1.1
+      case 'standard':
       default:
-        return 1.2 // "bugger" enlarged gamified as requested
+        return 0.85
     }
   }, [cursorConfig.size])
+
+  // Pro Precision keeps the glyph itself clean: no energy dots or glow accents.
+  const isProPack = (cursorConfig.pack || cursorConfig.theme) === 'pro-precision'
 
   // Theme styling colors based on pack / theme
   const themeColors = useMemo(() => {
     const activePack = cursorConfig.pack || cursorConfig.theme
     switch (activePack) {
+      case 'pro-precision':
+        return {
+          fill: '#0b0d13',
+          stroke: '#f8fafc',
+          shadow: 'rgba(0, 0, 0, 0.5)',
+          accent: '#6d5efc',
+          plusBg: '#6d5efc',
+          helpBg: '#d97706',
+          dropBg: '#059669',
+          noDropBg: '#dc2626',
+        }
       case 'cyber-violet':
         return {
           fill: '#0f051d',
@@ -437,8 +455,10 @@ export function CustomCursor() {
               d="m6.431 17 1.765-.941-2.775-5.202h3.604l-8.025-8.043v11.188l2.53-2.442z"
               fill={themeColors.fill}
             />
-            {/* Gamified Core Energy Dot */}
-            <circle cx="2.6" cy="3.6" r="1.3" fill={themeColors.accent} opacity="0.9" />
+            {/* Gamified Core Energy Dot (suppressed in Pro Precision) */}
+            {!isProPack && (
+              <circle cx="2.6" cy="3.6" r="1.3" fill={themeColors.accent} opacity="0.9" />
+            )}
           </svg>
         )}
 
@@ -458,8 +478,8 @@ export function CustomCursor() {
               d="m9 2.8c-1 0-1.8 0.8-1.8 1.8v9.8h-2.2c-1 0-1.8 0.8-1.8 1.8 0 0.8 0.4 1.5 1.1 2.2l5.4 5.4c0.8 0.8 2 1.6 3.6 1.6h5c1.5 0 2.6-1.1 2.6-2.6v-8.7c0-1-0.8-1.8-1.8-1.8-0.4 0-0.8 0.1-1.1 0.4v-1.8c0-1-0.8-1.8-1.8-1.8-0.4 0-0.8 0.1-1.1 0.4v-1.8c0-1-0.8-1.8-1.8-1.8-0.4 0-0.8 0.1-1.1 0.4v-3.3c0-1-0.8-1.8-1.2-1.8z"
               fill={themeColors.fill}
             />
-            {/* Tactile Fingertip Glow */}
-            <circle cx="9" cy="4.2" r="1.4" fill={themeColors.accent} />
+            {/* Tactile Fingertip Glow (suppressed in Pro Precision) */}
+            {!isProPack && <circle cx="9" cy="4.2" r="1.4" fill={themeColors.accent} />}
           </svg>
         )}
 

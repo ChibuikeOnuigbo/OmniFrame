@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-02T23:44:57.497Z",
+  "timestamp": "2026-10-05T11:47:30.618Z",
   "status": "SUCCESS",
   "unifiedSelectionSubtool": {
     "typesTested": [
@@ -17,6 +17,10 @@
     "assetName": "Room Leather Chair & Towel (Real Photo).jpg",
     "resolution": "1448x1086",
     "detectedObjects": [
+      {
+        "id": "char_chair",
+        "name": "Leather Armchair"
+      },
       {
         "id": "char_towel",
         "name": "Draped Armchair Towel"

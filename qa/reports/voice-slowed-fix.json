@@ -1,0 +1,289 @@
+{
+  "date": "2026-10-10T00:09:26.374Z",
+  "results": [
+    {
+      "name": "A: real slowed track detected",
+      "ok": true,
+      "detail": "factor x1.45 on 108s track (grid x1=0.000 x1.15=0.002 x1.3=0.277 x1.45=0.440 x1.6=0.337), native voice-detectability 0.0005"
+    },
+    {
+      "name": "C: normal-speed mix is a no-op",
+      "ok": true,
+      "detail": "factor 1 after 1 Silero pass(es), baseline 0.823 (>0.08 = clearly voiced at native speed)"
+    },
+    {
+      "name": "B: speed-corrected separation beats direct (SI-SDR)",
+      "ok": true,
+      "detail": "fixed 19.48 dB vs direct 18.46 dB (1.01 dB gain)"
+    },
+    {
+      "name": "B: output restored to exact input length",
+      "ok": true,
+      "detail": "fixed 264600 samples vs input 264600 (direct 264600, native mix 198450)"
+    },
+    {
+      "name": "D: auto-detection fired in the action",
+      "ok": true,
+      "detail": "factor x1.45, action log: \"40: Checking for slowed production…\"; old path log had 0 speed messages"
+    },
+    {
+      "name": "D: fixed acapella keeps the input timing",
+      "ok": true,
+      "detail": "fixed 264600 samples vs input 264600"
+    },
+    {
+      "name": "D: auto fix never degrades the output",
+      "ok": true,
+      "detail": "voice-like energy 0.982 → 0.981, recovery 0.101 → 0.106 on this prominent-vocal window (both approaches already work here — the fix's big win is on buried vocals, see E and the full-track evidence)"
+    },
+    {
+      "name": "E: speed-corrected separation recovers buried vocals",
+      "ok": true,
+      "detail": "Silero at natural pitch — direct mean 0.454 / voice-like energy 52.9% vs fixed mean 0.681 / voice-like energy 78.7% (recovery 88% → 183%)"
+    },
+    {
+      "name": "E: fixed acapella keeps the input timing",
+      "ok": true,
+      "detail": "fixed 264600 samples vs input 264600"
+    },
+    {
+      "name": "R: polyphase sinc round-trip fidelity",
+      "ok": true,
+      "detail": "bandlimited (<=12 kHz) speed-up/slow-back SNR — x1.45: 67.2 dB, x4:3: 76.6 dB (bar 45; WebAudio playbackRate measured 10.5-11.4 dB)"
+    },
+    {
+      "name": "G: natural-pitch acapella comes back at the corrected speed",
+      "ok": true,
+      "detail": "duration 4.138s vs expected 4.138s (input 6.0s / factor), asset \"[Vocal Isolated · htdemucs-v4] rw-nat · natural pitch.wav\""
+    },
+    {
+      "name": "G: real voice directly audible at natural pitch",
+      "ok": true,
+      "detail": "Silero on the raw output: mean 0.929, voiced 95%, peak 1.00; peak |sample| 0.664, non-finite 0"
+    },
+    {
+      "name": "F: instrumental track not flagged",
+      "ok": true,
+      "detail": "factor 1 after scanning 4 factors (x1=0.025 x1.15=0.048 x1.3=0.046 x1.45=0.021 x1.6=0.039) — the harmonic pad scores 0.02-0.05 on Silero at every speed but never decisively, so the gate declines; action log shows the routine check and no detection"
+    },
+    {
+      "name": "F: instrumental keep_vocal output stays near-silent",
+      "ok": true,
+      "detail": "output -75.6 dBFS vs mix -11.6 dBFS (64.0 dB below, bar 20), length 264600 === 264600"
+    },
+    {
+      "name": "N: native DSP core active in-browser",
+      "ok": true,
+      "detail": "wasm module (public/wasm/omni-dsp.wasm, compiled from native/dsp-core/omni_dsp.cpp) instantiated via the app pipeline; all DSP ops above ran natively with the JS modules as fallback"
+    },
+    {
+      "name": "N: native core numerically identical to JS fallback",
+      "ok": true,
+      "detail": "max|diff| vs JS — resample 0.00e+0 (bar 1e-5), LS de-leak 0.00e+0, pass average 0.00e+0, peak scale 0.00e+0 (bar 1e-6)"
+    },
+    {
+      "name": "M: model load shows smooth real progress and auto-dismisses",
+      "ok": true,
+      "detail": "phases download -> compile -> ready, 3 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
+    },
+    {
+      "name": "zero runtime page errors",
+      "ok": true,
+      "detail": "clean"
+    }
+  ],
+  "detail": {
+    "realTrackDetection": {
+      "factor": 1.45,
+      "baselineMean": 0.000477876455905936,
+      "bestMean": 0.4400154743045799,
+      "scanned": [
+        {
+          "factor": 1,
+          "mean": 0.000477876455905936,
+          "frames": 0
+        },
+        {
+          "factor": 1.15,
+          "mean": 0.002271458610191423,
+          "frames": 0.0008179959100204499
+        },
+        {
+          "factor": 1.3,
+          "mean": 0.2769366613263286,
+          "frames": 0.26537216828478966
+        },
+        {
+          "factor": 1.45,
+          "mean": 0.4400154743045799,
+          "frames": 0.42857142857142855
+        },
+        {
+          "factor": 1.6,
+          "mean": 0.33713423579880375,
+          "frames": 0.3511667615253273
+        }
+      ]
+    },
+    "synthetic": {
+      "siSdrDirect": 18.46,
+      "siSdrFixed": 19.48
+    },
+    "realSegment": {
+      "detection": {
+        "factor": 1.45,
+        "baselineMean": 0.01227138020138052,
+        "bestMean": 0.8430841643680898,
+        "scanned": [
+          {
+            "factor": 1,
+            "mean": 0.01227138020138052,
+            "frames": 0
+          },
+          {
+            "factor": 1.15,
+            "mean": 0.4929961428686154,
+            "frames": 0.49079754601226994
+          },
+          {
+            "factor": 1.3,
+            "mean": 0.7860538599391779,
+            "frames": 0.8541666666666666
+          },
+          {
+            "factor": 1.45,
+            "mean": 0.8430841643680898,
+            "frames": 0.9069767441860465
+          },
+          {
+            "factor": 1.6,
+            "mean": 0.8277223754642357,
+            "frames": 0.8803418803418803
+          }
+        ]
+      },
+      "actionLog": [
+        "40: Checking for slowed production…",
+        "42: Slowed production detected (×1.45) — separating at corrected speed",
+        "6: Demucs v4: speed-normalizing ×1.45 (slowed production)…"
+      ],
+      "richVet": {
+        "direct": {
+          "voiceLikeFrac": 0.982476261311023,
+          "voiceEnergy": 5131.480039476745,
+          "spedMean": 0.9061736808728802,
+          "spedFrames": 0.9224806201550387,
+          "rms": 0.16926864649908513
+        },
+        "fixed": {
+          "voiceLikeFrac": 0.9809586489213283,
+          "voiceEnergy": 5339.358843289041,
+          "spedMean": 0.9210167305414066,
+          "spedFrames": 0.9534883720930233,
+          "rms": 0.1727841391486706
+        },
+        "directRecovery": 0.10144558301877675,
+        "fixedRecovery": 0.10555519394734905
+      }
+    },
+    "buriedWindow": {
+      "direct": {
+        "voiceLikeFrac": 0.529369842850043,
+        "voiceEnergy": 2591.6719679113157,
+        "spedMean": 0.45408242132312565,
+        "spedFrames": 0.46511627906976744,
+        "rms": 0.16380399175741828
+      },
+      "fixed": {
+        "voiceLikeFrac": 0.7865423966079182,
+        "voiceEnergy": 5392.623036610183,
+        "spedMean": 0.6810086240140043,
+        "spedFrames": 0.7286821705426356,
+        "rms": 0.19386660493051433
+      },
+      "directRecovery": 0.8777028938047192,
+      "fixedRecovery": 1.8262808345476198
+    },
+    "instrumentalNoOp": {
+      "detection": {
+        "factor": 1,
+        "baselineMean": 0.024711543225987072,
+        "scanned": [
+          {
+            "factor": 1,
+            "mean": 0.024711543225987072,
+            "frames": 0
+          },
+          {
+            "factor": 1.15,
+            "mean": 0.04767600268674043,
+            "frames": 0
+          },
+          {
+            "factor": 1.3,
+            "mean": 0.04592745937407017,
+            "frames": 0
+          },
+          {
+            "factor": 1.45,
+            "mean": 0.021315974782603657,
+            "frames": 0
+          },
+          {
+            "factor": 1.6,
+            "mean": 0.038776507744422324,
+            "frames": 0
+          }
+        ]
+      },
+      "mixLvl": -11.590919605724348,
+      "outLvl": -75.59214622885113
+    },
+    "resamplerFidelity": {
+      "x145": 67.23794815297738,
+      "x133": 76.62340923083053,
+      "errors": []
+    },
+    "nativeDsp": {
+      "active": true,
+      "resampleMaxDiff": 0,
+      "resampleLenOk": true,
+      "lsMaxDiff": 0,
+      "avgMaxDiff": 0,
+      "peakMaxDiff": 0,
+      "avgMissing": 0,
+      "errors": []
+    },
+    "modelLoadProgress": {
+      "phases": [
+        "download",
+        "compile",
+        "ready"
+      ],
+      "maxPct": 100,
+      "finalPct": 100,
+      "monodrome": true,
+      "byteUpdates": 3,
+      "sessionOk": true,
+      "cardInDom": true,
+      "dismissed": true,
+      "errors": []
+    },
+    "naturalPitch": {
+      "name": "[Vocal Isolated · htdemucs-v4] rw-nat · natural pitch.wav",
+      "duration": 4.137936507936508,
+      "expectedDuration": 4.137931034482759,
+      "silero": {
+        "mean": 0.9290762668432191,
+        "frames": 0.9534883720930233,
+        "peak": 0.9999606609344482
+      },
+      "actionLog": [
+        "40: Checking for slowed production…",
+        "42: Slowed production detected (×1.45) — separating at corrected speed",
+        "44: Keeping the vocals at natural pitch (×1.45 speed, not slowed back)",
+        "6: Demucs v4: speed-normalizing ×1.45 (slowed production)…"
+      ]
+    }
+  }
+}

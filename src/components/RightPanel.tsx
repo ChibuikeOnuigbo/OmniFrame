@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
+  PanelRight,
   PanelRightClose,
   PanelRightOpen,
+  PictureInPicture2,
+  X,
   Trash2,
   Scissors,
   AudioLines,
@@ -19,6 +22,114 @@ import type { Clip } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
+import { isDemucsModelAvailable } from '../lib/demucs/index.ts'
+import { loudnessGain, measureIntegratedLufs } from '../lib/loudness'
+import { SectionsNavigator } from './SectionsNav'
+import { placedEffectLabels, activeEffectKeys } from '../lib/adjustment'
+
+/**
+ * "Placed Effects" inspector section: every LUT / effect placed on the
+ * selected clip (its own grade + nested adjustment layers for compounds).
+ * Clicking a listed LUT re-selects the clip, which re-shows its blue
+ * timeline border.
+ */
+function PlacedEffectsSection({ clip }: { clip: Clip }) {
+  const sequences = useEditor((s) => s.sequences)
+  const selectClip = useEditor((s) => s.selectClip)
+  const setLutIntensity = useEditor((s) => s.setLutIntensity)
+  const toggleLutEnabled = useEditor((s) => s.toggleLutEnabled)
+  const removeLutFromClip = useEditor((s) => s.removeLutFromClip)
+
+  const labels = placedEffectLabels(clip, sequences)
+  const ownLuts = clip.adjustment?.luts || []
+  const effectKeys = activeEffectKeys(clip.effects)
+  const nested: Clip[] =
+    clip.kind === 'compound'
+      ? (() => {
+          const seq = sequences.find((s) => s.id === clip.sourceSequenceId)
+          return seq ? seq.clips : clip.originalChildClips || []
+        })().filter((c) => c.kind === 'adjustment')
+      : []
+
+  if (!labels.length && clip.kind !== 'adjustment') return null
+
+  return (
+    <Section title="Placed Effects">
+      {labels.length === 0 && clip.kind === 'adjustment' && (
+        <p className="text-[11px] text-ink-500">Empty adjustment layer — place a LUT from the Effects tab.</p>
+      )}
+      {effectKeys.length > 0 && (
+        <Field label="Clip effects">
+          <span className="text-[11px] text-ink-300">{effectKeys.map((k) => k.replace(/([A-Z])/g, ' $1')).join(', ')}</span>
+        </Field>
+      )}
+      {ownLuts.map((lut) => (
+        <div key={lut.id} data-testid={`inspector-lut-${lut.id}`} className="flex items-center gap-1.5">
+          <button
+            type="button"
+            data-testid={`inspector-lut-power-${lut.id}`}
+            title={lut.enabled ? 'Disable' : 'Enable'}
+            aria-label={`Toggle ${lut.name}`}
+            onClick={() => toggleLutEnabled(clip.id, lut.id)}
+            className={`p-0.5 rounded ${lut.enabled ? 'text-emerald-300' : 'text-ink-600'}`}
+          >
+            <Activity size={11} />
+          </button>
+          <button
+            type="button"
+            className="flex-1 min-w-0 truncate text-left text-[11px] text-ink-200 hover:text-white"
+            title={`${lut.name} — click to re-show the timeline border`}
+            onClick={() => selectClip(clip.id)}
+          >
+            {lut.name}
+          </button>
+          <input
+            type="range"
+            data-testid={`inspector-lut-intensity-${lut.id}`}
+            min={0}
+            max={1}
+            step={0.05}
+            value={lut.intensity}
+            aria-label={`Intensity of ${lut.name}`}
+            onChange={(e) => setLutIntensity(clip.id, lut.id, parseFloat(e.target.value))}
+            className="of-range w-20"
+          />
+          <span className="w-8 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(lut.intensity * 100)}%</span>
+          <button
+            type="button"
+            data-testid={`inspector-lut-remove-${lut.id}`}
+            aria-label={`Remove ${lut.name}`}
+            title={`Remove ${lut.name}`}
+            onClick={() => removeLutFromClip(clip.id, lut.id)}
+            className="p-0.5 rounded text-ink-500 hover:text-red-300"
+          >
+            <Trash2 size={11} />
+          </button>
+        </div>
+      ))}
+      {nested.map((layer) => {
+        const inner = [
+          ...activeEffectKeys(layer.effects).map((k) => k),
+          ...(layer.adjustment?.luts || []).map((l) => l.name),
+        ]
+        return (
+          <div key={layer.id} data-testid={`inspector-nested-${layer.id}`} className="flex items-center gap-1.5">
+            <Diamond size={10} className="text-cyan-300 shrink-0" />
+            <button
+              type="button"
+              className="flex-1 min-w-0 truncate text-left text-[11px] text-ink-200 hover:text-white"
+              title="Nested adjustment layer — click to select it"
+              onClick={() => selectClip(layer.id)}
+            >
+              {layer.name}
+            </button>
+            <span className="text-[10px] text-ink-500 truncate max-w-[45%]">{inner.join(', ')}</span>
+          </div>
+        )
+      })}
+    </Section>
+  )
+}
 
 function ClipInspector({ clip }: { clip: Clip }) {
   const assets = useEditor((s) => s.assets)
@@ -39,8 +150,57 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const [isolationEnabled, setIsolationEnabled] = useState(false)
   const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
+  const [isolationStrength, setIsolationStrength] = useState(0.92)
+  const [demucsReady, setDemucsReady] = useState<boolean | null>(null)
+  const [vadCleanup, setVadCleanup] = useState(true)
+  const [speedFix, setSpeedFix] = useState(true)
+  const [speedNatural, setSpeedNatural] = useState(false)
+  useEffect(() => {
+    let alive = true
+    isDemucsModelAvailable().then((ok) => {
+      if (!alive) return
+      setDemucsReady(ok)
+      // Auto-select the real neural model when its weights are downloaded
+      // (public/models/htdemucs.onnx via `npm run fetch:demucs`).
+      if (ok) setIsolationModel((m) => (m === 'omni-voicetarget' ? 'htdemucs-v4' : m))
+    })
+    return () => { alive = false }
+  }, [])
   const [isProcessing, setIsProcessing] = useState(false)
   const [isolationStatus, setIsolationStatus] = useState<string | null>(null)
+
+  // Loudness normalization (BS.1770-4 integrated LUFS)
+  const [loudnessEnabled, setLoudnessEnabled] = useState(false)
+  const [targetLufs, setTargetLufs] = useState(-16)
+  const [measuredLufs, setMeasuredLufs] = useState<number | null>(null)
+  const [loudnessBusy, setLoudnessBusy] = useState(false)
+  const [loudnessStatus, setLoudnessStatus] = useState<string | null>(null)
+
+  const measureClipLoudness = async (): Promise<number | null> => {
+    if (!asset) return null
+    setLoudnessBusy(true)
+    try {
+      const res = await fetch(asset.url)
+      const buf = await res.arrayBuffer()
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const ctx = new Ctx()
+      const audio = await ctx.decodeAudioData(buf)
+      const mono = new Float32Array(audio.length)
+      for (let ch = 0; ch < audio.numberOfChannels; ch++) {
+        const d = audio.getChannelData(ch)
+        for (let i = 0; i < audio.length; i++) mono[i] += d[i] / audio.numberOfChannels
+      }
+      await ctx.close()
+      const lufs = measureIntegratedLufs([mono], audio.sampleRate)
+      setMeasuredLufs(lufs)
+      return lufs
+    } catch {
+      setLoudnessStatus('Could not decode audio for measurement')
+      return null
+    } finally {
+      setLoudnessBusy(false)
+    }
+  }
 
   const clipTime = Math.max(0, playhead - clip.start)
 
@@ -69,8 +229,10 @@ function ClipInspector({ clip }: { clip: Clip }) {
           type="button"
           data-testid={`keyframe-diamond-${propertyId}`}
           title={hasKey ? 'Remove Keyframe at Current Time' : 'Add Keyframe at Current Time'}
+          aria-label={hasKey ? 'Remove keyframe at current time' : 'Add keyframe at current time'}
+          aria-pressed={hasKey}
           onClick={handleToggle}
-          className={`p-1 rounded transition-colors ${
+          className={`flex min-h-8 min-w-8 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             hasKey ? 'text-brand-400' : 'text-ink-500 hover:text-ink-200'
           }`}
         >
@@ -80,8 +242,9 @@ function ClipInspector({ clip }: { clip: Clip }) {
           type="button"
           data-testid={`open-curve-${propertyId}`}
           title="Open in Curve Graph Editor"
+          aria-label={`Open ${propertyId.replace(/_/g, ' ')} in curve graph editor`}
           onClick={handleOpenCurve}
-          className="p-1 rounded text-ink-500 hover:text-brand-400 hover:bg-ink-800 transition-colors"
+          className="flex min-h-8 min-w-8 items-center justify-center rounded text-ink-500 transition-colors hover:bg-ink-800 hover:text-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Activity size={12} />
         </button>
@@ -239,6 +402,86 @@ function ClipInspector({ clip }: { clip: Clip }) {
             </span>
           </Field>
 
+          {/* Loudness Normalization (BS.1770-4 LUFS) */}
+          <div className="pt-2 border-t border-ink-800 space-y-2">
+            <label className="flex items-center gap-2 cursor-pointer select-none" title="Measure integrated loudness (ITU-R BS.1770-4) and apply gain to hit the target LUFS">
+              <input
+                type="checkbox"
+                data-testid="audio-loudness-checkbox"
+                checked={loudnessEnabled}
+                onChange={(e) => {
+                  setLoudnessEnabled(e.target.checked)
+                  if (e.target.checked && measuredLufs === null) void measureClipLoudness()
+                }}
+                className="h-3.5 w-3.5 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand focus:ring-offset-ink-900 cursor-pointer"
+              />
+              <span className="text-xs font-medium text-ink-200">Loudness Normalization</span>
+              <span className="ml-auto font-mono text-[10px] text-ink-400" data-testid="audio-loudness-measured">
+                {measuredLufs === null ? '' : `${measuredLufs.toFixed(1)} LUFS`}
+              </span>
+            </label>
+
+            {loudnessEnabled && (
+              <div data-testid="audio-loudness-controls" className="p-2.5 rounded-lg border border-ink-800 bg-ink-900/60 space-y-2.5 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-[10px] font-semibold uppercase text-ink-400">Target</label>
+                  <span className="font-mono text-[11px] text-brand-400" data-testid="audio-loudness-target-label">
+                    {targetLufs.toFixed(1)} LUFS
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  data-testid="audio-loudness-target-slider"
+                  aria-label="Target loudness in LUFS"
+                  min={-24}
+                  max={-10}
+                  step={0.5}
+                  value={targetLufs}
+                  onChange={(e) => setTargetLufs(parseFloat(e.target.value))}
+                  className="of-range w-full"
+                />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    data-testid="audio-loudness-remasure-btn"
+                    disabled={loudnessBusy}
+                    onClick={() => void measureClipLoudness()}
+                    className="flex-1 h-7.5 rounded-md bg-ink-800 hover:bg-ink-750 border border-ink-700 text-ink-200 text-[11px] font-medium transition-colors disabled:opacity-50"
+                  >
+                    {loudnessBusy ? 'Measuring…' : 'Measure'}
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="audio-loudness-apply-btn"
+                    disabled={loudnessBusy}
+                    onClick={async () => {
+                      const lufs = measuredLufs ?? (await measureClipLoudness())
+                      if (lufs === null || !isFinite(lufs)) {
+                        setLoudnessStatus('No measurable audio')
+                        return
+                      }
+                      const gain = loudnessGain(lufs, targetLufs)
+                      const clamped = Math.max(0.02, Math.min(2, gain))
+                      setClipProp(clip.id, { volume: clamped })
+                      const db = 20 * Math.log10(clamped)
+                      setLoudnessStatus(
+                        `${lufs.toFixed(1)} → ${targetLufs.toFixed(1)} LUFS (gain ${db >= 0 ? '+' : ''}${db.toFixed(1)} dB` +
+                          `${clamped !== gain ? `, capped at ${(20 * Math.log10(clamped)).toFixed(1)} dB` : ''})`,
+                      )
+                    }}
+                    className="flex-1 h-7.5 rounded-md bg-brand hover:bg-brand-600 text-white text-[11px] font-medium transition-colors disabled:opacity-50"
+                  >
+                    Normalize
+                  </button>
+                </div>
+                {loudnessStatus && <p className="text-[10px] text-ink-400 font-mono truncate" data-testid="audio-loudness-status">{loudnessStatus}</p>}
+                <p className="text-[9px] leading-relaxed text-ink-500">
+                  Streaming target −16 LUFS (podcast), −14 for music platforms. Gain above +0 dB is capped by browser playback.
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* Voice Isolation Checkbox */}
           <div className="pt-2 border-t border-ink-800 space-y-2">
             <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -280,15 +523,78 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   <select
                     data-testid="audio-isolation-model-dropdown"
                     value={isolationModel}
-                    onChange={(e) => setIsolationModel(e.target.value as VoiceIsolationModel)}
+                    onChange={(e) => {
+                      setIsolationModel(e.target.value as VoiceIsolationModel)
+                      useEditor.getState().setAudioIsolationModel(e.target.value as VoiceIsolationModel)
+                    }}
                     className="w-full h-7 rounded border border-ink-700 bg-ink-800 px-2 text-xs text-ink-100 outline-none focus:border-brand"
                   >
-                    <option value="omni-voicetarget">omni-voicetarget (20K+ Neural Stems)</option>
-                    <option value="htdemucs-v4">HTDemucs v4 (Meta Hybrid Transformer)</option>
-                    <option value="bs-roformer-lite">BS-Roformer Lite (Band-Split Web)</option>
+                    <option value="htdemucs-v4">Demucs v4 · real neural{demucsReady === false ? ' (weights not downloaded)' : ' — best quality'}</option>
+                    <option value="omni-voicetarget">omni-voicetarget · fast DSP (mid/side crossover)</option>
+                    <option value="bs-roformer-lite">BS-Roformer Lite (planned)</option>
                     <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
+                    {isolationMode === 'keep_vocal' && (
+                      <option value="omni-denoise-onnx">AI Denoise ONNX (voice extractor · keep-vocal only)</option>
+                    )}
+                    {isolationMode === 'keep_vocal' && (
+                      <option value="rnnoise-xiph">RNNoise (Xiph) · trained speech denoiser</option>
+                    )}
+                    <option value="omni-unified">omni-unified-v1 · isolation + denoise + normalize (both modes)</option>
                   </select>
                 </div>
+
+                {isolationModel === 'htdemucs-v4' && (
+                  <label className="flex items-center gap-2 cursor-pointer select-none" data-testid="audio-isolation-vad-toggle">
+                    <input
+                      type="checkbox"
+                      checked={vadCleanup}
+                      onChange={(e) => setVadCleanup(e.target.checked)}
+                      className="h-3 w-3 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand cursor-pointer"
+                    />
+                    <span className="text-[10px] text-ink-300">Silero VAD pause cleanup <span className="text-ink-500">(mutes residual noise between phrases)</span></span>
+                  </label>
+                )}
+
+                {isolationModel === 'htdemucs-v4' && (
+                  <label className="flex items-center gap-2 cursor-pointer select-none" data-testid="audio-isolation-speedfix-toggle">
+                    <input
+                      type="checkbox"
+                      checked={speedFix}
+                      onChange={(e) => setSpeedFix(e.target.checked)}
+                      className="h-3 w-3 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand cursor-pointer"
+                    />
+                    <span className="text-[10px] text-ink-300">Auto-fix slowed tracks <span className="text-ink-500">(separates at corrected speed, restores timing)</span></span>
+                  </label>
+                )}
+
+                <div className="flex items-center justify-between gap-2" data-testid="audio-isolation-strength-row">
+                  <span className="text-[10px] text-ink-300 shrink-0">Strength</span>
+                  <input
+                    type="range"
+                    data-testid="audio-isolation-strength-slider"
+                    aria-label="Isolation strength"
+                    min={0.1}
+                    max={1.0}
+                    step={0.01}
+                    value={isolationStrength}
+                    disabled={isProcessing}
+                    onChange={(e) => setIsolationStrength(parseFloat(e.target.value))}
+                    className="w-full h-1 accent-brand cursor-pointer"
+                  />
+                  <span className="text-[10px] font-mono text-ink-400 shrink-0 w-8 text-right">{Math.round(isolationStrength * 100)}%</span>
+                </div>
+
+                {isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && (
+                  <label className="flex items-center gap-2 cursor-pointer select-none ml-3" data-testid="audio-isolation-naturalpitch-toggle">
+                    <input
+                      type="checkbox"
+                      checked={speedNatural}
+                      onChange={(e) => setSpeedNatural(e.target.checked)}
+                      className="h-3 w-3 rounded border-ink-700 bg-ink-800 text-brand-400 focus:ring-brand cursor-pointer"
+                    />
+                    <span className="text-[10px] text-ink-300">Vocals at natural pitch <span className="text-ink-500">(skip the slow-back — usable acapella, no longer timeline-aligned)</span></span>
+                  </label>
+                )}
 
                 {isolationStatus && (
                   <p className="text-[10px] text-ink-400 font-mono truncate">{isolationStatus}</p>
@@ -304,7 +610,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     try {
                       await executeVoiceIsolationForClip(
                         clip.id,
-                        { mode: isolationMode, model: isolationModel },
+                        { mode: isolationMode, model: isolationModel, strength: isolationStrength, vadGate: isolationModel === 'htdemucs-v4' ? vadCleanup : undefined, speedNormalize: isolationModel === 'htdemucs-v4' ? speedFix : undefined, speedOutput: isolationModel === 'htdemucs-v4' && speedFix && isolationMode === 'keep_vocal' && speedNatural ? 'natural' : 'timeline' },
                         (pct, msg) => setIsolationStatus(`${pct}%: ${msg}`),
                       )
                       setIsolationStatus('Completed!')
@@ -356,6 +662,8 @@ function ClipInspector({ clip }: { clip: Clip }) {
           </Field>
         </Section>
       )}
+
+      <PlacedEffectsSection clip={clip} />
 
       {clip.effects && (
         <Section title="Effects">
@@ -421,50 +729,255 @@ export function RightPanel() {
   const setRightOpen = useEditor((s) => s.setRightOpen)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const rightPanelWidth = useEditor((s) => s.rightPanelWidth)
+  const setRightPanelWidth = useEditor((s) => s.setRightPanelWidth)
+  const rightPanelFloating = useEditor((s) => s.rightPanelFloating)
+  const setRightPanelFloating = useEditor((s) => s.setRightPanelFloating)
+  const rightPanelFloat = useEditor((s) => s.rightPanelFloat)
+  const setRightPanelFloat = useEditor((s) => s.setRightPanelFloat)
   const unclusterInspector = useEditor((s) => s.unclusterInspector)
   const setUnclusterInspector = useEditor((s) => s.setUnclusterInspector)
+  const sidebarSectionMode = useEditor((s) => s.sidebarSectionMode)
   const clip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) ?? null)
 
+  const dragState = useRef<{ kind: 'width' | 'move' | 'resize'; startX: number; startY: number; startW: number; startH: number; baseX: number; baseY: number } | null>(null)
+
+  // Shared pointer-drag helper: width (docked), move (float header), resize (float corner).
+  const beginDrag = (
+    kind: 'width' | 'move' | 'resize',
+    e: React.PointerEvent,
+  ) => {
+    const float = useEditor.getState().rightPanelFloat
+    dragState.current = {
+      kind,
+      startX: e.clientX,
+      startY: e.clientY,
+      startW: kind === 'width' ? useEditor.getState().rightPanelWidth : float.w,
+      startH: float.h,
+      baseX: float.x,
+      baseY: float.y,
+    }
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+
+  const onDragMove = (e: React.PointerEvent) => {
+    const d = dragState.current
+    if (!d) return
+    if (d.kind === 'width') {
+      // Dragging the left edge outward (negative dx) widens the panel.
+      setRightPanelWidth(d.startW + (d.startX - e.clientX))
+    } else if (d.kind === 'move') {
+      setRightPanelFloat({
+        x: d.baseX + (e.clientX - d.startX),
+        y: d.baseY + (e.clientY - d.startY),
+      })
+    } else if (d.kind === 'resize') {
+      setRightPanelFloat({
+        w: d.startW + (e.clientX - d.startX),
+        h: d.startH + (e.clientY - d.startY),
+      })
+    }
+  }
+
+  const endDrag = (e: React.PointerEvent) => {
+    dragState.current = null
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer already released
+    }
+  }
+
+  const inspectorTitle = selectedClipId ? 'Clip Inspector' : 'Project Inspector'
+
+  const inspectorBody = (
+    <SectionsNavigator mode={sidebarSectionMode} label="Inspector sections">
+      <div
+        id="inspector-panel"
+        data-testid="inspector-panel"
+        role="region"
+        aria-labelledby="inspector-heading"
+        tabIndex={0}
+        className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
+      >
+        {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+      </div>
+    </SectionsNavigator>
+  )
+
+  // ---- Floating window mode: draggable + resizable inspector overlay ----
+  if (rightPanelFloating) {
+    return (
+      <>
+        <div
+          data-testid="right-panel-float-window"
+          role="dialog"
+          aria-label={inspectorTitle}
+          style={{
+            position: 'fixed',
+            left: rightPanelFloat.x,
+            top: rightPanelFloat.y,
+            width: rightPanelFloat.w,
+            height: rightPanelFloat.h,
+            zIndex: 60,
+          }}
+          className="flex flex-col rounded-xl border border-ink-600 bg-ink-850 shadow-[0_24px_64px_rgba(0,0,0,0.55)] overflow-hidden"
+        >
+          <div
+            data-testid="right-panel-float-header"
+            onPointerDown={(e) => {
+              if ((e.target as HTMLElement).closest('button')) return
+              beginDrag('move', e)
+            }}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title="Drag to move the inspector"
+            className="h-9 shrink-0 flex items-center justify-between gap-2 px-3 border-b border-ink-700 bg-ink-900/90 text-xs font-semibold uppercase tracking-wider text-ink-300 cursor-grab active:cursor-grabbing select-none touch-none"
+          >
+            <h2 id="inspector-heading" className="truncate" title={inspectorTitle}>
+              {inspectorTitle}
+            </h2>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                data-testid="inspector-uncluster-btn"
+                title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-pressed={unclusterInspector}
+                onClick={() => setUnclusterInspector(!unclusterInspector)}
+                className={`grid h-7 w-7 place-items-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  unclusterInspector ? 'bg-brand text-white shadow-xs' : 'text-ink-400 hover:text-white hover:bg-ink-750'
+                }`}
+              >
+                <SlidersHorizontal size={12} />
+              </button>
+              <button
+                type="button"
+                data-testid="inspector-dock-btn"
+                title="Dock inspector back into the layout"
+                aria-label="Dock inspector"
+                onClick={() => setRightPanelFloating(false)}
+                className="grid h-7 w-7 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <PanelRight size={13} />
+              </button>
+              <button
+                type="button"
+                title="Hide inspector"
+                aria-label="Hide inspector"
+                onClick={() => setRightOpen(false)}
+                className="grid h-7 w-7 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <X size={13} />
+              </button>
+            </div>
+          </div>
+          {inspectorBody}
+          <div
+            data-testid="right-panel-float-resize"
+            onPointerDown={(e) => beginDrag('resize', e)}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title="Drag to resize"
+            aria-label="Resize inspector window"
+            className="absolute bottom-0 right-0 h-4 w-4 cursor-nwse-resize touch-none"
+          >
+            <div className="absolute bottom-1 right-1 h-2 w-2 border-b-2 border-r-2 border-ink-500" />
+          </div>
+        </div>
+        {/* Rail keeps dock-side controls available while floating */}
+        <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2">
+          <button
+            type="button"
+            data-testid="inspector-dock-btn-rail"
+            title="Dock inspector back into the layout"
+            aria-label="Dock inspector"
+            onClick={() => setRightPanelFloating(false)}
+            className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <PanelRight size={18} />
+          </button>
+        </div>
+      </>
+    )
+  }
+
+  // ---- Docked mode (collapsible + width-draggable) ----
   return (
     <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
       {rightOpen && (
-        <div style={{ width: `${rightPanelWidth}px` }} className="shrink-0 bg-ink-850 flex flex-col h-full">
+        <div style={{ width: `${rightPanelWidth}px` }} className="relative shrink-0 bg-ink-850 flex flex-col h-full">
+          {/* Width drag handle: slide the inspector edge to resize */}
+          <div
+            data-testid="right-panel-resize-handle"
+            role="separator"
+            aria-label="Resize inspector width"
+            aria-orientation="vertical"
+            onPointerDown={(e) => beginDrag('width', e)}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title="Drag to resize inspector"
+            className="absolute left-0 top-0 bottom-0 w-1.5 z-10 cursor-col-resize bg-transparent hover:bg-brand/60 transition-colors touch-none"
+          />
           <div className="h-9 shrink-0 flex items-center justify-between px-3 border-b border-ink-700 text-xs font-semibold uppercase tracking-wider text-ink-300">
-            <span className="truncate pr-2" title={selectedClipId ? 'Clip Inspector' : 'Project Inspector'}>
-              {selectedClipId ? 'Clip Inspector' : 'Project Inspector'}
-            </span>
-            <button
-              type="button"
-              data-testid="inspector-uncluster-btn"
-              title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
-              aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
-              aria-pressed={unclusterInspector}
-              onClick={() => setUnclusterInspector(!unclusterInspector)}
-              className={`grid h-6 w-6 place-items-center rounded transition-colors ${
-                unclusterInspector
-                  ? 'bg-brand text-white shadow-xs'
-                  : 'text-ink-400 hover:text-white hover:bg-ink-750'
-              }`}
-            >
-              <SlidersHorizontal size={12} />
-            </button>
+            <h2 id="inspector-heading" className="truncate pr-2" title={inspectorTitle}>
+              {inspectorTitle}
+            </h2>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                data-testid="inspector-uncluster-btn"
+                title={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-label={unclusterInspector ? 'Expanded View' : 'Uncluster / Compact Mode'}
+                aria-pressed={unclusterInspector}
+                onClick={() => setUnclusterInspector(!unclusterInspector)}
+                className={`grid h-8 w-8 place-items-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  unclusterInspector ? 'bg-brand text-white shadow-xs' : 'text-ink-400 hover:text-white hover:bg-ink-750'
+                }`}
+              >
+                <SlidersHorizontal size={12} />
+              </button>
+              <button
+                type="button"
+                data-testid="inspector-float-btn"
+                title="Float inspector into a movable window"
+                aria-label="Float inspector into a movable window"
+                onClick={() => setRightPanelFloating(true)}
+                className="grid h-8 w-8 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <PictureInPicture2 size={13} />
+              </button>
+            </div>
           </div>
-          <div data-testid="inspector-panel" className={`flex-1 min-h-0 overflow-y-auto ${unclusterInspector ? 'space-y-0.5' : ''}`}>
-            {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
-          </div>
+          {inspectorBody}
         </div>
       )}
-      <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2">
+      <div className="w-9 shrink-0 border-l border-ink-700 flex flex-col items-center pt-2 gap-1">
         <button
           type="button"
           title={rightOpen ? 'Hide inspector' : 'Show inspector'}
           aria-label={rightOpen ? 'Hide inspector' : 'Show inspector'}
           aria-expanded={rightOpen}
+          aria-controls={rightOpen ? 'inspector-panel' : undefined}
           onClick={() => setRightOpen(!rightOpen)}
-          className="grid place-items-center h-8 w-8 rounded-md text-ink-400 hover:text-white hover:bg-ink-700"
+          className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           {rightOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
         </button>
+        {rightOpen && (
+          <button
+            type="button"
+            data-testid="inspector-rail-float-btn"
+            title="Float inspector into a movable window"
+            aria-label="Float inspector into a movable window"
+            onClick={() => setRightPanelFloating(true)}
+            className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <PictureInPicture2 size={16} />
+          </button>
+        )}
       </div>
     </div>
   )

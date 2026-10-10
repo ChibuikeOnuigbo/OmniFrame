@@ -51,6 +51,18 @@ const visible = await page.locator('#rig-canvas').count()
 ok('rigging canvas renders', visible === 1, visible ? '' : 'left-tab-rigging not found or panel closed')
 
 if (visible) {
+  /**
+   * Rigging panel sections are tabbed now ('Parts', 'Part — <name>',
+   * 'Transform', ...). Show the tab whose label contains `text`.
+   */
+  const rigTab = async (text) => {
+    const chip = page.locator('[role="tab"]').filter({ hasText: text }).first()
+    if ((await chip.count()) > 0 && (await chip.getAttribute('aria-selected')) !== 'true') {
+      await chip.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
   await page.click('#rig-new')
   await page.waitForTimeout(300)
 
@@ -80,6 +92,9 @@ if (visible) {
   if (handIdx >= 0) {
     await page.locator('#rig-part-list button[id^="rig-select-"]').nth(handIdx).click()
     await page.waitForTimeout(250)
+    // Sections are tabbed now: switch to the selected part's tab to reach its
+    // controls (the only section chip whose label contains an em dash).
+    await rigTab('—')
     const parent = await page.locator('#rig-part-parent').inputValue()
     const parentName = await page.locator('#rig-part-parent option:checked').textContent()
     ok('hand is parented to the forearm after auto-rig',
@@ -90,11 +105,15 @@ if (visible) {
   // Cycle guard: parenting the torso under its own descendant must be refused.
   const torsoIdx = names.findIndex((n) => n === 'Torso')
   if (handIdx >= 0 && torsoIdx >= 0) {
+    await rigTab('Parts')
     const parts = page.locator('#rig-part-list button[id^="rig-select-"]')
     await parts.nth(handIdx).click(); await page.waitForTimeout(150)
+    await rigTab('—')
     const handId = (await page.locator('#rig-part-name').inputValue(), null)
     // Record the hand's id by selecting it, then try to make torso its child.
+    await rigTab('Parts')
     await parts.nth(torsoIdx).click(); await page.waitForTimeout(250)
+    await rigTab('—')
     const opts = await page.locator('#rig-part-parent option').allTextContents()
     const handOpt = await page.locator('#rig-part-parent option', { hasText: 'Hand L' }).count()
     ok('hand offered as a possible parent when torso is selected', handOpt >= 1, `${opts.length} options`)
@@ -102,11 +121,14 @@ if (visible) {
   }
 
   // Bend + wind sections exist and toggle.
+  await rigTab('Parts')
   await page.locator('#rig-part-list button[id^="rig-select-"]').first().click()
   await page.waitForTimeout(200)
+  await rigTab('Transform')
   ok('transform controls present', await page.locator('#rig-rot').count() === 1)
 
   // --- "Rigged in 1 tap": seed a rig from an existing segmented cutout ---
+  await rigTab('Parts')
   const hasChars = await page.locator('#rig-from-character-go').count()
   ok('one-tap path offered when cutouts exist', hasChars === 1)
 

@@ -45,6 +45,7 @@ import { TopBar } from './components/TopBar'
 import { LeftDock } from './components/LeftDock'
 import { Preview } from './components/Preview'
 import { RightPanel } from './components/RightPanel'
+import { ModelLoadOverlay } from './components/ModelLoadOverlay'
 import { Timeline } from './components/Timeline'
 
 export default function Studio() {
@@ -654,6 +655,7 @@ export default function Studio() {
           <Timeline />
         </div>
         <RightPanel />
+      <ModelLoadOverlay />
       </div>
       {contextMenu && (
         <div

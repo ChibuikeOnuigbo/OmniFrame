@@ -32,6 +32,7 @@ const QUICK_COLORS = [
 
 export function DrawingToolbar() {
   const drawingEnabled = useEditor((s) => s.drawingEnabled)
+  const leftOpen = useEditor((s) => s.leftOpen)
   const setDrawingEnabled = useEditor((s) => s.setDrawingEnabled)
   const drawingTool = useEditor((s) => s.drawingTool)
   const setDrawingTool = useEditor((s) => s.setDrawingTool)
@@ -66,14 +67,14 @@ export function DrawingToolbar() {
 
   return (
     <SlideDock id="drawing-toolbar" label="drawing tools" direction="down"
-      className="absolute z-30 max-sm:bottom-10 max-sm:top-auto sm:top-12 sm:bottom-auto left-1/2 -translate-x-1/2"
+      className={`absolute z-30 max-sm:bottom-10 max-sm:top-auto sm:top-12 sm:bottom-auto left-1/2 -translate-x-1/2 ${leftOpen ? 'max-sm:hidden' : ''}`}
     >
     <div
       data-testid="drawing-toolbar"
-      className="flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-ink-900/95 border border-ink-700 shadow-xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[max(180px,calc(100%-2rem))] w-auto overflow-x-auto scrollbar-none"
+      className="flex min-w-0 w-full max-w-full flex-wrap items-center justify-center gap-1 rounded-xl border border-ink-700 bg-ink-900/95 px-1.5 py-1 text-xs text-ink-200 shadow-xl backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150 overflow-hidden"
     >
       {/* Tool Selector */}
-      <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
+      <div className="flex min-w-0 items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0 max-sm:w-full max-sm:flex-wrap max-sm:justify-center max-sm:border-r-0 max-sm:border-b max-sm:pb-1 max-sm:pr-0">
         {tools.map((t) => {
           const Icon = t.icon
           const active = drawingTool === t.id
@@ -86,7 +87,7 @@ export function DrawingToolbar() {
               aria-label={t.label}
               aria-pressed={active}
               onClick={() => setDrawingTool(t.id)}
-              className={`p-0.5 h-5.5 w-5.5 rounded flex items-center justify-center transition-colors shrink-0 ${
+              className={`flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded p-0.5 transition-colors max-sm:min-h-8 max-sm:min-w-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 active
                   ? 'bg-brand text-white shadow-xs'
                   : 'hover:bg-ink-800 text-ink-400 hover:text-white'
@@ -99,7 +100,7 @@ export function DrawingToolbar() {
       </div>
 
       {/* Compact Quick Color Dots */}
-      <div className="flex items-center gap-1 border-r border-ink-800 pr-1 shrink-0">
+      <div className="flex items-center gap-1 border-r border-ink-800 pr-1 shrink-0 max-sm:border-r-0 max-sm:pr-0">
         {QUICK_COLORS.map((hex) => (
           <button
             key={hex}
@@ -108,13 +109,17 @@ export function DrawingToolbar() {
             title={`Color ${hex}`}
             aria-label={`Color ${hex}`}
             onClick={() => setDrawingColor(hex)}
-            className={`w-3 h-3 rounded-full border transition-transform ${
-              drawingColor === hex
-                ? 'scale-110 border-white ring-1 ring-brand'
-                : 'border-ink-700 hover:scale-105'
-            }`}
-            style={{ backgroundColor: hex }}
-          />
+            aria-pressed={drawingColor === hex}
+            className="flex min-h-6 min-w-6 items-center justify-center rounded transition-transform max-sm:min-h-8 max-sm:min-w-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <span
+              aria-hidden="true"
+              className={`h-3 w-3 rounded-full border ${
+                drawingColor === hex ? 'scale-110 border-white ring-1 ring-brand' : 'border-ink-700'
+              }`}
+              style={{ backgroundColor: hex }}
+            />
+          </button>
         ))}
         <input
           type="color"
@@ -123,12 +128,12 @@ export function DrawingToolbar() {
           onChange={(e) => setDrawingColor(e.target.value)}
           title="Color"
           aria-label="Custom color picker"
-          className="w-3 h-3 rounded-full border border-ink-600 cursor-pointer bg-transparent p-0 overflow-hidden shrink-0"
+          className="h-6 w-6 shrink-0 cursor-pointer rounded-full border border-ink-600 bg-transparent p-1 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand max-sm:min-h-8 max-sm:min-w-8"
         />
       </div>
 
       {/* Compact Size Slider */}
-      <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
+      <div className="flex items-center gap-1 border-r border-ink-800 pr-1 shrink-0 max-sm:border-r-0 max-sm:pr-0">
         <input
           type="range"
           data-testid="drawing-size-slider"
@@ -137,9 +142,9 @@ export function DrawingToolbar() {
           max={30}
           value={drawingSize}
           onChange={(e) => setDrawingSize(Number(e.target.value))}
-          className="of-range w-8"
+          className="of-range w-8 max-sm:w-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         />
-        <span className="text-[9px] text-ink-400 font-mono w-2.5 text-right">{drawingSize}</span>
+        <span className="w-3 text-right font-mono text-[10px] text-ink-300">{drawingSize}</span>
       </div>
 
       {/* Clear Drawing Strokes */}
@@ -149,7 +154,7 @@ export function DrawingToolbar() {
         title="Clear"
         aria-label="Clear drawing strokes"
         onClick={() => clearDrawingStrokes()}
-        className="p-0.5 h-5.5 w-5.5 rounded flex items-center justify-center hover:bg-ink-800 text-ink-400 hover:text-red-400 transition-colors shrink-0"
+        className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded p-0.5 text-ink-400 transition-colors hover:bg-ink-800 hover:text-red-400 max-sm:min-h-8 max-sm:min-w-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
         <Trash2 size={12} />
       </button>
@@ -161,7 +166,7 @@ export function DrawingToolbar() {
         title="Close"
         aria-label="Close drawing mode"
         onClick={() => setDrawingEnabled(false)}
-        className="p-0.5 h-5.5 w-5.5 rounded flex items-center justify-center hover:bg-ink-800 text-ink-400 hover:text-white transition-colors shrink-0"
+        className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded p-0.5 text-ink-400 transition-colors hover:bg-ink-800 hover:text-white max-sm:min-h-8 max-sm:min-w-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
         <X size={12} />
       </button>

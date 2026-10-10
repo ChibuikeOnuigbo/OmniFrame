@@ -3,8 +3,8 @@
     {
       "name": "Custom cursor initial mount & pack initialization",
       "state": "default",
-      "size": "bigger",
-      "pack": "mac-gamified",
+      "size": "standard",
+      "pack": "pro-precision",
       "activeClass": true,
       "passed": true
     },

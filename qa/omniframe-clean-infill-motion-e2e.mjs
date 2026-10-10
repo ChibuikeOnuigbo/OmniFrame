@@ -25,6 +25,12 @@ async function runOmniFrameVerification() {
   const page = await context.newPage()
 
   await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
   await page.waitForTimeout(1000)
 
   console.log('=== Step 2: Seed Death Note Video Clip onto Timeline ===')
@@ -312,10 +318,15 @@ async function runOmniFrameVerification() {
   // Capture verification inspector table cutout
   await page.click('[data-testid="omniframe-section-actions"]')
   await page.waitForTimeout(300)
-  const verifTable = page.locator('[data-testid="omniframe-verification-table"]')
-  if (await verifTable.isVisible()) {
-    await verifTable.screenshot({ path: join(CUT_DIR, 'cut-omniframe-verification-table.png') })
+  const verificationDisclosure = page.locator('[data-testid="panel-section-omniframe-verification"] > button')
+  // The accordion auto-activates the only live section, so only click when collapsed.
+  if ((await verificationDisclosure.getAttribute('aria-expanded')) !== 'true') {
+    await verificationDisclosure.click()
+    await page.waitForTimeout(100)
   }
+  const verifTable = page.locator('[data-testid="omniframe-verification-table"]')
+  if (!(await verifTable.isVisible())) throw new Error('Frame verification details did not expand')
+  await verifTable.screenshot({ path: join(CUT_DIR, 'cut-omniframe-verification-table.png') })
 
   // Write results JSON
   writeFileSync(join(REPORT_DIR, 'omniframe-infill-motion-results.json'), JSON.stringify(testResults, null, 2))

@@ -1,0 +1,39 @@
+{
+  "when": "2026-10-09T21:47:40.905Z",
+  "budgets": {
+    "JS_BUDGET_DECODED": 1677721.6,
+    "JS_BUDGET_TRANSFER": 491520
+  },
+  "results": [
+    {
+      "name": "initial load fetches exactly one JS file",
+      "status": "PASS",
+      "detail": "1: index-B8A6DwWn.js"
+    },
+    {
+      "name": "initial decoded JS under budget",
+      "status": "PASS",
+      "detail": "1401 KB decoded (budget 1638 KB)"
+    },
+    {
+      "name": "initial JS transfer (compressed) under budget",
+      "status": "PASS",
+      "detail": "364 KB transferred (budget 480 KB)"
+    },
+    {
+      "name": "onnxruntime-web NOT fetched on boot",
+      "status": "PASS",
+      "detail": "index-B8A6DwWn.js"
+    },
+    {
+      "name": "app renders (FCP recorded)",
+      "status": "PASS",
+      "detail": "FCP 328 ms"
+    },
+    {
+      "name": "zero page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ]
+}

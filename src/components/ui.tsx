@@ -1,5 +1,6 @@
-import { useState, type ReactNode } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { useEffect, useId, useState, type ReactNode } from 'react'
+import { CollapseGlyph } from './CollapseChip'
+import { NestedSectionContext, sectionIdFor, useSectionsNav, useIsNestedSection } from './SectionsNav'
 
 export function IconButton({
   active,
@@ -25,7 +26,7 @@ export function IconButton({
       disabled={disabled}
       onClick={onClick}
       className={[
-        'grid place-items-center h-8 w-8 rounded-md transition-colors',
+        'grid place-items-center h-8 w-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900',
         active ? 'bg-brand text-white' : 'text-ink-400 hover:text-white hover:bg-ink-700',
         disabled ? 'opacity-40 cursor-not-allowed hover:bg-transparent hover:text-ink-400' : '',
         className,
@@ -132,35 +133,116 @@ export function Section({
   action?: ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
-  return (
-    <div className="border-b border-ink-800">
-      <div
-        data-testid={`section-header-${title.toLowerCase().replace(/\s+/g, '-')}`}
-        role={collapsible ? 'button' : undefined}
-        tabIndex={collapsible ? 0 : undefined}
-        aria-expanded={collapsible ? open : undefined}
-        onClick={collapsible ? () => setOpen(!open) : undefined}
-        onKeyDown={collapsible ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(!open) } } : undefined}
-        className={`px-3 py-2.5 flex items-center justify-between select-none ${
-          collapsible ? 'cursor-pointer hover:bg-ink-800/50 transition-colors' : ''
-        }`}
-      >
-        <div className="flex items-center gap-1.5 min-w-0">
-          {collapsible && (
-            <ChevronDown
-              size={13}
-              className={`text-ink-400 shrink-0 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
-            />
-          )}
-          <span className="text-[11px] uppercase tracking-wider text-ink-300 font-semibold truncate">
-            {title}
-          </span>
-          {badge}
+  const headerId = useId()
+  const bodyId = useId()
+  const navCtx = useSectionsNav()
+  const nested = useIsNestedSection()
+  const nav = nested ? null : navCtx
+  const navId = sectionIdFor(undefined, title)
+  const headerTestId = `section-header-${navId}`
+
+  // Depend on the stable register/unregister callbacks, NOT the whole nav
+  // object (its identity changes with activeId/sections and would re-run
+  // registration forever).
+  const registerSection = nav?.register
+  const unregisterSection = nav?.unregister
+  useEffect(() => {
+    if (!registerSection || !collapsible) return
+    registerSection(navId, { title, defaultOpen })
+    return () => unregisterSection?.(navId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerSection, unregisterSection, navId, collapsible, title, defaultOpen])
+
+  // Inside a SectionsNavigator: 'tabs' renders only the active section (the
+  // tab chip replaces the header); 'accordion' is single-open.
+  if (nav && collapsible) {
+    const isActive = nav.activeId === navId
+    if (nav.mode === 'tabs') {
+      if (!isActive) return null
+      return (
+        <section aria-labelledby={headerId} className="px-3 pb-3 pt-1">
+          <div id={headerId} data-testid={headerTestId} className="flex min-h-8 items-center justify-between gap-2">
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">{title}</span>
+              {badge}
+            </span>
+            {action ? <div className="shrink-0">{action}</div> : null}
+          </div>
+          <div id={bodyId} aria-labelledby={headerId}>
+            <NestedSectionContext.Provider value={true}>{children}</NestedSectionContext.Provider>
+          </div>
+        </section>
+      )
+    }
+    return (
+      <section aria-labelledby={headerId} className="border-b border-ink-800">
+        <div className="flex items-center justify-between gap-2 px-3 py-0.5">
+          <button
+            id={headerId}
+            type="button"
+            data-testid={headerTestId}
+            aria-expanded={isActive}
+            aria-controls={isActive ? bodyId : undefined}
+            onClick={() => nav.activate(navId)}
+            className="flex min-h-8 min-w-0 flex-1 items-center rounded text-left transition-colors hover:bg-ink-800/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+          >
+            <span className="flex min-w-0 items-center gap-1.5 text-left">
+              <CollapseGlyph open={isActive} className="!h-4 !w-4" />
+              <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
+                {title}
+              </span>
+              {badge}
+            </span>
+          </button>
+          {action ? <div className="shrink-0">{action}</div> : null}
         </div>
-        {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
+        {isActive ? (
+          <div id={bodyId} aria-labelledby={headerId} className="px-3 pb-3 pt-0.5">
+            <NestedSectionContext.Provider value={true}>{children}</NestedSectionContext.Provider>
+          </div>
+        ) : null}
+      </section>
+    )
+  }
+
+  const heading = (
+    <span className="flex min-w-0 items-center gap-1.5 text-left">
+      {collapsible ? <CollapseGlyph open={open} className="!h-4 !w-4" /> : null}
+      <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
+        {title}
+      </span>
+      {badge}
+    </span>
+  )
+
+  return (
+    <section aria-labelledby={headerId} className="border-b border-ink-800">
+      <div className="flex items-center justify-between gap-2 px-3 py-0.5">
+        {collapsible ? (
+          <button
+            id={headerId}
+            type="button"
+            data-testid={headerTestId}
+            aria-expanded={open}
+            aria-controls={open ? bodyId : undefined}
+            onClick={() => setOpen((value) => !value)}
+            className="flex min-h-8 min-w-0 flex-1 items-center rounded text-left transition-colors hover:bg-ink-800/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+          >
+            {heading}
+          </button>
+        ) : (
+          <div id={headerId} data-testid={headerTestId} className="flex min-h-8 min-w-0 flex-1 items-center">
+            {heading}
+          </div>
+        )}
+        {action ? <div className="shrink-0">{action}</div> : null}
       </div>
-      {open && <div className="px-3 pb-3 pt-0.5">{children}</div>}
-    </div>
+      {open ? (
+        <div id={bodyId} aria-labelledby={headerId} className="px-3 pb-3 pt-0.5">
+          <NestedSectionContext.Provider value={true}>{children}</NestedSectionContext.Provider>
+        </div>
+      ) : null}
+    </section>
   )
 }
 
@@ -176,27 +258,31 @@ export function AccordionGroup({
   badge?: ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
+  const bodyId = useId()
+  const triggerId = `${bodyId}-trigger`
   return (
-    <div className="mt-2 rounded-lg border border-ink-800 bg-ink-900/40 overflow-hidden">
+    <section aria-labelledby={triggerId} className="mt-2 overflow-hidden rounded-lg border border-ink-800 bg-ink-900/40">
       <button
+        id={triggerId}
         type="button"
         data-testid={`accordion-${title.toLowerCase().replace(/\s+/g, '-')}`}
         aria-expanded={open}
-        onClick={() => setOpen(!open)}
-        className="w-full px-2.5 py-1.5 flex items-center justify-between text-left text-xs font-medium text-ink-300 hover:text-white hover:bg-ink-800/60 transition-colors"
+        aria-controls={open ? bodyId : undefined}
+        onClick={() => setOpen((value) => !value)}
+        className="flex min-h-8 w-full items-center justify-between px-2.5 py-1.5 text-left text-xs font-medium text-ink-300 transition-colors hover:bg-ink-800/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
       >
         <div className="flex items-center gap-1.5">
-          <ChevronDown
-            size={12}
-            className={`text-ink-500 transition-transform duration-150 ${open ? '' : '-rotate-90'}`}
-          />
+          <CollapseGlyph open={open} className="!h-4 !w-4" />
           <span className="text-[11px] font-semibold">{title}</span>
           {badge}
         </div>
-        <span className="text-[10px] text-ink-500">{open ? 'Hide' : 'Show'}</span>
       </button>
-      {open && <div className="p-2 border-t border-ink-800 space-y-1.5">{children}</div>}
-    </div>
+      {open && (
+        <div id={bodyId} aria-labelledby={triggerId} className="space-y-1.5 border-t border-ink-800 p-2">
+          {children}
+        </div>
+      )}
+    </section>
   )
 }
 

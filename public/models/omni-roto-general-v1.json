@@ -1,0 +1,14 @@
+{
+  "id": "omni-roto-general-v1",
+  "domain": "general",
+  "inputSize": 128,
+  "params": 142001,
+  "valIoU": 0.7722,
+  "trainSamples": 1152,
+  "rawImages": 24,
+  "epochs": 12,
+  "trainedAt": "2026-10-05",
+  "teacher": "opencv-grabcut pseudo-labels + heavy augmentation",
+  "runner": "onnxruntime-web saliency (input 1x3xHxW 0..1, output map)",
+  "license": "MIT (trained in-repo on collected reference photos)"
+}

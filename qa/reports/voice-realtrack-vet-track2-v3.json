@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-07T16:54:07",
+  "pipeline": {
+    "v2": "offline 2-pass x1.36, ffmpeg asetrate resampling, LS (Req 11)",
+    "v3": "offline 3-pass x1.45 (the factor in-app detection picks), polyphase sinc resampling (src/lib/demucs/resample.js \u2014 identical code to the app), finite-aware avg, LS, peak safety. Full 108 s at production strength via qa/voice-fulltrack-v3.mjs",
+    "naturalPitch": "the v3 vocals WITHOUT the slow-back \u2014 natural pitch and tempo (~160 BPM)"
+  },
+  "v2": {
+    "vocal_like_energy_frac": 0.4496844478532974,
+    "vocal_like_frames_frac": 0.3005370569280344,
+    "silero_mean": 0.31405818462371826,
+    "silero_frames_over_50": 0.29952690715552927,
+    "silero_peak": 0.9993060827255249,
+    "rms_dbfs": -12.240183208647437,
+    "clipped_samples": 2452,
+    "flux_outliers": 0,
+    "nonfinite": 0,
+    "seconds": 108.25301587301587
+  },
+  "v3": {
+    "vocal_like_energy_frac": 0.43176128815264264,
+    "vocal_like_frames_frac": 0.2878625134264232,
+    "silero_mean": 0.30260729789733887,
+    "silero_frames_over_50": 0.283264340626848,
+    "silero_peak": 0.9995797276496887,
+    "rms_dbfs": -15.347137041599703,
+    "clipped_samples": 0,
+    "flux_outliers": 0,
+    "nonfinite": 0,
+    "seconds": 108.25142857142858
+  },
+  "naturalPitch": {
+    "vocal_like_energy_frac": 0.8770625804588723,
+    "vocal_like_frames_frac": 0.6496259351620948,
+    "silero_mean": 0.6284868121147156,
+    "silero_frames_over_50": 0.6489498499785684,
+    "silero_peak": 0.9999700784683228,
+    "rms_dbfs": -15.334734017002427,
+    "clipped_samples": 0,
+    "flux_outliers": 0,
+    "nonfinite": 0,
+    "seconds": 74.65616780045352
+  },
+  "verdicts": {
+    "v2_to_v3": "EQUIVALENT on vocal yield (45.0% vs 43.2% voice-like energy \u2014 the model ceiling on this material); v3 fixes clipping (2452 -> 0 clipped samples) and is the exact in-app algorithm",
+    "v2_to_naturalPitch": "IMPROVED: 87.7% voice-like energy, 65.0% voiced frames (+2.9 dB), zero clipping \u2014 at natural pitch the SAME stems are ~2x purer to both Silero and the ear",
+    "factor_ab": "x1.36 at 3-pass measured 32.9% voice-like energy vs x1.45 43.2% \u2014 the detector-chosen factor is validated; no grid change"
+  }
+}

@@ -70,7 +70,28 @@ try {
   await page.evaluate(() => window.__omniframe_store.getState().setRightOpen(true))
   await page.waitForTimeout(400)
 
-  // Verify Audio section in inspector
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
+  // Verify Audio section in inspector (sections are tabbed now)
+  await activateSection('audio')
   const checkbox = page.locator('[data-testid="audio-voice-isolation-checkbox"]')
   assert(await checkbox.isVisible(), 'Voice Isolation checkbox is visible in RightPanel Audio section')
   const isInitiallyChecked = await checkbox.isChecked()

@@ -60,12 +60,33 @@ try {
   await trackingTab.click()
   await desktopPage.waitForTimeout(300)
 
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = desktopPage.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await desktopPage.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = desktopPage.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await desktopPage.waitForTimeout(200)
+    }
+  }
+
   // 2. Verify TrackingPanel provides dedicated Mask Tracking mode connected to Tracking
   const maskModeBtn = desktopPage.locator('[data-testid="track-mode-mask"]')
   await maskModeBtn.click()
   await desktopPage.waitForTimeout(200)
 
-  // Verify Mask Shape creation tools
+  // Verify Mask Shape creation tools (Create Mask Shape section)
+  await activateSection('tracking-create-mask')
   const rectMaskBtn = desktopPage.locator('[data-testid="create-mask-rectangle"]')
   const circleMaskBtn = desktopPage.locator('[data-testid="create-mask-ellipse"]')
   const polyMaskBtn = desktopPage.locator('[data-testid="create-mask-polygon"]')
@@ -83,6 +104,7 @@ try {
   }
 
   // Verify Mask property controls: Invert, Feather, Expansion, Opacity, Apply to All Frames
+  await activateSection('tracking-mask-properties')
   const invertToggle = desktopPage.locator('[data-testid="mask-invert-toggle"]')
   const featherSlider = desktopPage.locator('[data-testid="mask-feather-slider"]')
   const expansionSlider = desktopPage.locator('[data-testid="mask-expansion-slider"]')
@@ -102,6 +124,7 @@ try {
   }
 
   // 3. Verify Mask Tracking optical flow execution
+  await activateSection('tracking-actions')
   const trackMaskFwdBtn = desktopPage.locator('[data-testid="run-track-forward-btn"]')
   const fwdText = await trackMaskFwdBtn.innerText()
   if (fwdText.includes('Track Mask Forward')) {
@@ -147,25 +170,45 @@ try {
   await mobilePage.goto(URL, { waitUntil: 'networkidle' })
   await mobilePage.waitForSelector('[data-testid="preview-viewport"]', { timeout: 10000 })
 
-  // Enable drawing mode on mobile
+  // Verify floating toolbars yield to the mobile drawer instead of being
+  // trapped underneath it; the drawer contains the same tool families.
   await mobilePage.evaluate(() => {
-    window.__omniframe_store.getState().setDrawingEnabled(true)
+    const s = window.__omniframe_store.getState()
+    s.setLeftTab('omniframe')
+    s.setLeftOpen(true)
+    s.setDrawingEnabled(true)
   })
-  await mobilePage.waitForTimeout(400)
-
+  await mobilePage.waitForTimeout(300)
   const mobileToolbar = mobilePage.locator('[data-testid="drawing-toolbar"]')
+  const floatingSelectionToolbar = mobilePage.locator('[data-testid="selection-floating-toolbar"]')
+  if (!(await mobileToolbar.isVisible()) && !(await floatingSelectionToolbar.isVisible())) {
+    pass('08. Mobile Drawer Takes Precedence Over Floating Toolbars', 'Floating palettes yield while the drawer is open')
+  } else {
+    fail('08. Mobile Drawer Takes Precedence Over Floating Toolbars', 'A floating palette overlaps the open mobile drawer')
+  }
+
+  await mobilePage.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    s.setLeftTab('drawing')
+    s.setLeftOpen(false)
+  })
+  await mobilePage.waitForTimeout(300)
+
+  // With the drawer closed, expose the floating drawing tools in the preview.
+  await mobilePage.waitForTimeout(100)
+
   if (await mobileToolbar.isVisible()) {
     const box = await mobileToolbar.boundingBox()
     if (box) {
       console.log(`[INFO] Mobile Drawing Toolbar Bounding Box: width=${box.width}px, screenWidth=390px`)
       // Assert toolbar width does NOT exceed screen width (390px)
       if (box.width <= 390) {
-        pass('08. Drawing Toolbar Width Fits Mobile Screen', `Toolbar width is ${Math.round(box.width)}px <= 390px phone width`)
+        pass('09. Drawing Toolbar Width Fits Mobile Screen', `Toolbar width is ${Math.round(box.width)}px <= 390px phone width`)
       } else {
-        fail('08. Drawing Toolbar Width Fits Mobile Screen', `Toolbar width ${box.width}px EXCEEDS 390px phone width!`)
+        fail('09. Drawing Toolbar Width Fits Mobile Screen', `Toolbar width ${box.width}px EXCEEDS 390px phone width!`)
       }
     } else {
-      fail('08. Drawing Toolbar Width Fits Mobile Screen', 'Could not get toolbar bounding box')
+      fail('09. Drawing Toolbar Width Fits Mobile Screen', 'Could not get toolbar bounding box')
     }
 
     // Check page horizontal overflow on mobile
@@ -173,9 +216,9 @@ try {
       return document.documentElement.scrollWidth > document.documentElement.clientWidth
     })
     if (!overflow) {
-      pass('09. Zero Page Horizontal Overflow on Phone', 'document.scrollWidth <= document.clientWidth')
+      pass('10. Zero Page Horizontal Overflow on Phone', 'document.scrollWidth <= document.clientWidth')
     } else {
-      fail('09. Zero Page Horizontal Overflow on Phone', 'Horizontal scrollbar detected on mobile!')
+      fail('10. Zero Page Horizontal Overflow on Phone', 'Horizontal scrollbar detected on mobile!')
     }
 
     // Check tool tooltip / title lengths
@@ -197,17 +240,17 @@ try {
     console.log(`[INFO] Longest Tooltip/Title: "${longestTitle}" (${maxTitleLen} chars)`)
     // Concise titles (max 20 chars) ensure native tooltips never wrap or span across phone screens
     if (maxTitleLen <= 22) {
-      pass('10. Drawing Tooltip / Title Length Compact', `Longest title is "${longestTitle}" (${maxTitleLen} chars <= 22)`)
+      pass('11. Drawing Tooltip / Title Length Compact', `Longest title is "${longestTitle}" (${maxTitleLen} chars <= 22)`)
     } else {
-      fail('10. Drawing Tooltip / Title Length Compact', `Title "${longestTitle}" is too long (${maxTitleLen} chars)`)
+      fail('11. Drawing Tooltip / Title Length Compact', `Title "${longestTitle}" is too long (${maxTitleLen} chars)`)
     }
 
     // Capture mobile evidence screenshot
     const mobileShotPath = join(SHOTS, 'mobile-drawing-toolbar-responsive.png')
     await mobilePage.screenshot({ path: mobileShotPath, fullPage: true })
-    pass('11. Mobile Evidence Screenshot Saved', 'evidence/screenshots/mobile-drawing-toolbar-responsive.png')
+    pass('12. Mobile Evidence Screenshot Saved', 'evidence/screenshots/mobile-drawing-toolbar-responsive.png')
   } else {
-    fail('08. Drawing Toolbar Width Fits Mobile Screen', 'Drawing toolbar not visible on mobile')
+    fail('09. Drawing Toolbar Width Fits Mobile Screen', 'Drawing toolbar not visible on mobile')
   }
 
   await mobilePage.close()

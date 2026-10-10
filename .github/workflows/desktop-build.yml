@@ -1,0 +1,79 @@
+name: Desktop build (Tauri)
+
+# Builds the OmniFrame desktop application (Rust shell in src-tauri/ wrapping
+# the Vite build of src/) into native installers for Windows, Linux and macOS.
+#
+# Why CI: the Rust toolchain + crates.io access is all that the Tauri build
+# needs beyond npm. Running it here produces signed-unsigned-but-ready
+# artifacts for every platform without any local toolchain.
+#
+# Triggers:
+#   - workflow_dispatch: manual "Run workflow" from the Actions tab; artifacts
+#     land on the run page for download.
+#   - tag push (v*): creates/updates a GitHub Release draft with installers.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest # Apple Silicon
+            args: '--target aarch64-apple-darwin'
+          - platform: macos-latest # Intel
+            args: '--target x86_64-apple-darwin'
+          - platform: ubuntu-latest # .deb + .rpm + AppImage
+            args: ''
+          - platform: windows-latest # .msi + NSIS .exe
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node toolchain
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ contains(matrix.platform, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Linux system dependencies (webkit2gtk)
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev patchelf
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build desktop installers
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: ${{ matrix.args }}
+          # On tag builds, attach installers to a draft GitHub Release.
+          tagName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
+          releaseName: 'OmniFrame Desktop ${{ github.ref_name }}'
+          releaseDraft: true
+          prerelease: false

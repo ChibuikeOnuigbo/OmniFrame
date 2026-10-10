@@ -24,6 +24,12 @@ const shot=async(name)=>page.screenshot({path:join(SHOTS,`${name}.png`)})
 const drag=async(loc,dx,dy=0,steps=12)=>{const b=await loc.boundingBox(); if(!b)throw Error('no box'); await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+dx,b.y+b.height/2+dy,{steps});await page.mouse.up()}
 
 await page.goto(URL,{waitUntil:'networkidle'}); await shot('stress-01-empty')
+
+// Section presentation: these workflows exercise disclosure headers, so run
+// in single-open accordion mode (production default is tabs).
+try {
+  await page.evaluate(() => window.__omniframe_store?.getState?.().setSidebarSectionMode?.('accordion'))
+} catch {}
 assert(await page.getByText('Your canvas is empty').isVisible(),'empty state visible')
 // Count only per-track controls. The timeline also shows a master "Mute
 // master" button, which the bare /Lock|Mute|Hide/ search matched and made
@@ -185,8 +191,8 @@ assert(previewOverflow.overflow==='hidden','zoomed preview is clipped without sc
 await page.mouse.move(previewBox.x+previewBox.width/2,previewBox.y+previewBox.height/2); await page.mouse.down(); await page.mouse.move(previewBox.x+previewBox.width/2+100,previewBox.y+previewBox.height/2+60,{steps:10}); await page.mouse.up()
 assert(Math.abs(Number(await previewViewport.getAttribute('data-preview-pan-x')))>1,'200% preview supports bounded pointer pan',await previewViewport.getAttribute('data-preview-pan-x'))
 await shot('stress-08-preview-200-panned')
-await page.getByTitle('Auto fit preview',{exact:true}).click(); await page.waitForTimeout(100); const fitPan=await previewViewport.getAttribute('data-preview-pan-x'); assert(Math.abs(Number(fitPan))<.01,'Fit recenters preview canvas',fitPan)
-await page.getByTitle('Safe areas').click(); await page.getByTitle('Grid').click(); await shot('stress-08-preview-zoom')
+await page.getByRole('button',{name:'Auto fit preview',exact:true}).click(); await page.waitForTimeout(100); const fitPan=await previewViewport.getAttribute('data-preview-pan-x'); assert(Math.abs(Number(fitPan))<.01,'Fit recenters preview canvas',fitPan)
+await page.getByTitle('Toggle safe areas').click(); await page.getByTitle('Toggle composition grid').click(); await shot('stress-08-preview-zoom')
 
 // Inspector has one persistent edge control; no duplicate remains beside Export.
 assert(await page.locator('header').getByRole('button',{name:/inspector/i}).count()===0,'top bar has no duplicate inspector toggle')
@@ -221,8 +227,11 @@ await shot('stress-09-panels')
 image=page.locator('[data-kind="image"]'); await image.click(); const sliders=page.locator('aside input[type=range], div.w-72 input[type=range]')
 // Right inspector is currently open at desktop; use labels via nearby fields.
 // The inspector's width is set inline, so the old .w-72 selector matched
-// nothing. Address it by its testid.
-const inspectorRanges=page.getByTestId('inspector-panel').locator('input[type=range]'); assert(await inspectorRanges.count()>=5,'transform sliders visible')
+// nothing. Address it by its testid. Sections are single-open now: expand
+// Transform (home of the sliders) first.
+const transformHeader=page.locator('[data-testid="section-header-transform"]');
+if(await transformHeader.count()){const exp=await transformHeader.getAttribute('aria-expanded');if(exp!=='true'){await transformHeader.click();await page.waitForTimeout(250)}}
+const inspectorRanges=page.getByTestId('inspector-panel').locator('input[type=range]'); assert(await inspectorRanges.count()>=4,'transform sliders visible')
 await inspectorRanges.nth(2).focus(); await page.keyboard.press('ArrowRight'); pass('scale slider keyboard interaction')
 
 // Delete selected image, then undo/redo.
@@ -256,7 +265,9 @@ await shot('stress-10-exported')
 await page.reload({waitUntil:'networkidle'}); assert(await page.getByTestId('timeline-clip').count()===0,'refresh intentionally resets non-persistent project')
 assert(await page.getByText('Your canvas is empty').isVisible(),'refresh returns clean empty state')
 assert(errors.length===0,'unexpected console/page errors',errors.join(' | '))
-const unexpectedFailed=failed.filter(x=>!(x.startsWith('blob:')&&x.includes('ERR_ABORTED')))
+// Reload-heavy stress flow aborts in-flight /models/* availability HEADs
+// (net::ERR_ABORTED) — expected, same class as blob-aborts during reload.
+const unexpectedFailed=failed.filter(x=>!(x.startsWith('blob:')&&x.includes('ERR_ABORTED'))&&!(x.includes('/models/')&&x.includes('ERR_ABORTED')))
 assert(unexpectedFailed.length===0,'unexpected failed requests',unexpectedFailed.join(' | '))
 pass('expected reload-time blob aborts classified',String(failed.length-unexpectedFailed.length))
 

@@ -22,6 +22,7 @@ import { DrawingToolbar } from './DrawingToolbar'
 import { SelectionSubToolBar } from './SelectionSubToolBar'
 import { DrawingCanvasOverlay } from './DrawingCanvasOverlay'
 import { SlideDock } from './SlideDock'
+import { CollapseChip } from './CollapseChip'
 import { Tooltip } from './Tooltip'
 import { AspectRatioSelector } from './AspectRatioSelector'
 import { ThreeViewer } from './ThreeViewer'
@@ -86,6 +87,8 @@ export function Preview() {
   const canvasH = Math.round(canvasW / (sequenceSettings.width / sequenceSettings.height))
 
   const [display, setDisplay] = useState<'fit' | number>('fit')
+  // − / + collapse for the view/zoom cluster (chip lives top-left; cluster top-right).
+  const [viewControlsOpen, setViewControlsOpen] = useState(true)
   const [safe, setSafe] = useState(false)
   const [grid, setGrid] = useState(false)
   const [viewport, setViewport] = useState({ width: 1, height: 1 })
@@ -235,8 +238,27 @@ export function Preview() {
           z-40 also clears the selection floating toolbar (z-30), which is
           centred and wide enough to reach this corner once several tools are
           shown -- it used to bury the 3D and drawing toggles. */}
+      {/* Top Left: the −/+ chip that collapses the whole view & zoom cluster.
+          Placed in the stage corner so it never competes with the controls
+          themselves and stays discoverable when the cluster is gone. */}
+      <div className="absolute top-2 left-2 z-40">
+        <CollapseChip
+          open={viewControlsOpen}
+          onToggle={() => setViewControlsOpen((v) => !v)}
+          label="preview view & zoom controls"
+          testId="slide-dock-preview-view-controls-toggle"
+        />
+      </div>
+
       <div className="absolute top-2 right-2 z-40 flex items-center gap-1">
-        <SlideDock id="preview-view-controls" label="view controls" direction="up">
+        <SlideDock
+          id="preview-view-controls"
+          label="view controls"
+          direction="up"
+          toggle="none"
+          open={viewControlsOpen}
+          onOpenChange={setViewControlsOpen}
+        >
         {/* 3D Orbit Viewer Toggle */}
         <Tooltip label={is3DMode ? '3D Mode: on (orbit & drag to view)' : '3D Mode: off'}>
         <button
@@ -258,13 +280,14 @@ export function Preview() {
         <Tooltip label="Drawing & Paint">
         <IconButton
           data-testid="toggle-drawing-btn"
+          title="Toggle drawing and paint tools"
           active={drawingEnabled}
           onClick={() => toggleDrawingEnabled()}
         >
           <Paintbrush size={15} />
         </IconButton></Tooltip>
-        <Tooltip label="Safe areas"><IconButton active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton></Tooltip>
-        <Tooltip label="Grid"><IconButton active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton></Tooltip>
+        <Tooltip label="Safe areas"><IconButton title="Toggle safe areas" active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton></Tooltip>
+        <Tooltip label="Grid"><IconButton title="Toggle composition grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton></Tooltip>
         <div className="ml-1 flex h-8 items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-800 max-sm:hidden">
           <Tooltip label="Auto fit preview"><button type="button" aria-label="Auto fit preview" aria-pressed={display === 'fit'} onClick={() => chooseDisplay('fit')} className={`grid w-9 place-items-center border-r border-ink-700 ${display === 'fit' ? 'bg-brand text-white' : 'text-ink-400 hover:bg-ink-700 hover:text-white'}`}><Maximize2 size={14} /></button></Tooltip>
           <div className="relative flex items-center px-2"><input data-testid="preview-zoom-slider" aria-label="Preview zoom" type="range" min={25} max={200} step={5} value={Math.max(25, Math.min(200, Math.round(scale * 100)))} onChange={(e) => chooseDisplay(Number(e.target.value) / 100)} className="of-range w-20 sm:w-28" /><i aria-hidden="true" title="Auto fit point" className="pointer-events-none absolute top-1/2 h-3 w-px -translate-y-1/2 bg-white/60" style={{ left: `${8 + Math.max(0, Math.min(1, (fitScale * 100 - 25) / 175)) * 100}%` }} /></div>

@@ -146,7 +146,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
     onClose()
   }
 
-  const handleApplyMaskLayer = () => {
+  const handleUseAsSelectionMask = () => {
     if (!activeClip) return
     const st = useEditor.getState()
     st.setActiveSelection({
@@ -358,6 +358,14 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               )}
             </div>
           </div>
+
+          <p
+            role="note"
+            data-testid="bg-removal-mask-scope-note"
+            className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-3 py-2 text-[11px] leading-relaxed text-ink-300"
+          >
+            This uses the selected bounds as an editing selection; it does not carry the AI preview matte or change the clip/export. For a real alpha matte, run Guided Background Removal, then apply its result to a Drawing paint layer.
+          </p>
         </div>
 
         {/* Footer */}
@@ -378,12 +386,13 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               type="button"
               data-testid="apply-mask-layer-btn"
               disabled={isProcessing}
-              onClick={handleApplyMaskLayer}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand/50 bg-brand/20 hover:bg-brand/30 text-brand-400 font-medium text-xs transition-colors"
-              title="Create non-destructive mask layer rather than editing original image"
+              onClick={handleUseAsSelectionMask}
+              aria-label="Use background-removal bounds as a temporary selection mask"
+              className="flex min-h-8 items-center gap-1.5 rounded-lg border border-brand/50 bg-brand/20 px-3 py-1.5 text-xs font-medium text-brand-400 transition-colors hover:bg-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              title="Use the selected bounds as a temporary selection; the generated AI matte is not applied by this action"
             >
               <Layers size={13} />
-              <span>Create Mask Layer</span>
+              <span>Use as Selection Mask</span>
             </button>
             <button
               type="button"

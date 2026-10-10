@@ -226,6 +226,12 @@ async function run() {
       opts.join(','),
     )
     check('R2b overlay offered among the blend modes (user request)', opts.includes('overlay'))
+    const blendScopeHint = await page.textContent('[data-testid="recolor-blend-hint"]')
+    check(
+      'R2c OmniFrame recolor blend is distinguished from Drawing layer blend',
+      /Drawing layer blend is separate/i.test(blendScopeHint || ''),
+      (blendScopeHint || '').trim(),
+    )
 
     const baseUrl = await page.evaluate(() => {
       const s = window.__omniframe_store?.getState?.()

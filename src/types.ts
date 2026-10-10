@@ -3,7 +3,7 @@ import type { RecolorBlend } from './lib/recolor'
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound' | 'adjustment'
 
 export interface Sequence {
   id: string
@@ -101,6 +101,22 @@ export interface ClipEffect {
   invert?: number // 0..1 (default 0)
   sepia?: number // 0..1 (default 0)
   hueRotate?: number // 0..360 deg (default 0)
+}
+
+/** One LUT inside an adjustment layer (or a clip's own grade). */
+export interface ClipLut {
+  id: string
+  name: string
+  /** builtin manifest id (file under /luts) or the raw .cube text for uploads */
+  builtin?: string
+  cubeText?: string
+  intensity: number // 0..1
+  enabled: boolean
+}
+
+/** LUT-stack grading carried by adjustment layers AND normal clips. */
+export interface ClipAdjustment {
+  luts: ClipLut[]
 }
 
 export interface TextTitleStyle {
@@ -296,7 +312,25 @@ export interface PaintLayer {
 }
 
 // ---- Workspace Layout & Focus Mode Types ----
-export type WorkspacePreset = 'default' | 'edit' | 'timeline-focus' | 'preview-focus' | 'drawing' | 'color' | '3d' | 'minimal' | 'full-canvas'
+export type WorkspacePreset =
+  | 'default'
+  | 'edit'
+  | 'timeline-focus'
+  | 'preview-focus'
+  | 'drawing'
+  | 'color'
+  | '3d'
+  | 'minimal'
+  | 'full-canvas'
+  | 'audio'
+  | 'vfx'
+  | 'rig'
+  | 'manga'
+  | 'capcut'
+  | 'cinema'
+
+/** How side-panel sections are presented: tab panels or single-open accordion. */
+export type SidebarSectionMode = 'tabs' | 'accordion'
 export type FocusMode = 'none' | 'preview' | 'timeline' | 'canvas-only' | 'one-panel'
 
 export interface CustomWorkspace {
@@ -324,6 +358,9 @@ export interface Clip {
   hidden: boolean // clip-level visibility; distinct from track visibility
   transform: ClipTransform
   effects?: ClipEffect
+  /** LUT stack: adjustment layers grade everything below them; regular
+   *  clips carrying this grade only their own output (effect placed "inside"). */
+  adjustment?: ClipAdjustment
   textStyle?: TextTitleStyle
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
   // Compound Clip / Nested Sequence references
@@ -349,6 +386,19 @@ export interface Scene3DObject {
   wireframe?: boolean
   materialId?: string
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
+}
+
+export type ThreeMaskMode = 'off' | 'scene' | 'viewport'
+export type ThreeMaskTargetKind = 'geometry' | 'material'
+
+/** Editing-only 3D selection, projected into the current viewport for optional Drawing transfer. */
+export interface ThreeMaskSelection {
+  id: string
+  mode: Exclude<ThreeMaskMode, 'off'>
+  bounds: { x: number; y: number; width: number; height: number }
+  targetName: string
+  targetKind?: ThreeMaskTargetKind
+  targetIds?: string[]
 }
 
 export interface ProjectSettings {
@@ -572,9 +622,9 @@ export interface OmniframeOperation {
 export type TemplateSlotType = 'video' | 'image' | 'text' | 'audio' | '3d' | 'drawing' | 'background' | 'logo'
 
 // ---- Settings Customization: Shortcuts, Context Menu & Cursors ----
-export type CursorPack = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
-export type CursorTheme = 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
-export type CursorSize = 'standard' | 'bigger' | 'mega'
+export type CursorPack = 'pro-precision' | 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorTheme = 'pro-precision' | 'mac-sonoma-pro' | 'mac-gamified' | 'cyber-violet' | 'neo-stealth'
+export type CursorSize = 'compact' | 'standard' | 'bigger' | 'mega'
 export type CursorRenderMode = 'follower' | 'native-css'
 
 export interface CursorConfig {
@@ -640,9 +690,9 @@ export interface GuidedMatteRecord {
   iterations: number
   seedStats: { foreground: number; background: number }
   timings: { seed: number; gmm: number; classify: number; refine: number; encode: number; total: number }
-  /** OmniFrame object created from the matte (non-destructive layer). */
+  /** OmniFrame cutout object created when the matte is run in OmniFrame context. */
   objectId?: string
-  /** Mask layer id created on the active paint layer. */
+  /** Drawing paint layer receiving this matte; absent until it is applied. */
   maskLayerId?: string
   createdAt: number
 }

@@ -24,6 +24,7 @@ import type {
   MonitorMode,
   TimelineInsertionMode,
   ClipEffect,
+  ClipLut,
   TimelineMarker,
   MarkerColor,
   LinkRuleType,
@@ -38,6 +39,9 @@ import type {
   BlenderMode,
   Primitive3D,
   Scene3DObject,
+  ThreeMaskMode,
+  ThreeMaskTargetKind,
+  ThreeMaskSelection,
   OmniframeCharacter,
   OmniframeScopeType,
   SelectionModeType,
@@ -46,11 +50,13 @@ import type {
   TransparencyMask,
   BrushDynamics,
   GuidedMatteRecord,
+  SidebarSectionMode,
 } from './types'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
+import { parseCubeLUT } from './lib/lutEngine'
 import { TimelineController } from './lib/oop/TimelineController'
 import type { VoiceIsolationModel } from './lib/voiceIsolation'
 import {
@@ -238,15 +244,15 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
 
 export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
   enabled: true,
-  pack: 'mac-gamified',
-  theme: 'mac-gamified',
-  size: 'bigger', // "bugger" enlarged as requested by user
+  pack: 'pro-precision',
+  theme: 'pro-precision',
+  size: 'standard', // native-feeling cursor size (see CustomCursor scale map)
   renderMode: 'follower',
-  showClickBurst: true,
+  showClickBurst: false, // ripple on every click is visual noise for pro editing
   showBadges: true, // + for drag, ? for help as requested by user
   showDragPill: true, // ghost pill with info when dragging
   showDropReticle: true, // magnetized drop target when over timeline tracks
-  showTrail: true,
+  showTrail: false,
 }
 
 /**
@@ -265,9 +271,47 @@ import {
   type TimelineGap,
 } from './store/gapTools'
 import { createOmniframeCharacterSlice } from './store/omniframeCharacters'
+import { createRotoMaskSlice } from './store/rotoMask'
+import type {
+  RotoMaskSlice,
+  RotoMaskFrameResult,
+  RotoMaskRecord,
+  RotoStatus,
+  RotoFrameScope,
+  RotoToolMode,
+} from './store/rotoMask'
+import type { RotoModelDescriptor } from './lib/rotoModels'
+import type { RotoClick } from './lib/rotoMaskEngine'
 import { createRiggingSlice, type RiggingSlice } from './store/rigging'
+// Statically imported (not dynamically in the test hook below): RightPanel
+// already pulls this 4 KB module into the main bundle, so a dynamic import
+// here only triggered rolldown's INEFFECTIVE_DYNAMIC_IMPORT warning.
+import { measureIntegratedLufs } from './lib/loudness'
+// Statically imported (not dynamically at the use sites): rotoBrush and
+// aiDenoise are already statically imported by rotoMaskEngine/omniUnified/
+// voiceIsolation, so dynamic imports here only triggered rolldown's
+// INEFFECTIVE_DYNAMIC_IMPORT warnings without moving any chunk.
+import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } from './lib/rotoBrush'
+import { denoiseAudioBuffer } from './lib/aiDenoise'
 
-interface EditorState extends RiggingSlice {
+interface EditorState extends RiggingSlice, RotoMaskSlice {
+  selectionBrushAuto: boolean
+  selectionBrushTolerance: number
+  selectionWandTolerance: number
+  // ---- RotoMask (click-to-segment rotoscoping) state ----
+  rotoModelId: string
+  rotoImportedModels: RotoModelDescriptor[]
+  rotoStatus: RotoStatus
+  rotoClicks: RotoClick[]
+  rotoResult: RotoMaskRecord | null
+  rotoBusy: boolean
+  rotoScope: RotoFrameScope
+  rotoFrames: RotoMaskFrameResult[]
+  rotoTracking: { running: boolean; done: number; total: number }
+  rotoTool: RotoToolMode
+  rotoTolerance: number
+  rotoBrushRadius: number
+  rotoLumaExport: { url: string; frame: number; at: number } | null
   assets: MediaAsset[]
   tracks: Track[]
   clips: Clip[]
@@ -334,6 +378,18 @@ interface EditorState extends RiggingSlice {
   timelineHeight: number
   leftDockWidth: number
   rightPanelWidth: number
+  rightPanelFloating: boolean
+  rightPanelFloat: { x: number; y: number; w: number; h: number }
+  leftPanelFloating: boolean
+  leftPanelFloat: { x: number; y: number; w: number; h: number }
+  /** Timeline folded to a thin strip (−) — + restores the previous height. */
+  timelineCollapsed: boolean
+  timelineFloating: boolean
+  timelineFloat: { x: number; y: number; w: number; h: number }
+  /** Rising z-index allocator so popped-out windows stack in click order. */
+  floatZ: number
+  bumpFloatZ: () => number
+  sidebarSectionMode: SidebarSectionMode
   customWorkspaces: CustomWorkspace[]
 
   // ---- sequence & aspect ratio ----
@@ -377,6 +433,44 @@ interface EditorState extends RiggingSlice {
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
   addTextTitleClip: (text?: string, duration?: number) => void
+
+  // ---- adjustment layers & LUTs ----
+  /** Built-in LUT library (public/luts/manifest.json). */
+  lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string }> }
+  /** User-uploaded .cube LUTs (persisted to localStorage when they fit). */
+  userLuts: Array<{ id: string; name: string; cubeText: string }>
+  loadLutLibrary: () => Promise<void>
+  addUserLut: (name: string, cubeText: string) => string | null
+  removeUserLut: (id: string) => void
+  /**
+   * Creates an adjustment-layer clip (kind 'adjustment') that grades every
+   * track below it. With no args it spans playhead→content end on the
+   * topmost video track.
+   */
+  addAdjustmentLayer: (partial?: {
+    name?: string
+    start?: number
+    duration?: number
+    trackId?: string
+    effects?: ClipEffect
+    luts?: ClipLut[]
+  }) => string
+  /** Append a LUT to a clip's adjustment stack (creates it if needed). */
+  addLutToClip: (clipId: string, lut: Omit<ClipLut, 'id'> & { id?: string }) => string
+  removeLutFromClip: (clipId: string, lutId: string) => void
+  setLutIntensity: (clipId: string, lutId: string, intensity: number) => void
+  toggleLutEnabled: (clipId: string, lutId: string) => void
+  /**
+   * Universal placement: if a clip is selected, the LUT goes INSIDE that
+   * clip (per-clip grade). Otherwise an adjustment layer is created on the
+   * timeline at the playhead, affecting everything below it.
+   */
+  placeLut: (lut: { name: string; builtin?: string; cubeText?: string }) => string
+  /**
+   * Same layer semantics for filter effects (blur, B&W, ...): merges the
+   * effect into the selected/active adjustment layer, or creates one.
+   */
+  placeEffectAsLayer: (name: string, effect: ClipEffect) => string
 
   // ---- media ----
   addAsset: (a: MediaAsset) => void
@@ -444,6 +538,7 @@ interface EditorState extends RiggingSlice {
   setPaintLayerBlendMode: (layerId: string, blendMode: GlobalCompositeOperation) => void
   setPaintLayerBlur: (layerId: string, blur: number) => void
   setPaintLayerOpacity: (layerId: string, opacity: number) => void
+  clearPaintLayerRasterMask: (layerId: string) => void
   setOnionSkin: (partial: Partial<OnionSkinSettings>) => void
   toggleOnionSkin: () => void
   setDrawingHoldFrames: (frames: number) => void
@@ -452,6 +547,13 @@ interface EditorState extends RiggingSlice {
   clearSelection: () => void
   convertSelectionToMask: (layerId?: string) => void
   invertSelection: () => void
+  /** Auto-brush: compute a real edge-snapped mask for the painted selection. */
+  refineBrushSelectionMask: (points: { x: number; y: number }[]) => Promise<void>
+  /** Real magic wand: colour-region selection from the clicked pixel. */
+  setWandSelectionAt: (point: { x: number; y: number }) => Promise<void>
+  setSelectionBrushAuto: (v: boolean) => void
+  setSelectionBrushTolerance: (n: number) => void
+  setSelectionWandTolerance: (n: number) => void
   growSelection: (pixels?: number) => void
   shrinkSelection: (pixels?: number) => void
   setSelectionFeather: (feather: number) => void
@@ -510,6 +612,14 @@ interface EditorState extends RiggingSlice {
   setTimelineHeight: (height: number) => void
   setLeftDockWidth: (width: number) => void
   setRightPanelWidth: (width: number) => void
+  setRightPanelFloating: (v: boolean) => void
+  setRightPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
+  setLeftPanelFloating: (v: boolean) => void
+  setLeftPanelFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
+  setTimelineCollapsed: (v: boolean) => void
+  setTimelineFloating: (v: boolean) => void
+  setTimelineFloat: (patch: Partial<{ x: number; y: number; w: number; h: number }>) => void
+  setSidebarSectionMode: (mode: SidebarSectionMode) => void
   saveCustomWorkspace: (name: string) => string
   applyCustomWorkspace: (id: string) => void
   deleteCustomWorkspace: (id: string) => void
@@ -608,7 +718,9 @@ interface EditorState extends RiggingSlice {
   runGuidedRectBackgroundRemoval: (
     rect?: { x: number; y: number; width: number; height: number },
     hint?: { x: number; y: number; radius?: number },
+    destination?: 'omniframe' | 'drawing',
   ) => Promise<GuidedMatteRecord | null>
+  applyGuidedMatteToDrawingLayer: (layerId?: string) => void
   clearGuidedMatte: () => void
 
 
@@ -633,6 +745,14 @@ interface EditorState extends RiggingSlice {
   addScene3DObject: (object: Scene3DObject) => void
   updateScene3DObject: (id: string, updates: Partial<Scene3DObject>) => void
   removeScene3DObject: (id: string) => void
+  threeMaskMode: ThreeMaskMode
+  setThreeMaskMode: (mode: ThreeMaskMode) => void
+  threeMaskTargetKind: ThreeMaskTargetKind
+  setThreeMaskTargetKind: (kind: ThreeMaskTargetKind) => void
+  threeMaskSelection: ThreeMaskSelection | null
+  setThreeMaskSelection: (selection: ThreeMaskSelection | null) => void
+  clearThreeMaskSelection: () => void
+  useThreeMaskSelectionInDrawing: () => void
 
   // ---- Graph Editor & Keyframing System ----
   graphEditorOpen: boolean
@@ -833,6 +953,17 @@ export const useEditor = create<EditorState>((set, get) => {
     tracks: [],
     clips: [],
     transitions: [],
+    lutLibrary: { loaded: false, luts: [] },
+    userLuts: (() => {
+      try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.userLuts') : null
+        if (!raw) return []
+        const parsed = JSON.parse(raw)
+        return Array.isArray(parsed) ? parsed.filter((l) => l && typeof l.cubeText === 'string') : []
+      } catch {
+        return []
+      }
+    })(),
     selectedTransitionId: null,
     playhead: 0,
     duration: 10,
@@ -944,6 +1075,40 @@ export const useEditor = create<EditorState>((set, get) => {
         scene3DObjects: s.scene3DObjects.filter((o) => o.id !== id),
         selected3DObjectId: s.selected3DObjectId === id ? (s.scene3DObjects[0]?.id || null) : s.selected3DObjectId,
       }))
+    },
+    threeMaskMode: 'off',
+    setThreeMaskMode: (mode) => set({ threeMaskMode: mode }),
+    threeMaskTargetKind: 'geometry',
+    setThreeMaskTargetKind: (kind) => set({ threeMaskTargetKind: kind }),
+    threeMaskSelection: null,
+    setThreeMaskSelection: (selection) => set({ threeMaskSelection: selection }),
+    clearThreeMaskSelection: () => set({ threeMaskSelection: null }),
+    useThreeMaskSelectionInDrawing: () => {
+      const selection = get().threeMaskSelection
+      if (!selection) return
+      const x = clamp(selection.bounds.x, 0, 1)
+      const y = clamp(selection.bounds.y, 0, 1)
+      const width = clamp(selection.bounds.width, 0, 1 - x)
+      const height = clamp(selection.bounds.height, 0, 1 - y)
+      if (width < 0.005 || height < 0.005) return
+
+      set({
+        activeSelection: {
+          type: 'rectangle',
+          bounds: { x, y, width, height },
+          characterName: selection.targetName,
+          showMaskOnly: false,
+          maskDisplayMode: 'cutout',
+        },
+        selectionMode: 'rect',
+        drawingTool: 'select-rect',
+        drawingEnabled: true,
+        leftTab: 'drawing',
+        leftOpen: true,
+        activeSubMode: null,
+        is3DMode: false,
+        threeMaskMode: 'off',
+      })
     },
 
     // ---- Graph Editor & Keyframing System ----
@@ -1082,6 +1247,21 @@ export const useEditor = create<EditorState>((set, get) => {
     // Universal gap tools + track targeting (see ./store/gapTools.ts).
     ...createGapToolsSlice(set, get, { pushSnapshot, recompute }),
     ...createOmniframeCharacterSlice(set, get, { pushSnapshot }),
+    // RotoMask: click-to-segment rotoscoping (see ./store/rotoMask.ts).
+    ...createRotoMaskSlice(set, get, { pushSnapshot }),
+    rotoModelId: 'smart',
+    rotoImportedModels: [],
+    rotoStatus: { state: 'idle', message: 'Smart engine ready - no model needed' },
+    rotoClicks: [],
+    rotoResult: null,
+    rotoBusy: false,
+    rotoScope: { mode: 'current', start: 0, end: 2, step: 1 },
+    rotoFrames: [],
+    rotoTracking: { running: false, done: 0, total: 0 },
+    rotoTool: null,
+    rotoTolerance: 26,
+    rotoBrushRadius: 24,
+    rotoLumaExport: null,
     // Character rigging: named parts joined by a parent/child skeleton.
     ...createRiggingSlice(set, get, { pushSnapshot }),
     lassoEngagedAt: 0,
@@ -1114,6 +1294,9 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     activeSelection: null,
     selectionMode: 'rect',
+    selectionBrushAuto: true,
+    selectionBrushTolerance: 26,
+    selectionWandTolerance: 24,
     activeMaskId: null,
     clipMasks: [
       {
@@ -1148,6 +1331,15 @@ export const useEditor = create<EditorState>((set, get) => {
     timelineHeight: 280,
     leftDockWidth: 320,
     rightPanelWidth: 280,
+    rightPanelFloating: false,
+    rightPanelFloat: { x: 0, y: 0, w: 340, h: 560 },
+    leftPanelFloating: false,
+    leftPanelFloat: { x: 0, y: 0, w: 380, h: 560 },
+    timelineCollapsed: false,
+    timelineFloating: false,
+    timelineFloat: { x: 0, y: 0, w: 900, h: 380 },
+    floatZ: 70,
+    sidebarSectionMode: 'tabs',
     customWorkspaces: (() => {
       try {
         const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.customWorkspaces') : null
@@ -1282,6 +1474,239 @@ export const useEditor = create<EditorState>((set, get) => {
           c.id === id ? { ...c, effects: { ...c.effects, ...effect } } : c,
         ),
       }))
+    },
+
+    // ---- adjustment layers & LUTs ------------------------------------
+    loadLutLibrary: async () => {
+      if (get().lutLibrary.loaded) return
+      try {
+        const res = await fetch('luts/manifest.json')
+        if (!res.ok) throw new Error(String(res.status))
+        const manifest = await res.json()
+        set({ lutLibrary: { loaded: true, luts: manifest.luts || [] } })
+      } catch {
+        // keep loaded=false so panels can show an honest error
+      }
+    },
+
+    addUserLut: (name, cubeText) => {
+      // validate before storing (throws -> null for invalid .cube files)
+      try {
+        parseCubeLUT(cubeText)
+      } catch {
+        return null
+      }
+      const entry = { id: `user-lut-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`, name, cubeText }
+      set((s) => ({ userLuts: [...s.userLuts, entry] }))
+      try {
+        localStorage.setItem('omniframe.userLuts', JSON.stringify(get().userLuts))
+      } catch {
+        // quota exceeded — LUT stays in memory for this session only
+      }
+      return entry.id
+    },
+
+    removeUserLut: (id) => {
+      set((s) => ({ userLuts: s.userLuts.filter((l) => l.id !== id) }))
+      try {
+        localStorage.setItem('omniframe.userLuts', JSON.stringify(get().userLuts))
+      } catch { /* ignore */ }
+    },
+
+    addAdjustmentLayer: (partial = {}) => {
+      pushSnapshot()
+      const s = get()
+      const start = Math.max(0, partial.start ?? s.playhead)
+      const contentEnd = s.clips.reduce((m, c) => Math.max(m, c.start + c.duration), 0)
+      const duration = Math.max(0.5, partial.duration ?? Math.max(2, contentEnd - start))
+
+      // Default target: the topmost video track with no overlapping clip, so
+      // the layer grades everything below it while tracks above (e.g. text)
+      // stay untouched.
+      const videoTracks = s.tracks.filter((t) => t.type === 'video')
+      const overlaps = (trackId: string) =>
+        s.clips.some(
+          (c) =>
+            c.trackId === trackId &&
+            !(c.start + c.duration <= start || c.start >= start + duration),
+        )
+      let targetTrackId = partial.trackId || ''
+      if (!targetTrackId) {
+        const free = videoTracks.find((t) => !overlaps(t.id))
+        targetTrackId =
+          free?.id ||
+          (videoTracks[0]
+            ? get().createTrack('video', 'above', videoTracks[0].id)
+            : get().ensureTrack('video'))
+      }
+
+      const id = `clip-adjustment-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+      const lutCount = partial.luts?.length || 0
+      const clip: Clip = {
+        id,
+        trackId: targetTrackId,
+        assetId: '',
+        start,
+        duration,
+        inPoint: 0,
+        name:
+          partial.name ||
+          (lutCount ? `Adjustment: ${partial.luts!.map((l) => l.name).join(' + ')}` : 'Adjustment Layer'),
+        kind: 'adjustment',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        effects: partial.effects,
+        adjustment: partial.luts?.length ? { luts: partial.luts } : undefined,
+      }
+      set((st) => ({
+        clips: [...st.clips, clip],
+        selectedClipId: id,
+        selectedClipIds: [id],
+        duration: recompute([...st.clips, clip]),
+      }))
+      return id
+    },
+
+    addLutToClip: (clipId, lut) => {
+      pushSnapshot()
+      const lutId = lut.id || `clip-lut-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+      set((s) => ({
+        clips: s.clips.map((c) => {
+          if (c.id !== clipId) return c
+          const luts = [...(c.adjustment?.luts || []), { ...lut, id: lutId }]
+          const renamed =
+            c.kind === 'adjustment' && (!c.name || c.name === 'Adjustment Layer')
+              ? { name: `Adjustment: ${luts.map((l) => l.name).join(' + ')}` }
+              : {}
+          return { ...c, ...renamed, adjustment: { luts } }
+        }),
+      }))
+      return lutId
+    },
+
+    removeLutFromClip: (clipId, lutId) => {
+      pushSnapshot()
+      set((s) => ({
+        clips: s.clips.map((c) => {
+          if (c.id !== clipId || !c.adjustment) return c
+          const luts = c.adjustment.luts.filter((l) => l.id !== lutId)
+          return { ...c, adjustment: luts.length ? { luts } : undefined }
+        }),
+      }))
+    },
+
+    setLutIntensity: (clipId, lutId, intensity) => {
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === clipId && c.adjustment
+            ? {
+                ...c,
+                adjustment: {
+                  luts: c.adjustment.luts.map((l) =>
+                    l.id === lutId ? { ...l, intensity: Math.max(0, Math.min(1, intensity)) } : l,
+                  ),
+                },
+              }
+            : c,
+        ),
+      }))
+    },
+
+    toggleLutEnabled: (clipId, lutId) => {
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === clipId && c.adjustment
+            ? {
+                ...c,
+                adjustment: {
+                  luts: c.adjustment.luts.map((l) => (l.id === lutId ? { ...l, enabled: !l.enabled } : l)),
+                },
+              }
+            : c,
+        ),
+      }))
+    },
+
+    placeLut: (lut) => {
+      const s = get()
+      const selected = s.clips.find((c) => c.id === s.selectedClipId)
+      const clipLut: Omit<ClipLut, 'id'> = {
+        name: lut.name,
+        builtin: lut.builtin,
+        cubeText: lut.cubeText,
+        intensity: 1,
+        enabled: true,
+      }
+      // Selected clip (any visual kind, incl. compound): LUT goes INSIDE it.
+      if (selected && selected.kind !== 'audio' && selected.kind !== 'adjustment') {
+        const clipId = selected.id
+        get().addLutToClip(clipId, clipLut)
+        get().selectClip(clipId)
+        return clipId
+      }
+      // Selected adjustment layer: stack onto it.
+      if (selected && selected.kind === 'adjustment') {
+        get().addLutToClip(selected.id, clipLut)
+        return selected.id
+      }
+      // Nothing selected: reuse an adjustment layer already active at the
+      // playhead (topmost), else create one.
+      const playhead = s.playhead
+      const active = s.clips
+        .filter(
+          (c) =>
+            c.kind === 'adjustment' &&
+            playhead >= c.start &&
+            playhead < c.start + c.duration &&
+            !c.hidden,
+        )
+        .sort((a, b) => {
+          const ai = s.tracks.findIndex((t) => t.id === a.trackId)
+          const bi = s.tracks.findIndex((t) => t.id === b.trackId)
+          return ai - bi
+        })[0]
+      if (active) {
+        get().addLutToClip(active.id, clipLut)
+        get().selectClip(active.id)
+        return active.id
+      }
+      const layerId = get().addAdjustmentLayer({ luts: [{ ...clipLut, id: `clip-lut-${Date.now().toString(36)}` }] })
+      return layerId
+    },
+
+    placeEffectAsLayer: (name, effect) => {
+      const s = get()
+      // Prefer the selected adjustment layer, else one active at playhead.
+      const selected = s.clips.find((c) => c.id === s.selectedClipId)
+      const target =
+        selected?.kind === 'adjustment'
+          ? selected
+          : s.clips.find(
+              (c) =>
+                c.kind === 'adjustment' &&
+                s.playhead >= c.start &&
+                s.playhead < c.start + c.duration &&
+                !c.hidden,
+            )
+      if (target) {
+        pushSnapshot()
+        set((st) => ({
+          clips: st.clips.map((c) =>
+            c.id === target.id
+              ? {
+                  ...c,
+                  name: c.name === 'Adjustment Layer' ? `Adjustment: ${name}` : c.name,
+                  effects: { ...c.effects, ...effect },
+                }
+              : c,
+          ),
+          selectedClipId: target.id,
+          selectedClipIds: [target.id],
+        }))
+        return target.id
+      }
+      return get().addAdjustmentLayer({ name: `Adjustment: ${name}`, effects: effect })
     },
 
     addTextTitleClip: (text = 'Title', duration = 4.0) => {
@@ -2241,6 +2666,20 @@ export const useEditor = create<EditorState>((set, get) => {
         ),
       }))
     },
+    clearPaintLayerRasterMask: (layerId) => {
+      const layer = get().paintLayers.find((item) => item.id === layerId)
+      if (!layer?.maskDataUrl) return
+      pushSnapshot()
+      set((s) => ({
+        paintLayers: s.paintLayers.map((item) =>
+          item.id === layerId ? { ...item, maskDataUrl: undefined } : item,
+        ),
+        guidedMatte:
+          s.guidedMatte?.maskLayerId === layerId && s.guidedMatte.maskDataUrl === layer.maskDataUrl
+            ? { ...s.guidedMatte, maskLayerId: undefined }
+            : s.guidedMatte,
+      }))
+    },
     setOnionSkin: (partial) => set((s) => ({ onionSkin: { ...s.onionSkin, ...partial } })),
     toggleOnionSkin: () => set((s) => ({ onionSkin: { ...s.onionSkin, enabled: !s.onionSkin.enabled } })),
     setDrawingHoldFrames: (frames) => set({ drawingHoldFrames: Math.max(1, Math.min(120, frames)) }),
@@ -2315,6 +2754,78 @@ export const useEditor = create<EditorState>((set, get) => {
           : null,
       }))
     },
+    // ---- Auto Brush & real Magic Wand (Selection & Masking sub-tool) ----
+    setSelectionBrushAuto: (v) => set({ selectionBrushAuto: v }),
+    setSelectionBrushTolerance: (n) => set({ selectionBrushTolerance: Math.max(1, Math.min(100, n)) }),
+    setSelectionWandTolerance: (n) => set({ selectionWandTolerance: Math.max(1, Math.min(100, n)) }),
+
+    /**
+     * Auto Brush: after the user paints a selection stroke, grow the painted
+     * band to the subject's real edges (colour model + gradient stop) using
+     * the pixels of the live preview canvas. Replaces the old hard-circle
+     * brush that ignored what was under it.
+     */
+    refineBrushSelectionMask: async (points) => {
+      const sel = get().activeSelection
+      if (!sel || sel.type !== 'brush' || points.length < 2) return
+      if (typeof document === 'undefined') return
+      const preview = document.getElementById('of-canvas') as HTMLCanvasElement | null
+      if (!preview) return
+      const ctx = preview.getContext('2d', { willReadFrequently: true })
+      if (!ctx) return
+      const img = ctx.getImageData(0, 0, preview.width, preview.height)
+      const radiusPx = Math.max(4, (get().drawingSize / 2) * (preview.width / Math.max(1, preview.clientWidth || preview.width)))
+      const auto = autoBrushMaskFromStroke({
+        source: img,
+        stroke: points.map((p) => ({ x: p.x * img.width, y: p.y * img.height })),
+        radius: radiusPx,
+        tolerance: get().selectionBrushTolerance,
+        maxGrow: Math.round(radiusPx * 3),
+        feather: 1.5,
+      })
+      set((s) =>
+        s.activeSelection
+          ? { activeSelection: { ...s.activeSelection, maskDataUrl: maskToDataUrl(auto.mask) } }
+          : {},
+      )
+    },
+
+    /**
+     * Real Magic Wand: flood the clicked colour region from the preview
+     * canvas pixels (the old implementation faked a fixed 0.2x0.2 rectangle).
+     */
+    setWandSelectionAt: async (point) => {
+      if (typeof document === 'undefined') return
+      const preview = document.getElementById('of-canvas') as HTMLCanvasElement | null
+      if (!preview) return
+      const ctx = preview.getContext('2d', { willReadFrequently: true })
+      if (!ctx) return
+      const img = ctx.getImageData(0, 0, preview.width, preview.height)
+      const wand = magicWandMask({
+        source: img,
+        seed: { x: point.x * img.width, y: point.y * img.height },
+        tolerance: get().selectionWandTolerance,
+        contiguous: true,
+        feather: 1,
+      })
+      const b = maskBounds(wand.mask)
+      // Keep the bounds visible even for tiny selections (min 6% box).
+      const nb = {
+        x: b.width ? Math.max(0, b.x / img.width) : Math.max(0, point.x - 0.03),
+        y: b.height ? Math.max(0, b.y / img.height) : Math.max(0, point.y - 0.03),
+        width: b.width ? Math.max(0.06, b.width / img.width) : 0.06,
+        height: b.height ? Math.max(0.06, b.height / img.height) : 0.06,
+      }
+      set({
+        activeSelection: {
+          type: 'magic-wand',
+          bounds: nb,
+          points: [{ ...point, timestamp: 0 }],
+          maskDataUrl: maskToDataUrl(wand.mask),
+        },
+      })
+    },
+
     setSelectionMode: (mode) => {
       set({ selectionMode: mode })
       const toolMap: Record<SelectionModeType, DrawingToolType> = {
@@ -2580,6 +3091,14 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- layout actions ----
     setWorkspacePreset: (preset) => {
+      // Applying a preset is a full layout reset: every popped-out panel
+      // returns to its dock and the timeline strip expands.
+      set({
+        leftPanelFloating: false,
+        rightPanelFloating: false,
+        timelineFloating: false,
+        timelineCollapsed: false,
+      })
       switch (preset) {
         case 'default':
           set({
@@ -2680,6 +3199,90 @@ export const useEditor = create<EditorState>((set, get) => {
             drawingEnabled: false,
           })
           break
+        case 'audio':
+          // Audio Suite: stems panel open, tall timeline for waveforms.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'audio',
+            rightOpen: false,
+            leftDockWidth: 300,
+            timelineHeight: 460,
+            drawingEnabled: false,
+          })
+          break
+        case 'vfx':
+          // VFX & Tracking: tracking panel + wide inspector for matte params.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'tracking',
+            leftDockWidth: 320,
+            rightOpen: true,
+            rightPanelWidth: 320,
+            timelineHeight: 200,
+            drawingEnabled: false,
+          })
+          break
+        case 'rig':
+          // Rig & Animate: rigging panel, inspector, graph editor open.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'rigging',
+            leftDockWidth: 320,
+            rightOpen: true,
+            rightPanelWidth: 300,
+            timelineHeight: 240,
+            graphEditorOpen: true,
+            drawingEnabled: false,
+          })
+          break
+        case 'manga':
+          // Manga / MMV edit: drawing canvas + wide media dock, clean sides.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'drawing',
+            leftDockWidth: 340,
+            rightOpen: false,
+            timelineHeight: 300,
+            drawingEnabled: true,
+          })
+          break
+        case 'capcut':
+          // CapCut-style: media-first left dock, right inspector, tall timeline.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'media',
+            leftDockWidth: 300,
+            rightOpen: true,
+            rightPanelWidth: 300,
+            timelineHeight: 320,
+            drawingEnabled: false,
+            leftPanelFloating: false,
+            rightPanelFloating: false,
+          })
+          break
+        case 'cinema':
+          // Cinema: everything docked away for a pure clean-screen review pass.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: false,
+            rightOpen: false,
+            timelineHeight: 180,
+            drawingEnabled: false,
+            leftPanelFloating: false,
+            rightPanelFloating: false,
+          })
+          break
       }
     },
     setFocusMode: (mode) => {
@@ -2688,7 +3291,7 @@ export const useEditor = create<EditorState>((set, get) => {
         get().setWorkspacePreset(currentPreset)
         return
       }
-      set({ focusMode: mode })
+      set({ focusMode: mode, timelineCollapsed: false, timelineFloating: false })
       if (mode === 'canvas-only') {
         set({ leftOpen: false, rightOpen: false, timelineHeight: 0 })
       } else if (mode === 'preview') {
@@ -2699,9 +3302,92 @@ export const useEditor = create<EditorState>((set, get) => {
         set({ leftOpen: false, rightOpen: true, timelineHeight: 160 })
       }
     },
-    setTimelineHeight: (height) => set({ timelineHeight: Math.max(120, Math.min(600, height)) }),
+    setTimelineHeight: (height) =>
+      set({ timelineHeight: Math.max(120, Math.min(600, height)), timelineCollapsed: false }),
     setLeftDockWidth: (width) => set({ leftDockWidth: Math.max(220, Math.min(600, width)) }),
     setRightPanelWidth: (width) => set({ rightPanelWidth: Math.max(220, Math.min(500, width)) }),
+    setRightPanelFloating: (v) => {
+      if (!v) {
+        set({ rightPanelFloating: false })
+        return
+      }
+      // First float: place the window over the right side of the preview.
+      const cur = get().rightPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.min(cur.w || 340, vw - 32)
+      const h = Math.min(cur.h || 560, vh - 120)
+      const x = cur.x > 0 ? cur.x : Math.max(16, vw - w - 64)
+      const y = cur.y > 0 ? cur.y : 88
+      set({ rightPanelFloating: true, rightPanelFloat: { x, y, w, h } })
+    },
+    setTimelineCollapsed: (v) => set({ timelineCollapsed: v }),
+    setTimelineFloating: (v) => {
+      if (!v) {
+        set({ timelineFloating: false })
+        return
+      }
+      // First float: a wide, timeline-shaped window over the lower half.
+      const cur = get().timelineFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.min(cur.w || 900, vw - 32)
+      const h = Math.min(cur.h || 380, vh - 160)
+      const x = cur.x > 0 ? cur.x : Math.max(16, (vw - w) / 2)
+      const y = cur.y > 0 ? cur.y : Math.max(64, vh - h - 48)
+      set({ timelineFloating: true, timelineCollapsed: false, timelineFloat: { x, y, w, h } })
+    },
+    setTimelineFloat: (patch) => {
+      const cur = get().timelineFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.max(420, Math.min(patch.w ?? cur.w, vw - 24))
+      const h = Math.max(200, Math.min(patch.h ?? cur.h, vh - 96))
+      const x = Math.max(0, Math.min(patch.x ?? cur.x, vw - w))
+      const y = Math.max(40, Math.min(patch.y ?? cur.y, vh - 48))
+      set({ timelineFloat: { x, y, w, h } })
+    },
+    bumpFloatZ: () => {
+      const z = get().floatZ + 1
+      set({ floatZ: z })
+      return z
+    },
+    setLeftPanelFloating: (v) => {
+      if (!v) {
+        set({ leftPanelFloating: false })
+        return
+      }
+      // First float: place the window over the left side of the preview.
+      const cur = get().leftPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.min(cur.w || 380, vw - 32)
+      const h = Math.min(cur.h || 560, vh - 120)
+      const x = cur.x > 0 ? cur.x : Math.max(16, (vw - w) / 2 - 120)
+      const y = cur.y > 0 ? cur.y : 88
+      set({ leftPanelFloating: true, leftPanelFloat: { x, y, w, h } })
+    },
+    setLeftPanelFloat: (patch) => {
+      const cur = get().leftPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.max(240, Math.min(patch.w ?? cur.w, vw - 24))
+      const h = Math.max(280, Math.min(patch.h ?? cur.h, vh - 96))
+      const x = Math.max(0, Math.min(patch.x ?? cur.x, vw - w))
+      const y = Math.max(40, Math.min(patch.y ?? cur.y, vh - 48))
+      set({ leftPanelFloat: { x, y, w, h } })
+    },
+    setSidebarSectionMode: (mode) => set({ sidebarSectionMode: mode }),
+    setRightPanelFloat: (patch) => {
+      const cur = get().rightPanelFloat
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const w = Math.max(280, Math.min(patch.w ?? cur.w, vw - 24))
+      const h = Math.max(320, Math.min(patch.h ?? cur.h, vh - 96))
+      const x = Math.max(0, Math.min(patch.x ?? cur.x, vw - w))
+      const y = Math.max(40, Math.min(patch.y ?? cur.y, vh - 48))
+      set({ rightPanelFloat: { x, y, w, h } })
+    },
     saveCustomWorkspace: (name) => {
       const s = get()
       const id = uid('ws')
@@ -2733,6 +3419,10 @@ export const useEditor = create<EditorState>((set, get) => {
         rightPanelWidth: ws.rightPanelWidth,
         timelineHeight: ws.timelineHeight,
         focusMode: ws.focusMode,
+        leftPanelFloating: false,
+        rightPanelFloating: false,
+        timelineFloating: false,
+        timelineCollapsed: false,
       })
     },
     deleteCustomWorkspace: (id) => {
@@ -3022,7 +3712,7 @@ export const useEditor = create<EditorState>((set, get) => {
     // ---- background removal actions ----
     setActiveBgRemovalJob: (job) => set({ activeBgRemovalJob: job }),
 
-    runGuidedRectBackgroundRemoval: async (rectOverride, hint) => {
+    runGuidedRectBackgroundRemoval: async (rectOverride, hint, destination = 'omniframe') => {
       const sel = get().activeSelection
       const rect = rectOverride || sel?.bounds
       if (!rect || rect.width <= 0.01 || rect.height <= 0.01) return null
@@ -3057,46 +3747,40 @@ export const useEditor = create<EditorState>((set, get) => {
 
         pushSnapshot()
 
-        // 1. Non-destructive mask layer on the active paint layer
-        const layerId = get().activePaintLayerId || get().paintLayers[0]?.id
-        if (layerId) {
-          set((st) => ({
-            paintLayers: st.paintLayers.map((l) =>
-              l.id === layerId
-                ? {
-                    ...l,
-                    maskDataUrl: result.maskDataUrl,
-                    transparencyMask: {
-                      id: l.transparencyMask?.id || uid('mask'),
-                      parentLayerId: layerId,
-                      name: 'Guided Rect Matte',
-                      enabled: true,
-                      inverted: false,
-                      opacity: 1,
-                      dataUrl: result.maskDataUrl,
-                    },
-                  }
-                : l,
-            ),
-            activeMaskId: get().activeMaskId,
-          }))
+        // A guided matte created in OmniFrame stays detached from Drawing paint
+        // layers by default. Drawing mode may apply it directly to its active
+        // layer; cross-mode application uses the explicit apply action.
+        let layerId: string | undefined
+        if (destination === 'drawing') {
+          layerId = get().activePaintLayerId || get().paintLayers[0]?.id
+          if (layerId) {
+            set((st) => ({
+              paintLayers: st.paintLayers.map((l) =>
+                l.id === layerId ? { ...l, maskDataUrl: result.maskDataUrl } : l,
+              ),
+            }))
+          }
         }
 
-        // 2. OmniFrame object layered from the matte (movable, recolorable)
-        const objectId = `obj_guided_${Date.now()}`
-        const newChar: OmniframeCharacter = {
-          id: objectId,
-          name: 'Guided Cutout',
-          label: 'Guided Rect Background Removal',
-          bounds: { ...rect },
-          cutoutUrl: result.cutoutDataUrl,
-          transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
-          scope: 'all',
+        // OmniFrame owns the movable cutout object. Drawing mode gets only a
+        // Drawing-layer matte, rather than creating cross-mode content too.
+        let objectId: string | undefined
+        if (destination === 'omniframe') {
+          objectId = `obj_guided_${Date.now()}`
+          const newChar: OmniframeCharacter = {
+            id: objectId,
+            name: 'Guided Cutout',
+            label: 'Guided Rect Background Removal',
+            bounds: { ...rect },
+            cutoutUrl: result.cutoutDataUrl,
+            transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+            scope: 'all',
+          }
+          set((st) => ({
+            omniframeCharacters: [...st.omniframeCharacters, newChar],
+            selectedCharacterId: objectId,
+          }))
         }
-        set((st) => ({
-          omniframeCharacters: [...st.omniframeCharacters, newChar],
-          selectedCharacterId: objectId,
-        }))
 
         const record: GuidedMatteRecord = {
           id: uid('guided'),
@@ -3122,6 +3806,22 @@ export const useEditor = create<EditorState>((set, get) => {
       }
     },
 
+    applyGuidedMatteToDrawingLayer: (layerId) => {
+      const matte = get().guidedMatte
+      if (!matte) return
+      const targetLayerId = layerId || get().activePaintLayerId || get().paintLayers[0]?.id
+      if (!targetLayerId || !get().paintLayers.some((layer) => layer.id === targetLayerId)) return
+
+      pushSnapshot()
+      set((state) => ({
+        paintLayers: state.paintLayers.map((layer) =>
+          layer.id === targetLayerId ? { ...layer, maskDataUrl: matte.maskDataUrl } : layer,
+        ),
+        guidedMatte: state.guidedMatte
+          ? { ...state.guidedMatte, maskLayerId: targetLayerId }
+          : null,
+      }))
+    },
     clearGuidedMatte: () => set({ guidedMatte: null }),
 
     newProject: () => {
@@ -3159,6 +3859,15 @@ export const useEditor = create<EditorState>((set, get) => {
 
 if (typeof window !== 'undefined') {
   ;(window as any).__omniframe_store = useEditor
+  // Test hooks (qa/*.mjs): BS.1770 loudness measurement and the ONNX denoiser.
+  ;(window as any).__omniframe_lufs = async (channels: Float32Array[], sampleRate: number) => {
+    return measureIntegratedLufs(channels, sampleRate)
+  }
+  ;(window as any).__omniframe_denoise = {
+    runBuffer: async (buffer: AudioBuffer, alpha = 1) => {
+      return denoiseAudioBuffer(buffer, alpha)
+    },
+  }
 }
 
 async function decodeWaveform(file: File, bins = 256): Promise<number[] | undefined> {

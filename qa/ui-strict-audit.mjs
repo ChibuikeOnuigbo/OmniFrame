@@ -254,6 +254,11 @@ function collectStrict() {
     // sr-only is the standard visually-hidden pattern: clipping to 1px is the
     // intent, so it is never a defect.
     if (el.classList.contains('sr-only') || el.closest('.sr-only')) continue
+    // A scrollable container (overflow auto/scroll) offers the clipped content
+    // to the user — timeline rulers and track lanes are *supposed* to extend
+    // past the viewport and be scrolled to. Only unreachable clipping (hidden
+    // or clip with no scroll) is a defect.
+    if (/^(auto|scroll)$/.test(cs.overflowX)) continue
     if (el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0) {
       if (!el.querySelector('button, input, select')) {
         push('D04', 'low', el, `text clipped: scrollWidth ${el.scrollWidth} > clientWidth ${el.clientWidth}`)

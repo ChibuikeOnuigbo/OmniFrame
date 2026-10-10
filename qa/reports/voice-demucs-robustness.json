@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-10T00:30:23.673Z",
+  "results": [
+    {
+      "name": "mono keep_vocal: keeps the voice",
+      "ok": true,
+      "detail": "SI-SDR 16.15 dB vs clean mono voice (bar 14)"
+    },
+    {
+      "name": "mono default strength (3-pass): keeps the voice",
+      "ok": true,
+      "detail": "SI-SDR 16.21 dB vs clean mono voice (bar 14)"
+    },
+    {
+      "name": "mono default strength (3-pass): duration preserved",
+      "ok": true,
+      "detail": "output 6.000s (input 6.000s)"
+    },
+    {
+      "name": "48 kHz keep_vocal: resample path correct",
+      "ok": true,
+      "detail": "SI-SDR 25.96 dB (input decoded at 48000 Hz)"
+    },
+    {
+      "name": "48 kHz keep_vocal: duration preserved",
+      "ok": true,
+      "detail": "output 6.000s (input 6.000s)"
+    },
+    {
+      "name": "0.5 s clip: separation succeeds",
+      "ok": true,
+      "detail": "duration 0.500s, non-finite 0, rms 0.1597"
+    },
+    {
+      "name": "two speakers keep_vocal: both voices survive",
+      "ok": true,
+      "detail": "SI-SDR 25.12 dB vs both-voices reference (bar 14)"
+    },
+    {
+      "name": "mono remove_vocal: instrumental survives the upmix path",
+      "ok": true,
+      "detail": "SI-SDR 18.54 dB vs clean mono music (bar 14)"
+    },
+    {
+      "name": "48 kHz remove_vocal: instrumental through the resample path",
+      "ok": true,
+      "detail": "SI-SDR 23.69 dB vs clean music (bar 14), duration 6.000s"
+    },
+    {
+      "name": "voice-only remove_vocal: karaoke of a voice-only mix is (near-)silent",
+      "ok": true,
+      "detail": "residue -64.7 dBFS vs mix -18.3 dBFS (46.4 dB below, bar 20)"
+    },
+    {
+      "name": "zero runtime page errors",
+      "ok": true,
+      "detail": "clean"
+    }
+  ],
+  "summary": "11/11 PASS"
+}

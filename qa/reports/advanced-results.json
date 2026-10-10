@@ -73,7 +73,7 @@
     {
       "name": "audio clip grabbable at 8px/s",
       "status": "PASS",
-      "detail": "grab point 512,816"
+      "detail": "grab point 512,820"
     },
     {
       "name": "pointer move accurate at 8px/s",
@@ -93,7 +93,7 @@
     {
       "name": "audio clip grabbable at 8000px/s",
       "status": "PASS",
-      "detail": "grab point 1000,816"
+      "detail": "grab point 1000,820"
     },
     {
       "name": "pointer move accurate at 8000px/s",
@@ -198,7 +198,7 @@
     {
       "name": "pagehide revokes all created object URLs",
       "status": "PASS",
-      "detail": "10/7"
+      "detail": "9/7"
     },
     {
       "name": "reload clean state after lifecycle release",
@@ -218,21 +218,21 @@
   ],
   "errors": [],
   "failed": [
-    "blob:http://localhost:5173/15134584-5e6f-4a50-b38b-e7dfc4c4e998 :: net::ERR_ABORTED",
-    "blob:http://localhost:5173/15134584-5e6f-4a50-b38b-e7dfc4c4e998 :: net::ERR_ABORTED"
+    "blob:http://localhost:5173/b8772c6a-013a-4959-b99a-48b1339a3953 :: net::ERR_ABORTED",
+    "blob:http://localhost:5173/b8772c6a-013a-4959-b99a-48b1339a3953 :: net::ERR_ABORTED",
+    "http://localhost:5173/models/htdemucs.onnx :: net::ERR_ABORTED"
   ],
   "unexpectedFailed": [],
   "lifecycle": [
-    "OF_URL_CREATE blob:http://localhost:5173/67df3e8b-f224-4fc9-8145-ad73ce251a29",
-    "OF_URL_REVOKE blob:http://localhost:5173/67df3e8b-f224-4fc9-8145-ad73ce251a29",
-    "OF_URL_CREATE blob:http://localhost:5173/15134584-5e6f-4a50-b38b-e7dfc4c4e998",
-    "OF_URL_CREATE blob:http://localhost:5173/9e7a9cfa-3881-4bec-974d-29da7471ab73",
-    "OF_URL_CREATE blob:http://localhost:5173/52b891e3-fc41-43a9-9566-784e0e096db0",
-    "OF_URL_CREATE blob:http://localhost:5173/58e89ac8-fdde-46e4-8657-56d7b0bc79cc",
-    "OF_URL_CREATE blob:http://localhost:5173/807475c8-3247-4f0e-910f-aceece6370dd",
-    "OF_URL_REVOKE blob:http://localhost:5173/807475c8-3247-4f0e-910f-aceece6370dd",
-    "OF_URL_CREATE blob:http://localhost:5173/76ce018e-0d45-41cb-82ce-e2bbba881330",
-    "OF_URL_REVOKE blob:http://localhost:5173/76ce018e-0d45-41cb-82ce-e2bbba881330"
+    "OF_URL_CREATE blob:http://localhost:5173/f9951e38-71ed-4d38-90f0-7ca65b3d0e91",
+    "OF_URL_REVOKE blob:http://localhost:5173/f9951e38-71ed-4d38-90f0-7ca65b3d0e91",
+    "OF_URL_CREATE blob:http://localhost:5173/b8772c6a-013a-4959-b99a-48b1339a3953",
+    "OF_URL_CREATE blob:http://localhost:5173/d3d4ba63-c8af-4f64-b60d-21e7c2f8586b",
+    "OF_URL_CREATE blob:http://localhost:5173/1839ff38-f2b4-465d-bb01-a0d389d2cae1",
+    "OF_URL_CREATE blob:http://localhost:5173/71974ed8-3bbc-489f-8135-821a51a8ac6d",
+    "OF_URL_CREATE blob:http://localhost:5173/c9c4dcc6-0b8d-431e-ac3c-3810565b70a3",
+    "OF_URL_REVOKE blob:http://localhost:5173/c9c4dcc6-0b8d-431e-ac3c-3810565b70a3",
+    "OF_URL_CREATE blob:http://localhost:5173/64e58fae-0739-41ea-b427-cd93b38071e7"
   ],
   "exports": [
     "/home/user/OmniFrame/qa/exports/advanced-export-1-omniframe-export.mp4",

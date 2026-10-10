@@ -2,6 +2,8 @@ import { useRef, useState, useEffect, useMemo} from 'react'
 import {
   ZoomIn,
   ZoomOut,
+  PictureInPicture2,
+  PanelBottom,
   Maximize,
   Magnet,
   Eye,
@@ -23,6 +25,7 @@ import {
   Gauge,
   AlignJustify,
   Sparkles,
+  Sliders,
   MoreVertical,
   Plus,
   Trash2,
@@ -46,8 +49,12 @@ import {
   Film,
 } from 'lucide-react'
 import { useEditor, gapsOnTrack } from '../store'
+import { CollapseChip } from './CollapseChip'
+import { ClipFilmstrip } from './ClipFilmstrip'
+import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
+import { placedEffectLabels } from '../lib/adjustment'
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { GraphEditor } from './GraphEditor'
@@ -831,10 +838,21 @@ function ClipView({
   const isText = clip.kind === 'text' || Boolean((clip as any).textStyle)
   const is3D = clip.kind === 'threed'
   const isImage = clip.kind === 'image' || asset?.kind === 'image'
-  const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage)
+  const isAdjustment = clip.kind === 'adjustment'
+  const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage && !isAdjustment)
+
+  // Effects/LUTs placed on this clip (own filters + LUT stack + nested
+  // adjustment layers for compounds) drive the badge + selection affordance.
+  const sequences = useEditor((s) => s.sequences)
+  const effectLabels = placedEffectLabels(clip, sequences)
+  const hasEffects = effectLabels.length > 0
 
   const clipBorderClass = selected
-    ? isCompound
+    ? isAdjustment
+      ? 'border-2 border-cyan-300 ring-2 ring-cyan-300/90 shadow-[0_0_18px_rgba(103,232,249,0.65)] z-10'
+      : hasEffects
+      ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 shadow-[0_0_16px_rgba(147,197,253,0.6)] z-10'
+      : isCompound
       ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 shadow-[0_0_16px_rgba(129,140,248,0.6)] z-10'
       : isText
       ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
@@ -845,6 +863,8 @@ function ClipView({
       : is3D
       ? 'border-2 border-fuchsia-400 ring-2 ring-fuchsia-400/80 shadow-[0_0_14px_rgba(232,121,249,0.5)] z-10'
       : 'border-2 border-sky-400 ring-2 ring-sky-400/80 shadow-[0_0_14px_rgba(56,189,248,0.5)] z-10'
+    : isAdjustment
+    ? 'border border-cyan-600/70 hover:border-cyan-300 hover:shadow-md'
     : isCompound
     ? 'border border-indigo-500/80 hover:border-indigo-300 hover:shadow-md'
     : isText
@@ -857,7 +877,9 @@ function ClipView({
     ? 'border border-fuchsia-800/70 hover:border-fuchsia-400 hover:shadow-md'
     : 'border border-sky-600/70 hover:border-sky-300 hover:shadow-md'
 
-  const clipBgClass = isCompound
+  const clipBgClass = isAdjustment
+    ? 'bg-gradient-to-r from-cyan-950/85 via-blue-950/80 to-cyan-950/85 text-cyan-100'
+    : isCompound
     ? 'bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 text-indigo-100'
     : isText
     ? 'bg-amber-950/75 text-amber-100'
@@ -910,22 +932,24 @@ function ClipView({
       style={{ left, width }}
       title={clip.name}
     >
-      {isCompound && (
-        <div className="pointer-events-none absolute inset-0 opacity-15 flex flex-col justify-around py-1 px-1">
-          <div className="h-1.5 w-3/4 rounded bg-indigo-400" />
-          <div className="h-1.5 w-1/2 rounded bg-purple-400 ml-4" />
-          <div className="h-1.5 w-2/3 rounded bg-sky-400" />
-        </div>
+      {/* Frame-accurate filmstrip: each section of the clip shows the frame
+          the project will show there — decoded source frames for video
+          clips, the rendered nested composite for compound clips. Falls
+          back to the single poster frame while tiles render. */}
+      {!isAudio && !isText && (isCompound || asset?.kind === 'video' || asset?.kind === 'image') && (
+        <ClipFilmstrip
+          clip={clip}
+          widthPx={width}
+          posterUrl={asset ? (asset.kind === 'image' ? asset.url : asset.thumbnail) : undefined}
+          isCompound={isCompound}
+        />
       )}
-      {!isCompound && !isAudio && !isText && (asset?.thumbnail || asset?.kind === 'image') && (
+      {isAdjustment && (
         <div
-          data-testid="clip-filmstrip"
-          className="pointer-events-none absolute inset-0 opacity-55"
+          className="pointer-events-none absolute inset-0 opacity-20"
           style={{
-            backgroundImage: `linear-gradient(90deg,rgba(8,9,13,.15),rgba(8,9,13,.15)),url(${asset.kind === 'image' ? asset.url : asset.thumbnail})`,
-            backgroundRepeat: 'repeat-x',
-            backgroundPosition: 'center',
-            backgroundSize: 'auto 100%',
+            backgroundImage:
+              'repeating-linear-gradient(135deg, rgba(103,232,249,.55) 0 6px, transparent 6px 14px)',
           }}
         />
       )}
@@ -967,6 +991,8 @@ function ClipView({
       <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/40 border-b border-white/5 flex items-center gap-1 min-w-0">
         {clip.hidden ? (
           <EyeOff size={10} aria-label="Hidden clip" />
+        ) : isAdjustment ? (
+          <Sliders size={10} className="text-cyan-300 shrink-0" />
         ) : isCompound ? (
           <Layers size={10} className="text-indigo-300 shrink-0" />
         ) : isText ? (
@@ -981,6 +1007,17 @@ function ClipView({
           <Video size={10} className="text-sky-400 shrink-0" />
         )}
         <span className="truncate">{clip.name}</span>
+        {hasEffects && (
+          <span
+            data-testid="clip-effects-badge"
+            data-effect-count={effectLabels.length}
+            title={effectLabels.join(', ')}
+            className="ml-auto min-w-0 max-w-[60%] flex items-center gap-0.5 px-1 rounded bg-blue-500/25 text-blue-200 border border-blue-300/40 text-[10px] shrink-0"
+          >
+            <Sliders size={9} className="shrink-0" />
+            <span className="truncate">{effectLabels.join(', ')}</span>
+          </span>
+        )}
         {isCompound && (
           <span className="ml-auto text-[10px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 font-mono font-bold shrink-0">
             NESTED ({clip.nestedClipCount || 2})
@@ -991,6 +1028,8 @@ function ClipView({
 
       {/* trim handles */}
       <div
+        role="separator"
+        aria-orientation="vertical"
         onPointerDown={onDown('left')}
         onPointerMove={onTrimMove}
         onPointerUp={onTrimUp}
@@ -999,6 +1038,8 @@ function ClipView({
         className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-white/0 hover:bg-white/40 z-20"
       />
       <div
+        role="separator"
+        aria-orientation="vertical"
         onPointerDown={onDown('right')}
         onPointerMove={onTrimMove}
         onPointerUp={onTrimUp}
@@ -1021,6 +1062,44 @@ export function Timeline() {
   const dropFrameTimecode = useEditor((s) => s.dropFrameTimecode)
   const duration = useEditor((s) => s.duration)
   const timelineHeight = useEditor((s) => s.timelineHeight)
+  const timelineCollapsed = useEditor((s) => s.timelineCollapsed)
+  const setTimelineCollapsed = useEditor((s) => s.setTimelineCollapsed)
+  const timelineFloating = useEditor((s) => s.timelineFloating)
+  const setTimelineFloating = useEditor((s) => s.setTimelineFloating)
+  const timelineFloat = useEditor((s) => s.timelineFloat)
+  const setTimelineFloat = useEditor((s) => s.setTimelineFloat)
+  // Breadcrumbs-bar drag-out: dragging the bar ≥24px tears the whole timeline
+  // out into a floating window (same gesture as the left dock header).
+  const tlHeaderDrag = useRef<{ startX: number; startY: number } | null>(null)
+  const onTlHeaderDragDown = (e: React.PointerEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return
+    tlHeaderDrag.current = { startX: e.clientX, startY: e.clientY }
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onTlHeaderDragMove = (e: React.PointerEvent) => {
+    const d = tlHeaderDrag.current
+    if (!d || useEditor.getState().timelineFloating) return
+    if (Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 24) return
+    tlHeaderDrag.current = null
+    const cur = useEditor.getState().timelineFloat
+    const w = cur.w || 900
+    const h = cur.h || 380
+    setTimelineFloat({
+      x: Math.max(8, Math.min(e.clientX - 120, window.innerWidth - w - 8)),
+      y: Math.max(40, Math.min(e.clientY - 16, window.innerHeight - h - 16)),
+      w,
+      h,
+    })
+    setTimelineFloating(true)
+  }
+  const onTlHeaderDragUp = (e: React.PointerEvent) => {
+    tlHeaderDrag.current = null
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer already released
+    }
+  }
   const tool = useEditor((s) => s.tool)
   const setPlayhead = useEditor((s) => s.setPlayhead)
   const setTool = useEditor((s) => s.setTool)
@@ -1554,27 +1633,37 @@ export function Timeline() {
     }
   }
 
-  return (
-    <div
-      data-testid="timeline"
-      data-px-per-second={px.toFixed(4)}
-      data-project-fps={FPS}
-      data-drop-frame={dropFrameTimecode ? 'true' : 'false'}
-      data-render-count={renderCount.current}
-      style={{
-        height: timelineHeight > 0 ? `${timelineHeight}px` : '0px',
-        display: timelineHeight === 0 ? 'none' : 'flex',
-      }}
-      className={`shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none ${
-        tool === 'blade' ? 'of-blade-tool' : 'of-select-tool'
-      }`}
-    >
+  // Root attributes shared by every render path (docked, collapsed, floating
+  // placeholder) so E2E instrumentation keeps working in all states.
+  const timelineRootAttrs: Record<string, string> = {
+    'data-testid': 'timeline',
+    'data-px-per-second': px.toFixed(4),
+    'data-project-fps': String(FPS),
+    'data-drop-frame': dropFrameTimecode ? 'true' : 'false',
+    'data-render-count': String(renderCount.current),
+  }
+
+  const timelineBody = (
+    <>
       {/* Sequence Breadcrumbs Bar */}
       <div
         data-testid="sequence-breadcrumbs-bar"
-        className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none"
+        onPointerDown={onTlHeaderDragDown}
+        onPointerMove={onTlHeaderDragMove}
+        onPointerUp={onTlHeaderDragUp}
+        onPointerCancel={onTlHeaderDragUp}
+        title="Drag to pop the timeline out into a window · − folds it to a strip"
+        className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none touch-none"
       >
         <div className="flex items-center gap-1.5 flex-wrap">
+          {!timelineFloating && (
+            <CollapseChip
+              open={!timelineCollapsed}
+              onToggle={() => setTimelineCollapsed(!timelineCollapsed)}
+              label="timeline"
+              testId="timeline-collapse-toggle"
+            />
+          )}
           {breadcrumbs.map((b, idx) => {
             const isLast = idx === breadcrumbs.length - 1
             return (
@@ -1598,59 +1687,85 @@ export function Timeline() {
           })}
         </div>
 
-        {breadcrumbs.length > 1 && (
-          <button
-            type="button"
-            data-testid="breadcrumb-back-button"
-            aria-label="Back to parent timeline"
-            onClick={() => navigateBreadcrumb(breadcrumbs[breadcrumbs.length - 2].id)}
-            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs shrink-0"
-            title="Exit Compound Clip to Parent Timeline"
-          >
-            <ArrowLeft size={12} className="shrink-0" />
-            <span className="hidden sm:inline">Back to Timeline</span>
-          </button>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {!timelineFloating && (
+            <button
+              type="button"
+              data-testid="timeline-popout-btn"
+              title="Pop timeline out into a floating window (or drag the breadcrumbs bar)"
+              aria-label="Pop timeline out into a floating window"
+              onClick={() => setTimelineFloating(true)}
+              className="grid h-6.5 w-6.5 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-750 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              <PictureInPicture2 size={13} />
+            </button>
+          )}
+          {breadcrumbs.length > 1 && (
+            <button
+              type="button"
+              data-testid="breadcrumb-back-button"
+              aria-label="Back to parent timeline"
+              onClick={() => navigateBreadcrumb(breadcrumbs[breadcrumbs.length - 2].id)}
+              className="flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-medium transition-colors shadow-xs shrink-0"
+              title="Exit Compound Clip to Parent Timeline"
+            >
+              <ArrowLeft size={12} className="shrink-0" />
+              <span className="hidden sm:inline">Back to Timeline</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* transport + tools + zoom */}
       <div className="shrink-0 flex items-center gap-2 px-3 h-12 border-b border-ink-800 bg-ink-900 overflow-x-auto">
-        {/* transport */}
-        <div className="flex items-center gap-1">
-          <IconButton title="Go to start (Home)" onClick={() => setPlayhead(0)}>
-            <SkipBack size={16} />
-          </IconButton>
-          <IconButton title={playing ? 'Pause (Space)' : 'Play (Space)'} onClick={togglePlay}>
-            {playing ? <Pause size={18} /> : <Play size={18} />}
-          </IconButton>
-          <IconButton title="Go to end (End)" onClick={() => setPlayhead(duration)}>
-            <SkipForward size={16} />
-          </IconButton>
-        </div>
-        <div className="px-2 font-mono text-sm tabular-nums whitespace-nowrap">
-          <LiveTimecode />
-          <span className="text-ink-500"> / {formatTimecode(duration)}</span>
-        </div>
-        <button
-          ref={speedButtonRef}
-          type="button"
-          data-testid="speed-menu-button"
-          title="Playback speed"
-          aria-expanded={speedMenuOpen}
-          onClick={() => {
-            setToolMenuOpen(false)
-            setSpeedMenuOpen((open) => !open)
-          }}
-          className="flex h-8 min-w-[66px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
+        {/* Playback controls: transport, timecode and speed stay together. */}
+        <div
+          role="group"
+          aria-label="Playback transport"
+          data-testid="timeline-transport-group"
+          className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 px-1"
         >
-          <Gauge size={15} />
-          <span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span>
-          <ChevronDown size={12} />
-        </button>
+          <div className="flex items-center gap-0.5" role="group" aria-label="Playback navigation">
+            <IconButton title="Go to start (Home)" onClick={() => setPlayhead(0)}>
+              <SkipBack size={16} />
+            </IconButton>
+            <IconButton title={playing ? 'Pause (Space)' : 'Play (Space)'} onClick={togglePlay}>
+              {playing ? <Pause size={18} /> : <Play size={18} />}
+            </IconButton>
+            <IconButton title="Go to end (End)" onClick={() => setPlayhead(duration)}>
+              <SkipForward size={16} />
+            </IconButton>
+          </div>
+          <div
+            aria-label="Current playhead time and sequence duration"
+            className="px-1 font-mono text-xs sm:text-sm tabular-nums whitespace-nowrap"
+          >
+            <LiveTimecode />
+            <span className="hidden text-ink-500 sm:inline"> / {formatTimecode(duration)}</span>
+          </div>
+          <button
+            ref={speedButtonRef}
+            type="button"
+            data-testid="speed-menu-button"
+            title="Playback speed"
+            aria-label={`Playback speed ${Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×`}
+            aria-expanded={speedMenuOpen}
+            onClick={() => {
+              setToolMenuOpen(false)
+              setSpeedMenuOpen((open) => !open)
+            }}
+            className="flex h-8 min-w-[62px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
+          >
+            <Gauge size={15} />
+            <span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span>
+            <ChevronDown size={12} />
+          </button>
+        </div>
 
         <div className="w-px h-6 bg-ink-700" />
 
         {/* edit tools */}
+        <div role="group" aria-label="Timeline edit tools" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 px-1">
         <button
           type="button"
           data-testid="timeline-split-btn"
@@ -1676,10 +1791,12 @@ export function Timeline() {
           {tool === 'select' ? <MousePointer2 size={15} /> : <Slash size={15} />}
           <ChevronDown size={12} />
         </button>
+        </div>
 
         <div className="w-px h-6 bg-ink-700" />
 
         {/* Universal tools: target tracks, then close or hand-pick gaps. */}
+        <div role="group" aria-label="Track targeting and gap tools" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 px-1">
         <TrackTargetMenu />
 
         <button
@@ -1702,9 +1819,10 @@ export function Timeline() {
           <Trash2 size={15} />
           <span className="hidden lg:inline">Select Gaps</span>
         </button>
+        </div>
 
-        {/* marker button */}
-
+        {/* Marker placement */}
+        <div role="group" aria-label="Timeline markers" className="flex shrink-0 items-center rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         <button
           type="button"
           data-testid="add-marker-btn"
@@ -1715,12 +1833,17 @@ export function Timeline() {
         >
           <Bookmark size={15} />
         </button>
+        </div>
 
         <div className="flex-1 min-w-[12px]" />
 
         {/* Audio VU Meter & Master Volume */}
+        <div role="group" aria-label="Master audio level" className="flex shrink-0 items-center rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         <AudioMeter />
+        </div>
 
+        {/* View and snapping controls */}
+        <div role="group" aria-label="Timeline zoom and snapping" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         {/* zoom group */}
         <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-md border border-ink-700 bg-ink-800">
           <IconButton title="Zoom out" onClick={() => zoomBy(0.8)} className="rounded-none border-r border-ink-700">
@@ -1789,6 +1912,7 @@ export function Timeline() {
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
           {px.toFixed(0)} px/s{frameMode ? ' · frame' : ''}
         </span>
+        </div>
       </div>
 
       {toolMenuOpen && (
@@ -2606,6 +2730,102 @@ export function Timeline() {
           </div>
         </>
       )}
+    </>
+  )
+
+  // ---- Popped-out timeline: slim dock strip + the full timeline in a
+  //      draggable, resizable floating window. ----
+  if (timelineFloating) {
+    return (
+      <>
+        <div
+          {...timelineRootAttrs}
+          data-floating="true"
+          style={{ height: '32px' }}
+          className="shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none"
+        >
+          <div className="flex h-full items-center gap-2 px-2">
+            <PanelBottom size={14} className="text-ink-500" aria-hidden="true" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">
+              Timeline is floating
+            </span>
+            <div className="flex-1" />
+            <button
+              type="button"
+              data-testid="timeline-dock-back-btn"
+              onClick={() => setTimelineFloating(false)}
+              className="rounded-md border border-ink-700 bg-ink-800 px-2 py-0.5 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              Dock back
+            </button>
+          </div>
+        </div>
+        <FloatingWindow
+          testId="timeline-float-window"
+          title="Timeline"
+          rect={timelineFloat}
+          setRect={setTimelineFloat}
+          onDock={() => setTimelineFloating(false)}
+          onClose={() => {
+            setTimelineFloating(false)
+            setTimelineCollapsed(true)
+          }}
+          dockIcon={<PanelBottom size={13} />}
+          dockLabel="Dock timeline back into the layout"
+        >
+          <div className="flex h-full min-h-0 flex-col">{timelineBody}</div>
+        </FloatingWindow>
+      </>
+    )
+  }
+
+  // ---- Collapsed strip: − folds the whole timeline down to one rail; +
+  //      brings it back, and the splitter drag expands it too. ----
+  if (timelineCollapsed && timelineHeight > 0) {
+    return (
+      <div
+        {...timelineRootAttrs}
+        data-collapsed="true"
+        style={{ height: '32px' }}
+        className="shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none"
+      >
+        <div className="flex h-full items-center gap-2 px-2">
+          <CollapseChip
+            open={false}
+            onToggle={() => setTimelineCollapsed(false)}
+            label="timeline"
+            testId="timeline-collapse-toggle"
+          />
+          <Film size={12} className="text-brand-400" aria-hidden="true" />
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">Timeline</span>
+          <div className="flex-1" />
+          <button
+            type="button"
+            data-testid="timeline-popout-btn"
+            title="Pop timeline out into a floating window (or drag the breadcrumbs bar)"
+            aria-label="Pop timeline out into a floating window"
+            onClick={() => setTimelineFloating(true)}
+            className="grid h-6.5 w-6.5 place-items-center rounded text-ink-400 transition-colors hover:bg-ink-750 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <PictureInPicture2 size={13} />
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      {...timelineRootAttrs}
+      style={{
+        height: timelineHeight > 0 ? `${timelineHeight}px` : '0px',
+        display: timelineHeight === 0 ? 'none' : 'flex',
+      }}
+      className={`shrink-0 flex flex-col bg-ink-900 border-t border-ink-700 select-none ${
+        tool === 'blade' ? 'of-blade-tool' : 'of-select-tool'
+      }`}
+    >
+      {timelineBody}
     </div>
   )
 }

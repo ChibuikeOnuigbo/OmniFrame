@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2026-10-09T00:18:43.843Z",
+  "results": [
+    {
+      "name": "Default sidebar section mode is tabs",
+      "status": "PASS",
+      "detail": "tabs"
+    },
+    {
+      "name": "Tab list renders for sectioned panel",
+      "status": "PASS",
+      "detail": "6 tabs"
+    },
+    {
+      "name": "Exactly one tab selected",
+      "status": "PASS",
+      "detail": "section-tab-tools"
+    },
+    {
+      "name": "Clicking a chip switches the active tab panel",
+      "status": "PASS",
+      "detail": "section-tab-tools -> section-tab-colour-frames"
+    },
+    {
+      "name": "Arrow key moves to the next tab",
+      "status": "PASS",
+      "detail": "section-tab-colour-frames -> section-tab-tool-params"
+    },
+    {
+      "name": "Header toggle flips to accordion",
+      "status": "PASS",
+      "detail": "accordion"
+    },
+    {
+      "name": "Tab list hidden in accordion mode",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Section headers visible again in accordion",
+      "status": "PASS",
+      "detail": "6 top-level headers"
+    },
+    {
+      "name": "Single-open: expanding one section collapses the others",
+      "status": "PASS",
+      "detail": "[{\"id\":\"panel-section-tools\",\"expanded\":\"false\"},{\"id\":\"panel-section-colour-frames\",\"expanded\":\"true\"},{\"id\":\"panel-section-tool-params\",\"expanded\":\"false\"},{\"id\":\"panel-section-timing\",\"expanded\":\"false\"},{\"id\":\"panel-section-layers\",\"expanded\":\"false\"},{\"id\":\"panel-section-brush\",\"expanded\":\"false\"}]"
+    },
+    {
+      "name": "Toggle returns to tabs",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Inspector renders a section tab list",
+      "status": "PASS",
+      "detail": "1 list(s)"
+    },
+    {
+      "name": "Inspector sections appear as tabs",
+      "status": "PASS",
+      "detail": "5 tabs"
+    },
+    {
+      "name": "Inspector tab switching works",
+      "status": "PASS",
+      "detail": "section-tab-transform"
+    },
+    {
+      "name": "Audio Suite preset applies",
+      "status": "PASS",
+      "detail": "{\"leftTab\":\"audio\",\"timeline\":460}"
+    },
+    {
+      "name": "VFX & Tracking preset applies",
+      "status": "PASS",
+      "detail": "{\"leftTab\":\"tracking\",\"rightOpen\":true}"
+    },
+    {
+      "name": "Rig & Animate preset opens graph editor",
+      "status": "PASS",
+      "detail": "{\"leftTab\":\"rigging\",\"graph\":true}"
+    },
+    {
+      "name": "Manga/MMV preset enables drawing canvas",
+      "status": "PASS",
+      "detail": "{\"leftTab\":\"drawing\",\"drawing\":true}"
+    },
+    {
+      "name": "Panel overview banner replaced by compact hint",
+      "status": "PASS",
+      "detail": "0 banners"
+    },
+    {
+      "name": "Compact hint carries the description as tooltip",
+      "status": "PASS",
+      "detail": "1 hints"
+    },
+    {
+      "name": "AccordionGroup Show/Hide text removed",
+      "status": "PASS",
+      "detail": "0 labels"
+    },
+    {
+      "name": "Zero runtime page errors",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "pageErrors": []
+}

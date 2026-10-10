@@ -45,20 +45,22 @@ export function SelectionSubToolBar() {
 
   return (
     <SlideDock id="selection-toolbar" label="selection tools" direction="down"
-      className="absolute z-30 bottom-3 top-auto left-1/2 -translate-x-1/2"
+      className={`absolute z-30 bottom-3 top-auto left-1/2 -translate-x-1/2 ${leftOpen ? 'max-sm:hidden' : ''}`}
     >
     <div
       data-testid="selection-floating-toolbar"
-      className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 select-none animate-in fade-in zoom-in-95 duration-150 max-w-[max(180px,calc(100%-18rem))] min-w-0 w-auto overflow-x-auto scrollbar-none"
+      role="group"
+      aria-label="Selection tools"
+      className="flex min-w-0 w-auto max-w-[calc(100vw_-_4rem)] items-center gap-1 rounded-xl border border-ink-700/80 bg-ink-900/95 px-2 py-1.5 text-xs text-ink-200 shadow-2xl backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150 overflow-x-auto scrollbar-none"
     >
-      <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
+      <div role="group" aria-label="Selection mode" className="flex items-center gap-0.5 border-r border-ink-800 pr-1 shrink-0">
         <span className="text-[10px] font-mono uppercase font-bold text-brand-400 px-1 py-0.5">
           MASK
         </span>
       </div>
 
       {/* 6 Selection Mode Buttons */}
-      <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1.5 shrink-0">
+      <div role="group" aria-label="Selection shape" className="flex items-center gap-0.5 border-r border-ink-800 pr-1.5 shrink-0">
         {selectionTypes.map((st) => {
           const Icon = st.icon
           const isActive = selectionMode === st.id
@@ -69,8 +71,9 @@ export function SelectionSubToolBar() {
               data-testid={`floating-sel-${st.id}`}
               title={st.label}
               aria-label={st.label}
+              aria-pressed={isActive}
               onClick={() => setSelectionMode(st.id)}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`min-h-8 min-w-8 rounded-lg p-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 isActive
                   ? 'bg-brand text-white shadow-xs'
                   : 'text-ink-300 hover:text-white hover:bg-ink-800'
@@ -83,7 +86,7 @@ export function SelectionSubToolBar() {
       </div>
 
       {/* Quick Action Tools */}
-      <div className="flex items-center gap-0.5 border-r border-ink-800 pr-1.5 shrink-0">
+      <div role="group" aria-label="Selection actions" className="flex items-center gap-0.5 border-r border-ink-800 pr-1.5 shrink-0">
         <Tooltip label="Invert selection boundary">
 <button
           type="button"
@@ -91,7 +94,7 @@ export function SelectionSubToolBar() {
           title="Invert Selection Boundary"
           aria-label="Invert Selection"
           onClick={invertSelection}
-          className="p-1.5 rounded-lg text-ink-300 hover:text-white hover:bg-ink-800 transition-colors"
+          className="min-h-8 min-w-8 rounded-lg p-1.5 text-ink-300 transition-colors hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <FlipHorizontal size={14} />
         </button></Tooltip>
@@ -102,7 +105,7 @@ export function SelectionSubToolBar() {
           title="Colorize: Royal Blue (Towel / Seat / Object)"
           aria-label="Recolor Blue"
           onClick={() => recolorActiveSelection('#2563eb')}
-          className="p-1.5 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-500/20 transition-colors"
+          className="min-h-8 min-w-8 rounded-lg p-1.5 text-blue-400 transition-colors hover:bg-blue-500/20 hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <PaintBucket size={14} />
         </button>
@@ -113,7 +116,7 @@ export function SelectionSubToolBar() {
           title="Colorize: Apple Crimson Red"
           aria-label="Recolor Red"
           onClick={() => recolorActiveSelection('#dc2626')}
-          className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-colors"
+          className="min-h-8 min-w-8 rounded-lg p-1.5 text-red-400 transition-colors hover:bg-red-500/20 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <PaintBucket size={14} />
         </button>
@@ -125,7 +128,7 @@ export function SelectionSubToolBar() {
           title={activeSelection?.showMaskOnly ? 'Hide Mask Layer' : 'Show Mask Layer'}
           aria-label="Show Mask"
           onClick={() => toggleSelectionMaskView()}
-          className={`p-1.5 rounded-lg transition-colors ${
+          className={`min-h-8 min-w-8 rounded-lg p-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             activeSelection?.showMaskOnly
               ? 'bg-emerald-500/20 text-emerald-300'
               : 'text-ink-300 hover:text-white hover:bg-ink-800'
@@ -142,9 +145,9 @@ export function SelectionSubToolBar() {
           type="button"
           data-testid="floating-convert-omniframe-btn"
           title="Convert selection to movable OmniFrame Object with clean inpainting"
-          aria-label="Convert to OmniFrame Object"
+          aria-label="To Object: convert selection to a movable OmniFrame object"
           onClick={() => convertSelectionToOmniframeObject()}
-          className="flex items-center gap-1 px-2 py-1 rounded-lg bg-brand/20 text-brand-400 hover:bg-brand/30 border border-brand/40 text-[11px] font-medium transition-colors"
+          className="flex min-h-8 min-w-8 items-center gap-1 rounded-lg border border-brand/40 bg-brand/20 px-2 py-1 text-[11px] font-medium text-brand-400 transition-colors hover:bg-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Scissors size={12} />
           <span className="hidden sm:inline">To Object</span>
@@ -157,7 +160,7 @@ export function SelectionSubToolBar() {
             title="Clear Selection"
             aria-label="Clear Selection"
             onClick={clearSelection}
-            className="p-1.5 rounded-lg text-ink-400 hover:text-red-400 hover:bg-red-500/20 transition-colors"
+            className="min-h-8 min-w-8 rounded-lg p-1.5 text-ink-400 transition-colors hover:bg-red-500/20 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <X size={14} />
           </button>

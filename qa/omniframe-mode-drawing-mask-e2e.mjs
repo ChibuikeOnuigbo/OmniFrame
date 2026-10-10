@@ -221,7 +221,28 @@ async function runTest() {
   const drawPanel = page.locator('[data-testid="drawing-panel"]')
   await drawPanel.waitFor({ state: 'visible' })
 
-  // Verify Frame Attach Presets
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if ((await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
+  // Verify Frame Attach Presets (Frame Hold lives under the Colour & Frames tab)
+  await activateSection('colour-frames')
   const preset6f = page.locator('[data-testid="attach-preset-6f"]')
   await preset6f.click()
   await page.waitForTimeout(200)
@@ -237,7 +258,8 @@ async function runTest() {
   const labelText = await framesLabel.innerText()
   console.log(`[PASS] Frame attach picker confirmed: ${labelText}`)
 
-  // Test "Add Directly to Video" toggle
+  // Test "Add Directly to Video" toggle (Timeline Attachment section)
+  await activateSection('tools')
   const attachToggle = page.locator('[data-testid="attach-directly-to-video-toggle"]')
   await attachToggle.waitFor({ state: 'visible' })
 
@@ -276,6 +298,7 @@ async function runTest() {
   await trackPanel.waitFor({ state: 'visible' })
 
   // 1. Convert Drawing to Mask
+  await activateSection('tracking-conversions')
   const convDrawBtn = page.locator('[data-testid="convert-drawing-to-mask-btn"]')
   await convDrawBtn.waitFor({ state: 'visible' })
   await convDrawBtn.click()
@@ -318,6 +341,7 @@ async function runTest() {
   // 5. Test Krita Selection Tools (Box, Circle, Lasso, Poly, Wand)
   const selTools = ['rect', 'ellipse', 'lasso', 'polygon', 'magic-wand']
   for (const st of selTools) {
+    await activateSection('tracking-shapes')
     const btn = page.locator(`[data-testid="select-tool-${st}"]`)
     await btn.waitFor({ state: 'visible' })
     await btn.click()

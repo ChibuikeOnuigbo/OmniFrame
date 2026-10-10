@@ -18,11 +18,14 @@ import {
   Image as ImageIcon,
   BoxSelect,
   Wand2,
+  Crosshair,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { OmniframeScopeType } from '../types'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
+import { RotoMaskSubTool } from './RotoMaskSubTool'
 import { RECOLOR_BLENDS, type RecolorBlend } from '../lib/recolor'
+import { PanelSection } from './PanelSection'
 
 /**
  * The panel used to render every control at once, which made it read as a
@@ -37,8 +40,9 @@ const PANEL_SECTIONS = [
     hint: 'Pick the asset and choose a detected segment',
   },
   { id: 'select', label: 'Mask', icon: Wand2, hint: 'Selection and masking sub-tools' },
+  { id: 'rotomask', label: 'Roto', icon: Crosshair, hint: 'Click-to-segment rotoscoping (RotoMask)' },
   { id: 'transform', label: 'Transform', icon: Move, hint: 'Position, scale and rotation' },
-  { id: 'color', label: 'Color', icon: PaintBucket, hint: 'Recolor the segment and pick a blend mode' },
+  { id: 'color', label: 'Color', icon: PaintBucket, hint: 'Recolor the segment; separate from Drawing layer blending' },
   { id: 'scope', label: 'Scope', icon: Clock, hint: 'All frames, a section, or a single frame' },
   { id: 'actions', label: 'Actions', icon: Layers, hint: 'Duplicate, cut to track, remove, and verify' },
 ] as const
@@ -161,10 +165,16 @@ export function OmniFramePanel() {
       {/* Section navigation — the panel used to render every control at once,
           which is what made it read as a wall of small icons. One section
           at a time; the controls you are not using are not on screen. */}
-      <div
-        data-testid="omniframe-section-nav"
-        className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-ink-950 border border-ink-800"
-      >
+      <section aria-labelledby="omniframe-workflow-heading" className="space-y-1.5">
+        <h3 id="omniframe-workflow-heading" className="px-0.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">
+          Workflow
+        </h3>
+        <div
+          data-testid="omniframe-section-nav"
+          role="group"
+          aria-label="OmniFrame workflow steps"
+          className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-ink-950 border border-ink-800"
+        >
         {PANEL_SECTIONS.map((sec) => {
           const Icon = sec.icon
           const active = section === sec.id
@@ -177,74 +187,77 @@ export function OmniFramePanel() {
               aria-label={sec.label}
               aria-pressed={active}
               onClick={() => setSection(sec.id)}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1.5 px-0.5 rounded-md transition-colors ${
+              className={`flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-md px-0.5 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
                 active
                   ? 'bg-brand text-white shadow-xs'
                   : 'text-ink-400 hover:text-ink-100 hover:bg-ink-800'
               }`}
             >
               <Icon size={18} strokeWidth={active ? 2.2 : 1.8} />
-              <span className="text-[9px] font-medium leading-none">{sec.label}</span>
+              <span className="text-[10px] font-medium leading-none">{sec.label}</span>
             </button>
           )
         })}
-      </div>
+        </div>
+      </section>
 
       <Section active={section === 'segments'}>
       {/* Quick Sub-Mode Channels Bar */}
       {(!activeSubMode || activeSubMode === 'omniframe-overview') && (
-        <div className="space-y-1">
-          <span className="text-[10px] font-semibold uppercase text-ink-400 tracking-wider">
-            OmniFrame Channels
-          </span>
-          <div className="grid grid-cols-3 gap-1.5">
+        <section aria-labelledby="omniframe-channels-heading" className="space-y-1">
+          <h3 id="omniframe-channels-heading" className="text-[11px] font-semibold uppercase tracking-wider text-ink-400">
+            Quick tools
+          </h3>
+          <div role="group" aria-label="OmniFrame quick tools" className="grid grid-cols-3 gap-1.5">
             <button
               type="button"
               data-testid="omniframe-submode-selection-btn"
               onClick={() => openSubMode('omniframe', 'omniframe-selection', 'OmniFrame Selection Subtool', 'BoxSelect')}
-              className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
+              className="flex min-h-[84px] flex-col items-center justify-center rounded-lg border border-ink-800 bg-ink-900 p-2 text-center transition-all hover:border-brand/60 hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <BoxSelect size={20} className="text-brand-400 mb-1" />
-              <div className="font-semibold text-[10px] text-ink-100">Selection</div>
-              <div className="text-[9px] text-ink-400">6 Subtools</div>
+              <div className="font-semibold text-[11px] leading-tight text-ink-100">Selection</div>
+              <div className="text-[10px] text-ink-400">6 sub-tools</div>
             </button>
 
             <button
               type="button"
               data-testid="omniframe-submode-shift-btn"
               onClick={() => openSubMode('omniframe', 'omniframe-shift', 'AI Segmentation & Character Shift', 'Move')}
-              className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
+              className="flex min-h-[84px] flex-col items-center justify-center rounded-lg border border-ink-800 bg-ink-900 p-2 text-center transition-all hover:border-brand/60 hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <Move size={20} className="text-amber-400 mb-1" />
-              <div className="font-semibold text-[10px] text-ink-100">Shift & Infill</div>
-              <div className="text-[9px] text-ink-400">Multi-Frame</div>
+              <div className="font-semibold text-[11px] leading-tight text-ink-100">Shift & Infill</div>
+              <div className="text-[10px] text-ink-400">Multi-frame</div>
             </button>
 
             <button
               type="button"
               data-testid="omniframe-submode-recolor-btn"
               onClick={() => openSubMode('omniframe', 'omniframe-recolor', 'Recolor & Material Palette', 'PaintBucket')}
-              className="flex flex-col items-center justify-center p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-center transition-all"
+              className="flex min-h-[84px] flex-col items-center justify-center rounded-lg border border-ink-800 bg-ink-900 p-2 text-center transition-all hover:border-brand/60 hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <PaintBucket size={20} className="text-cyan-400 mb-1" />
-              <div className="font-semibold text-[10px] text-ink-100">Recolor</div>
-              <div className="text-[9px] text-ink-400">Hue & Presets</div>
+              <div className="font-semibold text-[11px] leading-tight text-ink-100">Recolor</div>
+              <div className="text-[10px] text-ink-400">Hue & presets</div>
             </button>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Target Asset / Media Switcher */}
       {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
-            <span>Active Asset Mode</span>
-            <span className="text-[9px] text-brand-400 font-mono">Image & Video Eligible</span>
+        <section aria-labelledby="omniframe-asset-heading" className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <h3 id="omniframe-asset-heading" className="text-[11px] font-semibold uppercase tracking-wider text-ink-400">Active Asset</h3>
+            <span className="text-[10px] text-brand-400 font-mono">Image & video</span>
           </div>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div role="group" aria-label="Choose an asset for segmentation" className="grid grid-cols-2 gap-1.5">
             <button
               type="button"
               data-testid="switch-asset-room-btn"
+              aria-pressed={omniframeCharacters.some((c) => c.id.startsWith('char_towel'))}
+              title="Load the room chair and towel photo for segmentation"
               onClick={() => {
                 loadAssetObjects('asset-room-chair-towel')
                 const roomAsset = assets.find((a) => a.id === 'asset-room-chair-towel')
@@ -262,12 +275,14 @@ export function OmniFramePanel() {
               }`}
             >
               <div className="font-semibold text-[11px] truncate">Room Chair & Towel</div>
-              <div className="text-[9px] text-ink-400 truncate">Real Uploaded Photo</div>
+              <div className="text-[10px] text-ink-400 truncate">Real Uploaded Photo</div>
             </button>
 
             <button
               type="button"
               data-testid="switch-asset-deathnote-btn"
+              aria-pressed={omniframeCharacters.some((c) => c.id.startsWith('char_light'))}
+              title="Load the Death Note characters video or image for segmentation"
               onClick={() => {
                 loadAssetObjects('asset-death-note-vid')
               }}
@@ -278,10 +293,10 @@ export function OmniFramePanel() {
               }`}
             >
               <div className="font-semibold text-[11px] truncate">Death Note 5 Chibi</div>
-              <div className="text-[9px] text-ink-400 truncate">Characters Video/Image</div>
+              <div className="text-[10px] text-ink-400 truncate">Characters Video/Image</div>
             </button>
           </div>
-        </div>
+        </section>
       )}
 
       </Section>
@@ -289,22 +304,29 @@ export function OmniFramePanel() {
       <Section active={section === 'select'}>
       {/* Unified Selection & Masking Sub-Tool */}
       {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
-        <SelectionMaskSubTool />
+        <SelectionMaskSubTool context="omniframe" />
       )}
+      </Section>
+
+      <Section active={section === 'rotomask'}>
+      {/* RotoMask Sub-Tool - click-to-segment rotoscoping */}
+      <RotoMaskSubTool context="omniframe" />
       </Section>
 
       {/* Detected Characters List & Multi-Frame Shift */}
       {(!activeSubMode || activeSubMode === 'omniframe-shift') && (
         <>
           <Section active={section === 'segments'}>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-[11px] font-medium text-ink-400 uppercase tracking-wider">
-          <span>Detected Characters ({omniframeCharacters.length})</span>
+          <section aria-labelledby="omniframe-detected-heading" className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between gap-2">
+          <h3 id="omniframe-detected-heading" className="text-[11px] font-semibold uppercase tracking-wider text-ink-400">
+            Segments <span className="font-mono text-ink-300">({omniframeCharacters.length})</span>
+          </h3>
           <button
             type="button"
             data-testid="omniframe-auto-arrange-btn"
             onClick={handleAutoArrange}
-            className="flex items-center gap-1 text-[10px] text-brand-400 hover:text-white px-2 py-0.5 rounded bg-brand/20 hover:bg-brand/30 border border-brand/40 font-semibold transition-colors"
+            className="flex min-h-7 items-center gap-1 rounded bg-brand/20 px-2 py-1 text-[10px] font-semibold text-brand-400 transition-colors hover:bg-brand/30 hover:text-white border border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <Sparkles size={14} />
             <span>Rearrange Clean</span>
@@ -318,6 +340,7 @@ export function OmniFramePanel() {
                 key={char.id}
                 type="button"
                 data-testid={`character-card-${char.id}`}
+                aria-pressed={isSelected}
                 onClick={() => {
                   setSelectedCharacterId(char.id)
                   if (char.sectionRange) {
@@ -347,11 +370,11 @@ export function OmniFramePanel() {
                   </div>
                   <div className="min-w-0">
                     <div className="truncate font-semibold text-[11px] leading-tight">{char.name}</div>
-                    <div className="truncate text-[9px] text-ink-400">{char.label}</div>
+                    <div className="truncate text-[10px] text-ink-400">{char.label}</div>
                   </div>
                 </div>
                 <div className="flex min-w-0 flex-row items-center justify-end gap-1">
-                  <span className={`text-[9px] px-1 py-0.2 rounded font-mono uppercase ${
+                  <span className={`text-[10px] px-1 py-0.2 rounded font-mono uppercase ${
                     char.scope === 'all'
                       ? 'bg-indigo-500/20 text-indigo-300'
                       : char.scope === 'section'
@@ -361,7 +384,7 @@ export function OmniFramePanel() {
                     {char.scope === 'all' ? 'All Frames' : char.scope === 'section' ? 'Section' : '1 Frame'}
                   </span>
                   {(char.transform.x !== 0 || char.transform.y !== 0) && (
-                    <span className="text-[9px] text-brand-400 font-mono font-bold">
+                    <span className="text-[10px] text-brand-400 font-mono font-bold">
                       Δ ({char.transform.x > 0 ? `+${char.transform.x}` : char.transform.x}, {char.transform.y > 0 ? `+${char.transform.y}` : char.transform.y})
                     </span>
                   )}
@@ -370,7 +393,7 @@ export function OmniFramePanel() {
             )
           })}
         </div>
-      </div>
+          </section>
           </Section>
 
       {selectedChar && (
@@ -545,13 +568,14 @@ export function OmniFramePanel() {
                 layer; these keep the object's own lightness structure. */}
             <div className="flex items-center gap-1.5 pt-1">
               <span className="text-[9px] uppercase tracking-wider text-ink-500 shrink-0">
-                Blend
+                Recolor Blend
               </span>
               <select
                 data-testid="recolor-blend-select"
+                aria-label="OmniFrame recolor blend"
                 value={recolorBlend}
                 onChange={(e) => setRecolorBlend(e.target.value as RecolorBlend)}
-                title="How the colour is applied to the object's pixels"
+                title="How OmniFrame applies colour to this segment; separate from Drawing paint-layer blending"
                 className="flex-1 min-w-0 min-h-[24px] bg-ink-950 border border-ink-800 rounded px-1.5 py-1 text-[10px] text-ink-200 outline-none focus:border-brand"
               >
                 {RECOLOR_BLENDS.map((b) => (
@@ -565,7 +589,7 @@ export function OmniFramePanel() {
               data-testid="recolor-blend-hint"
               className="text-[9px] text-ink-500 leading-tight"
             >
-              {RECOLOR_BLENDS.find((b) => b.value === recolorBlend)?.hint}
+              {RECOLOR_BLENDS.find((b) => b.value === recolorBlend)?.hint} · Applies to this OmniFrame segment only; Drawing layer blend is separate.
             </p>
           </div>
 
@@ -778,9 +802,15 @@ export function OmniFramePanel() {
 
       {/* Live Evaluated Multi-Frame Verification Inspector */}
       {selectedChar && (
-        <div data-testid="omniframe-verification-table" className="p-2.5 rounded-xl bg-ink-950 border border-ink-800 space-y-2">
-          <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
-            <span>Evaluated Position Verification</span>
+        <PanelSection
+          title="Frame Verification"
+          hint={`${verificationPoints.length} checkpoints`}
+          defaultOpen={false}
+          testId="omniframe-verification"
+        >
+        <div data-testid="omniframe-verification-table" className="rounded-lg bg-ink-950/60 space-y-2">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-ink-400 uppercase tracking-wider">
+            <span>Evaluated Position</span>
             <span className="font-mono text-brand-400 font-bold">Scope: {selectedChar.scope}</span>
           </div>
 
@@ -821,6 +851,7 @@ export function OmniFramePanel() {
             })}
           </div>
         </div>
+        </PanelSection>
       )}
         </>
       )}

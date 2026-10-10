@@ -46,6 +46,26 @@ async function runKritaDrawingTest() {
   await drawTab.click()
   await page.waitForTimeout(400)
 
+  /**
+   * The sidebar presents its sections as tabs (single-open in accordion mode).
+   * Bring the section owning the next control on screen, either way.
+   */
+  const activateSection = async (id) => {
+    const chip = page.locator(`[data-testid="section-tab-${id}"]`)
+    if ((await chip.count()) > 0) {
+      if (chip.getAttribute('aria-selected') !== null && (await chip.getAttribute('aria-selected')) !== 'true') {
+        await chip.click()
+        await page.waitForTimeout(250)
+      }
+      return
+    }
+    const btn = page.locator(`[data-testid="panel-section-${id}"] > button`)
+    if ((await btn.count()) > 0 && (await btn.getAttribute('aria-expanded')) !== 'true') {
+      await btn.click()
+      await page.waitForTimeout(200)
+    }
+  }
+
   // Enable Drawing
   const enableToggle = page.locator('[data-testid="drawing-mode-toggle"]')
   await enableToggle.waitFor({ state: 'visible' })
@@ -92,6 +112,7 @@ async function runKritaDrawingTest() {
   // --- SUBTEST 2: Add Krita-Style Transparency Mask to Layer ---
   console.log('=== Subtest 2: Add Krita-Style Transparency Mask ===')
   const layer = await page.evaluate(() => window.__omniframe_store.getState().paintLayers[0])
+  await activateSection('layers')
   const addMaskBtn = page.locator(`[data-testid="add-transparency-mask-${layer.id}"]`)
   await addMaskBtn.waitFor({ state: 'visible' })
   await addMaskBtn.click()
@@ -172,6 +193,7 @@ async function runKritaDrawingTest() {
 
   // --- SUBTEST 6: Brush Dynamics & Stabilizer ---
   console.log('=== Subtest 6: Krita Brush Dynamics & Stabilizer ===')
+  await activateSection('brush')
   const pressureSizeBox = page.locator('[data-testid="brush-pressure-size-checkbox"]')
   await pressureSizeBox.check()
   const stabilizerBtn = page.locator('[data-testid="smoothing-mode-stabilizer"]')
@@ -189,6 +211,7 @@ async function runKritaDrawingTest() {
   console.log('  -> Full screenshot saved:', fullScreenshotPath)
 
   // Cutout of layer tree with mask
+  await activateSection('layers')
   const layerItem = page.locator(`[data-testid="paint-layer-item-${layer.id}"]`)
   const maskItem = page.locator(`[data-testid="transparency-mask-item-${layer.id}"]`)
   if (await maskItem.isVisible()) {
