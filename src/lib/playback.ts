@@ -17,6 +17,7 @@ import type { Clip, MediaAsset, Track, Transition } from '../types'
 import { clamp } from './time'
 import { renderAllPaintLayers } from './drawingEngine'
 import { evaluateClipAnimation } from './animation/CurveEngine'
+import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
 
 export const PW = 1280
 export const PH = 720
@@ -179,6 +180,95 @@ export class PreviewEngine {
     this.backCanvas.height = height
   }
 
+  // ---- adjustment layers & LUT rendering -------------------------------
+
+  /** Offscreen canvases used to isolate per-clip/compound LUT grading. */
+  private scratchPool: HTMLCanvasElement[] = []
+  private scratchInUse = new Set<HTMLCanvasElement>()
+  private takeScratch(): HTMLCanvasElement {
+    let c = this.scratchPool.find((x) => !this.scratchInUse.has(x))
+    if (!c) {
+      c = document.createElement('canvas')
+      c.width = this.width
+      c.height = this.height
+      this.scratchPool.push(c)
+    }
+    this.scratchInUse.add(c)
+    const c2 = c.getContext('2d')!
+    c2.setTransform(1, 0, 0, 1, 0, 0)
+    c2.filter = 'none'
+    c2.globalAlpha = 1
+    c2.globalCompositeOperation = 'source-over'
+    c2.clearRect(0, 0, this.width, this.height)
+    return c
+  }
+  private releaseScratch(c: HTMLCanvasElement) {
+    this.scratchInUse.delete(c)
+  }
+
+  /** Resolve a clip's enabled LUT stack; flags pending loads. */
+  private buildLutStack(clip: Clip): { stack: LutStackItem[]; pending: boolean } {
+    const luts = clip.adjustment?.luts?.filter((l) => l.enabled) ?? []
+    const stack: LutStackItem[] = []
+    let pending = false
+    for (const l of luts) {
+      const lut = resolveLutRef({ builtin: l.builtin, text: l.cubeText })
+      if (!lut) {
+        pending = true
+        continue
+      }
+      stack.push({ lut, intensity: Math.max(0, Math.min(1, l.intensity)) })
+    }
+    if (pending && !this.pendingLutRedraw) {
+      this.pendingLutRedraw = true
+      whenLutsLoaded().then(() => {
+        this.pendingLutRedraw = false
+        this.redraw()
+      })
+    }
+    return { stack, pending }
+  }
+  private pendingLutRedraw = false
+
+  /**
+   * Applies an adjustment-layer clip (LUT stack + filter effects) to the
+   * current contents of the target canvas — i.e. everything already drawn
+   * below it. Returns true when a LUT is still loading.
+   */
+  private applyAdjustmentLayer(
+    ctx: CanvasRenderingContext2D,
+    target: HTMLCanvasElement,
+    clip: Clip,
+  ): boolean {
+    const { stack, pending } = this.buildLutStack(clip)
+    // filter effects (blur/brightness/...): filtered self-draw over the canvas
+    if (clip.effects) {
+      const eff = clip.effects
+      const filters: string[] = []
+      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
+      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
+      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
+      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
+      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
+      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
+      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
+      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
+      if (filters.length > 0) {
+        // Reset the transform for the self-draw: the full canvas is being
+        // re-drawn over itself in screen space regardless of caller state.
+        ctx.save()
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.filter = filters.join(' ')
+        ctx.globalAlpha = 1
+        ctx.globalCompositeOperation = 'source-over'
+        ctx.drawImage(target, 0, 0)
+        ctx.restore()
+      }
+    }
+    if (stack.length) applyLutStackToCanvas(target, stack)
+    return pending
+  }
+
   start() {
     if (this.running) return
     this.running = true
@@ -271,6 +361,12 @@ export class PreviewEngine {
 
       const clip = activeClipOnTrack(st.clips, track.id, time)
       if (!clip) continue
+
+      // Adjustment layer: grades everything already drawn (all tracks below)
+      if (clip.kind === 'adjustment' && track.type === 'video') {
+        if (this.applyAdjustmentLayer(ctx, this.backCanvas, clip)) visualPending = true
+        continue
+      }
 
       if (clip.kind === 'compound' && track.type === 'video') {
         this.drawCompoundClip(ctx, clip, time, st, track.muted)
@@ -618,8 +714,24 @@ export class PreviewEngine {
     return el
   }
 
-  private drawTextClip(ctx: CanvasRenderingContext2D, clip: Clip) {
+  private drawTextClip(ctx: CanvasRenderingContext2D, clip: Clip, skipLutIsolation = false) {
     if (!clip.textStyle) return
+    // Per-clip LUT isolation for text clips (same semantics as drawClip).
+    if (!skipLutIsolation && clip.adjustment?.luts?.some((l) => l.enabled)) {
+      const scratch = this.takeScratch()
+      const octx = scratch.getContext('2d')!
+      this.drawTextClip(octx, clip, true)
+      const { stack } = this.buildLutStack(clip)
+      if (stack.length) applyLutStackToCanvas(scratch, stack)
+      const t = ctx.getTransform()
+      if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
+        ctx.drawImage(scratch, 0, 0)
+      } else {
+        ctx.drawImage(scratch, -this.width / 2, -this.height / 2)
+      }
+      this.releaseScratch(scratch)
+      return
+    }
     ctx.save()
     ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity))
 
@@ -687,7 +799,28 @@ export class PreviewEngine {
     clip: Clip,
     asset: MediaAsset,
     time: number = 0,
+    skipLutIsolation = false,
   ) {
+    // Per-clip LUT grade ("effect placed inside the clip"): render the clip
+    // into an isolated scratch canvas, grade it there, composite back so
+    // sibling content on the target canvas is untouched.
+    if (!skipLutIsolation && clip.adjustment?.luts?.some((l) => l.enabled)) {
+      const scratch = this.takeScratch()
+      const octx = scratch.getContext('2d')!
+      this.drawClip(octx, el, clip, asset, time, true)
+      const { stack } = this.buildLutStack(clip)
+      if (stack.length) applyLutStackToCanvas(scratch, stack)
+      // Composite with the caller's current state (alpha/filter/transform of
+      // an enclosing compound must keep applying to this clip's pixels).
+      const t = ctx.getTransform()
+      if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
+        ctx.drawImage(scratch, 0, 0) // screen-space target
+      } else {
+        ctx.drawImage(scratch, -this.width / 2, -this.height / 2) // compound-local target
+      }
+      this.releaseScratch(scratch)
+      return
+    }
     const vw =
       (el as HTMLVideoElement).videoWidth ||
       (el as HTMLImageElement).naturalWidth ||
@@ -832,6 +965,44 @@ export class PreviewEngine {
     time: number,
     st: ReturnType<typeof useEditor.getState>,
     trackMuted: boolean,
+    skipLutIsolation = false,
+  ) {
+    const childSeq = (st.sequences || []).find((s) => s.id === clip.sourceSequenceId)
+    const childClips = childSeq ? childSeq.clips : (clip.originalChildClips || [])
+    const childTracks = childSeq ? childSeq.tracks : (clip.originalChildTracks || [])
+
+    // Nested adjustment layers (inside this compound) or the compound's own
+    // LUT grade require isolated rendering so the grade stays scoped to this
+    // compound's pixels only.
+    const hasNestedAdjustment = childClips.some((c) => c.kind === 'adjustment')
+    const { stack: ownLuts } = this.buildLutStack(clip)
+    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0)) {
+      const scratch = this.takeScratch()
+      const octx = scratch.getContext('2d')!
+      this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
+      if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
+      // Composite with the caller's current state intact (outer opacity /
+      // filter / transform keep applying, exactly like non-isolated draws).
+      const t = ctx.getTransform()
+      if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
+        ctx.drawImage(scratch, 0, 0)
+      } else {
+        ctx.drawImage(scratch, -this.width / 2, -this.height / 2)
+      }
+      this.releaseScratch(scratch)
+      return
+    }
+    this.drawCompoundContents(ctx, clip, time, st, trackMuted, childClips, childTracks)
+  }
+
+  private drawCompoundContents(
+    ctx: CanvasRenderingContext2D,
+    clip: Clip,
+    time: number,
+    st: ReturnType<typeof useEditor.getState>,
+    trackMuted: boolean,
+    childClips: Clip[],
+    childTracks: Track[],
   ) {
     const evalT = evaluateClipAnimation(clip, time)
     ctx.save()
@@ -858,9 +1029,6 @@ export class PreviewEngine {
     ctx.scale(evalT.scaleX, evalT.scaleY)
 
     const innerTime = time - clip.start + clip.inPoint
-    const childSeq = (st.sequences || []).find((s) => s.id === clip.sourceSequenceId)
-    const childClips = childSeq ? childSeq.clips : (clip.originalChildClips || [])
-    const childTracks = childSeq ? childSeq.tracks : (clip.originalChildTracks || [])
 
     const renderChildTracks = [...childTracks].reverse()
     for (const childTrack of renderChildTracks) {
@@ -868,6 +1036,13 @@ export class PreviewEngine {
 
       const childClip = activeClipOnTrack(childClips, childTrack.id, innerTime)
       if (!childClip) continue
+
+      // Nested adjustment layer: grades only what has been drawn inside
+      // this compound so far (the scratch canvas when isolated).
+      if (childClip.kind === 'adjustment' && childTrack.type === 'video') {
+        this.applyAdjustmentLayer(ctx, ctx.canvas, childClip)
+        continue
+      }
 
       if (childClip.kind === 'compound') {
         this.drawCompoundClip(ctx, childClip, innerTime, st, trackMuted || childTrack.muted)

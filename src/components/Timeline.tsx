@@ -25,6 +25,7 @@ import {
   Gauge,
   AlignJustify,
   Sparkles,
+  Sliders,
   MoreVertical,
   Plus,
   Trash2,
@@ -53,6 +54,7 @@ import { ClipFilmstrip } from './ClipFilmstrip'
 import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
+import { placedEffectLabels } from '../lib/adjustment'
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { GraphEditor } from './GraphEditor'
@@ -836,10 +838,21 @@ function ClipView({
   const isText = clip.kind === 'text' || Boolean((clip as any).textStyle)
   const is3D = clip.kind === 'threed'
   const isImage = clip.kind === 'image' || asset?.kind === 'image'
-  const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage)
+  const isAdjustment = clip.kind === 'adjustment'
+  const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage && !isAdjustment)
+
+  // Effects/LUTs placed on this clip (own filters + LUT stack + nested
+  // adjustment layers for compounds) drive the badge + selection affordance.
+  const sequences = useEditor((s) => s.sequences)
+  const effectLabels = placedEffectLabels(clip, sequences)
+  const hasEffects = effectLabels.length > 0
 
   const clipBorderClass = selected
-    ? isCompound
+    ? isAdjustment
+      ? 'border-2 border-cyan-300 ring-2 ring-cyan-300/90 shadow-[0_0_18px_rgba(103,232,249,0.65)] z-10'
+      : hasEffects
+      ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 shadow-[0_0_16px_rgba(147,197,253,0.6)] z-10'
+      : isCompound
       ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 shadow-[0_0_16px_rgba(129,140,248,0.6)] z-10'
       : isText
       ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
@@ -850,6 +863,8 @@ function ClipView({
       : is3D
       ? 'border-2 border-fuchsia-400 ring-2 ring-fuchsia-400/80 shadow-[0_0_14px_rgba(232,121,249,0.5)] z-10'
       : 'border-2 border-sky-400 ring-2 ring-sky-400/80 shadow-[0_0_14px_rgba(56,189,248,0.5)] z-10'
+    : isAdjustment
+    ? 'border border-cyan-600/70 hover:border-cyan-300 hover:shadow-md'
     : isCompound
     ? 'border border-indigo-500/80 hover:border-indigo-300 hover:shadow-md'
     : isText
@@ -862,7 +877,9 @@ function ClipView({
     ? 'border border-fuchsia-800/70 hover:border-fuchsia-400 hover:shadow-md'
     : 'border border-sky-600/70 hover:border-sky-300 hover:shadow-md'
 
-  const clipBgClass = isCompound
+  const clipBgClass = isAdjustment
+    ? 'bg-gradient-to-r from-cyan-950/85 via-blue-950/80 to-cyan-950/85 text-cyan-100'
+    : isCompound
     ? 'bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 text-indigo-100'
     : isText
     ? 'bg-amber-950/75 text-amber-100'
@@ -927,6 +944,15 @@ function ClipView({
           isCompound={isCompound}
         />
       )}
+      {isAdjustment && (
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(135deg, rgba(103,232,249,.55) 0 6px, transparent 6px 14px)',
+          }}
+        />
+      )}
       {isText && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-90 px-2 overflow-hidden">
           <span
@@ -965,6 +991,8 @@ function ClipView({
       <div className="relative z-[1] px-1.5 py-0.5 truncate text-ink-100 bg-black/40 border-b border-white/5 flex items-center gap-1 min-w-0">
         {clip.hidden ? (
           <EyeOff size={10} aria-label="Hidden clip" />
+        ) : isAdjustment ? (
+          <Sliders size={10} className="text-cyan-300 shrink-0" />
         ) : isCompound ? (
           <Layers size={10} className="text-indigo-300 shrink-0" />
         ) : isText ? (
@@ -979,6 +1007,17 @@ function ClipView({
           <Video size={10} className="text-sky-400 shrink-0" />
         )}
         <span className="truncate">{clip.name}</span>
+        {hasEffects && (
+          <span
+            data-testid="clip-effects-badge"
+            data-effect-count={effectLabels.length}
+            title={effectLabels.join(', ')}
+            className="ml-auto min-w-0 max-w-[60%] flex items-center gap-0.5 px-1 rounded bg-blue-500/25 text-blue-200 border border-blue-300/40 text-[10px] shrink-0"
+          >
+            <Sliders size={9} className="shrink-0" />
+            <span className="truncate">{effectLabels.join(', ')}</span>
+          </span>
+        )}
         {isCompound && (
           <span className="ml-auto text-[10px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 font-mono font-bold shrink-0">
             NESTED ({clip.nestedClipCount || 2})

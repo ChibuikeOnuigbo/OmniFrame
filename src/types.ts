@@ -3,7 +3,7 @@ import type { RecolorBlend } from './lib/recolor'
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound' | 'adjustment'
 
 export interface Sequence {
   id: string
@@ -101,6 +101,22 @@ export interface ClipEffect {
   invert?: number // 0..1 (default 0)
   sepia?: number // 0..1 (default 0)
   hueRotate?: number // 0..360 deg (default 0)
+}
+
+/** One LUT inside an adjustment layer (or a clip's own grade). */
+export interface ClipLut {
+  id: string
+  name: string
+  /** builtin manifest id (file under /luts) or the raw .cube text for uploads */
+  builtin?: string
+  cubeText?: string
+  intensity: number // 0..1
+  enabled: boolean
+}
+
+/** LUT-stack grading carried by adjustment layers AND normal clips. */
+export interface ClipAdjustment {
+  luts: ClipLut[]
 }
 
 export interface TextTitleStyle {
@@ -342,6 +358,9 @@ export interface Clip {
   hidden: boolean // clip-level visibility; distinct from track visibility
   transform: ClipTransform
   effects?: ClipEffect
+  /** LUT stack: adjustment layers grade everything below them; regular
+   *  clips carrying this grade only their own output (effect placed "inside"). */
+  adjustment?: ClipAdjustment
   textStyle?: TextTitleStyle
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
   // Compound Clip / Nested Sequence references

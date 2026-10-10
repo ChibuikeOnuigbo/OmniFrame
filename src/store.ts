@@ -24,6 +24,7 @@ import type {
   MonitorMode,
   TimelineInsertionMode,
   ClipEffect,
+  ClipLut,
   TimelineMarker,
   MarkerColor,
   LinkRuleType,
@@ -55,6 +56,7 @@ import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
+import { parseCubeLUT } from './lib/lutEngine'
 import { TimelineController } from './lib/oop/TimelineController'
 import type { VoiceIsolationModel } from './lib/voiceIsolation'
 import {
@@ -431,6 +433,44 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
   addTextTitleClip: (text?: string, duration?: number) => void
+
+  // ---- adjustment layers & LUTs ----
+  /** Built-in LUT library (public/luts/manifest.json). */
+  lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string }> }
+  /** User-uploaded .cube LUTs (persisted to localStorage when they fit). */
+  userLuts: Array<{ id: string; name: string; cubeText: string }>
+  loadLutLibrary: () => Promise<void>
+  addUserLut: (name: string, cubeText: string) => string | null
+  removeUserLut: (id: string) => void
+  /**
+   * Creates an adjustment-layer clip (kind 'adjustment') that grades every
+   * track below it. With no args it spans playhead→content end on the
+   * topmost video track.
+   */
+  addAdjustmentLayer: (partial?: {
+    name?: string
+    start?: number
+    duration?: number
+    trackId?: string
+    effects?: ClipEffect
+    luts?: ClipLut[]
+  }) => string
+  /** Append a LUT to a clip's adjustment stack (creates it if needed). */
+  addLutToClip: (clipId: string, lut: Omit<ClipLut, 'id'> & { id?: string }) => string
+  removeLutFromClip: (clipId: string, lutId: string) => void
+  setLutIntensity: (clipId: string, lutId: string, intensity: number) => void
+  toggleLutEnabled: (clipId: string, lutId: string) => void
+  /**
+   * Universal placement: if a clip is selected, the LUT goes INSIDE that
+   * clip (per-clip grade). Otherwise an adjustment layer is created on the
+   * timeline at the playhead, affecting everything below it.
+   */
+  placeLut: (lut: { name: string; builtin?: string; cubeText?: string }) => string
+  /**
+   * Same layer semantics for filter effects (blur, B&W, ...): merges the
+   * effect into the selected/active adjustment layer, or creates one.
+   */
+  placeEffectAsLayer: (name: string, effect: ClipEffect) => string
 
   // ---- media ----
   addAsset: (a: MediaAsset) => void
@@ -913,6 +953,17 @@ export const useEditor = create<EditorState>((set, get) => {
     tracks: [],
     clips: [],
     transitions: [],
+    lutLibrary: { loaded: false, luts: [] },
+    userLuts: (() => {
+      try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.userLuts') : null
+        if (!raw) return []
+        const parsed = JSON.parse(raw)
+        return Array.isArray(parsed) ? parsed.filter((l) => l && typeof l.cubeText === 'string') : []
+      } catch {
+        return []
+      }
+    })(),
     selectedTransitionId: null,
     playhead: 0,
     duration: 10,
@@ -1423,6 +1474,239 @@ export const useEditor = create<EditorState>((set, get) => {
           c.id === id ? { ...c, effects: { ...c.effects, ...effect } } : c,
         ),
       }))
+    },
+
+    // ---- adjustment layers & LUTs ------------------------------------
+    loadLutLibrary: async () => {
+      if (get().lutLibrary.loaded) return
+      try {
+        const res = await fetch('luts/manifest.json')
+        if (!res.ok) throw new Error(String(res.status))
+        const manifest = await res.json()
+        set({ lutLibrary: { loaded: true, luts: manifest.luts || [] } })
+      } catch {
+        // keep loaded=false so panels can show an honest error
+      }
+    },
+
+    addUserLut: (name, cubeText) => {
+      // validate before storing (throws -> null for invalid .cube files)
+      try {
+        parseCubeLUT(cubeText)
+      } catch {
+        return null
+      }
+      const entry = { id: `user-lut-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`, name, cubeText }
+      set((s) => ({ userLuts: [...s.userLuts, entry] }))
+      try {
+        localStorage.setItem('omniframe.userLuts', JSON.stringify(get().userLuts))
+      } catch {
+        // quota exceeded — LUT stays in memory for this session only
+      }
+      return entry.id
+    },
+
+    removeUserLut: (id) => {
+      set((s) => ({ userLuts: s.userLuts.filter((l) => l.id !== id) }))
+      try {
+        localStorage.setItem('omniframe.userLuts', JSON.stringify(get().userLuts))
+      } catch { /* ignore */ }
+    },
+
+    addAdjustmentLayer: (partial = {}) => {
+      pushSnapshot()
+      const s = get()
+      const start = Math.max(0, partial.start ?? s.playhead)
+      const contentEnd = s.clips.reduce((m, c) => Math.max(m, c.start + c.duration), 0)
+      const duration = Math.max(0.5, partial.duration ?? Math.max(2, contentEnd - start))
+
+      // Default target: the topmost video track with no overlapping clip, so
+      // the layer grades everything below it while tracks above (e.g. text)
+      // stay untouched.
+      const videoTracks = s.tracks.filter((t) => t.type === 'video')
+      const overlaps = (trackId: string) =>
+        s.clips.some(
+          (c) =>
+            c.trackId === trackId &&
+            !(c.start + c.duration <= start || c.start >= start + duration),
+        )
+      let targetTrackId = partial.trackId || ''
+      if (!targetTrackId) {
+        const free = videoTracks.find((t) => !overlaps(t.id))
+        targetTrackId =
+          free?.id ||
+          (videoTracks[0]
+            ? get().createTrack('video', 'above', videoTracks[0].id)
+            : get().ensureTrack('video'))
+      }
+
+      const id = `clip-adjustment-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+      const lutCount = partial.luts?.length || 0
+      const clip: Clip = {
+        id,
+        trackId: targetTrackId,
+        assetId: '',
+        start,
+        duration,
+        inPoint: 0,
+        name:
+          partial.name ||
+          (lutCount ? `Adjustment: ${partial.luts!.map((l) => l.name).join(' + ')}` : 'Adjustment Layer'),
+        kind: 'adjustment',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        effects: partial.effects,
+        adjustment: partial.luts?.length ? { luts: partial.luts } : undefined,
+      }
+      set((st) => ({
+        clips: [...st.clips, clip],
+        selectedClipId: id,
+        selectedClipIds: [id],
+        duration: recompute([...st.clips, clip]),
+      }))
+      return id
+    },
+
+    addLutToClip: (clipId, lut) => {
+      pushSnapshot()
+      const lutId = lut.id || `clip-lut-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+      set((s) => ({
+        clips: s.clips.map((c) => {
+          if (c.id !== clipId) return c
+          const luts = [...(c.adjustment?.luts || []), { ...lut, id: lutId }]
+          const renamed =
+            c.kind === 'adjustment' && (!c.name || c.name === 'Adjustment Layer')
+              ? { name: `Adjustment: ${luts.map((l) => l.name).join(' + ')}` }
+              : {}
+          return { ...c, ...renamed, adjustment: { luts } }
+        }),
+      }))
+      return lutId
+    },
+
+    removeLutFromClip: (clipId, lutId) => {
+      pushSnapshot()
+      set((s) => ({
+        clips: s.clips.map((c) => {
+          if (c.id !== clipId || !c.adjustment) return c
+          const luts = c.adjustment.luts.filter((l) => l.id !== lutId)
+          return { ...c, adjustment: luts.length ? { luts } : undefined }
+        }),
+      }))
+    },
+
+    setLutIntensity: (clipId, lutId, intensity) => {
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === clipId && c.adjustment
+            ? {
+                ...c,
+                adjustment: {
+                  luts: c.adjustment.luts.map((l) =>
+                    l.id === lutId ? { ...l, intensity: Math.max(0, Math.min(1, intensity)) } : l,
+                  ),
+                },
+              }
+            : c,
+        ),
+      }))
+    },
+
+    toggleLutEnabled: (clipId, lutId) => {
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === clipId && c.adjustment
+            ? {
+                ...c,
+                adjustment: {
+                  luts: c.adjustment.luts.map((l) => (l.id === lutId ? { ...l, enabled: !l.enabled } : l)),
+                },
+              }
+            : c,
+        ),
+      }))
+    },
+
+    placeLut: (lut) => {
+      const s = get()
+      const selected = s.clips.find((c) => c.id === s.selectedClipId)
+      const clipLut: Omit<ClipLut, 'id'> = {
+        name: lut.name,
+        builtin: lut.builtin,
+        cubeText: lut.cubeText,
+        intensity: 1,
+        enabled: true,
+      }
+      // Selected clip (any visual kind, incl. compound): LUT goes INSIDE it.
+      if (selected && selected.kind !== 'audio' && selected.kind !== 'adjustment') {
+        const clipId = selected.id
+        get().addLutToClip(clipId, clipLut)
+        get().selectClip(clipId)
+        return clipId
+      }
+      // Selected adjustment layer: stack onto it.
+      if (selected && selected.kind === 'adjustment') {
+        get().addLutToClip(selected.id, clipLut)
+        return selected.id
+      }
+      // Nothing selected: reuse an adjustment layer already active at the
+      // playhead (topmost), else create one.
+      const playhead = s.playhead
+      const active = s.clips
+        .filter(
+          (c) =>
+            c.kind === 'adjustment' &&
+            playhead >= c.start &&
+            playhead < c.start + c.duration &&
+            !c.hidden,
+        )
+        .sort((a, b) => {
+          const ai = s.tracks.findIndex((t) => t.id === a.trackId)
+          const bi = s.tracks.findIndex((t) => t.id === b.trackId)
+          return ai - bi
+        })[0]
+      if (active) {
+        get().addLutToClip(active.id, clipLut)
+        get().selectClip(active.id)
+        return active.id
+      }
+      const layerId = get().addAdjustmentLayer({ luts: [{ ...clipLut, id: `clip-lut-${Date.now().toString(36)}` }] })
+      return layerId
+    },
+
+    placeEffectAsLayer: (name, effect) => {
+      const s = get()
+      // Prefer the selected adjustment layer, else one active at playhead.
+      const selected = s.clips.find((c) => c.id === s.selectedClipId)
+      const target =
+        selected?.kind === 'adjustment'
+          ? selected
+          : s.clips.find(
+              (c) =>
+                c.kind === 'adjustment' &&
+                s.playhead >= c.start &&
+                s.playhead < c.start + c.duration &&
+                !c.hidden,
+            )
+      if (target) {
+        pushSnapshot()
+        set((st) => ({
+          clips: st.clips.map((c) =>
+            c.id === target.id
+              ? {
+                  ...c,
+                  name: c.name === 'Adjustment Layer' ? `Adjustment: ${name}` : c.name,
+                  effects: { ...c.effects, ...effect },
+                }
+              : c,
+          ),
+          selectedClipId: target.id,
+          selectedClipIds: [target.id],
+        }))
+        return target.id
+      }
+      return get().addAdjustmentLayer({ name: `Adjustment: ${name}`, effects: effect })
     },
 
     addTextTitleClip: (text = 'Title', duration = 4.0) => {

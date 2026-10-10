@@ -25,6 +25,111 @@ import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/v
 import { isDemucsModelAvailable } from '../lib/demucs/index.ts'
 import { loudnessGain, measureIntegratedLufs } from '../lib/loudness'
 import { SectionsNavigator } from './SectionsNav'
+import { placedEffectLabels, activeEffectKeys } from '../lib/adjustment'
+
+/**
+ * "Placed Effects" inspector section: every LUT / effect placed on the
+ * selected clip (its own grade + nested adjustment layers for compounds).
+ * Clicking a listed LUT re-selects the clip, which re-shows its blue
+ * timeline border.
+ */
+function PlacedEffectsSection({ clip }: { clip: Clip }) {
+  const sequences = useEditor((s) => s.sequences)
+  const selectClip = useEditor((s) => s.selectClip)
+  const setLutIntensity = useEditor((s) => s.setLutIntensity)
+  const toggleLutEnabled = useEditor((s) => s.toggleLutEnabled)
+  const removeLutFromClip = useEditor((s) => s.removeLutFromClip)
+
+  const labels = placedEffectLabels(clip, sequences)
+  const ownLuts = clip.adjustment?.luts || []
+  const effectKeys = activeEffectKeys(clip.effects)
+  const nested: Clip[] =
+    clip.kind === 'compound'
+      ? (() => {
+          const seq = sequences.find((s) => s.id === clip.sourceSequenceId)
+          return seq ? seq.clips : clip.originalChildClips || []
+        })().filter((c) => c.kind === 'adjustment')
+      : []
+
+  if (!labels.length && clip.kind !== 'adjustment') return null
+
+  return (
+    <Section title="Placed Effects">
+      {labels.length === 0 && clip.kind === 'adjustment' && (
+        <p className="text-[11px] text-ink-500">Empty adjustment layer — place a LUT from the Effects tab.</p>
+      )}
+      {effectKeys.length > 0 && (
+        <Field label="Clip effects">
+          <span className="text-[11px] text-ink-300">{effectKeys.map((k) => k.replace(/([A-Z])/g, ' $1')).join(', ')}</span>
+        </Field>
+      )}
+      {ownLuts.map((lut) => (
+        <div key={lut.id} data-testid={`inspector-lut-${lut.id}`} className="flex items-center gap-1.5">
+          <button
+            type="button"
+            data-testid={`inspector-lut-power-${lut.id}`}
+            title={lut.enabled ? 'Disable' : 'Enable'}
+            aria-label={`Toggle ${lut.name}`}
+            onClick={() => toggleLutEnabled(clip.id, lut.id)}
+            className={`p-0.5 rounded ${lut.enabled ? 'text-emerald-300' : 'text-ink-600'}`}
+          >
+            <Activity size={11} />
+          </button>
+          <button
+            type="button"
+            className="flex-1 min-w-0 truncate text-left text-[11px] text-ink-200 hover:text-white"
+            title={`${lut.name} — click to re-show the timeline border`}
+            onClick={() => selectClip(clip.id)}
+          >
+            {lut.name}
+          </button>
+          <input
+            type="range"
+            data-testid={`inspector-lut-intensity-${lut.id}`}
+            min={0}
+            max={1}
+            step={0.05}
+            value={lut.intensity}
+            aria-label={`Intensity of ${lut.name}`}
+            onChange={(e) => setLutIntensity(clip.id, lut.id, parseFloat(e.target.value))}
+            className="of-range w-20"
+          />
+          <span className="w-8 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(lut.intensity * 100)}%</span>
+          <button
+            type="button"
+            data-testid={`inspector-lut-remove-${lut.id}`}
+            aria-label={`Remove ${lut.name}`}
+            title={`Remove ${lut.name}`}
+            onClick={() => removeLutFromClip(clip.id, lut.id)}
+            className="p-0.5 rounded text-ink-500 hover:text-red-300"
+          >
+            <Trash2 size={11} />
+          </button>
+        </div>
+      ))}
+      {nested.map((layer) => {
+        const inner = [
+          ...activeEffectKeys(layer.effects).map((k) => k),
+          ...(layer.adjustment?.luts || []).map((l) => l.name),
+        ]
+        return (
+          <div key={layer.id} data-testid={`inspector-nested-${layer.id}`} className="flex items-center gap-1.5">
+            <Diamond size={10} className="text-cyan-300 shrink-0" />
+            <button
+              type="button"
+              className="flex-1 min-w-0 truncate text-left text-[11px] text-ink-200 hover:text-white"
+              title="Nested adjustment layer — click to select it"
+              onClick={() => selectClip(layer.id)}
+            >
+              {layer.name}
+            </button>
+            <span className="text-[10px] text-ink-500 truncate max-w-[45%]">{inner.join(', ')}</span>
+          </div>
+        )
+      })}
+    </Section>
+  )
+}
 
 function ClipInspector({ clip }: { clip: Clip }) {
   const assets = useEditor((s) => s.assets)
@@ -557,6 +662,8 @@ function ClipInspector({ clip }: { clip: Clip }) {
           </Field>
         </Section>
       )}
+
+      <PlacedEffectsSection clip={clip} />
 
       {clip.effects && (
         <Section title="Effects">
