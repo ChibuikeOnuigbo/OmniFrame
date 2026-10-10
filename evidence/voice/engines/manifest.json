@@ -1,5 +1,5 @@
 {
-  "when": "2026-10-08T16:18:48.182Z",
+  "when": "2026-10-10T00:31:01.001Z",
   "sampleRate": 44100,
   "jobs": [
     {
@@ -7,7 +7,7 @@
       "engine": "rnnoise-xiph",
       "mode": "keep_vocal",
       "bytes": 528362,
-      "ms": 349,
+      "ms": 387,
       "notes": [
         "10:Fetching audio stream…",
         "30:Decoding audio samples…",
@@ -26,7 +26,7 @@
       "engine": "omni-unified",
       "mode": "keep_vocal",
       "bytes": 529244,
-      "ms": 2079,
+      "ms": 2347,
       "notes": [
         "10:Fetching audio stream…",
         "30:Decoding audio samples…",
@@ -41,7 +41,7 @@
       "engine": "omni-unified",
       "mode": "keep_vocal",
       "bytes": 396944,
-      "ms": 217,
+      "ms": 254,
       "notes": [
         "10:Fetching audio stream…",
         "30:Decoding audio samples…",
@@ -56,7 +56,7 @@
       "engine": "omni-unified",
       "mode": "remove_vocal",
       "bytes": 396944,
-      "ms": 258,
+      "ms": 233,
       "notes": [
         "10:Fetching audio stream…",
         "30:Decoding audio samples…",

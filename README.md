@@ -128,6 +128,51 @@ Every phase below started as a roadmap bullet and now ships with E2E coverage
    Deeper native work (encoding, project persistence behind commands) stays
    future work.
 
+## Evidence — every input and output, listen for yourself
+
+All evidence files are tracked in the repo. Click any link and A/B the input
+against its output. Every audio pair below was produced by the real app
+engine through the same code path the UI calls (no reimplementation), and
+each pack regenerates from its `qa/` script.
+
+### Audio — input ↔ output pairs
+
+| Pack | What you can play | Where |
+|---|---|---|
+| **Main study** (showcase A/B + old-DSP comparison + variant + the shared 6 s fixture, both modes) | 3 inputs → 8 output MP3s | [`evidence/voice/listen/`](evidence/voice/listen/README.md) |
+| **Robustness edge cases** (mono voice memo, 48 kHz context, 0.5 s clip, two overlapping speakers, **default-strength 3-pass**, instrumental/karaoke mode — 11/11) | 5 inputs → 10 output MP3s | [`evidence/voice/robustness/`](evidence/voice/robustness/README.md) |
+| **Real full-length songs** (two complete tracks, keep + remove vocal, plus the "ultra slowed" failure → diagnosis → v2/v3 fix study) | 10 MP3s, 108 s track included | [`evidence/voice/realworld/`](evidence/voice/realworld/README.md) |
+| **Slowed + reverb tracks** (auto speed-fix on/off, natural-pitch acapella) | slowed pack | [`evidence/voice/slowed/`](evidence/voice/slowed/README.md) |
+| **Per-engine outputs** (RNNoise denoise, omni-unified-v1 keep/remove — with a manifest of timings) | WAVs + [`manifest.json`](evidence/voice/engines/manifest.json) | [`evidence/voice/engines/`](evidence/voice/engines/) |
+| **Full-fidelity main study** (the showcase input + its exact clean voice/music ground-truth stems + the isolated output, uncompressed) | WAVs | [`mix-showcase-input.wav`](evidence/voice/mix-showcase-input.wav) · [`mix-showcase-clean-voice.wav`](evidence/voice/mix-showcase-clean-voice.wav) · [`mix-showcase-clean-music.wav`](evidence/voice/mix-showcase-clean-music.wav) · [`mix-showcase-isolated.wav`](evidence/voice/mix-showcase-isolated.wav) |
+| **Input source assets** (the TTS voices + synthesized music beds every mix above is built from) | MP3/WAV corpus | [`qa/assets/voice/`](qa/assets/voice/) |
+
+### Scores — the numbers behind the pairs
+
+Every pack above has a machine-written report with the PASS bars and exact
+measurements: [`qa/reports/`](qa/reports/) — the headline ones are
+[`voice-demucs-robustness.json`](qa/reports/voice-demucs-robustness.json)
+(11/11 edge cases), [`voice-tts-mix-isolation.json`](qa/reports/voice-tts-mix-isolation.json)
+(main study), [`voice-slowed-fix.json`](qa/reports/voice-slowed-fix.json)
+(speed-fix, 18/18), [`ai-denoise-browser.json`](qa/reports/ai-denoise-browser.json)
+(11/11), [`loudness-normalization.json`](qa/reports/loudness-normalization.json)
+(7/7), and [`strict-audio-grades.json`](qa/reports/strict-audio-grades.json)
+(sample-level Python grader, all GRADE A). Guard suites:
+[`keyboard-shortcuts.json`](qa/reports/keyboard-shortcuts.json) (19/19),
+[`axe-a11y.json`](qa/reports/axe-a11y.json) (14/14 surfaces clean),
+[`bundle-budget.json`](qa/reports/bundle-budget.json) (payload budgets),
+[`demucs-model-unavailable.json`](qa/reports/demucs-model-unavailable.json)
+(failure path). Honest history of every training run and reset:
+[`RUNS.md`](RUNS.md).
+
+### Visual evidence
+
+E2E screenshots and cutouts ([`evidence/screenshots/`](evidence/screenshots/),
+[`evidence/cutouts/`](evidence/cutouts/)), frame-accurate export stills verified
+with OpenCV ([`evidence/rebuild/`](evidence/rebuild/)), timeline/UI states
+and drawing studies
+([`evidence/drawing/`](evidence/drawing/)).
+
 ## License
 
 MIT. Third-party model weights and native libraries are out of scope for this foundation and will be

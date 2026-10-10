@@ -21,23 +21,24 @@ Every path below is clickable:
 | Test source assets (TTS voices, synthesized beds) | [`qa/assets/voice/`](../../../qa/assets/voice/) |
 | The test scripts | [`qa/voice-demucs-robustness-e2e.mjs`](../../../qa/voice-demucs-robustness-e2e.mjs) (this suite), [`qa/voice-demucs-model-e2e.mjs`](../../../qa/voice-demucs-model-e2e.mjs) (main study) |
 
-## Edge cases — keep_vocal (through the real app, 9/9 PASS)
+## Edge cases — keep_vocal (through the real app, 11/11 PASS)
 
 Click an input, then its output, and A/B them. SI-SDR is measured against
 the exact known clean voice; the PASS bar is 14 dB.
 
 | Case | Input → Output | Result |
 |---|---|---|
-| **Mono input** (phone voice memo — voice + chord pad, 6 s) | [`input-mono.mp3`](input-mono.mp3) → [`output-mono-keep-vocal-demucs.mp3`](output-mono-keep-vocal-demucs.mp3) | **16.4 dB**, output correctly stereo |
+| **Mono input** (phone voice memo — voice + chord pad, 6 s) | [`input-mono.mp3`](input-mono.mp3) → [`output-mono-keep-vocal-demucs.mp3`](output-mono-keep-vocal-demucs.mp3) | **16.2 dB**, output correctly stereo |
 | **48 kHz input** (real-browser context rate — exercises the resample path that 44.1 kHz headless tests never touch) | [`input-48k.mp3`](input-48k.mp3) → [`output-48k-keep-vocal-demucs.mp3`](output-48k-keep-vocal-demucs.mp3) | **25.9 dB**, duration exact (6.000 s) |
 | **0.5 s clip** (shorter than one model chunk; voice-only input) | → [`output-short-clip-keep-vocal-demucs.mp3`](output-short-clip-keep-vocal-demucs.mp3) | works, zero non-finite samples |
-| **Two overlapping speakers** (male + female at once) | [`input-duo.mp3`](input-duo.mp3) → [`output-duo-keep-vocal-demucs.mp3`](output-duo-keep-vocal-demucs.mp3) | **32.5 dB** vs both-voices reference — Demucs keeps both voices |
+| **Two overlapping speakers** (male + female at once) | [`input-duo.mp3`](input-duo.mp3) → [`output-duo-keep-vocal-demucs.mp3`](output-duo-keep-vocal-demucs.mp3) | **25.1 dB** vs both-voices reference — Demucs keeps both voices |
+| **Default strength 0.92** (3 shift-averaged passes — the exact fresh-install configuration) | [`input-mono.mp3`](input-mono.mp3) → [`output-mono-default-3pass-keep-vocal-demucs.mp3`](output-mono-default-3pass-keep-vocal-demucs.mp3) | **16.2 dB**, duration exact (6.000 s) |
 
 ## Edge cases — remove_vocal (instrumental / karaoke)
 
 | Case | Input → Output | Result |
 |---|---|---|
-| **Mono input** — instrumental through the upmix path | [`input-mono.mp3`](input-mono.mp3) → [`output-mono-remove-vocal-demucs.mp3`](output-mono-remove-vocal-demucs.mp3) | **19.9 dB** vs clean music (bar 14) |
+| **Mono input** — instrumental through the upmix path | [`input-mono.mp3`](input-mono.mp3) → [`output-mono-remove-vocal-demucs.mp3`](output-mono-remove-vocal-demucs.mp3) | **18.5 dB** vs clean music (bar 14) |
 | **48 kHz input** — instrumental through the resample path | [`input-48k.mp3`](input-48k.mp3) → [`output-48k-remove-vocal-demucs.mp3`](output-48k-remove-vocal-demucs.mp3) | **23.7 dB**, duration exact |
 | **Voice-only mix** — nothing left to keep | [`input-duo.mp3`](input-duo.mp3) → [`output-duo-remove-vocal-demucs.mp3`](output-duo-remove-vocal-demucs.mp3) | residue **−58.8 dBFS** — 45.9 dB below the mix, effectively silent |
 

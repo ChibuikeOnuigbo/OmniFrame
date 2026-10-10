@@ -449,6 +449,9 @@ for (const [n, src] of [
   ['mono', 'mono-rmv-output'], ['48k', '48k-rmv-output'], ['duo', 'duo-rmv-output'],
 ]) mp3(join(TMP, `${src}.wav`), join(EVID, `output-${n}-remove-vocal-demucs.mp3`))
 mp3(join(TMP, 'short-output.wav'), join(EVID, 'output-short-clip-keep-vocal-demucs.mp3'))
+// default panel strength (0.92 = 3 shift-averaged passes) — the fresh-install
+// configuration, its own listenable pair (input shares input-mono.mp3)
+mp3(join(TMP, 'mono-default-output.wav'), join(EVID, 'output-mono-default-3pass-keep-vocal-demucs.mp3'))
 
 writeFileSync(join(ROOT, 'qa/reports/voice-demucs-robustness.json'), JSON.stringify({
   date: new Date().toISOString(),
