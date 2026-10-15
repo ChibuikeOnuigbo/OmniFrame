@@ -317,23 +317,36 @@ try {
   }
 
   await page.click('[data-testid="roto-patch-btn"]')
-  await page.waitForTimeout(600)
+  await page.waitForFunction(
+    () => window.__omniframe_store.getState().assets.some((a) => a.name === 'RotoMask BG Patch') &&
+      window.__omniframe_store.getState().clips.some((c) => c.name === 'BG Patch (RotoMask)'),
+    { timeout: 90000 },
+  )
   st = await page.evaluate(() => {
     const s = window.__omniframe_store.getState()
+    const asset = s.assets.find((a) => a.name === 'RotoMask BG Patch')
+    const patchClip = s.clips.find((c) => c.name === 'BG Patch (RotoMask)')
+    const character = s.omniframeCharacters.find((c) => c.id.startsWith('obj_roto_'))
     return {
-      patchAsset: s.assets.some((a) => a.name === 'RotoMask BG Patch'),
-      patchClip: s.clips.some((c) => c.name === 'BG Patch (RotoMask)'),
+      patchAsset: !!asset,
+      patchClip: !!patchClip,
+      patchFrames: asset?.imageSequence?.frames?.length ?? 1,
+      patchDuration: patchClip?.duration ?? 0,
+      cutoutFrames: character?.cutoutSequence?.length ?? 1,
       chars: s.omniframeCharacters.filter((c) => c.id.startsWith('obj_roto_')).length,
     }
   })
-  if (st.patchAsset && st.patchClip && st.chars >= 2) {
-    pass('12. Cut Out + Patch BG (copy-paste workflow)', 'patch asset + clip above video + character layer on top')
+  if (st.patchAsset && st.patchClip && st.chars >= 2 && st.patchFrames >= 7 && st.cutoutFrames >= 7) {
+    pass('12. Cut Out + Patch BG (temporal sequence)', `${st.patchFrames} patch frames + ${st.cutoutFrames} OmniFrame cutout frames over ${st.patchDuration.toFixed(2)}s`)
   } else {
     fail('12. Cut Out + Patch BG (copy-paste workflow)', JSON.stringify(st))
   }
 
   await page.click('[data-testid="roto-remove-btn"]')
-  await page.waitForTimeout(600)
+  await page.waitForFunction(
+    () => window.__omniframe_store.getState().clips.filter((c) => c.name === 'BG Patch (RotoMask)').length >= 2,
+    { timeout: 90000 },
+  )
   st = await page.evaluate(() => {
     const s = window.__omniframe_store.getState()
     const chars = s.omniframeCharacters.filter((c) => c.id.startsWith('obj_roto_'))

@@ -141,19 +141,23 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   })
 
   const previousSpeed = st.speed
+  // In/Out range export: record only the marked slice (CapCut behaviour).
+  const range = st.exportRange && st.exportRange.out > st.exportRange.in ? st.exportRange : null
+  const recordFrom = range ? range.in : 0
+  const recordTo = range ? range.out : st.duration
   st.setSpeed(1)
-  st.setPlayhead(0)
+  st.setPlayhead(recordFrom)
   recorder.start(100)
   st.play()
-  opts.onStatus?.('Recording timeline…')
+  opts.onStatus?.(range ? 'Recording selected range…' : 'Recording timeline…')
 
   // Wait for playback to finish (engine pauses itself at duration).
   const start = performance.now()
   while (true) {
     const s = useEditor.getState()
-    const frac = s.duration > 0 ? s.playhead / s.duration : 1
+    const frac = recordTo > recordFrom ? (s.playhead - recordFrom) / (recordTo - recordFrom) : 1
     opts.onProgress?.(Math.min(1, Math.max(0, frac)))
-    if (!s.playing || s.playhead >= s.duration - 0.02) break
+    if (!s.playing || s.playhead >= recordTo - 0.02) break
     if (performance.now() - start > 5 * 60 * 1000) break // safety timeout
     await new Promise((r) => setTimeout(r, 100))
   }

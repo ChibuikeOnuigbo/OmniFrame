@@ -1,4 +1,4 @@
-export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'cursor' | 'accessibility' | 'ai'
+export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'cursor' | 'accessibility' | 'ai' | 'dockers'
 export type SettingsScope = 'project' | 'user' | 'session'
 
 export interface SettingDefinition {
@@ -44,7 +44,7 @@ export const EDITABLE_SHORTCUTS: EditableShortcut[] = [
   { id: 'undo', label: 'Undo', defaultKey: 'Ctrl+Z' },
   { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Shift+Z' },
   { id: 'playPause', label: 'Play / Pause', defaultKey: 'Space' },
-  { id: 'omniframe', label: 'OmniFrame Mask Tab', defaultKey: 'Alt+O' },
+  { id: 'omniframe', label: 'OmniFrame Tab', defaultKey: 'Alt+O' },
   { id: 'threed', label: 'Toggle 3D Mode', defaultKey: '3' },
 ]
 
@@ -68,6 +68,14 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     controlType: 'radio', defaultValue: 'high', scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.previewQuality', testId: 'setting-preview-quality',
     sourceRefs: [{ editor: 'OpenShot', url: 'https://www.openshot.org/files/user-guide/preferences.html', evidence: 'Optimized preview resolution is an explicit preview preference.' }],
+  },
+  {
+    id: 'ui.hideOverflowX', category: 'accessibility', label: 'Hide horizontal overflow',
+    description: 'Default on: horizontal tab/chip strips hide their scrollbar and scroll with edge arrows (hover to scroll), the mouse wheel, or dragging. Turn off to restore native horizontal scrollbars everywhere.',
+    aliases: ['overflow', 'scrollbar', 'horizontal scroll', 'scroll arrows', 'overflow x'],
+    controlType: 'toggle', defaultValue: true, scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.hideOverflowX', testId: 'toggle-hide-overflow-x',
+    sourceRefs: [{ editor: 'CapCut', url: 'https://www.capcut.com/', evidence: 'CapCut panels navigate sections from a horizontal strip without visible scrollbars.' }],
   },
   {
     id: 'accessibility.reduceMotion', category: 'accessibility', label: 'Reduce motion',
@@ -119,6 +127,38 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     aliases: ['cursor', 'mouse', 'pointer', 'mac cursor', 'drag plus', 'help question', 'pointer events'],
     controlType: 'toggle', defaultValue: true, scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.cursorConfig.enabled', testId: 'setting-cursor-enabled', sourceRefs: [],
+  },
+  {
+    id: 'dockers.leftTabs',
+    category: 'dockers',
+    label: 'Dockers — sidebar panels',
+    description: 'Choose which panels appear on the left rail; review the active workspace mode and what it shows, then customize. Hidden panels can be re-enabled at any time.',
+    aliases: ['docker', 'panels', 'sidebar', 'workspace', 'rails', 'show hide panels'],
+    controlType: 'toggle',
+    defaultValue: true,
+    scope: 'user',
+    persistent: true,
+    requiresReload: false,
+    capability: 'web-and-desktop',
+    runtimeBinding: 'dockerPrefs.leftTabs',
+    testId: 'setting-dockers-left-tabs',
+    sourceRefs: [],
+  },
+  {
+    id: 'dockers.rightSubtools',
+    category: 'dockers',
+    label: 'Dockers — right sub-tools',
+    description: 'Choose which sub-tools (Masking, Smart Patch, RotoMask) appear on the right panel icon dock. Sub-tools are shared across modes and can be opened or closed as needed.',
+    aliases: ['docker', 'subtools', 'masking', 'right panel', 'tools dock'],
+    controlType: 'toggle',
+    defaultValue: true,
+    scope: 'user',
+    persistent: true,
+    requiresReload: false,
+    capability: 'web-and-desktop',
+    runtimeBinding: 'dockerPrefs.rightSubtools',
+    testId: 'setting-dockers-right-subtools',
+    sourceRefs: [],
   },
 ]
 

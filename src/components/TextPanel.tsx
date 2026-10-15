@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Type, Plus, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight } from 'lucide-react'
+import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
+import { previewTextClip } from '../lib/visualPreviewActions'
 
 export function TextPanel() {
   const clips = useEditor((s) => s.clips)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const setClipProp = useEditor((s) => s.setClipProp)
-  const addTextTitleClip = useEditor((s) => s.addTextTitleClip)
   const activeSubMode = useEditor((s) => s.activeSubMode)
   const openSubMode = useEditor((s) => s.openSubMode)
 
@@ -53,18 +53,10 @@ export function TextPanel() {
     }
   }
 
-  const handleAdd = (customText?: string, customStyle?: Partial<TextStyle>) => {
+  const handleAdd = (customText?: string, customStyle?: Partial<TextStyle>, label?: string) => {
     const t = customText || text
-    addTextTitleClip(t)
-    if (customStyle) {
-      const st = useEditor.getState()
-      const newClip = st.clips[st.clips.length - 1]
-      if (newClip) {
-        st.setClipProp(newClip.id, {
-          textStyle: { ...newClip.textStyle, ...customStyle, text: t },
-        })
-      }
-    }
+    const style = customStyle ?? { fontSize, color, backgroundColor: bgColor, bold, italic }
+    previewTextClip(label || t, t, style)
   }
 
   return (
@@ -83,13 +75,13 @@ export function TextPanel() {
           <button
             type="button"
             data-testid="add-new-title-btn"
-            title="Create a new title clip at playhead"
-            aria-label="Add new title"
+            title="Preview a new title at the playhead; Apply in the monitor to add it"
+            aria-label="Preview new title"
             onClick={() => handleAdd()}
             className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-300 hover:text-white text-[10px] transition-colors shrink-0"
           >
-            <Plus size={11} className="shrink-0" />
-            <span>New Title</span>
+            <Play size={11} className="shrink-0" />
+            <span>Preview Title</span>
           </button>
         </div>
       ) : (
@@ -98,7 +90,7 @@ export function TextPanel() {
             Add Text & Titles
           </span>
           <p className="text-[11px] text-ink-400 mt-0.5">
-            Create titles, lower thirds, or subtitles rendered directly on the video canvas.
+            Preview titles over the timeline first; Apply in the monitor adds the title clip.
           </p>
         </div>
       )}
@@ -267,11 +259,13 @@ export function TextPanel() {
           <button
             type="button"
             data-testid="add-text-clip-btn"
+            aria-label="Preview Title"
+            title="Preview this title; Apply in the monitor to add it to the timeline"
             onClick={() => handleAdd()}
             className="w-full flex items-center justify-center gap-1.5 h-8 rounded-md bg-brand hover:bg-brand-600 text-white font-medium transition-colors shadow-sm text-xs"
           >
-            <Plus size={14} />
-            <span>Add Title to Timeline</span>
+            <Play size={14} />
+            <span>Preview Title</span>
           </button>
         </div>
       )}
@@ -309,14 +303,16 @@ export function TextPanel() {
                 key={preset.label}
                 type="button"
                 data-testid={`text-preset-${preset.label.toLowerCase().replace(/\s+/g, '-')}`}
-                onClick={() => handleAdd(preset.text, preset.style)}
+                aria-label={`${preset.label} — “${preset.text}” — preview title`}
+                title={`Preview ${preset.label}; Apply in the monitor to add it`}
+                onClick={() => handleAdd(preset.text, preset.style, preset.label)}
                 className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md bg-ink-900 border border-ink-800 hover:border-brand text-left text-ink-300 hover:text-white transition-colors"
               >
                 <div>
                   <div className="text-[11px] font-medium text-ink-200">{preset.label}</div>
                   <div className="text-[10px] text-ink-500 italic truncate max-w-[170px]">“{preset.text}”</div>
                 </div>
-                <Plus size={12} className="text-ink-500" />
+                <Play size={12} className="text-ink-500" />
               </button>
             ))}
           </div>

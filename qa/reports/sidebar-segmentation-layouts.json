@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T00:18:43.843Z",
+  "generatedAt": "2026-10-15T22:08:39.577Z",
   "results": [
     {
       "name": "Default sidebar section mode is tabs",
@@ -9,22 +9,22 @@
     {
       "name": "Tab list renders for sectioned panel",
       "status": "PASS",
-      "detail": "6 tabs"
+      "detail": "10 tabs"
     },
     {
       "name": "Exactly one tab selected",
       "status": "PASS",
-      "detail": "section-tab-tools"
+      "detail": "section-tab-masking"
     },
     {
       "name": "Clicking a chip switches the active tab panel",
       "status": "PASS",
-      "detail": "section-tab-tools -> section-tab-colour-frames"
+      "detail": "section-tab-masking -> section-tab-smart-patch"
     },
     {
       "name": "Arrow key moves to the next tab",
       "status": "PASS",
-      "detail": "section-tab-colour-frames -> section-tab-tool-params"
+      "detail": "section-tab-smart-patch -> section-tab-rotomask"
     },
     {
       "name": "Header toggle flips to accordion",
@@ -39,12 +39,12 @@
     {
       "name": "Section headers visible again in accordion",
       "status": "PASS",
-      "detail": "6 top-level headers"
+      "detail": "10 top-level headers"
     },
     {
       "name": "Single-open: expanding one section collapses the others",
       "status": "PASS",
-      "detail": "[{\"id\":\"panel-section-tools\",\"expanded\":\"false\"},{\"id\":\"panel-section-colour-frames\",\"expanded\":\"true\"},{\"id\":\"panel-section-tool-params\",\"expanded\":\"false\"},{\"id\":\"panel-section-timing\",\"expanded\":\"false\"},{\"id\":\"panel-section-layers\",\"expanded\":\"false\"},{\"id\":\"panel-section-brush\",\"expanded\":\"false\"}]"
+      "detail": "[{\"id\":\"panel-section-masking\",\"expanded\":\"false\"},{\"id\":\"panel-section-smart-patch\",\"expanded\":\"true\"},{\"id\":\"panel-section-rotomask\",\"expanded\":\"false\"},{\"id\":\"panel-section-attachment\",\"expanded\":\"false\"},{\"id\":\"panel-section-frame-hold\",\"expanded\":\"false\"},{\"id\":\"panel-section-drawing-colour\",\"expanded\":\"false\"},{\"id\":\"panel-section-tool-params\",\"expanded\":\"false\"},{\"id\":\"panel-section-timing\",\"expanded\":\"false\"},{\"id\":\"panel-section-layers\",\"expanded\":\"false\"},{\"id\":\"panel-section-brush\",\"expanded\":\"false\"}]"
     },
     {
       "name": "Toggle returns to tabs",
@@ -59,12 +59,12 @@
     {
       "name": "Inspector sections appear as tabs",
       "status": "PASS",
-      "detail": "5 tabs"
+      "detail": "6 tabs"
     },
     {
       "name": "Inspector tab switching works",
       "status": "PASS",
-      "detail": "section-tab-transform"
+      "detail": "section-tab-video-mask-view"
     },
     {
       "name": "Audio Suite preset applies",

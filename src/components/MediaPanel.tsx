@@ -17,6 +17,7 @@ import {
 import { useEditor } from '../store'
 import type { MediaAsset } from '../types'
 import { formatClock } from '../lib/time'
+import { getLayeredArtworkInfo } from '../lib/layeredArtworkMetadata'
 
 type MediaFilter = 'all' | 'video' | 'image' | 'audio' | 'threed'
 
@@ -31,6 +32,8 @@ const FILTERS: Array<{ value: MediaFilter; label: string }> = [
 export function MediaPanel() {
   const assets = useEditor((s) => s.assets)
   const importFiles = useEditor((s) => s.importFiles)
+  const mediaImportNotice = useEditor((s) => s.mediaImportNotice)
+  const clearMediaImportNotice = useEditor((s) => s.clearMediaImportNotice)
   const setSourcePreviewAsset = useEditor((s) => s.setSourcePreviewAsset)
   const setMonitorMode = useEditor((s) => s.setMonitorMode)
   const sourcePreview = useEditor((s) => s.sourcePreview)
@@ -38,6 +41,7 @@ export function MediaPanel() {
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<MediaFilter>('all')
   const [infoAsset, setInfoAsset] = useState<MediaAsset | null>(null)
+  const infoArtwork = infoAsset ? getLayeredArtworkInfo(infoAsset) : undefined
 
   const shown = useMemo(() => {
     const needle = query.trim().toLocaleLowerCase()
@@ -92,12 +96,29 @@ export function MediaPanel() {
           aria-label="Import media files"
           ref={fileInput}
           type="file"
-          accept="video/*,image/*,audio/*"
+          accept="video/*,image/*,audio/*,.psd,.ora,.kra,.psb,.xcf,.clip,.cmc,.procreate,.afphoto,.afdesign,.pdn,.mdp,.rif,.ai"
           multiple
           hidden
           onChange={onPick}
         />
 
+        {mediaImportNotice && (
+          <div
+            className="mt-2 flex items-start justify-between gap-2 rounded-md border border-brand/30 bg-brand/10 px-2 py-1.5 text-[10px] text-ink-200"
+            role={mediaImportNotice.startsWith('Could not') ? 'alert' : 'status'}
+            data-testid="media-import-notice"
+          >
+            <span>{mediaImportNotice}</span>
+            <button
+              type="button"
+              aria-label="Dismiss import message"
+              className="shrink-0 rounded px-1 text-ink-400 hover:text-white"
+              onClick={clearMediaImportNotice}
+            >
+              ×
+            </button>
+          </div>
+        )}
         <div className="flex items-center gap-1.5">
           <label className="relative flex-1 min-w-0">
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-500 pointer-events-none" />
@@ -147,11 +168,12 @@ export function MediaPanel() {
             onDrop={handleSafeDrop}
             className="h-32 grid place-items-center rounded-lg border border-dashed border-ink-700 text-ink-500 text-xs text-center px-3"
           >
-            {assets.length === 0 ? 'Drag & drop video, image or audio here' : 'No media matches this search'}
+            {assets.length === 0 ? 'Drag & drop video, image, audio, layered PSD, OpenRaster, or Krita .kra here' : 'No media matches this search'}
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-2">
             {shown.map((a) => {
+              const artwork = getLayeredArtworkInfo(a)
               const isSelectedSource = sourcePreview.assetId === a.id
               return (
                 <div
@@ -227,6 +249,11 @@ export function MediaPanel() {
 
                   <div className="px-2 py-1.5">
                     <div className="text-[11px] text-ink-200 truncate font-medium" title={a.name}>{a.name}</div>
+                    {artwork && (
+                      <div className="mt-0.5 truncate text-[9px] text-brand-300/80" title={`${artwork.documentName} · ${artwork.groupPath?.join(' / ')}${artwork.groupPath?.length ? ' / ' : ''}${artwork.layerName}`}>
+                        {artwork.sourceFormat.toUpperCase()} layer · {artwork.layerName}
+                      </div>
+                    )}
                     <div className="text-[10px] text-ink-500 flex items-center justify-between mt-0.5">
                       <span className="flex items-center gap-1 capitalize">
                         {a.kind === 'image' ? <ImageIcon size={10} /> : a.kind === 'video' ? <Film size={10} /> : <Music size={10} />}
@@ -297,6 +324,17 @@ export function MediaPanel() {
                   </span>
                 </div>
               </div>
+
+              {infoArtwork && (
+                <div className="space-y-1 pt-1 border-t border-ink-800/80" data-testid="layered-artwork-details">
+                  <span className="text-ink-500 block text-[10px] uppercase font-mono">Layered {infoArtwork.sourceFormat.toUpperCase()} source</span>
+                  <div className="text-[10px] text-ink-300">{infoArtwork.documentName} · {[...(infoArtwork.groupPath || []), infoArtwork.layerName].join(' / ')}</div>
+                  <div className="font-mono text-[10px] text-ink-400">
+                    Canvas {infoArtwork.documentWidth}×{infoArtwork.documentHeight} · offset {infoArtwork.left},{infoArtwork.top}
+                  </div>
+                  <div className="text-[10px] text-ink-500">Imported as an independent raster layer; unsupported source-app features are not reconstructed.</div>
+                </div>
+              )}
 
               <div className="pt-1 border-t border-ink-800/80">
                 <span className="text-ink-500 block text-[10px] uppercase font-mono">Decoder Pipeline</span>

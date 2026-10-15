@@ -37,6 +37,11 @@ function copyOrtWasm(): Plugin {
 }
 
 export default defineConfig({
+  build: {
+    // Lazy tab panels (Drawing/3D/Audio/Rigging) must not be preloaded at
+    // boot; they load on first tab open. Static code ships in the entry.
+    modulePreload: false,
+  },
   plugins: [react(), copyOrtWasm()],
   // The runtime WASM import must not be rewritten by the optimizer.
   optimizeDeps: { exclude: ['onnxruntime-web'] },

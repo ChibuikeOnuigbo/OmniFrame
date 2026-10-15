@@ -14,6 +14,7 @@ import {
   Box,
   Film,
   Sparkles,
+  Check,
 } from 'lucide-react'
 import { PreviewEngine } from '../lib/playback'
 import { useEditor } from '../store'
@@ -54,10 +55,33 @@ export function Preview() {
   const leftTab = useEditor((s) => s.leftTab)
   const leftOpen = useEditor((s) => s.leftOpen)
   const playhead = useEditor((s) => s.playhead)
+  const visualPreview = useEditor((s) => s.visualPreview)
+  const applyVisualPreview = useEditor((s) => s.applyVisualPreview)
+  const stopVisualPreview = useEditor((s) => s.stopVisualPreview)
   const omniframeCharacters = useEditor((s) => s.omniframeCharacters)
   const selectedCharacterId = useEditor((s) => s.selectedCharacterId)
   const setSelectedCharacterId = useEditor((s) => s.setSelectedCharacterId)
   const evaluateCharacterTransformAtTime = useEditor((s) => s.evaluateCharacterTransformAtTime)
+  const maskEditClipId = useEditor((s) => s.maskEditClipId)
+  const setMaskEditClip = useEditor((s) => s.setMaskEditClip)
+  const updateClipMask = useEditor((s) => s.updateClipMask)
+  const maskClip = useEditor((s) => s.clips.find((c) => c.id === s.maskEditClipId) || null)
+  const maskDragRef = useRef<{
+    mode: 'draw' | 'move' | 'nw' | 'ne' | 'sw' | 'se' | 'split-move' | 'split-rotate' | 'point'
+    anchor: Point
+    orig: { centerX: number; centerY: number; width: number; height: number }
+    pointIndex?: number
+    origSplit?: { pos: number; angle: number }
+  } | null>(null)
+
+  useEffect(() => {
+    if (!maskEditClipId) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMaskEditClip(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [maskEditClipId, setMaskEditClip])
 
   // Active uploaded media asset if selected from media library in source monitor mode
   const previewAsset = assets.find((a) => a.id === sourcePreview.assetId)
@@ -299,6 +323,42 @@ export function Preview() {
       <DrawingToolbar />
       <SelectionSubToolBar />
 
+      {visualPreview && !isPreviewingAsset && (
+        <div
+          data-testid="visual-preview-actions"
+          className="pointer-events-auto absolute left-1/2 top-12 z-50 flex max-w-[min(92%,560px)] -translate-x-1/2 items-center gap-2 rounded-lg border border-amber-400/40 bg-ink-950/95 px-2.5 py-2 text-[10px] text-ink-200 shadow-2xl backdrop-blur-sm"
+          role="status"
+        >
+          <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-amber-400/15 text-amber-300">
+            <Sparkles size={11} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate font-semibold text-amber-200" title={visualPreview.label}>{visualPreview.label}</span>
+            <span className="block text-[9px] text-ink-500">Temporary audition · not in the project until applied</span>
+          </span>
+          {visualPreview.kind !== 'clip-playback' && visualPreview.kind !== 'range-playback' && (
+            <button
+              type="button"
+              data-testid="apply-visual-preview"
+              onClick={applyVisualPreview}
+              className="flex h-7 shrink-0 items-center gap-1 rounded-md bg-emerald-500/20 px-2 font-semibold text-emerald-200 hover:bg-emerald-500/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+              title="Commit this audition to the timeline"
+            >
+              <Check size={12} /> Apply
+            </button>
+          )}
+          <button
+            type="button"
+            data-testid="stop-visual-preview"
+            onClick={stopVisualPreview}
+            className="h-7 shrink-0 rounded-md border border-ink-700 px-2 text-ink-300 hover:border-red-400/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
+            title="Cancel this audition and restore the previous playhead"
+          >
+            Stop
+          </button>
+        </div>
+      )}
+
       {/* Bottom Left: Very small & short Sequence Ping Icon down close to timeline */}
       {!isPreviewingAsset && (
         <div
@@ -441,6 +501,216 @@ export function Preview() {
               })}
             </div>
           )}
+          {/* Clip Mask draw/edit overlay: drag to draw, inside to move, corners to resize */}
+          {maskClip?.mask && !isPreviewingAsset && (() => {
+            const m = maskClip.mask
+            const toPoint = (e: React.PointerEvent) => {
+              const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+              return {
+                x: Math.max(0, Math.min(1, (e.clientX - rect.left) / Math.max(1, rect.width))),
+                y: Math.max(0, Math.min(1, (e.clientY - rect.top) / Math.max(1, rect.height))),
+              }
+            }
+            const bounds = {
+              left: m.centerX - m.width / 2,
+              top: m.centerY - m.height / 2,
+              right: m.centerX + m.width / 2,
+              bottom: m.centerY + m.height / 2,
+            }
+            const applyBounds = (left: number, top: number, right: number, bottom: number) => {
+              const w = Math.max(0.02, Math.abs(right - left))
+              const h = Math.max(0.02, Math.abs(bottom - top))
+              updateClipMask(maskClip.id, {
+                centerX: Math.max(0, Math.min(1, (left + right) / 2)),
+                centerY: Math.max(0, Math.min(1, (top + bottom) / 2)),
+                width: Math.min(1, w),
+                height: Math.min(1, h),
+              })
+            }
+            return (
+              <div
+                data-testid="clip-mask-overlay"
+                className="absolute inset-0 z-30 select-none"
+                style={{ touchAction: 'none' }}
+                onPointerDown={(e) => {
+                  const p = toPoint(e)
+                  const kind = m.kind || 'shape'
+                  if (kind === 'custom') {
+                    const pointIdx = (e.target as HTMLElement).dataset.maskPoint
+                    if (pointIdx !== undefined) {
+                      maskDragRef.current = { mode: 'point', anchor: p, orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height }, pointIndex: Number(pointIdx) }
+                    } else {
+                      updateClipMask(maskClip.id, { points: [...(m.points || []), p] })
+                      maskDragRef.current = { mode: 'point', anchor: p, orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height }, pointIndex: (m.points || []).length }
+                    }
+                    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                    return
+                  }
+                  if (kind === 'split') {
+                    const rotate = (e.target as HTMLElement).dataset.maskSplitRotate
+                    maskDragRef.current = {
+                      mode: rotate ? 'split-rotate' : 'split-move',
+                      anchor: p,
+                      orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height },
+                      origSplit: { pos: m.splitPos ?? 0.5, angle: m.splitAngle ?? 0 },
+                    }
+                    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                    return
+                  }
+                  const handle = (e.target as HTMLElement).dataset.maskHandle
+                  const inside = p.x >= bounds.left && p.x <= bounds.right && p.y >= bounds.top && p.y <= bounds.bottom
+                  const mode = (handle as 'nw' | 'ne' | 'sw' | 'se' | undefined) || (inside ? 'move' : 'draw')
+                  maskDragRef.current = { mode, anchor: p, orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height } }
+                  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                  if (mode === 'draw') applyBounds(p.x, p.y, p.x, p.y)
+                }}
+                onPointerMove={(e) => {
+                  const drag = maskDragRef.current
+                  if (!drag) return
+                  const p = toPoint(e)
+                  if (drag.mode === 'point' && drag.pointIndex !== undefined) {
+                    const pts = (m.points || []).map((pt, i) => (i === drag.pointIndex ? p : pt))
+                    updateClipMask(maskClip.id, { points: pts })
+                    return
+                  }
+                  if (drag.mode === 'split-move' && drag.origSplit) {
+                    // Project in pixel space, matching the renderer: the
+                    // stored pos is the signed distance along the split
+                    // normal in units of the canvas diagonal.
+                    const a = ((drag.origSplit.angle * Math.PI) / 180)
+                    const nx = Math.cos(a)
+                    const ny = Math.sin(a)
+                    const projPx = (p.x - 0.5) * canvasW * nx + (p.y - 0.5) * canvasH * ny
+                    updateClipMask(maskClip.id, { splitPos: Math.max(0, Math.min(1, 0.5 + projPx / Math.hypot(canvasW, canvasH))) })
+                    return
+                  }
+                  if (drag.mode === 'split-rotate' && drag.origSplit) {
+                    const a = ((drag.origSplit.angle * Math.PI) / 180)
+                    const diag = Math.hypot(canvasW, canvasH)
+                    const px = 0.5 + Math.cos(a) * ((drag.origSplit.pos - 0.5) * (diag / canvasW))
+                    const py = 0.5 + Math.sin(a) * ((drag.origSplit.pos - 0.5) * (diag / canvasH))
+                    const deg = (Math.atan2(p.y - py, p.x - px) * 180) / Math.PI - 90
+                    updateClipMask(maskClip.id, { splitAngle: Math.max(-180, Math.min(180, deg)) })
+                    return
+                  }
+                  const o = drag.orig
+                  const ob = { left: o.centerX - o.width / 2, top: o.centerY - o.height / 2, right: o.centerX + o.width / 2, bottom: o.centerY + o.height / 2 }
+                  if (drag.mode === 'draw') {
+                    applyBounds(drag.anchor.x, drag.anchor.y, p.x, p.y)
+                  } else if (drag.mode === 'move') {
+                    const dx = p.x - drag.anchor.x
+                    const dy = p.y - drag.anchor.y
+                    updateClipMask(maskClip.id, {
+                      centerX: Math.max(0, Math.min(1, o.centerX + dx)),
+                      centerY: Math.max(0, Math.min(1, o.centerY + dy)),
+                    })
+                  } else {
+                    const left = drag.mode.includes('w') ? p.x : ob.left
+                    const right = drag.mode.includes('e') ? p.x : ob.right
+                    const top = drag.mode.includes('n') ? p.y : ob.top
+                    const bottom = drag.mode.includes('s') ? p.y : ob.bottom
+                    // Keep the opposite corner anchored: the untouched edges
+                    // above already hold the original bounds.
+                    applyBounds(
+                      drag.mode.includes('w') ? Math.min(p.x, ob.right - 0.02) : left,
+                      drag.mode.includes('n') ? Math.min(p.y, ob.bottom - 0.02) : top,
+                      drag.mode.includes('e') ? Math.max(p.x, ob.left + 0.02) : right,
+                      drag.mode.includes('s') ? Math.max(p.y, ob.top + 0.02) : bottom,
+                    )
+                  }
+                }}
+                onPointerUp={() => {
+                  maskDragRef.current = null
+                }}
+              >
+                {(m.kind || 'shape') === 'split' && (() => {
+                  const a = (((m.splitAngle ?? 0) * Math.PI) / 180)
+                  // Same pixel-space placement as the renderer: pos is in
+                  // diagonal units, so each axis scales by diag/axis.
+                  const diag = Math.hypot(canvasW, canvasH)
+                  const px = 0.5 + Math.cos(a) * (((m.splitPos ?? 0.5) - 0.5) * (diag / canvasW))
+                  const py = 0.5 + Math.sin(a) * (((m.splitPos ?? 0.5) - 0.5) * (diag / canvasH))
+                  return (
+                    <>
+                      <div
+                        data-testid="clip-mask-split-line"
+                        className={`pointer-events-none absolute h-[220%] w-0 border-l-2 border-dashed ${m.inverted ? 'border-amber-300' : 'border-teal-300'}`}
+                        style={{ left: `${px * 100}%`, top: '-60%', transform: `rotate(${-(m.splitAngle ?? 0)}deg)`, transformOrigin: 'center' }}
+                      />
+                      <span
+                        data-mask-split-rotate="1"
+                        data-testid="clip-mask-split-rotate"
+                        title="Drag to rotate the split line"
+                        className="pointer-events-auto absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border border-black/50 bg-teal-200"
+                        style={{ left: `${px * 100}%`, top: `${py * 100}%` }}
+                      />
+                    </>
+                  )
+                })()}
+                {m.kind === 'custom' && (
+                  <>
+                    <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                      {(m.points || []).length >= 2 && (
+                        <polygon
+                          points={(m.points || []).map((pt) => `${pt.x * 100},${pt.y * 100}`).join(' ')}
+                          fill="rgba(45,212,191,0.10)"
+                          stroke={m.inverted ? '#fcd34d' : '#5eead4'}
+                          strokeWidth="0.5"
+                        />
+                      )}
+                    </svg>
+                    {(m.points || []).map((pt, i) => (
+                      <span
+                        key={i}
+                        data-mask-point={i}
+                        data-testid={`clip-mask-point-${i}`}
+                        title={`Point ${i + 1} — drag to move`}
+                        className="pointer-events-auto absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border border-black/50 bg-teal-200"
+                        style={{ left: `${pt.x * 100}%`, top: `${pt.y * 100}%` }}
+                      />
+                    ))}
+                  </>
+                )}
+                {(m.kind || 'shape') !== 'split' && m.kind !== 'custom' && (
+                <div
+                  data-testid="clip-mask-outline"
+                  className={`pointer-events-none absolute border-2 ${m.inverted ? 'border-amber-300' : 'border-teal-300'} bg-white/5 shadow-[0_0_0_1px_rgba(0,0,0,0.45)]`}
+                  style={{
+                    left: `${bounds.left * 100}%`,
+                    top: `${bounds.top * 100}%`,
+                    width: `${m.width * 100}%`,
+                    height: `${m.height * 100}%`,
+                    transform: `rotate(${m.rotation}deg)`,
+                    borderRadius: m.shape === 'ellipse' ? '50%' : '4px',
+                  }}
+                >
+                  {(['nw', 'ne', 'sw', 'se'] as const).map((h) => (
+                    <span
+                      key={h}
+                      data-mask-handle={h}
+                      data-testid={`clip-mask-handle-${h}`}
+                      className="pointer-events-auto absolute h-3 w-3 rounded-sm border border-black/50 bg-teal-200"
+                      style={{
+                        left: h.includes('w') ? -6 : undefined,
+                        right: h.includes('e') ? -6 : undefined,
+                        top: h.includes('n') ? -6 : undefined,
+                        bottom: h.includes('s') ? -6 : undefined,
+                        cursor: `${h}-resize`,
+                      }}
+                    />
+                  ))}
+                </div>
+                )}
+                <div className="pointer-events-none absolute bottom-1 left-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] text-teal-100">
+                  {m.kind === 'split'
+                    ? `Split view (${m.inverted ? 'Exclude' : 'Include'}): drag to move the line · handle rotates · Esc done`
+                    : m.kind === 'custom'
+                      ? `Custom view (${m.inverted ? 'Exclude' : 'Include'}): click to add points · drag points · Esc done`
+                      : `Mask (${m.inverted ? 'Outside' : 'Inside'}): drag to draw · inside moves · corners resize · Esc done`}
+                </div>
+              </div>
+            )
+          })()}
           {safe && (
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-[5%] border border-dashed border-white/40" />

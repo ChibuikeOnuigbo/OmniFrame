@@ -18,26 +18,26 @@ learned as "vocals". The fix, proven offline in the
    the **exact input length**, so the isolated clip stays frame-aligned with
    the timeline.
 
-A toggle next to the model picker (**Auto-fix slowed tracks**, on by default)
-disables it; the action log shows `Slowed production detected (×F)` when it
+A toggle next to the model picker (**Correct slowed + reverb**, on by default)
+disables it; the action log reports `Slowed production correction ×F` when it
 fires.
 
 Everything below ran through the real app pipeline (dev server + the app's own
 modules and actions) by [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs) —
-**15/15 PASS**, report: [`qa/reports/voice-slowed-fix.json`](../../../qa/reports/voice-slowed-fix.json).
+**18/18 PASS** on 12 Oct 2026, report: [`qa/reports/voice-slowed-fix.json`](../../../qa/reports/voice-slowed-fix.json). Memory-constrained action cases use one separation pass and short excerpts; full-track production-strength results are separately documented below.
 
 ## Results
 
 | Case | Check | Result |
 | --- | --- | --- |
-| A | real "ultra slowed" track detected | **×1.45** picked on the full 108 s track (grid ×1.15→0.002, ×1.3→0.274, **×1.45→0.445**, ×1.6→0.335; native voice-detectability 0.0005) |
+| A | real "ultra slowed" track detected | **×1.45** picked on the full 108 s track (grid ×1.15→0.002, ×1.3→0.277, **×1.45→0.440**, ×1.6→0.337; native voice-detectability 0.0005) |
 | C | normal-speed mix untouched | factor 1 after **one** Silero pass (baseline 0.823 = clearly voiced at native speed — the cheap guard) |
-| B | synthetic slowed mix, forced fix | speed-corrected separation **+1.01 dB SI-SDR** vs direct (19.48 vs 18.46 dB against the slowed ground-truth voice); output restored to the **exact** input length (264,600 samples). *Runs `passes: 1` on the current 3.94 GB CI sandbox (re-probed ceiling; the 2-pass run is preserved in the earlier committed report, and 2-pass averaging parity is asserted bit-exactly by case N)* |
-| D | real track through the user-facing action | detection fired in the action log (×1.45), timing exact, and the fix **never degraded** the output on a prominent-vocal window (voice-like energy 0.981→0.982, recovery 0.236→0.229) |
-| E | real track, buried-vocal window (78–84 s), forced ×1.45 | voice-like energy **52.9% → 78.7%**, Silero mean at natural pitch 0.454 → 0.681, voice recovery vs the mix **88% → 183%**, timing exact |
-| F | instrumental mix (harmonic pad) through the auto action | detection scans all 4 factors — the pad scores 0.02–0.05 on Silero at every speed but never decisively — and correctly returns **factor 1**; acapella stays near-silent (**−63.5 dB** below the mix), timing exact |
+| B | synthetic slowed mix, forced fix | On the 5 s slowed fixture, corrected separation gains **0.79 dB SI-SDR** vs direct (20.75 vs 19.96 dB against ground truth); output restored to the **exact** input length (220,500 samples). One pass on this memory-constrained run; case N separately checks the DSP averaging core. |
+| D | real 60–64 s excerpt through the user-facing action | Auto correction fired at ×1.45 and preserved exact timing; on this prominent-vocal excerpt it did not degrade the output (voice-like energy 0.983→0.991, recovery 0.100→0.108). |
+| E | real 78–82 s buried-vocal excerpt, forced ×1.45 | At one pass, voice-like energy **50.1% → 68.7%** (+18.6 percentage points), Silero mean at natural pitch 0.608→0.709 (+16.6%); measured recovery vs the mix **81% → 170%**; timing exact. The test gate requires >10% mean gain and >10 percentage points—not parity or perceptual quality. |
+| F | 5 s instrumental mix (harmonic pad) through the auto action | Detection scans all 4 factors—the pad scores 0.02–0.05 on Silero at every speed but never decisively—and correctly returns **factor 1**; acapella stays near-silent (**−63.2 dB** below the mix), timing exact. |
 | R | resampler fidelity | the polyphase sinc in `renderAtRate` measures **67.2 dB** (×1.45) / **76.6 dB** (×4/3) bandlimited round-trip SNR — WebAudio's `playbackRate` rendering, which the feature originally used, measures **10.5–11.4 dB** (audible grit on every speed-fixed output) |
-| G | **natural-pitch output** (new option) | keep_vocal with `speedOutput: 'natural'` returns the acapella at the corrected speed — duration **exactly** input ÷ factor, asset named `… · natural pitch`, and Silero hears the voice **directly** on the raw output (mean 0.934, 96% voiced, peak-safe 0.98, zero non-finite) |
+| G | **natural-pitch output** | keep_vocal with `speedOutput: 'natural'` returns the acapella at the corrected speed — 4 s input became **2.759 s** at ×1.45; asset is named `… · natural pitch`. Silero heard the raw output directly (mean 0.967, 99% voiced); peak |sample| 0.710, zero non-finite. |
 | N | **native DSP core** (new) | the compiled C++→wasm core (`native/dsp-core/omni_dsp.cpp`, ~11 KB) is instantiated through the real app pipeline, and every DSP op above ran natively with **max|diff| 0.0 vs the pure-JS fallbacks** (resample, LS de-leak, pass averaging, peak scale — bit-identical, not just within tolerance; 2.3–2.5× faster on the 108 s track) |
 | M | **model-load progress** (new) | a web model download streams real byte counts into a smooth monotonic progress card — phases download → compile → ready, 100% only when true, auto-dismiss on success; the same pipeline covers Demucs v4 (174 MB, streamed through the worker boundary), the roto/SAM catalog (4–170 MB), denoise and Silero. Desktop loads from disk so its cards flash by |
 
@@ -53,9 +53,10 @@ by window showed the gain is **not uniform**:
   non-degradation). Silero *hearing* slowed vocals is also not the same as
   Demucs *separating* them — the loudest hook (42–51 s) is natively
   detectable by Silero (0.45–0.53) yet still benefits from the fix overall.
-- **Buried vocals** (e.g. 78–84 s): the big win — 3× detectability on the
-  full-track artifacts, and **51.9% → 78.3%** voice-like energy at 1-pass
-  in-page (case E).
+- **Buried vocals** (e.g. 78–84 s): the full-track artifacts show a large
+  detectability gain; the current 4 s in-page excerpt (78–82 s) improves
+  voice-like energy **50.1% → 68.7%** at 1-pass (case E). The exact gain varies
+  with the crop; this is a small excerpt, not full-song parity.
 - **Full-track aggregate**: vocal-like energy 23.2% → 45.0%, voiced frames
   13.0% → 30.1%, +2.9 dB (see the
   [vet report](../../../qa/reports/voice-realtrack-vet-track2.json) and the
@@ -64,11 +65,12 @@ by window showed the gain is **not uniform**:
   correction is a per-track decision, not a per-section one, and the
   aggregate is strongly positive.
 
-**Detection needs context.** A 6 s clip of *only* buried vocals does not fire
-detection standalone (the mix buries the voice even when sped up); it fires on
-hook-bearing material — in practice on whole tracks, which is exactly what the
-app processes. Case E therefore forces the factor the full-track detection
-chose (×1.45) to demonstrate the recovery on a buried-vocal window.
+**Detection needs context.** A short clip of *only* buried vocals does not
+fire detection standalone (the mix buries the voice even when sped up); it
+fires on hook-bearing material — in practice on whole tracks, which is exactly
+what the app processes. The current E2E confirms the 78–82 s excerpt alone
+returns factor 1; case E therefore forces the ×1.45 factor chosen on the full
+track to measure recovery in that buried-vocal window.
 
 **The natural-pitch finding (why "still horrible" was right).** Measured on
 the full track with the committed v3 artifacts: the SAME separated stems
@@ -83,13 +85,13 @@ tempo, e.g. 6.0 s → 4.14 s at ×1.45). Full-track proof:
 (88% voice-like energy, +2.9 dB, zero clipping —
 [vet report](../../../qa/reports/voice-realtrack-vet-track2-v3.json)).
 
-**CI limits, stated plainly.** The test sandbox (~3.9 GB RAM) OOMs the
-renderer above ~6 s of separation at 2 passes (or 3 passes at any length), so
-the E2E runs 6 s windows at reduced strength: B at 2-pass, D at 1-pass through
-the full action path, E at 1-pass through the real separator. The
-production-default (3-pass, full track) behavior is validated offline in the
-[realworld evidence pack](../realworld/README.md) — same algorithm, bigger
-canvas. The legacy suites also exceed this instance's memory —
+**CI limits, stated plainly.** The browser sandbox can OOM when the sped
+signal crosses Demucs' 5.85 s chunk stride or when multiple passes retain too
+much WASM memory. The current E2E uses a 5 s slowed synthetic fixture and 4 s
+real excerpts (×1.45 produces 5.8 s) at one pass, keeping each model run to one
+chunk. The production-default (3-pass, full track) behavior is validated
+offline in the [realworld evidence pack](../realworld/README.md) — same
+algorithm, larger memory budget. The legacy suites also exceed this instance's memory —
 [`qa/voice-demucs-model-e2e.mjs`](../../../qa/voice-demucs-model-e2e.mjs)
 (20 s mix × 3 passes) and
 [`qa/voice-demucs-robustness-e2e.mjs`](../../../qa/voice-demucs-robustness-e2e.mjs)
@@ -103,8 +105,9 @@ path.
 
 ## Listen for yourself
 
-Real track: **UPAST · HELLBLADE (Ultra Slowed)** — 60–66 s window (case D,
-through the app's isolation action):
+Real track: **UPAST · HELLBLADE (Ultra Slowed)** — 60–64 s window (case D,
+through the app's isolation action; shortened to keep ×1.45 inference within a
+single Demucs chunk):
 
 | | File |
 | --- | --- |
@@ -112,8 +115,8 @@ through the app's isolation action):
 | Old behavior (direct separation) | [`output-realtrack-direct-keep-vocal-demucs.mp3`](output-realtrack-direct-keep-vocal-demucs.mp3) |
 | **New default (auto speed-fix ×1.45)** | [`output-realtrack-speedfix-keep-vocal-demucs.mp3`](output-realtrack-speedfix-keep-vocal-demucs.mp3) |
 
-Real track: **78–84 s buried-vocal window** (case E — where the fix pays off;
-forced ×1.45 through the real separator):
+Real track: **78–82 s buried-vocal window** (case E — where the fix pays off;
+forced ×1.45 through the real separator; 4 s source excerpt):
 
 | | File |
 | --- | --- |
@@ -121,8 +124,8 @@ forced ×1.45 through the real separator):
 | Direct separation | [`output-realtrack-buried-direct-keep-vocal-demucs.mp3`](output-realtrack-buried-direct-keep-vocal-demucs.mp3) |
 | **Speed-fixed (×1.45, timing restored)** | [`output-realtrack-buried-speedfix-keep-vocal-demucs.mp3`](output-realtrack-buried-speedfix-keep-vocal-demucs.mp3) |
 
-Synthetic showcase (TTS voice + pad bed, slowed ×0.75 — exact ground truth,
-case B):
+Synthetic showcase (TTS voice + pad bed; 3.75 s native fixture slowed ×0.75 to
+5 s — exact ground truth, case B):
 
 | | File |
 | --- | --- |
@@ -130,7 +133,7 @@ case B):
 | Direct separation | [`output-showcase-slowed-direct-keep-vocal-demucs.mp3`](output-showcase-slowed-direct-keep-vocal-demucs.mp3) |
 | **Speed-fixed (×4/3, timing restored)** | [`output-showcase-slowed-speedfix-keep-vocal-demucs.mp3`](output-showcase-slowed-speedfix-keep-vocal-demucs.mp3) |
 
-Real track: **natural-pitch acapella** (case G, 6 s window at 1-pass; the
+Real track: **natural-pitch acapella** (case G, 4 s window at 1-pass; the
 full-track production-strength version is linked above):
 
 | | File |
@@ -140,7 +143,7 @@ full-track production-strength version is linked above):
 The full-track before/after pairs (all 108 s, production strength) live in
 [`evidence/voice/realworld/`](../realworld/README.md).
 
-Instrumental input (case F — detection correctly declines; acapella of a
+Instrumental input (case F, 5 s — detection correctly declines; acapella of a
 vocal-free mix):
 
 | | File |

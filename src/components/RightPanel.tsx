@@ -15,10 +15,24 @@ import {
   FolderOutput,
   Layers,
   SlidersHorizontal,
+  ScanFace,
+  Sparkles,
+  Slice,
+  Columns2,
+  Square,
+  PenTool,
+  Type,
+  FlipHorizontal2,
+  FlipVertical2,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
+import { SelectionMaskSubTool } from './SelectionMaskSubTool'
+import { SmartPatchSubTool } from './SmartPatchSubTool'
+import { RotoMaskSubTool } from './RotoMaskSubTool'
+import { Tooltip } from './Tooltip'
+import { InfoTip } from './InfoTip'
 import { useEditor } from '../store'
-import type { Clip } from '../types'
+import type { Clip, ClipAdjustmentMask, ClipVisualMask } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
@@ -56,7 +70,7 @@ function PlacedEffectsSection({ clip }: { clip: Clip }) {
   return (
     <Section title="Placed Effects">
       {labels.length === 0 && clip.kind === 'adjustment' && (
-        <p className="text-[11px] text-ink-500">Empty adjustment layer — place a LUT from the Effects tab.</p>
+        <p className="text-[11px] text-ink-500">Empty adjustment layer. Add a LUT or effect from the Adjustments panel; it will grade the composite below this track.</p>
       )}
       {effectKeys.length > 0 && (
         <Field label="Clip effects">
@@ -131,6 +145,363 @@ function PlacedEffectsSection({ clip }: { clip: Clip }) {
   )
 }
 
+/**
+ * Mask inspector section: the CapCut/AE-style clip visibility mask. This is
+ * deliberately separate from selection/roto "masking" (OmniFrame/RotoMask)
+ * and from the adjustment-layer Effect Mask: it hides part of the selected
+ * clip itself — Inside keeps only the region, Outside keeps frame − region.
+ */
+function ClipMaskSection({ clip }: { clip: Clip }) {
+  const playhead = useEditor((s) => s.playhead)
+  // Uploaded mask fonts persist on this device (desktop keeps them in
+  // local storage; the web build keeps them for this browser profile).
+  const [customFonts, setCustomFonts] = useState<string[]>(() => {
+    try {
+      return (JSON.parse(localStorage.getItem('omniframe.customFonts') || '[]') as { name: string }[]).map((f) => f.name)
+    } catch { return [] }
+  })
+  useEffect(() => {
+    try {
+      const list = JSON.parse(localStorage.getItem('omniframe.customFonts') || '[]') as { name: string; dataUrl: string }[]
+      for (const f of list) {
+        const face = new FontFace(f.name, `url(${f.dataUrl})`)
+        void face.load().then((loaded) => document.fonts.add(loaded)).catch(() => undefined)
+      }
+    } catch { /* no stored fonts */ }
+  }, [])
+  const uploadMaskFont = async (file: File, clipId: string) => {
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const r = new FileReader()
+      r.onload = () => resolve(String(r.result))
+      r.onerror = reject
+      r.readAsDataURL(file)
+    })
+    const name = file.name.replace(/\.(ttf|otf|woff2?)$/i, '').replace(/[^a-zA-Z0-9 -]/g, ' ').trim() || 'Custom Font'
+    try {
+      const list = JSON.parse(localStorage.getItem('omniframe.customFonts') || '[]') as { name: string; dataUrl: string }[]
+      localStorage.setItem('omniframe.customFonts', JSON.stringify([...list.filter((f) => f.name !== name), { name, dataUrl }]))
+    } catch { /* storage full/blocked: font still applies this session */ }
+    try {
+      const face = new FontFace(name, `url(${dataUrl})`)
+      document.fonts.add(await face.load())
+    } catch { /* renderer falls back to sans for this session */ }
+    setCustomFonts((prev) => [...new Set([...prev, name])])
+    updateClipMask(clipId, { kind: 'text', fontFamily: name })
+  }
+  const addClipMask = useEditor((s) => s.addClipMask)
+  const updateClipMask = useEditor((s) => s.updateClipMask)
+  const removeClipMask = useEditor((s) => s.removeClipMask)
+  const maskEditClipId = useEditor((s) => s.maskEditClipId)
+  const setMaskEditClip = useEditor((s) => s.setMaskEditClip)
+  const activeSelection = useEditor((s) => s.activeSelection)
+  const mask = clip.mask
+  const drawing = maskEditClipId === clip.id
+
+  return (
+    <Section title="Video Mask View">
+      {!mask ? (
+        <div className="space-y-1.5">
+          <button
+            type="button"
+            data-testid="add-clip-mask-btn"
+            onClick={() => addClipMask(clip.id)}
+            className="flex h-8 w-full items-center justify-center rounded-md border border-teal-800 bg-teal-950/30 text-xs text-teal-100 transition-colors hover:border-teal-500"
+          >
+            Add mask — hide part of this clip
+          </button>
+          <p className="text-[10px] leading-snug text-ink-500">
+            Shows or hides a region of this image/video (like CapCut / After Effects masks). Not the selection or roto masking tools.
+          </p>
+        </div>
+      ) : (
+        <div data-testid="clip-mask-controls" className="space-y-1.5">
+          <div className="flex items-center gap-1" role="group" aria-label="Mask mode">
+            <button
+              type="button"
+              data-testid="mask-mode-inside-btn"
+              aria-pressed={!mask.inverted}
+              title="Keep only the masked region visible"
+              onClick={() => updateClipMask(clip.id, { inverted: false })}
+              className={`h-7 flex-1 rounded border text-[11px] ${!mask.inverted ? 'border-teal-500 bg-teal-950/50 text-teal-100' : 'border-ink-700 text-ink-400 hover:text-ink-100'}`}
+            >
+              Inside
+            </button>
+            <button
+              type="button"
+              data-testid="mask-mode-outside-btn"
+              aria-pressed={mask.inverted}
+              title="Keep everything except the masked region (frame minus mask)"
+              onClick={() => updateClipMask(clip.id, { inverted: true })}
+              className={`h-7 flex-1 rounded border text-[11px] ${mask.inverted ? 'border-teal-500 bg-teal-950/50 text-teal-100' : 'border-ink-700 text-ink-400 hover:text-ink-100'}`}
+            >
+              Outside
+            </button>
+          </div>
+          <p data-testid="mask-mode-hint" className="text-[10px] leading-snug text-ink-500">
+            {mask.inverted
+              ? 'Outside: the clip shows everywhere except the masked region.'
+              : 'Inside: only the masked region of the clip stays visible.'}
+          </p>
+          <div className="flex items-center justify-between gap-2">
+            <label htmlFor="clip-mask-shape" className="text-xs text-ink-400">Shape</label>
+            <select
+              id="clip-mask-shape"
+              data-testid="clip-mask-shape"
+              value={mask.shape}
+              onChange={(event) => updateClipMask(clip.id, { shape: event.target.value as ClipVisualMask['shape'] })}
+              className="h-7 rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100"
+            >
+              <option value="ellipse">Ellipse</option>
+              <option value="rectangle">Rectangle</option>
+            </select>
+          </div>
+          <label className="flex items-center gap-2 text-[11px] text-ink-300">
+            <input
+              type="checkbox"
+              data-testid="clip-mask-enabled"
+              checked={mask.enabled}
+              onChange={(event) => updateClipMask(clip.id, { enabled: event.target.checked })}
+              className="accent-teal-400"
+            />
+            Mask enabled
+          </label>
+          <Field label="Center X">
+            <Slider label="Mask center X" min={0} max={1} step={0.01} value={mask.centerX} onChange={(value) => updateClipMask(clip.id, { centerX: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.centerX * 100)}%</span>
+          </Field>
+          <Field label="Center Y">
+            <Slider label="Mask center Y" min={0} max={1} step={0.01} value={mask.centerY} onChange={(value) => updateClipMask(clip.id, { centerY: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.centerY * 100)}%</span>
+          </Field>
+          <Field label="Width">
+            <Slider label="Mask width" min={0.02} max={1} step={0.01} value={mask.width} onChange={(value) => updateClipMask(clip.id, { width: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.width * 100)}%</span>
+          </Field>
+          <Field label="Height">
+            <Slider label="Mask height" min={0.02} max={1} step={0.01} value={mask.height} onChange={(value) => updateClipMask(clip.id, { height: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.height * 100)}%</span>
+          </Field>
+          <Field label="Rotation">
+            <Slider label="Mask rotation" min={-180} max={180} step={1} value={mask.rotation} onChange={(value) => updateClipMask(clip.id, { rotation: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.rotation)}°</span>
+          </Field>
+          <Field label="Feather">
+            <Slider label="Mask feather" min={0} max={240} step={2} value={mask.feather} onChange={(value) => updateClipMask(clip.id, { feather: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.feather)}px</span>
+          </Field>
+          <Field label="Expand">
+            <Slider label="Mask expansion" min={-120} max={120} step={2} value={mask.expansion} onChange={(value) => updateClipMask(clip.id, { expansion: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.expansion)}px</span>
+          </Field>
+          <Field label="Opacity">
+            <Slider label="Mask opacity" min={0} max={1} step={0.01} value={mask.opacity} onChange={(value) => updateClipMask(clip.id, { opacity: value })} />
+            <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.opacity * 100)}%</span>
+          </Field>
+          {/* Video Mask View kind: icon-first, names in tooltips. */}
+          <div className="flex items-center gap-1" role="group" aria-label="Mask view kind">
+            {([
+              { id: 'shape', label: 'Shape view (rectangle / ellipse)', icon: Square },
+              { id: 'split', label: 'Split view (infinite line)', icon: Columns2 },
+              { id: 'custom', label: 'Custom shape view', icon: PenTool },
+              { id: 'text', label: 'Text view', icon: Type },
+            ] as const).map((k) => {
+              const Icon = k.icon
+              const on = (mask.kind || 'shape') === k.id
+              return (
+                <Tooltip key={k.id} label={k.label}>
+                  <button
+                    type="button"
+                    data-testid={`mask-view-kind-${k.id}`}
+                    aria-label={k.label}
+                    aria-pressed={on}
+                    onClick={() => updateClipMask(clip.id, { kind: k.id })}
+                    className={`grid h-7 w-7 place-items-center rounded-md border transition-colors ${on ? 'border-teal-400 bg-teal-950/50 text-teal-200' : 'border-ink-700 text-ink-400 hover:text-white'}`}
+                  >
+                    <Icon size={13} />
+                  </button>
+                </Tooltip>
+              )
+            })}
+            <InfoTip label="The mask is the clip's view window: the editor treats the output as a new video with the view's dimensions. Include keeps the inside; Exclude keeps frame minus inside. Split is an infinite rotatable line; Text uses any font, including uploaded ones." />
+          </div>
+          {(mask.kind || 'shape') === 'split' && (
+            <div className="space-y-1.5" data-testid="mask-view-split-controls">
+              <Field label="Position">
+                <Slider label="Split position" min={0} max={1} step={0.01} value={mask.splitPos ?? 0.5} onChange={(v) => updateClipMask(clip.id, { splitPos: v })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round((mask.splitPos ?? 0.5) * 100)}%</span>
+              </Field>
+              <Field label="Angle">
+                <Slider label="Split angle" min={-180} max={180} step={1} value={mask.splitAngle ?? 0} onChange={(v) => updateClipMask(clip.id, { splitAngle: v })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.splitAngle ?? 0)}°</span>
+              </Field>
+              <div className="flex items-center gap-1">
+                <Tooltip label="Flip horizontal (line across)">
+                  <button type="button" data-testid="mask-view-flip-h" aria-label="Flip horizontal" onClick={() => updateClipMask(clip.id, { splitAngle: 90 })} className="grid h-7 w-7 place-items-center rounded border border-ink-700 text-ink-300 hover:text-white"><FlipHorizontal2 size={13} /></button>
+                </Tooltip>
+                <Tooltip label="Flip vertical (line down)">
+                  <button type="button" data-testid="mask-view-flip-v" aria-label="Flip vertical" onClick={() => updateClipMask(clip.id, { splitAngle: 0 })} className="grid h-7 w-7 place-items-center rounded border border-ink-700 text-ink-300 hover:text-white"><FlipVertical2 size={13} /></button>
+                </Tooltip>
+                <button type="button" data-testid="mask-view-flip-side" onClick={() => updateClipMask(clip.id, { inverted: !mask.inverted })} className="h-7 flex-1 rounded border border-ink-700 text-[11px] text-ink-300 hover:text-white">Flip side</button>
+              </div>
+            </div>
+          )}
+          {mask.kind === 'custom' && (
+            <div className="space-y-1.5" data-testid="mask-view-custom-controls">
+              <p className="text-[10px] text-ink-500">{(mask.points || []).length} points — enable “Draw on monitor”, click to add points, drag points to reshape.</p>
+              <div className="flex items-center gap-1">
+                <label className="flex flex-1 items-center gap-1.5 text-[11px] text-ink-300">
+                  <input type="checkbox" data-testid="mask-view-curved" checked={Boolean(mask.curved)} onChange={(e) => updateClipMask(clip.id, { curved: e.target.checked })} className="accent-teal-400" />
+                  Curved lines
+                </label>
+                <button type="button" data-testid="mask-view-clear-points" onClick={() => updateClipMask(clip.id, { points: [] })} className="h-7 rounded border border-ink-700 px-2 text-[11px] text-ink-300 hover:text-white">Clear</button>
+              </div>
+            </div>
+          )}
+          {mask.kind === 'text' && (
+            <div className="space-y-1.5" data-testid="mask-view-text-controls">
+              <input
+                data-testid="mask-view-text"
+                value={mask.text || ''}
+                onChange={(e) => updateClipMask(clip.id, { text: e.target.value })}
+                placeholder="Mask text"
+                className="h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100"
+              />
+              <div className="flex items-center gap-1">
+                <select
+                  data-testid="mask-view-font"
+                  value={mask.fontFamily || ''}
+                  onChange={(e) => updateClipMask(clip.id, { fontFamily: e.target.value || undefined })}
+                  className="h-7 min-w-0 flex-1 rounded border border-ink-700 bg-ink-900 px-1 text-[11px] text-ink-100"
+                >
+                  <option value="">System sans</option>
+                  {['Georgia', 'Impact', 'Courier New', 'Trebuchet MS', 'Verdana'].map((f) => (
+                    <option key={f} value={f}>{f}</option>
+                  ))}
+                  {customFonts.map((f) => (
+                    <option key={f} value={f}>{f} (uploaded)</option>
+                  ))}
+                </select>
+                <label className="grid h-7 w-7 shrink-0 cursor-pointer place-items-center rounded border border-ink-700 text-ink-300 hover:text-white" title="Upload a font (.ttf/.otf/.woff) — saved on this device">
+                  <Type size={13} />
+                  <input
+                    type="file"
+                    data-testid="mask-view-font-upload"
+                    accept=".ttf,.otf,.woff,.woff2,font/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) void uploadMaskFont(file, clip.id)
+                      e.target.value = ''
+                    }}
+                  />
+                </label>
+              </div>
+              <Field label="Size">
+                <Slider label="Text size" min={0.05} max={0.9} step={0.01} value={mask.fontSize ?? 0.25} onChange={(v) => updateClipMask(clip.id, { fontSize: v })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round((mask.fontSize ?? 0.25) * 100)}%</span>
+              </Field>
+            </div>
+          )}
+          {/* Keyframed view window (curves: linear / smooth / ease). */}
+          <div className="space-y-1" data-testid="mask-view-keyframes">
+            <div className="flex items-center gap-1">
+              <Tooltip label="Add a view keyframe at the playhead">
+                <button
+                  type="button"
+                  data-testid="mask-view-add-keyframe"
+                  aria-label="Add view keyframe at playhead"
+                  onClick={() => {
+                    const local = Math.max(0, playhead - clip.start)
+                    const kf = {
+                      time: local,
+                      centerX: mask.centerX, centerY: mask.centerY,
+                      width: mask.width, height: mask.height, rotation: mask.rotation,
+                      splitPos: mask.splitPos ?? 0.5,
+                      easing: 'smooth' as const,
+                    }
+                    const next = [...(mask.keyframes || []).filter((k) => Math.abs(k.time - local) > 0.01), kf].sort((a, b) => a.time - b.time)
+                    updateClipMask(clip.id, { keyframes: next })
+                  }}
+                  className="grid h-7 w-7 place-items-center rounded border border-ink-700 text-ink-300 hover:text-white"
+                >
+                  <Diamond size={13} />
+                </button>
+              </Tooltip>
+              <span className="text-[10px] text-ink-500">{(mask.keyframes || []).length} keyframes</span>
+            </div>
+            {(mask.keyframes || []).map((k, i) => (
+              <div key={`${k.time}-${i}`} className="flex items-center gap-1 text-[10px] text-ink-400">
+                <span className="w-12 tabular-nums">{k.time.toFixed(2)}s</span>
+                <select
+                  data-testid={`mask-view-kf-easing-${i}`}
+                  value={k.easing}
+                  onChange={(e) => {
+                    const next = (mask.keyframes || []).map((kk, j) => j === i ? { ...kk, easing: e.target.value as typeof kk.easing } : kk)
+                    updateClipMask(clip.id, { keyframes: next })
+                  }}
+                  className="h-6 flex-1 rounded border border-ink-700 bg-ink-900 px-1 text-[10px]"
+                >
+                  <option value="linear">Linear</option>
+                  <option value="smooth">Smooth</option>
+                  <option value="ease-in">Ease in</option>
+                  <option value="ease-out">Ease out</option>
+                </select>
+                <button
+                  type="button"
+                  data-testid={`mask-view-kf-remove-${i}`}
+                  aria-label={`Remove keyframe ${i + 1}`}
+                  onClick={() => updateClipMask(clip.id, { keyframes: (mask.keyframes || []).filter((_, j) => j !== i) })}
+                  className="grid h-6 w-6 place-items-center rounded border border-ink-800 text-ink-500 hover:text-red-300"
+                >
+                  <X size={11} />
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            data-testid="clip-mask-draw-btn"
+            aria-pressed={drawing}
+            title="Drag on the monitor to draw the mask; drag inside to move, corners to resize"
+            onClick={() => setMaskEditClip(drawing ? null : clip.id)}
+            className={`h-7 w-full rounded border text-[11px] transition-colors ${drawing ? 'border-teal-400 bg-teal-950/60 text-teal-100' : 'border-ink-700 text-ink-300 hover:border-teal-600 hover:text-teal-100'}`}
+          >
+            {drawing ? 'Done drawing' : 'Draw on monitor'}
+          </button>
+          {activeSelection && (
+            <button
+              type="button"
+              data-testid="clip-mask-from-selection-btn"
+              title="Set the mask bounds from the current selection"
+              onClick={() => {
+                const b = activeSelection.bounds
+                updateClipMask(clip.id, {
+                  centerX: b.x + b.width / 2,
+                  centerY: b.y + b.height / 2,
+                  width: Math.max(0.02, b.width),
+                  height: Math.max(0.02, b.height),
+                  shape: activeSelection.type === 'ellipse' ? 'ellipse' : 'rectangle',
+                })
+              }}
+              className="h-7 w-full rounded border border-ink-700 text-[11px] text-ink-300 transition-colors hover:border-teal-600 hover:text-teal-100"
+            >
+              Use current selection bounds
+            </button>
+          )}
+          <button
+            type="button"
+            data-testid="remove-clip-mask-btn"
+            onClick={() => removeClipMask(clip.id)}
+            className="h-7 w-full rounded border border-ink-800 text-[10px] text-ink-400 transition-colors hover:border-red-800 hover:text-red-200"
+          >
+            Remove mask
+          </button>
+        </div>
+      )}
+    </Section>
+  )
+}
+
 function ClipInspector({ clip }: { clip: Clip }) {
   const assets = useEditor((s) => s.assets)
   const setClipProp = useEditor((s) => s.setClipProp)
@@ -146,6 +517,20 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
   const asset = assets.find((a) => a.id === clip.assetId)
   const t = clip.transform
+  const adjustmentMaskDefaults: ClipAdjustmentMask = {
+    shape: 'ellipse',
+    centerX: 0.5,
+    centerY: 0.5,
+    width: 0.75,
+    height: 0.75,
+    feather: 36,
+    inverted: false,
+  }
+  const updateAdjustmentMask = (patch: Partial<ClipAdjustmentMask>) => {
+    setClipProp(clip.id, {
+      adjustmentMask: { ...adjustmentMaskDefaults, ...clip.adjustmentMask, ...patch },
+    })
+  }
 
   const [isolationEnabled, setIsolationEnabled] = useState(false)
   const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
@@ -264,8 +649,13 @@ function ClipInspector({ clip }: { clip: Clip }) {
           />
         </div>
         <div className="text-[10px] text-ink-500 mt-1">
-          {asset?.kind} · {formatClock(clip.duration)} on track
+          {clip.kind === 'adjustment' ? 'Adjustment layer' : asset?.kind || clip.kind} · {formatClock(clip.duration)} on track
         </div>
+        {clip.kind === 'adjustment' && (
+          <p className="mt-1 rounded border border-cyan-900/70 bg-cyan-950/25 px-2 py-1 text-[10px] leading-snug text-cyan-100/75" data-testid="adjustment-layer-scope-note">
+            Grades layers below this clip. Higher tracks, including text above it, remain unaffected.
+          </p>
+        )}
         <div className="flex gap-2 mt-2">
           <button
             type="button"
@@ -276,6 +666,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
           </button>
           <button
             type="button"
+            data-testid={clip.kind === 'adjustment' ? 'delete-adjustment-layer-btn' : 'delete-clip-btn'}
             onClick={() => removeClip(clip.id)}
             className="flex items-center justify-center gap-1.5 h-8 px-3 rounded-md bg-ink-800 border border-ink-700 text-xs text-bad hover:bg-ink-700"
           >
@@ -334,6 +725,77 @@ function ClipInspector({ clip }: { clip: Clip }) {
           </button>
         )}
       </Section>
+
+      {clip.kind === 'adjustment' && (
+        <Section title="Effect Mask">
+          {!clip.adjustmentMask ? (
+            <button
+              type="button"
+              data-testid="add-adjustment-mask-btn"
+              onClick={() => updateAdjustmentMask({})}
+              className="flex h-8 w-full items-center justify-center rounded-md border border-cyan-800 bg-cyan-950/30 text-xs text-cyan-100 transition-colors hover:border-cyan-500"
+            >
+              Add ellipse mask
+            </button>
+          ) : (
+            <div data-testid="adjustment-mask-controls" className="space-y-1.5">
+              <div className="flex items-center justify-between gap-2">
+                <label htmlFor="adjustment-mask-shape" className="text-xs text-ink-400">Shape</label>
+                <select
+                  id="adjustment-mask-shape"
+                  data-testid="adjustment-mask-shape"
+                  value={clip.adjustmentMask.shape}
+                  onChange={(event) => updateAdjustmentMask({ shape: event.target.value as ClipAdjustmentMask['shape'] })}
+                  className="h-7 rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100"
+                >
+                  <option value="ellipse">Ellipse</option>
+                  <option value="rectangle">Rectangle</option>
+                </select>
+              </div>
+              <Field label="Center X">
+                <Slider label="Adjustment mask center X" min={0} max={1} step={0.01} value={clip.adjustmentMask.centerX} onChange={(value) => updateAdjustmentMask({ centerX: value })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.centerX * 100)}%</span>
+              </Field>
+              <Field label="Center Y">
+                <Slider label="Adjustment mask center Y" min={0} max={1} step={0.01} value={clip.adjustmentMask.centerY} onChange={(value) => updateAdjustmentMask({ centerY: value })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.centerY * 100)}%</span>
+              </Field>
+              <Field label="Width">
+                <Slider label="Adjustment mask width" min={0.05} max={1} step={0.01} value={clip.adjustmentMask.width} onChange={(value) => updateAdjustmentMask({ width: value })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.width * 100)}%</span>
+              </Field>
+              <Field label="Height">
+                <Slider label="Adjustment mask height" min={0.05} max={1} step={0.01} value={clip.adjustmentMask.height} onChange={(value) => updateAdjustmentMask({ height: value })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.height * 100)}%</span>
+              </Field>
+              <Field label="Feather">
+                <Slider label="Adjustment mask feather" min={0} max={240} step={2} value={clip.adjustmentMask.feather} onChange={(value) => updateAdjustmentMask({ feather: value })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.feather)}px</span>
+              </Field>
+              <label className="flex items-center gap-2 text-[11px] text-ink-300">
+                <input
+                  type="checkbox"
+                  data-testid="invert-adjustment-mask"
+                  checked={clip.adjustmentMask.inverted}
+                  onChange={(event) => updateAdjustmentMask({ inverted: event.target.checked })}
+                  className="accent-cyan-400"
+                />
+                Invert mask
+              </label>
+              <button
+                type="button"
+                data-testid="remove-adjustment-mask-btn"
+                onClick={() => setClipProp(clip.id, { adjustmentMask: undefined })}
+                className="h-7 w-full rounded border border-ink-800 text-[10px] text-ink-400 transition-colors hover:border-red-800 hover:text-red-200"
+              >
+                Remove mask
+              </button>
+            </div>
+          )}
+        </Section>
+      )}
+
+      {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <ClipMaskSection clip={clip} />}
 
       <Section title="Transform">
         <Field label="Position X">
@@ -531,7 +993,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                   >
                     <option value="htdemucs-v4">Demucs v4 · real neural{demucsReady === false ? ' (weights not downloaded)' : ' — best quality'}</option>
                     <option value="omni-voicetarget">omni-voicetarget · fast DSP (mid/side crossover)</option>
-                    <option value="bs-roformer-lite">BS-Roformer Lite (planned)</option>
+                    <option value="bs-roformer-lite" disabled>BS-Roformer Lite (planned, unavailable)</option>
                     <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
                     {isolationMode === 'keep_vocal' && (
                       <option value="omni-denoise-onnx">AI Denoise ONNX (voice extractor · keep-vocal only)</option>
@@ -683,6 +1145,22 @@ function ClipInspector({ clip }: { clip: Clip }) {
             <Slider label="Blur" min={0} max={20} step={0.5} value={clip.effects.blur ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { blur: v })} />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.blur ?? 0).toFixed(0)}px</span>
           </Field>
+          <Field label="Hue rotate">
+            <Slider label="Hue rotate" min={0} max={360} step={5} value={clip.effects.hueRotate ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { hueRotate: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(clip.effects.hueRotate ?? 0)}°</span>
+          </Field>
+          <Field label="Grayscale">
+            <Slider label="Grayscale" min={0} max={1} step={0.05} value={clip.effects.grayscale ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { grayscale: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((clip.effects.grayscale ?? 0) * 100)}%</span>
+          </Field>
+          <Field label="Invert">
+            <Slider label="Invert" min={0} max={1} step={0.05} value={clip.effects.invert ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { invert: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((clip.effects.invert ?? 0) * 100)}%</span>
+          </Field>
+          <Field label="Sepia">
+            <Slider label="Sepia" min={0} max={1} step={0.05} value={clip.effects.sepia ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { sepia: v })} />
+            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((clip.effects.sepia ?? 0) * 100)}%</span>
+          </Field>
         </Section>
       )}
 
@@ -788,9 +1266,58 @@ export function RightPanel() {
   }
 
   const inspectorTitle = selectedClipId ? 'Clip Inspector' : 'Project Inspector'
+  const dockerPrefs = useEditor((s) => s.dockerPrefs)
+  const [activeSubtool, setActiveSubtool] = useState<'masking' | 'smart-patch' | 'rotomask' | null>(null)
+  const subtoolDefs = [
+    { id: 'masking' as const, label: 'Masking sub-tool', icon: ScanFace },
+    { id: 'smart-patch' as const, label: 'Smart Patch sub-tool', icon: Sparkles },
+    { id: 'rotomask' as const, label: 'RotoMask sub-tool', icon: Slice },
+  ].filter((d) => dockerPrefs.rightSubtools[d.id] !== false)
 
   const inspectorBody = (
     <SectionsNavigator mode={sidebarSectionMode} label="Inspector sections">
+      {/* Sub-tool dock: shared sub-tools live on the right panel as icons.
+          Which ones appear is chosen in Settings > Dockers. */}
+      {subtoolDefs.length > 0 && (
+        <div className="shrink-0 border-b border-ink-800 px-2 py-1.5">
+          <div className="flex items-center gap-1" role="group" aria-label="Sub-tools">
+            {subtoolDefs.map((d) => {
+              const Icon = d.icon
+              const on = activeSubtool === d.id
+              return (
+                <Tooltip key={d.id} label={d.label}>
+                  <button
+                    type="button"
+                    data-testid={`right-subtool-${d.id}`}
+                    aria-label={d.label}
+                    aria-pressed={on}
+                    onClick={() => setActiveSubtool(on ? null : d.id)}
+                    className={`grid h-7 w-7 place-items-center rounded-md border transition-colors ${on ? 'border-teal-400 bg-teal-950/50 text-teal-200' : 'border-ink-700 text-ink-400 hover:text-white'}`}
+                  >
+                    <Icon size={14} />
+                  </button>
+                </Tooltip>
+              )
+            })}
+            <InfoTip label="Sub-tools are shared across modes — masking, patching and rotoscoping live here. Choose which appear in Settings → Dockers." />
+          </div>
+          {activeSubtool === 'masking' && (
+            <div className="mt-1.5 max-h-[46vh] overflow-y-auto" data-testid="right-subtool-masking-body">
+              <SelectionMaskSubTool context="drawing" />
+            </div>
+          )}
+          {activeSubtool === 'smart-patch' && (
+            <div className="mt-1.5 max-h-[46vh] overflow-y-auto" data-testid="right-subtool-smart-patch-body">
+              <SmartPatchSubTool />
+            </div>
+          )}
+          {activeSubtool === 'rotomask' && (
+            <div className="mt-1.5 max-h-[46vh] overflow-y-auto" data-testid="right-subtool-rotomask-body">
+              <RotoMaskSubTool context="drawing" />
+            </div>
+          )}
+        </div>
+      )}
       <div
         id="inspector-panel"
         data-testid="inspector-panel"

@@ -13,7 +13,8 @@
  * (SI-SDR, residual-music suppression) against ground truth.
  *
  * Run: node qa/voice-build-clean-stems.mjs [outDir]   (default: qa/assets/voice)
- * Requires: dev server on :5173, qa/assets/voice/{tts-f1-technical.mp3,full-band.wav}
+ * Requires: a dev server, qa/assets/voice/tts-f1-technical.mp3, and either
+ * qa/assets/voice/full-band.wav or the committed evidence/voice/mix-showcase-clean-music.wav fallback.
  */
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -49,7 +50,14 @@ const recipe = await page.evaluate(async () => {
     return ctx.decodeAudioData(await res.arrayBuffer())
   }
   const voice = await load('qa/assets/voice/tts-f1-technical.mp3')
-  const bed = await load('qa/assets/voice/full-band.wav')
+  // Some workspace snapshots omit the optional full-band bed. Vite answers a
+  // missing asset with index.html (HTTP 200), so validate the response rather
+  // than allowing decodeAudioData to fail on the SPA fallback page.
+  const bedResponse = await fetch('qa/assets/voice/full-band.wav')
+  const bedMime = (bedResponse.headers.get('content-type') || '').toLowerCase()
+  const bed = bedResponse.ok && !bedMime.includes('text/html')
+    ? await ctx.decodeAudioData(await bedResponse.arrayBuffer())
+    : await load('evidence/voice/mix-showcase-clean-music.wav')
 
   const len = Math.min(voice.length, bed.length)
   const norm = (buf) => {

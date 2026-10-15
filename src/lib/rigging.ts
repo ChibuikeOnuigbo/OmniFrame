@@ -27,8 +27,10 @@ import type {
   RigBend,
   RigPart,
   RigPartKind,
+  RigPin,
   RigResolvedPart,
   RigSide,
+  RigSway,
 } from '../types'
 
 export const DEFAULT_PIVOTS: Record<RigPartKind, { x: number; y: number }> = {
@@ -288,6 +290,61 @@ export function sampleWind(
   const phase = time * wind.frequency * Math.PI * 2 + seed * 0.7 + depth * (wind.lag || 0) * 0.9
   const sway = Math.sin(phase) * wind.amplitude * Math.min(1 + depth * 0.25, 2.5)
   return sway + (wind.bias || 0)
+}
+
+/** Pin displacement for one point in the animation cycle. */
+/** Stable phase offset shared by rig preview and timeline rendering. */
+export function stablePartSeed(id: string): number {
+  let hash = 2166136261
+  for (let i = 0; i < id.length; i++) hash = Math.imul(hash ^ id.charCodeAt(i), 16777619)
+  return ((hash >>> 0) / 0xffffffff) * Math.PI * 2
+}
+
+export function sampleSway(
+  sway: RigSway | undefined,
+  time: number,
+  pin: Pick<RigPin, 'x' | 'y'>,
+  seed = 0,
+): { dx: number; dy: number } {
+  if (!sway?.enabled || !sway.distance || !sway.speed) return { dx: 0, dy: 0 }
+  // The first pin near the root remains almost still; the tip trails further.
+  const progress = sway.direction === 'horizontal' ? pin.y : pin.x
+  const tail = Math.pow(Math.min(1, Math.max(0, progress)), 1.35)
+  const phase = time * sway.speed * Math.PI * 2 + seed + progress * 0.8
+  const offset = Math.sin(phase) * sway.distance * tail
+  return sway.direction === 'horizontal' ? { dx: offset, dy: 0 } : { dx: 0, dy: offset }
+}
+
+/**
+ * Inverse-distance Gaussian puppet warp at a source-image point. The values
+ * are measured in source-image pixels; pin displacements are normalized to
+ * the part dimensions, so one rig behaves at any preview scale.
+ */
+export function deformPuppetPoint(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  pins: RigPin[],
+  sway: RigSway | undefined,
+  time: number,
+  seed = 0,
+): { x: number; y: number } {
+  if (!pins.length || !width || !height) return { x, y }
+  let dx = 0
+  let dy = 0
+  const size = Math.max(width, height)
+  for (const [index, pin] of pins.entries()) {
+    const pinX = pin.x * width
+    const pinY = pin.y * height
+    const radius = Math.max(1, size * Math.max(0.01, pin.radius || 0.25))
+    const distanceSquared = (x - pinX) ** 2 + (y - pinY) ** 2
+    const influence = Math.exp(-distanceSquared / (2 * radius * radius))
+    const secondary = sampleSway(sway, time, pin, seed + index * 0.61)
+    dx += pin.dx * width * influence + secondary.dx * size * influence
+    dy += pin.dy * height * influence + secondary.dy * size * influence
+  }
+  return { x: x + dx, y: y + dy }
 }
 
 /**

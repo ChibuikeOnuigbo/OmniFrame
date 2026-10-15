@@ -18,6 +18,7 @@ import type {
   RigPartKind,
   RigPin,
   RigSide,
+  RigSway,
   RigWind,
 } from '../types'
 import {
@@ -28,6 +29,7 @@ import {
   wouldCycle,
 } from '../lib/rigging'
 import { uid } from '../lib/time'
+import { getLayeredArtworkInfo } from '../lib/layeredArtworkMetadata'
 
 export interface RiggingStoreState {
   rigs: Rig[]
@@ -51,6 +53,10 @@ export interface RiggingSlice {
   deleteRig: (rigId: string) => void
   /** Seed a rig from an existing segmented cutout. The "rigged in 1 tap" path. */
   createRigFromCharacter: (characterId: string) => string | null
+  /** Build a part rig from imported visible raster layers in a layered artwork document. */
+  createRigFromLayeredArtwork: (documentId: string) => string | null
+  /** @deprecated Alias retained for older PSD-specific callers. */
+  createRigFromPsd: (documentId: string) => string | null
 
   addRigPart: (
     rigId: string,
@@ -65,11 +71,13 @@ export interface RiggingSlice {
   setRigPartTransform: (rigId: string, partId: string, transform: Partial<ClipTransform>) => void
   setRigPartBend: (rigId: string, partId: string, bend: Partial<RigBend> | null) => void
   setRigPartWind: (rigId: string, partId: string, wind: Partial<RigWind> | null) => void
+  setRigPartSway: (rigId: string, partId: string, sway: Partial<RigSway> | null) => void
   reorderRigPart: (rigId: string, partId: string, direction: 'up' | 'down' | 'front' | 'back') => void
   toggleRigPartHidden: (rigId: string, partId: string) => void
   toggleRigPartLocked: (rigId: string, partId: string) => void
 
   addRigPin: (rigId: string, partId: string, x: number, y: number) => string | null
+  addRigPins: (rigId: string, partId: string, points: Array<{ x: number; y: number }>) => string[]
   moveRigPin: (rigId: string, partId: string, pinId: string, dx: number, dy: number) => void
   removeRigPin: (rigId: string, partId: string, pinId: string) => void
 
@@ -96,11 +104,99 @@ function updatePart(set: SetState, rigId: string, partId: string, fn: (part: Rig
   }))
 }
 
+function inferPsdPartKind(name: string): RigPartKind {
+  const value = name.toLowerCase().replace(/[_-]+/g, ' ')
+  if (/hair|bang|fringe|strand|lock|ponytail|braid/.test(value)) return 'hair'
+  if (/eye|eyebrow|brow|mouth|nose|face/.test(value)) return 'face'
+  if (/head|skull/.test(value)) return 'head'
+  if (/neck/.test(value)) return 'neck'
+  if (/torso|chest|body/.test(value)) return 'torso'
+  if (/upper arm|arm upper|shoulder/.test(value)) return 'armUpper'
+  if (/forearm|lower arm|arm lower|elbow/.test(value)) return 'armLower'
+  if (/hand|fist|finger/.test(value)) return 'hand'
+  if (/thigh|upper leg|leg upper/.test(value)) return 'legUpper'
+  if (/shin|calf|lower leg|leg lower/.test(value)) return 'legLower'
+  if (/foot|shoe/.test(value)) return 'foot'
+  if (/cloth|shirt|cape|coat|dress|sleeve/.test(value)) return 'clothing'
+  if (/accessory|weapon|glasses|earring/.test(value)) return 'accessory'
+  return 'custom'
+}
+
+function inferPsdPartSide(name: string): RigSide {
+  const value = name.toLowerCase().replace(/[_-]+/g, ' ')
+  if (/\b(left|l)\b/.test(value)) return 'left'
+  if (/\b(right|r)\b/.test(value)) return 'right'
+  return 'center'
+}
+
 export function createRiggingSlice(
   set: SetState,
   _get: () => any,
   deps: { pushSnapshot: () => void },
 ): RiggingSlice {
+  const createRigFromLayeredArtwork = (documentId: string): string | null => {
+    const state = _get() as any
+    const sourceAssets = (state.assets || [])
+      .map((asset: any) => ({ asset, meta: getLayeredArtworkInfo(asset) }))
+      .filter((entry: any) => entry.meta?.documentId === documentId)
+      .sort((a: any, b: any) => (a.meta.order ?? 0) - (b.meta.order ?? 0))
+    if (sourceAssets.length === 0) return null
+
+    deps.pushSnapshot()
+    const now = Date.now()
+    const rigId = `rig_${uid()}`
+    const parts: RigPart[] = sourceAssets.map(({ asset, meta }: any, index: number) => {
+      const documentWidth = Math.max(1, meta.documentWidth || asset.width || 1)
+      const documentHeight = Math.max(1, meta.documentHeight || asset.height || 1)
+      const name = meta.layerName || asset.name
+      const kind = inferPsdPartKind(name)
+      return {
+        id: `part_${uid()}`,
+        name,
+        kind,
+        side: inferPsdPartSide(name),
+        cutoutUrl: asset.url || '',
+        bounds: {
+          x: (meta.left || 0) / documentWidth,
+          y: (meta.top || 0) / documentHeight,
+          width: (meta.width || asset.width || 1) / documentWidth,
+          height: (meta.height || asset.height || 1) / documentHeight,
+        },
+        pivot: { ...(DEFAULT_PIVOTS[kind] || { x: 0.5, y: 0.5 }) },
+        parentId: null,
+        // Source layers are stored top-to-bottom; lower z draws behind them.
+        z: sourceAssets.length - index - 1,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+        pins: [],
+        sourceAssetId: asset.id,
+        sourceOpacity: meta.opacityBaked ? 1 : meta.opacity,
+        sourceBlendMode: meta.blendMode,
+      }
+    })
+    const firstAsset = sourceAssets[0].asset
+    const firstMeta = sourceAssets[0].meta
+    const rig: Rig = {
+      id: rigId,
+      name: `${firstMeta.documentName || 'Layered artwork'} rig`,
+      sourceDocumentId: documentId,
+      sourceFormat: firstMeta.sourceFormat,
+      ...(firstMeta.sourceFormat === 'psd' ? { psdDocumentId: documentId } : {}),
+      canvasWidth: Math.max(1, firstMeta.documentWidth || firstAsset.width || 1),
+      canvasHeight: Math.max(1, firstMeta.documentHeight || firstAsset.height || 1),
+      sourceUrl: firstAsset.url,
+      parts: autoRig(parts),
+      createdAt: now,
+      updatedAt: now,
+    }
+    const selected = rig.parts.find((part) => part.kind === 'hair')?.id || rig.parts[0]?.id || null
+    set((s: RiggingStoreState) => ({
+      rigs: [...s.rigs, rig],
+      activeRigId: rigId,
+      selectedPartId: selected,
+    }))
+    return rigId
+  }
+
   return {
     rigs: [],
     activeRigId: null,
@@ -170,6 +266,9 @@ export function createRiggingSlice(
       }))
       return rigId
     },
+
+    createRigFromLayeredArtwork,
+    createRigFromPsd: createRigFromLayeredArtwork,
 
     deleteRig: (rigId) => {
       deps.pushSnapshot()
@@ -288,6 +387,26 @@ export function createRiggingSlice(
       })
     },
 
+    setRigPartSway: (rigId, partId, sway) => {
+      deps.pushSnapshot()
+      updatePart(set, rigId, partId, (p) => {
+        if (!sway) {
+          const { sway: _drop, ...rest } = p
+          return rest as RigPart
+        }
+        const current: RigSway = p.sway || { enabled: false, distance: 0.08, speed: 0.8, direction: 'horizontal' }
+        return {
+          ...p,
+          sway: {
+            ...current,
+            ...sway,
+            distance: Math.max(0, Math.min(0.5, sway.distance ?? current.distance)),
+            speed: Math.max(0.1, Math.min(4, sway.speed ?? current.speed)),
+          },
+        }
+      })
+    },
+
     reorderRigPart: (rigId, partId, direction) => {
       deps.pushSnapshot()
       updateRig(set, rigId, (rig) => {
@@ -327,6 +446,27 @@ export function createRiggingSlice(
         return { ...p, pins: [...(p.pins || []), pin] }
       })
       return created ? id : null
+    },
+
+    addRigPins: (rigId, partId, points) => {
+      if (points.length === 0) return []
+      deps.pushSnapshot()
+      const ids = points.map(() => `pin_${uid()}`)
+      updatePart(set, rigId, partId, (p) => ({
+        ...p,
+        pins: [
+          ...(p.pins || []),
+          ...points.map((point, index): RigPin => ({
+            id: ids[index],
+            x: Math.max(0, Math.min(1, point.x)),
+            y: Math.max(0, Math.min(1, point.y)),
+            radius: 0.25,
+            dx: 0,
+            dy: 0,
+          })),
+        ],
+      }))
+      return ids
     },
 
     moveRigPin: (rigId, partId, pinId, dx, dy) => {

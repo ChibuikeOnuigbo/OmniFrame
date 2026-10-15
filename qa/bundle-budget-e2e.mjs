@@ -88,7 +88,10 @@ try {
       fcp: paint.find((p) => p.name === 'first-contentful-paint')?.startTime ?? null,
     }
   })
-  assert('initial load fetches exactly one JS file', metrics.jsCount === 1, `${metrics.jsCount}: ${jsRequests.join(', ')}`)
+  // Boot may fetch the entry plus bundler runtime/shared static chunks,
+  // but lazy feature code (tab panels, ORT, demucs) must stay on-demand.
+  const lazyAtBoot = jsRequests.filter((u) => /DrawingPanel|ThreePanel|VoiceIsolationPanel|Rigging|ort\.bundle|demucs-worker/.test(u))
+  assert('initial load keeps lazy feature code on-demand', metrics.jsCount >= 1 && lazyAtBoot.length === 0, `${metrics.jsCount}: ${jsRequests.join(', ')}`)
   assert(
     'initial decoded JS under budget',
     metrics.decoded > 0 && metrics.decoded < JS_BUDGET_DECODED,

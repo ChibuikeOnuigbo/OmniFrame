@@ -1,0 +1,467 @@
+import { useMemo, useState } from 'react'
+import { AppWindow, Box, ChevronRight, Folder, FolderOpen, Layers, MousePointer2, Search, Sparkles } from 'lucide-react'
+import { useEditor } from '../store'
+import type { ClipEffect, CursorPack, Primitive3D } from '../types'
+import { PACK_ASSETS, PACK_BUNDLES, PACK_H, PACK_W, packAssetUrl, type PackAssetDef, type PackBundleDef, type PackSection } from '../lib/desktopPack'
+import { previewClipEffect, previewEffectLayer } from '../lib/visualPreviewActions'
+import { HScrollStrip } from './HScrollStrip'
+
+/**
+ * Desktop Pack: the screen-life toolkit organised like a file library —
+ * five sections on a horizontal segmented strip (CapCut pattern), each
+ * section filed into collapsible folders (Explorer/ChatGPT-sidebar pattern:
+ * chevron, folder name, item count, indented contents) with a search box
+ * on top (ChatGPT pattern) so nothing competes for attention all at once.
+ */
+
+const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
+  { id: 'windows', label: 'Desktop & Windows', icon: AppWindow },
+  { id: 'cursors', label: 'Cursors', icon: MousePointer2 },
+  { id: 'overlays', label: 'Overlays', icon: Layers },
+  { id: 'edits', label: 'Edit Presets', icon: Sparkles },
+  { id: 'threed', label: '3D Tools', icon: Box },
+]
+
+const GROUP_ORDER: Record<string, string[]> = {
+  windows: ['Packs', 'Desktops', 'Browsers', 'App Windows', 'Devices & Social'],
+  cursors: ['Pointers', 'Clicks & Marks', 'Editor Cursor'],
+  overlays: ['Frames & Bars', 'Light & Focus'],
+  edits: ['Looks', 'Fixes'],
+  threed: ['Primitives', 'Scene'],
+}
+
+const CURSOR_PACKS: { id: CursorPack; label: string }[] = [
+  { id: 'pro-precision', label: 'Pro Precision' },
+  { id: 'mac-sonoma-pro', label: 'Mac Sonoma Pro' },
+  { id: 'mac-gamified', label: 'Mac Gamified' },
+  { id: 'cyber-violet', label: 'Cyber Violet' },
+  { id: 'neo-stealth', label: 'Neo Stealth' },
+]
+
+const EDIT_PRESETS: { id: string; label: string; desc: string; group: string; effect: ClipEffect }[] = [
+  { id: 'tutorial-pop', label: 'Tutorial Pop', desc: 'Contrast + saturation for screen recordings', group: 'Looks', effect: { contrast: 1.18, saturation: 1.2, brightness: 1.02 } },
+  { id: 'warm-cast', label: 'Warm Cast', desc: 'Warm sepia cast', group: 'Looks', effect: { sepia: 0.35, saturation: 1.1, brightness: 1.03 } },
+  { id: 'mono-doc', label: 'Mono Doc', desc: 'Black & white document look', group: 'Looks', effect: { grayscale: 1, contrast: 1.3 } },
+  { id: 'night-screen', label: 'Night Screen', desc: 'Dark UI / night-mode grade', group: 'Looks', effect: { brightness: 0.82, contrast: 1.15, saturation: 0.9 } },
+  { id: 'screen-clean', label: 'Clean Screen', desc: 'Gentle lift for UI captures', group: 'Fixes', effect: { contrast: 1.08, saturation: 1.05, brightness: 1.03 } },
+  { id: 'soft-blur', label: 'Soft Blur', desc: 'Dreamy soft focus', group: 'Fixes', effect: { blur: 6, brightness: 1.05 } },
+]
+
+const PRIMITIVES: { type: Primitive3D; label: string; color: string }[] = [
+  { type: 'cube', label: 'Cube', color: '#6d5efc' },
+  { type: 'sphere', label: 'Sphere', color: '#2dd4bf' },
+  { type: 'torus', label: 'Torus', color: '#f59e0b' },
+  { type: 'diamond', label: 'Diamond', color: '#38bdf8' },
+  { type: 'plane', label: 'Plane', color: '#94a3b8' },
+  { type: 'wheel', label: 'Wheel', color: '#f472b6' },
+]
+
+function ensurePackAsset(def: PackAssetDef): string {
+  const state = useEditor.getState()
+  const assetId = `pack-${def.id}`
+  if (!state.assets.some((a) => a.id === assetId)) {
+    const url = packAssetUrl(def.id)
+    state.addAsset({
+      id: assetId,
+      name: def.name,
+      kind: 'image',
+      url,
+      duration: 5,
+      width: PACK_W,
+      height: PACK_H,
+      size: url.length,
+    })
+  }
+  return assetId
+}
+
+/** A pack track with no clip overlapping the playhead window, else a new top track. */
+function freePackTrack(): string {
+  const s = useEditor.getState()
+  const t0 = s.playhead
+  const t1 = t0 + 5
+  const candidate = s.tracks.find(
+    (tk) =>
+      tk.type === 'video' &&
+      s.clips.some((c) => c.trackId === tk.id && c.assetId.startsWith('pack-')) &&
+      !s.clips.some((c) => c.trackId === tk.id && c.start < t1 && c.start + c.duration > t0),
+  )
+  return candidate?.id ?? s.createTrack('video')
+}
+
+function addPackClip(def: PackAssetDef, trackId?: string): string | undefined {
+  const state = useEditor.getState()
+  const assetId = ensurePackAsset(def)
+  const target = trackId ?? freePackTrack()
+  const before = new Set(state.clips.map((c) => c.id))
+  state.addClipToTrack(target, assetId, state.playhead)
+  const created = useEditor.getState().clips.find((c) => !before.has(c.id) && c.assetId === assetId)
+  if (created) state.selectClip(created.id)
+  return created?.id
+}
+
+/** Stack assets as layers at the playhead: desktops go below, each next layer on its own track above. */
+function stackPackAssets(defs: PackAssetDef[]) {
+  let lastId: string | undefined
+  defs.forEach((def, i) => {
+    const state = useEditor.getState()
+    if (i === 0 && def.id.startsWith('desktop-')) {
+      const firstVideo = state.tracks.find((t) => t.type === 'video')
+      const bgTrack = firstVideo ? state.createTrack('video', 'below', firstVideo.id) : state.createTrack('video')
+      lastId = addPackClip(def, bgTrack)
+    } else {
+      lastId = addPackClip(def, state.createTrack('video'))
+    }
+  })
+  if (lastId) useEditor.getState().selectClip(lastId)
+}
+
+function addFakeDesktop(os: 'mac' | 'win') {
+  const defs = ['desktop', 'chrome', 'cursor'].map((kind) =>
+    PACK_ASSETS.find((a) => a.id === `${kind}-${os}`)!,
+  )
+  stackPackAssets(defs)
+}
+
+function addBundle(bundle: PackBundleDef) {
+  const defs = bundle.items
+    .map((id) => PACK_ASSETS.find((a) => a.id === id))
+    .filter((d): d is PackAssetDef => Boolean(d))
+  stackPackAssets(defs)
+}
+
+function AssetCard({ def }: { def: PackAssetDef }) {
+  return (
+    <button
+      type="button"
+      data-testid={`pack-asset-${def.id}`}
+      title={`${def.name} — add as an overlay clip at the playhead`}
+      aria-label={`Add ${def.name} overlay clip`}
+      onClick={() => addPackClip(def)}
+      className="group min-w-0 overflow-hidden rounded-lg border border-ink-800 bg-ink-900 text-left transition-colors hover:border-brand/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+    >
+      <span className="relative block aspect-video w-full overflow-hidden bg-[repeating-conic-gradient(#161a23_0%_25%,#0c0e13_0%_50%)] bg-[length:16px_16px]">
+        <img src={packAssetUrl(def.id)} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+      </span>
+      <span className="block truncate px-2 pt-1.5 text-[11px] font-medium text-ink-100" title={def.name}>{def.name}</span>
+      <span className="block px-2 pb-2 text-[10px] leading-snug text-ink-500">{def.desc}</span>
+    </button>
+  )
+}
+
+/** Collapsible folder row (Explorer tree / ChatGPT sidebar pattern). */
+export function PackFolder({
+  folderKey,
+  title,
+  count,
+  open,
+  onToggle,
+  children,
+}: {
+  folderKey: string
+  title: string
+  count: number
+  open: boolean
+  onToggle: (key: string, open: boolean) => void
+  children: React.ReactNode
+}) {
+  return (
+    <div data-testid={`pack-folder-${folderKey}`} className="overflow-hidden rounded-lg border border-ink-800/80 bg-ink-950/40">
+      <button
+        type="button"
+        data-testid={`pack-folder-toggle-${folderKey}`}
+        aria-expanded={open}
+        onClick={() => onToggle(folderKey, !open)}
+        className="flex min-h-8 w-full items-center gap-1.5 px-2 text-left transition-colors hover:bg-ink-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+      >
+        <ChevronRight size={12} className={`shrink-0 text-ink-500 transition-transform ${open ? 'rotate-90' : ''}`} />
+        {open ? <FolderOpen size={13} className="shrink-0 text-amber-300" /> : <Folder size={13} className="shrink-0 text-amber-200/70" />}
+        <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-ink-200">{title}</span>
+        <span className="shrink-0 rounded-full bg-ink-800 px-1.5 py-px text-[9px] tabular-nums text-ink-400">{count}</span>
+      </button>
+      {open && <div className="ml-[15px] border-l border-ink-800 py-1.5 pl-2 pr-1.5">{children}</div>}
+    </div>
+  )
+}
+
+export function DesktopPackPanel() {
+  const [section, setSection] = useState<PackSection>('windows')
+  const [query, setQuery] = useState('')
+  const [openMap, setOpenMap] = useState<Record<string, boolean>>({})
+  const cursorConfig = useEditor((s) => s.cursorConfig)
+  const setCursorConfig = useEditor((s) => s.setCursorConfig)
+  const selectedClip = useEditor((s) => s.clips.find((c) => c.id === s.selectedClipId) || null)
+  const addScene3DObject = useEditor((s) => s.addScene3DObject)
+  const sceneCount = useEditor((s) => s.scene3DObjects.length)
+  const setIs3DMode = useEditor((s) => s.setIs3DMode)
+  const setLeftTab = useEditor((s) => s.setLeftTab)
+
+  const searching = query.trim().length > 0
+  const needle = query.trim().toLowerCase()
+  const matches = (name: string, desc: string, group: string) =>
+    !searching || `${name} ${desc} ${group}`.toLowerCase().includes(needle)
+
+  const sectionAssets = useMemo(() => PACK_ASSETS.filter((a) => a.section === section), [section])
+  const groups = useMemo(() => {
+    const order = GROUP_ORDER[section] || []
+    const present = [...new Set(sectionAssets.map((a) => a.group))]
+    return [...order.filter((g) => present.includes(g)), ...present.filter((g) => !order.includes(g))]
+  }, [section, sectionAssets])
+
+  const isOpen = (key: string, isFirst: boolean) => searching || (openMap[key] ?? isFirst)
+  const toggleFolder = (key: string, open: boolean) => setOpenMap((m) => ({ ...m, [key]: open }))
+
+  const applyEditPreset = (preset: (typeof EDIT_PRESETS)[number]) => {
+    if (selectedClip && selectedClip.kind !== 'adjustment') {
+      previewClipEffect(selectedClip.id, preset.label, preset.effect)
+    } else {
+      previewEffectLayer(preset.label, preset.effect)
+    }
+  }
+
+  const visibleBundles = PACK_BUNDLES.filter((b) => matches(b.name, b.desc, 'Packs'))
+  const anyVisible =
+    visibleBundles.length > 0 ||
+    sectionAssets.some((a) => matches(a.name, a.desc, a.group)) ||
+    (section === 'edits' && EDIT_PRESETS.some((p) => matches(p.label, p.desc, p.group))) ||
+    section === 'threed'
+
+  return (
+    <div data-testid="desktop-pack-panel" className="flex h-full flex-col text-xs text-ink-200">
+      <div className="px-3 pt-3">
+        <h2 className="text-sm font-semibold text-ink-50">Desktop Pack</h2>
+        <p className="mt-0.5 text-[10px] leading-snug text-ink-500">
+          Screen-life library: fake desktops &amp; windows, cursors, overlays, grades and quick 3D — filed in folders.
+        </p>
+        <label className="mt-2 flex items-center gap-1.5 rounded-md border border-ink-700 bg-ink-900 px-2 py-1.5 focus-within:border-brand">
+          <Search size={12} className="shrink-0 text-ink-500" />
+          <input
+            data-testid="pack-search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search packs, windows, cursors…"
+            aria-label="Search Desktop Pack"
+            className="min-w-0 flex-1 bg-transparent text-[11px] text-ink-100 outline-none placeholder:text-ink-500"
+          />
+        </label>
+      </div>
+
+      {/* Horizontal segmented bar — the five sections of this tab */}
+      <HScrollStrip
+        data-testid="pack-section-strip"
+        arrowTestIdPrefix="pack-section"
+        className="mt-2 shrink-0 border-b border-ink-800"
+        innerClassName="flex-nowrap items-center gap-1 px-2 pb-2"
+      >
+        <div role="tablist" aria-label="Desktop Pack sections" className="flex flex-nowrap items-center gap-1">
+          {SECTIONS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={section === id}
+              data-testid={`pack-section-${id}`}
+              onClick={() => setSection(id)}
+              className={`flex min-h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                section === id
+                  ? 'border-brand bg-brand/25 text-white'
+                  : 'border-ink-700 bg-ink-850 text-ink-300 hover:bg-ink-800 hover:text-ink-100'
+              }`}
+            >
+              <Icon size={12} className="shrink-0" />
+              {label}
+            </button>
+          ))}
+        </div>
+      </HScrollStrip>
+
+      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-3 py-3">
+        {!anyVisible && searching && (
+          <p data-testid="pack-search-empty" className="rounded-md border border-ink-800 px-2 py-3 text-center text-[10px] text-ink-500">
+            Nothing in this section matches “{query}”.
+          </p>
+        )}
+
+        {section === 'windows' && (
+          <>
+            {(searching ? visibleBundles.length > 0 : true) && (
+              <PackFolder folderKey="packs" title="Packs · one-click bundles" count={visibleBundles.length} open={isOpen('packs', true)} onToggle={toggleFolder}>
+                <div className="space-y-1.5">
+                  {visibleBundles.map((bundle) => (
+                    <button
+                      key={bundle.id}
+                      type="button"
+                      data-testid={`pack-bundle-${bundle.id}`}
+                      title={`${bundle.name} — stack ${bundle.items.length} clips at the playhead`}
+                      onClick={() => addBundle(bundle)}
+                      className="block w-full rounded-lg border border-teal-800/70 bg-teal-950/25 px-2 py-2 text-left transition-colors hover:border-teal-500"
+                    >
+                      <span className="block truncate text-[11px] font-semibold text-teal-100">{bundle.name}</span>
+                      <span className="mt-0.5 block text-[10px] leading-snug text-teal-200/70">{bundle.desc}</span>
+                      <span className="mt-1 inline-block rounded-full bg-teal-900/60 px-1.5 py-px text-[9px] text-teal-200">{bundle.items.length} clips stacked</span>
+                    </button>
+                  ))}
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <button type="button" data-testid="pack-desktop-mac" onClick={() => addFakeDesktop('mac')} className="rounded-lg border border-ink-700 bg-ink-900 px-2 py-2 text-left transition-colors hover:border-brand/70">
+                      <span className="block text-[11px] font-medium text-ink-100">Fake Desktop · macOS</span>
+                      <span className="mt-0.5 block text-[10px] leading-snug text-ink-500">Wallpaper + Chrome + cursor</span>
+                    </button>
+                    <button type="button" data-testid="pack-desktop-win" onClick={() => addFakeDesktop('win')} className="rounded-lg border border-ink-700 bg-ink-900 px-2 py-2 text-left transition-colors hover:border-brand/70">
+                      <span className="block text-[11px] font-medium text-ink-100">Fake Desktop · Windows</span>
+                      <span className="mt-0.5 block text-[10px] leading-snug text-ink-500">Wallpaper + Chrome + cursor</span>
+                    </button>
+                  </div>
+                </div>
+              </PackFolder>
+            )}
+            {groups.filter((g) => g !== 'Packs').map((group, gi) => {
+              const items = sectionAssets.filter((a) => a.group === group && matches(a.name, a.desc, a.group))
+              if (searching && items.length === 0) return null
+              const key = `windows-${group}`
+              return (
+                <PackFolder key={key} folderKey={key} title={group} count={items.length} open={isOpen(key, gi === 0)} onToggle={toggleFolder}>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {items.map((def) => <AssetCard key={def.id} def={def} />)}
+                  </div>
+                </PackFolder>
+              )
+            })}
+          </>
+        )}
+
+        {section === 'cursors' && (
+          <>
+            {groups.map((group, gi) => {
+              const items = sectionAssets.filter((a) => a.group === group && matches(a.name, a.desc, a.group))
+              if (searching && items.length === 0) return null
+              const key = `cursors-${group}`
+              return (
+                <PackFolder key={key} folderKey={key} title={group} count={items.length} open={isOpen(key, gi === 0)} onToggle={toggleFolder}>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {items.map((def) => <AssetCard key={def.id} def={def} />)}
+                  </div>
+                </PackFolder>
+              )
+            })}
+            <PackFolder folderKey="cursors-editor" title="Editor Cursor" count={CURSOR_PACKS.length} open={isOpen('cursors-editor', false)} onToggle={toggleFolder}>
+              <p className="text-[10px] leading-snug text-ink-500">Applies to the cursor you edit with, app-wide.</p>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {CURSOR_PACKS.map((packDef) => (
+                  <button
+                    key={packDef.id}
+                    type="button"
+                    data-testid={`pack-cursor-theme-${packDef.id}`}
+                    aria-pressed={cursorConfig.pack === packDef.id && cursorConfig.enabled}
+                    onClick={() => setCursorConfig({ pack: packDef.id, theme: packDef.id, enabled: true })}
+                    className={`min-h-7 rounded-full border px-2.5 text-[11px] transition-colors ${
+                      cursorConfig.pack === packDef.id && cursorConfig.enabled
+                        ? 'border-brand bg-brand/25 text-white'
+                        : 'border-ink-700 text-ink-300 hover:bg-ink-800 hover:text-ink-100'
+                    }`}
+                  >
+                    {packDef.label}
+                  </button>
+                ))}
+              </div>
+            </PackFolder>
+          </>
+        )}
+
+        {section === 'overlays' && (
+          <>
+            {groups.map((group, gi) => {
+              const items = sectionAssets.filter((a) => a.group === group && matches(a.name, a.desc, a.group))
+              if (searching && items.length === 0) return null
+              const key = `overlays-${group}`
+              return (
+                <PackFolder key={key} folderKey={key} title={group} count={items.length} open={isOpen(key, gi === 0)} onToggle={toggleFolder}>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {items.map((def) => <AssetCard key={def.id} def={def} />)}
+                  </div>
+                </PackFolder>
+              )
+            })}
+            <p className="px-0.5 text-[10px] leading-snug text-ink-500">Overlays land at the playhead on their own layer — trim or stretch like any clip. Pair Spotlight Dim with a clip Mask to isolate a subject.</p>
+          </>
+        )}
+
+        {section === 'edits' && (
+          <>
+            <p className="px-0.5 text-[10px] leading-snug text-ink-500">
+              {selectedClip
+                ? `Auditions on “${selectedClip.name}” in the monitor — Apply commits, Stop discards.`
+                : 'Select a clip to audition on it, or audition as an adjustment layer over the current footage.'}
+            </p>
+            {['Looks', 'Fixes'].map((group, gi) => {
+              const items = EDIT_PRESETS.filter((preset) => preset.group === group && matches(preset.label, preset.desc, preset.group))
+              if (searching && items.length === 0) return null
+              const key = `edits-${group}`
+              return (
+                <PackFolder key={key} folderKey={key} title={group} count={items.length} open={isOpen(key, gi === 0)} onToggle={toggleFolder}>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {items.map((preset) => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        data-testid={`pack-edit-${preset.id}`}
+                        title={`Preview ${preset.label}; Apply in the monitor to commit`}
+                        onClick={() => applyEditPreset(preset)}
+                        className="min-w-0 rounded-lg border border-ink-800 bg-ink-900 px-2 py-2 text-left transition-colors hover:border-brand/70"
+                      >
+                        <span className="block truncate text-[11px] font-medium text-ink-100">{preset.label}</span>
+                        <span className="mt-0.5 block text-[10px] leading-snug text-ink-500">{preset.desc}</span>
+                      </button>
+                    ))}
+                  </div>
+                </PackFolder>
+              )
+            })}
+          </>
+        )}
+
+        {section === 'threed' && (
+          <>
+            <PackFolder folderKey="threed-primitives" title="Primitives" count={PRIMITIVES.length} open={isOpen('threed-primitives', true)} onToggle={toggleFolder}>
+              <div className="grid grid-cols-3 gap-1.5">
+                {PRIMITIVES.map(({ type, label, color }) => (
+                  <button
+                    key={type}
+                    type="button"
+                    data-testid={`pack-3d-${type}`}
+                    onClick={() => {
+                      addScene3DObject({
+                        id: `pack-obj-${Date.now().toString(36)}-${type}`,
+                        name: label,
+                        type,
+                        position: { x: (sceneCount % 5 - 2) * 1.7, y: 0, z: 0 },
+                        rotation: { x: 0, y: 0, z: 0 },
+                        scale: { x: 1, y: 1, z: 1 },
+                        color,
+                      })
+                      setIs3DMode(true)
+                    }}
+                    className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg border border-ink-800 bg-ink-900 text-[11px] text-ink-200 transition-colors hover:border-brand/70"
+                  >
+                    <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: color }} aria-hidden="true" />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </PackFolder>
+            <PackFolder folderKey="threed-scene" title="Scene" count={sceneCount} open={isOpen('threed-scene', false)} onToggle={toggleFolder}>
+              <p className="text-[10px] leading-snug text-ink-500">{sceneCount} object{sceneCount === 1 ? '' : 's'} in the 3D scene. Added objects open in the 3D view to place.</p>
+              <button
+                type="button"
+                data-testid="pack-open-3d"
+                onClick={() => setLeftTab('threed')}
+                className="mt-1.5 h-8 w-full rounded-md border border-ink-700 text-[11px] text-ink-200 transition-colors hover:border-brand/70 hover:text-white"
+              >
+                Open the full 3D Scene panel
+              </button>
+            </PackFolder>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}

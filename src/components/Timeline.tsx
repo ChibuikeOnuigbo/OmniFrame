@@ -1007,7 +1007,7 @@ function ClipView({
           <Video size={10} className="text-sky-400 shrink-0" />
         )}
         <span className="truncate">{clip.name}</span>
-        {hasEffects && (
+        {hasEffects && selected && (
           <span
             data-testid="clip-effects-badge"
             data-effect-count={effectLabels.length}
@@ -1148,6 +1148,7 @@ export function Timeline() {
   const graphEditorOpen = useEditor((s) => s.graphEditorOpen)
   const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
   const breadcrumbs = useEditor((s) => s.breadcrumbs || [{ id: 'main', name: 'Main Timeline' }])
+  const compoundWindow = useEditor((s) => s.compoundWindow)
   const navigateBreadcrumb = useEditor((s) => s.navigateBreadcrumb)
 
   const handleAddMarker = () => {
@@ -1301,6 +1302,27 @@ export function Timeline() {
     window.addEventListener('keydown', onDeleteKey)
     return () => window.removeEventListener('keydown', onDeleteKey)
   }, [])
+
+  // CapCut In/Out: I and O mark the export range at the playhead.
+  useEffect(() => {
+    const onInOut = (ev: KeyboardEvent) => {
+      const target = ev.target as HTMLElement | null
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return
+      const st = useEditor.getState()
+      // If the user rebound another action onto I/O, that action wins.
+      const rebound = Object.values(st.customShortcuts || {}).some(
+        (key) => typeof key === 'string' && !key.includes('+') && key.toLowerCase() === ev.key.toLowerCase(),
+      )
+      if (rebound) return
+      if (ev.key === 'i' || ev.key === 'I') st.setExportIn()
+      else if (ev.key === 'o' || ev.key === 'O') st.setExportOut()
+    }
+    window.addEventListener('keydown', onInOut)
+    return () => window.removeEventListener('keydown', onInOut)
+  }, [])
+  const exportRange = useEditor((s) => s.exportRange)
+  const clearExportRange = useEditor((s) => s.clearExportRange)
   const [scrollLeft, setScrollLeft] = useState(0)
   const [viewW, setViewW] = useState(900)
   const seeking = useRef(false)
@@ -2215,6 +2237,49 @@ export function Timeline() {
                 addClipToTrack(trackId, assetId, Math.max(0, (e.clientX - rect.left) / px))
               }}
             >
+              {exportRange && (
+                <>
+                  <div data-testid="export-range-shade-l" aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-10 bg-black/55" style={{ width: exportRange.in * px }} />
+                  <div data-testid="export-range-shade-r" aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 bg-black/55" style={{ left: exportRange.out * px, right: 0 }} />
+                  <button
+                    type="button"
+                    data-testid="export-range-clear"
+                    onClick={clearExportRange}
+                    className="absolute top-1 z-20 rounded border border-brand/50 bg-ink-900/90 px-1.5 py-0.5 text-[9px] font-medium text-brand-200 hover:bg-ink-800"
+                    style={{ left: exportRange.in * px + 4 }}
+                    title="Clear the In/Out export range (exports will use the full timeline again)"
+                  >
+                    Range {exportRange.in.toFixed(1)}–{exportRange.out.toFixed(1)}s · Cancel
+                  </button>
+                </>
+              )}
+              {compoundWindow && (compoundWindow.in > 0.001 || compoundWindow.out < compoundWindow.total - 0.001) && (
+                <>
+                  {compoundWindow.in > 0.001 && (
+                    <div
+                      data-testid="compound-cut-void-head"
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 left-0 z-10 border-r border-dashed border-amber-200/40"
+                      style={{
+                        width: compoundWindow.in * px,
+                        backgroundImage: 'repeating-linear-gradient(45deg, rgba(251,191,36,0.10) 0 8px, rgba(0,0,0,0.25) 8px 16px)',
+                      }}
+                    />
+                  )}
+                  {compoundWindow.out < compoundWindow.total - 0.001 && (
+                    <div
+                      data-testid="compound-cut-void-tail"
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 z-10 border-l border-dashed border-amber-200/40"
+                      style={{
+                        left: compoundWindow.out * px,
+                        right: 0,
+                        backgroundImage: 'repeating-linear-gradient(45deg, rgba(251,191,36,0.10) 0 8px, rgba(0,0,0,0.25) 8px 16px)',
+                      }}
+                    />
+                  )}
+                </>
+              )}
               {tracks.map((tr) => {
                 const laneHeight = new TrackModel(tr).getEffectiveHeight(clips)
                 return (
@@ -2224,7 +2289,12 @@ export function Timeline() {
                     className="relative border-b border-ink-800 bg-ink-900/40"
                     style={{ height: laneHeight }}
                     onPointerDown={(e) => {
-                      if (e.target === e.currentTarget) seekFromClientX(e.clientX)
+                      if (e.target === e.currentTarget) {
+                        // Clicking empty timeline space clears the active clip/layer
+                        // highlight and reveals the project inspector again.
+                        selectClip(null)
+                        seekFromClientX(e.clientX)
+                      }
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault()

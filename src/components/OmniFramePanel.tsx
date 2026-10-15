@@ -39,7 +39,7 @@ const PANEL_SECTIONS = [
     icon: BoxSelect,
     hint: 'Pick the asset and choose a detected segment',
   },
-  { id: 'select', label: 'Mask', icon: Wand2, hint: 'Selection and masking sub-tools' },
+  { id: 'select', label: 'Select', icon: Wand2, hint: 'Selection sub-tools: box, ellipse, lasso, brush' },
   { id: 'rotomask', label: 'Roto', icon: Crosshair, hint: 'Click-to-segment rotoscoping (RotoMask)' },
   { id: 'transform', label: 'Transform', icon: Move, hint: 'Position, scale and rotation' },
   { id: 'color', label: 'Color', icon: PaintBucket, hint: 'Recolor the segment; separate from Drawing layer blending' },
@@ -142,12 +142,15 @@ export function OmniFramePanel() {
       <div className="flex items-center justify-between pb-2 border-b border-ink-800">
         <div className="flex items-center gap-1.5">
           <Scissors size={17} className="text-brand-400" />
-          <span className="font-semibold text-ink-100">OmniFrame Mask</span>
+          <span className="font-semibold text-ink-100">OmniFrame</span>
         </div>
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand/15 text-brand-400 font-mono font-medium">
-          Multi-Frame Cuts
+          Frame Scope
         </span>
       </div>
+      <p className="text-[10px] leading-snug text-ink-500 -mt-2">
+        Apply tools to the whole frame or one region: select or drag a region, resize it, then shift, recolor or clean it across frames.
+      </p>
 
       {/* Target Video Banner */}
       <div className="px-2.5 py-1.5 rounded-lg bg-ink-900 border border-ink-800 flex items-center justify-between text-[11px]">
@@ -223,7 +226,7 @@ export function OmniFramePanel() {
             <button
               type="button"
               data-testid="omniframe-submode-shift-btn"
-              onClick={() => openSubMode('omniframe', 'omniframe-shift', 'AI Segmentation & Character Shift', 'Move')}
+              onClick={() => openSubMode('omniframe', 'omniframe-shift', 'Select, Drag & Shift Regions', 'Move')}
               className="flex min-h-[84px] flex-col items-center justify-center rounded-lg border border-ink-800 bg-ink-900 p-2 text-center transition-all hover:border-brand/60 hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <Move size={20} className="text-amber-400 mb-1" />
@@ -252,12 +255,12 @@ export function OmniFramePanel() {
             <h3 id="omniframe-asset-heading" className="text-[11px] font-semibold uppercase tracking-wider text-ink-400">Active Asset</h3>
             <span className="text-[10px] text-brand-400 font-mono">Image & video</span>
           </div>
-          <div role="group" aria-label="Choose an asset for segmentation" className="grid grid-cols-2 gap-1.5">
+          <div role="group" aria-label="Choose an asset to edit by region" className="grid grid-cols-2 gap-1.5">
             <button
               type="button"
               data-testid="switch-asset-room-btn"
               aria-pressed={omniframeCharacters.some((c) => c.id.startsWith('char_towel'))}
-              title="Load the room chair and towel photo for segmentation"
+              title="Load the room chair and towel photo to edit by region"
               onClick={() => {
                 loadAssetObjects('asset-room-chair-towel')
                 const roomAsset = assets.find((a) => a.id === 'asset-room-chair-towel')
@@ -282,7 +285,7 @@ export function OmniFramePanel() {
               type="button"
               data-testid="switch-asset-deathnote-btn"
               aria-pressed={omniframeCharacters.some((c) => c.id.startsWith('char_light'))}
-              title="Load the Death Note characters video or image for segmentation"
+              title="Load the Death Note characters video or image to edit by region"
               onClick={() => {
                 loadAssetObjects('asset-death-note-vid')
               }}

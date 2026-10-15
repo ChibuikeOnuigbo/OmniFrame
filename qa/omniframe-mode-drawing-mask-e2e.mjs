@@ -241,8 +241,8 @@ async function runTest() {
     }
   }
 
-  // Verify Frame Attach Presets (Frame Hold lives under the Colour & Frames tab)
-  await activateSection('colour-frames')
+  // Verify Frame Attach Presets (Frame Hold is a top-level docker tab after the flatten)
+  await activateSection('frame-hold')
   const preset6f = page.locator('[data-testid="attach-preset-6f"]')
   await preset6f.click()
   await page.waitForTimeout(200)
@@ -259,7 +259,7 @@ async function runTest() {
   console.log(`[PASS] Frame attach picker confirmed: ${labelText}`)
 
   // Test "Add Directly to Video" toggle (Timeline Attachment section)
-  await activateSection('tools')
+  await activateSection('attachment')
   const attachToggle = page.locator('[data-testid="attach-directly-to-video-toggle"]')
   await attachToggle.waitFor({ state: 'visible' })
 

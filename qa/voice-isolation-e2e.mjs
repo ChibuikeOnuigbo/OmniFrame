@@ -111,6 +111,10 @@ try {
   // 5. Open Voice Isolation Modal from the sidebar panel launcher
   await page.keyboard.press('Escape')
   await openAudioPanel()
+  // This UI flow checks clip creation/selection, not neural inference. Select
+  // the lightweight DSP path here; Demucs is separately exercised with a
+  // deterministic mocked Worker so headless Chromium avoids the known OOM.
+  await page.locator('[data-testid="panel-engine-select"]').selectOption('omni-voicetarget')
   await page.getByTestId('panel-voice-settings-btn').click()
   const modal = page.locator('[data-testid="voice-isolation-modal"]')
   await modal.waitFor({ state: 'visible' })
@@ -131,8 +135,15 @@ try {
 
   await page.locator('[data-testid="execute-voice-isolation-btn"]').click()
 
-  // Wait for processing status and completion
-  await modal.waitFor({ state: 'hidden', timeout: 15000 })
+  // Wait for processing status and completion. If the operation fails, surface
+  // the inline diagnostic rather than reporting only a modal-close timeout.
+  try {
+    await modal.waitFor({ state: 'hidden', timeout: 15000 })
+  } catch (error) {
+    const diagnostic = await page.locator('[data-testid="voice-isolation-error-alert"]').textContent().catch(() => null)
+    console.error('[voice-isolation diagnostic]', diagnostic || await modal.innerText())
+    throw error
+  }
   assert((await modal.count()) === 0, 'Modal automatically closes upon DSP completion')
 
   // 7. Verify new synchronized clip and asset created

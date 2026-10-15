@@ -54,6 +54,50 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
    * about; tagging a stroke with such an id makes it invisible, because
    * renderAllPaintLayers then excludes it from both the base and mask passes.
    */
+
+  /**
+   * View-as-layers drawing bounds (normalized stage coords): when the mode
+   * is on, drawing only lands inside the selected clips' view regions — a
+   * clip masked from 100x100 down to 10x10 accepts drawing in the 10x10
+   * window only. Returns null when drawing is unrestricted.
+   */
+  const layeredRegions = (): { x: number; y: number; w: number; h: number }[] | null => {
+    const st = useEditor.getState()
+    if (!st.viewVideosAsLayers) return null
+    const ids = st.selectedClipIds.length > 0 ? st.selectedClipIds : st.selectedClipId ? [st.selectedClipId] : []
+    const regions: { x: number; y: number; w: number; h: number }[] = []
+    for (const id of ids) {
+      const clip = st.clips.find((c) => c.id === id)
+      if (!clip) continue
+      const asset = st.assets.find((a) => a.id === clip.assetId)
+      const vw = asset?.width || 1280
+      const vh = asset?.height || 720
+      const cover = Math.max(1280 / vw, 720 / vh)
+      const wN = ((vw * cover) / 1280) * Math.abs(clip.transform?.scale || 1)
+      const hN = ((vh * cover) / 720) * Math.abs(clip.transform?.scale || 1)
+      let rect = {
+        x: 0.5 + (clip.transform?.x || 0) / 1280 - wN / 2,
+        y: 0.5 + (clip.transform?.y || 0) / 720 - hN / 2,
+        w: wN,
+        h: hN,
+      }
+      const mask = clip.mask
+      if (mask?.enabled && (!mask.kind || mask.kind === 'shape')) {
+        const mRect = { x: mask.centerX - mask.width / 2, y: mask.centerY - mask.height / 2, w: mask.width, h: mask.height }
+        const ix = Math.max(rect.x, mRect.x)
+        const iy = Math.max(rect.y, mRect.y)
+        const iw = Math.min(rect.x + rect.w, mRect.x + mRect.w) - ix
+        const ih = Math.min(rect.y + rect.h, mRect.y + mRect.h) - iy
+        if (iw <= 0 || ih <= 0) continue
+        rect = { x: ix, y: iy, w: iw, h: ih }
+      }
+      regions.push(rect)
+    }
+    return regions
+  }
+  const inRegions = (pt: { x: number; y: number }, regions: { x: number; y: number; w: number; h: number }[]) =>
+    regions.some((r) => pt.x >= r.x && pt.x <= r.x + r.w && pt.y >= r.y && pt.y <= r.y + r.h)
+
   const activeLayer = paintLayers.find((l) => l.id === (activePaintLayerId || 'default-paint-layer'))
   const strokeMaskId =
     activeMaskId && activeLayer?.transparencyMask?.id === activeMaskId ? activeMaskId : undefined
@@ -268,7 +312,7 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       return
     }
 
-    if (drawingTool === 'clone') {
+    if (drawingTool === 'clone' || drawingTool === 'smart-patch') {
       if (e.altKey || !useEditor.getState().cloneSourcePoint) {
         const previewCanvas = document.getElementById('of-canvas') as HTMLCanvasElement | null
         const sampleUrl = previewCanvas ? previewCanvas.toDataURL() : undefined
@@ -506,7 +550,23 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
       return
     }
 
+    if (drawingTool === 'smart-patch' && currentPointsRef.current.length > 0) {
+      const points = [...currentPointsRef.current]
+      currentPointsRef.current = []
+      void useEditor.getState().applySmartPatch(points)
+      return
+    }
+
     if (currentPointsRef.current.length > 0) {
+      const regions = layeredRegions()
+      if (regions) {
+        // Outside the selected clips' view: nothing draws there.
+        currentPointsRef.current = currentPointsRef.current.filter((pt) => inRegions(pt, regions))
+        if (currentPointsRef.current.length === 0) {
+          currentPointsRef.current = []
+          return
+        }
+      }
       const finalStroke: DrawingStroke = {
         id: uid('strk'),
         layerId: activePaintLayerId,

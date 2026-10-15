@@ -1,0 +1,166 @@
+# Feature catalog and support boundaries
+
+**Reviewed:** 2026-10-14  
+**Scope:** the left-dock panel registry and entry points, the package's QA scripts, and the existing format/audio/desktop research notes. This is a discoverability and support inventory—not a line-by-line certification of every editor feature or a claim that every listed QA script was run in this review.
+
+## How to read this catalog
+
+- **In the UI** means the feature has a visible panel or action in the current web editor. It does not promise that every input file, codec, browser, model, GPU, or operating system will work.
+- **Bounded support** means only the named subset is imported or exported. A flattened preview, a partial parser, or an experimental model is not full native-file fidelity.
+- A path in the **regression coverage** column identifies an automated test that exists in this checkout. The **verification performed in this review** section separately lists the tests actually rerun on 2026-10-14.
+- For continuing work, prefer **`.omni`**. Other formats are capability-checked subsets; read the loss warning and use `.omni` when unsure.
+
+## Discovering the editor's tools
+
+The editor has **12 top-level panels**, grouped in the left rail as Video, 2D, and 3D. The rail's LUT badge remains visible even when the side panel is closed. The **Find a tool or panel** search in that rail searches panel names and feature descriptions (for example, “voice isolation”, “.cube”, “PSD”, “Procreate”, or “OBJ”), opens the matching panel, and selects its category. Search results preserve explicit unsupported-format wording rather than presenting an unsupported format as an importer.
+
+The tool finder is a panel navigator, not a promise that every result is a standalone tool or that it supports a file type beyond the wording shown. Its dialog is keyboard dismissible, returns focus to the trigger, and fits the tested 390-pixel mobile viewport. Category filters and the original panel controls remain available; the finder supplements rather than hides or replaces them.
+
+## Temporary visual auditions
+
+Visual presets are now **audition first, commit second**:
+
+- Clicking a built-in or uploaded LUT, a quick adjustment-layer preset, a clip-filter preset, a title preset/custom title preview, or a transition preset starts playback from the beginning of the relevant clip, title, or transition window.
+- The audition is held outside the timeline document: it creates no clip, LUT entry, effect change, transition, undo step, or saved-project content. The monitor labels it “Temporary audition · not in the project until applied.”
+- **Apply** in the monitor commits that one audition exactly once. **Stop** discards it. Either action restores the playhead and playback speed from before the audition; audition playback also pauses on its final frame so the result can be inspected before choosing.
+- Effects and LUTs audition on the selected visual clip/layer when one exists. Without a selection, they audition as a virtual adjustment layer over the active footage, leaving higher tracks such as titles outside the temporary grade.
+- Transition auditions prefer a cut touching the selected clip, otherwise the cut nearest the playhead. They only use adjacent clips on the same visible track with a gap of at most 0.5s and at least half the chosen transition duration on both sides; if no cut qualifies, the panel explains what is missing instead of inventing a one-clip transition.
+- Title presets and the custom-title Preview action audition as a virtual overlay clip at the playhead. Apply creates and selects the real title clip on an available/new track; Stop leaves the timeline unchanged.
+- Clicking a placed transition replays its existing window and offers no Apply button, so replay cannot duplicate it.
+- The selected-clip Play control replays that clip from its start with its current committed look. Individual effect sliders remain direct live controls: dragging one intentionally edits the selected clip/layer immediately and updates the monitor, rather than starting a separate preset audition.
+
+## Top-level feature inventory
+
+| Panel | What is surfaced | Important boundary | Regression coverage in the repository |
+|---|---|---|---|
+| **Media Library** | Video, image, and audio assets; search/import; bounded layered-artwork import. | ORA, PSD, and KRA are limited as described below. Procreate is unsupported. Browser codec and memory limits still apply. | `qa/media-library-e2e.mjs`, `qa/layered-artwork-import-e2e.mjs`, `qa/psd-hair-animation-e2e.mjs` |
+| **Text & Titles** | Text/title and caption-oriented timeline tools. Presets and custom titles audition as virtual overlay clips before Apply creates a timeline title. | Rendering and exported fonts depend on browser/platform font availability; editable OmniFrame text remains in `.omni`. | `qa/visual-preview-e2e.mjs`, `qa/unified-preview-text-effects-mobile-e2e.mjs` |
+| **Transitions** | Timeline transitions, including dissolve/wipe/slide/zoom choices. Clicking a preset auditions it temporarily at the nearest usable cut; Apply in the monitor commits it. Placed transitions can be replayed from their own window without duplicating them. | A transition is an OmniFrame timeline effect; it is not retained by flattened PNG or geometry-only OBJ. The audition finder requires two adjacent clips on one visible track, separated by no more than 0.5s, with at least half the transition duration available on each side. | `qa/visual-preview-e2e.mjs`, `qa/unified-preview-text-effects-mobile-e2e.mjs` |
+| **LUTs & Adjustments** | 25 built-in looks with a compact 12-look first view, on-demand full gallery, search/category filters, and real sample-image thumbnails rendered through each LUT and cropped with `object-fit: cover`; multiple `.cube` imports, temporary look/effect auditions, clip grades, stackable adjustment clips, effect controls, and mattes. Adjustment clips process content below their track placement; a compound sequence can host the layer inside its nested timeline. | LUT/effect edits are OmniFrame state. PNG flattens the current still; OBJ does not include them. Uploading `.cube` files now only catalogs them; preview and Apply are separate explicit steps. | `qa/adjustments-lut-e2e.mjs`, `qa/visual-preview-e2e.mjs` |
+| **Desktop Pack** | One sidebar tab bundling the screen-life toolkit into five CapCut-style sections (horizontal segmented strip), each filed into collapsible folders (Explorer tree / ChatGPT-sidebar pattern: chevron + folder + item count + indented contents, first folder open by default) with a ChatGPT-style search box filtering across folders. 36 procedurally drawn transparent 1280×720 PNG assets — Desktops (macOS/Windows/Linux/dark), Browsers (Chrome Mac/Win, Safari, Firefox, Edge), App Windows (Explorer, code editor, terminal, chat, plain OS windows), Devices & Social (phone/tablet frames, YouTube player, post card, macOS/Windows notifications, shortcut key caps, progress bar), Pointers & Clicks (OS arrows, hand, I-beam, click ring, highlight box, magnifier, censor bar), Frames & Light overlays — plus six one-click bundles (Screen-Life macOS/Windows, Tutorial, Social, Privacy, Streamer) that stack layered clips at the playhead, six edit grades that audition in the monitor and commit on Apply, and quick 3D primitives. Inspired by desktop-emulation ('screen-life') editing, where the whole video plays out inside fake OS/browser windows. | Overlays/bundles are ordinary image clips on their own tracks (trim/stretch freely; bundles are stacked clips, not a grouped unit). Pack art is stylized, not pixel-perfect replicas of real OS chrome. | `qa/desktop-pack-e2e.mjs` |
+| **Audio** | Voice/music isolation, four-stem separation, slowed-audio correction, key/BPM estimates, reviewed vocal-range patching, independent pitch/tempo rendering, and local microphone recording with basic EQ/reverb. | Model downloads/runtime, browser memory, and the selected audio affect results. Key/BPM and VAD ranges are suggestions. **DeVoice parity is not achieved or claimed**; see the measured gap in [AUDIO-TOOLS-RESEARCH.md](AUDIO-TOOLS-RESEARCH.md). | `qa/audio-isolation-panel-e2e.mjs`, `qa/audio-demucs-stems-e2e.mjs`, `qa/audio-vocal-patch-e2e.mjs`, `qa/audio-analysis-e2e.mjs`, `qa/audio-pitch-tempo-e2e.mjs`, `qa/audio-recorder-e2e.mjs`, `qa/voice-demucs-model-e2e.mjs` |
+| **Link & Groups** | Clip linking/parenting and ripple-group workflows. | These remain timeline relationships, not a flattened media-file layer hierarchy. | `qa/advanced-e2e.mjs`, `qa/compound-clip-colors-character-shift-e2e.mjs` |
+| **Drawing & Paint** | Raster/vector drawing, paint controls, transparency masks, onion-skin animation, and Smart Patch donor-to-target cloning by click, brush stroke, or active selection. Smart Patch works on stills/video and can follow Current, Range, All, or the selected OmniFrame scope. | These are OmniFrame editing features; this inventory does not imply native Krita/Photoshop round-trip. Smart Patch applies the same target operation per addressed frame; it does not motion-track a target automatically. | `qa/smart-patch-e2e.mjs`, `qa/drawing-layout-e2e.mjs`, `qa/krita-transparency-mask-paint-e2e.mjs`, `qa/onion-skin-cel-animation-e2e.mjs` |
+| **OmniFrame** | Frame-scope application tool (not an AI feature): apply edits to the whole frame or one region — select or drag a region, resize it, then shift, recolor, or clean it across Current/Range/All frame scopes, including temporal Analyze & Inpaint donor review. | Region work is selection/geometry based; donor analysis suggests useful frames and does not guarantee perfect temporal consistency or motion tracking. | `qa/temporal-inpaint-e2e.mjs`, `qa/rotomask-e2e.mjs`, `qa/omniframe-mode-vetting-e2e.mjs`, `qa/omniframe-clean-infill-motion-e2e.mjs`, `qa/omniframe-selection-masking-recolor-e2e.mjs` |
+| **Mask (clip visibility)** | CapCut/After Effects-style mask on any image/video/text/compound clip, in the clip inspector's Mask tab: rectangle/ellipse shape, center/size/rotation, feather, expansion, opacity, draw-on-monitor with move/corner-resize handles, and an Inside/Outside toggle — Inside keeps only the region, Outside keeps frame − region (for example, mask a head to keep the head, or invert to keep the body). It hides the clip's own rendered pixels including its filters/LUTs; adjustment clips keep the separate Effect Mask that limits where their grade applies. All mask edits are undoable (Ctrl+Z). Modeled on the CapCut mask workflow (select upper clip → Mask → shape, drag/resize/rotate, feather, invert) and After Effects layer masks (feather, opacity, expansion, inverted). | Mask coordinates are frame-relative and are not keyframed or motion-tracked in this version; one mask per clip. This Mask tool is distinct from selection masking (OmniFrame Select/RotoMask), Drawing transparency masks, and the adjustment Effect Mask. | `qa/mask-tool-e2e.mjs` |
+| **Masking & Tracking** | Mattes and Lucas–Kanade-style tracking workflows. | Tracking is bounded by footage texture, motion, and frame quality; it is not a universal object-tracking guarantee. | `qa/rotomask-e2e.mjs`, `qa/masking-tracking-mobile-drawing-e2e.mjs` |
+| **Rigging** | Bones, pivots, puppet pins, and artwork-layer rig workflows. | Imports used for a rig are still subject to the layered-artwork boundaries below. | `qa/rigging-unit.mjs`, `qa/rigging-smoke.mjs`, `qa/psd-hair-animation-e2e.mjs` |
+| **3D Scene** | Scene viewport, primitive geometry, materials/camera controls, and timeline composition. | OBJ is available only when the active scene has exportable geometry; it is geometry-only and omits materials, textures, animation, timeline, media, and effects. | `qa/three-d-video-plane-e2e.mjs`, `qa/keyframe-graph-3d-e2e.mjs`, `qa/blender-rotation-e2e.mjs` |
+
+The detailed adjustment/LUT and audio research notes are [ADJUSTMENTS-AND-LOOKS-RESEARCH.md](ADJUSTMENTS-AND-LOOKS-RESEARCH.md) and [AUDIO-TOOLS-RESEARCH.md](AUDIO-TOOLS-RESEARCH.md). This table is not a substitute for those implementation and quality records.
+
+## File support: what is and is not promised
+
+| File family | Current scope | Not preserved / important caveat |
+|---|---|---|
+| **`.omni`** | Preferred editable OmniFrame project. Versioned bundle of project/timeline state and supported embedded session media, with integrity checks. | OmniFrame-to-OmniFrame restore, not a PSD/KRA/ORA or other application's native project. Undo history and active runtime jobs are not saved; see [OMNI-PROJECT-AND-EXPORTS.md](OMNI-PROJECT-AND-EXPORTS.md). |
+| **OpenRaster `.ora`** | Visible, decodable PNG raster-layer subset with supported names/order/offsets/opacity/blends; recognized unsupported composition can fall back to the saved merged image. | Not all groups, masks, text/vector layers, editor extensions, profiles, or blend semantics are reconstructed. |
+| **Photoshop `.psd`** | Guarded RGB/8-bit raster subset; a saved merged composite is used for recognized unsupported composition when available. | Not full Photoshop fidelity, all color modes/bit depths, arbitrary effects/smart objects, or a PSD writer. |
+| **Krita `.kra`** | The saved merged composite as a flat still. | The KRA layer tree, animation, masks, filters, profile/proofing data, and native structure are not imported. Export supported raster layers as ORA when an editable layer subset is needed. |
+| **Procreate `.procreate`** | **Unsupported.** The import flow gives conversion guidance rather than parsing version-dependent native archives. | Do not claim Procreate import or layer fidelity. Export a supported interchange/raster format from Procreate first. |
+| **Other painting-app formats** | No full native support is claimed. Recognized unsupported extensions may receive conversion guidance; ordinary supported raster images remain image imports. | XCF, Clip Studio `.clip`/`.cmc`, PSB, Affinity, Paint.NET, FireAlpaca/MediBang, Corel Painter, and Illustrator are not promoted as native editable imports here. Check [ARTWORK-FORMAT-IMPORT-RESEARCH.md](ARTWORK-FORMAT-IMPORT-RESEARCH.md) for individual evidence and conversion guidance. |
+| **`.cube` LUT** | Built-in LUTs plus multiple uploaded 3D `.cube` files; uploaded looks can be applied to clips/layers and adjusted in the editor. | A LUT is a color transform, not an editable project or footage file. Keep the `.omni` project for the placed layer/clip state. |
+
+The import table is deliberately conservative: a file extension being recognized is not the same as full native support. The detailed guarded parser behavior and tests are in [ARTWORK-FORMAT-IMPORT-RESEARCH.md](ARTWORK-FORMAT-IMPORT-RESEARCH.md).
+
+## Capability-checked export matrix
+
+The exact live gate and loss warnings are documented in [OMNI-PROJECT-AND-EXPORTS.md](OMNI-PROJECT-AND-EXPORTS.md). The short form is:
+
+| Visible project content | Export choices exposed |
+|---|---|
+| Still-only image/text timeline with a visible still at the playhead | `.omni` + flattened PNG; **no video option** |
+| Image + video (or other visible time-varying/audio/3D/compound content) | `.omni` + video when a visible picture can be rendered; PNG withheld |
+| Audio-only timeline | `.omni`; no blank video or still subset |
+| Active 3D mode with exportable scene geometry | `.omni` + OBJ geometry subset; OBJ loss warning; PNG withheld |
+| No applicable subset content | `.omni` only |
+
+The actual export menu is driven by visible tracks/content. A PNG is one flattened Program Monitor frame, not the editable still project. An OBJ contains geometry, not a complete scene. If unsure, save `.omni`.
+
+## Web, desktop, and runtime-dependent support
+
+- **Web:** `npm run dev` / `npm run build` is the directly exercised product path. This review rebuilt it successfully. Browser media codecs, `MediaRecorder`, GPU/WebGL, memory ceilings, microphone permissions, and model loading can change behavior.
+- **Desktop:** a Tauri shell shares the editor code. Its packaging/build instructions are in [DESKTOP.md](DESKTOP.md). The native Rust/Tauri package was not built or platform-tested during this feature/UI review; do not treat the web build as a desktop acceptance test.
+- **Voice/music model quality:** the local Demucs path is the strongest installed local separator, but a full real-song DeVoice quality match is still an open gap. Existing numeric comparisons are heuristic; they are not ground-truth metrics. Do not promise an exact DeVoice result or advertise unavailable BS-RoFormer weights as active. See the measured study in [AUDIO-TOOLS-RESEARCH.md](AUDIO-TOOLS-RESEARCH.md).
+
+## Verification performed in this review (2026-10-14)
+
+| Check | Result |
+|---|---|
+| `npm run typecheck` | Passed. |
+| `npm run build` | Passed. Vite still reports the repository's existing large-main-chunk and ineffective-dynamic-import warnings. |
+| `node qa/omni-project-e2e.mjs` | **15 passed / 0 failed**, including a large Smart Patch media attachment round trip, still-only PNG/no-video gating, audio-only export gating, mixed image+video warning, OBJ subset, and tamper rejection. |
+| `node qa/tool-finder-e2e.mjs` | Passed: Smart Patch and temporal-inpainting searches, panel navigation, explicit Procreate wording, Escape dismissal, focus return, mobile dialog fit, and no browser errors. |
+| `node qa/adjustments-lut-e2e.mjs` | Passed: all 25 bundled LUT assets, compact 12-look default with expand-to-25, per-LUT sample thumbnails that differ by transform and crop without stretching, focus descriptions, temporary clip/layer auditions followed by Apply, import-only multi-upload followed by per-look preview/Apply stacking, mask behavior, and selection handling. |
+| `node qa/visual-preview-e2e.mjs` | Passed: nearest usable transition cut skips a nearer too-short pair, cross-dissolve pixels blend temporarily, Invert pixels render and revert, Stop restores playhead/effects, Apply commits exactly once, placed transitions replay without duplication, quick layers remain virtual until Apply, and title presets audition as virtual overlays before Apply. |
+| `node qa/unified-preview-text-effects-mobile-e2e.mjs` | **29 passed:** title, clip-effect, and transition auditions do not commit before monitor Apply, followed by successful committed checks and the mobile checks. |
+| `node qa/smart-patch-e2e.mjs` | Passed: 12-frame video scope, 4-frame OmniFrame-linked range, masked active selection, drawn/click target paths, and still-image patch. |
+| `node qa/temporal-inpaint-e2e.mjs` | Passed: 6 donor previews, 10 target frames, a frame-addressed patch clip, and stale review reset after scope changes. |
+| `node qa/rotomask-e2e.mjs` / `node qa/omniframe-clean-infill-motion-e2e.mjs` | RotoMask **19/19**; clean-infill, scope, motion, and rearrangement subtests passed. |
+| Audio panel, recorder, pitch/tempo, analysis, and patch E2Es | All five targeted scripts passed after the audio-panel labels were raised from 8px to 9px and low-contrast secondary text was lightened. |
+| Sequential UI affordance audit | **0 findings, 0 duplicate test IDs.** |
+| Sequential UI overflow audit | **0 findings** at 1920, 1440, 1280, 1024, and 900px. |
+| UI density audit | Last recorded baseline: **644 raw findings / 171 roots**, with 0 clipped-text findings. This density scan was not rerun after the compact LUT gallery and scope-link UI updates. |
+| Sequential UI strict audit | Latest run: **0 findings / 0 instances** across the tested viewports and overlays. |
+
+### UI audit interpretation
+
+The affordance audit checks naming/interaction affordances; the overflow audit tests its configured desktop/tablet widths; the strict audit is a seeded, heuristic scan; and density counts visual text/control patterns rather than product intent. The latest strict audit has **0 findings**. The LUT gallery now opens with 12 looks and exposes the full 25-look catalog on demand, with search and category filters still available; its controls are grouped into search/import, style filters, and look choices. The density report remains a historical baseline and was not rerun after this compact-gallery change. Use audits to locate concrete issues and verify them in the rendered UI; do not treat every heuristic count as a confirmed defect.
+
+## Screenshots and UI concepts
+
+- `evidence/screenshots/omniframe-smart-patch-temporal.png` — actual OmniFrame capture showing the donor, Current/Range/All/Omni scope chips, canvas, and patch status.
+- `evidence/screenshots/omniframe-smart-patch-omniframe-scope.png` — actual OmniFrame capture with Smart Patch linked to an OmniFrame-selected range and concise scope status.
+- `evidence/screenshots/omniframe-temporal-inpaint-review.png` — actual OmniFrame capture showing donor candidates and selected target range.
+- `evidence/screenshots/omniframe-lut-gallery-live.png` — actual OmniFrame capture of the LUT gallery using transformed sample-image thumbnails; previews fill their cards by cover-cropping rather than stretching.
+- `evidence/screenshots/omniframe-visual-preview-audition.png` — actual OmniFrame capture mid-cross-dissolve: the monitor shows the temporary-audition Apply/Stop controls and the timeline contains no transition item for the audition.
+- `evidence/screenshots/omniframe-layered-drawing-maskview.png` — actual OmniFrame capture: icon-first Drawing panel (As layers / To clips with info tips, toolbox, Smart Patch docker), the right-panel sub-tool dock hosting Masking, and a compound clip on the timeline.
+- `evidence/screenshots/omniframe-drawing-workspace.png` — actual OmniFrame capture of the Krita-style Drawing workspace: icon Toolbox (Freehand / Shapes / Retouch / Colour groups), tabbed dockers below, full-word wrapped headers, and the Audio tab shelved from the rail.
+- `evidence/screenshots/omniframe-desktop-pack.png` — actual OmniFrame capture of the Desktop Pack: the five-section horizontal strip (with its right-edge scroll arrow), Fake Desktop cards, window/cursor asset cards, the six-bundle Packs folder, and a full screen-life composite in the monitor (macOS desktop + Chrome window + cursor with click ring under letterbox bars) stacked layer-per-track on the timeline.
+- `evidence/screenshots/omniframe-mask-tool.png` — actual OmniFrame capture of the Mask tool: a rectangle drawn on the monitor keeps only that region of the top clip visible over the photo beneath, with the Inside/Outside toggle and feather/expand/opacity controls in the inspector.
+- `evidence/screenshots/omniframe-text-preview-audition.png` — actual OmniFrame capture of a Cinematic Title audition: “EPISODE ONE” renders in the monitor while no title clip exists in the timeline.
+- `evidence/ui-mockups/smart-patch-omniframe-linked-concept.png` and `evidence/ui-mockups/temporal-inpaint-review-concept.png` — AI concept mockups generated from OmniFrame captures. They are visual explorations, not screenshots of the running app.
+- **Krita reference limitation:** Krita is not installed in this workspace and no authentic Krita toolbox screenshot was provided. Images with “Krita” in their filenames under `evidence/screenshots` are OmniFrame captures, not Krita references. The mockups use broad layout/alignment ideas only and do not claim Krita provenance.
+
+## Per-feature checklist
+
+The checked panel items below mean **the panel and its boundary were inventoried and the relevant regression path was identified**. They do not mean every panel test was rerun in this pass. Exact current-turn test results are separately recorded above.
+
+### User-facing panels
+
+- [x] **Media Library** — list normal media import and bounded ORA/PSD/KRA scope; keep Procreate explicitly unsupported. `qa/media-library-e2e.mjs`, `qa/layered-artwork-import-e2e.mjs`, and `qa/psd-hair-animation-e2e.mjs` identified; **not rerun in this pass**.
+- [x] **Text & Titles** — title presets/custom titles audition as virtual overlays and become real selected clips only on Apply. `node qa/visual-preview-e2e.mjs` and `node qa/unified-preview-text-effects-mobile-e2e.mjs` **passed this pass**.
+- [x] **Transitions** — presets audition at the nearest usable cut and commit only from monitor Apply; placed transitions replay without duplication. `node qa/visual-preview-e2e.mjs` and `node qa/unified-preview-text-effects-mobile-e2e.mjs` **passed this pass**.
+- [x] **LUTs & Adjustments** — retain all 25 looks with a compact default view, import-only multiple `.cube` uploads, visible descriptions, accessible names, temporary auditions, and clip/layer scope. `node qa/adjustments-lut-e2e.mjs` and `node qa/visual-preview-e2e.mjs` **passed this pass**.
+- [x] **Layered drawing, drawing-to-clips, Video Mask View, dockers** — "View videos as layers" stamps strokes with exactly the clips selected at draw time (strict: only while ON); layered art composites above its anchor clip, clipped to the clips' view region (a 100x100 clip masked to 10x10 accepts drawing only there). "Convert drawing to clips" (pure planner, 10,000-scenario fuzz: exact frame coverage, partition, strata ordering) bakes strokes into drawing clips spanning precisely the covered frames — frames 1-15 and 123-126 stay two clips — with payloads untouched and one undo step. **Video Mask View** replaces the Mask section: Split (infinite rotatable line, flip H/V/side), Shape, Custom (straight/curved points, canvas editing), and Text (uploaded fonts persisted) kinds, Include/Exclude, keyframed view windows with linear/smooth/ease curves. Compound clips show trimmed head/tail as hatched cut voids inside the nested timeline. CapCut-style **In/Out range export** (I/O keys, grey shades, Cancel chip) from the linked tutorial. **Settings → Dockers** shows the active mode and toggles left-rail panels + right-panel sub-tools (Masking/Smart Patch/RotoMask now docked on the right as icons); the Drawing rail icon gained an animated chevron flyout collecting five brand-tinted drawing sub-tools. `node qa/drawing-to-clips-fuzz.mjs` (10,000 scenarios) and `node qa/layered-drawing-maskview-e2e.mjs` **passed this pass**; CapCut tutorial scan (119 title-indexed videos) in `docs/capcut-pc-tutorials-channel.md`.
+- [x] **Krita-style drawing workspace** — the Drawing panel now leads with a permanent icon Toolbox (grouped tiles, tooltip names, never tabbed/accordioned away) above flattened tabbed dockers; picking a tool brings its options forward (Smart Patch → Smart Patch docker, shapes → Tool Parameters, paint → Brush & Layers). Panels follow context Krita-style instead of packing modes: enabling drawing/3D from the Preview opens the matching panel, the Drawing workspace shelves the Audio rail tab, and panels that host their own drawing/3D controls (Tracking, OmniFrame, Pack) are never yanked away. Section headers wrap at natural size instead of truncating (whole-UI overflow audit: 0 issues). `node qa/drawing-workspace-e2e.mjs` **passed this pass**; regressions: drawing-layout, smart-patch, omniframe-mode-drawing-mask, krita-transparency-mask, onion-skin, desktop-pack, mask-tool, tool-finder, ui-strict-audit all pass.
+- [x] **Desktop Pack** — five-section screen-life tab with 36 generated assets in collapsible folders, cross-folder search, six stackable bundles, edit-preset auditions, and quick 3D. `node qa/desktop-pack-e2e.mjs` **passed this pass** (incl. closed-folder hiding, search filtering, bundle stacking).
+- [x] **Horizontal section strips & overflow** — panel section tabs are now single-row horizontal strips (CapCut pattern, like its top toolbar with an overflow arrow): with **Hide horizontal overflow** on (Settings → Accessibility, default on) their scrollbar is invisible and they scroll via pinned edge arrows (hover scrolls, click pages), mouse wheel, or drag; turning it off restores native scrollbars everywhere. `node qa/desktop-pack-e2e.mjs` **passed this pass**.
+- [x] **Audio** — index isolation, stems, slowed correction, analysis, reviewed patching, pitch/tempo, and recording; raise audio microcopy from 8px to 9px and improve secondary-text contrast. `qa:audio-panel`, `qa:audio-recorder`, `qa:audio-pitch-tempo`, `qa:audio-analysis`, and `qa:audio-patch` **all passed this pass**. The full Demucs real-media/quality suite was **not** rerun.
+- [x] **Link & Groups** — identify parent/ripple and compound-clip regression paths. `qa/advanced-e2e.mjs` and `qa/compound-clip-colors-character-shift-e2e.mjs` identified; **not rerun in this pass**.
+- [x] **Drawing & Paint** — Smart Patch is covered for video/still, drawn and clicked targets, active selection masks, frame ranges, and OmniFrame scope sync. `node qa/smart-patch-e2e.mjs` **passed this pass**; the broader drawing and onion-skin suites were not rerun.
+- [x] **OmniFrame** — reframed as a non-AI frame-scope tool (whole frame or selected region: drag, resize, shift, recolor, clean); temporal Analyze & Inpaint donor review and application passed; RotoMask and clean-infill/motion also passed this pass.
+- [x] **Mask (clip visibility)** — Inside keeps only the region, Outside keeps frame − region; feather/expansion/opacity/rotation, monitor draw/move/resize, effect hiding, and undo all verified. `node qa/mask-tool-e2e.mjs` **passed this pass**.
+- [x] **Masking & Tracking** — `node qa/rotomask-e2e.mjs` **19/19 passed**. The mobile tracking-specific suite was not rerun.
+- [x] **Rigging** — identify rigging smoke/unit and PSD-hair coverage. `qa/rigging-unit.mjs`, `qa/rigging-smoke.mjs`, and `qa/psd-hair-animation-e2e.mjs` identified; **not rerun in this pass**.
+- [x] **3D Scene** — identify viewport/keyframe/rotation suites and verify the exported OBJ subset separately. The OBJ subset was checked by `qa:omni-project`; the broader viewport suites were **not rerun in this pass**.
+
+### Shared workflows and accessibility
+
+- [x] **Tool discovery** — searchable panel finder supplements (does not replace) categories and existing panels; `node qa/tool-finder-e2e.mjs` passed Smart Patch/temporal-inpaint search, panel navigation, support wording, keyboard dismissal/focus return, and 390px fit.
+- [x] **Temporary visual auditions** — LUTs, uploaded looks, quick layers, clip-filter presets, titles, and transitions play from the relevant clip/title/cut without timeline or project mutation; monitor Apply commits once, Stop restores, and placed transitions replay without duplication. `node qa/visual-preview-e2e.mjs` **passed this pass**.
+- [x] **Still-only export** — PNG offered when an eligible visible still is at the playhead; no primary or menu video option. Covered in `qa/omni-project-e2e.mjs` (**15 passed / 0 failed overall**).
+- [x] **Audio-only export** — no blank video or PNG offered; `.omni` remains. Covered in `qa:omni-project`.
+- [x] **Mixed timeline export** — image+video keeps video and withholds PNG with a loss warning. Covered in `qa:omni-project`.
+- [x] **3D export** — OBJ geometry is checked and described as a lossy subset; `.omni` remains the project recommendation. Covered in `qa:omni-project`.
+- [x] **Readable/keyboard UI** — compact LUT discovery, Smart Patch grouping, keyboard/focus behavior, and visible status previews; the latest strict audit reports 0 findings. Earlier affordance and overflow audits also reported 0; they were not rerun after the newest scope-link refinement.
+- [x] **Build checks** — `npm run typecheck` and `npm run build` passed; the existing bundle-size and ineffective-dynamic-import warnings remain.
+
+### Explicitly open work (not claimed complete)
+
+- [ ] Obtain authentic Krita screenshots/toolbox references from a local Krita install or user-provided captures before making any Krita-specific visual comparison; current screenshot references are OmniFrame only.
+- [ ] Rerun broader media-import, drawing-layout/transparency/onion-skin, transition/text, rigging/tracking, OmniFrame selection/recolor, and full 3D suites; the focused Smart Patch, temporal-inpaint, RotoMask, and clean-infill/motion paths passed here.
+- [ ] Rerun the Demucs real-model/stem/slow-correction suites and evaluate full-length real slowed/reverb quality; DeVoice parity remains unachieved and must not be advertised.
+- [ ] Build and exercise the native Tauri desktop package on supported operating systems; the web build is not desktop certification.
+- [ ] Add new native painting-app import support only after representative files, a reliable parser, clear fallback behavior, and round-trip/safety tests exist. Do not claim Procreate support or promote formats because a parser package exists.
+- [ ] Continue the broader repository/channel and model research separately; this document covers the dock catalog and named evidence paths, not an exhaustive review of every code path, video, or external application.

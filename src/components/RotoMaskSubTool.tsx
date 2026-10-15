@@ -18,6 +18,8 @@ import {
   Check,
   Loader2,
   Clock,
+  Search,
+  CheckCircle2,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import PanelSection from './PanelSection'
@@ -49,6 +51,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
   const rotoScope = useEditor((s) => s.rotoScope)
   const rotoFrames = useEditor((s) => s.rotoFrames)
   const rotoTracking = useEditor((s) => s.rotoTracking)
+  const rotoInpaint = useEditor((s) => s.rotoInpaint)
   const rotoTool = useEditor((s) => s.rotoTool)
   const rotoTolerance = useEditor((s) => s.rotoTolerance)
   const rotoBrushRadius = useEditor((s) => s.rotoBrushRadius)
@@ -64,6 +67,9 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
   const setRotoTolerance = useEditor((s) => s.setRotoTolerance)
   const setRotoBrushRadius = useEditor((s) => s.setRotoBrushRadius)
   const trackRotoMask = useEditor((s) => s.trackRotoMask)
+  const analyzeRotoInpaint = useEditor((s) => s.analyzeRotoInpaint)
+  const applyRotoInpaint = useEditor((s) => s.applyRotoInpaint)
+  const selectRotoInpaintDonor = useEditor((s) => s.selectRotoInpaintDonor)
   const rotoExtractToObject = useEditor((s) => s.rotoExtractToObject)
   const rotoToDrawingMask = useEditor((s) => s.rotoToDrawingMask)
   const rotoExportLumaMatte = useEditor((s) => s.rotoExportLumaMatte)
@@ -75,6 +81,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
   const models = allRotoModels({ rotoImportedModels })
   const posCount = rotoClicks.filter((c) => c.positive).length
   const negCount = rotoClicks.length - posCount
+  const inpaintBusy = rotoInpaint.phase === 'analyzing' || rotoInpaint.phase === 'applying'
 
   const btn =
     'flex min-h-8 items-center justify-center gap-1.5 rounded-lg border px-2 py-1.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-40'
@@ -86,7 +93,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
       className="flex flex-col gap-2.5 p-2.5 rounded-xl bg-ink-950/70 border border-ink-800 text-xs text-ink-200"
     >
       {/* Header */}
-      <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
+      <div className="flex flex-wrap items-center justify-between gap-1.5 pb-1.5 border-b border-ink-800">
         <div className="flex items-center gap-1.5 font-semibold text-ink-100">
           <Crosshair size={13} className="text-fuchsia-400" />
           <span>RotoMask Sub-Tool</span>
@@ -104,10 +111,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
         <div className="mb-0.5 font-semibold uppercase tracking-wide text-fuchsia-200">
           {context === 'omniframe' ? 'OmniFrame roto mask' : 'Drawing roto mask'}
         </div>
-        <p>
-          Roto selections are workflow data. Convert them to a Drawing mask (or an OmniFrame
-          layer) for them to affect the final export — same rule as every other selection.
-        </p>
+        <p>Apply as a Drawing mask or OmniFrame layer to include it in output.</p>
       </div>
 
       {/* 1. Engine & Models */}
@@ -479,6 +483,74 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
               </div>
             ))}
           </div>
+        )}
+      </PanelSection>
+
+      {/* Temporal donor scan is a separate workflow from Smart Patch. */}
+      <PanelSection title="Analyze & Inpaint" hint={rotoInpaint.candidates.length ? `${rotoInpaint.candidates.length} donors` : undefined} testId="roto-inpaint" defaultOpen={false}>
+        <div className="flex items-center justify-between gap-2">
+          <span className="min-w-0 truncate text-[10px] text-ink-400">Target: {rotoScope.mode === 'all' ? 'all frames' : rotoScope.mode === 'range' ? `${rotoScope.start.toFixed(1)}–${rotoScope.end.toFixed(1)}s` : 'current frame'}</span>
+          <button
+            type="button"
+            data-testid="roto-inpaint-analyze"
+            disabled={!rotoResult || rotoBusy || inpaintBusy}
+            onClick={() => void analyzeRotoInpaint()}
+            title="Scan the full clip for low-overlap donor frames; cleanup is applied only to the selected scope"
+            className={`${btnIdle} shrink-0 border-cyan-500/35 text-cyan-100 hover:bg-cyan-500/15`}
+          >
+            {rotoInpaint.phase === 'analyzing' ? <Loader2 size={12} className="animate-spin" /> : <Search size={12} />}
+            <span>{rotoInpaint.phase === 'analyzing' ? 'Scanning…' : 'Analyze clip'}</span>
+          </button>
+        </div>
+        {inpaintBusy && rotoInpaint.total > 0 && (
+          <div data-testid="roto-inpaint-progress" className="pt-1 text-[10px] font-mono text-ink-500">{rotoInpaint.done}/{rotoInpaint.total} frames</div>
+        )}
+        {rotoInpaint.phase !== 'idle' && (
+          <div data-testid="roto-inpaint-status" aria-live="polite" className={`text-[10px] leading-snug ${rotoInpaint.phase === 'error' ? 'text-red-300' : rotoInpaint.phase === 'done' ? 'text-emerald-300' : 'text-ink-400'}`}>
+            {rotoInpaint.message}
+          </div>
+        )}
+        {rotoInpaint.phase === 'ready' && (
+          <>
+            <div className="flex items-center justify-between gap-2 pt-1">
+              <span className="text-[10px] font-medium text-ink-300">Source selection</span>
+              <button type="button" data-testid="roto-inpaint-auto-source" aria-pressed={rotoInpaint.selectedDonorFrame === null} onClick={() => selectRotoInpaintDonor(null)} className={`rounded border px-1.5 py-1 text-[9px] ${rotoInpaint.selectedDonorFrame === null ? 'border-cyan-400 bg-cyan-500/15 text-cyan-100' : 'border-ink-700 bg-ink-900 text-ink-400'}`}>
+                Auto · per frame
+              </button>
+            </div>
+            {rotoInpaint.candidates.length > 0 && (
+              <div className="grid grid-cols-3 gap-1.5" data-testid="roto-inpaint-candidates">
+                {rotoInpaint.candidates.slice(0, 6).map((candidate) => (
+                  <button
+                    key={candidate.frame}
+                    type="button"
+                    data-testid={`roto-inpaint-donor-${candidate.frame}`}
+                    aria-pressed={rotoInpaint.selectedDonorFrame === candidate.frame}
+                    onClick={() => selectRotoInpaintDonor(candidate.frame)}
+                    title={`Frame ${candidate.frame} · match ${(candidate.score * 100).toFixed(0)}% · overlap ${(candidate.overlap * 100).toFixed(0)}%`}
+                    className={`relative overflow-hidden rounded border text-left ${rotoInpaint.selectedDonorFrame === candidate.frame ? 'border-cyan-300 ring-1 ring-cyan-400/60' : 'border-ink-800 hover:border-ink-600'}`}
+                  >
+                    <img src={candidate.thumbnail} alt={`Donor frame ${candidate.frame}`} className="h-12 w-full object-cover" />
+                    <span className="flex items-center justify-between bg-ink-950 px-1 py-0.5 text-[9px] font-mono text-ink-300"><span>f{candidate.frame}</span><span>{Math.round(candidate.score * 100)}%</span></span>
+                    {rotoInpaint.selectedDonorFrame === candidate.frame && <CheckCircle2 size={12} className="absolute right-1 top-1 rounded-full bg-ink-950 text-cyan-200" />}
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              data-testid="roto-inpaint-apply"
+              disabled={inpaintBusy || !rotoInpaint.targetFrames.length}
+              onClick={async () => {
+                const id = await applyRotoInpaint()
+                if (id) setApplyNote(`Temporal patch added · ${rotoInpaint.targetFrames.length} target frames`)
+              }}
+              title="Apply best-match donor frames to the selected target scope; spatial inpaint is the per-frame fallback"
+              className={`${btnIdle} w-full border-emerald-500/35 bg-emerald-500/10 text-emerald-200 hover:bg-emerald-500/20`}
+            >
+              <Bandage size={12} /> Apply temporal patch
+            </button>
+          </>
         )}
       </PanelSection>
 

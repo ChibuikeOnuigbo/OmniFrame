@@ -131,13 +131,13 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context =
       className="flex flex-col gap-2.5 p-2.5 rounded-xl bg-ink-950/70 border border-ink-800 text-xs text-ink-200"
     >
       {/* Header & Sub-tool Mode Indicator */}
-      <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
+      <div className="flex flex-wrap items-center justify-between gap-1.5 pb-1.5 border-b border-ink-800">
         <div className="flex items-center gap-1.5 font-semibold text-ink-100">
           <Sparkles size={13} className="text-brand-400" />
           <span>Selection & Masking Sub-Tool</span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-[11px] px-1.5 py-0.2 rounded font-mono uppercase bg-brand/15 text-brand-400 border border-brand/30">
+          <span className="shrink-0 whitespace-nowrap text-[11px] px-1.5 py-0.2 rounded font-mono uppercase bg-brand/15 text-brand-400 border border-brand/30">
             LumaCut Mask Engine
           </span>
         </div>
@@ -153,7 +153,7 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context =
         </div>
         <p>
           {context === 'omniframe'
-            ? 'OmniFrame masks are selection and segmentation data, not final-video effects. Convert the selection to a Drawing mask to include it in export.'
+            ? 'OmniFrame selections are region data, not final-video effects. To hide part of a clip, use the Mask section in the clip inspector; convert the selection to a Drawing mask to paint with it.'
             : 'A selection mask is an editing guide until converted. Only masks applied to a Drawing paint layer are composited into the final video.'}
         </p>
       </div>

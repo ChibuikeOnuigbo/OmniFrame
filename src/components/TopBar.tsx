@@ -15,10 +15,16 @@ import {
   Sliders,
   HelpCircle,
   Monitor,
+  Save,
+  FolderOpen,
+  ChevronDown,
+  Image as ImageIcon,
+  Box,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
 import { exportVideo } from '../lib/export'
+import { exportPrimitiveSceneObj, exportProgramFramePng } from '../lib/projectSubsets'
 import { EDITABLE_SHORTCUTS, SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
 import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
 import {
@@ -49,6 +55,18 @@ export function TopBar() {
   const canUndo = useEditor((s) => s.past.length > 0)
   const canRedo = useEditor((s) => s.future.length > 0)
   const importFiles = useEditor((s) => s.importFiles)
+  const saveOmniProject = useEditor((s) => s.saveOmniProject)
+  const loadOmniProject = useEditor((s) => s.loadOmniProject)
+  const projectName = useEditor((s) => s.projectName)
+  const setProjectName = useEditor((s) => s.setProjectName)
+  const exportClips = useEditor((s) => s.clips)
+  const exportTracks = useEditor((s) => s.tracks)
+  const exportPlayhead = useEditor((s) => s.playhead)
+  const monitorMode = useEditor((s) => s.monitorMode)
+  const setMonitorMode = useEditor((s) => s.setMonitorMode)
+  const is3DMode = useEditor((s) => s.is3DMode)
+  const export3DObjects = useEditor((s) => s.scene3DObjects)
+  const exportAssets = useEditor((s) => s.assets)
   const leftOpen = useEditor((s) => s.leftOpen)
   const setLeftOpen = useEditor((s) => s.setLeftOpen)
   const projectFps = useEditor((s) => s.projectFps)
@@ -76,6 +94,10 @@ export function TopBar() {
   const [editingKeyVal, setEditingKeyVal] = useState('')
 
   const fileInput = useRef<HTMLInputElement>(null)
+  const projectInput = useRef<HTMLInputElement>(null)
+  const exportMenuRef = useRef<HTMLDivElement>(null)
+  const [projectStatus, setProjectStatus] = useState('')
+  const [exportMenuOpen, setExportMenuOpen] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
@@ -116,6 +138,12 @@ export function TopBar() {
     }
   }
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('omniframe.reducedMotion') === 'true')
+  const hideOverflowX = useEditor((s) => s.hideOverflowX)
+  const dockerPrefs = useEditor((s) => s.dockerPrefs)
+  const setDockerPref = useEditor((s) => s.setDockerPref)
+  const leftTab = useEditor((s) => s.leftTab)
+  const drawingEnabledTop = useEditor((s) => s.drawingEnabled)
+  const setHideOverflowX = useEditor((s) => s.setHideOverflowX)
   const settingsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -145,9 +173,55 @@ export function TopBar() {
     return () => { window.removeEventListener('pointerdown', closeOutside); window.removeEventListener('keydown', closeEscape) }
   }, [layoutOpen])
 
+  useEffect(() => {
+    if (!exportMenuOpen) return
+    const closeOutside = (event: PointerEvent) => {
+      if (!exportMenuRef.current?.contains(event.target as Node)) setExportMenuOpen(false)
+    }
+    const closeEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setExportMenuOpen(false) }
+    window.addEventListener('pointerdown', closeOutside)
+    window.addEventListener('keydown', closeEscape)
+    return () => { window.removeEventListener('pointerdown', closeOutside); window.removeEventListener('keydown', closeEscape) }
+  }, [exportMenuOpen])
+
   const onPickFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) importFiles(e.target.files)
     e.target.value = ''
+  }
+
+  const onSaveOmniProject = async () => {
+    const requestedName = window.prompt('Save complete OmniFrame project as .omni', projectName || 'Untitled')
+    if (requestedName === null) return
+    const name = requestedName.trim() || 'Untitled'
+    const safeName = (name.replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-').slice(0, 120) || 'OmniFrame Project').replace(/\.omni$/i, '') || 'OmniFrame Project'
+    setProjectStatus('Bundling project state and source media…')
+    try {
+      const bundle = await saveOmniProject(name)
+      setProjectName(name)
+      const url = URL.createObjectURL(bundle)
+      const anchor = document.createElement('a')
+      anchor.href = url
+      anchor.download = `${safeName}.omni`
+      document.body.appendChild(anchor)
+      anchor.click()
+      anchor.remove()
+      window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
+      setProjectStatus(`Saved ${safeName}.omni · complete OmniFrame project bundle`)
+    } catch (error) {
+      setProjectStatus(`Could not save .omni: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  }
+
+  const onPickOmniProject = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    setProjectStatus(`Opening ${file.name}…`)
+    void loadOmniProject(file).then(() => {
+      setProjectStatus(`Opened ${file.name} · project state and embedded source media restored`)
+    }).catch((error) => {
+      setProjectStatus(`Could not open .omni: ${error instanceof Error ? error.message : String(error)}`)
+    })
   }
 
   const onExport = async () => {
@@ -165,8 +239,69 @@ export function TopBar() {
     setTimeout(() => setExporting(false), 1200)
   }
 
+  const visibleTrackIds = new Set(exportTracks.filter((track) => !track.hidden).map((track) => track.id))
+  const hasVisibleNonStillTimelineContent = exportClips.some((clip) =>
+    ['video', 'audio', 'threed', 'compound'].includes(clip.kind) && !clip.hidden && visibleTrackIds.has(clip.trackId),
+  )
+  const hasVisibleVisualTimelineContent = exportClips.some((clip) =>
+    ['video', 'image', 'text', 'threed', 'compound'].includes(clip.kind) && !clip.hidden && visibleTrackIds.has(clip.trackId),
+  )
+  const canExportVideo = hasVisibleNonStillTimelineContent && hasVisibleVisualTimelineContent
+  const hasVisibleStillAtPlayhead = exportClips.some((clip) =>
+    ['image', 'text'].includes(clip.kind) && !clip.hidden && visibleTrackIds.has(clip.trackId) &&
+    exportPlayhead >= clip.start && exportPlayhead < clip.start + clip.duration,
+  )
+  // Still-only timelines are images, not video sequences. Video export also
+  // needs visible picture content; audio-only timelines should not yield a blank video.
+  // Mixed timelines with motion/audio/3D/compound content cannot be represented by PNG.
+  const canExportPng = !is3DMode && !hasVisibleNonStillTimelineContent && hasVisibleStillAtPlayhead
+  const canExportObj = is3DMode && export3DObjects.length > 0
+  const hasImported3DModels = exportAssets.some((asset) => asset.kind === 'threed')
+
+  const downloadSubset = (blob: Blob, extension: string) => {
+    const safeName = (projectName || 'OmniFrame Project').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-').slice(0, 120)
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = `${safeName || 'OmniFrame Project'}.${extension}`
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+    window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
+  }
+
+  const onExportPng = async () => {
+    setExportMenuOpen(false)
+    const previousMonitorMode = monitorMode
+    try {
+      // Program Monitor content is the rendered source of the flattened PNG.
+      // Switching is temporary when the user was inspecting a source asset.
+      if (previousMonitorMode !== 'program') setMonitorMode('program')
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+      await new Promise((resolve) => window.setTimeout(resolve, 80))
+      const blob = await exportProgramFramePng()
+      downloadSubset(blob, 'png')
+      setProjectStatus('Exported PNG · flattened current still frame only; use .omni for the editable project.')
+    } catch (error) {
+      setProjectStatus(`Could not export PNG: ${error instanceof Error ? error.message : String(error)}`)
+    } finally {
+      if (previousMonitorMode !== 'program') setMonitorMode(previousMonitorMode)
+    }
+  }
+
+  const onExportObj = () => {
+    setExportMenuOpen(false)
+    try {
+      const blob = exportPrimitiveSceneObj(export3DObjects)
+      downloadSubset(blob, 'obj')
+      setProjectStatus('Exported OBJ geometry subset · materials, animation, timeline, media and effects are not included.')
+    } catch (error) {
+      setProjectStatus(`Could not export OBJ: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  }
+
   return (
-    <header className="h-12 shrink-0 flex items-center gap-2 px-3 bg-ink-900 border-b border-ink-700">
+    <header className="h-12 min-w-0 shrink-0 flex items-center gap-1 px-1 bg-ink-900 border-b border-ink-700 sm:gap-2 sm:px-3">
       <button
         type="button"
         title={leftOpen ? 'Hide panel' : 'Show panel'}
@@ -179,7 +314,7 @@ export function TopBar() {
         {leftOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
       </button>
 
-      <div className="flex items-center gap-2 pl-1 pr-1 sm:pr-2">
+      <div className="flex shrink-0 items-center gap-1 pl-0.5 pr-0.5 sm:gap-2 sm:pl-1 sm:pr-2">
         <Film size={18} className="text-brand-400" />
         <span className="hidden sm:inline font-semibold tracking-tight text-sm">OmniFrame</span>
         {desktopInfo && (
@@ -227,8 +362,46 @@ export function TopBar() {
           <Upload size={15} aria-hidden="true" />
           <span className="hidden sm:inline">Import</span>
         </button>
-        <input id="topbar-import-input" data-testid="import-input" aria-label="Import media files" ref={fileInput} type="file" accept="video/*,image/*,audio/*" multiple hidden onChange={onPickFiles} />
+        <input id="topbar-import-input" data-testid="import-input" aria-label="Import media files" ref={fileInput} type="file" accept="video/*,image/*,audio/*,.psd,.ora,.kra,.psb,.xcf,.clip,.cmc,.procreate,.afphoto,.afdesign,.pdn,.mdp,.rif,.ai" multiple hidden onChange={onPickFiles} />
       </div>
+
+      <div role="group" aria-label="OmniFrame project" className="hidden shrink-0 items-center gap-0.5 min-[420px]:flex sm:gap-1">
+        <button
+          type="button"
+          data-testid="save-omni-project"
+          onClick={onSaveOmniProject}
+          title="Save the complete OmniFrame project as .omni"
+          aria-label="Save .omni — complete OmniFrame project"
+          className="flex h-8 shrink-0 items-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-1 text-xs font-medium text-ink-200 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:gap-1.5 sm:px-2"
+        >
+          <Save size={14} aria-hidden="true" />
+          <span className="hidden lg:inline">Save .omni</span>
+        </button>
+        <button
+          type="button"
+          data-testid="open-omni-project"
+          onClick={() => projectInput.current?.click()}
+          title="Open a saved OmniFrame .omni project"
+          aria-label="Open OmniFrame project"
+          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          <FolderOpen size={15} aria-hidden="true" />
+        </button>
+        <input
+          ref={projectInput}
+          type="file"
+          accept=".omni,application/x-omniframe-project"
+          aria-label="Open OmniFrame project file"
+          data-testid="omni-project-input"
+          hidden
+          onChange={onPickOmniProject}
+        />
+      </div>
+      {projectStatus && (
+        <span role="status" data-testid="omni-project-status" className="hidden max-w-48 truncate text-[10px] text-ink-400 xl:inline">
+          {projectStatus}
+        </span>
+      )}
 
       <div role="group" aria-label="Workspace layout" className="relative">
         <button
@@ -360,7 +533,7 @@ export function TopBar() {
             setSettingsCategory('cursor')
             setSettingsOpen(true)
           }}
-          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          className="hidden h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:grid"
         >
           <HelpCircle size={15} />
         </button>
@@ -381,19 +554,120 @@ export function TopBar() {
         </button>
       </div>
 
-      <div role="group" aria-label="Export video">
-        <button
-          type="button"
-          data-testid="export-video-btn"
-          onClick={onExport}
-          disabled={exporting}
-          title={exporting ? 'Exporting video' : 'Export video'}
-          aria-label={exporting ? 'Exporting video' : 'Export video'}
-          className="flex h-8 items-center gap-2 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs font-medium transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 disabled:opacity-50 sm:px-3"
-        >
-          <Download size={15} />
-          <span className="hidden sm:inline">{exporting ? 'Exporting…' : 'Export'}</span>
-        </button>
+      <div role="group" aria-label="Project exports" className="flex items-center gap-1">
+        {canExportVideo && (
+          <button
+            type="button"
+            data-testid="export-video-btn"
+            onClick={onExport}
+            disabled={exporting}
+            title={exporting ? 'Exporting video' : 'Export the complete timeline as video'}
+            aria-label={exporting ? 'Exporting video' : 'Export video'}
+            className="flex h-8 items-center gap-2 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs font-medium transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3"
+          >
+            <Download size={15} />
+            <span className="hidden sm:inline">{exporting ? 'Exporting…' : 'Export video'}</span>
+          </button>
+        )}
+        <div className="relative" ref={exportMenuRef}>
+          <button
+            type="button"
+            data-testid="export-options-toggle"
+            onClick={() => setExportMenuOpen((open) => !open)}
+            aria-label="More export formats"
+            aria-haspopup="menu"
+            aria-expanded={exportMenuOpen}
+            title="Choose a content-compatible export format"
+            className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <ChevronDown size={14} />
+          </button>
+          {exportMenuOpen && (
+            <div role="menu" aria-label="Content-aware export formats" data-testid="subset-export-menu" className="absolute right-0 top-10 z-[90] w-80 max-w-[calc(100vw-24px)] rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-2 shadow-[0_20px_60px_rgba(0,0,0,.65)] backdrop-blur-xl">
+              <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Full editable project</div>
+              <button
+                type="button"
+                role="menuitem"
+                data-testid="export-omni-option"
+                onClick={() => { setExportMenuOpen(false); void onSaveOmniProject() }}
+                className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-ink-100 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <Save size={14} className="text-brand-400" />
+                <span><strong>Save .omni</strong><span className="ml-1 text-ink-400">— editable project + embedded media</span></span>
+              </button>
+              <div className="my-2 border-t border-ink-700" />
+              <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Compatible subset exports</div>
+              {canExportVideo && (
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    data-testid="subset-export-video-option"
+                    disabled={exporting}
+                    onClick={() => { setExportMenuOpen(false); void onExport() }}
+                    className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-ink-200 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-50"
+                  >
+                    <Film size={14} className="text-amber-300" />
+                    <span><strong>Video sequence</strong><span className="ml-1 text-ink-400">— rendered timeline; layers become frames</span></span>
+                  </button>
+                  <p data-testid="video-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                    Video is a rendered copy, not an editable timeline. MediaRecorder chooses MP4 or WebM based on browser support.
+                  </p>
+                </>
+              )}
+              {canExportPng && (
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    data-testid="subset-export-png-option"
+                    onClick={() => void onExportPng()}
+                    className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-ink-200 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                  >
+                    <ImageIcon size={14} className="text-sky-300" />
+                    <span><strong>PNG still</strong><span className="ml-1 text-ink-400">— flattened frame at playhead</span></span>
+                  </button>
+                  <p data-testid="png-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                    PNG contains one flattened frame only; clip/layer structure, animation and all other frames are lost.
+                  </p>
+                </>
+              )}
+              {canExportObj && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  data-testid="subset-export-obj-option"
+                  onClick={onExportObj}
+                  className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-ink-200 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                >
+                  <Box size={14} className="text-violet-300" />
+                  <span><strong>OBJ 3D geometry</strong><span className="ml-1 text-ink-400">— scene primitives only</span></span>
+                </button>
+              )}
+              {!canExportVideo && !canExportPng && !canExportObj && (
+                <p data-testid="no-subset-export" className="px-2 py-2 text-xs text-ink-400">No compatible subset export is available for the current visible content. Save the editable project as .omni.</p>
+              )}
+              {(hasVisibleNonStillTimelineContent || is3DMode) && !canExportPng && (
+                <p data-testid="png-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                  PNG is withheld for this timeline because it contains video, audio, 3D, or compound content that a still image cannot represent.
+                </p>
+              )}
+              {canExportObj && (
+                <p data-testid="obj-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                  OBJ contains geometry only; animation, materials/textures, effects, timeline media and 2D layers are omitted.
+                </p>
+              )}
+              {canExportObj && hasImported3DModels && (
+                <p className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                  Imported model files are also omitted; only OmniFrame scene primitives are written.
+                </p>
+              )}
+              <div className="mt-2 border-t border-ink-700 px-2 pt-2 text-[10px] leading-relaxed text-ink-400">
+                Subset exports discard content the target format cannot carry. Use <strong className="text-brand-300">.omni</strong> when you need the editable project or are unsure.
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {settingsOpen && (
@@ -927,6 +1201,21 @@ export function TopBar() {
               )}
 
               {!settingsSearch && settingsCategory === 'accessibility' && (
+                <div className="space-y-3">
+                <label className="flex items-center justify-between gap-4 text-xs">
+                  <span>
+                    <span className="block text-ink-200">Hide horizontal overflow</span>
+                    <span className="mt-1 block text-ink-500">On: strips scroll with edge arrows, wheel, or drag — no visible horizontal scrollbar. Off: native scrollbars return.</span>
+                  </span>
+                  <input
+                    data-testid="toggle-hide-overflow-x"
+                    aria-label="Hide horizontal overflow"
+                    type="checkbox"
+                    checked={hideOverflowX}
+                    onChange={(event) => setHideOverflowX(event.target.checked)}
+                    className="h-4 w-4 shrink-0 accent-violet-500"
+                  />
+                </label>
                 <label className="flex items-center justify-between gap-4 text-xs">
                   <span>
                     <span className="block text-ink-200">Reduce motion</span>
@@ -940,6 +1229,59 @@ export function TopBar() {
                     className="h-4 w-4 accent-violet-500"
                   />
                 </label>
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'dockers' && (
+                <div className="space-y-3" data-testid="settings-dockers">
+                  <p className="text-[11px] leading-snug text-ink-400">
+                    Active mode: <span className="text-ink-100" data-testid="dockers-active-mode">{workspacePreset}</span>
+                    {drawingEnabledTop ? ' · Drawing on' : ''}{is3DMode ? ' · 3D on' : ''} · showing the{' '}
+                    <span className="text-ink-100">{leftTab}</span> panel. Toggle what stays on your rails — nothing here blocks the canvas.
+                  </p>
+                  <div>
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Left rail panels</p>
+                    <div className="space-y-1">
+                      {([
+                        ['media', 'Media'], ['omniframe', 'OmniFrame'], ['audio', 'Audio'], ['tracking', 'Tracking'],
+                        ['relationships', 'Relationships'], ['drawing', 'Drawing'], ['transitions', 'Transitions'],
+                        ['effects', 'Effects / LUT'], ['text', 'Text'], ['threed', '3D Scene'], ['rigging', 'Rigging'], ['pack', 'Pack'],
+                      ] as const).map(([id, label]) => (
+                        <label key={id} className="flex items-center justify-between gap-4 text-xs">
+                          <span className="text-ink-200">{label}</span>
+                          <input
+                            data-testid={`docker-toggle-left-${id}`}
+                            aria-label={`Show ${label} on the left rail`}
+                            type="checkbox"
+                            checked={dockerPrefs.leftTabs[id] !== false}
+                            onChange={(event) => setDockerPref('leftTabs', id, event.target.checked)}
+                            className="h-4 w-4 shrink-0 accent-violet-500"
+                          />
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Right panel sub-tools</p>
+                    <div className="space-y-1">
+                      {([
+                        ['masking', 'Masking'], ['smart-patch', 'Smart Patch'], ['rotomask', 'RotoMask'],
+                      ] as const).map(([id, label]) => (
+                        <label key={id} className="flex items-center justify-between gap-4 text-xs">
+                          <span className="text-ink-200">{label}</span>
+                          <input
+                            data-testid={`docker-toggle-right-${id}`}
+                            aria-label={`Show ${label} in the right sub-tool dock`}
+                            type="checkbox"
+                            checked={dockerPrefs.rightSubtools[id] !== false}
+                            onChange={(event) => setDockerPref('rightSubtools', id, event.target.checked)}
+                            className="h-4 w-4 shrink-0 accent-violet-500"
+                          />
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               )}
 
               {!settingsSearch && settingsCategory === 'ai' && (

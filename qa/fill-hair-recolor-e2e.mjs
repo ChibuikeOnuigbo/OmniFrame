@@ -58,6 +58,15 @@ async function run() {
   await addBtn.waitFor()
   await addBtn.click({ force: true })
   await page.waitForTimeout(400)
+  // Video export requires non-still content (image-only timelines export
+  // PNG only), so seat the still over a real video base track.
+  await page.evaluate(() => {
+    const store = window.__omniframe_store
+    const s = store.getState()
+    const imgClip = store.getState().clips[0]
+    const baseTrack = s.createTrack('video', 'below', imgClip.trackId)
+    s.addClipToTrack(baseTrack, 'asset-death-note-vid', 0)
+  })
   await page.evaluate(() => window.__omniframe_store.getState().setMonitorMode('program'))
   await page.waitForTimeout(400)
 

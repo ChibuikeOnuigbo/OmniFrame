@@ -36,6 +36,7 @@ export function placedEffectLabels(clip: Clip, sequences: Sequence[] = []): stri
   for (const lut of clip.adjustment?.luts || []) {
     if (lut.enabled) labels.push(lut.name)
   }
+  if (clip.adjustmentMask) labels.push(`${clip.adjustmentMask.shape} mask`)
   if (clip.kind === 'compound') {
     const seq = sequences.find((s) => s.id === clip.sourceSequenceId)
     const children = seq ? seq.clips : clip.originalChildClips || []
@@ -44,6 +45,7 @@ export function placedEffectLabels(clip: Clip, sequences: Sequence[] = []): stri
       const inner = [
         ...activeEffectKeys(child.effects).map((k) => EFFECT_LABEL[k] || k),
         ...(child.adjustment?.luts || []).filter((l) => l.enabled).map((l) => l.name),
+        ...(child.adjustmentMask ? [`${child.adjustmentMask.shape} mask`] : []),
       ]
       if (inner.length) labels.push(`Adj: ${inner.join(' + ')}`)
     }

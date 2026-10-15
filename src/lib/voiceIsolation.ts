@@ -31,7 +31,7 @@ import { unifiedIsolateBuffer } from './omniUnified'
 
 const UNIFIED_WASM_NOTE = 'onnxruntime-web WASM'
 import { separateWithDemucs, isDemucsModelAvailable } from './demucs/index.ts'
-import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor } from './vad.ts'
+import { computeSpeechGate, applyGainEnvelope, detectSlowedFactor, detectSpeech } from './vad.ts'
 import { nativePeakScale, nativeNormalize } from './native/dspNative.js'
 
 export type VoiceIsolationModel =
@@ -74,6 +74,10 @@ export interface VoiceIsolationOptions {
    *  restores the original timing. Normal and instrumental tracks pass through
    *  untouched after one cheap detection pass. */
   speedNormalize?: boolean
+  /** Optional manually selected speed-up factor for a known slowed edit.
+   * Overrides automatic detection when speedNormalize is enabled; useful when
+   * unusual reverb/pitch processing makes the detector conservative. */
+  speedFactorOverride?: number
   /**
    * 'timeline' (default): the isolated acapella is slowed back to the input's
    * time base so it stays frame-aligned on the timeline. 'natural'
@@ -88,7 +92,7 @@ export interface VoiceIsolationOptions {
 /**
  * Encodes an AudioBuffer into a canonical 16-bit PCM RIFF WAV Blob.
  */
-export function encodeAudioBufferToWav(buffer: AudioBuffer): Blob {
+export function encodeAudioBufferToWav(buffer: AudioBuffer, options: { fixedGain?: number } = {}): Blob {
   const numChannels = buffer.numberOfChannels
   const sampleRate = buffer.sampleRate
   const format = 1 // PCM
@@ -135,13 +139,14 @@ export function encodeAudioBufferToWav(buffer: AudioBuffer): Blob {
     channelData.push(buffer.getChannelData(ch))
   }
   // Peak safety: separation / EQ stages can push peaks past ±1.0, which the
-  // int16 encode below would hard-clip (audible crackle). If any channel
-  // exceeds the ceiling, scale ALL channels by the same factor — no limiter
-  // pumping, no per-channel image shift.
-  // native core first (same policy in one wasm call — native/dsp-core/
-  // omni_dsp.cpp); this loop is the fallback when it isn't loaded yet
-  // (the core is warmed at app startup, see main.tsx)
-  if (channelData.length !== 2 || nativePeakScale(channelData[0] as Float32Array<ArrayBuffer>, channelData[1] as Float32Array<ArrayBuffer>) === null) {
+  // int16 encode below would hard-clip (audible crackle). For ordinary single
+  // outputs, scale all channels together as before. A fixedGain is supplied
+  // when encoding a set of stems so every stem receives the SAME gain and
+  // their relative balance survives import/rebalancing in the timeline.
+  const fixedGain = options.fixedGain === undefined
+    ? undefined
+    : Math.max(0, Math.min(1, Number.isFinite(options.fixedGain) ? options.fixedGain : 1))
+  if (fixedGain === undefined && (channelData.length !== 2 || nativePeakScale(channelData[0] as Float32Array<ArrayBuffer>, channelData[1] as Float32Array<ArrayBuffer>) === null)) {
     let peak = 0
     for (const ch of channelData) for (let i = 0; i < ch.length; i++) { const a = Math.abs(ch[i]); if (a > peak) peak = a }
     if (peak > 0.999) {
@@ -153,7 +158,7 @@ export function encodeAudioBufferToWav(buffer: AudioBuffer): Blob {
   let offset = 44
   for (let i = 0; i < buffer.length; i++) {
     for (let ch = 0; ch < numChannels; ch++) {
-      let sample = channelData[ch][i]
+      let sample = channelData[ch][i] * (fixedGain ?? 1)
       // Clamp between -1.0 and 1.0
       sample = Math.max(-1, Math.min(1, sample))
       // Scale to 16-bit signed integer [-32768, 32767]
@@ -200,6 +205,170 @@ export function computeBufferWaveform(buffer: AudioBuffer, bins = 256): number[]
 
   const max = Math.max(...peaks, 0.001)
   return peaks.map((p) => Math.min(1.0, p / max))
+}
+
+export interface VocalInterval {
+  id: string
+  /** Start in seconds relative to the source media asset. */
+  start: number
+  /** End in seconds relative to the source media asset. */
+  end: number
+  /** Mean Silero voice probability across the unpadded detected span. */
+  confidence: number
+}
+
+/** Detects likely vocal moments in a Demucs vocal stem. Silero VAD supplies
+ * the speech/singing cue; a relative stem-energy check keeps lower-confidence
+ * sung notes while rejecting near-silent leakage. Returned times are padded
+ * slightly for breaths and reverb tails and are intended for human review. */
+export async function detectVocalIntervals(
+  vocalStem: AudioBuffer,
+  onProgress?: (fraction: number) => void,
+): Promise<VocalInterval[]> {
+  const { probs, frameSamples, sr } = await detectSpeech(vocalStem, onProgress)
+  if (probs.length === 0) return []
+  const frameSeconds = frameSamples / sr
+  const frameLength = Math.max(1, Math.round(frameSeconds * vocalStem.sampleRate))
+  const levels = new Float32Array(probs.length)
+  for (let f = 0; f < probs.length; f++) {
+    const from = f * frameLength
+    const to = Math.min(vocalStem.length, from + frameLength)
+    let power = 0
+    let count = 0
+    for (let ch = 0; ch < vocalStem.numberOfChannels; ch++) {
+      const data = vocalStem.getChannelData(ch)
+      for (let i = from; i < to; i++) {
+        power += data[i] * data[i]
+        count++
+      }
+    }
+    levels[f] = 10 * Math.log10(power / Math.max(1, count) + 1e-12)
+  }
+  const orderedLevels = Array.from(levels).sort((a, b) => a - b)
+  const percentile = (p: number) => orderedLevels[Math.min(orderedLevels.length - 1, Math.floor(p * (orderedLevels.length - 1)))]
+  const p90Db = percentile(0.9)
+  const flags = new Uint8Array(probs.length)
+  let confidentFrames = 0
+  for (let f = 0; f < probs.length; f++) {
+    const probability = probs[f]
+    const energetic = levels[f] >= p90Db - 16
+    // A strong VAD frame stands alone. Softer singing/held notes need both
+    // meaningful VAD evidence and energy relative to this separated stem.
+    if (probability >= 0.34 || (probability >= 0.16 && energetic) || (probability >= 0.12 && levels[f] >= p90Db - 7)) {
+      flags[f] = 1
+      if (probability >= 0.28) confidentFrames++
+    }
+  }
+  const activeFrames = flags.reduce((n, v) => n + v, 0)
+  // Near-silent, voice-free mixes can contain tiny model leakage. Do not turn
+  // that noise into a long list of bogus replacement ranges.
+  if (activeFrames < 4 || (confidentFrames < 3 && activeFrames < 10)) return []
+
+  const rawSpans: { from: number; to: number; confidence: number }[] = []
+  const maxGap = Math.max(1, Math.round(0.22 / frameSeconds))
+  let start = -1
+  let last = -1
+  let probabilitySum = 0
+  let probabilityCount = 0
+  const close = () => {
+    if (start < 0 || last < start) return
+    const frameCount = last - start + 1
+    if (frameCount >= Math.max(4, Math.round(0.14 / frameSeconds))) {
+      rawSpans.push({ from: start, to: last + 1, confidence: probabilitySum / Math.max(1, probabilityCount) })
+    }
+    start = -1
+    last = -1
+    probabilitySum = 0
+    probabilityCount = 0
+  }
+  for (let f = 0; f < flags.length; f++) {
+    if (flags[f]) {
+      if (start < 0) start = f
+      last = f
+      probabilitySum += probs[f]
+      probabilityCount++
+    } else if (start >= 0 && f - last > maxGap) {
+      close()
+    }
+  }
+  close()
+
+  const padFrames = Math.round(0.12 / frameSeconds)
+  const merged: VocalInterval[] = []
+  for (const span of rawSpans) {
+    const startTime = Math.max(0, (span.from - padFrames) * frameSeconds)
+    const endTime = Math.min(vocalStem.duration, (span.to + padFrames) * frameSeconds)
+    const previous = merged[merged.length - 1]
+    if (previous && startTime <= previous.end + 0.08) {
+      previous.end = endTime
+      previous.confidence = (previous.confidence + span.confidence) / 2
+    } else {
+      merged.push({
+        id: uid('vocal_interval'),
+        start: startTime,
+        end: endTime,
+        confidence: Math.max(0, Math.min(1, span.confidence)),
+      })
+    }
+  }
+  return merged
+}
+
+/** Creates a non-destructive full-length mix where chosen vocal ranges are
+ * replaced by the time-aligned Demucs instrumental stem. This preserves the
+ * exact beat/harmony at the same moment, with short raised-cosine transitions
+ * so the edit does not click. */
+export function patchVocalIntervalsWithInstrumental(
+  audioCtx: BaseAudioContext,
+  source: AudioBuffer,
+  instrumental: AudioBuffer,
+  intervals: Pick<VocalInterval, 'start' | 'end'>[],
+  crossfadeMs = 80,
+): AudioBuffer {
+  const output = audioCtx.createBuffer(source.numberOfChannels, source.length, source.sampleRate)
+  const sourceChannels = Array.from({ length: source.numberOfChannels }, (_, c) => source.getChannelData(c))
+  const instrumentalChannels = Array.from({ length: instrumental.numberOfChannels }, (_, c) => instrumental.getChannelData(c))
+  const outputChannels = Array.from({ length: output.numberOfChannels }, (_, c) => output.getChannelData(c))
+  for (let c = 0; c < outputChannels.length; c++) outputChannels[c].set(sourceChannels[c])
+
+  const ordered = intervals
+    .map((item) => ({
+      start: Math.max(0, Math.min(source.duration, item.start)),
+      end: Math.max(0, Math.min(source.duration, item.end)),
+    }))
+    .filter((item) => item.end > item.start)
+    .sort((a, b) => a.start - b.start)
+  const merged: { start: number; end: number }[] = []
+  for (const item of ordered) {
+    const previous = merged[merged.length - 1]
+    if (previous && item.start <= previous.end) previous.end = Math.max(previous.end, item.end)
+    else merged.push({ ...item })
+  }
+
+  for (const interval of merged) {
+    const start = Math.max(0, Math.floor(interval.start * source.sampleRate))
+    const end = Math.min(source.length, Math.ceil(interval.end * source.sampleRate))
+    const span = Math.max(0, end - start)
+    const fadeSamples = Math.min(Math.floor(span / 2), Math.max(1, Math.round(crossfadeMs * source.sampleRate / 1000)))
+    for (let i = start; i < end; i++) {
+      const edgeDistance = Math.min(i - start, end - 1 - i)
+      const ramp = fadeSamples > 0 ? Math.min(1, edgeDistance / fadeSamples) : 1
+      const amount = 0.5 - 0.5 * Math.cos(Math.PI * ramp)
+      const instrumentalPosition = instrumental.sampleRate === source.sampleRate
+        ? i
+        : i * instrumental.sampleRate / source.sampleRate
+      const instrumentalIndex = Math.min(instrumental.length - 1, Math.floor(instrumentalPosition))
+      const fraction = instrumentalPosition - instrumentalIndex
+      for (let c = 0; c < outputChannels.length; c++) {
+        const donor = instrumentalChannels[Math.min(c, instrumentalChannels.length - 1)]
+        const left = donor[instrumentalIndex] ?? 0
+        const right = donor[Math.min(instrumental.length - 1, instrumentalIndex + 1)] ?? left
+        const instrumentalSample = left * (1 - fraction) + right * fraction
+        outputChannels[c][i] = sourceChannels[c][i] * (1 - amount) + instrumentalSample * amount
+      }
+    }
+  }
+  return output
 }
 
 /**
@@ -436,8 +605,15 @@ export async function processVoiceIsolation(
       const arrayBuffer = await response.arrayBuffer()
       onProgress?.(30, 'Decoding audio samples…')
       inputBuffer = await audioCtx.decodeAudioData(arrayBuffer)
-    } catch {
-      // Offline / synthetic fallback for mock test blobs
+    } catch (decodeError) {
+      // Keep the sine fixture only for explicit mock URLs used by UI tests.
+      // A real fetch/decode failure must never look like successful isolation
+      // of the wrong (synthetic) sound — this is especially important for
+      // compressed/slowed files where a decoder failure can otherwise hide.
+      if (!sourceUrl.startsWith('blob:mock')) {
+        const message = decodeError instanceof Error ? decodeError.message : String(decodeError)
+        throw new Error(`Could not decode the selected audio (${message}). Import a supported audio file or extract an audio-only track from the video.`)
+      }
       const sampleRate = 44100
       const length = sampleRate * 3
       inputBuffer = audioCtx.createBuffer(2, length, sampleRate)
@@ -470,11 +646,17 @@ export async function processVoiceIsolation(
       // vocals that "slowed + reverb" edits pitch out of the model's range.
       let speedFactor = 1
       if (options.speedNormalize !== false) {
-        onProgress?.(40, 'Checking for slowed production…')
-        const detection = await detectSlowedFactor(inputBuffer)
-        speedFactor = detection.factor
+        const override = options.speedFactorOverride
+        if (Number.isFinite(override) && (override ?? 1) > 1) {
+          speedFactor = Math.max(1.01, Math.min(2, override as number))
+          onProgress?.(40, `Using manual slowed-track correction ×${speedFactor.toFixed(2)}…`)
+        } else {
+          onProgress?.(40, 'Checking for slowed production…')
+          const detection = await detectSlowedFactor(inputBuffer)
+          speedFactor = detection.factor
+        }
         if (speedFactor > 1) {
-          onProgress?.(42, `Slowed production detected (×${speedFactor.toFixed(2)}) — separating at corrected speed`)
+          onProgress?.(42, `Slowed production correction ×${speedFactor.toFixed(2)} — separating at corrected speed`)
         }
       }
       // natural pitch: keep the acapella at the corrected speed (shorter,
@@ -565,6 +747,259 @@ export async function processVoiceIsolation(
 
     onProgress?.(100, 'Voice isolation complete')
     return { blob, url, duration, waveform, naturalPitch }
+  } finally {
+    await audioCtx.close()
+  }
+}
+
+export type DemucsStemRole = 'vocals' | 'drums' | 'bass' | 'other'
+
+export interface DemucsStemSeparationOptions {
+  strength?: number
+  speedNormalize?: boolean
+  speedFactorOverride?: number
+}
+
+export interface DemucsStemSeparationResult {
+  groupId: string
+  intervals: VocalInterval[]
+  stemAssetIds: Record<DemucsStemRole, string>
+  stemClipIds: string[]
+  instrumentalAssetId: string
+  speedFactor: number
+}
+
+/** Runs the high-quality four-stem Demucs model, detects candidate vocal
+ * ranges on the sped-domain vocal output (when speed correction is active),
+ * then restores every stem to the source timeline. A shared peak-safety gain
+ * preserves the relative loudness between stems. */
+export async function executeDemucsStemSeparationForClip(
+  clipId: string,
+  options: DemucsStemSeparationOptions = {},
+  onProgress?: (percent: number, status: string) => void,
+): Promise<DemucsStemSeparationResult> {
+  const store = useEditor.getState()
+  const clip = store.clips.find((item) => item.id === clipId)
+  if (!clip) throw new Error('Selected clip not found on timeline')
+  const sourceAsset = store.assets.find((item) => item.id === clip.assetId)
+  if (!sourceAsset) throw new Error('Media asset for clip not found')
+  if (!(await isDemucsModelAvailable())) {
+    throw new Error('Demucs v4 weights are missing. Run `npm run fetch:demucs` and reload the editor.')
+  }
+
+  const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+  const audioCtx = new AudioCtxClass()
+  try {
+    onProgress?.(4, 'Loading source audio…')
+    const response = await fetch(sourceAsset.url)
+    if (!response.ok) throw new Error(`Could not load source audio (HTTP ${response.status})`)
+    const inputBuffer = await audioCtx.decodeAudioData(await response.arrayBuffer())
+
+    let speedFactor = 1
+    if (options.speedNormalize !== false) {
+      const override = options.speedFactorOverride
+      if (Number.isFinite(override) && (override ?? 1) > 1) {
+        speedFactor = Math.max(1.01, Math.min(2, override as number))
+        onProgress?.(8, `Using manual slowed-track correction ×${speedFactor.toFixed(2)}…`)
+      } else {
+        onProgress?.(8, 'Checking for slowed + reverb production…')
+        speedFactor = (await detectSlowedFactor(inputBuffer)).factor
+      }
+      if (speedFactor > 1) onProgress?.(10, `Slowed production correction ×${speedFactor.toFixed(2)} before separation`)
+    }
+    const strength = options.strength ?? 0.92
+    const passes = strength >= 0.85 ? 3 : strength >= 0.6 ? 2 : 1
+    const separation = await separateWithDemucs(audioCtx, inputBuffer, onProgress, {
+      passes,
+      speedFactor,
+      speedRestoreVocals: true,
+    })
+    const rawVocal = separation.stems.vocals
+    if (!rawVocal) throw new Error('Demucs did not return a vocal stem')
+    const analysisBuffer = audioCtx.createBuffer(rawVocal.channelData.length, rawVocal.channelData[0].length, rawVocal.sampleRate)
+    for (let c = 0; c < rawVocal.channelData.length; c++) {
+      analysisBuffer.copyToChannel(rawVocal.channelData[c] as Float32Array<ArrayBuffer>, c)
+    }
+    onProgress?.(93, 'Finding vocal ranges with Silero VAD…')
+    const foundIntervals = await detectVocalIntervals(analysisBuffer, (fraction) => {
+      onProgress?.(93 + Math.round(fraction * 5), `Finding vocal ranges · ${(fraction * 100).toFixed(0)}%`)
+    })
+    const intervals = foundIntervals.map((item) => ({
+      ...item,
+      start: Math.max(0, Math.min(inputBuffer.duration, item.start * speedFactor)),
+      end: Math.max(0, Math.min(inputBuffer.duration, item.end * speedFactor)),
+    })).filter((item) => item.end > item.start)
+
+    const baseName = sourceAsset.name.replace(/\.[^/.]+$/, '')
+    const groupId = uid('demucs_group')
+    const roles: DemucsStemRole[] = ['vocals', 'drums', 'bass', 'other']
+    const buffers = roles.map((role) => {
+      const buffer = separation.timelineStems[role]
+      if (!buffer) throw new Error(`Demucs did not return the ${role} stem`)
+      return buffer
+    })
+    const instrumentalBuffer = separation.instrumental
+    let maximumPeak = 0
+    for (const buffer of [...buffers, instrumentalBuffer]) {
+      for (let c = 0; c < buffer.numberOfChannels; c++) {
+        const data = buffer.getChannelData(c)
+        for (let i = 0; i < data.length; i++) maximumPeak = Math.max(maximumPeak, Math.abs(data[i]))
+      }
+    }
+    const fixedGain = maximumPeak > 0.98 ? 0.98 / maximumPeak : 1
+    const labels: Record<DemucsStemRole, string> = { vocals: 'Vocals', drums: 'Drums', bass: 'Bass', other: 'Other' }
+    const stemAssets = {} as Record<DemucsStemRole, MediaAsset>
+    for (let i = 0; i < roles.length; i++) {
+      const role = roles[i]
+      const buffer = buffers[i]
+      const blob = encodeAudioBufferToWav(buffer, { fixedGain })
+      stemAssets[role] = {
+        id: uid('asset_stem'),
+        name: `[Demucs v4 · ${labels[role]}] ${baseName}.wav`,
+        kind: 'audio',
+        url: URL.createObjectURL(blob),
+        duration: buffer.duration,
+        width: 0,
+        height: 0,
+        waveform: computeBufferWaveform(buffer, 256),
+        size: blob.size,
+        extractedFromClipId: clip.id,
+        audioStemRole: role,
+        audioStemGroupId: groupId,
+      }
+    }
+    const instrumentalBlob = encodeAudioBufferToWav(instrumentalBuffer, { fixedGain })
+    const instrumentalAsset: MediaAsset = {
+      id: uid('asset_stem'),
+      name: `[Demucs v4 · Instrumental] ${baseName}.wav`,
+      kind: 'audio',
+      url: URL.createObjectURL(instrumentalBlob),
+      duration: instrumentalBuffer.duration,
+      width: 0,
+      height: 0,
+      waveform: computeBufferWaveform(instrumentalBuffer, 256),
+      size: instrumentalBlob.size,
+      extractedFromClipId: clip.id,
+      audioStemRole: 'instrumental',
+      audioStemGroupId: groupId,
+    }
+
+    const entries = roles.map((role) => {
+      const asset = stemAssets[role]
+      const id = uid('clip_stem')
+      const duration = Math.max(0, Math.min(clip.duration, asset.duration - clip.inPoint))
+      if (duration <= 0) throw new Error(`The selected clip has no ${labels[role].toLowerCase()} audio in its visible range`)
+      const timelineClip: Omit<Clip, 'trackId'> = {
+        id,
+        assetId: asset.id,
+        start: clip.start,
+        duration,
+        inPoint: clip.inPoint,
+        name: asset.name,
+        kind: 'audio',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+      }
+      return { asset, clip: timelineClip, trackName: `${labels[role]} · ${baseName}` }
+    })
+    const added = useEditor.getState().addGeneratedAudioTracks(entries, {
+      extraAssets: [instrumentalAsset],
+      muteClipIds: [clip.id],
+      selectedClipId: clip.id,
+    })
+    onProgress?.(100, `Four Demucs stems ready · ${intervals.length} vocal range${intervals.length === 1 ? '' : 's'} detected`)
+    return {
+      groupId,
+      intervals,
+      stemAssetIds: {
+        vocals: stemAssets.vocals.id,
+        drums: stemAssets.drums.id,
+        bass: stemAssets.bass.id,
+        other: stemAssets.other.id,
+      },
+      stemClipIds: added.clipIds,
+      instrumentalAssetId: instrumentalAsset.id,
+      speedFactor,
+    }
+  } finally {
+    await audioCtx.close()
+  }
+}
+
+/** Builds a full-length replacement mix from a reviewed set of vocal ranges,
+ * using the matching time-aligned instrumental passage as the patch donor. The
+ * source and separated tracks are muted together so the new mix is not doubled. */
+export async function executeVocalPatchForClip(
+  clipId: string,
+  instrumentalAssetId: string,
+  intervals: Pick<VocalInterval, 'start' | 'end'>[],
+  options: { crossfadeMs?: number; stemClipIds?: string[]; groupId?: string } = {},
+  onProgress?: (percent: number, status: string) => void,
+): Promise<{ assetId: string; clipId: string; trackId: string }> {
+  if (intervals.length === 0) throw new Error('Select at least one detected vocal range to patch')
+  const store = useEditor.getState()
+  const sourceClip = store.clips.find((item) => item.id === clipId)
+  if (!sourceClip) throw new Error('Selected source clip is no longer on the timeline')
+  const sourceAsset = store.assets.find((item) => item.id === sourceClip.assetId)
+  const instrumentalAsset = store.assets.find((item) => item.id === instrumentalAssetId)
+  if (!sourceAsset || !instrumentalAsset) throw new Error('The source or matching instrumental stem is no longer available')
+
+  const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+  const audioCtx = new AudioCtxClass()
+  try {
+    onProgress?.(5, 'Loading source and time-matched instrumental…')
+    const [sourceResponse, instrumentalResponse] = await Promise.all([
+      fetch(sourceAsset.url),
+      fetch(instrumentalAsset.url),
+    ])
+    if (!sourceResponse.ok || !instrumentalResponse.ok) throw new Error('Could not reload the audio assets for patching')
+    const [source, instrumental] = await Promise.all([
+      sourceResponse.arrayBuffer().then((data) => audioCtx.decodeAudioData(data)),
+      instrumentalResponse.arrayBuffer().then((data) => audioCtx.decodeAudioData(data)),
+    ])
+    onProgress?.(45, `Patching ${intervals.length} reviewed vocal range${intervals.length === 1 ? '' : 's'} with the matching instrumental…`)
+    const patched = patchVocalIntervalsWithInstrumental(
+      audioCtx,
+      source,
+      instrumental,
+      intervals,
+      options.crossfadeMs ?? 80,
+    )
+    const blob = encodeAudioBufferToWav(patched)
+    const baseName = sourceAsset.name.replace(/\.[^/.]+$/, '')
+    const patchedAsset: MediaAsset = {
+      id: uid('asset_patch'),
+      name: `[Vocal Patch · ${intervals.length} range${intervals.length === 1 ? '' : 's'}] ${baseName}.wav`,
+      kind: 'audio',
+      url: URL.createObjectURL(blob),
+      duration: patched.duration,
+      width: 0,
+      height: 0,
+      waveform: computeBufferWaveform(patched, 256),
+      size: blob.size,
+      extractedFromClipId: sourceClip.id,
+      audioStemRole: 'patched-mix',
+      audioStemGroupId: options.groupId,
+    }
+    const newClip: Omit<Clip, 'trackId'> = {
+      id: uid('clip_patch'),
+      assetId: patchedAsset.id,
+      start: sourceClip.start,
+      duration: Math.max(0, Math.min(sourceClip.duration, patched.duration - sourceClip.inPoint)),
+      inPoint: sourceClip.inPoint,
+      name: patchedAsset.name,
+      kind: 'audio',
+      volume: 1,
+      hidden: false,
+      transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+    }
+    if (newClip.duration <= 0) throw new Error('The selected source clip has no audio in its visible range')
+    const added = useEditor.getState().addGeneratedAudioTracks([
+      { asset: patchedAsset, clip: newClip, trackName: `Patched Mix · ${baseName}` },
+    ], { muteClipIds: [sourceClip.id, ...(options.stemClipIds || [])], selectedClipId: sourceClip.id })
+    onProgress?.(100, 'Vocal patch mix added to the timeline')
+    return { assetId: patchedAsset.id, clipId: added.clipIds[0], trackId: added.trackIds[0] }
   } finally {
     await audioCtx.close()
   }

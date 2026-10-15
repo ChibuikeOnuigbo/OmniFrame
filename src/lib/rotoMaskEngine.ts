@@ -858,6 +858,42 @@ export function propagateMaskToFrame(
  * painted (patched background) and every other pixel transparent — so it
  * can be layered directly above the original video as a background patch.
  */
+export function inpaintMaskedHoleWithDonor(
+  donor: CanvasImageSource,
+  sourceWidth: number,
+  sourceHeight: number,
+  mask: MaskBitmap,
+  feather = 2,
+): string {
+  const softened = feather > 0 ? featherMask(mask, feather) : mask
+  const matte = document.createElement('canvas')
+  matte.width = softened.width
+  matte.height = softened.height
+  const matteCtx = matte.getContext('2d')
+  if (!matteCtx) return ''
+  const image = matteCtx.createImageData(softened.width, softened.height)
+  for (let i = 0; i < softened.data.length; i++) {
+    image.data[i * 4] = 255
+    image.data[i * 4 + 1] = 255
+    image.data[i * 4 + 2] = 255
+    image.data[i * 4 + 3] = softened.data[i]
+  }
+  matteCtx.putImageData(image, 0, 0)
+
+  // Keep only the donor pixels inside the target-frame matte. The soft alpha
+  // feathers the seam; the caller adds this transparent patch above the clip.
+  const patch = document.createElement('canvas')
+  patch.width = sourceWidth
+  patch.height = sourceHeight
+  const patchCtx = patch.getContext('2d')
+  if (!patchCtx) return ''
+  patchCtx.drawImage(donor, 0, 0, sourceWidth, sourceHeight)
+  patchCtx.globalCompositeOperation = 'destination-in'
+  patchCtx.drawImage(matte, 0, 0, sourceWidth, sourceHeight)
+  patchCtx.globalCompositeOperation = 'source-over'
+  return patch.toDataURL('image/png')
+}
+
 export function inpaintMaskedHole(
   source: CanvasImageSource,
   sourceWidth: number,

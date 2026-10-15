@@ -1,0 +1,58 @@
+{
+  "generated_at_utc": "2026-10-12T18:40:18.736206+00:00",
+  "inputs": {
+    "source_mix": "UPAST (Ultra Slowed) - HELLBLADE.mp3",
+    "reference_vocal": "devoice-vocal.mp3",
+    "reference_other": "devoice-other.mp3",
+    "app_vocals": "output-track2-keep-vocal-demucs-v3.mp3",
+    "reference_origin_commit": "22ecf32"
+  },
+  "duration_seconds": 60.0,
+  "sample_rate_hz": 44100,
+  "source_match": {
+    "sum_of_devoice_stems": {
+      "envelope": {
+        "window_ms": 100.0,
+        "windows": 600,
+        "log_rms_correlation": 0.9893801148054363
+      },
+      "sample_correlation_at_zero_lag": -0.17725080231074306,
+      "sample_correlation_after_alignment": 0.9880711175692064,
+      "stem_delay_samples": 576,
+      "stem_delay_ms": 13.061224489795919,
+      "alignment_search_limit_ms": 100.0
+    }
+  },
+  "silero_vocal_yield": {
+    "devoice_vocal": {
+      "seconds": 60.0,
+      "vocal_like_energy_frac": 0.8551565153972192,
+      "vocal_like_frames_frac": 0.7204968944099379,
+      "silero_mean": 0.6681064367294312,
+      "silero_frames_over_50": 0.72,
+      "silero_peak": 0.9999223947525024,
+      "rms_dbfs": -16.312548094242075
+    },
+    "devoice_other": {
+      "seconds": 60.0,
+      "vocal_like_energy_frac": 0.0006174186762155094,
+      "vocal_like_frames_frac": 0.0,
+      "silero_mean": 0.0016658955719321966,
+      "silero_frames_over_50": 0.0,
+      "silero_peak": 0.3094729483127594,
+      "rms_dbfs": -10.814843896063353
+    },
+    "omniframe_app_output_first_minute": {
+      "seconds": 60.0,
+      "vocal_like_energy_frac": 0.46517775744265827,
+      "vocal_like_frames_frac": 0.3575310559006211,
+      "silero_mean": 0.38203859329223633,
+      "silero_frames_over_50": 0.3552,
+      "silero_peak": 0.9995875358581543,
+      "rms_dbfs": -14.539143486205568
+    }
+  },
+  "caveat": "Silero VAD is a voice-likelihood heuristic, not a separator-quality ground truth; the sample alignment only identifies the likely source.",
+  "onnxruntime_version": "1.31.0",
+  "numpy_version": "2.4.6"
+}

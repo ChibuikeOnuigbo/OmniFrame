@@ -3,7 +3,7 @@ import type { RecolorBlend } from './lib/recolor'
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound' | 'adjustment'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound' | 'adjustment' | 'drawing'
 
 export interface Sequence {
   id: string
@@ -40,6 +40,55 @@ export interface Transition {
   enabled: boolean
 }
 
+export type LayeredArtworkFormat = 'psd' | 'ora'
+
+/** Pixel-backed source data imported from a layered-art interchange document. */
+export interface LayeredArtworkAssetInfo {
+  sourceFormat: LayeredArtworkFormat
+  documentId: string
+  documentName: string
+  layerName: string
+  /** Flattened visible raster order, as exposed by the source layer tree. */
+  order: number
+  documentWidth: number
+  documentHeight: number
+  left: number
+  top: number
+  width: number
+  height: number
+  /** Effective source layer/group opacity normalized to 0..1. */
+  opacity: number
+  /** PSD raster importer bakes the source opacity into the PNG; ORA does not. */
+  opacityBaked?: boolean
+  /** Optional group path; hierarchy is flattened into independent raster assets. */
+  groupPath?: string[]
+  /** Normalized Canvas compositing operation when supported. */
+  blendMode?: string
+}
+
+/** @deprecated Use LayeredArtworkAssetInfo; retained for already-saved PSD assets. */
+export interface PsdLayerAssetInfo extends Omit<LayeredArtworkAssetInfo, 'sourceFormat'> {
+  sourceFormat?: 'psd'
+}
+
+/** Original source file retained alongside a converted artwork import. */
+export interface SourceDocument {
+  id: string
+  fileName: string
+  format: string
+  mimeType: string
+  size: number
+  /** Session object URL; `.omni` bundles embed the bytes instead of persisting this URL. */
+  url: string
+  importedAt: number
+}
+
+export interface ImageSequenceFrame {
+  /** Source-relative time in seconds; the frame is held until the next entry. */
+  time: number
+  url: string
+}
+
 export interface MediaAsset {
   id: string
   name: string
@@ -50,8 +99,17 @@ export interface MediaAsset {
   height: number
   size: number // bytes
   thumbnail?: string // optional dataURL preview
+  /** Frame-addressable raster sequence used by temporal patch/inpaint results. */
+  imageSequence?: { fps: number; frames: ImageSequenceFrame[] }
   waveform?: number[] // normalized source peaks for real timeline visualization
   extractedFromClipId?: string
+  /** Optional semantic label for generated multi-stem audio assets. */
+  audioStemRole?: 'vocals' | 'drums' | 'bass' | 'other' | 'instrumental' | 'patched-mix'
+  audioStemGroupId?: string
+  /** Generic source-layer metadata for imported PSD/OpenRaster artwork. */
+  layeredArtwork?: LayeredArtworkAssetInfo
+  /** @deprecated Legacy field kept for PSD projects created by older builds. */
+  psdLayer?: PsdLayerAssetInfo
 }
 
 export type TrackType = 'video' | 'audio'
@@ -117,6 +175,80 @@ export interface ClipLut {
 /** LUT-stack grading carried by adjustment layers AND normal clips. */
 export interface ClipAdjustment {
   luts: ClipLut[]
+}
+
+/** Spatial matte for an adjustment clip, in normalized sequence coordinates. */
+export interface ClipAdjustmentMask {
+  shape: 'ellipse' | 'rectangle'
+  centerX: number // 0..1, left to right
+  centerY: number // 0..1, top to bottom
+  width: number // 0..1 of sequence width
+  height: number // 0..1 of sequence height
+  feather: number // blur radius in sequence pixels
+  inverted: boolean
+}
+
+/**
+ * Clip Mask — the CapCut/After Effects-style visibility mask (NOT the
+ * selection/roto "masking" workflow and NOT the effect-region matte above).
+ * It hides part of the clip itself: in normal ("Inside") mode only the
+ * masked region of the clip stays visible; with `inverted` ("Outside")
+ * the clip is visible everywhere EXCEPT the masked region (frame − mask).
+ * Coordinates are normalized to the sequence frame; the mask is applied
+ * after the clip's own filters/LUTs, so it hides graded pixels too.
+ */
+export interface MaskViewKeyframe {
+  time: number // seconds, clip-local
+  centerX: number
+  centerY: number
+  width: number
+  height: number
+  rotation: number
+  splitPos?: number
+  easing: 'linear' | 'smooth' | 'ease-in' | 'ease-out'
+}
+
+export interface ClipVisualMask {
+  shape: 'ellipse' | 'rectangle'
+  /** Video Mask View kind. Absent = legacy shape mask (rect/ellipse). */
+  kind?: 'shape' | 'split' | 'custom' | 'text'
+  /** Split mask: angle of the dividing line in degrees (0 = vertical line). */
+  splitAngle?: number
+  /** Split mask: line position 0..1 along its normal. */
+  splitPos?: number
+  /** Custom shape: normalized points; `curved` smooths through them. */
+  points?: { x: number; y: number }[]
+  curved?: boolean
+  /** Text mask content + font (fontFamily may be an uploaded custom font). */
+  text?: string
+  fontFamily?: string
+  fontSize?: number // 0..1 of frame height
+  /** Optional animation of the view window over the clip. */
+  keyframes?: MaskViewKeyframe[]
+  centerX: number // 0..1, left to right
+  centerY: number // 0..1, top to bottom
+  width: number // 0..1 of sequence width
+  height: number // 0..1 of sequence height
+  rotation: number // degrees, clockwise
+  feather: number // edge softness, sequence pixels
+  expansion: number // grow (+) / shrink (−) the shape, sequence pixels
+  opacity: number // 0..1 mask strength (1 = full hide/show)
+  inverted: boolean // false = Inside (keep region), true = Outside (frame − region)
+  enabled: boolean
+}
+
+export const DEFAULT_CLIP_MASK: ClipVisualMask = {
+  shape: 'ellipse',
+  centerX: 0.5,
+  centerY: 0.5,
+  width: 0.5,
+  height: 0.5,
+  rotation: 0,
+  feather: 24,
+  expansion: 0,
+  opacity: 1,
+  inverted: false,
+  enabled: true,
 }
 
 export interface TextTitleStyle {
@@ -219,6 +351,7 @@ export type DrawingToolType =
   | 'gradient'
   | 'fill'
   | 'clone'
+  | 'smart-patch'
   | 'eyedropper'
   | SelectionToolType
 
@@ -237,6 +370,15 @@ export interface TemporalScope {
   duration?: number // seconds
   frame?: number // frame index
   holdFrames?: number // number of frames to hold/expose cel without duplicate data
+}
+
+export interface SmartPatchScope {
+  mode: 'current' | 'range' | 'all' | 'omniframe'
+  /** Clip-relative seconds when mode === 'range'; OmniFrame mode reads the shared RotoFrameScope. */
+  start: number
+  end: number
+  /** Frame stride; 1 applies to every frame. */
+  step: number
 }
 
 export interface OnionSkinSettings {
@@ -279,6 +421,18 @@ export interface DrawingStroke {
   preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
   maskDataUrl?: string // raster patch for flood fill
   cloneSource?: { x: number; y: number; sampleDataUrl?: string } // normalized source anchor for clone stamp
+  /** Frame-addressed transparent patches generated by Smart Patch. */
+  smartPatchFrames?: { time: number; dataUrl: string }[]
+  /** View-as-layers stamp: true when the stroke was drawn while
+   *  "View videos as layers" was on. Only stamped strokes take part in
+   *  layered compositing / drawing-to-clips ordering — nothing is ever
+   *  inferred retroactively for unstamped strokes. */
+  layered?: boolean
+  /** Clips selected at draw time (the stroke passes through exactly these). */
+  anchorClipIds?: string[]
+  /** Set when the stroke has been converted into a drawing clip; the
+   *  top-of-frame paint pass then skips it (the clip renders it in-track). */
+  convertedClipId?: string
 }
 
 export interface TransparencyMask {
@@ -361,8 +515,17 @@ export interface Clip {
   /** LUT stack: adjustment layers grade everything below them; regular
    *  clips carrying this grade only their own output (effect placed "inside"). */
   adjustment?: ClipAdjustment
+  /** Optional spatial matte that limits adjustment-layer grading. */
+  adjustmentMask?: ClipAdjustmentMask
+  /** Optional CapCut/AE-style visibility mask that hides part of the clip. */
+  mask?: ClipVisualMask
   textStyle?: TextTitleStyle
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
+  /** Drawing clips (kind: 'drawing'): strokes baked into a timeline clip.
+   *  The strokes keep their original payload (tool, colour, blend via their
+   *  paint layer, scopes) — conversion changes placement, never appearance. */
+  drawingStrokeIds?: string[]
+  drawingLayerId?: string
   // Compound Clip / Nested Sequence references
   sourceSequenceId?: string
   originalChildClips?: Clip[]
@@ -384,6 +547,8 @@ export interface Scene3DObject {
   scale: { x: number; y: number; z: number }
   color: string
   wireframe?: boolean
+  roughness?: number
+  metalness?: number
   materialId?: string
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
 }
@@ -596,6 +761,8 @@ export interface OmniframeCharacter {
   label: string
   bounds: { x: number; y: number; width: number; height: number } // normalized [0, 1]
   cutoutUrl: string
+  /** Optional frame-addressed cutout sequence for tracked video subjects. */
+  cutoutSequence?: { time: number; url: string }[]
   transform: ClipTransform
   scope: OmniframeScopeType
   sectionRange?: { start: number; end: number } // in seconds (e.g. 2.0s to 5.0s)
@@ -763,6 +930,15 @@ export interface RigWind {
   bias: number
 }
 
+export interface RigSway {
+  enabled: boolean
+  /** Peak pin travel as a fraction of the part's width or height (0..0.5). */
+  distance: number
+  /** Sway cycles per second. */
+  speed: number
+  direction: 'horizontal' | 'vertical'
+}
+
 export interface RigPart {
   id: string
   name: string
@@ -782,7 +958,15 @@ export interface RigPart {
   transform: ClipTransform
   bend?: RigBend
   wind?: RigWind
+  /** Pin-driven secondary motion for PSD hair strands and cloth. */
+  sway?: RigSway
   pins?: RigPin[]
+  /** Source library asset when this part came from imported layered artwork. */
+  sourceAssetId?: string
+  /** Layer opacity when it is not baked into the source PNG. */
+  sourceOpacity?: number
+  /** Normalized Canvas/CSS blend operation from the source artwork. */
+  sourceBlendMode?: string
   hidden?: boolean
   locked?: boolean
   sourceMaskId?: string
@@ -793,6 +977,14 @@ export interface Rig {
   name: string
   /** The OmniFrame character this rig was built from, if any. */
   characterId?: string
+  /** Imported layered artwork document used to seed this rig (new generic field). */
+  sourceDocumentId?: string
+  sourceFormat?: LayeredArtworkFormat
+  /** @deprecated Legacy PSD document link for projects created by older builds. */
+  psdDocumentId?: string
+  /** Source design-space dimensions; part x/y transforms are stored in document pixels. */
+  canvasWidth?: number
+  canvasHeight?: number
   /** Source panel, kept so the rig can be rebuilt. */
   sourceUrl?: string
   parts: RigPart[]

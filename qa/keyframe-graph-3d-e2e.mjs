@@ -286,7 +286,11 @@ async function runTest() {
 
   // The 3D panel explains that Drawing paint-layer masks are the only mask
   // route into the final video, then offers a deliberate switch to those tools.
-  await page.locator('[data-testid="left-tab-threed"]').click()
+  await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    s.setLeftTab('threed')
+    s.setLeftOpen(true)
+  })
   const maskScopeNote = page.locator('[data-testid="threed-mask-export-note"]')
   await maskScopeNote.waitFor({ state: 'visible', timeout: 5000 })
   const maskScopeText = await maskScopeNote.innerText()
@@ -313,7 +317,11 @@ async function runTest() {
   console.log('--- Step 7: Testing 3D Mask & Selection subtool ---')
   await toggle3DBtn.click()
   await page.waitForTimeout(800)
-  await page.locator('[data-testid="left-tab-threed"]').click()
+  await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    s.setLeftTab('threed')
+    s.setLeftOpen(true)
+  })
   await page.waitForTimeout(300)
   await page.locator('[data-testid="threed-submode-mask-btn"]').click()
   await page.waitForTimeout(400)
@@ -324,7 +332,10 @@ async function runTest() {
   if (sceneMode !== 'scene') throw new Error(`Expected default scene mask mode, got ${sceneMode}`)
   console.log('[PASS] 3D mask subtool opens in scene-target mode')
 
-  // Scene geometry pick: click the 2.5D video plane near the viewport centre.
+  // Scene geometry pick: frame the video plane dead-center first (earlier
+  // steps orbited/keyframed the camera), then click the viewport centre.
+  await page.locator('[data-testid="aim-video-btn"]').click()
+  await page.waitForTimeout(600)
   const maskCanvasBox = await page.locator('[data-testid="three-canvas-wrapper"]').boundingBox()
   await page.mouse.click(maskCanvasBox.x + maskCanvasBox.width * 0.5, maskCanvasBox.y + maskCanvasBox.height * 0.5)
   await page.waitForTimeout(300)

@@ -163,7 +163,7 @@ export function Section({
         <section aria-labelledby={headerId} className="px-3 pb-3 pt-1">
           <div id={headerId} data-testid={headerTestId} className="flex min-h-8 items-center justify-between gap-2">
             <span className="flex min-w-0 items-center gap-1.5">
-              <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">{title}</span>
+              <span className="whitespace-normal break-words leading-snug text-[11px] font-semibold uppercase tracking-wider text-ink-300">{title}</span>
               {badge}
             </span>
             {action ? <div className="shrink-0">{action}</div> : null}
@@ -188,7 +188,7 @@ export function Section({
           >
             <span className="flex min-w-0 items-center gap-1.5 text-left">
               <CollapseGlyph open={isActive} className="!h-4 !w-4" />
-              <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
+              <span className="whitespace-normal break-words leading-snug text-[11px] font-semibold uppercase tracking-wider text-ink-300">
                 {title}
               </span>
               {badge}
@@ -208,7 +208,7 @@ export function Section({
   const heading = (
     <span className="flex min-w-0 items-center gap-1.5 text-left">
       {collapsible ? <CollapseGlyph open={open} className="!h-4 !w-4" /> : null}
-      <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-ink-300">
+      <span className="whitespace-normal break-words leading-snug text-[11px] font-semibold uppercase tracking-wider text-ink-300">
         {title}
       </span>
       {badge}

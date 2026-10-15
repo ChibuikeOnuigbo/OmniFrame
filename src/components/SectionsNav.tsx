@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { HScrollStrip } from './HScrollStrip'
 
 /**
  * Sections navigation: one system, two presentations.
@@ -138,12 +139,14 @@ export function SectionsNavigator({
     <SectionsNavContext.Provider value={value}>
       <div className="flex min-h-0 flex-1 flex-col">
         {showStrip && (
-          <div
+          <HScrollStrip
             role="tablist"
             aria-label={label}
             data-testid="sections-tablist"
+            arrowTestIdPrefix="sections"
             onKeyDown={onTablistKeyDown}
-            className="flex flex-wrap items-center gap-1 border-b border-ink-800 bg-ink-900/70 px-2 py-1.5 shrink-0"
+            className="shrink-0 border-b border-ink-800 bg-ink-900/70"
+            innerClassName="flex-nowrap items-center gap-1 px-2 py-1.5"
           >
             {sections.map((s) => {
               const selected = s.id === activeId
@@ -156,7 +159,7 @@ export function SectionsNavigator({
                   data-testid={`section-tab-${s.id}`}
                   tabIndex={selected ? 0 : -1}
                   onClick={() => activate(s.id)}
-                  className={`min-h-7 max-w-full truncate rounded-full border px-2.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  className={`min-h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                     selected
                       ? 'border-brand bg-brand/25 text-white shadow-xs'
                       : 'border-ink-700 bg-ink-850 text-ink-300 hover:bg-ink-800 hover:text-ink-100'
@@ -167,7 +170,7 @@ export function SectionsNavigator({
                 </button>
               )
             })}
-          </div>
+          </HScrollStrip>
         )}
         {children}
       </div>

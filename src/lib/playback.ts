@@ -13,11 +13,15 @@
 //   - drift is corrected by occasional currentTime seeks, not per-frame seeks
 
 import { useEditor } from '../store'
-import type { Clip, MediaAsset, Track, Transition } from '../types'
+import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
 import { clamp } from './time'
 import { renderAllPaintLayers } from './drawingEngine'
 import { evaluateClipAnimation } from './animation/CurveEngine'
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
+import { resolveRig, stablePartSeed } from './rigging'
+import { drawPuppetWarp } from './puppetWarp'
+import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtworkMetadata'
+import type { VisualPreview } from './visualPreview'
 
 export const PW = 1280
 export const PH = 720
@@ -135,6 +139,28 @@ function activeClipOnTrack(clips: Clip[], trackId: string, time: number): Clip |
   )
 }
 
+function effectFilterString(effect?: ClipEffect): string {
+  if (!effect) return ''
+  const filters: string[] = []
+  if (typeof effect.brightness === 'number' && effect.brightness !== 1) filters.push(`brightness(${effect.brightness})`)
+  if (typeof effect.contrast === 'number' && effect.contrast !== 1) filters.push(`contrast(${effect.contrast})`)
+  if (typeof effect.saturation === 'number' && effect.saturation !== 1) filters.push(`saturate(${effect.saturation})`)
+  if (typeof effect.blur === 'number' && effect.blur > 0) filters.push(`blur(${effect.blur}px)`)
+  if (typeof effect.grayscale === 'number' && effect.grayscale > 0) filters.push(`grayscale(${effect.grayscale})`)
+  if (typeof effect.invert === 'number' && effect.invert > 0) filters.push(`invert(${effect.invert})`)
+  if (typeof effect.sepia === 'number' && effect.sepia > 0) filters.push(`sepia(${effect.sepia})`)
+  if (typeof effect.hueRotate === 'number' && effect.hueRotate > 0) filters.push(`hue-rotate(${effect.hueRotate}deg)`)
+  return filters.join(' ')
+}
+
+/** Preserve a parent compound's filter while adding this clip's own filters. */
+function applyClipFilter(ctx: CanvasRenderingContext2D, effect?: ClipEffect) {
+  const local = effectFilterString(effect)
+  if (!local) return
+  const inherited = ctx.filter && ctx.filter !== 'none' ? ctx.filter : ''
+  ctx.filter = inherited ? `${inherited} ${local}` : local
+}
+
 export class PreviewEngine {
   private canvas: HTMLCanvasElement
   private ctx: CanvasRenderingContext2D
@@ -185,6 +211,12 @@ export class PreviewEngine {
   /** Offscreen canvases used to isolate per-clip/compound LUT grading. */
   private scratchPool: HTMLCanvasElement[] = []
   private scratchInUse = new Set<HTMLCanvasElement>()
+  private adjustmentMaskCanvas: HTMLCanvasElement | null = null
+  private shapeMatteCanvas: HTMLCanvasElement | null = null
+  /** One bounded reusable surface avoids a full-canvas allocation per rigged layer. */
+  private puppetCanvas: HTMLCanvasElement | null = null
+  /** Resolve each PSD rig's hierarchy once per rendered frame. */
+  private resolvedArtworkRigCache = new Map<string, Map<string, RigResolvedPart>>()
   private takeScratch(): HTMLCanvasElement {
     let c = this.scratchPool.find((x) => !this.scratchInUse.has(x))
     if (!c) {
@@ -206,8 +238,255 @@ export class PreviewEngine {
     this.scratchInUse.delete(c)
   }
 
+  /**
+   * Build a shape matte and multiply it into the scratch canvas alpha.
+   * Normal mode keeps the shape region (strength = mask opacity); inverted
+   * mode keeps frame − shape. Feather blurs the shape coverage so the
+   * boundary falls off smoothly in both modes.
+   */
+  private applyShapeMatte(
+    scratch: HTMLCanvasElement,
+    opts: {
+      shape: 'ellipse' | 'rectangle'
+      centerX: number
+      centerY: number
+      width: number
+      height: number
+      rotation?: number
+      feather: number
+      expansion?: number
+      inverted: boolean
+      opacity?: number
+    },
+    coveragePainter?: (shctx: CanvasRenderingContext2D) => void,
+  ) {
+    if (!this.adjustmentMaskCanvas) this.adjustmentMaskCanvas = document.createElement('canvas')
+    if (!this.shapeMatteCanvas) this.shapeMatteCanvas = document.createElement('canvas')
+    const matte = this.adjustmentMaskCanvas
+    const shapeCanvas = this.shapeMatteCanvas
+    for (const c of [matte, shapeCanvas]) {
+      if (c.width !== this.width) c.width = this.width
+      if (c.height !== this.height) c.height = this.height
+    }
+    const clamp01 = (value: number) => Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0))
+    const scale = this.width / PW
+    const centerX = clamp01(opts.centerX) * this.width
+    const centerY = clamp01(opts.centerY) * this.height
+    const expandPx = (opts.expansion || 0) * scale
+    const width = Math.max(1, clamp01(opts.width) * this.width + expandPx * 2)
+    const height = Math.max(1, clamp01(opts.height) * this.height + expandPx * 2)
+    const feather = Math.max(0, Math.min(240, opts.feather || 0)) * scale
+    const opacity = clamp01(opts.opacity ?? 1)
+    const outsideAlpha = opts.inverted ? 1 : 1 - opacity
+
+    // Shape coverage (white, blurred edges), drawn rotated about its center.
+    const shctx = shapeCanvas.getContext('2d')!
+    shctx.save()
+    shctx.setTransform(1, 0, 0, 1, 0, 0)
+    shctx.filter = 'none'
+    shctx.globalAlpha = 1
+    shctx.globalCompositeOperation = 'source-over'
+    shctx.clearRect(0, 0, this.width, this.height)
+    if (coveragePainter) {
+      if (feather > 0) shctx.filter = `blur(${feather}px)`
+      coveragePainter(shctx)
+      shctx.restore()
+    } else {
+    shctx.translate(centerX, centerY)
+    if (opts.rotation) shctx.rotate(((opts.rotation || 0) * Math.PI) / 180)
+    if (feather > 0) shctx.filter = `blur(${feather}px)`
+    shctx.fillStyle = '#fff'
+    if (opts.shape === 'ellipse') {
+      shctx.beginPath()
+      shctx.ellipse(0, 0, width / 2, height / 2, 0, 0, Math.PI * 2)
+      shctx.fill()
+    } else {
+      shctx.fillRect(-width / 2, -height / 2, width, height)
+    }
+    shctx.restore()
+    }
+
+    const mctx = matte.getContext('2d')!
+    mctx.save()
+    mctx.setTransform(1, 0, 0, 1, 0, 0)
+    mctx.filter = 'none'
+    mctx.globalAlpha = 1
+    mctx.globalCompositeOperation = 'source-over'
+    mctx.clearRect(0, 0, this.width, this.height)
+    mctx.fillStyle = `rgba(255, 255, 255, ${outsideAlpha})`
+    mctx.fillRect(0, 0, this.width, this.height)
+    if (opts.inverted) {
+      // Erase the shape coverage at mask strength, leaving frame − shape.
+      mctx.globalCompositeOperation = 'destination-out'
+      mctx.globalAlpha = opacity
+    }
+    mctx.drawImage(shapeCanvas, 0, 0)
+    mctx.restore()
+
+    const sctx = scratch.getContext('2d')!
+    sctx.save()
+    sctx.setTransform(1, 0, 0, 1, 0, 0)
+    sctx.filter = 'none'
+    sctx.globalAlpha = 1
+    sctx.globalCompositeOperation = 'destination-in'
+    sctx.drawImage(matte, 0, 0)
+    sctx.restore()
+  }
+
+  /** Effect-region matte for adjustment clips. */
+  private applyAdjustmentMask(scratch: HTMLCanvasElement, mask: ClipAdjustmentMask) {
+    this.applyShapeMatte(scratch, { ...mask, rotation: 0, expansion: 0, opacity: 1 })
+  }
+
+  /** On-screen view region of a clip (canvas px): its placed frame,
+   *  narrowed to the Video Mask View window when a shape mask is enabled
+   *  (a 100x100 clip masked to 10x10 is a 10x10 target for drawing). */
+  private clipViewRect(
+    clip: import('../types').Clip,
+    st: ReturnType<typeof useEditor.getState>,
+    time: number,
+  ): { x: number; y: number; w: number; h: number } | null {
+    const asset = st.assets.find((a) => a.id === clip.assetId)
+    const vw = asset?.width || PW
+    const vh = asset?.height || PH
+    const cover = Math.max(this.width / vw, this.height / vh)
+    const evalT = evaluateClipAnimation(clip, time)
+    const w = vw * cover * Math.abs(evalT.scaleX || 1)
+    const h = vh * cover * Math.abs(evalT.scaleY || 1)
+    const cx = this.width / 2 + evalT.x * (this.width / PW)
+    const cy = this.height / 2 + evalT.y * (this.height / PH)
+    let rect = { x: cx - w / 2, y: cy - h / 2, w, h }
+    const mask = clip.mask
+    if (mask?.enabled && (!mask.kind || mask.kind === 'shape')) {
+      const eff = this.effectiveMask(mask, Math.max(0, time - clip.start))
+      const mx = (eff.centerX - eff.width / 2) * this.width
+      const my = (eff.centerY - eff.height / 2) * this.height
+      const mw = eff.width * this.width
+      const mh = eff.height * this.height
+      const ix = Math.max(rect.x, mx)
+      const iy = Math.max(rect.y, my)
+      const iw = Math.min(rect.x + rect.w, mx + mw) - ix
+      const ih = Math.min(rect.y + rect.h, my + mh) - iy
+      if (iw <= 0 || ih <= 0) return null
+      rect = { x: ix, y: iy, w: iw, h: ih }
+    }
+    return rect
+  }
+
+  /** Mask geometry at a clip-local time, with keyframe interpolation. */
+  private effectiveMask(mask: import('../types').ClipVisualMask, localTime: number): import('../types').ClipVisualMask {
+    const kfs = [...(mask.keyframes || [])].sort((a, b) => a.time - b.time)
+    if (kfs.length === 0) return mask
+    const apply = (k: import('../types').MaskViewKeyframe): import('../types').ClipVisualMask => ({
+      ...mask,
+      centerX: k.centerX,
+      centerY: k.centerY,
+      width: k.width,
+      height: k.height,
+      rotation: k.rotation,
+      splitPos: k.splitPos ?? mask.splitPos,
+    })
+    if (localTime <= kfs[0].time) return apply(kfs[0])
+    if (localTime >= kfs[kfs.length - 1].time) return apply(kfs[kfs.length - 1])
+    let i = 0
+    while (i < kfs.length - 2 && kfs[i + 1].time <= localTime) i++
+    const a = kfs[i]
+    const b = kfs[i + 1]
+    const span = Math.max(1e-6, b.time - a.time)
+    let t = Math.max(0, Math.min(1, (localTime - a.time) / span))
+    if (b.easing === 'smooth') t = t * t * (3 - 2 * t)
+    else if (b.easing === 'ease-in') t = t * t
+    else if (b.easing === 'ease-out') t = 1 - (1 - t) * (1 - t)
+    const lerp = (u: number, v: number) => u + (v - u) * t
+    return {
+      ...mask,
+      centerX: lerp(a.centerX, b.centerX),
+      centerY: lerp(a.centerY, b.centerY),
+      width: lerp(a.width, b.width),
+      height: lerp(a.height, b.height),
+      rotation: lerp(a.rotation, b.rotation),
+      splitPos: lerp(a.splitPos ?? mask.splitPos ?? 0.5, b.splitPos ?? mask.splitPos ?? 0.5),
+    }
+  }
+
+  /** Clip Mask: hide part of the clip itself (after its filters/LUTs). */
+  private applyClipVisualMask(scratch: HTMLCanvasElement, mask: ClipVisualMask, localTime = 0) {
+    if (!mask.enabled) return
+    const eff = this.effectiveMask(mask, localTime)
+    const kind = eff.kind || 'shape'
+    if (kind === 'shape') {
+      this.applyShapeMatte(scratch, eff)
+      return
+    }
+    const W = this.width
+    const H = this.height
+    const coverage = (shctx: CanvasRenderingContext2D) => {
+      shctx.fillStyle = '#fff'
+      if (kind === 'split') {
+        // Infinite dividing line: draggable position + any rotation.
+        const angle = ((eff.splitAngle ?? 0) * Math.PI) / 180
+        const nx = Math.cos(angle)
+        const ny = Math.sin(angle)
+        const d = ((eff.splitPos ?? 0.5) - 0.5) * Math.hypot(W, H)
+        const px = W / 2 + nx * d
+        const py = H / 2 + ny * d
+        const diag = Math.hypot(W, H)
+        shctx.save()
+        shctx.translate(px, py)
+        shctx.rotate(angle + Math.PI / 2)
+        shctx.fillRect(-diag, -diag, diag * 2, diag)
+        shctx.restore()
+      } else if (kind === 'custom') {
+        const pts = (eff.points || []).map((pt) => ({ x: pt.x * W, y: pt.y * H }))
+        if (pts.length >= 3) {
+          shctx.beginPath()
+          if (eff.curved && pts.length > 2) {
+            shctx.moveTo((pts[0].x + pts[pts.length - 1].x) / 2, (pts[0].y + pts[pts.length - 1].y) / 2)
+            for (let i = 0; i < pts.length; i++) {
+              const p = pts[i]
+              const q = pts[(i + 1) % pts.length]
+              shctx.quadraticCurveTo(p.x, p.y, (p.x + q.x) / 2, (p.y + q.y) / 2)
+            }
+          } else {
+            shctx.moveTo(pts[0].x, pts[0].y)
+            for (let i = 1; i < pts.length; i++) shctx.lineTo(pts[i].x, pts[i].y)
+          }
+          shctx.closePath()
+          shctx.fill()
+        }
+      } else if (kind === 'text') {
+        const size = Math.max(8, (eff.fontSize ?? 0.25) * H)
+        shctx.font = `700 ${size}px ${eff.fontFamily ? `"${eff.fontFamily}", ` : ''}sans-serif`
+        shctx.textAlign = 'center'
+        shctx.textBaseline = 'middle'
+        shctx.fillText(eff.text || 'MASK', eff.centerX * W, eff.centerY * H)
+      }
+    }
+    this.applyShapeMatte(scratch, { ...eff, shape: 'rectangle' }, coverage)
+  }
+
+  private activeVisualPreviewAt(
+    time: number,
+    st: ReturnType<typeof useEditor.getState> = useEditor.getState(),
+  ): VisualPreview | null {
+    if (this.sampling) return null
+    const preview = st.visualPreview
+    return preview && time >= preview.startTime && time <= preview.endTime ? preview : null
+  }
+
+  private effectsForRender(clip: Clip, time: number): ClipEffect | undefined {
+    const preview = this.activeVisualPreviewAt(time)
+    if (preview?.kind !== 'clip-effect' || preview.clipId !== clip.id) return clip.effects
+    return { ...clip.effects, ...preview.effect }
+  }
+
+  private hasPreviewLutFor(clip: Clip, time: number) {
+    const preview = this.activeVisualPreviewAt(time)
+    return preview?.kind === 'clip-lut' && preview.clipId === clip.id && preview.lut.enabled
+  }
+
   /** Resolve a clip's enabled LUT stack; flags pending loads. */
-  private buildLutStack(clip: Clip): { stack: LutStackItem[]; pending: boolean } {
+  private buildLutStack(clip: Clip, time = useEditor.getState().playhead): { stack: LutStackItem[]; pending: boolean } {
     const luts = clip.adjustment?.luts?.filter((l) => l.enabled) ?? []
     const stack: LutStackItem[] = []
     let pending = false
@@ -219,6 +498,16 @@ export class PreviewEngine {
       }
       stack.push({ lut, intensity: Math.max(0, Math.min(1, l.intensity)) })
     }
+
+    // A LUT audition is composited last, after any currently applied LUTs,
+    // without touching the clip's persisted adjustment stack.
+    const preview = this.activeVisualPreviewAt(time)
+    if (preview?.kind === 'clip-lut' && preview.clipId === clip.id && preview.lut.enabled) {
+      const lut = resolveLutRef({ builtin: preview.lut.builtin, text: preview.lut.cubeText })
+      if (!lut) pending = true
+      else stack.push({ lut, intensity: Math.max(0, Math.min(1, preview.lut.intensity)) })
+    }
+
     if (pending && !this.pendingLutRedraw) {
       this.pendingLutRedraw = true
       whenLutsLoaded().then(() => {
@@ -239,33 +528,91 @@ export class PreviewEngine {
     ctx: CanvasRenderingContext2D,
     target: HTMLCanvasElement,
     clip: Clip,
+    time = useEditor.getState().playhead,
   ): boolean {
-    const { stack, pending } = this.buildLutStack(clip)
-    // filter effects (blur/brightness/...): filtered self-draw over the canvas
-    if (clip.effects) {
-      const eff = clip.effects
-      const filters: string[] = []
-      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
-      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
-      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
-      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
-      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
-      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
-      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
-      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
-      if (filters.length > 0) {
-        // Reset the transform for the self-draw: the full canvas is being
-        // re-drawn over itself in screen space regardless of caller state.
+    const { stack, pending } = this.buildLutStack(clip, time)
+    const effects = this.effectsForRender(clip, time)
+    const effectFilter = effectFilterString(effects)
+
+    // A spatial matte requires grading an isolated copy, then compositing the
+    // graded pixels back through the mask. Without a mask we retain the fast
+    // in-place path below.
+    if (clip.adjustmentMask && (stack.length > 0 || effectFilter)) {
+      const graded = this.takeScratch()
+      const gctx = graded.getContext('2d')!
+      try {
+        gctx.drawImage(target, 0, 0)
+        if (effectFilter) {
+          gctx.save()
+          gctx.setTransform(1, 0, 0, 1, 0, 0)
+          gctx.filter = effectFilter
+          gctx.globalAlpha = 1
+          gctx.globalCompositeOperation = 'source-over'
+          gctx.drawImage(target, 0, 0)
+          gctx.restore()
+        }
+        if (stack.length) applyLutStackToCanvas(graded, stack)
+        this.applyAdjustmentMask(graded, clip.adjustmentMask)
         ctx.save()
         ctx.setTransform(1, 0, 0, 1, 0, 0)
-        ctx.filter = filters.join(' ')
+        ctx.filter = 'none'
         ctx.globalAlpha = 1
         ctx.globalCompositeOperation = 'source-over'
-        ctx.drawImage(target, 0, 0)
+        ctx.drawImage(graded, 0, 0)
         ctx.restore()
+      } finally {
+        this.releaseScratch(graded)
       }
+      return pending
+    }
+
+    // filter effects (blur/brightness/...): filtered self-draw over the canvas
+    if (effectFilter) {
+      ctx.save()
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.filter = effectFilter
+      ctx.globalAlpha = 1
+      ctx.globalCompositeOperation = 'source-over'
+      ctx.drawImage(target, 0, 0)
+      ctx.restore()
     }
     if (stack.length) applyLutStackToCanvas(target, stack)
+    return pending
+  }
+
+  /** Temporarily grades the already-composited footage below an audition layer. */
+  private applyPreviewAdjustmentLayer(
+    ctx: CanvasRenderingContext2D,
+    target: HTMLCanvasElement,
+    preview: Extract<VisualPreview, { kind: 'adjustment-layer' }>,
+  ): boolean {
+    const filter = effectFilterString(preview.effect)
+    if (filter) {
+      ctx.save()
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.filter = filter
+      ctx.globalAlpha = 1
+      ctx.globalCompositeOperation = 'source-over'
+      ctx.drawImage(target, 0, 0)
+      ctx.restore()
+    }
+
+    let pending = false
+    if (preview.lut?.enabled) {
+      const lut = resolveLutRef({ builtin: preview.lut.builtin, text: preview.lut.cubeText })
+      if (lut) {
+        applyLutStackToCanvas(target, [{ lut, intensity: Math.max(0, Math.min(1, preview.lut.intensity)) }])
+      } else {
+        pending = true
+        if (!this.pendingLutRedraw) {
+          this.pendingLutRedraw = true
+          whenLutsLoaded().then(() => {
+            this.pendingLutRedraw = false
+            this.redraw()
+          })
+        }
+      }
+    }
     return pending
   }
 
@@ -287,20 +634,31 @@ export class PreviewEngine {
   private loop = (ts: number) => {
     const dt = Math.min(0.05, (ts - this.last) / 1000)
     this.last = ts
-    const st = useEditor.getState()
-    let time = st.playhead
-    if (st.playing && !st.scrubbing) {
-      time += dt * st.speed
-      if (time >= st.duration) {
-        time = st.duration
-        st.pause()
-      } else if (time <= 0 && st.speed < 0) {
+    let frameState = useEditor.getState()
+    let time = frameState.playhead
+    if (frameState.playing && !frameState.scrubbing) {
+      time += dt * frameState.speed
+      const auditionEnd = !this.sampling ? frameState.visualPreview?.endTime : undefined
+      if (auditionEnd !== undefined && frameState.speed > 0 && time >= auditionEnd) {
+        // Keep the temporary look active on the last audition frame so the
+        // user can inspect it or Apply it after playback pauses.
+        time = auditionEnd
+        frameState.setPlayhead(time)
+        frameState.pause()
+      } else if (time >= frameState.duration) {
+        time = frameState.duration
+        frameState.setPlayhead(time)
+        frameState.pause()
+      } else if (time <= 0 && frameState.speed < 0) {
         time = 0
-        st.pause()
+        frameState.setPlayhead(time)
+        frameState.pause()
+      } else {
+        frameState.setPlayhead(time)
       }
-      st.setPlayhead(time)
+      frameState = useEditor.getState()
     }
-    this.renderFrame(time, st)
+    this.renderFrame(time, frameState)
     this.raf = requestAnimationFrame(this.loop)
   }
 
@@ -315,6 +673,7 @@ export class PreviewEngine {
   }
 
   private renderFrame(time: number, st: ReturnType<typeof useEditor.getState>) {
+    this.resolvedArtworkRigCache.clear()
     const ctx = this.backCtx
     ctx.fillStyle = '#000000'
     ctx.fillRect(0, 0, this.width, this.height)
@@ -324,13 +683,12 @@ export class PreviewEngine {
     // Standard NLE visual compositing: lower tracks drawn first, higher visual tracks composite on top
     const renderTracks = [...st.tracks].reverse()
 
-    for (const track of renderTracks) {
-      if (track.type === 'video' && track.hidden) {
-        continue
-      }
-
-      // Check if an active transition is playing on this track
-      const activeTrans = (st.transitions || []).find(
+    const renderTrackContents = (track: Track): boolean => {
+      const preview = this.activeVisualPreviewAt(time, st)
+      const previewTransition = preview?.kind === 'transition' && preview.transition.trackId === track.id
+        ? preview.transition
+        : null
+      const activeTrans = previewTransition || (st.transitions || []).find(
         (tr) =>
           tr.trackId === track.id &&
           tr.enabled &&
@@ -355,57 +713,114 @@ export class PreviewEngine {
             st,
             track.muted,
           )
-          continue
+          return false
         }
       }
 
       const clip = activeClipOnTrack(st.clips, track.id, time)
-      if (!clip) continue
+      if (!clip) return false
 
       // Adjustment layer: grades everything already drawn (all tracks below)
       if (clip.kind === 'adjustment' && track.type === 'video') {
-        if (this.applyAdjustmentLayer(ctx, this.backCanvas, clip)) visualPending = true
-        continue
+        return this.applyAdjustmentLayer(ctx, this.backCanvas, clip, time)
+      }
+
+      if (clip.kind === 'drawing' && track.type === 'video') {
+        // Converted drawing: strokes render here, in track order, with
+        // their original payloads — placement changed, appearance didn't.
+        const ids = new Set(clip.drawingStrokeIds || [])
+        const sts = (st.drawingStrokes || []).filter((x) => ids.has(x.id))
+        if (sts.length > 0) {
+          ctx.save()
+          ctx.globalAlpha *= Math.max(0, Math.min(1, clip.transform?.opacity ?? 1))
+          renderAllPaintLayers(ctx, this.width, this.height, sts, st.paintLayers || [], time, st.projectFps || 30)
+          ctx.restore()
+        }
+        return false
       }
 
       if (clip.kind === 'compound' && track.type === 'video') {
         this.drawCompoundClip(ctx, clip, time, st, track.muted)
-        continue
+        return false
       }
 
       const asset = st.assets.find((a) => a.id === clip.assetId)
       if (!asset) {
-        if (clip.textStyle && track.type === 'video') {
-          this.drawTextClip(ctx, clip)
-        }
-        continue
+        if (clip.textStyle && track.type === 'video') this.drawTextClip(ctx, clip, time)
+        return false
       }
       const el = this.syncElement(asset, time, clip, st.playing, track.muted, st.speed)
-      if (!el) {
-        if (track.type === 'video') visualPending = true
-        continue
-      }
+      if (!el) return track.type === 'video'
       if (track.type === 'video') {
         const media = asset.kind === 'video' ? el as HTMLVideoElement : null
-        if (media && (media.seeking || media.readyState < HTMLMediaElement.HAVE_CURRENT_DATA)) {
-          visualPending = true
-          continue
-        }
+        if (media && (media.seeking || media.readyState < HTMLMediaElement.HAVE_CURRENT_DATA)) return true
         this.drawClip(ctx, el as CanvasImageSource, clip, asset, time)
+      }
+      return false
+    }
+
+    // View-as-layers: strokes stamped while the mode was on composite
+    // directly above their topmost active anchor clip, clipped to the
+    // union of their anchor clips' view regions. Everything else (mode
+    // off, unstamped, converted) keeps the classic on-top pass below.
+    const layeredOn = Boolean((st as { viewVideosAsLayers?: boolean }).viewVideosAsLayers)
+    const layeredByTrack = new Map<string, { stroke: import('../types').DrawingStroke; rects: { x: number; y: number; w: number; h: number }[] }[]>()
+    if (layeredOn) {
+      for (const stroke of st.drawingStrokes || []) {
+        if (!stroke.layered || stroke.convertedClipId || !stroke.anchorClipIds?.length) continue
+        const anchors = stroke.anchorClipIds
+          .map((id) => st.clips.find((c) => c.id === id))
+          .filter((c): c is NonNullable<typeof c> => Boolean(c) && time >= c!.start && time < c!.start + c!.duration)
+        if (anchors.length === 0) continue
+        const top = anchors.reduce((a, b) =>
+          st.tracks.findIndex((t) => t.id === a.trackId) <= st.tracks.findIndex((t) => t.id === b.trackId) ? a : b,
+        )
+        const rects = anchors.map((c) => this.clipViewRect(c, st, time)).filter((r): r is NonNullable<typeof r> => Boolean(r))
+        if (rects.length === 0) continue
+        const list = layeredByTrack.get(top.trackId) || []
+        list.push({ stroke, rects })
+        layeredByTrack.set(top.trackId, list)
       }
     }
 
-    // Composite Paint Layers & Vector Drawing Strokes
+    for (const track of renderTracks) {
+      if (track.type === 'video' && track.hidden) continue
+      if (renderTrackContents(track)) visualPending = true
+      const layeredHere = layeredByTrack.get(track.id)
+      if (layeredHere && layeredHere.length > 0) {
+        ctx.save()
+        ctx.beginPath()
+        for (const item of layeredHere) for (const r of item.rects) ctx.rect(r.x, r.y, r.w, r.h)
+        ctx.clip()
+        renderAllPaintLayers(ctx, this.width, this.height, layeredHere.map((i) => i.stroke), st.paintLayers || [], time, st.projectFps || 30)
+        ctx.restore()
+      }
+
+      // Virtual adjustment layer: composite after its anchor track, just like
+      // a placed layer, but keep it outside clips/history/project data.
+      const preview = this.activeVisualPreviewAt(time, st)
+      if (preview?.kind === 'adjustment-layer' && preview.afterTrackId === track.id) {
+        if (this.applyPreviewAdjustmentLayer(ctx, this.backCanvas, preview)) visualPending = true
+      }
+    }
+
+    // A temporary title is an overlay audition: draw it above the timeline
+    // composite without inserting a clip into any track.
+    const textPreview = this.activeVisualPreviewAt(time, st)
+    if (textPreview?.kind === 'text-clip') {
+      this.drawTextClip(ctx, textPreview.clip, time)
+    }
+
+    // Composite Paint Layers & Vector Drawing Strokes (on-top pass:
+    // converted strokes render inside their clips; layered strokes were
+    // composited in-stack above when the mode is on).
     if (st.drawingStrokes && st.drawingStrokes.length > 0) {
-      renderAllPaintLayers(
-        ctx,
-        this.width,
-        this.height,
-        st.drawingStrokes,
-        st.paintLayers || [],
-        time,
-        st.projectFps || 30,
+      const topStrokes = st.drawingStrokes.filter(
+        (x) => !x.convertedClipId && !(layeredOn && x.layered && x.anchorClipIds?.length),
       )
+      if (topStrokes.length > 0) {
+        renderAllPaintLayers(ctx, this.width, this.height, topStrokes, st.paintLayers || [], time, st.projectFps || 30)
+      }
     }
 
     // Never flash black while Chromium is decoding a newly requested frame.
@@ -439,12 +854,12 @@ export class PreviewEngine {
 
     const drawFrom = (context: CanvasRenderingContext2D) => {
       if (fromEl && fromAsset) this.drawClip(context, fromEl as CanvasImageSource, fromClip, fromAsset, time)
-      else if (fromClip.textStyle) this.drawTextClip(context, fromClip)
+      else if (fromClip.textStyle) this.drawTextClip(context, fromClip, time)
     }
 
     const drawTo = (context: CanvasRenderingContext2D) => {
       if (toEl && toAsset) this.drawClip(context, toEl as CanvasImageSource, toClip, toAsset, time)
-      else if (toClip.textStyle) this.drawTextClip(context, toClip)
+      else if (toClip.textStyle) this.drawTextClip(context, toClip, time)
     }
 
     const progress = clamp((time - trans.startTime) / Math.max(0.001, trans.duration), 0, 1)
@@ -639,7 +1054,7 @@ export class PreviewEngine {
     const asset = st.assets.find((a) => a.id === clip.assetId)
     if (!asset) {
       if (clip.textStyle) {
-        this.drawTextClip(ctx, clip)
+        this.drawTextClip(ctx, clip, time)
         return true
       }
       return false
@@ -682,6 +1097,19 @@ export class PreviewEngine {
     allowClamping = false,
   ): HTMLVideoElement | HTMLAudioElement | HTMLImageElement | null {
     if (asset.kind === 'image') {
+      const sequence = asset.imageSequence
+      if (sequence?.frames?.length) {
+        const sourceTime = Math.max(0, clip.inPoint + (time - clip.start))
+        let frameIndex = 0
+        for (let i = 1; i < sequence.frames.length; i++) {
+          if (sequence.frames[i].time > sourceTime) break
+          frameIndex = i
+        }
+        const frame = sequence.frames[frameIndex]
+        const img = getImage({ ...asset, id: `${asset.id}:frame:${frameIndex}`, url: frame.url })
+        if (!img.complete || img.naturalWidth === 0) return null
+        return img
+      }
       const img = getImage(asset)
       if (!img.complete || img.naturalWidth === 0) return null
       return img
@@ -714,15 +1142,21 @@ export class PreviewEngine {
     return el
   }
 
-  private drawTextClip(ctx: CanvasRenderingContext2D, clip: Clip, skipLutIsolation = false) {
+  private drawTextClip(
+    ctx: CanvasRenderingContext2D,
+    clip: Clip,
+    time = useEditor.getState().playhead,
+    skipLutIsolation = false,
+  ) {
     if (!clip.textStyle) return
     // Per-clip LUT isolation for text clips (same semantics as drawClip).
-    if (!skipLutIsolation && clip.adjustment?.luts?.some((l) => l.enabled)) {
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled)) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
-      this.drawTextClip(octx, clip, true)
-      const { stack } = this.buildLutStack(clip)
+      this.drawTextClip(octx, clip, time, true)
+      const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
+      if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
         ctx.drawImage(scratch, 0, 0)
@@ -733,7 +1167,8 @@ export class PreviewEngine {
       return
     }
     ctx.save()
-    ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity))
+    applyClipFilter(ctx, this.effectsForRender(clip, time))
+    ctx.globalAlpha *= Math.max(0, Math.min(1, clip.transform.opacity))
 
     const cx = this.width / 2 + clip.transform.x * (this.width / PW)
     const cy = this.height / 2 + clip.transform.y * (this.height / PH)
@@ -793,6 +1228,74 @@ export class PreviewEngine {
     ctx.restore()
   }
 
+  private resolveLayeredArtworkRigPart(asset: MediaAsset, state: ReturnType<typeof useEditor.getState>) {
+    const documentId = getLayeredArtworkInfo(asset)?.documentId
+    if (!documentId) return undefined
+    const matchingRigs = (state.rigs || []).filter((rig) => (rig.sourceDocumentId || rig.psdDocumentId) === documentId)
+    const rig = matchingRigs.find((candidate) => candidate.id === state.activeRigId) ||
+      (matchingRigs.length === 1 ? matchingRigs[0] : undefined)
+    if (!rig) return undefined
+
+    let partsByAsset = this.resolvedArtworkRigCache.get(rig.id)
+    if (!partsByAsset) {
+      partsByAsset = new Map<string, RigResolvedPart>()
+      for (const resolved of resolveRig(rig)) {
+        if (resolved.part.sourceAssetId) partsByAsset.set(resolved.part.sourceAssetId, resolved)
+      }
+      this.resolvedArtworkRigCache.set(rig.id, partsByAsset)
+    }
+    const node = partsByAsset.get(asset.id)
+    return node ? { rig, node } : undefined
+  }
+
+  private drawPsdPuppetLayer(
+    ctx: CanvasRenderingContext2D,
+    image: CanvasImageSource,
+    asset: MediaAsset,
+    part: RigPart,
+    time: number,
+    drawX: number,
+    drawY: number,
+    drawWidth: number,
+    drawHeight: number,
+  ): boolean {
+    const pins = part.pins || []
+    const hasWarp = pins.some((pin) => Math.abs(pin.dx) > 1e-6 || Math.abs(pin.dy) > 1e-6) ||
+      (!!part.sway?.enabled && part.sway.distance > 0 && pins.length > 0)
+    if (!hasWarp) return false
+
+    const width = Math.max(1, Math.ceil(drawWidth))
+    const height = Math.max(1, Math.ceil(drawHeight))
+    const surface = this.puppetCanvas || (this.puppetCanvas = document.createElement('canvas'))
+    if (surface.width !== width) surface.width = width
+    if (surface.height !== height) surface.height = height
+
+    const surfaceContext = surface.getContext('2d')
+    if (!surfaceContext) return false
+    surfaceContext.setTransform(1, 0, 0, 1, 0, 0)
+    surfaceContext.globalAlpha = 1
+    surfaceContext.globalCompositeOperation = 'source-over'
+    surfaceContext.filter = 'none'
+    surfaceContext.imageSmoothingEnabled = true
+    surfaceContext.clearRect(0, 0, width, height)
+
+    const imageWidth = (image as HTMLImageElement).naturalWidth || asset.width
+    const imageHeight = (image as HTMLImageElement).naturalHeight || asset.height
+    drawPuppetWarp(
+      surfaceContext,
+      image,
+      imageWidth,
+      imageHeight,
+      pins,
+      part.sway,
+      Math.max(0, time),
+      stablePartSeed(part.id),
+      { x: 0, y: 0, width: drawWidth, height: drawHeight },
+    )
+    ctx.drawImage(surface, drawX, drawY, drawWidth, drawHeight)
+    return true
+  }
+
   private drawClip(
     ctx: CanvasRenderingContext2D,
     el: CanvasImageSource,
@@ -803,13 +1306,15 @@ export class PreviewEngine {
   ) {
     // Per-clip LUT grade ("effect placed inside the clip"): render the clip
     // into an isolated scratch canvas, grade it there, composite back so
-    // sibling content on the target canvas is untouched.
-    if (!skipLutIsolation && clip.adjustment?.luts?.some((l) => l.enabled)) {
+    // sibling content on the target canvas is untouched. A clip Mask uses the
+    // same isolation: it mattes the clip's own graded pixels (only).
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled)) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawClip(octx, el, clip, asset, time, true)
-      const { stack } = this.buildLutStack(clip)
+      const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
+      if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of
       // an enclosing compound must keep applying to this clip's pixels).
       const t = ctx.getTransform()
@@ -832,27 +1337,34 @@ export class PreviewEngine {
       asset.height ||
       PH
     const cover = Math.max(this.width / vw, this.height / vh)
-    const dw = vw * cover
-    const dh = vh * cover
+    const artwork = getLayeredArtworkInfo(asset)
+    const artworkComposite = toCanvasCompositeOperation(artwork?.blendMode)
+    const hasArtworkCanvas = Boolean(artwork && artwork.documentWidth > 0 && artwork.documentHeight > 0)
+    // Cropped source layers share one document-space fit and retain their
+    // signed offsets rather than independently covering the frame.
+    const artworkFit = hasArtworkCanvas
+      ? Math.min(this.width / artwork!.documentWidth, this.height / artwork!.documentHeight)
+      : null
+    const layoutScale = artworkFit ?? cover
+    const dw = vw * layoutScale
+    const dh = vh * layoutScale
+    const drawX = hasArtworkCanvas
+      ? -(artwork!.documentWidth * artworkFit!) / 2 + (artwork!.left || 0) * artworkFit!
+      : -dw / 2
+    const drawY = hasArtworkCanvas
+      ? -(artwork!.documentHeight * artworkFit!) / 2 + (artwork!.top || 0) * artworkFit!
+      : -dh / 2
 
     const evalT = evaluateClipAnimation(clip, time)
     ctx.save()
-    ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity))
-
-    // Apply Real Clip Effects (brightness, contrast, saturation, blur, grayscale, invert, sepia, hueRotate)
-    if (clip.effects) {
-      const eff = clip.effects
-      const filters: string[] = []
-      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
-      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
-      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
-      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
-      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
-      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
-      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
-      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
-      if (filters.length > 0) ctx.filter = filters.join(' ')
+    ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity))
+    if (artwork && !artwork.opacityBaked) {
+      ctx.globalAlpha *= Math.max(0, Math.min(1, artwork.opacity))
     }
+    if (artworkComposite) ctx.globalCompositeOperation = artworkComposite
+
+    // Clip filters stack on top of any enclosing compound filter.
+    applyClipFilter(ctx, this.effectsForRender(clip, time))
 
     const cx = this.width / 2 + evalT.x * (this.width / PW)
     const cy = this.height / 2 + evalT.y * (this.height / PH)
@@ -861,6 +1373,8 @@ export class PreviewEngine {
     ctx.scale(evalT.scaleX, evalT.scaleY)
 
     const st = useEditor.getState()
+    const resolvedPsdPart = artwork ? this.resolveLayeredArtworkRigPart(asset, st) : undefined
+    const rigPart = resolvedPsdPart?.node.part
     const isOmniFrameEligible =
       asset.id === 'asset-death-note-vid' ||
       clip.assetId === 'asset-death-note-vid' ||
@@ -874,19 +1388,47 @@ export class PreviewEngine {
       clip.name.toLowerCase().includes('room') ||
       asset.name.toLowerCase().includes('chair') ||
       clip.name.toLowerCase().includes('chair')
-    if (isOmniFrameEligible && st.omniframeCharacters && st.omniframeCharacters.length > 0) {
-      this.drawOmniframeCharacters(ctx, dw, dh, time, st, asset)
-    } else {
-      try {
-        ctx.drawImage(el, -dw / 2, -dh / 2, dw, dh)
-      } catch {
-        /* not ready */
+    if (!rigPart?.hidden) {
+      if (!resolvedPsdPart && isOmniFrameEligible && st.omniframeCharacters && st.omniframeCharacters.length > 0) {
+        this.drawOmniframeCharacters(ctx, dw, dh, time, st, asset)
+      } else {
+        const drawSource = () => {
+          try {
+            const warped = rigPart
+              ? this.drawPsdPuppetLayer(ctx, el, asset, rigPart, time - clip.start, drawX, drawY, dw, dh)
+              : false
+            if (!warped) ctx.drawImage(el, drawX, drawY, dw, dh)
+          } catch {
+            /* not ready */
+          }
+        }
+
+        if (resolvedPsdPart) {
+          const { rig, node } = resolvedPsdPart
+          const world = node.world
+          const sourceDocumentWidth = Math.max(1, artwork?.documentWidth || rig.canvasWidth || 1)
+          const sourceDocumentHeight = Math.max(1, artwork?.documentHeight || rig.canvasHeight || 1)
+          const rigScaleX = (artworkFit ?? 1) * (sourceDocumentWidth / Math.max(1, rig.canvasWidth || sourceDocumentWidth))
+          const rigScaleY = (artworkFit ?? 1) * (sourceDocumentHeight / Math.max(1, rig.canvasHeight || sourceDocumentHeight))
+          const pivotX = drawX + node.part.pivot.x * dw
+          const pivotY = drawY + node.part.pivot.y * dh
+          ctx.save()
+          ctx.globalAlpha *= Math.max(0, Math.min(1, world.opacity ?? 1))
+          ctx.translate(pivotX + world.x * rigScaleX, pivotY + world.y * rigScaleY)
+          ctx.rotate(((world.rotation || 0) * Math.PI) / 180)
+          ctx.scale(world.scale ?? 1, world.scale ?? 1)
+          ctx.translate(-pivotX, -pivotY)
+          drawSource()
+          ctx.restore()
+        } else {
+          drawSource()
+        }
       }
     }
 
     // Render Title / Text Overlay if clip has text style
     if (clip.textStyle) {
-      this.drawTextClip(ctx, clip)
+      this.drawTextClip(ctx, clip, time)
     }
 
     ctx.restore()
@@ -923,7 +1465,16 @@ export class PreviewEngine {
       const evalT = st.evaluateCharacterTransformAtTime(char.id, time)
       if ((evalT.opacity ?? 1) <= 0.01) continue
 
-      const imgUrl = char.recolorUrl || char.cutoutUrl
+      let sequenceUrl: string | null = null
+      if (!char.recolorUrl && char.cutoutSequence?.length) {
+        let sequenceFrame: { time: number; url: string } | undefined
+        for (const frame of char.cutoutSequence) {
+          if (frame.time > time) break
+          sequenceFrame = frame
+        }
+        if (sequenceFrame) sequenceUrl = sequenceFrame.url
+      }
+      const imgUrl = char.recolorUrl || sequenceUrl || char.cutoutUrl
       const charImg = getUrlImage(imgUrl)
       if (!charImg.complete || charImg.naturalWidth === 0) continue
 
@@ -939,7 +1490,7 @@ export class PreviewEngine {
       const ch = baseH * scale
 
       ctx.save()
-      ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity ?? 1))
+      ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity ?? 1))
       ctx.translate(cx, cy)
       if (evalT.rotation) {
         ctx.rotate((evalT.rotation * Math.PI) / 180)
@@ -975,12 +1526,13 @@ export class PreviewEngine {
     // LUT grade require isolated rendering so the grade stays scoped to this
     // compound's pixels only.
     const hasNestedAdjustment = childClips.some((c) => c.kind === 'adjustment')
-    const { stack: ownLuts } = this.buildLutStack(clip)
-    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0)) {
+    const { stack: ownLuts } = this.buildLutStack(clip, time)
+    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled)) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
+      if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state intact (outer opacity /
       // filter / transform keep applying, exactly like non-isolated draws).
       const t = ctx.getTransform()
@@ -1006,21 +1558,9 @@ export class PreviewEngine {
   ) {
     const evalT = evaluateClipAnimation(clip, time)
     ctx.save()
-    ctx.globalAlpha = Math.max(0, Math.min(1, evalT.opacity))
+    ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity))
 
-    if (clip.effects) {
-      const eff = clip.effects
-      const filters: string[] = []
-      if (typeof eff.brightness === 'number') filters.push(`brightness(${eff.brightness})`)
-      if (typeof eff.contrast === 'number') filters.push(`contrast(${eff.contrast})`)
-      if (typeof eff.saturation === 'number') filters.push(`saturate(${eff.saturation})`)
-      if (typeof eff.blur === 'number' && eff.blur > 0) filters.push(`blur(${eff.blur}px)`)
-      if (typeof eff.grayscale === 'number' && eff.grayscale > 0) filters.push(`grayscale(${eff.grayscale})`)
-      if (typeof eff.invert === 'number' && eff.invert > 0) filters.push(`invert(${eff.invert})`)
-      if (typeof eff.sepia === 'number' && eff.sepia > 0) filters.push(`sepia(${eff.sepia})`)
-      if (typeof eff.hueRotate === 'number' && eff.hueRotate > 0) filters.push(`hue-rotate(${eff.hueRotate}deg)`)
-      if (filters.length > 0) ctx.filter = filters.join(' ')
-    }
+    applyClipFilter(ctx, this.effectsForRender(clip, time))
 
     const cx = this.width / 2 + evalT.x * (this.width / PW)
     const cy = this.height / 2 + evalT.y * (this.height / PH)
@@ -1040,7 +1580,7 @@ export class PreviewEngine {
       // Nested adjustment layer: grades only what has been drawn inside
       // this compound so far (the scratch canvas when isolated).
       if (childClip.kind === 'adjustment' && childTrack.type === 'video') {
-        this.applyAdjustmentLayer(ctx, ctx.canvas, childClip)
+        this.applyAdjustmentLayer(ctx, ctx.canvas, childClip, innerTime)
         continue
       }
 
@@ -1052,7 +1592,7 @@ export class PreviewEngine {
       const childAsset = st.assets.find((a) => a.id === childClip.assetId)
       if (!childAsset) {
         if (childClip.textStyle && childTrack.type === 'video') {
-          this.drawTextClip(ctx, childClip)
+          this.drawTextClip(ctx, childClip, innerTime)
         }
         continue
       }
@@ -1074,6 +1614,7 @@ export class PreviewEngine {
     this.unsubscribe?.()
     this.unsubscribe = null
     if (activePreviewEngine === this) activePreviewEngine = null
+    this.puppetCanvas = null
     if (this.sampling) {
       this.samplePool.forEach((el) => {
         el.pause()

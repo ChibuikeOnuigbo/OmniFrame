@@ -1,6 +1,6 @@
 {
   "suite": "rotomask-e2e",
-  "date": "2026-10-08T23:34:44.884Z",
+  "date": "2026-10-15T22:07:12.418Z",
   "total": 19,
   "passed": 19,
   "failed": 0,
@@ -61,9 +61,9 @@
       "details": "scope=section label=\"RotoMask (omni-roto-anime-v1)\""
     },
     {
-      "name": "12. Cut Out + Patch BG (copy-paste workflow)",
+      "name": "12. Cut Out + Patch BG (temporal sequence)",
       "status": "PASS",
-      "details": "patch asset + clip above video + character layer on top"
+      "details": "9 patch frames + 9 OmniFrame cutout frames over 0.97s"
     },
     {
       "name": "13. Remove from Video (object removal)",

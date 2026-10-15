@@ -20,8 +20,11 @@ import {
   resolvePart,
   sampleBend,
   sampleWind,
+  stablePartSeed,
 } from '../lib/rigging'
 import { PanelSection } from './PanelSection'
+import { drawPuppetWarp } from '../lib/puppetWarp'
+import { getLayeredArtworkInfo, toCssArtworkBlendMode } from '../lib/layeredArtworkMetadata'
 
 // ---------------------------------------------------------------------------
 // small shared controls
@@ -130,11 +133,116 @@ function ToggleField({
 }
 
 // ---------------------------------------------------------------------------
-// the rig canvas
+// puppet raster warp + rig canvas
 // ---------------------------------------------------------------------------
+
+function PuppetArtwork({
+  src,
+  pins,
+  sway,
+  time,
+  seed,
+  partName,
+}: {
+  src: string
+  pins: RigPart['pins']
+  sway: RigPart['sway']
+  time: number
+  seed: number
+  partName: string
+}) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const imageRef = useRef<HTMLImageElement | null>(null)
+  const [imageVersion, setImageVersion] = useState(0)
+
+  useEffect(() => {
+    let live = true
+    const image = new Image()
+    image.onload = () => {
+      if (!live) return
+      imageRef.current = image
+      setImageVersion((version) => version + 1)
+    }
+    image.onerror = () => {
+      if (live) imageRef.current = null
+    }
+    image.src = src
+    return () => {
+      live = false
+      imageRef.current = null
+    }
+  }, [src])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const image = imageRef.current
+    if (!canvas || !image || !image.complete || !image.naturalWidth || !image.naturalHeight) return
+    const width = canvas.clientWidth
+    const height = canvas.clientHeight
+    if (!width || !height) return
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+    const pixelWidth = Math.max(1, Math.round(width * dpr))
+    const pixelHeight = Math.max(1, Math.round(height * dpr))
+    if (canvas.width !== pixelWidth) canvas.width = pixelWidth
+    if (canvas.height !== pixelHeight) canvas.height = pixelHeight
+    const context = canvas.getContext('2d')
+    if (!context) return
+    context.setTransform(dpr, 0, 0, dpr, 0, 0)
+    context.clearRect(0, 0, width, height)
+    context.imageSmoothingEnabled = true
+
+    const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight)
+    const drawWidth = image.naturalWidth * scale
+    const drawHeight = image.naturalHeight * scale
+    const offsetX = (width - drawWidth) / 2
+    const offsetY = (height - drawHeight) / 2
+    const activePins = pins || []
+    const hasWarp = activePins.some((pin) => Math.abs(pin.dx) > 1e-6 || Math.abs(pin.dy) > 1e-6) ||
+      (!!sway?.enabled && sway.distance > 0 && activePins.length > 0)
+
+    if (!hasWarp) {
+      context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight)
+      return
+    }
+
+    drawPuppetWarp(
+      context,
+      image,
+      image.naturalWidth,
+      image.naturalHeight,
+      activePins,
+      sway,
+      time,
+      seed,
+      { x: offsetX, y: offsetY, width: drawWidth, height: drawHeight },
+      dpr,
+    )
+  }, [pins, sway, time, seed, imageVersion])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      aria-hidden="true"
+      data-testid="puppet-artwork"
+      data-puppet-pin-count={pins?.length || 0}
+      data-sway-enabled={String(!!sway?.enabled)}
+      data-sway-frame={Math.round(time * 100)}
+      data-puppet-part-name={partName}
+    />
+  )
+}
+
+function hairPinLayout(part: RigPart): Array<{ x: number; y: number }> {
+  return part.bounds.width > part.bounds.height
+    ? [{ x: 0.1, y: 0.5 }, { x: 0.5, y: 0.5 }, { x: 0.9, y: 0.5 }]
+    : [{ x: 0.5, y: 0.1 }, { x: 0.5, y: 0.5 }, { x: 0.5, y: 0.9 }]
+}
 
 function RigCanvas({
   parts,
+  documentWidth,
+  documentHeight,
   selectedId,
   tool,
   showSkeleton,
@@ -146,6 +254,8 @@ function RigCanvas({
   onAddPin,
 }: {
   parts: RigPart[]
+  documentWidth?: number
+  documentHeight?: number
   selectedId: string | null
   tool: string
   showSkeleton: boolean
@@ -165,11 +275,24 @@ function RigCanvas({
     () => ({ id: 'preview', name: 'preview', parts, createdAt: 0, updatedAt: 0 }),
     [parts],
   )
+  const animatedRig = useMemo<Rig>(() => {
+    const depths = new Map(parts.map((part) => [part.id, Math.max(0, (resolvePart(rigObj, part.id)?.chain.length || 1) - 1)]))
+    return {
+      ...rigObj,
+      parts: rigObj.parts.map((part) => {
+        const swayAngle = sampleWind(part.wind, time, depths.get(part.id) || 0, stablePartSeed(part.id))
+        if (!swayAngle) return part
+        return {
+          ...part,
+          transform: { ...part.transform, rotation: (part.transform.rotation || 0) + swayAngle },
+        }
+      }),
+    }
+  }, [parts, rigObj, time])
   const resolved = useMemo(
-    () => parts.map((p) => resolvePart(rigObj, p.id)).filter((n): n is RigResolvedPart => !!n),
-    [parts, rigObj],
+    () => animatedRig.parts.map((p) => resolvePart(animatedRig, p.id)).filter((n): n is RigResolvedPart => !!n),
+    [animatedRig],
   )
-  void time
 
   const localPoint = useCallback((clientX: number, clientY: number) => {
     const box = boxRef.current?.getBoundingClientRect()
@@ -218,6 +341,15 @@ function RigCanvas({
           if (part.hidden) return null
           const selected = part.id === selectedId
           const pivotPx = { left: `${part.pivot.x * 100}%`, top: `${part.pivot.y * 100}%` }
+          // Layered-artwork offsets use document pixels so the same transform scales
+          // with the preview panel and the sequence canvas. CSS percentage
+          // translation is relative to this part's own bounds.
+          const translateX = documentWidth
+            ? `${(world.x / Math.max(1e-6, part.bounds.width * documentWidth)) * 100}%`
+            : `${world.x}px`
+          const translateY = documentHeight
+            ? `${(world.y / Math.max(1e-6, part.bounds.height * documentHeight)) * 100}%`
+            : `${world.y}px`
           return (
             <div key={part.id}>
               {/* The part itself. Nested transform: world (incl. parents) then local. */}
@@ -234,10 +366,12 @@ function RigCanvas({
                   top: `${part.bounds.y * 100}%`,
                   width: `${part.bounds.width * 100}%`,
                   height: `${part.bounds.height * 100}%`,
-                  opacity: world.opacity,
-                  transform: `translate(${world.x}px, ${world.y}px) rotate(${world.rotation}deg) scale(${world.scale})`,
+                  opacity: world.opacity * (part.sourceOpacity ?? 1),
+                  mixBlendMode: toCssArtworkBlendMode(part.sourceBlendMode),
+                  transform: `translate(${translateX}, ${translateY}) rotate(${world.rotation}deg) scale(${world.scale})`,
+                  transformOrigin: `${part.pivot.x * 100}% ${part.pivot.y * 100}%`,
                   background: part.cutoutUrl
-                    ? `center/contain no-repeat url(${part.cutoutUrl})`
+                    ? 'transparent'
                     : selected
                       ? 'rgba(109,94,252,0.35)'
                       : 'rgba(255,255,255,0.10)',
@@ -257,7 +391,18 @@ function RigCanvas({
                     onSelect(part.id)
                   }
                 }}
-              />
+              >
+                {part.cutoutUrl && (
+                  <PuppetArtwork
+                    src={part.cutoutUrl}
+                    pins={part.pins}
+                    sway={part.sway}
+                    time={time}
+                    seed={stablePartSeed(part.id)}
+                    partName={part.name}
+                  />
+                )}
+              </div>
 
               {/* Pivot: the point the part rotates about. */}
               {(showPivots || selected) && (
@@ -354,6 +499,7 @@ function RigCanvas({
 
 export default function Rigging() {
   const rigs = useEditor((s) => s.rigs)
+  const assets = useEditor((s) => s.assets)
   const activeRigId = useEditor((s) => s.activeRigId)
   const selectedPartId = useEditor((s) => s.selectedPartId)
   const rigTool = useEditor((s) => s.rigTool)
@@ -363,6 +509,8 @@ export default function Rigging() {
   const setSelectedPart = useEditor((s) => s.setSelectedPart)
   const createRig = useEditor((s) => s.createRig)
   const createRigFromCharacter = useEditor((s) => s.createRigFromCharacter)
+  const createRigFromLayeredArtwork = useEditor((s) => s.createRigFromLayeredArtwork)
+  const placeLayeredArtworkOnTimeline = useEditor((s) => s.placeLayeredArtworkOnTimeline)
   const deleteRig = useEditor((s) => s.deleteRig)
   const setRigPartCutout = useEditor((s) => s.setRigPartCutout)
   const characters = useEditor((s) => s.omniframeCharacters)
@@ -374,10 +522,12 @@ export default function Rigging() {
   const setRigPartTransform = useEditor((s) => s.setRigPartTransform)
   const setRigPartBend = useEditor((s) => s.setRigPartBend)
   const setRigPartWind = useEditor((s) => s.setRigPartWind)
+  const setRigPartSway = useEditor((s) => s.setRigPartSway)
   const reorderRigPart = useEditor((s) => s.reorderRigPart)
   const toggleRigPartHidden = useEditor((s) => s.toggleRigPartHidden)
   const toggleRigPartLocked = useEditor((s) => s.toggleRigPartLocked)
   const addRigPin = useEditor((s) => s.addRigPin)
+  const addRigPins = useEditor((s) => s.addRigPins)
   const moveRigPin = useEditor((s) => s.moveRigPin)
   const removeRigPin = useEditor((s) => s.removeRigPin)
   const autoRigParts = useEditor((s) => s.autoRigParts)
@@ -390,6 +540,26 @@ export default function Rigging() {
   const [scrub, setScrub] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [parentError, setParentError] = useState('')
+  const [selectedArtworkDocumentId, setSelectedArtworkDocumentId] = useState('')
+
+  const layeredDocuments = useMemo(() => {
+    const documents = new Map<string, { id: string; name: string; layers: number; format: string }>()
+    for (const asset of assets) {
+      const source = getLayeredArtworkInfo(asset)
+      if (!source) continue
+      const current = documents.get(source.documentId)
+      documents.set(source.documentId, {
+        id: source.documentId,
+        name: source.documentName,
+        format: source.sourceFormat,
+        layers: (current?.layers || 0) + 1,
+      })
+    }
+    return [...documents.values()]
+  }, [assets])
+  const activeArtworkDocumentId = layeredDocuments.some((doc) => doc.id === selectedArtworkDocumentId)
+    ? selectedArtworkDocumentId
+    : layeredDocuments[0]?.id || ''
 
   const rig = rigs.find((r) => r.id === activeRigId) || null
   const parts = rig?.parts ?? []
@@ -426,22 +596,54 @@ export default function Rigging() {
   )
 
   const onPinDrag = useCallback(
-    (partId: string, pinId: string, dx: number, dy: number) => {
+    (partId: string, pinId: string, canvasX: number, canvasY: number) => {
       if (!rig) return
       const target = parts.find((p) => p.id === partId)
       const pin = target?.pins?.find((p) => p.id === pinId)
       if (!target || !pin) return
-      moveRigPin(rig.id, partId, pinId, dx - target.bounds.x, dy - target.bounds.y)
+      const localX = Math.max(0, Math.min(1, (canvasX - target.bounds.x) / Math.max(1e-6, target.bounds.width)))
+      const localY = Math.max(0, Math.min(1, (canvasY - target.bounds.y) / Math.max(1e-6, target.bounds.height)))
+      moveRigPin(rig.id, partId, pinId, localX - pin.x, localY - pin.y)
     },
     [rig, parts, moveRigPin],
   )
 
   const onAddPin = useCallback(
-    (partId: string, x: number, y: number) => {
-      if (rig) addRigPin(rig.id, partId, x, y)
+    (partId: string, canvasX: number, canvasY: number) => {
+      if (!rig) return
+      const target = parts.find((p) => p.id === partId)
+      if (!target) return
+      const x = Math.max(0, Math.min(1, (canvasX - target.bounds.x) / Math.max(1e-6, target.bounds.width)))
+      const y = Math.max(0, Math.min(1, (canvasY - target.bounds.y) / Math.max(1e-6, target.bounds.height)))
+      addRigPin(rig.id, partId, x, y)
     },
-    [rig, addRigPin],
+    [rig, parts, addRigPin],
   )
+
+  const addMissingHairPins = useCallback(() => {
+    if (!rig || !part) return
+    const existing = part.pins || []
+    const needed = Math.max(0, 3 - existing.length)
+    if (!needed) return
+    const candidates = hairPinLayout(part)
+    const missing = candidates.filter((candidate) =>
+      existing.every((pin) => Math.hypot(pin.x - candidate.x, pin.y - candidate.y) > 0.08),
+    )
+    const fill = [...missing, ...candidates.filter((candidate) => !missing.includes(candidate))]
+    addRigPins(rig.id, part.id, fill.slice(0, needed))
+  }, [rig, part, addRigPins])
+
+  const createHairSway = useCallback(() => {
+    if (!rig || !part) return
+    addMissingHairPins()
+    setRigPartSway(rig.id, part.id, {
+      enabled: true,
+      distance: part.sway?.distance ?? 0.08,
+      speed: part.sway?.speed ?? 0.8,
+      direction: part.sway?.direction ?? (part.bounds.width > part.bounds.height ? 'vertical' : 'horizontal'),
+    })
+    setPlaying(true)
+  }, [rig, part, addMissingHairPins, setRigPartSway])
 
   const setTransform = useCallback(
     (patch: Partial<ClipTransform>) => {
@@ -452,6 +654,10 @@ export default function Rigging() {
 
   const bendPreview = part?.bend ? sampleBend(part.bend, 0.5) : 0
   const windPreview = part?.wind ? sampleWind(part.wind, scrub, 0) : 0
+  const isDocumentSpaceRig = !!((rig?.sourceDocumentId || rig?.psdDocumentId) && rig.canvasWidth && rig.canvasHeight)
+  const documentPixelLabel = rig?.sourceFormat === 'psd' || rig?.psdDocumentId ? 'PSD px' : 'document px'
+  const rigXLimit = isDocumentSpaceRig ? Math.min(400, Math.max(1, Math.round((rig?.canvasWidth || 1) / 2))) : 400
+  const rigYLimit = isDocumentSpaceRig ? Math.min(400, Math.max(1, Math.round((rig?.canvasHeight || 1) / 2))) : 400
 
   return (
     <div className="flex h-full min-h-0 flex-col bg-[#0f0f11] text-white/90">
@@ -524,6 +730,8 @@ export default function Rigging() {
         <div className="flex min-h-0 flex-1 flex-col gap-2">
           <RigCanvas
             parts={parts}
+            documentWidth={rig?.canvasWidth}
+            documentHeight={rig?.canvasHeight}
             selectedId={selectedPartId}
             tool={rigTool}
             showSkeleton={showSkeleton}
@@ -579,8 +787,52 @@ export default function Rigging() {
           className="flex w-full shrink-0 flex-col gap-2 overflow-y-auto lg:w-[300px]"
         >
           <PanelSection title="Parts" defaultOpen>
+            <div className="mb-2 rounded-md border border-brand/25 bg-brand/5 p-2" id="rig-from-psd">
+              <div className="mb-1 text-[10px] font-semibold text-brand-200">Layered artwork rigging workflow</div>
+              <div className="flex items-end gap-1.5">
+                <label className="block min-w-0 flex-1" htmlFor="rig-source-psd">
+                  <span className="mb-0.5 block text-[10px] text-white/45">Layered artwork document</span>
+                  <select
+                    id="rig-source-psd"
+                    className="h-7 w-full rounded border border-white/15 bg-black/40 px-1 text-[11px] text-white/85 disabled:opacity-50"
+                    value={activeArtworkDocumentId}
+                    onChange={(event) => setSelectedArtworkDocumentId(event.target.value)}
+                    disabled={layeredDocuments.length === 0}
+                  >
+                    {layeredDocuments.length === 0 ? (
+                      <option value="">Import PSD or OpenRaster layers first</option>
+                    ) : layeredDocuments.map((document) => (
+                      <option key={document.id} value={document.id}>
+                        {document.name} · {document.format.toUpperCase()} ({document.layers} layers)
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  type="button"
+                  id="rig-from-psd-go"
+                  disabled={!activeArtworkDocumentId}
+                  className="h-7 shrink-0 rounded border border-brand-400 bg-brand px-2 text-[11px] text-white hover:bg-brand-400 disabled:opacity-40"
+                  onClick={() => activeArtworkDocumentId && createRigFromLayeredArtwork(activeArtworkDocumentId)}
+                >
+                  Rig artwork layers
+                </button>
+              </div>
+              <button
+                type="button"
+                id="rig-place-psd-timeline"
+                disabled={!activeArtworkDocumentId}
+                className="mt-2 h-7 w-full rounded border border-white/15 bg-white/5 px-2 text-[10px] text-white/75 hover:bg-white/10 disabled:opacity-40"
+                onClick={() => activeArtworkDocumentId && placeLayeredArtworkOnTimeline(activeArtworkDocumentId)}
+              >
+                Place aligned artwork layers on timeline
+              </button>
+              <p className="mt-1 text-[9px] leading-snug text-white/40">
+                Raster layer offsets and supported opacity/blend settings are retained. Placement creates synchronized still clips; a matching rig drives its layers in sequence playback and the canvas-capture export path. X/Y uses document pixels. Encoded export parity and unsupported source-app features remain unverified.
+              </p>
+            </div>
             {!rig ? (
-              <p className="text-[11px] text-white/40">Create a rig first.</p>
+              <p className="text-[11px] text-white/40">Import layered PSD/OpenRaster artwork above or create a rig to add parts manually.</p>
             ) : (
               <>
                 {/* The one-tap path: an already-segmented cutout becomes a rig. */}
@@ -865,18 +1117,18 @@ export default function Rigging() {
               <PanelSection title="Transform" defaultOpen>
                 <SliderField
                   id="rig-tx"
-                  label="X"
+                  label={isDocumentSpaceRig ? `X · ${documentPixelLabel}` : 'X'}
                   value={part.transform.x}
-                  min={-400}
-                  max={400}
+                  min={-rigXLimit}
+                  max={rigXLimit}
                   onChange={(v) => setTransform({ x: v })}
                 />
                 <SliderField
                   id="rig-ty"
-                  label="Y"
+                  label={isDocumentSpaceRig ? `Y · ${documentPixelLabel}` : 'Y'}
                   value={part.transform.y}
-                  min={-400}
-                  max={400}
+                  min={-rigYLimit}
+                  max={rigYLimit}
                   onChange={(v) => setTransform({ y: v })}
                 />
                 <SliderField
@@ -962,6 +1214,67 @@ export default function Rigging() {
                 )}
               </PanelSection>
 
+              <PanelSection title="Hair / cloth sway" defaultOpen={!!part.sway}>
+                <div className="mb-2 flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    id="rig-create-sway"
+                    className="h-7 rounded border border-brand-400 bg-brand px-2 text-[11px] text-white hover:bg-brand-400"
+                    onClick={createHairSway}
+                  >
+                    {part.sway?.enabled ? 'Preview sway' : 'Create sway'}
+                  </button>
+                  <span className="text-[9px] text-white/40">Adds up to 3 distributed puppet pins.</span>
+                </div>
+                <ToggleField
+                  id="rig-sway-on"
+                  label="Enable pin deformation"
+                  checked={!!part.sway?.enabled}
+                  onChange={(enabled) => setRigPartSway(rig.id, part.id, {
+                    enabled,
+                    distance: part.sway?.distance ?? 0.08,
+                    speed: part.sway?.speed ?? 0.8,
+                    direction: part.sway?.direction ?? (part.bounds.width > part.bounds.height ? 'vertical' : 'horizontal'),
+                  })}
+                />
+                {part.sway?.enabled && (
+                  <>
+                    <SliderField
+                      id="rig-sway-distance"
+                      label="Sway distance"
+                      value={part.sway.distance}
+                      min={0}
+                      max={0.35}
+                      step={0.005}
+                      format={(value) => `${Math.round(value * 100)}%`}
+                      onChange={(value) => setRigPartSway(rig.id, part.id, { distance: value })}
+                    />
+                    <SliderField
+                      id="rig-sway-speed"
+                      label="Sway speed"
+                      value={part.sway.speed}
+                      min={0.1}
+                      max={3}
+                      step={0.1}
+                      format={(value) => `${value.toFixed(1)} cycles/s`}
+                      onChange={(value) => setRigPartSway(rig.id, part.id, { speed: value })}
+                    />
+                    <label className="block text-[10px] text-white/45" htmlFor="rig-sway-direction">
+                      Direction
+                      <select
+                        id="rig-sway-direction"
+                        className="mt-0.5 h-7 w-full rounded border border-white/15 bg-black/40 px-1 text-[11px] text-white/85"
+                        value={part.sway.direction}
+                        onChange={(event) => setRigPartSway(rig.id, part.id, { direction: event.target.value as 'horizontal' | 'vertical' })}
+                      >
+                        <option value="horizontal">Side to side</option>
+                        <option value="vertical">Up and down</option>
+                      </select>
+                    </label>
+                  </>
+                )}
+              </PanelSection>
+
               <PanelSection title="Wind" defaultOpen={!!part.wind}>
                 <ToggleField
                   id="rig-wind-on"
@@ -1019,6 +1332,18 @@ export default function Rigging() {
               </PanelSection>
 
               <PanelSection title="Pins" defaultOpen={(part.pins || []).length > 0}>
+                <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    id="rig-add-three-pins"
+                    disabled={(part.pins || []).length >= 3}
+                    className="h-7 rounded border border-white/15 bg-white/5 px-2 text-[11px] text-white/80 hover:bg-white/10 disabled:opacity-40"
+                    onClick={addMissingHairPins}
+                  >
+                    Add three hair pins
+                  </button>
+                  <span className="text-[9px] text-white/40">Root, middle, tip</span>
+                </div>
                 <p className="mb-1.5 text-[10px] leading-snug text-white/45">
                   Pick the Pin tool, then click a part to drop a pin. Drag pins to deform that area
                   freely.

@@ -1,13 +1,13 @@
 {
-  "testTimestamp": "2026-10-05T00:26:29.118Z",
+  "testTimestamp": "2026-10-15T22:23:06.120Z",
   "viewport": {
     "width": 1440,
     "height": 900
   },
   "categoryFilters": {
     "all": 10,
-    "video": 6,
-    "twoD": 4,
+    "video": 8,
+    "twoD": 5,
     "threeD": 1
   },
   "subModeChanneling": {

@@ -1,9 +1,13 @@
 import { recolorImage } from './lib/recolor'
+import { planDrawingToClips } from './lib/drawingToClips'
+import { importPsdDocument } from './lib/psdImport'
+import { getLayeredArtworkInfo } from './lib/layeredArtworkMetadata'
 import type { RecolorBlend } from './lib/recolor'
 import { create } from 'zustand'
 import type {
   Clip,
   MediaAsset,
+  SourceDocument,
   Track,
   TrackType,
   ClipTransform,
@@ -46,12 +50,14 @@ import type {
   OmniframeScopeType,
   SelectionModeType,
   ClipMask,
+  ClipVisualMask,
   Sequence,
   TransparencyMask,
   BrushDynamics,
   GuidedMatteRecord,
   SidebarSectionMode,
 } from './types'
+import { DEFAULT_CLIP_MASK } from './types'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -88,6 +94,7 @@ export type LeftTab =
   | 'text'
   | 'threed'
   | 'rigging'
+  | 'pack'
 
 export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
   {
@@ -272,12 +279,15 @@ import {
 } from './store/gapTools'
 import { createOmniframeCharacterSlice } from './store/omniframeCharacters'
 import { createRotoMaskSlice } from './store/rotoMask'
+import { createSmartPatchSlice } from './store/smartPatch'
+import type { SmartPatchSlice } from './store/smartPatch'
 import type {
   RotoMaskSlice,
   RotoMaskFrameResult,
   RotoMaskRecord,
   RotoStatus,
   RotoFrameScope,
+  RotoInpaintState,
   RotoToolMode,
 } from './store/rotoMask'
 import type { RotoModelDescriptor } from './lib/rotoModels'
@@ -293,8 +303,10 @@ import { measureIntegratedLufs } from './lib/loudness'
 // INEFFECTIVE_DYNAMIC_IMPORT warnings without moving any chunk.
 import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } from './lib/rotoBrush'
 import { denoiseAudioBuffer } from './lib/aiDenoise'
+import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
+import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
 
-interface EditorState extends RiggingSlice, RotoMaskSlice {
+interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   selectionBrushAuto: boolean
   selectionBrushTolerance: number
   selectionWandTolerance: number
@@ -308,15 +320,34 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   rotoScope: RotoFrameScope
   rotoFrames: RotoMaskFrameResult[]
   rotoTracking: { running: boolean; done: number; total: number }
+  rotoInpaint: RotoInpaintState
   rotoTool: RotoToolMode
   rotoTolerance: number
   rotoBrushRadius: number
   rotoLumaExport: { url: string; frame: number; at: number } | null
   assets: MediaAsset[]
+  sourceDocuments: SourceDocument[]
+  projectName: string
+  saveOmniProject: (name?: string) => Promise<Blob>
+  setProjectName: (name: string) => void
+  loadOmniProject: (file: File) => Promise<void>
+  mediaImportNotice: string | null
+  clearMediaImportNotice: () => void
   tracks: Track[]
   clips: Clip[]
   transitions: Transition[]
   selectedTransitionId: string | null
+  /** Transient visual audition state; excluded from Doc/project serialization. */
+  visualPreview: VisualPreview | null
+  startVisualPreview: (preview: VisualPreviewInput) => void
+  stopVisualPreview: () => void
+  applyVisualPreview: () => void
+  /** Clip whose Mask outline is drawn/edited on the monitor (transient). */
+  maskEditClipId: string | null
+  setMaskEditClip: (id: string | null) => void
+  addClipMask: (clipId: string) => void
+  updateClipMask: (clipId: string, patch: Partial<ClipVisualMask>) => void
+  removeClipMask: (clipId: string) => void
   playhead: number
   duration: number
   pxPerSec: number
@@ -325,6 +356,30 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   projectFps: number
   dropFrameTimecode: boolean
   previewQuality: PreviewQuality
+  /** Hide horizontal overflow app-wide (default on): strips use hover arrows / wheel / drag instead of visible scrollbars. */
+  hideOverflowX: boolean
+  /** Drawing: treat selected video clips as paint layers (drawing sits in
+   *  the clip stack) instead of always compositing on top of everything. */
+  viewVideosAsLayers: boolean
+  setViewVideosAsLayers: (v: boolean) => void
+  /** Convert all unconverted drawing strokes into timeline drawing clips. */
+  convertDrawingToClips: () => { clips: number; tracks: number; strokes: number }
+  /** Docker customization (Settings > Dockers): which left tabs and right
+   *  sub-tools the user keeps on their rails. Persisted per user. */
+  dockerPrefs: { leftTabs: Record<string, boolean>; rightSubtools: Record<string, boolean> }
+  setDockerPref: (kind: 'leftTabs' | 'rightSubtools', id: string, visible: boolean) => void
+  /** One-shot request for a panel to bring a section forward (rail flyouts). */
+  drawingSectionRequest: string | null
+  /** When inside a compound clip: the parent clip's visible window into
+   *  this sequence (trimmed head/tail show as cut voids in the timeline). */
+  compoundWindow: { in: number; out: number; total: number } | null
+  /** CapCut-style In/Out export range: exports render only this slice. */
+  exportRange: { in: number; out: number } | null
+  setExportIn: () => void
+  setExportOut: () => void
+  clearExportRange: () => void
+  requestDrawingSection: (section: string | null) => void
+  setHideOverflowX: (v: boolean) => void
   audioIsolationModel: VoiceIsolationModel
   selectedClipId: string | null
   tool: Tool
@@ -436,16 +491,19 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
 
   // ---- adjustment layers & LUTs ----
   /** Built-in LUT library (public/luts/manifest.json). */
-  lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string }> }
+  lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string; tags?: string[] }> }
   /** User-uploaded .cube LUTs (persisted to localStorage when they fit). */
   userLuts: Array<{ id: string; name: string; cubeText: string }>
   loadLutLibrary: () => Promise<void>
   addUserLut: (name: string, cubeText: string) => string | null
   removeUserLut: (id: string) => void
+  clearUserLuts: () => void
   /**
-   * Creates an adjustment-layer clip (kind 'adjustment') that grades every
-   * track below it. With no args it spans playhead→content end on the
-   * topmost video track.
+   * Creates a timeline adjustment clip that grades content below its track.
+   * With a visual clip selected it is placed immediately above that clip,
+   * matches its time range, and stays below any higher title/overlay tracks.
+   * With no visual selection it is placed above the lowest active video clip
+   * at the playhead and spans the remaining content.
    */
   addAdjustmentLayer: (partial?: {
     name?: string
@@ -475,6 +533,12 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   // ---- media ----
   addAsset: (a: MediaAsset) => void
   importFiles: (files: FileList | File[]) => Promise<void>
+  /** Adds one undoable generated-audio operation: assets, synchronized audio
+   * tracks/clips, and optional source/stem mute changes. */
+  addGeneratedAudioTracks: (
+    entries: { asset: MediaAsset; clip: Omit<Clip, 'trackId'>; trackName: string }[],
+    options?: { extraAssets?: MediaAsset[]; muteClipIds?: string[]; selectedClipId?: string },
+  ) => { trackIds: string[]; clipIds: string[] }
 
   // ---- tracks / clips ----
   ensureTrack: (type: TrackType) => string
@@ -484,6 +548,10 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   setTrackHeight: (id: string, height: number) => void
   setTrackName: (id: string, name: string) => void
   addClipToTrack: (trackId: string, assetId: string, atTime?: number) => void
+  /** Place visible raster layers from imported layered artwork as aligned still clips. */
+  placeLayeredArtworkOnTimeline: (documentId: string, atTime?: number) => string[]
+  /** @deprecated PSD-specific alias retained for older callers. */
+  placePsdDocumentOnTimeline: (documentId: string, atTime?: number) => string[]
   moveClip: (id: string, newStart: number, newTrackId?: string) => void
   moveClipToNewTrack: (
     clipId: string,
@@ -905,6 +973,8 @@ async function loadDrawableSource(
 }
 
 export const useEditor = create<EditorState>((set, get) => {
+  let maskUndoAt = 0
+  let maskUndoClipId = ''
   const pushSnapshot = () => {
     const snap = cloneDoc(get())
     set((s) => ({ past: [...s.past.slice(-49), snap], future: [] }))
@@ -950,6 +1020,27 @@ export const useEditor = create<EditorState>((set, get) => {
         size: 384000,
       },
     ],
+    sourceDocuments: [],
+    projectName: 'Untitled',
+    saveOmniProject: async (name) => buildOmniProjectBundle(get(), name || get().projectName),
+    setProjectName: (name) => set({ projectName: name.trim() || 'Untitled' }),
+    loadOmniProject: async (file) => {
+      const loaded = await parseOmniProjectBundle(file)
+      set({
+        ...loaded.state as Partial<EditorState>,
+        projectName: loaded.projectName,
+        playing: false,
+        visualPreview: null,
+        scrubbing: false,
+        inInteraction: false,
+        rotoBusy: false,
+        guidedMatteBusy: false,
+        mediaImportNotice: null,
+        past: [],
+        future: [],
+      })
+    },
+    mediaImportNotice: null,
     tracks: [],
     clips: [],
     transitions: [],
@@ -965,6 +1056,8 @@ export const useEditor = create<EditorState>((set, get) => {
       }
     })(),
     selectedTransitionId: null,
+    visualPreview: null,
+    maskEditClipId: null,
     playhead: 0,
     duration: 10,
     pxPerSec: 100,
@@ -973,6 +1066,21 @@ export const useEditor = create<EditorState>((set, get) => {
     projectFps: 30,
     dropFrameTimecode: false,
     previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
+    hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
+    viewVideosAsLayers: false,
+    dockerPrefs: (() => {
+      try {
+        const raw = localStorage.getItem('omniframe.dockerPrefs')
+        if (raw) {
+          const parsed = JSON.parse(raw)
+          return { leftTabs: parsed.leftTabs || {}, rightSubtools: parsed.rightSubtools || {} }
+        }
+      } catch { /* private mode / bad json */ }
+      return { leftTabs: {}, rightSubtools: {} }
+    })(),
+    drawingSectionRequest: null,
+    compoundWindow: null,
+    exportRange: null,
     audioIsolationModel: 'omni-voicetarget',
     selectedClipId: null,
     selectedClipIds: [],
@@ -1056,6 +1164,8 @@ export const useEditor = create<EditorState>((set, get) => {
         scale: { x: 1, y: 1, z: 1 },
         color: '#8b5cf6',
         wireframe: false,
+        roughness: 0.25,
+        metalness: 0.8,
       },
     ],
     selected3DObjectId: '3d-wheel-1',
@@ -1249,6 +1359,7 @@ export const useEditor = create<EditorState>((set, get) => {
     ...createOmniframeCharacterSlice(set, get, { pushSnapshot }),
     // RotoMask: click-to-segment rotoscoping (see ./store/rotoMask.ts).
     ...createRotoMaskSlice(set, get, { pushSnapshot }),
+    ...createSmartPatchSlice(set, get, pushSnapshot),
     rotoModelId: 'smart',
     rotoImportedModels: [],
     rotoStatus: { state: 'idle', message: 'Smart engine ready - no model needed' },
@@ -1258,6 +1369,16 @@ export const useEditor = create<EditorState>((set, get) => {
     rotoScope: { mode: 'current', start: 0, end: 2, step: 1 },
     rotoFrames: [],
     rotoTracking: { running: false, done: 0, total: 0 },
+    rotoInpaint: {
+      phase: 'idle',
+      done: 0,
+      total: 0,
+      message: '',
+      candidates: [],
+      selectedDonorFrame: null,
+      targetFrames: [],
+      donorByTarget: [],
+    },
     rotoTool: null,
     rotoTolerance: 26,
     rotoBrushRadius: 24,
@@ -1480,7 +1601,7 @@ export const useEditor = create<EditorState>((set, get) => {
     loadLutLibrary: async () => {
       if (get().lutLibrary.loaded) return
       try {
-        const res = await fetch('luts/manifest.json')
+        const res = await fetch('/luts/manifest.json')
         if (!res.ok) throw new Error(String(res.status))
         const manifest = await res.json()
         set({ lutLibrary: { loaded: true, luts: manifest.luts || [] } })
@@ -1513,31 +1634,79 @@ export const useEditor = create<EditorState>((set, get) => {
       } catch { /* ignore */ }
     },
 
+    clearUserLuts: () => {
+      set({ userLuts: [] })
+      try {
+        localStorage.removeItem('omniframe.userLuts')
+      } catch { /* ignore */ }
+    },
+
     addAdjustmentLayer: (partial = {}) => {
       pushSnapshot()
       const s = get()
-      const start = Math.max(0, partial.start ?? s.playhead)
       const contentEnd = s.clips.reduce((m, c) => Math.max(m, c.start + c.duration), 0)
-      const duration = Math.max(0.5, partial.duration ?? Math.max(2, contentEnd - start))
+      const selected = s.clips.find((c) => c.id === s.selectedClipId)
+      const selectedIsVisual =
+        !!selected &&
+        selected.kind !== 'adjustment' &&
+        selected.kind !== 'audio' &&
+        selected.kind !== 'text' &&
+        !selected.textStyle
+      const selectedAnchor = selectedIsVisual ? selected : undefined
+      const start = Math.max(0, partial.start ?? selectedAnchor?.start ?? s.playhead)
+      const duration = Math.max(
+        0.5,
+        partial.duration ?? selectedAnchor?.duration ?? Math.max(2, contentEnd - start),
+      )
 
-      // Default target: the topmost video track with no overlapping clip, so
-      // the layer grades everything below it while tracks above (e.g. text)
-      // stay untouched.
-      const videoTracks = s.tracks.filter((t) => t.type === 'video')
-      const overlaps = (trackId: string) =>
-        s.clips.some(
-          (c) =>
-            c.trackId === trackId &&
-            !(c.start + c.duration <= start || c.start >= start + duration),
+      // Tracks are stored top-to-bottom; the compositor draws them bottom-up.
+      // Put the new adjustment immediately above its target base clip. That
+      // makes it affect that clip and tracks below, while titles/overlays on
+      // higher tracks stay clean. Without a selected base clip, choose the
+      // lowest active non-adjustment visual at the playhead.
+      const trackIndex = (trackId: string) => s.tracks.findIndex((t) => t.id === trackId)
+      const activeVideoClips = s.clips.filter((c) => {
+        const track = s.tracks.find((t) => t.id === c.trackId)
+        return (
+          track?.type === 'video' &&
+          !track.hidden &&
+          !c.hidden &&
+          c.kind !== 'adjustment' &&
+          s.playhead >= c.start &&
+          s.playhead < c.start + c.duration
         )
+      })
+      const activeBaseClip = activeVideoClips
+        .filter((c) => c.kind !== 'text' && !c.textStyle)
+        .sort((a, b) => trackIndex(b.trackId) - trackIndex(a.trackId))[0]
+      const activeTextClip = activeVideoClips
+        .filter((c) => c.kind === 'text' || !!c.textStyle)
+        .sort((a, b) => trackIndex(b.trackId) - trackIndex(a.trackId))[0]
+      const anchor = selectedAnchor || activeBaseClip
+
+      let tracks = s.tracks
       let targetTrackId = partial.trackId || ''
       if (!targetTrackId) {
-        const free = videoTracks.find((t) => !overlaps(t.id))
-        targetTrackId =
-          free?.id ||
-          (videoTracks[0]
-            ? get().createTrack('video', 'above', videoTracks[0].id)
-            : get().ensureTrack('video'))
+        const anchorIndex = anchor ? trackIndex(anchor.trackId) : -1
+        const textTrackIndex = activeTextClip ? trackIndex(activeTextClip.trackId) + 1 : -1
+        const bottomVideoIndex = s.tracks.reduce(
+          (last, track, index) => (track.type === 'video' ? index : last),
+          -1,
+        )
+        // If there is only a title at the playhead, place the layer underneath
+        // it rather than grading the title itself.
+        const insertAt = anchorIndex >= 0
+          ? anchorIndex
+          : textTrackIndex >= 0
+            ? textTrackIndex
+            : bottomVideoIndex >= 0
+              ? bottomVideoIndex
+              : 0
+        const videoCount = s.tracks.filter((t) => t.type === 'video').length
+        const layerTrack = makeTrack('video', `V${videoCount + 1}`)
+        tracks = [...s.tracks]
+        tracks.splice(insertAt, 0, layerTrack)
+        targetTrackId = layerTrack.id
       }
 
       const id = `clip-adjustment-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
@@ -1559,12 +1728,16 @@ export const useEditor = create<EditorState>((set, get) => {
         effects: partial.effects,
         adjustment: partial.luts?.length ? { luts: partial.luts } : undefined,
       }
-      set((st) => ({
-        clips: [...st.clips, clip],
-        selectedClipId: id,
-        selectedClipIds: [id],
-        duration: recompute([...st.clips, clip]),
-      }))
+      set((st) => {
+        const clips = [...st.clips, clip]
+        return {
+          tracks,
+          clips,
+          selectedClipId: id,
+          selectedClipIds: [id],
+          duration: recompute(clips),
+        }
+      })
       return id
     },
 
@@ -1677,18 +1850,27 @@ export const useEditor = create<EditorState>((set, get) => {
 
     placeEffectAsLayer: (name, effect) => {
       const s = get()
-      // Prefer the selected adjustment layer, else one active at playhead.
       const selected = s.clips.find((c) => c.id === s.selectedClipId)
-      const target =
-        selected?.kind === 'adjustment'
-          ? selected
-          : s.clips.find(
+      // Explicitly selecting an adjustment clip means "add to this layer".
+      // With no selection, reuse the layer already covering the playhead.
+      // Selecting ordinary media instead creates a separate timeline layer
+      // above that clip (and below any existing titles or overlays).
+      const activeAdjustment = selected
+        ? undefined
+        : s.clips
+            .filter(
               (c) =>
                 c.kind === 'adjustment' &&
                 s.playhead >= c.start &&
                 s.playhead < c.start + c.duration &&
                 !c.hidden,
             )
+            .sort((a, b) => {
+              const ai = s.tracks.findIndex((t) => t.id === a.trackId)
+              const bi = s.tracks.findIndex((t) => t.id === b.trackId)
+              return ai - bi
+            })[0]
+      const target = selected?.kind === 'adjustment' ? selected : activeAdjustment
       if (target) {
         pushSnapshot()
         set((st) => ({
@@ -1765,16 +1947,99 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     addAsset: (a) => set((s) => ({ assets: [...s.assets, a] })),
+    clearMediaImportNotice: () => set({ mediaImportNotice: null }),
+
+    addGeneratedAudioTracks: (entries, options = {}) => {
+      if (entries.length === 0 && !(options.extraAssets?.length)) {
+        return { trackIds: [], clipIds: [] }
+      }
+      pushSnapshot()
+      const tracks = entries.map((entry) => makeTrack('audio', entry.trackName))
+      const newClips = entries.map((entry, index): Clip => ({
+        ...entry.clip,
+        trackId: tracks[index].id,
+      }))
+      const mutedIds = new Set(options.muteClipIds || [])
+      set((s) => {
+        const clips = [
+          ...s.clips.map((clip) => mutedIds.has(clip.id) ? { ...clip, volume: 0 } : clip),
+          ...newClips,
+        ]
+        return {
+          assets: [...s.assets, ...(options.extraAssets || []), ...entries.map((entry) => entry.asset)],
+          tracks: [...s.tracks, ...tracks],
+          clips,
+          selectedClipId: options.selectedClipId ?? newClips[newClips.length - 1]?.id ?? s.selectedClipId,
+          duration: recompute(clips),
+        }
+      })
+      return { trackIds: tracks.map((track) => track.id), clipIds: newClips.map((clip) => clip.id) }
+    },
 
     importFiles: async (files) => {
       const list = Array.from(files as ArrayLike<File>)
+      set({ mediaImportNotice: null })
       for (const file of list) {
-        const asset = await readMediaFile(file)
-        if (!asset) continue
-        get().addAsset(asset)
-        // Invariant I-10: Media import adds to project library ONLY.
-        // It does NOT insert into timeline. Loads into Source Monitor for preview.
-        get().setSourcePreviewAsset(asset.id)
+        try {
+          if (/\.omni$/i.test(file.name)) {
+            await get().loadOmniProject(file)
+            set({ mediaImportNotice: `Opened OmniFrame project “${file.name}”; project state and embedded media were restored.` })
+            continue
+          }
+
+          if (/\.psd$/i.test(file.name) || (!/\.psb$/i.test(file.name) && file.type === 'image/vnd.adobe.photoshop')) {
+            const result = await importPsdDocument(file)
+            const sourceDocument = sourceDocumentFromFile(file, result.sourceDocumentId)
+            set((s) => ({
+              assets: [...s.assets, ...result.assets],
+              sourceDocuments: [...s.sourceDocuments, sourceDocument],
+            }))
+            set({ mediaImportNotice: result.notice })
+            // PSD import adds either its supported raster layers or one saved
+            // flattened composite to the library only; the user explicitly
+            // chooses which artwork to place/rig next.
+            if (result.assets[0]) get().setSourcePreviewAsset(result.assets[0].id)
+            continue
+          }
+
+          if (/\.(?:ora|kra)$/i.test(file.name)) {
+            const { importArtworkArchive } = await import('./lib/layeredArtworkImport')
+            const result = await importArtworkArchive(file)
+            const sourceDocument = sourceDocumentFromFile(file, result.sourceDocumentId)
+            set((s) => ({
+              assets: [...s.assets, ...result.assets],
+              sourceDocuments: [...s.sourceDocuments, sourceDocument],
+            }))
+            set({ mediaImportNotice: result.notice })
+            if (result.assets[0]) get().setSourcePreviewAsset(result.assets[0].id)
+            continue
+          }
+
+          if (/\.(?:psb|xcf|clip|cmc|procreate|afphoto|afdesign|pdn|mdp|rif|ai)$/i.test(file.name)) {
+            const extension = file.name.split('.').pop()?.toLowerCase() || ''
+            const sourceApp: Record<string, string> = {
+              psb: 'Photoshop PSB', xcf: 'GIMP', clip: 'Clip Studio Paint', cmc: 'Clip Studio Paint',
+              procreate: 'Procreate', afphoto: 'Affinity Photo', afdesign: 'Affinity Designer',
+              pdn: 'Paint.NET', mdp: 'FireAlpaca/MediBang', rif: 'Corel Painter', ai: 'Adobe Illustrator',
+            }
+            const conversion = extension === 'xcf'
+              ? 'Export as OpenRaster (.ora) for its supported raster subset, or PNG for a flat render.'
+              : extension === 'ai'
+                ? 'Export a checked PDF, SVG, or PNG from Illustrator; fonts, links, live effects, and native editability are not transferred.'
+                : 'Export PNG for a flat render, or PSD/ORA only when the source app offers it; verify that export in the source application before relying on its layers.'
+            throw new Error(`${sourceApp[extension] || 'This application'} native files are not safely decoded as complete projects. ${conversion}`)
+          }
+
+          const asset = await readMediaFile(file)
+          if (!asset) continue
+          get().addAsset(asset)
+          // Invariant I-10: Media import adds to project library ONLY.
+          // It does NOT insert into timeline. Loads into Source Monitor for preview.
+          get().setSourcePreviewAsset(asset.id)
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
+          set({ mediaImportNotice: `Could not import “${file.name}”: ${message}` })
+        }
       }
     },
 
@@ -1954,6 +2219,55 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
+    placeLayeredArtworkOnTimeline: (documentId, atTime) => {
+      const state = get()
+      const layers = state.assets
+        .map((asset) => ({ asset, meta: getLayeredArtworkInfo(asset) }))
+        .filter((entry) => entry.asset.kind === 'image' && entry.meta?.documentId === documentId)
+        .sort((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
+      if (layers.length === 0) return []
+
+      const start = Math.max(0, atTime ?? state.playhead)
+      // Keep the still layers synchronized as a single static composite.
+      const duration = Math.max(...layers.map(({ asset }) => asset.duration || 5))
+      const tracks = layers.map(({ asset, meta }) => {
+        const layerName = meta?.layerName || asset.name
+        return makeTrack('video', `${(meta?.sourceFormat || 'artwork').toUpperCase()} · ${layerName}`)
+      })
+      const clips: Clip[] = layers.map(({ asset, meta }, index) => ({
+        id: uid('clip'),
+        trackId: tracks[index].id,
+        assetId: asset.id,
+        start,
+        duration,
+        inPoint: 0,
+        name: meta?.layerName || asset.name,
+        kind: asset.kind,
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+      }))
+
+      // Source layer order is front-to-back. New tracks keep that order at the
+      // top; playback reverses tracks so the front layer composites last.
+      pushSnapshot()
+      set((s) => {
+        const nextClips = [...s.clips, ...clips]
+        return {
+          tracks: [...tracks, ...s.tracks],
+          clips: nextClips,
+          selectedClipId: clips[0].id,
+          selectedClipIds: clips.map((clip) => clip.id),
+          monitorMode: 'program',
+          duration: recompute(nextClips),
+        }
+      })
+      return clips.map((clip) => clip.id)
+    },
+
+    placePsdDocumentOnTimeline: (documentId, atTime) =>
+      get().placeLayeredArtworkOnTimeline(documentId, atTime),
+
     moveClip: (id, newStart, newTrackId) => {
       const current = get().clips.find((c) => c.id === id)
       if (!current || get().tracks.find((t) => t.id === current.trackId)?.locked) return
@@ -2081,8 +2395,15 @@ export const useEditor = create<EditorState>((set, get) => {
         const selectedClipId =
           s.selectedClipId && targetIds.has(s.selectedClipId) ? null : s.selectedClipId
 
+        // Deleting a converted drawing clip returns its strokes to the
+        // live drawing pass (they were never destroyed by conversion).
+        const drawingStrokes = s.drawingStrokes.some((st) => st.convertedClipId && targetIds.has(st.convertedClipId))
+          ? s.drawingStrokes.map((st) => (st.convertedClipId && targetIds.has(st.convertedClipId) ? { ...st, convertedClipId: undefined } : st))
+          : s.drawingStrokes
+
         return {
           clips,
+          drawingStrokes,
           transitions,
           linkSets,
           parentRelationships,
@@ -2293,6 +2614,37 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...partial } : c)) }))
     },
 
+    // ---- Clip Mask (CapCut/AE-style visibility mask; undoable) ----
+    // Slider/drag updates coalesce: at most one undo snapshot per burst.
+    setMaskEditClip: (id) => set({ maskEditClipId: id }),
+    addClipMask: (clipId) => {
+      pushSnapshot()
+      set((s) => ({
+        clips: s.clips.map((c) => (c.id === clipId ? { ...c, mask: { ...DEFAULT_CLIP_MASK } } : c)),
+        maskEditClipId: clipId,
+      }))
+    },
+    updateClipMask: (clipId, patch) => {
+      const now = Date.now()
+      if (maskUndoClipId !== clipId || now - maskUndoAt > 1200) {
+        pushSnapshot()
+        maskUndoClipId = clipId
+      }
+      maskUndoAt = now
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === clipId ? { ...c, mask: { ...DEFAULT_CLIP_MASK, ...c.mask, ...patch } } : c,
+        ),
+      }))
+    },
+    removeClipMask: (clipId) => {
+      pushSnapshot()
+      set((s) => ({
+        clips: s.clips.map((c) => (c.id === clipId ? { ...c, mask: undefined } : c)),
+        maskEditClipId: s.maskEditClipId === clipId ? null : s.maskEditClipId,
+      }))
+    },
+
     setClipTransform: (id, partial) => {
       set((s) => ({
         clips: s.clips.map((c) =>
@@ -2460,6 +2812,7 @@ export const useEditor = create<EditorState>((set, get) => {
         if (mainSeq) {
           set({
             activeSequenceId: 'main',
+            compoundWindow: null,
             breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
             tracks: mainSeq.tracks,
             clips: mainSeq.clips,
@@ -2486,7 +2839,24 @@ export const useEditor = create<EditorState>((set, get) => {
 
       const newBreadcrumbs = [{ id: 'main', name: 'Main Timeline' }, { id: targetSeq.id, name: targetSeq.name }]
 
+      // The parent compound clip's trim defines the visible window; the
+      // trimmed head/tail render inside as faint cut voids.
+      let compoundWindow: { in: number; out: number; total: number } | null = null
+      if (targetSeq.compoundClipId) {
+        const parentClip =
+          currentSnapshot.clips.find((c) => c.id === targetSeq.compoundClipId) ||
+          updatedSequences.flatMap((seq) => seq.clips).find((c) => c.id === targetSeq.compoundClipId)
+        if (parentClip) {
+          compoundWindow = {
+            in: Math.max(0, parentClip.inPoint || 0),
+            out: Math.max(0, (parentClip.inPoint || 0) + parentClip.duration),
+            total: targetSeq.duration,
+          }
+        }
+      }
+
       set({
+        compoundWindow,
         activeSequenceId: targetSeq.id,
         breadcrumbs: newBreadcrumbs,
         tracks: structuredClone(targetSeq.tracks),
@@ -2503,6 +2873,102 @@ export const useEditor = create<EditorState>((set, get) => {
       get().openSequence(sequenceId)
     },
 
+    startVisualPreview: (input) => set((s) => {
+      const minimumWindow = 0.05
+      const start = clamp(input.startTime, 0, Math.max(0, s.duration - minimumWindow))
+      const end = Math.min(Math.max(start + minimumWindow, input.endTime), Math.max(s.duration, start + minimumWindow))
+      const previousPreview = s.visualPreview
+      return {
+        visualPreview: {
+          ...input,
+          startTime: start,
+          endTime: end,
+          id: uid('visual-preview'),
+          // Replacing an audition still returns to the playhead/speed from
+          // before the first audition, not the middle of the previous one.
+          returnPlayhead: previousPreview?.returnPlayhead ?? s.playhead,
+          returnSpeed: previousPreview?.returnSpeed ?? s.speed,
+        },
+        playhead: start,
+        playing: true,
+        speed: 1,
+        monitorMode: 'program',
+      }
+    }),
+    stopVisualPreview: () => {
+      const preview = get().visualPreview
+      if (!preview) return
+      set((s) => ({
+        visualPreview: null,
+        playing: false,
+        playhead: clamp(preview.returnPlayhead, 0, s.duration),
+        speed: preview.returnSpeed,
+      }))
+    },
+    applyVisualPreview: () => {
+      const preview = get().visualPreview
+      if (!preview || preview.kind === 'clip-playback' || preview.kind === 'range-playback') return
+      if (preview.kind === 'clip-effect') {
+        if (!get().clips.some((clip) => clip.id === preview.clipId)) return get().stopVisualPreview()
+        pushSnapshot()
+        set((s) => ({
+          clips: s.clips.map((clip) => clip.id === preview.clipId
+            ? { ...clip, effects: { ...clip.effects, ...preview.effect } }
+            : clip),
+        }))
+      } else if (preview.kind === 'clip-lut') {
+        if (!get().clips.some((clip) => clip.id === preview.clipId)) return get().stopVisualPreview()
+        get().addLutToClip(preview.clipId, preview.lut)
+      } else if (preview.kind === 'adjustment-layer') {
+        const anchor = get().clips.find((clip) => clip.id === preview.anchorClipId)
+        if (!anchor) return get().stopVisualPreview()
+        get().selectClip(anchor.id)
+        if (preview.effect) {
+          get().placeEffectAsLayer(preview.label, preview.effect)
+        } else if (preview.lut) {
+          get().addAdjustmentLayer({
+            name: `Adjustment: ${preview.lut.name}`,
+            start: anchor.start,
+            duration: anchor.duration,
+            luts: [{ ...preview.lut, id: uid('clip-lut') }],
+          })
+        }
+      } else if (preview.kind === 'transition') {
+        const { id: _previewId, ...transition } = preview.transition
+        get().addTransition(transition)
+      } else if (preview.kind === 'text-clip') {
+        const state = get()
+        const clipData = structuredClone(preview.clip)
+        let trackId = state.tracks.some((track) => track.id === clipData.trackId) ? clipData.trackId : ''
+        if (!trackId) {
+          const videoTracks = state.tracks.filter((track) => track.type === 'video')
+          const overlaps = (candidateId: string) => state.clips.some(
+            (clip) => clip.trackId === candidateId && !(clip.start + clip.duration <= clipData.start || clip.start >= clipData.start + clipData.duration),
+          )
+          const baseTrack = videoTracks[0]
+          const availableTrack = baseTrack && !overlaps(baseTrack.id)
+            ? baseTrack
+            : videoTracks.find((track) => !overlaps(track.id))
+          if (availableTrack) {
+            trackId = availableTrack.id
+            pushSnapshot()
+          } else if (baseTrack) {
+            // createTrack records the pre-commit snapshot itself.
+            trackId = get().createTrack('video', 'above', baseTrack.id)
+          } else {
+            trackId = get().ensureTrack('video')
+          }
+        } else {
+          pushSnapshot()
+        }
+        const clip: Clip = { ...clipData, id: uid('text'), trackId }
+        set((s) => {
+          const clips = [...s.clips, clip]
+          return { clips, selectedClipId: clip.id, selectedClipIds: [clip.id], duration: recompute(clips) }
+        })
+      }
+      get().stopVisualPreview()
+    },
     setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
     // Importing or clicking a media asset sets monitorMode to 'source', and the
     // preview then tears down the engine that owns the playhead clock. Playing
@@ -2538,6 +3004,10 @@ export const useEditor = create<EditorState>((set, get) => {
     setPreviewQuality: (previewQuality) => {
       localStorage.setItem('omniframe.previewQuality', previewQuality)
       set({ previewQuality })
+    },
+    setHideOverflowX: (v) => {
+      try { localStorage.setItem('omniframe.hideOverflowX', v ? 'yes' : 'no') } catch { /* private mode */ }
+      set({ hideOverflowX: v })
     },
     setAudioIsolationModel: (model) => set({ audioIsolationModel: model }),
 
@@ -2596,7 +3066,24 @@ export const useEditor = create<EditorState>((set, get) => {
     // ---- drawing actions ----
     addDrawingStroke: (stroke) => {
       pushSnapshot()
-      set((s) => ({ drawingStrokes: [...s.drawingStrokes, stroke] }))
+      set((s) => {
+        // Strict layered stamping: a stroke joins the layer stack only when
+        // "View videos as layers" was ON at the moment it was drawn, and it
+        // passes through exactly the clips selected at that moment.
+        const stamped: DrawingStroke = s.viewVideosAsLayers
+          ? {
+              ...stroke,
+              layered: true,
+              anchorClipIds: (s.selectedClipIds.length > 0
+                ? s.selectedClipIds
+                : s.selectedClipId
+                  ? [s.selectedClipId]
+                  : []
+              ).filter((id) => s.clips.some((c) => c.id === id)),
+            }
+          : { ...stroke, layered: false }
+        return { drawingStrokes: [...s.drawingStrokes, stamped] }
+      })
     },
     clearDrawingStrokes: (layerId) => {
       pushSnapshot()
@@ -2612,6 +3099,90 @@ export const useEditor = create<EditorState>((set, get) => {
     setDrawingOpacity: (opacity) => set({ drawingOpacity: Math.max(0, Math.min(1, opacity)) }),
     setDrawingScope: (scope) => set({ drawingScope: scope }),
     setDrawingEnabled: (enabled) => set({ drawingEnabled: enabled }),
+    setViewVideosAsLayers: (v) => set({ viewVideosAsLayers: v }),
+    setDockerPref: (kind, id, visible) => {
+      set((s) => ({ dockerPrefs: { ...s.dockerPrefs, [kind]: { ...s.dockerPrefs[kind], [id]: visible } } }))
+      try {
+        localStorage.setItem('omniframe.dockerPrefs', JSON.stringify(get().dockerPrefs))
+      } catch { /* private mode */ }
+    },
+    requestDrawingSection: (section) => set({ drawingSectionRequest: section }),
+    setExportIn: () =>
+      set((s) => ({
+        exportRange: { in: Math.max(0, s.playhead), out: Math.max(Math.max(0, s.playhead) + 0.1, s.exportRange?.out ?? s.duration) },
+      })),
+    setExportOut: () =>
+      set((s) => ({
+        exportRange: { in: Math.max(0, Math.min(s.exportRange?.in ?? 0, s.playhead)), out: Math.max((s.exportRange?.in ?? 0) + 0.1, s.playhead) },
+      })),
+    clearExportRange: () => set({ exportRange: null }),
+    convertDrawingToClips: () => {
+      const s = get()
+      const plan = planDrawingToClips({
+        strokes: s.drawingStrokes,
+        clips: s.clips,
+        trackIdsTopToBottom: s.tracks.map((t) => t.id),
+        fps: s.projectFps || 30,
+        projectDuration: s.duration || 10,
+      })
+      if (plan.clips.length === 0) return { clips: 0, tracks: 0, strokes: 0 }
+      pushSnapshot()
+      // Materialize tracks bottom-stratum first so each insert lands
+      // directly above its anchor (or at the very top for unanchored art).
+      const tracks = [...s.tracks]
+      const trackIdByKey = new Map<string, string>()
+      const insertedByStratum = new Map<string, string>()
+      for (const tp of [...plan.tracks].sort((a, b) => a.stratum - b.stratum || a.slot - b.slot)) {
+        const id = uid('track-drawing')
+        trackIdByKey.set(tp.key, id)
+        const newTrack: Track = {
+          id,
+          name: tp.stratum === Number.POSITIVE_INFINITY ? 'Drawing Clips' : 'Drawing Clips (layered)',
+          type: 'video',
+          height: 44,
+        } as Track
+        const stratumKey = String(tp.stratum)
+        const previous = insertedByStratum.get(stratumKey)
+        if (previous) {
+          const at = tracks.findIndex((t) => t.id === previous)
+          tracks.splice(Math.max(0, at), 0, newTrack)
+        } else if (tp.insertAboveTrackId) {
+          const at = tracks.findIndex((t) => t.id === tp.insertAboveTrackId)
+          tracks.splice(at >= 0 ? at : 0, 0, newTrack)
+        } else {
+          tracks.splice(0, 0, newTrack)
+        }
+        insertedByStratum.set(stratumKey, id)
+      }
+      const layerName = new Map(s.paintLayers.map((l) => [l.id, l.name]))
+      const newClips: Clip[] = plan.clips.map((pc) => ({
+        id: uid('clip-drawing'),
+        trackId: trackIdByKey.get(pc.trackKey) || tracks[0].id,
+        assetId: '',
+        start: pc.start,
+        duration: pc.duration,
+        inPoint: 0,
+        name: `Drawing · ${layerName.get(pc.layerId) || 'Paint'} · f${pc.startFrame}-${pc.endFrame - 1}`,
+        kind: 'drawing',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        drawingStrokeIds: pc.strokeIds,
+        drawingLayerId: pc.layerId,
+      }))
+      const clipIdByStroke = new Map<string, string>()
+      for (const c of newClips) for (const sid of c.drawingStrokeIds || []) clipIdByStroke.set(sid, c.id)
+      set({
+        tracks,
+        clips: [...s.clips, ...newClips],
+        drawingStrokes: s.drawingStrokes.map((st) =>
+          clipIdByStroke.has(st.id) ? { ...st, convertedClipId: clipIdByStroke.get(st.id) } : st,
+        ),
+        selectedClipId: newClips[0]?.id || s.selectedClipId,
+        selectedClipIds: newClips[0] ? [newClips[0].id] : s.selectedClipIds,
+      })
+      return { clips: newClips.length, tracks: trackIdByKey.size, strokes: plan.convertedStrokeIds.length }
+    },
     toggleDrawingEnabled: () => set((s) => ({ drawingEnabled: !s.drawingEnabled })),
     createPaintLayer: (name) => {
       const id = uid('layer')
@@ -3934,6 +4505,18 @@ async function captureVideoThumbnail(video: HTMLVideoElement): Promise<string | 
     return canvas.toDataURL('image/jpeg', 0.85)
   } catch {
     return undefined
+  }
+}
+
+function sourceDocumentFromFile(file: File, id: string): SourceDocument {
+  return {
+    id,
+    fileName: file.name,
+    format: file.name.split('.').pop()?.toLowerCase() || 'unknown',
+    mimeType: file.type || 'application/octet-stream',
+    size: file.size,
+    url: URL.createObjectURL(file),
+    importedAt: Date.now(),
   }
 }
 

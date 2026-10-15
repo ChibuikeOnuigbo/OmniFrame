@@ -539,7 +539,7 @@ export function renderStroke(
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, width, height)
     ctx.restore()
-  } else if (stroke.tool === 'clone') {
+  } else if (stroke.tool === 'clone' || stroke.tool === 'smart-patch') {
     if (stroke.cloneSource?.sampleDataUrl) {
       let img = imageCache.get(stroke.cloneSource.sampleDataUrl)
       if (!img) {
@@ -739,6 +739,28 @@ export function renderSelectionMarchingAnts(
   ctx.restore()
 }
 
+/** Resolve a Smart Patch's frame-addressed raster and composite it at the requested time. */
+function renderStrokeAtTime(
+  ctx: CanvasRenderingContext2D,
+  stroke: DrawingStroke,
+  width: number,
+  height: number,
+  time: number,
+  fps: number,
+) {
+  if (!isStrokeVisibleAtTime(stroke, time, fps)) return
+  if (stroke.tool === 'smart-patch') {
+    const frame = (stroke.smartPatchFrames || []).reduce<{ time: number; dataUrl: string } | null>(
+      (current, candidate) => (candidate.time <= time + 0.5 / fps ? candidate : current),
+      null,
+    )
+    if (!frame) return
+    renderStroke(ctx, { ...stroke, tool: 'fill', maskDataUrl: frame.dataUrl }, width, height)
+    return
+  }
+  renderStroke(ctx, stroke, width, height)
+}
+
 /**
  * Composites all active paint layers and their visible strokes onto a canvas context.
  */
@@ -792,7 +814,7 @@ export function renderAllPaintLayers(
           // 1. Render layer base strokes
           for (const stroke of baseStrokes) {
             if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
-            renderStroke(layerCtx, stroke, width, height)
+            renderStrokeAtTime(layerCtx, stroke, width, height, time, fps)
           }
 
           // 2. Render mask canvas: Default filled with solid white (100% opaque / visible in Krita)
@@ -804,9 +826,9 @@ export function renderAllPaintLayers(
             // In Krita, using the eraser on a transparency mask restores opacity by painting white
             if (stroke.tool === 'eraser') {
               const whiteStroke = { ...stroke, tool: 'brush' as const, color: '#ffffff' }
-              renderStroke(maskCtx, whiteStroke, width, height)
+              renderStrokeAtTime(maskCtx, whiteStroke, width, height, time, fps)
             } else {
-              renderStroke(maskCtx, stroke, width, height)
+              renderStrokeAtTime(maskCtx, stroke, width, height, time, fps)
             }
           }
 
@@ -867,7 +889,7 @@ export function renderAllPaintLayers(
       if (offCanvas && offCtx) {
         for (const stroke of baseStrokes) {
           if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
-          renderStroke(offCtx, stroke, width, height)
+          renderStrokeAtTime(offCtx, stroke, width, height, time, fps)
         }
 
         let maskImg = imageCache.get(layer.maskDataUrl)
@@ -913,7 +935,7 @@ export function renderAllPaintLayers(
 
     for (const stroke of baseStrokes) {
       if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
-      renderStroke(ctx, stroke, width, height)
+      renderStrokeAtTime(ctx, stroke, width, height, time, fps)
     }
 
     ctx.restore()

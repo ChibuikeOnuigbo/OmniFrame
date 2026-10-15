@@ -1,141 +1,114 @@
-import React, { useState } from 'react'
-import { Sparkles, Plus, Clock, Shuffle, Trash2, CheckCircle2 } from 'lucide-react'
+import { useState } from 'react'
+import { AlertCircle, Clock, Play, Sparkles, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
-import type { Clip, TransitionType } from '../types'
+import type { Clip, Transition, TransitionType } from '../types'
 
 interface TransitionPresetDef {
   id: TransitionType
   name: string
   description: string
-  previewClass: string
 }
 
 const TRANSITIONS: TransitionPresetDef[] = [
-  {
-    id: 'cross_dissolve',
-    name: 'Cross Dissolve',
-    description: 'Smooth opacity blend from outgoing to incoming frame.',
-    previewClass: 'from-brand/40 to-violet-500/40',
-  },
-  {
-    id: 'dip_to_black',
-    name: 'Dip to Black',
-    description: 'Fades down to pure black, then fades up to incoming media.',
-    previewClass: 'from-black to-ink-950',
-  },
-  {
-    id: 'dip_to_white',
-    name: 'Dip to White',
-    description: 'Flashes to pure white flash, then resolves into next clip.',
-    previewClass: 'from-white/30 to-amber-200/30',
-  },
-  {
-    id: 'wipe_left',
-    name: 'Wipe Left',
-    description: 'Horizontal edge wipes across from right to left.',
-    previewClass: 'from-cyan-500/30 to-blue-600/30',
-  },
-  {
-    id: 'wipe_right',
-    name: 'Wipe Right',
-    description: 'Horizontal edge wipes across from left to right.',
-    previewClass: 'from-blue-500/30 to-indigo-600/30',
-  },
-  {
-    id: 'slide_left',
-    name: 'Slide Left',
-    description: 'Incoming clip pushes outgoing clip smoothly offscreen.',
-    previewClass: 'from-emerald-500/30 to-teal-600/30',
-  },
-  {
-    id: 'zoom',
-    name: 'Zoom Push',
-    description: 'Camera pushes forward through outgoing into incoming clip.',
-    previewClass: 'from-amber-500/30 to-red-500/30',
-  },
+  { id: 'cross_dissolve', name: 'Cross Dissolve', description: 'Smooth opacity blend from outgoing to incoming frame.' },
+  { id: 'dip_to_black', name: 'Dip to Black', description: 'Fades down to pure black, then fades up to incoming media.' },
+  { id: 'dip_to_white', name: 'Dip to White', description: 'Flashes to pure white, then resolves into next clip.' },
+  { id: 'wipe_left', name: 'Wipe Left', description: 'Horizontal edge wipes across from right to left.' },
+  { id: 'wipe_right', name: 'Wipe Right', description: 'Horizontal edge wipes across from left to right.' },
+  { id: 'slide_left', name: 'Slide Left', description: 'Incoming clip pushes outgoing clip smoothly offscreen.' },
+  { id: 'zoom', name: 'Zoom Push', description: 'Camera pushes forward through outgoing into incoming clip.' },
 ]
 
+interface TransitionCandidate {
+  fromClip: Clip
+  toClip: Clip
+  cut: number
+  distance: number
+  selected: boolean
+}
+
+function findNearestTransitionCandidate(duration: number): TransitionCandidate | null {
+  const state = useEditor.getState()
+  const half = duration / 2
+  const candidates: TransitionCandidate[] = []
+
+  for (const track of state.tracks) {
+    if (track.type !== 'video' || track.hidden) continue
+    const clips = state.clips
+      .filter((clip) => clip.trackId === track.id && !clip.hidden && clip.kind !== 'audio' && clip.kind !== 'adjustment')
+      .sort((a, b) => a.start - b.start)
+
+    for (let index = 0; index < clips.length - 1; index++) {
+      const fromClip = clips[index]
+      const toClip = clips[index + 1]
+      const cut = fromClip.start + fromClip.duration
+      const gap = toClip.start - cut
+      // A transition needs an actual cut (or a very small edit gap) and enough
+      // material on both sides of it for the centred audition window.
+      if (gap < -0.01 || gap > 0.5) continue
+      if (fromClip.duration < half || toClip.duration < half) continue
+      candidates.push({
+        fromClip,
+        toClip,
+        cut,
+        distance: Math.abs(cut - state.playhead),
+        selected: state.selectedClipId === fromClip.id || state.selectedClipId === toClip.id,
+      })
+    }
+  }
+
+  candidates.sort((a, b) => Number(b.selected) - Number(a.selected) || a.distance - b.distance || a.cut - b.cut)
+  return candidates[0] ?? null
+}
+
 export function TransitionsPanel() {
-  const clips = useEditor((s) => s.clips)
   const transitions = useEditor((s) => s.transitions || [])
-  const selectedClipId = useEditor((s) => s.selectedClipId)
-  const addTransition = useEditor((s) => s.addTransition)
   const removeTransition = useEditor((s) => s.removeTransition)
+  const startVisualPreview = useEditor((s) => s.startVisualPreview)
   const [duration, setDuration] = useState(1.0)
-  const [lastApplied, setLastApplied] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
-  const handleApplyToSelected = (type: TransitionType) => {
-    const st = useEditor.getState()
-    const allClips = st.clips.filter((c) => c.kind !== 'audio').sort((a, b) => a.start - b.start)
-    if (allClips.length === 0) return
-
-    let fromClip: Clip | undefined
-    let toClip: Clip | undefined
-
-    if (selectedClipId) {
-      const sel = allClips.find((c) => c.id === selectedClipId)
-      if (sel) {
-        // Check following adjacent clip on same track
-        const next = allClips.find(
-          (c) => c.trackId === sel.trackId && c.id !== sel.id && Math.abs(c.start - (sel.start + sel.duration)) < 0.5,
-        )
-        if (next) {
-          fromClip = sel
-          toClip = next
-        } else {
-          // Check preceding adjacent clip on same track
-          const prev = allClips.find(
-            (c) => c.trackId === sel.trackId && c.id !== sel.id && Math.abs(sel.start - (c.start + c.duration)) < 0.5,
-          )
-          if (prev) {
-            fromClip = prev
-            toClip = sel
-          }
-        }
-      }
+  const previewTransition = (preset: TransitionPresetDef) => {
+    const candidate = findNearestTransitionCandidate(duration)
+    if (!candidate) {
+      setNotice(`No usable cut found. Place two adjacent clips near the playhead, each at least ${(duration / 2).toFixed(1)}s long.`)
+      return
     }
-
-    // Fallback: take first adjacent pair on any track
-    if (!fromClip || !toClip) {
-      for (let i = 0; i < allClips.length - 1; i++) {
-        const c1 = allClips[i]
-        const c2 = allClips[i + 1]
-        if (c1.trackId === c2.trackId && Math.abs(c2.start - (c1.start + c1.duration)) < 0.5) {
-          fromClip = c1
-          toClip = c2
-          break
-        }
-      }
-    }
-
-    // Single clip fallback
-    if (!fromClip) fromClip = allClips[0]
-    if (!toClip) toClip = allClips[1] || allClips[0]
-
-    const cutPoint = fromClip.start + fromClip.duration
-    const startTime = Math.max(0, cutPoint - duration / 2)
-
-    addTransition({
-      type,
-      fromClipId: fromClip.id,
-      toClipId: toClip.id,
-      trackId: fromClip.trackId,
+    setNotice(null)
+    const startTime = Math.max(candidate.fromClip.start, candidate.cut - duration / 2)
+    const transition: Transition = {
+      id: 'visual-preview-transition',
+      type: preset.id,
+      fromClipId: candidate.fromClip.id,
+      toClipId: candidate.toClip.id,
+      trackId: candidate.fromClip.trackId,
       startTime,
       duration,
       alignment: 'centered',
       enabled: true,
+    }
+    startVisualPreview({
+      kind: 'transition',
+      transition,
+      label: `${preset.name} · ${candidate.fromClip.name} → ${candidate.toClip.name}`,
+      startTime,
+      endTime: startTime + duration,
     })
+  }
 
-    // Seek playhead to start of transition to preview immediately
-    st.setPlayhead(startTime)
-    setLastApplied(type)
-    setTimeout(() => setLastApplied(null), 2500)
+  const previewPlacedTransition = (transition: Transition) => {
+    setNotice(null)
+    startVisualPreview({
+      kind: 'range-playback',
+      label: `${transition.type.replace(/_/g, ' ')} · placed transition`,
+      startTime: transition.startTime,
+      endTime: transition.startTime + transition.duration,
+    })
   }
 
   return (
     <div data-testid="transitions-panel" className="p-3 text-xs text-ink-200 select-none space-y-3">
-      {/* Duration configuration */}
-      <div className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800">
+      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-ink-900 border border-ink-800">
         <span className="text-[11px] text-ink-400 flex items-center gap-1">
           <Clock size={12} />
           <span>Transition Duration</span>
@@ -157,10 +130,14 @@ export function TransitionsPanel() {
         </div>
       </div>
 
-      {lastApplied && (
-        <div className="flex items-center gap-1.5 p-2 rounded-md bg-brand/10 border border-brand/30 text-brand-400 text-[11px] animate-in fade-in duration-100">
-          <CheckCircle2 size={13} />
-          <span>Applied {lastApplied.replace(/_/g, ' ')} to timeline cut!</span>
+      <p className="text-[10px] leading-snug text-ink-500">
+        Click a transition to audition it at the nearest usable cut. Nothing is added until you Apply in the monitor.
+      </p>
+
+      {notice && (
+        <div data-testid="transition-preview-notice" className="flex items-start gap-1.5 p-2 rounded-md bg-amber-950/30 border border-amber-900/70 text-amber-200 text-[11px]" role="status">
+          <AlertCircle size={13} className="mt-px shrink-0" />
+          <span>{notice}</span>
         </div>
       )}
 
@@ -169,56 +146,74 @@ export function TransitionsPanel() {
       </div>
 
       <div className="grid grid-cols-1 gap-1.5">
-        {TRANSITIONS.map((tr) => (
+        {TRANSITIONS.map((preset) => (
           <div
-            key={tr.id}
-            data-testid={`transition-card-${tr.id}`}
-            className="group p-2.5 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 transition-all flex items-center justify-between"
+            key={preset.id}
+            data-testid={`transition-card-${preset.id}`}
+            onClick={() => previewTransition(preset)}
+            className="group cursor-pointer p-2.5 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 transition-all flex items-center justify-between"
           >
-            <div className="min-w-0 pr-2">
+            <div className="min-w-0 flex-1 pr-2">
               <div className="font-medium text-ink-100 flex items-center gap-1.5">
                 <Sparkles size={13} className="text-amber-400 shrink-0" />
-                <span>{tr.name}</span>
+                <span>{preset.name}</span>
               </div>
-              <div className="text-[10px] text-ink-400 mt-0.5 leading-tight">{tr.description}</div>
+              <div className="text-[10px] text-ink-400 mt-0.5 leading-tight">{preset.description}</div>
             </div>
 
             <button
               type="button"
-              data-testid={`apply-trans-btn-${tr.id}`}
-              title={`Apply ${tr.name} to cut`}
-              aria-label={`Apply ${tr.name} transition`}
-              onClick={() => handleApplyToSelected(tr.id)}
+              data-testid={`apply-trans-btn-${preset.id}`}
+              title={`Preview ${preset.name}; Apply from the monitor to add it`}
+              aria-label={`Preview ${preset.name} transition`}
+              onClick={(event) => { event.stopPropagation(); previewTransition(preset) }}
               className="shrink-0 flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand-400 hover:text-white text-[11px] font-medium transition-colors"
             >
-              <Plus size={12} className="shrink-0" />
-              <span>Apply</span>
+              <Play size={12} className="shrink-0" />
+              <span>Preview</span>
             </button>
           </div>
         ))}
       </div>
 
-      {/* Active Transitions in Project */}
       {transitions.length > 0 && (
         <div className="pt-2 border-t border-ink-800">
           <div className="text-[10px] uppercase font-semibold text-ink-500 mb-1.5 tracking-wider">
             Active Cut Transitions ({transitions.length})
           </div>
           <div className="space-y-1">
-            {transitions.map((tr) => (
+            {transitions.map((transition) => (
               <div
-                key={tr.id}
+                key={transition.id}
+                data-testid={`placed-transition-${transition.id}`}
                 className="flex items-center justify-between px-2 py-1.5 rounded bg-ink-900/60 border border-ink-800 text-[11px]"
               >
-                <div className="truncate pr-2">
-                  <span className="font-medium text-ink-200 capitalize">{tr.type.replace(/_/g, ' ')}</span>
-                  <span className="text-ink-500 text-[10px] ml-1.5 font-mono">({tr.duration}s @ {tr.startTime.toFixed(2)}s)</span>
-                </div>
+                <button
+                  type="button"
+                  data-testid={`preview-existing-transition-${transition.id}`}
+                  onClick={() => previewPlacedTransition(transition)}
+                  className="min-w-0 flex-1 truncate pr-2 text-left"
+                  title="Play this placed transition from its start"
+                >
+                  <span className="font-medium text-ink-200 capitalize">{transition.type.replace(/_/g, ' ')}</span>
+                  <span className="text-ink-500 text-[10px] ml-1.5 font-mono">({transition.duration}s @ {transition.startTime.toFixed(2)}s)</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid={`preview-transition-btn-${transition.id}`}
+                  onClick={() => previewPlacedTransition(transition)}
+                  className="mr-1 grid h-6 w-6 shrink-0 place-items-center rounded text-brand-300 hover:bg-brand/20"
+                  title="Preview this placed transition"
+                  aria-label={`Preview placed ${transition.type.replace(/_/g, ' ')} transition`}
+                >
+                  <Play size={11} />
+                </button>
                 <button
                   type="button"
                   title="Remove transition"
-                  onClick={() => removeTransition(tr.id)}
-                  className="p-1 rounded text-ink-400 hover:text-red-400 transition-colors"
+                  aria-label={`Remove ${transition.type.replace(/_/g, ' ')} transition`}
+                  onClick={() => removeTransition(transition.id)}
+                  className="grid h-6 w-6 shrink-0 place-items-center rounded text-ink-400 hover:text-red-400 transition-colors"
                 >
                   <Trash2 size={12} />
                 </button>

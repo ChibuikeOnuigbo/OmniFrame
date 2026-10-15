@@ -2,10 +2,10 @@
 
 A real, working **web-based non-linear video editor** built with React + TypeScript + Vite + Tailwind + Zustand.
 
-> **Status (honest):** This is a browser-verified editor foundation, not a static UI mockup.
+> **Status (honest):** This is a browser-verified editor foundation, not a static UI mockup; feature scope varies and is documented by implementation notes and QA.
 > A Tauri 2 desktop shell is present under `src-tauri/`; native compilation still requires the
-> platform Rust/WebView prerequisites documented in `qa/reports/tauri-info.txt`. Text, effects,
-> masks, tracking, Omniframe, and 3D remain explicitly unsupported rather than being faked.
+> platform Rust/WebView prerequisites documented in `qa/reports/tauri-info.txt`. Do not assume
+> full native-format fidelity or that every advanced tool is complete.
 
 ## Run it
 
@@ -21,7 +21,8 @@ npm run qa:advanced # recording/trace/repeat-export workflow
 
 ## What works right now
 
-- **Import** video / image / audio via the single **Import** button or by dragging a file anywhere.
+- **Import** video / image / audio via the single **Import** button or by dragging a file anywhere. PSD and OpenRaster `.ora` import only bounded raster subsets; unsupported compositing falls back to the saved flat composite when possible. Krita `.kra` imports only its saved flattened composite. These paths are not full native-project recovery or native-format round trips. GIMP XCF, Clip Studio, Procreate, Affinity and other unverified native projects are rejected ([format scope and verification gate](docs/ARTWORK-FORMAT-IMPORT-RESEARCH.md)).
+- **Save/Open `.omni`** keeps the editable OmniFrame state and embeds session media (including retained PSD/ORA/KRA source files) in a versioned ZIP project. Undo history and temporary jobs are intentionally excluded; bundled app resources remain app-relative. Alternate exports are capability-gated: rendered video for timelines, flattened PNG only for a still-only timeline at the playhead, and geometry-only OBJ in 3D mode. Each subset export warns about omitted content. See [project format and export matrix](docs/OMNI-PROJECT-AND-EXPORTS.md).
 - **Real preview engine**: an imperative `requestAnimationFrame` canvas renderer (`src/lib/playback.ts`)
   that syncs cached `<video>/<audio>/<img>` elements to the playhead. Scrubbing/dragging never triggers
   React re-render storms, so the canvas updates immediately with no 2-second lag or blink.
@@ -37,7 +38,7 @@ npm run qa:advanced # recording/trace/repeat-export workflow
 - **Inspector** (right panel): per-clip transform (position / scale / rotation / opacity), audio
   volume, source in/out, rename, split, delete.
 - **Transport**: play/pause, go-to-start/end, live timecode, speed (0.5× / 1× / 2×, plus J/K/L), undo/redo.
-- **Export**: records the live preview with `MediaRecorder` to `.mp4`/`.webm` (best-effort audio mix).
+- **Export**: renders the live timeline with browser `MediaRecorder` to `.mp4` or `.webm` where supported, plus gated flattened PNG and geometry-only OBJ subsets. See [the loss-aware export matrix](docs/OMNI-PROJECT-AND-EXPORTS.md).
 - **Voice isolation (real neural model)**: per-clip **Keep Vocal / Remove Vocal** powered by
   **Meta's Demucs v4 Hybrid Transformer (htdemucs)** running fully in-browser via ONNX Runtime Web
   (WebGPU, WASM fallback). 3 passes with shifted chunk windows averaged per-sample (worker per
