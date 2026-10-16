@@ -35,6 +35,7 @@ that run in real time in a browser:
 | RAFT flow-guided pixel propagation | Donor pixels are shifted by the **mask-centroid delta** between donor and target frames (`maskCentroid`) — a cheap flow proxy that aligns the propagated region before compositing. Full RAFT flow is *not* claimed. |
 | Propagation window / direction | Donor ranking can be restricted to earlier frames, later frames, or both, and to a ±N-frame window (0 = whole clip). UI: **Donor search** select + **Donor window** slider. |
 | Temporal propagation consistency | Neighbouring target frames keep the same or smoothly advancing donor when raw scores are close (small continuity bonus in `analyzeRotoInpaint`), reducing donor flicker between adjacent patched frames. |
+| Local neighbours + global references | The donor pool is built ProPainter-style: a bounded uniform scan, global reference frames every 10 frames (the `ref_stride` analogue), plus the ±5 local neighbours of every target/base frame (the local-neighbour propagation analogue), de-duplicated before tracking. |
 | Transformer inpainting of leftovers | Spatial inpaint fallback (`inpaintMaskedHole`) — a classical fill, not a neural model. UI copy says exactly this. |
 
 Controls live in RotoMask → Analyze & Inpaint → Propagation

@@ -35,7 +35,11 @@ nothing here copies that framing. What transfers is the *workflow design*:
    (`setSequenceAspectRatio`, pack-asset placement, `trimClip`,
    `addTextTitleClip`, `setClipKeyframe`) to build ordinary clips. The user
    can immediately move, trim, restyle or delete every piece; there is no
-   prompt box, no locked generation and no AI-labelled control.
+   prompt box, no locked generation and no AI-labelled control. The brief
+   itself round-trips as a plain JSON file (Export/Import brief JSON:
+   title, captions, format, duration, backdrop, style), so an external
+   agent can author the file and OmniFrame builds it — the “agent builds
+   the video” workflow, with every step inspectable.
 3. **Projects as plain editable files.** CoAnimator's "scenes as files" maps
    to OmniFrame's `.omni` project (complete save) plus capability-checked
    subset exports with loss warnings — see

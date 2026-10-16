@@ -736,9 +736,24 @@ export function createRotoMaskSlice(
       const targets = frameIndicesForScope(st.rotoScope, clip, asset, fps, base.frame)
       const clipFrames = Math.max(1, Math.round(clip.duration * fps))
       const candidateStep = Math.max(1, Math.ceil(clipFrames / 96))
-      const candidates: number[] = []
-      if (isStillImage(asset)) candidates.push(base.frame)
-      else for (let frame = 0; frame < clipFrames; frame += candidateStep) candidates.push(frame)
+      const candidateSet = new Set<number>()
+      if (isStillImage(asset)) {
+        candidateSet.add(base.frame)
+      } else {
+        // ProPainter-style donor pool: (a) a bounded uniform scan, (b) global
+        // reference frames every 10 frames (its ref_stride analogue), and
+        // (c) the ±5 local neighbours of every target/base frame (its local
+        // neighbour propagation analogue). The set keeps tracking bounded.
+        for (let frame = 0; frame < clipFrames; frame += candidateStep) candidateSet.add(frame)
+        for (let frame = 0; frame < clipFrames; frame += 10) candidateSet.add(frame)
+        for (const centre of [...targets, base.frame]) {
+          for (let delta = -5; delta <= 5; delta++) {
+            const frame = centre + delta
+            if (frame >= 0 && frame < clipFrames) candidateSet.add(frame)
+          }
+        }
+      }
+      const candidates = [...candidateSet].sort((a, b) => a - b)
       const indices = [...new Set([...targets, ...candidates, base.frame])].sort((a, b) => a - b)
       set({
         rotoBusy: true,

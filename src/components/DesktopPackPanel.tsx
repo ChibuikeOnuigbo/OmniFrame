@@ -456,6 +456,50 @@ export function DesktopPackPanel() {
     setRecipeNote('')
   }
 
+  /** Plain-file brief exchange: an external agent (or the user) can author
+   * this JSON, and OmniFrame builds it with the same editor actions. */
+  const exportBrief = () => {
+    const brief = {
+      kind: 'omniframe-scene-brief',
+      version: 1,
+      title: briefTitle,
+      captions: briefCaptions.split('\n').map((line) => line.trim()).filter(Boolean),
+      format: briefFormat,
+      duration: briefDuration,
+      backdrop: briefBackdrop,
+      style: briefStyle,
+    }
+    const blob = new Blob([JSON.stringify(brief, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = 'demo-scene-brief.json'
+    anchor.click()
+    URL.revokeObjectURL(url)
+    setBriefNote('Scene brief saved as JSON — edit it as a plain file, then import it back here to rebuild.')
+  }
+
+  const importBrief = async (file: File | undefined) => {
+    if (!file) return
+    try {
+      const parsed = JSON.parse(await file.text()) as Record<string, unknown>
+      if (parsed.kind !== 'omniframe-scene-brief') throw new Error('Not an OmniFrame scene brief')
+      const formats = ['16:9', '9:16', '1:1']
+      const backdrops = ['post-card', 'desktop-mac', 'desktop-win', 'phone-frame', 'chrome-webpage', 'spotify-phone', 'maps-phone', 'none']
+      const styles = ['clean', 'cinematic', 'tutorial']
+      if (typeof parsed.title === 'string') setBriefTitle(parsed.title.slice(0, 80))
+      if (Array.isArray(parsed.captions)) setBriefCaptions(parsed.captions.filter((line): line is string => typeof line === 'string').slice(0, 6).join('\n'))
+      else if (typeof parsed.captions === 'string') setBriefCaptions(parsed.captions.slice(0, 500))
+      if (typeof parsed.format === 'string' && formats.includes(parsed.format)) setBriefFormat(parsed.format as typeof briefFormat)
+      if (typeof parsed.duration === 'number') setBriefDuration(Math.max(3, Math.min(12, Math.round(parsed.duration))))
+      if (typeof parsed.backdrop === 'string' && backdrops.includes(parsed.backdrop)) setBriefBackdrop(parsed.backdrop)
+      if (typeof parsed.style === 'string' && styles.includes(parsed.style)) setBriefStyle(parsed.style as typeof briefStyle)
+      setBriefNote('Brief loaded — review the fields, then Build editable scene.')
+    } catch {
+      setBriefNote('That file is not a valid OmniFrame scene brief JSON.')
+    }
+  }
+
   const visibleBundles = PACK_BUNDLES.filter((b) => matches(b.name, b.desc, 'Packs'))
   const anyVisible =
     visibleBundles.length > 0 ||
@@ -616,6 +660,16 @@ export function DesktopPackPanel() {
               <button type="button" data-testid="pack-brief-build" onClick={buildSceneBrief} className="h-8 w-full rounded-md bg-cyan-500 font-semibold text-ink-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200">
                 Build editable scene
               </button>
+              <div className="flex gap-1.5">
+                <button type="button" data-testid="pack-brief-export" onClick={exportBrief} className="h-7 flex-1 rounded-md border border-ink-700 text-[10px] text-ink-200 transition hover:border-cyan-400/60 hover:text-white">
+                  Export brief JSON
+                </button>
+                <label className="flex h-7 flex-1 cursor-pointer items-center justify-center rounded-md border border-ink-700 text-[10px] text-ink-200 transition hover:border-cyan-400/60 hover:text-white">
+                  Import brief JSON
+                  <input data-testid="pack-brief-file" type="file" accept="application/json,.json" className="sr-only" onChange={(e) => { void importBrief(e.target.files?.[0]); e.target.value = '' }} />
+                </label>
+              </div>
+              <p className="text-[9px] leading-snug text-ink-500">Brief files are plain JSON: title, captions, format, duration, backdrop and style. An external agent can write one; OmniFrame builds it into editable clips.</p>
               {briefNote && <p data-testid="pack-brief-note" aria-live="polite" className="rounded border border-cyan-400/25 bg-ink-950/60 px-2 py-1.5 text-[10px] leading-snug text-cyan-100">{briefNote}</p>}
             </div>
             {recipeNote && (

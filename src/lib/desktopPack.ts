@@ -27,6 +27,8 @@ export interface PackBundleDef {
 }
 
 export const PACK_BUNDLES: PackBundleDef[] = [
+  { id: 'video-call', name: 'Video Call Pack', desc: 'Demo video-call window with highlight box and hand cursor', items: ['video-call-window', 'highlight-box', 'cursor-hand'] },
+  { id: 'phone-shopping', name: 'Phone Shopping Pack', desc: 'Demo shopping phone with post card and hand cursor', items: ['shopping-phone', 'post-card', 'cursor-hand'] },
   { id: 'phone-story', name: 'Phone Story Pack', desc: 'Maps, photo gallery and hand cursor for a vertical phone story', items: ['maps-phone', 'photo-gallery-phone', 'cursor-hand'] },
   { id: 'creator-desk', name: 'Creator Desk Pack', desc: 'Podcast player, demo calendar and hand cursor for planning scenes', items: ['podcast-player', 'calendar-window', 'cursor-hand'] },
   { id: 'music-phone', name: 'Music Phone Pack', desc: 'Phone music player with progress bar for vertical listening scenes', items: ['spotify-phone', 'progress-bar', 'cursor-hand'] },
@@ -989,6 +991,63 @@ function spreadsheetWindow(ctx: CanvasRenderingContext2D) {
   }))
 }
 
+function videoCallWindow(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Demo Video Call' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#12141a'; ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  const people = [['Demo Host', '#6d5efc'], ['Test Guest', '#2dd4bf'], ['Sample Speaker', '#f59e0b'], ['Demo Viewer', '#ff8fa3']]
+  people.forEach(([name, colour], i) => {
+    const gx = x + 26 + (i % 2) * 505, gy = y + 66 + Math.floor(i / 2) * 164
+    ctx.fillStyle = '#1d2029'; roundRect(ctx, gx, gy, 480, 146, 12); ctx.fill()
+    ctx.fillStyle = colour; ctx.beginPath(); ctx.arc(gx + 240, gy + 58, 30, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#fff'; ctx.font = '600 13px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(name, gx + 240, gy + 122); ctx.textAlign = 'left'
+  })
+  ctx.fillStyle = '#22252d'; roundRect(ctx, x + 390, y + 408, 300, 42, 21); ctx.fill()
+  ctx.fillStyle = '#e8eaed'; ctx.font = '15px system-ui, sans-serif'; ctx.fillText('🎙   📷   ☐   ☎', x + 462, y + 436)
+}
+
+function shoppingPhone(ctx: CanvasRenderingContext2D) {
+  const { x, y, w } = phoneSceneBase(ctx, '#f6f4ef')
+  ctx.fillStyle = '#252525'; ctx.font = '600 19px system-ui, sans-serif'; ctx.fillText('Demo Shop', x + 22, y + 68)
+  ctx.fillStyle = '#756b45'; ctx.font = '12px system-ui, sans-serif'; ctx.fillText('Sample products · Test prices', x + 22, y + 90)
+  const items = [['Demo Mug', '10 test'], ['Sample Tee', '20 test'], ['Demo Poster', '15 test'], ['Test Sticker', '5 test']]
+  items.forEach(([name, price], i) => {
+    const gx = x + 18 + (i % 2) * 138, gy = y + 116 + Math.floor(i / 2) * 172
+    ctx.fillStyle = '#fff'; roundRect(ctx, gx, gy, 124, 148, 12); ctx.fill()
+    ctx.fillStyle = ['#ffd76a', '#7cc7ff', '#ff8fa3', '#7dffb2'][i]; roundRect(ctx, gx + 12, gy + 12, 100, 76, 9); ctx.fill()
+    ctx.fillStyle = '#252525'; ctx.font = '600 12px system-ui, sans-serif'; ctx.fillText(name, gx + 12, gy + 112)
+    ctx.font = '11px system-ui, sans-serif'; ctx.fillStyle = '#756b45'; ctx.fillText(price, gx + 12, gy + 132)
+  })
+  ctx.fillStyle = '#171a21'; roundRect(ctx, x + 22, y + 486, w - 44, 42, 21); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.font = '600 13px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Demo checkout', x + w / 2, y + 513); ctx.textAlign = 'left'
+  ctx.restore()
+}
+
+function filesPhone(ctx: CanvasRenderingContext2D) {
+  const { x, y } = phoneSceneBase(ctx, '#17191f')
+  ctx.fillStyle = '#f2f3f5'; ctx.font = '600 20px system-ui, sans-serif'; ctx.fillText('Demo Files', x + 22, y + 68)
+  demoRows(ctx, x + 20, y + 100, ['Demo Clip 01.mp4', 'Demo Photo 01.jpg', 'Project Notes (demo).txt', 'Demo Song 01.mp3', 'Export Test.mp4'], '#ffd76a')
+  ctx.fillStyle = '#22252d'; roundRect(ctx, x + 20, y + 330, 260, 116, 12); ctx.fill()
+  ctx.fillStyle = '#e8eaed'; ctx.font = '600 13px system-ui, sans-serif'; ctx.fillText('Storage — demo only', x + 36, y + 360)
+  ctx.fillStyle = '#3a3f4a'; roundRect(ctx, x + 36, y + 382, 228, 10, 5); ctx.fill()
+  ctx.fillStyle = '#4da3ff'; roundRect(ctx, x + 36, y + 382, 92, 10, 5); ctx.fill()
+  ctx.font = '11px system-ui, sans-serif'; ctx.fillStyle = '#9aa3af'; ctx.fillText('Test files · No real folders', x + 36, y + 420)
+  ctx.restore()
+}
+
+function videoPlayerPhone(ctx: CanvasRenderingContext2D) {
+  const { x, y, w } = phoneSceneBase(ctx, '#0c0e13')
+  ctx.fillStyle = '#20242c'; roundRect(ctx, x + 16, y + 70, w - 32, 190, 14); ctx.fill()
+  ctx.fillStyle = '#6d5efc'; ctx.beginPath(); ctx.arc(x + w / 2, y + 165, 28, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(x + w / 2 - 8, y + 152); ctx.lineTo(x + w / 2 - 8, y + 178); ctx.lineTo(x + w / 2 + 12, y + 165); ctx.closePath(); ctx.fill()
+  ctx.fillStyle = 'rgba(255,255,255,0.22)'; roundRect(ctx, x + 34, y + 232, w - 68, 6, 3); ctx.fill()
+  ctx.fillStyle = '#ff5f57'; roundRect(ctx, x + 34, y + 232, 104, 6, 3); ctx.fill()
+  ctx.fillStyle = '#f2f3f5'; ctx.font = '600 16px system-ui, sans-serif'; ctx.fillText('Demo Video Title', x + 22, y + 304)
+  ctx.fillStyle = '#9aa3af'; ctx.font = '12px system-ui, sans-serif'; ctx.fillText('Test Channel · Demo views · Sample captions', x + 22, y + 328)
+  demoRows(ctx, x + 20, y + 368, ['Next demo video', 'Sample tutorial', 'Test recap'], '#ff5f57')
+  ctx.restore()
+}
+
 export const PACK_ASSETS: PackAssetDef[] = [
   { id: 'spotify-mac', name: 'Music Player · Mac', desc: 'Streaming player in a macOS window with demo tracks', section: 'apps', group: 'Music', paint: (c) => spotifyMac(c) },
   { id: 'spotify-phone', name: 'Music Player · Phone', desc: 'Phone now-playing screen with demo album and progress', section: 'apps', group: 'Music', paint: (c) => spotifyPhone(c) },
@@ -999,6 +1058,10 @@ export const PACK_ASSETS: PackAssetDef[] = [
   { id: 'weather-phone', name: 'Weather · Phone', desc: 'Phone weather card with a sample forecast', section: 'apps', group: 'Phones', paint: (c) => weatherPhone(c) },
   { id: 'settings-phone', name: 'Settings · Phone', desc: 'Phone settings toggles with demo labels', section: 'apps', group: 'Phones', paint: (c) => settingsPhone(c) },
   { id: 'calendar-window', name: 'Calendar · Desktop', desc: 'Desktop calendar with demo launch and edit events', section: 'apps', group: 'Productivity', paint: (c) => calendarWindow(c) },
+  { id: 'video-call-window', name: 'Video Call · Desktop', desc: 'Video-call grid with demo participant names', section: 'apps', group: 'Creators', paint: (c) => videoCallWindow(c) },
+  { id: 'shopping-phone', name: 'Shopping · Phone', desc: 'Phone shop grid with sample products and test prices', section: 'apps', group: 'Phones', paint: (c) => shoppingPhone(c) },
+  { id: 'files-phone', name: 'Files · Phone', desc: 'Phone file list with demo media names — no real folders', section: 'apps', group: 'Phones', paint: (c) => filesPhone(c) },
+  { id: 'video-player-phone', name: 'Video Player · Phone', desc: 'Phone player with demo title, channel and up-next list', section: 'apps', group: 'Phones', paint: (c) => videoPlayerPhone(c) },
   { id: 'spreadsheet-window', name: 'Spreadsheet · Demo Budget', desc: 'Spreadsheet window with test numbers only', section: 'apps', group: 'Productivity', paint: (c) => spreadsheetWindow(c) },
   { id: 'discord-chat', name: 'Community Chat · Demo', desc: 'Purple community chat with demo channels and messages', section: 'apps', group: 'Chat & Mail', paint: (c) => discordChat(c) },
   { id: 'vscode-window', name: 'Code Editor · Demo Project', desc: 'Editor window with demo file tree and syntax lines', section: 'apps', group: 'Code & Design', paint: (c) => vscodeWindow(c) },

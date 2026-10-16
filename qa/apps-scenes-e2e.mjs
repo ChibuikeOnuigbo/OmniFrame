@@ -73,6 +73,12 @@ try {
   await addAsset('spreadsheet-window', 'apps', 'Productivity')
   console.log('PASS wave-3 phone/productivity assets add clips')
 
+  await addAsset('video-call-window', 'apps', 'Creators')
+  await addAsset('shopping-phone', 'apps', 'Phones')
+  await addAsset('files-phone', 'apps', 'Phones')
+  await addAsset('video-player-phone', 'apps', 'Phones')
+  console.log('PASS wave-4 call/shopping/files/player assets add clips')
+
   // Seed a base clip for recipes (built-in demo image asset).
   await page.evaluate(() => {
     const store = window.__omniframe_store
@@ -158,6 +164,31 @@ try {
   assert.equal(briefState.backdropKeys, 2, 'brief backdrop receives real zoom keyframes')
   assert.match(await page.getByTestId('pack-brief-note').textContent() ?? '', /editable clips/)
   console.log('PASS scene brief builder creates an editable scene')
+
+  // Plain-file brief exchange: an external agent can author this JSON and
+  // OmniFrame builds it through the same UI path.
+  await page.getByTestId('pack-brief-file').setInputFiles({
+    name: 'agent-brief.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify({
+      kind: 'omniframe-scene-brief',
+      version: 1,
+      title: 'Imported Demo Brief',
+      captions: ['Imported hook', 'Imported middle step', 'Imported ending'],
+      format: '1:1',
+      duration: 6,
+      backdrop: 'phone-frame',
+      style: 'cinematic',
+    })),
+  })
+  await page.waitForFunction(() => document.querySelector('[data-testid="pack-brief-title"]')?.value === 'Imported Demo Brief')
+  assert.match(await page.getByTestId('pack-brief-note').textContent() ?? '', /Brief loaded/)
+  await page.getByTestId('pack-brief-build').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    return s.sequenceSettings?.aspectRatio === '1:1' && s.clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'Imported Demo Brief') && s.clips.some((c) => c.assetId === 'pack-letterbox')
+  })
+  console.log('PASS imported scene brief JSON builds an editable scene')
 
   assert.deepEqual(errors, [], `page errors: ${errors.join(' | ')}`)
   console.log('APPS+SCENES E2E PASSED')

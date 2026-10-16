@@ -465,7 +465,7 @@ export function LeftDock() {
                     setLeftOpen(true)
                     setDrawingFlyoutOpen((v) => !v)
                   }}
-                  className="grid h-4 w-8.5 place-items-center rounded text-ink-500 transition-colors hover:text-brand-300 group-hover:animate-[of-nudge-y_0.7s_ease-in-out_infinite]"
+                  className="grid h-6 w-8.5 place-items-center rounded text-ink-500 transition-colors hover:text-brand-300 group-hover:animate-[of-nudge-y_0.7s_ease-in-out_infinite]"
                 >
                   <ChevronDown size={12} className={`transition-transform duration-200 ${drawingFlyoutOpen ? 'rotate-180' : ''}`} />
                 </button>
