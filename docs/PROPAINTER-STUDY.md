@@ -34,6 +34,7 @@ that run in real time in a browser:
 | Mask dilation before fill | `dilateMaskBitmap` (separable max-filter) in `src/lib/rotoBrush.ts`; applied to every target mask before filling. UI: **Mask grow** slider, 0–24 px, default 4. |
 | RAFT flow-guided pixel propagation | Donor pixels are shifted by the **mask-centroid delta** between donor and target frames (`maskCentroid`) — a cheap flow proxy that aligns the propagated region before compositing. Full RAFT flow is *not* claimed. |
 | Propagation window / direction | Donor ranking can be restricted to earlier frames, later frames, or both, and to a ±N-frame window (0 = whole clip). UI: **Donor search** select + **Donor window** slider. |
+| Temporal propagation consistency | Neighbouring target frames keep the same or smoothly advancing donor when raw scores are close (small continuity bonus in `analyzeRotoInpaint`), reducing donor flicker between adjacent patched frames. |
 | Transformer inpainting of leftovers | Spatial inpaint fallback (`inpaintMaskedHole`) — a classical fill, not a neural model. UI copy says exactly this. |
 
 Controls live in RotoMask → Analyze & Inpaint → Propagation
@@ -46,6 +47,9 @@ by `qa/inpaint-propagation-e2e.mjs` and `qa/temporal-inpaint-e2e.mjs`.
 - Centroid shift aligns translation only; rotation, scale and non-rigid
   motion are not compensated. Bad alignment shows up as a soft patch — the
   per-frame spatial fallback and donor review exist for exactly that case.
+- ProPainter's code/models are NTU S-Lab non-commercial licensed; OmniFrame
+  does not bundle or redistribute them. Only the pipeline ideas above were
+  reimplemented with browser-safe classical operations.
 - No neural inpainting runs in the browser build. If a future desktop build
   ships a real flow model, it should slot in behind the same
   analyze → review → apply contract.

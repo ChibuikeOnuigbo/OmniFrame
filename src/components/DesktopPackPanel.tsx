@@ -26,7 +26,7 @@ const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
 
 const GROUP_ORDER: Record<string, string[]> = {
   windows: ['Packs', 'Desktops', 'Browsers', 'App Windows', 'Devices & Social'],
-  apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Code & Design', 'Chat & Mail'],
+  apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Code & Design', 'Productivity', 'Chat & Mail'],
   scenes: ['Intros & Titles', 'Looks & Teaching', 'Social Versions'],
   cursors: ['Pointers', 'Clicks & Marks', 'Editor Cursor'],
   overlays: ['Frames & Bars', 'Light & Focus'],
@@ -341,6 +341,13 @@ export function PackFolder({
 export function DesktopPackPanel() {
   const [section, setSection] = useState<PackSection>('windows')
   const [recipeNote, setRecipeNote] = useState('')
+  const [briefNote, setBriefNote] = useState('')
+  const [briefTitle, setBriefTitle] = useState('Demo launch')
+  const [briefCaptions, setBriefCaptions] = useState('Hook — watch this\nShow the main step\nFinish with the result')
+  const [briefFormat, setBriefFormat] = useState<'16:9' | '9:16' | '1:1'>('16:9')
+  const [briefBackdrop, setBriefBackdrop] = useState('post-card')
+  const [briefStyle, setBriefStyle] = useState<'clean' | 'cinematic' | 'tutorial'>('clean')
+  const [briefDuration, setBriefDuration] = useState(6)
   const [query, setQuery] = useState('')
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({})
   const cursorConfig = useEditor((s) => s.cursorConfig)
@@ -374,6 +381,79 @@ export function DesktopPackPanel() {
     } else {
       previewEffectLayer(preset.label, preset.effect)
     }
+  }
+
+  /** Add a pack asset in 5-second editable segments so longer brief scenes stay covered. */
+  const addPackForDuration = (def: PackAssetDef, start: number, duration: number): string | undefined => {
+    let firstId: string | undefined
+    for (let offset = 0; offset < duration; offset += 5) {
+      const state = useEditor.getState()
+      state.setPlayhead(start + offset)
+      const id = addPackClip(def)
+      if (id) {
+        useEditor.getState().trimClip(id, 'right', start + Math.min(duration, offset + 5))
+        firstId ??= id
+      }
+    }
+    return firstId
+  }
+
+  /**
+   * Scene Brief Builder: the CoAnimator workflow adapted without AI framing.
+   * A short structured brief becomes ordinary editable clips using only real
+   * editor actions — sequence settings, pack assets, title clips, trims and
+   * transform keyframes. Nothing is generated as a locked render.
+   */
+  const buildSceneBrief = () => {
+    const state = useEditor.getState()
+    const start = Math.max(0, state.playhead)
+    const duration = Math.max(3, Math.min(12, Math.round(briefDuration || 6)))
+    const title = briefTitle.trim() || 'Demo scene'
+    const captions = briefCaptions
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .slice(0, 6)
+    const captionLines = captions.length ? captions : ['Hook — watch this', 'Show the main step', 'Finish with the result']
+    const before = state.clips.length
+
+    state.setSequenceAspectRatio(briefFormat)
+    let backdropId: string | undefined
+    if (briefBackdrop !== 'none') {
+      const backdrop = PACK_ASSETS.find((asset) => asset.id === briefBackdrop)
+      if (backdrop) backdropId = addPackForDuration(backdrop, start, duration)
+    }
+    if (briefStyle === 'cinematic') {
+      const letterbox = PACK_ASSETS.find((asset) => asset.id === 'letterbox')
+      if (letterbox) addPackForDuration(letterbox, start, duration)
+    }
+    if (briefStyle === 'tutorial') {
+      const spotlight = PACK_ASSETS.find((asset) => asset.id === 'spotlight')
+      const highlight = PACK_ASSETS.find((asset) => asset.id === 'highlight-box')
+      if (spotlight) addPackForDuration(spotlight, start, duration)
+      if (highlight) addPackForDuration(highlight, start, duration)
+    }
+    if (backdropId) {
+      const clip = useEditor.getState().clips.find((candidate) => candidate.id === backdropId)
+      if (clip) {
+        useEditor.getState().setClipKeyframe(clip.id, 'scale_x', 0, 1, 'bezier')
+        useEditor.getState().setClipKeyframe(clip.id, 'scale_x', Math.max(0.1, clip.duration), 1.06, 'bezier')
+        useEditor.getState().setClipKeyframe(clip.id, 'scale_y', 0, 1, 'bezier')
+        useEditor.getState().setClipKeyframe(clip.id, 'scale_y', Math.max(0.1, clip.duration), 1.06, 'bezier')
+      }
+    }
+
+    useEditor.getState().setPlayhead(start)
+    useEditor.getState().addTextTitleClip(title, duration)
+    const segment = duration / captionLines.length
+    captionLines.forEach((line, index) => {
+      useEditor.getState().setPlayhead(start + index * segment)
+      useEditor.getState().addTextTitleClip(line, Math.max(0.5, segment))
+    })
+    useEditor.getState().setPlayhead(start)
+    const created = useEditor.getState().clips.length - before
+    setBriefNote(`Built ${created} editable clips for “${title}” (${briefFormat}, ${duration}s). Move, trim, restyle or delete any piece.`)
+    setRecipeNote('')
   }
 
   const visibleBundles = PACK_BUNDLES.filter((b) => matches(b.name, b.desc, 'Packs'))
@@ -491,6 +571,53 @@ export function DesktopPackPanel() {
             <p className="px-0.5 text-[10px] leading-snug text-ink-500">
               One-click scenes built from real editor tools — every piece lands as ordinary editable clips at the playhead.
             </p>
+            <div data-testid="pack-scene-builder" className="space-y-2 rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-2.5 py-2">
+              <div>
+                <p className="flex items-center gap-1.5 text-[11px] font-semibold text-cyan-100"><Clapperboard size={12} /> Scene Brief Builder</p>
+                <p className="mt-0.5 text-[10px] leading-snug text-ink-400">Write a short brief; OmniFrame builds it from editable titles, captions, pack layers, trims and keyframes. No locked render.</p>
+              </div>
+              <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-title">Scene title
+                <input id="pack-brief-title" data-testid="pack-brief-title" value={briefTitle} onChange={(e) => setBriefTitle(e.target.value)} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100 outline-none focus:border-cyan-400" />
+              </label>
+              <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-captions">Caption beats — one per line
+                <textarea id="pack-brief-captions" data-testid="pack-brief-captions" value={briefCaptions} onChange={(e) => setBriefCaptions(e.target.value)} rows={3} className="mt-1 w-full resize-y rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-[11px] leading-snug text-ink-100 outline-none focus:border-cyan-400" />
+              </label>
+              <div className="grid grid-cols-2 gap-1.5">
+                <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-format">Format
+                  <select id="pack-brief-format" data-testid="pack-brief-format" value={briefFormat} onChange={(e) => setBriefFormat(e.target.value as typeof briefFormat)} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-100">
+                    <option value="16:9">Landscape 16:9</option>
+                    <option value="9:16">Vertical 9:16</option>
+                    <option value="1:1">Square 1:1</option>
+                  </select>
+                </label>
+                <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-duration">Duration · {briefDuration}s
+                  <input id="pack-brief-duration" data-testid="pack-brief-duration" type="range" min={3} max={12} step={1} value={briefDuration} onChange={(e) => setBriefDuration(Number(e.target.value))} className="mt-2 w-full accent-cyan-400" />
+                </label>
+                <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-backdrop">Backdrop / device
+                  <select id="pack-brief-backdrop" data-testid="pack-brief-backdrop" value={briefBackdrop} onChange={(e) => setBriefBackdrop(e.target.value)} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-100">
+                    <option value="post-card">Social post card</option>
+                    <option value="desktop-mac">Fake desktop · macOS</option>
+                    <option value="desktop-win">Fake desktop · Windows</option>
+                    <option value="phone-frame">Phone frame</option>
+                    <option value="chrome-webpage">Chrome webpage · demo</option>
+                    <option value="spotify-phone">Music player · phone</option>
+                    <option value="maps-phone">Maps · phone</option>
+                    <option value="none">No backdrop</option>
+                  </select>
+                </label>
+                <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-style">Look
+                  <select id="pack-brief-style" data-testid="pack-brief-style" value={briefStyle} onChange={(e) => setBriefStyle(e.target.value as typeof briefStyle)} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-100">
+                    <option value="clean">Clean</option>
+                    <option value="cinematic">Cinematic letterbox</option>
+                    <option value="tutorial">Tutorial spotlight</option>
+                  </select>
+                </label>
+              </div>
+              <button type="button" data-testid="pack-brief-build" onClick={buildSceneBrief} className="h-8 w-full rounded-md bg-cyan-500 font-semibold text-ink-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200">
+                Build editable scene
+              </button>
+              {briefNote && <p data-testid="pack-brief-note" aria-live="polite" className="rounded border border-cyan-400/25 bg-ink-950/60 px-2 py-1.5 text-[10px] leading-snug text-cyan-100">{briefNote}</p>}
+            </div>
             {recipeNote && (
               <p data-testid="pack-recipe-note" aria-live="polite" className="rounded-md border border-cyan-500/25 bg-cyan-500/10 px-2 py-1 text-[10px] leading-snug text-cyan-100">{recipeNote}</p>
             )}

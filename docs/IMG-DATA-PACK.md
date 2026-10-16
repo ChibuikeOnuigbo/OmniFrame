@@ -18,25 +18,30 @@ Originals may contain personal information. They:
 - Each screenshot was classified by app/window type (privacy-safe category
   counts only — no file names, account names, messages, or other personal
   strings were recorded anywhere).
-- Gist categories found: Windows File Explorer, Chrome/web apps (mail,
-  video-studio dashboards, chat, docs, music streaming), VS Code, phone-style
-  app UIs, video-editor UIs, 3D screens.
+- Gist categories found (counts only): code editor 22, light web/docs 18,
+  dark app windows 22, mixed web 10, music streaming/playback 9, video-site
+  UI 2, purple design/chat 2 — 85 screenshots in total. Blurred gist contact
+  sheets are in `img_data_pack/processed/` for local review.
 
 ## Resulting packs (all demo text, procedurally drawn)
 
 In Desktop Pack → **Apps & Devices** (`src/lib/desktopPack.ts`,
 `packAssetUrl()` renders 1280×720 PNGs on canvas at runtime):
 
-- **Music** — Music Player (streaming player with demo playlist).
-- **Files & Browsers** — File Explorer Win11, Finder Mac, Chrome phone.
-- **Phones** — iOS home screen, Android home screen, Figma-style phone
-  canvas. (Phone layouts were requested even though no phone screenshot was
-  supplied.)
-- **Creators** — YouTube Studio dashboard.
-- **Chat & Mail** — Gmail window, WhatsApp chat.
+- **Music** — Music Player desktop/Mac/phone and Podcast Player, all with
+  demo tracks/episodes.
+- **Files & Browsers** — File Explorer Win11, Finder Mac, Chrome phone and a
+  Chrome webpage recreation.
+- **Phones** — iOS/Android home screens, Figma-style phone canvas, Chrome,
+  Maps, Photo Gallery, Notes, Weather and Settings phone layouts. (Phone
+  layouts were requested even though no phone screenshot was supplied.)
+- **Creators** — Creator Studio analytics dashboard.
+- **Code & Design** — Code Editor demo project and desktop Design Canvas.
+- **Productivity** — Demo Calendar and Demo Budget spreadsheet.
+- **Chat & Mail** — Mail inbox, chat app and community-chat recreations.
 
-All names, tracks, files and messages inside these recreations are demo/test
-text ("Demo Track 01 — Test Artist", "Demo Clip 01.mp4", …). Two bundles use
-them: **Music Video** (player + progress bar + click ring) and **Phone Demo**
-(Android home + cursor hand). Covered by `qa/apps-scenes-e2e.mjs` and
-`qa/desktop-pack-e2e.mjs`.
+All names, tracks, files, messages, places and numbers inside these
+recreations are demo/test text ("Demo Track 01 — Test Artist", "Demo Clip
+01.mp4", "Demo Park", …). Twelve one-click bundles stack them, including
+**Music Video**, **Phone Demo**, **Phone Story** and **Creator Desk**.
+Covered by `qa/apps-scenes-e2e.mjs` and `qa/desktop-pack-e2e.mjs`.

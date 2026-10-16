@@ -157,17 +157,16 @@ if (hasFixture) {
     }
   })
   await page.waitForTimeout(400)
-  const inspectorTabs = page.getByTestId('inspector-panel').locator('..').getByTestId('sections-tablist')
-  const inspectorTabCount = await inspectorTabs.count()
-  assert('Inspector renders a section tab list', inspectorTabCount >= 1, `${inspectorTabCount} list(s)`)
-  const firstList = inspectorTabs.first()
-  if (await firstList.isVisible()) {
-    const n = await firstList.locator('[role="tab"]').count()
-    assert('Inspector sections appear as tabs', n >= 2, `${n} tabs`)
-    await firstList.locator('[role="tab"]').nth(1).click()
+  const inspectorRail = page.getByTestId('sections-icon-rail').last()
+  const inspectorRailCount = await inspectorRail.count()
+  assert('Inspector renders the general-section icon rail', inspectorRailCount >= 1, `${inspectorRailCount} rail(s)`)
+  if (await inspectorRail.isVisible()) {
+    const n = await inspectorRail.locator('[role="tab"]').count()
+    assert('Inspector general sections appear as icon tabs', n >= 2, `${n} icons`)
+    await inspectorRail.locator('[role="tab"]').nth(1).click()
     await page.waitForTimeout(250)
-    const sel = await firstList.locator('[aria-selected="true"]').first().getAttribute('data-testid')
-    assert('Inspector tab switching works', !!sel, sel || '')
+    const sel = await inspectorRail.locator('[aria-selected="true"]').first().getAttribute('data-testid')
+    assert('Inspector icon switching works', !!sel, sel || '')
   }
 } else {
   console.log('SKIP inspector tab check (no fixture asset)')

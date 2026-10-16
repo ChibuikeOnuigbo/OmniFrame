@@ -546,7 +546,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
               className="w-28 accent-cyan-400"
             />
           </label>
-          <p className="text-[9px] leading-snug text-ink-500">Propagation: donors are flow-aligned by mask-centroid shift, the hole is grown before filling, and spatial inpaint remains the fallback. Re-analyze after changing direction or window.</p>
+          <p className="text-[9px] leading-snug text-ink-500">Propagation: donors are flow-aligned by mask-centroid shift, kept temporally consistent across neighbouring target frames, the hole is grown before filling, and spatial inpaint remains the fallback. Re-analyze after changing direction or window.</p>
         </div>
         {inpaintBusy && rotoInpaint.total > 0 && (
           <div data-testid="roto-inpaint-progress" className="pt-1 text-[10px] font-mono text-ink-500">{rotoInpaint.done}/{rotoInpaint.total} frames</div>

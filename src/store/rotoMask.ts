@@ -771,9 +771,14 @@ export function createRotoMaskSlice(
         const targetRecords = targets
           .map((frame) => tracked.get(frame))
           .filter((entry): entry is TrackedRotoFrame => !!entry)
+          .sort((a, b) => a.record.frame - b.record.frame)
         const candidateRecords = [...tracked.values()]
         const assignments: RotoInpaintState['donorByTarget'] = []
         const perTargetRankings = new Map<number, { record: TrackedRotoFrame; score: number; overlap: number }[]>()
+        // ProPainter propagates through time rather than picking every frame
+        // in isolation. Keep the same (or smoothly advancing) donor for
+        // neighbouring targets when its raw match is close, reducing flicker.
+        let previousDonorFrame: number | null = null
         for (const target of targetRecords) {
           const edge = boundaryIndices(target.mask)
           const ranked = candidateRecords
@@ -789,7 +794,19 @@ export function createRotoMaskSlice(
             })
             .sort((a, b) => b.score - a.score)
           perTargetRankings.set(target.record.frame, ranked)
-          const best = ranked.find((candidate) => candidate.overlap < 0.38)
+          const temporallyConsistent = ranked
+            .map((candidate) => {
+              const frame = candidate.record.record.frame
+              const continuityBonus = previousDonorFrame === frame
+                ? 0.04
+                : previousDonorFrame !== null && Math.abs(frame - previousDonorFrame) <= 2
+                  ? 0.015
+                  : 0
+              return { ...candidate, adjustedScore: Math.min(1, candidate.score + continuityBonus) }
+            })
+            .sort((a, b) => b.adjustedScore - a.adjustedScore)
+          const best = temporallyConsistent.find((candidate) => candidate.overlap < 0.38)
+          if (best) previousDonorFrame = best.record.record.frame
           assignments.push({
             targetFrame: target.record.frame,
             donorFrame: best?.record.record.frame ?? null,

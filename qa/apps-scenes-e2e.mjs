@@ -64,6 +64,15 @@ try {
   await addAsset('chrome-webpage', 'windows', 'Browsers')
   console.log('PASS wave-2 app/window assets add clips')
 
+  // Wave-3 generated packs: more phone/productivity scenes from the
+  // screenshot gist groups, still with demo/test fields only.
+  await addAsset('maps-phone', 'apps', 'Phones')
+  await addAsset('photo-gallery-phone', 'apps', 'Phones')
+  await addAsset('podcast-player', 'apps', 'Music')
+  await addAsset('calendar-window', 'apps', 'Productivity')
+  await addAsset('spreadsheet-window', 'apps', 'Productivity')
+  console.log('PASS wave-3 phone/productivity assets add clips')
+
   // Seed a base clip for recipes (built-in demo image asset).
   await page.evaluate(() => {
     const store = window.__omniframe_store
@@ -117,6 +126,38 @@ try {
   await page.getByTestId('pack-recipe-on-air').click()
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'ON AIR'))
   console.log('PASS on-air recipe adds its title')
+
+  // Scene Brief Builder: a structured brief becomes editable clips through
+  // real sequence, pack, title, trim and keyframe actions.
+  await page.getByTestId('pack-brief-title').fill('Demo Launch Brief')
+  await page.getByTestId('pack-brief-captions').fill('Open with the demo hook\nShow the phone route\nEnd with the demo result')
+  await page.getByTestId('pack-brief-format').selectOption('9:16')
+  await page.getByTestId('pack-brief-backdrop').selectOption('maps-phone')
+  await page.getByTestId('pack-brief-style').selectOption('tutorial')
+  await page.getByTestId('pack-brief-duration').fill('8')
+  const briefBefore = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
+  await page.getByTestId('pack-brief-build').click()
+  await page.waitForFunction((n) => window.__omniframe_store.getState().clips.length > n + 5, briefBefore)
+  const briefState = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    const texts = s.clips.filter((c) => c.kind === 'text').map((c) => c.textStyle?.text)
+    const backdrop = s.clips.find((c) => c.assetId === 'pack-maps-phone')
+    return {
+      aspect: s.sequenceSettings?.aspectRatio,
+      texts,
+      hasBackdrop: Boolean(backdrop),
+      hasSpotlight: s.clips.some((c) => c.assetId === 'pack-spotlight'),
+      hasHighlight: s.clips.some((c) => c.assetId === 'pack-highlight-box'),
+      backdropKeys: Math.max(0, ...s.clips.filter((c) => c.assetId === 'pack-maps-phone').map((c) => c.animation?.curves?.scale_x?.keyframes?.length ?? 0)),
+    }
+  })
+  assert.equal(briefState.aspect, '9:16')
+  assert.ok(briefState.texts.includes('Demo Launch Brief'), 'brief title clip created')
+  assert.ok(briefState.texts.includes('Show the phone route'), 'brief caption clips created')
+  assert.ok(briefState.hasBackdrop && briefState.hasSpotlight && briefState.hasHighlight, 'brief backdrop/tutorial layers created')
+  assert.equal(briefState.backdropKeys, 2, 'brief backdrop receives real zoom keyframes')
+  assert.match(await page.getByTestId('pack-brief-note').textContent() ?? '', /editable clips/)
+  console.log('PASS scene brief builder creates an editable scene')
 
   assert.deepEqual(errors, [], `page errors: ${errors.join(' | ')}`)
   console.log('APPS+SCENES E2E PASSED')

@@ -54,7 +54,9 @@ console.log('building production bundle…')
 await run('npx', ['vite', 'build'])
 
 console.log('serving preview…')
-const preview = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], { cwd: ROOT, stdio: 'pipe' })
+// Spawn Vite's Node entry directly (not the npx shell wrapper) so cleanup
+// signals reach the actual server process and this QA process can exit.
+const preview = spawn(process.execPath, [join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js'), 'preview', '--port', String(PORT), '--strictPort'], { cwd: ROOT, stdio: 'pipe' })
 try {
   // wait for the preview server to accept connections
   let up = false
@@ -107,7 +109,14 @@ try {
   assert('zero page errors', pageErrors.length === 0, pageErrors.join(' | '))
   await browser.close()
 } finally {
-  preview.kill('SIGTERM')
+  if (preview.exitCode === null && preview.signalCode === null) {
+    preview.kill('SIGTERM')
+    await Promise.race([
+      new Promise((resolve) => preview.once('exit', resolve)),
+      new Promise((resolve) => setTimeout(resolve, 3000)),
+    ])
+    if (preview.exitCode === null && preview.signalCode === null) preview.kill('SIGKILL')
+  }
 }
 
 writeFileSync(

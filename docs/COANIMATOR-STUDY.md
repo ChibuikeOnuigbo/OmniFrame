@@ -24,17 +24,32 @@ nothing here copies that framing. What transfers is the *workflow design*:
    - Caption Burst — four editable caption titles across the selected clip.
    - Vertical 9:16 Version — switch the sequence to 1080×1920 for
      Shorts/Reels.
+   - Ken Burns Drift — real `scale_x`/`scale_y` keyframes (100% → 125%)
+     across the selected clip.
+   - On-Air Backdrop — post-card layer plus an editable “ON AIR” title.
    Covered by `qa/apps-scenes-e2e.mjs`.
-2. **Projects as plain editable files.** CoAnimator's "scenes as files" maps
+2. **Scene Brief Builder (structured brief → editable scene).** CoAnimator's
+   central workflow is “describe the video and watch scenes appear.” OmniFrame
+   adapts that as a visible form — title, caption beats, format, duration,
+   backdrop/device and look — then calls only real store actions
+   (`setSequenceAspectRatio`, pack-asset placement, `trimClip`,
+   `addTextTitleClip`, `setClipKeyframe`) to build ordinary clips. The user
+   can immediately move, trim, restyle or delete every piece; there is no
+   prompt box, no locked generation and no AI-labelled control.
+3. **Projects as plain editable files.** CoAnimator's "scenes as files" maps
    to OmniFrame's `.omni` project (complete save) plus capability-checked
    subset exports with loss warnings — see
    `docs/OMNI-PROJECT-AND-EXPORTS.md`.
-3. **Local rendering.** OmniFrame exports locally in the browser/desktop app;
+4. **Local rendering.** OmniFrame exports locally in the browser/desktop app;
    no credits, no upload. Already the product's model.
 
 ## Not adapted
 
-- Agent-authored narration/voiceover pipelines and "describe a video"
-  generation — conflicts with OmniFrame's no-AI-labelling rule and its
-  frame-scope-tool identity.
+- Agent-authored narration/voiceover pipelines and free-form "describe a
+  video" generation — conflicts with OmniFrame's no-AI-labelling rule and its
+  frame-scope-tool identity. The Scene Brief Builder is the deliberate,
+  inspectable substitute: structured fields in, editable clips out.
+- CoAnimator's proprietary desktop binary was not copied or bundled; only
+  its public workflow ideas were studied and reimplemented with OmniFrame's
+  own editor functions.
 - Watermark/720p free-tier gating — OmniFrame has no such tiers.
