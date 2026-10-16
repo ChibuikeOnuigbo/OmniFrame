@@ -92,6 +92,31 @@ await page.waitForTimeout(300)
 assert.equal(await page.getByTestId('section-tab-audio').getAttribute('aria-selected'), 'true')
 pass('Audio icon activates the Audio section')
 
+// Train arrows: pinned at both edges while the strip overflows, nothing
+// underneath them, left arrow disabled at the start, click scrolls. The
+// Desktop Pack strip always overflows its narrow panel, so it exercises
+// the same HScrollStrip contract deterministically.
+await page.getByTestId('left-tab-pack').evaluate((el) => el.click())
+await page.getByTestId('desktop-pack-panel').waitFor({ state: 'visible' })
+await page.getByTestId('pack-section-arrow-left').waitFor({ state: 'visible' })
+await page.getByTestId('pack-section-arrow-right').waitFor({ state: 'visible' })
+pass('train shows pinned left and right arrows while overflowing')
+assert.equal(await page.getByTestId('pack-section-arrow-left').isEnabled(), false, 'left arrow disabled at the start')
+const overlap = await page.evaluate(() => {
+  const arrow = document.querySelector('[data-testid="pack-section-arrow-left"]')?.getBoundingClientRect()
+  const chip = document.querySelector('[data-testid="pack-section-strip"] [data-testid^="pack-section-"]:not([data-testid*="arrow"])')?.getBoundingClientRect()
+  if (!arrow || !chip) return 'missing'
+  return chip.left >= arrow.right - 1 ? 'clear' : `chip under arrow: chip.left=${chip.left} arrow.right=${arrow.right}`
+})
+assert.equal(overlap, 'clear', 'no chip sits underneath the left arrow')
+pass('no chip underneath the arrow buttons')
+const scrollBefore = await page.evaluate(() => document.querySelector('[data-testid="pack-section-strip"]')?.scrollLeft ?? 0)
+await page.getByTestId('pack-section-arrow-right').click()
+await page.waitForTimeout(700)
+const scrollAfter = await page.evaluate(() => document.querySelector('[data-testid="pack-section-strip"]')?.scrollLeft ?? 0)
+assert.ok(scrollAfter > scrollBefore, `train scrolled ${scrollBefore} -> ${scrollAfter}`)
+pass('clicking the right arrow moves the train')
+
 assert.equal(errors.length, 0, `page errors: ${errors.join(' | ')}`)
 pass('zero page errors')
 await page.screenshot({ path: 'evidence/screenshots/omniframe-inspector-icon-rail.png', fullPage: false }).catch(() => {})

@@ -27,6 +27,8 @@ export interface PackBundleDef {
 }
 
 export const PACK_BUNDLES: PackBundleDef[] = [
+  { id: 'music-phone', name: 'Music Phone Pack', desc: 'Phone music player with progress bar for vertical listening scenes', items: ['spotify-phone', 'progress-bar', 'cursor-hand'] },
+  { id: 'design-review', name: 'Design Review Pack', desc: 'Design canvas, highlight box and hand cursor for UI walkthroughs', items: ['figma-desktop', 'highlight-box', 'cursor-hand'] },
   { id: 'screenlife-mac', name: 'Screen-Life Pack · macOS', desc: 'Desktop, Chrome, cursor and click ring for a full screen-life scene', items: ['desktop-mac', 'chrome-mac', 'cursor-mac', 'click-ring'] },
   { id: 'screenlife-win', name: 'Screen-Life Pack · Windows', desc: 'Desktop, Chrome, cursor and click ring for a full screen-life scene', items: ['desktop-win', 'chrome-win', 'cursor-win', 'click-ring'] },
   { id: 'tutorial', name: 'Tutorial Pack', desc: 'Browser window, hand cursor, highlight box and progress bar', items: ['chrome-win', 'cursor-hand', 'highlight-box', 'progress-bar'] },
@@ -711,7 +713,135 @@ function figmaPhone(ctx: CanvasRenderingContext2D) {
   textLines(ctx, x + PACK_W - 220 - 152, y + 66, [110, 88, 96, 74, 102], 'rgba(180,180,190,0.4)', 26)
 }
 
+
+function spotifyMac(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'mac', { title: 'Music Player — Demo (Mac)' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#101010'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  demoRows(ctx, x + 26, y + 96, ['Demo Track 01 — Test Artist', 'Demo Track 02 — Test Artist', 'Demo Track 03 — Sample Band'], '#1db954')
+  ctx.fillStyle = '#1db954'
+  ctx.beginPath(); ctx.arc(x + 120, y + 330, 40, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#0c0e12'
+  ctx.font = '600 14px system-ui, sans-serif'
+  ctx.fillText('DEMO', x + 98, y + 336)
+}
+
+function spotifyPhone(ctx: CanvasRenderingContext2D) {
+  deviceFrame(ctx, false)
+  const w = 300, h = 620
+  const x = (PACK_W - w) / 2, y = (PACK_H - h) / 2
+  ctx.fillStyle = '#121212'
+  roundRect(ctx, x + 6, y + 38, w - 12, h - 90, 24); ctx.fill()
+  ctx.fillStyle = '#1db954'
+  roundRect(ctx, x + 30, y + 70, w - 60, 170, 12); ctx.fill()
+  ctx.fillStyle = '#0c0e12'
+  ctx.font = '600 17px system-ui, sans-serif'
+  ctx.fillText('DEMO ALBUM', x + 44, y + 162)
+  demoRows(ctx, x + 34, y + 300, ['Demo Track 01', 'Demo Track 02', 'Demo Track 03'], '#1db954')
+  ctx.fillStyle = 'rgba(255,255,255,0.2)'
+  roundRect(ctx, x + 30, y + 470, w - 60, 7, 3.5); ctx.fill()
+  ctx.fillStyle = '#1db954'
+  roundRect(ctx, x + 30, y + 470, 120, 7, 3.5); ctx.fill()
+  ctx.fillStyle = '#e8eaed'
+  ctx.font = '17px system-ui, sans-serif'
+  ctx.fillText('⏮   ▶   ⏭', x + 112, y + 520)
+}
+
+function discordChat(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Community Chat — Demo Server' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#1e1f22'
+  ctx.fillRect(x + 1, y + 45, 200, 420)
+  demoRows(ctx, x + 22, y + 96, ['# announcements', '# general (demo)', '# clips-and-edits', '# support'], '#5865f2')
+  const msgs: [string, string][] = [
+    ['DemoUser', 'This is a demo message.'],
+    ['TestMod', 'All names here are test data.'],
+    ['DemoUser', 'Replace with your own chat.'],
+  ]
+  ctx.font = '13px system-ui, sans-serif'
+  msgs.forEach(([who, text], i) => {
+    ctx.fillStyle = '#5865f2'
+    ctx.beginPath(); ctx.arc(x + 250, y + 92 + i * 74, 15, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#e8eaed'
+    ctx.font = '600 13px system-ui, sans-serif'
+    ctx.fillText(who, x + 276, y + 84 + i * 74)
+    ctx.font = '13px system-ui, sans-serif'
+    ctx.fillStyle = 'rgba(215,221,232,0.8)'
+    ctx.fillText(text, x + 276, y + 106 + i * 74)
+  })
+}
+
+function vscodeWindow(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'demo-project — Code Editor' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#181818'
+  ctx.fillRect(x + 1, y + 45, 190, 420)
+  demoRows(ctx, x + 22, y + 96, ['src', 'demo.ts', 'styles.css', 'README-demo.md'], '#4da3ff')
+  const palette = ['#c792ea', '#82aaff', '#7fdbca', '#ffcb6b', '#89ddff', '#f07178']
+  for (let row = 0; row < 11; row++) {
+    let cx = x + 240 + (row % 3) * 26
+    const segs = 2 + (row % 3)
+    for (let sg = 0; sg < segs; sg++) {
+      const wdt = 44 + ((row * 37 + sg * 53) % 90)
+      ctx.fillStyle = palette[(row + sg) % palette.length] + 'cc'
+      roundRect(ctx, cx, y + 76 + row * 27, wdt, 8, 4)
+      ctx.fill()
+      cx += wdt + 14
+    }
+  }
+}
+
+function figmaDesktop(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'mac', { title: 'Demo App — Design Canvas' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#1e1e1e'
+  ctx.fillRect(x + 1, y + 45, 170, 420)
+  demoRows(ctx, x + 20, y + 96, ['Frame — Home', 'Card (demo)', 'Button (demo)', 'Text (demo)'], '#b78bff')
+  ctx.fillStyle = '#2c2c2c'
+  ctx.fillRect(x + 171, y + 45, PACK_W - 392, 420)
+  // phone wireframe in the middle of the canvas
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)'
+  ctx.lineWidth = 1.5
+  roundRect(ctx, x + 420, y + 80, 190, 340, 18); ctx.stroke()
+  ctx.fillStyle = '#6d5efc'
+  roundRect(ctx, x + 436, y + 100, 158, 60, 8); ctx.fill()
+  demoRows(ctx, x + 440, y + 210, ['Title (demo)', 'Body (demo)'], '#b78bff')
+  ctx.fillStyle = '#6d5efc'
+  roundRect(ctx, x + 436, y + 350, 158, 34, 17); ctx.fill()
+}
+
+function chromeWebpage(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Demo Site — Example', browser: 'chrome', urlText: 'example.com/demo' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#f4f5f7'
+  ctx.fillRect(x + 1, y + 87, PACK_W - 222, 378)
+  ctx.fillStyle = '#171a21'
+  ctx.font = '600 24px system-ui, sans-serif'
+  ctx.fillText('Demo headline (test text)', x + 60, y + 150)
+  ctx.font = '14px system-ui, sans-serif'
+  ctx.fillStyle = '#4a5160'
+  ctx.fillText('Replace this page with your own screen recording.', x + 60, y + 182)
+  ctx.fillText('Second demo paragraph — no real data here.', x + 60, y + 206)
+  ctx.fillStyle = '#6d5efc'
+  roundRect(ctx, x + 60, y + 240, 170, 40, 20); ctx.fill()
+  ctx.fillStyle = '#fff'
+  ctx.font = '600 14px system-ui, sans-serif'
+  ctx.fillText('Call to action', x + 92, y + 265)
+  const cols = ['#ffd76a', '#7cc7ff', '#7dffb2']
+  cols.forEach((c, i) => {
+    ctx.fillStyle = c
+    roundRect(ctx, x + 60 + i * 260, y + 330, 220, 100, 10); ctx.fill()
+  })
+}
+
 export const PACK_ASSETS: PackAssetDef[] = [
+  { id: 'spotify-mac', name: 'Music Player · Mac', desc: 'Streaming player in a macOS window with demo tracks', section: 'apps', group: 'Music', paint: (c) => spotifyMac(c) },
+  { id: 'spotify-phone', name: 'Music Player · Phone', desc: 'Phone now-playing screen with demo album and progress', section: 'apps', group: 'Music', paint: (c) => spotifyPhone(c) },
+  { id: 'discord-chat', name: 'Community Chat · Demo', desc: 'Purple community chat with demo channels and messages', section: 'apps', group: 'Chat & Mail', paint: (c) => discordChat(c) },
+  { id: 'vscode-window', name: 'Code Editor · Demo Project', desc: 'Editor window with demo file tree and syntax lines', section: 'apps', group: 'Code & Design', paint: (c) => vscodeWindow(c) },
+  { id: 'figma-desktop', name: 'Design Canvas · Desktop', desc: 'Design-tool window with a phone wireframe (demo)', section: 'apps', group: 'Code & Design', paint: (c) => figmaDesktop(c) },
+  { id: 'chrome-webpage', name: 'Chrome Webpage · Demo', desc: 'Browser window showing a demo landing page', section: 'windows', group: 'Browsers', paint: (c) => chromeWebpage(c) },
   { id: 'spotify-desktop', name: 'Music Player · Desktop', desc: 'Streaming player window with demo playlist and progress', section: 'apps', group: 'Music', paint: (c) => spotifyDesktop(c) },
   { id: 'explorer-win11', name: 'File Explorer · Windows 11', desc: 'Explorer window with demo media files — no real folder names', section: 'apps', group: 'Files & Browsers', paint: (c) => explorerWin11(c) },
   { id: 'finder-mac', name: 'Finder · macOS', desc: 'Finder window with demo files and sidebar favourites', section: 'apps', group: 'Files & Browsers', paint: (c) => finderMac(c) },

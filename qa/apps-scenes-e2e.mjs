@@ -44,6 +44,26 @@ try {
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.length >= 4)
   console.log('PASS apps pack assets + bundle add clips')
 
+  // Wave-2 generated assets (demo text only) also add clips.
+  const addAsset = async (id, section, folder) => {
+    await page.getByTestId('pack-search').fill('')
+    await page.getByTestId(`pack-section-${section}`).click()
+    if (!(await page.getByTestId(`pack-asset-${id}`).isVisible().catch(() => false))) {
+      const toggle = page.getByTestId(`pack-folder-toggle-${section}-${folder}`)
+      if (await toggle.count()) await toggle.click()
+    }
+    await page.getByTestId(`pack-asset-${id}`).waitFor({ state: 'visible' })
+    const b = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
+    await page.getByTestId(`pack-asset-${id}`).click()
+    await page.waitForFunction((n) => window.__omniframe_store.getState().clips.length === n + 1, b)
+  }
+  await addAsset('spotify-phone', 'apps', 'Music')
+  await addAsset('vscode-window', 'apps', 'Code & Design')
+  await addAsset('figma-desktop', 'apps', 'Code & Design')
+  await addAsset('discord-chat', 'apps', 'Chat & Mail')
+  await addAsset('chrome-webpage', 'windows', 'Browsers')
+  console.log('PASS wave-2 app/window assets add clips')
+
   // Seed a base clip for recipes (built-in demo image asset).
   await page.evaluate(() => {
     const store = window.__omniframe_store
@@ -78,6 +98,25 @@ try {
   await page.getByTestId('pack-recipe-punch-in').click()
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => (c.transform?.scale ?? 1) > 1.1))
   console.log('PASS punch-in splits and scales the middle clip')
+
+  // Ken Burns: keyframes a real zoom on the selected image clip.
+  await page.evaluate(() => {
+    const store = window.__omniframe_store
+    const clip = store.getState().clips.find((c) => c.assetId === 'asset-death-note-img')
+    store.setState({ selectedClipId: clip?.id ?? null })
+  })
+  await page.getByTestId('pack-recipe-ken-burns').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const keys = clip?.animation?.curves?.scale_x?.keyframes ?? []
+    return keys.length === 2 && Math.abs(keys[keys.length - 1].value - 1.25) < 0.01
+  })
+  console.log('PASS ken-burns keyframes a real zoom')
+
+  await page.getByTestId('pack-recipe-on-air').click()
+  await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'ON AIR'))
+  console.log('PASS on-air recipe adds its title')
 
   assert.deepEqual(errors, [], `page errors: ${errors.join(' | ')}`)
   console.log('APPS+SCENES E2E PASSED')

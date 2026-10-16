@@ -26,7 +26,7 @@ const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
 
 const GROUP_ORDER: Record<string, string[]> = {
   windows: ['Packs', 'Desktops', 'Browsers', 'App Windows', 'Devices & Social'],
-  apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Chat & Mail'],
+  apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Code & Design', 'Chat & Mail'],
   scenes: ['Intros & Titles', 'Looks & Teaching', 'Social Versions'],
   cursors: ['Pointers', 'Clicks & Marks', 'Editor Cursor'],
   overlays: ['Frames & Bars', 'Light & Focus'],
@@ -181,6 +181,31 @@ const SCENE_RECIPES: SceneRecipe[] = [
     run: async () => {
       useEditor.getState().setSequenceAspectRatio('9:16')
       return 'Sequence is now 9:16 — reframe clips with Transform, then export'
+    },
+  },
+  {
+    id: 'ken-burns', label: 'Ken Burns Drift', desc: 'Slow 100% → 125% zoom keyframed across the selected clip', group: 'Looks & Teaching', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      s.setClipKeyframe(clip.id, 'scale_x', 0, 1, 'bezier')
+      s.setClipKeyframe(clip.id, 'scale_x', Math.max(0.1, clip.duration), 1.25, 'bezier')
+      s.setClipKeyframe(clip.id, 'scale_y', 0, 1, 'bezier')
+      s.setClipKeyframe(clip.id, 'scale_y', Math.max(0.1, clip.duration), 1.25, 'bezier')
+      return 'Ken Burns drift keyframed — adjust the curve in the Graph Editor'
+    },
+  },
+  {
+    id: 'on-air', label: 'On-Air Backdrop', desc: 'Post-card backdrop + ON AIR title over the selected clip', group: 'Intros & Titles', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const card = PACK_ASSETS.find((a) => a.id === 'post-card')
+      if (card) addPackClip(card)
+      s.addTextTitleClip('ON AIR', 4)
+      return 'On-air backdrop added — move the card and title behind your subject track if needed'
     },
   },
 ]
