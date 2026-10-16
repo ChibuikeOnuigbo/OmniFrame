@@ -68,6 +68,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
   const setRotoBrushRadius = useEditor((s) => s.setRotoBrushRadius)
   const trackRotoMask = useEditor((s) => s.trackRotoMask)
   const analyzeRotoInpaint = useEditor((s) => s.analyzeRotoInpaint)
+  const setRotoInpaintOptions = useEditor((s) => s.setRotoInpaintOptions)
   const applyRotoInpaint = useEditor((s) => s.applyRotoInpaint)
   const selectRotoInpaintDonor = useEditor((s) => s.selectRotoInpaintDonor)
   const rotoExtractToObject = useEditor((s) => s.rotoExtractToObject)
@@ -501,6 +502,51 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
             {rotoInpaint.phase === 'analyzing' ? <Loader2 size={12} className="animate-spin" /> : <Search size={12} />}
             <span>{rotoInpaint.phase === 'analyzing' ? 'Scanning…' : 'Analyze clip'}</span>
           </button>
+        </div>
+        <div className="space-y-1.5 pt-1.5" data-testid="roto-inpaint-propagation">
+          <div className="flex items-center justify-between gap-2">
+            <label htmlFor="roto-donor-direction" className="text-[10px] text-ink-400">Donor search</label>
+            <select
+              id="roto-donor-direction"
+              data-testid="roto-donor-direction"
+              value={rotoInpaint.donorDirection}
+              onChange={(e) => setRotoInpaintOptions({ donorDirection: e.target.value as 'both' | 'earlier' | 'later' })}
+              className="h-6 rounded border border-ink-700 bg-ink-900 px-1 text-[10px] text-ink-200"
+            >
+              <option value="both">Both directions</option>
+              <option value="earlier">Earlier frames</option>
+              <option value="later">Later frames</option>
+            </select>
+          </div>
+          <label className="flex items-center justify-between gap-2 text-[10px] text-ink-400">
+            <span>Mask grow · {rotoInpaint.maskGrow}px</span>
+            <input
+              type="range"
+              min={0}
+              max={24}
+              step={1}
+              value={rotoInpaint.maskGrow}
+              data-testid="roto-mask-grow"
+              aria-label="Mask grow in pixels"
+              onChange={(e) => setRotoInpaintOptions({ maskGrow: Number(e.target.value) })}
+              className="w-28 accent-cyan-400"
+            />
+          </label>
+          <label className="flex items-center justify-between gap-2 text-[10px] text-ink-400">
+            <span>Donor window · {rotoInpaint.donorWindow === 0 ? 'whole clip' : `±${rotoInpaint.donorWindow} frames`}</span>
+            <input
+              type="range"
+              min={0}
+              max={120}
+              step={5}
+              value={rotoInpaint.donorWindow}
+              data-testid="roto-donor-window"
+              aria-label="Donor window in frames, zero means whole clip"
+              onChange={(e) => setRotoInpaintOptions({ donorWindow: Number(e.target.value) })}
+              className="w-28 accent-cyan-400"
+            />
+          </label>
+          <p className="text-[9px] leading-snug text-ink-500">Propagation: donors are flow-aligned by mask-centroid shift, the hole is grown before filling, and spatial inpaint remains the fallback. Re-analyze after changing direction or window.</p>
         </div>
         {inpaintBusy && rotoInpaint.total > 0 && (
           <div data-testid="roto-inpaint-progress" className="pt-1 text-[10px] font-mono text-ink-500">{rotoInpaint.done}/{rotoInpaint.total} frames</div>

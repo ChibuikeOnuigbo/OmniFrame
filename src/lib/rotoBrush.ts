@@ -108,6 +108,46 @@ function fitColorModel(img: ImageData, pixels: number[]): ColorModel {
 }
 
 /** Separable box blur over a coverage mask (feather). */
+/** Grow a mask by `radius` px (max-filter, separable). ProPainter-style
+ * inpainting dilates the hole before filling so foreground remnants at the
+ * boundary do not bleed into the patch. */
+export function dilateMaskBitmap(mask: MaskBitmap, radius: number): MaskBitmap {
+  const r = Math.max(0, Math.min(32, Math.round(radius)))
+  if (r < 1) return mask
+  const { width: w, height: h } = mask
+  const tmp = new Uint8Array(w * h)
+  const out = new Uint8Array(w * h)
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let m = 0
+      for (let k = -r; k <= r; k++) m = Math.max(m, mask.data[y * w + Math.min(w - 1, Math.max(0, x + k))])
+      tmp[y * w + x] = m
+    }
+  }
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let m = 0
+      for (let k = -r; k <= r; k++) m = Math.max(m, tmp[Math.min(h - 1, Math.max(0, y + k)) * w + x])
+      out[y * w + x] = m
+    }
+  }
+  return { width: w, height: h, data: out }
+}
+
+/** Centroid of the covered pixels (mask px), or null when empty. Used as a
+ * cheap flow proxy: shifting a donor frame by the centroid delta aligns it
+ * with the target frame before pixels are propagated into the hole. */
+export function maskCentroid(mask: MaskBitmap): { x: number; y: number } | null {
+  const { width: w, height: h, data } = mask
+  let sx = 0, sy = 0, n = 0
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (data[y * w + x] >= 100) { sx += x; sy += y; n++ }
+    }
+  }
+  return n ? { x: sx / n, y: sy / n } : null
+}
+
 export function featherMask(mask: MaskBitmap, radius: number): MaskBitmap {
   if (radius < 1) return mask
   const { width: w, height: h } = mask

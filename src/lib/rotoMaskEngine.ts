@@ -33,6 +33,8 @@ import { isDesktopApp } from './desktop'
 import {
   colorDistance,
   featherMask,
+  dilateMaskBitmap,
+  maskCentroid,
   gradientMagnitude,
   maskToDataUrl,
   type MaskBitmap,
@@ -864,6 +866,7 @@ export function inpaintMaskedHoleWithDonor(
   sourceHeight: number,
   mask: MaskBitmap,
   feather = 2,
+  offset?: { dx: number; dy: number },
 ): string {
   const softened = feather > 0 ? featherMask(mask, feather) : mask
   const matte = document.createElement('canvas')
@@ -887,7 +890,9 @@ export function inpaintMaskedHoleWithDonor(
   patch.height = sourceHeight
   const patchCtx = patch.getContext('2d')
   if (!patchCtx) return ''
-  patchCtx.drawImage(donor, 0, 0, sourceWidth, sourceHeight)
+  // Flow alignment: the donor is drawn shifted by the mask-centroid delta
+  // so propagated pixels land where the target frame needs them.
+  patchCtx.drawImage(donor, offset?.dx ?? 0, offset?.dy ?? 0, sourceWidth, sourceHeight)
   patchCtx.globalCompositeOperation = 'destination-in'
   patchCtx.drawImage(matte, 0, 0, sourceWidth, sourceHeight)
   patchCtx.globalCompositeOperation = 'source-over'

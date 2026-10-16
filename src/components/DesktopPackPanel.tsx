@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AppWindow, Box, ChevronRight, Folder, FolderOpen, Layers, MousePointer2, Search, Sparkles } from 'lucide-react'
+import { AppWindow, Box, ChevronRight, Clapperboard, Folder, FolderOpen, Layers, MousePointer2, Search, Smartphone, Sparkles } from 'lucide-react'
 import { useEditor } from '../store'
 import type { ClipEffect, CursorPack, Primitive3D } from '../types'
 import { PACK_ASSETS, PACK_BUNDLES, PACK_H, PACK_W, packAssetUrl, type PackAssetDef, type PackBundleDef, type PackSection } from '../lib/desktopPack'
@@ -8,7 +8,7 @@ import { HScrollStrip } from './HScrollStrip'
 
 /**
  * Desktop Pack: the screen-life toolkit organised like a file library —
- * five sections on a horizontal segmented strip (CapCut pattern), each
+ * six sections on a horizontal segmented strip (CapCut pattern), each
  * section filed into collapsible folders (Explorer/ChatGPT-sidebar pattern:
  * chevron, folder name, item count, indented contents) with a search box
  * on top (ChatGPT pattern) so nothing competes for attention all at once.
@@ -16,6 +16,8 @@ import { HScrollStrip } from './HScrollStrip'
 
 const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
   { id: 'windows', label: 'Desktop & Windows', icon: AppWindow },
+  { id: 'apps', label: 'Apps & Devices', icon: Smartphone },
+  { id: 'scenes', label: 'Scene Recipes', icon: Clapperboard },
   { id: 'cursors', label: 'Cursors', icon: MousePointer2 },
   { id: 'overlays', label: 'Overlays', icon: Layers },
   { id: 'edits', label: 'Edit Presets', icon: Sparkles },
@@ -24,6 +26,8 @@ const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
 
 const GROUP_ORDER: Record<string, string[]> = {
   windows: ['Packs', 'Desktops', 'Browsers', 'App Windows', 'Devices & Social'],
+  apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Chat & Mail'],
+  scenes: ['Intros & Titles', 'Looks & Teaching', 'Social Versions'],
   cursors: ['Pointers', 'Clicks & Marks', 'Editor Cursor'],
   overlays: ['Frames & Bars', 'Light & Focus'],
   edits: ['Looks', 'Fixes'],
@@ -54,6 +58,131 @@ const PRIMITIVES: { type: Primitive3D; label: string; color: string }[] = [
   { type: 'diamond', label: 'Diamond', color: '#38bdf8' },
   { type: 'plane', label: 'Plane', color: '#94a3b8' },
   { type: 'wheel', label: 'Wheel', color: '#f472b6' },
+]
+
+
+/** CoAnimator-style scene recipes: one click builds a real, editable scene
+ * from existing editor functions (frame capture, pack overlays, text clips,
+ * effects, splits, sequence settings). Nothing is baked in — every result
+ * stays a normal clip the user can move, trim or delete. */
+async function captureClipFrameDataUrl(clipId: string): Promise<string | null> {
+  const s = useEditor.getState()
+  const clip = s.clips.find((c) => c.id === clipId)
+  if (!clip) return null
+  const asset = s.assets.find((a) => a.id === clip.assetId)
+  if (!asset) return null
+  if (asset.kind === 'image') return asset.url
+  if (asset.kind !== 'video') return null
+  const at = clip.inPoint + Math.max(0, Math.min(clip.duration - 0.05, s.playhead - clip.start))
+  return await new Promise((resolve) => {
+    const video = document.createElement('video')
+    video.crossOrigin = 'anonymous'
+    video.muted = true
+    video.src = asset.url
+    const done = (url: string | null) => { video.remove(); resolve(url) }
+    video.onloadedmetadata = () => { video.currentTime = Math.min(at, Math.max(0, video.duration - 0.05)) }
+    video.onseeked = () => {
+      try {
+        const canvas = document.createElement('canvas')
+        canvas.width = 1280; canvas.height = 720
+        const ctx = canvas.getContext('2d')!
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1280, 720)
+        const vw = video.videoWidth || 1280, vh = video.videoHeight || 720
+        const scale = Math.min(1280 / vw, 720 / vh)
+        ctx.drawImage(video, (1280 - vw * scale) / 2, (720 - vh * scale) / 2, vw * scale, vh * scale)
+        done(canvas.toDataURL('image/png'))
+      } catch { done(null) }
+    }
+    video.onerror = () => done(null)
+    window.setTimeout(() => done(null), 8000)
+  })
+}
+
+interface SceneRecipe { id: string; label: string; desc: string; group: string; needsClip: boolean; run: () => Promise<string> }
+
+const SCENE_RECIPES: SceneRecipe[] = [
+  {
+    id: 'freeze-pop', label: 'Freeze-Pop Intro', desc: 'Freeze the frame at the playhead, sticker frame + name title on top', group: 'Intros & Titles', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const url = await captureClipFrameDataUrl(clip.id)
+      if (!url) return 'Could not capture a frame from that clip'
+      const st = useEditor.getState()
+      const assetId = `freeze-${Date.now().toString(36)}`
+      st.addAsset({ id: assetId, name: 'Freeze frame (demo)', kind: 'image', url, duration: 1.5, width: 1280, height: 720, size: url.length })
+      const trackId = st.createTrack('video', 'above', clip.trackId)
+      st.addClipToTrack(trackId, assetId, st.playhead)
+      const frameDef = PACK_ASSETS.find((a) => a.id === 'pip-frame')
+      if (frameDef) addPackClip(frameDef)
+      st.addTextTitleClip('YOUR NAME', 1.5)
+      return 'Freeze-pop built: frozen frame, sticker frame and name title at the playhead'
+    },
+  },
+  {
+    id: 'cinematic-cast', label: 'Cinematic Cast Intro', desc: 'Letterbox bars, warm cinematic grade and a title card', group: 'Intros & Titles', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      s.setClipEffect(clip.id, { contrast: 1.16, saturation: 1.08, sepia: 0.14, brightness: 0.98 })
+      const letterbox = PACK_ASSETS.find((a) => a.id === 'letterbox')
+      if (letterbox) addPackClip(letterbox)
+      s.addTextTitleClip('EPISODE ONE', 3)
+      return 'Cinematic intro applied: grade on the clip, letterbox + title above'
+    },
+  },
+  {
+    id: 'spotlight-tutorial', label: 'Spotlight Tutorial', desc: 'Spotlight dim + look-here box, screen-clean grade on the clip', group: 'Looks & Teaching', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      s.setClipEffect(clip.id, { contrast: 1.18, saturation: 1.2, brightness: 1.02 })
+      const spot = PACK_ASSETS.find((a) => a.id === 'spotlight')
+      if (spot) addPackClip(spot)
+      const box = PACK_ASSETS.find((a) => a.id === 'highlight-box')
+      if (box) addPackClip(box)
+      return 'Spotlight look built — move the highlight box to the detail that matters'
+    },
+  },
+  {
+    id: 'punch-in', label: 'Punch-In Cut', desc: 'Split all tracks at the playhead and scale the selected clip to 118%', group: 'Looks & Teaching', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      s.splitAt(s.playhead)
+      const st = useEditor.getState()
+      const mid = st.clips.filter((c) => c.trackId === clip.trackId && c.start >= s.playhead - 0.01).sort((a, b) => a.start - b.start)[0]
+      if (mid) st.setClipTransform(mid.id, { scale: 1.18 })
+      return 'Punch-in cut made at the playhead (all tracks split)'
+    },
+  },
+  {
+    id: 'caption-burst', label: 'Caption Burst', desc: 'Four editable caption titles spread across the selected clip', group: 'Social Versions', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const lines = ['HOOK — watch this', 'Step one (demo caption)', 'Step two (demo caption)', 'Follow for part two']
+      const seg = clip.duration / lines.length
+      lines.forEach((line, i) => {
+        useEditor.getState().setPlayhead(clip.start + i * seg)
+        useEditor.getState().addTextTitleClip(line, Math.max(1, seg))
+      })
+      useEditor.getState().setPlayhead(clip.start)
+      return 'Four editable captions added — rewrite them in the Text panel'
+    },
+  },
+  {
+    id: 'vertical-version', label: 'Vertical 9:16 Version', desc: 'Switch the sequence to 1080×1920 for Shorts/Reels', group: 'Social Versions', needsClip: false,
+    run: async () => {
+      useEditor.getState().setSequenceAspectRatio('9:16')
+      return 'Sequence is now 9:16 — reframe clips with Transform, then export'
+    },
+  },
 ]
 
 function ensurePackAsset(def: PackAssetDef): string {
@@ -186,6 +315,7 @@ export function PackFolder({
 
 export function DesktopPackPanel() {
   const [section, setSection] = useState<PackSection>('windows')
+  const [recipeNote, setRecipeNote] = useState('')
   const [query, setQuery] = useState('')
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({})
   const cursorConfig = useEditor((s) => s.cursorConfig)
@@ -204,7 +334,9 @@ export function DesktopPackPanel() {
   const sectionAssets = useMemo(() => PACK_ASSETS.filter((a) => a.section === section), [section])
   const groups = useMemo(() => {
     const order = GROUP_ORDER[section] || []
-    const present = [...new Set(sectionAssets.map((a) => a.group))]
+    const present = section === 'scenes'
+      ? [...new Set(SCENE_RECIPES.map((r) => r.group))]
+      : [...new Set(sectionAssets.map((a) => a.group))]
     return [...order.filter((g) => present.includes(g)), ...present.filter((g) => !order.includes(g))]
   }, [section, sectionAssets])
 
@@ -318,6 +450,57 @@ export function DesktopPackPanel() {
               const items = sectionAssets.filter((a) => a.group === group && matches(a.name, a.desc, a.group))
               if (searching && items.length === 0) return null
               const key = `windows-${group}`
+              return (
+                <PackFolder key={key} folderKey={key} title={group} count={items.length} open={isOpen(key, gi === 0)} onToggle={toggleFolder}>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {items.map((def) => <AssetCard key={def.id} def={def} />)}
+                  </div>
+                </PackFolder>
+              )
+            })}
+          </>
+        )}
+
+        {section === 'scenes' && (
+          <>
+            <p className="px-0.5 text-[10px] leading-snug text-ink-500">
+              One-click scenes built from real editor tools — every piece lands as ordinary editable clips at the playhead.
+            </p>
+            {recipeNote && (
+              <p data-testid="pack-recipe-note" aria-live="polite" className="rounded-md border border-cyan-500/25 bg-cyan-500/10 px-2 py-1 text-[10px] leading-snug text-cyan-100">{recipeNote}</p>
+            )}
+            {groups.map((group) => {
+              const items = SCENE_RECIPES.filter((r) => r.group === group && matches(r.label, r.desc, r.group))
+              if (searching && items.length === 0) return null
+              return (
+                <div key={group} className="space-y-1.5">
+                  <p className="px-0.5 pt-1 text-[10px] font-semibold uppercase tracking-wide text-ink-500">{group}</p>
+                  {items.map((recipe) => (
+                    <button
+                      key={recipe.id}
+                      type="button"
+                      data-testid={`pack-recipe-${recipe.id}`}
+                      disabled={recipe.needsClip && !selectedClip}
+                      title={recipe.needsClip && !selectedClip ? `${recipe.desc} — select a clip first` : recipe.desc}
+                      onClick={() => void recipe.run().then(setRecipeNote)}
+                      className="w-full rounded-lg border border-ink-800 bg-ink-900 px-2.5 py-2 text-left transition hover:border-cyan-500/40 hover:bg-ink-850 disabled:cursor-not-allowed disabled:opacity-45"
+                    >
+                      <span className="flex items-center gap-1.5 text-[11px] font-medium text-ink-100"><Clapperboard size={12} className="text-cyan-300" />{recipe.label}</span>
+                      <span className="mt-0.5 block text-[10px] leading-snug text-ink-400">{recipe.desc}{recipe.needsClip && !selectedClip ? ' (select a clip first)' : ''}</span>
+                    </button>
+                  ))}
+                </div>
+              )
+            })}
+          </>
+        )}
+
+        {section === 'apps' && (
+          <>
+            {groups.map((group, gi) => {
+              const items = sectionAssets.filter((a) => a.group === group && matches(a.name, a.desc, a.group))
+              if (searching && items.length === 0) return null
+              const key = `apps-${group}`
               return (
                 <PackFolder key={key} folderKey={key} title={group} count={items.length} open={isOpen(key, gi === 0)} onToggle={toggleFolder}>
                   <div className="grid grid-cols-2 gap-1.5">

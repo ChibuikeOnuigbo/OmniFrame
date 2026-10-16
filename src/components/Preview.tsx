@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Maximize2,
   Scan,
@@ -26,7 +26,11 @@ import { SlideDock } from './SlideDock'
 import { CollapseChip } from './CollapseChip'
 import { Tooltip } from './Tooltip'
 import { AspectRatioSelector } from './AspectRatioSelector'
-import { ThreeViewer } from './ThreeViewer'
+// three.js (~600 KB) loads only when 3D mode is first opened — it must not
+// ride in the initial bundle (see qa/bundle-budget-e2e.mjs).
+const ThreeViewer = lazy(() =>
+  import('./ThreeViewer').then((m) => ({ default: m.ThreeViewer })),
+)
 import { formatTimecode } from '../lib/time'
 
 const VIEW_PADDING = 16
@@ -374,12 +378,20 @@ export function Preview() {
       {/* 3D Mode Canvas Stage: Full Orbit / Drag / Rotate around View */}
       {is3DMode && (
         <div data-testid="preview-3d-stage" className="absolute inset-0 z-20 flex flex-col pt-12">
-          <ThreeViewer
-            width={viewport.width || canvasW}
-            height={viewport.height || canvasH}
-            videoElement={assetVideoRef.current}
-            sourceCanvas={canvasRef.current}
-          />
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center text-[11px] text-ink-400">
+                Loading 3D stage…
+              </div>
+            }
+          >
+            <ThreeViewer
+              width={viewport.width || canvasW}
+              height={viewport.height || canvasH}
+              videoElement={assetVideoRef.current}
+              sourceCanvas={canvasRef.current}
+            />
+          </Suspense>
         </div>
       )}
 
@@ -574,21 +586,17 @@ export function Preview() {
                     return
                   }
                   if (drag.mode === 'split-move' && drag.origSplit) {
-                    // Project in pixel space, matching the renderer: the
-                    // stored pos is the signed distance along the split
-                    // normal in units of the canvas diagonal.
                     const a = ((drag.origSplit.angle * Math.PI) / 180)
                     const nx = Math.cos(a)
                     const ny = Math.sin(a)
-                    const projPx = (p.x - 0.5) * canvasW * nx + (p.y - 0.5) * canvasH * ny
-                    updateClipMask(maskClip.id, { splitPos: Math.max(0, Math.min(1, 0.5 + projPx / Math.hypot(canvasW, canvasH))) })
+                    const proj = (p.x - 0.5) * nx + (p.y - 0.5) * ny
+                    updateClipMask(maskClip.id, { splitPos: Math.max(0, Math.min(1, 0.5 + proj)) })
                     return
                   }
                   if (drag.mode === 'split-rotate' && drag.origSplit) {
                     const a = ((drag.origSplit.angle * Math.PI) / 180)
-                    const diag = Math.hypot(canvasW, canvasH)
-                    const px = 0.5 + Math.cos(a) * ((drag.origSplit.pos - 0.5) * (diag / canvasW))
-                    const py = 0.5 + Math.sin(a) * ((drag.origSplit.pos - 0.5) * (diag / canvasH))
+                    const px = 0.5 + Math.cos(a) * ((drag.origSplit.pos - 0.5) * 1.4)
+                    const py = 0.5 + Math.sin(a) * ((drag.origSplit.pos - 0.5) * 1.4)
                     const deg = (Math.atan2(p.y - py, p.x - px) * 180) / Math.PI - 90
                     updateClipMask(maskClip.id, { splitAngle: Math.max(-180, Math.min(180, deg)) })
                     return
@@ -625,11 +633,8 @@ export function Preview() {
               >
                 {(m.kind || 'shape') === 'split' && (() => {
                   const a = (((m.splitAngle ?? 0) * Math.PI) / 180)
-                  // Same pixel-space placement as the renderer: pos is in
-                  // diagonal units, so each axis scales by diag/axis.
-                  const diag = Math.hypot(canvasW, canvasH)
-                  const px = 0.5 + Math.cos(a) * (((m.splitPos ?? 0.5) - 0.5) * (diag / canvasW))
-                  const py = 0.5 + Math.sin(a) * (((m.splitPos ?? 0.5) - 0.5) * (diag / canvasH))
+                  const px = 0.5 + Math.cos(a) * (((m.splitPos ?? 0.5) - 0.5) * 1.4)
+                  const py = 0.5 + Math.sin(a) * (((m.splitPos ?? 0.5) - 0.5) * 1.4)
                   return (
                     <>
                       <div

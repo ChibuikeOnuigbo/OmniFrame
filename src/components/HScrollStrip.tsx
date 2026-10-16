@@ -28,6 +28,7 @@ export function HScrollStrip({
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canLeft, setCanLeft] = useState(false)
   const [canRight, setCanRight] = useState(false)
+  const [hasOverflow, setHasOverflow] = useState(false)
   const dragRef = useRef<{ x: number; left: number; moved: boolean } | null>(null)
   const suppressClickRef = useRef(false)
   const hoverTimerRef = useRef<number | null>(null)
@@ -37,6 +38,7 @@ export function HScrollStrip({
     if (!el) return
     setCanLeft(el.scrollLeft > 2)
     setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2)
+    setHasOverflow(el.scrollWidth > el.clientWidth + 2)
   }, [])
 
   useEffect(() => {
@@ -119,35 +121,41 @@ export function HScrollStrip({
             e.stopPropagation()
           }
         }}
+        style={hideOverflowX && hasOverflow ? { paddingLeft: 30, paddingRight: 30, scrollPaddingLeft: 30, scrollPaddingRight: 30 } : undefined}
         className={`of-hstrip flex overflow-x-auto ${hideOverflowX ? 'scrollbar-none' : ''} ${innerClassName}`}
         {...rest}
       >
         {children}
       </div>
-      {hideOverflowX && canLeft && (
+      {/* Train controls: one pinned arrow at each edge whenever the strip
+          overflows. The scroller reserves a 30px lane at both ends, so no
+          chip ever sits underneath an arrow; clicking pages the train. */}
+      {hideOverflowX && hasOverflow && (
         <button
           type="button"
           data-testid={`${arrowTestIdPrefix}-arrow-left`}
           aria-label="Scroll left"
           title="Scroll left (hover to keep scrolling)"
+          disabled={!canLeft}
           onMouseEnter={() => startHoverScroll(-1)}
           onMouseLeave={stopHoverScroll}
           onClick={() => page(-1)}
-          className="absolute left-0 top-1/2 z-10 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-ink-600 bg-ink-900/95 text-ink-100 shadow-md transition-colors hover:bg-ink-700"
+          className="absolute left-0.5 top-1/2 z-10 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-ink-600 bg-ink-900/95 text-ink-100 shadow-md transition-colors hover:bg-ink-700 disabled:cursor-default disabled:opacity-35"
         >
           <ChevronLeft size={13} />
         </button>
       )}
-      {hideOverflowX && canRight && (
+      {hideOverflowX && hasOverflow && (
         <button
           type="button"
           data-testid={`${arrowTestIdPrefix}-arrow-right`}
           aria-label="Scroll right"
           title="Scroll right (hover to keep scrolling)"
+          disabled={!canRight}
           onMouseEnter={() => startHoverScroll(1)}
           onMouseLeave={stopHoverScroll}
           onClick={() => page(1)}
-          className="absolute right-0 top-1/2 z-10 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-ink-600 bg-ink-900/95 text-ink-100 shadow-md transition-colors hover:bg-ink-700"
+          className="absolute right-0.5 top-1/2 z-10 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-ink-600 bg-ink-900/95 text-ink-100 shadow-md transition-colors hover:bg-ink-700 disabled:cursor-default disabled:opacity-35"
         >
           <ChevronRight size={13} />
         </button>

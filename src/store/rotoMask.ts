@@ -32,7 +32,9 @@ import {
   cutoutToDataUrl,
   lumaMatteToDataUrl,
   maskBounds,
+  maskCentroid,
   maskCoverage,
+  dilateMaskBitmap,
   maskToDataUrl,
   type MaskBitmap,
 } from '../lib/rotoBrush'
@@ -91,6 +93,10 @@ export interface RotoInpaintState {
   targetFrames: number[]
   donorByTarget: { targetFrame: number; donorFrame: number | null; score: number }[]
   patchClipId?: string
+  /** ProPainter-style propagation controls (see docs/PROPAINTER-STUDY.md). */
+  maskGrow: number
+  donorDirection: 'both' | 'earlier' | 'later'
+  donorWindow: number
 }
 
 export interface RotoMaskRecord extends RotoSegmentResult {
@@ -155,6 +161,7 @@ export interface RotoMaskSlice {
   analyzeRotoInpaint: () => Promise<void>
   applyRotoInpaint: () => Promise<string | null>
   selectRotoInpaintDonor: (frame: number | null) => void
+  setRotoInpaintOptions: (patch: Partial<Pick<RotoInpaintState, 'maskGrow' | 'donorDirection' | 'donorWindow'>>) => void
   rotoExtractToObject: (opts?: {
     patch?: boolean
     hideAfter?: boolean
@@ -662,7 +669,7 @@ export function createRotoMaskSlice(
         rotoResult: null,
         rotoFrames: [],
         rotoLumaExport: null,
-        rotoInpaint: { phase: 'idle', done: 0, total: 0, message: '', candidates: [], selectedDonorFrame: null, targetFrames: [], donorByTarget: [] },
+        rotoInpaint: { phase: 'idle', done: 0, total: 0, message: '', candidates: [], selectedDonorFrame: null, targetFrames: [], donorByTarget: [], maskGrow: 4, donorDirection: 'both', donorWindow: 0 },
       }),
 
     setRotoScope: (patch) => {
@@ -680,6 +687,9 @@ export function createRotoMaskSlice(
           targetFrames: [],
           donorByTarget: [],
           patchClipId: undefined,
+          maskGrow: 4,
+          donorDirection: 'both' as const,
+          donorWindow: 0,
         },
       })
     },
@@ -741,6 +751,9 @@ export function createRotoMaskSlice(
           selectedDonorFrame: null,
           targetFrames: targets,
           donorByTarget: [],
+          maskGrow: st.rotoInpaint.maskGrow,
+          donorDirection: st.rotoInpaint.donorDirection,
+          donorWindow: st.rotoInpaint.donorWindow,
         },
       })
       try {
@@ -765,6 +778,8 @@ export function createRotoMaskSlice(
           const edge = boundaryIndices(target.mask)
           const ranked = candidateRecords
             .filter((candidate) => candidate.record.frame !== target.record.frame)
+            .filter((candidate) => st.rotoInpaint.donorDirection === 'both' || (st.rotoInpaint.donorDirection === 'earlier' ? candidate.record.frame < target.record.frame : candidate.record.frame > target.record.frame))
+            .filter((candidate) => st.rotoInpaint.donorWindow <= 0 || Math.abs(candidate.record.frame - target.record.frame) <= st.rotoInpaint.donorWindow)
             .map((candidate) => {
               const overlap = maskOverlap(target.mask, candidate.mask)
               const colorDiff = boundaryColorDifference(target, candidate, edge)
@@ -803,6 +818,9 @@ export function createRotoMaskSlice(
             selectedDonorFrame: null,
             targetFrames: targetRecords.map((entry) => entry.record.frame),
             donorByTarget: assignments,
+            maskGrow: st.rotoInpaint.maskGrow,
+            donorDirection: st.rotoInpaint.donorDirection,
+            donorWindow: st.rotoInpaint.donorWindow,
           },
         })
       } catch (err) {
@@ -819,6 +837,15 @@ export function createRotoMaskSlice(
 
     selectRotoInpaintDonor: (frame) => set((st) => ({
       rotoInpaint: { ...st.rotoInpaint, selectedDonorFrame: frame },
+    })),
+
+    setRotoInpaintOptions: (patch) => set((st) => ({
+      rotoInpaint: {
+        ...st.rotoInpaint,
+        ...(patch.maskGrow !== undefined ? { maskGrow: Math.max(0, Math.min(24, Math.round(patch.maskGrow))) } : {}),
+        ...(patch.donorDirection !== undefined ? { donorDirection: patch.donorDirection } : {}),
+        ...(patch.donorWindow !== undefined ? { donorWindow: Math.max(0, Math.round(patch.donorWindow)) } : {}),
+      },
     })),
 
     applyRotoInpaint: async () => {
@@ -842,15 +869,22 @@ export function createRotoMaskSlice(
           if (record && mask && target) {
             const donorFrame = st.rotoInpaint.selectedDonorFrame ?? assignments.get(frame) ?? null
             let patch = ''
+            const grownMask = dilateMaskBitmap(mask, st.rotoInpaint.maskGrow)
             if (donorFrame !== null && donorFrame !== frame) {
               const donorRecord = trackedByFrame.get(donorFrame)
               const donorMask = donorRecord?.maskDataUrl ? await maskFromDataUrl(donorRecord.maskDataUrl) : null
               const donor = await loadRotoFrame(asset, clip.inPoint + donorFrame / fps)
-              if (donor && (!donorMask || maskOverlap(mask, donorMask) < 0.38)) {
-                patch = inpaintMaskedHoleWithDonor(donor.source, target.width, target.height, mask, 3)
+              if (donor && (!donorMask || maskOverlap(grownMask, donorMask) < 0.38)) {
+                // Flow alignment by mask-centroid delta (mask px -> source px).
+                const tc = maskCentroid(grownMask)
+                const dc = donorMask ? maskCentroid(donorMask) : null
+                const offset = tc && dc
+                  ? { dx: (tc.x - dc.x) * (target.width / grownMask.width), dy: (tc.y - dc.y) * (target.height / grownMask.height) }
+                  : undefined
+                patch = inpaintMaskedHoleWithDonor(donor.source, target.width, target.height, grownMask, 3, offset)
               }
             }
-            if (!patch) patch = inpaintMaskedHole(target.source, target.width, target.height, mask)
+            if (!patch) patch = inpaintMaskedHole(target.source, target.width, target.height, grownMask)
             if (patch) outputFrames.push({ frame, url: patch })
           }
           set((current) => ({

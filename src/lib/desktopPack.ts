@@ -6,7 +6,7 @@
  * with correct transparency and no external files.
  */
 
-export type PackSection = 'windows' | 'cursors' | 'overlays' | 'edits' | 'threed'
+export type PackSection = 'windows' | 'apps' | 'scenes' | 'cursors' | 'overlays' | 'edits' | 'threed'
 
 export interface PackAssetDef {
   id: string
@@ -31,6 +31,8 @@ export const PACK_BUNDLES: PackBundleDef[] = [
   { id: 'screenlife-win', name: 'Screen-Life Pack · Windows', desc: 'Desktop, Chrome, cursor and click ring for a full screen-life scene', items: ['desktop-win', 'chrome-win', 'cursor-win', 'click-ring'] },
   { id: 'tutorial', name: 'Tutorial Pack', desc: 'Browser window, hand cursor, highlight box and progress bar', items: ['chrome-win', 'cursor-hand', 'highlight-box', 'progress-bar'] },
   { id: 'social', name: 'Social Pack', desc: 'Phone frame, post card, notification and hand cursor', items: ['phone-frame', 'post-card', 'notify-mac', 'cursor-hand'] },
+  { id: 'music-video', name: 'Music Video Pack', desc: 'Music player window, progress bar and click ring', items: ['spotify-desktop', 'progress-bar', 'click-ring'] },
+  { id: 'phone-demo', name: 'Phone Demo Pack', desc: 'Android phone home screen with hand cursor', items: ['phone-android-home', 'cursor-hand'] },
   { id: 'privacy', name: 'Privacy Pack', desc: 'Chat window with a censor bar and spotlight dim', items: ['chat-window', 'censor-bar', 'spotlight'] },
   { id: 'streamer', name: 'Streamer Pack', desc: 'PiP frame, screen glare and vignette for face-cam layouts', items: ['pip-frame', 'screen-glare', 'vignette'] },
 ]
@@ -485,7 +487,241 @@ function censorBar(ctx: CanvasRenderingContext2D) {
   ctx.strokeRect(x, y, w, h)
 }
 
+
+function demoRows(ctx: CanvasRenderingContext2D, x: number, y: number, rows: string[], accent: string) {
+  ctx.font = '13px system-ui, sans-serif'
+  rows.forEach((label, i) => {
+    const ry = y + i * 34
+    ctx.fillStyle = i % 2 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.055)'
+    roundRect(ctx, x, ry, 560, 26, 6)
+    ctx.fill()
+    ctx.fillStyle = accent
+    roundRect(ctx, x + 8, ry + 6, 14, 14, 3)
+    ctx.fill()
+    ctx.fillStyle = 'rgba(230,234,240,0.85)'
+    ctx.fillText(label, x + 32, ry + 18)
+  })
+}
+
+function spotifyDesktop(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Music Player — Demo' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#101010'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#181818'
+  ctx.fillRect(x + 1, y + 45, 190, 340)
+  textLines(ctx, x + 18, y + 66, [110, 88, 96, 74], 'rgba(200,208,220,0.5)', 26)
+  ctx.fillStyle = '#1db954'
+  ctx.font = '700 22px system-ui, sans-serif'
+  ctx.fillText('Demo Playlist', x + 226, y + 92)
+  demoRows(ctx, x + 226, y + 112, ['Demo Track 01 — Test Artist', 'Demo Track 02 — Test Artist', 'Demo Track 03 — Test Artist', 'Demo Track 04 — Test Artist', 'Demo Track 05 — Test Artist'], '#1db954')
+  // player bar
+  ctx.fillStyle = '#181818'
+  ctx.fillRect(x + 1, y + 386, PACK_W - 222, 78)
+  ctx.fillStyle = '#1db954'
+  ctx.beginPath(); ctx.arc(x + 70, y + 424, 18, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#0b0b0b'
+  ctx.beginPath(); ctx.moveTo(x + 65, y + 415); ctx.lineTo(x + 65, y + 433); ctx.lineTo(x + 79, y + 424); ctx.closePath(); ctx.fill()
+  ctx.fillStyle = 'rgba(255,255,255,0.25)'
+  roundRect(ctx, x + 330, y + 420, 420, 6, 3); ctx.fill()
+  ctx.fillStyle = '#1db954'
+  roundRect(ctx, x + 330, y + 420, 190, 6, 3); ctx.fill()
+  ctx.fillStyle = 'rgba(230,234,240,0.8)'
+  ctx.font = '12px system-ui, sans-serif'
+  ctx.fillText('Demo Track 01 — Test Artist', x + 120, y + 430)
+}
+
+function phoneHome(ctx: CanvasRenderingContext2D, os: 'ios' | 'android') {
+  deviceFrame(ctx, false)
+  const x = (PACK_W - 300) / 2, y = (PACK_H - 620) / 2
+  const g = ctx.createLinearGradient(x, y, x + 300, y + 620)
+  if (os === 'ios') { g.addColorStop(0, '#3b4a8f'); g.addColorStop(1, '#8a4a7d') } else { g.addColorStop(0, '#123a2c'); g.addColorStop(1, '#1d5c46') }
+  ctx.save()
+  roundRect(ctx, x + 6, y + 6, 288, 608, 38)
+  ctx.clip()
+  ctx.fillStyle = g
+  ctx.fillRect(x, y, 300, 620)
+  ctx.fillStyle = 'rgba(255,255,255,0.92)'
+  ctx.font = '600 12px system-ui, sans-serif'
+  ctx.textAlign = 'center'
+  ctx.fillText('9:41', x + 150, y + 34)
+  ctx.font = '300 44px system-ui, sans-serif'
+  ctx.fillText(os === 'ios' ? 'Demo Phone' : 'Demo Pixel', x + 150, y + 120)
+  ctx.font = '13px system-ui, sans-serif'
+  ctx.fillText('Tuesday, Demo 15', x + 150, y + 146)
+  ctx.textAlign = 'left'
+  const apps = ['#ff5f57', '#1db954', '#4da3ff', '#ffb340', '#b78bff', '#ff3b6b', '#4dd7d0', '#f2f2f2', '#7ee787', '#ff9f43', '#6d5efc', '#34c759']
+  apps.forEach((c, i) => {
+    const ax = x + 26 + (i % 4) * 66
+    const ay = y + 190 + Math.floor(i / 4) * 74
+    ctx.fillStyle = c
+    roundRect(ctx, ax, ay, 48, 48, os === 'ios' ? 12 : 14)
+    ctx.fill()
+  })
+  if (os === 'android') {
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'
+    roundRect(ctx, x + 24, y + 500, 252, 38, 19); ctx.fill()
+    ctx.fillStyle = '#3c4043'
+    ctx.font = '13px system-ui, sans-serif'
+    ctx.fillText('  Search demo…', x + 38, y + 524)
+  } else {
+    ctx.fillStyle = 'rgba(255,255,255,0.24)'
+    roundRect(ctx, x + 16, y + 540, 268, 62, 20); ctx.fill()
+    apps.slice(0, 4).forEach((c, i) => { ctx.fillStyle = c; roundRect(ctx, x + 28 + i * 66, y + 548, 46, 46, 11); ctx.fill() })
+  }
+  ctx.restore()
+}
+
+function phoneChrome(ctx: CanvasRenderingContext2D) {
+  deviceFrame(ctx, false)
+  const x = (PACK_W - 300) / 2, y = (PACK_H - 620) / 2
+  ctx.save()
+  roundRect(ctx, x + 6, y + 6, 288, 608, 38)
+  ctx.clip()
+  ctx.fillStyle = '#20242c'
+  ctx.fillRect(x, y, 300, 620)
+  ctx.fillStyle = '#171b21'
+  ctx.fillRect(x, y, 300, 92)
+  ctx.fillStyle = '#2d333d'
+  roundRect(ctx, x + 18, y + 44, 264, 34, 17); ctx.fill()
+  ctx.fillStyle = '#9aa3af'
+  ctx.font = '13px system-ui, sans-serif'
+  ctx.fillText('  demo.site/watch', x + 32, y + 66)
+  textLines(ctx, x + 24, y + 120, [220, 250, 180], 'rgba(200,208,220,0.4)', 26)
+  demoRows(ctx, x + 20, y + 220, ['Demo result one', 'Demo result two', 'Demo result three'], '#4da3ff')
+  ctx.restore()
+}
+
+function explorerWin11(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Music — File Explorer' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#191c22'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#20242c'
+  ctx.fillRect(x + 1, y + 45, 196, 420)
+  ctx.fillStyle = 'rgba(230,234,240,0.75)'
+  ctx.font = '13px system-ui, sans-serif'
+  ;['Home', 'Gallery', 'Desktop', 'Downloads', 'Documents', 'Music', 'Videos'].forEach((f, i) => ctx.fillText(`▸  ${f}`, x + 20, y + 78 + i * 30))
+  demoRows(ctx, x + 226, y + 66, ['Demo Clip 01.mp4 — 00:12 — 1920×1080', 'Demo Clip 02.mp4 — 00:08 — 1080×1080', 'Demo Song 01.mp3 — 03:05 — Test Artist', 'Demo Photo 01.jpg — 4000×3000', 'Project Notes (demo).txt'], '#ffd76a')
+}
+
+function finderMac(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'mac', { title: 'Demo Folder — Finder' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#22242a'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#2a2d34'
+  ctx.fillRect(x + 1, y + 45, 190, 420)
+  ctx.fillStyle = 'rgba(230,234,240,0.75)'
+  ctx.font = '13px system-ui, sans-serif'
+  ;['Recents', 'Desktop', 'Documents', 'Downloads', 'Movies', 'Music', 'Pictures'].forEach((f, i) => ctx.fillText(`•  ${f}`, x + 20, y + 78 + i * 30))
+  for (let i = 0; i < 6; i++) {
+    const fx = x + 226 + (i % 3) * 180
+    const fy = y + 70 + Math.floor(i / 3) * 140
+    ctx.fillStyle = '#ffd76a'
+    roundRect(ctx, fx, fy, 74, 52, 6); ctx.fill()
+    ctx.fillStyle = 'rgba(230,234,240,0.75)'
+    ctx.font = '12px system-ui, sans-serif'
+    ctx.fillText(`Demo File 0${i + 1}`, fx, fy + 74)
+  }
+}
+
+function youtubeStudio(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Channel analytics — Demo Studio' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#17181c'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#202127'
+  ctx.fillRect(x + 1, y + 45, 170, 420)
+  textLines(ctx, x + 18, y + 66, [96, 74, 108, 62, 88], 'rgba(160,170,190,0.45)', 26)
+  ctx.fillStyle = 'rgba(230,234,240,0.9)'
+  ctx.font = '700 20px system-ui, sans-serif'
+  ctx.fillText('Demo Channel analytics', x + 206, y + 92)
+  ctx.font = '13px system-ui, sans-serif'
+  ctx.fillStyle = 'rgba(200,208,220,0.7)'
+  ctx.fillText('Views  12.4K demo      Watch time  812 demo hours', x + 206, y + 120)
+  const bars = [42, 68, 55, 90, 74, 120, 96, 140, 112, 160, 132, 178]
+  bars.forEach((bh, i) => {
+    ctx.fillStyle = i % 3 === 0 ? '#3ea6ff' : 'rgba(62,166,255,0.55)'
+    ctx.fillRect(x + 216 + i * 58, y + 330 - bh, 34, bh)
+  })
+  ctx.fillStyle = 'rgba(255,255,255,0.18)'
+  ctx.fillRect(x + 206, y + 330, 720, 2)
+}
+
+function gmailWindow(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'mac', { title: 'Inbox — Demo Mail' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#1b1d23'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#22252d'
+  ctx.fillRect(x + 1, y + 45, 180, 420)
+  textLines(ctx, x + 18, y + 66, [96, 74, 108, 62], 'rgba(160,170,190,0.45)', 26)
+  demoRows(ctx, x + 216, y + 66, ['Demo Sender — Test subject line one', 'Demo Team — Your demo report is ready', 'Demo Store — Order demo #0001 confirmed', 'Demo Studio — Video finished processing', 'Demo News — Weekly demo digest'], '#ff6b6b')
+}
+
+function whatsappChat(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Demo Chat' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#0b141a'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#1f2c34'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 52)
+  ctx.fillStyle = '#25d366'
+  ctx.beginPath(); ctx.arc(x + 42, y + 71, 16, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = 'rgba(230,234,240,0.9)'
+  ctx.font = '600 14px system-ui, sans-serif'
+  ctx.fillText('Demo Contact', x + 70, y + 76)
+  const bubbles: [number, number, string][] = [[0, 0, 'Demo message one'], [1, 58, 'Demo reply here'], [0, 116, 'Sending the demo file now'], [1, 174, 'Got it — test looks good']]
+  ctx.font = '13px system-ui, sans-serif'
+  bubbles.forEach(([right, dy, label]) => {
+    const wdt = 300
+    const bx = right ? x + PACK_W - 220 - 36 - wdt : x + 36
+    ctx.fillStyle = right ? '#005c4b' : '#1f2c34'
+    roundRect(ctx, bx, y + 116 + dy, wdt, 42, 10)
+    ctx.fill()
+    ctx.fillStyle = 'rgba(235,240,244,0.9)'
+    ctx.fillText(label, bx + 14, y + 142 + dy)
+  })
+}
+
+function figmaPhone(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'mac', { title: 'Phone UI — Demo Design' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#1e1e1e'
+  ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#2c2c2c'
+  ctx.fillRect(x + 1, y + 45, 180, 420)
+  textLines(ctx, x + 18, y + 66, [96, 74, 108, 62, 88, 70], 'rgba(180,180,190,0.4)', 24)
+  ctx.fillStyle = '#262626'
+  ctx.fillRect(x + 190, y + 45, PACK_W - 412, 420)
+  for (let i = 0; i < 2; i++) {
+    const fx = x + 320 + i * 300
+    ctx.strokeStyle = 'rgba(255,255,255,0.65)'
+    ctx.lineWidth = 2
+    roundRect(ctx, fx, y + 76, 190, 360, 20); ctx.stroke()
+    ctx.fillStyle = '#a259ff'
+    roundRect(ctx, fx + 18, y + 104, 154, 90, 10); ctx.fill()
+    textLines(ctx, fx + 18, y + 216, [140, 110, 128], 'rgba(220,220,230,0.5)', 24)
+    ctx.fillStyle = '#0d99ff'
+    roundRect(ctx, fx + 18, y + 330, 154, 36, 8); ctx.fill()
+  }
+  ctx.fillStyle = '#2c2c2c'
+  ctx.fillRect(x + PACK_W - 220 - 170, y + 45, 170, 420)
+  textLines(ctx, x + PACK_W - 220 - 152, y + 66, [110, 88, 96, 74, 102], 'rgba(180,180,190,0.4)', 26)
+}
+
 export const PACK_ASSETS: PackAssetDef[] = [
+  { id: 'spotify-desktop', name: 'Music Player · Desktop', desc: 'Streaming player window with demo playlist and progress', section: 'apps', group: 'Music', paint: (c) => spotifyDesktop(c) },
+  { id: 'explorer-win11', name: 'File Explorer · Windows 11', desc: 'Explorer window with demo media files — no real folder names', section: 'apps', group: 'Files & Browsers', paint: (c) => explorerWin11(c) },
+  { id: 'finder-mac', name: 'Finder · macOS', desc: 'Finder window with demo files and sidebar favourites', section: 'apps', group: 'Files & Browsers', paint: (c) => finderMac(c) },
+  { id: 'phone-ios-home', name: 'Phone Home · iOS style', desc: 'Phone frame with demo home screen and dock', section: 'apps', group: 'Phones', paint: (c) => phoneHome(c, 'ios') },
+  { id: 'phone-android-home', name: 'Phone Home · Android style', desc: 'Phone frame with demo home screen and search pill', section: 'apps', group: 'Phones', paint: (c) => phoneHome(c, 'android') },
+  { id: 'chrome-phone', name: 'Chrome · Phone', desc: 'Mobile browser with demo search results', section: 'apps', group: 'Phones', paint: (c) => phoneChrome(c) },
+  { id: 'figma-phone-ui', name: 'Phone UI Design Canvas', desc: 'Design-tool canvas with phone wireframes (demo)', section: 'apps', group: 'Phones', paint: (c) => figmaPhone(c) },
+  { id: 'youtube-studio', name: 'Creator Studio · Analytics', desc: 'Analytics dashboard with demo chart — sell the growth story', section: 'apps', group: 'Creators', paint: (c) => youtubeStudio(c) },
+  { id: 'gmail-window', name: 'Mail Inbox · Demo', desc: 'Inbox window with demo senders and subjects', section: 'apps', group: 'Chat & Mail', paint: (c) => gmailWindow(c) },
+  { id: 'whatsapp-chat', name: 'Chat App · Demo', desc: 'Messaging window with demo bubbles', section: 'apps', group: 'Chat & Mail', paint: (c) => whatsappChat(c) },
   { id: 'desktop-mac', name: 'Fake Desktop · macOS', desc: 'Wallpaper, menu bar and dock — build a screen-life scene', section: 'windows', group: 'Desktops', paint: (c) => wallpaper(c, 'mac') },
   { id: 'desktop-win', name: 'Fake Desktop · Windows', desc: 'Wallpaper and taskbar — build a screen-life scene', section: 'windows', group: 'Desktops', paint: (c) => wallpaper(c, 'win') },
   { id: 'chrome-mac', name: 'Chrome Bar · macOS', desc: 'Browser window with traffic lights and address bar', section: 'windows', group: 'Browsers', paint: (c) => windowChrome(c, 'mac', { title: 'My Video — YouTube', browser: 'chrome' }) },

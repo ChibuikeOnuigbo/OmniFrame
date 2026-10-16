@@ -1,8 +1,11 @@
-import * as THREE from 'three'
-import { OBJExporter } from 'three/examples/jsm/exporters/OBJExporter.js'
+import type * as THREE from 'three'
 import type { Scene3DObject } from '../types'
 
-function createPrimitive(object: Scene3DObject): THREE.Object3D {
+// three.js is loaded lazily inside exportPrimitiveSceneObj so the OBJ
+// exporter never rides in the initial bundle.
+type ThreeModule = typeof THREE
+
+function createPrimitive(THREE: ThreeModule, object: Scene3DObject): THREE.Object3D {
   const group = new THREE.Group()
   group.name = object.name || object.type
 
@@ -49,11 +52,15 @@ function createPrimitive(object: Scene3DObject): THREE.Object3D {
  * not carry OmniFrame's animation/timeline, video, audio, 2D layers, effects,
  * textures, or full material settings; callers must label this as a subset.
  */
-export function exportPrimitiveSceneObj(objects: Scene3DObject[]): Blob {
+export async function exportPrimitiveSceneObj(objects: Scene3DObject[]): Promise<Blob> {
   if (!objects.length) throw new Error('There are no editable 3D scene objects to export as OBJ.')
+  const [THREE, { OBJExporter }] = await Promise.all([
+    import('three'),
+    import('three/examples/jsm/exporters/OBJExporter.js'),
+  ])
   const root = new THREE.Group()
   root.name = 'OmniFrame scene subset'
-  for (const object of objects) root.add(createPrimitive(object))
+  for (const object of objects) root.add(createPrimitive(THREE, object))
   root.updateMatrixWorld(true)
   const text = new OBJExporter().parse(root)
   root.traverse((child) => {

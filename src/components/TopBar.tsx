@@ -289,10 +289,10 @@ export function TopBar() {
     }
   }
 
-  const onExportObj = () => {
+  const onExportObj = async () => {
     setExportMenuOpen(false)
     try {
-      const blob = exportPrimitiveSceneObj(export3DObjects)
+      const blob = await exportPrimitiveSceneObj(export3DObjects)
       downloadSubset(blob, 'obj')
       setProjectStatus('Exported OBJ geometry subset · materials, animation, timeline, media and effects are not included.')
     } catch (error) {

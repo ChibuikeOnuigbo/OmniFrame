@@ -24,6 +24,11 @@ import {
   Type,
   FlipHorizontal2,
   FlipVertical2,
+  Scaling,
+  Shapes,
+  Palette,
+  FileVideo,
+  Settings2,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
@@ -1275,7 +1280,20 @@ export function RightPanel() {
   ].filter((d) => dockerPrefs.rightSubtools[d.id] !== false)
 
   const inspectorBody = (
-    <SectionsNavigator mode={sidebarSectionMode} label="Inspector sections">
+    <SectionsNavigator
+      mode={sidebarSectionMode}
+      label="Inspector sections"
+      rail={[
+        { id: 'clip', label: 'General', icon: Settings2 },
+        { id: 'transform', label: 'Transform', icon: Scaling },
+        { id: 'video-mask-view', label: 'Mask', icon: Shapes },
+        { id: 'appearance', label: 'Appearance', icon: Palette },
+        { id: 'audio', label: 'Audio', icon: Volume2 },
+        { id: 'effects', label: 'Effects', icon: Sparkles },
+        { id: 'text-&-title', label: 'Text', icon: Type },
+        { id: 'source', label: 'Source', icon: FileVideo },
+      ]}
+    >
       {/* Sub-tool dock: shared sub-tools live on the right panel as icons.
           Which ones appear is chosen in Settings > Dockers. */}
       {subtoolDefs.length > 0 && (

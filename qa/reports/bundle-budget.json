@@ -1,5 +1,5 @@
 {
-  "when": "2026-10-15T22:21:36.744Z",
+  "when": "2026-10-16T11:35:02.919Z",
   "budgets": {
     "JS_BUDGET_DECODED": 1677721.6,
     "JS_BUDGET_TRANSFER": 491520
@@ -8,27 +8,27 @@
     {
       "name": "initial load keeps lazy feature code on-demand",
       "status": "PASS",
-      "detail": "4: index-C_ONhEFP.js, rolldown-runtime-Dd_uD5pT.js, desktop-BsMTBZj2.js, core-DllG4yp3.js"
+      "detail": "4: index-CJCKNMe4.js, rolldown-runtime-Dd_uD5pT.js, desktop-BsMTBZj2.js, core-DllG4yp3.js"
     },
     {
       "name": "initial decoded JS under budget",
       "status": "PASS",
-      "detail": "1557 KB decoded (budget 1638 KB)"
+      "detail": "1027 KB decoded (budget 1638 KB)"
     },
     {
       "name": "initial JS transfer (compressed) under budget",
       "status": "PASS",
-      "detail": "419 KB transferred (budget 480 KB)"
+      "detail": "287 KB transferred (budget 480 KB)"
     },
     {
       "name": "onnxruntime-web NOT fetched on boot",
       "status": "PASS",
-      "detail": "index-C_ONhEFP.js, rolldown-runtime-Dd_uD5pT.js, desktop-BsMTBZj2.js, core-DllG4yp3.js"
+      "detail": "index-CJCKNMe4.js, rolldown-runtime-Dd_uD5pT.js, desktop-BsMTBZj2.js, core-DllG4yp3.js"
     },
     {
       "name": "app renders (FCP recorded)",
       "status": "PASS",
-      "detail": "FCP 428 ms"
+      "detail": "FCP 484 ms"
     },
     {
       "name": "zero page errors",

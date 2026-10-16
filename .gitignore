@@ -37,3 +37,6 @@ public/models/htdemucs.onnx
 
 # local training checkpoints (large, regenerable)
 training-runs/
+
+# User-supplied screenshots for processing (may contain personal info — never commit)
+img_data_pack/
