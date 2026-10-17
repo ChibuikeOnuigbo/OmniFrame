@@ -33,6 +33,8 @@ export const PACK_BUNDLES: PackBundleDef[] = [
   { id: 'creator-desk', name: 'Creator Desk Pack', desc: 'Podcast player, demo calendar and hand cursor for planning scenes', items: ['podcast-player', 'calendar-window', 'cursor-hand'] },
   { id: 'podcast-studio', name: 'Podcast Studio Pack', desc: 'Studio window, progress bar and hand cursor for podcast edits', items: ['podcast-studio-window', 'progress-bar', 'cursor-hand'] },
   { id: 'phone-lifestyle', name: 'Phone Lifestyle Pack', desc: 'Fitness and food-delivery phones with hand cursor for lifestyle cuts', items: ['fitness-phone', 'food-delivery-phone', 'cursor-hand'] },
+  { id: 'studio-desk', name: 'Studio Desk Pack', desc: 'Music studio window, progress bar and hand cursor for studio scenes', items: ['music-studio-window', 'progress-bar', 'cursor-hand'] },
+  { id: 'phone-essentials', name: 'Phone Essentials Pack', desc: 'Banking, mail and alarm phones with hand cursor for everyday phone scenes', items: ['banking-phone', 'mail-phone', 'alarm-phone', 'cursor-hand'] },
   { id: 'music-phone', name: 'Music Phone Pack', desc: 'Phone music player with progress bar for vertical listening scenes', items: ['spotify-phone', 'progress-bar', 'cursor-hand'] },
   { id: 'design-review', name: 'Design Review Pack', desc: 'Design canvas, highlight box and hand cursor for UI walkthroughs', items: ['figma-desktop', 'highlight-box', 'cursor-hand'] },
   { id: 'screenlife-mac', name: 'Screen-Life Pack · macOS', desc: 'Desktop, Chrome, cursor and click ring for a full screen-life scene', items: ['desktop-mac', 'chrome-mac', 'cursor-mac', 'click-ring'] },
@@ -1135,6 +1137,146 @@ function videoPlayerPhone(ctx: CanvasRenderingContext2D) {
   ctx.restore()
 }
 
+function photoEditorWindow(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Demo Photo Editor' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#14161c'; ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  const gx = x + 24, gy = y + 66, gw = 690, gh = 296
+  const sky = ctx.createLinearGradient(gx, gy, gx, gy + gh)
+  sky.addColorStop(0, '#7cc7ff'); sky.addColorStop(0.62, '#ffd76a'); sky.addColorStop(1, '#ff8fa3')
+  ctx.fillStyle = sky; ctx.fillRect(gx, gy, gw, gh)
+  ctx.fillStyle = '#fff3c4'; ctx.beginPath(); ctx.arc(gx + 470, gy + 92, 30, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#3f6212'; ctx.beginPath(); ctx.ellipse(gx + 150, gy + gh, 330, 92, 0, Math.PI, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#365314'; ctx.beginPath(); ctx.ellipse(gx + 520, gy + gh, 360, 70, 0, Math.PI, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = 'rgba(10,10,14,0.55)'; roundRect(ctx, gx + 14, gy + gh - 34, 220, 22, 6); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText('Demo photo — sample image', gx + 24, gy + gh - 19)
+  for (let i = 0; i < 5; i++) {
+    ctx.fillStyle = ['#7cc7ff', '#ffd76a', '#ff8fa3', '#7dffb2', '#b78bff'][i]
+    roundRect(ctx, gx + i * 142, gy + gh + 14, 128, 54, 8); ctx.fill()
+  }
+  ctx.fillStyle = '#f2f3f5'; ctx.font = '600 13px system-ui, sans-serif'; ctx.fillText('Adjust (demo)', x + 742, y + 84)
+  const sliders: [string, number][] = [['Exposure', 0.6], ['Contrast', 0.45], ['Saturation', 0.7], ['Warmth', 0.35]]
+  sliders.forEach(([label, v], i) => {
+    const sy = y + 116 + i * 52
+    ctx.fillStyle = '#9aa3af'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText(`${label} (demo)`, x + 742, sy)
+    ctx.fillStyle = '#2a2f3a'; roundRect(ctx, x + 742, sy + 10, 250, 8, 4); ctx.fill()
+    ctx.fillStyle = '#4da3ff'; roundRect(ctx, x + 742, sy + 10, 250 * v, 8, 4); ctx.fill()
+    ctx.beginPath(); ctx.arc(x + 742 + 250 * v, sy + 14, 7, 0, Math.PI * 2); ctx.fillStyle = '#e8eaed'; ctx.fill()
+  })
+  ctx.fillStyle = '#1d2129'; roundRect(ctx, x + 742, y + 352, 250, 64, 10); ctx.fill()
+  ctx.fillStyle = '#9aa3af'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText('Histogram — demo only', x + 758, y + 378)
+  ctx.fillStyle = '#4da3ff'; ctx.fillText('▲ ▲▲  sample levels', x + 758, y + 400)
+}
+
+function docWriterWindow(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'mac', { title: 'Demo Doc — Writer' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#e9e7e1'; ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  ctx.fillStyle = '#f4f2ec'; roundRect(ctx, x + 24, y + 66, 150, 330, 10); ctx.fill()
+  ctx.fillStyle = '#252525'; ctx.font = '600 12px system-ui, sans-serif'; ctx.fillText('Demo docs', x + 40, y + 92)
+  ;['Demo Doc 01', 'Sample Notes', 'Test Outline'].forEach((label, i) => {
+    ctx.fillStyle = i === 0 ? '#fff' : 'transparent'; roundRect(ctx, x + 34, y + 106 + i * 40, 130, 30, 7); ctx.fill()
+    ctx.fillStyle = '#55503f'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText(label, x + 44, y + 125 + i * 40)
+  })
+  ctx.fillStyle = '#fff'; roundRect(ctx, x + 198, y + 66, 700, 330, 6); ctx.fill()
+  ctx.fillStyle = '#252525'; ctx.font = '700 25px system-ui, sans-serif'; ctx.fillText('Demo Document', x + 234, y + 122)
+  ctx.fillStyle = '#8a8474'; ctx.font = '12px system-ui, sans-serif'; ctx.fillText('Sample text only — replace every line with your own words.', x + 234, y + 148)
+  for (let row = 0; row < 7; row++) {
+    const lw = 620 - ((row * 137) % 210)
+    ctx.fillStyle = '#d8d3c6'; roundRect(ctx, x + 234, y + 178 + row * 28, lw, 9, 4); ctx.fill()
+  }
+  ctx.fillStyle = '#171a21'; roundRect(ctx, x + 234, y + 396 - 18, 190, 30, 8); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.font = '600 11px system-ui, sans-serif'; ctx.fillText('Demo button — no action', x + 250, y + 397)
+}
+
+function musicStudioWindow(ctx: CanvasRenderingContext2D) {
+  windowChrome(ctx, 'win', { title: 'Demo Music Studio' })
+  const x = 110, y = 70
+  ctx.fillStyle = '#101216'; ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
+  const tracks: [string, string, number[]][] = [
+    ['Demo Drums', '#ff8fa3', [0, 90, 180, 270, 360, 450]],
+    ['Demo Bass', '#7cc7ff', [0, 180, 360]],
+    ['Demo Keys', '#7dffb2', [45, 225, 405]],
+    ['Demo Vocal', '#ffd76a', [90, 270, 450]],
+  ]
+  tracks.forEach(([label, colour, blocks], i) => {
+    const gy = y + 66 + i * 62
+    ctx.fillStyle = '#1a1e26'; roundRect(ctx, x + 24, gy, 120, 48, 8); ctx.fill()
+    ctx.fillStyle = '#e8eaed'; ctx.font = '600 11px system-ui, sans-serif'; ctx.fillText(label, x + 36, gy + 29)
+    ctx.fillStyle = '#171b21'; roundRect(ctx, x + 158, gy, 820, 48, 8); ctx.fill()
+    blocks.forEach((off) => {
+      ctx.fillStyle = colour; roundRect(ctx, x + 166 + off, gy + 8, 76, 32, 6); ctx.fill()
+    })
+  })
+  ctx.strokeStyle = '#ff5f57'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x + 470, y + 60); ctx.lineTo(x + 470, y + 322); ctx.stroke()
+  ctx.fillStyle = '#ff5f57'; ctx.font = '600 11px system-ui, sans-serif'; ctx.fillText('▶ 00:00 demo playhead', x + 482, y + 74)
+  ;['Demo fader 1', 'Demo fader 2', 'Demo fader 3', 'Demo master'].forEach((label, i) => {
+    const fx = x + 60 + i * 240
+    ctx.fillStyle = '#1a1e26'; roundRect(ctx, fx, y + 348, 190, 62, 10); ctx.fill()
+    ctx.fillStyle = '#2a2f3a'; roundRect(ctx, fx + 24, y + 384, 142, 7, 3); ctx.fill()
+    ctx.fillStyle = '#e8eaed'; roundRect(ctx, fx + 24 + 142 * (0.3 + i * 0.18), y + 378, 14, 18, 3); ctx.fill()
+    ctx.fillStyle = '#9aa3af'; ctx.font = '10px system-ui, sans-serif'; ctx.fillText(label, fx + 24, y + 372)
+  })
+}
+
+function bankingPhone(ctx: CanvasRenderingContext2D) {
+  const { x, y, w } = phoneSceneBase(ctx, '#0f1420')
+  ctx.fillStyle = '#f2f3f5'; ctx.font = '600 20px system-ui, sans-serif'; ctx.fillText('Demo Bank', x + 22, y + 68)
+  ctx.fillStyle = '#1d2a44'; roundRect(ctx, x + 18, y + 92, w - 36, 128, 16); ctx.fill()
+  ctx.fillStyle = '#9db8dd'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText('Demo balance · Sample account 0123', x + 36, y + 124)
+  ctx.fillStyle = '#fff'; ctx.font = '700 27px system-ui, sans-serif'; ctx.fillText('1,250 test credits', x + 36, y + 162)
+  ctx.fillStyle = '#9db8dd'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText('Test numbers only — not a real account', x + 36, y + 190)
+  const rows: [string, string][] = [['Demo Coffee', '−5 test'], ['Sample Salary', '+900 test'], ['Demo Transfer', '−40 test'], ['Test Refund', '+12 test']]
+  rows.forEach(([label, amount], i) => {
+    const gy = y + 244 + i * 58
+    ctx.fillStyle = '#171d29'; roundRect(ctx, x + 20, gy, w - 40, 46, 10); ctx.fill()
+    ctx.fillStyle = '#f2f3f5'; ctx.font = '600 12px system-ui, sans-serif'; ctx.fillText(label, x + 34, gy + 28)
+    ctx.fillStyle = amount.startsWith('+') ? '#7dffb2' : '#ff8fa3'; ctx.textAlign = 'right'; ctx.fillText(amount, x + w - 34, gy + 28); ctx.textAlign = 'left'
+  })
+  ctx.restore()
+}
+
+function mailPhone(ctx: CanvasRenderingContext2D) {
+  const { x, y, w } = phoneSceneBase(ctx, '#f6f6f8')
+  ctx.fillStyle = '#252525'; ctx.font = '600 20px system-ui, sans-serif'; ctx.fillText('Demo Inbox', x + 22, y + 68)
+  const mails: [string, string, string][] = [
+    ['DS', 'Demo Sender', 'Sample subject — test mail'],
+    ['TN', 'Test News', 'Demo digest · sample headlines'],
+    ['SP', 'Sample Photos', 'Your demo album is ready (test)'],
+    ['DR', 'Demo Receipts', 'Receipt (sample) — 0 test credits'],
+  ]
+  mails.forEach(([initials, sender, subject], i) => {
+    const gy = y + 92 + i * 78
+    ctx.fillStyle = '#fff'; roundRect(ctx, x + 18, gy, w - 36, 66, 12); ctx.fill()
+    ctx.fillStyle = ['#6d5efc', '#2dd4bf', '#f59e0b', '#ff8fa3'][i]; ctx.beginPath(); ctx.arc(x + 52, gy + 33, 17, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#fff'; ctx.font = '700 11px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(initials, x + 52, gy + 37); ctx.textAlign = 'left'
+    ctx.fillStyle = '#252525'; ctx.font = '600 12px system-ui, sans-serif'; ctx.fillText(sender, x + 80, gy + 28)
+    ctx.fillStyle = '#8a8474'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText(subject, x + 80, gy + 48)
+  })
+  ctx.fillStyle = '#171a21'; roundRect(ctx, x + 22, y + 486, w - 44, 42, 21); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.font = '600 13px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('✎ Compose demo mail', x + w / 2, y + 513); ctx.textAlign = 'left'
+  ctx.restore()
+}
+
+function alarmPhone(ctx: CanvasRenderingContext2D) {
+  const { x, y, w } = phoneSceneBase(ctx, '#101216')
+  ctx.fillStyle = '#f2f3f5'; ctx.font = '600 20px system-ui, sans-serif'; ctx.fillText('Demo Clock', x + 22, y + 68)
+  ctx.font = '700 44px system-ui, sans-serif'; ctx.fillText('07:30', x + 22, y + 128)
+  ctx.fillStyle = '#9aa3af'; ctx.font = '12px system-ui, sans-serif'; ctx.fillText('Demo time · Sample day', x + 22, y + 152)
+  const alarms: [string, string, boolean][] = [['06:45', 'Demo wake-up', true], ['08:15', 'Sample reminder', true], ['21:30', 'Test wind-down', false]]
+  alarms.forEach(([time, label, on], i) => {
+    const gy = y + 182 + i * 72
+    ctx.fillStyle = '#1a1e26'; roundRect(ctx, x + 20, gy, w - 40, 60, 12); ctx.fill()
+    ctx.fillStyle = '#f2f3f5'; ctx.font = '600 17px system-ui, sans-serif'; ctx.fillText(time, x + 36, gy + 30)
+    ctx.fillStyle = '#9aa3af'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText(label, x + 36, gy + 50)
+    ctx.fillStyle = on ? '#35c759' : '#3a3f4a'; roundRect(ctx, x + w - 84, gy + 18, 46, 24, 12); ctx.fill()
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x + w - (on ? 52 : 72), gy + 30, 9, 0, Math.PI * 2); ctx.fill()
+  })
+  ctx.fillStyle = '#22252d'; roundRect(ctx, x + 22, y + 486, w - 44, 42, 21); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.font = '600 13px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('+ Add demo alarm', x + w / 2, y + 513); ctx.textAlign = 'left'
+  ctx.restore()
+}
+
 export const PACK_ASSETS: PackAssetDef[] = [
   { id: 'spotify-mac', name: 'Music Player · Mac', desc: 'Streaming player in a macOS window with demo tracks', section: 'apps', group: 'Music', paint: (c) => spotifyMac(c) },
   { id: 'spotify-phone', name: 'Music Player · Phone', desc: 'Phone now-playing screen with demo album and progress', section: 'apps', group: 'Music', paint: (c) => spotifyPhone(c) },
@@ -1153,6 +1295,12 @@ export const PACK_ASSETS: PackAssetDef[] = [
   { id: 'slides-window', name: 'Slides · Desktop', desc: 'Presentation editor with demo slides and speaker notes', section: 'apps', group: 'Productivity', paint: (c) => slidesWindow(c) },
   { id: 'fitness-phone', name: 'Fitness · Phone', desc: 'Phone activity rings with demo stats — sample numbers only', section: 'apps', group: 'Phones', paint: (c) => fitnessPhone(c) },
   { id: 'food-delivery-phone', name: 'Food Delivery · Phone', desc: 'Phone delivery list with sample kitchens and test times', section: 'apps', group: 'Phones', paint: (c) => foodDeliveryPhone(c) },
+  { id: 'music-studio-window', name: 'Music Studio · Desktop', desc: 'DAW window with demo tracks, clip blocks and mixer faders', section: 'apps', group: 'Music', paint: (c) => musicStudioWindow(c) },
+  { id: 'photo-editor-window', name: 'Photo Editor · Desktop', desc: 'Photo editor window with demo image, filmstrip and adjustment sliders', section: 'apps', group: 'Code & Design', paint: (c) => photoEditorWindow(c) },
+  { id: 'doc-writer-window', name: 'Doc Writer · Desktop', desc: 'Word processor with a demo document and sample text lines', section: 'apps', group: 'Productivity', paint: (c) => docWriterWindow(c) },
+  { id: 'banking-phone', name: 'Banking · Phone', desc: 'Phone banking card with demo balance and test transactions', section: 'apps', group: 'Phones', paint: (c) => bankingPhone(c) },
+  { id: 'mail-phone', name: 'Mail · Phone', desc: 'Phone inbox with demo senders and sample subjects', section: 'apps', group: 'Phones', paint: (c) => mailPhone(c) },
+  { id: 'alarm-phone', name: 'Clock & Alarms · Phone', desc: 'Phone clock with demo alarms and toggle pills', section: 'apps', group: 'Phones', paint: (c) => alarmPhone(c) },
   { id: 'spreadsheet-window', name: 'Spreadsheet · Demo Budget', desc: 'Spreadsheet window with test numbers only', section: 'apps', group: 'Productivity', paint: (c) => spreadsheetWindow(c) },
   { id: 'discord-chat', name: 'Community Chat · Demo', desc: 'Purple community chat with demo channels and messages', section: 'apps', group: 'Chat & Mail', paint: (c) => discordChat(c) },
   { id: 'vscode-window', name: 'Code Editor · Demo Project', desc: 'Editor window with demo file tree and syntax lines', section: 'apps', group: 'Code & Design', paint: (c) => vscodeWindow(c) },

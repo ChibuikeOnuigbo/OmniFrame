@@ -27,7 +27,7 @@ const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
 const GROUP_ORDER: Record<string, string[]> = {
   windows: ['Packs', 'Desktops', 'Browsers', 'App Windows', 'Devices & Social'],
   apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Code & Design', 'Productivity', 'Chat & Mail'],
-  scenes: ['Intros & Titles', 'Looks & Teaching', 'Social Versions'],
+  scenes: ['Intros & Titles', 'Studio & Podcast', 'Looks & Teaching', 'Social Versions'],
   cursors: ['Pointers', 'Clicks & Marks', 'Editor Cursor'],
   overlays: ['Frames & Bars', 'Light & Focus'],
   edits: ['Looks', 'Fixes'],
@@ -374,7 +374,12 @@ export function DesktopPackPanel() {
   const matches = (name: string, desc: string, group: string) =>
     !searching || `${name} ${desc} ${group}`.toLowerCase().includes(needle)
 
-  const sectionAssets = useMemo(() => PACK_ASSETS.filter((a) => a.section === section), [section])
+  // Explorer order: folders follow GROUP_ORDER; items inside a folder are
+  // filed A–Z by display name, like File Explorer's default name sort.
+  const sectionAssets = useMemo(
+    () => PACK_ASSETS.filter((a) => a.section === section).sort((a, b) => a.name.localeCompare(b.name)),
+    [section],
+  )
   const groups = useMemo(() => {
     const order = GROUP_ORDER[section] || []
     const present = section === 'scenes'
@@ -511,7 +516,7 @@ export function DesktopPackPanel() {
     }
   }
 
-  const visibleBundles = PACK_BUNDLES.filter((b) => matches(b.name, b.desc, 'Packs'))
+  const visibleBundles = PACK_BUNDLES.filter((b) => matches(b.name, b.desc, 'Packs')).sort((a, b) => a.name.localeCompare(b.name))
   const anyVisible =
     visibleBundles.length > 0 ||
     sectionAssets.some((a) => matches(a.name, a.desc, a.group)) ||
@@ -687,7 +692,7 @@ export function DesktopPackPanel() {
               <p data-testid="pack-recipe-note" aria-live="polite" className="rounded-md border border-cyan-500/25 bg-cyan-500/10 px-2 py-1 text-[10px] leading-snug text-cyan-100">{recipeNote}</p>
             )}
             {groups.map((group) => {
-              const items = SCENE_RECIPES.filter((r) => r.group === group && matches(r.label, r.desc, r.group))
+              const items = SCENE_RECIPES.filter((r) => r.group === group && matches(r.label, r.desc, r.group)).sort((a, b) => a.label.localeCompare(b.label))
               if (searching && items.length === 0) return null
               return (
                 <div key={group} className="space-y-1.5">

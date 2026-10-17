@@ -87,6 +87,17 @@ try {
   await addAsset('food-delivery-phone', 'apps', 'Phones')
   console.log('PASS wave-5 studio/slides/lifestyle assets add clips')
 
+  // Wave-6: studio/editor windows and everyday phone scenes, filed into
+  // the existing Explorer-style folders (Music, Code & Design,
+  // Productivity, Phones) with demo/test fields only.
+  await addAsset('music-studio-window', 'apps', 'Music')
+  await addAsset('photo-editor-window', 'apps', 'Code & Design')
+  await addAsset('doc-writer-window', 'apps', 'Productivity')
+  await addAsset('banking-phone', 'apps', 'Phones')
+  await addAsset('mail-phone', 'apps', 'Phones')
+  await addAsset('alarm-phone', 'apps', 'Phones')
+  console.log('PASS wave-6 studio/editor/phone-essentials assets add clips')
+
   // Podcast Studio recipe builds a full scene without a selected clip.
   await page.getByTestId('pack-section-scenes').click()
   const beforeRecipe = await page.evaluate(() => window.__omniframe_store.getState().clips.length)

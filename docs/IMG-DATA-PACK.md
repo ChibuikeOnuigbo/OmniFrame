@@ -66,5 +66,11 @@ Wave-5 followed this gist: a dark two-host **Podcast Studio** window and a
 **Slides** explainer window for the desktop majority, plus generated
 **Fitness** and **Food Delivery** phone layouts for the phone gap. Per-file
 records live in `img_data_pack/processed/gist-summary.json` (gitignored,
-alongside the screenshots). The pack now totals 69 generated assets and 16
-one-click bundles.
+alongside the screenshots).
+
+Wave-6 kept filing into the same Explorer-style folders (curated folder
+order, items sorted A–Z by display name): **Music Studio** (DAW) into
+Music, **Photo Editor** into Code & Design, **Doc Writer** into
+Productivity, and **Banking**, **Mail** and **Clock & Alarms** phones into
+Phones, plus the Studio Desk and Phone Essentials bundles. The pack now
+totals 75 generated assets and 18 one-click bundles.
