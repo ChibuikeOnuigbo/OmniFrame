@@ -359,6 +359,57 @@ const SCENE_RECIPES: SceneRecipe[] = [
       return 'Swing In keyframed — tune the pendulum in the Graph Editor'
     },
   },
+  {
+    id: 'motion-impact-shake', label: 'Impact Shake', desc: 'Hard decaying shake over 0.5s (AMV beat-hit style, linear keys)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      const steps = 10
+      for (let i = 0; i <= steps; i++) {
+        const time = (i / steps) * 0.5
+        const mag = 14 * Math.pow(1 - i / steps, 1.3)
+        const sign = i % 2 === 0 ? 1 : -1
+        s.setClipKeyframe(clip.id, 'position_x', time, t.x + mag * sign, 'linear')
+        s.setClipKeyframe(clip.id, 'position_y', time, t.y + mag * 0.6 * -sign, 'linear')
+        s.setClipKeyframe(clip.id, 'rotation_z', time, t.rotation + 1.2 * (mag / 14) * sign, 'linear')
+      }
+      return 'Impact Shake keyframed (decaying oscillation) — trim or stretch the keys to retime it'
+    },
+  },
+  {
+    id: 'motion-oscillate', label: 'Oscillate Shake', desc: 'Smooth sustained shake, ±7px over 1.2s (Alight-style oscillate)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      const keys = 16
+      for (let i = 0; i <= keys; i++) {
+        const time = (i / keys) * 1.2
+        const phase = Math.sin((i / keys) * Math.PI * 2 * 1.5)
+        const fade = i === 0 || i === keys ? 0 : 1
+        s.setClipKeyframe(clip.id, 'position_x', time, t.x + 7 * phase * fade, 'linear')
+        s.setClipKeyframe(clip.id, 'position_y', time, t.y + 3.5 * Math.cos((i / keys) * Math.PI * 2 * 1.5) * fade, 'linear')
+      }
+      return 'Oscillate Shake keyframed (sine-sampled) — copy the keys to extend it'
+    },
+  },
+  {
+    id: 'motion-zoom-punch', label: 'Zoom Punch', desc: 'Fast punch-in to 115% on the beat (back easing, 0.15s)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'scale_x', 0, t.scale, 'back')
+      s.setClipKeyframe(clip.id, 'scale_x', 0.15, t.scale * 1.15, 'back')
+      s.setClipKeyframe(clip.id, 'scale_y', 0, t.scale, 'back')
+      s.setClipKeyframe(clip.id, 'scale_y', 0.15, t.scale * 1.15, 'back')
+      return 'Zoom Punch keyframed — drop it on a beat hit'
+    },
+  },
 ]
 
 function ensurePackAsset(def: PackAssetDef): string {

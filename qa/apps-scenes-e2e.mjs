@@ -208,6 +208,32 @@ try {
     return rz.length >= 4
   })
   console.log('PASS motion swing-in writes pendulum keyframes')
+  // AMV shake family (Wizzy Tutorials study): oscillate/impact/zoom-punch.
+  await page.getByTestId('pack-recipe-motion-impact-shake').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const px = clip?.animation?.curves?.position_x?.keyframes ?? []
+    return px.length >= 11 && px.some((k) => Math.abs(k.value) > 5)
+  })
+  console.log('PASS motion impact-shake writes decaying oscillation keyframes')
+  await page.getByTestId('pack-recipe-motion-oscillate').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const px = clip?.animation?.curves?.position_x?.keyframes ?? []
+    const oscKeys = px.filter((k) => k.time > 0.55 && Math.abs(k.value) <= 7.01)
+    return px.length >= 17 && oscKeys.length >= 8
+  })
+  console.log('PASS motion oscillate writes smooth ±7px shake keyframes')
+  await page.getByTestId('pack-recipe-motion-zoom-punch').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const sx = clip?.animation?.curves?.scale_x?.keyframes ?? []
+    return sx.some((k) => Math.abs(k.value - 1.15) < 0.02 && k.interpolation === 'back')
+  })
+  console.log('PASS motion zoom-punch writes a 115% beat punch')
 
   await page.getByTestId('pack-recipe-on-air').click()
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'ON AIR'))

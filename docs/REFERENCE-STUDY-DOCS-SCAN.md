@@ -231,6 +231,43 @@ QA: `qa/graph-capcut-e2e.mjs` §4c asserts the matrix math (cos60 = 0.5,
 180° = −1, X-90° edge-on), the static-value fallbacks, and that setting
 Rotation Y = 70° visibly narrows the clip's span in the preview canvas.
 
+## Follow-up scan — "How I Made This Edit - Full Editing Breakdown" (YouTube)
+
+`youtube.com/watch?v=up7sbPbZlDc`, **Wizzy Tutorials**, uploaded
+2026-09-22, **1:29**, 11,566 views, People & Blogs. Supplied by the user on
+2026-10-17 with the instruction to "make sure the app can do all" of it.
+**Honesty first:** the video's accessible caption track is **music only**
+(one spoken "Hey"), so — as with the Krita timelapse — no narration could
+be read and no frames were viewed. What *can* be established: the title
+("Full Editing Breakdown"), the description ("Full Editing Process
+'Step By Step' — AMV Tutorial", fair-use anime AMV, hashtags
+#alightmotion #amv #aftereffects #capcut), and the channel's own catalog
+from search results (Wizzy's other tutorials: "How to Make Shake &
+Transitions Like Molob/Xenoz on Alight Motion", "Smooth Zoom
+Transition", "How to make Smooth Transitions + Position Shake on After
+Effects"), plus the community-standard AMV shake recipe (Alight Motion
+Oscillate: Angle/Frequency/Magnitude; Swing; opacity-keyframe fade-out;
+clips placed on each beat). The coverage check below is therefore against
+**the AMV-editing technique class this video belongs to**, stated as
+such — not a claimed frame-by-frame account of this 89-second video.
+
+| AMV technique (class) | OmniFrame coverage |
+| --- | --- |
+| Clips/photos cut **on the beat** | Timeline split/trim/snap; audio analysis estimates BPM/key (verified: synthetic C-major 120 BPM mix identified). The analyzer honestly labels itself an estimate, not a beat-grid master — cuts are placed by the editor on the playhead/ruler |
+| **Impact shake** on beat hits | **Implemented this pass** — `Impact Shake` preset: decaying oscillation (14px envelope → 0 over 0.5s, alternating linear keys on position X/Y + slight rotation) |
+| Continuous **Oscillate / Swing** shake | **Implemented this pass** — `Oscillate Shake` preset: sine-sampled ±7px / ±3.5px keys over 1.2s, mirroring the community Angle/Frequency/Magnitude recipe as editable keyframes |
+| **Smooth zoom transition** + zoom punch-ins | Timeline transition types include `zoom`, `cross_dissolve`, dips, wipe, slide; **implemented this pass** — `Zoom Punch` preset (scale → 115% in 0.15s, back easing) for beat-hit punch-ins; Ken Burns Drift for slow zooms |
+| Interpolation/bounce curves | Curve Engine `back`/`bounce`/`elastic` + Graph Editor presets, intensity, tangent handles |
+| **Fade out** via opacity keyframes | `Drop Out (Exit)` preset + opacity curves |
+| Spin/slide/wipe transitions | Transition system (`spin` via Spin In preset on clips; slide/wipe/zoom/dip transitions between clips) |
+| Text bursts / titles | Caption Burst recipe, text clips, graph-animated properties |
+
+QA this pass: `qa/apps-scenes-e2e.mjs` asserts the shake keyframe patterns
+(≥11 decaying keys; ≥8 smooth ±7px keys past 0.55s; 115% back-eased punch),
+`qa/audio-analysis-e2e.mjs` (BPM/key), `qa/improvement-screens.mjs`
+screenshots 07 (preset list) and 08 (mid-shake preview). Recipes now
+**21 total / 12 Motion Presets**.
+
 ## Gap table — what to add, honestly prioritized
 
 | # | Idea (source) | OmniFrame status | Decision |

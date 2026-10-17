@@ -199,5 +199,33 @@ try {
 }
 await shot('06-flip-in-midair.png')
 
+// 07/08 — AMV shake family (Wizzy Tutorials study): preset list, then mid-shake
+try {
+  await page.evaluate(() => window.__omniframe_store.getState().setLeftTab('pack'))
+  await page.getByTestId('desktop-pack-panel').waitFor({ state: 'visible' })
+  await page.waitForTimeout(400)
+  await page.getByTestId('pack-section-scenes').click()
+  await page.waitForTimeout(400)
+  const shakeBtn = page.locator('[data-testid="pack-recipe-motion-impact-shake"]')
+  if ((await shakeBtn.count()) === 1) {
+    await shakeBtn.scrollIntoViewIfNeeded()
+    await page.waitForTimeout(300)
+    await shot('07-amv-shake-presets.png')
+    await shakeBtn.click()
+    await page.waitForTimeout(300)
+    await page.evaluate(() => {
+      const s = window.__omniframe_store.getState()
+      s.setLeftTab('media')
+      s.setPlayhead(0.1)
+    })
+    console.log('PASS Impact Shake applied; playhead mid-shake')
+    await shot('08-amv-shake-midhit.png')
+  } else {
+    console.log('WARN impact-shake recipe not found for screenshot')
+  }
+} catch (e) {
+  console.log('WARN shake step:', String(e).slice(0, 160))
+}
+
 await browser.close()
 console.log('SCREENS DONE ->', OUT)
