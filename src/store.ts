@@ -1415,6 +1415,7 @@ export const useEditor = create<EditorState>((set, get) => {
       opacity: 0.35,
       tintBefore: '#ef4444',
       tintAfter: '#10b981',
+      tintStrength: 1,
     },
     activeSelection: null,
     selectionMode: 'rect',

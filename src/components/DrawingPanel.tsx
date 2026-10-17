@@ -811,6 +811,20 @@ export function DrawingPanel() {
                     onChange={(e) => setOnionSkin({ opacity: Number(e.target.value) / 100 })}
                     className="of-range w-full"
                   />
+
+                  <div className="flex justify-between items-center">
+                    <span>Tint Strength</span>
+                    <span className="font-mono text-ink-200">{Math.round((onionSkin.tintStrength ?? 1) * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    data-testid="onion-tint-strength-slider"
+                    min={0}
+                    max={100}
+                    value={Math.round((onionSkin.tintStrength ?? 1) * 100)}
+                    onChange={(e) => setOnionSkin({ tintStrength: Number(e.target.value) / 100 })}
+                    className="of-range w-full"
+                  />
                 </div>
               )}
             </div>

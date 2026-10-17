@@ -811,6 +811,51 @@ export function GraphEditor() {
                   </button>
                 </section>
 
+                {/* Easing intensity (Jitter-style: scales the easing effect) */}
+                {selectedKeyframe.interpolation !== 'bezier' && (
+                  <div className="flex items-center gap-1.5 shrink-0" title="Easing intensity: 0% = linear, 100% = preset as-is, up to 150% exaggerated">
+                    <span className="text-[10px] uppercase tracking-wide text-ink-400">Intensity</span>
+                    <input
+                      type="range"
+                      data-testid="easing-intensity-slider"
+                      min={0}
+                      max={150}
+                      step={5}
+                      value={Math.round((selectedKeyframe.easingIntensity ?? 1) * 100)}
+                      onChange={(e) => {
+                        if (!activeClip || !activeCurve) return
+                        const intensity = Number(e.target.value) / 100
+                        const updated = {
+                          ...activeCurve,
+                          keyframes: activeCurve.keyframes.map((k) =>
+                            k.id === selectedKeyframe.id ? { ...k, easingIntensity: intensity } : k,
+                          ),
+                        }
+                        useEditor.setState((s) => ({
+                          clips: s.clips.map((c) =>
+                            c.id === activeClip.id
+                              ? {
+                                  ...c,
+                                  animation: {
+                                    ...c.animation!,
+                                    curves: {
+                                      ...c.animation!.curves,
+                                      [activeCurve.id]: updated,
+                                    },
+                                  },
+                                }
+                              : c,
+                          ),
+                        }))
+                      }}
+                      className="of-range w-20"
+                    />
+                    <span className="font-mono text-[10px] text-ink-200 w-8">
+                      {Math.round((selectedKeyframe.easingIntensity ?? 1) * 100)}%
+                    </span>
+                  </div>
+                )}
+
                 {/* Extrapolation Mode Dropdown */}
                 <div className="flex items-center gap-1 shrink-0 ml-auto">
                   <span className="text-[10px] text-ink-400">Extrapolation:</span>

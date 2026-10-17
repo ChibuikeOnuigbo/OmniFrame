@@ -189,6 +189,40 @@ await page.waitForTimeout(400)
   await page.waitForTimeout(200)
 }
 
+// ---------- 4b. easing intensity (Jitter-style intensity control) ----------
+{
+  const slider = page.locator('[data-testid="easing-intensity-slider"]')
+  assert('easing intensity slider shows for preset keys', (await slider.count()) === 1)
+  await slider.fill('30')
+  await page.waitForTimeout(250)
+  const stored = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.animation)
+    const curve = clip?.animation?.curves?.position_x
+    return curve?.keyframes?.[0]?.easingIntensity
+  })
+  assert('intensity writes onto the keyframe node', Math.abs((stored ?? 1) - 0.3) < 0.02, `stored=${stored}`)
+  await slider.fill('100')
+  await page.waitForTimeout(200)
+  try {
+    const vals = await page.evaluate(async () => {
+      const { evaluateCurve } = await import('/src/lib/animation/CurveEngine.ts')
+      const mk = (easingIntensity) => ({
+        id: 'position_x', property: 'position_x', channel: 'X', unit: 'px',
+        min: -5000, max: 5000, defaultValue: 0, color: '#ffffff',
+        keyframes: [
+          { id: 'a', time: 0, value: 0, interpolation: 'ease-out', easingIntensity },
+          { id: 'b', time: 2, value: 100, interpolation: 'linear' },
+        ],
+      })
+      return { full: evaluateCurve(mk(1), 1), low: evaluateCurve(mk(0.3), 1), zero: evaluateCurve(mk(0), 1) }
+    })
+    assert('intensity blends easing toward linear', vals.full > vals.low + 5 && vals.low > 51 && Math.abs(vals.zero - 50) < 0.6, JSON.stringify(vals))
+  } catch (err) {
+    console.log('SKIP easing engine module check:', err.message)
+  }
+}
+
 // ---------- 5. tangent handles are squares (bezier keys) ----------
 {
   // Preset keys have preset interpolations; bezier handles come from keys

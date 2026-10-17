@@ -37,6 +37,8 @@ export interface KeyframeNode {
   inHandle?: TangentHandle
   outHandle?: TangentHandle
   easingPreset?: string
+  /** Jitter-style easing intensity: 1 = preset as-is, 0 = linear, up to 1.5 = exaggerated (default 1) */
+  easingIntensity?: number
 }
 
 export interface PropertyCurve {
@@ -354,7 +356,10 @@ export function evaluateCurve(curve: PropertyCurve, time: number): number {
   }
 
   // Standard easing presets (cubic-in, cubic-out, ease-in, ease-out, back, bounce, etc.)
-  const progress = evaluateEasingProgress(u, k0.interpolation)
+  // Easing intensity (Jitter-style): blend the eased progress toward/away from linear.
+  const rawProgress = evaluateEasingProgress(u, k0.interpolation)
+  const intensity = Math.min(1.5, Math.max(0, k0.easingIntensity ?? 1))
+  const progress = u + (rawProgress - u) * intensity
   return k0.value + progress * (k1.value - k0.value)
 }
 

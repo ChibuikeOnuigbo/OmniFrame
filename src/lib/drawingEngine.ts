@@ -198,6 +198,32 @@ export function isStrokeVisibleAtTime(stroke: DrawingStroke, time: number, fps: 
 }
 
 /**
+ * Krita-style ghost tinting: blends a stroke's original color toward the
+ * onion-skin tint by `strength` (1 = full silhouette tint, 0 = original color).
+ * Unparseable colors fall back to the tint when strength > 0.5.
+ */
+export function blendGhostColor(color: string, tint: string, strength: number): string {
+  const s = Math.min(1, Math.max(0, strength))
+  if (s >= 1) return tint
+  const parse = (c: string): [number, number, number] | null => {
+    const hex = c.trim()
+    const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex)
+    if (m) {
+      const h = m[1].length === 3 ? m[1].split('').map((ch) => ch + ch).join('') : m[1]
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+    }
+    const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i.exec(hex)
+    if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
+    return null
+  }
+  const from = parse(color)
+  const to = parse(tint)
+  if (!from || !to) return s > 0.5 ? tint : color
+  const mix = from.map((v, i) => Math.round(v + (to[i] - v) * s))
+  return `rgb(${mix[0]}, ${mix[1]}, ${mix[2]})`
+}
+
+/**
  * Renders onion skin ghost cels of previous and next animation frames.
  */
 export function renderOnionSkin(
@@ -231,7 +257,7 @@ export function renderOnionSkin(
     for (const stroke of priorStrokes) {
       const ghostStroke: DrawingStroke = {
         ...stroke,
-        color: settings.tintBefore || '#ef4444',
+        color: blendGhostColor(stroke.color, settings.tintBefore || '#ef4444', settings.tintStrength ?? 1),
       }
       renderStroke(ctx, ghostStroke, width, height)
     }
@@ -257,7 +283,7 @@ export function renderOnionSkin(
     for (const stroke of futureStrokes) {
       const ghostStroke: DrawingStroke = {
         ...stroke,
-        color: settings.tintAfter || '#10b981',
+        color: blendGhostColor(stroke.color, settings.tintAfter || '#10b981', settings.tintStrength ?? 1),
       }
       renderStroke(ctx, ghostStroke, width, height)
     }

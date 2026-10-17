@@ -388,6 +388,8 @@ export interface OnionSkinSettings {
   opacity: number // default 0.35
   tintBefore?: string // default #ef4444
   tintAfter?: string // default #10b981
+  /** Krita-style tint strength: 1 = full silhouette tint, lower keeps original stroke colors (default 1) */
+  tintStrength?: number
 }
 
 export interface ActiveSelection {
