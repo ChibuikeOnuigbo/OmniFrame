@@ -27,7 +27,7 @@ const SECTIONS: { id: PackSection; label: string; icon: typeof AppWindow }[] = [
 const GROUP_ORDER: Record<string, string[]> = {
   windows: ['Packs', 'Desktops', 'Browsers', 'App Windows', 'Devices & Social'],
   apps: ['Music', 'Files & Browsers', 'Phones', 'Creators', 'Code & Design', 'Productivity', 'Chat & Mail'],
-  scenes: ['Intros & Titles', 'Studio & Podcast', 'Looks & Teaching', 'Social Versions'],
+  scenes: ['Intros & Titles', 'Motion Presets', 'Studio & Podcast', 'Looks & Teaching', 'Social Versions'],
   cursors: ['Pointers', 'Clicks & Marks', 'Editor Cursor'],
   overlays: ['Frames & Bars', 'Light & Focus'],
   edits: ['Looks', 'Fixes'],
@@ -217,6 +217,100 @@ const SCENE_RECIPES: SceneRecipe[] = [
       if (bar) addPackClip(bar)
       useEditor.getState().addTextTitleClip('DEMO PODCAST — EPISODE 1', 4)
       return 'Podcast studio scene built — swap in your episode title and artwork'
+    },
+  },
+  // Motion Presets (Jitter study): named one-click animations written as
+  // ordinary keyframes on the selected clip, so they stay fully editable
+  // in the Graph Editor. Spring feels use the Curve Engine's physical
+  // easings ('back' overshoot), the same family as Remotion's spring().
+  {
+    id: 'motion-fade-rise', label: 'Fade + Rise In', desc: 'Fade in while rising 36px over 0.45s (ease-out)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.45, t.opacity, 'ease-out')
+      s.setClipKeyframe(clip.id, 'position_y', 0, t.y + 36, 'ease-out')
+      s.setClipKeyframe(clip.id, 'position_y', 0.45, t.y, 'ease-out')
+      return 'Fade + Rise In keyframed — tune it in the Graph Editor'
+    },
+  },
+  {
+    id: 'motion-pop-in', label: 'Pop In (Spring)', desc: 'Scale up from 55% with a spring overshoot (back easing)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'scale_x', 0, t.scale * 0.55, 'back')
+      s.setClipKeyframe(clip.id, 'scale_x', 0.5, t.scale, 'back')
+      s.setClipKeyframe(clip.id, 'scale_y', 0, t.scale * 0.55, 'back')
+      s.setClipKeyframe(clip.id, 'scale_y', 0.5, t.scale, 'back')
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.5, t.opacity, 'ease-out')
+      return 'Pop In keyframed with a spring (back) ease — tune it in the Graph Editor'
+    },
+  },
+  {
+    id: 'motion-slide-in', label: 'Slide In (Left)', desc: 'Slide in from 160px left while fading in (ease-out)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'position_x', 0, t.x - 160, 'ease-out')
+      s.setClipKeyframe(clip.id, 'position_x', 0.45, t.x, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.45, t.opacity, 'ease-out')
+      return 'Slide In keyframed — tune it in the Graph Editor'
+    },
+  },
+  {
+    id: 'motion-spin-in', label: 'Spin In', desc: 'Rotate in from −16° while fading in (ease-out)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'rotation_z', 0, t.rotation - 16, 'ease-out')
+      s.setClipKeyframe(clip.id, 'rotation_z', 0.5, t.rotation, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.5, t.opacity, 'ease-out')
+      return 'Spin In keyframed — tune it in the Graph Editor'
+    },
+  },
+  {
+    id: 'motion-pulse', label: 'Pulse Beat', desc: 'One scale pulse to 107% and back at the clip start', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'scale_x', 0, t.scale, 'ease-in-out')
+      s.setClipKeyframe(clip.id, 'scale_x', 0.26, t.scale * 1.07, 'ease-in-out')
+      s.setClipKeyframe(clip.id, 'scale_x', 0.52, t.scale, 'ease-in-out')
+      s.setClipKeyframe(clip.id, 'scale_y', 0, t.scale, 'ease-in-out')
+      s.setClipKeyframe(clip.id, 'scale_y', 0.26, t.scale * 1.07, 'ease-in-out')
+      s.setClipKeyframe(clip.id, 'scale_y', 0.52, t.scale, 'ease-in-out')
+      return 'Pulse Beat keyframed — copy the keys to repeat it'
+    },
+  },
+  {
+    id: 'motion-drop-out', label: 'Drop Out (Exit)', desc: 'Final 0.4s: sink 56px while fading out (ease-in)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      const end = Math.max(0.1, clip.duration)
+      const start = Math.max(0, end - 0.4)
+      s.setClipKeyframe(clip.id, 'opacity', start, t.opacity, 'ease-in')
+      s.setClipKeyframe(clip.id, 'opacity', end, 0, 'ease-in')
+      s.setClipKeyframe(clip.id, 'position_y', start, t.y, 'ease-in')
+      s.setClipKeyframe(clip.id, 'position_y', end, t.y + 56, 'ease-in')
+      return 'Drop Out keyframed at the clip end — tune it in the Graph Editor'
     },
   },
 ]

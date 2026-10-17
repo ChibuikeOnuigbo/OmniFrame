@@ -155,6 +155,35 @@ try {
   })
   console.log('PASS ken-burns keyframes a real zoom')
 
+  // Motion Presets (Jitter/Remotion study): named one-click animations land
+  // as ordinary, editable keyframes on the selected clip.
+  await page.getByTestId('pack-recipe-motion-pop-in').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const sx = clip?.animation?.curves?.scale_x?.keyframes ?? []
+    const op = clip?.animation?.curves?.opacity?.keyframes ?? []
+    return sx.length >= 2 && op.length >= 2 && sx.some((k) => k.interpolation === 'back')
+  })
+  console.log('PASS motion pop-in writes spring (back) keyframes')
+  await page.getByTestId('pack-recipe-motion-fade-rise').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const py = clip?.animation?.curves?.position_y?.keyframes ?? []
+    return py.length >= 2 && py.some((k) => k.interpolation === 'ease-out')
+  })
+  console.log('PASS motion fade-rise writes position keyframes')
+  await page.getByTestId('pack-recipe-motion-drop-out').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const op = clip?.animation?.curves?.opacity?.keyframes ?? []
+    const last = op[op.length - 1]
+    return !!last && last.value === 0 && last.interpolation === 'ease-in'
+  })
+  console.log('PASS motion drop-out writes exit keyframes')
+
   await page.getByTestId('pack-recipe-on-air').click()
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'ON AIR'))
   console.log('PASS on-air recipe adds its title')
