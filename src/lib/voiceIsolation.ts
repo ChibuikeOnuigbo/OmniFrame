@@ -411,6 +411,18 @@ export function isolateVoiceFromAudioBuffer(
     let lpL_h = 0, bpL_h = 0
     let lpR_h = 0, bpR_h = 0
 
+    // Vocal-activity gate for reverb leakage: on slowed/reverberant songs
+    // the voice's reverb tail lives in the stereo side (S), so pure center
+    // cancellation leaves it audible. Envelope followers estimate how
+    // center-dominated the vocal band is right now; while a centered voice
+    // is active the side is trimmed (scaled by strength), and while stereo
+    // content dominates the side passes untouched so instruments keep
+    // their width. Attack 3 ms / release 150 ms keeps it click-free.
+    const gateAttack = Math.exp(-1 / (0.003 * sampleRate))
+    const gateRelease = Math.exp(-1 / (0.15 * sampleRate))
+    let envM = 0
+    let envS = 0
+
     for (let i = 0; i < length; i++) {
       const sL = inL[i]
       const sR = inR[i]
@@ -452,8 +464,15 @@ export function isolateVoiceFromAudioBuffer(
 
       // Vocal cancellation: attenuate Center component M by strength factor
       // S contains side instruments (stereo guitars, backing synths, room reflections)
-      const remMidL = S + (1 - strength) * M
-      const remMidR = -S + (1 - strength) * M
+      const absM = Math.abs(M)
+      const absS = Math.abs(S)
+      envM = (absM > envM ? gateAttack : gateRelease) * envM + (1 - (absM > envM ? gateAttack : gateRelease)) * absM
+      envS = (absS > envS ? gateAttack : gateRelease) * envS + (1 - (absS > envS ? gateAttack : gateRelease)) * absS
+      const activity = envM / (envM + envS + 0.000001)
+      const gate = Math.max(0, Math.min(1, (activity - 0.3) / 0.45)) * strength
+      const sideScale = Math.max(0.25, 1 - 0.65 * gate)
+      const remMidL = S * sideScale + (1 - strength) * M
+      const remMidR = -S * sideScale + (1 - strength) * M
 
       // Reconstruct output stereo channels
       outL[i] = bassMono + remMidL + airL
