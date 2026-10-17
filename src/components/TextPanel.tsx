@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight } from 'lucide-react'
+import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
 import { previewTextClip } from '../lib/visualPreviewActions'
+import { registerAllCustomFonts } from '../lib/fonts'
+
+const BUILTIN_FONTS: Array<{ value: string; label: string }> = [
+  { value: 'sans-serif', label: 'Clean Sans (system)' },
+  { value: 'Georgia, serif', label: 'Serif (Georgia)' },
+  { value: '"Courier New", monospace', label: 'Mono (Courier)' },
+  { value: 'Impact, sans-serif', label: 'Display (Impact)' },
+]
 
 export function TextPanel() {
   const clips = useEditor((s) => s.clips)
@@ -13,6 +21,18 @@ export function TextPanel() {
 
   const selectedClip = clips.find((c) => c.id === selectedClipId)
   const isEditingTextClip = Boolean(selectedClip?.textStyle)
+  const customFonts = useEditor((s) => s.customFonts)
+  const importCustomFontFile = useEditor((s) => s.importCustomFontFile)
+  const removeCustomFont = useEditor((s) => s.removeCustomFont)
+  const importSubtitleFile = useEditor((s) => s.importSubtitleFile)
+  const [fontFamily, setFontFamily] = useState('sans-serif')
+  const [utilStatus, setUtilStatus] = useState('')
+
+  // Imported fonts register with the document so canvas + DOM render them.
+  useEffect(() => {
+    void registerAllCustomFonts(useEditor.getState().customFonts)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [text, setText] = useState('OmniFrame Title')
   const [fontSize, setFontSize] = useState(48)
@@ -31,6 +51,7 @@ export function TextPanel() {
       setBgColor(ts.backgroundColor || 'transparent')
       setBold(ts.bold ?? true)
       setItalic(ts.italic ?? false)
+      setFontFamily(ts.fontFamily || 'sans-serif')
     }
   }, [selectedClipId, selectedClip?.textStyle])
 
@@ -55,8 +76,38 @@ export function TextPanel() {
 
   const handleAdd = (customText?: string, customStyle?: Partial<TextStyle>, label?: string) => {
     const t = customText || text
-    const style = customStyle ?? { fontSize, color, backgroundColor: bgColor, bold, italic }
+    const style = customStyle ?? { fontSize, color, backgroundColor: bgColor, bold, italic, fontFamily }
     previewTextClip(label || t, t, style)
+  }
+
+  const applyFontFamily = (value: string) => {
+    setFontFamily(value)
+    if (isEditingTextClip) handleUpdate({ fontFamily: value })
+  }
+
+  const onPickFontFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return
+    const names: string[] = []
+    for (const file of Array.from(files)) {
+      try {
+        const font = await importCustomFontFile(file)
+        names.push(font.name)
+      } catch (err) {
+        setUtilStatus(err instanceof Error ? err.message : String(err))
+        return
+      }
+    }
+    setUtilStatus(`Imported ${names.join(', ')} - embedded in the project on Save .omni.`)
+  }
+
+  const onPickSubtitleFile = async (file: File | null) => {
+    if (!file) return
+    try {
+      const result = await importSubtitleFile(file, fontFamily)
+      setUtilStatus(`Imported ${result.cues} caption clip${result.cues === 1 ? '' : 's'} from ${file.name}.`)
+    } catch (err) {
+      setUtilStatus(err instanceof Error ? err.message : String(err))
+    }
   }
 
   return (
@@ -254,6 +305,129 @@ export function TextPanel() {
                 </button>
               </div>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-semibold uppercase text-ink-500 mb-1">
+              Font
+            </label>
+            <select
+              data-testid="text-font-select"
+              aria-label="Font family"
+              value={fontFamily}
+              onChange={(e) => applyFontFamily(e.target.value)}
+              className="w-full h-7 px-1.5 rounded-md bg-ink-900 border border-ink-700 text-ink-100 text-[11px] focus:outline-none focus:border-brand"
+            >
+              <optgroup label="Built-in">
+                {BUILTIN_FONTS.map((f) => (
+                  <option key={f.value} value={f.value}>{f.label}</option>
+                ))}
+              </optgroup>
+              {customFonts.length > 0 && (
+                <optgroup label="Imported (saved in project)">
+                  {customFonts.map((f) => (
+                    <option key={f.id} value={f.name}>{f.name}</option>
+                  ))}
+                </optgroup>
+              )}
+            </select>
+          </div>
+
+          <div data-testid="fonts-manager" className="rounded-md bg-ink-900/60 border border-ink-800 p-2 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-semibold uppercase text-ink-400 tracking-wider">Imported Fonts</span>
+              <label
+                data-testid="font-import-btn"
+                className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-200 hover:text-white text-[10px] cursor-pointer transition-colors"
+                title="Import .ttf, .otf, .woff or .woff2 font files"
+              >
+                <Upload size={11} />
+                <span>Import font</span>
+                <input
+                  type="file"
+                  data-testid="font-import-input"
+                  accept=".ttf,.otf,.woff,.woff2"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    void onPickFontFiles(e.target.files)
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+            </div>
+            {customFonts.length === 0 ? (
+              <p className="text-[10px] text-ink-500">
+                No imported fonts yet. Imported fonts apply to titles, captions and text masks, and are embedded when you Save .omni.
+              </p>
+            ) : (
+              customFonts.map((font) => (
+                <div
+                  key={font.id}
+                  data-testid={`font-row-${font.id}`}
+                  className="flex items-center gap-2 rounded bg-ink-900 border border-ink-800 px-2 py-1"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="text-[15px] leading-none text-ink-100 w-8 text-center shrink-0"
+                    style={{ fontFamily: `"${font.name}", sans-serif` }}
+                  >
+                    Ag
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[11px] text-ink-100" title={font.fileName}>{font.name}</span>
+                    <span className="block text-[9px] uppercase text-ink-500">
+                      {font.format} - {Math.max(1, Math.round(font.sizeBytes / 1024))} KB - saved in project
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    data-testid={`font-apply-${font.id}`}
+                    title={`Use ${font.name} for the selected title / next title`}
+                    onClick={() => applyFontFamily(font.name)}
+                    className="px-1.5 py-1 rounded bg-ink-800 hover:bg-brand text-ink-200 hover:text-white text-[10px] transition-colors shrink-0"
+                  >
+                    Use
+                  </button>
+                  <button
+                    type="button"
+                    data-testid={`font-remove-${font.id}`}
+                    title={`Remove ${font.name} from this project`}
+                    aria-label={`Remove font ${font.name}`}
+                    onClick={() => removeCustomFont(font.id)}
+                    className="p-1 rounded bg-ink-800 hover:bg-red-600 text-ink-300 hover:text-white transition-colors shrink-0"
+                  >
+                    <Trash2 size={11} />
+                  </button>
+                </div>
+              ))
+            )}
+            <div className="flex items-center justify-between pt-0.5">
+              <span className="text-[10px] text-ink-500">Captions from file (.srt / .vtt)</span>
+              <label
+                data-testid="subtitle-import-btn"
+                className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-200 hover:text-white text-[10px] cursor-pointer transition-colors"
+                title="Import subtitles as caption clips on their own track"
+              >
+                <Upload size={11} />
+                <span>Import subtitles</span>
+                <input
+                  type="file"
+                  data-testid="subtitle-import-input"
+                  accept=".srt,.vtt"
+                  className="hidden"
+                  onChange={(e) => {
+                    void onPickSubtitleFile(e.target.files?.[0] || null)
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+            </div>
+            {utilStatus && (
+              <p data-testid="fonts-status" role="status" className="text-[10px] text-ink-400">
+                {utilStatus}
+              </p>
+            )}
           </div>
 
           <button

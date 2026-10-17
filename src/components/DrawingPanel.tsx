@@ -28,6 +28,7 @@ import {
   ChevronLeft,
   ChevronRight,
   RotateCcw,
+  Upload,
   CornerDownRight,
   Shield,
   type LucideIcon,
@@ -75,6 +76,10 @@ export function DrawingPanel() {
   const drawingTool = useEditor((s) => s.drawingTool)
   const setDrawingTool = useEditor((s) => s.setDrawingTool)
   const drawingColor = useEditor((s) => s.drawingColor)
+  const customPalettes = useEditor((s) => s.customPalettes)
+  const importPaletteFile = useEditor((s) => s.importPaletteFile)
+  const removeCustomPalette = useEditor((s) => s.removeCustomPalette)
+  const [paletteStatus, setPaletteStatus] = useState('')
   const setDrawingColor = useEditor((s) => s.setDrawingColor)
   const drawingSize = useEditor((s) => s.drawingSize)
   const setDrawingSize = useEditor((s) => s.setDrawingSize)
@@ -546,6 +551,72 @@ export function DrawingPanel() {
             className="h-7 w-7 rounded-full border border-ink-700 cursor-pointer bg-transparent p-0 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           />
         </div>
+
+      {/* Imported palettes (.gpl/.pal/.json) — saved inside the project */}
+      <div data-testid="imported-palettes" className="mt-2 space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Imported Palettes</span>
+          <label
+            data-testid="palette-import-btn"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-200 hover:text-white text-[10px] cursor-pointer transition-colors"
+            title="Import a GIMP .gpl, JASC .pal or JSON colour palette"
+          >
+            <Upload size={11} />
+            <span>Import palette</span>
+            <input
+              type="file"
+              data-testid="palette-import-input"
+              accept=".gpl,.pal,.json,.txt"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                e.target.value = ''
+                if (!file) return
+                importPaletteFile(file)
+                  .then((pal) => setPaletteStatus(`Imported "${pal.name}" - ${pal.colors.length} colours, saved in the project.`))
+                  .catch((err) => setPaletteStatus(err instanceof Error ? err.message : String(err)))
+              }}
+            />
+          </label>
+        </div>
+        {customPalettes.map((pal) => (
+          <div key={pal.id} data-testid={`palette-row-${pal.id}`} className="rounded bg-ink-900/60 border border-ink-800 p-1.5">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] text-ink-300 truncate" title={pal.source}>{pal.name}</span>
+              <button
+                type="button"
+                data-testid={`palette-remove-${pal.id}`}
+                aria-label={`Remove palette ${pal.name}`}
+                title={`Remove palette ${pal.name}`}
+                onClick={() => removeCustomPalette(pal.id)}
+                className="p-0.5 rounded bg-ink-800 hover:bg-red-600 text-ink-300 hover:text-white transition-colors shrink-0"
+              >
+                <Trash2 size={10} />
+              </button>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {pal.colors.map((hex) => (
+                <button
+                  key={hex}
+                  type="button"
+                  data-testid={`palette-swatch-${pal.id}-${hex.replace('#', '')}`}
+                  aria-label={`Set drawing colour to ${hex} from ${pal.name}`}
+                  aria-pressed={drawingColor === hex}
+                  title={`${hex} - ${pal.name}`}
+                  onClick={() => setDrawingColor(hex)}
+                  className={`h-5 w-5 rounded-full border transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                    drawingColor === hex ? 'border-white scale-110 shadow-sm' : 'border-ink-700 hover:scale-105'
+                  }`}
+                  style={{ backgroundColor: hex }}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+        {paletteStatus && (
+          <p data-testid="palette-status" role="status" className="text-[10px] text-ink-400">{paletteStatus}</p>
+        )}
+      </div>
       </div>
         </PanelSection>
       <PanelSection title="Tool Parameters" defaultOpen={true} testId="tool-params">

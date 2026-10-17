@@ -56,8 +56,12 @@ import type {
   BrushDynamics,
   GuidedMatteRecord,
   SidebarSectionMode,
+  CustomFont,
+  ImportedPalette,
 } from './types'
 import { DEFAULT_CLIP_MASK } from './types'
+import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, dataUrlByteSize, registerCustomFont, registerAllCustomFonts, unregisterCustomFont } from './lib/fonts'
+import { parseSubtitles, parsePalette } from './lib/importUtils'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -489,6 +493,13 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
   setClipNotes: (id: string, notes: string) => void
+  customFonts: CustomFont[]
+  customPalettes: ImportedPalette[]
+  importCustomFontFile: (file: File) => Promise<CustomFont>
+  removeCustomFont: (id: string) => void
+  importPaletteFile: (file: File) => Promise<ImportedPalette>
+  removeCustomPalette: (id: string) => void
+  importSubtitleFile: (file: File, fontFamily?: string) => Promise<{ cues: number; trackId: string }>
   addTextTitleClip: (text?: string, duration?: number) => void
 
   // ---- adjustment layers & LUTs ----
@@ -1023,6 +1034,8 @@ export const useEditor = create<EditorState>((set, get) => {
       },
     ],
     sourceDocuments: [],
+    customFonts: [],
+    customPalettes: [],
     projectName: 'Untitled',
     saveOmniProject: async (name) => buildOmniProjectBundle(get(), name || get().projectName),
     setProjectName: (name) => set({ projectName: name.trim() || 'Untitled' }),
@@ -1041,6 +1054,8 @@ export const useEditor = create<EditorState>((set, get) => {
         past: [],
         future: [],
       })
+      // Fonts travel inside the bundle; re-register them with the document.
+      void registerAllCustomFonts(get().customFonts || [])
     },
     mediaImportNotice: null,
     tracks: [],
@@ -1607,6 +1622,99 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({
         clips: s.clips.map((c) => (c.id === id ? { ...c, notes } : c)),
       }))
+    },
+    importCustomFontFile: async (file) => {
+      const format = fontFormatFromFileName(file.name)
+      if (!/\.(ttf|otf|woff2?)$/i.test(file.name)) {
+        throw new Error('That file is not a font - pick a .ttf, .otf, .woff or .woff2 file.')
+      }
+      const MAX_FONT_BYTES = 16 * 1024 * 1024
+      if (file.size > MAX_FONT_BYTES) {
+        throw new Error(`"${file.name}" is ${(file.size / 1048576).toFixed(1)} MB - fonts up to 16 MB can be embedded in a project.`)
+      }
+      const dataUrl = await readFileAsDataUrl(file)
+      const font: CustomFont = {
+        id: uid('font'),
+        name: fontFamilyFromFileName(file.name),
+        fileName: file.name,
+        format,
+        sizeBytes: dataUrlByteSize(dataUrl) || file.size,
+        dataUrl,
+        importedAt: Date.now(),
+      }
+      const registered = await registerCustomFont(font)
+      if (!registered) {
+        throw new Error(`"${file.name}" could not be loaded as a font - the file may be corrupt or an unsupported variant.`)
+      }
+      set((s) => ({ customFonts: [...s.customFonts.filter((f) => f.name !== font.name), font] }))
+      try {
+        const list = JSON.parse(localStorage.getItem('omniframe.customFonts') || '[]') as { name: string; dataUrl: string }[]
+        localStorage.setItem('omniframe.customFonts', JSON.stringify([...list.filter((f) => f.name !== font.name), { name: font.name, dataUrl }]))
+      } catch { /* storage full/blocked: project save still embeds the font */ }
+      return font
+    },
+    removeCustomFont: (id) => {
+      const font = get().customFonts.find((f) => f.id === id)
+      if (font) unregisterCustomFont(font.name)
+      set((s) => ({ customFonts: s.customFonts.filter((f) => f.id !== id) }))
+    },
+    importPaletteFile: async (file) => {
+      const text = await file.text()
+      const parsed = parsePalette(text, file.name)
+      if (!parsed) {
+        throw new Error('No colours could be read - use a GIMP .gpl, JASC .pal, or JSON palette file.')
+      }
+      const palette: ImportedPalette = {
+        id: uid('palette'),
+        name: parsed.name,
+        colors: parsed.colors.slice(0, 512),
+        source: file.name,
+        importedAt: Date.now(),
+      }
+      set((s) => ({ customPalettes: [...s.customPalettes.filter((pl) => pl.name !== palette.name), palette] }))
+      return palette
+    },
+    removeCustomPalette: (id) => {
+      set((s) => ({ customPalettes: s.customPalettes.filter((pl) => pl.id !== id) }))
+    },
+    importSubtitleFile: async (file, fontFamily) => {
+      const text = await file.text()
+      const cues = parseSubtitles(text, file.name).slice(0, 1000)
+      if (cues.length === 0) {
+        throw new Error('No subtitle cues found - use a SubRip .srt or WebVTT .vtt file.')
+      }
+      pushSnapshot()
+      const trackName = `${file.name.replace(/\.(srt|vtt)$/i, '').trim() || 'Captions'} - Captions`
+      const track = { ...makeTrack('video', trackName), height: 44 }
+      const newClips: Clip[] = cues.map((cue, idx) => ({
+        id: uid('clip-caption'),
+        trackId: track.id,
+        assetId: '',
+        start: cue.start,
+        duration: Math.max(0.4, cue.end - cue.start),
+        inPoint: 0,
+        name: cue.text.split('\n')[0].slice(0, 60) || `Caption ${idx + 1}`,
+        kind: 'text',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 250, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        textStyle: {
+          text: cue.text,
+          fontSize: 30,
+          color: '#ffffff',
+          backgroundColor: 'rgba(0,0,0,0.65)',
+          fontFamily: fontFamily || 'sans-serif',
+          bold: false,
+          italic: false,
+        },
+      }))
+      set((s) => ({
+        tracks: [track, ...s.tracks],
+        clips: [...s.clips, ...newClips],
+        selectedClipId: newClips[0].id,
+        selectedClipIds: [newClips[0].id],
+      }))
+      return { cues: newClips.length, trackId: track.id }
     },
 
     // ---- adjustment layers & LUTs ------------------------------------

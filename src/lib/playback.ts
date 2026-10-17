@@ -1238,7 +1238,10 @@ export class PreviewEngine {
     const scaleFactor = this.width / PW
     const fontSize = Math.max(14, Math.round((t.fontSize || 48) * scaleFactor))
     const fontFamily = t.fontFamily || 'sans-serif'
-    ctx.font = `${t.bold ? 'bold ' : ''}${t.italic ? 'italic ' : ''}${fontSize}px ${fontFamily}`
+    // Quote single family names (imported fonts often contain spaces);
+    // comma stacks like "Georgia, serif" are already valid as-is.
+    const fam = fontFamily.includes(',') ? fontFamily : `"${fontFamily.replace(/"/g, '')}"`
+    ctx.font = `${t.bold ? 'bold ' : ''}${t.italic ? 'italic ' : ''}${fontSize}px ${fam}`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
 

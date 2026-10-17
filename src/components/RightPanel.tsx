@@ -160,6 +160,7 @@ function ClipMaskSection({ clip }: { clip: Clip }) {
   const playhead = useEditor((s) => s.playhead)
   // Uploaded mask fonts persist on this device (desktop keeps them in
   // local storage; the web build keeps them for this browser profile).
+  const projectFonts = useEditor((s) => s.customFonts)
   const [customFonts, setCustomFonts] = useState<string[]>(() => {
     try {
       return (JSON.parse(localStorage.getItem('omniframe.customFonts') || '[]') as { name: string }[]).map((f) => f.name)
@@ -384,6 +385,9 @@ function ClipMaskSection({ clip }: { clip: Clip }) {
                   ))}
                   {customFonts.map((f) => (
                     <option key={f} value={f}>{f} (uploaded)</option>
+                  ))}
+                  {projectFonts.filter((f) => !customFonts.includes(f.name)).map((f) => (
+                    <option key={f.id} value={f.name}>{f.name} (project)</option>
                   ))}
                 </select>
                 <label className="grid h-7 w-7 shrink-0 cursor-pointer place-items-center rounded border border-ink-700 text-ink-300 hover:text-white" title="Upload a font (.ttf/.otf/.woff) — saved on this device">

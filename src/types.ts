@@ -271,6 +271,33 @@ export interface TextTitleStyle {
 
 export type TextStyle = TextTitleStyle
 
+/**
+ * A user-imported font file (TTF/OTF/WOFF/WOFF2). The binary travels as a
+ * data URL inside project state, so Save .omni embeds it as a bundle
+ * attachment and reopening the project restores the exact font — no
+ * dependency on the machine's installed fonts.
+ */
+export interface CustomFont {
+  id: string
+  /** CSS font-family name used by canvas + DOM rendering. */
+  name: string
+  fileName: string
+  format: 'ttf' | 'otf' | 'woff' | 'woff2' | 'font'
+  sizeBytes: number
+  dataUrl: string
+  importedAt: number
+}
+
+/** A colour palette imported from a .gpl/.pal/.json file for drawing. */
+export interface ImportedPalette {
+  id: string
+  name: string
+  colors: string[]
+  source: string
+  importedAt: number
+}
+
+
 // ---- Aspect Ratio & Sequence Settings ----
 export type AspectRatioType =
   | '16:9'
