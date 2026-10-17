@@ -788,12 +788,7 @@ export function createRotoMaskSlice(
           .filter((entry): entry is TrackedRotoFrame => !!entry)
           .sort((a, b) => a.record.frame - b.record.frame)
         const candidateRecords = [...tracked.values()]
-        const assignments: RotoInpaintState['donorByTarget'] = []
         const perTargetRankings = new Map<number, { record: TrackedRotoFrame; score: number; overlap: number }[]>()
-        // ProPainter propagates through time rather than picking every frame
-        // in isolation. Keep the same (or smoothly advancing) donor for
-        // neighbouring targets when its raw match is close, reducing flicker.
-        let previousDonorFrame: number | null = null
         for (const target of targetRecords) {
           const edge = boundaryIndices(target.mask)
           const ranked = candidateRecords
@@ -809,25 +804,52 @@ export function createRotoMaskSlice(
             })
             .sort((a, b) => b.score - a.score)
           perTargetRankings.set(target.record.frame, ranked)
-          const temporallyConsistent = ranked
-            .map((candidate) => {
-              const frame = candidate.record.record.frame
-              const continuityBonus = previousDonorFrame === frame
-                ? 0.04
-                : previousDonorFrame !== null && Math.abs(frame - previousDonorFrame) <= 2
-                  ? 0.015
-                  : 0
-              return { ...candidate, adjustedScore: Math.min(1, candidate.score + continuityBonus) }
-            })
-            .sort((a, b) => b.adjustedScore - a.adjustedScore)
-          const best = temporallyConsistent.find((candidate) => candidate.overlap < 0.38)
-          if (best) previousDonorFrame = best.record.record.frame
-          assignments.push({
-            targetFrame: target.record.frame,
-            donorFrame: best?.record.record.frame ?? null,
-            score: best?.score ?? 0,
-          })
         }
+        // ProPainter propagates donor content in BOTH time directions and
+        // fuses the passes rather than picking every frame in isolation. Run
+        // the temporally-consistent donor walk forwards and backwards, then
+        // keep, per target, whichever pass produced the stronger adjusted
+        // match. Inside each pass, keeping the same (or smoothly advancing)
+        // donor for neighbouring targets is what reduces flicker.
+        const walkDonors = (ordered: TrackedRotoFrame[]) => {
+          const picks = new Map<number, { donorFrame: number | null; score: number; adjusted: number }>()
+          let previousDonorFrame: number | null = null
+          for (const target of ordered) {
+            const ranked = perTargetRankings.get(target.record.frame) || []
+            const temporallyConsistent = ranked
+              .map((candidate) => {
+                const frame = candidate.record.record.frame
+                const continuityBonus = previousDonorFrame === frame
+                  ? 0.04
+                  : previousDonorFrame !== null && Math.abs(frame - previousDonorFrame) <= 2
+                    ? 0.015
+                    : 0
+                return { ...candidate, adjustedScore: Math.min(1, candidate.score + continuityBonus) }
+              })
+              .sort((a, b) => b.adjustedScore - a.adjustedScore)
+            const best = temporallyConsistent.find((candidate) => candidate.overlap < 0.38)
+            if (best) previousDonorFrame = best.record.record.frame
+            picks.set(target.record.frame, {
+              donorFrame: best?.record.record.frame ?? null,
+              score: best?.score ?? 0,
+              adjusted: best?.adjustedScore ?? 0,
+            })
+          }
+          return picks
+        }
+        const forwardPicks = walkDonors(targetRecords)
+        const backwardPicks = walkDonors([...targetRecords].reverse())
+        const assignments: RotoInpaintState['donorByTarget'] = targetRecords.map((target) => {
+          const frame = target.record.frame
+          const forward = forwardPicks.get(frame)
+          const backward = backwardPicks.get(frame)
+          const chosen = backward && (!forward || backward.adjusted > forward.adjusted) ? backward : forward
+          return {
+            targetFrame: frame,
+            donorFrame: chosen?.donorFrame ?? null,
+            score: chosen?.score ?? 0,
+          }
+        })
         const primaryFrame = base.frame
         const primaryRanked = perTargetRankings.get(primaryFrame) || []
         const topCandidates = primaryRanked.slice(0, 6).map((candidate) => ({

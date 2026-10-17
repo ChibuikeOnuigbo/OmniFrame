@@ -79,6 +79,21 @@ try {
   await addAsset('video-player-phone', 'apps', 'Phones')
   console.log('PASS wave-4 call/shopping/files/player assets add clips')
 
+  // Wave-5: gist-led scenes (dark desktop apps + generated phone layouts,
+  // since no phone screenshots were supplied) — demo/test fields only.
+  await addAsset('podcast-studio-window', 'apps', 'Creators')
+  await addAsset('slides-window', 'apps', 'Productivity')
+  await addAsset('fitness-phone', 'apps', 'Phones')
+  await addAsset('food-delivery-phone', 'apps', 'Phones')
+  console.log('PASS wave-5 studio/slides/lifestyle assets add clips')
+
+  // Podcast Studio recipe builds a full scene without a selected clip.
+  await page.getByTestId('pack-section-scenes').click()
+  const beforeRecipe = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
+  await page.getByTestId('pack-recipe-podcast-studio-cut').click()
+  await page.waitForFunction((n) => window.__omniframe_store.getState().clips.length >= n + 3, beforeRecipe)
+  console.log('PASS podcast studio recipe builds a scene')
+
   // Seed a base clip for recipes (built-in demo image asset).
   await page.evaluate(() => {
     const store = window.__omniframe_store

@@ -208,6 +208,17 @@ const SCENE_RECIPES: SceneRecipe[] = [
       return 'On-air backdrop added — move the card and title behind your subject track if needed'
     },
   },
+  {
+    id: 'podcast-studio-cut', label: 'Podcast Studio Cut', desc: 'Studio window + progress bar + episode title for podcast edits', group: 'Studio & Podcast', needsClip: false,
+    run: async () => {
+      const studio = PACK_ASSETS.find((a) => a.id === 'podcast-studio-window')
+      if (studio) addPackClip(studio)
+      const bar = PACK_ASSETS.find((a) => a.id === 'progress-bar')
+      if (bar) addPackClip(bar)
+      useEditor.getState().addTextTitleClip('DEMO PODCAST — EPISODE 1', 4)
+      return 'Podcast studio scene built — swap in your episode title and artwork'
+    },
+  },
 ]
 
 function ensurePackAsset(def: PackAssetDef): string {
