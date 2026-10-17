@@ -12,6 +12,7 @@ export function activeEffectKeys(effects?: ClipEffect): string[] {
   if (typeof effects.invert === 'number' && effects.invert > 0) keys.push('invert')
   if (typeof effects.sepia === 'number' && effects.sepia > 0) keys.push('sepia')
   if (typeof effects.hueRotate === 'number' && effects.hueRotate > 0) keys.push('hue-rotate')
+  if (typeof effects.lightIntensity === 'number' && effects.lightIntensity > 0) keys.push('light')
   return keys
 }
 

@@ -199,6 +199,23 @@ try {
 }
 await shot('06-flip-in-midair.png')
 
+// 09 — Light layer (Gold Motion study): warm point light over the dark scene
+try {
+  await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    s.addAdjustmentLayer({
+      name: 'Light · Warm Point',
+      effects: { lightType: 'point', lightColor: '#ffd9a0', lightIntensity: 0.95, lightFalloff: 0.55, lightX: 0.42, lightY: 0.35 },
+    })
+    s.setPlayhead(3.2)
+  })
+  await page.waitForTimeout(500)
+  console.log('PASS warm light layer added over the scene')
+} catch (e) {
+  console.log('WARN light step:', String(e).slice(0, 160))
+}
+await shot('09-light-layer.png')
+
 // 07/08 — AMV shake family (Wizzy Tutorials study): preset list, then mid-shake
 try {
   await page.evaluate(() => window.__omniframe_store.getState().setLeftTab('pack'))

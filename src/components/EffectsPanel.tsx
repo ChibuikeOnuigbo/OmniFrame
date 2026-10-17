@@ -40,6 +40,12 @@ const DEFAULT_EFFECTS: ClipEffect = {
   invert: 0,
   sepia: 0,
   hueRotate: 0,
+  lightType: 'point',
+  lightColor: '#ffd9a0',
+  lightIntensity: 0,
+  lightFalloff: 0.45,
+  lightX: 0.5,
+  lightY: 0.4,
 }
 
 let lutPreviewImagePromise: Promise<HTMLImageElement> | null = null
@@ -657,6 +663,72 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           />
         </label>
       ))}
+      {isLayer ? (
+        <div className="space-y-1.5 rounded-md border border-ink-800 bg-ink-950/40 px-2 py-2" data-testid="light-controls">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-200/90">Light layer</span>
+            <div className="flex gap-1">
+              {(['point', 'spot'] as const).map((lt) => (
+                <button
+                  key={lt}
+                  type="button"
+                  data-testid={`light-type-${lt}`}
+                  aria-pressed={(effects.lightType ?? 'point') === lt}
+                  onClick={() => setClipEffect(clip.id, { lightType: lt })}
+                  className={`rounded border px-1.5 py-0.5 text-[9px] capitalize transition-colors ${
+                    (effects.lightType ?? 'point') === lt
+                      ? 'border-amber-400/60 bg-amber-400/15 text-amber-200'
+                      : 'border-ink-700 text-ink-400 hover:text-white'
+                  }`}
+                >
+                  {lt}
+                </button>
+              ))}
+            </div>
+          </div>
+          <label className="flex items-center justify-between gap-2 text-[10px] text-ink-400">
+            <span>Light color</span>
+            <input
+              type="color"
+              data-testid="light-color"
+              value={effects.lightColor ?? '#ffd9a0'}
+              onChange={(event) => setClipEffect(clip.id, { lightColor: event.target.value })}
+              className="h-5 w-9 cursor-pointer rounded border border-ink-700 bg-transparent"
+            />
+          </label>
+          {(
+            [
+              { key: 'lightIntensity', label: 'Intensity', min: 0, max: 1.5, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              { key: 'lightFalloff', label: 'Falloff', min: 0.1, max: 1, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              { key: 'lightX', label: 'Position X', min: 0, max: 1, step: 0.02, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              { key: 'lightY', label: 'Position Y', min: 0, max: 1, step: 0.02, fmt: (v: number) => `${Math.round(v * 100)}%` },
+            ] as const
+          ).map((c) => (
+            <label key={c.key} className="block">
+              <span className="mb-0.5 flex items-center justify-between gap-2 text-[10px] text-ink-400">
+                <span>{c.label}</span>
+                <span className="font-mono text-[9px] text-ink-500">{c.fmt((effects[c.key] as number) ?? 0)}</span>
+              </span>
+              <input
+                type="range"
+                data-testid={`light-slider-${c.key}`}
+                aria-label={`Light ${c.label}`}
+                min={c.min}
+                max={c.max}
+                step={c.step}
+                value={(effects[c.key] as number) ?? 0}
+                onChange={(event) => setClipEffect(clip.id, { [c.key]: parseFloat(event.target.value) })}
+                className="of-range w-full"
+              />
+            </label>
+          ))}
+          <p className="text-[9px] leading-snug text-ink-500">Screen-blended radial light over everything beneath this layer.</p>
+        </div>
+      ) : (
+        <p className="rounded-md border border-dashed border-ink-800 px-2 py-1.5 text-[9px] leading-snug text-ink-500" data-testid="light-layer-hint">
+          Light lives on adjustment layers — add one with the Light Layer preset, then tune color, intensity and falloff here.
+        </p>
+      )}
       {labels.length > 0 && (
         <div className="rounded-md border border-ink-800 bg-ink-950/40 px-2 py-1.5" data-testid="clip-effect-summary">
           <span className="block text-[9px] font-semibold uppercase tracking-wider text-ink-600">Active filters</span>

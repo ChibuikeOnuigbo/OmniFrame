@@ -197,6 +197,17 @@ const SCENE_RECIPES: SceneRecipe[] = [
     },
   },
   {
+    id: 'light-layer-warm', label: 'Light Layer (Warm)', desc: 'Warm point-light adjustment layer over the scene (Gold Motion-style light)', group: 'Looks & Teaching', needsClip: false,
+    run: async () => {
+      const s = useEditor.getState()
+      s.addAdjustmentLayer({
+        name: 'Light · Warm Point',
+        effects: { lightType: 'point', lightColor: '#ffd9a0', lightIntensity: 0.8, lightFalloff: 0.5, lightX: 0.5, lightY: 0.35 },
+      })
+      return 'Warm light layer added — tune color, intensity, falloff in Color & Adjustments'
+    },
+  },
+  {
     id: 'on-air', label: 'On-Air Backdrop', desc: 'Post-card backdrop + ON AIR title over the selected clip', group: 'Intros & Titles', needsClip: true,
     run: async () => {
       const s = useEditor.getState()

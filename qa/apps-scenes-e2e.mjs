@@ -234,6 +234,13 @@ try {
     return sx.some((k) => Math.abs(k.value - 1.15) < 0.02 && k.interpolation === 'back')
   })
   console.log('PASS motion zoom-punch writes a 115% beat punch')
+  // Light layer (Gold Motion study): one-click warm point light adjustment.
+  await page.getByTestId('pack-recipe-light-layer-warm').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    return s.clips.some((c) => c.kind === 'adjustment' && Math.abs((c.effects?.lightIntensity ?? 0) - 0.8) < 0.01)
+  })
+  console.log('PASS light-layer recipe adds a warm point-light adjustment layer')
 
   await page.getByTestId('pack-recipe-on-air').click()
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'ON AIR'))

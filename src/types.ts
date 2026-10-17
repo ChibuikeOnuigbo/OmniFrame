@@ -159,6 +159,14 @@ export interface ClipEffect {
   invert?: number // 0..1 (default 0)
   sepia?: number // 0..1 (default 0)
   hueRotate?: number // 0..360 deg (default 0)
+  // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
+  // Honoured on adjustment layers (lights everything beneath) and in audition previews.
+  lightType?: 'point' | 'spot' // default 'point' (spot = elliptical falloff cone)
+  lightColor?: string // default '#ffd9a0'
+  lightIntensity?: number // 0..1.5 (default 0 = off)
+  lightFalloff?: number // radius as a fraction of the frame's long edge, 0.1..1 (default 0.45)
+  lightX?: number // 0..1 horizontal center (default 0.5)
+  lightY?: number // 0..1 vertical center (default 0.4)
 }
 
 /** One LUT inside an adjustment layer (or a clip's own grade). */

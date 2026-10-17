@@ -207,7 +207,7 @@ Feature inventory from the narration, mapped to OmniFrame:
 | DFR (detect & correct dead/frozen frames) | Not present — classical frame-difference detection is feasible later |
 | Audio Converter (MP3↔WAV/M4A/AAC) | Partial: audio export exists; no general converter panel |
 | New shapes + Edit Shape | Covered: drawing shapes with parameters |
-| **Light elements** — Objects/Elements → Light: Point/Spot light styles, Light Color, **Intensity**, **Falloff** as timeline light layers | Not present as a light layer — good next candidate (gradient light overlay fits the effects/overlay stack) |
+| **Light elements** — Objects/Elements → Light: Point/Spot light styles, Light Color, **Intensity**, **Falloff** as timeline light layers | **Implemented in the follow-up pass** — `lightType`/`lightColor`/`lightIntensity`/`lightFalloff`/`lightX`/`lightY` on `ClipEffect`, screen-composited radial light in the adjustment-layer + audition render paths, Light controls in Color & Adjustments (adjustment layers), `Light Layer` quick preset, and a **Light Layer (Warm)** scene recipe. QA: apps-scenes + adjustments-lut; screenshot `evidence/improvements/09-light-layer.png` |
 | **3-axis rotation** — Rotation X/Y/Z (Y = horizontal 3D flip, X = vertical flip) | **Gap found and fixed this pass** (below) |
 | Expanded effects categories with per-effect detail | Covered: effects panel with adjustable parameters |
 | Project setup: canvas ratio, up to 2K, up to 99 fps, preview quality | Covered: sequence settings, export FPS/resolution, preview quality modes |
