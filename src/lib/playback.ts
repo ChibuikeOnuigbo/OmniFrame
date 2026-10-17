@@ -16,7 +16,14 @@ import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
 import { clamp } from './time'
 import { renderAllPaintLayers } from './drawingEngine'
-import { evaluateClipAnimation } from './animation/CurveEngine'
+import { evaluateClipAnimation, rotationXYMatrix } from './animation/CurveEngine'
+
+/** Applies orthographic Rotation X/Y (3-axis flip) to the current transform. */
+function applyRotationXY(ctx: CanvasRenderingContext2D, rotationX?: number, rotationY?: number): void {
+  if (!rotationX && !rotationY) return
+  const m = rotationXYMatrix(rotationX || 0, rotationY || 0)
+  ctx.transform(m.a, m.b, m.c, m.d, 0, 0)
+}
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
 import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
@@ -1174,6 +1181,7 @@ export class PreviewEngine {
     const cy = this.height / 2 + clip.transform.y * (this.height / PH)
     ctx.translate(cx, cy)
     ctx.rotate((clip.transform.rotation * Math.PI) / 180)
+    applyRotationXY(ctx, clip.transform.rotationX, clip.transform.rotationY)
     ctx.scale(clip.transform.scale, clip.transform.scale)
 
     const t = clip.textStyle
@@ -1370,6 +1378,7 @@ export class PreviewEngine {
     const cy = this.height / 2 + evalT.y * (this.height / PH)
     ctx.translate(cx, cy)
     ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    applyRotationXY(ctx, evalT.rotationX, evalT.rotationY)
     ctx.scale(evalT.scaleX, evalT.scaleY)
 
     const st = useEditor.getState()
@@ -1566,6 +1575,7 @@ export class PreviewEngine {
     const cy = this.height / 2 + evalT.y * (this.height / PH)
     ctx.translate(cx, cy)
     ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    applyRotationXY(ctx, evalT.rotationX, evalT.rotationY)
     ctx.scale(evalT.scaleX, evalT.scaleY)
 
     const innerTime = time - clip.start + clip.inPoint

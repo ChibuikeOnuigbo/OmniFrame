@@ -182,6 +182,55 @@ No other playable YouTube links were present in the fetched docs pages;
 where sites reference video showcases without direct links in the docs
 text, nothing could be followed, and nothing was inferred from them.
 
+## Follow-up scan — "Gold Motion Is Literally Insane! Full Course" (YouTube)
+
+`youtube.com/watch?v=uTnlenQj964`, **Vault Tube**, uploaded 2026-10-12,
+5:30, 36,273 views, 1,045 likes, Science & Technology. Supplied by the user
+on 2026-10-17. Unlike the Krita timelapse above, this video is fully
+narrated, so its **caption transcript was read in full**; no video frames
+were viewed and no frame-level claim is made. The narrator walks through
+**Gold Motion**, a gold-reskinned Alight Motion-style mobile editor, and
+himself asks whether it is "actually useful or just a copy of Alight
+Motion", concluding that of its marketed "AI" tools only **Upscale** and
+**DFR** look like genuine AI features, with a slight performance
+deficiency noted. Description links route to a Telegram channel
+(software + "FREE XML PACK"); nothing was downloaded from it.
+
+Feature inventory from the narration, mapped to OmniFrame:
+
+| Gold Motion feature (as narrated) | OmniFrame status |
+| --- | --- |
+| Upscale Quality (photo 2X/4X enhance) | Not present; no AI-labelled features by product rule — not adopted |
+| Project Doctor (project/device compatibility scan) | Partial: export capability checks + subset loss warnings exist; no single diagnostics view — future candidate |
+| Reverse (selected video) | Preview playback clamps to `Math.abs(speed)` (negative `playbackRate` unreliable); a true reverse render is not offered — documented limit |
+| Twister (slow motion) | Covered differently: clip speed + pitch/tempo tools and speed in the curve engine |
+| DFR (detect & correct dead/frozen frames) | Not present — classical frame-difference detection is feasible later |
+| Audio Converter (MP3↔WAV/M4A/AAC) | Partial: audio export exists; no general converter panel |
+| New shapes + Edit Shape | Covered: drawing shapes with parameters |
+| **Light elements** — Objects/Elements → Light: Point/Spot light styles, Light Color, **Intensity**, **Falloff** as timeline light layers | Not present as a light layer — good next candidate (gradient light overlay fits the effects/overlay stack) |
+| **3-axis rotation** — Rotation X/Y/Z (Y = horizontal 3D flip, X = vertical flip) | **Gap found and fixed this pass** (below) |
+| Expanded effects categories with per-effect detail | Covered: effects panel with adjustable parameters |
+| Project setup: canvas ratio, up to 2K, up to 99 fps, preview quality | Covered: sequence settings, export FPS/resolution, preview quality modes |
+
+### Implemented from this scan — Rotation X/Y now actually renders
+OmniFrame already had Rotation X (Tilt) / Rotation Y (Pan) inspector
+sliders, keyframe diamonds, and `rotation_x`/`rotation_y` curves, but the
+preview compositor only ever applied `rotationZ` — the X/Y values were
+sampled and then silently dropped, and `evaluateClipAnimation` also
+discarded the static inspector values. Fixed:
+- `rotationXYMatrix()` in `CurveEngine.ts`: orthographic Rx·Ry projection
+  (cos foreshortening + combined-angle shear; 90° edge-on, 180° mirror
+  flip). Canvas 2D has no true perspective; this is the standard honest
+  orthographic model, not a fake-3D claim.
+- `evaluateClipAnimation` now falls back to `clip.transform.rotationX/Y`
+  (no-animation branch and per-curve fallbacks).
+- `applyRotationXY()` applied in all three clip render paths of the
+  preview compositor (`playback.ts`); video export records the preview
+  canvas, so exports inherit the fix.
+QA: `qa/graph-capcut-e2e.mjs` §4c asserts the matrix math (cos60 = 0.5,
+180° = −1, X-90° edge-on), the static-value fallbacks, and that setting
+Rotation Y = 70° visibly narrows the clip's span in the preview canvas.
+
 ## Gap table — what to add, honestly prioritized
 
 | # | Idea (source) | OmniFrame status | Decision |
@@ -204,3 +253,8 @@ text, nothing could be followed, and nothing was inferred from them.
 - `src/lib/animation/CurveEngine.ts` (`easingIntensity`, evaluation),
   `src/components/GraphEditor.tsx` (Intensity slider)
 - QA: `qa/onion-skin-cel-animation-e2e.mjs`, `qa/graph-capcut-e2e.mjs` (§4b)
+- Follow-up (Gold Motion scan): `src/lib/animation/CurveEngine.ts`
+  (`rotationXYMatrix`, Rotation X/Y fallbacks),
+  `src/lib/playback.ts` (`applyRotationXY` in three clip render paths),
+  `qa/graph-capcut-e2e.mjs` §4c + §7 (matrix math, evaluator fallbacks,
+  screenshot-based preview pixel proof: span 385 → 131 at Rotation Y 70°)

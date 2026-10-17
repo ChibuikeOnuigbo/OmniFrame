@@ -498,6 +498,27 @@ export function createDefaultClipAnimation(
 /**
  * Evaluate all clip animation channels at a given timeline time
  */
+/**
+ * Orthographic 3-axis rotation matrix for canvas 2D (Gold Motion / Alight-style
+ * Rotation X/Y flip): returns the affine {a,b,c,d} for ctx.transform(a,b,c,d,0,0).
+ * rotationY foreshortens horizontally (cos), rotationX foreshortens vertically,
+ * and combined angles add the correct diagonal shear (Rx·Ry orthographic
+ * projection). 90° = edge-on, 180° = mirrored flip. Canvas 2D has no true
+ * perspective, so this is the standard orthographic model, not a fake 3D claim.
+ */
+export function rotationXYMatrix(
+  rotationXDeg: number,
+  rotationYDeg: number,
+): { a: number; b: number; c: number; d: number } {
+  const rx = ((rotationXDeg || 0) * Math.PI) / 180
+  const ry = ((rotationYDeg || 0) * Math.PI) / 180
+  const sx = Math.sin(rx)
+  const cx = Math.cos(rx)
+  const sy = Math.sin(ry)
+  const cy = Math.cos(ry)
+  return { a: cy, b: sx * sy, c: 0, d: cx }
+}
+
 export function evaluateClipAnimation(clip: Clip, timelineTime: number): EvaluatedClipTransform {
   const base = clip.transform
   const anim = clip.animation
@@ -507,8 +528,8 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
       x: base.x,
       y: base.y,
       z: 0,
-      rotationX: 0,
-      rotationY: 0,
+      rotationX: base.rotationX ?? 0,
+      rotationY: base.rotationY ?? 0,
       rotationZ: base.rotation,
       scaleX: base.scale,
       scaleY: base.scale,
@@ -531,8 +552,8 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
     x: getVal('position_x', base.x),
     y: getVal('position_y', base.y),
     z: getVal('position_z', 0),
-    rotationX: getVal('rotation_x', 0),
-    rotationY: getVal('rotation_y', 0),
+    rotationX: getVal('rotation_x', base.rotationX ?? 0),
+    rotationY: getVal('rotation_y', base.rotationY ?? 0),
     rotationZ: getVal('rotation_z', base.rotation),
     scaleX: getVal('scale_x', base.scale),
     scaleY: getVal('scale_y', base.scale),
