@@ -95,6 +95,7 @@ export type LeftTab =
   | 'threed'
   | 'rigging'
   | 'pack'
+  | 'storyboard'
 
 export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
   {
@@ -487,6 +488,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
 
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
+  setClipNotes: (id: string, notes: string) => void
   addTextTitleClip: (text?: string, duration?: number) => void
 
   // ---- adjustment layers & LUTs ----
@@ -1598,6 +1600,12 @@ export const useEditor = create<EditorState>((set, get) => {
         clips: s.clips.map((c) =>
           c.id === id ? { ...c, effects: { ...c.effects, ...effect } } : c,
         ),
+      }))
+    },
+
+    setClipNotes: (id: string, notes: string) => {
+      set((s) => ({
+        clips: s.clips.map((c) => (c.id === id ? { ...c, notes } : c)),
       }))
     },
 

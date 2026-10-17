@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AppWindow,
+  Clapperboard,
   LibraryBig,
   Palette,
   Scan,
@@ -34,6 +35,7 @@ import { Tooltip } from './Tooltip'
 import { MediaPanel } from './MediaPanel'
 import { OmniFramePanel } from './OmniFramePanel'
 import { DesktopPackPanel } from './DesktopPackPanel'
+import { StoryboardPanel } from './StoryboardPanel'
 const VoiceIsolationPanel = lazy(() => import('./VoiceIsolationPanel').then((m) => ({ default: m.VoiceIsolationPanel })))
 const DrawingPanel = lazy(() => import('./DrawingPanel').then((m) => ({ default: m.DrawingPanel })))
 import { TrackingPanel } from './TrackingPanel'
@@ -63,6 +65,7 @@ const TABS: TabDef[] = [
   { id: 'audio', label: 'Audio', icon: Volume2, category: 'video', desc: 'Voice isolation, music split, mic recording, EQ/reverb, pitch/tempo, four stems & vocal patching' },
   { id: 'relationships', label: 'Link & Groups', icon: Link2, category: 'video', desc: 'Parenting & Ripple Groups' },
   { id: 'pack', label: 'Desktop Pack', icon: AppWindow, category: 'video', desc: 'Screen-life pack: fake macOS/Windows desktops, Chrome & Safari bars, cursor assets, overlay frames, edit presets & quick 3D' },
+  { id: 'storyboard', label: 'Storyboard', icon: Clapperboard, category: 'video', desc: 'Plan shots in order: thumbnails, duration, track and shot notes; plan the plan, not the clips' },
 
   // 2. 2D CREATIVE & PAINT (Photoshop / Krita / LumaCut Style)
   { id: 'drawing', label: 'Drawing & Paint', icon: Palette, category: '2d', desc: 'Raster/Vector Brushes, Smart Patch donor/target clone across frames with OmniFrame scope sync & Onion Skin' },
@@ -717,6 +720,7 @@ export function LeftDock() {
               {leftTab === 'threed' && <ThreePanel />}
               {leftTab === 'rigging' && <Rigging />}
               {leftTab === 'pack' && <DesktopPackPanel />}
+              {leftTab === 'storyboard' && <StoryboardPanel />}
               </Suspense>
             </div>
           </SectionsNavigator>
@@ -756,6 +760,7 @@ export function LeftDock() {
               {leftTab === 'threed' && <ThreePanel />}
               {leftTab === 'rigging' && <Rigging />}
               {leftTab === 'pack' && <DesktopPackPanel />}
+              {leftTab === 'storyboard' && <StoryboardPanel />}
               </Suspense>
             </div>
           </SectionsNavigator>

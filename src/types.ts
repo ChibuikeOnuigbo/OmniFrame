@@ -520,6 +520,8 @@ export interface Clip {
   kind: MediaKind
   volume: number // 0..1 (audio)
   hidden: boolean // clip-level visibility; distinct from track visibility
+  /** Storyboard shot note (plan-level annotation; never rendered into output). */
+  notes?: string
   transform: ClipTransform
   effects?: ClipEffect
   /** LUT stack: adjustment layers grade everything below them; regular

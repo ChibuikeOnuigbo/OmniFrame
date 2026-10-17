@@ -96,7 +96,10 @@ cache — consistent with OmniFrame's deterministic `evaluateCurve(time)`.
   **wrap-around mode** for seamless textures: genuine drawing-side gaps,
   documented below as future work.
 - **Storyboard docker**: thumbnail grid of scenes with per-shot fields —
-  the strongest "add later" candidate (see gap table).
+  **implemented** as the left-dock Storyboard tab ("plan the plan, not the
+  scenes"): one card per clip in timeline order with shot number, time
+  range, duration, track, a per-clip shot note (never exported) and
+  click-to-jump; compounds carry nested counts and sequence-open actions.
 
 ## Jitter docs (help.jitter.video + changelog)
 
