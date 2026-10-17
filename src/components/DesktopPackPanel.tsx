@@ -313,6 +313,52 @@ const SCENE_RECIPES: SceneRecipe[] = [
       return 'Drop Out keyframed at the clip end — tune it in the Graph Editor'
     },
   },
+  {
+    id: 'motion-flip-in', label: 'Flip In (3D)', desc: 'Flip in around the Y axis from −80° (3-axis rotation, ease-out)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      const base = t.rotationY ?? 0
+      s.setClipKeyframe(clip.id, 'rotation_y', 0, base - 80, 'ease-out')
+      s.setClipKeyframe(clip.id, 'rotation_y', 0.55, base, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.4, t.opacity, 'ease-out')
+      return 'Flip In (3D) keyframed on Rotation Y — tune it in the Graph Editor'
+    },
+  },
+  {
+    id: 'motion-tumble-in', label: 'Tumble In (3D)', desc: 'Tumble in around the X axis from +70° (3-axis rotation, ease-out)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      const base = t.rotationX ?? 0
+      s.setClipKeyframe(clip.id, 'rotation_x', 0, base + 70, 'ease-out')
+      s.setClipKeyframe(clip.id, 'rotation_x', 0.55, base, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.4, t.opacity, 'ease-out')
+      return 'Tumble In (3D) keyframed on Rotation X — tune it in the Graph Editor'
+    },
+  },
+  {
+    id: 'motion-swing-in', label: 'Swing In', desc: 'Pendulum swing −14° → +8° → −4° → rest over 0.72s (ease-out)', group: 'Motion Presets', needsClip: true,
+    run: async () => {
+      const s = useEditor.getState()
+      const clip = s.clips.find((c) => c.id === s.selectedClipId)
+      if (!clip) return 'Select a clip first'
+      const t = clip.transform
+      s.setClipKeyframe(clip.id, 'rotation_z', 0, t.rotation - 14, 'ease-out')
+      s.setClipKeyframe(clip.id, 'rotation_z', 0.28, t.rotation + 8, 'ease-out')
+      s.setClipKeyframe(clip.id, 'rotation_z', 0.52, t.rotation - 4, 'ease-out')
+      s.setClipKeyframe(clip.id, 'rotation_z', 0.72, t.rotation, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0, 0, 'ease-out')
+      s.setClipKeyframe(clip.id, 'opacity', 0.25, t.opacity, 'ease-out')
+      return 'Swing In keyframed — tune the pendulum in the Graph Editor'
+    },
+  },
 ]
 
 function ensurePackAsset(def: PackAssetDef): string {

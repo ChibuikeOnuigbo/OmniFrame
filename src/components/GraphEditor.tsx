@@ -9,6 +9,7 @@ import {
   Trash2,
   Sliders,
   Check,
+  Copy,
   X,
   RefreshCw,
   Layers,
@@ -26,6 +27,8 @@ import {
   addOrUpdateKeyframe,
   applyEasingPreset,
   removeKeyframe,
+  easingToCss,
+  keyframeSegmentToCss,
 } from '../lib/animation/CurveEngine'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 
@@ -84,6 +87,7 @@ export function GraphEditor() {
   const [viewValRange, setViewValRange] = useState<[number, number]>([-100, 100])
   const [selectedKeyframeId, setSelectedKeyframeId] = useState<string | null>(null)
   const [morePresetsOpen, setMorePresetsOpen] = useState(false)
+  const [cssCopied, setCssCopied] = useState(false)
   const [draggingTarget, setDraggingTarget] = useState<
     { type: 'key'; keyId: string; startPointer: { x: number; y: number }; startT: number; startV: number }
     | { type: 'inHandle' | 'outHandle'; keyId: string; startPointer: { x: number; y: number }; startDt: number; startDv: number }
@@ -855,6 +859,39 @@ export function GraphEditor() {
                     </span>
                   </div>
                 )}
+
+                {/* Copy easing as CSS (Jitter-style developer handoff) */}
+                <button
+                  type="button"
+                  data-testid="easing-copy-css-btn"
+                  title="Copy this segment's easing as a CSS timing function"
+                  onClick={async () => {
+                    if (!activeCurve) return
+                    const css =
+                      keyframeSegmentToCss(activeCurve, selectedKeyframe.id) ??
+                      easingToCss(selectedKeyframe.interpolation, selectedKeyframe.easingIntensity ?? 1)
+                    try {
+                      await navigator.clipboard.writeText(css)
+                    } catch {
+                      const ta = document.createElement('textarea')
+                      ta.value = css
+                      document.body.appendChild(ta)
+                      ta.select()
+                      document.execCommand('copy')
+                      ta.remove()
+                    }
+                    setCssCopied(true)
+                    window.setTimeout(() => setCssCopied(false), 1600)
+                  }}
+                  className={`flex items-center gap-1 shrink-0 rounded border px-1.5 h-7 text-[10px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                    cssCopied
+                      ? 'border-emerald-500/60 bg-emerald-500/15 text-emerald-300'
+                      : 'border-ink-700 bg-ink-800 text-ink-300 hover:border-ink-600 hover:text-white'
+                  }`}
+                >
+                  {cssCopied ? <Check size={12} /> : <Copy size={12} />}
+                  {cssCopied ? 'Copied' : 'CSS'}
+                </button>
 
                 {/* Extrapolation Mode Dropdown */}
                 <div className="flex items-center gap-1 shrink-0 ml-auto">

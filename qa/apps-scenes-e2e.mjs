@@ -183,6 +183,31 @@ try {
     return !!last && last.value === 0 && last.interpolation === 'ease-in'
   })
   console.log('PASS motion drop-out writes exit keyframes')
+  // 3D trick presets (Gold Motion study): flip/tumble write Rotation Y/X keys.
+  await page.getByTestId('pack-recipe-motion-flip-in').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const ry = clip?.animation?.curves?.rotation_y?.keyframes ?? []
+    return ry.length >= 2 && ry[0].value <= -79
+  })
+  console.log('PASS motion flip-in writes Rotation Y keyframes (3D flip)')
+  await page.getByTestId('pack-recipe-motion-tumble-in').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const rx = clip?.animation?.curves?.rotation_x?.keyframes ?? []
+    return rx.length >= 2 && rx[0].value >= 69
+  })
+  console.log('PASS motion tumble-in writes Rotation X keyframes (3D tumble)')
+  await page.getByTestId('pack-recipe-motion-swing-in').click()
+  await page.waitForFunction(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.id === s.selectedClipId)
+    const rz = clip?.animation?.curves?.rotation_z?.keyframes ?? []
+    return rz.length >= 4
+  })
+  console.log('PASS motion swing-in writes pendulum keyframes')
 
   await page.getByTestId('pack-recipe-on-air').click()
   await page.waitForFunction(() => window.__omniframe_store.getState().clips.some((c) => c.kind === 'text' && c.textStyle?.text === 'ON AIR'))

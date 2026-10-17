@@ -178,5 +178,26 @@ try {
 }
 await shot('05-motion-presets.png')
 
+// 06 — NEW: apply Flip In (3D) to the player and catch it mid-flip
+try {
+  const flip = page.locator('[data-testid="pack-recipe-motion-flip-in"]')
+  if ((await flip.count()) === 1) {
+    await flip.scrollIntoViewIfNeeded()
+    await flip.click()
+    await page.waitForTimeout(400)
+    await page.evaluate(() => {
+      const s = window.__omniframe_store.getState()
+      s.setLeftTab('media')
+      s.setPlayhead(0.28)
+    })
+    console.log('PASS Flip In (3D) applied; playhead mid-flip')
+  } else {
+    console.log('WARN flip-in recipe not found for screenshot')
+  }
+} catch (e) {
+  console.log('WARN flip step:', String(e).slice(0, 160))
+}
+await shot('06-flip-in-midair.png')
+
 await browser.close()
 console.log('SCREENS DONE ->', OUT)

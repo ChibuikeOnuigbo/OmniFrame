@@ -519,6 +519,60 @@ export function rotationXYMatrix(
   return { a: cy, b: sx * sy, c: 0, d: cx }
 }
 
+/** Format evaluated progress samples (0..1 time) as a CSS linear() timing function. */
+function progressToCssLinear(samples: number[]): string {
+  const stops = samples.map((p, i) => {
+    const pct = Math.round((i / (samples.length - 1)) * 1000) / 10
+    const val = Math.round(p * 1000) / 10
+    return `${val}% ${pct}%`
+  })
+  return `linear(${stops.join(', ')})`
+}
+
+/**
+ * CSS timing-function for an easing preset (Jitter-style "Copy as CSS").
+ * Standard presets are sampled from the exact evaluated curve (including
+ * intensity), so back/bounce/elastic overshoot survives as linear() stops;
+ * only the trivially exact cases use keyword forms.
+ */
+export function easingToCss(interpolation: InterpolationType, intensity = 1): string {
+  if (interpolation === 'constant') return 'steps(1, end)'
+  const inten = Math.min(1.5, Math.max(0, intensity))
+  if (interpolation === 'linear' && inten === 1) return 'linear'
+  const N = 20
+  const samples: number[] = []
+  for (let i = 0; i <= N; i++) {
+    const u = i / N
+    const raw = evaluateEasingProgress(u, interpolation)
+    samples.push(u + (raw - u) * inten)
+  }
+  return progressToCssLinear(samples)
+}
+
+/**
+ * CSS timing-function for one concrete keyframe segment, sampled from the
+ * real evaluated curve — bezier handles and easing intensity included.
+ * Returns null when the keyframe has no following segment to describe.
+ */
+export function keyframeSegmentToCss(curve: PropertyCurve, keyframeId: string): string | null {
+  const keys = [...curve.keyframes].sort((a, b) => a.time - b.time)
+  const idx = keys.findIndex((k) => k.id === keyframeId)
+  if (idx < 0 || idx >= keys.length - 1) return null
+  const k0 = keys[idx]
+  const k1 = keys[idx + 1]
+  if (k0.interpolation === 'constant') return 'steps(1, end)'
+  const dt = k1.time - k0.time
+  const dv = k1.value - k0.value
+  if (dt <= 1e-6 || Math.abs(dv) <= 1e-9) return null
+  const N = 20
+  const samples: number[] = []
+  for (let i = 0; i <= N; i++) {
+    const t = k0.time + (i / N) * dt
+    samples.push((evaluateCurve(curve, t) - k0.value) / dv)
+  }
+  return progressToCssLinear(samples)
+}
+
 export function evaluateClipAnimation(clip: Clip, timelineTime: number): EvaluatedClipTransform {
   const base = clip.transform
   const anim = clip.animation

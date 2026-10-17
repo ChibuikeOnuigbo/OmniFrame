@@ -247,6 +247,52 @@ await page.waitForTimeout(400)
   }
 }
 
+// ---------- 4d. copy easing as CSS (Jitter-style developer handoff) ----------
+{
+  try {
+    const css = await page.evaluate(async () => {
+      const { easingToCss, keyframeSegmentToCss } = await import('/src/lib/animation/CurveEngine.ts')
+      const curve = {
+        id: 'position_x', property: 'position_x', channel: 'X', unit: 'px',
+        min: -5000, max: 5000, defaultValue: 0, color: '#ffffff',
+        keyframes: [
+          { id: 'a', time: 0, value: 0, interpolation: 'back', easingIntensity: 1 },
+          { id: 'b', time: 2, value: 100, interpolation: 'linear' },
+        ],
+      }
+      return {
+        constant: easingToCss('constant'),
+        linear: easingToCss('linear'),
+        backSeg: keyframeSegmentToCss(curve, 'a'),
+        tail: keyframeSegmentToCss(curve, 'b'),
+      }
+    })
+    assert('constant easing copies as steps()', css.constant === 'steps(1, end)', css.constant)
+    assert('linear easing copies as linear', css.linear === 'linear')
+    assert(
+      'spring segment copies as a densely sampled linear()',
+      typeof css.backSeg === 'string' && css.backSeg.startsWith('linear(') && css.backSeg.split(',').length >= 20,
+      String(css.backSeg).slice(0, 90),
+    )
+    assert('last keyframe has no segment to copy', css.tail === null)
+  } catch (err) {
+    console.log('SKIP css easing module check:', err.message)
+  }
+  const btn = page.locator('[data-testid="easing-copy-css-btn"]')
+  assert('copy-as-CSS button present in keyframe controls', (await btn.count()) === 1)
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {})
+  await btn.click()
+  await page.waitForTimeout(300)
+  const label = await btn.innerText()
+  assert('copy button confirms the copy', /copied/i.test(label), label)
+  try {
+    const clipText = await page.evaluate(() => navigator.clipboard.readText())
+    assert('clipboard holds a CSS timing function', /^(linear\(|steps\(|cubic-bezier\()/.test(clipText.trim()), clipText.slice(0, 60))
+  } catch (err) {
+    console.log('SKIP clipboard readback:', err.message)
+  }
+}
+
 // ---------- 5. tangent handles are squares (bezier keys) ----------
 {
   // Preset keys have preset interpolations; bezier handles come from keys

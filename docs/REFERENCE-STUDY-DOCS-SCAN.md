@@ -238,7 +238,7 @@ Rotation Y = 70° visibly narrows the clip's span in the preview canvas.
 | 1 | Onion-skin **tint strength** (Krita) | **Implemented this pass** | Shipped + QA |
 | 2 | Easing **intensity** control (Jitter) | **Implemented this pass** | Shipped + QA |
 | 3 | **Storyboard** surface: scene cards + notes before timeline work (Krita Storyboard docker; Hyperframes L6) | Brief Builder exists; no visual storyboard | Next candidate; medium UI build |
-| 4 | Copy easing as **CSS** (Jitter) | Graph Editor presets exist | Small follow-up; needs cubic-bezier mapping per preset |
+| 4 | Copy easing as **CSS** (Jitter) | **Implemented in the follow-up pass** | `easingToCss`/`keyframeSegmentToCss` sample the exact evaluated curve (bezier handles + intensity included) into CSS `linear()` stops; **CSS** button in the Graph Editor keyframe controls (`easing-copy-css-btn`), QA graph-capcut §4d incl. clipboard readback |
 | 5 | **Blur** as animatable channel (Jitter presets) | Effects exist; curves are transform/opacity only | Needs effect-channel in curve engine; larger |
 | 6 | **Lottie** export (Jitter) | No Lottie exporter | Large; defer, note in catalog |
 | 7 | Drawing **assistants** (vanishing point/perspective) + **wrap-around** (Krita) | Not present | Drawing-side roadmap items; defer |
