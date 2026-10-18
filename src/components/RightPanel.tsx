@@ -521,6 +521,8 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const defaultModel = useEditor((s) => s.audioIsolationModel)
   const playhead = useEditor((s) => s.playhead)
   const setClipKeyframe = useEditor((s) => s.setClipKeyframe)
+  const pivotEditEnabled = useEditor((s) => s.pivotEditEnabled)
+  const setPivotEditEnabled = useEditor((s) => s.setPivotEditEnabled)
   const removeClipKeyframe = useEditor((s) => s.removeClipKeyframe)
   const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
   const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
@@ -827,6 +829,52 @@ function ClipInspector({ clip }: { clip: Clip }) {
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.rotation)}°</span>
           {renderKeyframeControl('rotation_z', t.rotation)}
         </Field>
+        <Field label="Pivot X (Anchor)">
+          <Slider label="Pivot X" min={0} max={1} step={0.01} value={t.pivotX ?? 0.5} onChange={(v) => setClipTransform(clip.id, { pivotX: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((t.pivotX ?? 0.5) * 100)}%</span>
+          {renderKeyframeControl('pivot_x', t.pivotX ?? 0.5)}
+        </Field>
+        <Field label="Pivot Y (Anchor)">
+          <Slider label="Pivot Y" min={0} max={1} step={0.01} value={t.pivotY ?? 0.5} onChange={(v) => setClipTransform(clip.id, { pivotY: v })} />
+          <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((t.pivotY ?? 0.5) * 100)}%</span>
+          {renderKeyframeControl('pivot_y', t.pivotY ?? 0.5)}
+        </Field>
+        <div className="space-y-1.5" data-testid="pivot-controls">
+          <div className="flex flex-wrap gap-1">
+            {[
+              { label: 'Centre', x: 0.5, y: 0.5 },
+              { label: 'Joint L', x: 0, y: 0.5 },
+              { label: 'Joint R', x: 1, y: 0.5 },
+              { label: 'Top', x: 0.5, y: 0 },
+              { label: 'Bottom', x: 0.5, y: 1 },
+            ].map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                data-testid={`pivot-preset-${preset.label.toLowerCase().replace(/\s+/g, '-')}`}
+                title={`Set pivot to ${preset.label} (${Math.round(preset.x * 100)}%, ${Math.round(preset.y * 100)}%)`}
+                onClick={() => setClipTransform(clip.id, { pivotX: preset.x, pivotY: preset.y })}
+                className="px-1.5 py-1 rounded bg-ink-800 hover:bg-brand text-ink-300 hover:text-white text-[10px] transition-colors"
+              >
+                {preset.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              data-testid="pivot-edit-toggle"
+              aria-pressed={pivotEditEnabled}
+              title="Show the draggable anchor on the preview: drag it onto a joint so rotation hinges there (Krita armature technique)"
+              onClick={() => setPivotEditEnabled(!pivotEditEnabled)}
+              className={`px-1.5 py-1 rounded text-[10px] transition-colors ${pivotEditEnabled ? 'bg-brand text-white' : 'bg-ink-800 hover:bg-brand text-ink-300 hover:text-white'}`}
+            >
+              {pivotEditEnabled ? 'Anchor: drag on preview' : 'Edit anchor on preview'}
+            </button>
+          </div>
+          <p className="text-[10px] leading-snug text-ink-500">
+            Rotation and scale hinge on this anchor. Drag it onto a joint, then keyframe Rotation.
+            Keyframe the pivot itself to move the hinge mid-animation; with no pivot keyframes the anchor stays put.
+          </p>
+        </div>
         {/* 3D Spatial Properties: Clean Accordion Sub-Group */}
         <AccordionGroup
           title="3D Spatial (Depth, Tilt, Pan)"

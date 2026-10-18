@@ -72,6 +72,8 @@ export interface EvaluatedClipTransform {
   scaleZ: number
   opacity: number
   speed: number
+  pivotX: number
+  pivotY: number
   width?: number
   height?: number
 }
@@ -489,6 +491,8 @@ export function createDefaultClipAnimation(
       scale_y: makeCurve('scale_y', 'scale', 'Y', 'Scale Y', '#a855f7', initial.scale, '%', 0.01, 10),
       scale_z: makeCurve('scale_z', 'scale', 'Z', 'Scale Z', '#ec4899', 1.0, '%', 0.01, 10),
       opacity: makeCurve('opacity', 'opacity', 'Scalar', 'Opacity', '#14b8a6', initial.opacity, '%', 0, 1),
+      pivot_x: makeCurve('pivot_x', 'pivot', 'X', 'Pivot X', '#f472b6', initial.pivotX ?? 0.5, '', -1, 2),
+      pivot_y: makeCurve('pivot_y', 'pivot', 'Y', 'Pivot Y', '#fb923c', initial.pivotY ?? 0.5, '', -1, 2),
       playback_speed: makeCurve('playback_speed', 'speed', 'Scalar', 'Playback Speed', '#eab308', 1.0, 'x', 0.1, 10),
       wheel_rotation: makeCurve('wheel_rotation', 'wheel', 'Z', '3D Wheel Rotation', '#8b5cf6', 0, '°', -3600, 3600),
     },
@@ -590,6 +594,8 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
       scaleZ: 1,
       opacity: base.opacity,
       speed: 1.0,
+      pivotX: base.pivotX ?? 0.5,
+      pivotY: base.pivotY ?? 0.5,
     }
   }
 
@@ -614,5 +620,7 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
     scaleZ: getVal('scale_z', 1.0),
     opacity: getVal('opacity', base.opacity),
     speed: getVal('playback_speed', 1.0),
+    pivotX: getVal('pivot_x', base.pivotX ?? 0.5),
+    pivotY: getVal('pivot_y', base.pivotY ?? 0.5),
   }
 }

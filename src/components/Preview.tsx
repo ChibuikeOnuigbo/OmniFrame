@@ -17,6 +17,8 @@ import {
   Check,
 } from 'lucide-react'
 import { PreviewEngine } from '../lib/playback'
+import { PW, PH } from '../lib/playback'
+import { evaluateClipAnimation } from '../lib/animation/CurveEngine'
 import { useEditor } from '../store'
 import { IconButton } from './ui'
 import { DrawingToolbar } from './DrawingToolbar'
@@ -57,6 +59,12 @@ export function Preview() {
   const setSourcePreviewAsset = useEditor((s) => s.setSourcePreviewAsset)
   const projectFps = useEditor((s) => s.projectFps)
   const leftTab = useEditor((s) => s.leftTab)
+  const pivotEditEnabled = useEditor((s) => s.pivotEditEnabled)
+  const selectedClipId = useEditor((s) => s.selectedClipId)
+  const allClips = useEditor((s) => s.clips)
+  const allTracks = useEditor((s) => s.tracks)
+  const playheadPos = useEditor((s) => s.playhead)
+  const pivotDragRef = useRef<{ pointerId: number; clipId: string } | null>(null)
   const leftOpen = useEditor((s) => s.leftOpen)
   const playhead = useEditor((s) => s.playhead)
   const visualPreview = useEditor((s) => s.visualPreview)
@@ -458,6 +466,73 @@ export function Preview() {
             }}
           />
           <DrawingCanvasOverlay width={canvasW} height={canvasH} />
+
+          {/* Pivot (anchor) handle — Krita armature technique: drag the hinge
+              onto a joint; rotation/scale turn about it. Canvas coords map
+              1:1 inside the stage. */}
+          {pivotEditEnabled && (() => {
+            const clip = allClips.find((c) => c.id === selectedClipId)
+            if (!clip || clip.kind === 'audio' || clip.kind === 'adjustment') return null
+            if (!allTracks.some((t) => t.id === clip.trackId)) return null
+            if (playheadPos < clip.start || playheadPos >= clip.start + clip.duration) return null
+            const asset = assets.find((a) => a.id === clip.assetId)
+            let dw = canvasW
+            let dh = canvasH
+            if (clip.kind !== 'compound' && asset) {
+              const vw = asset.width || PW
+              const vh = asset.height || PH
+              const cover = Math.max(canvasW / vw, canvasH / vh)
+              dw = vw * cover
+              dh = vh * cover
+            } else if (clip.kind !== 'compound' && !asset) {
+              return null
+            }
+            const evalT = evaluateClipAnimation(clip, playheadPos)
+            const cxC = canvasW / 2 + evalT.x * (canvasW / PW)
+            const cyC = canvasH / 2 + evalT.y * (canvasH / PH)
+            const hx = cxC + (evalT.pivotX - 0.5) * dw
+            const hy = cyC + (evalT.pivotY - 0.5) * dh
+            const toCanvas = (e: React.PointerEvent) => {
+              const rect = (e.currentTarget as HTMLElement).parentElement!.getBoundingClientRect()
+              return {
+                x: (e.clientX - rect.left) * (canvasW / rect.width),
+                y: (e.clientY - rect.top) * (canvasH / rect.height),
+              }
+            }
+            return (
+              <div
+                data-testid="pivot-anchor-handle"
+                role="slider"
+                aria-label={`Pivot anchor for ${clip.name}: drag to move the rotation hinge`}
+                aria-valuetext={`pivot ${(evalT.pivotX * 100).toFixed(0)} percent, ${(evalT.pivotY * 100).toFixed(0)} percent`}
+                title="Pivot anchor — drag onto a joint; rotation hinges here"
+                className="absolute z-30 grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none place-items-center rounded-full border-2 border-pink-400 bg-pink-500/25 shadow-[0_0_0_3px_rgba(0,0,0,0.45)] active:cursor-grabbing"
+                style={{ left: hx, top: hy }}
+                onPointerDown={(e) => {
+                  e.stopPropagation()
+                  pivotDragRef.current = { pointerId: e.pointerId, clipId: clip.id }
+                  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                }}
+                onPointerMove={(e) => {
+                  const drag = pivotDragRef.current
+                  if (!drag || drag.pointerId !== e.pointerId || drag.clipId !== clip.id) return
+                  const pt = toCanvas(e)
+                  useEditor.getState().setClipTransform(clip.id, {
+                    pivotX: Math.max(-1, Math.min(2, 0.5 + (pt.x - cxC) / dw)),
+                    pivotY: Math.max(-1, Math.min(2, 0.5 + (pt.y - cyC) / dh)),
+                  })
+                }}
+                onPointerUp={(e) => {
+                  if (pivotDragRef.current?.pointerId === e.pointerId) pivotDragRef.current = null
+                  try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId) } catch { /* already released */ }
+                }}
+                onPointerCancel={() => { pivotDragRef.current = null }}
+              >
+                <span aria-hidden="true" className="pointer-events-none block h-1.5 w-1.5 rounded-full bg-pink-300" />
+                <span aria-hidden="true" className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 rounded bg-black/70 px-1 text-[8px] font-semibold tracking-wider text-pink-200">PIVOT</span>
+              </div>
+            )
+          })()}
 
           {/* OmniFrame Mode Character Overlays on Preview */}
           {leftTab === 'omniframe' && leftOpen && (

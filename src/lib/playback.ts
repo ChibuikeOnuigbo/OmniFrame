@@ -1225,14 +1225,11 @@ export class PreviewEngine {
     }
     ctx.save()
     applyClipFilter(ctx, this.effectsForRender(clip, time))
-    ctx.globalAlpha *= Math.max(0, Math.min(1, clip.transform.opacity))
+    const evalT = evaluateClipAnimation(clip, time)
+    ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity ?? clip.transform.opacity))
 
-    const cx = this.width / 2 + clip.transform.x * (this.width / PW)
-    const cy = this.height / 2 + clip.transform.y * (this.height / PH)
-    ctx.translate(cx, cy)
-    ctx.rotate((clip.transform.rotation * Math.PI) / 180)
-    applyRotationXY(ctx, clip.transform.rotationX, clip.transform.rotationY)
-    ctx.scale(clip.transform.scale, clip.transform.scale)
+    const cx = this.width / 2 + evalT.x * (this.width / PW)
+    const cy = this.height / 2 + evalT.y * (this.height / PH)
 
     const t = clip.textStyle
     const scaleFactor = this.width / PW
@@ -1259,6 +1256,16 @@ export class PreviewEngine {
     const totalH = lines.length * lineHeight
     const boxW = maxLineW + padX * 2
     const boxH = totalH + padY * 2
+
+    // Pivot about the text box (same anchor semantics as media clips).
+    ctx.translate(cx, cy)
+    const pvx = (evalT.pivotX - 0.5) * boxW
+    const pvy = (evalT.pivotY - 0.5) * boxH
+    ctx.translate(pvx, pvy)
+    ctx.rotate((evalT.rotationZ * Math.PI) / 180)
+    applyRotationXY(ctx, evalT.rotationX, evalT.rotationY)
+    ctx.scale(evalT.scaleX, evalT.scaleY)
+    ctx.translate(-pvx, -pvy)
 
     // Background pill if configured
     if (t.backgroundColor && t.backgroundColor !== 'transparent') {
@@ -1430,9 +1437,15 @@ export class PreviewEngine {
     const cx = this.width / 2 + evalT.x * (this.width / PW)
     const cy = this.height / 2 + evalT.y * (this.height / PH)
     ctx.translate(cx, cy)
+    // Pivot (anchor): rotation/scale hinge on this point of the drawn rect
+    // (Krita armature technique). pivot == 0.5/0.5 reproduces centre rotation.
+    const pvx = drawX + evalT.pivotX * dw
+    const pvy = drawY + evalT.pivotY * dh
+    ctx.translate(pvx, pvy)
     ctx.rotate((evalT.rotationZ * Math.PI) / 180)
     applyRotationXY(ctx, evalT.rotationX, evalT.rotationY)
     ctx.scale(evalT.scaleX, evalT.scaleY)
+    ctx.translate(-pvx, -pvy)
 
     const st = useEditor.getState()
     const resolvedPsdPart = artwork ? this.resolveLayeredArtworkRigPart(asset, st) : undefined
@@ -1627,9 +1640,22 @@ export class PreviewEngine {
     const cx = this.width / 2 + evalT.x * (this.width / PW)
     const cy = this.height / 2 + evalT.y * (this.height / PH)
     ctx.translate(cx, cy)
+    // Compound pivot is a fraction of the whole frame: rotating the compound
+    // about a linkage point carries every nested clip with it (FK chain).
+    const pvx = (evalT.pivotX - 0.5) * this.width
+    const pvy = (evalT.pivotY - 0.5) * this.height
+    ctx.translate(pvx, pvy)
     ctx.rotate((evalT.rotationZ * Math.PI) / 180)
     applyRotationXY(ctx, evalT.rotationX, evalT.rotationY)
     ctx.scale(evalT.scaleX, evalT.scaleY)
+    ctx.translate(-pvx, -pvy)
+    // Children are placed with the same convention as the main timeline:
+    // drawClip/drawTextClip translate by (frame/2 + position). Without this
+    // shift the compound's centre-origin frame double-translates every
+    // child by (+width/2, +height/2) — compounded media used to render in
+    // the bottom-right corner (drawing children were unaffected because
+    // they paint in absolute frame coordinates).
+    ctx.translate(-this.width / 2, -this.height / 2)
 
     const innerTime = time - clip.start + clip.inPoint
 

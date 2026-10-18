@@ -413,6 +413,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   drawingOpacity: number
   drawingScope: TemporalScope
   drawingEnabled: boolean
+  pivotEditEnabled: boolean
   drawingFillTolerance: number
   drawingPreserveLuminance: boolean
   /** Number of sides for the Krita Polygon Tool, 3..12. */
@@ -609,6 +610,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   setDrawingScope: (scope: TemporalScope) => void
   setDrawingEnabled: (enabled: boolean) => void
   toggleDrawingEnabled: () => void
+  setPivotEditEnabled: (enabled: boolean) => void
   setDrawingFillTolerance: (tolerance: number) => void
   setDrawingPolygonSides: (sides: number) => void
   setDrawingShapeFilled: (filled: boolean) => void
@@ -1419,6 +1421,7 @@ export const useEditor = create<EditorState>((set, get) => {
     drawingOpacity: 1,
     drawingScope: { type: 'global' },
     drawingEnabled: false,
+    pivotEditEnabled: false,
     drawingFillTolerance: 32,
     drawingPreserveLuminance: false,
     drawingPolygonSides: 5,
@@ -3304,6 +3307,7 @@ export const useEditor = create<EditorState>((set, get) => {
       return { clips: newClips.length, tracks: trackIdByKey.size, strokes: plan.convertedStrokeIds.length }
     },
     toggleDrawingEnabled: () => set((s) => ({ drawingEnabled: !s.drawingEnabled })),
+    setPivotEditEnabled: (enabled) => set({ pivotEditEnabled: enabled }),
     createPaintLayer: (name) => {
       const id = uid('layer')
       const newLayer: PaintLayer = {

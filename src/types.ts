@@ -142,6 +142,12 @@ export interface ClipTransform {
   scale: number
   rotation: number // degrees
   opacity: number // 0..1
+  /** Anchor (pivot) the clip rotates/scales about, as a fraction of its
+   * drawn rect (0..1; 0.5/0.5 = centre). Krita armature technique: park it
+   * on a joint/linkage and rotations hinge there. May be keyframed via the
+   * pivot_x/pivot_y curves; outside 0..1 is allowed for off-clip anchors. */
+  pivotX?: number
+  pivotY?: number
   z?: number
   rotationX?: number
   rotationY?: number
