@@ -198,6 +198,12 @@ The checked panel items below mean **the panel and its boundary were inventoried
 - [x] **Learning library** — pack Likes + placement taste reorder "For you" on-device; resettable.
 - [x] **Nova pixel effects + Alight layout** — Solarize/Vibrance/Posterize/Grain/Pixelate in playback + Effects panel; Alight Motion workspace preset. `node qa/models-training-e2e.mjs` **ALL PASS** (mocked provider); evidence 21.
 
+### Watermark Studio + Retro Text (tutorial studies)
+
+- [x] **Watermark Studio** — CapCut's six watermark levels (NDK Edit `r6GsP90vBLk`) as editable-clip builders: glow text, character drift, pixel-stretch/chromatic slices, wave-warp character + voice tag, logo pop, lighten combo; saved presets stamp any project at a corner. Study: `docs/RETRO-WATERMARK-STUDY.md`.
+- [x] **Retro Text Studio** — Alight Motion retro text (Noelle `UxfwndLF8cY`): Effects method (seeded Text Randomizer, deterministic settle) and Traditional method (per-letter 1-frame glitch mutations: move/colour/swap/stroke/vanish).
+- [x] **New render primitives** — Chroma Key, Pixel Stretch, Chromatic Aberration, Wave Warp effects; text glow/stroke/tracking/randomizer; per-clip blend modes (lighten/splice) in the compositor. `node qa/retro-watermark-e2e.mjs` **ALL PASS**; evidence 22.
+
 ### Explicitly open work (not claimed complete)
 
 - [ ] Obtain authentic Krita screenshots/toolbox references from a local Krita install or user-provided captures before making any Krita-specific visual comparison; current screenshot references are OmniFrame only.

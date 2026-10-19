@@ -13,8 +13,19 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.solarize && effect.solarize > 0) ||
     (effect.posterize && effect.posterize > 0) ||
     (effect.grain && effect.grain > 0) ||
-    (effect.pixelate && effect.pixelate > 0),
+    (effect.pixelate && effect.pixelate > 0) ||
+    (effect.chromatic && effect.chromatic > 0) ||
+    (effect.pixelStretch && effect.pixelStretch > 0) ||
+    (effect.waveWarp && effect.waveWarp > 0) ||
+    (effect.chromaKey && effect.chromaKey > 0),
   )
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace('#', '')
+  const v = h.length === 3 ? h.split('').map((c) => c + c).join('') : h
+  const n = parseInt(v || '00ff00', 16)
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 
 export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, seed = 0): void {
@@ -36,14 +47,51 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
     ctx.drawImage(small, 0, 0, canvas.width, canvas.height)
     ctx.restore()
   }
+  // Wave Warp: horizontal sine displacement in 4px bands (hair/cloth life).
+  const warp = Math.min(24, Math.max(0, effect.waveWarp || 0))
+  if (warp > 0) {
+    const snap = document.createElement('canvas')
+    snap.width = canvas.width; snap.height = canvas.height
+    snap.getContext('2d')!.drawImage(canvas, 0, 0)
+    ctx.save()
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.filter = 'none'
+    for (let y = 0; y < canvas.height; y += 4) {
+      const dx = Math.sin(y * 0.045 + seed * 0.9) * warp
+      ctx.drawImage(snap, 0, y, canvas.width, 4, dx, y, canvas.width, 4)
+    }
+    ctx.restore()
+  }
+  // Pixel Stretch: smear the centre column band outward (CapCut L3 look).
+  const stretchPct = Math.min(60, Math.max(0, effect.pixelStretch || 0))
+  if (stretchPct > 0) {
+    const zone = (stretchPct / 100) * canvas.width
+    const cx0 = canvas.width / 2
+    const snap = document.createElement('canvas')
+    snap.width = canvas.width; snap.height = canvas.height
+    snap.getContext('2d')!.drawImage(canvas, 0, 0)
+    ctx.save()
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.filter = 'none'
+    ctx.imageSmoothingEnabled = true
+    // 2px centre slice stretched across the zone
+    ctx.drawImage(snap, cx0 - 1, 0, 2, canvas.height, cx0 - zone / 2, 0, zone, canvas.height)
+    ctx.restore()
+  }
+
   const vibrance = typeof effect.vibrance === 'number' ? effect.vibrance : 1
   const solarize = Math.min(1, Math.max(0, effect.solarize || 0))
   const posterize = Math.min(1, Math.max(0, effect.posterize || 0))
   const grain = Math.min(1, Math.max(0, effect.grain || 0))
-  if (vibrance === 1 && !solarize && !posterize && !grain) return
+  const chromatic = Math.min(24, Math.max(0, Math.round(effect.chromatic || 0)))
+  const chromaKey = Math.min(1, Math.max(0, effect.chromaKey || 0))
+  if (vibrance === 1 && !solarize && !posterize && !grain && !chromatic && !chromaKey) return
   let image: ImageData
   try { image = ctx.getImageData(0, 0, canvas.width, canvas.height) } catch { return }
   const d = image.data
+  const src = (chromatic || chromaKey) ? new Uint8ClampedArray(d) : d
+  const W = canvas.width
+  const [kr, kg, kb] = chromaKey ? hexToRgb(effect.chromaColor || '#00ff00') : [0, 255, 0]
   const levels = posterize > 0 ? Math.max(2, Math.round(16 - posterize * 14)) : 0
   const vibAmt = vibrance - 1
   // deterministic per-frame grain (mulberry-ish hash of seed + index)
@@ -53,7 +101,21 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
     return ((rngState >>> 0) / 4294967295) * 2 - 1
   }
   for (let i = 0; i < d.length; i += 4) {
-    let r = d[i], g = d[i + 1], b = d[i + 2]
+    let r = src[i], g = src[i + 1], b = src[i + 2]
+    if (chromatic) {
+      const px = (i / 4) % W
+      const left = px >= chromatic ? i - chromatic * 4 : i
+      const right = px + chromatic < W ? i + chromatic * 4 : i
+      r = src[left]
+      b = src[right + 2]
+    }
+    if (chromaKey) {
+      const dist = Math.sqrt((r - kr) * (r - kr) + (g - kg) * (g - kg) + (b - kb) * (b - kb)) / 441
+      const alphaK = Math.min(1, Math.max(0, (dist - (1 - chromaKey) * 0.45) / 0.18))
+      d[i + 3] = Math.round(d[i + 3] * alphaK)
+      // spill suppression: pull green toward the other channels on edges
+      if (alphaK < 1 && g > Math.max(r, b)) g = Math.max(r, b) + (g - Math.max(r, b)) * alphaK
+    }
     if (vibAmt !== 0) {
       const mx = Math.max(r, g, b), mn = Math.min(r, g, b)
       const sat = mx === 0 ? 0 : (mx - mn) / mx

@@ -18,6 +18,10 @@ export function activeEffectKeys(effects?: ClipEffect): string[] {
   if (typeof effects.posterize === 'number' && effects.posterize > 0) keys.push('posterize')
   if (typeof effects.grain === 'number' && effects.grain > 0) keys.push('grain')
   if (typeof effects.pixelate === 'number' && effects.pixelate > 0) keys.push('pixelate')
+  if (typeof effects.chromatic === 'number' && effects.chromatic > 0) keys.push('chromatic')
+  if (typeof effects.pixelStretch === 'number' && effects.pixelStretch > 0) keys.push('pixelStretch')
+  if (typeof effects.waveWarp === 'number' && effects.waveWarp > 0) keys.push('waveWarp')
+  if (typeof effects.chromaKey === 'number' && effects.chromaKey > 0) keys.push('chromaKey')
   return keys
 }
 
@@ -35,6 +39,10 @@ const EFFECT_LABEL: Record<string, string> = {
   posterize: 'Posterize',
   grain: 'Grain',
   pixelate: 'Pixelate',
+  chromatic: 'Chromatic Aberration',
+  pixelStretch: 'Pixel Stretch',
+  waveWarp: 'Wave Warp',
+  chromaKey: 'Chroma Key',
   light: 'Light',
 }
 

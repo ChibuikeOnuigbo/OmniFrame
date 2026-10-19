@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { buildRetroText, buildWatermark, WATERMARK_LEVELS, type WatermarkLevel } from '../lib/builders'
 import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
@@ -25,6 +26,22 @@ export function TextPanel() {
   const importCustomFontFile = useEditor((s) => s.importCustomFontFile)
   const removeCustomFont = useEditor((s) => s.removeCustomFont)
   const importSubtitleFile = useEditor((s) => s.importSubtitleFile)
+  const assets = useEditor((s) => s.assets)
+  const watermarks = useEditor((s) => s.watermarks)
+  const addWatermark = useEditor((s) => s.addWatermark)
+  const removeWatermark = useEditor((s) => s.removeWatermark)
+  const [retroText, setRetroText] = useState('NOELLE')
+  const [retroSub, setRetroSub] = useState('★ RETRO ★')
+  const [retroColor, setRetroColor] = useState('#ff2a4d')
+  const [retroSeed, setRetroSeed] = useState(7)
+  const [retroMethod, setRetroMethod] = useState<'effects' | 'traditional'>('traditional')
+  const [wmText, setWmText] = useState('@yourname')
+  const [wmLevel, setWmLevel] = useState<1 | 2 | 3 | 4 | 5 | 6>(2)
+  const [wmColor, setWmColor] = useState('#7dd3fc')
+  const [wmChar, setWmChar] = useState('')
+  const [wmVoice, setWmVoice] = useState('')
+  const [wmCorner, setWmCorner] = useState('br')
+  const [studioStatus, setStudioStatus] = useState('')
   const [fontFamily, setFontFamily] = useState('sans-serif')
   const [utilStatus, setUtilStatus] = useState('')
 
@@ -492,6 +509,133 @@ export function TextPanel() {
           </div>
         </div>
       )}
+
+      {/* Retro Text Studio (Alight Motion study) */}
+      <div data-testid="retro-text-studio" className="pt-2 border-t border-ink-800 space-y-1.5">
+        <span className="text-[10px] font-semibold uppercase text-ink-500 block">Retro Text Studio</span>
+        <input data-testid="retro-text-input" value={retroText} onChange={(e) => setRetroText(e.target.value)} placeholder="Main text" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
+        <input data-testid="retro-sub-input" value={retroSub} onChange={(e) => setRetroSub(e.target.value)} placeholder="Small satellite text" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
+        <div className="flex items-center gap-1.5">
+          <input type="color" data-testid="retro-color-input" value={retroColor} onChange={(e) => setRetroColor(e.target.value)} className="h-6 w-8 cursor-pointer rounded border border-ink-700 bg-ink-950 p-0.5" title="Shadow / glitch colour" />
+          <label className="flex items-center gap-1 text-[10px] text-ink-400">Seed
+            <input type="number" data-testid="retro-seed-input" value={retroSeed} onChange={(e) => setRetroSeed(Number(e.target.value) || 1)} className="h-6 w-14 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[10px] text-white outline-none" />
+          </label>
+          <div className="ml-auto flex rounded-md border border-ink-700 overflow-hidden" role="group" aria-label="Retro method">
+            <button type="button" data-testid="retro-method-effects" aria-pressed={retroMethod === 'effects'} onClick={() => setRetroMethod('effects')} className={`h-6 px-2 text-[10px] ${retroMethod === 'effects' ? 'bg-brand text-white' : 'text-ink-400'}`}>Effects</button>
+            <button type="button" data-testid="retro-method-traditional" aria-pressed={retroMethod === 'traditional'} onClick={() => setRetroMethod('traditional')} className={`h-6 px-2 text-[10px] ${retroMethod === 'traditional' ? 'bg-brand text-white' : 'text-ink-400'}`}>Traditional</button>
+          </div>
+        </div>
+        <button
+          type="button"
+          data-testid="retro-build-btn"
+          onClick={() => {
+            const ids = buildRetroText({ text: retroText.trim() || 'RETRO', sub: retroSub, color: retroColor, seed: retroSeed, method: retroMethod, duration: 3 })
+            setStudioStatus(`Retro text built — ${ids.length} editable clips on new tracks. Compound them to move as one.`)
+          }}
+          className="h-7 w-full rounded bg-brand text-[11px] font-semibold text-white hover:bg-brand/85"
+        >
+          Build retro text at playhead
+        </button>
+        <p className="text-[9px] leading-snug text-ink-600">Effects = Text Randomizer scramble that settles. Traditional = per-letter 1-frame glitches (move/colour/stroke/vanish) that settle — same seed, same glitches, every time.</p>
+      </div>
+
+      {/* Watermark Studio (CapCut study, levels 1–6) */}
+      <div data-testid="watermark-studio" className="pt-2 border-t border-ink-800 space-y-1.5">
+        <span className="text-[10px] font-semibold uppercase text-ink-500 block">Watermark Studio</span>
+        <input data-testid="wm-text-input" value={wmText} onChange={(e) => setWmText(e.target.value)} placeholder="Watermark name — @you" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
+        <div className="grid grid-cols-2 gap-1" role="group" aria-label="Watermark level">
+          {WATERMARK_LEVELS.map((l) => (
+            <button
+              key={l.level}
+              type="button"
+              data-testid={`wm-level-${l.level}`}
+              aria-pressed={wmLevel === l.level}
+              onClick={() => setWmLevel(l.level as WatermarkLevel)}
+              title={l.desc}
+              className={`rounded border px-1.5 py-1 text-left text-[9px] leading-tight ${wmLevel === l.level ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 text-ink-400 hover:border-ink-500'}`}
+            >
+              {l.name}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1.5">
+          <select data-testid="wm-char-select" value={wmChar} onChange={(e) => setWmChar(e.target.value)} className="h-7 min-w-0 flex-1 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-ink-200" aria-label="Character or logo image">
+            <option value="">No character</option>
+            {assets.filter((a) => a.kind === 'image' || a.kind === 'video').map((a) => (<option key={a.id} value={a.id}>{a.name}</option>))}
+          </select>
+          <select data-testid="wm-voice-select" value={wmVoice} onChange={(e) => setWmVoice(e.target.value)} className="h-7 min-w-0 flex-1 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-ink-200" aria-label="Voice tag audio">
+            <option value="">No voice tag</option>
+            {assets.filter((a) => a.kind === 'audio').map((a) => (<option key={a.id} value={a.id}>{a.name}</option>))}
+          </select>
+          <input type="color" data-testid="wm-color-input" value={wmColor} onChange={(e) => setWmColor(e.target.value)} className="h-7 w-8 shrink-0 cursor-pointer rounded border border-ink-700 bg-ink-950 p-0.5" title="Glow colour" />
+        </div>
+        <div className="flex gap-1.5">
+          <button
+            type="button"
+            data-testid="wm-build-btn"
+            onClick={() => {
+              const ids = buildWatermark({ text: wmText.trim() || '@you', level: wmLevel, color: wmColor, characterAssetId: wmChar || undefined, voiceAssetId: wmVoice || undefined, duration: 5, seed: 42 })
+              setStudioStatus(`Watermark built — ${ids.length} clips. Drag anywhere, or stamp it as a compound below.`)
+            }}
+            className="h-7 flex-1 rounded bg-brand text-[11px] font-semibold text-white hover:bg-brand/85"
+          >
+            Build on timeline
+          </button>
+          <button
+            type="button"
+            data-testid="wm-save-btn"
+            onClick={() => {
+              addWatermark({ name: wmText.trim() || '@you', level: wmLevel, color: wmColor, characterAssetId: wmChar || undefined, voiceAssetId: wmVoice || undefined, seed: 42 })
+              setStudioStatus('Watermark saved — stamp it onto any project from the list below.')
+            }}
+            className="h-7 rounded border border-ink-600 bg-ink-800 px-2 text-[10px] text-ink-100 hover:border-brand"
+          >
+            Save preset
+          </button>
+        </div>
+        {watermarks.length > 0 && (
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[9px] uppercase tracking-wider text-ink-500">Stamp at</span>
+              <select data-testid="wm-corner-select" value={wmCorner} onChange={(e) => setWmCorner(e.target.value)} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-ink-200" aria-label="Stamp corner">
+                <option value="br">Bottom right</option>
+                <option value="bl">Bottom left</option>
+                <option value="tr">Top right</option>
+                <option value="tl">Top left</option>
+                <option value="c">Centre</option>
+              </select>
+            </div>
+            {watermarks.map((w) => (
+              <div key={w.id} className="flex items-center gap-1.5 rounded border border-ink-800 bg-ink-900 px-2 py-1">
+                <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: w.color }} />
+                <span className="min-w-0 flex-1 truncate text-[10px] text-ink-200">{w.name} · L{w.level}</span>
+                <button
+                  type="button"
+                  data-testid={`wm-apply-${w.id}`}
+                  onClick={() => {
+                    const st = useEditor.getState()
+                    const before = new Set(st.clips.map((c) => c.id))
+                    const ids = buildWatermark({ text: w.name, level: w.level as WatermarkLevel, color: w.color, characterAssetId: w.characterAssetId, voiceAssetId: w.voiceAssetId, duration: Math.max(3, st.duration || 5), seed: w.seed })
+                    const pos = { br: { x: 620, y: 390 }, bl: { x: -620, y: 390 }, tr: { x: 620, y: -390 }, tl: { x: -620, y: -390 }, c: { x: 0, y: 0 } }[wmCorner as 'br'] || { x: 620, y: 390 }
+                    const fresh = useEditor.getState().clips.filter((c) => !before.has(c.id))
+                    useEditor.setState({
+                      clips: useEditor.getState().clips.map((c) => (ids.includes(c.id) ? { ...c, start: 0, transform: { ...c.transform, x: (c.transform?.x || 0) * 0.4 + pos.x, y: (c.transform?.y || 0) * 0.4 + pos.y } } : c)),
+                    })
+                    void fresh
+                    setStudioStatus(`Stamped “${w.name}” across the project at ${wmCorner.toUpperCase()}. Select the clips to compound them into one movable watermark.`)
+                  }}
+                  className="h-6 shrink-0 rounded bg-ink-800 border border-ink-600 px-2 text-[9px] text-white hover:border-brand"
+                >
+                  Stamp
+                </button>
+                <button type="button" data-testid={`wm-delete-${w.id}`} onClick={() => removeWatermark(w.id)} className="h-6 shrink-0 rounded border border-red-900/60 px-1.5 text-[9px] text-red-300 hover:bg-red-950/40" aria-label={`Delete watermark ${w.name}`}>✕</button>
+              </div>
+            ))}
+          </div>
+        )}
+        {studioStatus && <p className="text-[9px] leading-snug text-emerald-300" role="status">{studioStatus}</p>}
+        <p className="text-[9px] leading-snug text-ink-600">Levels follow the CapCut tutorial ladder. Everything is real editable clips — keyframes, graphs, effects — never a baked render. Green-screen footage? Add Chroma Key from the Effects panel.</p>
+      </div>
     </div>
   )
 }

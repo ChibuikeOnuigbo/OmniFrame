@@ -384,6 +384,10 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   setAiApiKey: (v: string) => void
   setAiCapabilityModel: (capability: string, model: string) => void
   setAiConnection: (c: { status: 'idle' | 'testing' | 'connected' | 'error'; message: string; latencyMs: number | null; modelAvailable?: boolean | null }) => void
+  // Saved watermarks (Watermark Studio presets, from the CapCut study).
+  watermarks: { id: string; name: string; level: number; color: string; characterAssetId?: string; voiceAssetId?: string; seed: number }[]
+  addWatermark: (w: { name: string; level: number; color: string; characterAssetId?: string; voiceAssetId?: string; seed: number }) => string
+  removeWatermark: (id: string) => void
   // Library taste: the pack learns from likes + what you actually place.
   packLikes: string[]
   packTaste: Record<string, number>
@@ -1157,6 +1161,7 @@ export const useEditor = create<EditorState>((set, get) => {
     aiCapabilityModels: (() => { try { return JSON.parse(localStorage.getItem('omniframe.aiCapabilityModels') || '{}') } catch { return {} } })(),
     aiConnection: { status: 'idle', message: '', latencyMs: null, modelAvailable: null, at: 0 },
     packLikes: (() => { try { return JSON.parse(localStorage.getItem('omniframe.packLikes') || '[]') } catch { return [] } })(),
+    watermarks: (() => { try { return JSON.parse(localStorage.getItem('omniframe.watermarks') || '[]') } catch { return [] } })(),
     packTaste: (() => { try { return JSON.parse(localStorage.getItem('omniframe.packTaste') || '{}') } catch { return {} } })(),
     viewVideosAsLayers: false,
     dockerPrefs: (() => {
@@ -3300,6 +3305,18 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ aiCapabilityModels: next })
     },
     setAiConnection: (c) => set({ aiConnection: { status: c.status, message: c.message, latencyMs: c.latencyMs, modelAvailable: c.modelAvailable ?? null, at: Date.now() } }),
+    addWatermark: (w) => {
+      const id = `wm_${Date.now().toString(36)}${Math.floor(Math.random() * 1e6).toString(36)}`
+      const next = [...get().watermarks, { id, ...w }]
+      try { localStorage.setItem('omniframe.watermarks', JSON.stringify(next)) } catch { /* private mode */ }
+      set({ watermarks: next })
+      return id
+    },
+    removeWatermark: (id: string) => {
+      const next = get().watermarks.filter((w) => w.id !== id)
+      try { localStorage.setItem('omniframe.watermarks', JSON.stringify(next)) } catch { /* private mode */ }
+      set({ watermarks: next })
+    },
     togglePackLike: (assetId: string) => {
       const likes = get().packLikes.includes(assetId) ? get().packLikes.filter((id) => id !== assetId) : [...get().packLikes, assetId]
       try { localStorage.setItem('omniframe.packLikes', JSON.stringify(likes)) } catch { /* private mode */ }

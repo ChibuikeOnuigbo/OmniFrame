@@ -48,6 +48,11 @@ const DEFAULT_EFFECTS: ClipEffect = {
   posterize: 0,
   grain: 0,
   pixelate: 0,
+  chromatic: 0,
+  pixelStretch: 0,
+  waveWarp: 0,
+  chromaKey: 0,
+  chromaColor: '#00ff00',
   lightType: 'point',
   lightColor: '#ffd9a0',
   lightIntensity: 0,
@@ -580,6 +585,10 @@ const CONTROL_DEFS: Array<{ key: keyof ClipEffect; label: string; min: number; m
   { key: 'posterize', label: 'Posterize', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
   { key: 'grain', label: 'Grain', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
   { key: 'pixelate', label: 'Pixelate / Mosaic', min: 0, max: 24, step: 1, valueLabel: (value: number) => (value ? `${Math.round(value)}px blocks` : 'Off') },
+  { key: 'chromatic', label: 'Chromatic Aberration', min: 0, max: 24, step: 1, valueLabel: (value: number) => (value ? `${Math.round(value)}px shift` : 'Off') },
+  { key: 'pixelStretch', label: 'Pixel Stretch', min: 0, max: 60, step: 1, valueLabel: (value: number) => (value ? `${Math.round(value)}% smear` : 'Off') },
+  { key: 'waveWarp', label: 'Wave Warp', min: 0, max: 24, step: 0.5, valueLabel: (value: number) => (value ? `${Math.round(value)}px` : 'Off') },
+  { key: 'chromaKey', label: 'Chroma Key (green)', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => (value ? `${Math.round(value * 100)}%` : 'Off') },
 ]
 
 function ClipEffectsControls({ clip }: { clip?: Clip }) {

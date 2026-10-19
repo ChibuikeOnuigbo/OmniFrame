@@ -181,6 +181,11 @@ export interface ClipEffect {
   posterize?: number // 0..1 colour-level reduction (default 0)
   grain?: number // 0..1 animated film grain (default 0)
   pixelate?: number // mosaic block size in px, 0 = off
+  chromatic?: number // chromatic aberration, channel shift in px (0 = off)
+  pixelStretch?: number // horizontal pixel-stretch smear, % of width (0 = off)
+  waveWarp?: number // sine wave warp amplitude in px (0 = off)
+  chromaKey?: number // green-screen key strength 0..1 (0 = off)
+  chromaColor?: string // key colour, default pure green
   // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.
   lightType?: 'point' | 'spot' // default 'point' (spot = elliptical falloff cone)
@@ -307,6 +312,20 @@ export interface TextTitleStyle {
   fontFamily?: string
   bold?: boolean
   italic?: boolean
+  /** Extra tracking in project px (Alight-style text spacing). */
+  letterSpacing?: number
+  strokeColor?: string
+  strokeWidth?: number
+  /** Stroke-only letters (no fill) — retro glitch frames use these. */
+  strokeOnly?: boolean
+  glowColor?: string
+  glowBlur?: number
+  /**
+   * Text Randomizer (Alight Motion): during the first `untilSec` seconds
+   * (clip-local), glyphs scramble with a per-frame seeded RNG and settle
+   * left-to-right into the real text. Deterministic for a given seed.
+   */
+  randomizer?: { seed: number; untilSec: number; charset?: string }
 }
 
 export type TextStyle = TextTitleStyle
@@ -599,6 +618,8 @@ export interface Clip {
   adjustmentMask?: ClipAdjustmentMask
   /** Optional CapCut/AE-style visibility mask that hides part of the clip. */
   mask?: ClipVisualMask
+  /** Canvas composite op for this clip (watermark lighten/splice etc.). */
+  blendMode?: GlobalCompositeOperation
   textStyle?: TextTitleStyle
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
   /** Drawing clips (kind: 'drawing'): strokes baked into a timeline clip.

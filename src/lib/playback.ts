@@ -779,6 +779,9 @@ export class PreviewEngine {
 
       const clip = activeClipOnTrack(st.clips, track.id, time)
       if (!clip) return false
+      // Per-clip blend (watermarks: lighten/splice…). Restored by the
+      // caller's save/restore around renderTrackContents.
+      if (clip.blendMode && clip.blendMode !== 'source-over') ctx.globalCompositeOperation = clip.blendMode
 
       // Adjustment layer: grades everything already drawn (all tracks below)
       if (clip.kind === 'adjustment' && track.type === 'video') {
@@ -845,7 +848,9 @@ export class PreviewEngine {
 
     for (const track of renderTracks) {
       if (track.type === 'video' && track.hidden) continue
+      ctx.save()
       if (renderTrackContents(track)) visualPending = true
+      ctx.restore()
       const layeredHere = layeredByTrack.get(track.id)
       if (layeredHere && layeredHere.length > 0) {
         ctx.save()
@@ -1245,12 +1250,35 @@ export class PreviewEngine {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
 
-    const lines = (t.text || '').split('\n')
+    // Text Randomizer (Alight Motion effects method): glyphs scramble with
+    // a per-frame seeded RNG and settle left-to-right into the real text.
+    let displayText = t.text || ''
+    if (t.randomizer && t.randomizer.untilSec > 0) {
+      const local = Math.max(0, time - clip.start)
+      if (local < t.randomizer.untilSec) {
+        const charset = t.randomizer.charset || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$'
+        const frame = Math.floor(local * 30)
+        const progress = local / t.randomizer.untilSec
+        let rngState = (t.randomizer.seed * 2654435761 + frame * 97) >>> 0 || 1
+        const rnd = () => { rngState ^= rngState << 13; rngState ^= rngState >>> 17; rngState ^= rngState << 5; return (rngState >>> 0) / 4294967295 }
+        const chars = [...displayText]
+        const settleAt = progress * 1.3 // settle front runs ahead of progress
+        let pos = 0
+        displayText = chars.map((ch) => {
+          const idx = pos++
+          if (ch === ' ' || ch === '\n') return ch
+          const settled = idx / Math.max(1, chars.length) < settleAt && rnd() < progress + 0.25
+          return settled ? ch : charset[Math.floor(rnd() * charset.length)]
+        }).join('')
+      }
+    }
+    const lines = displayText.split('\n')
     const lineHeight = fontSize * 1.3
+    const tracking = (t.letterSpacing || 0) * scaleFactor
 
     let maxLineW = 0
     for (const line of lines) {
-      const w = ctx.measureText(line).width
+      const w = ctx.measureText(line).width + Math.max(0, line.length - 1) * tracking
       if (w > maxLineW) maxLineW = w
     }
 
@@ -1283,17 +1311,44 @@ export class PreviewEngine {
       ctx.fill()
     }
 
-    // Drop shadow
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.85)'
-    ctx.shadowBlur = 10 * scaleFactor
-    ctx.shadowOffsetX = 2 * scaleFactor
-    ctx.shadowOffsetY = 2 * scaleFactor
+    // Glow (watermark L1 / retro text) replaces the drop shadow when set.
+    if (t.glowColor && (t.glowBlur || 0) > 0) {
+      ctx.shadowColor = t.glowColor
+      ctx.shadowBlur = (t.glowBlur || 18) * scaleFactor
+      ctx.shadowOffsetX = 0
+      ctx.shadowOffsetY = 0
+    } else {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.85)'
+      ctx.shadowBlur = 10 * scaleFactor
+      ctx.shadowOffsetX = 2 * scaleFactor
+      ctx.shadowOffsetY = 2 * scaleFactor
+    }
 
-    // Draw text lines
+    // Draw text lines (per-glyph when tracking/stroke needs it)
     ctx.fillStyle = t.color || '#ffffff'
     const startY = -(lines.length - 1) * (lineHeight / 2)
+    const drawLine = (line: string, y: number) => {
+      if (!tracking && !t.strokeWidth) { ctx.fillText(line, 0, y); return }
+      const widths = [...line].map((ch) => ctx.measureText(ch).width)
+      const total = widths.reduce((a, b) => a + b, 0) + Math.max(0, line.length - 1) * tracking
+      let x = -total / 2
+      ;[...line].forEach((ch, ci) => {
+        if (!t.strokeOnly) ctx.fillText(ch, x + widths[ci] / 2, y)
+        if (t.strokeWidth && t.strokeColor) {
+          ctx.save()
+          ctx.shadowBlur = 0
+          ctx.strokeStyle = t.strokeColor
+          ctx.lineWidth = t.strokeWidth * scaleFactor
+          ctx.strokeText(ch, x + widths[ci] / 2, y)
+          ctx.restore()
+        }
+        x += widths[ci] + tracking
+      })
+    }
     lines.forEach((line, i) => {
-      ctx.fillText(line, 0, startY + i * lineHeight)
+      // double-pass for a stronger glow core
+      drawLine(line, startY + i * lineHeight)
+      if (t.glowColor && (t.glowBlur || 0) > 0) drawLine(line, startY + i * lineHeight)
     })
 
     ctx.restore()
