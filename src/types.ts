@@ -186,6 +186,24 @@ export interface ClipLut {
   enabled: boolean
 }
 
+/**
+ * A user-created custom effect (Gold Motion-style "Custom Effects" in
+ * OmniFrame form): a named snapshot of a clip's effect settings + optional
+ * LUT stack + thumbnail, listed beside the built-ins, applicable to any
+ * clip or placeable as an adjustment layer, and shareable as a small
+ * `.json` file (see src/lib/customEffects.ts). Plain data only, so it
+ * persists in localStorage and inside `.omni` projects automatically.
+ */
+export interface CustomEffect {
+  id: string
+  name: string
+  effect: ClipEffect
+  luts?: ClipLut[]
+  /** Small JPEG data URL captured from the preview frame when saved. */
+  thumbnail?: string
+  createdAt: number
+}
+
 /** LUT-stack grading carried by adjustment layers AND normal clips. */
 export interface ClipAdjustment {
   luts: ClipLut[]

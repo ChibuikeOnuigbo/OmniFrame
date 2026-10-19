@@ -28,6 +28,7 @@ import type {
   MonitorMode,
   TimelineInsertionMode,
   ClipEffect,
+  CustomEffect,
   ClipLut,
   TimelineMarker,
   MarkerColor,
@@ -309,6 +310,7 @@ import { measureIntegratedLufs } from './lib/loudness'
 import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } from './lib/rotoBrush'
 import { denoiseAudioBuffer } from './lib/aiDenoise'
 import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
+import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
 import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
 
 interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
@@ -512,6 +514,17 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   addUserLut: (name: string, cubeText: string) => string | null
   removeUserLut: (id: string) => void
   clearUserLuts: () => void
+  /** User-created custom effects (Gold Motion-style): named effect+LUT
+   * snapshots, persisted to localStorage and inside .omni projects. */
+  customEffects: CustomEffect[]
+  /** Snapshot the selected clip's effect settings + LUT stack as a custom effect. Returns its id, or null when the clip has nothing to save. */
+  saveCustomEffect: (name: string, clipId: string, thumbnail?: string) => string | null
+  /** Replace a clip's effect settings + LUT stack with the custom effect's. */
+  applyCustomEffect: (id: string, clipId?: string) => boolean
+  /** Place the custom effect as an adjustment layer (grades what's below). */
+  placeCustomEffectAsLayer: (id: string) => string | null
+  deleteCustomEffect: (id: string) => void
+  importCustomEffects: (items: CustomEffect[]) => number
   /**
    * Creates a timeline adjustment clip that grades content below its track.
    * With a visual clip selected it is placed immediately above that clip,
@@ -1064,6 +1077,19 @@ export const useEditor = create<EditorState>((set, get) => {
     clips: [],
     transitions: [],
     lutLibrary: { loaded: false, luts: [] },
+    customEffects: (() => {
+      try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.customEffects') : null
+        if (!raw) return []
+        const parsed = JSON.parse(raw)
+        if (!Array.isArray(parsed)) return []
+        return parsed
+          .filter((fx) => fx && typeof fx.id === 'string' && typeof fx.name === 'string')
+          .map((fx) => ({ ...fx, effect: sanitizeEffect(fx.effect), luts: sanitizeLuts(fx.luts) }))
+      } catch {
+        return []
+      }
+    })(),
     userLuts: (() => {
       try {
         const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.userLuts') : null
@@ -1718,6 +1744,75 @@ export const useEditor = create<EditorState>((set, get) => {
         selectedClipIds: [newClips[0].id],
       }))
       return { cues: newClips.length, trackId: track.id }
+    },
+
+    // ---- custom effects (user-built, shareable) ----------------------
+    saveCustomEffect: (name, clipId, thumbnail) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return null
+      const effect = sanitizeEffect(clip.effects)
+      const luts = sanitizeLuts(clip.adjustment?.luts)
+      const hasEffect = Object.keys(effect).length > 0
+      if (!hasEffect && !luts.length) return null
+      const fx: CustomEffect = {
+        id: `fx-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+        name: name.trim().slice(0, 80) || 'My effect',
+        effect,
+        ...(luts.length ? { luts } : {}),
+        ...(thumbnail ? { thumbnail } : {}),
+        createdAt: Date.now(),
+      }
+      const next = [fx, ...get().customEffects]
+      set({ customEffects: next })
+      try {
+        localStorage.setItem('omniframe.customEffects', JSON.stringify(next))
+      } catch { /* quota: still kept in memory + .omni */ }
+      return fx.id
+    },
+
+    applyCustomEffect: (id, clipId) => {
+      const fx = get().customEffects.find((f) => f.id === id)
+      const targetId = clipId ?? get().selectedClipId
+      if (!fx || !targetId) return false
+      const clip = get().clips.find((c) => c.id === targetId)
+      if (!clip) return false
+      const luts = sanitizeLuts(fx.luts)
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === targetId
+            ? { ...c, effects: sanitizeEffect(fx.effect), adjustment: { ...(c.adjustment ?? { luts: [] }), luts } }
+            : c,
+        ),
+      }))
+      return true
+    },
+
+    placeCustomEffectAsLayer: (id) => {
+      const fx = get().customEffects.find((f) => f.id === id)
+      if (!fx) return null
+      return get().addAdjustmentLayer({
+        name: fx.name,
+        effects: sanitizeEffect(fx.effect),
+        luts: sanitizeLuts(fx.luts),
+      })
+    },
+
+    deleteCustomEffect: (id) => {
+      const next = get().customEffects.filter((f) => f.id !== id)
+      set({ customEffects: next })
+      try {
+        localStorage.setItem('omniframe.customEffects', JSON.stringify(next))
+      } catch { /* ignore */ }
+    },
+
+    importCustomEffects: (items) => {
+      if (!items.length) return 0
+      const next = [...items, ...get().customEffects]
+      set({ customEffects: next })
+      try {
+        localStorage.setItem('omniframe.customEffects', JSON.stringify(next))
+      } catch { /* quota: kept in memory */ }
+      return items.length
     },
 
     // ---- adjustment layers & LUTs ------------------------------------

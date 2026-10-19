@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Activity,
+  Download,
   Layers,
   Play,
   Plus,
@@ -19,6 +20,8 @@ import { activeEffectKeys, placedEffectLabels } from '../lib/adjustment'
 import { applyLutStackToImageData, loadCubeLut, parseCubeLUT } from '../lib/lutEngine'
 import { PanelSection } from './PanelSection'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
+import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
+import type { CustomEffect } from '../types'
 
 type LutItem = {
   id: string
@@ -739,12 +742,177 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
   )
 }
 
+/** Gold Motion-style custom effects: save a look you dialled in, share it as
+ * a file, import other people's, apply like a built-in. Clicking a card
+ * only auditions it (temporary preview); Apply / Layer commit. */
+function MyEffects() {
+  const customEffects = useEditor((s) => s.customEffects)
+  const clips = useEditor((s) => s.clips)
+  const selectedClipId = useEditor((s) => s.selectedClipId)
+  const saveCustomEffect = useEditor((s) => s.saveCustomEffect)
+  const applyCustomEffect = useEditor((s) => s.applyCustomEffect)
+  const placeCustomEffectAsLayer = useEditor((s) => s.placeCustomEffectAsLayer)
+  const deleteCustomEffect = useEditor((s) => s.deleteCustomEffect)
+  const importCustomEffects = useEditor((s) => s.importCustomEffects)
+  const [name, setName] = useState('')
+  const [notice, setNotice] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+  const selected = clips.find((c) => c.id === selectedClipId)
+  const canSave = !!selected && (activeEffectKeys(selected.effects).length > 0 || (selected.adjustment?.luts?.length ?? 0) > 0)
+
+  const captureThumbnail = (): string | undefined => {
+    try {
+      const src = document.querySelector('#of-canvas') as HTMLCanvasElement | null
+      if (!src || !src.width) return undefined
+      const t = document.createElement('canvas')
+      t.width = 160
+      t.height = Math.max(1, Math.round((160 * src.height) / src.width))
+      t.getContext('2d')?.drawImage(src, 0, 0, t.width, t.height)
+      return t.toDataURL('image/jpeg', 0.72)
+    } catch {
+      return undefined
+    }
+  }
+
+  const handleSave = () => {
+    if (!selected) return
+    const id = saveCustomEffect(name.trim() || selected.name || 'My effect', selected.id, captureThumbnail())
+    if (id) {
+      setNotice('Saved — it now works like a built-in effect.')
+      setName('')
+    } else {
+      setNotice('That clip has no effect settings or LUTs to save yet.')
+    }
+  }
+
+  const handleExport = (fx: CustomEffect) => {
+    const blob = new Blob([serializeCustomEffect(fx)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = customEffectFileName(fx.name)
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  }
+
+  const handleImport = async (files: FileList | null) => {
+    if (!files?.length) return
+    const collected: CustomEffect[] = []
+    const errors: string[] = []
+    for (const file of Array.from(files)) {
+      const result = parseCustomEffectFile(await file.text())
+      collected.push(...result.effects)
+      if (result.error) errors.push(result.error)
+    }
+    if (collected.length) importCustomEffects(collected)
+    setNotice(
+      errors.length
+        ? errors[0]
+        : `Imported ${collected.length} custom effect${collected.length === 1 ? '' : 's'}.`,
+    )
+  }
+
+  const audition = (fx: CustomEffect) => {
+    const effectKeys = activeEffectKeys(fx.effect)
+    if (selected && effectKeys.length) {
+      previewClipEffect(selected.id, fx.name, fx.effect)
+    } else if (fx.luts?.length) {
+      previewLut(fx.luts[0])
+    } else if (selected) {
+      previewClipEffect(selected.id, fx.name, fx.effect)
+    }
+  }
+
+  return (
+    <div data-testid="custom-effects" className="space-y-2">
+      <div className="flex gap-1.5">
+        <input
+          data-testid="custom-effect-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name your effect…"
+          className="h-8 min-w-0 flex-1 rounded-md border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100 outline-none focus:border-brand"
+        />
+        <button
+          type="button"
+          data-testid="save-custom-effect-btn"
+          disabled={!canSave}
+          onClick={handleSave}
+          title={canSave ? 'Save the selected clip’s effect settings + LUT stack as a reusable custom effect' : 'Select a clip with effect settings or LUTs first'}
+          className="flex h-8 shrink-0 items-center gap-1 rounded-md bg-brand px-2.5 text-[11px] font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <Plus size={13} /> Save look
+        </button>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <button
+          type="button"
+          data-testid="import-custom-effects-btn"
+          onClick={() => fileRef.current?.click()}
+          className="flex h-7 items-center gap-1 rounded-md border border-ink-700 bg-ink-900 px-2 text-[10px] text-ink-200 hover:border-ink-500"
+        >
+          <Upload size={11} /> Import .json
+        </button>
+        <span className="text-[9px] leading-tight text-ink-500">Custom effects are small shareable .omniframe-effect.json files (settings + LUTs + thumbnail).</span>
+      </div>
+      <input
+        ref={fileRef}
+        data-testid="import-custom-effects-input"
+        type="file"
+        accept=".json,application/json"
+        multiple
+        className="hidden"
+        onChange={(e) => { void handleImport(e.target.files); e.target.value = '' }}
+      />
+      {notice && <p className="text-[10px] text-ink-400" data-testid="custom-effect-notice" role="status">{notice}</p>}
+      {customEffects.length === 0 ? (
+        <p className="rounded-md border border-dashed border-ink-800 px-2.5 py-3 text-center text-[10px] text-ink-500" data-testid="custom-effects-empty">
+          No custom effects yet. Dial in a look on a clip (Clip controls or LUTs), name it, and Save look — it appears here like a built-in, ready to apply or share.
+        </p>
+      ) : (
+        <div className="grid grid-cols-2 gap-1.5">
+          {customEffects.map((fx) => (
+            <div key={fx.id} data-testid={`custom-effect-${fx.id}`} className="overflow-hidden rounded-md border border-ink-800 bg-ink-950/40">
+              <button type="button" onClick={() => audition(fx)} title="Audition (temporary preview — nothing is committed)" className="block w-full text-left">
+                {fx.thumbnail ? (
+                  <img src={fx.thumbnail} alt="" className="block aspect-video w-full object-cover" />
+                ) : (
+                  <span className="flex aspect-video w-full items-center justify-center bg-gradient-to-br from-fuchsia-900/60 via-ink-900 to-cyan-900/50 text-fuchsia-200">
+                    <Wand2 size={16} />
+                  </span>
+                )}
+                <span className="block truncate px-1.5 pt-1 text-[11px] font-medium text-ink-100">{fx.name}</span>
+                <span className="block truncate px-1.5 pb-1 text-[9px] text-ink-500">{customEffectSummary(fx)}</span>
+              </button>
+              <div className="flex items-center gap-0.5 border-t border-ink-800 px-1 py-1">
+                <button type="button" data-testid={`custom-effect-apply-${fx.id}`} disabled={!selected} onClick={() => { if (applyCustomEffect(fx.id)) setNotice(`Applied “${fx.name}” to the selected clip.`) }} title="Apply to the selected clip (replaces its effect settings + LUT stack)" className="flex h-6 flex-1 items-center justify-center gap-1 rounded text-[9px] text-ink-200 hover:bg-ink-800 disabled:opacity-40">
+                  <Wand2 size={10} /> Apply
+                </button>
+                <button type="button" data-testid={`custom-effect-layer-${fx.id}`} onClick={() => { if (placeCustomEffectAsLayer(fx.id)) setNotice(`Placed “${fx.name}” as an adjustment layer.`) }} title="Place as an adjustment layer (grades everything below it)" className="flex h-6 flex-1 items-center justify-center gap-1 rounded text-[9px] text-ink-200 hover:bg-ink-800">
+                  <Layers size={10} /> Layer
+                </button>
+                <button type="button" data-testid={`custom-effect-export-${fx.id}`} onClick={() => handleExport(fx)} title="Download as a shareable .omniframe-effect.json file" className="grid h-6 w-6 place-items-center rounded text-ink-400 hover:bg-ink-800" aria-label={`Export ${fx.name}`}>
+                  <Download size={11} />
+                </button>
+                <button type="button" data-testid={`custom-effect-delete-${fx.id}`} onClick={() => deleteCustomEffect(fx.id)} title="Delete this custom effect" className="grid h-6 w-6 place-items-center rounded text-ink-400 hover:bg-red-950/50 hover:text-red-300" aria-label={`Delete ${fx.name}`}>
+                  <Trash2 size={11} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function EffectsPanel() {
   const clips = useEditor((s) => s.clips)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const addAdjustmentLayer = useEditor((s) => s.addAdjustmentLayer)
   const selectedClip = clips.find((clip) => clip.id === selectedClipId)
   const layerCount = clips.filter((clip) => clip.kind === 'adjustment').length
+  const customCount = useEditor((s) => s.customEffects.length)
 
   return (
     <div data-testid="effects-panel" className="text-xs text-ink-200 select-none">
@@ -757,6 +925,10 @@ export function EffectsPanel() {
 
       <PanelSection title="LUT looks" hint="25" defaultOpen testId="adjustment-looks">
         <LutGallery />
+      </PanelSection>
+
+      <PanelSection title="My effects" hint={customCount ? String(customCount) : undefined} testId="custom-effects-section">
+        <MyEffects />
       </PanelSection>
 
       <PanelSection title="Adjustment layers" hint={String(layerCount)} testId="adjustment-layers">
