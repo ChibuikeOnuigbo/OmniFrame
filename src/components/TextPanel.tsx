@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { buildRetroText, buildWatermark, WATERMARK_LEVELS, type WatermarkLevel } from '../lib/builders'
+import { TEXT_PRESETS, buildTextPreset, lengthGuidance } from '../lib/textPresets'
 import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
@@ -30,6 +31,10 @@ export function TextPanel() {
   const watermarks = useEditor((s) => s.watermarks)
   const addWatermark = useEditor((s) => s.addWatermark)
   const removeWatermark = useEditor((s) => s.removeWatermark)
+  const [presetText, setPresetText] = useState('YOUR TEXT')
+  const [presetColor, setPresetColor] = useState('#ff2a4d')
+  const [presetSeed, setPresetSeed] = useState(7)
+  const [presetMsg, setPresetMsg] = useState('')
   const [retroText, setRetroText] = useState('NOELLE')
   const [retroSub, setRetroSub] = useState('★ RETRO ★')
   const [retroColor, setRetroColor] = useState('#ff2a4d')
@@ -42,6 +47,11 @@ export function TextPanel() {
   const [wmVoice, setWmVoice] = useState('')
   const [wmCorner, setWmCorner] = useState('br')
   const [studioStatus, setStudioStatus] = useState('')
+  useEffect(() => {
+    const w = window as unknown as Record<string, unknown>
+    w.__omniframe_text_presets = TEXT_PRESETS.map((p) => ({ id: p.id, name: p.name, category: p.category, source: p.source, ideal: p.ideal, demo: p.demo }))
+    w.__omniframe_build_text_preset = (id: string, text: string, seed?: number, color?: string) => buildTextPreset(id, text, { seed: seed ?? 7, color: color ?? '#ff2a4d' })
+  }, [])
   const [fontFamily, setFontFamily] = useState('sans-serif')
   const [utilStatus, setUtilStatus] = useState('')
 
@@ -509,6 +519,39 @@ export function TextPanel() {
           </div>
         </div>
       )}
+
+      {/* Text Preset Library — procedural looks from tutorial.md */}
+      <div data-testid="text-preset-library" className="pt-2 border-t border-ink-800 space-y-1.5">
+        <span className="text-[10px] font-semibold uppercase text-ink-500 block">Text Preset Library</span>
+        <input data-testid="preset-text-input" value={presetText} onChange={(e) => setPresetText(e.target.value)} placeholder="Your text" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
+        <div className="flex items-center gap-1.5">
+          <input type="color" data-testid="preset-color-input" value={presetColor} onChange={(e) => setPresetColor(e.target.value)} className="h-6 w-8 cursor-pointer rounded border border-ink-700 bg-ink-950 p-0.5" title="Accent colour" />
+          <label className="flex items-center gap-1 text-[10px] text-ink-400">Seed
+            <input type="number" data-testid="preset-seed-input" value={presetSeed} onChange={(e) => setPresetSeed(Number(e.target.value) || 1)} className="h-6 w-14 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[10px] text-white outline-none" />
+          </label>
+          <span className="text-[9px] text-ink-600">Any text works — presets are procedural, not recordings.</span>
+        </div>
+        <div className="space-y-1">
+          {TEXT_PRESETS.map((p) => (
+            <div key={p.id} className="flex items-center gap-1.5">
+              <button
+                type="button"
+                data-testid={`text-preset-lib-${p.id}`}
+                onClick={() => {
+                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor })
+                  setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
+                }}
+                className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
+                title={`${p.source} · best with ${p.ideal[0]}–${p.ideal[1]} characters`}
+              >
+                <span className="block text-[11px] font-medium text-ink-100">{p.name}</span>
+                <span className="block text-[9px] text-ink-500">{p.category} · best {p.ideal[0]}–{p.ideal[1]} chars</span>
+              </button>
+            </div>
+          ))}
+        </div>
+        <p className="text-[9px] leading-snug text-ink-500" data-testid="preset-guidance">{presetMsg || lengthGuidance(TEXT_PRESETS[0], presetText)}</p>
+      </div>
 
       {/* Retro Text Studio (Alight Motion study) */}
       <div data-testid="retro-text-studio" className="pt-2 border-t border-ink-800 space-y-1.5">

@@ -1,0 +1,18 @@
+{
+  "preset": "echo-trail",
+  "name": "Echo Trail",
+  "category": "Motion",
+  "source": "Echo/trail motion text tutorials",
+  "idealCharacters": [
+    2,
+    10
+  ],
+  "demoText": "TRAIL",
+  "clipsBuilt": 4,
+  "frames": [
+    "frame-1-early.png @ 0.12s",
+    "frame-2-mid.png @ 0.55s",
+    "frame-3-settled.png @ 1.8s"
+  ],
+  "recreate": "Open OmniFrame → Text panel → Text Preset Library, type the demo text, click the preset."
+}

@@ -25,7 +25,7 @@ export function seededRng(seed: number) {
 
 type Store = ReturnType<typeof useEditor.getState>
 
-function pushClips(clips: Clip[]) {
+export function pushClips(clips: Clip[]) {
   const st = useEditor.getState()
   useEditor.setState({ clips: [...st.clips, ...clips] })
   return clips.map((c) => c.id)
@@ -55,7 +55,9 @@ export function textClip(trackId: string, start: number, duration: number, style
 }
 
 export function withKeys(clip: Clip, prop: string, keys: [number, number, string?][]): Clip {
-  const anim = createDefaultClipAnimation(clip.transform, clip.duration)
+  // Merge into any existing animation — stacking curves must not drop
+  // the ones already written (position + opacity + scale combos).
+  const anim = clip.animation || createDefaultClipAnimation(clip.transform, clip.duration)
   anim.curves[prop].keyframes = keys.map(([time, value, easingPreset], i) => ({
     id: `${clip.id}_${prop}_${i}`,
     time, value,
@@ -78,14 +80,17 @@ export function withFade(clip: Clip, fadeIn = 0.4, fadeOut = 0.4, peak?: number)
 }
 
 /** White bar asset for retro wipe rectangles (created once per build). */
-function barAssetId(st: Store): string {
+export function barAssetId(st: Store): string {
   const existing = st.assets.find((a) => a.id === 'builders-white-bar')
-  if (existing) return existing.id
   const c = document.createElement('canvas')
-  c.width = 512; c.height = 48
+  // Image clips are cover-fit to the frame, so the bar must be a
+  // full-frame transparent canvas with a painted centre band — a small
+  // asset would flood the frame when cover-scaled.
+  c.width = 1920; c.height = 1080
   const g = c.getContext('2d')!
-  g.fillStyle = '#ffffff'; g.fillRect(0, 0, 512, 48)
-  st.addAsset({ id: 'builders-white-bar', name: 'white-bar.png', kind: 'image', url: c.toDataURL('image/png'), width: 512, height: 48, duration: 8 } as never)
+  g.clearRect(0, 0, 1920, 1080)
+  g.fillStyle = '#ffffff'; g.fillRect(0, 488, 1920, 104)
+  st.addAsset({ id: 'builders-white-bar', name: 'white-bar.png', kind: 'image', url: c.toDataURL('image/png'), width: 1920, height: 1080, duration: 8 } as never)
   return 'builders-white-bar'
 }
 
