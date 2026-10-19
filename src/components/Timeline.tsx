@@ -849,7 +849,7 @@ function ClipView({
 
   const clipBorderClass = selected
     ? isAdjustment
-      ? 'border-2 border-cyan-300 ring-2 ring-cyan-300/90 shadow-[0_0_18px_rgba(103,232,249,0.65)] z-10'
+      ? 'border-2 border-violet-300 ring-2 ring-violet-300/90 shadow-[0_0_18px_rgba(167,139,250,0.65)] z-10'
       : hasEffects
       ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 shadow-[0_0_16px_rgba(147,197,253,0.6)] z-10'
       : isCompound
@@ -864,7 +864,7 @@ function ClipView({
       ? 'border-2 border-fuchsia-400 ring-2 ring-fuchsia-400/80 shadow-[0_0_14px_rgba(232,121,249,0.5)] z-10'
       : 'border-2 border-sky-400 ring-2 ring-sky-400/80 shadow-[0_0_14px_rgba(56,189,248,0.5)] z-10'
     : isAdjustment
-    ? 'border border-cyan-600/70 hover:border-cyan-300 hover:shadow-md'
+    ? 'border border-violet-500/70 hover:border-violet-300 hover:shadow-md'
     : isCompound
     ? 'border border-indigo-500/80 hover:border-indigo-300 hover:shadow-md'
     : isText
@@ -878,7 +878,7 @@ function ClipView({
     : 'border border-sky-600/70 hover:border-sky-300 hover:shadow-md'
 
   const clipBgClass = isAdjustment
-    ? 'bg-gradient-to-r from-cyan-950/85 via-blue-950/80 to-cyan-950/85 text-cyan-100'
+    ? 'bg-gradient-to-r from-violet-800/85 via-purple-700/70 to-violet-800/85 text-violet-50'
     : isCompound
     ? 'bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 text-indigo-100'
     : isText
@@ -921,7 +921,9 @@ function ClipView({
       }}
       onContextMenu={(e) => onContextMenu(e, clip)}
       className={[
-        'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
+        // CapCut model: an effect is a thin purple clip (text-clip height),
+        // centred in its track — it grades whatever is underneath it.
+        isAdjustment ? 'absolute top-[23%] bottom-[23%] pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]' : 'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
         tool === 'select' ? 'cursor-grab active:cursor-grabbing' : 'cursor-inherit',
         clipBorderClass,
         clip.hidden

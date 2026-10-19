@@ -211,7 +211,7 @@ try {
 
   const effectTimelineClip = page.locator(`[data-testid="timeline-clip"][data-clip-id="${layer.clip.id}"]`)
   await effectTimelineClip.waitFor({ state: 'visible' })
-  assert.match(await effectTimelineClip.getAttribute('class'), /border-2 border-cyan-300/, 'selected adjustment has a distinct timeline border')
+  assert.match(await effectTimelineClip.getAttribute('class'), /border-2 border-violet-300/, 'selected adjustment has a distinct timeline border')
   await page.getByTestId('section-tab-adjustment-controls').click()
   await page.getByTestId('clip-effects-controls').waitFor({ state: 'visible' })
 
@@ -306,10 +306,10 @@ try {
   assert.ok(laneBox && laneBox.width > 1)
   await layerLane.click({ position: { x: Math.max(1, laneBox.width - 5), y: Math.max(1, laneBox.height / 2) } })
   await waitForState(() => window.__omniframe_store.getState().selectedClipId === null)
-  assert.doesNotMatch(await effectTimelineClip.getAttribute('class'), /border-2 border-cyan-300/, 'blank track click hides the selected border')
+  assert.doesNotMatch(await effectTimelineClip.getAttribute('class'), /border-2 border-violet-300/, 'blank track click hides the selected border')
   await page.getByTestId(`placed-adjustment-${layer.clip.id}`).getByRole('button').first().click()
   await waitForState((id) => window.__omniframe_store.getState().selectedClipId === id, layer.clip.id)
-  assert.match(await effectTimelineClip.getAttribute('class'), /border-2 border-cyan-300/, 'selecting the placed layer restores its border')
+  assert.match(await effectTimelineClip.getAttribute('class'), /border-2 border-violet-300/, 'selecting the placed layer restores its border')
   await page.getByTestId('section-tab-clip').click()
   await page.getByTestId('adjustment-layer-scope-note').waitFor({ state: 'visible' })
   await page.getByTestId('delete-adjustment-layer-btn').click()
