@@ -122,6 +122,20 @@ The affordance audit checks naming/interaction affordances; the overflow audit t
 - `evidence/ui-mockups/smart-patch-omniframe-linked-concept.png` and `evidence/ui-mockups/temporal-inpaint-review-concept.png` — AI concept mockups generated from OmniFrame captures. They are visual explorations, not screenshots of the running app.
 - **Krita reference limitation:** Krita is not installed in this workspace and no authentic Krita toolbox screenshot was provided. Images with “Krita” in their filenames under `evidence/screenshots` are OmniFrame captures, not Krita references. The mockups use broad layout/alignment ideas only and do not claim Krita provenance.
 
+## Text Preset Library + tutorial.md (1,000-title index)
+
+`tutorial.md` (repo root): 1,000 YouTube-style text-tutorial titles (20
+editors × 50 text techniques); recreated rows marked ✅ with preset ids.
+Honesty: titles are a topic index, not watched videos; the two tutorials
+studied end-to-end (transcripts) are in `docs/RETRO-WATERMARK-STUDY.md`.
+Text panel → **Text Preset Library**: 23 procedural presets
+(`src/lib/textPresets.ts`) keyed to normalized letter position `u = i/(n−1)`
+with per-preset ideal ranges and live non-blocking guidance; seeded looks
+re-roll via seed. Vetting packs: `testing_asset_etc/<preset>/` (3 frames +
+spec.json) + README with Perfect/Horrible columns
+(`qa/export-text-preset-tests.mjs` regenerates). QA `qa/text-presets-e2e.mjs`:
+all build; 2/6/16-char mapping; determinism; guidance states.
+
 ## Per-feature checklist
 
 The checked panel items below mean **the panel and its boundary were inventoried and the relevant regression path was identified**. They do not mean every panel test was rerun in this pass. Exact current-turn test results are separately recorded above.
