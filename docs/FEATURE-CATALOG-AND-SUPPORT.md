@@ -122,10 +122,23 @@ The affordance audit checks naming/interaction affordances; the overflow audit t
 - `evidence/ui-mockups/smart-patch-omniframe-linked-concept.png` and `evidence/ui-mockups/temporal-inpaint-review-concept.png` — AI concept mockups generated from OmniFrame captures. They are visual explorations, not screenshots of the running app.
 - **Krita reference limitation:** Krita is not installed in this workspace and no authentic Krita toolbox screenshot was provided. Images with “Krita” in their filenames under `evidence/screenshots` are OmniFrame captures, not Krita references. The mockups use broad layout/alignment ideas only and do not claim Krita provenance.
 
+## Text Preset Library, tutorial.md (100,000 titles) + subscription scan
+
+`tutorial.md` now carries **100,000** generated tutorial titles (52
+tutorial/edit channels from your subscription scan × 101 techniques × 40
+editors × 20 title formulas; ✅ = built preset) — a demand map, not watched
+videos. `docs/SUBSCRIPTION-SCAN.md`: your 211 subscriptions classified
+(7 tutorial / 45 edit-creator / 159 other), the gateway+RSS mining route
+(titles/descriptions only — no frames watched; sandbox yt-dlp is blocked),
+techniques consumed and what's queued. Preset library is at **33 presets**
+(added Wizzy shake system, fire/ice/gold, gradient flow, long shadow, blur
+focus, VHS, word pop). Vetting packs in `testing_asset_etc/` are now
+**videos**: `preview.mp4` (2.8 s, synthesized sound cues — whoosh/pop/ding,
+glitch ticks; all 33 verified audible) + `preview.webm` + stills + spec.
+
 ## Text Preset Library + tutorial.md (1,000-title index)
 
-`tutorial.md` (repo root): 1,000 YouTube-style text-tutorial titles (20
-editors × 50 text techniques); recreated rows marked ✅ with preset ids.
+`tutorial.md` (repo root): originally 1,000 titles (20 editors × 50 techniques) — superseded by the 100,000-title index above.
 Honesty: titles are a topic index, not watched videos; the two tutorials
 studied end-to-end (transcripts) are in `docs/RETRO-WATERMARK-STUDY.md`.
 Text panel → **Text Preset Library**: 23 procedural presets

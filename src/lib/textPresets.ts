@@ -323,6 +323,144 @@ export const TEXT_PRESETS: TextPresetDef[] = [
       return pushClips(created)
     },
   },
+  {
+    id: 'shake-smooth', name: 'Smooth Shake Text (Wizzy)', category: 'Motion', source: 'Wizzy Tutorials — Make YOUR OWN Shake Effects (91AtnciF8fc)', ideal: [2, 10], demo: 'SMOOTH',
+    build: (text, o) => {
+      const c = word(text, { glowColor: o.color, glowBlur: 10 }, o)
+      const keys: [number, number, string?][] = [[0, 0]]
+      for (let t = 0.06; t < 1.5; t += 0.07) { const decay = 1 - t / 1.6; keys.push([t, Math.sin(t * 42) * 6 * decay, 'smooth']) }
+      keys.push([1.6, 0], [o.duration, 0])
+      withKeys(c, 'position_x', keys)
+      const ky: [number, number, string?][] = keys.map(([t, v, e]) => [t, v * 0.6, e] as [number, number, string?])
+      withKeys(c, 'position_y', ky)
+      return pushClips([withFade(c, 0.15, 0.25)])
+    },
+  },
+  {
+    id: 'shake-aggressive', name: 'Aggressive Shake Text (Wizzy)', category: 'Motion', source: 'Wizzy Tutorials — Make YOUR OWN Shake Effects (91AtnciF8fc)', ideal: [2, 8], demo: 'CHAOS',
+    build: (text, o) => {
+      const c = word(text, { color: '#ffffff', glowColor: '#ff2222', glowBlur: 12 }, o)
+      const rng = seededRng(o.seed)
+      const kx: [number, number, string?][] = [[0, 0]]
+      const ky: [number, number, string?][] = [[0, 0]]
+      const kr: [number, number, string?][] = [[0, 0]]
+      for (let t = 0.05; t < 1.3; t += 0.05) {
+        const decay = 1 - t / 1.45
+        kx.push([t, (rng() * 2 - 1) * 17 * decay]); ky.push([t, (rng() * 2 - 1) * 12 * decay]); kr.push([t, (rng() * 2 - 1) * 2.4 * decay])
+      }
+      kx.push([1.4, 0], [o.duration, 0]); ky.push([1.4, 0], [o.duration, 0]); kr.push([1.4, 0], [o.duration, 0])
+      withKeys(c, 'position_x', kx); withKeys(c, 'position_y', ky); withKeys(c, 'rotation_z', kr)
+      return pushClips([withFade(c, 0.1, 0.25)])
+    },
+  },
+  {
+    id: 'fire-text', name: 'Fire Text', category: 'Glow / Neon', source: 'Fire text tutorials (subscription scan)', ideal: [3, 10], demo: 'FIRE',
+    build: (text, o) => {
+      const halo = word(text, { color: '#ff6a00', glowColor: '#ff4400', glowBlur: 36 }, o, { name: 'fire halo' })
+      const rng = seededRng(o.seed)
+      const keys: [number, number, string?][] = [[0, 0.4]]
+      for (let t = 0.15; t < o.duration - 0.3; t += 0.13) keys.push([t, 0.55 + rng() * 0.45])
+      keys.push([o.duration - 0.25, 0.9], [o.duration, 0])
+      withKeys(halo, 'opacity', keys)
+      const core = word(text, { color: '#ffd23f', glowColor: '#ff9500', glowBlur: 12 }, o)
+      return pushClips([halo, withFade(core, 0.2, 0.3)])
+    },
+  },
+  {
+    id: 'ice-text', name: 'Ice Text', category: 'Glow / Neon', source: 'Frozen/ice text tutorials (subscription scan)', ideal: [3, 10], demo: 'FROZEN',
+    build: (text, o) => {
+      const halo = word(text, { color: '#a5f3fc', glowColor: '#22d3ee', glowBlur: 30 }, o, { name: 'ice halo' })
+      const core = word(text, { color: '#ffffff', glowColor: '#bae6fd', glowBlur: 8 }, o)
+      withKeys(core, 'opacity', [[0, 0, 'ease-out'], [0.4, 1], [o.duration / 2, 0.9], [o.duration - 0.3, 1], [o.duration, 0]])
+      return pushClips([withFade(halo, 0.3, 0.4), core])
+    },
+  },
+  {
+    id: 'gold-text', name: 'Gold Shine Text', category: 'Style', source: 'Gold/metallic text tutorials (subscription scan)', ideal: [3, 10], demo: 'GOLD',
+    build: (text, o) => {
+      const golds = ['#b8860b', '#daa520', '#ffd700', '#ffec8b', '#ffd700', '#daa520']
+      return letters(text, o, (ctx) => [withFade(letterClip(ctx, { color: golds[ctx.i % golds.length], glowColor: '#ffaa00', glowBlur: 10 }), 0.3, 0.3)])
+    },
+  },
+  {
+    id: 'gradient-flow', name: 'Gradient Flow Letters', category: 'Style', source: 'Animated gradient text tutorials (subscription scan)', ideal: [4, 14], demo: 'FLOW',
+    build: (text, o) => {
+      const stops = ['#22d3ee', '#34d399', '#a3e635', '#facc15', '#fb923c', '#f472b6', '#a78bfa']
+      return letters(text, o, (ctx) => {
+        const col = stops[Math.floor(ctx.u * (stops.length - 1))]
+        const c = letterClip(ctx, { color: col, glowColor: col, glowBlur: 7 })
+        withKeys(c, 'position_y', [[0, 0, 'smooth'], [ctx.dur / 2, -7, 'smooth'], [ctx.dur, 0, 'smooth']])
+        return [withFade(c, 0.3, 0.3)]
+      })
+    },
+  },
+  {
+    id: 'long-shadow', name: 'Long Shadow Retro', category: 'Style', source: 'Long shadow text tutorials (subscription scan)', ideal: [3, 10], demo: 'SHADOW',
+    build: (text, o) => {
+      const created: Clip[] = []
+      for (let k = 6; k >= 1; k--) {
+        const c = word(text, { color: '#15151f' }, o, { name: `shadow ${k}` })
+        c.transform = { ...c.transform, x: k * 5, y: k * 5 }
+        created.push(c)
+      }
+      created.push(withFade(word(text, { color: o.color, glowColor: o.color, glowBlur: 6 }, o), 0.25, 0.3))
+      return pushClips(created)
+    },
+  },
+  {
+    id: 'blur-focus', name: 'Blur Focus Pull', category: 'Motion', source: 'Blur reveal / focus pull title tutorials', ideal: [3, 14], demo: 'FOCUS',
+    build: (text, o) => {
+      const blurred = word(text, {}, o, { name: 'blurred pass' })
+      blurred.effects = { blur: 16 }
+      blurred.duration = Math.min(0.85, o.duration * 0.4)
+      blurred.transform = { ...blurred.transform, scale: 1.07, scaleY: 1.07 }
+      const sharp = word(text, {}, o)
+      const offset = Math.min(0.55, o.duration * 0.28)
+      sharp.start = start() + offset
+      sharp.duration = o.duration - offset
+      withKeys(sharp, 'opacity', [[0, 0], [0.25, 1], [sharp.duration - 0.3, 1], [sharp.duration, 0]])
+      return pushClips([withFade(blurred, 0.1, 0.3), sharp])
+    },
+  },
+  {
+    id: 'vhs-text', name: 'VHS Camcorder Text', category: 'Retro / Glitch', source: 'VHS retro overlay text tutorials', ideal: [3, 12], demo: 'PLAY ►',
+    build: (text, o) => {
+      const created: Clip[] = []
+      const main = word(text, { fontFamily: 'ui-monospace, Menlo, monospace', fontSize: 76 }, o)
+      const ky: [number, number, string?][] = [[0, 0], [0.5, 1.5], [1.1, -1], [1.7, 1], [2.3, -1.5], [o.duration, 0]]
+      withKeys(main, 'position_y', ky)
+      created.push(withFade(main, 0.2, 0.3))
+      const t = track()
+      ;[0.45, 1.35, 2.2].forEach((off, i) => {
+        const sl = textClip(t, start() + off, 0.16, { text, fontSize: 76, bold: true, fontFamily: 'ui-monospace, Menlo, monospace', color: '#fff' }, { name: `vhs tear ${i}` })
+        sl.effects = { chromatic: 14, waveWarp: 9 }
+        created.push(sl)
+      })
+      return pushClips(created)
+    },
+  },
+  {
+    id: 'word-pop', name: 'Word Pop Captions', category: 'Style', source: 'Word-by-word caption tutorials (podcast style)', ideal: [6, 28], demo: 'EVERY WORD POPS',
+    build: (text, o) => {
+      const wordsArr = text.split(/\s+/).filter(Boolean)
+      const created: Clip[] = []
+      const per = Math.min(0.42, (o.duration * 0.7) / Math.max(1, wordsArr.length))
+      const widths = wordsArr.map((w) => w.length * 41 + 30)
+      const total = widths.reduce((a, b) => a + b, 0)
+      let cursor = -total / 2
+      wordsArr.forEach((w, wi) => {
+        const c = textClip(track(), start(), o.duration, { text: w, fontSize: 68, bold: true, fontFamily: FONT, color: wi % 2 ? '#ffffff' : o.color }, { name: w })
+        c.transform = { ...c.transform, x: cursor + widths[wi] / 2 }
+        cursor += widths[wi]
+        const on = wi * per
+        withKeys(c, 'scale_x', [[0, 0], [on, 0], [on + 0.14, 1.12, 'back'], [on + 0.24, 1], [o.duration - 0.25, 1], [o.duration, 1]])
+        withKeys(c, 'scale_y', [[0, 0], [on, 0], [on + 0.14, 1.12, 'back'], [on + 0.24, 1]])
+        withKeys(c, 'opacity', [[0, 0], [on, 0], [on + 0.03, 1], [o.duration - 0.25, 1], [o.duration, 0]])
+        created.push(c)
+      })
+      return pushClips(created)
+    },
+  },
 ]
 
 export function buildTextPreset(id: string, text: string, opts?: Partial<O>): string[] {
