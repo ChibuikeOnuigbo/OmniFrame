@@ -370,6 +370,26 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   uiPalette: string
   setUiStyle: (v: string) => void
   setUiPalette: (v: string) => void
+  // Provider connection (BYOK). The API key lives in memory ONLY — never
+  // persisted, never in .omni files. Provider/model/endpoint persist.
+  aiProvider: string
+  aiModel: string
+  aiEndpoint: string
+  aiApiKey: string
+  aiCapabilityModels: Record<string, string>
+  aiConnection: { status: 'idle' | 'testing' | 'connected' | 'error'; message: string; latencyMs: number | null; modelAvailable: boolean | null; at: number }
+  setAiProvider: (v: string) => void
+  setAiModel: (v: string) => void
+  setAiEndpoint: (v: string) => void
+  setAiApiKey: (v: string) => void
+  setAiCapabilityModel: (capability: string, model: string) => void
+  setAiConnection: (c: { status: 'idle' | 'testing' | 'connected' | 'error'; message: string; latencyMs: number | null; modelAvailable?: boolean | null }) => void
+  // Library taste: the pack learns from likes + what you actually place.
+  packLikes: string[]
+  packTaste: Record<string, number>
+  togglePackLike: (assetId: string) => void
+  recordPackUse: (assetId: string, section: string, group: string) => void
+  resetPackTaste: () => void
   /** Drawing: treat selected video clips as paint layers (drawing sits in
    *  the clip stack) instead of always compositing on top of everything. */
   viewVideosAsLayers: boolean
@@ -1130,6 +1150,14 @@ export const useEditor = create<EditorState>((set, get) => {
     hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
     uiStyle: typeof localStorage === 'undefined' ? 'omniframe' : (localStorage.getItem('omniframe.uiStyle') || 'omniframe'),
     uiPalette: typeof localStorage === 'undefined' ? 'violet' : (localStorage.getItem('omniframe.uiPalette') || 'violet'),
+    aiProvider: typeof localStorage === 'undefined' ? 'openrouter' : (localStorage.getItem('omniframe.aiProvider') || 'openrouter'),
+    aiModel: typeof localStorage === 'undefined' ? 'openai/gpt-4o-mini' : (localStorage.getItem('omniframe.aiModel') || 'openai/gpt-4o-mini'),
+    aiEndpoint: typeof localStorage === 'undefined' ? '' : (localStorage.getItem('omniframe.aiEndpoint') || ''),
+    aiApiKey: '',
+    aiCapabilityModels: (() => { try { return JSON.parse(localStorage.getItem('omniframe.aiCapabilityModels') || '{}') } catch { return {} } })(),
+    aiConnection: { status: 'idle', message: '', latencyMs: null, modelAvailable: null, at: 0 },
+    packLikes: (() => { try { return JSON.parse(localStorage.getItem('omniframe.packLikes') || '[]') } catch { return [] } })(),
+    packTaste: (() => { try { return JSON.parse(localStorage.getItem('omniframe.packTaste') || '{}') } catch { return {} } })(),
     viewVideosAsLayers: false,
     dockerPrefs: (() => {
       try {
@@ -3253,6 +3281,42 @@ export const useEditor = create<EditorState>((set, get) => {
       try { localStorage.setItem('omniframe.uiPalette', v) } catch { /* private mode */ }
       set({ uiPalette: v })
     },
+    setAiProvider: (v: string) => {
+      try { localStorage.setItem('omniframe.aiProvider', v) } catch { /* private mode */ }
+      set({ aiProvider: v, aiConnection: { status: 'idle', message: '', latencyMs: null, modelAvailable: null, at: 0 } })
+    },
+    setAiModel: (v: string) => {
+      try { localStorage.setItem('omniframe.aiModel', v) } catch { /* private mode */ }
+      set({ aiModel: v })
+    },
+    setAiEndpoint: (v: string) => {
+      try { localStorage.setItem('omniframe.aiEndpoint', v) } catch { /* private mode */ }
+      set({ aiEndpoint: v })
+    },
+    setAiApiKey: (v: string) => set({ aiApiKey: v }), // memory only, by design
+    setAiCapabilityModel: (capability: string, model: string) => {
+      const next = { ...get().aiCapabilityModels, [capability]: model }
+      try { localStorage.setItem('omniframe.aiCapabilityModels', JSON.stringify(next)) } catch { /* private mode */ }
+      set({ aiCapabilityModels: next })
+    },
+    setAiConnection: (c) => set({ aiConnection: { status: c.status, message: c.message, latencyMs: c.latencyMs, modelAvailable: c.modelAvailable ?? null, at: Date.now() } }),
+    togglePackLike: (assetId: string) => {
+      const likes = get().packLikes.includes(assetId) ? get().packLikes.filter((id) => id !== assetId) : [...get().packLikes, assetId]
+      try { localStorage.setItem('omniframe.packLikes', JSON.stringify(likes)) } catch { /* private mode */ }
+      set({ packLikes: likes })
+    },
+    recordPackUse: (assetId: string, section: string, group: string) => {
+      const taste = { ...get().packTaste }
+      taste[`section:${section}`] = (taste[`section:${section}`] || 0) + 1
+      taste[`group:${group}`] = (taste[`group:${group}`] || 0) + 1
+      taste[`asset:${assetId}`] = (taste[`asset:${assetId}`] || 0) + 1
+      try { localStorage.setItem('omniframe.packTaste', JSON.stringify(taste)) } catch { /* private mode */ }
+      set({ packTaste: taste })
+    },
+    resetPackTaste: () => {
+      try { localStorage.removeItem('omniframe.packTaste'); localStorage.removeItem('omniframe.packLikes') } catch { /* private mode */ }
+      set({ packTaste: {}, packLikes: [] })
+    },
     setAudioIsolationModel: (model) => set({ audioIsolationModel: model }),
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
@@ -4068,6 +4132,25 @@ export const useEditor = create<EditorState>((set, get) => {
             rightOpen: false,
             timelineHeight: 300,
             drawingEnabled: true,
+          })
+          break
+        case 'alight':
+          // Alight Motion-style (from the Nova study): phone-editor DNA —
+          // layer stack first, big timeline, inspector on the right.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'media',
+            leftDockWidth: 264,
+            rightOpen: true,
+            rightPanelWidth: 288,
+            timelineHeight: 380,
+            drawingEnabled: false,
+            leftPanelFloating: false,
+            rightPanelFloating: false,
+            timelineFloating: false,
+            timelineCollapsed: false,
           })
           break
         case 'capcut':

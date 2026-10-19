@@ -13,6 +13,11 @@ export function activeEffectKeys(effects?: ClipEffect): string[] {
   if (typeof effects.sepia === 'number' && effects.sepia > 0) keys.push('sepia')
   if (typeof effects.hueRotate === 'number' && effects.hueRotate > 0) keys.push('hue-rotate')
   if (typeof effects.lightIntensity === 'number' && effects.lightIntensity > 0) keys.push('light')
+  if (typeof effects.vibrance === 'number' && effects.vibrance !== 1) keys.push('vibrance')
+  if (typeof effects.solarize === 'number' && effects.solarize > 0) keys.push('solarize')
+  if (typeof effects.posterize === 'number' && effects.posterize > 0) keys.push('posterize')
+  if (typeof effects.grain === 'number' && effects.grain > 0) keys.push('grain')
+  if (typeof effects.pixelate === 'number' && effects.pixelate > 0) keys.push('pixelate')
   return keys
 }
 
@@ -25,6 +30,12 @@ const EFFECT_LABEL: Record<string, string> = {
   invert: 'Invert',
   sepia: 'Sepia',
   hueRotate: 'Hue Rotate',
+  vibrance: 'Vibrance',
+  solarize: 'Solarize',
+  posterize: 'Posterize',
+  grain: 'Grain',
+  pixelate: 'Pixelate',
+  light: 'Light',
 }
 
 /**

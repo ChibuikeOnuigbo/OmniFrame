@@ -43,6 +43,11 @@ const DEFAULT_EFFECTS: ClipEffect = {
   invert: 0,
   sepia: 0,
   hueRotate: 0,
+  vibrance: 1,
+  solarize: 0,
+  posterize: 0,
+  grain: 0,
+  pixelate: 0,
   lightType: 'point',
   lightColor: '#ffd9a0',
   lightIntensity: 0,
@@ -570,6 +575,11 @@ const CONTROL_DEFS: Array<{ key: keyof ClipEffect; label: string; min: number; m
   { key: 'grayscale', label: 'Grayscale', min: 0, max: 1, step: 0.05, valueLabel: (value) => `${Math.round(value * 100)}%` },
   { key: 'invert', label: 'Invert', min: 0, max: 1, step: 0.05, valueLabel: (value) => `${Math.round(value * 100)}%` },
   { key: 'sepia', label: 'Sepia', min: 0, max: 1, step: 0.05, valueLabel: (value) => `${Math.round(value * 100)}%` },
+  { key: 'vibrance', label: 'Vibrance', min: 0, max: 2, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
+  { key: 'solarize', label: 'Solarize', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
+  { key: 'posterize', label: 'Posterize', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
+  { key: 'grain', label: 'Grain', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
+  { key: 'pixelate', label: 'Pixelate / Mosaic', min: 0, max: 24, step: 1, valueLabel: (value: number) => (value ? `${Math.round(value)}px blocks` : 'Off') },
 ]
 
 function ClipEffectsControls({ clip }: { clip?: Clip }) {

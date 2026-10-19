@@ -25,6 +25,7 @@ function applyRotationXY(ctx: CanvasRenderingContext2D, rotationX?: number, rota
   ctx.transform(m.a, m.b, m.c, m.d, 0, 0)
 }
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
+import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
 import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
 import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtworkMetadata'
@@ -606,6 +607,7 @@ export class PreviewEngine {
           gctx.restore()
         }
         if (stack.length) applyLutStackToCanvas(graded, stack)
+        if (hasPixelGrade(effects)) applyPixelGrade(graded, effects!, Math.round(time * 24))
         this.applyAdjustmentMask(graded, clip.adjustmentMask)
         ctx.save()
         ctx.setTransform(1, 0, 0, 1, 0, 0)
@@ -632,6 +634,7 @@ export class PreviewEngine {
       ctx.restore()
     }
     if (stack.length) applyLutStackToCanvas(target, stack)
+    if (hasPixelGrade(effects)) applyPixelGrade(target, effects!, Math.round(time * 24))
     applyLightComposite(ctx, this.width, this.height, effects)
     return pending
   }
@@ -1376,12 +1379,13 @@ export class PreviewEngine {
     // into an isolated scratch canvas, grade it there, composite back so
     // sibling content on the target canvas is untouched. A clip Mask uses the
     // same isolation: it mattes the clip's own graded pixels (only).
-    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled)) {
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(clip.effects))) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawClip(octx, el, clip, asset, time, true)
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
+      if (hasPixelGrade(clip.effects)) applyPixelGrade(scratch, clip.effects!, Math.round(time * 24))
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of
       // an enclosing compound must keep applying to this clip's pixels).
@@ -1607,6 +1611,7 @@ export class PreviewEngine {
       const octx = scratch.getContext('2d')!
       this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
+      if (hasPixelGrade(clip.effects)) applyPixelGrade(scratch, clip.effects!, Math.round(time * 24))
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state intact (outer opacity /
       // filter / transform keep applying, exactly like non-isolated draws).

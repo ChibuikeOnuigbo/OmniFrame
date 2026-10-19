@@ -190,6 +190,14 @@ The checked panel items below mean **the panel and its boundary were inventoried
 - [x] **UI styles + palettes** — Settings → Appearance: 5 structural styles (OmniFrame, Clean Cut, Workshop, Pro Blue, Daylight light theme) × 3 accent palettes, live + persisted; study in `data.md`. `node qa/ui-styles-e2e.mjs` **ALL PASS**; evidence 18–20.
 - [x] **Pivot rotation (re-verified)** — pivot-point rotation shipped earlier (`da04a32`); `qa/pivot-armature-e2e.mjs` re-run this wave: **PASSED**.
 
+### Providers, model equivalents, training (Nova study wave)
+
+- [x] **Connected API key (BYOK)** — provider/model/endpoint in the store (shared studio-wide); key memory-only, never persisted; full connection check = ping + latency + /models + model-exists. Study: `docs/NOVA-EDITOR-STUDY.md`.
+- [x] **Model equivalents** — six capability tabs with same-tier models across 10 providers; per-capability choices remembered; equivalent chips switch provider + model together.
+- [x] **Train your own model** — Custom Effects → validated JSONL dataset (export), OpenAI-compatible fine-tune submit + polling; tuned model auto-selects. Training runs on the provider, not locally.
+- [x] **Learning library** — pack Likes + placement taste reorder "For you" on-device; resettable.
+- [x] **Nova pixel effects + Alight layout** — Solarize/Vibrance/Posterize/Grain/Pixelate in playback + Effects panel; Alight Motion workspace preset. `node qa/models-training-e2e.mjs` **ALL PASS** (mocked provider); evidence 21.
+
 ### Explicitly open work (not claimed complete)
 
 - [ ] Obtain authentic Krita screenshots/toolbox references from a local Krita install or user-provided captures before making any Krita-specific visual comparison; current screenshot references are OmniFrame only.

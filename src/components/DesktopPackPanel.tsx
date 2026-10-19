@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AppWindow, Box, ChevronRight, Clapperboard, Folder, FolderOpen, Layers, MousePointer2, Search, Smartphone, Sparkles } from 'lucide-react'
+import { AppWindow, Box, ChevronRight, Clapperboard, Folder, FolderOpen, Heart, Layers, MousePointer2, Search, Smartphone, Sparkles } from 'lucide-react'
 import { useEditor } from '../store'
 import type { ClipEffect, CursorPack, Primitive3D } from '../types'
 import { PACK_ASSETS, PACK_BUNDLES, PACK_H, PACK_W, packAssetUrl, type PackAssetDef, type PackBundleDef, type PackSection } from '../lib/desktopPack'
@@ -457,6 +457,7 @@ function freePackTrack(): string {
 }
 
 function addPackClip(def: PackAssetDef, trackId?: string): string | undefined {
+  useEditor.getState().recordPackUse(def.id, def.section, def.group)
   const state = useEditor.getState()
   const assetId = ensurePackAsset(def)
   const target = trackId ?? freePackTrack()
@@ -498,7 +499,10 @@ function addBundle(bundle: PackBundleDef) {
 }
 
 function AssetCard({ def }: { def: PackAssetDef }) {
+  const liked = useEditor((st) => st.packLikes.includes(def.id))
+  const togglePackLike = useEditor((st) => st.togglePackLike)
   return (
+    <div className="relative">
     <button
       type="button"
       data-testid={`pack-asset-${def.id}`}
@@ -513,6 +517,18 @@ function AssetCard({ def }: { def: PackAssetDef }) {
       <span className="block truncate px-2 pt-1.5 text-[11px] font-medium text-ink-100" title={def.name}>{def.name}</span>
       <span className="block px-2 pb-2 text-[10px] leading-snug text-ink-500">{def.desc}</span>
     </button>
+    <button
+      type="button"
+      data-testid={`pack-like-${def.id}`}
+      aria-pressed={liked}
+      aria-label={liked ? `Unlike ${def.name}` : `Like ${def.name} — teach the library your taste`}
+      title={liked ? 'Liked — the library learns from this' : 'Like — teach the library your taste'}
+      onClick={(e) => { e.stopPropagation(); togglePackLike(def.id) }}
+      className={`absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full backdrop-blur transition-colors ${liked ? 'bg-rose-500 text-white' : 'bg-black/45 text-white/80 hover:bg-black/70'}`}
+    >
+      <Heart size={12} fill={liked ? 'currentColor' : 'none'} />
+    </button>
+    </div>
   )
 }
 
@@ -578,9 +594,20 @@ export function DesktopPackPanel() {
 
   // Explorer order: folders follow GROUP_ORDER; items inside a folder are
   // filed A–Z by display name, like File Explorer's default name sort.
+  const packLikes = useEditor((st) => st.packLikes)
+  const packTaste = useEditor((st) => st.packTaste)
+  const togglePackLike = useEditor((st) => st.togglePackLike)
+  const [forYou, setForYou] = useState(false)
+  const tasteScore = (a: PackAssetDef) =>
+    (packLikes.includes(a.id) ? 100 : 0) +
+    (packTaste[`asset:${a.id}`] || 0) * 4 +
+    (packTaste[`group:${a.group}`] || 0) * 2 +
+    (packTaste[`section:${a.section}`] || 0)
   const sectionAssets = useMemo(
-    () => PACK_ASSETS.filter((a) => a.section === section).sort((a, b) => a.name.localeCompare(b.name)),
-    [section],
+    () => PACK_ASSETS.filter((a) => a.section === section).sort((a, b) =>
+      forYou ? tasteScore(b) - tasteScore(a) || a.name.localeCompare(b.name) : a.name.localeCompare(b.name)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [section, forYou, packLikes, packTaste],
   )
   const groups = useMemo(() => {
     const order = GROUP_ORDER[section] || []
@@ -743,6 +770,19 @@ export function DesktopPackPanel() {
             className="min-w-0 flex-1 bg-transparent text-[11px] text-ink-100 outline-none placeholder:text-ink-500"
           />
         </label>
+        <div className="mt-2 flex items-center gap-1.5">
+          <button
+            type="button"
+            data-testid="pack-foryou-toggle"
+            aria-pressed={forYou}
+            onClick={() => setForYou((v) => !v)}
+            className={`flex h-6 items-center gap-1 rounded-full border px-2 text-[10px] font-medium ${forYou ? 'border-rose-400 bg-rose-500/20 text-rose-100' : 'border-ink-700 text-ink-400 hover:border-ink-500'}`}
+            title="Order by what you like and place most — learned on this device"
+          >
+            <Heart size={10} fill={forYou ? 'currentColor' : 'none'} /> For you
+          </button>
+          <span className="text-[9px] leading-tight text-ink-600">Likes teach the order. Nothing leaves this device.</span>
+        </div>
       </div>
 
       {/* Horizontal segmented bar — the five sections of this tab */}

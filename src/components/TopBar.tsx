@@ -27,7 +27,9 @@ import { exportVideo } from '../lib/export'
 import { exportPrimitiveSceneObj, exportProgramFramePng } from '../lib/projectSubsets'
 import { EDITABLE_SHORTCUTS, SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
 import { UI_STYLES, UI_PALETTES } from '../lib/uiStyles'
-import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
+import { AI_PROVIDERS, testAiConnectionFull, submitFineTuneJob, getFineTuneJobStatus, type AiProviderId } from '../lib/aiProviders'
+import { MODEL_CAPABILITIES, equivalentsFor, equivalentAcrossProviders, FINETUNE_BASES, type ModelCapability } from '../lib/modelCatalog'
+import { buildFineTuneDataset, downloadTextFile } from '../lib/fineTune'
 import {
   getDesktopInfo,
   toggleDesktopFullscreen,
@@ -109,17 +111,37 @@ export function TopBar() {
   const [settingsCategory, setSettingsCategory] = useState<SettingsCategory>('timeline')
   const [settingsSearch, setSettingsSearch] = useState('')
   const settingsMatches = searchSettings(settingsSearch)
-  const [aiProvider, setAiProvider] = useState<AiProviderId>('openrouter')
-  const initialAiProvider = AI_PROVIDERS[0]
-  const [aiModel, setAiModel] = useState(initialAiProvider.defaultModel)
-  const [aiEndpoint, setAiEndpoint] = useState('')
-  const [aiApiKey, setAiApiKey] = useState('')
+  // Provider state lives in the store so every panel sees the same
+  // connection; the key itself is memory-only (never persisted).
+  const aiProvider = useEditor((s) => s.aiProvider) as AiProviderId
+  const aiModel = useEditor((s) => s.aiModel)
+  const aiEndpoint = useEditor((s) => s.aiEndpoint)
+  const aiApiKey = useEditor((s) => s.aiApiKey)
+  const setAiProviderState = useEditor((s) => s.setAiProvider)
+  const setAiModel = useEditor((s) => s.setAiModel)
+  const setAiEndpoint = useEditor((s) => s.setAiEndpoint)
+  const setAiApiKey = useEditor((s) => s.setAiApiKey)
+  const aiCapabilityModels = useEditor((s) => s.aiCapabilityModels)
+  const setAiCapabilityModel = useEditor((s) => s.setAiCapabilityModel)
+  const aiConnection = useEditor((s) => s.aiConnection)
+  const setAiConnection = useEditor((s) => s.setAiConnection)
+  const customEffects = useEditor((s) => s.customEffects)
+  const packLikes = useEditor((s) => s.packLikes)
+  const packTaste = useEditor((s) => s.packTaste)
+  const resetPackTaste = useEditor((s) => s.resetPackTaste)
   const [aiTestState, setAiTestState] = useState<'idle' | 'testing' | 'success' | 'error'>('idle')
   const [aiTestMessage, setAiTestMessage] = useState('')
+  const [modelCap, setModelCap] = useState<ModelCapability>('chat')
+  const [ftBase, setFtBase] = useState('gpt-4o-mini-2024-07-18')
+  const [ftEpochs, setFtEpochs] = useState(3)
+  const [ftSuffix, setFtSuffix] = useState('omniframe-effects')
+  const [ftJob, setFtJob] = useState<{ id: string; status: string; model: string | null } | null>(null)
+  const [ftBusy, setFtBusy] = useState(false)
+  const [ftMessage, setFtMessage] = useState('')
 
   const selectAiProvider = (id: AiProviderId) => {
     const provider = AI_PROVIDERS.find((item) => item.id === id)!
-    setAiProvider(id)
+    setAiProviderState(id)
     setAiModel(provider.defaultModel)
     setAiEndpoint(provider.endpoint)
     setAiTestState('idle')
@@ -129,13 +151,50 @@ export function TopBar() {
   const testProvider = async () => {
     setAiTestState('testing')
     setAiTestMessage('')
+    setAiConnection({ status: 'testing', message: 'Pinging provider…', latencyMs: null })
     try {
-      await testAiConnection({ provider: aiProvider, apiKey: aiApiKey, model: aiModel, endpoint: aiEndpoint })
+      const report = await testAiConnectionFull({ provider: aiProvider, apiKey: aiApiKey, model: aiModel, endpoint: aiEndpoint })
       setAiTestState('success')
-      setAiTestMessage('Connection succeeded.')
+      const parts = [`Connected in ${report.latencyMs} ms — the model replied.`]
+      if (report.modelsListed !== null) parts.push(`${report.modelsListed} models on this account.`)
+      if (report.modelAvailable === false) parts.push(`Note: “${aiModel}” was not in the account's model list — check the ID.`)
+      setAiTestMessage(parts.join(' '))
+      setAiConnection({ status: 'connected', message: parts.join(' '), latencyMs: report.latencyMs, modelAvailable: report.modelAvailable })
     } catch (error) {
       setAiTestState('error')
-      setAiTestMessage(error instanceof Error ? error.message : 'Connection failed.')
+      const message = error instanceof Error ? error.message : 'Connection failed.'
+      setAiTestMessage(message)
+      setAiConnection({ status: 'error', message, latencyMs: null })
+    }
+  }
+
+  const providerConfig = { provider: aiProvider, apiKey: aiApiKey, model: aiModel, endpoint: aiEndpoint }
+  const ftDataset = buildFineTuneDataset(customEffects)
+  const submitFineTune = async () => {
+    setFtBusy(true)
+    setFtMessage('')
+    try {
+      const created = await submitFineTuneJob(providerConfig, { jsonl: ftDataset.jsonl, baseModel: ftBase, suffix: ftSuffix, epochs: ftEpochs })
+      setFtJob({ id: created.jobId, status: created.status, model: null })
+      setFtMessage(`Job ${created.jobId} created (${created.status}). Training runs on the provider — poll for status, then pick the tuned model above.`)
+    } catch (error) {
+      setFtMessage(error instanceof Error ? error.message : 'Fine-tune submit failed.')
+    } finally {
+      setFtBusy(false)
+    }
+  }
+  const pollFineTune = async () => {
+    if (!ftJob) return
+    setFtBusy(true)
+    try {
+      const status = await getFineTuneJobStatus(providerConfig, ftJob.id)
+      setFtJob({ ...ftJob, status: status.status, model: status.fineTunedModel })
+      if (status.fineTunedModel) setFtMessage(`Done — your tuned model is “${status.fineTunedModel}”. It is now selected as the active model.`)
+      if (status.fineTunedModel) setAiModel(status.fineTunedModel)
+    } catch (error) {
+      setFtMessage(error instanceof Error ? error.message : 'Status check failed.')
+    } finally {
+      setFtBusy(false)
     }
   }
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('omniframe.reducedMotion') === 'true')
@@ -1427,6 +1486,129 @@ export function TopBar() {
                       {aiTestMessage}
                     </p>
                   )}
+
+                  <div className="rounded-md border border-ink-700 bg-ink-900 p-2" data-testid="ai-connection-card">
+                    <div className="flex items-center gap-2">
+                      <span className={`h-2 w-2 rounded-full ${aiConnection.status === 'connected' ? 'bg-emerald-400' : aiConnection.status === 'error' ? 'bg-red-400' : aiConnection.status === 'testing' ? 'bg-amber-400' : 'bg-ink-500'}`} />
+                      <span className="font-semibold text-ink-100" data-testid="ai-connection-status">
+                        {aiConnection.status === 'connected' ? 'Connected' : aiConnection.status === 'error' ? 'Connection failed' : aiConnection.status === 'testing' ? 'Testing…' : 'Not tested yet'}
+                      </span>
+                      {aiConnection.latencyMs !== null && <span className="text-ink-500">{aiConnection.latencyMs} ms</span>}
+                      {aiConnection.at > 0 && <span className="ml-auto text-[10px] text-ink-500">{new Date(aiConnection.at).toLocaleTimeString()}</span>}
+                    </div>
+                    <p className="mt-1 text-[10px] leading-snug text-ink-500">
+                      One connection for the whole studio: the key stays in this tab's memory, is sent only to {AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.label || 'your provider'}, and is never saved to disk or into .omni projects.
+                    </p>
+                  </div>
+
+                  <div className="rounded-md border border-ink-700 bg-ink-900 p-2" data-testid="model-equivalents">
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Choose a model — equivalents per job</p>
+                    <div className="mb-2 flex flex-wrap gap-1" role="group" aria-label="Model capability">
+                      {MODEL_CAPABILITIES.map((cap) => (
+                        <button
+                          key={cap.id}
+                          type="button"
+                          data-testid={`model-cap-${cap.id}`}
+                          aria-pressed={modelCap === cap.id}
+                          onClick={() => setModelCap(cap.id)}
+                          className={`h-6 rounded-full border px-2 text-[10px] ${modelCap === cap.id ? 'border-brand bg-brand/20 text-white' : 'border-ink-700 text-ink-400 hover:border-ink-500'}`}
+                        >
+                          {cap.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="mb-1 text-[10px] text-ink-500">{MODEL_CAPABILITIES.find((c) => c.id === modelCap)?.note} · on {AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.label}:</p>
+                    <div className="space-y-1">
+                      {equivalentsFor(modelCap, aiProvider).length ? equivalentsFor(modelCap, aiProvider).map((eq) => (
+                        <button
+                          key={eq.model}
+                          type="button"
+                          data-testid="model-option"
+                          data-model-id={eq.model}
+                          aria-pressed={aiModel === eq.model}
+                          onClick={() => { setAiModel(eq.model); setAiCapabilityModel(modelCap, eq.model) }}
+                          className={`flex w-full items-center gap-2 rounded border px-2 py-1.5 text-left ${aiModel === eq.model ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 text-ink-300 hover:border-ink-500'}`}
+                        >
+                          <span className="min-w-0 flex-1 truncate font-mono text-[10px]">{eq.model}</span>
+                          <span className={`shrink-0 rounded-full px-1.5 py-px text-[9px] ${eq.tier === 'flagship' ? 'bg-violet-500/25 text-violet-200' : eq.tier === 'fast' ? 'bg-sky-500/20 text-sky-200' : 'bg-emerald-500/20 text-emerald-200'}`}>{eq.tier}</span>
+                          {aiCapabilityModels[modelCap] === eq.model && <span className="shrink-0 text-[9px] text-brand-400">in use</span>}
+                        </button>
+                      )) : (
+                        <p className="text-[10px] text-ink-500">No curated {modelCap} model on this provider — type any model ID above, or pick an equivalent below and switch provider.</p>
+                      )}
+                    </div>
+                    <p className="mt-2 text-[10px] text-ink-500">Same job on other providers:</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {equivalentAcrossProviders(modelCap).filter((eq) => eq.provider !== aiProvider).slice(0, 8).map((eq) => (
+                        <button
+                          key={`${eq.provider}:${eq.model}`}
+                          type="button"
+                          data-testid="model-equivalent-other"
+                          onClick={() => { selectAiProvider(eq.provider); setAiModel(eq.model); setAiCapabilityModel(modelCap, eq.model) }}
+                          className="rounded-full border border-ink-700 px-2 py-1 font-mono text-[9px] text-ink-400 hover:border-brand hover:text-white"
+                          title={`Switch to ${eq.provider} and use ${eq.model}`}
+                        >
+                          {eq.provider}: {eq.model}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rounded-md border border-ink-700 bg-ink-900 p-2" data-testid="training-center">
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Train your own model</p>
+                    <p className="text-[10px] leading-snug text-ink-500">
+                      Your saved Custom Effects become training pairs (brief → effect JSON). Export the dataset, or submit a fine-tune job with your key — the tuned model is then yours to select above.
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[10px] text-ink-400">
+                      <span data-testid="finetune-stats">{ftDataset.examples} examples · ≈{ftDataset.estTokens} tokens</span>
+                      <button type="button" data-testid="finetune-download" disabled={!ftDataset.examples} onClick={() => downloadTextFile('omniframe-training.jsonl', ftDataset.jsonl)} className="h-6 rounded border border-ink-600 bg-ink-800 px-2 text-[10px] text-ink-100 hover:border-brand disabled:opacity-40">
+                        Download JSONL
+                      </button>
+                    </div>
+                    {ftDataset.warnings.map((w) => (
+                      <p key={w} className="mt-1 text-[10px] text-amber-300">{w}</p>
+                    ))}
+                    <div className="mt-2 grid grid-cols-3 gap-1.5">
+                      <label className="block text-[10px] text-ink-400">Base model
+                        <select data-testid="finetune-base" value={ftBase} onChange={(e) => setFtBase(e.target.value)} className="mt-0.5 h-7 w-full rounded border border-ink-700 bg-ink-800 px-1 text-[10px] text-ink-100">
+                          {(FINETUNE_BASES[aiProvider] || []).map((m) => (<option key={m} value={m}>{m}</option>))}
+                          {!(FINETUNE_BASES[aiProvider] || []).length && <option value={ftBase}>{ftBase || '— pick OpenAI/Together/Mistral —'}</option>}
+                        </select>
+                      </label>
+                      <label className="block text-[10px] text-ink-400">Epochs
+                        <input data-testid="finetune-epochs" type="number" min={1} max={10} value={ftEpochs} onChange={(e) => setFtEpochs(Math.min(10, Math.max(1, Number(e.target.value) || 3)))} className="mt-0.5 h-7 w-full rounded border border-ink-700 bg-ink-800 px-1 text-[10px] text-ink-100" />
+                      </label>
+                      <label className="block text-[10px] text-ink-400">Name suffix
+                        <input data-testid="finetune-suffix" value={ftSuffix} onChange={(e) => setFtSuffix(e.target.value)} className="mt-0.5 h-7 w-full rounded border border-ink-700 bg-ink-800 px-1 text-[10px] text-ink-100" />
+                      </label>
+                    </div>
+                    <div className="mt-2 flex gap-1.5">
+                      <button
+                        type="button"
+                        data-testid="finetune-submit"
+                        disabled={ftBusy || !ftDataset.examples || aiConnection.status !== 'connected'}
+                        onClick={submitFineTune}
+                        className="h-7 flex-1 rounded bg-brand px-2 text-[11px] font-semibold text-white hover:bg-brand/85 disabled:opacity-40"
+                        title={aiConnection.status !== 'connected' ? 'Test the connection first' : 'Upload the dataset and start the job'}
+                      >
+                        {ftBusy ? 'Working…' : 'Start fine-tune job'}
+                      </button>
+                      {ftJob && (
+                        <button type="button" data-testid="finetune-poll" disabled={ftBusy} onClick={pollFineTune} className="h-7 rounded border border-ink-600 bg-ink-800 px-2 text-[10px] text-ink-100 hover:border-brand disabled:opacity-40">
+                          Check status
+                        </button>
+                      )}
+                    </div>
+                    {ftJob && <p className="mt-1 font-mono text-[9px] text-ink-500" data-testid="finetune-job">{ftJob.id} · {ftJob.status}{ftJob.model ? ` · ${ftJob.model}` : ''}</p>}
+                    {ftMessage && <p className="mt-1 text-[10px] leading-snug text-ink-400" role="status">{ftMessage}</p>}
+                    <div className="mt-3 border-t border-ink-800 pt-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-500">Library taste (learns locally)</p>
+                      <p className="mt-0.5 text-[10px] leading-snug text-ink-500" data-testid="taste-summary">
+                        {packLikes.length} liked · {Object.keys(packTaste).length} learned signals. Liking and placing pack assets teaches the “For you” order — on this device only.
+                      </p>
+                      <button type="button" data-testid="taste-reset" onClick={resetPackTaste} className="mt-1 h-6 rounded border border-ink-700 bg-ink-800 px-2 text-[10px] text-ink-300 hover:border-ink-500">Forget my taste</button>
+                    </div>
+                  </div>
                 </div>
               )}
             </section>

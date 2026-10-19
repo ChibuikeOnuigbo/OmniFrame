@@ -175,6 +175,12 @@ export interface ClipEffect {
   invert?: number // 0..1 (default 0)
   sepia?: number // 0..1 (default 0)
   hueRotate?: number // 0..360 deg (default 0)
+  // Per-pixel grades (Nova-style effects CSS filters cannot express):
+  vibrance?: number // 0..2 smart saturation (default 1)
+  solarize?: number // 0..1 invert-above-midpoint blend (default 0)
+  posterize?: number // 0..1 colour-level reduction (default 0)
+  grain?: number // 0..1 animated film grain (default 0)
+  pixelate?: number // mosaic block size in px, 0 = off
   // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.
   lightType?: 'point' | 'spot' // default 'point' (spot = elliptical falloff cone)
@@ -552,6 +558,7 @@ export type WorkspacePreset =
   | 'rig'
   | 'manga'
   | 'capcut'
+  | 'alight'
   | 'cinema'
 
 /** How side-panel sections are presented: tab panels or single-open accordion. */
