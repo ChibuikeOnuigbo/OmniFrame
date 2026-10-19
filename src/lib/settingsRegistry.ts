@@ -1,4 +1,4 @@
-export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'cursor' | 'accessibility' | 'ai' | 'dockers'
+export type SettingsCategory = 'timeline' | 'playback' | 'shortcuts' | 'contextMenu' | 'cursor' | 'accessibility' | 'ai' | 'dockers' | 'appearance'
 export type SettingsScope = 'project' | 'user' | 'session'
 
 export interface SettingDefinition {
@@ -160,8 +160,23 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     testId: 'setting-dockers-right-subtools',
     sourceRefs: [],
   },
+  {
+    id: 'ui.style', category: 'appearance', label: 'UI style',
+    description: 'Five interface styles (OmniFrame, Clean Cut, Workshop, Pro Blue, Daylight) that regroup corners, density and panel depth — structure, not just colour.',
+    aliases: ['ui style', 'theme', 'look', 'interface', 'appearance', 'dark', 'light', 'capcut style', 'krita style'],
+    controlType: 'radio', defaultValue: 'omniframe', scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.uiStyle', testId: 'ui-style-omniframe',
+    sourceRefs: [{ editor: 'Krita', url: 'https://docs.krita.org/en/user_manual/workspace.html', evidence: 'Docker/workspace theming ships as part of the workspace system.' }, { editor: 'CapCut', url: 'https://www.capcut.com/', evidence: 'Rounded card grids and pill controls define the consumer look.' }],
+  },
+  {
+    id: 'ui.palette', category: 'appearance', label: 'Accent palette',
+    description: 'Violet, Amber or Teal accent for primary actions and selection across every style.',
+    aliases: ['palette', 'accent', 'color', 'colour', 'brand'],
+    controlType: 'radio', defaultValue: 'violet', scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.uiPalette', testId: 'ui-palette-violet',
+    sourceRefs: [],
+  },
 ]
-
 export const SETTINGS_CATEGORIES = [...new Set(SETTINGS_REGISTRY.map((item) => item.category))] as SettingsCategory[]
 
 export function searchSettings(query: string): SettingDefinition[] {

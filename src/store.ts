@@ -311,6 +311,7 @@ import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } fro
 import { denoiseAudioBuffer } from './lib/aiDenoise'
 import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
 import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
+import { markerColorHex, MARKER_KINDS } from './lib/markers'
 import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
 
 interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
@@ -365,6 +366,10 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   previewQuality: PreviewQuality
   /** Hide horizontal overflow app-wide (default on): strips use hover arrows / wheel / drag instead of visible scrollbars. */
   hideOverflowX: boolean
+  uiStyle: string
+  uiPalette: string
+  setUiStyle: (v: string) => void
+  setUiPalette: (v: string) => void
   /** Drawing: treat selected video clips as paint layers (drawing sits in
    *  the clip stack) instead of always compositing on top of everything. */
   viewVideosAsLayers: boolean
@@ -779,6 +784,17 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   jumpToMarker: (id: string) => void
   jumpToNextMarker: () => void
   jumpToPrevMarker: () => void
+  /** User-saved custom marker colours (persisted), beyond the 5 kind colours. */
+  markerCustomColors: string[]
+  addCustomMarkerColor: (hex: string) => void
+  /** Last-used marker kind, remembered so M stays one-keystroke fast. */
+  lastMarkerKind: string
+  setLastMarkerKind: (kind: string) => void
+  addMarkersBulk: (items: Array<Omit<TimelineMarker, 'id'>>) => string[]
+  /** Move timeline markers inside the clip's range ONTO the clip (range-limited, CapCut-style). Returns how many moved. */
+  moveMarkersToClip: (clipId: string) => number
+  /** Move a clip's markers back to the main timeline at their resolved positions. */
+  moveMarkersToTimeline: (clipId: string) => number
 
   // ---- link sets, parenting & groups ----
   linkSets: LinkSet[]
@@ -1112,6 +1128,8 @@ export const useEditor = create<EditorState>((set, get) => {
     dropFrameTimecode: false,
     previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
+    uiStyle: typeof localStorage === 'undefined' ? 'omniframe' : (localStorage.getItem('omniframe.uiStyle') || 'omniframe'),
+    uiPalette: typeof localStorage === 'undefined' ? 'violet' : (localStorage.getItem('omniframe.uiPalette') || 'violet'),
     viewVideosAsLayers: false,
     dockerPrefs: (() => {
       try {
@@ -3227,6 +3245,14 @@ export const useEditor = create<EditorState>((set, get) => {
       try { localStorage.setItem('omniframe.hideOverflowX', v ? 'yes' : 'no') } catch { /* private mode */ }
       set({ hideOverflowX: v })
     },
+    setUiStyle: (v: string) => {
+      try { localStorage.setItem('omniframe.uiStyle', v) } catch { /* private mode */ }
+      set({ uiStyle: v })
+    },
+    setUiPalette: (v: string) => {
+      try { localStorage.setItem('omniframe.uiPalette', v) } catch { /* private mode */ }
+      set({ uiPalette: v })
+    },
     setAudioIsolationModel: (model) => set({ audioIsolationModel: model }),
 
     setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
@@ -4289,6 +4315,19 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- markers initial state & actions ----
     markers: [],
+    markerCustomColors: (() => {
+      try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.markerColors') : null
+        const parsed = raw ? JSON.parse(raw) : []
+        return Array.isArray(parsed) ? parsed.filter((c) => typeof c === 'string' && /^#[0-9a-fA-F]{6}$/.test(c)).slice(0, 24) : []
+      } catch { return [] }
+    })(),
+    lastMarkerKind: (() => {
+      try {
+        const k = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.markerKind') : null
+        return k && MARKER_KINDS.some((d) => d.id === k) ? k : 'beat'
+      } catch { return 'beat' }
+    })(),
     activeMarkerModalId: null,
     setActiveMarkerModalId: (id) => set({ activeMarkerModalId: id }),
     addMarker: (marker) => {
@@ -4299,7 +4338,9 @@ export const useEditor = create<EditorState>((set, get) => {
         duration: Math.max(0, marker.duration || 0),
         label: marker.label.trim() || 'Marker',
         notes: marker.notes || '',
-        color: marker.color || 'blue',
+        color: markerColorHex(marker.color, marker.kind),
+        kind: marker.kind || 'custom',
+        ...(marker.clipId ? { clipId: marker.clipId, clipOffset: Math.max(0, marker.clipOffset || 0) } : {}),
       }
       pushSnapshot()
       set((s) => ({
@@ -4337,6 +4378,71 @@ export const useEditor = create<EditorState>((set, get) => {
       const { markers, playhead } = get()
       const prev = [...markers].reverse().find((m) => m.time < playhead - 0.05)
       if (prev) get().setPlayhead(prev.time)
+    },
+
+    addCustomMarkerColor: (hex) => {
+      if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return
+      const next = [hex.toLowerCase(), ...get().markerCustomColors.filter((c) => c.toLowerCase() !== hex.toLowerCase())].slice(0, 24)
+      set({ markerCustomColors: next })
+      try { localStorage.setItem('omniframe.markerColors', JSON.stringify(next)) } catch { /* ignore */ }
+    },
+
+    setLastMarkerKind: (kind) => {
+      set({ lastMarkerKind: kind })
+      try { localStorage.setItem('omniframe.markerKind', kind) } catch { /* ignore */ }
+    },
+
+    addMarkersBulk: (items) => {
+      if (!items.length) return []
+      pushSnapshot()
+      const created = items.map((item) => ({
+        id: uid('marker'),
+        time: Math.max(0, item.time),
+        duration: Math.max(0, item.duration || 0),
+        label: (item.label || 'Marker').trim() || 'Marker',
+        notes: item.notes || '',
+        color: markerColorHex(item.color, item.kind),
+        kind: item.kind || 'custom',
+        ...(item.clipId ? { clipId: item.clipId, clipOffset: Math.max(0, item.clipOffset || 0) } : {}),
+      }))
+      set((s) => ({ markers: [...s.markers, ...created].sort((a, b) => a.time - b.time) }))
+      return created.map((m) => m.id)
+    },
+
+    moveMarkersToClip: (clipId) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return 0
+      const end = clip.start + clip.duration
+      let moved = 0
+      pushSnapshot()
+      set((s) => ({
+        markers: s.markers.map((m) => {
+          if (m.clipId) return m
+          if (m.time >= clip.start - 0.001 && m.time <= end + 0.001) {
+            moved++
+            return { ...m, clipId, clipOffset: Math.max(0, m.time - clip.start) }
+          }
+          return m
+        }),
+      }))
+      return moved
+    },
+
+    moveMarkersToTimeline: (clipId) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return 0
+      let moved = 0
+      pushSnapshot()
+      set((s) => ({
+        markers: s.markers.map((m) => {
+          if (m.clipId !== clipId) return m
+          moved++
+          const { clipId: _drop, clipOffset, ...rest } = m
+          void _drop
+          return { ...rest, time: clip.start + (clipOffset ?? 0) }
+        }),
+      }))
+      return moved
     },
 
     // ---- master audio ----

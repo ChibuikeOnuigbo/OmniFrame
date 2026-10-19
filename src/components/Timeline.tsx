@@ -55,6 +55,9 @@ import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { placedEffectLabels } from '../lib/adjustment'
+import { MARKER_KINDS, groupMarkers, markerColorHex, markerGroupBackground, resolveMarkerTime } from '../lib/markers'
+import type { MarkerKind } from '../types'
+import { detectBeatGrid, detectCustomBeat } from '../lib/beatDetect'
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { GraphEditor } from './GraphEditor'
@@ -1153,16 +1156,129 @@ export function Timeline() {
   const compoundWindow = useEditor((s) => s.compoundWindow)
   const navigateBreadcrumb = useEditor((s) => s.navigateBreadcrumb)
 
+  /** Build onset peaks for a clip's audible window (asset waveform if the
+   * importer stored one, else decode the audio and bucket it). */
+  const clipBeatPeaks = async (clip: Clip): Promise<Float32Array | null> => {
+    const asset = assets.find((a) => a.id === clip.assetId)
+    if (!asset || (asset.kind !== 'audio' && asset.kind !== 'video')) return null
+    const srcDur = asset.duration || clip.inPoint + clip.duration
+    if (asset.waveform && asset.waveform.length > 8) {
+      const from = Math.max(0, Math.floor((clip.inPoint / srcDur) * asset.waveform.length))
+      const to = Math.min(asset.waveform.length, Math.max(from + 1, Math.ceil(((clip.inPoint + clip.duration) / srcDur) * asset.waveform.length)))
+      return Float32Array.from(asset.waveform.slice(from, to))
+    }
+    try {
+      const res = await fetch(asset.url)
+      const raw = await res.arrayBuffer()
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const ctx = new AC()
+      const buffer = await ctx.decodeAudioData(raw)
+      void ctx.close().catch(() => undefined)
+      const sr = buffer.sampleRate
+      const startSample = Math.max(0, Math.floor((clip.inPoint || 0) * sr))
+      const frameCount = Math.min(buffer.length - startSample, Math.max(1, Math.floor(clip.duration * sr)))
+      const buckets = Math.max(16, Math.min(8192, Math.round(clip.duration * 100)))
+      const peaks = new Float32Array(buckets)
+      const per = frameCount / buckets
+      for (let b = 0; b < buckets; b++) {
+        let peak = 0
+        const s0 = startSample + Math.floor(b * per)
+        const s1 = Math.min(buffer.length, startSample + Math.floor((b + 1) * per))
+        for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+          const data = buffer.getChannelData(ch)
+          for (let i = s0; i < s1; i += 7) peak = Math.max(peak, Math.abs(data[i]))
+        }
+        peaks[b] = peak
+      }
+      return peaks
+    } catch {
+      return null
+    }
+  }
+
+  // Studio's clip context menu (capture-phase owner) asks for Auto Beat via
+  // a bridge event; the dialog + placement live here with the timeline.
+  useEffect(() => {
+    const onAutoBeatRequest = (e: Event) => {
+      const detail = (e as CustomEvent<{ clipId: string; mode: 'auto' | 'custom' }>).detail
+      const clip = useEditor.getState().clips.find((c) => c.id === detail?.clipId)
+      if (!clip) return
+      if (detail.mode === 'custom') {
+        setBeatDlg({ clipId: clip.id, mode: 'custom', times: [], periodSec: null, customStart: 0.5, customEnd: Math.min(1.5, Math.max(1, clip.duration / 2)), scanned: false })
+      } else {
+        void runAutoBeat(clip)
+      }
+    }
+    window.addEventListener('omniframe:auto-beat', onAutoBeatRequest)
+    return () => window.removeEventListener('omniframe:auto-beat', onAutoBeatRequest)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assets])
+
+  const runAutoBeat = async (clip: Clip) => {
+    setBeatBusy(true)
+    try {
+      const peaks = await clipBeatPeaks(clip)
+      if (!peaks) { setBeatDlg(null); return }
+      const grid = detectBeatGrid(peaks, clip.duration)
+      setBeatDlg({
+        clipId: clip.id,
+        mode: 'auto',
+        times: grid ? grid.times.filter((t) => t <= clip.duration) : [],
+        periodSec: grid ? grid.period : null,
+        customStart: 0.5,
+        customEnd: 1.5,
+        scanned: true,
+      })
+    } finally {
+      setBeatBusy(false)
+    }
+  }
+
+  const runCustomBeatScan = async () => {
+    if (!beatDlg) return
+    const clip = clips.find((c) => c.id === beatDlg.clipId)
+    if (!clip) return
+    setBeatBusy(true)
+    try {
+      const peaks = await clipBeatPeaks(clip)
+      if (!peaks) return
+      const len = Math.min(2, Math.max(0.5, beatDlg.customEnd - beatDlg.customStart))
+      const found = detectCustomBeat(peaks, clip.duration, beatDlg.customStart, len)
+      setBeatDlg({ ...beatDlg, times: found.times.filter((t) => t <= clip.duration), periodSec: found.period, scanned: true })
+    } finally {
+      setBeatBusy(false)
+    }
+  }
+
+  const placeBeatMarkers = (scope: 'timeline' | 'clip') => {
+    if (!beatDlg) return
+    const clip = clips.find((c) => c.id === beatDlg.clipId)
+    if (!clip) return
+    const st = useEditor.getState()
+    const def = MARKER_KINDS.find((d) => d.id === 'beat')!
+    st.addMarkersBulk(beatDlg.times.map((t, i) => ({
+      time: clip.start + t,
+      label: `${clip.name.slice(0, 14)} beat ${i + 1}`,
+      color: def.color,
+      kind: 'beat' as MarkerKind,
+      ...(scope === 'clip' ? { clipId: clip.id, clipOffset: t } : {}),
+    })))
+    setBeatDlg(null)
+  }
+
   const handleAddMarker = () => {
-    const playheadTime = useEditor.getState().playhead
-    const existing = markers.find((m) => Math.abs(m.time - playheadTime) < 0.1)
+    const st = useEditor.getState()
+    const playheadTime = st.playhead
+    const existing = markers.find((m) => Math.abs(m.time - playheadTime) < 0.1 && !m.clipId)
     if (existing) {
       setActiveMarkerModalId(existing.id)
     } else {
+      const def = MARKER_KINDS.find((d) => d.id === st.lastMarkerKind) || MARKER_KINDS[0]
       const id = addMarker({
         time: playheadTime,
-        label: `Marker ${markers.length + 1}`,
-        color: 'blue',
+        label: `${def.label} ${markers.length + 1}`,
+        color: def.color,
+        kind: def.id as MarkerKind,
       })
       setActiveMarkerModalId(id)
     }
@@ -1340,13 +1456,27 @@ export function Timeline() {
 
   // Context Menu State
   const [contextMenu, setContextMenu] = useState<{
-    type: 'clip' | 'transition' | 'empty-track'
+    type: 'clip' | 'transition' | 'empty-track' | 'marker'
     x: number
     y: number
     clip?: Clip
     transition?: Transition
     trackId?: string
+    markerId?: string
+    groupIds?: string[]
   } | null>(null)
+  const [markerPopover, setMarkerPopover] = useState<{ x: number; y: number; ids: string[] } | null>(null)
+  const [beatDlg, setBeatDlg] = useState<{
+    clipId: string
+    mode: 'auto' | 'custom'
+    times: number[]
+    periodSec: number | null
+    customStart: number
+    customEnd: number
+    scanned: boolean
+  } | null>(null)
+  const [beatBusy, setBeatBusy] = useState(false)
+  const beatCycleRef = useRef<{ key: string; idx: number }>({ key: '', idx: 0 })
 
   useEffect(() => {
     if (!toolMenuOpen && !speedMenuOpen && !contextMenu) return
@@ -2092,76 +2222,65 @@ export function Timeline() {
                 </div>
               ))}
 
-              {/* Sequence Timeline Markers */}
-              {markers.map((marker) => {
-                const markerLeft = marker.time * px
-                const markerWidth = marker.duration ? Math.max(4, marker.duration * px) : 0
-                const colorHex =
-                  marker.color === 'green'
-                    ? '#10b981'
-                    : marker.color === 'red'
-                    ? '#ef4444'
-                    : marker.color === 'yellow'
-                    ? '#f59e0b'
-                    : marker.color === 'purple'
-                    ? '#a855f7'
-                    : marker.color === 'orange'
-                    ? '#f97316'
-                    : '#3b82f6'
-
+              {/* Sequence Timeline Markers — coincident markers combine
+                  into ONE flag (CapCut-style): hard colour slices for a
+                  few, a gradient + count past that. Click seeks (groups
+                  open a list), double-click edits, right-click menus. */}
+              {groupMarkers(markers, clips).map((g) => {
+                const left = g.time * px
+                const isGroup = g.markers.length > 1
+                const bg = markerGroupBackground(g.colors)
+                const primary = g.markers[0]
                 return (
                   <div
-                    key={marker.id}
-                    data-testid="timeline-marker"
-                    data-marker-id={marker.id}
-                    data-marker-color={marker.color}
-                    data-marker-time={marker.time.toFixed(3)}
-                    title={`${marker.label} (${formatTimecode(marker.time, FPS, dropFrameTimecode)})${marker.notes ? `\n${marker.notes}` : ''}`}
+                    key={`${g.time.toFixed(3)}:${primary.id}`}
+                    data-testid={isGroup ? 'timeline-marker-group' : 'timeline-marker'}
+                    data-marker-id={primary.id}
+                    data-marker-ids={g.markers.map((m) => m.id).join(',')}
+                    data-marker-count={g.markers.length}
+                    data-marker-time={g.time.toFixed(3)}
+                    title={isGroup ? `${g.markers.length} markers here — click to list` : `${primary.label} (${formatTimecode(g.time, FPS, dropFrameTimecode)})${primary.notes ? `\n${primary.notes}` : ''}`}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => {
                       e.stopPropagation()
-                      setPlayhead(marker.time)
+                      if (isGroup) {
+                        setMarkerPopover({ x: e.clientX, y: e.clientY, ids: g.markers.map((m) => m.id) })
+                      } else {
+                        setPlayhead(g.time)
+                      }
                     }}
                     onDoubleClick={(e) => {
                       e.stopPropagation()
-                      setActiveMarkerModalId(marker.id)
+                      setActiveMarkerModalId(primary.id)
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setContextMenu({ type: 'marker', x: e.clientX, y: e.clientY, markerId: primary.id, groupIds: g.markers.map((m) => m.id) })
                     }}
                     className="absolute top-0 z-20 cursor-pointer group"
-                    style={{ left: markerLeft }}
+                    style={{ left }}
                   >
-                    {/* Duration span ribbon */}
-                    {markerWidth > 0 && (
-                      <div
-                        className="absolute top-0 h-[28px] opacity-25 pointer-events-none"
-                        style={{
-                          width: markerWidth,
-                          backgroundColor: colorHex,
-                        }}
-                      />
-                    )}
-
-                    {/* Flag pin */}
                     <div
-                      className="relative w-3.5 h-4 flex items-center justify-center -ml-1.5 transition-transform group-hover:scale-125"
-                      style={{ color: colorHex }}
-                    >
-                      <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
-                        <path d="M0 0 H12 L7 6 L12 12 H0 Z" />
-                      </svg>
-                    </div>
-
-                    {/* Marker label pill */}
-                    <span
-                      title={marker.label}
-                      className="absolute top-4 left-1 text-[10px] font-semibold px-1 py-0.2 rounded shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
-                      style={{ backgroundColor: colorHex, color: readableTextColor(colorHex) }}
-                    >
-                      {marker.label}
-                    </span>
+                      className="relative h-4 w-3.5 -ml-1.5 transition-transform group-hover:scale-125"
+                      style={{ background: bg, clipPath: 'polygon(0 0, 100% 0, 62% 46%, 100% 100%, 0 100%)' }}
+                    />
+                    {isGroup && (
+                      <span className="absolute -right-2 top-0 grid h-3 min-w-3 place-items-center rounded-full bg-white px-0.5 text-[8px] font-bold text-black shadow" data-testid="marker-group-count">
+                        {g.markers.length}
+                      </span>
+                    )}
+                    {!isGroup && (
+                      <span
+                        className="absolute left-1 top-4 max-w-[80px] truncate whitespace-nowrap rounded px-1 py-px text-[10px] font-semibold opacity-90 shadow-sm group-hover:opacity-100 pointer-events-none"
+                        style={{ backgroundColor: markerColorHex(primary.color, primary.kind), color: readableTextColor(markerColorHex(primary.color, primary.kind)) }}
+                      >
+                        {primary.label}
+                      </span>
+                    )}
                   </div>
                 )
               })}
-
               {/* Imperative marker */}
               <PlayheadMarker px={px} handle />
             </div>
@@ -2347,6 +2466,53 @@ export function Timeline() {
                 })}
               </div>
 
+              {/* Clip top-edge markers: markers placed ON a clip ride its
+                  top edge and move with it. Coincident ones combine. */}
+              <div className="absolute inset-0 z-30 pointer-events-none" data-testid="clip-marker-layer">
+                {clips.map((c) => {
+                  const owned = markers.filter((m) => m.clipId === c.id)
+                  if (!owned.length) return null
+                  const tr = tracks.find((t) => t.id === c.trackId)
+                  if (!tr) return null
+                  const top = tracks.slice(0, tracks.indexOf(tr)).reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
+                  const groups = groupMarkers(owned, clips)
+                  return groups.map((g) => {
+                    const first = g.markers[0]
+                    return (
+                      <button
+                        key={`${c.id}:${g.time.toFixed(3)}:${first.id}`}
+                        type="button"
+                        data-testid="clip-marker-flag"
+                        data-marker-id={first.id}
+                        data-marker-ids={g.markers.map((m) => m.id).join(',')}
+                        data-marker-count={g.markers.length}
+                        data-clip-id={c.id}
+                        title={g.markers.length > 1 ? `${g.markers.length} markers on this clip` : `${first.label}${first.notes ? ` — ${first.notes}` : ''}`}
+                        className="absolute h-3 w-3 pointer-events-auto cursor-pointer transition-transform hover:scale-125"
+                        style={{
+                          left: g.time * px - 5,
+                          top: top + 2,
+                          background: markerGroupBackground(g.colors),
+                          clipPath: 'polygon(0 0, 100% 0, 62% 46%, 100% 100%, 0 100%)',
+                        }}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (g.markers.length > 1) setMarkerPopover({ x: e.clientX, y: e.clientY, ids: g.markers.map((m) => m.id) })
+                          else setPlayhead(c.start + g.time)
+                        }}
+                        onDoubleClick={(e) => { e.stopPropagation(); setActiveMarkerModalId(first.id) }}
+                        onContextMenu={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          setContextMenu({ type: 'marker', x: e.clientX, y: e.clientY, markerId: first.id, groupIds: g.markers.map((m) => m.id) })
+                        }}
+                      />
+                    )
+                  })
+                })}
+              </div>
+
               {/* Gap picker overlay. Only mounted in Select Gaps mode, so the
                   lanes stay uncluttered and unclickable the rest of the time. */}
               {gapSelectMode && (
@@ -2518,6 +2684,96 @@ export function Timeline() {
       )}
 
       {/* Centralized Target-Aware Context Menu */}
+      {/* Combined-marker list: everything sitting at one point */}
+      {markerPopover && (
+        <>
+          <div className="fixed inset-0 z-[96]" onClick={() => setMarkerPopover(null)} />
+          <div
+            data-testid="marker-group-popover"
+            className="fixed z-[101] w-60 rounded-md border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
+            style={{ left: Math.min(markerPopover.x, window.innerWidth - 250), top: Math.min(markerPopover.y, window.innerHeight - 260) }}
+          >
+            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-400">{markerPopover.ids.length} markers at this point</div>
+            {markerPopover.ids.map((id) => {
+              const mk = markers.find((m) => m.id === id)
+              if (!mk) return null
+              const t = resolveMarkerTime(mk, clips)
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  data-testid="marker-group-row"
+                  data-marker-id={id}
+                  onClick={() => setPlayhead(t)}
+                  onDoubleClick={() => { setActiveMarkerModalId(id); setMarkerPopover(null) }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700"
+                  title="Click to jump · double-click to edit"
+                >
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: markerColorHex(mk.color, mk.kind) }} />
+                  <span className="min-w-0 flex-1 truncate">{mk.label}</span>
+                  <span className="font-mono text-[10px] text-ink-500">{formatTimecode(t)}</span>
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )}
+
+      {/* Auto Beat placement popup: choose where the beat markers land */}
+      {beatDlg && (() => {
+        const clip = clips.find((c) => c.id === beatDlg.clipId)
+        if (!clip) return null
+        const segLen = Math.min(2, Math.max(0.5, beatDlg.customEnd - beatDlg.customStart))
+        return (
+          <div data-testid="auto-beat-popup" className="fixed bottom-44 right-4 z-[97] w-80 rounded-xl border border-ink-600 bg-ink-900/97 p-3 shadow-2xl backdrop-blur select-none">
+            <div className="mb-1 flex items-center gap-2">
+              <Music size={14} className="text-amber-400" />
+              <span className="text-xs font-semibold text-white">{beatDlg.mode === 'auto' ? 'Auto Beat' : 'Custom Auto Beat'}</span>
+              <span className="min-w-0 flex-1 truncate text-[10px] text-ink-500">on “{clip.name}”</span>
+              <button type="button" data-testid="auto-beat-close" onClick={() => setBeatDlg(null)} className="grid h-6 w-6 place-items-center rounded text-ink-400 hover:bg-ink-800 hover:text-white" aria-label="Close beat dialog"><X size={13} /></button>
+            </div>
+            {beatDlg.mode === 'custom' && (
+              <div className="mb-2 space-y-1.5">
+                <p className="text-[10px] leading-snug text-ink-400">Trim ONE beat (0.5–2 s). The engine learns its shape, then finds every match in this clip.</p>
+                <div className="flex items-center gap-1.5 text-[11px] text-ink-300">
+                  <label className="flex items-center gap-1">Start
+                    <input type="number" step="0.05" min={0} max={Math.max(0, clip.duration - 0.5)} data-testid="custom-beat-start" value={beatDlg.customStart}
+                      onChange={(e) => setBeatDlg({ ...beatDlg, customStart: Math.max(0, Number(e.target.value) || 0), scanned: false })}
+                      className="h-6 w-16 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[11px] text-white outline-none focus:border-brand" />
+                  </label>
+                  <label className="flex items-center gap-1">End
+                    <input type="number" step="0.05" min={0.5} max={clip.duration} data-testid="custom-beat-end" value={beatDlg.customEnd}
+                      onChange={(e) => setBeatDlg({ ...beatDlg, customEnd: Math.min(clip.duration, Number(e.target.value) || 0.5), scanned: false })}
+                      className="h-6 w-16 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[11px] text-white outline-none focus:border-brand" />
+                  </label>
+                  <span className="text-ink-500">{segLen.toFixed(2)}s</span>
+                  <button type="button" data-testid="custom-beat-scan" disabled={beatBusy} onClick={() => void runCustomBeatScan()} className="ml-auto h-6 rounded bg-brand px-2 text-[11px] font-semibold text-white hover:bg-brand/85 disabled:opacity-50">
+                    {beatBusy ? 'Scanning…' : 'Scan for this beat'}
+                  </button>
+                </div>
+              </div>
+            )}
+            <p className="mb-2 text-[11px] text-ink-300" data-testid="auto-beat-summary">
+              {beatBusy && beatDlg.mode === 'auto'
+                ? 'Listening for the beat…'
+                : beatDlg.scanned
+                  ? beatDlg.times.length
+                    ? `Found ${beatDlg.times.length} beats${beatDlg.periodSec ? ` · one every ${beatDlg.periodSec.toFixed(2)}s (${(60 / beatDlg.periodSec).toFixed(0)} BPM)` : ''}. Where should the markers go?`
+                    : 'No clear beat found in this clip — try Custom Auto Beat with a clean single hit.'
+                  : 'Set your beat segment, then scan.'}
+            </p>
+            <div className="flex gap-1.5">
+              <button type="button" data-testid="auto-beat-place-timeline" disabled={!beatDlg.times.length || beatBusy} onClick={() => placeBeatMarkers('timeline')} className="h-7 flex-1 rounded bg-ink-800 px-2 text-[11px] font-semibold text-white ring-1 ring-ink-600 hover:bg-ink-700 disabled:opacity-40">
+                On main timeline
+              </button>
+              <button type="button" data-testid="auto-beat-place-clip" disabled={!beatDlg.times.length || beatBusy} onClick={() => placeBeatMarkers('clip')} className="h-7 flex-1 rounded bg-amber-500 px-2 text-[11px] font-semibold text-black hover:bg-amber-400 disabled:opacity-40">
+                On this clip's edge
+              </button>
+            </div>
+          </div>
+        )
+      })()}
+
       {contextMenu && (
         <>
           <div className="fixed inset-0 z-[95]" onClick={() => setContextMenu(null)} />
@@ -2530,6 +2786,56 @@ export function Timeline() {
               top: Math.min(contextMenu.y, window.innerHeight - 240),
             }}
           >
+            {contextMenu.type === 'marker' && contextMenu.markerId && (() => {
+              const st = useEditor.getState()
+              const mk = st.markers.find((m) => m.id === contextMenu.markerId)
+              if (!mk) return null
+              const resolved = resolveMarkerTime(mk, st.clips)
+              const host = mk.clipId ? st.clips.find((c) => c.id === mk.clipId) : undefined
+              const spanning = !mk.clipId ? st.clips.find((c) => resolved >= c.start && resolved <= c.start + c.duration && c.kind !== 'adjustment') : undefined
+              const groupIds = contextMenu.groupIds && contextMenu.groupIds.length ? contextMenu.groupIds : [mk.id]
+              return (
+                <>
+                  <div className="mb-1 flex items-center gap-2 border-b border-ink-750 px-2 py-1 font-semibold text-ink-100">
+                    <span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: markerColorHex(mk.color, mk.kind) }} />
+                    <span className="truncate">{mk.label}</span>
+                    {groupIds.length > 1 && <span className="text-[10px] font-normal text-ink-400">+{groupIds.length - 1} here</span>}
+                  </div>
+                  <button type="button" data-testid="marker-menu-jump" onClick={() => { st.jumpToMarker(mk.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">Jump to marker</button>
+                  <button type="button" data-testid="marker-menu-edit" onClick={() => { st.setActiveMarkerModalId(mk.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">Edit marker…</button>
+                  <div className="my-1 border-t border-ink-700" />
+                  <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Purpose</div>
+                  {MARKER_KINDS.map((def) => (
+                    <button
+                      key={def.id}
+                      type="button"
+                      data-testid={`marker-menu-kind-${def.id}`}
+                      onClick={() => { st.updateMarker(mk.id, { kind: def.id, color: def.color }); st.setLastMarkerKind(def.id); setContextMenu(null) }}
+                      className="flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-ink-700"
+                    >
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: def.color }} />
+                      {def.label}
+                      {mk.kind === def.id && <span className="ml-auto text-[10px] text-ink-400">current</span>}
+                    </button>
+                  ))}
+                  <div className="my-1 border-t border-ink-700" />
+                  {mk.clipId ? (
+                    <button type="button" data-testid="marker-menu-to-timeline" onClick={() => { st.moveMarkersToTimeline(mk.clipId!); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">
+                      Move this clip's markers to main timeline
+                    </button>
+                  ) : spanning ? (
+                    <button type="button" data-testid="marker-menu-to-clip" onClick={() => { st.moveMarkersToClip(spanning.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">
+                      Move markers in “{spanning.name.slice(0, 16)}” onto the clip
+                    </button>
+                  ) : null}
+                  <button type="button" data-testid="marker-menu-delete" onClick={() => { st.removeMarker(mk.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-red-400 hover:bg-red-500/20">Delete marker</button>
+                  {groupIds.length > 1 && (
+                    <button type="button" data-testid="marker-menu-delete-all-here" onClick={() => { groupIds.forEach((id) => st.removeMarker(id)); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-red-400 hover:bg-red-500/20">Delete all {groupIds.length} here</button>
+                  )}
+                </>
+              )
+            })()}
+
             {contextMenu.type === 'clip' && contextMenu.clip && (
               <>
                 <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={contextMenu.clip.name}>
@@ -2662,6 +2968,36 @@ export function Timeline() {
                     <span>Create Compound Clip</span>
                   </button>
                 )}
+
+                <div className="my-1 border-t border-ink-700" />
+                <div className="px-2 pb-0.5 pt-1 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Auto Beat</div>
+                <button
+                  type="button"
+                  data-testid="context-menu-auto-beat"
+                  disabled={beatBusy}
+                  onClick={() => {
+                    const clip = contextMenu.clip!
+                    setContextMenu(null)
+                    void runAutoBeat(clip)
+                  }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700 disabled:opacity-50"
+                >
+                  <Music size={14} className="text-amber-400" />
+                  <span>Auto Beat — find the beat</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid="context-menu-custom-auto-beat"
+                  onClick={() => {
+                    const clip = contextMenu.clip!
+                    setContextMenu(null)
+                    setBeatDlg({ clipId: clip.id, mode: 'custom', times: [], periodSec: null, customStart: 0.5, customEnd: Math.min(1.5, Math.max(1, clip.duration / 2)), scanned: false })
+                  }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700"
+                >
+                  <Activity size={14} className="text-amber-400" />
+                  <span>Custom Auto Beat… — teach it one beat</span>
+                </button>
 
                 <div className="my-1 border-t border-ink-700" />
                 <button

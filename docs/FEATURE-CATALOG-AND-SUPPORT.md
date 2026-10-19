@@ -181,6 +181,15 @@ The checked panel items below mean **the panel and its boundary were inventoried
 - [x] **Readable/keyboard UI** — compact LUT discovery, Smart Patch grouping, keyboard/focus behavior, and visible status previews. This pass's strict audit (`qa/ui-strict-audit.mjs`) completed with one advisory rule (D01, medium: the drawing left panel groups 15 controls — a regroup candidate, identical on clean HEAD) and no other findings; earlier affordance and overflow audits reported 0.
 - [x] **Build checks** — `npm run typecheck` and `npm run build` passed; the existing bundle-size and ineffective-dynamic-import warnings remain.
 
+### Markers, Auto Beat, Appearance (this wave)
+
+- [x] **Purpose markers** — five kinds (Beat/Section/Note/Fix-it/Cue), each its own colour, plus user-saved custom colours; non-blocking popup editor (no modal lockdown), right-click marker menu, double-click popup, M / Alt+M / Shift+M keyboard model. `node qa/markers-autobeat-e2e.mjs` **ALL PASS**; evidence `evidence/improvements/17-markers-autobeat.png`.
+- [x] **Combined flags** — coincident markers (any scope) render as ONE flag: colour slices up to 4, gradient + count beyond; group popover lists every marker at the point.
+- [x] **Marker scopes** — markers live on the main ruler or a clip's top edge; transfers are range-limited to the clip's timeline span (`moveMarkersToClip` moves only in-span markers).
+- [x] **Auto Beat / Custom Auto Beat** — clip context menu (Studio menu, Auto Beat submenu): onset-flux autocorrelation grid snapped to real hits, or a user-trimmed 0.5–2 s template matched by normalized cross-correlation anchored to the template peak; placement popup chooses main timeline vs clip edge. Verified on a synthesized 1 Hz click track: 8/8 hits exact.
+- [x] **UI styles + palettes** — Settings → Appearance: 5 structural styles (OmniFrame, Clean Cut, Workshop, Pro Blue, Daylight light theme) × 3 accent palettes, live + persisted; study in `data.md`. `node qa/ui-styles-e2e.mjs` **ALL PASS**; evidence 18–20.
+- [x] **Pivot rotation (re-verified)** — pivot-point rotation shipped earlier (`da04a32`); `qa/pivot-armature-e2e.mjs` re-run this wave: **PASSED**.
+
 ### Explicitly open work (not claimed complete)
 
 - [ ] Obtain authentic Krita screenshots/toolbox references from a local Krita install or user-provided captures before making any Krita-specific visual comparison; current screenshot references are OmniFrame only.

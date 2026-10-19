@@ -116,13 +116,23 @@ export type TrackType = 'video' | 'audio'
 
 export type MarkerColor = 'blue' | 'green' | 'red' | 'yellow' | 'purple' | 'orange'
 
+/** The five marker purposes (CapCut-style colour coding): every marker is
+ * FOR one thing — a beat, a section, a note, a fix, or a cue. */
+export type MarkerKind = 'beat' | 'section' | 'note' | 'fix' | 'cue'
+
 export interface TimelineMarker {
   id: string
-  time: number // Time in seconds
+  time: number // Timeline time in seconds (for clip markers: resolved = clip.start + clipOffset)
   duration?: number // Optional duration span for range markers (0 for single-point)
   label: string
   notes?: string
-  color: MarkerColor
+  /** Hex colour. Legacy saves may hold a MarkerColor name — normalized on read. */
+  color: string
+  kind?: MarkerKind | 'custom'
+  /** When set, the marker lives on that clip's top edge and moves with it. */
+  clipId?: string
+  /** Seconds from the clip's start (clip markers only). */
+  clipOffset?: number
 }
 
 export interface Track {

@@ -26,6 +26,7 @@ import type { WorkspacePreset, FocusMode } from '../types'
 import { exportVideo } from '../lib/export'
 import { exportPrimitiveSceneObj, exportProgramFramePng } from '../lib/projectSubsets'
 import { EDITABLE_SHORTCUTS, SETTINGS_CATEGORIES, searchSettings, type SettingsCategory } from '../lib/settingsRegistry'
+import { UI_STYLES, UI_PALETTES } from '../lib/uiStyles'
 import { AI_PROVIDERS, testAiConnection, type AiProviderId } from '../lib/aiProviders'
 import {
   getDesktopInfo,
@@ -139,6 +140,10 @@ export function TopBar() {
   }
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('omniframe.reducedMotion') === 'true')
   const hideOverflowX = useEditor((s) => s.hideOverflowX)
+  const uiStyle = useEditor((s) => s.uiStyle)
+  const uiPalette = useEditor((s) => s.uiPalette)
+  const setUiStyle = useEditor((s) => s.setUiStyle)
+  const setUiPalette = useEditor((s) => s.setUiPalette)
   const dockerPrefs = useEditor((s) => s.dockerPrefs)
   const setDockerPref = useEditor((s) => s.setDockerPref)
   const leftTab = useEditor((s) => s.leftTab)
@@ -428,7 +433,7 @@ export function TopBar() {
             data-testid="layout-popup"
             role="dialog"
             aria-label="Workspace Layouts"
-            className="fixed right-16 top-12 z-[80] flex w-72 flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.5)] backdrop-blur-xl p-2 text-xs text-ink-200"
+            className="fixed right-16 top-12 z-[80] flex w-72 flex-col overflow-hidden rounded-xl border border-ink-600 bg-ink-900/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.5)] backdrop-blur-xl p-2 text-xs text-ink-200"
           >
             <div role="group" aria-labelledby="workspace-presets-heading">
               <div className="flex items-center justify-between px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">
@@ -583,7 +588,7 @@ export function TopBar() {
             <ChevronDown size={14} />
           </button>
           {exportMenuOpen && (
-            <div role="menu" aria-label="Content-aware export formats" data-testid="subset-export-menu" className="absolute right-0 top-10 z-[90] w-80 max-w-[calc(100vw-24px)] rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-2 shadow-[0_20px_60px_rgba(0,0,0,.65)] backdrop-blur-xl">
+            <div role="menu" aria-label="Content-aware export formats" data-testid="subset-export-menu" className="absolute right-0 top-10 z-[90] w-80 max-w-[calc(100vw-24px)] rounded-xl border border-ink-600 bg-ink-900/[0.98] p-2 shadow-[0_20px_60px_rgba(0,0,0,.65)] backdrop-blur-xl">
               <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Full editable project</div>
               <button
                 type="button"
@@ -677,7 +682,7 @@ export function TopBar() {
           data-testid="settings-popup"
           role="dialog"
           aria-labelledby="settings-heading"
-          className="fixed inset-x-2 top-14 sm:inset-auto sm:right-3 sm:top-12 z-[80] flex w-auto sm:w-[min(520px,calc(100vw-24px))] max-h-[min(540px,calc(100vh-64px))] flex-col overflow-hidden rounded-xl border border-ink-600 bg-[#11131d]/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.6)] backdrop-blur-xl"
+          className="fixed inset-x-2 top-14 sm:inset-auto sm:right-3 sm:top-12 z-[80] flex w-auto sm:w-[min(520px,calc(100vw-24px))] max-h-[min(540px,calc(100vh-64px))] flex-col overflow-hidden rounded-xl border border-ink-600 bg-ink-900/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.6)] backdrop-blur-xl"
         >
           <header className="border-b border-ink-700 p-3">
             <div className="mb-2 flex items-center justify-between">
@@ -1229,6 +1234,56 @@ export function TopBar() {
                     className="h-4 w-4 accent-violet-500"
                   />
                 </label>
+                </div>
+              )}
+
+              {!settingsSearch && settingsCategory === 'appearance' && (
+                <div className="space-y-3" data-testid="settings-appearance">
+                  <div>
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">UI style — structure, not just colour</p>
+                    <div className="grid grid-cols-1 gap-1.5">
+                      {UI_STYLES.map((style) => (
+                        <button
+                          key={style.id}
+                          type="button"
+                          data-testid={`ui-style-${style.id}`}
+                          aria-pressed={uiStyle === style.id}
+                          onClick={() => setUiStyle(style.id)}
+                          className={`flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition-colors ${uiStyle === style.id ? 'border-brand bg-brand/15' : 'border-ink-700 bg-ink-900 hover:border-ink-500'}`}
+                        >
+                          <span className="flex shrink-0 overflow-hidden rounded border border-black/30" aria-hidden>
+                            <span className="h-6 w-3.5" style={{ backgroundColor: style.swatch[0] }} />
+                            <span className="h-6 w-3.5" style={{ backgroundColor: style.swatch[1] }} />
+                            <span className="h-6 w-2" style={{ backgroundColor: style.swatch[2] }} />
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block text-xs font-semibold text-ink-100">{style.name}</span>
+                            <span className="block truncate text-[10px] text-ink-500" title={style.concept}>{style.concept}</span>
+                          </span>
+                          {uiStyle === style.id && <span className="ml-auto shrink-0 text-[10px] font-semibold text-brand-400">Active</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Accent palette</p>
+                    <div className="flex gap-1.5">
+                      {UI_PALETTES.map((palette) => (
+                        <button
+                          key={palette.id}
+                          type="button"
+                          data-testid={`ui-palette-${palette.id}`}
+                          aria-pressed={uiPalette === palette.id}
+                          onClick={() => setUiPalette(palette.id)}
+                          className={`flex h-8 flex-1 items-center justify-center gap-1.5 rounded-md border text-[11px] ${uiPalette === palette.id ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500'}`}
+                        >
+                          <span className="h-3 w-3 rounded-full" style={{ backgroundColor: palette.accent }} />
+                          {palette.name}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="mt-1 text-[10px] text-ink-500">Styles change corners, density and panel depth. Palettes only move the accent. Daylight is the light theme.</p>
+                  </div>
                 </div>
               )}
 

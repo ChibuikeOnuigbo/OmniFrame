@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-15T22:08:39.577Z",
+  "generatedAt": "2026-10-19T10:22:58.522Z",
   "results": [
     {
       "name": "Default sidebar section mode is tabs",
@@ -52,19 +52,19 @@
       "detail": ""
     },
     {
-      "name": "Inspector renders a section tab list",
+      "name": "Inspector renders the general-section icon rail",
       "status": "PASS",
-      "detail": "1 list(s)"
+      "detail": "1 rail(s)"
     },
     {
-      "name": "Inspector sections appear as tabs",
+      "name": "Inspector general sections appear as icon tabs",
       "status": "PASS",
-      "detail": "6 tabs"
+      "detail": "6 icons"
     },
     {
-      "name": "Inspector tab switching works",
+      "name": "Inspector icon switching works",
       "status": "PASS",
-      "detail": "section-tab-video-mask-view"
+      "detail": "section-tab-transform"
     },
     {
       "name": "Audio Suite preset applies",
