@@ -371,6 +371,31 @@ export function Preview() {
         </div>
       )}
 
+      {/* Floating selection quick-bar (BrandBird study): contextual
+          actions float over the monitor for the selected clip. */}
+      {!visualPreview && !isPreviewingAsset && (() => {
+        const clip = allClips.find((c) => c.id === selectedClipId)
+        if (!clip) return null
+        const isTitle = clip.kind === 'text' || !!clip.textStyle
+        return (
+          <div
+            data-testid="selection-quick-bar"
+            className="pointer-events-auto absolute left-1/2 top-12 z-40 flex max-w-[min(94%,520px)] -translate-x-1/2 items-center gap-1 rounded-full border border-ink-600/80 bg-ink-950/90 py-1 pl-3 pr-1 text-[10px] text-ink-200 shadow-2xl backdrop-blur-sm"
+            role="toolbar"
+            aria-label="Selected clip quick actions"
+          >
+            <span className="max-w-44 truncate font-medium text-ink-100" title={clip.name}>{clip.name}</span>
+            <span className="h-4 w-px bg-ink-700" aria-hidden="true" />
+            <button type="button" data-testid="quick-bar-effects" onClick={() => useEditor.getState().setLeftTab('effects')} className="h-6 rounded-full px-2 hover:bg-ink-800 hover:text-white" title="Open Effects for this clip">Effects</button>
+            {isTitle && (
+              <button type="button" data-testid="quick-bar-text" onClick={() => useEditor.getState().setLeftTab('text')} className="h-6 rounded-full px-2 hover:bg-ink-800 hover:text-white" title="Style this title">Text</button>
+            )}
+            <button type="button" data-testid="quick-bar-split" onClick={() => useEditor.getState().splitAt(useEditor.getState().playhead)} className="h-6 rounded-full px-2 hover:bg-ink-800 hover:text-white" title="Split at playhead (Ctrl+B)">Split</button>
+            <button type="button" data-testid="quick-bar-delete" onClick={() => useEditor.getState().removeClip(clip.id)} className="grid h-6 w-6 place-items-center rounded-full text-ink-400 hover:bg-red-500/20 hover:text-red-200" title="Delete clip" aria-label="Delete selected clip">✕</button>
+          </div>
+        )
+      })()}
+
       {/* Bottom Left: Very small & short Sequence Ping Icon down close to timeline */}
       {!isPreviewingAsset && (
         <div

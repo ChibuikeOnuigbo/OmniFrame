@@ -44,3 +44,6 @@ img_data_pack/
 # downloaded reference app (third-party site mirror, study only)
 ui_downlaod_study/zip-extract/
 google_drive/
+
+# correct BrandBird mirror (RAR extraction, third-party, study only)
+ui_downlaod_study/brandbird-rar-extract/

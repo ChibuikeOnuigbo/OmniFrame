@@ -1,109 +1,97 @@
-# data_ui — ReferenceTool UI inventory (all info)
+# data_ui — BrandBird UI inventory (from the live app)
 
-Mined verbatim from the shipped bundle
-(`_next/static/chunks/pages/_app-b0bee8b57a907b9e.js`, 4,544,658 bytes)
-plus the offline DOM captures in `snapshots/`. Frequencies are bundle
-hit counts. Honest limit: the live panel UI needs the vendor backend;
-this inventory is the app's own strings/code, not screenshots.
+Source: the correct RAR mirror, run locally (see `README.md`).
+Frequencies/labels mined from `_app-b0bee8b57a907b9e.js` (4.5 MB) and
+confirmed against the live DOM dumps in `snapshots/*.json`.
 
-## 1. Section registry (command palette / panel stack)
+## 1. Shell layout
 
-| Category | Title | Command | Section id |
-|---|---|---|---|
-| Open Section | Mockup | open | mockup |
-| Open Section | Border | open | border |
-| Open Section | Shadow | open | shadow |
-| Open Section | Background | open | background |
-| Open Section | Layout | open | layout |
-| Open Section | Position | open | position |
-| Open Section | 3D Effect | open | transform |
-| Open Section | Watermark | open | watermark |
-| Open Section | Annotation | open | annotation |
-| Open Section | Title / Header | open | title |
-| Open Section | Images | open | images |
-| Open Section | Templates | open | templates |
-| Open Section | Brands | open | brands |
-| Open Section | AI | open | ai |
-| Export | Copy image | copy | — |
-| Export | Download PNG image | download-png | — |
-| Export | Download JPG image | download-jpg | — |
-| Utility | Preview on socials (Twitter, Instagram, LinkedIn, Bluesky) | preview | — |
-| Utility | Preview Tweet | preview | — |
-| Utility | Start with a blank canvas | reset-canvas | — |
-| Help | Ask a question or Share feedback | help | — |
+- **Top bar**: logo + plan badge (FREE) · undo/redo · preview eye ·
+  canvas-size selector (`2400 × 1350 px`) · Save as Template ·
+  Export · alerts bell · Sign In (primary).
+- **Left rail** (icon + 10px label, active = filled tile + blue
+  label, `+` create button pinned bottom): AI, Uploads, Templates,
+  Images, Annotation, Background, Mockup, Position, 3D, Shadow,
+  Border, Layout, Header, Watermark, Brands.
+- **Panel**: floating rounded card next to the rail; header = icon +
+  CAPS title + optional PRO badge.
+- **Canvas**: dotted dark workspace; design centered; zoom −/+
+  bottom-left; Share Feedback + shortcut/help buttons bottom-right.
+- **Selection**: blue handles + floating toolbar above the object:
+  AI Tools, Crop, Highlight, Padding, Blur, overflow ⋮, close ✕.
 
-## 2. The control atom
+## 2. Panel inventory (live-verified)
 
-`Mockup Controls` (21 hits) is an accordion section
-(`title:"Mockup Controls", w:"100%", innerSpacing:4, spacing:6`).
-Every control is one row: **14 px icon + one-line label + slider
-(min/max/step) + numeric value**, e.g. `Border Radius 0–100 step 1`,
-`Opacity`, `Border Width`, `Padding Around`, `Letter Spacing`,
-`Line Height`. Properties group by **object part** — frame, border,
-shadow, background, spacing — never by feature.
+| Panel | Controls (in order) |
+|---|---|
+| AI | History · ACTIVE TOOL · PROMPT · Unlock AI tools (gate) |
+| Uploads | chips All/Images/Backgrounds/AI · Upload New · Select |
+| Templates | Public/Saved · platform filter · template card grid |
+| Images | Upload Image · paste Ctrl+V · Import Tweet PRO · Screenshot Website PRO · MagicPattern Tools PRO · Install Figma Plugin · Install Chrome Extension |
+| Annotation | ADD ANNOTATION: Image/Text/Icons/Arrow/Rectangle… |
+| Background | Save/Saved/Settings/Effects · Gradient (Direction 45°, Type Linear/Conic, from-a-color) · Gallery |
+| Mockup | frame tile (NONE…) · Remove mockup · LAYOUT SCALE · ASPECT RATIO Original/Fixed · device frames (MacBook/iPad/iPhone/Browser/Android in bundle vocab) |
+| Position | 3×3 position grid · Take border radius into account · POSITION X/Y · SCALE |
+| 3D | (image required) tilt/perspective effect |
+| Shadow | SELECTED IMAGE · PICK SHADOW · COLOR · Remove shadow |
+| Border | Border Radius (0–100) · Border Width · color |
+| Layout | PICK A LAYOUT · CONFIG Start/Center/End · SPACING · SCALE · FORCE EQUAL WIDTH (PRO) |
+| Header | USE A HEADER toggle · title text controls |
+| Watermark | Classic/Fullscreen/Dark/Light (PRO) |
+| Brands | brand assets: colors, logos, fonts (PRO) |
 
-## 3. Control-label vocabulary (266 distinct labels, abridged)
+Empty panels (Mockup/Shadow/Border/3D without a selection) show one
+caps line: "PLEASE, SELECT AN IMAGE TO CUSTOMIZE ITS …".
 
-Alignment (Align Left/Center/Right, top/bottom, distribute spacing,
-force equal width / same aspect), Amount, Background Color, Blur /
-Blur Density / Blur Radius, Border Radius / Border Width, Color
-Overlay, Dash size, Dither Effect, Duotone, Fade in grid corners,
-Fill, Font Family / Font Size, Gradient highlighter, Grain, Grid
-Overlay, Icon Scale, Intensity, Letter Spacing, Line Height, Logo
-Size, Margin, Mesh Gradient, Offset, Opacity, Padding (Around),
-Paper Texture, Pixelate, Roundness, Scale, Shadow / Bar Shadow / Add
-Shadow, Size Ratio, Spacing, Spread, Text Color / Text Size, Thickness,
-Transparency, Watermark, Zoom. Blend modes present: Color Burn,
-Darken, Lighten, Luminosity, Multiply, Normal, Plus Lighter.
+## 3. Control grammar
 
-## 4. Device frames
+- Slider row: CAPS label left, value right, thin track
+  (`LAYOUT SCALE ——— 0.80`, `SPACING 0.50`).
+- Segmented chips for enums: Original/Fixed, Linear/Conic,
+  PNG/JPG/WebP/PDF, 0.5x/1x/1.5x/2x/3x, Start/Center/End.
+- Toggles for booleans (Use a header, Take border radius into
+  account, Force equal width).
+- PRO = small badge on the panel header or inline gate line; the
+  tool remains visible.
 
-MacBook (Front, Pro 14, Pro 14 Left Side), iPad (Mini, Pro 12.9-inch,
-with Pencil, Simulator), iPhone (14 5.8", 14 Plus 6.5", 14 Pro 6.1",
-15 Pro / 16, Dynamic Island), Android Mobile, Browser, Chromebook,
-Apple Watch Series / Ultra. Generators: "Browser Mockup Generator",
-"MacBook Mockup Generator", "iPad Mockup Generator", "iPhone 14/15
-Mockup Generator", Mobile Mockups Grid, Device Mockups, Device OS.
+## 4. Command palette registry (bundle)
 
-## 5. Backgrounds
+Open Section: annotation, shadow, mockup, background, title,
+images, templates, layout, border, position, transform (3D),
+watermark, brands, ai · Export: copy, download-png, download-jpg ·
+Utility: preview (socials), reset-canvas · Help: help/feedback.
 
-Flat/Solid Color, Gradient (+ Gradient Background, Gradient fill,
-Gradient Suggestions), Mesh Gradient (+ Helper), Pattern / Patterns
-(Polka v2, Dotted, Dashed), Paper Texture, image backgrounds
-(`imageURL`, `topPadding`, `bgColor` props), Swap with background
-color, Make Padding Transparent, Screenshot Fill Screen.
+## 5. Vocabulary (bundle, abridged)
 
-## 6. Content & extras
+266 control labels: Alignment set (Align/Distribute/Force equal
+width), Blur Density/Radius, Border Radius/Width, Dash size, Dither,
+Duotone, Fade in grid corners, Font Family/Size, Gradient
+highlighter, Grain, Grid Overlay, Icon Scale, Letter/Line spacing,
+Mesh Gradient, Padding Around, Paper Texture, Pixelate, Roundness,
+Spread, Text highlight, Zoom. Devices: MacBook (Pro 14…), iPad
+(Mini/Pro/Pencil), iPhone (14/15, Dynamic Island), Android, Browser,
+Chromebook, Apple Watch. Blend modes: Color Burn, Darken, Lighten,
+Luminosity, Multiply, Normal, Plus Lighter.
 
-Annotation (arrows, handwritten circle/rectangle/underline, text
-highlight/highlighter, Delete/Duplicate highlight, Highlight Layers),
-Templates (Your Templates, Manage saved templates, Close template),
-Uploads (Upload Image 9×, Manage your uploads, Replace From Uploads,
-Replace Image), Brands (Brand Assets), social tooling (Fake Tweet
-Generator, Tweet to image, OG Image Generator, Carousel Maker, App
-Store / Play Store Screenshots, Feature Graphic, Profile Picture
-Maker, Emoji Maker, QR Code), AI (AI Image Edits, Text to Image,
-Text Generation, Remove background, Upscale Image, Anime portrait),
-themes (Dark/Light mode), Smart Paste onboarding
-(pastes/downloads/copies/saves counters gating tips).
+## 6. Export (reference for OmniFrame's export surface)
 
-## 7. Shell (what renders offline — see BRANDBIRD-UI.md)
+One popover from the Export button: FORMAT chips (PNG/JPG/WebP/
+PDF), SCALE chips (0.5x–3x) with computed output px, two option
+checkboxes (Remove watermark PRO, Remove background PRO), primary
+**Download PNG ⌘B**, secondary **Copy as PNG ⌘C**, ADVANCE OPTIONS
+expander. Keyboard shortcuts printed on the actions themselves.
 
-Dark dotted-grid canvas, viewport-full; bottom-right "Share Feedback"
-pill + shortcuts + help icon buttons; Inter font; no other chrome
-before auth. `ingest/` = PostHog analytics. `_ext/` hosts hang
-(assets.customer.io, tally.so, usefathom, wdfl) — marketing/site
-chrome, not studio.
+## 7. Onboarding & help
 
-## 8. What OmniFrame adopted from this
+One welcome modal (4 steps, primary CTA + "I'll explore on my own"),
+a shortcuts button and a help button bottom-right, Share Feedback
+pill. No explanatory prose inside panels afterwards — labels, empty
+states, and this one help affordance carry everything.
 
-1. Group controls by object part with one-line labels (LUT/adjustment
-   sections, pack sections) — already the panel grammar.
-2. Canvas-first: explanatory prose moved OUT of panels into one
-   **Help docker** (`HelpModal`, `?` header button, context-menu
-   "Tutorial & Info") — shipped this wave.
-3. Explorer metaphors for libraries: **Pack Browser** (95% window,
-   folders, search, tags, bundle previews showing what's inside) —
-   shipped this wave; sub-modes spawn the same 95% window on desktop.
-4. Device/background vocabulary seeded the Desktop Pack sections
-   (Windows & Apps, Apps & Phones, Scenes, Cursors, Overlays).
+## 8. Limits (honest)
+
+Editing is client-side and works offline from the mirror. Sign In,
+cloud templates/uploads sync, template gallery thumbnails and PRO
+checkout need brandbird.com backends (Stripe/Firebase/Google
+storage hosts in `_ext/`) and were not exercised. No credentials
+were used; nothing was uploaded anywhere.

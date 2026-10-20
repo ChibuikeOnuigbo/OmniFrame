@@ -1,45 +1,51 @@
-# brandbird_study — ReferenceTool (BrandBird-style) UI study
+# brandbird_study — BrandBird UI study (REDONE with the correct file)
 
-This folder is a study of the **reference work the user supplied**: the
-`refernce.zip` mirror downloaded from Google Drive (see
-`../ui_downlaod_study/UI-STUDY.md` for provenance). The app is
-**ReferenceTool** — "Powerful image, mockup & screenshot editor for
-entrepreneurs" (a BrandBird-style screenshot beautifier: drop in a
-screenshot, get a framed, shadowed, gradient-backed marketing image).
+> **Redo note:** the first upload (`refernce.zip`) was a spoilt/partial
+> mirror — its studio could never boot (the shared webpack chunks were
+> missing), so the earlier study was bundle-mining only. The user
+> replaced it with **`BrandBird - Powerful image, mockup & screenshot
+> editor for entrepreneurs - www.b.rar`** (3,323,095 bytes, Drive file
+> `15PnvqnUPOJwkB34q-6mmgkyy25jb7ic0`), which contains the complete
+> app: `index.html` (1.7 MB prerendered studio), all shared chunks,
+> fonts, favicons. **The real BrandBird studio boots and runs offline
+> from this mirror** — everything in this folder is now based on the
+> live app, screenshotted state by state.
 
 ## What is in here
 
 | File | What it is |
 |---|---|
-| `BRANDBIRD-UI.md` | The snapshot-linked tour: every capture taken, what each shows, and what we learned from it. |
-| `data_ui.md` | The full mined UI inventory: sections, command palette, control labels, device frames, background system, export — all info extracted from the app's bundle + DOM. |
-| `snapshots/` | Raw captures: `01-collection-studio.png/html`, `02-collection-fresh.png/html`, `capture-report.json` (machine-readable route report). |
+| `BRANDBIRD-UI.md` | Snapshot-linked tour: all 25 captures, what each shows, and the design lesson taken from it. |
+| `data_ui.md` | The full UI inventory from the live app + bundle: rail sections, every panel's controls, sliders, export options, onboarding, PRO gating, vocabulary. |
+| `snapshots/` | 25 PNG captures + per-state JSON DOM dumps (`buttons`, `inputs`, slider counts) + `capture-report.json`. |
 
-## Honest rendering limit (important)
+## How it was run
 
-The ZIP is a **static mirror** (HTML + JS chunks). Served locally, the
-studio boots to its **empty dotted canvas** only: the panel stack,
-templates and dashboard are rendered from a live backend (auth +
-API at `storage.googleapis.com` etc.) that is not in the ZIP and
-cannot be reproduced offline. So:
+- RAR extracted with `node-unrar-js` (WASM unrar) into
+  `ui_downlaod_study/brandbird-rar-extract/bb/` (gitignored — third-party mirror).
+- Served with an SPA-fallback static server (any unknown path →
+  `index.html`), driven with Playwright: onboarding dismissed, every
+  rail section opened, one of our own screenshots uploaded through
+  their file chooser so image-selected states (Mockup/Shadow/Border/
+  Position controls, floating selection toolbar) could be captured.
+- The app is **fully client-side for editing**: canvas, panels,
+  uploads, mockup/shadow/border/position controls and the Export
+  options popover all work offline. Only account/template-cloud
+  features need their backend (Sign In, public template gallery
+  thumbnails, PRO unlocks).
 
-- Screenshots here show **exactly what genuinely renders offline** —
-  the canvas shell + Share Feedback widget. We do **not** fabricate
-  panel screenshots.
-- Everything known about the real panels comes from **mining the
-  shipped JS bundle** (4.5 MB `_app` chunk): component titles, section
-  registry, slider labels, device/background vocabularies. That
-  inventory is complete and verbatim in `data_ui.md`.
+## What OmniFrame took from it (shipped this wave)
 
-## How OmniFrame uses this (summary)
-
-1. **Canvas-first shell**: the reference puts the canvas center-stage
-   with nothing but a feedback/help affordance — OmniFrame keeps its
-   own studio canvas-first and moves help into one docker (HelpModal).
-2. **Controls group by object part** (Mockup / Border / Shadow /
-   Background / Padding / Position), one-line labels, sliders with
-   icon + label + value. OmniFrame panels follow the same grouping.
-3. **Command palette sections** (`Open Section`, `Export`, `Utility`,
-   `Help`) mirror OmniFrame's context-menu + tool-finder model.
-4. **Device frames + backgrounds** vocabulary informed the Desktop
-   Pack (windows/apps/cursors/overlays) and the Explorer Pack Browser.
+1. **Floating selection quick-bar** — BrandBird floats a contextual
+   toolbar (AI Tools / Crop / Highlight / Padding / Blur) over the
+   selected image. OmniFrame's monitor now floats an equivalent bar
+   over a selected clip: clip name · Effects · Text (titles) · Split ·
+   Delete (`selection-quick-bar` in `Preview.tsx`).
+2. Their grammar was already our direction and is now confirmed by
+   the live app: icon rail + floating panel card, CAPS micro-headers,
+   label-left/value-right sliders, segmented chips (Original/Fixed,
+   PNG/JPG/WebP/PDF, 0.5x–3x), big primary action with shortcut hint
+   (Download PNG ⌘B), empty states that say what to select.
+3. Export popover pattern (format chips + scale chips + primary
+   download + "Advanced options") is recorded in `data_ui.md` §6 as
+   the reference for OmniFrame's export surface.

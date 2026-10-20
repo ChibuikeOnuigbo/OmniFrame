@@ -50,8 +50,34 @@ async function main() {
   await page.waitForTimeout(300)
   const inside = await page.evaluate(() => !!document.querySelector('[data-testid^="pack-browser-add-bundle-"]'))
   check('bundle detail shows contents + add-whole-pack', inside)
+  await page.click('[data-testid="pack-browser-back"]')
+  await page.waitForTimeout(300)
+  await page.click('[data-testid="pack-browser-folder-all"]')
+  await page.waitForTimeout(300)
+  await page.click('[data-testid^="pack-browser-asset-"]')
+  await page.waitForTimeout(400)
   await page.click('[data-testid="pack-browser-close"]')
   await page.waitForTimeout(300)
+  // BrandBird-style floating selection quick bar (needs a clip: add one from the pack browser state or via store)
+  const barVisible = await page.evaluate(() => {
+    const st = window.__omniframe_store.getState()
+    if (!st.clips.length) return 'no-clips'
+    st.selectClip(st.clips[0].id)
+    return true
+  })
+  if (barVisible === true) {
+    await page.waitForTimeout(400)
+    const bar = await page.evaluate(() => !!document.querySelector('[data-testid="selection-quick-bar"]'))
+    check('selection quick-bar floats over monitor', bar)
+    if (bar) {
+      await page.click('[data-testid="quick-bar-effects"]')
+      await page.waitForTimeout(300)
+      const tab = await page.evaluate(() => window.__omniframe_store.getState().leftTab)
+      check('quick-bar Effects opens effects panel', tab === 'effects', tab)
+    }
+  } else {
+    console.log('SKIP quick-bar (no clips in project)')
+  }
   console.log(`\n${pass} passed, ${fail} failed`)
   await browser.close()
   process.exit(fail ? 1 : 0)
