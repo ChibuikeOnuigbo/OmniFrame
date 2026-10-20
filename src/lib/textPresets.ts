@@ -226,15 +226,8 @@ function typewriterBuild(form: TypewriterForm) {
     let cursorPos = -totalW / 2
     chars.forEach((ch, i) => { charX.push(cursorPos + widths[i] / 2); cursorPos += widths[i] + cs })
     const created: Clip[] = []
-    chars.forEach((ch, i) => {
-      if (ch === ' ') return
-      const c = textClip(track(), start(), o.duration, { text: ch, fontSize: 72, bold: true, fontFamily: MONO, color: '#ffffff' }, { name: ch })
-      c.transform = { ...c.transform, x: charX[i] }
-      const on = i * per
-      withKeys(c, 'opacity', [[0, 0], [on, 0], [on + 0.02, 1], [o.duration - 0.3, 1], [o.duration, 0]])
-      created.push(c)
-    })
-
+    // Cursor is created FIRST so its track draws UNDER the glyphs
+    // (highlight/blob/image cursors sit behind the current letter).
     // ---- cursor: custom text > custom image > named forme > preset default
     const customText = (o.cursorCustomText ?? '').trim()
     const forme = CURSOR_FORMES.find((f) => f.id === (o.cursorForm ?? PRESET_DEFAULT_FORME[form])) ?? CURSOR_FORMES[0]
@@ -272,6 +265,15 @@ function typewriterBuild(form: TypewriterForm) {
     withKeys(cur, 'opacity', blink)
     if (cur.animation) for (const k of cur.animation.curves.opacity.keyframes) k.interpolation = 'constant'
     created.push(cur)
+    chars.forEach((ch, i) => {
+      if (ch === ' ') return
+      const c = textClip(track(), start(), o.duration, { text: ch, fontSize: 72, bold: true, fontFamily: MONO, color: '#ffffff' }, { name: ch })
+      c.transform = { ...c.transform, x: charX[i] }
+      const on = i * per
+      withKeys(c, 'opacity', [[0, 0], [on, 0], [on + 0.02, 1], [o.duration - 0.3, 1], [o.duration, 0]])
+      created.push(c)
+    })
+
     return pushClips(created)
   }
 }
