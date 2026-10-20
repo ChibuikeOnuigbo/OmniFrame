@@ -57,7 +57,7 @@ def encode(pack: Path, spec: dict) -> None:
 def main() -> None:
     rows = []
     for pack in sorted(ROOT.iterdir()):
-        if not pack.is_dir():
+        if not pack.is_dir() or pack.name == 'videos' or not (pack / 'spec.json').exists():
             continue
         spec = json.loads((pack / "spec.json").read_text())
         encode(pack, spec)

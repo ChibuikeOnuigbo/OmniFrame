@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { buildRetroText, buildWatermark, WATERMARK_LEVELS, type WatermarkLevel } from '../lib/builders'
-import { TEXT_PRESETS, buildTextPreset, lengthGuidance } from '../lib/textPresets'
+import { TEXT_PRESETS, buildTextPreset, lengthGuidance, spacingCaps, GRAPH_OPTIONS, type GlowSettings } from '../lib/textPresets'
 import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
@@ -35,6 +35,18 @@ export function TextPanel() {
   const [presetColor, setPresetColor] = useState('#ff2a4d')
   const [presetSeed, setPresetSeed] = useState(7)
   const [presetMsg, setPresetMsg] = useState('')
+  const [presetSpacing, setPresetSpacing] = useState(0)
+  const [presetWordSpacing, setPresetWordSpacing] = useState(0)
+  const [presetDuration, setPresetDuration] = useState(3)
+  const [presetDelay, setPresetDelay] = useState(0)
+  const [presetGraph, setPresetGraph] = useState('preset')
+  const [glowAngle, setGlowAngle] = useState(45)
+  const [glowIntensity, setGlowIntensity] = useState(1)
+  const [glowSpread, setGlowSpread] = useState(0)
+  const [glowBlur, setGlowBlur] = useState(1)
+  const [glowSmooth, setGlowSmooth] = useState(0)
+  const [glowSharp, setGlowSharp] = useState<'text' | 'effect'>('text')
+  const [glowClarity, setGlowClarity] = useState(0)
   const [retroText, setRetroText] = useState('NOELLE')
   const [retroSub, setRetroSub] = useState('★ RETRO ★')
   const [retroColor, setRetroColor] = useState('#ff2a4d')
@@ -50,7 +62,9 @@ export function TextPanel() {
   useEffect(() => {
     const w = window as unknown as Record<string, unknown>
     w.__omniframe_text_presets = TEXT_PRESETS.map((p) => ({ id: p.id, name: p.name, category: p.category, source: p.source, ideal: p.ideal, demo: p.demo }))
-    w.__omniframe_build_text_preset = (id: string, text: string, seed?: number, color?: string) => buildTextPreset(id, text, { seed: seed ?? 7, color: color ?? '#ff2a4d' })
+    w.__omniframe_build_text_preset = (id: string, text: string, opts?: unknown) =>
+      buildTextPreset(id, text, typeof opts === 'number' ? { seed: opts } : (opts as never) ?? { seed: 7 })
+    w.__omniframe_spacing_caps = (t: string) => spacingCaps(t)
   }, [])
   const [fontFamily, setFontFamily] = useState('sans-serif')
   const [utilStatus, setUtilStatus] = useState('')
@@ -538,7 +552,8 @@ export function TextPanel() {
                 type="button"
                 data-testid={`text-preset-lib-${p.id}`}
                 onClick={() => {
-                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor })
+                  const glow: GlowSettings = { angle: glowAngle, intensity: glowIntensity, spread: glowSpread, blur: glowBlur, smoothness: glowSmooth, sharpness: glowSharp, clarity: glowClarity }
+                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow })
                   setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
                 }}
                 className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
@@ -550,6 +565,47 @@ export function TextPanel() {
             </div>
           ))}
         </div>
+        {(() => {
+          const caps = spacingCaps(presetText || 'YOUR TEXT')
+          const slider = (label: string, testid: string, val: number, set: (n: number) => void, min: number, max: number, step = 1) => (
+            <label className="flex items-center gap-1 text-[9px] text-ink-400" key={testid}>{label}
+              <input type="range" data-testid={testid} min={min} max={Math.max(min, max)} step={step} value={val} onChange={(e) => set(Number(e.target.value))} className="w-16 accent-fuchsia-400" />
+              <span className="w-7 font-mono text-ink-300">{val}</span>
+            </label>
+          )
+          return (
+            <div className="space-y-1 rounded border border-ink-800 bg-ink-950/60 p-1.5" data-testid="preset-settings">
+              <span className="text-[9px] font-semibold uppercase text-ink-500">Animation settings (apply to every preset)</span>
+              <div className="flex flex-wrap gap-x-2 gap-y-1">
+                {slider('Char spacing', 'preset-spacing-input', presetSpacing, setPresetSpacing, -10, caps.charMax)}
+                {slider('Word spacing', 'preset-word-spacing-input', presetWordSpacing, setPresetWordSpacing, 0, caps.wordMax)}
+                {slider('Duration s', 'preset-duration-input', presetDuration, setPresetDuration, 1, 8, 0.5)}
+                {slider('Delay s', 'preset-delay-input', presetDelay, setPresetDelay, 0, 4, 0.1)}
+              </div>
+              <label className="flex items-center gap-1 text-[9px] text-ink-400">Graph
+                <select data-testid="preset-graph-select" value={presetGraph} onChange={(e) => setPresetGraph(e.target.value)} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-white outline-none">
+                  {GRAPH_OPTIONS.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}
+                </select>
+              </label>
+              <span className="block text-[9px] font-semibold uppercase text-ink-500 pt-0.5">Glow / shadow layer</span>
+              <div className="flex flex-wrap gap-x-2 gap-y-1">
+                {slider('Angle°', 'preset-glow-angle', glowAngle, setGlowAngle, 0, 360)}
+                {slider('Intensity', 'preset-glow-intensity', glowIntensity, setGlowIntensity, 0, 2, 0.1)}
+                {slider('Spread px', 'preset-glow-spread', glowSpread, setGlowSpread, 0, 80)}
+                {slider('Blur', 'preset-glow-blur', glowBlur, setGlowBlur, 0, 2, 0.1)}
+                {slider('Smooth', 'preset-glow-smooth', glowSmooth, setGlowSmooth, 0, 1, 0.1)}
+                {slider('Clarity', 'preset-glow-clarity', glowClarity, setGlowClarity, 0, 1, 0.1)}
+                <label className="flex items-center gap-1 text-[9px] text-ink-400">Sharpness
+                  <select data-testid="preset-glow-sharp" value={glowSharp} onChange={(e) => setGlowSharp(e.target.value as 'text' | 'effect')} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-white outline-none">
+                    <option value="text">Text stays sharp</option>
+                    <option value="effect">Effect stays sharp</option>
+                  </select>
+                </label>
+              </div>
+              <p className="text-[9px] text-ink-600" data-testid="preset-caps">Auto caps for “{presetText || 'YOUR TEXT'}”: character spacing ≤ {caps.charMax}px · word spacing ≤ {caps.wordMax}px (text ≈{caps.textWidth}px of 1766px usable — maths in animation_study.md).</p>
+            </div>
+          )
+        })()}
         <p className="text-[9px] leading-snug text-ink-500" data-testid="preset-guidance">{presetMsg || lengthGuidance(TEXT_PRESETS[0], presetText)}</p>
       </div>
 

@@ -125,7 +125,8 @@ export function buildRetroText(opts: RetroOptions): string[] {
     const main = textClip(fxTrack, start, dur, {
       text: opts.text, fontSize: 92, color: '#ffffff', bold: true, fontFamily: font,
       glowColor: '#ffffff', glowBlur: 14, letterSpacing: 5,
-      randomizer: { seed: opts.seed, untilSec: 0.9 },
+      // Scramble phase grows with duration (more gibberish time on longer builds).
+      randomizer: { seed: opts.seed, untilSec: Math.min(4, Math.max(0.8, opts.duration * 0.55)) },
     }, { name: `${opts.text} (randomizer)` })
     created.push(withFade(main, 0.15, 0.3))
   } else {
