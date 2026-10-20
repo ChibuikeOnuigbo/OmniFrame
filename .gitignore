@@ -40,3 +40,7 @@ training-runs/
 
 # User-supplied screenshots for processing (may contain personal info — never commit)
 img_data_pack/
+
+# downloaded reference app (third-party site mirror, study only)
+ui_downlaod_study/zip-extract/
+google_drive/

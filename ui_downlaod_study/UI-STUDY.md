@@ -6,14 +6,45 @@ You linked a Google Drive ZIP: file id `1lsp7EwETtHZhRbbFhKRpQXLhwtFMLgG0`,
 name **`refernce.zip`** (`application/x-zip-compressed`) — confirmed via
 your asset gateway, which renders the Drive viewer page.
 
-**Honest limit:** the ZIP binary cannot be extracted inside this sandbox.
-Outbound traffic here only reaches GitHub / npm / PyPI; the gateway
-returns web pages as text (great for YouTube metadata — used heavily in
-the preset waves) but cannot pass a binary archive through, and direct
-Drive/yt-dlp downloads are TLS-blocked. So no screenshots *from inside
-your ZIP* exist in this folder — if you want that software's exact
-screens studied, drop the unzipped screenshots (PNGs) into this folder
-and I'll annotate them one by one.
+**Update — downloaded and extracted.** The route that worked was the
+**Google Drive connector** (not the gateway): folder
+`1qApqBEFXe5ImvLhq-QwltQ925Fv7xASW` → `refernce.zip` (1.85 MB,
+id `1lsp7EwETtHZhRbbFhKRpQXLhwtFMLgG0`) → extracted to
+`ui_downlaod_study/zip-extract/refernce/` (kept local, gitignored — it's
+a third-party site mirror).
+
+## What the software actually is
+
+**ReferenceTool** — "Powerful image, mockup & screenshot editor for
+entrepreneurs": a BrandBird-style screenshot beautifier (Next.js app:
+`collection.html` + `_next` chunks; studio and dashboard pages).
+Served locally and opened in a browser, the mirror renders only its
+empty dotted canvas (`reference-1-collection.png`) — its data/auth
+backend isn't in the ZIP, so the live panels can't be screenshotted
+offline. Instead, the studio bundle (4.5 MB `_app` chunk) was mined for
+its real UI vocabulary, which maps its workspace clearly:
+
+- **Canvas-first layout**: dotted-grid infinite-feeling canvas, tools
+  around the edges, almost no chrome — the work area is the hero.
+- **Mockup controls** (21× in bundle): device frames (MacBook, iPad,
+  Browser, Windows), border radius/width, shadow, background (flat,
+  gradient, mesh gradient, patterns, images), padding/spacing —
+  property groups, each a compact labelled control stack.
+- **Layers**: duplicate/delete layer, uploads library, templates
+  ("Your Templates", "Share Template", "Save Templates").
+- **Export & Share**: PNG/JPG download, OG-image and app-store
+  screenshot generators.
+
+## What we already match / what we took from it
+
+Our Apps & Devices pack (browser windows, device frames, cursors) and
+image tooling cover the same mockup family; the declutter wave covers
+its space discipline (canvas-first, grouped property stacks, modes
+instead of scroll). The additional principle adopted here: **property
+controls group by object part (frame / shadow / background / spacing)
+with one-line labels** — the same grouping our glow stack and preset
+settings now use. If you can share screenshots of the live tool (it
+needs its backend), I'll annotate panel-for-panel next.
 
 What IS in this folder: screenshots of **our own app, before and after**
 the refactor, captured with the same harness as the QA suites
