@@ -50,6 +50,12 @@ export interface PresetBuildOpts {
   /** Typewriter cursor: 'follow' trails each typed letter (1_ 12_ 123_);
    *  'end' parks the cursor at the final position while letters fill in. */
   typewriterCursor?: 'follow' | 'end'
+  /** Cursor forme id from CURSOR_FORMES (overrides the preset's default). */
+  cursorForm?: string
+  /** Custom cursor: any text/unicode (emoji, symbols, words) used as the cursor. */
+  cursorCustomText?: string
+  /** Custom cursor: asset id of a user-imported image used as the cursor. */
+  cursorImageAssetId?: string
 }
 
 type O = PresetBuildOpts
@@ -139,14 +145,74 @@ function letterClip(ctx: LetterCtx, style: Omit<TextTitleStyle, 'text'>, opts: P
   return c
 }
 
-export type TypewriterForm = 'bar' | 'block' | 'underscore' | 'caret' | 'highlight'
-export const TYPEWRITER_FORMS: { form: TypewriterForm; name: string; glyph: string }[] = [
-  { form: 'bar', name: 'Typewriter · Vertical Bar', glyph: '|' },
-  { form: 'block', name: 'Typewriter · Block', glyph: '\u{25AE}' },
-  { form: 'underscore', name: 'Typewriter · Underscore', glyph: '_' },
-  { form: 'caret', name: 'Typewriter · Caret', glyph: '\u{25B8}' },
-  { form: 'highlight', name: 'Typewriter · Highlight', glyph: '\u{2588}' },
+export interface CursorFormeDef { id: string; name: string; kind: 'glyph' | 'shape'; glyph?: string; preview: string }
+
+/** Named cursor formes for the typewriter family — glyphs (text) and
+ *  drawn 2D shapes. Picked in the panel's forme window; users can also
+ *  supply any unicode text or an imported image instead. */
+export const CURSOR_FORMES: CursorFormeDef[] = [
+  { id: 'bar', name: 'Vertical Bar', kind: 'glyph', glyph: '|', preview: '|' },
+  { id: 'slash', name: 'Slash', kind: 'glyph', glyph: '/', preview: '/' },
+  { id: 'backslash', name: 'Backslash', kind: 'glyph', glyph: '\\', preview: '\\' },
+  { id: 'gt', name: 'Greater Than', kind: 'glyph', glyph: '>', preview: '>' },
+  { id: 'lt', name: 'Less Than', kind: 'glyph', glyph: '<', preview: '<' },
+  { id: 'chevrons', name: 'Double Chevron', kind: 'glyph', glyph: '<>', preview: '<>' },
+  { id: 'dot', name: 'Dot', kind: 'glyph', glyph: '.', preview: '.' },
+  { id: 'underscore', name: 'Underscore', kind: 'glyph', glyph: '_', preview: '_' },
+  { id: 'block', name: 'Block', kind: 'glyph', glyph: '\u{25AE}', preview: '\u{25AE}' },
+  { id: 'caret', name: 'Caret', kind: 'glyph', glyph: '\u{25B8}', preview: '\u{25B8}' },
+  { id: 'arrow', name: 'Arrow', kind: 'glyph', glyph: '\u{2192}', preview: '\u{2192}' },
+  { id: 'star', name: 'Star', kind: 'glyph', glyph: '\u{2605}', preview: '\u{2605}' },
+  { id: 'plus', name: 'Plus', kind: 'glyph', glyph: '+', preview: '+' },
+  { id: 'cross', name: 'Cross', kind: 'glyph', glyph: '\u{2715}', preview: '\u{2715}' },
+  { id: 'heart', name: 'Heart', kind: 'glyph', glyph: '\u{2665}', preview: '\u{2665}' },
+  { id: 'note', name: 'Music Note', kind: 'glyph', glyph: '\u{266A}', preview: '\u{266A}' },
+  { id: 'bolt', name: 'Lightning', kind: 'glyph', glyph: '\u{26A1}', preview: '\u{26A1}' },
+  { id: 'circle-glyph', name: 'Circle', kind: 'glyph', glyph: '\u{25CB}', preview: '\u{25CB}' },
+  { id: 'square-glyph', name: 'Square', kind: 'glyph', glyph: '\u{25A0}', preview: '\u{25A0}' },
+  { id: 'triangle', name: 'Triangle', kind: 'glyph', glyph: '\u{25B2}', preview: '\u{25B2}' },
+  { id: 'smiley', name: 'Smiley', kind: 'glyph', glyph: '\u{263A}', preview: '\u{263A}' },
+  { id: 'pencil', name: 'Pencil', kind: 'glyph', glyph: '\u{270E}', preview: '\u{270E}' },
+  { id: 'ring', name: 'Ring (2D)', kind: 'shape', preview: '\u{25CE}' },
+  { id: 'frame', name: 'Rounded Frame (2D)', kind: 'shape', preview: '\u{25AD}' },
+  { id: 'brackets', name: 'Corner Brackets (2D)', kind: 'shape', preview: '\u{27E6}\u{27E7}' },
+  { id: 'diamond-shape', name: 'Diamond (2D)', kind: 'shape', preview: '\u{25C7}' },
+  { id: 'underline-shape', name: 'Underline Bar (2D)', kind: 'shape', preview: '\u{2015}' },
+  { id: 'blob', name: 'Highlight Blob (2D)', kind: 'shape', preview: '\u{25A0}' },
 ]
+
+/** Drawn 2D cursor shapes as full-frame transparent assets (image clips
+ *  are cover-fit, so the shape is painted at frame centre). */
+function shapeAssetId(shape: string, color: string): string {
+  const st = useEditor.getState()
+  const id = `tw-shape-${shape}-${color.replace('#', '')}`
+  if (st.assets.some((a) => a.id === id)) return id
+  const c = document.createElement('canvas')
+  c.width = 1920; c.height = 1080
+  const g = c.getContext('2d')!
+  const cx = 960, cy = 540
+  g.strokeStyle = '#7dd3fc'; g.fillStyle = color; g.lineWidth = 10; g.lineCap = 'round'; g.lineJoin = 'round'
+  const rr = (x: number, y: number, w: number, h: number, r: number) => { g.beginPath(); if (typeof g.roundRect === 'function') g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h) }
+  if (shape === 'ring') { g.beginPath(); g.arc(cx, cy, 58, 0, Math.PI * 2); g.stroke() }
+  else if (shape === 'diamond-shape') { g.beginPath(); g.moveTo(cx, cy - 66); g.lineTo(cx + 54, cy); g.lineTo(cx, cy + 66); g.lineTo(cx - 54, cy); g.closePath(); g.stroke() }
+  else if (shape === 'frame') { rr(cx - 60, cy - 68, 120, 136, 18); g.stroke() }
+  else if (shape === 'brackets') {
+    const L = 26, x0 = cx - 60, x1 = cx + 60, y0 = cy - 68, y1 = cy + 68
+    g.beginPath()
+    g.moveTo(x0 + L, y0); g.lineTo(x0, y0); g.lineTo(x0, y0 + L)
+    g.moveTo(x1 - L, y0); g.lineTo(x1, y0); g.lineTo(x1, y0 + L)
+    g.moveTo(x0 + L, y1); g.lineTo(x0, y1); g.lineTo(x0, y1 - L)
+    g.moveTo(x1 - L, y1); g.lineTo(x1, y1); g.lineTo(x1, y1 - L)
+    g.stroke()
+  }
+  else if (shape === 'underline-shape') { g.fillStyle = '#7dd3fc'; rr(cx - 58, cy + 54, 116, 15, 7); g.fill() }
+  else { g.globalAlpha = 0.55; rr(cx - 60, cy - 68, 120, 136, 24); g.fill() }
+  st.addAsset({ id, name: `cursor-${shape}.png`, kind: 'image', url: c.toDataURL('image/png'), width: 1920, height: 1080, duration: 5 } as never)
+  return id
+}
+
+export type TypewriterForm = 'bar' | 'block' | 'underscore' | 'caret' | 'highlight'
+const PRESET_DEFAULT_FORME: Record<string, string> = { bar: 'bar', block: 'block', underscore: 'underscore', caret: 'caret', highlight: 'blob' }
 
 function typewriterBuild(form: TypewriterForm) {
   return (text: string, o: O): string[] => {
@@ -157,12 +223,9 @@ function typewriterBuild(form: TypewriterForm) {
     const cs = o.charSpacing ? clampSpacing(text, o.charSpacing, 0, 72).charSpacing : 0
     const totalW = widths.reduce((a, b) => a + b, 0) + Math.max(0, chars.length - 1) * cs
     const charX: number[] = []
-    let cursor = -totalW / 2
-    chars.forEach((ch, i) => { charX.push(cursor + widths[i] / 2); cursor += widths[i] + cs })
+    let cursorPos = -totalW / 2
+    chars.forEach((ch, i) => { charX.push(cursorPos + widths[i] / 2); cursorPos += widths[i] + cs })
     const created: Clip[] = []
-    // highlight block sits under the glyphs (created first = drawn first)
-    const glyph = TYPEWRITER_FORMS.find((f) => f.form === form)!.glyph
-    const cursorTrack = track()
     chars.forEach((ch, i) => {
       if (ch === ' ') return
       const c = textClip(track(), start(), o.duration, { text: ch, fontSize: 72, bold: true, fontFamily: MONO, color: '#ffffff' }, { name: ch })
@@ -171,24 +234,38 @@ function typewriterBuild(form: TypewriterForm) {
       withKeys(c, 'opacity', [[0, 0], [on, 0], [on + 0.02, 1], [o.duration - 0.3, 1], [o.duration, 0]])
       created.push(c)
     })
-    const cur = textClip(cursorTrack, start(), o.duration, { text: glyph, fontSize: 72, bold: true, fontFamily: MONO, color: form === 'highlight' ? o.color : '#7dd3fc' }, { name: `cursor ${form}` })
-    if (form === 'highlight') cur.transform = { ...cur.transform, opacity: 0.55 }
-    const endX = form === 'highlight' ? (charX[chars.length - 1] ?? 0) : totalW / 2 + 6
-    let xKeys: [number, number, string?][]
-    if ((o.typewriterCursor ?? 'follow') === 'end') {
-      // Cursor parked where the finished word will end; letters fill toward it.
-      xKeys = [[0, endX], [o.duration, endX]]
+
+    // ---- cursor: custom text > custom image > named forme > preset default
+    const customText = (o.cursorCustomText ?? '').trim()
+    const forme = CURSOR_FORMES.find((f) => f.id === (o.cursorForm ?? PRESET_DEFAULT_FORME[form])) ?? CURSOR_FORMES[0]
+    const atChar = form === 'highlight' || (!customText && !o.cursorImageAssetId && forme.kind === 'shape') || (!!o.cursorImageAssetId)
+    let cur: Clip
+    if (o.cursorImageAssetId && !customText) {
+      const st = useEditor.getState()
+      const asset = st.assets.find((a) => a.id === o.cursorImageAssetId)
+      const vw = asset?.width || 512, vh = asset?.height || 512
+      const cover = Math.max(1920 / vw, 1080 / vh)
+      cur = baseClip({ trackId: track(), start: start(), duration: o.duration, name: 'cursor image', kind: 'image', assetId: o.cursorImageAssetId })
+      cur.transform = { ...cur.transform, scale: 96 / (vw * cover), scaleY: 120 / (vh * cover) }
+    } else if (!customText && forme.kind === 'shape') {
+      cur = baseClip({ trackId: track(), start: start(), duration: o.duration, name: `cursor ${forme.id}`, kind: 'image', assetId: shapeAssetId(forme.id, o.color) })
     } else {
-      // Cursor trails each typed letter: 1_ -> 12_ -> 123_
-      xKeys = [[0, form === 'highlight' ? charX[0] ?? 0 : -totalW / 2]]
-      chars.forEach((ch, i) => {
-        const x = form === 'highlight' ? charX[i] : -totalW / 2 + widths.slice(0, i + 1).reduce((a, b) => a + b, 0) + i * cs + 6
-        xKeys.push([i * per, x])
-      })
-      xKeys.push([o.duration, xKeys[xKeys.length - 1][1]])
+      const glyph = customText || forme.glyph || '|'
+      cur = textClip(track(), start(), o.duration, { text: glyph, fontSize: glyph.length > 3 ? 42 : 72, bold: true, fontFamily: MONO, color: '#7dd3fc' }, { name: customText ? 'cursor custom text' : `cursor ${forme.id}` })
+    }
+    const afterX = (i: number) => -totalW / 2 + widths.slice(0, i + 1).reduce((a, b) => a + b, 0) + i * cs + 8
+    const endMode = (o.typewriterCursor ?? 'follow') === 'end'
+    let xKeys: [number, number, string?][]
+    if (endMode) {
+      const x = atChar ? (charX[chars.length - 1] ?? 0) : totalW / 2 + 8
+      xKeys = [[0, x], [o.duration, x]]
+    } else if (atChar) {
+      xKeys = [[0, charX[0] ?? 0], ...chars.map((ch, i) => [i * per, charX[i]] as [number, number, string?]), [o.duration, charX[chars.length - 1] ?? 0]]
+    } else {
+      xKeys = [[0, -totalW / 2], ...chars.map((ch, i) => [i * per, afterX(i)] as [number, number, string?]), [o.duration, afterX(chars.length - 1)]]
     }
     withKeys(cur, 'position_x', xKeys)
-    if (cur.animation) for (const cv of Object.values(cur.animation.curves)) for (const k of cv.keyframes) if (cv === cur.animation.curves.position_x) k.interpolation = 'constant'
+    if (cur.animation) for (const k of cur.animation.curves.position_x.keyframes) k.interpolation = 'constant'
     const blink: [number, number, string?][] = [[0, 1]]
     for (let t = chars.length * per + 0.4; t < o.duration - 0.2; t += 0.8) blink.push([t, 0.05], [t + 0.4, 1])
     blink.push([o.duration, 0])
@@ -199,12 +276,20 @@ function typewriterBuild(form: TypewriterForm) {
   }
 }
 
+const TYPEWRITER_PRESETS: { form: TypewriterForm; name: string }[] = [
+  { form: 'bar', name: 'Typewriter · Vertical Bar' },
+  { form: 'block', name: 'Typewriter · Block' },
+  { form: 'underscore', name: 'Typewriter · Underscore' },
+  { form: 'caret', name: 'Typewriter · Caret' },
+  { form: 'highlight', name: 'Typewriter · Highlight' },
+]
+
 function makeTypewriterFormes(): TextPresetDef[] {
-  return TYPEWRITER_FORMS.map((f) => ({
+  return TYPEWRITER_PRESETS.map((f) => ({
     id: `typewriter-${f.form}`,
     name: f.name,
     category: 'Typewriter',
-    source: 'Typewriter tutorials — 5 cursor formes',
+    source: 'Typewriter tutorials — cursor formes in the Cursor Forme window',
     ideal: [4, 20] as [number, number],
     demo: 'HELLO WORLD',
     build: typewriterBuild(f.form),
@@ -677,6 +762,9 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
     graph: opts?.graph ?? 'preset',
     glow: opts?.glow,
     typewriterCursor: opts?.typewriterCursor ?? 'follow',
+    cursorForm: opts?.cursorForm,
+    cursorCustomText: opts?.cursorCustomText,
+    cursorImageAssetId: opts?.cursorImageAssetId,
   }
   const ids = def.build(clean.slice(0, 28), o)
   if (!ids.length) return ids

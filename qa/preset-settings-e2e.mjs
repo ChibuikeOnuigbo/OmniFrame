@@ -148,6 +148,50 @@ assert(new Set(twModes.follow).size >= 4, 'I follow mode: cursor steps after eac
 assert(new Set(twModes.end).size === 1 && twModes.end[0] === twModes.follow[twModes.follow.length - 1], 'I end mode: cursor parked at the final position from frame 0', twModes.end.join(','))
 assert(await page.locator('[data-testid="preset-tw-cursor-select"]').count() === 1, 'I panel exposes the cursor toggle')
 
+// --- J. cursor formes registry, shapes, custom text + custom image ----------
+const formesReg = await page.evaluate(() => window.__omniframe_cursor_formes)
+assert(formesReg.length >= 25, 'J forme registry has 25+ named formes', `n=${formesReg.length}`)
+for (const need of ['bar', 'slash', 'gt', 'lt', 'chevrons', 'dot', 'ring', 'blob']) {
+  assert(formesReg.some((f) => f.id === need), `J forme ${need} exists`)
+}
+const custom = await page.evaluate(() => {
+  const store = window.__omniframe_store
+  const cursorOf = () => store.getState().clips.find((c) => c.name.startsWith('cursor'))
+  store.setState({ clips: [], tracks: [], playhead: 0, duration: 8 })
+  window.__omniframe_build_text_preset('typewriter-bar', 'HEY', { seed: 7, cursorForm: 'heart' })
+  const heart = cursorOf()?.textStyle?.text
+  store.setState({ clips: [], tracks: [], playhead: 0, duration: 8 })
+  window.__omniframe_build_text_preset('typewriter-bar', 'HEY', { seed: 7, cursorForm: 'ring' })
+  const ringCur = cursorOf()
+  store.setState({ clips: [], tracks: [], playhead: 0, duration: 8 })
+  window.__omniframe_build_text_preset('typewriter-bar', 'HEY', { seed: 7, cursorCustomText: 'OK\u{1F525}' })
+  const customText = cursorOf()?.textStyle?.text
+  const cv = document.createElement('canvas'); cv.width = 80; cv.height = 80
+  cv.getContext('2d').fillStyle = '#ff0'; cv.getContext('2d').fillRect(0, 0, 80, 80)
+  store.getState().addAsset({ id: 'qa-cursor-img', name: 'c.png', kind: 'image', url: cv.toDataURL('image/png'), width: 80, height: 80, duration: 5 })
+  store.setState({ clips: [], tracks: [], playhead: 0, duration: 8 })
+  window.__omniframe_build_text_preset('typewriter-bar', 'HEY', { seed: 7, cursorImageAssetId: 'qa-cursor-img' })
+  const imgCur = cursorOf()
+  return { heart, ring: { kind: imgCur0(ringCur), asset: ringCur?.assetId }, customText, img: { kind: imgCur?.kind, asset: imgCur?.assetId } }
+  function imgCur0(c) { return c?.kind }
+})
+assert(custom.heart === '\u{2665}', 'J glyph forme (heart) used as cursor', custom.heart)
+assert(custom.ring.kind === 'image' && String(custom.ring.asset).startsWith('tw-shape-ring'), 'J 2D ring shape cursor is a drawn image clip', JSON.stringify(custom.ring))
+assert(custom.customText === 'OK\u{1F525}', 'J custom unicode text cursor used verbatim', custom.customText)
+assert(custom.img.kind === 'image' && custom.img.asset === 'qa-cursor-img', 'J imported image used as cursor clip', JSON.stringify(custom.img))
+await page.locator('[data-testid="preset-cursor-forme-btn"]').click()
+await page.waitForTimeout(300)
+assert(await page.locator('[data-testid="cursor-forme-window"]').count() === 1, 'J forme window opens')
+await page.locator('[data-testid="cursor-forme-star"]').click()
+const starBuilt = await page.evaluate(() => {
+  const store = window.__omniframe_store
+  store.setState({ clips: [], tracks: [], playhead: 0, duration: 8 })
+  return true
+})
+assert(starBuilt, 'J forme selected from window')
+const status = await page.locator('[data-testid="cursor-custom-status"]').innerText()
+assert(status.includes('Star'), 'J window shows selected forme', status)
+
 // --- H. panel settings UI -------------------------------------------------------------
 for (const tid of ['preset-spacing-input', 'preset-word-spacing-input', 'preset-duration-input', 'preset-delay-input', 'preset-graph-select', 'preset-glow-angle', 'preset-glow-intensity', 'preset-glow-spread', 'preset-glow-blur', 'preset-glow-sharp', 'preset-caps']) {
   assert(await page.locator(`[data-testid="${tid}"]`).count() === 1, `H control ${tid}`)

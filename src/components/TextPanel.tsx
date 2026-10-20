@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { buildRetroText, buildWatermark, WATERMARK_LEVELS, type WatermarkLevel } from '../lib/builders'
-import { TEXT_PRESETS, buildTextPreset, lengthGuidance, spacingCaps, GRAPH_OPTIONS, type GlowSettings } from '../lib/textPresets'
+import { TEXT_PRESETS, buildTextPreset, lengthGuidance, spacingCaps, GRAPH_OPTIONS, CURSOR_FORMES, type GlowSettings } from '../lib/textPresets'
 import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
@@ -41,6 +41,11 @@ export function TextPanel() {
   const [presetDelay, setPresetDelay] = useState(0)
   const [presetGraph, setPresetGraph] = useState('preset')
   const [presetTwCursor, setPresetTwCursor] = useState<'follow' | 'end'>('follow')
+  const [formeWindow, setFormeWindow] = useState(false)
+  const [cursorForme, setCursorForme] = useState('bar')
+  const [cursorCustomText, setCursorCustomText] = useState('')
+  const [cursorImageId, setCursorImageId] = useState<string | null>(null)
+  const [cursorImageName, setCursorImageName] = useState('')
   const [glowAngle, setGlowAngle] = useState(45)
   const [glowIntensity, setGlowIntensity] = useState(1)
   const [glowSpread, setGlowSpread] = useState(0)
@@ -66,6 +71,7 @@ export function TextPanel() {
     w.__omniframe_build_text_preset = (id: string, text: string, opts?: unknown) =>
       buildTextPreset(id, text, typeof opts === 'number' ? { seed: opts } : (opts as never) ?? { seed: 7 })
     w.__omniframe_spacing_caps = (t: string) => spacingCaps(t)
+    w.__omniframe_cursor_formes = CURSOR_FORMES
   }, [])
   const [fontFamily, setFontFamily] = useState('sans-serif')
   const [utilStatus, setUtilStatus] = useState('')
@@ -554,7 +560,7 @@ export function TextPanel() {
                 data-testid={`text-preset-lib-${p.id}`}
                 onClick={() => {
                   const glow: GlowSettings = { angle: glowAngle, intensity: glowIntensity, spread: glowSpread, blur: glowBlur, smoothness: glowSmooth, sharpness: glowSharp, clarity: glowClarity }
-                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, typewriterCursor: presetTwCursor })
+                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, typewriterCursor: presetTwCursor, cursorForm: cursorForme, cursorCustomText: cursorCustomText || undefined, cursorImageAssetId: cursorImageId ?? undefined })
                   setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
                 }}
                 className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
@@ -589,6 +595,69 @@ export function TextPanel() {
                   <option value="end">Fixed at end · letters fill to cursor</option>
                 </select>
               </label>
+              <div className="space-y-1">
+                <button
+                  type="button"
+                  data-testid="preset-cursor-forme-btn"
+                  onClick={() => setFormeWindow((v) => !v)}
+                  className="flex w-full items-center justify-between rounded border border-ink-700 bg-ink-900 px-2 py-1 text-left hover:border-brand"
+                  title="Open the cursor forme window (typewriter presets)"
+                >
+                  <span className="text-[10px] text-ink-300">Cursor forme</span>
+                  <span className="text-[11px] text-white">{cursorImageId ? `🖼 ${cursorImageName || 'custom image'}` : cursorCustomText ? `“${cursorCustomText}” (custom)` : `${CURSOR_FORMES.find((f) => f.id === cursorForme)?.preview ?? '|'} ${CURSOR_FORMES.find((f) => f.id === cursorForme)?.name ?? ''}`} {formeWindow ? '▴' : '▾'}</span>
+                </button>
+                {formeWindow && (
+                  <div data-testid="cursor-forme-window" className="space-y-1.5 rounded border border-brand/50 bg-ink-950 p-1.5">
+                    <div className="grid grid-cols-3 gap-1">
+                      {CURSOR_FORMES.map((f) => (
+                        <button
+                          key={f.id}
+                          type="button"
+                          data-testid={`cursor-forme-${f.id}`}
+                          onClick={() => { setCursorForme(f.id); setCursorCustomText(''); setCursorImageId(null) }}
+                          className={`rounded border px-1 py-1 text-center ${cursorForme === f.id && !cursorCustomText && !cursorImageId ? 'border-brand bg-brand/20' : 'border-ink-700 bg-ink-900 hover:border-brand'}`}
+                          title={f.name}
+                        >
+                          <span className="block text-[15px] leading-tight text-white">{f.preview}</span>
+                          <span className="block text-[8px] text-ink-400">{f.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <label className="block text-[9px] text-ink-400">Custom cursor text (any unicode — emoji, symbols, words)
+                      <input
+                        data-testid="cursor-custom-text"
+                        value={cursorCustomText}
+                        onChange={(e) => { setCursorCustomText(e.target.value); if (e.target.value) setCursorImageId(null) }}
+                        placeholder="e.g. 🔥  ▸  >>  your name"
+                        className="mt-0.5 h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[12px] text-white outline-none focus:border-brand"
+                      />
+                    </label>
+                    <label className="block text-[9px] text-ink-400">…or import an image as the cursor
+                      <input
+                        type="file"
+                        accept="image/*"
+                        data-testid="cursor-custom-image"
+                        className="mt-0.5 block w-full text-[10px] text-ink-300 file:mr-2 file:rounded file:border file:border-ink-600 file:bg-ink-800 file:px-2 file:py-1 file:text-[10px] file:text-white"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          const url = URL.createObjectURL(file)
+                          const img = new Image()
+                          img.onload = () => {
+                            const id = `cursor-img-${Date.now()}`
+                            useEditor.getState().addAsset({ id, name: file.name, kind: 'image', url, width: img.naturalWidth, height: img.naturalHeight, duration: 5 } as never)
+                            setCursorImageId(id)
+                            setCursorImageName(file.name)
+                            setCursorCustomText('')
+                          }
+                          img.src = url
+                        }}
+                      />
+                    </label>
+                    <p className="text-[9px] text-ink-600" data-testid="cursor-custom-status">{cursorImageId ? `Cursor: your image “${cursorImageName}”` : cursorCustomText ? `Cursor: custom text “${cursorCustomText}”` : `Cursor: ${CURSOR_FORMES.find((f) => f.id === cursorForme)?.name}`}. Applies to Typewriter presets; 2D shapes hug the current letter.</p>
+                  </div>
+                )}
+              </div>
               <label className="flex items-center gap-1 text-[9px] text-ink-400">Graph
                 <select data-testid="preset-graph-select" value={presetGraph} onChange={(e) => setPresetGraph(e.target.value)} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-white outline-none">
                   {GRAPH_OPTIONS.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}

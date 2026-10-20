@@ -153,21 +153,36 @@ bezier`) — because our evaluator selects the formula from the keyframe's
 label. First opacity keys are spared so fades don't pop. This mirrors
 CapCut's "select segment → choose graph chip" workflow.
 
-## 5. Typewriter: 5 cursor formes
+## 5. Typewriter: 5 presets, 28 cursor formes, custom cursors
 
-The old typewriter drew a floating white band. It is now five presets,
-all driven by stepped (`constant`) cursor keys over measured glyph
-positions (each char reveals at tᵢ = i·per):
+The old typewriter drew a floating white band. It is now five presets
+(bar, block, underscore, caret, highlight), all driven by stepped
+(`constant`) cursor keys over measured glyph positions (each char
+reveals at tᵢ = i·per). A **Cursor** setting chooses where it sits:
+*follow* (trails each letter: 1_ → 12_ → 123_) or *fixed at end*
+(parked at the finished word's end while letters fill in).
 
-1. **Vertical Bar** `|` — classic terminal caret after the last letter.
-2. **Block** `▮` — solid block caret (VT100 style).
-3. **Underscore** `_` — horizontal caret under the next position.
-4. **Caret** `▸` — sideways caret (prompt style).
-5. **Highlight** `█` — accent block *behind* the current glyph
-   (reverse-video), drawn first so glyphs sit on top.
+Its look comes from the panel's **Cursor Forme window** — 28 named
+formes in three families:
 
-Blink: after typing completes, opacity toggles 1 ↔ 0.05 every 0.4 s
-(stepped keys), like real terminals (~1.2 Hz).
+- **Glyph formes** (text cursors): Vertical Bar `|`, Slash `/`,
+  Backslash `\`, Greater Than `>`, Less Than `<`, Double Chevron `<>`,
+  Dot `.`, Underscore `_`, Block `▮`, Caret `▸`, Arrow `→`, Star `★`,
+  Plus `+`, Cross `✕`, Heart `♥`, Music Note `♪`, Lightning `⚡`,
+  Circle `○`, Square `■`, Triangle `▲`, Smiley `☺`, Pencil `✎`.
+- **2D design formes** (drawn shapes, as full-frame transparent assets
+  painted at centre): Ring, Rounded Frame, Corner Brackets, Diamond,
+  Underline Bar, Highlight Blob. Shapes *hug the current letter*
+  instead of trailing the text.
+- **Custom**: any unicode text typed in the window (emoji, symbols,
+  words — used verbatim as the cursor glyph), or an **imported image**,
+  auto-scaled to ≈96×120 px from its real pixel size
+  (scale = target / (assetSize · coverFit)).
+
+Priority: custom text > custom image > chosen forme > preset default
+(highlight defaults to the Blob shape). Blink: after typing completes,
+opacity toggles 1 ↔ 0.05 every 0.4 s (stepped keys), like real terminals
+(~1.2 Hz).
 
 ## 6. Spacing settings with auto caps (the maths)
 
