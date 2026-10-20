@@ -26,6 +26,8 @@ await page.waitForTimeout(1500)
 
 await page.locator('[data-testid="left-tab-text"]').click()
 await page.waitForTimeout(600)
+await page.locator('[data-testid="text-submode-library-btn"]').click()
+await page.waitForTimeout(400)
 const index = await page.evaluate(() => window.__omniframe_text_presets)
 assert(Array.isArray(index) && index.length >= 20, 'A preset index exposed', `n=${index?.length}`)
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { buildRetroText, buildWatermark, WATERMARK_LEVELS, type WatermarkLevel } from '../lib/builders'
 import { TEXT_PRESETS, buildTextPreset, lengthGuidance, spacingCaps, GRAPH_OPTIONS, CURSOR_FORMES, type GlowSettings } from '../lib/textPresets'
-import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2 } from 'lucide-react'
+import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2, Wand2, History, Stamp } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
 import { previewTextClip } from '../lib/visualPreviewActions'
@@ -216,6 +216,57 @@ export function TextPanel() {
 
             <button
               type="button"
+              data-testid="text-submode-library-btn"
+              onClick={() => openSubMode('text', 'text-library', 'Text Preset Library', 'Wand2')}
+              className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
+              title="42 procedural text presets with animation settings"
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Wand2 size={14} className="text-fuchsia-300 shrink-0" />
+                <div>
+                  <div className="font-semibold text-[11px] text-ink-100">Preset Library</div>
+                  <div className="text-[9px] text-ink-400">42 animated looks</div>
+                </div>
+              </div>
+              <ChevronRight size={13} className="text-ink-400" />
+            </button>
+
+            <button
+              type="button"
+              data-testid="text-submode-retro-btn"
+              onClick={() => openSubMode('text', 'text-retro', 'Retro Text Studio', 'History')}
+              className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
+              title="Retro glitch text — effects or traditional per-letter method"
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <History size={14} className="text-rose-300 shrink-0" />
+                <div>
+                  <div className="font-semibold text-[11px] text-ink-100">Retro Studio</div>
+                  <div className="text-[9px] text-ink-400">Glitch text builder</div>
+                </div>
+              </div>
+              <ChevronRight size={13} className="text-ink-400" />
+            </button>
+
+            <button
+              type="button"
+              data-testid="text-submode-watermark-btn"
+              onClick={() => openSubMode('text', 'text-watermark', 'Watermark Studio', 'Stamp')}
+              className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
+              title="Watermark levels 1–6 and saved stamps"
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Stamp size={14} className="text-sky-300 shrink-0" />
+                <div>
+                  <div className="font-semibold text-[11px] text-ink-100">Watermark</div>
+                  <div className="text-[9px] text-ink-400">Levels 1–6 · stamps</div>
+                </div>
+              </div>
+              <ChevronRight size={13} className="text-ink-400" />
+            </button>
+
+            <button
+              type="button"
               data-testid="text-submode-styling-btn"
               onClick={() => openSubMode('text', 'text-styling', 'Font & Typography', 'Type')}
               className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
@@ -231,7 +282,7 @@ export function TextPanel() {
       )}
 
       {/* Content & Typography Styling Section */}
-      {(!activeSubMode || activeSubMode === 'text-styling') && (
+      {(activeSubMode === 'text-styling' || (!activeSubMode && isEditingTextClip)) && (
         <div data-testid="text-styling-section" className="space-y-2">
           <div>
             <label className="block text-[10px] font-semibold uppercase text-ink-500 mb-1">
@@ -493,7 +544,7 @@ export function TextPanel() {
       )}
 
       {/* Preset Title Styles */}
-      {(!activeSubMode || activeSubMode === 'text-presets') && (
+      {activeSubMode === 'text-presets' && (
         <div data-testid="text-presets-section" className="pt-2 border-t border-ink-800">
           <span className="text-[10px] font-semibold uppercase text-ink-500 block mb-1.5">
             Title Presets
@@ -541,7 +592,8 @@ export function TextPanel() {
         </div>
       )}
 
-      {/* Text Preset Library — procedural looks from tutorial.md */}
+      {/* Text Preset Library — sub-mode 'text-library' (keeps the overview short) */}
+      {activeSubMode === 'text-library' && (
       <div data-testid="text-preset-library" className="pt-2 border-t border-ink-800 space-y-1.5">
         <span className="text-[10px] font-semibold uppercase text-ink-500 block">Text Preset Library</span>
         <input data-testid="preset-text-input" value={presetText} onChange={(e) => setPresetText(e.target.value)} placeholder="Your text" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
@@ -550,7 +602,7 @@ export function TextPanel() {
           <label className="flex items-center gap-1 text-[10px] text-ink-400">Seed
             <input type="number" data-testid="preset-seed-input" value={presetSeed} onChange={(e) => setPresetSeed(Number(e.target.value) || 1)} className="h-6 w-14 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[10px] text-white outline-none" />
           </label>
-          <span className="text-[9px] text-ink-600">Any text works — presets are procedural, not recordings.</span>
+          <span className="text-[9px] text-ink-600">Any text works.</span>
         </div>
         <div className="space-y-1">
           {TEXT_PRESETS.map((p) => (
@@ -684,8 +736,10 @@ export function TextPanel() {
         })()}
         <p className="text-[9px] leading-snug text-ink-500" data-testid="preset-guidance">{presetMsg || lengthGuidance(TEXT_PRESETS[0], presetText)}</p>
       </div>
+      )}
 
-      {/* Retro Text Studio (Alight Motion study) */}
+      {/* Retro Text Studio — sub-mode 'text-retro' */}
+      {activeSubMode === 'text-retro' && (
       <div data-testid="retro-text-studio" className="pt-2 border-t border-ink-800 space-y-1.5">
         <span className="text-[10px] font-semibold uppercase text-ink-500 block">Retro Text Studio</span>
         <input data-testid="retro-text-input" value={retroText} onChange={(e) => setRetroText(e.target.value)} placeholder="Main text" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
@@ -713,8 +767,10 @@ export function TextPanel() {
         </button>
         <p className="text-[9px] leading-snug text-ink-600">Effects = Text Randomizer scramble that settles. Traditional = per-letter 1-frame glitches (move/colour/stroke/vanish) that settle — same seed, same glitches, every time.</p>
       </div>
+      )}
 
-      {/* Watermark Studio (CapCut study, levels 1–6) */}
+      {/* Watermark Studio — sub-mode 'text-watermark' */}
+      {activeSubMode === 'text-watermark' && (
       <div data-testid="watermark-studio" className="pt-2 border-t border-ink-800 space-y-1.5">
         <span className="text-[10px] font-semibold uppercase text-ink-500 block">Watermark Studio</span>
         <input data-testid="wm-text-input" value={wmText} onChange={(e) => setWmText(e.target.value)} placeholder="Watermark name — @you" className="h-7 w-full rounded border border-ink-700 bg-ink-950 px-2 text-[11px] text-white outline-none focus:border-brand" />
@@ -809,8 +865,9 @@ export function TextPanel() {
           </div>
         )}
         {studioStatus && <p className="text-[9px] leading-snug text-emerald-300" role="status">{studioStatus}</p>}
-        <p className="text-[9px] leading-snug text-ink-600">Levels follow the CapCut tutorial ladder. Everything is real editable clips — keyframes, graphs, effects — never a baked render. Green-screen footage? Add Chroma Key from the Effects panel.</p>
+        <p className="text-[9px] leading-snug text-ink-600">Editable clips, never baked. Green screen? Effects → Chroma Key.</p>
       </div>
+      )}
     </div>
   )
 }

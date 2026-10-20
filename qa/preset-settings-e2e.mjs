@@ -23,6 +23,8 @@ await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded'
 await page.waitForTimeout(1500)
 await page.locator('[data-testid="left-tab-text"]').click()
 await page.waitForTimeout(600)
+await page.locator('[data-testid="text-submode-library-btn"]').click()
+await page.waitForTimeout(400)
 
 // --- A. five typewriter formes ---------------------------------------------
 const formes = await page.evaluate(() => {

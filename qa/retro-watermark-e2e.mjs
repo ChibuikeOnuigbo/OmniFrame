@@ -68,9 +68,11 @@ await page.evaluate(() => {
 })
 
 await page.locator('[data-testid="left-tab-text"]').click()
+await page.locator('[data-testid="text-submode-retro-btn"]').click()
+await page.waitForTimeout(400)
 await page.waitForTimeout(500)
 hard(await page.locator('[data-testid="retro-text-studio"]').isVisible(), 'retro studio renders')
-hard(await page.locator('[data-testid="watermark-studio"]').isVisible(), 'watermark studio renders')
+hard(await page.locator('[data-testid="watermark-studio"]').count() === 0, 'watermark studio hidden until its sub-mode (decluttered panel)')
 
 // --- A. traditional retro ---------------------------------------------------
 await page.locator('[data-testid="retro-text-input"]').fill('GLITCH')
@@ -119,6 +121,10 @@ assert(Math.abs(scramble1.white - settled2.white) > 0.0005 || scramble1.red !== 
 
 // --- C. watermark levels -----------------------------------------------------------
 await page.evaluate(() => window.__omniframe_store.setState({ clips: window.__omniframe_store.getState().clips.filter((c) => c.assetId === 'qa-dark'), playhead: 0 }))
+await page.locator('[data-testid="submode-back-btn"]').click()
+await page.waitForTimeout(300)
+await page.locator('[data-testid="text-submode-watermark-btn"]').click()
+await page.waitForTimeout(400)
 await page.locator('[data-testid="wm-text-input"]').fill('@qaedit')
 await page.locator('[data-testid="wm-level-1"]').click()
 await page.locator('[data-testid="wm-build-btn"]').click()
