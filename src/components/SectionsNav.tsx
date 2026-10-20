@@ -166,8 +166,8 @@ export function SectionsNavigator({
       data-testid="sections-tablist"
       arrowTestIdPrefix="sections"
       onKeyDown={onTablistKeyDown}
-      className="shrink-0 border-b border-ink-800 bg-ink-900/70"
-      innerClassName="flex-nowrap items-center gap-1 px-2 py-1.5"
+      className="shrink-0 border-b border-ink-800 bg-ink-900/70 px-1.5 py-1"
+      innerClassName=""
     >
       {stripSections.map((s) => {
         const selected = s.id === activeId

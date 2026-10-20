@@ -788,11 +788,12 @@ export function DesktopPackPanel() {
       {/* Horizontal segmented bar — the five sections of this tab */}
       <HScrollStrip
         data-testid="pack-section-strip"
+        role="tablist"
+        aria-label="Desktop Pack sections"
         arrowTestIdPrefix="pack-section"
-        className="mt-2 shrink-0 border-b border-ink-800"
-        innerClassName="flex-nowrap items-center gap-1 px-2 pb-2"
+        className="mx-2 mt-2 shrink-0"
+        innerClassName=""
       >
-        <div role="tablist" aria-label="Desktop Pack sections" className="flex flex-nowrap items-center gap-1">
           {SECTIONS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -811,7 +812,6 @@ export function DesktopPackPanel() {
               {label}
             </button>
           ))}
-        </div>
       </HScrollStrip>
 
       <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-3 py-3">

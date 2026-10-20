@@ -117,3 +117,15 @@ PNG ⌘C** · ADVANCE OPTIONS expander.
   its shortcut — reference for our export surface (`data_ui.md` §6).
 - PRO gating is inline and honest (badge + one-line gate), never a
   blocking wall before you can see the tool.
+
+## Measured geometry (added after the redo)
+
+Numbers, not impressions: top bar 54px; rail buttons 74×59 on a
+75px pitch with the rail scrolling itself; panel card 266px wide,
+20px from the rail, 45px from the canvas; design at 0.48 scale;
+≈9 primary controls per section before sub-grouping; panel scroll
+never moves the canvas. Full table + the segment-strip maths this
+produced in OmniFrame: [`data_ui.md` §9–10](./data_ui.md).
+OmniFrame's rebuilt strip, before/after paging:
+![Segment strip](../ui_downlaod_study/sections/26-segment-strip.png)
+![Segment strip paged](../ui_downlaod_study/sections/27-segment-strip-paged.png)

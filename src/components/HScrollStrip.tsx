@@ -3,62 +3,100 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEditor } from '../store'
 
 /**
- * Advanced horizontal scroller used for chip/tab strips.
+ * Segmented strip — one bar, three regions, per the design sketch:
  *
- * When the "Hide horizontal overflow" setting is ON (default): the native
- * scrollbar is invisible; pinned arrows appear at the leftmost/rightmost
- * edges (hover an arrow to keep scrolling, click to page), the mouse wheel
- * scrolls sideways, and dragging scrolls too. When the setting is OFF the
- * strip falls back to a plain native scrollbar with no arrows — everything
- * behaves like a normal scroll area again.
+ *   [ ◀ cell ][ viewport: segments, every segment the SAME size ][ ▶ cell ]
+ *
+ * The maths that keep it honest:
+ *  - visible = clamp(floor(viewportW / targetW), 1, total)
+ *  - cellW   = viewportW / visible          (exact division)
+ *  - offsets are always whole multiples of cellW (snapped on scroll-end)
+ *
+ * Because the viewport width is an exact multiple of the segment width,
+ * at rest every visible segment is fully inside the view and every other
+ * segment is fully hidden — a segment is never sliced at the edge
+ * ("cut out"). The arrows are full-height cells in the layout flow,
+ * never overlays floating on top of segments. Clicking an arrow pages
+ * by `visible` segments and lands flush.
+ *
+ * When the "Hide horizontal overflow" setting is OFF the strip falls
+ * back to a plain native-scrollbar strip with natural-width children
+ * and no arrows.
  */
 export function HScrollStrip({
   children,
   className = '',
   innerClassName = '',
   arrowTestIdPrefix = 'hstrip',
+  segmentTargetWidth = 76,
   ...rest
 }: {
   children: React.ReactNode
   className?: string
   innerClassName?: string
   arrowTestIdPrefix?: string
+  /** Target segment width in px; the real width is viewportW / visible. */
+  segmentTargetWidth?: number
 } & React.HTMLAttributes<HTMLDivElement>) {
   const hideOverflowX = useEditor((s) => s.hideOverflowX)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const [viewportW, setViewportW] = useState(0)
   const [canLeft, setCanLeft] = useState(false)
   const [canRight, setCanRight] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
   const dragRef = useRef<{ x: number; left: number; moved: boolean } | null>(null)
   const suppressClickRef = useRef(false)
   const hoverTimerRef = useRef<number | null>(null)
+  const snapTimerRef = useRef<number | null>(null)
+  const snappingRef = useRef(false)
+
+  const items = React.Children.toArray(children)
+  const total = items.length
+  const visible = Math.max(1, Math.min(total || 1, Math.floor(viewportW / segmentTargetWidth) || 1))
+  const cellW = viewportW > 0 ? viewportW / visible : segmentTargetWidth
 
   const updateArrows = useCallback(() => {
-    const el = scrollRef.current
+    const el = viewportRef.current
     if (!el) return
     setCanLeft(el.scrollLeft > 2)
     setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2)
     setHasOverflow(el.scrollWidth > el.clientWidth + 2)
   }, [])
 
+  // Keep the resting offset on a whole-segment boundary: no cut-outs.
+  const snapToSegment = useCallback(() => {
+    const el = viewportRef.current
+    if (!el || cellW <= 0) return
+    const max = Math.max(0, el.scrollWidth - el.clientWidth)
+    const target = Math.min(max, Math.max(0, Math.round(el.scrollLeft / cellW) * cellW))
+    if (Math.abs(target - el.scrollLeft) < 1) return
+    snappingRef.current = true
+    el.scrollTo({ left: target, behavior: 'smooth' })
+    window.setTimeout(() => { snappingRef.current = false }, 350)
+  }, [cellW])
+
+  const scheduleSnap = useCallback(() => {
+    if (snapTimerRef.current !== null) window.clearTimeout(snapTimerRef.current)
+    snapTimerRef.current = window.setTimeout(() => { if (!snappingRef.current) snapToSegment() }, 130)
+  }, [snapToSegment])
+
   useEffect(() => {
-    updateArrows()
-    const el = scrollRef.current
+    const el = viewportRef.current
     if (!el) return
-    const observer = new ResizeObserver(updateArrows)
+    const measure = () => { setViewportW(el.clientWidth); updateArrows() }
+    measure()
+    const observer = new ResizeObserver(measure)
     observer.observe(el)
-    window.addEventListener('resize', updateArrows)
+    window.addEventListener('resize', measure)
     return () => {
       observer.disconnect()
-      window.removeEventListener('resize', updateArrows)
+      window.removeEventListener('resize', measure)
     }
-  }, [updateArrows, children])
+  }, [updateArrows, total])
 
-  // Native non-passive wheel listener: React attaches wheel as passive, so
-  // preventDefault there only logs errors. Sideways wheel scrolling must
-  // stop the page/panel from also scrolling vertically.
+  // Native non-passive wheel listener (React attaches wheel as passive).
   useEffect(() => {
-    const el = scrollRef.current
+    const el = viewportRef.current
     if (!el) return
     const onWheel = (e: WheelEvent) => {
       if (!useEditor.getState().hideOverflowX) return
@@ -66,43 +104,84 @@ export function HScrollStrip({
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         el.scrollLeft += e.deltaY
         e.preventDefault()
+        scheduleSnap()
       }
     }
     el.addEventListener('wheel', onWheel, { passive: false })
     return () => el.removeEventListener('wheel', onWheel)
-  }, [])
+  }, [scheduleSnap])
 
   const stopHoverScroll = useCallback(() => {
     if (hoverTimerRef.current !== null) {
       window.clearInterval(hoverTimerRef.current)
       hoverTimerRef.current = null
     }
-  }, [])
+    scheduleSnap()
+  }, [scheduleSnap])
 
   const startHoverScroll = (dir: -1 | 1) => {
-    stopHoverScroll()
+    if (hoverTimerRef.current !== null) window.clearInterval(hoverTimerRef.current)
     hoverTimerRef.current = window.setInterval(() => {
-      scrollRef.current?.scrollBy({ left: dir * 12 })
+      viewportRef.current?.scrollBy({ left: dir * 12 })
     }, 16)
   }
 
   const page = (dir: -1 | 1) => {
-    const el = scrollRef.current
-    if (el) el.scrollBy({ left: dir * Math.max(80, el.clientWidth * 0.8), behavior: 'smooth' })
+    // A click is a deliberate page: kill any hover-scroll so the train
+    // lands exactly on the segment boundary instead of drifting past it.
+    if (hoverTimerRef.current !== null) {
+      window.clearInterval(hoverTimerRef.current)
+      hoverTimerRef.current = null
+    }
+    const el = viewportRef.current
+    if (!el || cellW <= 0) return
+    const max = Math.max(0, el.scrollWidth - el.clientWidth)
+    const index = Math.round(el.scrollLeft / cellW) + dir * visible
+    const target = Math.min(max, Math.max(0, index * cellW))
+    snappingRef.current = true
+    el.scrollTo({ left: target, behavior: 'smooth' })
+    window.setTimeout(() => { snappingRef.current = false }, 350)
+  }
+
+  const arrowBtn =
+    'grid w-9 shrink-0 cursor-pointer place-items-center self-stretch text-ink-300 transition-colors hover:bg-brand/15 hover:text-white disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand'
+
+  if (!hideOverflowX) {
+    return (
+      <div className={className}>
+        <div ref={viewportRef} className={`of-hstrip flex overflow-x-auto ${innerClassName}`} {...rest}>
+          {children}
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`flex items-stretch overflow-hidden rounded-xl border border-ink-700/80 bg-ink-900/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] ${className}`}>
+      {hasOverflow && (
+        <button
+          type="button"
+          data-testid={`${arrowTestIdPrefix}-arrow-left`}
+          aria-label="Scroll left"
+          title="Previous segments (hover to keep scrolling)"
+          disabled={!canLeft}
+          onMouseEnter={() => startHoverScroll(-1)}
+          onMouseLeave={stopHoverScroll}
+          onClick={() => page(-1)}
+          className={`${arrowBtn} rounded-l-[11px] border-r border-ink-700/70`}
+        >
+          <ChevronLeft size={16} />
+        </button>
+      )}
       <div
-        ref={scrollRef}
-        onScroll={updateArrows}
+        ref={viewportRef}
+        onScroll={() => { updateArrows(); if (!snappingRef.current) scheduleSnap() }}
         onPointerDown={(e) => {
-          if (!hideOverflowX) return
-          dragRef.current = { x: e.clientX, left: scrollRef.current?.scrollLeft ?? 0, moved: false }
+          dragRef.current = { x: e.clientX, left: viewportRef.current?.scrollLeft ?? 0, moved: false }
         }}
         onPointerMove={(e) => {
           const drag = dragRef.current
-          const el = scrollRef.current
+          const el = viewportRef.current
           if (!drag || !el) return
           const dx = e.clientX - drag.x
           if (Math.abs(dx) > 4) drag.moved = true
@@ -114,6 +193,7 @@ export function HScrollStrip({
             window.setTimeout(() => { suppressClickRef.current = false }, 50)
           }
           dragRef.current = null
+          scheduleSnap()
         }}
         onClickCapture={(e) => {
           if (suppressClickRef.current) {
@@ -121,43 +201,39 @@ export function HScrollStrip({
             e.stopPropagation()
           }
         }}
-        style={hideOverflowX && hasOverflow ? { paddingLeft: 30, paddingRight: 30, scrollPaddingLeft: 30, scrollPaddingRight: 30 } : undefined}
-        className={`of-hstrip flex overflow-x-auto ${hideOverflowX ? 'scrollbar-none' : ''} ${innerClassName}`}
+        className="of-hstrip scrollbar-none min-w-0 flex-1 overflow-x-auto"
         {...rest}
       >
-        {children}
+        <div className={`flex items-stretch ${innerClassName}`} style={{ width: total * cellW }}>
+          {items.map((child, i) => (
+            <div
+              key={(child as React.ReactElement)?.key ?? i}
+              data-segment-cell={i}
+              className="shrink-0 overflow-hidden px-0.5 py-1"
+              style={{ width: cellW }}
+            >
+              {React.isValidElement(child)
+                ? React.cloneElement(child as React.ReactElement<{ className?: string }>, {
+                    className: `${(child.props as { className?: string }).className ?? ''} flex h-full w-full items-center justify-center truncate`,
+                  })
+                : child}
+            </div>
+          ))}
+        </div>
       </div>
-      {/* Train controls: one pinned arrow at each edge whenever the strip
-          overflows. The scroller reserves a 30px lane at both ends, so no
-          chip ever sits underneath an arrow; clicking pages the train. */}
-      {hideOverflowX && hasOverflow && (
-        <button
-          type="button"
-          data-testid={`${arrowTestIdPrefix}-arrow-left`}
-          aria-label="Scroll left"
-          title="Scroll left (hover to keep scrolling)"
-          disabled={!canLeft}
-          onMouseEnter={() => startHoverScroll(-1)}
-          onMouseLeave={stopHoverScroll}
-          onClick={() => page(-1)}
-          className="absolute left-0.5 top-1/2 z-10 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-ink-600 bg-ink-900/95 text-ink-100 shadow-md transition-colors hover:bg-ink-700 disabled:cursor-default disabled:opacity-35"
-        >
-          <ChevronLeft size={13} />
-        </button>
-      )}
-      {hideOverflowX && hasOverflow && (
+      {hasOverflow && (
         <button
           type="button"
           data-testid={`${arrowTestIdPrefix}-arrow-right`}
           aria-label="Scroll right"
-          title="Scroll right (hover to keep scrolling)"
+          title="Next segments (hover to keep scrolling)"
           disabled={!canRight}
           onMouseEnter={() => startHoverScroll(1)}
           onMouseLeave={stopHoverScroll}
           onClick={() => page(1)}
-          className="absolute right-0.5 top-1/2 z-10 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-ink-600 bg-ink-900/95 text-ink-100 shadow-md transition-colors hover:bg-ink-700 disabled:cursor-default disabled:opacity-35"
+          className={`${arrowBtn} rounded-r-[11px] border-l border-ink-700/70`}
         >
-          <ChevronRight size={13} />
+          <ChevronRight size={16} />
         </button>
       )}
     </div>

@@ -1,0 +1,447 @@
+{
+  "welcome": {
+    "w": 798,
+    "h": 424,
+    "x": 401,
+    "y": 65
+  },
+  "regions": {
+    "viewport": {
+      "w": 1600,
+      "h": 1000
+    },
+    "signIn": null,
+    "exportBtn": {
+      "x": 1384,
+      "y": 21,
+      "w": 37,
+      "h": 12
+    },
+    "sizeBtn": null,
+    "railBtnAI": {
+      "x": 11,
+      "y": 107,
+      "w": 74,
+      "h": 59
+    },
+    "railButtons": [
+      {
+        "x": 11,
+        "y": 107,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 182,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 257,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 332,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 407,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 482,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 557,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 632,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 707,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 782,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 857,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 932,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 1007,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 1082,
+        "w": 74,
+        "h": 59
+      },
+      {
+        "x": 11,
+        "y": 1157,
+        "w": 74,
+        "h": 59
+      }
+    ],
+    "railCount": 15,
+    "panel": null,
+    "panelScroller": null,
+    "design": {
+      "x": 400,
+      "y": 70,
+      "w": 1200,
+      "h": 946
+    }
+  },
+  "sections": {
+    "AI": {
+      "found": false
+    },
+    "Uploads": {
+      "found": false
+    },
+    "Templates": {
+      "found": true,
+      "buttons": 4,
+      "inputs": 1,
+      "sliders": 0,
+      "interactives": 5,
+      "scrollables": [
+        {
+          "scrollH": 239,
+          "clientH": 187
+        },
+        {
+          "scrollH": 145,
+          "clientH": 93
+        },
+        {
+          "scrollH": 197,
+          "clientH": 145
+        },
+        {
+          "scrollH": 107,
+          "clientH": 55
+        },
+        {
+          "scrollH": 190,
+          "clientH": 138
+        },
+        {
+          "scrollH": 335,
+          "clientH": 283
+        },
+        {
+          "scrollH": 199,
+          "clientH": 147
+        },
+        {
+          "scrollH": 199,
+          "clientH": 147
+        },
+        {
+          "scrollH": 619,
+          "clientH": 567
+        },
+        {
+          "scrollH": 597,
+          "clientH": 545
+        },
+        {
+          "scrollH": 192,
+          "clientH": 140
+        },
+        {
+          "scrollH": 558,
+          "clientH": 506
+        },
+        {
+          "scrollH": 249,
+          "clientH": 197
+        },
+        {
+          "scrollH": 212,
+          "clientH": 160
+        },
+        {
+          "scrollH": 249,
+          "clientH": 197
+        },
+        {
+          "scrollH": 249,
+          "clientH": 197
+        },
+        {
+          "scrollH": 155,
+          "clientH": 103
+        },
+        {
+          "scrollH": 104,
+          "clientH": 52
+        },
+        {
+          "scrollH": 104,
+          "clientH": 52
+        },
+        {
+          "scrollH": 104,
+          "clientH": 52
+        }
+      ],
+      "clientH": 4790,
+      "text": "TEMPLATES |  | Public | Saved |  | Or filter by platform: |  | Airbnb iPhone 17 mobile screen |  | Gym Photo Dumb |  | Highlight Element on Screenshot |  | wallx |  | Desktop & Mobile Site m"
+    },
+    "Images": {
+      "found": true,
+      "buttons": 6,
+      "inputs": 1,
+      "sliders": 0,
+      "interactives": 7,
+      "scrollables": [
+        {
+          "scrollH": 20,
+          "clientH": 1
+        }
+      ],
+      "clientH": 496,
+      "text": "IMAGES |  | Learn more about BrandBird image types |  | START HERE |  | Upload Image |  | Or pasteCTRL+Vfrom your clipboard |  | How to use the copy/paste feature |  | More Integration"
+    },
+    "Annotation": {
+      "found": false
+    },
+    "Background": {
+      "found": true,
+      "buttons": 9,
+      "inputs": 0,
+      "sliders": 0,
+      "interactives": 9,
+      "scrollables": [],
+      "clientH": 998,
+      "text": "BACKGROUND |  | Save | Saved | Settings | Effects | Gradient | DIRECTION: |  | 45° |  | TYPE: | Linear | Conic | Create gradients from a color | NEW | GALLERY | Hide"
+    },
+    "Mockup": {
+      "found": false
+    },
+    "Position": {
+      "found": true,
+      "buttons": 1,
+      "inputs": 3,
+      "sliders": 3,
+      "interactives": 7,
+      "scrollables": [
+        {
+          "scrollH": 422,
+          "clientH": 416
+        },
+        {
+          "scrollH": 341,
+          "clientH": 335
+        },
+        {
+          "scrollH": 341,
+          "clientH": 335
+        },
+        {
+          "scrollH": 281,
+          "clientH": 275
+        },
+        {
+          "scrollH": 128,
+          "clientH": 118
+        },
+        {
+          "scrollH": 96,
+          "clientH": 90
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        }
+      ],
+      "clientH": 416,
+      "text": "POSITION |  | Adjust the position of the active Layout or the selected annotation layer. |  | TAKE BORDER RADIUS INTO ACCOUNT | POSITION | 0 | X | 0 | Y | 0.80 | SCALE"
+    },
+    "3D": {
+      "found": false
+    },
+    "Shadow": {
+      "found": false
+    },
+    "Border": {
+      "found": false
+    },
+    "Layout": {
+      "found": true,
+      "buttons": 14,
+      "inputs": 2,
+      "sliders": 2,
+      "interactives": 18,
+      "scrollables": [
+        {
+          "scrollH": 70,
+          "clientH": 64
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        },
+        {
+          "scrollH": 34,
+          "clientH": 28
+        }
+      ],
+      "clientH": 662,
+      "text": "LAYOUT |  | PRO |  | You can arrange your images with custom Layouts only on the PRO plan. |  | Unlock Layouts | PICK A LAYOUT | LAYOUT CONFIG | Start | Center | End | 0.50 | SPACING | 0.8"
+    },
+    "Header": {
+      "found": false
+    },
+    "Watermark": {
+      "found": true,
+      "buttons": 8,
+      "inputs": 1,
+      "sliders": 0,
+      "interactives": 9,
+      "scrollables": [],
+      "clientH": 445,
+      "text": "WATERMARK |  | PRO |  | Classic | Fullscreen | NEW | Dark | Light | Blue |  | Create & save your own watermark to brand | your posts here |  | Sign In"
+    },
+    "Brands": {
+      "found": true,
+      "buttons": 1,
+      "inputs": 0,
+      "sliders": 0,
+      "interactives": 1,
+      "scrollables": [],
+      "clientH": 870,
+      "text": "BRANDS |  | PRO |  | Save your brand assets (colors, logos, fonts, etc.) as a Brand to create on-brand graphics in a few clicks. |  | Unlock Brands"
+    }
+  },
+  "export": null,
+  "regions2": {
+    "panel": {
+      "x": 105,
+      "y": 75,
+      "w": 266,
+      "h": 496
+    },
+    "panelButtons": 6,
+    "design": {
+      "x": 416,
+      "y": 74,
+      "w": 1152,
+      "h": 649
+    },
+    "rail": {
+      "x": 11,
+      "y": 91,
+      "w": 74,
+      "h": 866,
+      "scrollH": 1311,
+      "clientH": 866,
+      "buttons": 17
+    },
+    "topbar": {
+      "x": 0,
+      "y": 0,
+      "w": 1600,
+      "h": 54
+    }
+  },
+  "scrollLink": {
+    "scrolled": null,
+    "designBefore": {
+      "x": 416,
+      "y": 74
+    },
+    "designAfter": {
+      "x": 416,
+      "y": 74
+    }
+  }
+}

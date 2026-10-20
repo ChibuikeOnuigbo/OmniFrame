@@ -95,3 +95,44 @@ cloud templates/uploads sync, template gallery thumbnails and PRO
 checkout need brandbird.com backends (Stripe/Firebase/Google
 storage hosts in `_ext/`) and were not exercised. No credentials
 were used; nothing was uploaded anywhere.
+
+## 9. Measured geometry (Playwright getBoundingClientRect, 1600×1000)
+
+Raw dump: `snapshots/metrics.json` (script `qa/brandbird-metrics*.mjs`).
+
+| Region | Rect (x, y, w, h) | Derived |
+|---|---|---|
+| Top bar | 0, 0, 1600, 54 | fixed 54px |
+| Icon rail | 11, 91, 74, 866 | buttons **74×59**, pitch **75** (16px gap); **15 sections** + create; rail **scrolls itself** (scrollH 1311 > clientH 866) |
+| Panel card | 105, 75, 266, ~496+ | rail→panel gap **20px** (105 − 85); panel = 16.6% of viewport width; top offset 21px under the bar |
+| Design canvas | 416, 74, 1152, 649 | panel→canvas gap **45px** (416 − 371); 2400×1350 shown at **0.48 scale**; right margin 32px |
+| Welcome modal | 401, 65, 798, 424 | ≈ 50% × 42% of viewport, centered |
+| Selection toolbar | floats ~8px above the selected image | AI Tools/Crop/Highlight/Padding/Blur |
+
+**Per-section control census** (buttons+inputs+sliders in the open
+panel): Images 7 · Background 9 · Position 7 (1 btn, 3 inputs, 3
+sliders) · Watermark 9 · Templates 5 primary + inner card scroll ·
+Brands 1 · Layout 18 but grouped (Pick / Config / Spacing / Scale /
+Force-equal-width). **Rule: one section = one object-part group; the
+primary-control budget is ≈ 9; anything longer becomes a sub-group
+or an inner scroll region — never a taller mega-section.**
+
+**Scroll & linkage**: rail click swaps the panel 1:1 (panel title =
+section); the panel owns the only vertical scroll in its column;
+scrolling it leaves the design pixel-identical (measured before/
+after: x 416, y 74 → 416, 74). Rail, panel and canvas are three
+independent regions with fixed gaps (20 / 45px) — nothing overlaps
+anything else.
+
+## 10. Applied to OmniFrame: the segmented strip (user sketch)
+
+`HScrollStrip` rewritten to the sketch's maths:
+`visible = clamp(floor(viewportW / 76), 1, total)`,
+`cellW = viewportW / visible`, offsets snapped to whole multiples of
+`cellW`. Arrows are full-height layout cells flanking the viewport
+(never overlays); segments are equal cells; at rest a segment is
+fully visible or fully hidden — never sliced ("cut out"). Clicking
+an arrow pages by `visible` segments and lands flush; wheel/drag
+snap on release. Proven geometrically by `qa/segment-strip-e2e.mjs`
+(8/8: arrow cells don't overlap the view, equal widths, zero cut
+segments before/after paging, boundary-exact scrollLeft).
