@@ -18,11 +18,15 @@ ROOT = Path(__file__).resolve().parent.parent / "testing_asset_etc"
 
 
 def encode(pack: Path, spec: dict) -> None:
-    webm = pack / "preview.webm"
-    mp4 = pack / "preview.mp4"
-    if not webm.exists():
+    webms = sorted(pack.glob("*.webm"))
+    if not webms:
         print(f"skip {pack.name} (no webm)")
         return
+    for webm in webms:
+        encode_one(webm, webm.with_suffix(".mp4"), spec)
+
+
+def encode_one(webm: Path, mp4: Path, spec: dict) -> None:
     cues = spec.get("soundCues", [])
     inputs = ["-i", str(webm)]
     filters = []
@@ -49,9 +53,9 @@ def encode(pack: Path, spec: dict) -> None:
            "-c:a", "aac", "-b:a", "96k", "-t", "2.8", "-shortest", "-movflags", "+faststart", str(mp4)]
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
-        print(f"FAIL {pack.name}: {r.stderr[-400:]}")
+        print(f"FAIL {mp4}: {r.stderr[-400:]}")
         sys.exit(1)
-    print(f"mp4 {pack.name} ({mp4.stat().st_size // 1024} KB)")
+    print(f"mp4 {mp4.parent.name}/{mp4.name} ({mp4.stat().st_size // 1024} KB)")
 
 
 def main() -> None:

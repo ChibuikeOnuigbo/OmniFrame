@@ -133,6 +133,21 @@ const filler = await page.evaluate(() => {
 })
 assert(filler.long.textLen > filler.short.textLen && filler.long.until > filler.short.until, 'G longer duration => more gibberish filler + longer scramble', JSON.stringify(filler))
 
+// --- I. typewriter cursor modes: follow (1_ 12_ 123_) vs fixed at end --------
+const twModes = await page.evaluate(() => {
+  const store = window.__omniframe_store
+  const xs = (mode) => {
+    store.setState({ clips: [], tracks: [], playhead: 0, duration: 8 })
+    window.__omniframe_build_text_preset('typewriter-bar', 'TYPE', mode ? { seed: 7, typewriterCursor: mode } : { seed: 7 })
+    const cur = store.getState().clips.find((c) => c.name.startsWith('cursor'))
+    return cur.animation.curves.position_x.keyframes.map((k) => Math.round(k.value))
+  }
+  return { follow: xs('follow'), end: xs('end') }
+})
+assert(new Set(twModes.follow).size >= 4, 'I follow mode: cursor steps after each letter (1_ 12_ 123_)', twModes.follow.join(','))
+assert(new Set(twModes.end).size === 1 && twModes.end[0] === twModes.follow[twModes.follow.length - 1], 'I end mode: cursor parked at the final position from frame 0', twModes.end.join(','))
+assert(await page.locator('[data-testid="preset-tw-cursor-select"]').count() === 1, 'I panel exposes the cursor toggle')
+
 // --- H. panel settings UI -------------------------------------------------------------
 for (const tid of ['preset-spacing-input', 'preset-word-spacing-input', 'preset-duration-input', 'preset-delay-input', 'preset-graph-select', 'preset-glow-angle', 'preset-glow-intensity', 'preset-glow-spread', 'preset-glow-blur', 'preset-glow-sharp', 'preset-caps']) {
   assert(await page.locator(`[data-testid="${tid}"]`).count() === 1, `H control ${tid}`)

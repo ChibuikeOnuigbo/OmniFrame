@@ -10,6 +10,7 @@
   "demoText": "HELLO WORLD",
   "clipsBuilt": 11,
   "video": "preview.mp4 (with sound cues) · preview.webm (raw)",
+  "cursorModes": "preview.mp4 = cursor follows each letter (1_ 12_ 123_); preview-end-mode.mp4 = cursor fixed at end",
   "soundCues": [
     {
       "t": 0.03,

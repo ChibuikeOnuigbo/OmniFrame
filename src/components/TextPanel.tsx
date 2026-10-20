@@ -40,6 +40,7 @@ export function TextPanel() {
   const [presetDuration, setPresetDuration] = useState(3)
   const [presetDelay, setPresetDelay] = useState(0)
   const [presetGraph, setPresetGraph] = useState('preset')
+  const [presetTwCursor, setPresetTwCursor] = useState<'follow' | 'end'>('follow')
   const [glowAngle, setGlowAngle] = useState(45)
   const [glowIntensity, setGlowIntensity] = useState(1)
   const [glowSpread, setGlowSpread] = useState(0)
@@ -553,7 +554,7 @@ export function TextPanel() {
                 data-testid={`text-preset-lib-${p.id}`}
                 onClick={() => {
                   const glow: GlowSettings = { angle: glowAngle, intensity: glowIntensity, spread: glowSpread, blur: glowBlur, smoothness: glowSmooth, sharpness: glowSharp, clarity: glowClarity }
-                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow })
+                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, typewriterCursor: presetTwCursor })
                   setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
                 }}
                 className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
@@ -582,6 +583,12 @@ export function TextPanel() {
                 {slider('Duration s', 'preset-duration-input', presetDuration, setPresetDuration, 1, 8, 0.5)}
                 {slider('Delay s', 'preset-delay-input', presetDelay, setPresetDelay, 0, 4, 0.1)}
               </div>
+              <label className="flex items-center gap-1 text-[9px] text-ink-400">Typewriter cursor
+                <select data-testid="preset-tw-cursor-select" value={presetTwCursor} onChange={(e) => setPresetTwCursor(e.target.value as 'follow' | 'end')} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-white outline-none" title="Follow: cursor trails each letter (1_ 12_ 123_). End: cursor waits at the final position while letters fill in.">
+                  <option value="follow">Follow each letter · 1_ 12_ 123_</option>
+                  <option value="end">Fixed at end · letters fill to cursor</option>
+                </select>
+              </label>
               <label className="flex items-center gap-1 text-[9px] text-ink-400">Graph
                 <select data-testid="preset-graph-select" value={presetGraph} onChange={(e) => setPresetGraph(e.target.value)} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-white outline-none">
                   {GRAPH_OPTIONS.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}

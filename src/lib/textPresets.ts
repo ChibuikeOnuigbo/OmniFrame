@@ -47,6 +47,9 @@ export interface PresetBuildOpts {
   wordSpacing?: number
   graph?: string
   glow?: GlowSettings
+  /** Typewriter cursor: 'follow' trails each typed letter (1_ 12_ 123_);
+   *  'end' parks the cursor at the final position while letters fill in. */
+  typewriterCursor?: 'follow' | 'end'
 }
 
 type O = PresetBuildOpts
@@ -170,12 +173,20 @@ function typewriterBuild(form: TypewriterForm) {
     })
     const cur = textClip(cursorTrack, start(), o.duration, { text: glyph, fontSize: 72, bold: true, fontFamily: MONO, color: form === 'highlight' ? o.color : '#7dd3fc' }, { name: `cursor ${form}` })
     if (form === 'highlight') cur.transform = { ...cur.transform, opacity: 0.55 }
-    const xKeys: [number, number, string?][] = [[0, form === 'highlight' ? charX[0] ?? 0 : -totalW / 2]]
-    chars.forEach((ch, i) => {
-      const x = form === 'highlight' ? charX[i] : -totalW / 2 + widths.slice(0, i + 1).reduce((a, b) => a + b, 0) + i * cs + 6
-      xKeys.push([i * per, x])
-    })
-    xKeys.push([o.duration, xKeys[xKeys.length - 1][1]])
+    const endX = form === 'highlight' ? (charX[chars.length - 1] ?? 0) : totalW / 2 + 6
+    let xKeys: [number, number, string?][]
+    if ((o.typewriterCursor ?? 'follow') === 'end') {
+      // Cursor parked where the finished word will end; letters fill toward it.
+      xKeys = [[0, endX], [o.duration, endX]]
+    } else {
+      // Cursor trails each typed letter: 1_ -> 12_ -> 123_
+      xKeys = [[0, form === 'highlight' ? charX[0] ?? 0 : -totalW / 2]]
+      chars.forEach((ch, i) => {
+        const x = form === 'highlight' ? charX[i] : -totalW / 2 + widths.slice(0, i + 1).reduce((a, b) => a + b, 0) + i * cs + 6
+        xKeys.push([i * per, x])
+      })
+      xKeys.push([o.duration, xKeys[xKeys.length - 1][1]])
+    }
     withKeys(cur, 'position_x', xKeys)
     if (cur.animation) for (const cv of Object.values(cur.animation.curves)) for (const k of cv.keyframes) if (cv === cur.animation.curves.position_x) k.interpolation = 'constant'
     const blink: [number, number, string?][] = [[0, 1]]
@@ -665,6 +676,7 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
     wordSpacing: opts?.wordSpacing ?? 0,
     graph: opts?.graph ?? 'preset',
     glow: opts?.glow,
+    typewriterCursor: opts?.typewriterCursor ?? 'follow',
   }
   const ids = def.build(clean.slice(0, 28), o)
   if (!ids.length) return ids
