@@ -196,12 +196,6 @@ function LutGallery() {
   const showFilteredBuiltins = showAllLooks || !!query.trim() || category !== 'All'
   const visibleBuiltins = showFilteredBuiltins ? filteredBuiltins : filteredBuiltins.slice(0, 12)
 
-  const placementHint = selected?.kind === 'adjustment'
-    ? `Preview on “${selected.name}”; Apply commits it to that layer.`
-    : selected
-      ? `Preview on selected clip “${selected.name}”; Apply commits the look.`
-      : 'Preview on active footage as a temporary adjustment layer; Apply commits it.'
-
   const handlePreviewLook = (lut: Pick<LutItem, 'name' | 'id' | 'cubeText'>) => {
     const started = previewLut({ name: lut.name, builtin: lut.id && !lut.cubeText ? lut.id : undefined, cubeText: lut.cubeText })
     setPreviewNotice(started ? null : 'Add visible timeline footage to audition this look.')
@@ -239,9 +233,6 @@ function LutGallery() {
 
   return (
     <div data-testid="lut-gallery" className="space-y-2.5">
-      <p className="text-[10px] leading-snug text-ink-400" data-testid="lut-placement-hint">
-        {placementHint} Set strength on an applied look in the controls below.
-      </p>
       {uploadNotice && <p className="rounded border border-emerald-900/70 bg-emerald-950/25 px-2 py-1 text-[9px] text-emerald-200" role="status">{uploadNotice}</p>}
       {previewNotice && <p className="rounded border border-amber-900/70 bg-amber-950/25 px-2 py-1 text-[9px] text-amber-200" role="status">{previewNotice}</p>}
 
@@ -548,7 +539,6 @@ function EffectLayerButtons() {
     <div className="space-y-1.5" data-testid="effect-layer-presets">
       <div>
         <div className="text-[10px] font-semibold uppercase tracking-wider text-ink-500">Quick adjustment layers</div>
-        <p className="mt-0.5 text-[10px] leading-snug text-ink-400">Click to audition from the clip start. Apply in the monitor to create the real layer clip.</p>
       </div>
       <div className="grid grid-cols-2 gap-1.5">
         {EFFECT_LAYERS.map((layer) => (
@@ -599,7 +589,6 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
       <div className="rounded-md border border-dashed border-ink-800 p-3 text-center" data-testid="clip-effects-empty">
         <SlidersHorizontal size={18} className="mx-auto mb-1.5 text-ink-600" />
         <p className="text-[10px] font-medium text-ink-300">Select a clip or adjustment layer</p>
-        <p className="mt-0.5 text-[10px] leading-snug text-ink-400">Clip controls stay scoped to that clip; a timeline layer grades the composite below it.</p>
       </div>
     )
   }
@@ -641,9 +630,6 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           </button>
         </div>
       </div>
-      <p className="text-[10px] leading-snug text-ink-400">
-        Presets audition temporarily from the clip start; Apply in the monitor to commit. Sliders below edit the selected {isLayer ? 'layer' : 'clip'} live.
-      </p>
       <div className="grid grid-cols-3 gap-1">
         {[
           { id: 'cinematic', label: 'Cinematic' },
@@ -746,11 +732,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           ))}
           <p className="text-[9px] leading-snug text-ink-500">Screen-blended radial light over everything beneath this layer.</p>
         </div>
-      ) : (
-        <p className="rounded-md border border-dashed border-ink-800 px-2 py-1.5 text-[9px] leading-snug text-ink-500" data-testid="light-layer-hint">
-          Light lives on adjustment layers — add one with the Light Layer preset, then tune color, intensity and falloff here.
-        </p>
-      )}
+      ) : null}
       {labels.length > 0 && (
         <div className="rounded-md border border-ink-800 bg-ink-950/40 px-2 py-1.5" data-testid="clip-effect-summary">
           <span className="block text-[9px] font-semibold uppercase tracking-wider text-ink-600">Active filters</span>

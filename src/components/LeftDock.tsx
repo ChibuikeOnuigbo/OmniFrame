@@ -26,8 +26,7 @@ import {
   List,
   PictureInPicture2,
   PanelLeft,
-  Search,
-} from 'lucide-react'
+  Search, Maximize2, Minimize2, CircleHelp } from 'lucide-react'
 import { useEditor, type LeftTab } from '../store'
 import { FloatingWindow } from './FloatingWindow'
 import { SectionsNavigator } from './SectionsNav'
@@ -128,7 +127,7 @@ function ToolFinderDialog({ onClose, onSelect }: { onClose: () => void; onSelect
         <header className="flex items-start justify-between gap-3 border-b border-ink-800 px-4 py-3">
           <div>
             <h2 id="tool-finder-title" className="text-sm font-semibold text-ink-100">Find a tool or panel</h2>
-            <p id="tool-finder-help" className="mt-0.5 text-[10px] leading-snug text-ink-400">Search by task or feature, such as “voice isolation”, “LUT”, “drawing”, or “3D”.</p>
+
           </div>
           <button
             type="button"
@@ -312,6 +311,9 @@ export function LeftDock() {
   const activeCategory = useEditor((s) => s.activeCategory)
   const setActiveCategory = useEditor((s) => s.setActiveCategory)
   const activeSubMode = useEditor((s) => s.activeSubMode)
+  const panelMaximized = useEditor((s) => s.panelMaximized)
+  const setPanelMaximized = useEditor((s) => s.setPanelMaximized)
+  const setHelpOpen = useEditor((s) => s.setHelpOpen)
   const closeSubMode = useEditor((s) => s.closeSubMode)
   const contextualSubModes = useEditor((s) => s.contextualSubModes)
   const openSubMode = useEditor((s) => s.openSubMode)
@@ -557,20 +559,28 @@ export function LeftDock() {
       </div>
 
       {/* Expandable Content Panel */}
+      {panelMaximized && leftOpen && (
+        <div data-testid="left-panel-backdrop" className="fixed inset-0 z-[75] bg-black/60 backdrop-blur-sm" onClick={() => setPanelMaximized(false)} aria-hidden="true" />
+      )}
       <div
         id="left-panel"
         data-testid="left-panel"
         data-open={leftOpen}
+        data-maximized={panelMaximized || undefined}
         style={{
-          width: leftOpen
-            ? `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`
-            : '0px',
+          width: panelMaximized && leftOpen
+            ? '95vw'
+            : leftOpen
+              ? `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`
+              : '0px',
         }}
-        className={`shrink-0 bg-ink-850 border-r border-ink-700/80 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:shadow-2xl ${dockResizing ? 'transition-none' : ''}`}
+        className={panelMaximized && leftOpen
+          ? 'fixed left-1/2 top-1/2 z-[80] h-[95vh] w-[95vw] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-ink-600 bg-ink-850 shadow-[0_32px_120px_rgba(0,0,0,.7)] overflow-hidden'
+          : `shrink-0 bg-ink-850 border-r border-ink-700/80 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:shadow-2xl ${dockResizing ? 'transition-none' : ''}`}
       >
         <div
           style={{
-            width: `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`,
+            width: panelMaximized && leftOpen ? '100%' : `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`,
           }}
           className="h-full flex flex-col relative"
         >
@@ -657,6 +667,27 @@ export function LeftDock() {
                 }`}
               >
                 {sidebarSectionMode === 'tabs' ? <LayoutGrid size={13} /> : <List size={13} />}
+              </button>
+              <button
+                type="button"
+                data-testid="left-panel-maximize-btn"
+                title={panelMaximized ? 'Restore panel size' : 'Open panel as a full window (95%)'}
+                aria-label={panelMaximized ? 'Restore panel size' : 'Open panel as a full window'}
+                aria-pressed={panelMaximized}
+                onClick={() => setPanelMaximized(!panelMaximized)}
+                className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                {panelMaximized ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+              </button>
+              <button
+                type="button"
+                data-testid="help-open-btn"
+                title="Help — tutorials & info"
+                aria-label="Open help: tutorials and info"
+                onClick={() => setHelpOpen(true)}
+                className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <CircleHelp size={14} />
               </button>
               {!leftPanelFloating && (
                 <button

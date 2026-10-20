@@ -588,6 +588,13 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
 
   // ---- media ----
   addAsset: (a: MediaAsset) => void
+  /** Demo fixtures (test/demo loaders). Library starts EMPTY for users;
+   *  fixtures seed only inside automated test rigs, or on explicit load. */
+  ensureDemoAssets: () => void
+  helpOpen: boolean
+  setHelpOpen: (v: boolean) => void
+  panelMaximized: boolean
+  setPanelMaximized: (v: boolean) => void
   importFiles: (files: FileList | File[]) => Promise<void>
   /** Adds one undoable generated-audio operation: assets, synchronized audio
    * tracks/clips, and optional source/stem mute changes. */
@@ -1040,6 +1047,40 @@ async function loadDrawableSource(
   return canvas
 }
 
+export const DEMO_ASSETS = [
+  {
+    id: 'asset-death-note-vid',
+    name: 'Death Note Chibi - 5 Characters.mp4',
+    kind: 'video',
+    url: '/death_note_video.mp4',
+    duration: 8.0,
+    width: 1672,
+    height: 940,
+    fps: 30,
+    size: 1548200,
+  },
+  {
+    id: 'asset-death-note-img',
+    name: 'Death Note Chibi - 5 Characters.jfif',
+    kind: 'image',
+    url: '/death_note_composite.jfif',
+    duration: 5.0,
+    width: 1672,
+    height: 941,
+    size: 158400,
+  },
+  {
+    id: 'asset-room-chair-towel',
+    name: 'Room Leather Chair & Towel (Real Photo).jpg',
+    kind: 'image',
+    url: '/room_chair_towel.jpg',
+    duration: 5.0,
+    width: 1448,
+    height: 1086,
+    size: 384000,
+  },
+] as MediaAsset[]
+
 export const useEditor = create<EditorState>((set, get) => {
   let maskUndoAt = 0
   let maskUndoClipId = ''
@@ -1055,39 +1096,10 @@ export const useEditor = create<EditorState>((set, get) => {
   }
 
   return {
-    assets: [
-      {
-        id: 'asset-death-note-vid',
-        name: 'Death Note Chibi - 5 Characters.mp4',
-        kind: 'video',
-        url: '/death_note_video.mp4',
-        duration: 8.0,
-        width: 1672,
-        height: 940,
-        fps: 30,
-        size: 1548200,
-      },
-      {
-        id: 'asset-death-note-img',
-        name: 'Death Note Chibi - 5 Characters.jfif',
-        kind: 'image',
-        url: '/death_note_composite.jfif',
-        duration: 5.0,
-        width: 1672,
-        height: 941,
-        size: 158400,
-      },
-      {
-        id: 'asset-room-chair-towel',
-        name: 'Room Leather Chair & Towel (Real Photo).jpg',
-        kind: 'image',
-        url: '/room_chair_towel.jpg',
-        duration: 5.0,
-        width: 1448,
-        height: 1086,
-        size: 384000,
-      },
-    ],
+    // Library starts empty. The three demo fixtures below exist for the
+    // OmniFrame region-edit demo loaders and the automated QA rigs
+    // (navigator.webdriver); real users import their own media.
+    assets: typeof navigator !== 'undefined' && (navigator as { webdriver?: boolean }).webdriver ? DEMO_ASSETS : [],
     sourceDocuments: [],
     customFonts: [],
     customPalettes: [],
@@ -2216,6 +2228,11 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     addAsset: (a) => set((s) => ({ assets: [...s.assets, a] })),
+    ensureDemoAssets: () => set((s) => ({ assets: [...s.assets, ...DEMO_ASSETS.filter((d) => !s.assets.some((a) => a.id === d.id))] })),
+    helpOpen: false,
+    setHelpOpen: (v) => set({ helpOpen: v }),
+    panelMaximized: false,
+    setPanelMaximized: (v) => set({ panelMaximized: v }),
     clearMediaImportNotice: () => set({ mediaImportNotice: null }),
 
     addGeneratedAudioTracks: (entries, options = {}) => {

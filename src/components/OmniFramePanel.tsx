@@ -262,7 +262,7 @@ export function OmniFramePanel() {
               aria-pressed={omniframeCharacters.some((c) => c.id.startsWith('char_towel'))}
               title="Load the room chair and towel photo to edit by region"
               onClick={() => {
-                loadAssetObjects('asset-room-chair-towel')
+                useEditor.getState().ensureDemoAssets(); loadAssetObjects('asset-room-chair-towel')
                 const roomAsset = assets.find((a) => a.id === 'asset-room-chair-towel')
                 if (roomAsset) {
                   const trkId = ensureTrack('video')
@@ -287,7 +287,7 @@ export function OmniFramePanel() {
               aria-pressed={omniframeCharacters.some((c) => c.id.startsWith('char_light'))}
               title="Load the Death Note characters video or image to edit by region"
               onClick={() => {
-                loadAssetObjects('asset-death-note-vid')
+                useEditor.getState().ensureDemoAssets(); loadAssetObjects('asset-death-note-vid')
               }}
               className={`p-1.5 rounded-lg border text-left transition-all ${
                 omniframeCharacters.some((c) => c.id.startsWith('char_light'))

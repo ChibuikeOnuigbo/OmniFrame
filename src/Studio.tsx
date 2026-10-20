@@ -22,9 +22,10 @@ import {
   Target,
   FolderOutput,
   FolderOpen,
-  Bookmark,
+  Bookmark,  CircleHelp,
 } from 'lucide-react'
 import { useEditor } from './store'
+import { HelpModal } from './components/HelpModal'
 import type { Clip, Transition } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
 import { VoiceIsolationModal } from './components/VoiceIsolationModal'
@@ -338,6 +339,7 @@ export default function Studio() {
           { id: 'copy', label: 'Copy', shortcut: 'Ctrl+C', icon: Copy, run: () => { writeClipClipboard(contextMenu.clip) } },
           ...(clipboardClip ? [{ id: 'paste', label: 'Paste at playhead', shortcut: 'Ctrl+V', icon: Clipboard, run: () => insertClipCopy(clipboardClip!, useEditor.getState().playhead) }] : []),
           { id: 'duplicate', label: 'Duplicate', shortcut: 'Ctrl+D', icon: Files, run: () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration) },
+          { id: 'help-info', label: 'Tutorial & Info', icon: CircleHelp, run: () => useEditor.getState().setHelpOpen(true) },
           { id: 'split', label: 'Split at Playhead', shortcut: 'Ctrl+B', icon: Scissors, run: () => useEditor.getState().splitAt(useEditor.getState().playhead) },
           {
             id: 'marker',
@@ -671,6 +673,7 @@ export default function Studio() {
         if (e.dataTransfer.files.length) importFiles(e.dataTransfer.files)
       }}
     >
+      <HelpModal />
       <TopBar />
       {focusMode !== 'none' && (
         <div

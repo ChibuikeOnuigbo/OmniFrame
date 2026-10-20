@@ -1,0 +1,42 @@
+[
+  {
+    "name": "01-collection-studio",
+    "route": "/collection.html",
+    "status": 200,
+    "title": "ReferenceTool - Powerful image, mockup & screenshot editor for entrepreneurs",
+    "text": "Share Feedback"
+  },
+  {
+    "name": "02-collection-fresh",
+    "route": "/collection.html?new=1",
+    "status": 200,
+    "title": "ReferenceTool - Powerful image, mockup & screenshot editor for entrepreneurs",
+    "text": "Share Feedback"
+  },
+  {
+    "name": "03-index",
+    "route": "/index.html",
+    "status": 404,
+    "title": "Error response",
+    "text": "Error response\n\nError code: 404\n\nMessage: File not found.\n\nError code explanation: 404 - Nothing matches the given URI."
+  },
+  {
+    "name": "04-home",
+    "route": "/",
+    "status": 200,
+    "title": "Directory listing for /",
+    "text": "Directory listing for /\n_ext/\n_next/\ncollection.html\ningest/"
+  },
+  {
+    "name": "studio-buttons",
+    "buttons": [
+      ".css-1wh2kri{display:-webkit-inline-box;",
+      ".css-fwuffs{display:-webkit-box;display:",
+      ".css-onkibi{width:1em;height:1em;display"
+    ]
+  },
+  {
+    "name": "studio-inputs",
+    "inputs": []
+  }
+]

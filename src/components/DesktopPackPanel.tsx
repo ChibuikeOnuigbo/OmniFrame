@@ -3,6 +3,7 @@ import { AppWindow, Box, ChevronRight, Clapperboard, Folder, FolderOpen, Heart, 
 import { useEditor } from '../store'
 import type { ClipEffect, CursorPack, Primitive3D } from '../types'
 import { PACK_ASSETS, PACK_BUNDLES, PACK_H, PACK_W, packAssetUrl, type PackAssetDef, type PackBundleDef, type PackSection } from '../lib/desktopPack'
+import { PackBrowserModal } from './PackBrowserModal'
 import { previewClipEffect, previewEffectLayer } from '../lib/visualPreviewActions'
 import { HScrollStrip } from './HScrollStrip'
 
@@ -568,6 +569,7 @@ export function PackFolder({
 }
 
 export function DesktopPackPanel() {
+  const [browserOpen, setBrowserOpen] = useState(false)
   const [section, setSection] = useState<PackSection>('windows')
   const [recipeNote, setRecipeNote] = useState('')
   const [briefNote, setBriefNote] = useState('')
@@ -754,11 +756,9 @@ export function DesktopPackPanel() {
 
   return (
     <div data-testid="desktop-pack-panel" className="flex h-full flex-col text-xs text-ink-200">
+      <button type="button" data-testid="pack-browser-open-btn" onClick={() => setBrowserOpen(true)} className="mb-2 h-8 w-full rounded-md border border-brand/60 bg-brand/15 font-semibold text-brand-200 transition hover:bg-brand/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand">Open Pack Browser</button>
       <div className="px-3 pt-3">
         <h2 className="text-sm font-semibold text-ink-50">Desktop Pack</h2>
-        <p className="mt-0.5 text-[10px] leading-snug text-ink-500">
-          Screen-life library: fake desktops &amp; windows, cursors, overlays, grades and quick 3D — filed in folders.
-        </p>
         <label className="mt-2 flex items-center gap-1.5 rounded-md border border-ink-700 bg-ink-900 px-2 py-1.5 focus-within:border-brand">
           <Search size={12} className="shrink-0 text-ink-500" />
           <input
@@ -870,13 +870,9 @@ export function DesktopPackPanel() {
 
         {section === 'scenes' && (
           <>
-            <p className="px-0.5 text-[10px] leading-snug text-ink-500">
-              One-click scenes built from real editor tools — every piece lands as ordinary editable clips at the playhead.
-            </p>
             <div data-testid="pack-scene-builder" className="space-y-2 rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-2.5 py-2">
               <div>
                 <p className="flex items-center gap-1.5 text-[11px] font-semibold text-cyan-100"><Clapperboard size={12} /> Scene Brief Builder</p>
-                <p className="mt-0.5 text-[10px] leading-snug text-ink-400">Write a short brief; OmniFrame builds it from editable titles, captions, pack layers, trims and keyframes. No locked render.</p>
               </div>
               <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-title">Scene title
                 <input id="pack-brief-title" data-testid="pack-brief-title" value={briefTitle} onChange={(e) => setBriefTitle(e.target.value)} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100 outline-none focus:border-cyan-400" />
@@ -927,7 +923,6 @@ export function DesktopPackPanel() {
                   <input data-testid="pack-brief-file" type="file" accept="application/json,.json" className="sr-only" onChange={(e) => { void importBrief(e.target.files?.[0]); e.target.value = '' }} />
                 </label>
               </div>
-              <p className="text-[9px] leading-snug text-ink-500">Brief files are plain JSON: title, captions, format, duration, backdrop and style. An external agent can write one; OmniFrame builds it into editable clips.</p>
               {briefNote && <p data-testid="pack-brief-note" aria-live="polite" className="rounded border border-cyan-400/25 bg-ink-950/60 px-2 py-1.5 text-[10px] leading-snug text-cyan-100">{briefNote}</p>}
             </div>
             {recipeNote && (
@@ -991,7 +986,6 @@ export function DesktopPackPanel() {
               )
             })}
             <PackFolder folderKey="cursors-editor" title="Editor Cursor" count={CURSOR_PACKS.length} open={isOpen('cursors-editor', false)} onToggle={toggleFolder}>
-              <p className="text-[10px] leading-snug text-ink-500">Applies to the cursor you edit with, app-wide.</p>
               <div className="mt-1.5 flex flex-wrap gap-1">
                 {CURSOR_PACKS.map((packDef) => (
                   <button
@@ -1028,17 +1022,12 @@ export function DesktopPackPanel() {
                 </PackFolder>
               )
             })}
-            <p className="px-0.5 text-[10px] leading-snug text-ink-500">Overlays land at the playhead on their own layer — trim or stretch like any clip. Pair Spotlight Dim with a clip Mask to isolate a subject.</p>
           </>
         )}
 
         {section === 'edits' && (
           <>
-            <p className="px-0.5 text-[10px] leading-snug text-ink-500">
-              {selectedClip
-                ? `Auditions on “${selectedClip.name}” in the monitor — Apply commits, Stop discards.`
-                : 'Select a clip to audition on it, or audition as an adjustment layer over the current footage.'}
-            </p>
+            
             {['Looks', 'Fixes'].map((group, gi) => {
               const items = EDIT_PRESETS.filter((preset) => preset.group === group && matches(preset.label, preset.desc, preset.group))
               if (searching && items.length === 0) return null
@@ -1109,6 +1098,7 @@ export function DesktopPackPanel() {
           </>
         )}
       </div>
+      <PackBrowserModal open={browserOpen} onClose={() => setBrowserOpen(false)} />
     </div>
   )
 }

@@ -57,10 +57,6 @@ export function StoryboardPanel() {
         <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-300">
           <Clapperboard size={12} /> Storyboard
         </div>
-        <p className="mt-1 text-[10px] leading-snug text-ink-400">
-          Plan the whole edit first: one card per shot in timeline order. Notes live on the clips and never
-          render into exports.
-        </p>
         <p className="mt-1 font-mono text-[9px] text-ink-500" data-testid="storyboard-summary">
           {shots.length} shots · {fmt(total)} total
         </p>

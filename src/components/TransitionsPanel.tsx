@@ -130,9 +130,6 @@ export function TransitionsPanel() {
         </div>
       </div>
 
-      <p className="text-[10px] leading-snug text-ink-500">
-        Click a transition to audition it at the nearest usable cut. Nothing is added until you Apply in the monitor.
-      </p>
 
       {notice && (
         <div data-testid="transition-preview-notice" className="flex items-start gap-1.5 p-2 rounded-md bg-amber-950/30 border border-amber-900/70 text-amber-200 text-[11px]" role="status">

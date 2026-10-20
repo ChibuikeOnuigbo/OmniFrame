@@ -765,7 +765,6 @@ export function TextPanel() {
         >
           Build retro text at playhead
         </button>
-        <p className="text-[9px] leading-snug text-ink-600">Effects = Text Randomizer scramble that settles. Traditional = per-letter 1-frame glitches (move/colour/stroke/vanish) that settle — same seed, same glitches, every time.</p>
       </div>
       )}
 
@@ -865,7 +864,6 @@ export function TextPanel() {
           </div>
         )}
         {studioStatus && <p className="text-[9px] leading-snug text-emerald-300" role="status">{studioStatus}</p>}
-        <p className="text-[9px] leading-snug text-ink-600">Editable clips, never baked. Green screen? Effects → Chroma Key.</p>
       </div>
       )}
     </div>

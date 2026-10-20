@@ -102,9 +102,6 @@ export function MarkerPopup() {
               </button>
             ))}
           </div>
-          <p className="mt-1 text-[10px] leading-snug text-ink-500" data-testid="marker-kind-hint">
-            {kindDef ? kindDef.hint : 'Custom colour — your own meaning.'}
-          </p>
         </div>
 
         <div>

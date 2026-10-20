@@ -243,11 +243,6 @@ function ClipMaskSection({ clip }: { clip: Clip }) {
               Outside
             </button>
           </div>
-          <p data-testid="mask-mode-hint" className="text-[10px] leading-snug text-ink-500">
-            {mask.inverted
-              ? 'Outside: the clip shows everywhere except the masked region.'
-              : 'Inside: only the masked region of the clip stays visible.'}
-          </p>
           <div className="flex items-center justify-between gap-2">
             <label htmlFor="clip-mask-shape" className="text-xs text-ink-400">Shape</label>
             <select
