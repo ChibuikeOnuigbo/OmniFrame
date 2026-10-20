@@ -1,3 +1,47 @@
+# ▶ START HERE: [00-VETTING-REEL.mp4](00-VETTING-REEL.mp4)
+
+**One video, every preset (79 s).** Each clip is numbered and named on
+screen and has sound cues (whoosh in, pop on settle, ding out). Watch it,
+then reply with the numbers: e.g. *"3, 7, 12 perfect — 5, 20 horrible"*.
+Individual MP4s (same numbering) are in [videos/](videos/); per-preset
+folders keep the WebM, stills and spec.json.
+
+1. **blur-focus** — Blur Focus Pull (Motion, demo “FOCUS”)
+2. **bounce-letters** — Bounce Letters (Motion, demo “BOUNCE”)
+3. **cascade-fall** — Cascade Fall (Motion, demo “FALL”)
+4. **cinematic-fade** — Cinematic Serif Fade (Style, demo “EPISODE ONE”)
+5. **credit-roll** — Credit Roll Rise (Motion, demo “THE END”)
+6. **echo-trail** — Echo Trail (Motion, demo “TRAIL”)
+7. **fire-text** — Fire Text (Glow / Neon, demo “FIRE”)
+8. **glow-pulse** — Glow Pulse Title (Glow / Neon, demo “SHINE”)
+9. **gold-text** — Gold Shine Text (Style, demo “GOLD”)
+10. **gradient-flow** — Gradient Flow Letters (Style, demo “FLOW”)
+11. **highlight-marker** — Marker Highlight (Style, demo “IMPORTANT”)
+12. **ice-text** — Ice Text (Glow / Neon, demo “FROZEN”)
+13. **karaoke-sweep** — Karaoke Sweep (Style, demo “SING ALONG”)
+14. **long-shadow** — Long Shadow Retro (Style, demo “SHADOW”)
+15. **lower-third** — News Lower Third (Style, demo “BREAKING NEWS”)
+16. **matrix-scramble** — Matrix Scramble (Retro / Glitch, demo “MATRIX”)
+17. **minimal-fade** — Minimal Fade (Style, demo “less, but better”)
+18. **neon-flicker** — Neon Sign Flicker (Glow / Neon, demo “NEON”)
+19. **outline-echo** — Outline Echo (Style, demo “ECHO”)
+20. **pixel-stretch-in** — Pixel Stretch Intro (Retro / Glitch, demo “STRETCH”)
+21. **rainbow-letters** — Rainbow Letters (Style, demo “RAINBOW”)
+22. **retro-effects** — Retro Scramble (Effects) (Retro / Glitch, demo “RETRO”)
+23. **retro-traditional** — Retro Glitch (Traditional) (Retro / Glitch, demo “NOELLE”)
+24. **rgb-split** — RGB Split Glitch (Retro / Glitch, demo “GLITCH”)
+25. **shake-aggressive** — Aggressive Shake Text (Wizzy) (Motion, demo “CHAOS”)
+26. **shake-smooth** — Smooth Shake Text (Wizzy) (Motion, demo “SMOOTH”)
+27. **slam-zoom** — Slam Zoom (Motion, demo “SLAM”)
+28. **spin-drop** — Spin Drop Letters (Motion, demo “SPIN”)
+29. **typewriter** — Typewriter + Cursor (Style, demo “HELLO WORLD”)
+30. **vertical-stack** — Vertical Letter Stack (Style, demo “STACK”)
+31. **vhs-text** — VHS Camcorder Text (Retro / Glitch, demo “PLAY ►”)
+32. **wave-letters** — Wave Letters (Motion, demo “WAVES”)
+33. **word-pop** — Word Pop Captions (Style, demo “EVERY WORD POPS”)
+
+---
+
 # Text preset test packs — vet the VIDEOS
 
 **Watch `preview.mp4` in each folder** (2.8 s, with sound cues: whoosh as the
