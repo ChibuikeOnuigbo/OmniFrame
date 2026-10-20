@@ -39,6 +39,18 @@ async function main() {
   check('all segments the same size', new Set(widths).size === 1, `widths=${widths.join(',')}`)
   const cut = (mm) => mm.cells.filter((c) => (c.right > mm.vp.left + 1 && c.left < mm.vp.left - 1) || (c.left < mm.vp.right - 1 && c.right > mm.vp.right + 1))
   check('no segment cut at the view edge (start)', cut(m).length === 0, `cut=${cut(m).length}`)
+  const fullText = await page.evaluate(() => {
+    const vp = document.querySelector('[data-testid="pack-section-strip"]')
+    const vr = vp.getBoundingClientRect()
+    return [...vp.querySelectorAll('[data-segment-cell]')].filter((c) => {
+      const r = c.getBoundingClientRect()
+      return r.left >= vr.left - 1 && r.right <= vr.right + 1
+    }).map((c) => {
+      const b = c.firstElementChild
+      return { text: b.textContent.trim(), fits: b.scrollWidth <= b.clientWidth + 1 }
+    })
+  })
+  check('visible segments show their FULL text', fullText.length > 0 && fullText.every((t) => t.fits), JSON.stringify(fullText))
   check('left arrow disabled at start', await page.evaluate(() => document.querySelector('[data-testid="pack-section-arrow-left"]')?.disabled === true))
 
   await page.click('[data-testid="pack-section-arrow-right"]')

@@ -129,3 +129,43 @@ produced in OmniFrame: [`data_ui.md` §9–10](./data_ui.md).
 OmniFrame's rebuilt strip, before/after paging:
 ![Segment strip](../ui_downlaod_study/sections/26-segment-strip.png)
 ![Segment strip paged](../ui_downlaod_study/sections/27-segment-strip-paged.png)
+
+## Deep pass — every remaining surface (26–47)
+
+### Background sub-tabs
+![Background Settings](snapshots/26-bg-settings.png) ![Background Effects](snapshots/27-bg-effects.png) ![Background Saved](snapshots/28-bg-saved.png)
+One section, four tabs (Save / Saved / Settings / Effects) — the
+sub-grouping rule from `data_ui.md` §9 in action: nothing stacks.
+
+### Annotation tools
+![Text](snapshots/29-annotation-text.png) ![Arrow](snapshots/30-annotation-arrow.png) ![Rectangle](snapshots/31-annotation-rectangle.png) ![Icons](snapshots/32-annotation-icons.png)
+Picking a tool swaps the panel to that tool's own controls.
+
+### Templates
+![Templates Saved](snapshots/33-templates-saved.png) ![Template applied](snapshots/34-template-applied.png)
+
+### Uploads filters · Header · Layout
+![Uploads Backgrounds](snapshots/35-uploads-backgrounds.png) ![Header on](snapshots/36-header-on.png) ![Layout picker](snapshots/37-layout-picker.png)
+
+### Canvas size menu
+![Canvas size menu](snapshots/38-canvas-size-menu.png)
+Preset browser grouped by platform (Instagram, Twitter, Bluesky,
+LinkedIn, Facebook, YouTube, Dribbble, Product Hunt), every preset
+labelled with its pixel size; custom Width/Height + Scale
+(0.5x/2x/3x); "Create size preset".
+
+### Export advanced · corner help · sign in
+![Export advanced](snapshots/39-export-advanced.png) ![Corner help](snapshots/40-corner-help.png) ![Sign in](snapshots/41-sign-in.png)
+
+### With an image: toolbar menus, crop, 3D, frames
+![Image toolbar](snapshots/42-image-toolbar.png) ![AI Tools menu](snapshots/43-ai-tools-menu.png) ![Crop mode](snapshots/44-crop-mode.png) ![3D with image](snapshots/45-3d-with-image.png) ![Mockup frame picker](snapshots/46-mockup-frame-picker.png)
+
+### Dashboard (route /dashboard)
+![Dashboard](snapshots/47-dashboard.png)
+Left card: Welcome · Integrations (Chrome extension, Figma plugin,
+Mac App) · Useful Tutorials. Main: **Quick Start** size cards
+(Twitter Post 2400×1350, Instagram Post 1200×1200, Dribbble Shot
+2800×2100…), **Popular Tools** (BrandBird Studio, App Store
+Screenshot Generator, 3D Device Mockups, Mobile Mockup Grid),
+**Your Templates**. Same grammar as the studio: cards, one-line
+descriptions, chevron affordance — no prose walls.

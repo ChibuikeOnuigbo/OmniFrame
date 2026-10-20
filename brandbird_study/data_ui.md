@@ -136,3 +136,16 @@ an arrow pages by `visible` segments and lands flush; wheel/drag
 snap on release. Proven geometrically by `qa/segment-strip-e2e.mjs`
 (8/8: arrow cells don't overlap the view, equal widths, zero cut
 segments before/after paging, boundary-exact scrollLeft).
+
+## 11. Dashboard & size presets (deep pass)
+
+Dashboard (`/dashboard`): sidebar card (Welcome / Integrations /
+Useful Tutorials) + Quick Start preset cards with pixel sizes
+(Twitter Post 2400×1350, Twitter Cover 1200×400, Instagram Post
+1200×1200, LinkedIn Post 1200×1200, Dribbble Shot 2800×2100,
+Product Hunt Gallery 1270×760) + Popular Tools + Your Templates.
+Canvas-size menu: platform-grouped presets (8 platforms, each item
+name + WxH), custom Width/Height fields, Scale 0.5x/2x/3x, "Create
+size preset". Background section sub-tabs: Save/Saved/Settings/
+Effects. Annotation tool choice swaps the panel to that tool's
+controls. Captures 26–47 in `snapshots/`.

@@ -1,4 +1,4 @@
-# SCREENSHOTS.md — every screenshot in the project (614 linked)
+# SCREENSHOTS.md — every screenshot in the project (616 linked)
 
 All screenshots taken across the loaded work and the app's development:
 the reference app study, **every UI section** (fresh captures in
@@ -9,7 +9,7 @@ Videos (the primary vetting format) live next to the stills in
 Regenerate: `python3 qa/generate-screenshot-index.py` ·
 Section captures: `node qa/ui-sections-capture.mjs`
 
-## Reference app (the loaded work) (40)
+## Reference app (the loaded work) (42)
 
 The extracted ReferenceTool mirror, served and screenshotted, plus the declutter before/after set.
 
@@ -51,6 +51,8 @@ The extracted ReferenceTool mirror, served and screenshotted, plus the declutter
 - [25-help-docker — Help Docker](sections/25-help-docker.png)
 - [26-segment-strip — Segment Strip](sections/26-segment-strip.png)
 - [27-segment-strip-paged — Segment Strip Paged](sections/27-segment-strip-paged.png)
+- [28-segment-strip-full-text — Segment Strip Full Text](sections/28-segment-strip-full-text.png)
+- [29-segment-strip-full-text-paged — Segment Strip Full Text Paged](sections/29-segment-strip-full-text-paged.png)
 
 ## Preset vetting stills (testing_asset_etc) (126)
 

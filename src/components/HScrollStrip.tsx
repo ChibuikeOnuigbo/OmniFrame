@@ -28,7 +28,7 @@ export function HScrollStrip({
   className = '',
   innerClassName = '',
   arrowTestIdPrefix = 'hstrip',
-  segmentTargetWidth = 76,
+  segmentTargetWidth = 88,
   ...rest
 }: {
   children: React.ReactNode
@@ -52,8 +52,25 @@ export function HScrollStrip({
 
   const items = React.Children.toArray(children)
   const total = items.length
-  const visible = Math.max(1, Math.min(total || 1, Math.floor(viewportW / segmentTargetWidth) || 1))
+  // Segments size to their CONTENT: the widest label (measured from the
+  // rendered children, +8px cell padding) sets the desired segment width,
+  // so full text is visible whenever the viewport can afford it. The
+  // exact-division rule still holds: cellW = viewportW / visible.
+  const [contentW, setContentW] = useState(0)
+  const desiredW = Math.min(viewportW || Infinity, Math.max(segmentTargetWidth, contentW))
+  const visible = Math.max(1, Math.min(total || 1, Math.floor(viewportW / desiredW) || 1))
   const cellW = viewportW > 0 ? viewportW / visible : segmentTargetWidth
+
+  useEffect(() => {
+    const el = viewportRef.current
+    if (!el) return
+    let max = 0
+    el.querySelectorAll('[data-segment-cell] > *').forEach((child) => {
+      max = Math.max(max, (child as HTMLElement).scrollWidth)
+    })
+    const needed = max > 0 ? max + 8 : 0
+    setContentW((prev) => (Math.abs(prev - needed) > 1 ? needed : prev))
+  })
 
   const updateArrows = useCallback(() => {
     const el = viewportRef.current
