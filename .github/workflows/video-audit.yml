@@ -64,6 +64,11 @@ jobs:
           } 2>&1 | tee audit-out/errors/pot-status.txt
           python3 -c "import yt_dlp_plugins" 2>/dev/null && echo "plugin import ok" >> audit-out/errors/pot-status.txt || echo "plugin import: not importable (yt-dlp discovers pip plugins at runtime)" >> audit-out/errors/pot-status.txt
 
+      - name: Install ffmpeg (frames/audio evidence)
+        run: |
+          { command -v ffmpeg && command -v ffprobe; } >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+          ffmpeg -version 2>&1 | head -1 | tee -a audit-out/errors/ytdlp-version.txt
+
       - name: Optional owner-provided cookies (secret; never visible to the agent)
         run: |
           if [ -n "${{ secrets.YT_COOKIES }}" ]; then
@@ -216,8 +221,22 @@ jobs:
                               errs.append(f"invidious {inst}: {e}")
                       else:
                           raise RuntimeError("; ".join(errs)[-2000:])
-                  src = [f for f in os.listdir(d) if f.startswith("src.")][0]
-                  src = os.path.join(d, src)
+                  srcs = sorted(f for f in os.listdir(d) if f.startswith("src."))
+                  if len(srcs) > 1:
+                      # separated video+audio parts: merge losslessly for evidence extraction
+                      parts = []
+                      for f0 in srcs:
+                          p0 = os.path.join(d, f0)
+                          hv = subprocess.run(["ffprobe","-v","error","-select_streams","v:0","-show_entries","stream=codec_type","-of","csv=p=0",p0], capture_output=True, text=True)
+                          parts.append((0 if hv.stdout.strip().startswith("video") else 1, p0))
+                      parts.sort()
+                      mcmd = ["ffmpeg","-v","error","-y"]
+                      for _, p0 in parts: mcmd += ["-i", p0]
+                      mcmd += ["-c","copy", os.path.join(d,"src-merged.mp4")]
+                      subprocess.run(mcmd, capture_output=True, timeout=300, check=True)
+                      src = os.path.join(d,"src-merged.mp4")
+                  else:
+                      src = os.path.join(d, srcs[0])
                   probe = subprocess.run(["ffprobe","-v","error","-select_streams","v:0",
                                           "-show_entries","stream=width,height,r_frame_rate",
                                           "-of","json", src], capture_output=True, text=True)
@@ -244,7 +263,8 @@ jobs:
                   rec["frames"] = sorted(f for f in os.listdir(d) if f.endswith(".jpg"))
                   rec["audio_evidence"] = ["loudness.json","spectrum.png","wave.png"]
                   rec["status"] = "FOOTAGE_ACQUIRED"
-                  os.remove(src)
+                  for f0 in os.listdir(d):
+                      if f0.startswith("src"): os.remove(os.path.join(d, f0))
               except Exception as e:
                   rec["status"] = "BLOCKED"
                   rec["failure"] = str(e)[:2000]
@@ -270,6 +290,8 @@ jobs:
           git config user.email "audit-bot@users.noreply.github.com"
           mkdir -p youtube-audit/runner
           cp -r audit-out/. youtube-audit/runner/
+          # never commit raw media - frames/spectra/JSON are the evidence
+          find youtube-audit/runner -type f -name 'src*' -size +2M -delete
           git add youtube-audit/runner
           git commit -m "youtube-audit: runner evidence batch (frames, audio, inventory) [ci skip]" || echo "nothing to commit"
           git push origin HEAD:${{ github.ref_name }}
