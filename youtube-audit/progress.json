@@ -13,7 +13,14 @@
  "blocked": 5,
  "inventoried_remaining": 243,
  "current_batch": 1,
- "checkpoint": "batch1 ladder exhausted 2026-10-21; runner committed evidence; awaiting owner unblock",
+ "checkpoint": {
+  "batch_completed": 1,
+  "videos_footage_acquired": 5,
+  "videos_visual_analysis_complete": 5,
+  "watched_total": 5,
+  "next_batch": 2,
+  "ts": "2026-10-21T20:36:56Z"
+ },
  "last_media_access_test": {
   "runner": "DNS ok, TCP ok, TLS ok, HTTP 200 on watch page; media download BLOCKED by YouTube bot-check (datacenter IP); Invidious registry instances 401/403",
   "sandbox": "DNS ok, TCP ok, TLS RESET (SNI allowlist); no media possible",
@@ -28,5 +35,13 @@
  "environments_unavailable": [
   "local/residential media worker (none connected)",
   "owner cookie secret (not set)"
+ ],
+ "history": [
+  {
+   "batch": 1,
+   "run": 39670876020,
+   "result": "5/5 FOOTAGE_ACQUIRED -> visual analysis complete (frames inspected)",
+   "ts": "2026-10-21T20:36:56Z"
+  }
  ]
 }

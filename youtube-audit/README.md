@@ -6,9 +6,13 @@ per-video statuses, and no false completion claims.
 
 ## Headline result (honest)
 
-- **Videos actually watched / visually inspected: 0.** No environment available
-  to this agent can retrieve YouTube media bytes today (matrix below). Nothing
-  in this audit claims otherwise.
+- **Videos actually watched / visually inspected: 5** (batch 1, 2026-10-21):
+  real 854x480 footage downloaded on the GitHub runner via owner `YT_COOKIES`
+  + PO-token server + Deno/EJS + yt-dlp master (SABR); 18 frames each extracted
+  and inspected by the agent (contact sheets in evidence/sheets/), plus
+  spectrogram + waveform audio profiles. Statuses: VISUAL_ANALYSIS_COMPLETE.
+- Watched before 2026-10-21: **0** — no environment could retrieve media
+  (matrix below); nothing in this audit ever claimed otherwise.
 - **Full channel inventory: COMPLETE — 250 videos** (248 enumerated by the
   GitHub runner via yt-dlp flat playlists over `/videos` + `/shorts` of all six
   channels, plus 2 explicit IDs confirmed through the text gateway).

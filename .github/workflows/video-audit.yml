@@ -152,7 +152,7 @@ jobs:
               per_channel.setdefault(ch, []).append(v)
           selection = [v for v in inv if v["id"] in explicit]
           for ch, vids in per_channel.items():
-              selection += vids[:3]
+              selection += vids
           # resumable slicing: batch N processes items [(N-1)*20, N*20)
           start, end = (batch-1)*20, batch*20
           selection = selection[start:end] or selection[:20]
@@ -250,7 +250,7 @@ jobs:
                   subprocess.run(["ffmpeg","-v","error","-i",src,"-vf",
                                   "select='gt(scene,0.4)',scale=640:360","-frames:v","6",
                                   "-q:v","5", f"{d}/s%d.jpg"], capture_output=True, timeout=300)
-                  loud = subprocess.run(["ffmpeg","-v","error","-i",src,"-af",
+                  loud = subprocess.run(["ffmpeg","-hide_banner","-i",src,"-af",
                                          "loudnorm=print_format=json","-f","null","-"],
                                         capture_output=True, text=True, timeout=600)
                   open(f"{d}/loudness.json","w").write(loud.stderr[-1200:])

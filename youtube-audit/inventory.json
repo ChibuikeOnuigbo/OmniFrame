@@ -12,11 +12,17 @@
    "formats": [
     "videos"
    ],
-   "status": "BLOCKED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] fGm0SBFTj3o: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
    "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
-   "next_action": "owner sets repo secret YT_COOKIES (own browser export) OR runs batch on residential-egress worker; then push youtube-audit/batch-trigger.txt batch=N"
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "credits block naming Kuiro/Exe/EzO/Chosen/JRVY/Spaceless; oversized typo; flame-glow plates; sword-slash splatter; B&W inversion w/ magenta; purple energy burst; gold explosion; end logo row",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/fGm0SBFTj3o/",
+    "youtube-audit/evidence/sheets/fGm0SBFTj3o.jpg"
+   ]
   },
   {
    "id": "L7RueAR-5Zc",
@@ -28,11 +34,17 @@
    "formats": [
     "videos"
    ],
-   "status": "BLOCKED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] L7RueAR-5Zc: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
    "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
-   "next_action": "owner sets repo secret YT_COOKIES (own browser export) OR runs batch on residential-egress worker; then push youtube-audit/batch-trigger.txt batch=N"
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "blue/white duotone grade; heavy bloom+blur intro; lyric typo overlays; glowing blue-iris close-ups; white-flash transitions; dust bokeh",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/L7RueAR-5Zc/",
+    "youtube-audit/evidence/sheets/L7RueAR-5Zc.jpg"
+   ]
   },
   {
    "id": "bpUZkFVX6NY",
@@ -44,11 +56,17 @@
    "formats": [
     "videos"
    ],
-   "status": "BLOCKED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] bpUZkFVX6NY: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
    "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
-   "next_action": "owner sets repo secret YT_COOKIES (own browser export) OR runs batch on residential-egress worker; then push youtube-audit/batch-trigger.txt batch=N"
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "AE UI; roto'd character isolated on black; separate grayscale fog plate; bg color pass (chapter card visible); particle specks; purple mood-light wash; final = purple duotone comp w/ rim+eye glow",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/bpUZkFVX6NY/",
+    "youtube-audit/evidence/sheets/bpUZkFVX6NY.jpg"
+   ]
   },
   {
    "id": "xeXhlkoOyrw",
@@ -60,11 +78,17 @@
    "formats": [
     "videos"
    ],
-   "status": "BLOCKED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] xeXhlkoOyrw: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
    "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
-   "next_action": "owner sets repo secret YT_COOKIES (own browser export) OR runs batch on residential-egress worker; then push youtube-audit/batch-trigger.txt batch=N"
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "white-bg smiley logo intro; cyan aura on Yuji then magenta variant; neon line-art skull trace; pink duotone silhouettes; white-flash cuts; dual-character outro w/ sparkle overlays",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/xeXhlkoOyrw/",
+    "youtube-audit/evidence/sheets/xeXhlkoOyrw.jpg"
+   ]
   },
   {
    "id": "u3A3Y3qzFzM",
@@ -3100,11 +3124,17 @@
    "formats": [
     "videos"
    ],
-   "status": "BLOCKED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] Tvd7qiK_gUA: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
    "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
-   "next_action": "owner sets repo secret YT_COOKIES (own browser export) OR runs batch on residential-egress worker; then push youtube-audit/batch-trigger.txt batch=N"
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "PS stage: asset grid, colored blonde character, hair-strand layers, separated eye layer (blink swap); AE stage: isolated hair strand, head comp, eye cut-in, final on white -> confirms PS-prep->AE puppet-pin pipeline",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/Tvd7qiK_gUA/",
+    "youtube-audit/evidence/sheets/Tvd7qiK_gUA.jpg"
+   ]
   },
   {
    "id": "0NLd3Ng0SKI",
