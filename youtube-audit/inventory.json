@@ -338,9 +338,14 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; glitch transition on samurai plate; on-screen effect-stack menu (~9 steps: displacement/waves/magnitude/colour/blur/repeat/sound); RGB slice-offset glitch frames; yellow colour-pass variant",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/uuFSBgUQbZI/",
+    "youtube-audit/evidence/sheets/uuFSBgUQbZI.jpg"
+   ]
   },
   {
    "id": "-NkNwjKEB_g",
@@ -380,9 +385,14 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; shake theory cards comparing amp/freq pairs (1amp2freq vs 1amp1.5freq, 0.5amp5freq, 2amp1freq); caption: position-only shake = consistent pattern (add properties to break it); graph-editor shake curves; slider-rig effect controls",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/k9mJqpVADho/",
+    "youtube-audit/evidence/sheets/k9mJqpVADho.jpg"
+   ]
   },
   {
    "id": "1AWoTraBxWY",
@@ -422,9 +432,14 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; CRT look = S-curve grade + scanline/aperture-grille overlay + final teal colour shift; caption 'Dont just copy everything im doing'; AvoidAEP outro card",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/4Nc-jJgODLA/",
+    "youtube-audit/evidence/sheets/4Nc-jJgODLA.jpg"
+   ]
   },
   {
    "id": "yslq1ZE0ITM",
@@ -562,9 +577,14 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; compositing = bg plate grade + light-streak overlay + bokeh particles (asset folder window shown) + character grade + speed ramp (graph editor); mistakes-list caption card",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/XL8JSvTfJ2k/",
+    "youtube-audit/evidence/sheets/XL8JSvTfJ2k.jpg"
+   ]
   },
   {
    "id": "L_vS0GAM8_g",

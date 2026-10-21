@@ -1,2 +1,2 @@
-batch=2
-nonce=coverage-start-20261021T2105
+batch=3
+nonce=coverage-3-20261021T2140
