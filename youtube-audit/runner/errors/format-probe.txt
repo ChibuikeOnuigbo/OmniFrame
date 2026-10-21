@@ -4,24 +4,59 @@
 [youtube] bpUZkFVX6NY: Downloading player 55de7e60-main
 [youtube] bpUZkFVX6NY: Downloading web embedded player API JSON
 [youtube] bpUZkFVX6NY: Downloading tv samsung player API JSON
-[youtube] [pot:bgutil:http] Generating a gvs PO Token for web client via bgutil HTTP server
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] bpUZkFVX6NY: Downloading m3u8 information
 [info] Available formats for bpUZkFVX6NY:
-ID  EXT   RESOLUTION FPS | PROTO | VCODEC MORE INFO
-----------------------------------------------------
-sb3 mhtml 48x27        0 | mhtml | images storyboard
-sb2 mhtml 80x45        0 | mhtml | images storyboard
-sb1 mhtml 160x90       0 | mhtml | images storyboard
-sb0 mhtml 320x180      0 | mhtml | images storyboard
+ID      EXT   RESOLUTION FPS CH |   FILESIZE   TBR PROTO | VCODEC         VBR ACODEC      ABR ASR MORE INFO
+-------------------------------------------------------------------------------------------------------------------------------
+sb3     mhtml 48x27        0    |                  mhtml | images                                 storyboard
+sb2     mhtml 80x45        0    |                  mhtml | images                                 storyboard
+sb1     mhtml 160x90       0    |                  mhtml | images                                 storyboard
+sb0     mhtml 320x180      0    |                  mhtml | images                                 storyboard
+249-drc webm  audio only      2 |    4.08MiB   53k https | audio only         opus        53k 48k low, DRC, WEB-E, webm_dash
+250-drc webm  audio only      2 |    5.43MiB   70k https | audio only         opus        70k 48k low, DRC, WEB-E, webm_dash
+249     webm  audio only      2 |    4.02MiB   52k https | audio only         opus        52k 48k low, WEB-E, webm_dash
+250     webm  audio only      2 |    5.42MiB   70k https | audio only         opus        70k 48k low, WEB-E, webm_dash
+140-drc m4a   audio only      2 |   10.01MiB  129k https | audio only         mp4a.40.2  129k 44k medium, DRC, WEB-E, m4a_dash
+251-drc webm  audio only      2 |   10.54MiB  136k https | audio only         opus       136k 48k medium, DRC, WEB-E, webm_dash
+140     m4a   audio only      2 |   10.01MiB  129k https | audio only         mp4a.40.2  129k 44k medium, WEB-E, m4a_dash
+251     webm  audio only      2 |   10.53MiB  136k https | audio only         opus       136k 48k medium, WEB-E, webm_dash
+91      mp4   256x144     30    | ~ 14.15MiB  183k m3u8  | avc1.4D400C        mp4a.40.5           WEB-E
+160     mp4   256x144     30    |    3.10MiB   40k https | avc1.4D400C    40k video only          144p, WEB-E, mp4_dash
+278     webm  256x144     30    |    4.69MiB   61k https | vp9            61k video only          144p, WEB-E, webm_dash
+394     mp4   256x144     30    |    2.10MiB   27k https | av01.0.00M.08  27k video only          144p, WEB-E, mp4_dash
+92      mp4   426x240     30    | ~ 26.17MiB  338k m3u8  | avc1.4D4015        mp4a.40.5           WEB-E
+133     mp4   426x240     30    |    6.09MiB   79k https | avc1.4D4015    79k video only          240p, WEB-E, mp4_dash
+242     webm  426x240     30    |    4.45MiB   58k https | vp9            58k video only          240p, WEB-E, webm_dash
+395     mp4   426x240     30    |    3.42MiB   44k https | av01.0.00M.08  44k video only          240p, WEB-E, mp4_dash
+93      mp4   640x360     30    | ~ 62.58MiB  809k m3u8  | avc1.4D401E        mp4a.40.2           WEB-E
+134     mp4   640x360     30    |   10.49MiB  136k https | avc1.4D401E   136k video only          360p, WEB-E, mp4_dash
+18      mp4   640x360     30  2 |   17.94MiB  232k https | avc1.42001E        mp4a.40.2       44k 360p, WEB-E
+243     webm  640x360     30    |    7.85MiB  102k https | vp9           102k video only          360p, WEB-E, webm_dash
+396     mp4   640x360     30    |    5.93MiB   77k https | av01.0.01M.08  77k video only          360p, WEB-E, mp4_dash
+94      mp4   854x480     30    | ~ 99.94MiB 1292k m3u8  | avc1.4D401F        mp4a.40.2           WEB-E
+135     mp4   854x480     30    |   16.91MiB  219k https | avc1.4D401F   219k video only          480p, WEB-E, mp4_dash
+244     webm  854x480     30    |   12.29MiB  159k https | vp9           159k video only          480p, WEB-E, webm_dash
+397     mp4   854x480     30    |    9.35MiB  121k https | av01.0.04M.08 121k video only          480p, WEB-E, mp4_dash
+95      mp4   1280x720    30    | ~168.63MiB 2180k m3u8  | avc1.64001F        mp4a.40.2           WEB-E
+136     mp4   1280x720    30    |   30.46MiB  394k https | avc1.64001F   394k video only          720p, WEB-E, mp4_dash
+247     webm  1280x720    30    |   23.06MiB  298k https | vp9           298k video only          720p, WEB-E, webm_dash
+398     mp4   1280x720    30    |   16.09MiB  208k https | av01.0.05M.08 208k video only          720p, WEB-E, mp4_dash
+96      mp4   1920x1080   30    | ~271.68MiB 3512k m3u8  | avc1.640028        mp4a.40.2           WEB-E
+137     mp4   1920x1080   30    |   53.56MiB  693k https | avc1.640028   693k video only          1080p, WEB-E, mp4_dash
+248     webm  1920x1080   30    |   39.81MiB  515k https | vp9           515k video only          1080p, WEB-E, webm_dash
+399     mp4   1920x1080   30    |   27.71MiB  358k https | av01.0.08M.08 358k video only          1080p, WEB-E, mp4_dash
 
 --STDERR--
 [debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=bpUZkFVX6NY']
+[debug] User config "/home/runner/.config/yt-dlp/config": ['--remote-components', 'ejs:github']
 [debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
 [debug] yt-dlp version stable@2026.08.19 from yt-dlp/yt-dlp [594bd50c2]
 [debug] Lazy loading extractors is disabled
-[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
+[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-6.17.0-1022-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
 [debug] exe versions: none
 [debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.0, certifi-2026.10.19, mutagen-1.48.1, requests-2.34.2, sqlite3-3.45.1, urllib3-2.8.0, websockets-17.3, yt_dlp_ejs-0.8.0
-[debug] JS runtimes: none
+[debug] JS runtimes: deno-2.5.4
 [debug] Proxy map: {}
 [debug] Request Handlers: urllib, requests, websockets
 [debug] Plugin directories: /home/runner/.local/lib/python3.12/site-packages/yt_dlp_plugins
@@ -34,19 +69,17 @@ sb0 mhtml 320x180      0 | mhtml | images storyboard
 [debug] [youtube] [pot] PO Token Providers: bgutil:http-2.0.2 (external), bgutil:script-node-2.0.2 (external, unavailable), bgutil:script-deno-2.0.2 (external, unavailable)
 [debug] [youtube] [pot] PO Token Cache Providers: memory
 [debug] [youtube] [pot] PO Token Cache Spec Providers: webpo
-[debug] [youtube] [jsc] JS Challenge Providers: bun (unavailable), deno (unavailable), node (unavailable), quickjs (unavailable)
+[debug] [youtube] [jsc] JS Challenge Providers: bun (unavailable), deno, node (unavailable), quickjs (unavailable)
 [debug] [youtube] Forcing "main" player JS variant for player 55de7e60
         original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
 [debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web_embedded client
-[debug] [youtube] bpUZkFVX6NY: Detected a 10s ad skippable after 5s for tv_samsung
-[debug] [youtube] bpUZkFVX6NY: Detected a 106s ad skippable after 5s for web
+[debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for tv_samsung
 [debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for web
-WARNING: [youtube] bpUZkFVX6NY: Signature solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
-WARNING: [youtube] bpUZkFVX6NY: n challenge solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
-[debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web client
-[debug] [youtube] [pot:bgutil:http] No base_url provided, defaulting to http://127.0.0.1:4416
-[debug] [youtube] bpUZkFVX6NY: Retrieved a gvs PO Token for web client
-[debug] [youtube] bpUZkFVX6NY: Some web client https formats have been skipped as they are missing a URL. YouTube is forcing SABR streaming for this client. See  https://github.com/yt-dlp/yt-dlp/issues/12482  for more details
-WARNING: Only images are available for download. use --list-formats to see them
+[debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for web
+[debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
+[debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
+[debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -
+[debug] Saving youtube-sigfuncs.55de7e60-main-105 to cache
+[debug] Saving youtube-sigfuncs.55de7e60-main-109 to cache
 [debug] Sort order given by extractor: quality, res, fps, hdr:12, source, vcodec, channels, acodec, lang, proto
 [debug] Formats sorted by: hasvid, ie_pref, quality, res, fps, hdr:12(7), source, vcodec, channels, acodec, lang, proto, size, br, asr, vext, aext, hasaud, id
