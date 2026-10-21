@@ -220,10 +220,14 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Deppey KEEP IT COOL: white-flash open, particle logo burst, radial zoom-blur vortex w/ chromatic dispersion, radial ray bursts, saturated gold flash, corridor perspective warp, pastel colour-splash overlays, neon logo sting outro",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/0_WXQKkgZU8.jpg"
+   ]
   },
   {
    "id": "pSCG5Y7KlKw",
@@ -3188,10 +3192,14 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "3D Poster Tutorial on CapCut PC: CapCut UI confirmed; photo-fragment grid arranged in 3D space, dense per-clip keyframe rows, keyframe/curve panel, parallax camera move, white canvas frame element; subject = Blue Lock poster",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/0NLd3Ng0SKI.jpg"
+   ]
   },
   {
    "id": "vRDKfGGRqE4",
