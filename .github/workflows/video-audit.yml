@@ -63,7 +63,7 @@ jobs:
               echo "cookies present: yes"
               echo "bytes: $(wc -c < /tmp/yt.cookies) lines: $(wc -l < /tmp/yt.cookies)"
               echo "youtube-domain lines: $(grep -c 'youtube\.com' /tmp/yt.cookies || true)"
-              for c in SID HSID SSID APISID SAPISID __Secure-1PSID __Secure-3PSID LOGIN_INFO; do
+              for c in SID HSID SSID APISID SAPISID __Secure-1PSID __Secure-3PSID LOGIN_INFO __Secure-1PSIDTS __Secure-3PSIDTS __Secure-1PSIDCC __Secure-3PSIDCC; do
                 if awk -F'\t' -v n="$c" '$6==n{found=1} END{exit !found}' /tmp/yt.cookies; then echo "critical $c: present"; else echo "critical $c: MISSING"; fi
               done
             } | tee audit-out/errors/cookies-status.txt
@@ -141,6 +141,16 @@ jobs:
           selection = selection[start:end] or selection[:20]
           os.makedirs("audit-out/evidence", exist_ok=True)
           os.makedirs("audit-out/reports", exist_ok=True)
+          os.makedirs("audit-out/errors", exist_ok=True)
+          # One-shot verbose format probe on the first queued video (diagnostics only:
+          # cookies-loaded count, plugin pickup, format table — never cookie values).
+          try:
+              cke = [os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []
+              pcmd = [x for x in (["yt-dlp","-v","-F"] + cke + [selection[0]["url"]]) if x]
+              p = subprocess.run(pcmd, capture_output=True, text=True, timeout=240)
+              open("audit-out/errors/format-probe.txt","w").write((p.stdout + "\n--STDERR--\n" + p.stderr)[-14000:])
+          except Exception as e:
+              open("audit-out/errors/format-probe.txt","w").write("probe failed: " + str(e))
           records = []
           for v in selection:
               vid = v["id"]; d = f"audit-out/evidence/{vid}"
