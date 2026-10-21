@@ -9,3 +9,7 @@ critical SAPISID: present
 critical __Secure-1PSID: present
 critical __Secure-3PSID: present
 critical LOGIN_INFO: present
+critical __Secure-1PSIDTS: present
+critical __Secure-3PSIDTS: present
+critical __Secure-1PSIDCC: present
+critical __Secure-3PSIDCC: present

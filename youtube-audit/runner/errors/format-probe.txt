@@ -1,0 +1,50 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=bpUZkFVX6NY
+[youtube] bpUZkFVX6NY: Downloading webpage
+[youtube] bpUZkFVX6NY: Downloading web embedded client config
+[youtube] bpUZkFVX6NY: Downloading player 55de7e60-main
+[youtube] bpUZkFVX6NY: Downloading web embedded player API JSON
+[youtube] bpUZkFVX6NY: Downloading tv downgraded player API JSON
+[youtube] [pot:bgutil:http] Generating a gvs PO Token for web client via bgutil HTTP server
+
+--STDERR--
+[debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=bpUZkFVX6NY']
+[debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
+[debug] yt-dlp version stable@2026.08.19 from yt-dlp/yt-dlp [594bd50c2] (pip)
+[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-6.17.0-1022-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
+[debug] exe versions: none
+[debug] Optional libraries: certifi-2023.11.17, requests-2.31.0 (unsupported), sqlite3-3.45.1, urllib3-2.0.7
+[debug] JS runtimes: none
+[debug] Proxy map: {}
+[debug] Request Handlers: urllib
+[debug] Plugin directories: /home/runner/.local/lib/python3.12/site-packages/yt_dlp_plugins
+[debug] Loaded 1744 extractors
+[debug] [youtube] Found YouTube account cookies
+[debug] [youtube] [pot:bgutil:script-node] No server_home or script_path passed, defaulting to /home/runner/bgutil-ytdlp-pot-provider/server
+[debug] [youtube] [pot:bgutil:script-node] Script path doesn't exist: /home/runner/bgutil-ytdlp-pot-provider/server/build/generate_once.js
+[debug] [youtube] [pot:bgutil:script-deno] No server_home or script_path passed, defaulting to /home/runner/bgutil-ytdlp-pot-provider/server
+[debug] [youtube] [pot:bgutil:script-deno] Script path doesn't exist: /home/runner/bgutil-ytdlp-pot-provider/server/src/generate_once.ts
+[debug] [youtube] [pot] PO Token Providers: bgutil:http-2.0.2 (external), bgutil:script-node-2.0.2 (external, unavailable), bgutil:script-deno-2.0.2 (external, unavailable)
+[debug] [youtube] [pot] PO Token Cache Providers: memory
+[debug] [youtube] [pot] PO Token Cache Spec Providers: webpo
+[debug] [youtube] [jsc] JS Challenge Providers: bun (unavailable), deno (unavailable), node (unavailable), quickjs (unavailable)
+[debug] [youtube] Forcing "main" player JS variant for player 55de7e60
+        original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
+[debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web_embedded client
+[debug] [youtube] bpUZkFVX6NY: tv_downgraded player response playability status: UNPLAYABLE
+[debug] [youtube] bpUZkFVX6NY: Detected a 32s ad skippable after 5s for web
+[debug] [youtube] bpUZkFVX6NY: Detected a 28s ad skippable after 5s for web
+WARNING: [youtube] bpUZkFVX6NY: Signature solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
+WARNING: [youtube] bpUZkFVX6NY: n challenge solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
+[debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web client
+[debug] [youtube] [pot:bgutil:http] No base_url provided, defaulting to http://127.0.0.1:4416
+[debug] [youtube] bpUZkFVX6NY: Retrieved a gvs PO Token for web client
+[debug] [youtube] bpUZkFVX6NY: Some web client https formats have been skipped as they are missing a URL. YouTube is forcing SABR streaming for this client. See  https://github.com/yt-dlp/yt-dlp/issues/12482  for more details
+ERROR: [youtube] bpUZkFVX6NY: The page needs to be reloaded.
+  File "/home/runner/.local/lib/python3.12/site-packages/yt_dlp/extractor/common.py", line 765, in extract
+    ie_result = self._real_extract(url)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/yt_dlp/extractor/youtube/_video.py", line 4076, in _real_extract
+    self.raise_no_formats(reason, expected=True)
+  File "/home/runner/.local/lib/python3.12/site-packages/yt_dlp/extractor/common.py", line 1272, in raise_no_formats
+    raise ExtractorError(msg, expected=expected, video_id=video_id)
+
