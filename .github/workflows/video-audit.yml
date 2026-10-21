@@ -43,6 +43,17 @@ jobs:
       - name: Install yt-dlp
         run: pip install -q yt-dlp
 
+      - name: Optional owner-provided cookies (secret; never visible to the agent)
+        run: |
+          if [ -n "${{ secrets.YT_COOKIES }}" ]; then
+            printf '%s' "${{ secrets.YT_COOKIES }}" > /tmp/yt.cookies
+            echo "YT_COOKIES_ARG=--cookies" >> $GITHUB_ENV
+            echo "YT_COOKIES_PATH=/tmp/yt.cookies" >> $GITHUB_ENV
+            echo "cookies present: yes"
+          else
+            echo "cookies present: no (owner may add repo secret YT_COOKIES to unblock bot-check)"
+          fi
+
       - name: Enumerate full channel inventories (flat playlists, paginated by yt-dlp)
         run: |
           mkdir -p audit-out
@@ -121,7 +132,7 @@ jobs:
               try:
                   errs = []
                   methods = [
-                      ("yt-dlp default", ["yt-dlp","--no-warnings","-f","bv*[height<=480]+ba/b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
+                      ("yt-dlp default", [x for x in (["yt-dlp","--no-warnings"] + ([os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []) + ["-f","bv*[height<=480]+ba/b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
                       ("yt-dlp client=tv", ["yt-dlp","--no-warnings","--extractor-args","youtube:player_client=tv","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
                       ("yt-dlp client=android", ["yt-dlp","--no-warnings","--extractor-args","youtube:player_client=android","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
                       ("yt-dlp client=web_embedded", ["yt-dlp","--no-warnings","--extractor-args","youtube:player_client=web_embedded","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
@@ -136,7 +147,17 @@ jobs:
                   else:
                       # public Invidious API instances (runner has general egress)
                       import urllib.request
-                      for inst in ("https://inv.nadeko.net","https://invidious.nerdvpn.de","https://yewtu.be"):
+                      insts = ["https://inv.nadeko.net","https://invidious.nerdvpn.de","https://yewtu.be",
+                               "https://iv.melmac.space","https://invidious.f5.si","https://inv.tux.pizza",
+                               "https://invidious.privacyredirect.com","https://yt.artemislena.eu"]
+                      try:
+                          with urllib.request.urlopen("https://api.invidious.io/instances.json?sort_by=health,users", timeout=45) as r:
+                              reg = json.load(r)
+                          insts = [("https://" + e[1]["uri"].replace("https://","")) for e in reg
+                                   if e[1].get("api") and e[1].get("type") == "https"][:10] + insts
+                      except Exception as e:
+                          errs.append(f"instance-registry: {e}")
+                      for inst in insts:
                           try:
                               with urllib.request.urlopen(f"{inst}/api/v1/videos/{vid}?local=false", timeout=60) as r:
                                   j = json.load(r)
