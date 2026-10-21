@@ -1311,10 +1311,32 @@ export class PreviewEngine {
       ctx.fill()
     }
 
-    // Glow (watermark L1 / retro text) replaces the drop shadow when set.
-    if (t.glowColor && (t.glowBlur || 0) > 0) {
-      ctx.shadowColor = t.glowColor
+    // Glow / shadow (Photoshop model): outward glow takes the shadow slot;
+    // an outer (drop) shadow takes it when there is no outward glow; inward
+    // glow / inner shadow are composited inside the glyphs further below.
+    const hexA = (hex: string, a: number) => {
+      const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')
+      if (!m) return hex
+      const n = parseInt(m[1], 16)
+      return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${Math.max(0, Math.min(1, a))})`
+    }
+    const glowActive = !!(t.glowColor && (t.glowBlur || 0) > 0)
+    const glowInward = glowActive && t.glowMode === 'inward'
+    const shadowInner = t.shadowMode === 'inner'
+    const needsInner = glowInward || shadowInner
+    if (glowActive && !glowInward) {
+      ctx.shadowColor = t.glowColor as string
       ctx.shadowBlur = (t.glowBlur || 18) * scaleFactor
+      ctx.shadowOffsetX = 0
+      ctx.shadowOffsetY = 0
+    } else if (t.shadowMode === 'outer') {
+      ctx.shadowColor = hexA(t.shadowColor || '#000000', t.shadowOpacity ?? 0.6)
+      ctx.shadowBlur = (t.shadowBlur ?? 8) * scaleFactor
+      ctx.shadowOffsetX = (t.shadowOffsetX ?? 3) * scaleFactor
+      ctx.shadowOffsetY = (t.shadowOffsetY ?? 3) * scaleFactor
+    } else if (t.shadowMode === 'none' || t.shadowMode === 'inner' || glowActive) {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0)'
+      ctx.shadowBlur = 0
       ctx.shadowOffsetX = 0
       ctx.shadowOffsetY = 0
     } else {
@@ -1327,29 +1349,74 @@ export class PreviewEngine {
     // Draw text lines (per-glyph when tracking/stroke needs it)
     ctx.fillStyle = t.color || '#ffffff'
     const startY = -(lines.length - 1) * (lineHeight / 2)
-    const drawLine = (line: string, y: number) => {
-      if (!tracking && !t.strokeWidth) { ctx.fillText(line, 0, y); return }
-      const widths = [...line].map((ch) => ctx.measureText(ch).width)
+    const drawLine = (c2: CanvasRenderingContext2D, line: string, y: number) => {
+      if (!tracking && !t.strokeWidth) { c2.fillText(line, 0, y); return }
+      const widths = [...line].map((ch) => c2.measureText(ch).width)
       const total = widths.reduce((a, b) => a + b, 0) + Math.max(0, line.length - 1) * tracking
       let x = -total / 2
       ;[...line].forEach((ch, ci) => {
-        if (!t.strokeOnly) ctx.fillText(ch, x + widths[ci] / 2, y)
+        if (!t.strokeOnly) c2.fillText(ch, x + widths[ci] / 2, y)
         if (t.strokeWidth && t.strokeColor) {
-          ctx.save()
-          ctx.shadowBlur = 0
-          ctx.strokeStyle = t.strokeColor
-          ctx.lineWidth = t.strokeWidth * scaleFactor
-          ctx.strokeText(ch, x + widths[ci] / 2, y)
-          ctx.restore()
+          c2.save()
+          c2.shadowBlur = 0
+          c2.strokeStyle = t.strokeColor
+          c2.lineWidth = t.strokeWidth * scaleFactor
+          c2.strokeText(ch, x + widths[ci] / 2, y)
+          c2.restore()
         }
         x += widths[ci] + tracking
       })
     }
-    lines.forEach((line, i) => {
-      // double-pass for a stronger glow core
-      drawLine(line, startY + i * lineHeight)
-      if (t.glowColor && (t.glowBlur || 0) > 0) drawLine(line, startY + i * lineHeight)
-    })
+    if (!needsInner) {
+      lines.forEach((line, i) => {
+        // double-pass for a stronger glow core
+        drawLine(ctx, line, startY + i * lineHeight)
+        if (glowActive && !glowInward) drawLine(ctx, line, startY + i * lineHeight)
+      })
+    } else {
+      // Inward effects: render glyphs offscreen, then let blurred shadows of
+      // the glyphs fall INSIDE their own alpha ('source-atop'), like
+      // Photoshop's Inner Glow / Inner Shadow. Two passes deepen the light.
+      const blurPad = Math.ceil(Math.max(glowInward ? (t.glowBlur || 18) : 0, shadowInner ? (t.shadowBlur ?? 8) : 0) * scaleFactor) + 8
+      const offW = Math.max(2, Math.ceil(boxW) + blurPad * 2)
+      const offH = Math.max(2, Math.ceil(boxH) + blurPad * 2)
+      const off = document.createElement('canvas')
+      off.width = offW
+      off.height = offH
+      const octx = off.getContext('2d')!
+      octx.font = ctx.font
+      octx.textAlign = 'center'
+      octx.textBaseline = 'middle'
+      octx.fillStyle = ctx.fillStyle
+      octx.translate(offW / 2, offH / 2)
+      lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+      octx.save()
+      octx.globalCompositeOperation = 'source-atop'
+      if (glowInward) {
+        // NOTE: a transparent fill casts no shadow in canvas — the redraw
+        // must carry the glow colour at low alpha; 'source-atop' confines
+        // fill + shadow to the glyph interior, strongest at the edges.
+        octx.shadowColor = t.glowColor as string
+        octx.shadowBlur = (t.glowBlur || 18) * scaleFactor
+        octx.shadowOffsetX = 0
+        octx.shadowOffsetY = 0
+        octx.fillStyle = hexA(t.glowColor as string, 0.35)
+        lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+        lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+        lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+      }
+      if (shadowInner) {
+        octx.shadowColor = hexA(t.shadowColor || '#000000', t.shadowOpacity ?? 0.6)
+        octx.shadowBlur = (t.shadowBlur ?? 8) * scaleFactor
+        octx.shadowOffsetX = (t.shadowOffsetX ?? 3) * scaleFactor
+        octx.shadowOffsetY = (t.shadowOffsetY ?? 3) * scaleFactor
+        octx.fillStyle = hexA(t.shadowColor || '#000000', 0.18)
+        lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+        lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+      }
+      octx.restore()
+      ctx.drawImage(off, -offW / 2, -offH / 2)
+    }
 
     ctx.restore()
   }

@@ -29,6 +29,10 @@ export interface TextPresetDef {
 const FONT = 'Arial Black, sans-serif'
 
 export interface GlowSettings {
+  /** Optional everywhere except Glow/Neon presets, where it is forced on. */
+  enabled?: boolean
+  /** 'outward' blooms around the glyphs; 'inward' lights them from inside. */
+  mode?: 'outward' | 'inward'
   angle: number
   intensity: number
   spread: number
@@ -36,6 +40,17 @@ export interface GlowSettings {
   smoothness: number
   sharpness: 'text' | 'effect'
   clarity: number
+}
+
+/** Photoshop-model shadow: outer = drop shadow, inner = shadow in the glyphs. */
+export interface ShadowSettings {
+  enabled?: boolean
+  mode?: 'outer' | 'inner'
+  angle: number
+  distance: number
+  blur: number
+  opacity: number
+  color: string
 }
 
 export interface PresetBuildOpts {
@@ -47,6 +62,7 @@ export interface PresetBuildOpts {
   wordSpacing?: number
   graph?: string
   glow?: GlowSettings
+  shadow?: ShadowSettings
   /** Typewriter cursor: 'follow' trails each typed letter (1_ 12_ 123_);
    *  'end' parks the cursor at the final position while letters fill in. */
   typewriterCursor?: 'follow' | 'end'
@@ -763,6 +779,7 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
     wordSpacing: opts?.wordSpacing ?? 0,
     graph: opts?.graph ?? 'preset',
     glow: opts?.glow,
+    shadow: opts?.shadow,
     typewriterCursor: opts?.typewriterCursor ?? 'follow',
     cursorForm: opts?.cursorForm,
     cursorCustomText: opts?.cursorCustomText,
@@ -771,10 +788,15 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
   const ids = def.build(clean.slice(0, 28), o)
   if (!ids.length) return ids
 
-  // --- Post-settings: animation delay, graph (interpolation), glow stack ---
+  // --- Post-settings: delay, graph, glow (optional; forced on Glow presets), shadow ---
   const graph = o.graph && o.graph !== 'preset' ? o.graph : null
   const delay = o.delay ?? 0
   const glow = o.glow
+  const shadow = o.shadow
+  // Glow presets ARE the glow (Photoshop/CapCut model): it cannot be switched off.
+  const glowForced = def.category === 'Glow / Neon'
+  const glowOn = glow ? glow.enabled !== false || glowForced : false
+  const glowMode = glow?.mode ?? 'outward'
   const st = useEditor.getState()
   const applyTo = (c: Clip): Clip => {
     let nc = c
@@ -786,8 +808,23 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
       }
       nc = { ...nc, animation: { ...nc.animation, curves: curves as never } }
     }
-    if (glow && nc.textStyle?.glowColor) {
-      nc = { ...nc, textStyle: { ...nc.textStyle, glowBlur: Math.max(0, Math.min(90, (nc.textStyle.glowBlur ?? 12) * glow.blur * glow.intensity)) } }
+    if (glow && nc.textStyle) {
+      if (glowOn) {
+        const base = nc.textStyle.glowBlur ?? 12
+        nc = { ...nc, textStyle: { ...nc.textStyle, glowColor: nc.textStyle.glowColor ?? o.color, glowBlur: Math.max(0, Math.min(90, base * glow.blur * glow.intensity)), glowMode } }
+      } else if (nc.textStyle.glowColor || nc.textStyle.glowMode) {
+        const ts = { ...nc.textStyle }
+        delete ts.glowColor; delete ts.glowBlur; delete ts.glowMode
+        nc = { ...nc, textStyle: ts }
+      }
+    }
+    if (shadow && nc.textStyle) {
+      if (shadow.enabled) {
+        const rad = (shadow.angle * Math.PI) / 180
+        nc = { ...nc, textStyle: { ...nc.textStyle, shadowMode: shadow.mode ?? 'outer', shadowColor: shadow.color, shadowBlur: shadow.blur, shadowOffsetX: Math.cos(rad) * shadow.distance, shadowOffsetY: Math.sin(rad) * shadow.distance, shadowOpacity: shadow.opacity } }
+      } else {
+        nc = { ...nc, textStyle: { ...nc.textStyle, shadowMode: 'none' } }
+      }
     }
     return nc
   }
@@ -795,7 +832,7 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
 
   // Glow spread copies along the angle (layered = smoother).
   let extraIds: string[] = []
-  if (glow && (glow.spread > 0 || glow.clarity > 0 || glow.smoothness > 0)) {
+  if (glow && glowOn && (glow.spread > 0 || glow.clarity > 0 || glow.smoothness > 0)) {
     const fresh = useEditor.getState().clips.filter((c) => ids.includes(c.id) && c.textStyle?.glowColor)
     const copies: Clip[] = []
     const rad = (glow.angle * Math.PI) / 180

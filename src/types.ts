@@ -320,6 +320,19 @@ export interface TextTitleStyle {
   strokeOnly?: boolean
   glowColor?: string
   glowBlur?: number
+  /** Glow direction: 'outward' blooms outside the glyphs (canvas shadow),
+   *  'inward' lights the glyph interior from its edges (Photoshop Inner Glow).
+   *  Default 'outward'. */
+  glowMode?: 'outward' | 'inward'
+  /** Drop/inner shadow (Photoshop model): 'outer' = classic drop shadow,
+   *  'inner' = shadow inside the glyph edges, 'none' = explicitly off.
+   *  Undefined keeps the legacy subtle default drop shadow. */
+  shadowMode?: 'outer' | 'inner' | 'none'
+  shadowColor?: string
+  shadowBlur?: number
+  shadowOffsetX?: number
+  shadowOffsetY?: number
+  shadowOpacity?: number
   /**
    * Text Randomizer (Alight Motion): during the first `untilSec` seconds
    * (clip-local), glyphs scramble with a per-frame seeded RNG and settle

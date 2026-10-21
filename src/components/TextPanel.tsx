@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { buildRetroText, buildWatermark, WATERMARK_LEVELS, type WatermarkLevel } from '../lib/builders'
-import { TEXT_PRESETS, buildTextPreset, lengthGuidance, spacingCaps, GRAPH_OPTIONS, CURSOR_FORMES, type GlowSettings } from '../lib/textPresets'
+import { TEXT_PRESETS, buildTextPreset, lengthGuidance, spacingCaps, GRAPH_OPTIONS, CURSOR_FORMES, type GlowSettings, type ShadowSettings } from '../lib/textPresets'
 import { Type, Play, Sparkles, Bold, Italic, AlignLeft, Check, ChevronRight, Upload, Trash2, Wand2, History, Stamp } from 'lucide-react'
 import { useEditor } from '../store'
 import type { TextStyle } from '../types'
@@ -46,6 +46,15 @@ export function TextPanel() {
   const [cursorCustomText, setCursorCustomText] = useState('')
   const [cursorImageId, setCursorImageId] = useState<string | null>(null)
   const [cursorImageName, setCursorImageName] = useState('')
+  const [glowEnabled, setGlowEnabled] = useState(true)
+  const [glowMode, setGlowMode] = useState<'outward' | 'inward'>('outward')
+  const [shadowEnabled, setShadowEnabled] = useState(false)
+  const [shadowMode, setShadowMode] = useState<'outer' | 'inner'>('outer')
+  const [shadowAngle, setShadowAngle] = useState(45)
+  const [shadowDistance, setShadowDistance] = useState(6)
+  const [shadowBlurS, setShadowBlurS] = useState(8)
+  const [shadowOpacity, setShadowOpacity] = useState(0.55)
+  const [shadowColor, setShadowColor] = useState('#000000')
   const [glowAngle, setGlowAngle] = useState(45)
   const [glowIntensity, setGlowIntensity] = useState(1)
   const [glowSpread, setGlowSpread] = useState(0)
@@ -611,8 +620,9 @@ export function TextPanel() {
                 type="button"
                 data-testid={`text-preset-lib-${p.id}`}
                 onClick={() => {
-                  const glow: GlowSettings = { angle: glowAngle, intensity: glowIntensity, spread: glowSpread, blur: glowBlur, smoothness: glowSmooth, sharpness: glowSharp, clarity: glowClarity }
-                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, typewriterCursor: presetTwCursor, cursorForm: cursorForme, cursorCustomText: cursorCustomText || undefined, cursorImageAssetId: cursorImageId ?? undefined })
+                  const glow: GlowSettings = { enabled: glowEnabled, mode: glowMode, angle: glowAngle, intensity: glowIntensity, spread: glowSpread, blur: glowBlur, smoothness: glowSmooth, sharpness: glowSharp, clarity: glowClarity }
+                  const shadow: ShadowSettings = { enabled: shadowEnabled, mode: shadowMode, angle: shadowAngle, distance: shadowDistance, blur: shadowBlurS, opacity: shadowOpacity, color: shadowColor }
+                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, shadow, typewriterCursor: presetTwCursor, cursorForm: cursorForme, cursorCustomText: cursorCustomText || undefined, cursorImageAssetId: cursorImageId ?? undefined })
                   setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
                 }}
                 className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
@@ -715,8 +725,21 @@ export function TextPanel() {
                   {GRAPH_OPTIONS.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}
                 </select>
               </label>
-              <span className="block text-[9px] font-semibold uppercase text-ink-500 pt-0.5">Glow / shadow layer</span>
-              <div className="flex flex-wrap gap-x-2 gap-y-1">
+              {(() => {
+                const seg = (testid: string, active: boolean, label: string, onClick: () => void) => (
+                  <button type="button" data-testid={testid} onClick={onClick} className={`h-6 px-2 rounded-full text-[10px] font-medium whitespace-nowrap leading-none transition-colors ${active ? 'bg-brand text-white' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'}`}>{label}</button>
+                )
+                return (<>
+              <div className="flex items-center gap-1.5 pt-0.5">
+                <span className="text-[9px] font-semibold uppercase text-ink-500">Glow</span>
+                <input type="checkbox" data-testid="preset-glow-enabled" checked={glowEnabled} onChange={(e) => setGlowEnabled(e.target.checked)} className="h-3.5 w-3.5 accent-fuchsia-400" title="Glow on/off (Glow presets always glow)" />
+                <div className="flex gap-1" role="group" aria-label="Glow direction">
+                  {seg('preset-glow-mode-outward', glowMode === 'outward', 'Outward glow', () => setGlowMode('outward'))}
+                  {seg('preset-glow-mode-inward', glowMode === 'inward', 'Inward glow', () => setGlowMode('inward'))}
+                </div>
+                <span data-testid="preset-glow-lock-note" className="text-[9px] text-ink-600 whitespace-nowrap">Glow presets: always on</span>
+              </div>
+              <div className={`flex flex-wrap gap-x-2 gap-y-1 ${glowEnabled ? '' : 'pointer-events-none opacity-40'}`}>
                 {slider('Angle°', 'preset-glow-angle', glowAngle, setGlowAngle, 0, 360)}
                 {slider('Intensity', 'preset-glow-intensity', glowIntensity, setGlowIntensity, 0, 2, 0.1)}
                 {slider('Spread px', 'preset-glow-spread', glowSpread, setGlowSpread, 0, 80)}
@@ -730,6 +753,23 @@ export function TextPanel() {
                   </select>
                 </label>
               </div>
+              <div className="flex items-center gap-1.5 pt-0.5">
+                <span className="text-[9px] font-semibold uppercase text-ink-500">Shadow</span>
+                <input type="checkbox" data-testid="preset-shadow-enabled" checked={shadowEnabled} onChange={(e) => setShadowEnabled(e.target.checked)} className="h-3.5 w-3.5 accent-fuchsia-400" title="Shadow on/off" />
+                <div className="flex gap-1" role="group" aria-label="Shadow direction">
+                  {seg('preset-shadow-mode-outer', shadowMode === 'outer', 'Outer shadow', () => setShadowMode('outer'))}
+                  {seg('preset-shadow-mode-inner', shadowMode === 'inner', 'Inner shadow', () => setShadowMode('inner'))}
+                </div>
+                <input type="color" data-testid="preset-shadow-color" value={shadowColor} onChange={(e) => setShadowColor(e.target.value)} className="h-6 w-8 cursor-pointer rounded border border-ink-700 bg-ink-950 p-0.5" title="Shadow colour" />
+              </div>
+              <div className={`flex flex-wrap gap-x-2 gap-y-1 ${shadowEnabled ? '' : 'pointer-events-none opacity-40'}`}>
+                {slider('Angle°', 'preset-shadow-angle', shadowAngle, setShadowAngle, 0, 360)}
+                {slider('Distance px', 'preset-shadow-distance', shadowDistance, setShadowDistance, 0, 60)}
+                {slider('Blur px', 'preset-shadow-blur', shadowBlurS, setShadowBlurS, 0, 60)}
+                {slider('Opacity', 'preset-shadow-opacity', shadowOpacity, setShadowOpacity, 0, 1, 0.05)}
+              </div>
+                </>)
+              })()}
               <p className="text-[9px] text-ink-600" data-testid="preset-caps">Auto caps for “{presetText || 'YOUR TEXT'}”: character spacing ≤ {caps.charMax}px · word spacing ≤ {caps.wordMax}px (text ≈{caps.textWidth}px of 1766px usable — maths in animation_study.md).</p>
             </div>
           )
