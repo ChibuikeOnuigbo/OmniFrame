@@ -49,9 +49,17 @@ jobs:
             printf '%s' "${{ secrets.YT_COOKIES }}" > /tmp/yt.cookies
             echo "YT_COOKIES_ARG=--cookies" >> $GITHUB_ENV
             echo "YT_COOKIES_PATH=/tmp/yt.cookies" >> $GITHUB_ENV
-            echo "cookies present: yes"
+            # Status diagnostics only — cookie NAMES and counts, never values.
+            {
+              echo "cookies present: yes"
+              echo "bytes: $(wc -c < /tmp/yt.cookies) lines: $(wc -l < /tmp/yt.cookies)"
+              echo "youtube-domain lines: $(grep -c 'youtube\.com' /tmp/yt.cookies || true)"
+              for c in SID HSID SSID APISID SAPISID __Secure-1PSID __Secure-3PSID LOGIN_INFO; do
+                if awk -F'\t' -v n="$c" '$6==n{found=1} END{exit !found}' /tmp/yt.cookies; then echo "critical $c: present"; else echo "critical $c: MISSING"; fi
+              done
+            } | tee audit-out/errors/cookies-status.txt
           else
-            echo "cookies present: no (owner may add repo secret YT_COOKIES to unblock bot-check)"
+            echo "cookies present: no (owner may add repo secret YT_COOKIES to unblock bot-check)" | tee audit-out/errors/cookies-status.txt
           fi
 
       - name: Enumerate full channel inventories (flat playlists, paginated by yt-dlp)
@@ -131,11 +139,12 @@ jobs:
               rec = dict(v); rec["environment"] = "github-runner"
               try:
                   errs = []
+                  ck = [os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []
                   methods = [
-                      ("yt-dlp default", [x for x in (["yt-dlp","--no-warnings"] + ([os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []) + ["-f","bv*[height<=480]+ba/b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
-                      ("yt-dlp client=tv", ["yt-dlp","--no-warnings","--extractor-args","youtube:player_client=tv","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
-                      ("yt-dlp client=android", ["yt-dlp","--no-warnings","--extractor-args","youtube:player_client=android","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
-                      ("yt-dlp client=web_embedded", ["yt-dlp","--no-warnings","--extractor-args","youtube:player_client=web_embedded","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]),
+                      ("yt-dlp default+cookies" if ck else "yt-dlp default", [x for x in (["yt-dlp","--no-warnings"] + ck + ["-f","bv*[height<=480]+ba/b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp client=tv+cookies" if ck else "yt-dlp client=tv", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=tv","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp client=android+cookies" if ck else "yt-dlp client=android", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=android","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp client=web_embedded+cookies" if ck else "yt-dlp client=web_embedded", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=web_embedded","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
                   ]
                   dl = None
                   for name, cmd in methods:
