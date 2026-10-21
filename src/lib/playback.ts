@@ -30,6 +30,8 @@ import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
 import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtworkMetadata'
 import type { VisualPreview } from './visualPreview'
+import { drawPillarFamily } from './pillarRenderers'
+import { PILLAR_DEF_BY_TYPE } from './transitionPresets'
 
 export const PW = 1280
 export const PH = 720
@@ -928,6 +930,25 @@ export class PreviewEngine {
     }
 
     const progress = clamp((time - trans.startTime) / Math.max(0.001, trans.duration), 0, 1)
+    // Pillar-deep families (350 generated presets) + the reworked legacy glitch
+    const pillarDef = PILLAR_DEF_BY_TYPE[trans.type]
+    if (pillarDef) {
+      drawPillarFamily(pillarDef.family, {
+        ctx, width: this.width, height: this.height, p: progress, params: pillarDef.params,
+        drawFrom, drawTo, hasFrom, hasTo,
+        takeScratch: () => this.takeScratch(), releaseScratch: (c) => this.releaseScratch(c),
+      })
+      return
+    }
+    if (trans.type === 'glitch') {
+      drawPillarFamily('glitch', {
+        ctx, width: this.width, height: this.height, p: progress,
+        params: { style: 'slice', intensity: 0.8, scan: 0.3, static: 0.4, seed: 7 },
+        drawFrom, drawTo, hasFrom, hasTo,
+        takeScratch: () => this.takeScratch(), releaseScratch: (c) => this.releaseScratch(c),
+      })
+      return
+    }
 
     ctx.save()
     switch (trans.type) {
@@ -1343,25 +1364,6 @@ export class PreviewEngine {
           ctx.translate(cx, 0); ctx.scale(Math.cos((1 - progress) * Math.PI), 1); ctx.translate(-cx, 0)
           drawTo(ctx)
           ctx.restore()
-        }
-        break
-      }
-      case 'glitch': {
-        if (hasFrom) drawFrom(ctx)
-        if (hasTo) {
-          const slices = 12
-          const sh = this.height / slices
-          const amp = Math.sin(progress * Math.PI) * 46
-          for (let i = 0; i < slices; i++) {
-            const rnd = Math.abs(Math.sin(i * 127.1 + Math.floor(progress * 9) * 311.7)) % 1
-            const dx = (rnd - 0.5) * 2 * amp
-            ctx.save()
-            ctx.beginPath(); ctx.rect(0, i * sh, this.width, sh); ctx.clip()
-            ctx.translate(dx, 0)
-            if (i % 2 === 0 || progress > 0.7) drawTo(ctx)
-            ctx.restore()
-          }
-          if (progress > 0.75 && hasTo) { ctx.save(); ctx.globalAlpha = (progress - 0.75) * 4; drawTo(ctx); ctx.restore() }
         }
         break
       }

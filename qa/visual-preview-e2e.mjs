@@ -112,6 +112,7 @@ try {
   await page.evaluate(() => window.__omniframe_store.getState().setPlayhead(12.4))
 
   await page.getByTestId('left-tab-transitions').click()
+  await page.getByTestId('transition-pillar-dissolve').click()
   await page.getByTestId('transition-card-cross_dissolve').waitFor({ state: 'visible' })
   await page.getByTestId('apply-trans-btn-cross_dissolve').click()
 

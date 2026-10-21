@@ -17,7 +17,7 @@ import { chromium } from 'playwright'
 import { mkdirSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
-const FPS = 24
+const FPS = 12
 const ROOT = '/tmp/tvframes'
 mkdirSync(ROOT, { recursive: true })
 
@@ -83,9 +83,9 @@ for (const preset of catalog.presets) {
   }, preset.id)
   if (!res.ok) { console.error(`FAIL apply ${preset.id}: ${res.error}`); process.exit(1) }
   const tr = res.transition
-  const lead = 0.8, tail = 0.8
+  const lead = 0.4, tail = 0.4
   const nVideo = await captureWindow(join(ROOT, preset.id), tr.startTime - lead, tr.startTime + tr.duration + tail)
-  const nReel = await captureWindow(join(ROOT, `reel-${preset.id}`), tr.startTime - 0.5, tr.startTime + tr.duration + 0.5)
+  const nReel = await captureWindow(join(ROOT, `reel-${preset.id}`), tr.startTime - 0.3, tr.startTime + tr.duration + 0.3)
   manifest.push({
     id: preset.id, name: preset.name, category: preset.category,
     baseDuration: preset.baseDuration, appliedDuration: tr.duration,

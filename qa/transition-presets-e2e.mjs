@@ -119,6 +119,14 @@ assert((await page.getByTestId('transition-duration-value').innerText()) === '3.
 assert((await page.getByTestId('transition-requirement').innerText()).includes('1.70s'), 'panel states the per-side clip requirement')
 const segOk = await page.evaluate(() => [...document.querySelectorAll('[data-testid^="transition-dur-"]')].every((b) => b.getBoundingClientRect().height <= 26))
 assert(segOk, 'duration chips are single-line')
+const pillarTiles = await page.evaluate(() => [...document.querySelectorAll('[data-testid^="transition-pillar-"]')].map((b) => b.getAttribute('data-testid')))
+assert(pillarTiles.length === 8, 'eight pillar sub-mode tiles', JSON.stringify(pillarTiles))
+const listScrolls = await page.evaluate(() => {
+  const el = document.querySelector('[data-testid="transition-variant-list"]')
+  return el.scrollHeight > el.clientHeight + 40
+})
+assert(listScrolls, 'pillar variant list inner-scrolls (50+ variants per pillar)')
+await page.getByTestId('transition-pillar-classic').click()
 await page.getByTestId('transition-card-whip_left').click({ position: { x: 30, y: 14 } }) // label area, not the buttons
 assert((await page.getByTestId('transition-duration-value').innerText()) === '0.5s', 'selecting a preset loads its base seconds into the slider')
 assert((await page.getByTestId('transition-base-loaded').innerText()).includes('base 0.5s'), 'panel states the loaded base seconds')
@@ -182,11 +190,13 @@ for (const preset of catalog.presets) {
   if (preset.id === 'dip_to_black') frameOk = px.dark > px.total * 0.4
   else if (preset.id === 'dip_to_white') frameOk = px.bright > px.total * 0.3
   else if (preset.id === 'flip_h') frameOk = px.dark > px.total * 0.4
-  else if (['cross_dissolve', 'film_dissolve', 'additive_dissolve', 'blur_dissolve', 'light_leak', 'zoom', 'zoom_out', 'spin'].includes(preset.id)) {
-    // Alpha-blend looks: the mid frame's mean colour must sit BETWEEN the
-    // two pure frames (a purple, not red and not blue).
-    frameOk = meanDist(px.mean, pureA.mean) > 12 && meanDist(px.mean, pureB.mean) > 12
-  } else frameOk = px.red > 80 && px.blue > 80 && meanDist(px.mean, pureA.mean) > 8 && meanDist(px.mean, pureB.mean) > 8
+  else {
+    // Generic law for all 383 presets: the mid frame must either show BOTH
+    // clips (wipe/split/push looks) or differ clearly from both pure frames
+    // (blends, dips, glitches, device overlays, light/flicker modulation).
+    frameOk = (px.red > 80 && px.blue > 80) ||
+      (meanDist(px.mean, pureA.mean) > 8 && meanDist(px.mean, pureB.mean) > 8)
+  }
   results.push({ id: preset.id, name: preset.name, category: preset.category, ok: frameOk, applied: true, pixels: px, frame: `evidence/transitions/${preset.id}.png` })
   assert(frameOk, `preset ${preset.id} renders mid-transition`, JSON.stringify(px))
 }

@@ -1,0 +1,638 @@
+/**
+ * Pillar family renderers — one parameterised renderer per pillar
+ * (glitch / blur / dissolve / light / flicker / tv / overlay). The 350
+ * catalogue presets in pillarPresets.ts are parameter sets into these
+ * functions, so every named variant is a distinct look.
+ *
+ * Technique sources (see transition_pillars/ index headers): glitchology's
+ * datamosh & glitch taxonomy (RGB split, slice displacement, block
+ * corruption, pixel sort, VHS tear, static), Storyblocks' four flare types
+ * (starburst, veiling, ghosting, anamorphic), ineedfx light-leak families
+ * (leak, flicker, bokeh, film burn), CapCut's TV/overlay template families
+ * (static burst, channel surf, retro interface, device frames), Alight
+ * Motion camera-object overlays (viewfinder / device pull-out).
+ */
+import type { PillarParams } from './pillarPresets'
+
+export interface PillarDrawArgs {
+  ctx: CanvasRenderingContext2D
+  width: number
+  height: number
+  p: number
+  params: PillarParams
+  drawFrom: (c: CanvasRenderingContext2D) => void
+  drawTo: (c: CanvasRenderingContext2D) => void
+  hasFrom: boolean
+  hasTo: boolean
+  takeScratch: () => HTMLCanvasElement
+  releaseScratch: (c: HTMLCanvasElement) => void
+}
+
+const num = (p: PillarParams, k: string, d = 0): number => (typeof p[k] === 'number' ? (p[k] as number) : d)
+const str = (p: PillarParams, k: string, d = ''): string => (typeof p[k] === 'string' ? (p[k] as string) : d)
+
+function mulberry32(a: number) {
+  return function () {
+    a |= 0; a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+const smooth = (t: number) => t * t * (3 - 2 * t)
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
+
+/** Deterministic per-step noise so glitch jitter steps like real signal loss. */
+const stepRnd = (seed: number, p: number, steps = 14) => mulberry32(seed + Math.floor(p * steps) * 7919)
+
+function snow(ctx: CanvasRenderingContext2D, w: number, h: number, alpha: number, rnd: () => number) {
+  if (alpha <= 0.01) return
+  const n = Math.round(alpha * 700)
+  for (let i = 0; i < n; i++) {
+    const g = Math.floor(rnd() * 255)
+    ctx.fillStyle = `rgba(${g},${g},${g},${(0.25 + rnd() * 0.6) * Math.min(1, alpha + 0.3)})`
+    ctx.fillRect(rnd() * w, rnd() * h, 1 + rnd() * 3, 1 + rnd() * 2)
+  }
+  ctx.fillStyle = `rgba(0,0,0,${alpha * 0.25})`
+  for (let y = 0; y < h; y += 3) ctx.fillRect(0, y, w, 1)
+}
+
+// --------------------------------------------------------------------- GLITCH
+function renderGlitch(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const I = num(params, 'intensity', 0.6)
+  const style = str(params, 'style', 'slice')
+  const seed = num(params, 'seed', 1)
+  const rnd = stepRnd(seed, p)
+  const scr = a.takeScratch()
+  const s = scr.getContext('2d')!
+  const base = (c: CanvasRenderingContext2D) => {
+    if (p < 0.5) { if (hasFrom) drawFrom(c); else if (hasTo) drawTo(c) }
+    else { if (hasTo) drawTo(c); else if (hasFrom) drawFrom(c) }
+  }
+  if (style === 'poster') s.filter = 'saturate(1.8) contrast(1.35)'
+  base(s)
+  s.filter = 'none'
+  if (style === 'mosh' && hasTo) {
+    // datamosh melt: incoming motion vectors smear over the old frame
+    s.globalAlpha = 0.25 + p * 0.6
+    for (let i = 0; i < 6; i++) {
+      const bw = W * (0.12 + rnd() * 0.3), bh = H * (0.08 + rnd() * 0.25)
+      const bx = rnd() * (W - bw), by = rnd() * (H - bh)
+      s.save(); s.beginPath(); s.rect(bx, by, bw, bh); s.clip()
+      drawTo(s); s.restore()
+    }
+    s.globalAlpha = 1
+  }
+  let ox = 0, oy = 0
+  if (style === 'shake') { ox = (rnd() - 0.5) * I * 46; oy = (rnd() - 0.5) * I * 22 }
+  ctx.save()
+  ctx.drawImage(scr, ox, oy)
+  // slice displacement — big bands, not hairlines
+  const slices = Math.round(3 + I * 11)
+  for (let i = 0; i < slices; i++) {
+    const sy = rnd() * H
+    const sh = (0.035 + rnd() * 0.16) * H * (0.6 + I)
+    const dx = (rnd() - 0.5) * 2 * I * 0.38 * W
+    ctx.drawImage(scr, 0, sy, W, sh, dx + ox, sy + oy, W, sh)
+  }
+  // corrupted macroblocks
+  if (style === 'block' || style === 'mosh' || I > 0.7) {
+    const n = Math.round(4 + I * 16)
+    for (let i = 0; i < n; i++) {
+      const bw = (0.05 + rnd() * 0.16) * W, bh = (0.04 + rnd() * 0.12) * H
+      const bx = rnd() * (W - bw), by = rnd() * (H - bh)
+      const dx = (rnd() - 0.5) * I * 0.5 * W, dy = (rnd() - 0.5) * I * 0.2 * H
+      ctx.drawImage(scr, bx, by, bw, bh, bx + dx, by + dy, bw, bh)
+    }
+  }
+  // pixel-sort streaks
+  if (style === 'sort') {
+    const bands = Math.round(3 + I * 8)
+    for (let i = 0; i < bands; i++) {
+      const sy = rnd() * H, sh = 2 + rnd() * 7
+      const off = (rnd() - 0.3) * I * W * 0.9
+      ctx.globalAlpha = 0.5 + rnd() * 0.5
+      ctx.drawImage(scr, 0, sy, W, sh, off, sy, W * (1 + rnd() * 0.3), sh)
+    }
+    ctx.globalAlpha = 1
+  }
+  // signal tears with white gap
+  if (style === 'tear') {
+    const tears = 1 + Math.round(I * 2)
+    for (let i = 0; i < tears; i++) {
+      const sy = rnd() * H, sh = (0.05 + rnd() * 0.12) * H
+      const dx = (rnd() - 0.5) * I * 0.7 * W
+      ctx.drawImage(scr, 0, sy, W, sh, dx, sy + (rnd() - 0.5) * 14, W, sh)
+      ctx.fillStyle = `rgba(255,255,255,${0.5 + rnd() * 0.4})`
+      ctx.fillRect(0, sy - 2, W, 2 + rnd() * 3)
+    }
+  }
+  // RGB split ghosts
+  const rgb = I * (style === 'rgb' ? 44 : 16) * (0.35 + 0.65 * Math.sin(Math.PI * p))
+  if (rgb > 1.5) {
+    ctx.globalAlpha = 0.32
+    ctx.globalCompositeOperation = 'lighter'
+    ctx.filter = 'hue-rotate(115deg) saturate(2.4)'
+    ctx.drawImage(scr, rgb + ox, oy)
+    ctx.filter = 'hue-rotate(-115deg) saturate(2.4)'
+    ctx.drawImage(scr, -rgb + ox, oy)
+    ctx.filter = 'none'
+    ctx.globalAlpha = 1
+    ctx.globalCompositeOperation = 'source-over'
+  }
+  // static patches + scanlines
+  const st = num(params, 'static', 0.25)
+  if (st > 0) {
+    const n = Math.round(st * 130 * (0.4 + Math.sin(Math.PI * p)))
+    for (let i = 0; i < n; i++) {
+      const g = rnd() > 0.5 ? 255 : 0
+      ctx.fillStyle = `rgba(${g},${g},${g},${0.12 + rnd() * 0.4})`
+      ctx.fillRect(rnd() * W, rnd() * H, 2 + rnd() * 26, 1 + rnd() * 3)
+    }
+  }
+  const sc = num(params, 'scan', 0.18)
+  if (sc > 0) {
+    ctx.fillStyle = `rgba(0,0,0,${sc * 0.4})`
+    for (let y = 0; y < H; y += 4) ctx.fillRect(0, y, W, 1)
+  }
+  ctx.restore()
+  a.releaseScratch(scr)
+}
+
+// ----------------------------------------------------------------------- BLUR
+function renderBlur(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const mode = str(params, 'mode', 'cross')
+  const amount = num(params, 'amount', 0.5)
+  const b = amount * 46 * Math.sin(Math.PI * p) + 0.01
+  const e = smooth(p)
+  const blur = (v: number) => `blur(${v.toFixed(1)}px)`
+  ctx.save()
+  const draw = (which: 'from' | 'to', alpha: number, filter: string, tx = 0, ty = 0, scale = 1, rot = 0) => {
+    if (alpha <= 0.004) return
+    ctx.save()
+    ctx.globalAlpha = clamp01(alpha)
+    ctx.filter = filter
+    if (tx || ty || scale !== 1 || rot) {
+      ctx.translate(W / 2 + tx, H / 2 + ty)
+      if (rot) ctx.rotate(rot)
+      if (scale !== 1) ctx.scale(scale, scale)
+      ctx.translate(-W / 2, -H / 2)
+    }
+    if (which === 'from' && hasFrom) drawFrom(ctx)
+    else if (which === 'to' && hasTo) drawTo(ctx)
+    ctx.restore()
+  }
+  if (mode === 'cross' || mode === 'tilt') {
+    if (mode === 'cross') {
+      draw('from', 1 - e, blur(b))
+      draw('to', e, blur(b))
+    } else {
+      // tilt-shift: blurred band racks down over the sharp incoming frame
+      draw('to', 1, 'none')
+      const scr = a.takeScratch(); const s = scr.getContext('2d')!
+      if (hasFrom) drawFrom(s)
+      s.globalCompositeOperation = 'destination-in'
+      const g = s.createLinearGradient(0, (e - 0.45) * H, 0, (e + 0.05) * H)
+      g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)')
+      s.fillStyle = g; s.fillRect(0, 0, W, H)
+      s.globalCompositeOperation = 'source-over'
+      ctx.save(); ctx.filter = blur(b * 0.8); ctx.drawImage(scr, 0, 0); ctx.restore()
+      a.releaseScratch(scr)
+    }
+  } else if (mode.startsWith('push') || mode === 'whip') {
+    const dir = mode === 'push_l' || mode === 'whip' ? -1 : mode === 'push_r' ? 1 : 0
+    const vy = mode === 'push_u' ? -1 : mode === 'push_d' ? 1 : 0
+    const bb = mode === 'whip' ? b * 1.6 : b
+    draw('from', 1, blur(bb * (0.3 + e)), dir * e * W * 0.9, vy * e * H * 0.9)
+    draw('to', 1, blur(bb * (1.3 - e)), dir * (e - 1) * W * 0.9, vy * (e - 1) * H * 0.9)
+  } else if (mode === 'zoom_in' || mode === 'zoom_out') {
+    const inn = mode === 'zoom_in'
+    draw('from', 1 - e * 0.85, blur(b * e), 0, 0, inn ? 1 + e * 0.7 : 1.5 - e * 0.5)
+    draw('to', e, blur(b * (1 - e)), 0, 0, inn ? 1.6 - e * 0.6 : 0.7 + e * 0.8)
+  } else if (mode === 'spin') {
+    draw('from', 1 - e, blur(b), 0, 0, 1 + e * 0.15, -e * 0.5)
+    draw('to', e, blur(b), 0, 0, 1.15 - e * 0.15, (1 - e) * 0.5)
+  }
+  ctx.restore()
+}
+
+// ------------------------------------------------------------------- DISSOLVE
+function renderDissolve(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const mode = str(params, 'mode', 'cross')
+  const easeV = str(params, 'ease', 'smooth')
+  const seed = num(params, 'seed', 1)
+  let t = p
+  if (easeV === 'fast') t = smooth(smooth(p))
+  else if (easeV === 'slow') t = p * p * (3 - 2 * p) * 0.85 + p * 0.15
+  else if (easeV === 'smooth') t = smooth(p)
+  if (mode === 'dip_black' || mode === 'dip_white' || mode === 'dip_color') {
+    const dip = mode === 'dip_black' ? '#000000' : mode === 'dip_white' ? '#ffffff' : 'hsl(265 60% 30%)'
+    if (hasFrom) drawFrom(ctx)
+    if (p < 0.5) { ctx.globalAlpha = smooth(p * 2); ctx.fillStyle = dip; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1 }
+    else {
+      ctx.fillStyle = dip; ctx.fillRect(0, 0, W, H)
+      if (hasTo) { ctx.globalAlpha = smooth((p - 0.5) * 2); drawTo(ctx); ctx.globalAlpha = 1 }
+    }
+    return
+  }
+  if (hasTo) drawTo(ctx)
+  const scr = a.takeScratch(); const s = scr.getContext('2d')!
+  if (hasFrom) drawFrom(s)
+  s.globalCompositeOperation = 'destination-in'
+  if (mode === 'luma') {
+    const radial = easeV === 'radial'
+    const g = radial
+      ? s.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.7 * t + 1)
+      : s.createLinearGradient(0, 0, W, 0)
+    if (radial) { g.addColorStop(0.98, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)') }
+    else {
+      const x = clamp01(t * 1.3 - 0.15)
+      g.addColorStop(Math.max(0, x - 0.15), 'rgba(0,0,0,1)')
+      g.addColorStop(Math.min(1, x + 0.15), 'rgba(0,0,0,0)')
+    }
+    s.fillStyle = g; s.fillRect(0, 0, W, H)
+  } else if (mode === 'dither') {
+    // Build the cell mask on its own scratch and composite ONCE: per-rect
+    // destination-in would re-blend the whole surface per cell (0.5 fps on
+    // software canvas).
+    const mask = a.takeScratch()
+    const m = mask.getContext('2d')!
+    const rnd = mulberry32(seed)
+    const cell = 10
+    m.fillStyle = '#000'
+    for (let y = 0; y < H; y += cell) for (let x = 0; x < W; x += cell) { if (rnd() > t) m.fillRect(x, y, cell, cell) }
+    s.drawImage(mask, 0, 0)
+    a.releaseScratch(mask)
+  } else {
+    let alpha = t
+    if (mode === 'film') alpha = Math.pow(t, 1.5)
+    else if (mode === 'gamma') alpha = Math.pow(t, 0.55)
+    s.fillStyle = `rgba(0,0,0,${clamp01(alpha)})`
+    s.fillRect(0, 0, W, H)
+  }
+  s.globalCompositeOperation = 'source-over'
+  if (mode === 'additive') ctx.globalCompositeOperation = 'lighter'
+  else if (mode === 'subtract') ctx.globalCompositeOperation = 'difference'
+  ctx.drawImage(scr, 0, 0)
+  ctx.globalCompositeOperation = 'source-over'
+  if (mode === 'film') {
+    const rnd = stepRnd(seed, p, 24)
+    ctx.fillStyle = 'rgba(255,255,255,0.05)'
+    for (let i = 0; i < 60; i++) ctx.fillRect(rnd() * W, rnd() * H, 1, 1)
+  }
+  a.releaseScratch(scr)
+}
+
+// ---------------------------------------------------------------------- LIGHT
+function renderLight(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const mode = str(params, 'mode', 'leak_l')
+  const hue = num(params, 'hue', 40)
+  const seed = num(params, 'seed', 1)
+  const e = smooth(p)
+  if (hasFrom) drawFrom(ctx)
+  if (hasTo) { ctx.globalAlpha = e; drawTo(ctx); ctx.globalAlpha = 1 }
+  const sin = Math.sin(Math.PI * p)
+  ctx.save()
+  ctx.globalCompositeOperation = 'screen'
+  const col = (al: number, l = 60) => `hsla(${hue} 92% ${l}% / ${clamp01(al)})`
+  if (mode.startsWith('leak')) {
+    const cx = mode === 'leak_l' ? W * (0.1 + e * 0.5) : mode === 'leak_r' ? W * (0.9 - e * 0.5) : W / 2
+    const cy = mode === 'leak_top' ? H * (0.05 + e * 0.45) : H * 0.5
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.75)
+    g.addColorStop(0, col(sin * 0.95, 72)); g.addColorStop(0.4, col(sin * 0.5)); g.addColorStop(1, 'hsla(0 0% 0% / 0)')
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+  } else if (mode === 'flash_white' || mode === 'flash_color') {
+    ctx.globalCompositeOperation = 'source-over'
+    ctx.fillStyle = mode === 'flash_white' ? `rgba(255,255,255,${Math.pow(sin, 1.4) * 0.96})` : col(Math.pow(sin, 1.4) * 0.9, 70)
+    ctx.fillRect(0, 0, W, H)
+  } else if (mode === 'flare_ana') {
+    const y = H * 0.44
+    const g = ctx.createLinearGradient(0, y - H * 0.06, 0, y + H * 0.06)
+    g.addColorStop(0, 'hsla(0 0% 0% / 0)'); g.addColorStop(0.5, col(sin * 0.95, 80)); g.addColorStop(1, 'hsla(0 0% 0% / 0)')
+    ctx.fillStyle = g; ctx.fillRect(0, y - H * 0.06, W, H * 0.12)
+    const g2 = ctx.createRadialGradient(W * (0.2 + e * 0.6), y, 0, W * (0.2 + e * 0.6), y, W * 0.2)
+    g2.addColorStop(0, col(sin, 88)); g2.addColorStop(1, 'hsla(0 0% 0% / 0)')
+    ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H)
+  } else if (mode === 'flare_star') {
+    const cx = W * 0.5, cy = H * 0.42
+    ctx.strokeStyle = col(sin * 0.8, 82); ctx.lineWidth = 3
+    for (let i = 0; i < 8; i++) {
+      const ang = (i * Math.PI) / 4 + 0.2
+      ctx.beginPath(); ctx.moveTo(cx, cy)
+      ctx.lineTo(cx + Math.cos(ang) * W * 0.5 * sin, cy + Math.sin(ang) * W * 0.5 * sin); ctx.stroke()
+    }
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, W * 0.3 * sin + 1)
+    g.addColorStop(0, col(sin, 90)); g.addColorStop(1, 'hsla(0 0% 0% / 0)')
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+  } else if (mode === 'flare_ghost') {
+    const rnd = mulberry32(seed)
+    for (let i = 0; i < 6; i++) {
+      const t = i / 5
+      const cx = W * (0.15 + t * 0.7), cy = H * (0.62 - t * 0.3)
+      const r = W * (0.03 + rnd() * 0.06)
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
+      g.addColorStop(0, `hsla(${hue + i * 24} 90% 70% / ${sin * 0.55})`); g.addColorStop(1, 'hsla(0 0% 0% / 0)')
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill()
+    }
+  } else if (mode === 'bokeh') {
+    const rnd = mulberry32(seed)
+    for (let i = 0; i < 14; i++) {
+      const cx = rnd() * W, cy = rnd() * H, r = W * (0.02 + rnd() * 0.08)
+      const g = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, r)
+      g.addColorStop(0, `hsla(${hue + rnd() * 40 - 20} 85% 72% / ${sin * (0.12 + rnd() * 0.3)})`)
+      g.addColorStop(1, 'hsla(0 0% 0% / 0)')
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill()
+    }
+  } else if (mode === 'filmburn') {
+    const g = ctx.createRadialGradient(W * 0.85, H * 0.15, 0, W * 0.85, H * 0.15, Math.max(W, H) * (0.3 + sin * 0.8))
+    g.addColorStop(0, col(sin * 0.9, 68)); g.addColorStop(0.55, `hsla(${hue - 15} 90% 45% / ${sin * 0.5})`); g.addColorStop(1, 'hsla(0 0% 0% / 0)')
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+  }
+  ctx.restore()
+}
+
+// -------------------------------------------------------------------- FLICKER
+function renderFlicker(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const mode = str(params, 'mode', 'film')
+  const hz = num(params, 'hz', 10)
+  const depth = num(params, 'depth', 0.45)
+  const seed = num(params, 'seed', 1)
+  const q = Math.floor(p * hz * 2)
+  const rnd = mulberry32(seed + q * 104729)
+  const v = rnd() * 2 - 1
+  let held = p
+  if (mode === 'frameskip') held = Math.floor(p * 7) / 7
+  const cross = smooth(mode === 'frameskip' ? held : p)
+  if (cross < 0.5) { if (hasFrom) drawFrom(ctx); else if (hasTo) drawTo(ctx) }
+  else { if (hasTo) drawTo(ctx); else if (hasFrom) drawFrom(ctx) }
+  ctx.save()
+  const dip = (color: string, alpha: number) => { if (alpha > 0.01) { ctx.fillStyle = color; ctx.globalAlpha = clamp01(alpha); ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1 } }
+  if (mode === 'strobe_b') dip('#000', p > 0.15 && p < 0.85 && q % 2 === 0 ? depth : 0)
+  else if (mode === 'strobe_w') dip('#fff', p > 0.15 && p < 0.85 && q % 2 === 0 ? depth : 0)
+  else if (mode === 'blink') dip('#000', depth * Math.pow(Math.sin(Math.PI * (p * 3 % 1)), 3))
+  else if (mode === 'burn') { dip('hsl(38 100% 82%)', rnd() > 0.5 ? depth * (0.4 + rnd() * 0.6) : depth * 0.3) }
+  else if (mode === 'film' || mode === 'vintage' || mode === 'candle' || mode === 'projector' || mode === 'gate') {
+    const warm = mode === 'candle' ? 0.16 : mode === 'vintage' ? 0.13 : 0
+    if (warm) dip('hsl(30 60% 50%)', warm)
+    const amp = depth * (0.35 + 0.65 * Math.abs(v))
+    if (v > 0) dip('#fff', amp * 0.7)
+    else dip('#000', amp * 0.7)
+    if (mode === 'gate' || mode === 'projector') {
+      const n = mode === 'gate' ? 7 : 3
+      for (let i = 0; i < n; i++) { ctx.fillStyle = `rgba(230,225,215,${0.15 + rnd() * 0.3})`; ctx.beginPath(); ctx.arc(rnd() * W, rnd() * H, 1 + rnd() * 2.5, 0, 7); ctx.fill() }
+      const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 0.95)
+      g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${0.25 + depth * 0.3 * Math.abs(v)})`)
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+    }
+  } else if (mode === 'frameskip') {
+    if (rnd() > 0.5) dip('#fff', 0.22)
+    else dip('#000', 0.15)
+  }
+  ctx.restore()
+}
+
+// ------------------------------------------------------------------------- TV
+function renderTV(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const mode = str(params, 'mode', 'static_burst')
+  const I = num(params, 'intensity', 0.55)
+  const osd = num(params, 'osd', 0)
+  const seed = num(params, 'seed', 1)
+  const rnd = stepRnd(seed, p, 20)
+  const e = smooth(p)
+  ctx.save()
+  if (mode === 'static_burst') {
+    if (hasFrom) { ctx.globalAlpha = 1 - e; drawFrom(ctx); ctx.globalAlpha = 1 }
+    if (hasTo) { ctx.globalAlpha = e; drawTo(ctx); ctx.globalAlpha = 1 }
+    snow(ctx, W, H, Math.sin(Math.PI * p) * I, rnd)
+  } else if (mode === 'channel') {
+    if (p < 0.42) { if (hasFrom) drawFrom(ctx) }
+    else if (p < 0.58) snow(ctx, W, H, 0.55 + I * 0.45, rnd)
+    else {
+      if (hasTo) drawTo(ctx)
+      snow(ctx, W, H, (1 - p) * I * 0.7, rnd)
+      if (osd) {
+        ctx.globalAlpha = clamp01((p - 0.55) * 6) * clamp01((1 - p) * 6)
+        ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(W - 190, 40, 150, 56)
+        ctx.fillStyle = '#7CFC9A'; ctx.font = 'bold 34px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText(`CH ${String((seed % 9) + 2).padStart(2, '0')}`, W - 115, 68)
+        ctx.globalAlpha = 1
+      }
+    }
+  } else if (mode === 'v_roll') {
+    const off = (1 - e) * H * (0.6 + I)
+    const y = -(off % H)
+    ctx.translate(0, y)
+    if (hasTo) drawTo(ctx)
+    ctx.translate(0, H)
+    if (hasFrom) drawFrom(ctx)
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    snow(ctx, W, H, I * 0.35 * Math.sin(Math.PI * p), rnd)
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fillRect(0, ((H - off % H) % H) - 2, W, 3)
+  } else if (mode === 'h_tear') {
+    if (hasFrom) { ctx.globalAlpha = 1 - e; drawFrom(ctx); ctx.globalAlpha = 1 }
+    if (hasTo) { ctx.globalAlpha = e; drawTo(ctx); ctx.globalAlpha = 1 }
+    const scr = a.takeScratch(); const s = scr.getContext('2d')!
+    s.drawImage(ctx.canvas, 0, 0)
+    const bands = 2 + Math.round(I * 3)
+    for (let i = 0; i < bands; i++) {
+      const sy = rnd() * H, sh = (0.04 + rnd() * 0.1) * H
+      ctx.drawImage(scr, 0, sy, W, sh, (rnd() - 0.5) * I * 0.5 * W, sy, W, sh)
+      ctx.fillStyle = `rgba(255,255,255,${0.3 + rnd() * 0.4})`; ctx.fillRect(0, sy, W, 2)
+    }
+    a.releaseScratch(scr)
+  } else if (mode === 'screen_off') {
+    if (p < 0.5) {
+      const k = 1 - p * 2
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H)
+      if (hasFrom) { ctx.save(); ctx.translate(0, H / 2); ctx.scale(1, Math.max(0.004, k * k)); ctx.translate(0, -H / 2); drawFrom(ctx); ctx.restore() }
+      ctx.fillStyle = `rgba(255,255,255,${0.5 + k * 0.5})`; ctx.fillRect(0, H / 2 - 1.5, W, 3)
+    } else {
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H)
+      if (hasTo) { ctx.globalAlpha = smooth((p - 0.5) * 2); drawTo(ctx); ctx.globalAlpha = 1 }
+      ctx.fillStyle = `rgba(255,255,255,${(1 - p) * 0.8})`; ctx.fillRect(0, H / 2 - 1, W, 2)
+    }
+  } else if (mode === 'power_on') {
+    if (p < 0.4) {
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H)
+      const hgt = 2 + p * 30
+      ctx.fillStyle = `rgba(255,255,255,${0.7 + p})`; ctx.fillRect(0, H / 2 - hgt / 2, W, hgt)
+      if (hasFrom) { ctx.globalAlpha = 0.35; ctx.save(); ctx.translate(0, H / 2); ctx.scale(1, 0.02); ctx.translate(0, -H / 2); drawFrom(ctx); ctx.restore(); ctx.globalAlpha = 1 }
+    } else {
+      const k = smooth((p - 0.4) / 0.6)
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H)
+      if (hasTo) { ctx.save(); ctx.translate(0, H / 2); ctx.scale(0.4 + k * 0.6, Math.max(0.02, k)); ctx.translate(0, -H / 2); drawTo(ctx); ctx.restore() }
+      ctx.fillStyle = `rgba(255,255,255,${(1 - k) * 0.5})`; ctx.fillRect(0, 0, W, H)
+    }
+  } else if (mode === 'phosphor') {
+    if (hasTo) drawTo(ctx)
+    const scr = a.takeScratch(); const s = scr.getContext('2d')!
+    if (hasFrom) drawFrom(s)
+    s.globalCompositeOperation = 'source-atop'
+    s.fillStyle = `rgba(90,255,140,${0.5})`; s.fillRect(0, 0, W, H)
+    s.globalCompositeOperation = 'source-over'
+    ctx.save(); ctx.globalAlpha = (1 - e) * 0.85; ctx.filter = `blur(${((1 - e) * 14).toFixed(1)}px)`
+    ctx.globalCompositeOperation = 'screen'; ctx.drawImage(scr, 0, 0); ctx.restore()
+    a.releaseScratch(scr)
+  } else if (mode === 'scan_crawl') {
+    if (hasTo) drawTo(ctx)
+    const y = (p * 1.4 - 0.2) * H
+    const bh = H * 0.28
+    ctx.save(); ctx.beginPath(); ctx.rect(0, y, W, bh); ctx.clip()
+    if (hasFrom) drawFrom(ctx)
+    snow(ctx, W, H, I * 0.3, rnd)
+    ctx.restore()
+    ctx.fillStyle = `rgba(255,255,255,${0.35 + I * 0.3})`; ctx.fillRect(0, y, W, 2); ctx.fillRect(0, y + bh, W, 2)
+  } else if (mode === 'color_bleed') {
+    if (hasTo) drawTo(ctx)
+    const off = (1 - e) * I * 60
+    const scr = a.takeScratch(); const s = scr.getContext('2d')!
+    if (hasTo) drawTo(s)
+    ctx.save(); ctx.globalAlpha = (1 - e) * 0.5; ctx.globalCompositeOperation = 'lighter'
+    ctx.filter = 'hue-rotate(90deg) saturate(2)'; ctx.drawImage(scr, off, 0)
+    ctx.filter = 'hue-rotate(-90deg) saturate(2)'; ctx.drawImage(scr, -off, 0)
+    ctx.restore()
+    a.releaseScratch(scr)
+  } else if (mode === 'vhs_track') {
+    if (hasTo) drawTo(ctx)
+    const y = (1 - p) * H * 1.1 - H * 0.06
+    const bh = H * (0.08 + I * 0.08)
+    ctx.save(); ctx.beginPath(); ctx.rect(0, y, W, bh); ctx.clip()
+    if (hasFrom) drawFrom(ctx)
+    snow(ctx, W, H, 0.5 + I * 0.4, rnd)
+    ctx.restore()
+    ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(0, y - 2, W, 2)
+    ctx.fillStyle = `rgba(0,0,0,${I * 0.2})`
+    for (let yy = 0; yy < H; yy += 4) ctx.fillRect(0, yy, W, 1)
+  }
+  ctx.restore()
+}
+
+// -------------------------------------------------------------------- OVERLAY
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.arcTo(x + w, y, x + w, y + h, r)
+  ctx.arcTo(x + w, y + h, x, y + h, r)
+  ctx.arcTo(x, y + h, x, y, r)
+  ctx.arcTo(x, y, x + w, y, r)
+  ctx.closePath()
+}
+
+function drawDeviceBody(ctx: CanvasRenderingContext2D, scene: string, W: number, H: number) {
+  // Local space: the screen IS the full frame rect; bodies extend beyond it.
+  const body = '#17171d', edge = '#2c2c36', detail = '#3a3a46'
+  ctx.lineWidth = Math.max(2, W * 0.004)
+  ctx.strokeStyle = edge
+  ctx.fillStyle = body
+  const m = (t: number, r: number, b: number, l: number) => { roundRect(ctx, -l, -t, W + l + r, H + t + b, W * 0.02); ctx.fill(); ctx.stroke() }
+  if (scene === 'tv') {
+    m(H * 0.14, W * 0.09, H * 0.2, W * 0.09)
+    ctx.strokeStyle = detail
+    ctx.beginPath(); ctx.moveTo(W * 0.3, -H * 0.13); ctx.lineTo(W * 0.12, -H * 0.42); ctx.moveTo(W * 0.7, -H * 0.13); ctx.lineTo(W * 0.9, -H * 0.4); ctx.stroke()
+    ctx.fillStyle = detail
+    for (let i = 0; i < 6; i++) { ctx.beginPath(); ctx.arc(W * (0.2 + i * 0.12), H + H * 0.1, W * 0.008, 0, 7); ctx.fill() }
+  } else if (scene === 'phone') {
+    m(H * 0.09, W * 0.05, H * 0.09, W * 0.05)
+    ctx.fillStyle = '#000'
+    roundRect(ctx, W * 0.42, -H * 0.055, W * 0.16, H * 0.035, H * 0.017); ctx.fill()
+    ctx.fillStyle = detail; roundRect(ctx, W * 0.44, H + H * 0.03, W * 0.12, H * 0.012, H * 0.006); ctx.fill()
+  } else if (scene === 'monitor') {
+    m(H * 0.07, W * 0.04, H * 0.07, W * 0.04)
+    ctx.fillStyle = body; ctx.fillRect(W * 0.44, H + H * 0.06, W * 0.12, H * 0.16)
+    roundRect(ctx, W * 0.32, H + H * 0.21, W * 0.36, H * 0.035, H * 0.017); ctx.fill(); ctx.stroke()
+  } else if (scene === 'camera') {
+    m(H * 0.12, W * 0.08, H * 0.14, W * 0.08)
+    ctx.fillStyle = body; roundRect(ctx, W * 0.36, -H * 0.24, W * 0.28, H * 0.12, H * 0.03); ctx.fill(); ctx.stroke()
+    ctx.fillStyle = '#e33'; ctx.beginPath(); ctx.arc(W * 0.94, -H * 0.06, W * 0.012, 0, 7); ctx.fill()
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1.5
+    ctx.beginPath(); ctx.moveTo(W / 3, 0); ctx.lineTo(W / 3, H); ctx.moveTo((2 * W) / 3, 0); ctx.lineTo((2 * W) / 3, H); ctx.moveTo(0, H / 3); ctx.lineTo(W, H / 3); ctx.moveTo(0, (2 * H) / 3); ctx.lineTo(W, (2 * H) / 3); ctx.stroke()
+  } else if (scene === 'projector') {
+    m(H * 0.05, W * 0.03, H * 0.05, W * 0.03)
+    ctx.strokeStyle = 'rgba(255,255,240,0.12)'; ctx.lineWidth = W * 0.002
+    for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(W * 0.5, -H * 0.9); ctx.lineTo(W * (i / 4), 0); ctx.stroke() }
+  } else if (scene === 'watch') {
+    m(H * 0.16, W * 0.12, H * 0.16, W * 0.12)
+    ctx.fillStyle = body
+    ctx.fillRect(W * 0.3, -H * 0.7, W * 0.4, H * 0.56); ctx.fillRect(W * 0.3, H + H * 0.14, W * 0.4, H * 0.56)
+    ctx.fillStyle = detail; roundRect(ctx, W + W * 0.12, H * 0.35, W * 0.03, H * 0.2, W * 0.01); ctx.fill()
+  } else if (scene === 'tablet') {
+    m(H * 0.08, W * 0.05, H * 0.08, W * 0.05)
+    ctx.fillStyle = detail; ctx.beginPath(); ctx.arc(-W * 0.025, H / 2, W * 0.008, 0, 7); ctx.fill()
+  } else if (scene === 'laptop') {
+    m(H * 0.08, W * 0.05, H * 0.05, W * 0.05)
+    ctx.fillStyle = body
+    ctx.beginPath(); ctx.moveTo(-W * 0.09, H + H * 0.05); ctx.lineTo(W * 1.09, H + H * 0.05); ctx.lineTo(W * 1.16, H + H * 0.2); ctx.lineTo(-W * 0.16, H + H * 0.2); ctx.closePath(); ctx.fill(); ctx.stroke()
+  } else if (scene === 'console') {
+    m(H * 0.1, W * 0.22, H * 0.1, W * 0.22)
+    ctx.fillStyle = detail
+    ctx.beginPath(); ctx.arc(-W * 0.11, H * 0.5, W * 0.035, 0, 7); ctx.fill()
+    for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.arc(W * (1.08 + (i % 2) * 0.05), H * (0.42 + Math.floor(i / 2) * 0.08), W * 0.014, 0, 7); ctx.fill() }
+  } else if (scene === 'cinema') {
+    ctx.fillStyle = '#3d0d12'
+    ctx.fillRect(-W * 0.22, -H * 0.2, W * 0.24, H * 1.4); ctx.fillRect(W * 0.98, -H * 0.2, W * 0.24, H * 1.4)
+    ctx.fillRect(-W * 0.22, -H * 0.2, W * 1.44, H * 0.16)
+    ctx.strokeStyle = '#2a080c'; ctx.lineWidth = W * 0.006
+    for (let i = 0; i < 6; i++) { ctx.beginPath(); ctx.moveTo(-W * 0.2 + i * W * 0.07, -H * 0.2); ctx.lineTo(-W * 0.2 + i * W * 0.07, H * 1.2); ctx.stroke() }
+  }
+}
+
+function renderOverlay(a: PillarDrawArgs) {
+  const { ctx, width: W, height: H, p, params, drawFrom, drawTo, hasFrom, hasTo } = a
+  const scene = str(params, 'scene', 'tv')
+  const motion = str(params, 'motion', 'flip')
+  const seed = num(params, 'seed', 1)
+  const rnd = stepRnd(seed, p, 10)
+  // phases: zoom-out (0-0.35) / device moment (0.35-0.65) / zoom-in (0.65-1)
+  let scale = 1, rot = 0, flipX = 1
+  let content: 'from' | 'to' = p < 0.5 ? 'from' : 'to'
+  let staticOn = 0
+  if (p < 0.35) { scale = 1 - smooth(p / 0.35) * 0.5; content = 'from' }
+  else if (p < 0.65) {
+    const t = (p - 0.35) / 0.3
+    scale = 0.5
+    if (motion === 'flip') { flipX = Math.cos(Math.PI * t); if (Math.abs(flipX) < 0.15) staticOn = 0.5; content = t < 0.5 ? 'from' : 'to' }
+    else if (motion === 'spin') { rot = t * Math.PI; content = t < 0.5 ? 'from' : 'to'; if (t > 0.42 && t < 0.58) staticOn = 0.4 }
+    else if (motion === 'swing') { rot = Math.sin(t * Math.PI) * 0.4; content = t < 0.5 ? 'from' : 'to'; if (t > 0.44 && t < 0.56) staticOn = 0.45 }
+    else if (motion === 'zoom') { scale = 0.5 + smooth(t) * 1.1; content = t < 0.5 ? 'from' : 'to'; if (t > 0.4 && t < 0.6) staticOn = 0.35 }
+    else { content = t < 0.45 ? 'from' : 'to'; if (t > 0.35 && t < 0.6) staticOn = 0.8 }
+  } else {
+    const t = (p - 0.65) / 0.35
+    scale = 0.5 + smooth(t) * 0.5
+    content = 'to'
+  }
+  ctx.save()
+  ctx.fillStyle = '#0a0a0e'; ctx.fillRect(0, 0, W, H)
+  const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.8)
+  g.addColorStop(0, 'rgba(60,60,80,0.25)'); g.addColorStop(1, 'rgba(0,0,0,0)')
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+  ctx.translate(W / 2, H / 2)
+  ctx.scale(Math.max(0.02, scale * Math.abs(flipX || 0.02) * (flipX < 0 ? -1 : 1) || 0.02), scale)
+  ctx.rotate(rot)
+  ctx.translate(-W / 2, -H / 2)
+  drawDeviceBody(ctx, scene, W, H)
+  ctx.save()
+  ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip()
+  if (content === 'from' && hasFrom) drawFrom(ctx)
+  else if (content === 'to' && hasTo) drawTo(ctx)
+  if (staticOn > 0) snow(ctx, W, H, staticOn, rnd)
+  ctx.restore()
+  ctx.restore()
+}
+
+// -------------------------------------------------------------------- DISPATCH
+export function drawPillarFamily(family: string, a: PillarDrawArgs) {
+  if (family === 'glitch') renderGlitch(a)
+  else if (family === 'blur') renderBlur(a)
+  else if (family === 'dissolve') renderDissolve(a)
+  else if (family === 'light') renderLight(a)
+  else if (family === 'flicker') renderFlicker(a)
+  else if (family === 'tv') renderTV(a)
+  else if (family === 'overlay') renderOverlay(a)
+  else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T17:03:26.974Z",
+  "generatedAt": "2026-10-21T17:48:30.870Z",
   "pair": {
     "from": "CLIP 1 (#dc2645)",
     "to": "CLIP 2 (#2456e6)",
@@ -29,22 +29,22 @@
       "ok": true,
       "transition": {
         "type": "cross_dissolve",
-        "fromClipId": "clip_di3hlvf2842",
-        "toClipId": "clip_xhm0c9e2843",
-        "trackId": "trk_2iyeh6m2842",
+        "fromClipId": "clip_km2b4aojol6",
+        "toClipId": "clip_a4kjy9wjol7",
+        "trackId": "trk_ubwlyb6jol6",
         "startTime": 5.95,
         "duration": 0.1,
         "alignment": "centered",
         "enabled": true,
-        "id": "trans_dpmudk028jv"
+        "id": "trans_13of36bjp2r"
       },
       "from": {
-        "id": "clip_di3hlvf2842",
+        "id": "clip_km2b4aojol6",
         "name": "test-clip-1.png",
         "duration": 6
       },
       "to": {
-        "id": "clip_xhm0c9e2843",
+        "id": "clip_a4kjy9wjol7",
         "name": "test-clip-2.png",
         "duration": 6
       },
@@ -55,22 +55,22 @@
       "ok": true,
       "transition": {
         "type": "cross_dissolve",
-        "fromClipId": "clip_di3hlvf2842",
-        "toClipId": "clip_xhm0c9e2843",
-        "trackId": "trk_2iyeh6m2842",
+        "fromClipId": "clip_km2b4aojol6",
+        "toClipId": "clip_a4kjy9wjol7",
+        "trackId": "trk_ubwlyb6jol6",
         "startTime": 3.5,
         "duration": 5,
         "alignment": "centered",
         "enabled": true,
-        "id": "trans_58bjnys28jw"
+        "id": "trans_g00rcm4jp2s"
       },
       "from": {
-        "id": "clip_di3hlvf2842",
+        "id": "clip_km2b4aojol6",
         "name": "test-clip-1.png",
         "duration": 6
       },
       "to": {
-        "id": "clip_xhm0c9e2843",
+        "id": "clip_a4kjy9wjol7",
         "name": "test-clip-2.png",
         "duration": 6
       },
@@ -735,22 +735,7022 @@
       "ok": true,
       "applied": true,
       "pixels": {
-        "red": 145176,
-        "blue": 142129,
+        "red": 0,
+        "blue": 287428,
         "dark": 0,
-        "bright": 4381,
+        "bright": 4089,
         "total": 291600,
         "mean": [
-          131.50322016460905,
-          64.40919753086419,
-          149.61205418381346
+          115.90624828532236,
+          140.49455075445817,
+          236.60524348422496
         ]
       },
       "frame": "evidence/transitions/glitch.png"
+    },
+    {
+      "id": "glitch_slice_mild",
+      "name": "Glitch Slice Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286720,
+        "dark": 0,
+        "bright": 4882,
+        "total": 291600,
+        "mean": [
+          118.29581275720165,
+          143.03709533607682,
+          239.70296296296297
+        ]
+      },
+      "frame": "evidence/transitions/glitch_slice_mild.png"
+    },
+    {
+      "id": "glitch_slice_medium",
+      "name": "Glitch Slice Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286809,
+        "dark": 0,
+        "bright": 4784,
+        "total": 291600,
+        "mean": [
+          118.04566872427984,
+          142.91588820301783,
+          239.70241083676268
+        ]
+      },
+      "frame": "evidence/transitions/glitch_slice_medium.png"
+    },
+    {
+      "id": "glitch_slice_heavy",
+      "name": "Glitch Slice Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287779,
+        "dark": 0,
+        "bright": 3775,
+        "total": 291600,
+        "mean": [
+          117.5585219478738,
+          142.2661316872428,
+          239.6582098765432
+        ]
+      },
+      "frame": "evidence/transitions/glitch_slice_heavy.png"
+    },
+    {
+      "id": "glitch_slice_extreme",
+      "name": "Glitch Slice Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286707,
+        "dark": 0,
+        "bright": 4846,
+        "total": 291600,
+        "mean": [
+          118.06164951989027,
+          142.9262791495199,
+          239.72853223593964
+        ]
+      },
+      "frame": "evidence/transitions/glitch_slice_extreme.png"
+    },
+    {
+      "id": "glitch_slice_tv",
+      "name": "Glitch Slice Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286842,
+        "dark": 0,
+        "bright": 3693,
+        "total": 291600,
+        "mean": [
+          114.47484910836762,
+          138.4859842249657,
+          231.91808641975308
+        ]
+      },
+      "frame": "evidence/transitions/glitch_slice_tv.png"
+    },
+    {
+      "id": "glitch_rgb_mild",
+      "name": "Glitch Rgb Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286716,
+        "dark": 0,
+        "bright": 4780,
+        "total": 291600,
+        "mean": [
+          117.5546536351166,
+          142.2661488340192,
+          239.59703017832646
+        ]
+      },
+      "frame": "evidence/transitions/glitch_rgb_mild.png"
+    },
+    {
+      "id": "glitch_rgb_medium",
+      "name": "Glitch Rgb Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286680,
+        "dark": 0,
+        "bright": 4874,
+        "total": 291600,
+        "mean": [
+          117.50232853223594,
+          142.27228737997257,
+          239.6097290809328
+        ]
+      },
+      "frame": "evidence/transitions/glitch_rgb_medium.png"
+    },
+    {
+      "id": "glitch_rgb_heavy",
+      "name": "Glitch Rgb Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 285730,
+        "dark": 0,
+        "bright": 5837,
+        "total": 291600,
+        "mean": [
+          117.33192043895748,
+          142.54066529492457,
+          239.57747599451304
+        ]
+      },
+      "frame": "evidence/transitions/glitch_rgb_heavy.png"
+    },
+    {
+      "id": "glitch_rgb_extreme",
+      "name": "Glitch Rgb Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 285505,
+        "dark": 0,
+        "bright": 5995,
+        "total": 291600,
+        "mean": [
+          117.15366598079561,
+          142.24590534979424,
+          239.52884773662552
+        ]
+      },
+      "frame": "evidence/transitions/glitch_rgb_extreme.png"
+    },
+    {
+      "id": "glitch_rgb_tv",
+      "name": "Glitch Rgb Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286927,
+        "dark": 0,
+        "bright": 3519,
+        "total": 291600,
+        "mean": [
+          113.31451646090535,
+          137.72471536351165,
+          231.75457475994514
+        ]
+      },
+      "frame": "evidence/transitions/glitch_rgb_tv.png"
+    },
+    {
+      "id": "glitch_block_mild",
+      "name": "Glitch Block Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286438,
+        "dark": 0,
+        "bright": 5124,
+        "total": 291600,
+        "mean": [
+          118.51913237311385,
+          143.24498971193415,
+          239.75600823045266
+        ]
+      },
+      "frame": "evidence/transitions/glitch_block_mild.png"
+    },
+    {
+      "id": "glitch_block_medium",
+      "name": "Glitch Block Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286795,
+        "dark": 0,
+        "bright": 4730,
+        "total": 291600,
+        "mean": [
+          117.61201989026063,
+          142.20935528120714,
+          239.60287722908095
+        ]
+      },
+      "frame": "evidence/transitions/glitch_block_medium.png"
+    },
+    {
+      "id": "glitch_block_heavy",
+      "name": "Glitch Block Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286061,
+        "dark": 0,
+        "bright": 5577,
+        "total": 291600,
+        "mean": [
+          118.6777914951989,
+          143.297719478738,
+          239.7871021947874
+        ]
+      },
+      "frame": "evidence/transitions/glitch_block_heavy.png"
+    },
+    {
+      "id": "glitch_block_extreme",
+      "name": "Glitch Block Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 285971,
+        "dark": 0,
+        "bright": 5574,
+        "total": 291600,
+        "mean": [
+          118.57148491083676,
+          143.36790809327846,
+          239.7785939643347
+        ]
+      },
+      "frame": "evidence/transitions/glitch_block_extreme.png"
+    },
+    {
+      "id": "glitch_block_tv",
+      "name": "Glitch Block Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286816,
+        "dark": 0,
+        "bright": 3595,
+        "total": 291600,
+        "mean": [
+          114.39120713305898,
+          138.42652606310014,
+          231.92585390946502
+        ]
+      },
+      "frame": "evidence/transitions/glitch_block_tv.png"
+    },
+    {
+      "id": "glitch_sort_mild",
+      "name": "Glitch Sort Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286501,
+        "dark": 0,
+        "bright": 5035,
+        "total": 291600,
+        "mean": [
+          117.90318587105624,
+          142.6402743484225,
+          239.6356893004115
+        ]
+      },
+      "frame": "evidence/transitions/glitch_sort_mild.png"
+    },
+    {
+      "id": "glitch_sort_medium",
+      "name": "Glitch Sort Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286643,
+        "dark": 0,
+        "bright": 4883,
+        "total": 291600,
+        "mean": [
+          117.93575445816187,
+          142.73320644718794,
+          239.66232167352538
+        ]
+      },
+      "frame": "evidence/transitions/glitch_sort_medium.png"
+    },
+    {
+      "id": "glitch_sort_heavy",
+      "name": "Glitch Sort Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287703,
+        "dark": 0,
+        "bright": 3922,
+        "total": 291600,
+        "mean": [
+          118.03616941015089,
+          142.74227709190671,
+          239.7495096021948
+        ]
+      },
+      "frame": "evidence/transitions/glitch_sort_heavy.png"
+    },
+    {
+      "id": "glitch_sort_extreme",
+      "name": "Glitch Sort Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287335,
+        "dark": 0,
+        "bright": 4264,
+        "total": 291600,
+        "mean": [
+          117.88085048010974,
+          142.88981481481483,
+          239.740744170096
+        ]
+      },
+      "frame": "evidence/transitions/glitch_sort_extreme.png"
+    },
+    {
+      "id": "glitch_sort_tv",
+      "name": "Glitch Sort Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286844,
+        "dark": 0,
+        "bright": 3537,
+        "total": 291600,
+        "mean": [
+          114.42188271604938,
+          138.480329218107,
+          231.9086145404664
+        ]
+      },
+      "frame": "evidence/transitions/glitch_sort_tv.png"
+    },
+    {
+      "id": "glitch_vhs_mild",
+      "name": "Glitch Vhs Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286785,
+        "dark": 0,
+        "bright": 4766,
+        "total": 291600,
+        "mean": [
+          118.16145404663924,
+          142.69920096021949,
+          239.67007887517147
+        ]
+      },
+      "frame": "evidence/transitions/glitch_vhs_mild.png"
+    },
+    {
+      "id": "glitch_vhs_medium",
+      "name": "Glitch Vhs Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286824,
+        "dark": 0,
+        "bright": 4818,
+        "total": 291600,
+        "mean": [
+          118.10240397805212,
+          142.83298353909464,
+          239.6576646090535
+        ]
+      },
+      "frame": "evidence/transitions/glitch_vhs_medium.png"
+    },
+    {
+      "id": "glitch_vhs_heavy",
+      "name": "Glitch Vhs Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286478,
+        "dark": 0,
+        "bright": 5100,
+        "total": 291600,
+        "mean": [
+          118.13669067215363,
+          142.71777091906722,
+          239.6922256515775
+        ]
+      },
+      "frame": "evidence/transitions/glitch_vhs_heavy.png"
+    },
+    {
+      "id": "glitch_vhs_extreme",
+      "name": "Glitch Vhs Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286851,
+        "dark": 0,
+        "bright": 4693,
+        "total": 291600,
+        "mean": [
+          117.92890946502058,
+          142.72079561042523,
+          239.714231824417
+        ]
+      },
+      "frame": "evidence/transitions/glitch_vhs_extreme.png"
+    },
+    {
+      "id": "glitch_vhs_tv",
+      "name": "Glitch Vhs Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286718,
+        "dark": 0,
+        "bright": 3636,
+        "total": 291600,
+        "mean": [
+          114.00339849108367,
+          137.86122085048012,
+          231.8007510288066
+        ]
+      },
+      "frame": "evidence/transitions/glitch_vhs_tv.png"
+    },
+    {
+      "id": "glitch_mosh_mild",
+      "name": "Glitch Mosh Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286724,
+        "dark": 0,
+        "bright": 4852,
+        "total": 291600,
+        "mean": [
+          118.14184842249657,
+          142.86970164609053,
+          239.71413237311384
+        ]
+      },
+      "frame": "evidence/transitions/glitch_mosh_mild.png"
+    },
+    {
+      "id": "glitch_mosh_medium",
+      "name": "Glitch Mosh Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 288429,
+        "dark": 0,
+        "bright": 3120,
+        "total": 291600,
+        "mean": [
+          116.78701989026064,
+          141.7477400548697,
+          239.58521262002745
+        ]
+      },
+      "frame": "evidence/transitions/glitch_mosh_medium.png"
+    },
+    {
+      "id": "glitch_mosh_heavy",
+      "name": "Glitch Mosh Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287894,
+        "dark": 0,
+        "bright": 3726,
+        "total": 291600,
+        "mean": [
+          117.45485939643348,
+          142.3200548696845,
+          239.73404663923182
+        ]
+      },
+      "frame": "evidence/transitions/glitch_mosh_heavy.png"
+    },
+    {
+      "id": "glitch_mosh_extreme",
+      "name": "Glitch Mosh Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286551,
+        "dark": 0,
+        "bright": 5083,
+        "total": 291600,
+        "mean": [
+          117.87651577503429,
+          142.8713305898491,
+          239.75718792866942
+        ]
+      },
+      "frame": "evidence/transitions/glitch_mosh_extreme.png"
+    },
+    {
+      "id": "glitch_mosh_tv",
+      "name": "Glitch Mosh Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 288343,
+        "dark": 0,
+        "bright": 2545,
+        "total": 291600,
+        "mean": [
+          113.65382716049383,
+          137.92133744855968,
+          231.92425925925926
+        ]
+      },
+      "frame": "evidence/transitions/glitch_mosh_tv.png"
+    },
+    {
+      "id": "glitch_static_mild",
+      "name": "Glitch Static Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286711,
+        "dark": 0,
+        "bright": 4786,
+        "total": 291600,
+        "mean": [
+          117.9110596707819,
+          142.4916083676269,
+          239.64144718792866
+        ]
+      },
+      "frame": "evidence/transitions/glitch_static_mild.png"
+    },
+    {
+      "id": "glitch_static_medium",
+      "name": "Glitch Static Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286787,
+        "dark": 0,
+        "bright": 4788,
+        "total": 291600,
+        "mean": [
+          117.78218106995885,
+          142.41570301783264,
+          239.6427914951989
+        ]
+      },
+      "frame": "evidence/transitions/glitch_static_medium.png"
+    },
+    {
+      "id": "glitch_static_heavy",
+      "name": "Glitch Static Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287383,
+        "dark": 0,
+        "bright": 4215,
+        "total": 291600,
+        "mean": [
+          117.90973593964334,
+          142.56215706447188,
+          239.7047462277092
+        ]
+      },
+      "frame": "evidence/transitions/glitch_static_heavy.png"
+    },
+    {
+      "id": "glitch_static_extreme",
+      "name": "Glitch Static Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284998,
+        "dark": 0,
+        "bright": 6562,
+        "total": 291600,
+        "mean": [
+          118.83798010973936,
+          143.59987311385458,
+          239.7976474622771
+        ]
+      },
+      "frame": "evidence/transitions/glitch_static_extreme.png"
+    },
+    {
+      "id": "glitch_static_tv",
+      "name": "Glitch Static Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286720,
+        "dark": 0,
+        "bright": 3619,
+        "total": 291600,
+        "mean": [
+          113.78741083676269,
+          137.6045438957476,
+          231.74132373113855
+        ]
+      },
+      "frame": "evidence/transitions/glitch_static_tv.png"
+    },
+    {
+      "id": "glitch_tear_mild",
+      "name": "Glitch Tear Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 285290,
+        "dark": 0,
+        "bright": 7294,
+        "total": 291600,
+        "mean": [
+          119.24787379972565,
+          143.53534293552812,
+          239.77245198902605
+        ]
+      },
+      "frame": "evidence/transitions/glitch_tear_mild.png"
+    },
+    {
+      "id": "glitch_tear_medium",
+      "name": "Glitch Tear Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284571,
+        "dark": 0,
+        "bright": 6913,
+        "total": 291600,
+        "mean": [
+          118.71519547325103,
+          143.0879526748971,
+          239.70777777777778
+        ]
+      },
+      "frame": "evidence/transitions/glitch_tear_medium.png"
+    },
+    {
+      "id": "glitch_tear_heavy",
+      "name": "Glitch Tear Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 283837,
+        "dark": 0,
+        "bright": 7599,
+        "total": 291600,
+        "mean": [
+          119.60289780521262,
+          143.74353566529493,
+          239.83493141289438
+        ]
+      },
+      "frame": "evidence/transitions/glitch_tear_heavy.png"
+    },
+    {
+      "id": "glitch_tear_extreme",
+      "name": "Glitch Tear Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 283598,
+        "dark": 0,
+        "bright": 7904,
+        "total": 291600,
+        "mean": [
+          119.68924554183813,
+          144.23400548696844,
+          239.8784465020576
+        ]
+      },
+      "frame": "evidence/transitions/glitch_tear_extreme.png"
+    },
+    {
+      "id": "glitch_tear_tv",
+      "name": "Glitch Tear Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284093,
+        "dark": 0,
+        "bright": 5407,
+        "total": 291600,
+        "mean": [
+          115.18248628257888,
+          138.95703360768175,
+          231.89958504801098
+        ]
+      },
+      "frame": "evidence/transitions/glitch_tear_tv.png"
+    },
+    {
+      "id": "glitch_shake_mild",
+      "name": "Glitch Shake Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284412,
+        "dark": 1080,
+        "bright": 4861,
+        "total": 291600,
+        "mean": [
+          117.4516049382716,
+          142.11094307270233,
+          237.8223353909465
+        ]
+      },
+      "frame": "evidence/transitions/glitch_shake_mild.png"
+    },
+    {
+      "id": "glitch_shake_medium",
+      "name": "Glitch Shake Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284619,
+        "dark": 1800,
+        "bright": 4767,
+        "total": 291600,
+        "mean": [
+          117.1886488340192,
+          141.79899519890262,
+          237.9164986282579
+        ]
+      },
+      "frame": "evidence/transitions/glitch_shake_medium.png"
+    },
+    {
+      "id": "glitch_shake_heavy",
+      "name": "Glitch Shake Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286552,
+        "dark": 1080,
+        "bright": 2858,
+        "total": 291600,
+        "mean": [
+          117.22694444444444,
+          140.69175582990397,
+          238.04262345679012
+        ]
+      },
+      "frame": "evidence/transitions/glitch_shake_heavy.png"
+    },
+    {
+      "id": "glitch_shake_extreme",
+      "name": "Glitch Shake Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284090,
+        "dark": 1553,
+        "bright": 4898,
+        "total": 291600,
+        "mean": [
+          118.06858024691358,
+          141.18113854595336,
+          237.78911865569273
+        ]
+      },
+      "frame": "evidence/transitions/glitch_shake_extreme.png"
+    },
+    {
+      "id": "glitch_shake_tv",
+      "name": "Glitch Shake Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 285122,
+        "dark": 720,
+        "bright": 3596,
+        "total": 291600,
+        "mean": [
+          113.70139574759945,
+          137.74389574759945,
+          230.59981138545953
+        ]
+      },
+      "frame": "evidence/transitions/glitch_shake_tv.png"
+    },
+    {
+      "id": "glitch_poster_mild",
+      "name": "Glitch Poster Mild",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286791,
+        "dark": 0,
+        "bright": 4700,
+        "total": 291600,
+        "mean": [
+          83.52104252400548,
+          127.63348765432099,
+          250.43932784636488
+        ]
+      },
+      "frame": "evidence/transitions/glitch_poster_mild.png"
+    },
+    {
+      "id": "glitch_poster_medium",
+      "name": "Glitch Poster Medium",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286718,
+        "dark": 0,
+        "bright": 4784,
+        "total": 291600,
+        "mean": [
+          83.79475651577503,
+          127.99530178326475,
+          250.43311385459535
+        ]
+      },
+      "frame": "evidence/transitions/glitch_poster_medium.png"
+    },
+    {
+      "id": "glitch_poster_heavy",
+      "name": "Glitch Poster Heavy",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286759,
+        "dark": 0,
+        "bright": 4792,
+        "total": 291600,
+        "mean": [
+          83.65209533607681,
+          127.61107338820302,
+          250.43679698216735
+        ]
+      },
+      "frame": "evidence/transitions/glitch_poster_heavy.png"
+    },
+    {
+      "id": "glitch_poster_extreme",
+      "name": "Glitch Poster Extreme",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287652,
+        "dark": 0,
+        "bright": 3932,
+        "total": 291600,
+        "mean": [
+          83.10232853223594,
+          127.52064814814815,
+          250.45383401920438
+        ]
+      },
+      "frame": "evidence/transitions/glitch_poster_extreme.png"
+    },
+    {
+      "id": "glitch_poster_tv",
+      "name": "Glitch Poster Tv-flavoured",
+      "category": "Glitch",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286776,
+        "dark": 0,
+        "bright": 3599,
+        "total": 291600,
+        "mean": [
+          80.58614540466392,
+          123.12036008230453,
+          242.11223593964334
+        ]
+      },
+      "frame": "evidence/transitions/glitch_poster_tv.png"
+    },
+    {
+      "id": "blur_cross_soft",
+      "name": "Blur Cross Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284418,
+        "dark": 4,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.99227709190671,
+          53.124821673525375,
+          130.32586419753088
+        ]
+      },
+      "frame": "evidence/transitions/blur_cross_soft.png"
+    },
+    {
+      "id": "blur_cross_medium",
+      "name": "Blur Cross Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 280860,
+        "dark": 6,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.46473936899862,
+          52.555092592592594,
+          128.74572016460905
+        ]
+      },
+      "frame": "evidence/transitions/blur_cross_medium.png"
+    },
+    {
+      "id": "blur_cross_strong",
+      "name": "Blur Cross Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 275440,
+        "dark": 14,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          72.89774691358025,
+          51.875380658436214,
+          126.90711248285322
+        ]
+      },
+      "frame": "evidence/transitions/blur_cross_strong.png"
+    },
+    {
+      "id": "blur_cross_dreamy",
+      "name": "Blur Cross Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 272888,
+        "dark": 16,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          72.54855281207134,
+          51.46674554183814,
+          125.7747085048011
+        ]
+      },
+      "frame": "evidence/transitions/blur_cross_dreamy.png"
+    },
+    {
+      "id": "blur_cross_snap",
+      "name": "Blur Cross Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 279346,
+        "dark": 8,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.33006515775034,
+          52.37036351165981,
+          128.22375171467763
+        ]
+      },
+      "frame": "evidence/transitions/blur_cross_snap.png"
+    },
+    {
+      "id": "blur_push_l_soft",
+      "name": "Blur Push Left Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 131220,
+        "blue": 160344,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.61968449931413,
+          67.4771913580247,
+          157.69374828532236
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_l_soft.png"
+    },
+    {
+      "id": "blur_push_l_medium",
+      "name": "Blur Push Left Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130452,
+        "blue": 160294,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.87413923182442,
+          67.0223182441701,
+          156.6008367626886
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_l_medium.png"
+    },
+    {
+      "id": "blur_push_l_strong",
+      "name": "Blur Push Left Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130442,
+        "blue": 160222,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.05697187928669,
+          66.53995541838134,
+          155.4378086419753
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_l_strong.png"
+    },
+    {
+      "id": "blur_push_l_dreamy",
+      "name": "Blur Push Left Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130440,
+        "blue": 160170,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          118.60084362139918,
+          66.2531207133059,
+          154.765438957476
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_l_dreamy.png"
+    },
+    {
+      "id": "blur_push_l_snap",
+      "name": "Blur Push Left Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130454,
+        "blue": 160284,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.70587791495198,
+          66.91979766803841,
+          156.3553669410151
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_l_snap.png"
+    },
+    {
+      "id": "blur_push_r_soft",
+      "name": "Blur Push Right Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130410,
+        "blue": 160372,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.95983882030178,
+          67.75801440329218,
+          158.36610082304526
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_r_soft.png"
+    },
+    {
+      "id": "blur_push_r_medium",
+      "name": "Blur Push Right Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130410,
+        "blue": 160346,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.24102880658437,
+          67.30671810699589,
+          157.27075788751714
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_r_medium.png"
+    },
+    {
+      "id": "blur_push_r_strong",
+      "name": "Blur Push Right Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129652,
+        "blue": 160294,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          118.44186556927298,
+          66.79369341563786,
+          156.0729766803841
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_r_strong.png"
+    },
+    {
+      "id": "blur_push_r_dreamy",
+      "name": "Blur Push Right Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129646,
+        "blue": 160258,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          117.98354938271605,
+          66.50564128943759,
+          155.3856172839506
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_r_dreamy.png"
+    },
+    {
+      "id": "blur_push_r_snap",
+      "name": "Blur Push Right Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129676,
+        "blue": 160336,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.06473936899863,
+          67.1964780521262,
+          157.0120061728395
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_r_snap.png"
+    },
+    {
+      "id": "blur_push_u_soft",
+      "name": "Blur Push Up Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130334,
+        "blue": 160179,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          121.87041838134431,
+          68.79987654320988,
+          158.88864197530864
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_u_soft.png"
+    },
+    {
+      "id": "blur_push_u_medium",
+      "name": "Blur Push Up Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129981,
+        "blue": 160143,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          121.35205761316872,
+          68.45026748971193,
+          158.25691015089163
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_u_medium.png"
+    },
+    {
+      "id": "blur_push_u_strong",
+      "name": "Blur Push Up Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129289,
+        "blue": 160081,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.76253772290809,
+          68.0477366255144,
+          157.53429355281207
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_u_strong.png"
+    },
+    {
+      "id": "blur_push_u_dreamy",
+      "name": "Blur Push Up Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 128945,
+        "blue": 160037,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.379890260631,
+          67.79143347050754,
+          157.0874074074074
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_u_dreamy.png"
+    },
+    {
+      "id": "blur_push_u_snap",
+      "name": "Blur Push Up Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129634,
+        "blue": 160134,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          121.22537037037037,
+          68.36536008230453,
+          158.1074245541838
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_u_snap.png"
+    },
+    {
+      "id": "blur_push_d_soft",
+      "name": "Blur Push Down Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129974,
+        "blue": 160539,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.98901577503429,
+          68.97814128943759,
+          159.6131550068587
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_d_soft.png"
+    },
+    {
+      "id": "blur_push_d_medium",
+      "name": "Blur Push Down Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129621,
+        "blue": 160503,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.56627914951989,
+          68.61073731138546,
+          158.9037551440329
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_d_medium.png"
+    },
+    {
+      "id": "blur_push_d_strong",
+      "name": "Blur Push Down Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 128929,
+        "blue": 160441,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.03796982167353,
+          68.1973559670782,
+          158.13294238683127
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_d_strong.png"
+    },
+    {
+      "id": "blur_push_d_dreamy",
+      "name": "Blur Push Down Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 128585,
+        "blue": 160397,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.67700617283951,
+          67.93784979423869,
+          157.6690329218107
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_d_dreamy.png"
+    },
+    {
+      "id": "blur_push_d_snap",
+      "name": "Blur Push Down Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129274,
+        "blue": 160494,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          120.45615912208505,
+          68.52251371742112,
+          158.74177297668038
+        ]
+      },
+      "frame": "evidence/transitions/blur_push_d_snap.png"
+    },
+    {
+      "id": "blur_zoom_in_soft",
+      "name": "Blur Zoom In Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 292,
+        "blue": 285242,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          84.06517489711935,
+          56.83393689986283,
+          135.7709293552812
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_in_soft.png"
+    },
+    {
+      "id": "blur_zoom_in_medium",
+      "name": "Blur Zoom In Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 25,
+        "blue": 287037,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          84.06831275720165,
+          56.836539780521264,
+          135.77444101508917
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_in_medium.png"
+    },
+    {
+      "id": "blur_zoom_in_strong",
+      "name": "Blur Zoom In Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 289262,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          84.07282578875171,
+          56.84185871056241,
+          135.77751371742113
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_in_strong.png"
+    },
+    {
+      "id": "blur_zoom_in_dreamy",
+      "name": "Blur Zoom In Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 290786,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          84.0760048010974,
+          56.845840192043894,
+          135.7791975308642
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_in_dreamy.png"
+    },
+    {
+      "id": "blur_zoom_in_snap",
+      "name": "Blur Zoom In Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287610,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          84.07106652949246,
+          56.839358710562415,
+          135.77650891632373
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_in_snap.png"
+    },
+    {
+      "id": "blur_zoom_out_soft",
+      "name": "Blur Zoom Out Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 1018,
+        "blue": 287004,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          83.23880315500686,
+          55.98440329218107,
+          135.47148834019205
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_out_soft.png"
+    },
+    {
+      "id": "blur_zoom_out_medium",
+      "name": "Blur Zoom Out Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 176,
+        "blue": 288131,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          83.23893689986282,
+          55.98699588477366,
+          135.47451303155006
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_out_medium.png"
+    },
+    {
+      "id": "blur_zoom_out_strong",
+      "name": "Blur Zoom Out Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 289876,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          83.24241769547325,
+          55.99099108367627,
+          135.47749657064472
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_out_strong.png"
+    },
+    {
+      "id": "blur_zoom_out_dreamy",
+      "name": "Blur Zoom Out Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 290824,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          83.24467421124828,
+          55.994393004115224,
+          135.4713340192044
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_out_dreamy.png"
+    },
+    {
+      "id": "blur_zoom_out_snap",
+      "name": "Blur Zoom Out Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 38,
+        "blue": 288580,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          83.24026406035665,
+          55.98752400548697,
+          135.4745644718793
+        ]
+      },
+      "frame": "evidence/transitions/blur_zoom_out_snap.png"
+    },
+    {
+      "id": "blur_spin_soft",
+      "name": "Blur Radial Spin Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 17441,
+        "blue": 265364,
+        "dark": 716,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.4766255144033,
+          51.45133401920439,
+          125.08807270233196
+        ]
+      },
+      "frame": "evidence/transitions/blur_spin_soft.png"
+    },
+    {
+      "id": "blur_spin_medium",
+      "name": "Blur Radial Spin Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 16656,
+        "blue": 266327,
+        "dark": 483,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.33473251028806,
+          51.357914951989024,
+          124.84941015089163
+        ]
+      },
+      "frame": "evidence/transitions/blur_spin_medium.png"
+    },
+    {
+      "id": "blur_spin_strong",
+      "name": "Blur Radial Spin Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 15719,
+        "blue": 265081,
+        "dark": 270,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.14219478737998,
+          51.2032853223594,
+          124.43721536351165
+        ]
+      },
+      "frame": "evidence/transitions/blur_spin_strong.png"
+    },
+    {
+      "id": "blur_spin_dreamy",
+      "name": "Blur Radial Spin Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 15143,
+        "blue": 263687,
+        "dark": 169,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.00890260631002,
+          51.083906035665294,
+          124.11909122085048
+        ]
+      },
+      "frame": "evidence/transitions/blur_spin_dreamy.png"
+    },
+    {
+      "id": "blur_spin_snap",
+      "name": "Blur Radial Spin Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 16448,
+        "blue": 266374,
+        "dark": 420,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          73.28055212620028,
+          51.315469821673524,
+          124.73479766803841
+        ]
+      },
+      "frame": "evidence/transitions/blur_spin_snap.png"
+    },
+    {
+      "id": "blur_whip_soft",
+      "name": "Blur Whip Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130458,
+        "blue": 160302,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          119.98752400548697,
+          67.09782235939643,
+          156.76402263374484
+        ]
+      },
+      "frame": "evidence/transitions/blur_whip_soft.png"
+    },
+    {
+      "id": "blur_whip_medium",
+      "name": "Blur Whip Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130440,
+        "blue": 160200,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          118.80200274348422,
+          66.37651920438958,
+          155.07599108367626
+        ]
+      },
+      "frame": "evidence/transitions/blur_whip_medium.png"
+    },
+    {
+      "id": "blur_whip_strong",
+      "name": "Blur Whip Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129710,
+        "blue": 160016,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          117.42635802469135,
+          65.55369341563787,
+          153.11878943758575
+        ]
+      },
+      "frame": "evidence/transitions/blur_whip_strong.png"
+    },
+    {
+      "id": "blur_whip_dreamy",
+      "name": "Blur Whip Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129696,
+        "blue": 159892,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          116.63906378600824,
+          65.06486282578875,
+          152.01399519890262
+        ]
+      },
+      "frame": "evidence/transitions/blur_whip_dreamy.png"
+    },
+    {
+      "id": "blur_whip_snap",
+      "name": "Blur Whip Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 130438,
+        "blue": 160156,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          118.47334019204389,
+          66.18920096021948,
+          154.60550754458163
+        ]
+      },
+      "frame": "evidence/transitions/blur_whip_snap.png"
+    },
+    {
+      "id": "blur_tilt_soft",
+      "name": "Blur Tilt Shift Soft",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 72169,
+        "blue": 201433,
+        "dark": 0,
+        "bright": 3994,
+        "total": 291600,
+        "mean": [
+          92.57725308641976,
+          74.37475308641976,
+          183.50338477366256
+        ]
+      },
+      "frame": "evidence/transitions/blur_tilt_soft.png"
+    },
+    {
+      "id": "blur_tilt_medium",
+      "name": "Blur Tilt Shift Medium",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 71630,
+        "blue": 201947,
+        "dark": 0,
+        "bright": 3454,
+        "total": 291600,
+        "mean": [
+          91.70502743484225,
+          74.57834362139917,
+          184.2349794238683
+        ]
+      },
+      "frame": "evidence/transitions/blur_tilt_medium.png"
+    },
+    {
+      "id": "blur_tilt_strong",
+      "name": "Blur Tilt Shift Strong",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 70220,
+        "blue": 202888,
+        "dark": 0,
+        "bright": 3058,
+        "total": 291600,
+        "mean": [
+          90.76592592592593,
+          74.80144375857338,
+          185.0428463648834
+        ]
+      },
+      "frame": "evidence/transitions/blur_tilt_strong.png"
+    },
+    {
+      "id": "blur_tilt_dreamy",
+      "name": "Blur Tilt Shift Dreamy long-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 69544,
+        "blue": 203287,
+        "dark": 0,
+        "bright": 2917,
+        "total": 291600,
+        "mean": [
+          90.2350891632373,
+          74.92956447187929,
+          185.47889574759944
+        ]
+      },
+      "frame": "evidence/transitions/blur_tilt_dreamy.png"
+    },
+    {
+      "id": "blur_tilt_snap",
+      "name": "Blur Tilt Shift Snap fast-ease",
+      "category": "Blur",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 71262,
+        "blue": 202070,
+        "dark": 0,
+        "bright": 3345,
+        "total": 291600,
+        "mean": [
+          91.49622085048011,
+          74.63157750342936,
+          184.4088100137174
+        ]
+      },
+      "frame": "evidence/transitions/blur_tilt_snap.png"
+    },
+    {
+      "id": "dissolve_cross_linear",
+      "name": "Dissolve Cross Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 371,
+        "blue": 286624,
+        "dark": 0,
+        "bright": 4183,
+        "total": 291600,
+        "mean": [
+          129.8925,
+          64.84212962962962,
+          151.51659807956105
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_cross_linear.png"
+    },
+    {
+      "id": "dissolve_cross_smooth",
+      "name": "Dissolve Cross Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 371,
+        "blue": 286624,
+        "dark": 0,
+        "bright": 4183,
+        "total": 291600,
+        "mean": [
+          129.8925,
+          64.84212962962962,
+          151.51659807956105
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_cross_smooth.png"
+    },
+    {
+      "id": "dissolve_cross_fast",
+      "name": "Dissolve Cross Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 371,
+        "blue": 286624,
+        "dark": 0,
+        "bright": 4183,
+        "total": 291600,
+        "mean": [
+          129.8925,
+          64.84212962962962,
+          151.51659807956105
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_cross_fast.png"
+    },
+    {
+      "id": "dissolve_cross_slow",
+      "name": "Dissolve Cross Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 371,
+        "blue": 286624,
+        "dark": 0,
+        "bright": 4183,
+        "total": 291600,
+        "mean": [
+          129.8925,
+          64.84212962962962,
+          151.51659807956105
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_cross_slow.png"
+    },
+    {
+      "id": "dissolve_cross_radial",
+      "name": "Dissolve Cross Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 371,
+        "blue": 286624,
+        "dark": 0,
+        "bright": 4183,
+        "total": 291600,
+        "mean": [
+          129.8925,
+          64.84212962962962,
+          151.51659807956105
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_cross_radial.png"
+    },
+    {
+      "id": "dissolve_film_linear",
+      "name": "Dissolve Film Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 350,
+        "blue": 287003,
+        "dark": 0,
+        "bright": 4179,
+        "total": 291600,
+        "mean": [
+          103.2868244170096,
+          70.76133058984911,
+          174.20200274348423
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_film_linear.png"
+    },
+    {
+      "id": "dissolve_film_smooth",
+      "name": "Dissolve Film Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 350,
+        "blue": 287003,
+        "dark": 0,
+        "bright": 4179,
+        "total": 291600,
+        "mean": [
+          103.28692729766804,
+          70.7614609053498,
+          174.20204732510288
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_film_smooth.png"
+    },
+    {
+      "id": "dissolve_film_fast",
+      "name": "Dissolve Film Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 350,
+        "blue": 287003,
+        "dark": 0,
+        "bright": 4179,
+        "total": 291600,
+        "mean": [
+          103.286951303155,
+          70.76148148148148,
+          174.20205075445816
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_film_fast.png"
+    },
+    {
+      "id": "dissolve_film_slow",
+      "name": "Dissolve Film Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 350,
+        "blue": 287003,
+        "dark": 0,
+        "bright": 4179,
+        "total": 291600,
+        "mean": [
+          103.28690329218107,
+          70.7614231824417,
+          174.20203703703703
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_film_slow.png"
+    },
+    {
+      "id": "dissolve_film_radial",
+      "name": "Dissolve Film Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 350,
+        "blue": 287003,
+        "dark": 0,
+        "bright": 4179,
+        "total": 291600,
+        "mean": [
+          103.28695816186557,
+          70.76148834019205,
+          174.20205075445816
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_film_radial.png"
+    },
+    {
+      "id": "dissolve_additive_linear",
+      "name": "Dissolve Additive Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286802,
+        "dark": 0,
+        "bright": 4781,
+        "total": 291600,
+        "mean": [
+          147.83714334705076,
+          107.56525034293553,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_additive_linear.png"
+    },
+    {
+      "id": "dissolve_additive_smooth",
+      "name": "Dissolve Additive Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286802,
+        "dark": 0,
+        "bright": 4781,
+        "total": 291600,
+        "mean": [
+          147.83714334705076,
+          107.56525034293553,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_additive_smooth.png"
+    },
+    {
+      "id": "dissolve_additive_fast",
+      "name": "Dissolve Additive Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286802,
+        "dark": 0,
+        "bright": 4781,
+        "total": 291600,
+        "mean": [
+          147.83714334705076,
+          107.56525034293553,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_additive_fast.png"
+    },
+    {
+      "id": "dissolve_additive_slow",
+      "name": "Dissolve Additive Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286802,
+        "dark": 0,
+        "bright": 4781,
+        "total": 291600,
+        "mean": [
+          147.83714334705076,
+          107.56525034293553,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_additive_slow.png"
+    },
+    {
+      "id": "dissolve_additive_radial",
+      "name": "Dissolve Additive Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286802,
+        "dark": 0,
+        "bright": 4781,
+        "total": 291600,
+        "mean": [
+          147.83714334705076,
+          107.56525034293553,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_additive_radial.png"
+    },
+    {
+      "id": "dissolve_subtract_linear",
+      "name": "Dissolve Subtractive Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286874,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.2694170096022,
+          68.06697873799726,
+          194.04060356652948
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_subtract_linear.png"
+    },
+    {
+      "id": "dissolve_subtract_smooth",
+      "name": "Dissolve Subtractive Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286874,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.2694170096022,
+          68.06697873799726,
+          194.04060356652948
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_subtract_smooth.png"
+    },
+    {
+      "id": "dissolve_subtract_fast",
+      "name": "Dissolve Subtractive Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286874,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.2694170096022,
+          68.06697873799726,
+          194.04060356652948
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_subtract_fast.png"
+    },
+    {
+      "id": "dissolve_subtract_slow",
+      "name": "Dissolve Subtractive Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286874,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.2694170096022,
+          68.06697873799726,
+          194.04060356652948
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_subtract_slow.png"
+    },
+    {
+      "id": "dissolve_subtract_radial",
+      "name": "Dissolve Subtractive Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286874,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.2694170096022,
+          68.06697873799726,
+          194.04060356652948
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_subtract_radial.png"
+    },
+    {
+      "id": "dissolve_dip_black_linear",
+      "name": "Dissolve Dip Black Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_black_linear.png"
+    },
+    {
+      "id": "dissolve_dip_black_smooth",
+      "name": "Dissolve Dip Black Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_black_smooth.png"
+    },
+    {
+      "id": "dissolve_dip_black_fast",
+      "name": "Dissolve Dip Black Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_black_fast.png"
+    },
+    {
+      "id": "dissolve_dip_black_slow",
+      "name": "Dissolve Dip Black Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_black_slow.png"
+    },
+    {
+      "id": "dissolve_dip_black_radial",
+      "name": "Dissolve Dip Black Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_black_radial.png"
+    },
+    {
+      "id": "dissolve_dip_white_linear",
+      "name": "Dissolve Dip White Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          255,
+          255,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_white_linear.png"
+    },
+    {
+      "id": "dissolve_dip_white_smooth",
+      "name": "Dissolve Dip White Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          255,
+          255,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_white_smooth.png"
+    },
+    {
+      "id": "dissolve_dip_white_fast",
+      "name": "Dissolve Dip White Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          255,
+          255,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_white_fast.png"
+    },
+    {
+      "id": "dissolve_dip_white_slow",
+      "name": "Dissolve Dip White Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          255,
+          255,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_white_slow.png"
+    },
+    {
+      "id": "dissolve_dip_white_radial",
+      "name": "Dissolve Dip White Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          255,
+          255,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_white_radial.png"
+    },
+    {
+      "id": "dissolve_dip_color_linear",
+      "name": "Dissolve Dip Color Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          69,
+          31,
+          122
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_color_linear.png"
+    },
+    {
+      "id": "dissolve_dip_color_smooth",
+      "name": "Dissolve Dip Color Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          69,
+          31,
+          122
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_color_smooth.png"
+    },
+    {
+      "id": "dissolve_dip_color_fast",
+      "name": "Dissolve Dip Color Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          69,
+          31,
+          122
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_color_fast.png"
+    },
+    {
+      "id": "dissolve_dip_color_slow",
+      "name": "Dissolve Dip Color Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          69,
+          31,
+          122
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_color_slow.png"
+    },
+    {
+      "id": "dissolve_dip_color_radial",
+      "name": "Dissolve Dip Color Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          69,
+          31,
+          122
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dip_color_radial.png"
+    },
+    {
+      "id": "dissolve_gamma_linear",
+      "name": "Dissolve Gamma Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287183,
+        "blue": 197,
+        "dark": 0,
+        "bright": 4182,
+        "total": 291600,
+        "mean": [
+          162.40197530864197,
+          55.95456790123457,
+          121.97033264746227
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_gamma_linear.png"
+    },
+    {
+      "id": "dissolve_gamma_smooth",
+      "name": "Dissolve Gamma Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287183,
+        "blue": 197,
+        "dark": 0,
+        "bright": 4182,
+        "total": 291600,
+        "mean": [
+          162.40197530864197,
+          55.95456790123457,
+          121.97033264746227
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_gamma_smooth.png"
+    },
+    {
+      "id": "dissolve_gamma_fast",
+      "name": "Dissolve Gamma Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287183,
+        "blue": 197,
+        "dark": 0,
+        "bright": 4182,
+        "total": 291600,
+        "mean": [
+          162.40197530864197,
+          55.95456790123457,
+          121.97033264746227
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_gamma_fast.png"
+    },
+    {
+      "id": "dissolve_gamma_slow",
+      "name": "Dissolve Gamma Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287183,
+        "blue": 197,
+        "dark": 0,
+        "bright": 4182,
+        "total": 291600,
+        "mean": [
+          162.40197530864197,
+          55.95456790123457,
+          121.97033264746227
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_gamma_slow.png"
+    },
+    {
+      "id": "dissolve_gamma_radial",
+      "name": "Dissolve Gamma Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287183,
+        "blue": 197,
+        "dark": 0,
+        "bright": 4182,
+        "total": 291600,
+        "mean": [
+          162.40197530864197,
+          55.95456790123457,
+          121.97033264746227
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_gamma_radial.png"
+    },
+    {
+      "id": "dissolve_luma_linear",
+      "name": "Dissolve Luma Gradient Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 135992,
+        "blue": 143655,
+        "dark": 0,
+        "bright": 4424,
+        "total": 291600,
+        "mean": [
+          129.92263374485597,
+          64.76290466392318,
+          150.93453017832647
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_luma_linear.png"
+    },
+    {
+      "id": "dissolve_luma_smooth",
+      "name": "Dissolve Luma Gradient Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 135992,
+        "blue": 143655,
+        "dark": 0,
+        "bright": 4424,
+        "total": 291600,
+        "mean": [
+          129.92263374485597,
+          64.76290466392318,
+          150.93453017832647
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_luma_smooth.png"
+    },
+    {
+      "id": "dissolve_luma_fast",
+      "name": "Dissolve Luma Gradient Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 135992,
+        "blue": 143655,
+        "dark": 0,
+        "bright": 4424,
+        "total": 291600,
+        "mean": [
+          129.92263374485597,
+          64.76290466392318,
+          150.93453017832647
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_luma_fast.png"
+    },
+    {
+      "id": "dissolve_luma_slow",
+      "name": "Dissolve Luma Gradient Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 135992,
+        "blue": 143655,
+        "dark": 0,
+        "bright": 4424,
+        "total": 291600,
+        "mean": [
+          129.92263374485597,
+          64.76290466392318,
+          150.93453017832647
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_luma_slow.png"
+    },
+    {
+      "id": "dissolve_luma_radial",
+      "name": "Dissolve Luma Gradient Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 172666,
+        "blue": 114282,
+        "dark": 0,
+        "bright": 4323,
+        "total": 291600,
+        "mean": [
+          148.43040809327846,
+          59.94679698216735,
+          134.7617729766804
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_luma_radial.png"
+    },
+    {
+      "id": "dissolve_dither_linear",
+      "name": "Dissolve Noise Dither Linear ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 141336,
+        "blue": 145916,
+        "dark": 0,
+        "bright": 4425,
+        "total": 291600,
+        "mean": [
+          128.45204732510288,
+          65.24912551440329,
+          152.32280178326474
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dither_linear.png"
+    },
+    {
+      "id": "dissolve_dither_smooth",
+      "name": "Dissolve Noise Dither Smooth ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143855,
+        "blue": 143358,
+        "dark": 0,
+        "bright": 4475,
+        "total": 291600,
+        "mean": [
+          130.0735425240055,
+          64.86746913580247,
+          150.94327503429355
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dither_smooth.png"
+    },
+    {
+      "id": "dissolve_dither_fast",
+      "name": "Dissolve Noise Dither Fast ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 141696,
+        "blue": 145537,
+        "dark": 0,
+        "bright": 4455,
+        "total": 291600,
+        "mean": [
+          128.68628943758574,
+          65.21761316872428,
+          152.14551783264747
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dither_fast.png"
+    },
+    {
+      "id": "dissolve_dither_slow",
+      "name": "Dissolve Noise Dither Slow ease",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143576,
+        "blue": 143812,
+        "dark": 0,
+        "bright": 4309,
+        "total": 291600,
+        "mean": [
+          129.76752400548696,
+          64.8263683127572,
+          151.09566529492454
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dither_slow.png"
+    },
+    {
+      "id": "dissolve_dither_radial",
+      "name": "Dissolve Noise Dither Radial shape",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 144052,
+        "blue": 143242,
+        "dark": 0,
+        "bright": 4401,
+        "total": 291600,
+        "mean": [
+          130.128268175583,
+          64.79741426611797,
+          150.84210562414265
+        ]
+      },
+      "frame": "evidence/transitions/dissolve_dither_radial.png"
+    },
+    {
+      "id": "light_leak_l_warm",
+      "name": "Light Leak Left Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 196400,
+        "blue": 209,
+        "dark": 0,
+        "bright": 4415,
+        "total": 291600,
+        "mean": [
+          183.81965020576132,
+          122.91781207133059,
+          164.07769204389575
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_l_warm.png"
+    },
+    {
+      "id": "light_leak_l_gold",
+      "name": "Light Leak Left Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 196308,
+        "blue": 209,
+        "dark": 0,
+        "bright": 4423,
+        "total": 291600,
+        "mean": [
+          183.81965020576132,
+          137.25409465020576,
+          164.07769204389575
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_l_gold.png"
+    },
+    {
+      "id": "light_leak_l_magenta",
+      "name": "Light Leak Left Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 27979,
+        "blue": 1528,
+        "dark": 0,
+        "bright": 4265,
+        "total": 291600,
+        "mean": [
+          183.81965020576132,
+          89.47078875171468,
+          185.07379972565158
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_l_magenta.png"
+    },
+    {
+      "id": "light_leak_l_cyan",
+      "name": "Light Leak Left Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 333,
+        "blue": 286888,
+        "dark": 0,
+        "bright": 4395,
+        "total": 291600,
+        "mean": [
+          146.09725651577503,
+          137.2540843621399,
+          195.57207475994514
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_l_cyan.png"
+    },
+    {
+      "id": "light_leak_l_cool",
+      "name": "Light Leak Left Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 333,
+        "blue": 286888,
+        "dark": 0,
+        "bright": 4388,
+        "total": 291600,
+        "mean": [
+          146.09725651577503,
+          113.36231138545953,
+          195.57207475994514
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_l_cool.png"
+    },
+    {
+      "id": "light_leak_r_warm",
+      "name": "Light Leak Right Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 196063,
+        "blue": 38,
+        "dark": 0,
+        "bright": 4574,
+        "total": 291600,
+        "mean": [
+          183.78169410150892,
+          122.90330246913581,
+          164.09406035665296
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_r_warm.png"
+    },
+    {
+      "id": "light_leak_r_gold",
+      "name": "Light Leak Right Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 195763,
+        "blue": 38,
+        "dark": 0,
+        "bright": 4609,
+        "total": 291600,
+        "mean": [
+          183.78169410150892,
+          137.22195473251028,
+          164.09406035665296
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_r_gold.png"
+    },
+    {
+      "id": "light_leak_r_magenta",
+      "name": "Light Leak Right Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 28082,
+        "blue": 1461,
+        "dark": 0,
+        "bright": 4221,
+        "total": 291600,
+        "mean": [
+          183.78169410150892,
+          89.49874485596708,
+          185.06949588477366
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_r_magenta.png"
+    },
+    {
+      "id": "light_leak_r_cyan",
+      "name": "Light Leak Right Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286889,
+        "dark": 0,
+        "bright": 4743,
+        "total": 291600,
+        "mean": [
+          146.10982510288065,
+          137.22194444444443,
+          195.5541769547325
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_r_cyan.png"
+    },
+    {
+      "id": "light_leak_r_cool",
+      "name": "Light Leak Right Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286889,
+        "dark": 0,
+        "bright": 4378,
+        "total": 291600,
+        "mean": [
+          146.10982510288065,
+          113.35923182441701,
+          195.5541769547325
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_r_cool.png"
+    },
+    {
+      "id": "light_leak_top_warm",
+      "name": "Light Leak Top Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 179829,
+        "blue": 119,
+        "dark": 0,
+        "bright": 4402,
+        "total": 291600,
+        "mean": [
+          182.4512962962963,
+          121.32342249657064,
+          163.5682853223594
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_top_warm.png"
+    },
+    {
+      "id": "light_leak_top_gold",
+      "name": "Light Leak Top Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 179777,
+        "blue": 119,
+        "dark": 0,
+        "bright": 4553,
+        "total": 291600,
+        "mean": [
+          182.4512962962963,
+          135.37216735253773,
+          163.5682853223594
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_top_gold.png"
+    },
+    {
+      "id": "light_leak_top_magenta",
+      "name": "Light Leak Top Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 28472,
+        "blue": 184,
+        "dark": 0,
+        "bright": 4239,
+        "total": 291600,
+        "mean": [
+          182.4512962962963,
+          88.5434293552812,
+          184.1477914951989
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_top_magenta.png"
+    },
+    {
+      "id": "light_leak_top_cyan",
+      "name": "Light Leak Top Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 267,
+        "blue": 286894,
+        "dark": 0,
+        "bright": 4390,
+        "total": 291600,
+        "mean": [
+          145.48491769547326,
+          135.3721536351166,
+          194.43712277091907
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_top_cyan.png"
+    },
+    {
+      "id": "light_leak_top_cool",
+      "name": "Light Leak Top Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 267,
+        "blue": 286894,
+        "dark": 0,
+        "bright": 4378,
+        "total": 291600,
+        "mean": [
+          145.48491769547326,
+          111.95805898491083,
+          194.43712277091907
+        ]
+      },
+      "frame": "evidence/transitions/light_leak_top_cool.png"
+    },
+    {
+      "id": "light_flash_white_warm",
+      "name": "Light Flash White Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          250.08081618655692,
+          247.12791495198903,
+          251.06308299039782
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_white_warm.png"
+    },
+    {
+      "id": "light_flash_white_gold",
+      "name": "Light Flash White Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          250.08081618655692,
+          247.12791495198903,
+          251.06308299039782
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_white_gold.png"
+    },
+    {
+      "id": "light_flash_white_magenta",
+      "name": "Light Flash White Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          250.08081618655692,
+          247.12791495198903,
+          251.06308299039782
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_white_magenta.png"
+    },
+    {
+      "id": "light_flash_white_cyan",
+      "name": "Light Flash White Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          250.08081618655692,
+          247.12791495198903,
+          251.06308299039782
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_white_cyan.png"
+    },
+    {
+      "id": "light_flash_white_cool",
+      "name": "Light Flash White Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          250.08081618655692,
+          247.12791495198903,
+          251.06308299039782
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_white_cool.png"
+    },
+    {
+      "id": "light_flash_color_warm",
+      "name": "Light Flash Color Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 291600,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          238.17817901234568,
+          177.28699931412893,
+          112.15565500685871
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_color_warm.png"
+    },
+    {
+      "id": "light_flash_color_gold",
+      "name": "Light Flash Color Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 291427,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          238.17817901234568,
+          209.28699931412893,
+          112.15565500685871
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_color_gold.png"
+    },
+    {
+      "id": "light_flash_color_magenta",
+      "name": "Light Flash Color Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 291600,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          238.17817901234568,
+          103.28699931412895,
+          197.15565500685872
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_color_magenta.png"
+    },
+    {
+      "id": "light_flash_color_cyan",
+      "name": "Light Flash Color Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.17817901234568,
+          209.28699931412893,
+          240.15565500685872
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_color_cyan.png"
+    },
+    {
+      "id": "light_flash_color_cool",
+      "name": "Light Flash Color Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 291600,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          110.17817901234568,
+          157.28699931412893,
+          240.15565500685872
+        ]
+      },
+      "frame": "evidence/transitions/light_flash_color_cool.png"
+    },
+    {
+      "id": "light_flare_ana_warm",
+      "name": "Light Anamorphic Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 8607,
+        "blue": 218024,
+        "dark": 0,
+        "bright": 5156,
+        "total": 291600,
+        "mean": [
+          137.69364197530865,
+          75.2892695473251,
+          155.17320644718794
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ana_warm.png"
+    },
+    {
+      "id": "light_flare_ana_gold",
+      "name": "Light Anamorphic Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 6201,
+        "blue": 218024,
+        "dark": 0,
+        "bright": 5479,
+        "total": 291600,
+        "mean": [
+          137.69364197530865,
+          76.14401234567902,
+          155.17320644718794
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ana_gold.png"
+    },
+    {
+      "id": "light_flare_ana_magenta",
+      "name": "Light Anamorphic Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 609,
+        "blue": 221334,
+        "dark": 0,
+        "bright": 4522,
+        "total": 291600,
+        "mean": [
+          137.69364197530865,
+          73.26607338820301,
+          156.447829218107
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ana_magenta.png"
+    },
+    {
+      "id": "light_flare_ana_cyan",
+      "name": "Light Anamorphic Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 293,
+        "blue": 286567,
+        "dark": 0,
+        "bright": 5093,
+        "total": 291600,
+        "mean": [
+          135.42980795610424,
+          76.14401234567902,
+          157.0742661179698
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ana_cyan.png"
+    },
+    {
+      "id": "light_flare_ana_cool",
+      "name": "Light Anamorphic Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 295,
+        "blue": 286567,
+        "dark": 0,
+        "bright": 4889,
+        "total": 291600,
+        "mean": [
+          135.42980795610424,
+          74.71612139917696,
+          157.0742661179698
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ana_cool.png"
+    },
+    {
+      "id": "light_flare_star_warm",
+      "name": "Light Starburst Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 3679,
+        "blue": 175437,
+        "dark": 0,
+        "bright": 5459,
+        "total": 291600,
+        "mean": [
+          140.35846021947873,
+          79.47084362139918,
+          157.5739231824417
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_star_warm.png"
+    },
+    {
+      "id": "light_flare_star_gold",
+      "name": "Light Starburst Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 1897,
+        "blue": 175437,
+        "dark": 0,
+        "bright": 5976,
+        "total": 291600,
+        "mean": [
+          140.35846021947873,
+          80.24864540466392,
+          157.5739231824417
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_star_gold.png"
+    },
+    {
+      "id": "light_flare_star_magenta",
+      "name": "Light Starburst Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 369,
+        "blue": 180364,
+        "dark": 0,
+        "bright": 4650,
+        "total": 291600,
+        "mean": [
+          140.35846021947873,
+          77.64706790123456,
+          158.72084362139918
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_star_magenta.png"
+    },
+    {
+      "id": "light_flare_star_cyan",
+      "name": "Light Starburst Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 350,
+        "blue": 286304,
+        "dark": 0,
+        "bright": 5524,
+        "total": 291600,
+        "mean": [
+          138.30650205761316,
+          80.24864540466392,
+          159.2938545953361
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_star_cyan.png"
+    },
+    {
+      "id": "light_flare_star_cool",
+      "name": "Light Starburst Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 352,
+        "blue": 286304,
+        "dark": 0,
+        "bright": 5136,
+        "total": 291600,
+        "mean": [
+          138.30650205761316,
+          78.9566426611797,
+          159.2938545953361
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_star_cool.png"
+    },
+    {
+      "id": "light_flare_ghost_warm",
+      "name": "Light Ghosting Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 625,
+        "blue": 270915,
+        "dark": 0,
+        "bright": 4188,
+        "total": 291600,
+        "mean": [
+          130.8514986282579,
+          66.9460219478738,
+          151.17831618655694
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ghost_warm.png"
+    },
+    {
+      "id": "light_flare_ghost_gold",
+      "name": "Light Ghosting Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 562,
+        "blue": 272622,
+        "dark": 0,
+        "bright": 4188,
+        "total": 291600,
+        "mean": [
+          130.72091906721536,
+          66.71915637860083,
+          151.14351165980796
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ghost_gold.png"
+    },
+    {
+      "id": "light_flare_ghost_magenta",
+      "name": "Light Ghosting Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 596,
+        "blue": 264737,
+        "dark": 0,
+        "bright": 4186,
+        "total": 291600,
+        "mean": [
+          130.88281893004114,
+          65.96810699588477,
+          150.9758950617284
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ghost_magenta.png"
+    },
+    {
+      "id": "light_flare_ghost_cyan",
+      "name": "Light Ghosting Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 372,
+        "blue": 279489,
+        "dark": 0,
+        "bright": 4186,
+        "total": 291600,
+        "mean": [
+          130.77660150891631,
+          65.95762345679012,
+          151.6630624142661
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ghost_cyan.png"
+    },
+    {
+      "id": "light_flare_ghost_cool",
+      "name": "Light Ghosting Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 372,
+        "blue": 273116,
+        "dark": 0,
+        "bright": 4186,
+        "total": 291600,
+        "mean": [
+          131.0829561042524,
+          66.1104938271605,
+          151.8198765432099
+        ]
+      },
+      "frame": "evidence/transitions/light_flare_ghost_cool.png"
+    },
+    {
+      "id": "light_bokeh_warm",
+      "name": "Light Bokeh Burst Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 419,
+        "blue": 238217,
+        "dark": 0,
+        "bright": 4191,
+        "total": 291600,
+        "mean": [
+          133.56155349794238,
+          69.33241083676269,
+          152.1016049382716
+        ]
+      },
+      "frame": "evidence/transitions/light_bokeh_warm.png"
+    },
+    {
+      "id": "light_bokeh_gold",
+      "name": "Light Bokeh Burst Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 1432,
+        "blue": 221365,
+        "dark": 0,
+        "bright": 4184,
+        "total": 291600,
+        "mean": [
+          134.67668381344308,
+          71.80565500685871,
+          152.59002057613168
+        ]
+      },
+      "frame": "evidence/transitions/light_bokeh_gold.png"
+    },
+    {
+      "id": "light_bokeh_magenta",
+      "name": "Light Bokeh Burst Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 372,
+        "blue": 229460,
+        "dark": 0,
+        "bright": 4184,
+        "total": 291600,
+        "mean": [
+          134.69863511659807,
+          68.52464677640603,
+          154.12417695473252
+        ]
+      },
+      "frame": "evidence/transitions/light_bokeh_magenta.png"
+    },
+    {
+      "id": "light_bokeh_cyan",
+      "name": "Light Bokeh Burst Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 368,
+        "blue": 286646,
+        "dark": 0,
+        "bright": 4185,
+        "total": 291600,
+        "mean": [
+          132.48708504801098,
+          72.00705418381344,
+          154.84481824417009
+        ]
+      },
+      "frame": "evidence/transitions/light_bokeh_cyan.png"
+    },
+    {
+      "id": "light_bokeh_cool",
+      "name": "Light Bokeh Burst Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 371,
+        "blue": 286677,
+        "dark": 0,
+        "bright": 4187,
+        "total": 291600,
+        "mean": [
+          132.87872770919068,
+          70.4733024691358,
+          155.47891975308642
+        ]
+      },
+      "frame": "evidence/transitions/light_bokeh_cool.png"
+    },
+    {
+      "id": "light_filmburn_warm",
+      "name": "Light Film Burn Warm",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 233491,
+        "blue": 149,
+        "dark": 0,
+        "bright": 4227,
+        "total": 291600,
+        "mean": [
+          191.94818587105624,
+          115.1336145404664,
+          160.9638888888889
+        ]
+      },
+      "frame": "evidence/transitions/light_filmburn_warm.png"
+    },
+    {
+      "id": "light_filmburn_gold",
+      "name": "Light Film Burn Gold",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 233378,
+        "blue": 149,
+        "dark": 0,
+        "bright": 4386,
+        "total": 291600,
+        "mean": [
+          191.94818587105624,
+          133.9747085048011,
+          160.9638888888889
+        ]
+      },
+      "frame": "evidence/transitions/light_filmburn_gold.png"
+    },
+    {
+      "id": "light_filmburn_magenta",
+      "name": "Light Film Burn Magenta",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 20350,
+        "blue": 194,
+        "dark": 0,
+        "bright": 4195,
+        "total": 291600,
+        "mean": [
+          191.94818587105624,
+          83.80026063100136,
+          195.5001440329218
+        ]
+      },
+      "frame": "evidence/transitions/light_filmburn_magenta.png"
+    },
+    {
+      "id": "light_filmburn_cyan",
+      "name": "Light Film Burn Cyan",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 288,
+        "blue": 286906,
+        "dark": 0,
+        "bright": 4376,
+        "total": 291600,
+        "mean": [
+          142.36871056241426,
+          155.0268587105624,
+          200.05043209876544
+        ]
+      },
+      "frame": "evidence/transitions/light_filmburn_cyan.png"
+    },
+    {
+      "id": "light_filmburn_cool",
+      "name": "Light Film Burn Cool",
+      "category": "Light",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 110,
+        "blue": 286991,
+        "dark": 0,
+        "bright": 4364,
+        "total": 291600,
+        "mean": [
+          142.36871056241426,
+          127.83479080932784,
+          202.36298010973937
+        ]
+      },
+      "frame": "evidence/transitions/light_filmburn_cool.png"
+    },
+    {
+      "id": "flicker_film_subtle",
+      "name": "Flicker Film Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287246,
+        "dark": 0,
+        "bright": 4449,
+        "total": 291600,
+        "mean": [
+          58.95991769547325,
+          103.3087037037037,
+          232.33965020576133
+        ]
+      },
+      "frame": "evidence/transitions/flicker_film_subtle.png"
+    },
+    {
+      "id": "flicker_film_classic",
+      "name": "Flicker Film Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287223,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          29.520617283950617,
+          67.9494170096022,
+          176.29232853223593
+        ]
+      },
+      "frame": "evidence/transitions/flicker_film_classic.png"
+    },
+    {
+      "id": "flicker_film_hard",
+      "name": "Flicker Film Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287171,
+        "dark": 0,
+        "bright": 4595,
+        "total": 291600,
+        "mean": [
+          121.03163580246914,
+          151.5764197530864,
+          239.24277091906723
+        ]
+      },
+      "frame": "evidence/transitions/flicker_film_hard.png"
+    },
+    {
+      "id": "flicker_film_chaos",
+      "name": "Flicker Film Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287166,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          22.90274691358025,
+          51.47962962962963,
+          134.22685185185185
+        ]
+      },
+      "frame": "evidence/transitions/flicker_film_chaos.png"
+    },
+    {
+      "id": "flicker_film_pulse",
+      "name": "Flicker Film Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287227,
+        "dark": 0,
+        "bright": 4520,
+        "total": 291600,
+        "mean": [
+          84.58409122085048,
+          123.00085048010973,
+          235.2919718792867
+        ]
+      },
+      "frame": "evidence/transitions/flicker_film_pulse.png"
+    },
+    {
+      "id": "flicker_strobe_b_subtle",
+      "name": "Flicker Strobe Black Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287223,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          30.619101508916323,
+          70.03277091906722,
+          184.2910425240055
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_b_subtle.png"
+    },
+    {
+      "id": "flicker_strobe_b_classic",
+      "name": "Flicker Strobe Black Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287156,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          20.805325788751716,
+          48.3973353909465,
+          126.21044924554184
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_b_classic.png"
+    },
+    {
+      "id": "flicker_strobe_b_hard",
+      "name": "Flicker Strobe Black Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          10.991690672153634,
+          25.76504801097394,
+          69.11223593964334
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_b_hard.png"
+    },
+    {
+      "id": "flicker_strobe_b_chaos",
+      "name": "Flicker Strobe Black Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          5.5033127572016465,
+          13.374022633744856,
+          35.04831275720164
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_b_chaos.png"
+    },
+    {
+      "id": "flicker_strobe_b_pulse",
+      "name": "Flicker Strobe Black Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287177,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          25.1304561042524,
+          57.64207818930041,
+          150.24183127572016
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_b_pulse.png"
+    },
+    {
+      "id": "flicker_strobe_w_subtle",
+      "name": "Flicker Strobe White Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287223,
+        "dark": 0,
+        "bright": 4514,
+        "total": 291600,
+        "mean": [
+          81.61910150891633,
+          121.03277091906722,
+          235.2910425240055
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_w_subtle.png"
+    },
+    {
+      "id": "flicker_strobe_w_classic",
+      "name": "Flicker Strobe White Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287156,
+        "dark": 0,
+        "bright": 4707,
+        "total": 291600,
+        "mean": [
+          135.8053257887517,
+          163.3973353909465,
+          241.21044924554184
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_w_classic.png"
+    },
+    {
+      "id": "flicker_strobe_w_hard",
+      "name": "Flicker Strobe White Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286880,
+        "dark": 0,
+        "bright": 4789,
+        "total": 291600,
+        "mean": [
+          189.99169067215362,
+          204.76504801097394,
+          248.11223593964334
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_w_hard.png"
+    },
+    {
+      "id": "flicker_strobe_w_chaos",
+      "name": "Flicker Strobe White Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286787,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          222.50331275720166,
+          230.37402263374486,
+          252.04831275720164
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_w_chaos.png"
+    },
+    {
+      "id": "flicker_strobe_w_pulse",
+      "name": "Flicker Strobe White Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287177,
+        "dark": 0,
+        "bright": 4587,
+        "total": 291600,
+        "mean": [
+          114.1304561042524,
+          146.6420781893004,
+          239.24183127572016
+        ]
+      },
+      "frame": "evidence/transitions/flicker_strobe_w_pulse.png"
+    },
+    {
+      "id": "flicker_frameskip_subtle",
+      "name": "Flicker Frame Skip Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287332,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          187.4391975308642,
+          34.676262002743485,
+          60.29810699588477
+        ]
+      },
+      "frame": "evidence/transitions/flicker_frameskip_subtle.png"
+    },
+    {
+      "id": "flicker_frameskip_classic",
+      "name": "Flicker Frame Skip Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287332,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          187.4391975308642,
+          34.676262002743485,
+          60.29810699588477
+        ]
+      },
+      "frame": "evidence/transitions/flicker_frameskip_classic.png"
+    },
+    {
+      "id": "flicker_frameskip_hard",
+      "name": "Flicker Frame Skip Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287297,
+        "blue": 0,
+        "dark": 0,
+        "bright": 4395,
+        "total": 291600,
+        "mean": [
+          227.40858367626885,
+          87.45696502057613,
+          111.10984567901235
+        ]
+      },
+      "frame": "evidence/transitions/flicker_frameskip_hard.png"
+    },
+    {
+      "id": "flicker_frameskip_chaos",
+      "name": "Flicker Frame Skip Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287332,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          187.4391975308642,
+          34.676262002743485,
+          60.29810699588477
+        ]
+      },
+      "frame": "evidence/transitions/flicker_frameskip_chaos.png"
+    },
+    {
+      "id": "flicker_frameskip_pulse",
+      "name": "Flicker Frame Skip Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 287332,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          187.4391975308642,
+          34.676262002743485,
+          60.29810699588477
+        ]
+      },
+      "frame": "evidence/transitions/flicker_frameskip_pulse.png"
+    },
+    {
+      "id": "flicker_gate_subtle",
+      "name": "Flicker Gate Flicker Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287246,
+        "dark": 0,
+        "bright": 4449,
+        "total": 291600,
+        "mean": [
+          55.80453017832647,
+          94.56459533607682,
+          208.1440706447188
+        ]
+      },
+      "frame": "evidence/transitions/flicker_gate_subtle.png"
+    },
+    {
+      "id": "flicker_gate_classic",
+      "name": "Flicker Gate Flicker Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287227,
+        "dark": 0,
+        "bright": 4520,
+        "total": 291600,
+        "mean": [
+          73.59556241426611,
+          108.49053840877914,
+          208.7554732510288
+        ]
+      },
+      "frame": "evidence/transitions/flicker_gate_classic.png"
+    },
+    {
+      "id": "flicker_gate_hard",
+      "name": "Flicker Gate Flicker Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287200,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          26.510860768175583,
+          58.896721536351166,
+          153.3589368998628
+        ]
+      },
+      "frame": "evidence/transitions/flicker_gate_hard.png"
+    },
+    {
+      "id": "flicker_gate_chaos",
+      "name": "Flicker Gate Flicker Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287066,
+        "dark": 0,
+        "bright": 4741,
+        "total": 291600,
+        "mean": [
+          135.01057613168723,
+          151.92840877914952,
+          201.00205761316872
+        ]
+      },
+      "frame": "evidence/transitions/flicker_gate_chaos.png"
+    },
+    {
+      "id": "flicker_gate_pulse",
+      "name": "Flicker Gate Flicker Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287223,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          27.338401920438958,
+          61.99793209876543,
+          162.4704355281207
+        ]
+      },
+      "frame": "evidence/transitions/flicker_gate_pulse.png"
+    },
+    {
+      "id": "flicker_burn_subtle",
+      "name": "Flicker Burn Flash Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287176,
+        "dark": 0,
+        "bright": 4445,
+        "total": 291600,
+        "mean": [
+          56.992719478737996,
+          99.32411865569273,
+          224.33938957475993
+        ]
+      },
+      "frame": "evidence/transitions/flicker_burn_subtle.png"
+    },
+    {
+      "id": "flicker_burn_classic",
+      "name": "Flicker Burn Flash Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287066,
+        "dark": 0,
+        "bright": 4514,
+        "total": 291600,
+        "mean": [
+          81.61910150891633,
+          114.03277091906722,
+          217.2910425240055
+        ]
+      },
+      "frame": "evidence/transitions/flicker_burn_classic.png"
+    },
+    {
+      "id": "flicker_burn_hard",
+      "name": "Flicker Burn Flash Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287059,
+        "dark": 0,
+        "bright": 4520,
+        "total": 291600,
+        "mean": [
+          84.58409122085048,
+          116.00085048010973,
+          216.2919718792867
+        ]
+      },
+      "frame": "evidence/transitions/flicker_burn_hard.png"
+    },
+    {
+      "id": "flicker_burn_chaos",
+      "name": "Flicker Burn Flash Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286717,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          156.49560013717422,
+          160.15403635116598,
+          194.1618964334705
+        ]
+      },
+      "frame": "evidence/transitions/flicker_burn_chaos.png"
+    },
+    {
+      "id": "flicker_burn_pulse",
+      "name": "Flicker Burn Flash Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286894,
+        "dark": 0,
+        "bright": 4528,
+        "total": 291600,
+        "mean": [
+          96.40554526748971,
+          123.85321330589849,
+          211.27632716049382
+        ]
+      },
+      "frame": "evidence/transitions/flicker_burn_pulse.png"
+    },
+    {
+      "id": "flicker_blink_subtle",
+      "name": "Flicker Blink Dip Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287223,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          30.619101508916323,
+          70.03277091906722,
+          184.2910425240055
+        ]
+      },
+      "frame": "evidence/transitions/flicker_blink_subtle.png"
+    },
+    {
+      "id": "flicker_blink_classic",
+      "name": "Flicker Blink Dip Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287156,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          20.805325788751716,
+          48.3973353909465,
+          126.21044924554184
+        ]
+      },
+      "frame": "evidence/transitions/flicker_blink_classic.png"
+    },
+    {
+      "id": "flicker_blink_hard",
+      "name": "Flicker Blink Dip Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          10.991690672153634,
+          25.76504801097394,
+          69.11223593964334
+        ]
+      },
+      "frame": "evidence/transitions/flicker_blink_hard.png"
+    },
+    {
+      "id": "flicker_blink_chaos",
+      "name": "Flicker Blink Dip Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          5.5033127572016465,
+          13.374022633744856,
+          35.04831275720164
+        ]
+      },
+      "frame": "evidence/transitions/flicker_blink_chaos.png"
+    },
+    {
+      "id": "flicker_blink_pulse",
+      "name": "Flicker Blink Dip Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287177,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          25.1304561042524,
+          57.64207818930041,
+          150.24183127572016
+        ]
+      },
+      "frame": "evidence/transitions/flicker_blink_pulse.png"
+    },
+    {
+      "id": "flicker_vintage_subtle",
+      "name": "Flicker Vintage Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287074,
+        "dark": 0,
+        "bright": 4432,
+        "total": 291600,
+        "mean": [
+          72.65081275720165,
+          104.06537722908094,
+          210.3072050754458
+        ]
+      },
+      "frame": "evidence/transitions/flicker_vintage_subtle.png"
+    },
+    {
+      "id": "flicker_vintage_classic",
+      "name": "Flicker Vintage Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287066,
+        "dark": 0,
+        "bright": 4501,
+        "total": 291600,
+        "mean": [
+          90.39008573388203,
+          117.8709670781893,
+          214.2755864197531
+        ]
+      },
+      "frame": "evidence/transitions/flicker_vintage_classic.png"
+    },
+    {
+      "id": "flicker_vintage_hard",
+      "name": "Flicker Vintage Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286885,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          31.545898491083676,
+          50.203131001371744,
+          112.17749657064472
+        ]
+      },
+      "frame": "evidence/transitions/flicker_vintage_hard.png"
+    },
+    {
+      "id": "flicker_vintage_chaos",
+      "name": "Flicker Vintage Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286890,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          33.64206447187929,
+          53.26802126200274,
+          118.19443072702332
+        ]
+      },
+      "frame": "evidence/transitions/flicker_vintage_chaos.png"
+    },
+    {
+      "id": "flicker_vintage_pulse",
+      "name": "Flicker Vintage Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287056,
+        "dark": 0,
+        "bright": 4520,
+        "total": 291600,
+        "mean": [
+          104.19508230452675,
+          130.6911316872428,
+          218.2429423868313
+        ]
+      },
+      "frame": "evidence/transitions/flicker_vintage_pulse.png"
+    },
+    {
+      "id": "flicker_projector_subtle",
+      "name": "Flicker Projector Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287239,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          30.40451646090535,
+          67.95670781893004,
+          176.25539094650205
+        ]
+      },
+      "frame": "evidence/transitions/flicker_projector_subtle.png"
+    },
+    {
+      "id": "flicker_projector_classic",
+      "name": "Flicker Projector Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287239,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          30.85817901234568,
+          69.02993141289437,
+          179.99517489711934
+        ]
+      },
+      "frame": "evidence/transitions/flicker_projector_classic.png"
+    },
+    {
+      "id": "flicker_projector_hard",
+      "name": "Flicker Projector Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287227,
+        "dark": 0,
+        "bright": 4512,
+        "total": 291600,
+        "mean": [
+          70.74563100137175,
+          107.32580246913581,
+          212.57434842249657
+        ]
+      },
+      "frame": "evidence/transitions/flicker_projector_hard.png"
+    },
+    {
+      "id": "flicker_projector_chaos",
+      "name": "Flicker Projector Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287183,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          23.46477023319616,
+          52.970346364883405,
+          138.8632475994513
+        ]
+      },
+      "frame": "evidence/transitions/flicker_projector_chaos.png"
+    },
+    {
+      "id": "flicker_projector_pulse",
+      "name": "Flicker Projector Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287239,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          30.654787379972564,
+          68.58981824417009,
+          177.95668381344308
+        ]
+      },
+      "frame": "evidence/transitions/flicker_projector_pulse.png"
+    },
+    {
+      "id": "flicker_candle_subtle",
+      "name": "Flicker Candle Subtle",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287002,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          59.486213991769546,
+          85.93251371742113,
+          182.2741632373114
+        ]
+      },
+      "frame": "evidence/transitions/flicker_candle_subtle.png"
+    },
+    {
+      "id": "flicker_candle_classic",
+      "name": "Flicker Candle Classic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287002,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          56.38919410150891,
+          81.8518072702332,
+          174.25909122085048
+        ]
+      },
+      "frame": "evidence/transitions/flicker_candle_classic.png"
+    },
+    {
+      "id": "flicker_candle_hard",
+      "name": "Flicker Candle Hard",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286874,
+        "dark": 0,
+        "bright": 4706,
+        "total": 291600,
+        "mean": [
+          144.60871056241427,
+          162.23450274348423,
+          223.1938683127572
+        ]
+      },
+      "frame": "evidence/transitions/flicker_candle_hard.png"
+    },
+    {
+      "id": "flicker_candle_chaos",
+      "name": "Flicker Candle Chaotic",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286883,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          42.8035768175583,
+          62.395997942386835,
+          131.21052126200274
+        ]
+      },
+      "frame": "evidence/transitions/flicker_candle_chaos.png"
+    },
+    {
+      "id": "flicker_candle_pulse",
+      "name": "Flicker Candle Pulsing",
+      "category": "Flicker",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287002,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          58.43799725651577,
+          83.90150548696845,
+          179.25909122085048
+        ]
+      },
+      "frame": "evidence/transitions/flicker_candle_pulse.png"
+    },
+    {
+      "id": "tv_static_burst_mild",
+      "name": "TV Static Burst Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 341,
+        "blue": 286861,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          72.40451303155007,
+          52.35616255144033,
+          128.84301783264746
+        ]
+      },
+      "frame": "evidence/transitions/tv_static_burst_mild.png"
+    },
+    {
+      "id": "tv_static_burst_classic",
+      "name": "TV Static Burst Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 341,
+        "blue": 286786,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          71.38984910836763,
+          51.35127914951989,
+          126.49787037037036
+        ]
+      },
+      "frame": "evidence/transitions/tv_static_burst_classic.png"
+    },
+    {
+      "id": "tv_static_burst_heavy",
+      "name": "TV Static Burst Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 340,
+        "blue": 286675,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          70.04873456790123,
+          50.677256515775035,
+          124.4760390946502
+        ]
+      },
+      "frame": "evidence/transitions/tv_static_burst_heavy.png"
+    },
+    {
+      "id": "tv_static_burst_retro",
+      "name": "TV Static Burst Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 340,
+        "blue": 286786,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          71.04757887517147,
+          51.34138203017832,
+          126.15323045267489
+        ]
+      },
+      "frame": "evidence/transitions/tv_static_burst_retro.png"
+    },
+    {
+      "id": "tv_static_burst_noise",
+      "name": "TV Static Burst Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 340,
+        "blue": 286614,
+        "dark": 2,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          69.37754801097394,
+          50.338367626886146,
+          123.4623731138546
+        ]
+      },
+      "frame": "evidence/transitions/tv_static_burst_noise.png"
+    },
+    {
+      "id": "tv_channel_mild",
+      "name": "TV Channel Change Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291233,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.13628257887517148,
+          0.13628257887517148,
+          0.13628257887517148
+        ]
+      },
+      "frame": "evidence/transitions/tv_channel_mild.png"
+    },
+    {
+      "id": "tv_channel_classic",
+      "name": "TV Channel Change Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291170,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.1556721536351166,
+          0.1556721536351166,
+          0.1556721536351166
+        ]
+      },
+      "frame": "evidence/transitions/tv_channel_classic.png"
+    },
+    {
+      "id": "tv_channel_heavy",
+      "name": "TV Channel Change Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291120,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.17462620027434841,
+          0.17462620027434841,
+          0.17462620027434841
+        ]
+      },
+      "frame": "evidence/transitions/tv_channel_heavy.png"
+    },
+    {
+      "id": "tv_channel_retro",
+      "name": "TV Channel Change Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291160,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.16194101508916323,
+          0.16194101508916323,
+          0.16194101508916323
+        ]
+      },
+      "frame": "evidence/transitions/tv_channel_retro.png"
+    },
+    {
+      "id": "tv_channel_noise",
+      "name": "TV Channel Change Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291083,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.19324759945130315,
+          0.19324759945130315,
+          0.19324759945130315
+        ]
+      },
+      "frame": "evidence/transitions/tv_channel_noise.png"
+    },
+    {
+      "id": "tv_v_roll_mild",
+      "name": "TV Vertical Roll Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 136733,
+        "blue": 150557,
+        "dark": 0,
+        "bright": 4386,
+        "total": 291600,
+        "mean": [
+          124.2848010973937,
+          65.46307270233196,
+          153.15054526748972
+        ]
+      },
+      "frame": "evidence/transitions/tv_v_roll_mild.png"
+    },
+    {
+      "id": "tv_v_roll_classic",
+      "name": "TV Vertical Roll Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 163499,
+        "blue": 123840,
+        "dark": 0,
+        "bright": 4306,
+        "total": 291600,
+        "mean": [
+          140.24152263374486,
+          60.75119341563786,
+          137.8729183813443
+        ]
+      },
+      "frame": "evidence/transitions/tv_v_roll_classic.png"
+    },
+    {
+      "id": "tv_v_roll_heavy",
+      "name": "TV Vertical Roll Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 192659,
+        "blue": 94680,
+        "dark": 0,
+        "bright": 4297,
+        "total": 291600,
+        "mean": [
+          157.32764403292182,
+          55.711495198902604,
+          121.2287037037037
+        ]
+      },
+      "frame": "evidence/transitions/tv_v_roll_heavy.png"
+    },
+    {
+      "id": "tv_v_roll_retro",
+      "name": "TV Vertical Roll Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 170723,
+        "blue": 116640,
+        "dark": 0,
+        "bright": 4284,
+        "total": 291600,
+        "mean": [
+          144.5439437585734,
+          59.5809670781893,
+          133.79152606310015
+        ]
+      },
+      "frame": "evidence/transitions/tv_v_roll_retro.png"
+    },
+    {
+      "id": "tv_v_roll_noise",
+      "name": "TV Vertical Roll Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 207060,
+        "blue": 80280,
+        "dark": 0,
+        "bright": 4296,
+        "total": 291600,
+        "mean": [
+          165.7864609053498,
+          53.27675925925926,
+          112.98035322359397
+        ]
+      },
+      "frame": "evidence/transitions/tv_v_roll_noise.png"
+    },
+    {
+      "id": "tv_h_tear_mild",
+      "name": "TV H-Sync Tear Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 342,
+        "blue": 286880,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          75.37617969821673,
+          54.73139231824417,
+          133.2791598079561
+        ]
+      },
+      "frame": "evidence/transitions/tv_h_tear_mild.png"
+    },
+    {
+      "id": "tv_h_tear_classic",
+      "name": "TV H-Sync Tear Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 342,
+        "blue": 286880,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          75.37670096021948,
+          54.734080932784636,
+          133.28205418381344
+        ]
+      },
+      "frame": "evidence/transitions/tv_h_tear_classic.png"
+    },
+    {
+      "id": "tv_h_tear_heavy",
+      "name": "TV H-Sync Tear Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 343,
+        "blue": 286888,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          75.56061728395062,
+          54.938796296296296,
+          133.40039437585733
+        ]
+      },
+      "frame": "evidence/transitions/tv_h_tear_heavy.png"
+    },
+    {
+      "id": "tv_h_tear_retro",
+      "name": "TV H-Sync Tear Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 342,
+        "blue": 286880,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          75.62679698216735,
+          55.01781207133059,
+          133.45199931412895
+        ]
+      },
+      "frame": "evidence/transitions/tv_h_tear_retro.png"
+    },
+    {
+      "id": "tv_h_tear_noise",
+      "name": "TV H-Sync Tear Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 342,
+        "blue": 286880,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          75.94778463648834,
+          55.37460219478738,
+          133.668048696845
+        ]
+      },
+      "frame": "evidence/transitions/tv_h_tear_noise.png"
+    },
+    {
+      "id": "tv_screen_off_mild",
+      "name": "TV Screen Off Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 290880,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.2518518518518518,
+          0.2518518518518518,
+          0.2518518518518518
+        ]
+      },
+      "frame": "evidence/transitions/tv_screen_off_mild.png"
+    },
+    {
+      "id": "tv_screen_off_classic",
+      "name": "TV Screen Off Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 290880,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.2518518518518518,
+          0.2518518518518518,
+          0.2518518518518518
+        ]
+      },
+      "frame": "evidence/transitions/tv_screen_off_classic.png"
+    },
+    {
+      "id": "tv_screen_off_heavy",
+      "name": "TV Screen Off Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 290880,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.2518518518518518,
+          0.2518518518518518,
+          0.2518518518518518
+        ]
+      },
+      "frame": "evidence/transitions/tv_screen_off_heavy.png"
+    },
+    {
+      "id": "tv_screen_off_retro",
+      "name": "TV Screen Off Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 290880,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.2518518518518518,
+          0.2518518518518518,
+          0.2518518518518518
+        ]
+      },
+      "frame": "evidence/transitions/tv_screen_off_retro.png"
+    },
+    {
+      "id": "tv_screen_off_noise",
+      "name": "TV Screen Off Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 290880,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0.2518518518518518,
+          0.2518518518518518,
+          0.2518518518518518
+        ]
+      },
+      "frame": "evidence/transitions/tv_screen_off_noise.png"
+    },
+    {
+      "id": "tv_power_on_mild",
+      "name": "TV Power On Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 9463,
+        "dark": 0,
+        "bright": 163,
+        "total": 291600,
+        "mean": [
+          118.68812071330589,
+          119.5630109739369,
+          122.05691700960219
+        ]
+      },
+      "frame": "evidence/transitions/tv_power_on_mild.png"
+    },
+    {
+      "id": "tv_power_on_classic",
+      "name": "TV Power On Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 9463,
+        "dark": 0,
+        "bright": 163,
+        "total": 291600,
+        "mean": [
+          118.68812071330589,
+          119.5630109739369,
+          122.05691700960219
+        ]
+      },
+      "frame": "evidence/transitions/tv_power_on_classic.png"
+    },
+    {
+      "id": "tv_power_on_heavy",
+      "name": "TV Power On Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 9463,
+        "dark": 0,
+        "bright": 163,
+        "total": 291600,
+        "mean": [
+          118.68812071330589,
+          119.5630109739369,
+          122.05691700960219
+        ]
+      },
+      "frame": "evidence/transitions/tv_power_on_heavy.png"
+    },
+    {
+      "id": "tv_power_on_retro",
+      "name": "TV Power On Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 9463,
+        "dark": 0,
+        "bright": 163,
+        "total": 291600,
+        "mean": [
+          118.68812071330589,
+          119.5630109739369,
+          122.05691700960219
+        ]
+      },
+      "frame": "evidence/transitions/tv_power_on_retro.png"
+    },
+    {
+      "id": "tv_power_on_noise",
+      "name": "TV Power On Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 9463,
+        "dark": 0,
+        "bright": 163,
+        "total": 291600,
+        "mean": [
+          118.68812071330589,
+          119.5630109739369,
+          122.05691700960219
+        ]
+      },
+      "frame": "evidence/transitions/tv_power_on_noise.png"
+    },
+    {
+      "id": "tv_phosphor_mild",
+      "name": "TV Phosphor Fade Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287196,
+        "dark": 0,
+        "bright": 4530,
+        "total": 291600,
+        "mean": [
+          93.88876543209877,
+          128.64951303155007,
+          234.3158196159122
+        ]
+      },
+      "frame": "evidence/transitions/tv_phosphor_mild.png"
+    },
+    {
+      "id": "tv_phosphor_classic",
+      "name": "TV Phosphor Fade Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287196,
+        "dark": 0,
+        "bright": 4530,
+        "total": 291600,
+        "mean": [
+          93.88876543209877,
+          128.64951303155007,
+          234.3158196159122
+        ]
+      },
+      "frame": "evidence/transitions/tv_phosphor_classic.png"
+    },
+    {
+      "id": "tv_phosphor_heavy",
+      "name": "TV Phosphor Fade Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287196,
+        "dark": 0,
+        "bright": 4530,
+        "total": 291600,
+        "mean": [
+          93.88876543209877,
+          128.64951303155007,
+          234.3158196159122
+        ]
+      },
+      "frame": "evidence/transitions/tv_phosphor_heavy.png"
+    },
+    {
+      "id": "tv_phosphor_retro",
+      "name": "TV Phosphor Fade Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287196,
+        "dark": 0,
+        "bright": 4530,
+        "total": 291600,
+        "mean": [
+          93.88876543209877,
+          128.64951303155007,
+          234.3158196159122
+        ]
+      },
+      "frame": "evidence/transitions/tv_phosphor_retro.png"
+    },
+    {
+      "id": "tv_phosphor_noise",
+      "name": "TV Phosphor Fade Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 287196,
+        "dark": 0,
+        "bright": 4530,
+        "total": 291600,
+        "mean": [
+          93.88876543209877,
+          128.64951303155007,
+          234.3158196159122
+        ]
+      },
+      "frame": "evidence/transitions/tv_phosphor_noise.png"
+    },
+    {
+      "id": "tv_scan_crawl_mild",
+      "name": "TV Scan Crawl Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 80158,
+        "blue": 207146,
+        "dark": 0,
+        "bright": 4397,
+        "total": 291600,
+        "mean": [
+          89.36709533607682,
+          75.55681412894376,
+          186.2077537722908
+        ]
+      },
+      "frame": "evidence/transitions/tv_scan_crawl_mild.png"
+    },
+    {
+      "id": "tv_scan_crawl_classic",
+      "name": "TV Scan Crawl Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 80158,
+        "blue": 207146,
+        "dark": 0,
+        "bright": 4398,
+        "total": 291600,
+        "mean": [
+          89.1201646090535,
+          75.60165980795611,
+          186.1387208504801
+        ]
+      },
+      "frame": "evidence/transitions/tv_scan_crawl_classic.png"
+    },
+    {
+      "id": "tv_scan_crawl_heavy",
+      "name": "TV Scan Crawl Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 80157,
+        "blue": 207146,
+        "dark": 0,
+        "bright": 4392,
+        "total": 291600,
+        "mean": [
+          88.87884087791495,
+          75.56496913580247,
+          186.07385802469136
+        ]
+      },
+      "frame": "evidence/transitions/tv_scan_crawl_heavy.png"
+    },
+    {
+      "id": "tv_scan_crawl_retro",
+      "name": "TV Scan Crawl Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 80158,
+        "blue": 207146,
+        "dark": 0,
+        "bright": 4398,
+        "total": 291600,
+        "mean": [
+          89.12748628257887,
+          75.61720164609054,
+          186.1466975308642
+        ]
+      },
+      "frame": "evidence/transitions/tv_scan_crawl_retro.png"
+    },
+    {
+      "id": "tv_scan_crawl_noise",
+      "name": "TV Scan Crawl Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 80157,
+        "blue": 207146,
+        "dark": 0,
+        "bright": 4390,
+        "total": 291600,
+        "mean": [
+          88.79854595336077,
+          75.58993141289437,
+          185.9982475994513
+        ]
+      },
+      "frame": "evidence/transitions/tv_scan_crawl_noise.png"
+    },
+    {
+      "id": "tv_color_bleed_mild",
+      "name": "TV Colour Bleed Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286800,
+        "dark": 0,
+        "bright": 4771,
+        "total": 291600,
+        "mean": [
+          102.29021604938272,
+          130.26473936899862,
+          254.79166666666666
+        ]
+      },
+      "frame": "evidence/transitions/tv_color_bleed_mild.png"
+    },
+    {
+      "id": "tv_color_bleed_classic",
+      "name": "TV Colour Bleed Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286805,
+        "dark": 0,
+        "bright": 4770,
+        "total": 291600,
+        "mean": [
+          102.08024691358025,
+          130.2437585733882,
+          254.65277777777777
+        ]
+      },
+      "frame": "evidence/transitions/tv_color_bleed_classic.png"
+    },
+    {
+      "id": "tv_color_bleed_heavy",
+      "name": "TV Colour Bleed Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286806,
+        "dark": 0,
+        "bright": 4769,
+        "total": 291600,
+        "mean": [
+          102.04261659807956,
+          130.33245884773663,
+          254.58333333333334
+        ]
+      },
+      "frame": "evidence/transitions/tv_color_bleed_heavy.png"
+    },
+    {
+      "id": "tv_color_bleed_retro",
+      "name": "TV Colour Bleed Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286806,
+        "dark": 0,
+        "bright": 4770,
+        "total": 291600,
+        "mean": [
+          102.12386145404663,
+          130.30039094650206,
+          254.65277777777777
+        ]
+      },
+      "frame": "evidence/transitions/tv_color_bleed_retro.png"
+    },
+    {
+      "id": "tv_color_bleed_noise",
+      "name": "TV Colour Bleed Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286808,
+        "dark": 0,
+        "bright": 4770,
+        "total": 291600,
+        "mean": [
+          101.91234224965706,
+          130.30309670781892,
+          254.51388888888889
+        ]
+      },
+      "frame": "evidence/transitions/tv_color_bleed_noise.png"
+    },
+    {
+      "id": "tv_vhs_track_mild",
+      "name": "TV VHS Tracking Mild",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 29430,
+        "blue": 257500,
+        "dark": 0,
+        "bright": 3736,
+        "total": 291600,
+        "mean": [
+          55.78898491083676,
+          81.83417009602195,
+          209.59644718792867
+        ]
+      },
+      "frame": "evidence/transitions/tv_vhs_track_mild.png"
+    },
+    {
+      "id": "tv_vhs_track_classic",
+      "name": "TV VHS Tracking Classic",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 34109,
+        "blue": 253179,
+        "dark": 0,
+        "bright": 2844,
+        "total": 291600,
+        "mean": [
+          57.786488340192044,
+          80.3173182441701,
+          204.93917352537724
+        ]
+      },
+      "frame": "evidence/transitions/tv_vhs_track_classic.png"
+    },
+    {
+      "id": "tv_vhs_track_heavy",
+      "name": "TV VHS Tracking Heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 38782,
+        "blue": 248498,
+        "dark": 0,
+        "bright": 2802,
+        "total": 291600,
+        "mean": [
+          59.54949588477366,
+          78.75470164609054,
+          200.2400171467764
+        ]
+      },
+      "frame": "evidence/transitions/tv_vhs_track_heavy.png"
+    },
+    {
+      "id": "tv_vhs_track_retro",
+      "name": "TV VHS Tracking Retos osd-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 35187,
+        "blue": 251738,
+        "dark": 0,
+        "bright": 2842,
+        "total": 291600,
+        "mean": [
+          58.12797668038409,
+          79.8843072702332,
+          203.8148353909465
+        ]
+      },
+      "frame": "evidence/transitions/tv_vhs_track_retro.png"
+    },
+    {
+      "id": "tv_vhs_track_noise",
+      "name": "TV VHS Tracking Noise-heavy",
+      "category": "TV",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 41305,
+        "blue": 245978,
+        "dark": 0,
+        "bright": 2801,
+        "total": 291600,
+        "mean": [
+          60.32534979423868,
+          77.85420438957476,
+          198.01334362139917
+        ]
+      },
+      "frame": "evidence/transitions/tv_vhs_track_noise.png"
+    },
+    {
+      "id": "overlay_tv_flip",
+      "name": "Overlay TV Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288703,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.639581618655694,
+          15.093302469135802,
+          21.74365912208505
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tv_flip.png"
+    },
+    {
+      "id": "overlay_tv_spin",
+      "name": "Overlay TV Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 216833,
+        "bright": 1088,
+        "total": 291600,
+        "mean": [
+          20.524396433470507,
+          32.31286694101509,
+          70.37408093278464
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tv_spin.png"
+    },
+    {
+      "id": "overlay_tv_swing",
+      "name": "Overlay TV Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216247,
+        "bright": 1098,
+        "total": 291600,
+        "mean": [
+          20.63574074074074,
+          32.460668724279834,
+          70.52635802469136
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tv_swing.png"
+    },
+    {
+      "id": "overlay_tv_zoom",
+      "name": "Overlay TV Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4915,
+        "total": 291600,
+        "mean": [
+          38.26533607681756,
+          85.99823388203018,
+          223.7441426611797
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tv_zoom.png"
+    },
+    {
+      "id": "overlay_tv_channel",
+      "name": "Overlay TV Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71819,
+        "dark": 215934,
+        "bright": 368,
+        "total": 291600,
+        "mean": [
+          20.43380315500686,
+          31.90520576131687,
+          68.86957818930041
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tv_channel.png"
+    },
+    {
+      "id": "overlay_phone_flip",
+      "name": "Overlay Phone Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288716,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.620586419753087,
+          15.074207818930041,
+          21.726515775034294
+        ]
+      },
+      "frame": "evidence/transitions/overlay_phone_flip.png"
+    },
+    {
+      "id": "overlay_phone_spin",
+      "name": "Overlay Phone Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 217215,
+        "bright": 1088,
+        "total": 291600,
+        "mean": [
+          20.092719478737997,
+          31.88141975308642,
+          69.92325445816186
+        ]
+      },
+      "frame": "evidence/transitions/overlay_phone_spin.png"
+    },
+    {
+      "id": "overlay_phone_swing",
+      "name": "Overlay Phone Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216672,
+        "bright": 1095,
+        "total": 291600,
+        "mean": [
+          19.99235596707819,
+          31.817596021947875,
+          69.84139917695474
+        ]
+      },
+      "frame": "evidence/transitions/overlay_phone_swing.png"
+    },
+    {
+      "id": "overlay_phone_zoom",
+      "name": "Overlay Phone Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4909,
+        "total": 291600,
+        "mean": [
+          38.259557613168724,
+          85.99197530864197,
+          223.73655692729767
+        ]
+      },
+      "frame": "evidence/transitions/overlay_phone_zoom.png"
+    },
+    {
+      "id": "overlay_phone_channel",
+      "name": "Overlay Phone Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71820,
+        "dark": 216483,
+        "bright": 366,
+        "total": 291600,
+        "mean": [
+          19.79145061728395,
+          31.26354938271605,
+          68.18909122085049
+        ]
+      },
+      "frame": "evidence/transitions/overlay_phone_channel.png"
+    },
+    {
+      "id": "overlay_monitor_flip",
+      "name": "Overlay Monitor Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288708,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.61937585733882,
+          15.07298353909465,
+          21.727657750342935
+        ]
+      },
+      "frame": "evidence/transitions/overlay_monitor_flip.png"
+    },
+    {
+      "id": "overlay_monitor_spin",
+      "name": "Overlay Monitor Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 217233,
+        "bright": 1086,
+        "total": 291600,
+        "mean": [
+          20.036550068587104,
+          31.82562414266118,
+          69.87068244170096
+        ]
+      },
+      "frame": "evidence/transitions/overlay_monitor_spin.png"
+    },
+    {
+      "id": "overlay_monitor_swing",
+      "name": "Overlay Monitor Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216462,
+        "bright": 1098,
+        "total": 291600,
+        "mean": [
+          19.955185185185186,
+          31.78133058984911,
+          69.81247599451304
+        ]
+      },
+      "frame": "evidence/transitions/overlay_monitor_swing.png"
+    },
+    {
+      "id": "overlay_monitor_zoom",
+      "name": "Overlay Monitor Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4918,
+        "total": 291600,
+        "mean": [
+          38.25843621399177,
+          85.99220507544581,
+          223.74079218106996
+        ]
+      },
+      "frame": "evidence/transitions/overlay_monitor_zoom.png"
+    },
+    {
+      "id": "overlay_monitor_channel",
+      "name": "Overlay Monitor Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71821,
+        "dark": 216305,
+        "bright": 367,
+        "total": 291600,
+        "mean": [
+          19.73113511659808,
+          31.202163923182443,
+          68.12435528120713
+        ]
+      },
+      "frame": "evidence/transitions/overlay_monitor_channel.png"
+    },
+    {
+      "id": "overlay_camera_flip",
+      "name": "Overlay Camera Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 15,
+        "blue": 2762,
+        "dark": 288700,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.6415329218107,
+          15.089200960219479,
+          21.739842249657066
+        ]
+      },
+      "frame": "evidence/transitions/overlay_camera_flip.png"
+    },
+    {
+      "id": "overlay_camera_spin",
+      "name": "Overlay Camera Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 58,
+        "blue": 71643,
+        "dark": 217558,
+        "bright": 1088,
+        "total": 291600,
+        "mean": [
+          20.408285322359397,
+          32.16071673525377,
+          70.21377229080933
+        ]
+      },
+      "frame": "evidence/transitions/overlay_camera_spin.png"
+    },
+    {
+      "id": "overlay_camera_swing",
+      "name": "Overlay Camera Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 62,
+        "blue": 71781,
+        "dark": 216410,
+        "bright": 1093,
+        "total": 291600,
+        "mean": [
+          20.457253086419755,
+          32.24600480109739,
+          70.29707818930041
+        ]
+      },
+      "frame": "evidence/transitions/overlay_camera_swing.png"
+    },
+    {
+      "id": "overlay_camera_zoom",
+      "name": "Overlay Camera Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4912,
+        "total": 291600,
+        "mean": [
+          38.25979766803841,
+          85.99239711934156,
+          223.73714334705076
+        ]
+      },
+      "frame": "evidence/transitions/overlay_camera_zoom.png"
+    },
+    {
+      "id": "overlay_camera_channel",
+      "name": "Overlay Camera Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 64,
+        "blue": 71822,
+        "dark": 216802,
+        "bright": 366,
+        "total": 291600,
+        "mean": [
+          20.209022633744855,
+          31.642921810699587,
+          68.58080932784637
+        ]
+      },
+      "frame": "evidence/transitions/overlay_camera_channel.png"
+    },
+    {
+      "id": "overlay_projector_flip",
+      "name": "Overlay Projector Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288723,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.61358024691358,
+          15.06733196159122,
+          21.72090192043896
+        ]
+      },
+      "frame": "evidence/transitions/overlay_projector_flip.png"
+    },
+    {
+      "id": "overlay_projector_spin",
+      "name": "Overlay Projector Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 217134,
+        "bright": 1085,
+        "total": 291600,
+        "mean": [
+          19.880816186556928,
+          31.66988340192044,
+          69.70203017832648
+        ]
+      },
+      "frame": "evidence/transitions/overlay_projector_spin.png"
+    },
+    {
+      "id": "overlay_projector_swing",
+      "name": "Overlay Projector Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216628,
+        "bright": 1098,
+        "total": 291600,
+        "mean": [
+          19.782112482853222,
+          31.608473936899863,
+          69.62999314128943
+        ]
+      },
+      "frame": "evidence/transitions/overlay_projector_swing.png"
+    },
+    {
+      "id": "overlay_projector_zoom",
+      "name": "Overlay Projector Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4915,
+        "total": 291600,
+        "mean": [
+          38.26398148148148,
+          85.99546639231825,
+          223.7375925925926
+        ]
+      },
+      "frame": "evidence/transitions/overlay_projector_zoom.png"
+    },
+    {
+      "id": "overlay_projector_channel",
+      "name": "Overlay Projector Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71822,
+        "dark": 216870,
+        "bright": 366,
+        "total": 291600,
+        "mean": [
+          19.542451989026063,
+          31.012548010973937,
+          67.91825102880658
+        ]
+      },
+      "frame": "evidence/transitions/overlay_projector_channel.png"
+    },
+    {
+      "id": "overlay_watch_flip",
+      "name": "Overlay Watch Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288729,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.655857338820303,
+          15.109591906721537,
+          21.76002400548697
+        ]
+      },
+      "frame": "evidence/transitions/overlay_watch_flip.png"
+    },
+    {
+      "id": "overlay_watch_spin",
+      "name": "Overlay Watch Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 217836,
+        "bright": 1088,
+        "total": 291600,
+        "mean": [
+          21.266862139917695,
+          33.055408093278466,
+          71.1501989026063
+        ]
+      },
+      "frame": "evidence/transitions/overlay_watch_spin.png"
+    },
+    {
+      "id": "overlay_watch_swing",
+      "name": "Overlay Watch Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216663,
+        "bright": 1099,
+        "total": 291600,
+        "mean": [
+          21.41079561042524,
+          33.236776406035666,
+          71.34355624142661
+        ]
+      },
+      "frame": "evidence/transitions/overlay_watch_swing.png"
+    },
+    {
+      "id": "overlay_watch_zoom",
+      "name": "Overlay Watch Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4915,
+        "total": 291600,
+        "mean": [
+          38.2686865569273,
+          86.00019547325103,
+          223.74229766803842
+        ]
+      },
+      "frame": "evidence/transitions/overlay_watch_zoom.png"
+    },
+    {
+      "id": "overlay_watch_channel",
+      "name": "Overlay Watch Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71821,
+        "dark": 216872,
+        "bright": 368,
+        "total": 291600,
+        "mean": [
+          21.027037037037037,
+          32.49882373113854,
+          69.48097050754458
+        ]
+      },
+      "frame": "evidence/transitions/overlay_watch_channel.png"
+    },
+    {
+      "id": "overlay_tablet_flip",
+      "name": "Overlay Tablet Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288711,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.619866255144032,
+          15.073539094650206,
+          21.726237997256515
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tablet_flip.png"
+    },
+    {
+      "id": "overlay_tablet_spin",
+      "name": "Overlay Tablet Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 217365,
+        "bright": 1088,
+        "total": 291600,
+        "mean": [
+          20.070048010973938,
+          31.85951646090535,
+          69.90778463648834
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tablet_spin.png"
+    },
+    {
+      "id": "overlay_tablet_swing",
+      "name": "Overlay Tablet Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216809,
+        "bright": 1092,
+        "total": 291600,
+        "mean": [
+          19.96949588477366,
+          31.79517489711934,
+          69.82514403292181
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tablet_swing.png"
+    },
+    {
+      "id": "overlay_tablet_zoom",
+      "name": "Overlay Tablet Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4912,
+        "total": 291600,
+        "mean": [
+          38.26288751714678,
+          85.99524005486968,
+          223.73966049382716
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tablet_zoom.png"
+    },
+    {
+      "id": "overlay_tablet_channel",
+      "name": "Overlay Tablet Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71821,
+        "dark": 216578,
+        "bright": 368,
+        "total": 291600,
+        "mean": [
+          19.768556241426612,
+          31.23800411522634,
+          68.15993141289438
+        ]
+      },
+      "frame": "evidence/transitions/overlay_tablet_channel.png"
+    },
+    {
+      "id": "overlay_laptop_flip",
+      "name": "Overlay Laptop Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288689,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.631464334705075,
+          15.08519890260631,
+          21.737959533607683
+        ]
+      },
+      "frame": "evidence/transitions/overlay_laptop_flip.png"
+    },
+    {
+      "id": "overlay_laptop_spin",
+      "name": "Overlay Laptop Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 216564,
+        "bright": 1087,
+        "total": 291600,
+        "mean": [
+          20.378189300411524,
+          32.16697530864197,
+          70.23165294924554
+        ]
+      },
+      "frame": "evidence/transitions/overlay_laptop_spin.png"
+    },
+    {
+      "id": "overlay_laptop_swing",
+      "name": "Overlay Laptop Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 216044,
+        "bright": 1098,
+        "total": 291600,
+        "mean": [
+          20.307914951989027,
+          32.134437585733885,
+          70.18769890260631
+        ]
+      },
+      "frame": "evidence/transitions/overlay_laptop_swing.png"
+    },
+    {
+      "id": "overlay_laptop_zoom",
+      "name": "Overlay Laptop Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4897,
+        "total": 291600,
+        "mean": [
+          38.257568587105624,
+          85.98983882030178,
+          223.73409122085047
+        ]
+      },
+      "frame": "evidence/transitions/overlay_laptop_zoom.png"
+    },
+    {
+      "id": "overlay_laptop_channel",
+      "name": "Overlay Laptop Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71822,
+        "dark": 215749,
+        "bright": 365,
+        "total": 291600,
+        "mean": [
+          20.13582304526749,
+          31.606371742112483,
+          68.55561728395061
+        ]
+      },
+      "frame": "evidence/transitions/overlay_laptop_channel.png"
+    },
+    {
+      "id": "overlay_console_flip",
+      "name": "Overlay Console Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 288668,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.641625514403293,
+          15.095377229080933,
+          21.744591906721535
+        ]
+      },
+      "frame": "evidence/transitions/overlay_console_flip.png"
+    },
+    {
+      "id": "overlay_console_spin",
+      "name": "Overlay Console Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 218070,
+        "bright": 1088,
+        "total": 291600,
+        "mean": [
+          20.164314128943758,
+          31.95277777777778,
+          69.99424554183814
+        ]
+      },
+      "frame": "evidence/transitions/overlay_console_spin.png"
+    },
+    {
+      "id": "overlay_console_swing",
+      "name": "Overlay Console Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71781,
+        "dark": 215664,
+        "bright": 1095,
+        "total": 291600,
+        "mean": [
+          21.12829218106996,
+          32.9542524005487,
+          71.09519890260631
+        ]
+      },
+      "frame": "evidence/transitions/overlay_console_swing.png"
+    },
+    {
+      "id": "overlay_console_zoom",
+      "name": "Overlay Console Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4916,
+        "total": 291600,
+        "mean": [
+          38.26543552812071,
+          85.99572359396433,
+          223.73431412894377
+        ]
+      },
+      "frame": "evidence/transitions/overlay_console_zoom.png"
+    },
+    {
+      "id": "overlay_console_channel",
+      "name": "Overlay Console Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71819,
+        "dark": 215836,
+        "bright": 366,
+        "total": 291600,
+        "mean": [
+          20.904389574759946,
+          32.37604938271605,
+          69.40768518518519
+        ]
+      },
+      "frame": "evidence/transitions/overlay_console_channel.png"
+    },
+    {
+      "id": "overlay_cinema_flip",
+      "name": "Overlay Cinema Flip",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 2762,
+        "dark": 286049,
+        "bright": 73,
+        "total": 291600,
+        "mean": [
+          14.974389574759945,
+          15.001011659807956,
+          21.63955418381344
+        ]
+      },
+      "frame": "evidence/transitions/overlay_cinema_flip.png"
+    },
+    {
+      "id": "overlay_cinema_spin",
+      "name": "Overlay Cinema Spin",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71643,
+        "dark": 193830,
+        "bright": 1083,
+        "total": 291600,
+        "mean": [
+          23.2944890260631,
+          30.991742112482854,
+          68.94178669410151
+        ]
+      },
+      "frame": "evidence/transitions/overlay_cinema_spin.png"
+    },
+    {
+      "id": "overlay_cinema_swing",
+      "name": "Overlay Cinema Swing",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71770,
+        "dark": 163561,
+        "bright": 1095,
+        "total": 291600,
+        "mean": [
+          28.015665294924553,
+          30.86533950617284,
+          68.7844341563786
+        ]
+      },
+      "frame": "evidence/transitions/overlay_cinema_swing.png"
+    },
+    {
+      "id": "overlay_cinema_zoom",
+      "name": "Overlay Cinema Zoom",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 286727,
+        "dark": 0,
+        "bright": 4917,
+        "total": 291600,
+        "mean": [
+          38.26213648834019,
+          85.99288751714677,
+          223.73283607681756
+        ]
+      },
+      "frame": "evidence/transitions/overlay_cinema_zoom.png"
+    },
+    {
+      "id": "overlay_cinema_channel",
+      "name": "Overlay Cinema Channel",
+      "category": "Overlay",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 71819,
+        "dark": 161507,
+        "bright": 368,
+        "total": 291600,
+        "mean": [
+          28.140130315500684,
+          30.282091906721536,
+          67.0897085048011
+        ]
+      },
+      "frame": "evidence/transitions/overlay_cinema_channel.png"
     }
   ],
   "summary": {
-    "total": 33,
-    "passed": 33
+    "total": 383,
+    "passed": 383
   }
 }

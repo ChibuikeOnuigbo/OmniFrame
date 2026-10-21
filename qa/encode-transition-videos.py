@@ -13,7 +13,7 @@ ROOT = '/tmp/tvframes'
 OUT = os.path.join(os.getcwd(), 'transistion_video_result')
 SEQ = os.path.join(ROOT, 'reel-seq')
 FPS = 24
-CARD_FRAMES = 20  # ~0.83s per title card
+CARD_FRAMES = 12  # 1s per title card at 12 fps
 
 manifest = json.load(open(os.path.join(ROOT, 'manifest.json')))
 items = manifest['items']
@@ -23,10 +23,10 @@ os.makedirs(SEQ, exist_ok=True)
 BOLD = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 REG = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 
-def encode(frame_dir, out_path, pattern='f%04d.jpg'):
+def encode(frame_dir, out_path, pattern='f%04d.jpg', crf=26):
     subprocess.run([FF, '-y', '-framerate', str(FPS), '-i', os.path.join(frame_dir, pattern),
                     '-vf', 'scale=1280:720', '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
-                    '-crf', '21', '-movflags', '+faststart', out_path],
+                    '-crf', str(crf), '-movflags', '+faststart', out_path],
                    check=True, capture_output=True)
 
 def title_card(item, idx):
@@ -64,7 +64,7 @@ for idx, item in enumerate(items):
         add_seq(os.path.join(fdir, fn))
     print('encoded', item['id'])
 
-encode(SEQ, os.path.join(OUT, 'all-transitions-reel.mp4'), pattern='s%05d.jpg')
+encode(SEQ, os.path.join(OUT, 'all-transitions-reel.mp4'), pattern='s%05d.jpg', crf=29)
 print('encoded reel')
 
 # --- README.md index ---------------------------------------------------------

@@ -14,6 +14,7 @@
  */
 import { useEditor } from '../store'
 import type { Clip, Transition, TransitionType } from '../types'
+import { PILLAR_PRESETS, type PillarPresetDef } from './pillarPresets'
 
 export const TRANSITION_MIN_DURATION = 0.1
 export const TRANSITION_MAX_DURATION = 5
@@ -21,7 +22,7 @@ export const TRANSITION_MAX_DURATION = 5
 export interface TransitionPresetDef {
   id: TransitionType
   name: string
-  category: 'Dissolve' | 'Wipe' | 'Slide' | 'Shapes' | 'Zoom & Motion' | 'Special'
+  category: 'Dissolve' | 'Wipe' | 'Slide' | 'Shapes' | 'Zoom & Motion' | 'Special' | 'Blur' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay'
   /** Out-of-the-box duration in seconds. Users can lower/raise it, but the
    *  applied duration is always capped to TRANSITION_MIN/MAX_DURATION. */
   baseDuration: number
@@ -172,3 +173,13 @@ export const transitionAgentApi: TransitionAgentApi = {
 if (typeof window !== 'undefined') {
   ;(window as unknown as Record<string, unknown>).__omniframe_transitions = transitionAgentApi
 }
+
+// --- Pillar merge -----------------------------------------------------------
+/** The 350 pillar presets adapted to the shared def shape; family renderers
+ *  in pillarRenderers.ts read their `params`. */
+const pillarAsDefs: TransitionPresetDef[] = PILLAR_PRESETS.map((p) => ({ ...p }) as unknown as TransitionPresetDef)
+TRANSITION_PRESETS.push(...pillarAsDefs)
+
+export const PILLAR_DEF_BY_TYPE: Partial<Record<TransitionType, PillarPresetDef>> = Object.fromEntries(
+  PILLAR_PRESETS.map((p) => [p.id, p]),
+) as Partial<Record<TransitionType, PillarPresetDef>>
