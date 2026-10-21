@@ -95,7 +95,7 @@ jobs:
                       rec["status"] = "BLOCKED"; rec["failure"] = str(e)[:1500]
                   records.append(rec)
           # manifest first (batch 1 only, tiny)
-          if batch == 1:
+          if not os.path.isdir("youtube-audit/runner-drive/manifest"):
               mf = cfg["manifest"]
               ok, rc = fetch(mf["id"], "manifest.zip")
               if ok:
