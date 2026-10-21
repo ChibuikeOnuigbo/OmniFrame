@@ -19,6 +19,9 @@ concurrency:
   group: video-audit
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   audit:
     runs-on: ubuntu-latest
@@ -166,3 +169,15 @@ jobs:
           name: youtube-audit-batch
           path: audit-out/
           retention-days: 30
+
+      # Artifact zips live on Azure Blob (outside the sandbox allowlist), so the
+      # durable hand-off is a commit: the sandbox pulls it via github.com.
+      - name: Publish evidence to the branch
+        run: |
+          git config user.name "omniframe-audit-bot"
+          git config user.email "audit-bot@users.noreply.github.com"
+          mkdir -p youtube-audit/runner
+          cp -r audit-out/. youtube-audit/runner/
+          git add youtube-audit/runner
+          git commit -m "youtube-audit: runner evidence batch (frames, audio, inventory) [ci skip]" || echo "nothing to commit"
+          git push origin HEAD:${{ github.ref_name }}
