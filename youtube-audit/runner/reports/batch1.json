@@ -1,0 +1,81 @@
+{
+ "batch": 1,
+ "processed": 5,
+ "records": [
+  {
+   "id": "bpUZkFVX6NY",
+   "url": "https://www.youtube.com/watch?v=bpUZkFVX6NY",
+   "title": "AMV COMPOSITING tutorial | After Effects (Step-by-Step + Free Overlays)",
+   "duration": "649",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "ERROR: [youtube] bpUZkFVX6NY: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+  },
+  {
+   "id": "Tvd7qiK_gUA",
+   "url": "https://www.youtube.com/watch?v=Tvd7qiK_gUA",
+   "title": "How to do Manga Animations Like me | After Effects",
+   "duration": "978",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "ERROR: [youtube] Tvd7qiK_gUA: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+  },
+  {
+   "id": "fGm0SBFTj3o",
+   "url": "https://www.youtube.com/watch?v=fGm0SBFTj3o",
+   "title": "Playboi Carti - JUMPIN \ud83e\udd64 \u300c Kuiro MEP \u300d AMV / Flow Edit (4K)",
+   "duration": "49",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "ERROR: [youtube] fGm0SBFTj3o: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+  },
+  {
+   "id": "L7RueAR-5Zc",
+   "url": "https://www.youtube.com/watch?v=L7RueAR-5Zc",
+   "title": "Y Not? \u26d4 - JJK Shibuya Incident Arc \u300c Flow / Edit \u300d4K",
+   "duration": "19",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "ERROR: [youtube] L7RueAR-5Zc: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+  },
+  {
+   "id": "xeXhlkoOyrw",
+   "url": "https://www.youtube.com/watch?v=xeXhlkoOyrw",
+   "title": "\u300cScenario \ud83c\udfad\ud83d\udda4\u300d JJK\u300cAMV/EDIT\u300d(FREE PF)",
+   "duration": "13",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "ERROR: [youtube] xeXhlkoOyrw: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n"
+  }
+ ]
+}
