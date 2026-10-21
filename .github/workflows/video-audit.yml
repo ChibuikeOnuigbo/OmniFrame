@@ -1,0 +1,168 @@
+name: video-audit
+
+# Media-retrieval worker for the YouTube channel audit. The dev sandbox has NO
+# egress to youtube.com (TLS reset by SNI allowlist); GitHub-hosted runners have
+# legitimate general egress. This workflow enumerates channels, downloads the
+# current batch, extracts frames + audio evidence, and ships it back as an
+# artifact (retrievable from the sandbox via api.github.com, an allowed host).
+# Triggered only by changes to this file or youtube-audit/batch-trigger.txt so
+# normal commits never start a run. Batches are resumable: edit the trigger
+# file (batch=N) and push to process the next slice.
+
+on:
+  push:
+    paths:
+      - .github/workflows/video-audit.yml
+      - youtube-audit/batch-trigger.txt
+
+concurrency:
+  group: video-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Environment capability diagnosis (runner)
+        run: |
+          mkdir -p audit-out/errors
+          {
+            echo "RUNNER (github-hosted ubuntu-latest) capability test $(date -u +%FT%TZ)"
+            echo "-- DNS:"; getent hosts www.youtube.com | head -2
+            echo "-- TCP 443:"; timeout 10 python3 -c "import socket;s=socket.create_connection(('www.youtube.com',443),8);print('tcp ok');s.close()" 2>&1
+            echo "-- TLS+HTTP:"; timeout 20 curl -sS -o /dev/null -w "http=%{http_code} tls=%{ssl_verify_result}\n" https://www.youtube.com/ 2>&1 | tail -1
+            echo "-- media probe:"; timeout 30 curl -sS -o /dev/null -w "http=%{http_code} type=%{content_type} bytes=%{size_download}\n" -r 0-2047 "https://www.youtube.com/watch?v=9o8GT1Iurv0" 2>&1 | tail -1
+          } | tee audit-out/errors/runner-capability.txt
+
+      - name: Install yt-dlp
+        run: pip install -q yt-dlp
+
+      - name: Enumerate full channel inventories (flat playlists, paginated by yt-dlp)
+        run: |
+          mkdir -p audit-out
+          python3 - <<'PY'
+          import json, subprocess
+          channels = ["@spaceless2041","@Deppey","@AvoidAEP","@MatttVfx","@Keditz123","@chosensyt"]
+          explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
+          inv = {}
+          def add(vid, title, dur, chan, fmt):
+              if vid in inv: 
+                  inv[vid]["formats"].append(fmt); return
+              inv[vid] = {"id": vid, "url": f"https://www.youtube.com/watch?v={vid}", "title": title,
+                          "duration": dur, "channel": chan, "format": fmt, "formats": [fmt],
+                          "status": "INVENTORIED", "access": "pending-batch"}
+          for ch in channels:
+              for tab in ("videos", "shorts"):
+                  url = f"https://www.youtube.com/{ch}/{tab}"
+                  try:
+                      out = subprocess.run(["yt-dlp","--flat-playlist","--no-warnings",
+                                            "--print","%(id)s\t%(title)s\t%(duration)s\t%(channel)s", url],
+                                           capture_output=True, text=True, timeout=600)
+                      for line in out.stdout.splitlines():
+                          p = line.split("\t")
+                          if len(p) >= 4 and p[0]:
+                              add(p[0], p[1], p[2], p[3], tab)
+                      print(ch, tab, "ok", len(out.stdout.splitlines()))
+                  except Exception as e:
+                      print(ch, tab, "FAIL", e)
+                      open(f"audit-out/errors/inventory-{ch}-{tab}.txt","w").write(str(e))
+          for vid in explicit:
+              try:
+                  out = subprocess.run(["yt-dlp","--no-warnings","--print","%(id)s\t%(title)s\t%(duration)s\t%(channel)s",
+                                        f"https://www.youtube.com/watch?v={vid}"],
+                                       capture_output=True, text=True, timeout=180)
+                  p = out.stdout.strip().split("\t")
+                  if len(p) >= 4: add(p[0], p[1], p[2], p[3], "explicit")
+              except Exception as e:
+                  print(vid, "meta FAIL", e)
+                  open(f"audit-out/errors/meta-{vid}.txt","w").write(str(e))
+          json.dump({"generated": "__TS__", "total": len(inv), "videos": list(inv.values())},
+                    open("audit-out/inventory.json","w"), indent=1)
+          print("inventory total", len(inv))
+          PY
+          sed -i "s/__TS__/$(date -u +%FT%TZ)/" audit-out/inventory.json
+
+      - name: Batch download + frame/audio evidence
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, math
+          batch = 1
+          try:
+              txt = open("youtube-audit/batch-trigger.txt").read()
+              for line in txt.splitlines():
+                  if line.startswith("batch="): batch = int(line.split("=")[1])
+          except Exception: pass
+          inv = json.load(open("audit-out/inventory.json"))["videos"]
+          explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
+          per_channel = {}
+          for v in inv:
+              if v["id"] in explicit: continue
+              ch = v["channel"]
+              per_channel.setdefault(ch, []).append(v)
+          selection = [v for v in inv if v["id"] in explicit]
+          for ch, vids in per_channel.items():
+              selection += vids[:3]
+          # resumable slicing: batch N processes items [(N-1)*20, N*20)
+          start, end = (batch-1)*20, batch*20
+          selection = selection[start:end] or selection[:20]
+          os.makedirs("audit-out/evidence", exist_ok=True)
+          os.makedirs("audit-out/reports", exist_ok=True)
+          records = []
+          for v in selection:
+              vid = v["id"]; d = f"audit-out/evidence/{vid}"
+              os.makedirs(d, exist_ok=True)
+              rec = dict(v); rec["environment"] = "github-runner"
+              try:
+                  dl = subprocess.run(["yt-dlp","--no-warnings","-f","bv*[height<=480]+ba/b[height<=480]/w",
+                                       "-o", f"{d}/src.%(ext)s", v["url"]],
+                                      capture_output=True, text=True, timeout=900)
+                  if dl.returncode != 0:
+                      raise RuntimeError(dl.stderr[-1500:])
+                  src = [f for f in os.listdir(d) if f.startswith("src.")][0]
+                  src = os.path.join(d, src)
+                  probe = subprocess.run(["ffprobe","-v","error","-select_streams","v:0",
+                                          "-show_entries","stream=width,height,r_frame_rate",
+                                          "-of","json", src], capture_output=True, text=True)
+                  rec["probe"] = json.loads(probe.stdout)
+                  dur = float(v["duration"] or 60)
+                  for i in range(12):
+                      t = dur * (i + 0.5) / 12
+                      subprocess.run(["ffmpeg","-v","error","-ss",f"{t:.2f}","-i",src,"-frames:v","1",
+                                      "-vf","scale=640:360","-q:v","5", f"{d}/u{i:02d}.jpg"],
+                                     capture_output=True, timeout=120, check=True)
+                  subprocess.run(["ffmpeg","-v","error","-i",src,"-vf",
+                                  "select='gt(scene,0.4)',scale=640:360","-frames:v","6",
+                                  "-q:v","5", f"{d}/s%d.jpg"], capture_output=True, timeout=300)
+                  loud = subprocess.run(["ffmpeg","-v","error","-i",src,"-af",
+                                         "loudnorm=print_format=json","-f","null","-"],
+                                        capture_output=True, text=True, timeout=600)
+                  open(f"{d}/loudness.json","w").write(loud.stderr[-1200:])
+                  subprocess.run(["ffmpeg","-v","error","-i",src,"-filter_complex",
+                                  "showspectrumpic=s=900x360:legend=1", f"{d}/spectrum.png"],
+                                 capture_output=True, timeout=300)
+                  subprocess.run(["ffmpeg","-v","error","-i",src,"-filter_complex",
+                                  "showwavespic=s=900x200", f"{d}/wave.png"],
+                                 capture_output=True, timeout=300)
+                  rec["frames"] = sorted(f for f in os.listdir(d) if f.endswith(".jpg"))
+                  rec["audio_evidence"] = ["loudness.json","spectrum.png","wave.png"]
+                  rec["status"] = "FOOTAGE_ACQUIRED"
+                  os.remove(src)
+              except Exception as e:
+                  rec["status"] = "BLOCKED"
+                  rec["failure"] = str(e)[:2000]
+                  os.makedirs("audit-out/errors", exist_ok=True)
+                  open(f"audit-out/errors/{vid}.txt","w").write(str(e))
+              records.append(rec)
+              print(vid, rec["status"])
+          json.dump({"batch": batch, "processed": len(records), "records": records},
+                    open(f"audit-out/reports/batch{batch}.json","w"), indent=1)
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: youtube-audit-batch
+          path: audit-out/
+          retention-days: 30

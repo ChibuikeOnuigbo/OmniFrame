@@ -1,0 +1,2 @@
+batch=1
+# edit batch=N and push to process the next slice of the inventory
