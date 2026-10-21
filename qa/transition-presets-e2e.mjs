@@ -96,6 +96,21 @@ assert(validation.min.ok === true && validation.max.ok === true, 'boundary durat
 assert(validation.unknown.ok === false, 'unknown preset rejected with JSON error', JSON.stringify(validation.unknown))
 assert(validation.shortClips.ok === false && validation.shortClips.requiredClipSeconds === 2, 'short clips rejected: needs >= duration/2 per side', JSON.stringify(validation.shortClips))
 
+// --- Base seconds per preset ------------------------------------------------------
+const baseCheck = await page.evaluate(() => {
+  const api = window.__omniframe_transitions
+  const { presets, minDuration, maxDuration } = api.list()
+  const inRange = presets.every((p) => typeof p.baseDuration === 'number' && p.baseDuration >= minDuration && p.baseDuration <= maxDuration)
+  api.clear()
+  const applied = api.apply('whip_left') // no explicit duration -> base seconds
+  const dur = applied.ok ? applied.transition.duration : null
+  const base = presets.find((p) => p.id === 'whip_left').baseDuration
+  api.clear()
+  return { inRange, count: presets.length, dur, base }
+})
+assert(baseCheck.inRange, 'every preset ships a base duration inside 0.1–5s', `count=${baseCheck.count}`)
+assert(baseCheck.dur === baseCheck.base, 'apply() without a duration uses the preset base seconds', `applied=${baseCheck.dur} base=${baseCheck.base}`)
+
 // --- Panel: duration slider law --------------------------------------------------
 await page.getByTestId('left-tab-transitions').click()
 await page.getByTestId('transitions-panel').waitFor({ state: 'visible' })
@@ -104,6 +119,13 @@ assert((await page.getByTestId('transition-duration-value').innerText()) === '3.
 assert((await page.getByTestId('transition-requirement').innerText()).includes('1.70s'), 'panel states the per-side clip requirement')
 const segOk = await page.evaluate(() => [...document.querySelectorAll('[data-testid^="transition-dur-"]')].every((b) => b.getBoundingClientRect().height <= 26))
 assert(segOk, 'duration chips are single-line')
+await page.getByTestId('transition-card-whip_left').click({ position: { x: 30, y: 14 } }) // label area, not the buttons
+assert((await page.getByTestId('transition-duration-value').innerText()) === '0.5s', 'selecting a preset loads its base seconds into the slider')
+assert((await page.getByTestId('transition-base-loaded').innerText()).includes('base 0.5s'), 'panel states the loaded base seconds')
+{
+  const stop = page.getByTestId('stop-visual-preview')
+  if (await stop.count()) await stop.click()
+}
 
 // --- Reference frames: pure CLIP 1 (t=3) and pure CLIP 2 (t=9) ------------------
 const frameStats = () => page.evaluate(() => {

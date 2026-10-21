@@ -51,19 +51,23 @@ export function TransitionsPanel() {
   const removeTransition = useEditor((s) => s.removeTransition)
   const startVisualPreview = useEditor((s) => s.startVisualPreview)
   const [duration, setDuration] = useState(1.0)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [placedMsg, setPlacedMsg] = useState<string | null>(null)
 
+  const selectedPreset = TRANSITION_PRESETS.find((p) => p.id === selectedId) || null
+
   const clampDuration = (d: number) => Math.min(TRANSITION_MAX_DURATION, Math.max(TRANSITION_MIN_DURATION, Math.round(d * 10) / 10))
 
-  const previewTransition = (preset: TransitionPresetDef) => {
-    const candidate = findNearestTransitionCandidate(duration)
+  const previewTransition = (preset: TransitionPresetDef, durOverride?: number) => {
+    const dur = durOverride ?? duration
+    const candidate = findNearestTransitionCandidate(dur)
     if (!candidate) {
-      setNotice(`No usable cut found. Place two adjacent clips near the playhead, each at least ${(duration / 2).toFixed(1)}s long.`)
+      setNotice(`No usable cut found. Place two adjacent clips near the playhead, each at least ${(dur / 2).toFixed(1)}s long.`)
       return
     }
     setNotice(null)
-    const startTime = Math.max(candidate.fromClip.start, candidate.cut - duration / 2)
+    const startTime = Math.max(candidate.fromClip.start, candidate.cut - dur / 2)
     const transition: Transition = {
       id: 'visual-preview-transition',
       type: preset.id,
@@ -71,7 +75,7 @@ export function TransitionsPanel() {
       toClipId: candidate.toClip.id,
       trackId: candidate.fromClip.trackId,
       startTime,
-      duration,
+      duration: dur,
       alignment: 'centered',
       enabled: true,
     }
@@ -80,8 +84,17 @@ export function TransitionsPanel() {
       transition,
       label: `${preset.name} · ${candidate.fromClip.name} → ${candidate.toClip.name}`,
       startTime,
-      endTime: startTime + duration,
+      endTime: startTime + dur,
     })
+  }
+
+  // Selecting a preset loads its BASE seconds into the duration control;
+  // the user then raises/lowers it inside the 0.1–5s cap.
+  const selectPreset = (preset: TransitionPresetDef) => {
+    setSelectedId(preset.id)
+    const base = clampDuration(preset.baseDuration)
+    setDuration(base)
+    previewTransition(preset, base)
   }
 
   const placeTransition = (preset: TransitionPresetDef) => {
@@ -144,6 +157,11 @@ export function TransitionsPanel() {
         <p className="text-[10px] text-ink-500" data-testid="transition-requirement">
           0.1–5s. Needs a cut with at least {(duration / 2).toFixed(2)}s of clip on each side — pick clips long enough for the duration you choose.
         </p>
+        {selectedPreset && (
+          <p className="text-[10px] text-ink-400" data-testid="transition-base-loaded">
+            {selectedPreset.name}: base {selectedPreset.baseDuration}s loaded — raise or lower it above (0.1s floor, 5s cap).
+          </p>
+        )}
       </div>
 
       {notice && (
@@ -167,13 +185,14 @@ export function TransitionsPanel() {
               <div
                 key={preset.id}
                 data-testid={`transition-card-${preset.id}`}
-                onClick={() => previewTransition(preset)}
-                className="group cursor-pointer p-2.5 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 transition-all flex items-center justify-between"
+                onClick={() => selectPreset(preset)}
+                className={`group cursor-pointer p-2.5 rounded-lg bg-ink-900 border hover:border-brand/60 transition-all flex items-center justify-between ${selectedId === preset.id ? 'border-brand ring-1 ring-brand/50' : 'border-ink-800'}`}
               >
                 <div className="min-w-0 flex-1 pr-2">
                   <div className="font-medium text-ink-100 flex items-center gap-1.5">
                     <Sparkles size={13} className="text-amber-400 shrink-0" />
                     <span>{preset.name}</span>
+                    <span data-testid={`transition-base-${preset.id}`} className="text-[9px] font-mono px-1 py-px rounded bg-ink-800 text-ink-400 whitespace-nowrap">base {preset.baseDuration}s</span>
                   </div>
                   <div className="text-[10px] text-ink-400 mt-0.5 leading-tight">{preset.description}</div>
                 </div>

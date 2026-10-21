@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T15:13:00.935Z",
+  "generatedAt": "2026-10-21T17:03:26.974Z",
   "pair": {
     "from": "CLIP 1 (#dc2645)",
     "to": "CLIP 2 (#2456e6)",
@@ -29,22 +29,22 @@
       "ok": true,
       "transition": {
         "type": "cross_dissolve",
-        "fromClipId": "clip_tp5qkvr47ac",
-        "toClipId": "clip_rnqyglt47ad",
-        "trackId": "trk_rxtyl2247ac",
+        "fromClipId": "clip_di3hlvf2842",
+        "toClipId": "clip_xhm0c9e2843",
+        "trackId": "trk_2iyeh6m2842",
         "startTime": 5.95,
         "duration": 0.1,
         "alignment": "centered",
         "enabled": true,
-        "id": "trans_oepso4e47q8"
+        "id": "trans_dpmudk028jv"
       },
       "from": {
-        "id": "clip_tp5qkvr47ac",
+        "id": "clip_di3hlvf2842",
         "name": "test-clip-1.png",
         "duration": 6
       },
       "to": {
-        "id": "clip_rnqyglt47ad",
+        "id": "clip_xhm0c9e2843",
         "name": "test-clip-2.png",
         "duration": 6
       },
@@ -55,22 +55,22 @@
       "ok": true,
       "transition": {
         "type": "cross_dissolve",
-        "fromClipId": "clip_tp5qkvr47ac",
-        "toClipId": "clip_rnqyglt47ad",
-        "trackId": "trk_rxtyl2247ac",
+        "fromClipId": "clip_di3hlvf2842",
+        "toClipId": "clip_xhm0c9e2843",
+        "trackId": "trk_2iyeh6m2842",
         "startTime": 3.5,
         "duration": 5,
         "alignment": "centered",
         "enabled": true,
-        "id": "trans_nl6nw3x47q9"
+        "id": "trans_58bjnys28jw"
       },
       "from": {
-        "id": "clip_tp5qkvr47ac",
+        "id": "clip_di3hlvf2842",
         "name": "test-clip-1.png",
         "duration": 6
       },
       "to": {
-        "id": "clip_rnqyglt47ad",
+        "id": "clip_xhm0c9e2843",
         "name": "test-clip-2.png",
         "duration": 6
       },
