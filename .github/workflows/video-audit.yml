@@ -46,7 +46,15 @@ jobs:
           # streaming YouTube now forces (yt-dlp#12482 -> "The page needs to be
           # reloaded" / empty format lists). Master implements SABR.
           pip install -q -U --force-reinstall "yt-dlp[default] @ https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.tar.gz" || pip install -q -U yt-dlp
-          yt-dlp --version | tee audit-out/errors/ytdlp-version.txt
+          # EJS (external JS challenge solver): needs a JS runtime (Deno recommended)
+          # + solver scripts (yt-dlp-ejs python pkg, else auto-download from github).
+          curl -fsSL https://deno.land/install.sh | sh -s v2.5.4 || curl -fsSL https://deno.land/install.sh | sh || echo "deno install failed"
+          echo "$HOME/.deno/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.deno/bin:$PATH"
+          python3 -c "import yt_dlp_ejs" 2>/dev/null || pip install -q yt-dlp-ejs || echo "yt-dlp-ejs pip: failed (will use --remote-components)"
+          mkdir -p "$HOME/.config/yt-dlp"
+          printf -- '--remote-components ejs:github\n' > "$HOME/.config/yt-dlp/config"
+          { yt-dlp --version; deno --version 2>&1 | head -1 || echo "deno: missing"; python3 -c "import importlib.metadata as m; print('yt-dlp-ejs', m.version('yt-dlp-ejs'))" 2>/dev/null || echo "yt-dlp-ejs: not installed"; } | tee audit-out/errors/ytdlp-version.txt
           # PO-token provider (bgutil): yt-dlp plugin via pip + local HTTP server via docker.
           # Fixes "The page needs to be reloaded" / web-client PO-token walls. Best effort.
           pip install -q bgutil-ytdlp-pot-provider || echo "bgutil plugin pip: failed"
