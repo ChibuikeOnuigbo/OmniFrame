@@ -1,0 +1,756 @@
+{
+  "generatedAt": "2026-10-21T15:13:00.935Z",
+  "pair": {
+    "from": "CLIP 1 (#dc2645)",
+    "to": "CLIP 2 (#2456e6)",
+    "clipSeconds": 6,
+    "cut": 6,
+    "transitionSeconds": 2
+  },
+  "durationLaw": {
+    "min": 0.1,
+    "max": 5,
+    "rule": "each side of the cut must hold >= duration/2"
+  },
+  "validation": {
+    "tooShort": {
+      "ok": false,
+      "error": "Duration must be between 0.1s and 5s (got 0.05)."
+    },
+    "zero": {
+      "ok": false,
+      "error": "Duration must be between 0.1s and 5s (got 0)."
+    },
+    "tooLong": {
+      "ok": false,
+      "error": "Duration must be between 0.1s and 5s (got 7)."
+    },
+    "min": {
+      "ok": true,
+      "transition": {
+        "type": "cross_dissolve",
+        "fromClipId": "clip_tp5qkvr47ac",
+        "toClipId": "clip_rnqyglt47ad",
+        "trackId": "trk_rxtyl2247ac",
+        "startTime": 5.95,
+        "duration": 0.1,
+        "alignment": "centered",
+        "enabled": true,
+        "id": "trans_oepso4e47q8"
+      },
+      "from": {
+        "id": "clip_tp5qkvr47ac",
+        "name": "test-clip-1.png",
+        "duration": 6
+      },
+      "to": {
+        "id": "clip_rnqyglt47ad",
+        "name": "test-clip-2.png",
+        "duration": 6
+      },
+      "cut": 6,
+      "requiredClipSeconds": 0.05
+    },
+    "max": {
+      "ok": true,
+      "transition": {
+        "type": "cross_dissolve",
+        "fromClipId": "clip_tp5qkvr47ac",
+        "toClipId": "clip_rnqyglt47ad",
+        "trackId": "trk_rxtyl2247ac",
+        "startTime": 3.5,
+        "duration": 5,
+        "alignment": "centered",
+        "enabled": true,
+        "id": "trans_nl6nw3x47q9"
+      },
+      "from": {
+        "id": "clip_tp5qkvr47ac",
+        "name": "test-clip-1.png",
+        "duration": 6
+      },
+      "to": {
+        "id": "clip_rnqyglt47ad",
+        "name": "test-clip-2.png",
+        "duration": 6
+      },
+      "cut": 6,
+      "requiredClipSeconds": 2.5
+    },
+    "unknown": {
+      "ok": false,
+      "error": "Unknown transition preset \"does_not_exist\"."
+    },
+    "shortClips": {
+      "ok": false,
+      "error": "No usable cut: place two adjacent clips near the playhead, each at least 2.00s long on its side of the cut.",
+      "requiredClipSeconds": 2
+    }
+  },
+  "presets": [
+    {
+      "id": "cross_dissolve",
+      "name": "Cross Dissolve",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 342,
+        "blue": 286880,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          74.76753772290809,
+          54.05608367626886,
+          132.87051783264747
+        ]
+      },
+      "frame": "evidence/transitions/cross_dissolve.png"
+    },
+    {
+      "id": "film_dissolve",
+      "name": "Film Dissolve",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 298,
+        "blue": 287079,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          56.09398491083676,
+          60.03152949245542,
+          151.63616255144032
+        ]
+      },
+      "frame": "evidence/transitions/film_dissolve.png"
+    },
+    {
+      "id": "additive_dissolve",
+      "name": "Additive Dissolve",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 372,
+        "blue": 286638,
+        "dark": 0,
+        "bright": 4184,
+        "total": 291600,
+        "mean": [
+          129.8933058984911,
+          64.84180384087792,
+          150.54783607681756
+        ]
+      },
+      "frame": "evidence/transitions/additive_dissolve.png"
+    },
+    {
+      "id": "dip_to_black",
+      "name": "Dip to Black",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/dip_to_black.png"
+    },
+    {
+      "id": "dip_to_white",
+      "name": "Dip to White",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 0,
+        "bright": 291600,
+        "total": 291600,
+        "mean": [
+          255,
+          255,
+          255
+        ]
+      },
+      "frame": "evidence/transitions/dip_to_white.png"
+    },
+    {
+      "id": "blur_dissolve",
+      "name": "Blur Dissolve",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 284122,
+        "dark": 2,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          74.14172839506173,
+          53.327798353909465,
+          130.8603806584362
+        ]
+      },
+      "frame": "evidence/transitions/blur_dissolve.png"
+    },
+    {
+      "id": "light_leak",
+      "name": "Light Leak",
+      "category": "Dissolve",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 129624,
+        "blue": 87730,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          136.9729903978052,
+          101.7571364883402,
+          144.3934122085048
+        ]
+      },
+      "frame": "evidence/transitions/light_leak.png"
+    },
+    {
+      "id": "wipe_left",
+      "name": "Wipe Left",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143534,
+        "blue": 143715,
+        "dark": 0,
+        "bright": 4434,
+        "total": 291600,
+        "mean": [
+          129.82943758573387,
+          64.91303155006858,
+          151.1399862825789
+        ]
+      },
+      "frame": "evidence/transitions/wipe_left.png"
+    },
+    {
+      "id": "wipe_right",
+      "name": "Wipe Right",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143832,
+        "blue": 143539,
+        "dark": 0,
+        "bright": 4322,
+        "total": 291600,
+        "mean": [
+          129.95699931412895,
+          64.77134430727023,
+          150.92444444444445
+        ]
+      },
+      "frame": "evidence/transitions/wipe_right.png"
+    },
+    {
+      "id": "wipe_up",
+      "name": "Wipe Up",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143128,
+        "blue": 144188,
+        "dark": 0,
+        "bright": 4359,
+        "total": 291600,
+        "mean": [
+          129.5370096021948,
+          64.9094170096022,
+          151.32104595336077
+        ]
+      },
+      "frame": "evidence/transitions/wipe_up.png"
+    },
+    {
+      "id": "wipe_down",
+      "name": "Wipe Down",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 144238,
+        "blue": 143066,
+        "dark": 0,
+        "bright": 4398,
+        "total": 291600,
+        "mean": [
+          130.24937585733883,
+          64.77492112482854,
+          150.74338820301784
+        ]
+      },
+      "frame": "evidence/transitions/wipe_down.png"
+    },
+    {
+      "id": "clock_wipe",
+      "name": "Clock Wipe",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143534,
+        "blue": 143715,
+        "dark": 0,
+        "bright": 4434,
+        "total": 291600,
+        "mean": [
+          129.82943758573387,
+          64.91303155006858,
+          151.1399862825789
+        ]
+      },
+      "frame": "evidence/transitions/clock_wipe.png"
+    },
+    {
+      "id": "pinwheel",
+      "name": "Pinwheel",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143930,
+        "blue": 143371,
+        "dark": 0,
+        "bright": 4398,
+        "total": 291600,
+        "mean": [
+          130.06241426611797,
+          64.82383401920438,
+          150.90809327846364
+        ]
+      },
+      "frame": "evidence/transitions/pinwheel.png"
+    },
+    {
+      "id": "checker_wipe",
+      "name": "Checker Wipe",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143493,
+        "blue": 143762,
+        "dark": 0,
+        "bright": 4423,
+        "total": 291600,
+        "mean": [
+          129.79288751714677,
+          64.89325788751715,
+          151.1441975308642
+        ]
+      },
+      "frame": "evidence/transitions/checker_wipe.png"
+    },
+    {
+      "id": "blinds_h",
+      "name": "Venetian Blinds H",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 142048,
+        "blue": 145268,
+        "dark": 0,
+        "bright": 4359,
+        "total": 291600,
+        "mean": [
+          129.52965020576133,
+          64.90944787379972,
+          151.32475308641975
+        ]
+      },
+      "frame": "evidence/transitions/blinds_h.png"
+    },
+    {
+      "id": "blinds_v",
+      "name": "Venetian Blinds V",
+      "category": "Wipe",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143167,
+        "blue": 144166,
+        "dark": 0,
+        "bright": 4361,
+        "total": 291600,
+        "mean": [
+          129.57583333333332,
+          64.90106652949245,
+          151.288926611797
+        ]
+      },
+      "frame": "evidence/transitions/blinds_v.png"
+    },
+    {
+      "id": "slide_left",
+      "name": "Slide Left",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143832,
+        "blue": 143539,
+        "dark": 0,
+        "bright": 4322,
+        "total": 291600,
+        "mean": [
+          129.9569890260631,
+          64.77128600823045,
+          150.92439300411522
+        ]
+      },
+      "frame": "evidence/transitions/slide_left.png"
+    },
+    {
+      "id": "slide_right",
+      "name": "Slide Right",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143534,
+        "blue": 143715,
+        "dark": 0,
+        "bright": 4434,
+        "total": 291600,
+        "mean": [
+          129.82943758573387,
+          64.91303155006858,
+          151.1399862825789
+        ]
+      },
+      "frame": "evidence/transitions/slide_right.png"
+    },
+    {
+      "id": "slide_up",
+      "name": "Slide Up",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 144238,
+        "blue": 143066,
+        "dark": 0,
+        "bright": 4398,
+        "total": 291600,
+        "mean": [
+          130.24937585733883,
+          64.77492112482854,
+          150.74338820301784
+        ]
+      },
+      "frame": "evidence/transitions/slide_up.png"
+    },
+    {
+      "id": "slide_down",
+      "name": "Slide Down",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143128,
+        "blue": 144188,
+        "dark": 0,
+        "bright": 4359,
+        "total": 291600,
+        "mean": [
+          129.5370096021948,
+          64.9094170096022,
+          151.32104595336077
+        ]
+      },
+      "frame": "evidence/transitions/slide_down.png"
+    },
+    {
+      "id": "whip_left",
+      "name": "Whip Left",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 142616,
+        "blue": 147324,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          124.43049039780522,
+          63.05849451303155,
+          146.95060699588478
+        ]
+      },
+      "frame": "evidence/transitions/whip_left.png"
+    },
+    {
+      "id": "whip_right",
+      "name": "Whip Right",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143338,
+        "blue": 146536,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          124.9439060356653,
+          62.833391632373115,
+          146.40939300411523
+        ]
+      },
+      "frame": "evidence/transitions/whip_right.png"
+    },
+    {
+      "id": "barn_doors",
+      "name": "Barn Doors",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 141566,
+        "blue": 141454,
+        "dark": 0,
+        "bright": 8757,
+        "total": 291600,
+        "mean": [
+          131.78637517146777,
+          67.68427983539095,
+          152.56438271604938
+        ]
+      },
+      "frame": "evidence/transitions/barn_doors.png"
+    },
+    {
+      "id": "center_split",
+      "name": "Center Split",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 145800,
+        "blue": 141454,
+        "dark": 0,
+        "bright": 4434,
+        "total": 291600,
+        "mean": [
+          131.26836762688615,
+          64.53578189300411,
+          149.87258573388203
+        ]
+      },
+      "frame": "evidence/transitions/center_split.png"
+    },
+    {
+      "id": "page_turn",
+      "name": "Page Turn",
+      "category": "Slide",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 143532,
+        "blue": 143715,
+        "dark": 0,
+        "bright": 4045,
+        "total": 291600,
+        "mean": [
+          128.4222462277092,
+          64.41482853223594,
+          150.13291495198902
+        ]
+      },
+      "frame": "evidence/transitions/page_turn.png"
+    },
+    {
+      "id": "iris_circle",
+      "name": "Iris Round",
+      "category": "Shapes",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 105589,
+        "blue": 181628,
+        "dark": 0,
+        "bright": 4434,
+        "total": 291600,
+        "mean": [
+          105.92097050754458,
+          71.14709533607682,
+          172.05003086419754
+        ]
+      },
+      "frame": "evidence/transitions/iris_circle.png"
+    },
+    {
+      "id": "iris_diamond",
+      "name": "Iris Diamond",
+      "category": "Shapes",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 216004,
+        "blue": 71236,
+        "dark": 0,
+        "bright": 4434,
+        "total": 291600,
+        "mean": [
+          175.58969478737998,
+          52.972126200274346,
+          111.08909122085048
+        ]
+      },
+      "frame": "evidence/transitions/iris_diamond.png"
+    },
+    {
+      "id": "iris_box",
+      "name": "Iris Box",
+      "category": "Shapes",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 218520,
+        "blue": 68734,
+        "dark": 0,
+        "bright": 4433,
+        "total": 291600,
+        "mean": [
+          177.2672462277092,
+          52.53587448559671,
+          109.62320987654321
+        ]
+      },
+      "frame": "evidence/transitions/iris_box.png"
+    },
+    {
+      "id": "zoom",
+      "name": "Zoom Push",
+      "category": "Zoom & Motion",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 495,
+        "blue": 284864,
+        "dark": 0,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          75.55472222222222,
+          54.973415637860086,
+          133.26046639231825
+        ]
+      },
+      "frame": "evidence/transitions/zoom.png"
+    },
+    {
+      "id": "zoom_out",
+      "name": "Zoom Out",
+      "category": "Zoom & Motion",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 230,
+        "blue": 172434,
+        "dark": 116388,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          44.92969478737997,
+          32.48321330589849,
+          79.83729080932784
+        ]
+      },
+      "frame": "evidence/transitions/zoom_out.png"
+    },
+    {
+      "id": "spin",
+      "name": "Spin",
+      "category": "Zoom & Motion",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 1555,
+        "blue": 111863,
+        "dark": 177390,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          29.47489368998628,
+          21.395140603566528,
+          52.136402606310014
+        ]
+      },
+      "frame": "evidence/transitions/spin.png"
+    },
+    {
+      "id": "flip_h",
+      "name": "Flip",
+      "category": "Zoom & Motion",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 0,
+        "blue": 0,
+        "dark": 291600,
+        "bright": 0,
+        "total": 291600,
+        "mean": [
+          0,
+          0,
+          0
+        ]
+      },
+      "frame": "evidence/transitions/flip_h.png"
+    },
+    {
+      "id": "glitch",
+      "name": "Glitch",
+      "category": "Special",
+      "ok": true,
+      "applied": true,
+      "pixels": {
+        "red": 145176,
+        "blue": 142129,
+        "dark": 0,
+        "bright": 4381,
+        "total": 291600,
+        "mean": [
+          131.50322016460905,
+          64.40919753086419,
+          149.61205418381346
+        ]
+      },
+      "frame": "evidence/transitions/glitch.png"
+    }
+  ],
+  "summary": {
+    "total": 33,
+    "passed": 33
+  }
+}

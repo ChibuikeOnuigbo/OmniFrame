@@ -1053,6 +1053,318 @@ export class PreviewEngine {
         }
         break
       }
+      case 'zoom_out': {
+        if (hasFrom) {
+          ctx.save()
+          const s = 1.0 - progress * 0.45
+          ctx.translate(this.width / 2, this.height / 2)
+          ctx.scale(s, s)
+          ctx.translate(-this.width / 2, -this.height / 2)
+          ctx.globalAlpha = 1 - progress
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          const s = 0.55 + progress * 0.45
+          ctx.translate(this.width / 2, this.height / 2)
+          ctx.scale(s, s)
+          ctx.translate(-this.width / 2, -this.height / 2)
+          ctx.globalAlpha = progress
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'film_dissolve': {
+        if (hasFrom) { ctx.save(); ctx.globalAlpha = Math.pow(1 - progress, 1.4); drawFrom(ctx); ctx.restore() }
+        if (hasTo) { ctx.save(); ctx.globalAlpha = Math.pow(progress, 0.7); drawTo(ctx); ctx.restore() }
+        break
+      }
+      case 'additive_dissolve': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          ctx.save()
+          ctx.globalCompositeOperation = 'lighter'
+          ctx.globalAlpha = progress
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'blur_dissolve': {
+        const blurPx = Math.round(Math.sin(progress * Math.PI) * 22)
+        if (hasFrom) {
+          ctx.save()
+          ctx.filter = `blur(${Math.round(progress * 22)}px)`
+          ctx.globalAlpha = 1 - progress
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          ctx.filter = `blur(${Math.round((1 - progress) * 22)}px)`
+          ctx.globalAlpha = progress
+          drawTo(ctx)
+          ctx.restore()
+        }
+        void blurPx
+        break
+      }
+      case 'light_leak': {
+        if (hasFrom) { ctx.save(); ctx.globalAlpha = 1 - progress * 0.6; drawFrom(ctx); ctx.restore() }
+        if (hasTo) { ctx.save(); ctx.globalAlpha = 0.4 + progress * 0.6; drawTo(ctx); ctx.restore() }
+        const g = ctx.createRadialGradient(this.width * 0.3, this.height * 0.25, 10, this.width * 0.3, this.height * 0.25, this.width * 0.75)
+        const a = Math.sin(progress * Math.PI) * 0.65
+        g.addColorStop(0, `rgba(255, 214, 150, ${a})`)
+        g.addColorStop(0.5, `rgba(255, 140, 60, ${a * 0.55})`)
+        g.addColorStop(1, 'rgba(255, 120, 40, 0)')
+        ctx.fillStyle = g
+        ctx.fillRect(0, 0, this.width, this.height)
+        break
+      }
+      case 'wipe_up': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(0, this.height * (1 - progress), this.width, this.height * progress)
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'wipe_down': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(0, 0, this.width, this.height * progress)
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'slide_up': {
+        if (hasFrom) { ctx.save(); ctx.translate(0, -progress * this.height); drawFrom(ctx); ctx.restore() }
+        if (hasTo) { ctx.save(); ctx.translate(0, (1 - progress) * this.height); drawTo(ctx); ctx.restore() }
+        break
+      }
+      case 'slide_down': {
+        if (hasFrom) { ctx.save(); ctx.translate(0, progress * this.height); drawFrom(ctx); ctx.restore() }
+        if (hasTo) { ctx.save(); ctx.translate(0, -(1 - progress) * this.height); drawTo(ctx); ctx.restore() }
+        break
+      }
+      case 'whip_left':
+      case 'whip_right': {
+        const dir = trans.type === 'whip_left' ? -1 : 1
+        const blurPx = Math.max(0, Math.round(Math.sin(progress * Math.PI) * 26))
+        if (hasFrom) {
+          ctx.save()
+          ctx.filter = `blur(${blurPx}px)`
+          ctx.translate(dir * -progress * this.width, 0)
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          ctx.filter = `blur(${blurPx}px)`
+          ctx.translate(dir * (1 - progress) * this.width, 0)
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'clock_wipe':
+      case 'pinwheel': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          const cx = this.width / 2, cy = this.height / 2
+          const blades = trans.type === 'pinwheel' ? 2 : 1
+          ctx.save()
+          ctx.beginPath()
+          for (let b = 0; b < blades; b++) {
+            const start = -Math.PI / 2 + (b * Math.PI * 2) / blades
+            ctx.moveTo(cx, cy)
+            ctx.arc(cx, cy, Math.max(this.width, this.height), start, start + (progress * Math.PI * 2) / blades)
+            ctx.closePath()
+          }
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'checker_wipe': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          const cols = 8, rows = 5
+          const cw = this.width / cols, ch = this.height / rows
+          ctx.save()
+          ctx.beginPath()
+          for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
+              const parity = (x + y) % 2
+              const lp = Math.max(0, Math.min(1, progress * 2 - parity))
+              if (lp <= 0) continue
+              const insetX = (cw * (1 - lp)) / 2, insetY = (ch * (1 - lp)) / 2
+              ctx.rect(x * cw + insetX, y * ch + insetY, cw - insetX * 2, ch - insetY * 2)
+            }
+          }
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'blinds_h':
+      case 'blinds_v': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          const bands = trans.type === 'blinds_h' ? 6 : 9
+          ctx.save()
+          ctx.beginPath()
+          for (let i = 0; i < bands; i++) {
+            if (trans.type === 'blinds_h') {
+              const bh = this.height / bands
+              ctx.rect(0, i * bh, this.width, bh * progress)
+            } else {
+              const bw = this.width / bands
+              ctx.rect(i * bw, 0, bw * progress, this.height)
+            }
+          }
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'barn_doors': {
+        if (hasTo) drawTo(ctx)
+        if (hasFrom) {
+          // Each door is half the frame sliding outward; the clip region is
+          // the door's CURRENT screen rect, so a gap opens in the middle.
+          const halfW = this.width / 2
+          const doorW = halfW * (1 - progress)
+          ctx.save()
+          ctx.beginPath(); ctx.rect(0, 0, doorW, this.height); ctx.clip()
+          ctx.translate(-progress * halfW, 0)
+          drawFrom(ctx)
+          ctx.restore()
+          ctx.save()
+          ctx.beginPath(); ctx.rect(this.width - doorW, 0, doorW, this.height); ctx.clip()
+          ctx.translate(progress * halfW, 0)
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'center_split': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(this.width / 2 - (progress * this.width) / 2, 0, progress * this.width, this.height)
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'page_turn': {
+        if (hasTo) drawTo(ctx)
+        if (hasFrom) {
+          const edge = this.width * (1 - progress)
+          ctx.save()
+          ctx.beginPath(); ctx.rect(0, 0, edge, this.height); ctx.clip()
+          drawFrom(ctx)
+          ctx.restore()
+          const g = ctx.createLinearGradient(edge - 46, 0, edge + 6, 0)
+          g.addColorStop(0, 'rgba(0,0,0,0)')
+          g.addColorStop(1, 'rgba(0,0,0,0.45)')
+          ctx.fillStyle = g
+          ctx.fillRect(Math.max(0, edge - 46), 0, 52, this.height)
+        }
+        break
+      }
+      case 'iris_circle':
+      case 'iris_diamond':
+      case 'iris_box': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          const cx = this.width / 2, cy = this.height / 2
+          ctx.save()
+          ctx.beginPath()
+          if (trans.type === 'iris_circle') {
+            ctx.arc(cx, cy, progress * Math.max(this.width, this.height) * 0.72, 0, Math.PI * 2)
+          } else if (trans.type === 'iris_diamond') {
+            const rx = progress * this.width * 0.72, ry = progress * this.height * 0.72
+            ctx.moveTo(cx, cy - ry); ctx.lineTo(cx + rx, cy); ctx.lineTo(cx, cy + ry); ctx.lineTo(cx - rx, cy); ctx.closePath()
+          } else {
+            ctx.rect(cx - (progress * this.width) / 2, cy - (progress * this.height) / 2, progress * this.width, progress * this.height)
+          }
+          ctx.clip()
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'spin': {
+        const cx = this.width / 2, cy = this.height / 2
+        if (hasFrom) {
+          ctx.save()
+          ctx.translate(cx, cy); ctx.rotate(-progress * Math.PI); ctx.scale(1 - progress * 0.6, 1 - progress * 0.6); ctx.translate(-cx, -cy)
+          ctx.globalAlpha = 1 - progress
+          drawFrom(ctx)
+          ctx.restore()
+        }
+        if (hasTo) {
+          ctx.save()
+          ctx.translate(cx, cy); ctx.rotate((1 - progress) * Math.PI); ctx.scale(0.4 + progress * 0.6, 0.4 + progress * 0.6); ctx.translate(-cx, -cy)
+          ctx.globalAlpha = progress
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'flip_h': {
+        const cx = this.width / 2
+        if (progress < 0.5) {
+          if (hasFrom) {
+            ctx.save()
+            ctx.translate(cx, 0); ctx.scale(Math.cos(progress * Math.PI), 1); ctx.translate(-cx, 0)
+            drawFrom(ctx)
+            ctx.restore()
+          }
+        } else if (hasTo) {
+          ctx.save()
+          ctx.translate(cx, 0); ctx.scale(Math.cos((1 - progress) * Math.PI), 1); ctx.translate(-cx, 0)
+          drawTo(ctx)
+          ctx.restore()
+        }
+        break
+      }
+      case 'glitch': {
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          const slices = 12
+          const sh = this.height / slices
+          const amp = Math.sin(progress * Math.PI) * 46
+          for (let i = 0; i < slices; i++) {
+            const rnd = Math.abs(Math.sin(i * 127.1 + Math.floor(progress * 9) * 311.7)) % 1
+            const dx = (rnd - 0.5) * 2 * amp
+            ctx.save()
+            ctx.beginPath(); ctx.rect(0, i * sh, this.width, sh); ctx.clip()
+            ctx.translate(dx, 0)
+            if (i % 2 === 0 || progress > 0.7) drawTo(ctx)
+            ctx.restore()
+          }
+          if (progress > 0.75 && hasTo) { ctx.save(); ctx.globalAlpha = (progress - 0.75) * 4; drawTo(ctx); ctx.restore() }
+        }
+        break
+      }
       default: {
         if (hasFrom) drawFrom(ctx)
         break

@@ -234,6 +234,7 @@ try {
   // Title presets are virtual overlay clips during audition.
   const clipsBeforeTitle = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
   await page.getByTestId('left-tab-text').click()
+  await page.getByTestId('text-submode-presets-btn').click()
   await page.getByTestId('text-preset-cinematic-title').click()
   const titleAudition = await page.evaluate(() => {
     const state = window.__omniframe_store.getState()

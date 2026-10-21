@@ -1,23 +1,8 @@
 import { useState } from 'react'
-import { AlertCircle, Clock, Play, Sparkles, Trash2 } from 'lucide-react'
+import { AlertCircle, Check, Clock, Play, Sparkles, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
-import type { Clip, Transition, TransitionType } from '../types'
-
-interface TransitionPresetDef {
-  id: TransitionType
-  name: string
-  description: string
-}
-
-const TRANSITIONS: TransitionPresetDef[] = [
-  { id: 'cross_dissolve', name: 'Cross Dissolve', description: 'Smooth opacity blend from outgoing to incoming frame.' },
-  { id: 'dip_to_black', name: 'Dip to Black', description: 'Fades down to pure black, then fades up to incoming media.' },
-  { id: 'dip_to_white', name: 'Dip to White', description: 'Flashes to pure white, then resolves into next clip.' },
-  { id: 'wipe_left', name: 'Wipe Left', description: 'Horizontal edge wipes across from right to left.' },
-  { id: 'wipe_right', name: 'Wipe Right', description: 'Horizontal edge wipes across from left to right.' },
-  { id: 'slide_left', name: 'Slide Left', description: 'Incoming clip pushes outgoing clip smoothly offscreen.' },
-  { id: 'zoom', name: 'Zoom Push', description: 'Camera pushes forward through outgoing into incoming clip.' },
-]
+import type { Clip, Transition } from '../types'
+import { TRANSITION_PRESETS, applyTransitionPreset, TRANSITION_MIN_DURATION, TRANSITION_MAX_DURATION, type TransitionPresetDef } from '../lib/transitionPresets'
 
 interface TransitionCandidate {
   fromClip: Clip
@@ -43,8 +28,6 @@ function findNearestTransitionCandidate(duration: number): TransitionCandidate |
       const toClip = clips[index + 1]
       const cut = fromClip.start + fromClip.duration
       const gap = toClip.start - cut
-      // A transition needs an actual cut (or a very small edit gap) and enough
-      // material on both sides of it for the centred audition window.
       if (gap < -0.01 || gap > 0.5) continue
       if (fromClip.duration < half || toClip.duration < half) continue
       candidates.push({
@@ -61,12 +44,17 @@ function findNearestTransitionCandidate(duration: number): TransitionCandidate |
   return candidates[0] ?? null
 }
 
+const CATEGORIES: TransitionPresetDef['category'][] = ['Dissolve', 'Wipe', 'Slide', 'Shapes', 'Zoom & Motion', 'Special']
+
 export function TransitionsPanel() {
   const transitions = useEditor((s) => s.transitions || [])
   const removeTransition = useEditor((s) => s.removeTransition)
   const startVisualPreview = useEditor((s) => s.startVisualPreview)
   const [duration, setDuration] = useState(1.0)
   const [notice, setNotice] = useState<string | null>(null)
+  const [placedMsg, setPlacedMsg] = useState<string | null>(null)
+
+  const clampDuration = (d: number) => Math.min(TRANSITION_MAX_DURATION, Math.max(TRANSITION_MIN_DURATION, Math.round(d * 10) / 10))
 
   const previewTransition = (preset: TransitionPresetDef) => {
     const candidate = findNearestTransitionCandidate(duration)
@@ -96,6 +84,17 @@ export function TransitionsPanel() {
     })
   }
 
+  const placeTransition = (preset: TransitionPresetDef) => {
+    const result = applyTransitionPreset(preset.id, duration)
+    if (!result.ok) {
+      setPlacedMsg(null)
+      setNotice(result.error || 'Could not place the transition.')
+      return
+    }
+    setNotice(null)
+    setPlacedMsg(`${preset.name} placed: ${result.from?.name} → ${result.to?.name} (${duration.toFixed(1)}s at the cut).`)
+  }
+
   const previewPlacedTransition = (transition: Transition) => {
     setNotice(null)
     startVisualPreview({
@@ -108,19 +107,33 @@ export function TransitionsPanel() {
 
   return (
     <div data-testid="transitions-panel" className="p-3 text-xs text-ink-200 select-none space-y-3">
-      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-ink-900 border border-ink-800">
-        <span className="text-[11px] text-ink-400 flex items-center gap-1">
-          <Clock size={12} />
-          <span>Transition Duration</span>
-        </span>
+      <div className="p-2 rounded-lg bg-ink-900 border border-ink-800 space-y-1.5">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-[11px] text-ink-400 flex items-center gap-1">
+            <Clock size={12} />
+            <span>Transition Duration</span>
+          </span>
+          <span data-testid="transition-duration-value" className="font-mono text-[11px] text-ink-100">{duration.toFixed(1)}s</span>
+        </div>
+        <input
+          type="range"
+          data-testid="transition-duration-slider"
+          min={TRANSITION_MIN_DURATION}
+          max={TRANSITION_MAX_DURATION}
+          step={0.1}
+          value={duration}
+          onChange={(e) => setDuration(clampDuration(Number(e.target.value)))}
+          className="w-full accent-fuchsia-400"
+          aria-label="Transition duration in seconds (0.1 to 5)"
+        />
         <div className="flex items-center gap-1">
-          {[0.5, 1.0, 1.5, 2.0].map((d) => (
+          {[0.5, 1.0, 1.5, 2.0, 3.0, 5.0].map((d) => (
             <button
               key={d}
               type="button"
               data-testid={`transition-dur-${d}`}
               onClick={() => setDuration(d)}
-              className={`min-h-[24px] px-1.5 py-1 rounded text-[10px] font-mono transition-colors ${
+              className={`min-h-[24px] px-1.5 py-1 rounded text-[10px] font-mono whitespace-nowrap leading-none transition-colors ${
                 duration === d ? 'bg-brand text-white font-semibold' : 'bg-ink-800 text-ink-400 hover:text-white'
               }`}
             >
@@ -128,8 +141,10 @@ export function TransitionsPanel() {
             </button>
           ))}
         </div>
+        <p className="text-[10px] text-ink-500" data-testid="transition-requirement">
+          0.1–5s. Needs a cut with at least {(duration / 2).toFixed(2)}s of clip on each side — pick clips long enough for the duration you choose.
+        </p>
       </div>
-
 
       {notice && (
         <div data-testid="transition-preview-notice" className="flex items-start gap-1.5 p-2 rounded-md bg-amber-950/30 border border-amber-900/70 text-amber-200 text-[11px]" role="status">
@@ -137,41 +152,60 @@ export function TransitionsPanel() {
           <span>{notice}</span>
         </div>
       )}
+      {placedMsg && (
+        <div data-testid="transition-placed-notice" className="flex items-start gap-1.5 p-2 rounded-md bg-emerald-950/30 border border-emerald-900/70 text-emerald-200 text-[11px]" role="status">
+          <Check size={13} className="mt-px shrink-0" />
+          <span>{placedMsg}</span>
+        </div>
+      )}
 
-      <div className="text-[10px] uppercase font-semibold text-ink-500 tracking-wider">
-        Video Transitions
-      </div>
-
-      <div className="grid grid-cols-1 gap-1.5">
-        {TRANSITIONS.map((preset) => (
-          <div
-            key={preset.id}
-            data-testid={`transition-card-${preset.id}`}
-            onClick={() => previewTransition(preset)}
-            className="group cursor-pointer p-2.5 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 transition-all flex items-center justify-between"
-          >
-            <div className="min-w-0 flex-1 pr-2">
-              <div className="font-medium text-ink-100 flex items-center gap-1.5">
-                <Sparkles size={13} className="text-amber-400 shrink-0" />
-                <span>{preset.name}</span>
+      {CATEGORIES.map((category) => (
+        <div key={category} className="space-y-1.5">
+          <div className="text-[10px] uppercase font-semibold text-ink-500 tracking-wider">{category} Transitions</div>
+          <div className="grid grid-cols-1 gap-1.5">
+            {TRANSITION_PRESETS.filter((p) => p.category === category).map((preset) => (
+              <div
+                key={preset.id}
+                data-testid={`transition-card-${preset.id}`}
+                onClick={() => previewTransition(preset)}
+                className="group cursor-pointer p-2.5 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 transition-all flex items-center justify-between"
+              >
+                <div className="min-w-0 flex-1 pr-2">
+                  <div className="font-medium text-ink-100 flex items-center gap-1.5">
+                    <Sparkles size={13} className="text-amber-400 shrink-0" />
+                    <span>{preset.name}</span>
+                  </div>
+                  <div className="text-[10px] text-ink-400 mt-0.5 leading-tight">{preset.description}</div>
+                </div>
+                <div className="shrink-0 flex items-center gap-1">
+                  <button
+                    type="button"
+                    data-testid={`apply-trans-btn-${preset.id}`}
+                    title={`Preview ${preset.name}; Apply from the monitor to add it`}
+                    aria-label={`Preview ${preset.name} transition`}
+                    onClick={(event) => { event.stopPropagation(); previewTransition(preset) }}
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand-400 hover:text-white text-[11px] font-medium whitespace-nowrap leading-none transition-colors"
+                  >
+                    <Play size={12} className="shrink-0" />
+                    <span>Preview</span>
+                  </button>
+                  <button
+                    type="button"
+                    data-testid={`place-trans-btn-${preset.id}`}
+                    title={`Place ${preset.name} at the nearest usable cut`}
+                    aria-label={`Apply ${preset.name} transition`}
+                    onClick={(event) => { event.stopPropagation(); placeTransition(preset) }}
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-[11px] font-medium whitespace-nowrap leading-none transition-colors"
+                  >
+                    <Check size={12} className="shrink-0" />
+                    <span>Apply</span>
+                  </button>
+                </div>
               </div>
-              <div className="text-[10px] text-ink-400 mt-0.5 leading-tight">{preset.description}</div>
-            </div>
-
-            <button
-              type="button"
-              data-testid={`apply-trans-btn-${preset.id}`}
-              title={`Preview ${preset.name}; Apply from the monitor to add it`}
-              aria-label={`Preview ${preset.name} transition`}
-              onClick={(event) => { event.stopPropagation(); previewTransition(preset) }}
-              className="shrink-0 flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand-400 hover:text-white text-[11px] font-medium transition-colors"
-            >
-              <Play size={12} className="shrink-0" />
-              <span>Preview</span>
-            </button>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
 
       {transitions.length > 0 && (
         <div className="pt-2 border-t border-ink-800">
