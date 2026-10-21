@@ -41,7 +41,16 @@ jobs:
           } | tee audit-out/errors/runner-capability.txt
 
       - name: Install yt-dlp
-        run: pip install -q yt-dlp
+        run: |
+          pip install -q yt-dlp
+          # PO-token provider (bgutil): yt-dlp plugin via pip + local HTTP server via docker.
+          # Fixes "The page needs to be reloaded" / web-client PO-token walls. Best effort.
+          pip install -q bgutil-ytdlp-pot-provider || echo "bgutil plugin pip: failed"
+          {
+            docker run -d --name pot -p 4416:4416 brainicism/bgutil-ytdlp-pot-provider:latest && sleep 4
+            echo "pot server http probe:"; curl -sS -m 5 "http://127.0.0.1:4416/ping" || echo "(no ping response)"
+          } 2>&1 | tee audit-out/errors/pot-status.txt
+          python3 -c "import yt_dlp_plugins" 2>/dev/null && echo "plugin import ok" >> audit-out/errors/pot-status.txt || echo "plugin import: not importable (yt-dlp discovers pip plugins at runtime)" >> audit-out/errors/pot-status.txt
 
       - name: Optional owner-provided cookies (secret; never visible to the agent)
         run: |
@@ -140,11 +149,14 @@ jobs:
               try:
                   errs = []
                   ck = [os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []
+                  FMT = "bv*[height<=480]+ba/b[height<=480]/bv*+ba/b/w"
                   methods = [
-                      ("yt-dlp default+cookies" if ck else "yt-dlp default", [x for x in (["yt-dlp","--no-warnings"] + ck + ["-f","bv*[height<=480]+ba/b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
-                      ("yt-dlp client=tv+cookies" if ck else "yt-dlp client=tv", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=tv","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
-                      ("yt-dlp client=android+cookies" if ck else "yt-dlp client=android", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=android","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
-                      ("yt-dlp client=web_embedded+cookies" if ck else "yt-dlp client=web_embedded", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=web_embedded","-f","b[height<=480]/w","-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp android+cookies" if ck else "yt-dlp android", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=android","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp default+cookies" if ck else "yt-dlp default", [x for x in (["yt-dlp","--no-warnings"] + ck + ["-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp web_embedded+cookies" if ck else "yt-dlp client=web_embedded", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=web_embedded","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp web_safari+cookies" if ck else "yt-dlp client=web_safari", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=web_safari","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp mweb+cookies" if ck else "yt-dlp client=mweb", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=mweb","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp client=tv+cookies" if ck else "yt-dlp client=tv", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=tv","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
                   ]
                   dl = None
                   for name, cmd in methods:
