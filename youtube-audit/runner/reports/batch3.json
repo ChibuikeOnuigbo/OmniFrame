@@ -1,0 +1,1000 @@
+{
+ "batch": 3,
+ "processed": 20,
+ "records": [
+  {
+   "id": "cQQPjhaOP5I",
+   "url": "https://www.youtube.com/watch?v=cQQPjhaOP5I",
+   "title": "UNIQUE PLUGINS Every Editor NEEDS To Try (PART 2)",
+   "duration": "108",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "wtLu8JZYQ1Q",
+   "url": "https://www.youtube.com/watch?v=wtLu8JZYQ1Q",
+   "title": "Advanced ONE FRAMERS in After Effects (Quick Tutorial)",
+   "duration": "136",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "EWG5XOQqtVw",
+   "url": "https://www.youtube.com/watch?v=EWG5XOQqtVw",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 6)",
+   "duration": "201",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "P0UsKgktnLs",
+   "url": "https://www.youtube.com/watch?v=P0UsKgktnLs",
+   "title": "EASY TRANSITIONS in After Effects (Quick Tutorial)",
+   "duration": "171",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "csL_SzJj9CY",
+   "url": "https://www.youtube.com/watch?v=csL_SzJj9CY",
+   "title": "3 Shakes Every Editor NEEDS To Know (After Effects Tutorial)",
+   "duration": "146",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "YjD2f0g0AV8",
+   "url": "https://www.youtube.com/watch?v=YjD2f0g0AV8",
+   "title": "BEST Plugins Every Editor NEEDS To Try (After Effects Tutorial)",
+   "duration": "187",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "iNoogDwDo_c",
+   "url": "https://www.youtube.com/watch?v=iNoogDwDo_c",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 5)",
+   "duration": "136",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "si35Ia6_RgQ",
+   "url": "https://www.youtube.com/watch?v=si35Ia6_RgQ",
+   "title": "GOJO STYLE Text Effects in After Effects (Quick Tutorial)",
+   "duration": "102",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "kdCg3E7A8UI",
+   "url": "https://www.youtube.com/watch?v=kdCg3E7A8UI",
+   "title": "How to Make Thumbnails in Photoshop (Quick Tutorial)",
+   "duration": "181",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "M7PWQ3NAenM",
+   "url": "https://www.youtube.com/watch?v=M7PWQ3NAenM",
+   "title": "EASY COMPOSITING in After Effects (Quick Tutorial)",
+   "duration": "183",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "w1-NsMMAASE",
+   "url": "https://www.youtube.com/watch?v=w1-NsMMAASE",
+   "title": "EASY MANGA ANIMATION in After Effects (Quick Tutorial)",
+   "duration": "192",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "GMAvCLnbCYI",
+   "url": "https://www.youtube.com/watch?v=GMAvCLnbCYI",
+   "title": "How to make Flow Edits in After Effects (Quick Tutorial)",
+   "duration": "187",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "OHVOL1oodKI",
+   "url": "https://www.youtube.com/watch?v=OHVOL1oodKI",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 4)",
+   "duration": "199",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "tF_clYyo2FU",
+   "url": "https://www.youtube.com/watch?v=tF_clYyo2FU",
+   "title": "How to make 3D Lighting using Depth Maps in After Effects (Quick Tutorial)",
+   "duration": "143",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "TxMCZpTmxG0",
+   "url": "https://www.youtube.com/watch?v=TxMCZpTmxG0",
+   "title": "How to Use Card Dance in After Effects (Quick Tutorial)",
+   "duration": "79",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "nni31LkmA-U",
+   "url": "https://www.youtube.com/watch?v=nni31LkmA-U",
+   "title": "Advanced ONE FRAMERS in After Effects (Quick Tutorial)",
+   "duration": "103",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "ih8WI_jKI2Q",
+   "url": "https://www.youtube.com/watch?v=ih8WI_jKI2Q",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 3)",
+   "duration": "119",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "pD9ac1NJvbA",
+   "url": "https://www.youtube.com/watch?v=pD9ac1NJvbA",
+   "title": "Unique Text Effects Every Editor NEEDS To Try (Part 2)",
+   "duration": "89",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "M5t-RkH5fqM",
+   "url": "https://www.youtube.com/watch?v=M5t-RkH5fqM",
+   "title": "COLOR CORRECTIONS Every Editor NEEDS To Know (Quick Tutorial)",
+   "duration": "128",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "oCKNYDxPB4Y",
+   "url": "https://www.youtube.com/watch?v=oCKNYDxPB4Y",
+   "title": "How To Make VIBE Shakes in After Effects (Quick Tutorial)",
+   "duration": "124",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  }
+ ]
+}
