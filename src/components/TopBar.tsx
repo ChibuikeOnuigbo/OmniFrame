@@ -126,9 +126,6 @@ export function TopBar() {
   const aiConnection = useEditor((s) => s.aiConnection)
   const setAiConnection = useEditor((s) => s.setAiConnection)
   const customEffects = useEditor((s) => s.customEffects)
-  const packLikes = useEditor((s) => s.packLikes)
-  const packTaste = useEditor((s) => s.packTaste)
-  const resetPackTaste = useEditor((s) => s.resetPackTaste)
   const [aiTestState, setAiTestState] = useState<'idle' | 'testing' | 'success' | 'error'>('idle')
   const [aiTestMessage, setAiTestMessage] = useState('')
   const [modelCap, setModelCap] = useState<ModelCapability>('chat')
@@ -1601,14 +1598,7 @@ export function TopBar() {
                     </div>
                     {ftJob && <p className="mt-1 font-mono text-[9px] text-ink-500" data-testid="finetune-job">{ftJob.id} · {ftJob.status}{ftJob.model ? ` · ${ftJob.model}` : ''}</p>}
                     {ftMessage && <p className="mt-1 text-[10px] leading-snug text-ink-400" role="status">{ftMessage}</p>}
-                    <div className="mt-3 border-t border-ink-800 pt-2">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-500">Library taste (learns locally)</p>
-                      <p className="mt-0.5 text-[10px] leading-snug text-ink-500" data-testid="taste-summary">
-                        {packLikes.length} liked · {Object.keys(packTaste).length} learned signals. Liking and placing pack assets teaches the “For you” order — on this device only.
-                      </p>
-                      <button type="button" data-testid="taste-reset" onClick={resetPackTaste} className="mt-1 h-6 rounded border border-ink-700 bg-ink-800 px-2 text-[10px] text-ink-300 hover:border-ink-500">Forget my taste</button>
-                    </div>
-                  </div>
+                                      </div>
                 </div>
               )}
             </section>

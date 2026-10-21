@@ -53,6 +53,8 @@ The extracted ReferenceTool mirror, served and screenshotted, plus the declutter
 - [27-segment-strip-paged — Segment Strip Paged](sections/27-segment-strip-paged.png)
 - [28-segment-strip-full-text — Segment Strip Full Text](sections/28-segment-strip-full-text.png)
 - [29-segment-strip-full-text-paged — Segment Strip Full Text Paged](sections/29-segment-strip-full-text-paged.png)
+- [30-pack-panel-no-foryou — Pack Panel After For-You Removal](sections/30-pack-panel-no-foryou.png)
+- [31-study-pack-canvas — Screenshot-Study Pack Assets Layered](sections/31-study-pack-canvas.png)
 
 ## Preset vetting stills (testing_asset_etc) (126)
 

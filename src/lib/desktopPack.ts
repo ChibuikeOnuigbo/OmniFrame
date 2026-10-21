@@ -45,6 +45,7 @@ export const PACK_BUNDLES: PackBundleDef[] = [
   { id: 'phone-demo', name: 'Phone Demo Pack', desc: 'Android phone home screen with hand cursor', items: ['phone-android-home', 'cursor-hand'] },
   { id: 'privacy', name: 'Privacy Pack', desc: 'Chat window with a censor bar and spotlight dim', items: ['chat-window', 'censor-bar', 'spotlight'] },
   { id: 'streamer', name: 'Streamer Pack', desc: 'PiP frame, screen glare and vignette for face-cam layouts', items: ['pip-frame', 'screen-glare', 'vignette'] },
+  { id: 'screenshot-study', name: 'Screenshot Study Pack', desc: 'Light icon desktop, profile phone and mascot frame rebuilt from the UI screenshot study', items: ['desktop-light-icons', 'profile-phone', 'frame-mascot', 'cursor-hand'] },
 ]
 
 export const PACK_W = 1280
@@ -1277,6 +1278,65 @@ function alarmPhone(ctx: CanvasRenderingContext2D) {
   ctx.restore()
 }
 
+/** Screenshot-study scene (light desktop, icon grid) — rebuilt generically. */
+function desktopLightIcons(ctx: CanvasRenderingContext2D) {
+  const g = ctx.createLinearGradient(0, 0, 0, PACK_H)
+  g.addColorStop(0, '#fdfdfd'); g.addColorStop(1, '#eef1f5')
+  ctx.fillStyle = g; ctx.fillRect(0, 0, PACK_W, PACK_H)
+  const apps: Array<[string, string]> = [['#4da3ff', 'Files'], ['#5cd65c', 'Store'], ['#ffb340', 'Notes'], ['#b78bff', 'Draw'], ['#ff6b81', 'Music'], ['#35c7c7', 'Chat'], ['#f2f2f2', 'Docs'], ['#5c7cfa', 'Web']]
+  apps.forEach(([col, label], i) => {
+    const x = 36 + (i % 2) * 92, y = 36 + Math.floor(i / 2) * 104
+    ctx.save(); ctx.shadowColor = 'rgba(20,30,50,0.18)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3
+    ctx.fillStyle = col; roundRect(ctx, x, y, 56, 56, 14); ctx.fill(); ctx.restore()
+    ctx.fillStyle = '#39424f'; ctx.font = '600 12px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(label, x + 28, y + 74); ctx.textAlign = 'left'
+  })
+  ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(0, PACK_H - 44, PACK_W, 44)
+  ctx.fillStyle = 'rgba(20,30,50,0.08)'; ctx.fillRect(0, PACK_H - 44, PACK_W, 1)
+  ctx.fillStyle = '#39424f'; ctx.font = '13px system-ui, sans-serif'; ctx.fillText('  Search', 16, PACK_H - 17)
+  ctx.textAlign = 'right'; ctx.fillText('9:41  ', PACK_W - 12, PACK_H - 17); ctx.textAlign = 'left'
+}
+
+/** Screenshot-study phone profile (artboard layout) — generic demo content. */
+function profilePhone(ctx: CanvasRenderingContext2D) {
+  deviceFrame(ctx, false)
+  const x = (PACK_W - 300) / 2, y = (PACK_H - 620) / 2, w = 300
+  ctx.save(); roundRect(ctx, x + 6, y + 6, w - 12, 608, 38); ctx.clip()
+  const g = ctx.createLinearGradient(0, y, 0, y + 200); g.addColorStop(0, '#7fb2d9'); g.addColorStop(1, '#cfe5f5')
+  ctx.fillStyle = g; ctx.fillRect(x + 6, y + 6, w - 12, 210)
+  ctx.fillStyle = '#fdfdfd'; ctx.fillRect(x + 6, y + 216, w - 12, 398)
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(PACK_W / 2, y + 216, 52, 0, Math.PI * 2); ctx.fill()
+  ctx.strokeStyle = '#39424f'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(PACK_W / 2, y + 198, 16, 0, Math.PI * 2); ctx.stroke()
+  ctx.beginPath(); ctx.arc(PACK_W / 2, y + 252, 26, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke()
+  ctx.fillStyle = '#4da3ff'; ctx.beginPath(); ctx.arc(PACK_W / 2 + 46, y + 252, 15, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#1d2733'; ctx.font = '700 24px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Demo User', PACK_W / 2, y + 306)
+  ;[['My Courses', '4 Active'], ['Saved Items', '10 Saved'], ['Account Info', 'Edit']].forEach(([a, b], i) => {
+    const gy = y + 326 + i * 56
+    ctx.fillStyle = '#eef1f5'; roundRect(ctx, x + 22, gy, w - 44, 44, 12); ctx.fill()
+    ctx.fillStyle = '#39424f'; ctx.font = '600 14px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.fillText(a, x + 38, gy + 28)
+    ctx.fillStyle = '#31567d'; roundRect(ctx, x + w - 118, gy + 9, 84, 26, 13); ctx.fill()
+    ctx.fillStyle = '#fff'; ctx.font = '600 12px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(b, x + w - 76, gy + 26)
+  })
+  ctx.fillStyle = '#31567d'; roundRect(ctx, x + 6, y + 540, w - 12, 74, 18); ctx.fill()
+  ctx.fillStyle = '#fff'; ctx.font = '600 11px system-ui, sans-serif'
+  ;['Home', 'Courses', 'Saved', 'Profile'].forEach((t, i) => ctx.fillText(t, x + 48 + i * 68, y + 592))
+  ctx.textAlign = 'left'; ctx.restore()
+}
+
+/** Screenshot-study mascot frame overlay — transparent, generic shapes. */
+function frameMascot(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fillRect(0, 0, w, h)
+  ctx.fillStyle = '#f4f1ea'; roundRect(ctx, w * 0.24, h * 0.22, w * 0.55, h * 0.56, 18); ctx.fill()
+  ctx.strokeStyle = '#191919'; ctx.lineWidth = 6; roundRect(ctx, w * 0.24, h * 0.22, w * 0.55, h * 0.56, 18); ctx.stroke()
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = '#191919'; ctx.lineWidth = 4
+  ctx.beginPath(); ctx.arc(w * 0.335, h * 0.185, 44, 0, Math.PI * 2); ctx.fill(); ctx.stroke() // top mascot head
+  ctx.beginPath(); ctx.moveTo(w * 0.305, h * 0.15); ctx.lineTo(w * 0.315, h * 0.115); ctx.lineTo(w * 0.335, h * 0.145); ctx.closePath(); ctx.fill(); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(w * 0.345, h * 0.145); ctx.lineTo(w * 0.365, h * 0.115); ctx.lineTo(w * 0.37, h * 0.155); ctx.closePath(); ctx.fill(); ctx.stroke()
+  ctx.fillStyle = '#191919'; ctx.beginPath(); ctx.arc(w * 0.335, h * 0.185, 11, 0, Math.PI * 2); ctx.fill()
+  ctx.beginPath(); ctx.arc(w * 0.215, h * 0.79, 34, 0, Math.PI * 2); ctx.fill(); ctx.stroke() // bottom-left mascot
+  ctx.beginPath(); ctx.arc(w * 0.875, h * 0.68, 36, 0, Math.PI * 2); ctx.fill(); ctx.stroke() // right mascot
+  ctx.fillStyle = '#191919'; roundRect(ctx, w * 0.862, h * 0.745, 26, 40, 8); ctx.fill()
+}
+
 export const PACK_ASSETS: PackAssetDef[] = [
   { id: 'spotify-mac', name: 'Music Player · Mac', desc: 'Streaming player in a macOS window with demo tracks', section: 'apps', group: 'Music', paint: (c) => spotifyMac(c) },
   { id: 'spotify-phone', name: 'Music Player · Phone', desc: 'Phone now-playing screen with demo album and progress', section: 'apps', group: 'Music', paint: (c) => spotifyPhone(c) },
@@ -1336,6 +1396,9 @@ export const PACK_ASSETS: PackAssetDef[] = [
   { id: 'film-frame', name: 'Film Frame', desc: '35mm sprocket-hole frame border', section: 'overlays', group: 'Frames & Bars', paint: (ctx, w, h) => { ctx.fillStyle = '#0a0a0c'; ctx.fillRect(0, 0, w, 44); ctx.fillRect(0, h - 44, w, 44); ctx.fillStyle = '#e8e4da'; for (let x = 18; x < w - 20; x += 46) { roundRect(ctx, x, 12, 26, 20, 4); ctx.fill(); roundRect(ctx, x, h - 32, 26, 20, 4); ctx.fill() } } },
   { id: 'pip-frame', name: 'PiP Frame', desc: 'Rounded picture-in-picture border', section: 'overlays', group: 'Frames & Bars', paint: (ctx, w, h) => { ctx.strokeStyle = 'rgba(255,255,255,0.92)'; ctx.lineWidth = 10; roundRect(ctx, 26, 26, w - 52, h - 52, 28); ctx.stroke(); ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 2; roundRect(ctx, 34, 34, w - 68, h - 68, 22); ctx.stroke() } },
   { id: 'screen-glare', name: 'Screen Glare', desc: 'Diagonal monitor sheen for screen recordings', section: 'overlays', group: 'Light & Focus', paint: (ctx, w, h) => { const g = ctx.createLinearGradient(0, 0, w, h); g.addColorStop(0, 'rgba(255,255,255,0.16)'); g.addColorStop(0.35, 'rgba(255,255,255,0.03)'); g.addColorStop(0.6, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h) } },
+  { id: 'desktop-light-icons', name: 'Fake Desktop · Light Icons', desc: 'Light wallpaper with a tidy icon grid (screenshot-study rebuild)', group: 'Desktops', section: 'windows', paint: (c) => desktopLightIcons(c) },
+  { id: 'profile-phone', name: 'Profile Phone', desc: 'Phone profile with avatar, stat pills and bottom nav (screenshot-study rebuild)', section: 'apps', group: 'Social', paint: (c) => profilePhone(c) },
+  { id: 'frame-mascot', name: 'Mascot Frame', desc: 'Mascot-corner frame overlay for face-cam / explainer layouts (screenshot-study rebuild)', section: 'overlays', group: 'Frames & Bars', paint: (c, w, h) => frameMascot(c, w, h) },
   { id: 'desktop-linux', name: 'Fake Desktop · Linux', desc: 'Dark desktop with top bar and side dock', group: 'Desktops', section: 'windows', paint: (ctx) => { const g = ctx.createLinearGradient(0, 0, PACK_W, PACK_H); g.addColorStop(0, '#2d1b33'); g.addColorStop(1, '#77216f'); ctx.fillStyle = g; ctx.fillRect(0, 0, PACK_W, PACK_H); ctx.fillStyle = 'rgba(12,12,16,0.85)'; ctx.fillRect(0, 0, PACK_W, 30); ctx.fillStyle = '#f2f2f2'; ctx.font = '600 13px system-ui, sans-serif'; ctx.fillText('  Activities', 8, 20); ctx.textAlign = 'right'; ctx.fillText('15 Oct  9:41  ', PACK_W - 8, 20); ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(20,20,26,0.8)'; ctx.fillRect(10, 150, 56, 400); ['#ff7830', '#4da3ff', '#5cd65c', '#b78bff', '#f2f2f2'].forEach((c, i) => { ctx.fillStyle = c; roundRect(ctx, 20, 166 + i * 66, 36, 36, 9); ctx.fill() }) } },
   { id: 'desktop-dark', name: 'Fake Desktop · Dark Studio', desc: 'Minimal dark backdrop for product shots', group: 'Desktops', section: 'windows', paint: (ctx) => { const g = ctx.createRadialGradient(PACK_W / 2, 260, 80, PACK_W / 2, 360, 760); g.addColorStop(0, '#232733'); g.addColorStop(1, '#0a0b0f'); ctx.fillStyle = g; ctx.fillRect(0, 0, PACK_W, PACK_H) } },
   { id: 'firefox', name: 'Firefox Bar', desc: 'Firefox window with tab and address bar', group: 'Browsers', section: 'windows', paint: (c) => windowChrome(c, 'win', { title: 'Mozilla Firefox', browser: 'chrome', urlText: 'mozilla.org' }) },

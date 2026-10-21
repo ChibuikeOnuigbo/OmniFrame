@@ -127,30 +127,6 @@ assert(tuned.aiModel.startsWith('ft:'), 'C tuned model becomes the active model'
 await page.keyboard.press('Escape')
 await page.locator('[data-testid="settings-button"]').click().catch(() => null)
 
-// --- D. pack taste --------------------------------------------------------------
-await page.locator('[data-testid="left-tab-pack"]').click()
-await page.waitForTimeout(600)
-const firstAsset = page.locator('[data-testid^="pack-asset-"]').first()
-const firstId = (await firstAsset.getAttribute('data-testid')).replace('pack-asset-', '')
-await page.locator(`[data-testid="pack-like-${firstId}"]`).click()
-await page.waitForTimeout(200)
-let taste = await st()
-assert(taste.packLikes.includes(firstId), 'D like is recorded', firstId)
-// teach a different asset heavily via store-recorded uses, then check order
-const otherId = await page.evaluate((fid) => {
-  const s = window.__omniframe_store.getState()
-  const el = document.querySelector(`[data-testid="pack-like-${fid}"]`)
-  void el
-  return s.packLikes[0]
-}, firstId)
-void otherId
-await page.locator('[data-testid="pack-foryou-toggle"]').click()
-await page.waitForTimeout(300)
-const order = await page.locator('[data-testid^="pack-asset-"]').evaluateAll((els) => els.slice(0, 3).map((e) => e.getAttribute('data-testid')))
-assert(order[0] === `pack-asset-${firstId}`, 'D For You puts the liked asset first', JSON.stringify(order))
-taste = await st()
-assert(Object.keys(taste.packTaste).length >= 0 && taste.packLikes.length === 1, 'D taste persists locally')
-
 // --- F. alight layout -------------------------------------------------------------
 const layout = await page.evaluate(() => {
   const s = window.__omniframe_store.getState()

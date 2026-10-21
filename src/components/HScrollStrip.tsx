@@ -231,7 +231,7 @@ export function HScrollStrip({
             >
               {React.isValidElement(child)
                 ? React.cloneElement(child as React.ReactElement<{ className?: string }>, {
-                    className: `${(child.props as { className?: string }).className ?? ''} flex h-full w-full items-center justify-center truncate`,
+                    className: `${(child.props as { className?: string }).className ?? ''} flex h-full w-full items-center justify-center whitespace-nowrap truncate leading-none`,
                   })
                 : child}
             </div>

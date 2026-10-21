@@ -389,11 +389,6 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   addWatermark: (w: { name: string; level: number; color: string; characterAssetId?: string; voiceAssetId?: string; seed: number }) => string
   removeWatermark: (id: string) => void
   // Library taste: the pack learns from likes + what you actually place.
-  packLikes: string[]
-  packTaste: Record<string, number>
-  togglePackLike: (assetId: string) => void
-  recordPackUse: (assetId: string, section: string, group: string) => void
-  resetPackTaste: () => void
   /** Drawing: treat selected video clips as paint layers (drawing sits in
    *  the clip stack) instead of always compositing on top of everything. */
   viewVideosAsLayers: boolean
@@ -1172,9 +1167,7 @@ export const useEditor = create<EditorState>((set, get) => {
     aiApiKey: '',
     aiCapabilityModels: (() => { try { return JSON.parse(localStorage.getItem('omniframe.aiCapabilityModels') || '{}') } catch { return {} } })(),
     aiConnection: { status: 'idle', message: '', latencyMs: null, modelAvailable: null, at: 0 },
-    packLikes: (() => { try { return JSON.parse(localStorage.getItem('omniframe.packLikes') || '[]') } catch { return [] } })(),
     watermarks: (() => { try { return JSON.parse(localStorage.getItem('omniframe.watermarks') || '[]') } catch { return [] } })(),
-    packTaste: (() => { try { return JSON.parse(localStorage.getItem('omniframe.packTaste') || '{}') } catch { return {} } })(),
     viewVideosAsLayers: false,
     dockerPrefs: (() => {
       try {
@@ -3333,23 +3326,6 @@ export const useEditor = create<EditorState>((set, get) => {
       const next = get().watermarks.filter((w) => w.id !== id)
       try { localStorage.setItem('omniframe.watermarks', JSON.stringify(next)) } catch { /* private mode */ }
       set({ watermarks: next })
-    },
-    togglePackLike: (assetId: string) => {
-      const likes = get().packLikes.includes(assetId) ? get().packLikes.filter((id) => id !== assetId) : [...get().packLikes, assetId]
-      try { localStorage.setItem('omniframe.packLikes', JSON.stringify(likes)) } catch { /* private mode */ }
-      set({ packLikes: likes })
-    },
-    recordPackUse: (assetId: string, section: string, group: string) => {
-      const taste = { ...get().packTaste }
-      taste[`section:${section}`] = (taste[`section:${section}`] || 0) + 1
-      taste[`group:${group}`] = (taste[`group:${group}`] || 0) + 1
-      taste[`asset:${assetId}`] = (taste[`asset:${assetId}`] || 0) + 1
-      try { localStorage.setItem('omniframe.packTaste', JSON.stringify(taste)) } catch { /* private mode */ }
-      set({ packTaste: taste })
-    },
-    resetPackTaste: () => {
-      try { localStorage.removeItem('omniframe.packTaste'); localStorage.removeItem('omniframe.packLikes') } catch { /* private mode */ }
-      set({ packTaste: {}, packLikes: [] })
     },
     setAudioIsolationModel: (model) => set({ audioIsolationModel: model }),
 

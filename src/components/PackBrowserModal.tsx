@@ -28,7 +28,6 @@ function ensurePackAsset(def: PackAssetDef): string {
 }
 
 function addPackClip(def: PackAssetDef): void {
-  useEditor.getState().recordPackUse(def.id, def.section, def.group)
   const state = useEditor.getState()
   const assetId = ensurePackAsset(def)
   const trackId = state.createTrack('video')
