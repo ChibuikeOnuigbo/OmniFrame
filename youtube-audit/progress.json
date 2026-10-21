@@ -1,0 +1,32 @@
+{
+ "updated": "2026-10-21T19:10:24Z",
+ "total_discovered": 248,
+ "by_status": {
+  "BLOCKED": 5,
+  "INVENTORIED": 243
+ },
+ "footage_inspected": 0,
+ "visual_analysis_complete": 0,
+ "audio_analysis_complete": 0,
+ "full_analysis_complete": 0,
+ "metadata_only": 0,
+ "blocked": 5,
+ "inventoried_remaining": 243,
+ "current_batch": 1,
+ "checkpoint": "batch1 ladder exhausted 2026-10-21; runner committed evidence; awaiting owner unblock",
+ "last_media_access_test": {
+  "runner": "DNS ok, TCP ok, TLS ok, HTTP 200 on watch page; media download BLOCKED by YouTube bot-check (datacenter IP); Invidious registry instances 401/403",
+  "sandbox": "DNS ok, TCP ok, TLS RESET (SNI allowlist); no media possible",
+  "gateway": "text-only (titles/descriptions/chapters); no media bytes, transcripts bot-walled"
+ },
+ "environments_tested": [
+  "normal sandbox (bash+playwright)",
+  "text-only arena gateway",
+  "github-hosted actions runner",
+  "public invidious/piped instances via runner"
+ ],
+ "environments_unavailable": [
+  "local/residential media worker (none connected)",
+  "owner cookie secret (not set)"
+ ]
+}
