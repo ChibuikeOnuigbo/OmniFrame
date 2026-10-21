@@ -3,21 +3,29 @@
 [youtube] bpUZkFVX6NY: Downloading web embedded client config
 [youtube] bpUZkFVX6NY: Downloading player 55de7e60-main
 [youtube] bpUZkFVX6NY: Downloading web embedded player API JSON
-[youtube] bpUZkFVX6NY: Downloading tv downgraded player API JSON
+[youtube] bpUZkFVX6NY: Downloading tv samsung player API JSON
 [youtube] [pot:bgutil:http] Generating a gvs PO Token for web client via bgutil HTTP server
+[info] Available formats for bpUZkFVX6NY:
+ID  EXT   RESOLUTION FPS | PROTO | VCODEC MORE INFO
+----------------------------------------------------
+sb3 mhtml 48x27        0 | mhtml | images storyboard
+sb2 mhtml 80x45        0 | mhtml | images storyboard
+sb1 mhtml 160x90       0 | mhtml | images storyboard
+sb0 mhtml 320x180      0 | mhtml | images storyboard
 
 --STDERR--
 [debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=bpUZkFVX6NY']
 [debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
-[debug] yt-dlp version stable@2026.08.19 from yt-dlp/yt-dlp [594bd50c2] (pip)
-[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-6.17.0-1022-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
+[debug] yt-dlp version stable@2026.08.19 from yt-dlp/yt-dlp [594bd50c2]
+[debug] Lazy loading extractors is disabled
+[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
 [debug] exe versions: none
-[debug] Optional libraries: certifi-2023.11.17, requests-2.31.0 (unsupported), sqlite3-3.45.1, urllib3-2.0.7
+[debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.0, certifi-2026.10.19, mutagen-1.48.1, requests-2.34.2, sqlite3-3.45.1, urllib3-2.8.0, websockets-17.3, yt_dlp_ejs-0.8.0
 [debug] JS runtimes: none
 [debug] Proxy map: {}
-[debug] Request Handlers: urllib
+[debug] Request Handlers: urllib, requests, websockets
 [debug] Plugin directories: /home/runner/.local/lib/python3.12/site-packages/yt_dlp_plugins
-[debug] Loaded 1744 extractors
+[debug] Loaded 1747 extractors
 [debug] [youtube] Found YouTube account cookies
 [debug] [youtube] [pot:bgutil:script-node] No server_home or script_path passed, defaulting to /home/runner/bgutil-ytdlp-pot-provider/server
 [debug] [youtube] [pot:bgutil:script-node] Script path doesn't exist: /home/runner/bgutil-ytdlp-pot-provider/server/build/generate_once.js
@@ -30,21 +38,15 @@
 [debug] [youtube] Forcing "main" player JS variant for player 55de7e60
         original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
 [debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web_embedded client
-[debug] [youtube] bpUZkFVX6NY: tv_downgraded player response playability status: UNPLAYABLE
-[debug] [youtube] bpUZkFVX6NY: Detected a 32s ad skippable after 5s for web
-[debug] [youtube] bpUZkFVX6NY: Detected a 28s ad skippable after 5s for web
+[debug] [youtube] bpUZkFVX6NY: Detected a 10s ad skippable after 5s for tv_samsung
+[debug] [youtube] bpUZkFVX6NY: Detected a 106s ad skippable after 5s for web
+[debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for web
 WARNING: [youtube] bpUZkFVX6NY: Signature solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
 WARNING: [youtube] bpUZkFVX6NY: n challenge solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
 [debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web client
 [debug] [youtube] [pot:bgutil:http] No base_url provided, defaulting to http://127.0.0.1:4416
 [debug] [youtube] bpUZkFVX6NY: Retrieved a gvs PO Token for web client
 [debug] [youtube] bpUZkFVX6NY: Some web client https formats have been skipped as they are missing a URL. YouTube is forcing SABR streaming for this client. See  https://github.com/yt-dlp/yt-dlp/issues/12482  for more details
-ERROR: [youtube] bpUZkFVX6NY: The page needs to be reloaded.
-  File "/home/runner/.local/lib/python3.12/site-packages/yt_dlp/extractor/common.py", line 765, in extract
-    ie_result = self._real_extract(url)
-                ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/.local/lib/python3.12/site-packages/yt_dlp/extractor/youtube/_video.py", line 4076, in _real_extract
-    self.raise_no_formats(reason, expected=True)
-  File "/home/runner/.local/lib/python3.12/site-packages/yt_dlp/extractor/common.py", line 1272, in raise_no_formats
-    raise ExtractorError(msg, expected=expected, video_id=video_id)
-
+WARNING: Only images are available for download. use --list-formats to see them
+[debug] Sort order given by extractor: quality, res, fps, hdr:12, source, vcodec, channels, acodec, lang, proto
+[debug] Formats sorted by: hasvid, ie_pref, quality, res, fps, hdr:12(7), source, vcodec, channels, acodec, lang, proto, size, br, asr, vext, aext, hasaud, id
