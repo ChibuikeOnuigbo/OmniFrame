@@ -51,10 +51,10 @@ sb0     mhtml 320x180      0    |                  mhtml | images               
 [debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=bpUZkFVX6NY']
 [debug] User config "/home/runner/.config/yt-dlp/config": ['--remote-components', 'ejs:github']
 [debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
-[debug] yt-dlp version stable@2026.08.19 from yt-dlp/yt-dlp [594bd50c2]
+[debug] yt-dlp version stable@2026.10.21 from yt-dlp/yt-dlp [36b92b4f1]
 [debug] Lazy loading extractors is disabled
-[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-6.17.0-1022-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
-[debug] exe versions: none
+[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
+[debug] exe versions: ffmpeg 6.1.1 (setts), ffprobe 6.1.1
 [debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.0, certifi-2026.10.19, mutagen-1.48.1, requests-2.34.2, sqlite3-3.45.1, urllib3-2.8.0, websockets-17.3, yt_dlp_ejs-0.8.0
 [debug] JS runtimes: deno-2.5.4
 [debug] Proxy map: {}
@@ -73,7 +73,7 @@ sb0     mhtml 320x180      0    |                  mhtml | images               
 [debug] [youtube] Forcing "main" player JS variant for player 55de7e60
         original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
 [debug] [youtube] bpUZkFVX6NY: Detected experiment to bind GVS PO Token to video ID for web_embedded client
-[debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for tv_samsung
+[debug] [youtube] bpUZkFVX6NY: Detected a 6s ad skippable after 5s for tv_samsung
 [debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for web
 [debug] [youtube] bpUZkFVX6NY: Detected a 15s ad skippable after 5s for web
 [debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)

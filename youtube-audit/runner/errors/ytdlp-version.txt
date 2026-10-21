@@ -1,3 +1,4 @@
-2026.08.19
+2026.10.21
 deno 2.5.4 (stable, release, x86_64-unknown-linux-gnu)
 yt-dlp-ejs 0.8.0
+ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers
