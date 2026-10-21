@@ -1,0 +1,147 @@
+# Drive-zip media worker. Triggered only by changes to this file or
+# youtube-audit/drive-trigger.txt. Downloads the owner-packed channel zips
+# from the link-shared Drive folder ON THE RUNNER (sandbox cannot reach Drive),
+# extracts frames + audio evidence per video, commits it back to the branch.
+# Resumable: drive-trigger.txt holds batch=N; each run processes 4 zip entries.
+name: video-drive
+
+on:
+  push:
+    paths:
+      - .github/workflows/video-drive.yml
+      - youtube-audit/drive-trigger.txt
+
+concurrency:
+  group: video-drive
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  drive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          { command -v ffmpeg && command -v ffprobe; } >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+
+      - name: Download zips + extract frame/audio evidence
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, shutil
+          batch = 1
+          try:
+              for line in open("youtube-audit/drive-trigger.txt"):
+                  if line.startswith("batch="): batch = int(line.split("=")[1])
+          except Exception: pass
+          cfg = json.load(open("youtube-audit/drive-zips.json"))
+          os.makedirs("audit-drive/reports", exist_ok=True)
+          os.makedirs("audit-drive/errors", exist_ok=True)
+          DL = "https://drive.usercontent.google.com/download?id={}&export=download&confirm=t"
+          def fetch(fid, dest):
+              r = subprocess.run(["curl","-sSL","--retry","2","-m","1800","-o",dest,DL.format(fid)],
+                                 capture_output=True, text=True, timeout=1900)
+              ok = os.path.exists(dest) and os.path.getsize(dest) > 500000
+              return ok, r.returncode
+          records = []
+          def process_zip(path, label):
+              work = f"work/{label}"
+              os.makedirs(work, exist_ok=True)
+              uz = subprocess.run(["unzip","-o","-q",path,"-d",work], capture_output=True, text=True, timeout=1800)
+              if uz.returncode != 0:
+                  records.append({"zip":label,"error":uz.stderr[-500:]}); return
+              media = []
+              for root,_,fs in os.walk(work):
+                  for f in fs:
+                      if f.lower().endswith((".mp4",".webm",".mkv",".mov",".m4v")):
+                          media.append(os.path.join(root,f))
+              for m in sorted(media):
+                  stem = os.path.splitext(os.path.basename(m))[0]
+                  d = f"audit-drive/evidence/{label}/{stem}"
+                  os.makedirs(d, exist_ok=True)
+                  rec = {"zip":label,"file":os.path.basename(m),"status":"FOOTAGE_ACQUIRED"}
+                  try:
+                      pr = subprocess.run(["ffprobe","-v","error","-show_entries",
+                           "format=duration:stream=width,height,codec_type,r_frame_rate",
+                           "-of","json",m], capture_output=True, text=True, timeout=120)
+                      rec["probe"] = json.loads(pr.stdout or "{}")
+                      dur = 60.0
+                      try: dur = float(rec["probe"].get("format",{}).get("duration",60) or 60)
+                      except Exception: pass
+                      rec["duration"] = dur
+                      for i in range(12):
+                          t = dur*(i+0.5)/12
+                          subprocess.run(["ffmpeg","-v","error","-ss",f"{t:.2f}","-i",m,
+                              "-frames:v","1","-vf","scale=640:360","-q:v","5",f"{d}/u{i:02d}.jpg"],
+                              capture_output=True, timeout=120, check=True)
+                      subprocess.run(["ffmpeg","-v","error","-i",m,"-vf",
+                          "select='gt(scene,0.4)',scale=640:360","-frames:v","6","-q:v","5",
+                          f"{d}/s%d.jpg"], capture_output=True, timeout=300)
+                      loud = subprocess.run(["ffmpeg","-hide_banner","-i",m,"-af",
+                          "loudnorm=print_format=json","-f","null","-"],
+                          capture_output=True, text=True, timeout=600)
+                      open(f"{d}/loudness.json","w").write(loud.stderr[-1500:])
+                      subprocess.run(["ffmpeg","-v","error","-i",m,"-filter_complex",
+                          "showspectrumpic=s=900x360:legend=1",f"{d}/spectrum.png"],
+                          capture_output=True, timeout=300)
+                      subprocess.run(["ffmpeg","-v","error","-i",m,"-filter_complex",
+                          "showwavespic=s=900x200",f"{d}/wave.png"],
+                          capture_output=True, timeout=300)
+                      rec["frames"] = sorted(f for f in os.listdir(d) if f.endswith(".jpg"))
+                  except Exception as e:
+                      rec["status"] = "BLOCKED"; rec["failure"] = str(e)[:1500]
+                  records.append(rec)
+          # manifest first (batch 1 only, tiny)
+          if batch == 1:
+              mf = cfg["manifest"]
+              ok, rc = fetch(mf["id"], "manifest.zip")
+              if ok:
+                  os.makedirs("audit-drive/manifest", exist_ok=True)
+                  subprocess.run(["unzip","-o","-q","manifest.zip","-d","audit-drive/manifest"],
+                                 capture_output=True, text=True, timeout=300)
+                  records.append({"zip":"manifest","status":"EXTRACTED"})
+              else:
+                  records.append({"zip":"manifest","status":"FAILED","rc":rc})
+          entries = cfg["entries"]
+          start, end = (batch-1)*4, batch*4
+          for e in entries[start:end]:
+              label = e["name"].replace(".zip","")
+              if e.get("z01"):
+                  ok1,_ = fetch(e["z01"], "part.z01")
+                  ok2,_ = fetch(e["id"], "part.zip")
+                  if ok1 and ok2:
+                      with open("joined.zip","wb") as out:
+                          for p in ("part.z01","part.zip"):
+                              with open(p,"rb") as inn: shutil.copyfileobj(inn, out)
+                      zp = "joined.zip"
+                  else:
+                      records.append({"zip":label,"status":"DOWNLOAD_FAILED"}); continue
+              else:
+                  ok,_ = fetch(e["id"], "part.zip")
+                  if not ok:
+                      records.append({"zip":label,"status":"DOWNLOAD_FAILED"}); continue
+                  zp = "part.zip"
+              try:
+                  process_zip(zp, label)
+              except Exception as ex:
+                  records.append({"zip":label,"status":"ERROR","failure":str(ex)[:800]})
+              for p in ("part.zip","part.z01","joined.zip"):
+                  if os.path.exists(p): os.remove(p)
+              shutil.rmtree("work", ignore_errors=True)
+          json.dump(records, open(f"audit-drive/reports/drive-batch{batch}.json","w"), indent=1)
+          PY
+
+      - name: Publish evidence to the branch
+        run: |
+          mkdir -p youtube-audit/runner-drive
+          cp -r audit-drive/. youtube-audit/runner-drive/
+          find youtube-audit/runner-drive -type f \( -name '*.zip' -o -name '*.z01' \) -delete
+          find youtube-audit/runner-drive -type f -size +8M -delete
+          git config user.name "omniframe-audit-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add youtube-audit/runner-drive
+          git commit -m "youtube-audit: drive-zip evidence batch [ci skip]" || echo "nothing to commit"
+          git push origin HEAD:${{ github.ref_name }}
