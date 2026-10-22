@@ -1,0 +1,28 @@
+, q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
+    Metadata:
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:26.133000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:00:26.188000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=37.5x    
+frame=  410 fps=0.0 q=-0.0 size=N/A time=00:00:13.63 bitrate=N/A speed=23.5x    
+frame=  752 fps=694 q=-0.0 size=N/A time=00:00:25.03 bitrate=N/A speed=23.1x    
+[out#0/null @ 0x55c5e3639c80] video:368kB audio:19618kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  784 fps=669 q=-0.0 Lsize=N/A time=00:00:26.10 bitrate=N/A speed=22.3x    
+[Parsed_loudnorm_0 @ 0x55c5e36944c0] 
+{
+	"input_i" : "-7.47",
+	"input_tp" : "1.69",
+	"input_lra" : "2.90",
+	"input_thresh" : "-17.49",
+	"output_i" : "-23.40",
+	"output_tp" : "-14.34",
+	"output_lra" : "2.00",
+	"output_thresh" : "-33.43",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.60"
+}
