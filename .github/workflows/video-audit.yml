@@ -137,6 +137,16 @@ jobs:
               print('chat-history ids merged:', len(inv) - n0)
           except Exception as e:
               print('chat merge FAIL', e)
+          # repo master inventory merges in too, so ids= can target ANY registered id
+          try:
+              repo_inv = json.load(open('youtube-audit/inventory.json'))['videos']
+              n0 = len(inv)
+              for v in repo_inv:
+                  if v['id'] not in inv:
+                      add(v['id'], v.get('title', ''), str(v.get('duration', '0') or '0'), v.get('channel', 'repo'), v.get('format', 'videos'))
+              print('repo inventory merged:', len(inv) - n0)
+          except Exception as e:
+              print('repo merge FAIL', e)
           json.dump({"generated": "__TS__", "total": len(inv), "videos": list(inv.values())},
                     open("audit-out/inventory.json","w"), indent=1)
           print("inventory total", len(inv))
