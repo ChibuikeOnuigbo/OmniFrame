@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-22T11:33:56Z",
- "total": 357,
+ "generated": "2026-10-22T11:45:29Z",
+ "total": 358,
  "videos": [
   {
    "id": "fGm0SBFTj3o",
@@ -4639,6 +4639,19 @@
    "format": "videos",
    "formats": [
     "videos"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "K2mSI59wPvg",
+   "url": "https://www.youtube.com/watch?v=K2mSI59wPvg",
+   "title": "user short K2mSI59wPvg",
+   "duration": "0",
+   "channel": "user-links",
+   "format": "shorts",
+   "formats": [
+    "shorts"
    ],
    "status": "INVENTORIED",
    "access": "pending-batch"
