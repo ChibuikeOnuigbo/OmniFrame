@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { Activity, Aperture, Ban, Circle, CircleDot, CloudFog, CloudRain, Download, Feather, Flame, Flower2, Frame, Grid2x2, Grid3x3, Lamp, Layers, Orbit, Play, Plus, Power, RotateCcw, ScanLine, Search, SlidersHorizontal, Snowflake, Sparkles, SunMedium, Sunset, Trash2, Upload, Wand2, Waves, Wind, X } from 'lucide-react'
+import { Activity, Aperture, Ban, Circle, CircleDot, CloudFog, CloudRain, Download, Feather, Flame, Flower2, Frame, Grid2x2, Grid3x3, Image as ImageIcon, Lamp, Layers, Orbit, Play, Plus, Power, RotateCcw, ScanLine, Search, SlidersHorizontal, Snowflake, Sparkles, SunMedium, Sunset, Trash2, Upload, Wand2, Waves, Wind, X } from 'lucide-react'
+import SegmentCarousel from './SegmentCarousel'
+import ExpandableToolGroup from './ExpandableToolGroup'
 import { useEditor } from '../store'
 import type { Clip, ClipEffect } from '../types'
 import { activeEffectKeys, placedEffectLabels } from '../lib/adjustment'
@@ -696,32 +698,44 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
       ))}
       {/* Particle / overlay / background beds — scanned from the AE tutorial
           corpus (Study_edits_videos/deep-study-*.md). Icon-first tiles. */}
+      {/* Particle / overlay / background beds — user pattern: each bed is a
+          MAIN tool with a down arrow; its connected sub-tools (segment
+          carousel + direct tiles) live UNDER it, not stuffed into one tile. */}
       <div className="space-y-2" data-testid="clip-fx-layers">
-        {FX_TILE_GROUPS.map((group) => (
-          <div key={group.key} className="space-y-1">
-            <span className="text-[9px] uppercase tracking-wide text-ink-500">{group.label}</span>
-            <div className="flex flex-wrap gap-1">
-              {group.items.map((item) => {
-                const Icon = item.icon
-                const active = effects[group.key as keyof ClipEffect] === item.id
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    data-testid={`${group.testPrefix}-${item.id}`}
-                    title={item.label}
-                    aria-label={item.label}
-                    aria-pressed={active}
-                    onClick={() => setClipEffect(clip.id, { [group.key]: item.id } as Partial<ClipEffect>)}
-                    className={`flex h-7 w-7 items-center justify-center rounded border ${active ? 'border-sky-500 bg-sky-500/20 text-sky-200' : 'border-ink-700 bg-ink-900 text-ink-400 hover:text-white'}`}
-                  >
-                    <Icon size={13} />
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        ))}
+        {FX_TILE_GROUPS.map((group) => {
+          const GroupIcon = group.key === 'particleFx' ? Sparkles : group.key === 'overlayFx' ? Layers : ImageIcon
+          return (
+            <ExpandableToolGroup key={group.key} testId={`fxgroup-${group.key}`} icon={GroupIcon} label={group.label}>
+              <SegmentCarousel
+                ariaLabel={`${group.label} kinds`}
+                testId={`fxcarousel-${group.key}`}
+                segments={group.items.map((i) => ({ id: i.id, label: i.label }))}
+                value={String(effects[group.key as keyof ClipEffect] ?? 'none')}
+                onChange={(id) => setClipEffect(clip.id, { [group.key]: id } as Partial<ClipEffect>)}
+              />
+              <div className="flex flex-wrap gap-1">
+                {group.items.map((item) => {
+                  const Icon = item.icon
+                  const active = effects[group.key as keyof ClipEffect] === item.id
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      data-testid={`${group.testPrefix}-${item.id}`}
+                      title={item.label}
+                      aria-label={item.label}
+                      aria-pressed={active}
+                      onClick={() => setClipEffect(clip.id, { [group.key]: item.id } as Partial<ClipEffect>)}
+                      className={`flex h-7 w-7 items-center justify-center rounded border ${active ? 'border-sky-500 bg-sky-500/20 text-sky-200' : 'border-ink-700 bg-ink-900 text-ink-400 hover:text-white'}`}
+                    >
+                      <Icon size={13} />
+                    </button>
+                  )
+                })}
+              </div>
+            </ExpandableToolGroup>
+          )
+        })}
       </div>
       {isLayer ? (
         <div className="space-y-1.5 rounded-md border border-ink-800 bg-ink-950/40 px-2 py-2" data-testid="light-controls">

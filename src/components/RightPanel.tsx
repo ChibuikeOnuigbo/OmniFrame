@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
+import ExpandableToolGroup from './ExpandableToolGroup'
+import SegmentCarousel from './SegmentCarousel'
 import {
   Activity,
   AudioLines,
@@ -1311,30 +1313,54 @@ function MaskingRotoSection({ clip }: { clip: Clip }) {
 /** One-click rack of the settings combos scanned off the AE tutorial popups
  *  (Study_edits_videos/deep-study-*.md): comp light, CRT blotch, mosaic,
  *  RGB fringe, wave warp, green key, feather/ember beds, scanlines. */
-const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Record<string, unknown> }> = [
-  { id: 'complight', label: 'Comp light (warm point light + falloff)', icon: Lightbulb, effect: { lightType: 'point', lightIntensity: 1.1, lightColor: '#ffd9a0', lightFalloff: 0.5 } },
-  { id: 'crt', label: 'CRT look (posterize + grain + fringe)', icon: Tv, effect: { posterize: 0.55, grain: 0.35, chromatic: 3 } },
-  { id: 'mosaic', label: 'Mosaic pixel shift bed', icon: Grid3x3, effect: { pixelate: 12 } },
-  { id: 'fringe', label: 'RGB fringe attack', icon: Rainbow, effect: { chromatic: 9 } },
-  { id: 'warp', label: 'Wave warp bend', icon: Waves, effect: { waveWarp: 10 } },
-  { id: 'greenkey', label: 'Green-screen key (CTA card)', icon: Eraser, effect: { chromaKey: 0.85 } },
-  { id: 'feathers', label: 'Feather particle bed', icon: Feather, effect: { particleFx: 'feathers', particleDensity: 0.6 } },
-  { id: 'embers', label: 'Ember particle bed', icon: Flame, effect: { particleFx: 'embers', particleDensity: 0.5 } },
-  { id: 'scan', label: 'Scanline overlay', icon: ScanLine, effect: { overlayFx: 'scanlines', overlayStrength: 0.6 } },
+const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Record<string, unknown>; group: 'light' | 'pixel' | 'beds' }> = [
+  { id: 'complight', group: 'light', label: 'Comp light (warm point light + falloff)', icon: Lightbulb, effect: { lightType: 'point', lightIntensity: 1.1, lightColor: '#ffd9a0', lightFalloff: 0.5 } },
+  { id: 'crt', group: 'light', label: 'CRT look (posterize + grain + fringe)', icon: Tv, effect: { posterize: 0.55, grain: 0.35, chromatic: 3 } },
+  { id: 'mosaic', group: 'pixel', label: 'Mosaic pixel shift bed', icon: Grid3x3, effect: { pixelate: 12 } },
+  { id: 'fringe', group: 'light', label: 'RGB fringe attack', icon: Rainbow, effect: { chromatic: 9 } },
+  { id: 'warp', group: 'pixel', label: 'Wave warp bend', icon: Waves, effect: { waveWarp: 10 } },
+  { id: 'greenkey', group: 'pixel', label: 'Green-screen key (CTA card)', icon: Eraser, effect: { chromaKey: 0.85 } },
+  { id: 'feathers', group: 'beds', label: 'Feather particle bed', icon: Feather, effect: { particleFx: 'feathers', particleDensity: 0.6 } },
+  { id: 'embers', group: 'beds', label: 'Ember particle bed', icon: Flame, effect: { particleFx: 'embers', particleDensity: 0.5 } },
+  { id: 'scan', group: 'beds', label: 'Scanline overlay', icon: ScanLine, effect: { overlayFx: 'scanlines', overlayStrength: 0.6 } },
 ]
 function AeToolRackSection({ clip }: { clip: Clip }) {
   const setClipEffect = useEditor((s) => s.setClipEffect)
   return (
     <Section title="AE Tool Rack">
-      <div className="flex flex-wrap gap-1" data-testid="ae-tool-rack">
-        {AE_RACK.map((tool) => {
-          const Icon = tool.icon
+      {/* User pattern: main tools with a down arrow, connected sub-tools under. */}
+      <div className="space-y-2" data-testid="ae-tool-rack">
+        {([
+          { key: 'light', label: 'Light & look', icon: Lightbulb },
+          { key: 'pixel', label: 'Pixel & warp', icon: Grid3x3 },
+          { key: 'beds', label: 'Particle & overlay beds', icon: Feather },
+        ] as const).map((g) => {
+          const tools = AE_RACK.filter((t) => t.group === g.key)
           return (
-            <button key={tool.id} type="button" data-testid={`ae-rack-${tool.id}`} title={tool.label} aria-label={tool.label}
-              onClick={() => setClipEffect(clip.id, tool.effect as Partial<ClipEffect>)}
-              className="flex h-7 w-7 items-center justify-center rounded border border-ink-700 bg-ink-900 text-ink-300 hover:text-white">
-              <Icon size={13} />
-            </button>
+            <ExpandableToolGroup key={g.key} testId={`aerack-${g.key}`} icon={g.icon} label={g.label}>
+              <SegmentCarousel
+                ariaLabel={`${g.label} combos`}
+                testId={`aerack-carousel-${g.key}`}
+                segments={tools.map((t) => ({ id: t.id, label: t.label }))}
+                value={tools[0]?.id || ''}
+                onChange={(id) => {
+                  const t = tools.find((x) => x.id === id)
+                  if (t) setClipEffect(clip.id, t.effect as Partial<ClipEffect>)
+                }}
+              />
+              <div className="flex flex-wrap gap-1">
+                {tools.map((tool) => {
+                  const Icon = tool.icon
+                  return (
+                    <button key={tool.id} type="button" data-testid={`ae-rack-${tool.id}`} title={tool.label} aria-label={tool.label}
+                      onClick={() => setClipEffect(clip.id, tool.effect as Partial<ClipEffect>)}
+                      className="flex h-7 w-7 items-center justify-center rounded border border-ink-700 bg-ink-900 text-ink-300 hover:text-white">
+                      <Icon size={13} />
+                    </button>
+                  )
+                })}
+              </div>
+            </ExpandableToolGroup>
           )
         })}
       </div>
