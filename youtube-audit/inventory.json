@@ -1593,9 +1593,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "line-art white-haired anime girl (braids, surprised) on dark-blue patterned bg, black + dark-blue frames; NovaVision line-art output"
   },
   {
    "id": "kPq-jncT-Jg",
@@ -1802,9 +1803,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "manga hand w/ glowing pen comp + pink-tinted char comp, white frame w/ tiny b&w sphere + strokes; manga hand comps"
   },
   {
    "id": "RfQZjjyBYeg",
@@ -2521,9 +2523,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "classical painting comp (two figures, red robes) + 'AEAPIO FANTAZIO' logo comp w/ menu, yellow gradient frame; painting comp + logo"
   },
   {
    "id": "xnf7OpeSssU",
