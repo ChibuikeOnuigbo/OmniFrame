@@ -13,6 +13,17 @@
 //   - drift is corrected by occasional currentTime seeks, not per-frame seeks
 
 import { applyPatchUnder, type PatchUnderSpec } from './patchUnder'
+
+/** AM-named procedural family: warped local time + auto-shake offset. */
+function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<typeof evaluateClipAnimation> {
+  const t2 = pfxLocalTime(clip.effects, time, clip.start, clip.duration)
+  const ev = evaluateClipAnimation(clip, t2)
+  const sh = pfxShake(clip.effects, time)
+  ev.x += sh.dx
+  ev.y += sh.dy
+  return ev
+}
+import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples } from './proceduralFx'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -411,7 +422,7 @@ export class PreviewEngine {
     const vw = asset?.width || PW
     const vh = asset?.height || PH
     const cover = Math.max(this.width / vw, this.height / vh)
-    const evalT = evaluateClipAnimation(clip, time)
+    const evalT = evalClipPfx(clip, time)
     const w = vw * cover * Math.abs(evalT.scaleX || 1)
     const h = vh * cover * Math.abs(evalT.scaleY || 1)
     const cx = this.width / 2 + evalT.x * (this.width / PW)
@@ -1560,7 +1571,7 @@ export class PreviewEngine {
     ctx.save()
     this.applyParentWorld(ctx, clip, time)
     applyClipFilter(ctx, this.effectsForRender(clip, time))
-    const evalT = evaluateClipAnimation(clip, time)
+    const evalT = evalClipPfx(clip, time)
     ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity ?? clip.transform.opacity))
 
     const cx = this.width / 2 + evalT.x * (this.width / PW)
@@ -1869,6 +1880,20 @@ export class PreviewEngine {
       } else {
         ctx.drawImage(scratch, -this.width / 2, -this.height / 2) // compound-local target
       }
+      // AM Echo Keyframes / Motion Blur: ghost the rendered clip at past times
+      const ghosts = [...pfxEchoTimes(clip.effects, time), ...pfxMotionBlurSamples(clip.effects, time, (this as unknown as { projectFps?: number }).projectFps || 24)]
+      for (const g of ghosts) {
+        if (g.time < clip.start) continue
+        const gev = evalClipPfx(clip, g.time)
+        const vw = (asset.width || this.width) * Math.abs(gev.scaleX || 1)
+        const vh = (asset.height || this.height) * Math.abs(gev.scaleY || 1)
+        const gx = this.width / 2 + gev.x * (this.width / PW) - vw / 2
+        const gy = this.height / 2 + gev.y * (this.height / PH) - vh / 2
+        ctx.save()
+        ctx.globalAlpha = (ctx.globalAlpha || 1) * g.alpha
+        ctx.drawImage(scratch, gx, gy, vw, vh)
+        ctx.restore()
+      }
       this.releaseScratch(scratch)
       return
     }
@@ -1901,7 +1926,7 @@ export class PreviewEngine {
       ? -(artwork!.documentHeight * artworkFit!) / 2 + (artwork!.top || 0) * artworkFit!
       : -dh / 2
 
-    const evalT = evaluateClipAnimation(clip, time)
+    const evalT = evalClipPfx(clip, time)
     ctx.save()
     this.applyParentWorld(ctx, clip, time)
     ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity))
@@ -2112,7 +2137,7 @@ export class PreviewEngine {
     childClips: Clip[],
     childTracks: Track[],
   ) {
-    const evalT = evaluateClipAnimation(clip, time)
+    const evalT = evalClipPfx(clip, time)
     ctx.save()
     ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity))
 

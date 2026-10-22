@@ -116,6 +116,11 @@ export class FrameProvider {
   }
 }
 
+// headless shim so the app's pixelGrade (document.createElement canvases)
+// runs identically in node: same maths, two worlds
+if (typeof globalThis.document === 'undefined') {
+  globalThis.document = { createElement: () => createCanvas(1, 1) }
+}
 export function makeCanvas(w, h) { return createCanvas(w, h) }
 export { loadImage }
 export function cover(ctx, img, w, h, ox = 0, oy = 0) {

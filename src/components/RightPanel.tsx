@@ -1331,6 +1331,25 @@ const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Recor
   { id: 'fractalblur', group: 'pixel', label: 'Fractal blur (stacked octaves)', icon: Waves, effect: { fractalBlur: 8 } },
   { id: 'lumakey', group: 'pixel', label: 'Luma key bg removal', icon: Eraser, effect: { lumaKey: 0.85 } },
   { id: 'cardflip', group: 'pixel', label: 'Card flip fold', icon: Tv, effect: { cardFlip: 0.5 } },
+  // Alight-Motion-named family (rewatch 2026-10, guide.alightmotion.com/effects)
+  { id: 'amzoomblur', group: 'pixel', label: 'Zoom blur (AM)', icon: Waves, effect: { zoomBlur: 0.8 } },
+  { id: 'amdirblur', group: 'pixel', label: 'Directional blur (AM)', icon: Waves, effect: { directionalBlur: 0.7, directionalBlurAngle: 35 } },
+  { id: 'amglow', group: 'pixel', label: 'Glow (AM)', icon: Sparkles, effect: { glow: 0.9 } },
+  { id: 'amedgeglow', group: 'pixel', label: 'Edge glow (AM)', icon: Sparkles, effect: { edgeGlow: 0.9 } },
+  { id: 'amtilt', group: 'pixel', label: 'Tilt shift (AM)', icon: Waves, effect: { tiltShift: 0.9 } },
+  { id: 'amvignette', group: 'pixel', label: 'Vignette (AM)', icon: Sparkles, effect: { vignette: 0.8 } },
+  { id: 'amflicker', group: 'pixel', label: 'Flicker (AM)', icon: Sparkles, effect: { flicker: 0.6 } },
+  { id: 'amtiles', group: 'pixel', label: 'Tiles mirror (AM)', icon: Tv, effect: { tiles: 3 } },
+  { id: 'ambuldge', group: 'pixel', label: 'Pinch/Bulge (AM)', icon: Waves, effect: { pinchBulge: 0.6 } },
+  { id: 'amswirl', group: 'pixel', label: 'Swirl (AM)', icon: Waves, effect: { swirl: 90 } },
+  { id: 'amgradmap', group: 'pixel', label: 'Gradient map (AM)', icon: Sparkles, effect: { gradientMap: 1 } },
+  { id: 'amthresh', group: 'pixel', label: 'Threshold (AM)', icon: Tv, effect: { threshold: 0.5 } },
+  { id: 'amsharpen', group: 'pixel', label: 'Unsharp mask (AM)', icon: Sparkles, effect: { sharpen: 0.8 } },
+  { id: 'amedges', group: 'pixel', label: 'Find edges (AM)', icon: Tv, effect: { findEdges: 1 } },
+  { id: 'amecho', group: 'pixel', label: 'Echo keyframes (AM)', icon: Waves, effect: { echo: 4, echoSpacing: 0.1 } },
+  { id: 'amshake', group: 'pixel', label: 'Auto-shake (AM)', icon: Waves, effect: { autoShake: 8 } },
+  { id: 'amstrobe', group: 'pixel', label: 'Time quantization (AM)', icon: Tv, effect: { timeQuantization: 0.2 } },
+  { id: 'ammblur', group: 'pixel', label: 'Motion blur (AM)', icon: Waves, effect: { motionBlur: 0.8 } },
 ]
 
 /** Speed-curve rack (board C brief: 15 curves). One main tool with a down

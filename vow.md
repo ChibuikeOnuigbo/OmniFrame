@@ -101,3 +101,12 @@ itself: if a claim cannot be opened, run, watched or measured, it does not get s
   export (white-on-black, AE-ready). The booted app's Smart engine delegates
   to the same src/lib/rotoClick.ts maths. Click mode segments; polygon mode
   draws; exportMatte proves what was segmented.
+
+## Alight-Motion naming + rewatch law (same review)
+- Effect tools carry the OFFICIAL Alight Motion names (he edits in AM):
+  Echo Keyframes, Auto-Shake, Time Quantization, Glow, Edge Glow, Vignette,
+  Zoom/Directional Blur, Tilt Shift, Gradient Map, Threshold, Unsharp Mask,
+  Find Edges, Tiles, Pinch/Bulge, Swirl, Flicker, Motion Blur, reverse/freeze.
+- Rewatch includes the AI shorts; AI tools are logged and NEVER implemented.
+- Every rewatched non-AI tool he clicks gets researched by name first, then
+  implemented with its maths in BOTH renderers (one shared source).

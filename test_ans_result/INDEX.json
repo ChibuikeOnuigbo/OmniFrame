@@ -36,7 +36,9 @@
   "test_ans_result/D_analysis.mp4",
   "test_ans_result/D_tank_fill/solution.mp4",
   "test_ans_result/E_analysis.mp4",
-  "test_ans_result/E_move/solution.mp4"
+  "test_ans_result/E_move/solution.mp4",
+  "test_ans_result/F_amfx/procedural.mp4",
+  "test_ans_result/F_amfx/timefx.mp4"
  ],
  "json": [
   "test_ans_result/A_analysis.json",
@@ -76,6 +78,8 @@
   "test_ans_result/D_tank_fill/solution.json",
   "test_ans_result/E_analysis.json",
   "test_ans_result/E_move/solution.json",
+  "test_ans_result/F_amfx/procedural.json",
+  "test_ans_result/F_amfx/timefx.json",
   "test_ans_result/INDEX.json",
   "test_ans_result/evidence/timeline-A-01.png.json",
   "test_ans_result/evidence/timeline-A-02.png.json",
@@ -108,6 +112,7 @@
   "test_ans_result/evidence/timeline-C-09.png.json",
   "test_ans_result/evidence/timeline-C-10.png.json",
   "test_ans_result/evidence/timeline-D.png.json",
-  "test_ans_result/evidence/timeline-E.png.json"
+  "test_ans_result/evidence/timeline-E.png.json",
+  "test_ans_result/evidence/timeline-F.png.json"
  ]
 }

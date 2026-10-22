@@ -23,6 +23,12 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Board F — Alight Motion family
+effect_set carries every AM-named key; evidence/F-*.png are per-effect frame
+proofs, F_amfx/procedural.mp4 shows echo+shake+strobe+motion-blur on a moving
+clip, timefx.mp4 shows reverse+freeze. See
+Study_edits_videos/handbox-rewatch-alightmotion.md for the rewatch mapping.
+
 ## Same principle on every board
 D: object is CUT out (roto click -> extract -> patch under) and the cut piece
 fills the tank grid. A: roto click-matte exported as luma proof + polygon roto

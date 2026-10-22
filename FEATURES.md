@@ -110,6 +110,9 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 96 roto_mask v2: click-segment mode + polygon mode + exportMatte; app Smart engine delegates to same maths
 97 pixel-matte mask kind rendered by headless appRender (clip.mask.kind 'matte')
 98 boards D/A/B/C rebuilt on the omniframe principle: D cut+paste fill, A roto probe+polygon, B roto probe, C transparent-select extract
+99 AM pixel family in pixelGrade (16 keys: zoomBlur, directionalBlur, glow, edgeGlow, tiltShift, vignette, flicker, tiles, pinchBulge, swirl, gradientMap, threshold, sharpen, findEdges + colours)
+100 AM procedural family proceduralFx.ts (echo keyframes, auto-shake, time quantization, motion blur, reverse, freeze) wired into playback + appRender
+101 AE rack +18 Alight-Motion-named entries; headless document shim so app pixelGrade runs in node unchanged
 
-**Total: 98 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 98) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 101 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 101) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).

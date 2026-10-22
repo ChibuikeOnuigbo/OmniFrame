@@ -35,6 +35,8 @@ export async function loadAppTs(rel) {
 }
 
 export const CE = await loadAppTs('src/lib/animation/CurveEngine.ts')
+export const PG = await loadAppTs('src/lib/pixelGrade.ts')
+export const PFX = await loadAppTs('src/lib/proceduralFx.ts')
 
 export class Sequence {
   constructor({ w = 640, h = 360, fps = 24, duration = 2, bg = '#0d0f13' } = {}) {
@@ -72,40 +74,9 @@ export function makeClip({ id, name, asset, natW, natH, start = 0, duration = 2,
 }
 
 /* effect maths — mirrored 1:1 into playback.ts as app features */
-export function applyEffects(x, clip, w, h) {
-  const e = clip.effects || {}
-  if (e.pixelate > 0) {
-    const t = makeCanvas(Math.max(2, Math.round(w / e.pixelate)), Math.max(2, Math.round(h / e.pixelate)))
-    t.getContext('2d').drawImage(x.canvas, 0, 0, t.width, t.height)
-    x.imageSmoothingEnabled = false
-    x.clearRect(0, 0, w, h); x.drawImage(t, 0, 0, w, h)
-    x.imageSmoothingEnabled = true
-  }
-  if (e.fractalBlur > 0) {
-    // fractal blur: stacked self-similar blur passes (3 octaves, halving radius)
-    const src = makeCanvas(w, h); src.getContext('2d').drawImage(x.canvas, 0, 0)
-    x.clearRect(0, 0, w, h)
-    let r = e.fractalBlur
-    for (let o = 0; o < 3; o++) {
-      x.save(); x.filter = `blur(${Math.max(0.5, r).toFixed(1)}px)`; x.globalAlpha = o === 0 ? 1 : 0.55
-      x.drawImage(src, 0, 0); x.restore(); r /= 2
-    }
-    x.filter = 'none'
-  }
-  if (e.lumaKey > 0 || e.chromaKey > 0) {
-    const d = x.getImageData(0, 0, w, h), p = d.data
-    for (let i = 0; i < p.length; i += 4) {
-      if (e.lumaKey > 0) {
-        const lum = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]
-        const a = lum < 26 ? 0 : lum > 26 + 30 * (1 - e.lumaKey) ? 255 : ((lum - 26) / (30 * (1 - e.lumaKey))) * 255
-        p[i + 3] = Math.min(p[i + 3], Math.max(0, a))
-      } else {
-        const g = p[i + 1] - Math.max(p[i], p[i + 2])
-        if (g > 40 * (1 - e.chromaKey)) p[i + 3] = 0
-      }
-    }
-    x.putImageData(d, 0, 0)
-  }
+export function applyEffects(x, clip, w, h, t = 0) {
+  // single source of truth: the app's own pixelGrade (AM-named family included)
+  PG.applyPixelGrade(x.canvas, clip.effects || {}, Math.round(t * 24))
 }
 
 export function cardFlipFactor(clip, t) {
@@ -146,14 +117,23 @@ export function renderFrame(seq, t) {
   x.fillStyle = seq.bg; x.fillRect(0, 0, seq.w, seq.h)
   for (const clip of seq.clips) {
     if (t < clip.start || t >= clip.start + clip.duration) continue
-    const ev = CE.evaluateClipAnimation(clip, t)
-    const r = seq.clipRect(clip, t)
+    const eff = clip.effects || {}
+    const tt = PFX.pfxLocalTime(eff, t, clip.start, clip.duration)
+    const sh = PFX.pfxShake(eff, t)
+    const evAt = (time) => {
+      const e2 = CE.evaluateClipAnimation(clip, PFX.pfxLocalTime(eff, time, clip.start, clip.duration))
+      const s2 = PFX.pfxShake(eff, time)
+      e2.x += s2.dx; e2.y += s2.dy
+      return e2
+    }
+    const ev = evAt(t)
+    const r = seq.clipRectAt ? seq.clipRectAt(clip, ev) : seq.clipRect(clip, tt)
     const s = makeCanvas(Math.max(2, Math.round(r.w)), Math.max(2, Math.round(r.h)))
     const sx = s.getContext('2d')
     const flip = cardFlipFactor(clip, t)
     sx.save()
     sx.translate(s.width / 2, s.height / 2); sx.scale(flip.sx, 1); sx.translate(-s.width / 2, -s.height / 2)
-    clip.draw(sx, s.width, s.height, t - clip.start)
+    clip.draw(sx, s.width, s.height, Math.max(0, tt - clip.start))
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, s.width, s.height) }
     applyEffects(sx, clip, s.width, s.height)
@@ -182,6 +162,23 @@ export function renderFrame(seq, t) {
     x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
     x.drawImage(s, -r.w / 2, -r.h / 2, r.w, r.h)
     x.restore()
+    const ghosts = [...PFX.pfxEchoTimes(eff, t), ...PFX.pfxMotionBlurSamples(eff, t, seq.fps)]
+    for (const g of ghosts) {
+      if (g.time < clip.start) continue
+      const gev = evAt(g.time)
+      const gr = { x: seq.w / 2 + gev.x - (clip.natW * gev.scaleX) / 2, y: seq.h / 2 + gev.y - (clip.natH * gev.scaleY) / 2, w: clip.natW * gev.scaleX, h: clip.natH * gev.scaleY }
+      const gs = makeCanvas(Math.max(2, Math.round(gr.w)), Math.max(2, Math.round(gr.h)))
+      const gsx = gs.getContext('2d')
+      gsx.save()
+      gsx.translate(gs.width / 2, gs.height / 2); gsx.scale(1, 1); gsx.translate(-gs.width / 2, -gs.height / 2)
+      clip.draw(gsx, gs.width, gs.height, Math.max(0, PFX.pfxLocalTime(eff, g.time, clip.start, clip.duration) - clip.start))
+      gsx.restore()
+      if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) { /* matte applied below via shared path */ }
+      x.save()
+      x.globalAlpha = (clip.opacity ?? 1) * g.alpha
+      x.drawImage(gs, gr.x, gr.y, gr.w, gr.h)
+      x.restore()
+    }
   }
   return c
 }

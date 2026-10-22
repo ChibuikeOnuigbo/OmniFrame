@@ -596,6 +596,55 @@ export interface ClipEffect {
   lumaKey?: number
   /** Card flip: horizontal fold in half-turns (0..2). */
   cardFlip?: number
+  // ---- Alight-Motion-named effect family (rewatch 2026-10) ----
+  /** AM Zoom Blur: radial scale-stack blur amount 0..1. */
+  zoomBlur?: number
+  /** AM Directional Blur: angle deg + amount via directionalBlur (0..1). */
+  directionalBlur?: number
+  directionalBlurAngle?: number
+  /** AM Glow: bright-pass + blur added back, 0..1. */
+  glow?: number
+  /** AM Edge Glow / Stroke Color: alpha-edge tint strength 0..1. */
+  edgeGlow?: number
+  edgeGlowColor?: string
+  /** AM Lens Blur tilt-shift: horizontal sharp band, 0..1 (0 = off). */
+  tiltShift?: number
+  /** AM Vignette: edge darkening 0..1. */
+  vignette?: number
+  /** AM Flicker: random brightness jitter 0..1. */
+  flicker?: number
+  /** AM Mirror / Tiles: 0 off, 2 = mirror halves, 3+ = tile count. */
+  tiles?: number
+  /** AM Pinch/Bulge: -1..1 pinch(neg)/bulge(pos). */
+  pinchBulge?: number
+  /** AM Swirl: twirl angle deg. */
+  swirl?: number
+  /** AM Gradient Map: luma mapped between two colours. */
+  gradientMap?: number
+  gradientMapFrom?: string
+  gradientMapTo?: string
+  /** AM Threshold: hard luma cut 0..1 (0 = off). */
+  threshold?: number
+  /** AM Unsharp Mask: sharpen 0..1. */
+  sharpen?: number
+  /** AM Find Edges: outline pass 0..1. */
+  findEdges?: number
+  /** AM Echo Keyframes: ghost count of past transform positions. */
+  echo?: number
+  echoDecay?: number
+  echoSpacing?: number
+  /** AM Auto-Shake: oscillation amplitude px. */
+  autoShake?: number
+  autoShakeFreq?: number
+  /** AM Time Quantization: strobe step seconds (0 = off). */
+  timeQuantization?: number
+  /** AM Motion Blur: temporal sample stack 0..1. */
+  motionBlur?: number
+  /** AM Speed reverse: play clip backwards. */
+  reverse?: number
+  /** AM freeze-frame hold: local seconds to hold at freezeAt. */
+  freezeHold?: number
+  freezeAt?: number
   chromaColor?: string // key colour, default pure green
   // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.

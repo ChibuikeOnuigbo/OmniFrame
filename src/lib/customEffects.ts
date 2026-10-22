@@ -49,6 +49,12 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   overlayFx: 'none',
   overlayStrength: 0.5,
   replaceBg: 'none',
+  zoomBlur: 0, directionalBlur: 0, directionalBlurAngle: 0, glow: 0, edgeGlow: 0,
+  edgeGlowColor: '#ffdc78', tiltShift: 0, vignette: 0, flicker: 0, tiles: 0,
+  pinchBulge: 0, swirl: 0, gradientMap: 0, gradientMapFrom: '#0a0a28', gradientMapTo: '#ffbe5a',
+  threshold: 0, sharpen: 0, findEdges: 0, echo: 0, echoDecay: 0.5, echoSpacing: 0.08,
+  autoShake: 0, autoShakeFreq: 8, timeQuantization: 0, motionBlur: 0, reverse: 0,
+  freezeHold: 0, freezeAt: 0,
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
