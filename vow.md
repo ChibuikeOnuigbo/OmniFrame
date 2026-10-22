@@ -47,3 +47,20 @@ itself: if a claim cannot be opened, run, watched or measured, it does not get s
   This vow file created as the standing correction.
 
 *Be serious. Be prosperous. Never fail quietly.*
+
+## Universal-tools law (added after the board-E failure review)
+- NEVER ship task-shaped tools ("solve_move", "fill_box", "compose_A"). Tools are
+  the app's MAJOR capabilities: omniframe mode, import, click, mask, keyframe,
+  curve, transform, duplicate/paste, blend, effect, compound clip, smart patch,
+  fill composition area, snapshot, render/export, inspect. Puzzles are solved by
+  RECIPES (plain JSON lists of universal calls) — data, not code.
+- The agent never pixel-processes an answer itself. The agent's only eyes are
+  `snapshot` of the booted app/preview; its only hands are universal tool calls
+  (click on the character, draw the mask over what was clicked, set pos keys).
+  Outputs must look like the app made them, because the app made them.
+- Tutorial replication order: (1) scan frames for what the editor CLICKS
+  (fill composition area? fractal blur? card flip?), (2) check the app for that
+  tool, (3) create the missing basic with its maths, (4) rewatch and reproduce
+  the result USING the tool. No simulated look-alikes.
+- Sidecar JSON `tool:` field must name the major tool that ran (render_export,
+  mask_draw, …) plus the recipe trace — never the puzzle's name.

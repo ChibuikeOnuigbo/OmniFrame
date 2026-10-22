@@ -1,78 +1,445 @@
 {
- "tool": "compose_C_variants",
+ "tool": "render_export",
  "ok": true,
  "meta": {},
  "data": {
   "video": "test_ans_result/C_composition/variant-03.mp4",
-  "frames": 44,
-  "variant": 3,
-  "bg": "grid",
-  "entrance": "scale-pop",
-  "speedCurve": "expo-out",
-  "composition": 0.5,
-  "lighting": "rgba(90,200,255,0.10)",
-  "cc": "contrast(1.2)",
-  "editOps": [
-   [
-    "import-source",
-    "src_charC.png"
+  "out": "/home/user/OmniFrame/test_ans_result/C_composition/variant-03.mp4",
+  "frames": 43,
+  "fps": 24,
+  "size": 112014,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 1.8,
+     "bg": "#000000"
+    },
+    "out": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 1.8
+    }
+   },
+   {
+    "tool": "omniframe_mode",
+    "params": {
+     "on": true
+    },
+    "out": {
+     "mode": "omniframe"
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "grid"
+    },
+    "out": {
+     "clipId": "clip-1"
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/sources/src_charC.png",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "natW": 639,
+     "natH": 360
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "remove_background",
+    "params": {
+     "method": "luma",
+     "strength": 0.85
+    },
+    "out": {
+     "clipId": "clip-2",
+     "effects": {
+      "lumaKey": 0.85
+     }
+    }
+   },
+   {
+    "tool": "transform_set",
+    "params": {
+     "scale": 1.1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1.1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     }
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "time": 0,
+     "value": 0,
+     "interpolation": "cubic-out"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "curve": "position_x",
+     "keyframeId": "kf_u0kpbt0"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "time": 0.9,
+     "value": 0,
+     "interpolation": "cubic-out"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "curve": "position_x",
+     "keyframeId": "kf_9inpxcm"
+    }
+   },
+   {
+    "tool": "curve_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "interpolation": "cubic-out"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "curve": "position_x",
+     "keys": [
+      "kf_u0kpbt0",
+      "kf_9inpxcm"
+     ]
+    }
+   },
+   {
+    "tool": "effect_set",
+    "params": {
+     "patch": {
+      "chromatic": 4,
+      "lightType": "point",
+      "lightIntensity": 1.3,
+      "lightColor": "#ffd9a0"
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "effects": {
+      "lumaKey": 0.85,
+      "chromatic": 4,
+      "lightType": "point",
+      "lightIntensity": 1.3,
+      "lightColor": "#ffd9a0"
+     }
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.7
+    },
+    "out": {
+     "png": "test_ans_result/C_composition/snap-03.png"
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 1.8,
+    "bg": "#000000"
+   },
+   "selection": "clip-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "bg:grid",
+     "start": 0,
+     "duration": 1.8,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "src_charC.png",
+     "start": 0,
+     "duration": 1.8,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1.1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "lumaKey": 0.85,
+      "chromatic": 4,
+      "lightType": "point",
+      "lightIntensity": 1.3,
+      "lightColor": "#ffd9a0"
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [
+       {
+        "id": "kf_u0kpbt0",
+        "time": 0,
+        "value": 0,
+        "interpolation": "cubic-out"
+       },
+       {
+        "id": "kf_9inpxcm",
+        "time": 0.9,
+        "value": 0,
+        "interpolation": "cubic-out"
+       }
+      ],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
    ],
-   [
-    "key-black-matte",
-    "lum<20→α0, 20-40 feather"
-   ],
-   [
-    "despill",
-    "edge α erode 1px"
-   ],
-   [
-    "feather-mask",
-    "2px"
-   ],
-   [
-    "bg-replace",
-    "grid"
-   ],
-   [
-    "bg-scale",
-    "cover 640x360"
-   ],
-   [
-    "compose-pos",
-    "thirds u=0.5"
-   ],
-   [
-    "anchor",
-    "center-bottom"
-   ],
-   [
-    "entrance",
-    "scale-pop"
-   ],
-   [
-    "speed-curve",
-    "expo-out"
-   ],
-   [
-    "light-tint",
-    "rgba(90,200,255,0.10)"
-   ],
-   [
-    "cc-saturate",
-    "1.0"
-   ],
-   [
-    "cc-contrast",
-    "1.2"
-   ],
-   [
-    "motion-settle",
-    "hold 45%→100%"
-   ],
-   [
-    "export-mp4",
-    "test_ans_result/C_composition/variant-03.mp4"
+   "trace": [
+    {
+     "tool": "project_new",
+     "params": {
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 1.8,
+      "bg": "#000000"
+     },
+     "out": {
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 1.8
+     }
+    },
+    {
+     "tool": "omniframe_mode",
+     "params": {
+      "on": true
+     },
+     "out": {
+      "mode": "omniframe"
+     }
+    },
+    {
+     "tool": "new_background",
+     "params": {
+      "kind": "grid"
+     },
+     "out": {
+      "clipId": "clip-1"
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "test_ans_result/sources/src_charC.png",
+      "fit": "contain"
+     },
+     "out": {
+      "clipId": "clip-2",
+      "natW": 639,
+      "natH": 360
+     }
+    },
+    {
+     "tool": "select",
+     "params": {
+      "clipId": "clip-2"
+     },
+     "out": {
+      "selected": "clip-2"
+     }
+    },
+    {
+     "tool": "remove_background",
+     "params": {
+      "method": "luma",
+      "strength": 0.85
+     },
+     "out": {
+      "clipId": "clip-2",
+      "effects": {
+       "lumaKey": 0.85
+      }
+     }
+    },
+    {
+     "tool": "transform_set",
+     "params": {
+      "scale": 1.1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "transform": {
+       "x": 0,
+       "y": 0,
+       "scale": 1.1,
+       "rotation": 0,
+       "opacity": 1,
+       "pivotX": 0.5,
+       "pivotY": 0.5
+      }
+     }
+    },
+    {
+     "tool": "keyframe_set",
+     "params": {
+      "property": "position",
+      "channel": "X",
+      "time": 0,
+      "value": 0,
+      "interpolation": "cubic-out"
+     },
+     "out": {
+      "clipId": "clip-2",
+      "curve": "position_x",
+      "keyframeId": "kf_u0kpbt0"
+     }
+    },
+    {
+     "tool": "keyframe_set",
+     "params": {
+      "property": "position",
+      "channel": "X",
+      "time": 0.9,
+      "value": 0,
+      "interpolation": "cubic-out"
+     },
+     "out": {
+      "clipId": "clip-2",
+      "curve": "position_x",
+      "keyframeId": "kf_9inpxcm"
+     }
+    },
+    {
+     "tool": "curve_set",
+     "params": {
+      "property": "position",
+      "channel": "X",
+      "interpolation": "cubic-out"
+     },
+     "out": {
+      "clipId": "clip-2",
+      "curve": "position_x",
+      "keys": [
+       "kf_u0kpbt0",
+       "kf_9inpxcm"
+      ]
+     }
+    },
+    {
+     "tool": "effect_set",
+     "params": {
+      "patch": {
+       "chromatic": 4,
+       "lightType": "point",
+       "lightIntensity": 1.3,
+       "lightColor": "#ffd9a0"
+      }
+     },
+     "out": {
+      "clipId": "clip-2",
+      "effects": {
+       "lumaKey": 0.85,
+       "chromatic": 4,
+       "lightType": "point",
+       "lightIntensity": 1.3,
+       "lightColor": "#ffd9a0"
+      }
+     }
+    },
+    {
+     "tool": "snapshot",
+     "params": {
+      "time": 1.7
+     },
+     "out": {
+      "png": "test_ans_result/C_composition/snap-03.png"
+     }
+    }
    ]
-  ]
+  }
  }
 }

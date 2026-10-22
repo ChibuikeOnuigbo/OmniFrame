@@ -1,0 +1,200 @@
+{
+ "board": "D",
+ "note": "cut obj (ctrl+x) + paste grid until tank filled; sizes/pos computed from snapshot",
+ "steps": [
+  {
+   "tool": "project_new",
+   "params": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 2.4,
+    "bg": "#f2f4f8"
+   }
+  },
+  {
+   "tool": "omniframe_mode",
+   "params": {
+    "on": true
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "test_ans_result/sources/src_tank.png",
+    "fit": "contain"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 0,
+    "out": "test_ans_result/D_tank_fill/snap-00.png"
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-1"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 0,
+    "dy": 0,
+    "copy": true
+   }
+  },
+  {
+   "tool": "mask_draw",
+   "params": {
+    "shape": "rectangle",
+    "x0": 0,
+    "y0": 167,
+    "x1": 99,
+    "y1": 261,
+    "feather": 0
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 339.3,
+    "dy": -119.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 439.0,
+    "dy": -119.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 538.7,
+    "dy": -119.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 339.3,
+    "dy": -34.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 439.0,
+    "dy": -34.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 538.7,
+    "dy": -34.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 339.3,
+    "dy": 50.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 439.0,
+    "dy": 50.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "dx": 538.7,
+    "dy": 50.5,
+    "copy": true
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 2.3,
+    "out": "test_ans_result/D_tank_fill/snap-end.png"
+   }
+  },
+  {
+   "tool": "render_export",
+   "params": {
+    "out": "test_ans_result/D_tank_fill/solution.mp4"
+   }
+  }
+ ]
+}

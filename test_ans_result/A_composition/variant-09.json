@@ -1,31 +1,592 @@
 {
- "tool": "compose_A_variants",
+ "tool": "render_export",
  "ok": true,
  "meta": {},
  "data": {
-  "variant": 9,
   "video": "test_ans_result/A_composition/variant-09.mp4",
-  "frames": 40,
-  "bg": "parchment",
-  "rotoMask": "polygon 12-pt feather 10px",
-  "overlays": [
+  "out": "/home/user/OmniFrame/test_ans_result/A_composition/variant-09.mp4",
+  "frames": 38,
+  "fps": 24,
+  "size": 26687,
+  "mode": "omniframe",
+  "recipe": [
    {
-    "asset": "ov_smoke.png",
-    "blend": "screen",
-    "opacity": 0.4
+    "tool": "project_new",
+    "params": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 1.6,
+     "bg": "#101216"
+    },
+    "out": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 1.6
+    }
    },
    {
-    "asset": "ov_windowlight.png",
-    "blend": "overlay",
-    "opacity": 0.45
+    "tool": "omniframe_mode",
+    "params": {
+     "on": true
+    },
+    "out": {
+     "mode": "omniframe"
+    }
    },
    {
-    "asset": "ov_heightchart.png",
-    "blend": "screen",
-    "opacity": 0.3
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/assets/bg_parchment.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 640,
+     "natH": 363
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/sources/src_overlays.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "natW": 662,
+     "natH": 360
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0
+    },
+    "out": {
+     "png": "test_ans_result/A_composition/snap-09.png"
+    }
+   },
+   {
+    "tool": "click",
+    "params": {
+     "x": 192,
+     "y": 238,
+     "t": 0
+    },
+    "out": {
+     "clipId": "clip-2",
+     "rect": {
+      "x": -10.764835164835176,
+      "y": 0,
+      "w": 661.5296703296704,
+      "h": 360
+     }
+    }
+   },
+   {
+    "tool": "mask_draw",
+    "params": {
+     "shape": "rectangle",
+     "x0": 76,
+     "y0": 117,
+     "x1": 309,
+     "y1": 360,
+     "feather": 6
+    },
+    "out": {
+     "clipId": "clip-2",
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.3072648805964199,
+      "centerY": 0.6625,
+      "width": 0.3522139829100719,
+      "height": 0.675,
+      "feather": 0.009069887971933182,
+      "inverted": false,
+      "enabled": true
+     }
+    }
+   },
+   {
+    "tool": "transform_set",
+    "params": {
+     "x": 140
+    },
+    "out": {
+     "clipId": "clip-2",
+     "transform": {
+      "x": 140,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/assets/ov_heightchart.png",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-3",
+     "natW": 258,
+     "natH": 360
+    }
+   },
+   {
+    "tool": "blend_set",
+    "params": {
+     "mode": "screen",
+     "opacity": 0.5
+    },
+    "out": {
+     "clipId": "clip-3",
+     "blendMode": "screen",
+     "opacity": 0.5
+    }
+   },
+   {
+    "tool": "transform_set",
+    "params": {
+     "x": 150,
+     "y": -30,
+     "scale": 1.4
+    },
+    "out": {
+     "clipId": "clip-3",
+     "transform": {
+      "x": 150,
+      "y": -30,
+      "scale": 1.4,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/assets/ov_smoke.png",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-4",
+     "natW": 640,
+     "natH": 342
+    }
+   },
+   {
+    "tool": "blend_set",
+    "params": {
+     "mode": "screen",
+     "opacity": 0.4
+    },
+    "out": {
+     "clipId": "clip-4",
+     "blendMode": "screen",
+     "opacity": 0.4
+    }
+   },
+   {
+    "tool": "transform_set",
+    "params": {
+     "scale": 1.6
+    },
+    "out": {
+     "clipId": "clip-4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1.6,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     }
+    }
    }
   ],
-  "charPosition": "center",
-  "grade": "rgba(220,60,180,0.08)"
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 1.6,
+    "bg": "#101216"
+   },
+   "selection": "clip-4",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "bg_parchment.png",
+     "start": 0,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "src_overlays.png",
+     "start": 0,
+     "duration": 1.6,
+     "transform": {
+      "x": 140,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.3072648805964199,
+      "centerY": 0.6625,
+      "width": 0.3522139829100719,
+      "height": 0.675,
+      "feather": 0.009069887971933182,
+      "inverted": false,
+      "enabled": true
+     },
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-3",
+     "name": "ov_heightchart.png",
+     "start": 0,
+     "duration": 1.6,
+     "transform": {
+      "x": 150,
+      "y": -30,
+      "scale": 1.4,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "screen",
+     "opacity": 0.5,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-4",
+     "name": "ov_smoke.png",
+     "start": 0,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1.6,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "screen",
+     "opacity": 0.4,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "project_new",
+     "params": {
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 1.6,
+      "bg": "#101216"
+     },
+     "out": {
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 1.6
+     }
+    },
+    {
+     "tool": "omniframe_mode",
+     "params": {
+      "on": true
+     },
+     "out": {
+      "mode": "omniframe"
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "test_ans_result/assets/bg_parchment.png",
+      "fit": "cover"
+     },
+     "out": {
+      "clipId": "clip-1",
+      "natW": 640,
+      "natH": 363
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "test_ans_result/sources/src_overlays.png",
+      "fit": "cover"
+     },
+     "out": {
+      "clipId": "clip-2",
+      "natW": 662,
+      "natH": 360
+     }
+    },
+    {
+     "tool": "snapshot",
+     "params": {
+      "time": 0
+     },
+     "out": {
+      "png": "test_ans_result/A_composition/snap-09.png"
+     }
+    },
+    {
+     "tool": "click",
+     "params": {
+      "x": 192,
+      "y": 238,
+      "t": 0
+     },
+     "out": {
+      "clipId": "clip-2",
+      "rect": {
+       "x": -10.764835164835176,
+       "y": 0,
+       "w": 661.5296703296704,
+       "h": 360
+      }
+     }
+    },
+    {
+     "tool": "mask_draw",
+     "params": {
+      "shape": "rectangle",
+      "x0": 76,
+      "y0": 117,
+      "x1": 309,
+      "y1": 360,
+      "feather": 6
+     },
+     "out": {
+      "clipId": "clip-2",
+      "mask": {
+       "shape": "rectangle",
+       "kind": "shape",
+       "centerX": 0.3072648805964199,
+       "centerY": 0.6625,
+       "width": 0.3522139829100719,
+       "height": 0.675,
+       "feather": 0.009069887971933182,
+       "inverted": false,
+       "enabled": true
+      }
+     }
+    },
+    {
+     "tool": "transform_set",
+     "params": {
+      "x": 140
+     },
+     "out": {
+      "clipId": "clip-2",
+      "transform": {
+       "x": 140,
+       "y": 0,
+       "scale": 1,
+       "rotation": 0,
+       "opacity": 1,
+       "pivotX": 0.5,
+       "pivotY": 0.5
+      }
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "test_ans_result/assets/ov_heightchart.png",
+      "fit": "contain"
+     },
+     "out": {
+      "clipId": "clip-3",
+      "natW": 258,
+      "natH": 360
+     }
+    },
+    {
+     "tool": "blend_set",
+     "params": {
+      "mode": "screen",
+      "opacity": 0.5
+     },
+     "out": {
+      "clipId": "clip-3",
+      "blendMode": "screen",
+      "opacity": 0.5
+     }
+    },
+    {
+     "tool": "transform_set",
+     "params": {
+      "x": 150,
+      "y": -30,
+      "scale": 1.4
+     },
+     "out": {
+      "clipId": "clip-3",
+      "transform": {
+       "x": 150,
+       "y": -30,
+       "scale": 1.4,
+       "rotation": 0,
+       "opacity": 1,
+       "pivotX": 0.5,
+       "pivotY": 0.5
+      }
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "test_ans_result/assets/ov_smoke.png",
+      "fit": "contain"
+     },
+     "out": {
+      "clipId": "clip-4",
+      "natW": 640,
+      "natH": 342
+     }
+    },
+    {
+     "tool": "blend_set",
+     "params": {
+      "mode": "screen",
+      "opacity": 0.4
+     },
+     "out": {
+      "clipId": "clip-4",
+      "blendMode": "screen",
+      "opacity": 0.4
+     }
+    },
+    {
+     "tool": "transform_set",
+     "params": {
+      "scale": 1.6
+     },
+     "out": {
+      "clipId": "clip-4",
+      "transform": {
+       "x": 0,
+       "y": 0,
+       "scale": 1.6,
+       "rotation": 0,
+       "opacity": 1,
+       "pivotX": 0.5,
+       "pivotY": 0.5
+      }
+     }
+    }
+   ]
+  }
  }
 }

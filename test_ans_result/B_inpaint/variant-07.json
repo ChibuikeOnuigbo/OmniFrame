@@ -1,19 +1,276 @@
 {
- "tool": "inpaint_B_variants",
+ "tool": "render_export",
  "ok": true,
  "meta": {},
  "data": {
-  "variant": 7,
   "video": "test_ans_result/B_inpaint/variant-07.mp4",
-  "strategy": "clone-stamp",
-  "maskBox": {
-   "x": 0.16,
-   "y": 0.385,
-   "w": 0.54,
-   "h": 0.23
-  },
-  "featherPx": 6,
-  "blendQualityDelta": 0.0188,
-  "lowerIsBetter": true
+  "out": "/home/user/OmniFrame/test_ans_result/B_inpaint/variant-07.mp4",
+  "frames": 42,
+  "fps": 24,
+  "size": 16781,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 360,
+     "h": 640,
+     "fps": 24,
+     "duration": 1.75,
+     "bg": "#05070a"
+    },
+    "out": {
+     "w": 360,
+     "h": 640,
+     "fps": 24,
+     "duration": 1.75
+    }
+   },
+   {
+    "tool": "omniframe_mode",
+    "params": {
+     "on": true
+    },
+    "out": {
+     "mode": "omniframe"
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/sources/src_car.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 360,
+     "natH": 640
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0
+    },
+    "out": {
+     "png": "test_ans_result/B_inpaint/snap-07.png"
+    }
+   },
+   {
+    "tool": "click",
+    "params": {
+     "x": 155,
+     "y": 320,
+     "t": 0
+    },
+    "out": {
+     "clipId": "clip-1",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 640
+     }
+    }
+   },
+   {
+    "tool": "smart_patch",
+    "params": {
+     "x0": 58,
+     "y0": 246,
+     "x1": 252,
+     "y1": 394,
+     "strategy": "clone",
+     "donor": [
+      60,
+      120
+     ],
+     "feather": 6,
+     "brushRadius": 52
+    },
+    "out": {
+     "clipId": "clip-1",
+     "patchRegion": [
+      58,
+      246,
+      252,
+      394
+     ],
+     "feather": 6,
+     "brushRadius": 52
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.6
+    },
+    "out": {
+     "png": "test_ans_result/B_inpaint/snap-end-07.png"
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 360,
+    "h": 640,
+    "fps": 24,
+    "duration": 1.75,
+    "bg": "#05070a"
+   },
+   "selection": "clip-1",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "src_car.png",
+     "start": 0,
+     "duration": 1.75,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": {
+      "x0": 58,
+      "y0": 246,
+      "x1": 252,
+      "y1": 394,
+      "strategy": "clone",
+      "donor": [
+       60,
+       120
+      ],
+      "feather": 6,
+      "brushRadius": 52
+     },
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "project_new",
+     "params": {
+      "w": 360,
+      "h": 640,
+      "fps": 24,
+      "duration": 1.75,
+      "bg": "#05070a"
+     },
+     "out": {
+      "w": 360,
+      "h": 640,
+      "fps": 24,
+      "duration": 1.75
+     }
+    },
+    {
+     "tool": "omniframe_mode",
+     "params": {
+      "on": true
+     },
+     "out": {
+      "mode": "omniframe"
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "test_ans_result/sources/src_car.png",
+      "fit": "cover"
+     },
+     "out": {
+      "clipId": "clip-1",
+      "natW": 360,
+      "natH": 640
+     }
+    },
+    {
+     "tool": "snapshot",
+     "params": {
+      "time": 0
+     },
+     "out": {
+      "png": "test_ans_result/B_inpaint/snap-07.png"
+     }
+    },
+    {
+     "tool": "click",
+     "params": {
+      "x": 155,
+      "y": 320,
+      "t": 0
+     },
+     "out": {
+      "clipId": "clip-1",
+      "rect": {
+       "x": 0,
+       "y": 0,
+       "w": 360,
+       "h": 640
+      }
+     }
+    },
+    {
+     "tool": "smart_patch",
+     "params": {
+      "x0": 58,
+      "y0": 246,
+      "x1": 252,
+      "y1": 394,
+      "strategy": "clone",
+      "donor": [
+       60,
+       120
+      ],
+      "feather": 6,
+      "brushRadius": 52
+     },
+     "out": {
+      "clipId": "clip-1",
+      "patchRegion": [
+       58,
+       246,
+       252,
+       394
+      ],
+      "feather": 6,
+      "brushRadius": 52
+     }
+    },
+    {
+     "tool": "snapshot",
+     "params": {
+      "time": 1.6
+     },
+     "out": {
+      "png": "test_ans_result/B_inpaint/snap-end-07.png"
+     }
+    }
+   ]
+  }
  }
 }

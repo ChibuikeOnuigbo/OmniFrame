@@ -22,6 +22,9 @@ export function activeEffectKeys(effects?: ClipEffect): string[] {
   if (typeof effects.pixelStretch === 'number' && effects.pixelStretch > 0) keys.push('pixelStretch')
   if (typeof effects.waveWarp === 'number' && effects.waveWarp > 0) keys.push('waveWarp')
   if (typeof effects.chromaKey === 'number' && effects.chromaKey > 0) keys.push('chromaKey')
+  if (typeof effects.fractalBlur === 'number' && effects.fractalBlur > 0) keys.push('fractalBlur')
+  if (typeof effects.lumaKey === 'number' && effects.lumaKey > 0) keys.push('lumaKey')
+  if (typeof effects.cardFlip === 'number' && effects.cardFlip > 0) keys.push('cardFlip')
   return keys
 }
 
@@ -43,6 +46,9 @@ const EFFECT_LABEL: Record<string, string> = {
   pixelStretch: 'Pixel Stretch',
   waveWarp: 'Wave Warp',
   chromaKey: 'Chroma Key',
+  fractalBlur: 'Fractal Blur',
+  lumaKey: 'Luma Key (bg removal)',
+  cardFlip: 'Card Flip',
   light: 'Light',
 }
 

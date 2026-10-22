@@ -588,6 +588,12 @@ export interface ClipEffect {
   pixelStretch?: number // horizontal pixel-stretch smear, % of width (0 = off)
   waveWarp?: number // sine wave warp amplitude in px (0 = off)
   chromaKey?: number // green-screen key strength 0..1 (0 = off)
+  /** Fractal blur: stacked self-similar blur octaves (px). */
+  fractalBlur?: number
+  /** Luma key (bg removal by luminance) strength 0..1. */
+  lumaKey?: number
+  /** Card flip: horizontal fold in half-turns (0..2). */
+  cardFlip?: number
   chromaColor?: string // key colour, default pure green
   // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.

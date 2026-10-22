@@ -1,0 +1,144 @@
+{
+ "board": "B",
+ "note": "smart patch / inpainter car removal via universal tools",
+ "steps": [
+  {
+   "tool": "project_new",
+   "params": {
+    "w": 360,
+    "h": 640,
+    "fps": 24,
+    "duration": 1.75,
+    "bg": "#05070a"
+   }
+  },
+  {
+   "tool": "omniframe_mode",
+   "params": {
+    "on": true
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "test_ans_result/sources/src_car.png",
+    "fit": "cover"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 0,
+    "out": "test_ans_result/B_inpaint/snap-{{vi}}.png"
+   }
+  },
+  {
+   "tool": "click",
+   "params": {
+    "x": 155,
+    "y": 320
+   }
+  },
+  {
+   "tool": "smart_patch",
+   "params": {
+    "x0": 58,
+    "y0": 246,
+    "x1": 252,
+    "y1": 394,
+    "strategy": "{{strategy}}",
+    "donor": [
+     60,
+     120
+    ],
+    "feather": 6,
+    "brushRadius": 52
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 1.6,
+    "out": "test_ans_result/B_inpaint/snap-end-{{vi}}.png"
+   }
+  },
+  {
+   "tool": "render_export",
+   "params": {
+    "out": "test_ans_result/B_inpaint/variant-{{vi}}.mp4"
+   }
+  }
+ ],
+ "variants": [
+  {
+   "name": "v01",
+   "overrides": {
+    "vi": "01",
+    "strategy": "clone"
+   }
+  },
+  {
+   "name": "v02",
+   "overrides": {
+    "vi": "02",
+    "strategy": "blur"
+   }
+  },
+  {
+   "name": "v03",
+   "overrides": {
+    "vi": "03",
+    "strategy": "gradient"
+   }
+  },
+  {
+   "name": "v04",
+   "overrides": {
+    "vi": "04",
+    "strategy": "clone"
+   }
+  },
+  {
+   "name": "v05",
+   "overrides": {
+    "vi": "05",
+    "strategy": "blur"
+   }
+  },
+  {
+   "name": "v06",
+   "overrides": {
+    "vi": "06",
+    "strategy": "gradient"
+   }
+  },
+  {
+   "name": "v07",
+   "overrides": {
+    "vi": "07",
+    "strategy": "clone"
+   }
+  },
+  {
+   "name": "v08",
+   "overrides": {
+    "vi": "08",
+    "strategy": "blur"
+   }
+  },
+  {
+   "name": "v09",
+   "overrides": {
+    "vi": "09",
+    "strategy": "gradient"
+   }
+  },
+  {
+   "name": "v10",
+   "overrides": {
+    "vi": "10",
+    "strategy": "clone"
+   }
+  }
+ ]
+}

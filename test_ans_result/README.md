@@ -1,26 +1,31 @@
-# test_ans_result — graded answer pack
+# test_ans_result — answers produced BY THE APP's universal tools
 
-Every uploaded board (sources/) analysed, converted to video, and solved.
-All renders go through the MCP utility layer (`tools/mcp/`): OOP tools,
-chunked-JSON returns (sha256-manifested), and a FrameProvider so any frame of
-any mp4 can be pulled on demand.
+Law (vow.md): no task-shaped tools, no agent pixel-work. The layer exposes the
+app's MAJOR tools; puzzles are recipes (plain JSON call lists); the agent's
+eyes are `snapshot` / `data:img` dumps; the app renders everything.
 
-## Layout
-- `A_analysis.mp4 … E_analysis.mp4` — each source board converted to video (ken-burns + decoded callouts).
-- `A_composition/variant-01..10.mp4` — board A: roto-mask character + bg replaced with parchment + height-chart/overlay layering. **10 results** (composition/effects question).
-- `B_inpaint/variant-01..10.mp4` — board B: matte/roto + 10 inpaint/smart-patch car-removal strategies, each with a measured blend-quality delta (lower = cleaner blend; best = blur-fill 0.0181). **10 results**.
-- `C_composition/variant-01..10.mp4` — board C: bg replacement × 10, each logging 15 edit ops (composition, lighting, speed curve, entrance, cc) = **150 edits total**. **10 results**.
-- `D_tank_fill/solution.mp4` — board D puzzle: cut obj (ctrl+x), computed 4×4 grid (cell 70×72) fills the tank exactly; placements in the sidecar JSON.
-- `E_move/solution.mp4` — board E puzzle solved THE OMNIFRAME WAY: masking sub-tool draws a rectangle over the EXISTING black rectangle in the image (no new elements), position keyframe 1 set at its original position, end key at the destination rectangle, then the FULL composition is rendered (plate + masked layer + key diamonds + curve plot HUD). Sidecar carries the app-format descriptor (ClipVisualMask rectangle + ClipAnimation PropertyCurve keyframes, easing via src/lib/speedCurves.ts) and 48 per-frame key evaluations. QA: `node qa/move-composition-unit.mjs`.
-- Every mp4 has a `.json` sidecar (full ToolResult + chunk manifest). `INDEX.json` lists all files.
+## Universal tool catalog (29)
+project_new · omniframe_mode · import_media · new_background · click · select ·
+mask_draw · mask_clear · roto_mask · keyframe_set · curve_set · transform_set ·
+duplicate_paste · blend_set · effect_set · remove_background · fill_composition_area ·
+compound_clip_create · context_menu · create_text · edit_element · smart_patch ·
+snapshot · render_export · inspect · data_dump · help · list_presets · run_recipe
 
-## Pull any frame (preview-friendly)
-    node tools/mcp/cli.mjs get_frame --params '{"video":"test_ans_result/C_composition/variant-03.mp4","index":20}'
-    node tools/mcp/cli.mjs get_frame --params '{"video":"…mp4","index":20,"dataUrl":true}' --chunks
-    node tools/mcp/cli.mjs list            # all tools + schemas
-    node tools/mcp/cli.mjs <tool> --params '{…}' --chunks   # streamed chunks
+    node tools/mcp/cli.mjs help                     # explains every tool + app function catalog
+    node tools/mcp/cli.mjs list_presets --params '{"catalog":"text","limit":10,"dataImg":true}'
+    node tools/mcp/cli.mjs data_dump --params '{"withImages":true,"times":[0,1]}'   # data:img for vision models
+    node tools/mcp/cli.mjs run_recipe --params '{"file":"tools/mcp/recipes/board_E_move.json"}'
 
-## Speed curves (board C) shipped into the editor
-15 presets in `src/lib/speedCurves.ts`, clip field `speedCurve`, remap applied
-in playback media sampling, UI = RightPanel "Speed Curves" main tool with the
-segment carousel of 15 beneath (user UI law). QA: `node qa/speed-curves-unit.mjs`.
+## Recipes (data, not code)
+- board_E_move.json — click existing rect → mask_draw over it → pos1 key → end key at destination → ease-in-out → full comp render.
+- board_D_tank.json — cut obj (duplicate_paste) → mask → 3×3 paste grid fills tank (sizes/pos computed from snapshot).
+- board_A_roto.json ×10 — mask character + parchment bg replace + height-chart/smoke overlay layering (blend/opacity variants).
+- board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
+- board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
+
+## Proof & feedback
+- every mp4 sidecar: `tool:"render_export"` + full recipe trace + inspect dump (never a puzzle name).
+- snapshots in */snap-*.png and evidence/ are taken THROUGH the snapshot tool.
+- booted app: RightPanel → MCP Console shows the live window.omniMCP call log
+  (✓/✗ per call, copy-log-json); window.omniMCP.call('snapshot') returns data:img
+  of the real preview canvas. QA: node qa/universal-tools-unit.mjs.

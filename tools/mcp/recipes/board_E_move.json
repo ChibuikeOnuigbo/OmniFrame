@@ -1,0 +1,19 @@
+{ "board": "E", "note": "mask existing rect -> pos1 key -> end key at destination -> full comp",
+  "steps": [
+    { "tool": "project_new", "params": { "w": 864, "h": 216, "fps": 24, "duration": 2, "bg": "#f2f4f8" } },
+    { "tool": "omniframe_mode", "params": { "on": true } },
+    { "tool": "import_media", "params": { "path": "test_ans_result/sources/src_move.png", "fit": "contain" } },
+    { "tool": "import_media", "params": { "path": "test_ans_result/sources/src_move.png", "fit": "contain" } },
+    { "tool": "select", "params": { "clipId": "clip-2" } },
+    { "tool": "snapshot", "params": { "time": 0, "out": "test_ans_result/E_move/snap-00.png" } },
+    { "tool": "click", "params": { "x": 73, "y": 146 } },
+    { "tool": "mask_draw", "params": { "shape": "rectangle", "x0": 1, "y0": 87, "x1": 145, "y1": 206, "feather": 0 } },
+    { "tool": "keyframe_set", "params": { "property": "position", "channel": "X", "time": 0, "value": 0, "interpolation": "ease-in-out" } },
+    { "tool": "keyframe_set", "params": { "property": "position", "channel": "Y", "time": 0, "value": 0, "interpolation": "ease-in-out" } },
+    { "tool": "keyframe_set", "params": { "property": "position", "channel": "X", "time": 2, "value": 529, "interpolation": "ease-in-out" } },
+    { "tool": "keyframe_set", "params": { "property": "position", "channel": "Y", "time": 2, "value": 9.5, "interpolation": "ease-in-out" } },
+    { "tool": "curve_set", "params": { "property": "position", "channel": "X", "interpolation": "ease-in-out" } },
+    { "tool": "curve_set", "params": { "property": "position", "channel": "Y", "interpolation": "ease-in-out" } },
+    { "tool": "snapshot", "params": { "time": 1.9, "out": "test_ans_result/E_move/snap-end.png" } },
+    { "tool": "render_export", "params": { "out": "test_ans_result/E_move/solution.mp4" } }
+  ] }

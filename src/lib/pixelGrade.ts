@@ -85,11 +85,38 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
   const grain = Math.min(1, Math.max(0, effect.grain || 0))
   const chromatic = Math.min(24, Math.max(0, Math.round(effect.chromatic || 0)))
   const chromaKey = Math.min(1, Math.max(0, effect.chromaKey || 0))
-  if (vibrance === 1 && !solarize && !posterize && !grain && !chromatic && !chromaKey) return
+  const lumaKey = Math.min(1, Math.max(0, effect.lumaKey || 0))
+  const fractalBlur = Math.min(24, Math.max(0, effect.fractalBlur || 0))
+  const cardFlip = Math.min(2, Math.max(0, effect.cardFlip || 0))
+  if (fractalBlur > 0) {
+    const snap = document.createElement('canvas')
+    snap.width = canvas.width; snap.height = canvas.height
+    snap.getContext('2d')!.drawImage(canvas, 0, 0)
+    const cx = canvas.getContext('2d')!
+    cx.clearRect(0, 0, canvas.width, canvas.height)
+    let r = fractalBlur
+    for (let o = 0; o < 3; o++) {
+      cx.save(); cx.filter = `blur(${Math.max(0.5, r).toFixed(1)}px)`; cx.globalAlpha = o === 0 ? 1 : 0.55
+      cx.drawImage(snap, 0, 0); cx.restore(); r /= 2
+    }
+    cx.filter = 'none'
+  }
+  if (cardFlip > 0) {
+    const sq = Math.max(0.04, Math.abs(Math.cos(Math.PI * cardFlip)))
+    const snap = document.createElement('canvas')
+    snap.width = canvas.width; snap.height = canvas.height
+    snap.getContext('2d')!.drawImage(canvas, 0, 0)
+    const cx = canvas.getContext('2d')!
+    cx.clearRect(0, 0, canvas.width, canvas.height)
+    cx.save(); cx.translate(canvas.width / 2, 0); cx.scale(sq, 1); cx.translate(-canvas.width / 2, 0)
+    cx.drawImage(snap, 0, 0); cx.restore()
+    cx.fillStyle = `rgba(0,0,0,${0.5 * (1 - sq)})`; cx.fillRect(0, 0, canvas.width, canvas.height)
+  }
+  if (vibrance === 1 && !solarize && !posterize && !grain && !chromatic && !chromaKey && !lumaKey) return
   let image: ImageData
   try { image = ctx.getImageData(0, 0, canvas.width, canvas.height) } catch { return }
   const d = image.data
-  const src = (chromatic || chromaKey) ? new Uint8ClampedArray(d) : d
+  const src = (chromatic || chromaKey || lumaKey) ? new Uint8ClampedArray(d) : d
   const W = canvas.width
   const [kr, kg, kb] = chromaKey ? hexToRgb(effect.chromaColor || '#00ff00') : [0, 255, 0]
   const levels = posterize > 0 ? Math.max(2, Math.round(16 - posterize * 14)) : 0
@@ -115,6 +142,12 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
       d[i + 3] = Math.round(d[i + 3] * alphaK)
       // spill suppression: pull green toward the other channels on edges
       if (alphaK < 1 && g > Math.max(r, b)) g = Math.max(r, b) + (g - Math.max(r, b)) * alphaK
+    }
+    if (lumaKey) {
+      const lum = 0.299 * r + 0.587 * g + 0.114 * b
+      const band = 30 * (1 - lumaKey)
+      const la = lum < 26 ? 0 : lum > 26 + band ? 255 : ((lum - 26) / band) * 255
+      d[i + 3] = Math.min(d[i + 3], Math.max(0, la))
     }
     if (vibAmt !== 0) {
       const mx = Math.max(r, g, b), mn = Math.min(r, g, b)

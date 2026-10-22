@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ExpandableToolGroup from './ExpandableToolGroup'
 import { SPEED_CURVES, type SpeedCurveId } from '../lib/speedCurves'
+import { mcpLog, omniMcpCall, OMNI_MCP_CATALOG } from '../lib/mcpBridge'
 import SegmentCarousel from './SegmentCarousel'
 import {
   Activity,
@@ -820,6 +821,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <MaskingRotoSection clip={clip} />}
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <AeToolRackSection clip={clip} />}
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <SpeedCurveSection clip={clip} />}
+      <McpConsoleSection />
 
       <Section title="Transform">
         <Field label="Position X">
@@ -1326,10 +1328,43 @@ const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Recor
   { id: 'feathers', group: 'beds', label: 'Feather particle bed', icon: Feather, effect: { particleFx: 'feathers', particleDensity: 0.6 } },
   { id: 'embers', group: 'beds', label: 'Ember particle bed', icon: Flame, effect: { particleFx: 'embers', particleDensity: 0.5 } },
   { id: 'scan', group: 'beds', label: 'Scanline overlay', icon: ScanLine, effect: { overlayFx: 'scanlines', overlayStrength: 0.6 } },
+  { id: 'fractalblur', group: 'pixel', label: 'Fractal blur (stacked octaves)', icon: Waves, effect: { fractalBlur: 8 } },
+  { id: 'lumakey', group: 'pixel', label: 'Luma key bg removal', icon: Eraser, effect: { lumaKey: 0.85 } },
+  { id: 'cardflip', group: 'pixel', label: 'Card flip fold', icon: Tv, effect: { cardFlip: 0.5 } },
 ]
 
 /** Speed-curve rack (board C brief: 15 curves). One main tool with a down
  *  arrow; the connected sub-tool beneath is the segment carousel of curves. */
+
+/** MCP Console: live log of universal-tool calls that operated this app
+ *  (window.omniMCP). Proof + feedback channel: the app did the work. */
+function McpConsoleSection() {
+  const [, force] = useState(0)
+  return (
+    <Section title="MCP Console">
+      <div className="space-y-1" data-testid="mcp-console">
+        <div className="flex gap-1">
+          <button type="button" data-testid="mcp-refresh" onClick={() => force(v => v + 1)}
+            className="h-7 rounded border border-ink-700 bg-ink-900 px-2 font-mono text-[9px] text-ink-300 hover:text-white">refresh</button>
+          <button type="button" data-testid="mcp-copy-log" onClick={() => { navigator.clipboard?.writeText(JSON.stringify(mcpLog, null, 1)) }}
+            className="h-7 rounded border border-ink-700 bg-ink-900 px-2 font-mono text-[9px] text-ink-300 hover:text-white">copy log json</button>
+          <button type="button" data-testid="mcp-help" onClick={() => { omniMcpCall('help'); force(v => v + 1) }}
+            className="h-7 rounded border border-ink-700 bg-ink-900 px-2 font-mono text-[9px] text-ink-300 hover:text-white">help</button>
+        </div>
+        <div className="max-h-44 space-y-0.5 overflow-y-auto rounded border border-ink-800 bg-ink-950 p-1">
+          {mcpLog.length === 0 && <div className="font-mono text-[9px] text-ink-500">no calls yet — window.omniMCP.call(tool, params)</div>}
+          {mcpLog.slice(-40).map((e, i) => (
+            <div key={i} data-testid={`mcp-log-${i}`} className={`truncate font-mono text-[9px] ${e.ok ? 'text-emerald-300' : 'text-rose-400'}`}>
+              {e.ok ? '✓' : '✗'} {e.tool} {JSON.stringify(e.params).slice(0, 70)}
+            </div>
+          ))}
+        </div>
+        <div className="truncate font-mono text-[8px] text-ink-500">{OMNI_MCP_CATALOG.join(' · ')}</div>
+      </div>
+    </Section>
+  )
+}
+
 function SpeedCurveSection({ clip }: { clip: Clip }) {
   const setClipSpeedCurve = useEditor((s) => s.setClipSpeedCurve)
   return (
