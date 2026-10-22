@@ -113,7 +113,7 @@ jobs:
                   records.append({"zip":label,"error":uz.stderr[-500:]}); return
               process_dir(work, label)
           entries = cfg["entries"]
-          start, end = (batch-1)*4, batch*4
+          start, end = ((batch-1)*4, batch*4) if batch <= 5 else (20+(batch-6)*8, 20+(batch-5)*8)
           for e in entries[start:end]:
               label = e["name"].replace(".zip","")
               prev = f"youtube-audit/runner-drive/evidence/{label}"
