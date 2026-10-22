@@ -3,7 +3,7 @@ import type { RecolorBlend } from './lib/recolor'
 // The editor document is a small, serializable graph:
 //   assets -> clips (placed on tracks) -> sequence (timeline) -> project.
 
-export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound' | 'adjustment' | 'drawing'
+export type MediaKind = 'video' | 'image' | 'audio' | 'text' | 'threed' | 'compound' | 'adjustment' | 'drawing' | 'null'
 
 export interface Sequence {
   id: string

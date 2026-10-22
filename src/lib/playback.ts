@@ -27,6 +27,7 @@ function applyRotationXY(ctx: CanvasRenderingContext2D, rotationX?: number, rota
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
 import { applyClipFxLayers, hasClipFxLayers } from './particleFx'
+import { inheritedWorld } from './parentChain'
 import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
 import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtworkMetadata'
@@ -784,6 +785,8 @@ export class PreviewEngine {
 
       const clip = activeClipOnTrack(st.clips, track.id, time)
       if (!clip) return false
+      // AE/AM null objects render no pixels — they only control children.
+      if (clip.kind === 'null') return false
       // Per-clip blend (watermarks: lighten/splice…). Restored by the
       // caller's save/restore around renderTrackContents.
       if (clip.blendMode && clip.blendMode !== 'source-over') ctx.globalCompositeOperation = clip.blendMode
@@ -1549,6 +1552,7 @@ export class PreviewEngine {
       return
     }
     ctx.save()
+    this.applyParentWorld(ctx, clip, time)
     applyClipFilter(ctx, this.effectsForRender(clip, time))
     const evalT = evaluateClipAnimation(clip, time)
     ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity ?? clip.transform.opacity))
@@ -1806,6 +1810,30 @@ export class PreviewEngine {
     return true
   }
 
+  /** AE/Alight-Motion parenting: pre-apply the parent hierarchy's world motion
+   *  (position/rotation/scale gated per link; opacity never inherits). */
+  private applyParentWorld(ctx: CanvasRenderingContext2D, clip: Clip, time: number) {
+    const st = useEditor.getState()
+    const rels = st.parentRelationships
+    if (!rels || !rels.length) return
+    const w = inheritedWorld(
+      rels,
+      (id) => {
+        const c = st.clips.find((cc) => cc.id === id)
+        if (!c) return { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 }
+        const e = evaluateClipAnimation(c, time)
+        return { x: e.x, y: e.y, scale: e.scaleX, rotation: e.rotationZ, opacity: e.opacity }
+      },
+      clip.id,
+    )
+    if (w.x === 0 && w.y === 0 && w.rot === 0 && w.sx === 1 && w.sy === 1) return
+    ctx.translate(this.width / 2, this.height / 2)
+    ctx.translate(w.x * (this.width / PW), w.y * (this.height / PH))
+    ctx.rotate((w.rot * Math.PI) / 180)
+    ctx.scale(w.sx, w.sy)
+    ctx.translate(-this.width / 2, -this.height / 2)
+  }
+
   private drawClip(
     ctx: CanvasRenderingContext2D,
     el: CanvasImageSource,
@@ -1869,6 +1897,7 @@ export class PreviewEngine {
 
     const evalT = evaluateClipAnimation(clip, time)
     ctx.save()
+    this.applyParentWorld(ctx, clip, time)
     ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity))
     if (artwork && !artwork.opacityBaked) {
       ctx.globalAlpha *= Math.max(0, Math.min(1, artwork.opacity))

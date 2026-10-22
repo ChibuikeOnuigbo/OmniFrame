@@ -1,3 +1,4 @@
+import { regroupFor, expandGroupSelection } from './lib/parentChain'
 import { recolorImage } from './lib/recolor'
 import { planDrawingToClips } from './lib/drawingToClips'
 import { importPsdDocument } from './lib/psdImport'
@@ -837,6 +838,12 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   removeParentRelationship: (childId: string) => void
   createGroup: (memberIds: string[], name?: string) => string
   removeGroup: (groupId: string) => void
+  /** CapCut-style: group the current multi-selection (Ctrl+G). */
+  groupSelection: () => string | null
+  /** CapCut-style: dissolve every group touching the selection (Ctrl+Shift+G). */
+  ungroupSelection: () => void
+  /** AE Layer > New > Null Object: invisible transform-controller clip. */
+  addNullObject: () => string
 
   // ---- tracking subsystem ----
   trackingSessions: TrackingSession[]
@@ -2880,12 +2887,20 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
-    selectClip: (id) => set({ selectedClipId: id, selectedClipIds: id ? [id] : [] }),
-    selectClips: (ids) => set({ selectedClipIds: ids, selectedClipId: ids[0] || null }),
+    selectClip: (id) => {
+      // CapCut/Shotcut rule: clicking any group member selects the whole group.
+      const ids = id ? expandGroupSelection(get().groups, [id]) : []
+      set({ selectedClipId: id, selectedClipIds: ids })
+    },
+    selectClips: (ids) => {
+      const exp = expandGroupSelection(get().groups, ids)
+      set({ selectedClipIds: exp, selectedClipId: exp[0] || null })
+    },
     toggleClipSelection: (id, multi = false) => {
       const s = get()
       if (!multi) {
-        set({ selectedClipId: id, selectedClipIds: id ? [id] : [] })
+        const ids = id ? expandGroupSelection(get().groups, [id]) : []
+        set({ selectedClipId: id, selectedClipIds: ids })
         return
       }
       const exists = s.selectedClipIds.includes(id)
@@ -4645,6 +4660,49 @@ export const useEditor = create<EditorState>((set, get) => {
       }
       pushSnapshot()
       set((s) => ({ groups: [...s.groups, newGroup] }))
+      return id
+    },
+    groupSelection: () => {
+      const ids = [...new Set(get().selectedClipIds || [])]
+      if (ids.length < 2) return null
+      pushSnapshot()
+      const id = uid('group')
+      const groups = regroupFor(get().groups, ids)
+      const g: GroupInstance = { id, name: `Group ${get().groups.length + 1}`, memberIds: ids, collapsed: false, locked: false, hidden: false }
+      set({ groups: [...groups, g] })
+      return id
+    },
+    ungroupSelection: () => {
+      const ids = new Set(get().selectedClipIds || [])
+      if (!get().groups.some((g) => g.memberIds.some((m) => ids.has(m)))) return
+      pushSnapshot()
+      set((s) => ({ groups: s.groups.filter((g) => !g.memberIds.some((m) => ids.has(m))) }))
+    },
+    addNullObject: () => {
+      const st = get()
+      const track = st.tracks.find((t) => t.type === 'video') || makeTrack('video', 'Nulls')
+      const id = uid('clip-null')
+      const n = st.clips.filter((c) => c.kind === 'null').length + 1
+      const clip: Clip = {
+        id,
+        trackId: track.id,
+        assetId: '',
+        start: st.playhead ?? 0,
+        duration: 5,
+        inPoint: 0,
+        name: `Null ${n}`,
+        kind: 'null',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+      }
+      pushSnapshot()
+      set((s) => ({
+        tracks: s.tracks.some((t) => t.id === track.id) ? s.tracks : [track, ...s.tracks],
+        clips: [...s.clips, clip],
+        selectedClipId: id,
+        selectedClipIds: [id],
+      }))
       return id
     },
     removeGroup: (groupId) => {

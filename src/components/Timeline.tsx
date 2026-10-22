@@ -47,6 +47,9 @@ import {
   Image as ImageIcon,
   ChevronRight,
   Film,
+  Group,
+  Ungroup,
+  SquareDashed,
 } from 'lucide-react'
 import { useEditor, gapsOnTrack } from '../store'
 import { CollapseChip } from './CollapseChip'
@@ -764,6 +767,7 @@ function ClipView({
 }) {
   const trimClip = useEditor((s) => s.trimClip)
   const selectClip = useEditor((s) => s.selectClip)
+  const groupOf = useEditor((s) => s.groups.find((g) => g.memberIds.includes(clip.id)))
   const splitAt = useEditor((s) => s.splitAt)
   const beginHistory = useEditor((s) => s.beginHistory)
   const endHistory = useEditor((s) => s.endHistory)
@@ -937,6 +941,21 @@ function ClipView({
       style={{ left, width }}
       title={clip.name}
     >
+      {clip.kind === 'null' && (
+        <div
+          data-testid="null-tile-overlay"
+          className="pointer-events-none absolute inset-0 grid place-items-center rounded-md border border-dashed border-slate-300/70 bg-slate-400/10"
+        >
+          <span className="font-mono text-[9px] tracking-widest text-slate-200">NULL</span>
+        </div>
+      )}
+      {groupOf && (
+        <div
+          data-testid="group-band"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[3px]"
+          style={{ background: `hsl(${[...groupOf.id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % 360} 70% 55%)` }}
+        />
+      )}
       {/* Frame-accurate filmstrip: each section of the clip shows the frame
           the project will show there — decoded source frames for video
           clips, the rendered nested composite for compound clips. Falls
@@ -1405,6 +1424,20 @@ export function Timeline() {
   }
 
   // Delete / Backspace removes the whole gripped selection, not just the anchor.
+  useEffect(() => {
+    // CapCut desktop shortcuts: Ctrl+G group selection, Ctrl+Shift+G ungroup.
+    const onGroupKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'g') return
+      const t = e.target as HTMLElement | null
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      e.preventDefault()
+      if (e.shiftKey) useEditor.getState().ungroupSelection()
+      else useEditor.getState().groupSelection()
+    }
+    window.addEventListener('keydown', onGroupKey)
+    return () => window.removeEventListener('keydown', onGroupKey)
+  }, [])
+
   useEffect(() => {
     const onDeleteKey = (ev: KeyboardEvent) => {
       const target = ev.target as HTMLElement | null
@@ -2841,6 +2874,35 @@ export function Timeline() {
                 <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={contextMenu.clip.name}>
                   {contextMenu.clip.name}
                 </div>
+                <button
+                  type="button"
+                  data-testid="ctx-group-btn"
+                  onClick={() => { useEditor.getState().groupSelection(); setContextMenu(null) }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                >
+                  <Group size={14} />
+                  <span>Group</span>
+                  <kbd className="ml-auto text-[10px] text-ink-500">Ctrl+G</kbd>
+                </button>
+                <button
+                  type="button"
+                  data-testid="ctx-ungroup-btn"
+                  onClick={() => { useEditor.getState().ungroupSelection(); setContextMenu(null) }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                >
+                  <Ungroup size={14} />
+                  <span>Ungroup</span>
+                  <kbd className="ml-auto text-[10px] text-ink-500">Ctrl+Shift+G</kbd>
+                </button>
+                <button
+                  type="button"
+                  data-testid="ctx-new-null-btn"
+                  onClick={() => { useEditor.getState().addNullObject(); setContextMenu(null) }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                >
+                  <SquareDashed size={14} />
+                  <span>New Null Object</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => {
