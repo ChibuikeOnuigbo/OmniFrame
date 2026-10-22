@@ -15,6 +15,7 @@ const TAR = path.join(ROOT, 'test_ans_result')
 /* ---------- session (the booted headless app) ---------- */
 export const SESSION = {
   seq: null, selection: null, trace: [], mode: 'omniframe', omniSelection: null,
+  paint: { strokes: [], layers: [{ id: 'paint-1', name: 'paint', visible: true, locked: false, opacity: 1 }], clock: 0 },
   reset() { this.seq = null; this.selection = null; this.trace = []; },
   note(tool, params, out) { this.trace.push({ tool, params, out }); return out },
 }
@@ -196,6 +197,71 @@ class RenderExport extends MCPTool {
     fs.writeFileSync(dest.replace(/\.mp4$/, '.json'), JSON.stringify({ ...r.toJSON(), chunks: r.chunkManifest(1500).manifest }, null, 1))
     return r.data
   }
+}
+/* ---------- paint canvas: ibisPaint X workflow harvested from the NothingxArt
+   sunset short (2yAZqtdc_qk): time-lapse recording, radial ruler, smudge ---------- */
+class DrawStroke extends MCPTool {
+  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/circle/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24', filled: 'bool', appearAt: 's' }) }
+  async run(p) {
+    const st = SESSION.paint
+    const w = SESSION.seq?.w || 640, h = SESSION.seq?.h || 360
+    const at = typeof p.appearAt === 'number' ? p.appearAt : (st.clock = +(st.clock + 0.3).toFixed(2))
+    const stroke = {
+      id: 'stroke_' + Math.random().toString(36).slice(2, 8),
+      layerId: 'paint-1',
+      tool: p.tool || 'brush',
+      color: p.color || '#ffffff',
+      size: Math.max(1, Math.round(p.size ?? 12)),
+      opacity: Math.min(1, Math.max(0.02, p.opacity ?? 1)),
+      points: (p.points || []).map(([x, y]) => ({ x: +(x / w).toFixed(5), y: +(y / h).toFixed(5) })),
+      temporalScope: { type: 'span', startTime: at, duration: 999 },
+      radialCopies: p.radialCopies ? Math.min(24, Math.max(2, Math.round(p.radialCopies))) : undefined,
+      radialCenter: Array.isArray(p.radialCenter) ? [+(p.radialCenter[0] / w).toFixed(5), +(p.radialCenter[1] / h).toFixed(5)] : undefined,
+      gradientColor: p.gradientColor,
+      filled: !!p.filled,
+    }
+    st.strokes.push(stroke)
+    return SESSION.note('draw_stroke', { tool: stroke.tool, points: stroke.points.length, radialCopies: stroke.radialCopies }, { id: stroke.id, appearAt: at, totalStrokes: st.strokes.length })
+  }
+}
+class PaintTimelapse extends MCPTool {
+  constructor() { super('paint_timelapse', 'Major tool: render the paint canvas process time-lapse to mp4 — strokes appear in draw order, exactly like the ibisPaint X recording export. grade=dreamcore applies the NothingxArt sunset look (glow+grain+chromatic+vignette+dusk gradientMap). Returns video + final painting png.', { out: 'repo-relative mp4', grade: 'none|dreamcore', fps: 'n', duration: 's' }) }
+  async run({ out, grade = 'none', fps, duration }) {
+    const st = SESSION.paint
+    if (!st.strokes.length) throw new Error('no strokes — call draw_stroke first')
+    const s = SESSION.seq
+    const w = s?.w || 1280, h = s?.h || 720
+    const f = fps || s?.fps || 30
+    const last = st.strokes.reduce((m, x) => Math.max(m, x.temporalScope.startTime || 0), 0)
+    const dur = duration ?? +(last + 1).toFixed(2)
+    const N = Math.max(2, Math.round(dur * f))
+    const dest = path.join(ROOT, out)
+    fs.mkdirSync(path.dirname(dest), { recursive: true })
+    const DE = await loadAppTs('src/lib/drawingEngine.ts')
+    const PG = await loadAppTs('src/lib/pixelGrade.ts')
+    const DREAM = { glow: 0.5, grain: 0.35, chromatic: 2, vignette: 0.5, gradientMap: 0.35, gradientMapFrom: '#2b1e5a', gradientMapTo: '#ffb86b' }
+    const enc = new VideoEncoder({ w, h, fps: f, out: dest })
+    const canvas = makeCanvas(w, h)
+    const cx = canvas.getContext('2d')
+    for (let i = 0; i < N; i++) {
+      const t = i / f
+      cx.save(); cx.fillStyle = '#0b0a14'; cx.fillRect(0, 0, w, h); cx.restore()
+      DE.renderAllPaintLayers(cx, w, h, st.strokes, st.layers, t, f)
+      if (grade === 'dreamcore') PG.applyPixelGrade(canvas, DREAM, i)
+      enc.addCanvas(canvas)
+    }
+    const info = enc.finish()
+    const finalPng = dest.replace(/\.mp4$/, '-final.png')
+    fs.writeFileSync(finalPng, canvas.toBuffer('image/png'))
+    SESSION.note('paint_timelapse', { out, grade }, { frames: info.frames, strokes: st.strokes.length })
+    const r = new ToolResult('paint_timelapse', true, { video: path.relative(ROOT, dest), final: path.relative(ROOT, finalPng), grade, strokes: st.strokes.length, duration: dur, ...info })
+    fs.writeFileSync(dest.replace(/\.mp4$/, '.json'), JSON.stringify(r.toJSON(), null, 1))
+    return r.data
+  }
+}
+class PaintClear extends MCPTool {
+  constructor() { super('paint_clear', 'Clear the universal paint canvas (fresh time-lapse).', {}) }
+  async run() { SESSION.paint = { strokes: [], layers: SESSION.paint.layers, clock: 0 }; return SESSION.note('paint_clear', {}, { ok: true }) }
 }
 class Inspect extends MCPTool {
   constructor() { super('inspect', 'Major tool: JSON dump of composition, selection, curves, trace (data info).', { scope: 'project|results' }) }
@@ -605,4 +671,4 @@ class OmniMove extends MCPTool {
     return SESSION.note('omniframe_move', { x, y, t }, { clipId: c.id, interpolation: 'constant', slide: false })
   }
 }
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear]) registry.register(new T())

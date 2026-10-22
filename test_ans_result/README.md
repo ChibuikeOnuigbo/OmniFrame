@@ -23,6 +23,14 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Board G — NothingxArt ibisPaint X sunset (shorts/2yAZqtdc_qk)
+Painted on the universal paint canvas with `draw_stroke` (gradient sky, filled sun disc, 12-ray radial
+ruler, smudge clouds, reflections, silhouette bezier, birds), exported as an ibisPaint-style process
+recording with `paint_timelapse` — plain (`G_paint/paint-timelapse.mp4`) and with the dreamcore grade
+(`G_paint/dreamcore-timelapse.mp4` + final pngs). Mid/early frames `evidence/G-timelapse-{mid,early}.png`
+prove strokes appear in draw order (sun finished while the second hill is still undrawn).
+Recipe `tools/mcp/recipes/board_G_sunset.json`; study note `Study_edits_videos/nothingxart-sunset-2yAZqtdc_qk.md`.
+
 ## Board F — Alight Motion family
 effect_set carries every AM-named key; evidence/F-*.png are per-effect frame
 proofs, F_amfx/procedural.mp4 shows echo+shake+strobe+motion-blur on a moving

@@ -46,6 +46,25 @@ if (!fs.existsSync(ha) || md5(ha) !== md5(hb)) { console.error('FAIL hold frames
 if (md5(hb) === md5(hj)) { console.error('FAIL step never happened'); fail++ }
 if (!fs.existsSync('test_ans_result/E_move/solution.mp4')) { console.error('FAIL no mp4'); fail++ }
 if (!fs.existsSync('test_ans_result/evidence/timeline-E.png')) { console.error('FAIL no timeline proof'); fail++ }
+// ---- paint canvas (ibisPaint X family harvested from NothingxArt 2yAZqtdc_qk) ----
+SESSION.paint = { strokes: [], layers: SESSION.paint.layers, clock: 0 }
+const d1 = await registry.call('draw_stroke', { tool: 'gradient', points: [[10, 0], [10, 10]], color: '#2b1e5a', gradientColor: '#ff8c42', size: 40 })
+const d2 = await registry.call('draw_stroke', { tool: 'circle', points: [[8, 6], [12, 10]], color: '#ffd9a0', filled: true, size: 2 })
+const d3 = await registry.call('draw_stroke', { tool: 'line', points: [[10, 8], [10, 4]], color: '#ffb86b', size: 2, radialCopies: 8 })
+const d4 = await registry.call('draw_stroke', { tool: 'smudge', points: [[4, 3], [8, 3], [12, 3]], size: 20 })
+for (const d of [d1, d2, d3, d4]) if (!d.ok) { console.error('FAIL draw_stroke', d.data); fail++ }
+if (SESSION.paint.strokes.length !== 4) { console.error('FAIL stroke count'); fail++ }
+if (SESSION.paint.strokes[2].radialCopies !== 8) { console.error('FAIL radial ruler'); fail++ }
+if (SESSION.paint.strokes[0].points[0].x > 1 || SESSION.paint.strokes[0].points[0].y > 1) { console.error('FAIL points must be normalized'); fail++ }
+const tl = await registry.call('paint_timelapse', { out: 'test_ans_result/G_paint/qa-timelapse.mp4', fps: 12, duration: 2 })
+if (!tl.ok || !fs.existsSync('test_ans_result/G_paint/qa-timelapse.mp4') || !fs.existsSync('test_ans_result/G_paint/qa-timelapse-final.png')) { console.error('FAIL paint_timelapse', tl.data); fail++ }
+const td = await registry.call('paint_timelapse', { out: 'test_ans_result/G_paint/qa-dreamcore.mp4', grade: 'dreamcore', fps: 12, duration: 1 })
+if (!td.ok || td.data.grade !== 'dreamcore') { console.error('FAIL dreamcore grade', td.data); fail++ }
+const pc = await registry.call('paint_clear', {})
+if (!pc.ok || SESSION.paint.strokes.length !== 0) { console.error('FAIL paint_clear'); fail++ }
+for (const t of ['draw_stroke', 'paint_timelapse', 'paint_clear'])
+  if (!registry.list().some(x => x.name === t)) { console.error('FAIL missing tool', t); fail++ }
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })

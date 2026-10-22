@@ -1350,6 +1350,7 @@ const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Recor
   { id: 'amshake', group: 'pixel', label: 'Auto-shake (AM)', icon: Waves, effect: { autoShake: 8 } },
   { id: 'amstrobe', group: 'pixel', label: 'Time quantization (AM)', icon: Tv, effect: { timeQuantization: 0.2 } },
   { id: 'ammblur', group: 'pixel', label: 'Motion blur (AM)', icon: Waves, effect: { motionBlur: 0.8 } },
+  { id: 'dreamcore', group: 'pixel', label: 'Dreamcore sunset (NothingxArt)', icon: Sparkles, effect: { glow: 0.5, grain: 0.35, chromatic: 2, vignette: 0.5, gradientMap: 0.35, gradientMapFrom: '#2b1e5a', gradientMapTo: '#ffb86b' } },
 ]
 
 /** Speed-curve rack (board C brief: 15 curves). One main tool with a down

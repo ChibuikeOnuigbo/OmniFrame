@@ -300,9 +300,64 @@ export function renderStroke(
   width: number,
   height: number,
 ) {
+  // Radial / symmetry ruler (ibisPaint X): the same stroke repeated rotated
+  // around a centre — sun rays, mandalas, kaleidoscopic skies.
+  const n = Math.max(1, Math.floor(stroke.radialCopies || 1))
+  if (n > 1) {
+    const [cx, cy] = [
+      (stroke.radialCenter?.[0] ?? 0.5) * width,
+      (stroke.radialCenter?.[1] ?? 0.5) * height,
+    ]
+    for (let i = 0; i < n; i++) {
+      ctx.save()
+      ctx.translate(cx, cy)
+      ctx.rotate((i * Math.PI * 2) / n)
+      ctx.translate(-cx, -cy)
+      renderStrokeCore(ctx, stroke, width, height)
+      ctx.restore()
+    }
+    return
+  }
+  renderStrokeCore(ctx, stroke, width, height)
+}
+
+function renderStrokeCore(
+  ctx: CanvasRenderingContext2D,
+  stroke: DrawingStroke,
+  width: number,
+  height: number,
+) {
   ctx.save()
   ctx.globalAlpha = stroke.opacity ?? 1.0
 
+  if (stroke.tool === 'smudge') {
+    // ibisPaint smudge/blur brush: drag what is already on the canvas along
+    // the stroke path (blurred re-stamp of the pixels under the previous point)
+    const r = Math.max(2, stroke.size / 2)
+    const pts = stroke.points
+    for (let i = 1; i < pts.length; i++) {
+      const p0 = pts[i - 1], p1 = pts[i]
+      const sx = p0.x * width
+      const sy = p0.y * height
+      const dx = p1.x * width
+      const dy = p1.y * height
+      const snap = ctx.getImageData(Math.max(0, Math.round(sx - r)), Math.max(0, Math.round(sy - r)), Math.ceil(r * 2), Math.ceil(r * 2))
+      const tmp = document.createElement('canvas')
+      tmp.width = snap.width; tmp.height = snap.height
+      tmp.getContext('2d')!.putImageData(snap, 0, 0)
+      ctx.save()
+      ctx.globalAlpha = (stroke.opacity ?? 1) * 0.55
+      ctx.filter = `blur(${Math.max(1, r * 0.35)}px)`
+      ctx.beginPath()
+      ctx.arc(dx, dy, r, 0, Math.PI * 2)
+      ctx.clip()
+      ctx.drawImage(tmp, dx - r, dy - r)
+      ctx.restore()
+      ctx.filter = 'none'
+    }
+    ctx.restore()
+    return
+  }
   if (stroke.tool === 'fill' && stroke.maskDataUrl) {
     let img = imageCache.get(stroke.maskDataUrl)
     if (!img) {
@@ -455,6 +510,7 @@ export function renderStroke(
     ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
     ctx.beginPath()
     ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2)
+    if (stroke.filled) ctx.fill()
     ctx.stroke()
   } else if (stroke.tool === 'arrow') {
     const start = pts[0]

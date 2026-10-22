@@ -113,6 +113,11 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 99 AM pixel family in pixelGrade (16 keys: zoomBlur, directionalBlur, glow, edgeGlow, tiltShift, vignette, flicker, tiles, pinchBulge, swirl, gradientMap, threshold, sharpen, findEdges + colours)
 100 AM procedural family proceduralFx.ts (echo keyframes, auto-shake, time quantization, motion blur, reverse, freeze) wired into playback + appRender
 101 AE rack +18 Alight-Motion-named entries; headless document shim so app pixelGrade runs in node unchanged
+102 ibisPaint X smudge brush (drag existing pixels along the stroke path, blurred re-stamp) in drawingEngine
+103 ibisPaint X radial/symmetry ruler on any stroke (radialCopies + radialCenter; sun rays, mandalas)
+104 universal paint canvas tools draw_stroke/paint_clear — the app paint engine exposed headless, seq-px in, normalized store
+105 paint_timelapse: process-recording export to mp4 (strokes appear in draw order) + dreamcore grade preset (glow/grain/chromatic/vignette/dusk gradientMap) on rack + ToolResult sidecar
+106 shape fill honoured on circle/ellipse tools (filled flag) for solid sun discs / planets
 
-**Total: 101 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 101) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
-Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).
+**Total: 106 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 106) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+Watched videos at this commit: **345** (see youtube-audit/progress.json watched_ids).

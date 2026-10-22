@@ -1,0 +1,16 @@
+{
+ "tool": "paint_timelapse",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/G_paint/qa-dreamcore.mp4",
+  "final": "test_ans_result/G_paint/qa-dreamcore-final.png",
+  "grade": "dreamcore",
+  "strokes": 4,
+  "duration": 1,
+  "out": "/home/user/OmniFrame/test_ans_result/G_paint/qa-dreamcore.mp4",
+  "frames": 12,
+  "fps": 12,
+  "size": 237588
+ }
+}

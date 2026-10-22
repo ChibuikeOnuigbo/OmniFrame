@@ -930,6 +930,7 @@ export type DrawingToolType =
   | 'clone'
   | 'smart-patch'
   | 'eyedropper'
+  | 'smudge'
   | SelectionToolType
 
 export interface StrokePoint {
@@ -995,6 +996,9 @@ export interface DrawingStroke {
   temporalScope: TemporalScope
   polygonSides?: number // 3..12 for the Krita Polygon Tool
   gradientColor?: string // end colour of the linear gradient ramp
+  /** ibisPaint-style radial/symmetry ruler: duplicate the stroke rotated N times. */
+  radialCopies?: number
+  radialCenter?: [number, number] // stage px, default canvas centre
   filled?: boolean // shape tools fill as well as stroke
   fillTolerance?: number // threshold 1..100 for flood fill
   preserveLuminance?: boolean // true for hair / clothing recolor preserving shading
