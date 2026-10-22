@@ -1373,9 +1373,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "BLOCKED_MEMBERS_ONLY",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
   },
   {
    "id": "r2KfQ9tEvgI",
@@ -1417,9 +1418,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "BLOCKED_MEMBERS_ONLY",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
   },
   {
    "id": "Lg_7-Wift8E",
@@ -1431,9 +1433,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "BLOCKED_MEMBERS_ONLY",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
   },
   {
    "id": "v-cM5D3qc7s",
@@ -1445,9 +1448,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "BLOCKED_MEMBERS_ONLY",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
   },
   {
    "id": "HFkb60azqN0",
@@ -1459,9 +1463,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "BLOCKED_MEMBERS_ONLY",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
   },
   {
    "id": "AS2AJA-O5gU",
