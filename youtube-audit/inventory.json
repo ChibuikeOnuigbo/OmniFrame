@@ -1356,9 +1356,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D grid floor comp + project browser w/ colourful thumb grid, dark 3D corridor w/ yellow 'editing videos' typo"
   },
   {
    "id": "iw8lJAt_8z8",
@@ -2322,9 +2323,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-spiral iris manga eye close-up (PS), AE char on white w/ green mask edges, clean final cutout render"
   },
   {
    "id": "g3ah_mKmZyc",
@@ -2532,9 +2534,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white paper-collage comp + dialog, vintage paper comp w/ caped char + TH typo, red/white blur w/ EL MAT.. typo"
   },
   {
    "id": "ujTa67O_WOk",
@@ -2728,9 +2731,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE dialog over pink/white comp, 3D camera rig w/ tree scene-plane + camera path, orange blur; 3D scene-plane rig"
   },
   {
    "id": "HXFuhKAUbEY",
