@@ -20,7 +20,8 @@ function push(e: McpLogEntry) {
 export const OMNI_MCP_CATALOG = [
   'help', 'select', 'click', 'mask_draw', 'mask_clear', 'keyframe_set', 'curve_set',
   'effect_set', 'remove_background', 'fill_composition_area', 'snapshot', 'dump',
-  'timeline_screenshot', 'track_assign', 'log',
+  'timeline_screenshot', 'track_assign', 'log', 'clip_stretch', 'transparent_select',
+  'select_main_element', 'omniframe_extract', 'patch_under', 'omniframe_move',
 ]
 
 export async function omniMcpCall(tool: string, params: Record<string, any> = {}): Promise<{ ok: boolean; out?: unknown; error?: string }> {
@@ -113,6 +114,32 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
       case 'log':
         out = { entries: mcpLog.slice(-(params.limit || 50)) }
         break
+      case 'clip_stretch': {
+        const c = selClip(); if (!c) throw new Error('nothing selected')
+        c.duration = Math.max(0.1, params.duration ?? c.duration)
+        useEditor.setState({ clips: [...clips()] }); out = { clipId: c.id, duration: c.duration }
+        break
+      }
+      case 'transparent_select':
+        out = await st().omniTransparentSelect(params)
+        break
+      case 'select_main_element':
+        out = await st().omniSelectMainElement(params.rect, params.tol)
+        break
+      case 'omniframe_extract':
+        out = st().omniExtractCutout()
+        break
+      case 'patch_under':
+        st().omniSetPatchUnder(params.on !== false); out = { on: params.on !== false }
+        break
+      case 'omniframe_move': {
+        const c = selClip(); if (!c) throw new Error('nothing selected')
+        const t = params.t ?? 0
+        c.animation.curves.position_x = addOrUpdateKeyframe(c.animation.curves.position_x, t, params.x ?? 0, 'constant').curve
+        c.animation.curves.position_y = addOrUpdateKeyframe(c.animation.curves.position_y, t, params.y ?? 0, 'constant').curve
+        useEditor.setState({ clips: [...clips()] }); out = { clipId: c.id, interpolation: 'constant', slide: false }
+        break
+      }
       case 'timeline_screenshot': {
         const tracks = (st().tracks || []) as any[]
         const payload: TimelineSnapPayload = {

@@ -6,6 +6,8 @@ import { createCanvas, loadImage } from '@napi-rs/canvas'
 import { execFileSync } from 'child_process'
 import crypto from 'crypto'
 import fs from 'fs'
+import path from 'path'
+import os from 'os'
 
 let _ff
 export function ffmpegExe() {
@@ -72,24 +74,30 @@ export class MCPRegistry {
 
 export class VideoEncoder {
   constructor({ w = 640, h = 360, fps = 24, out }) {
-    this.w = w; this.h = h; this.fps = fps; this.out = out; this.bufs = []
+    this.w = w; this.h = h; this.fps = fps; this.out = out
+    // stream raw frames to disk: holding 500+ RGB buffers in RAM OOMs the box
+    this.raw = path.join(os.tmpdir(), `omni-raw-${Date.now()}.rgb`)
+    this.fd = fs.openSync(this.raw, 'w')
+    this.n = 0
   }
   addCanvas(canvas) {
     const d = canvas.getContext('2d').getImageData(0, 0, this.w, this.h).data
     const rgb = Buffer.alloc(this.w * this.h * 3)
     for (let i = 0, j = 0; i < d.length; i += 4, j += 3) { rgb[j] = d[i]; rgb[j + 1] = d[i + 1]; rgb[j + 2] = d[i + 2] }
-    this.bufs.push(rgb)
+    fs.writeSync(this.fd, rgb)
+    this.n++
     return this
   }
-  get frames() { return this.bufs.length }
+  get frames() { return this.n }
   finish() {
-    if (!this.bufs.length) throw new Error('no frames')
-    const raw = Buffer.concat(this.bufs)
+    if (!this.n) throw new Error('no frames')
+    fs.closeSync(this.fd)
     execFileSync(ffmpegExe(), ['-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
-      '-s', `${this.w}x${this.h}`, '-r', String(this.fps), '-i', '-', '-an',
+      '-s', `${this.w}x${this.h}`, '-r', String(this.fps), '-i', this.raw, '-an',
       '-vf', 'format=yuv420p', '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', this.out],
-      { input: raw, maxBuffer: 1 << 30 })
-    return { out: this.out, frames: this.bufs.length, fps: this.fps, size: fs.statSync(this.out).size }
+      { maxBuffer: 1 << 30 })
+    fs.unlinkSync(this.raw)
+    return { out: this.out, frames: this.n, fps: this.fps, size: fs.statSync(this.out).size }
   }
 }
 

@@ -12,6 +12,7 @@
 //   - audio tracks are synced/played in lock-step
 //   - drift is corrected by occasional currentTime seeks, not per-frame seeks
 
+import { applyPatchUnder, type PatchUnderSpec } from './patchUnder'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -1543,6 +1544,10 @@ export class PreviewEngine {
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
+      const puSpec = (clip as unknown as { patch?: PatchUnderSpec }).patch
+      if (puSpec?.strategy) {
+        applyPatchUnder(scratch.getContext('2d')!, puSpec, { x: 0, y: 0, w: this.width, h: this.height }, this.width, this.height)
+      }
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
         ctx.drawImage(scratch, 0, 0)
@@ -1847,7 +1852,7 @@ export class PreviewEngine {
     // into an isolated scratch canvas, grade it there, composite back so
     // sibling content on the target canvas is untouched. A clip Mask uses the
     // same isolation: it mattes the clip's own graded pixels (only).
-    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(clip.effects))) {
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(clip.effects) || !!(clip as unknown as { patch?: unknown }).patch)) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawClip(octx, el, clip, asset, time, true)

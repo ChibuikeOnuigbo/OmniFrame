@@ -12,5 +12,7 @@
    returns data:img of the live timeline; `omniMCP.call('snapshot')` the preview.
 4. **Agent eyes/hands**: only snapshot/data:img dumps for seeing; only universal
    tool calls for acting (vow.md universal-tools + proof laws).
+5b. **No-slide proof**: evidence/E-snap-hold-a.png and -hold-b.png are
+   byte-identical (md5), E-snap-jump.png differs — omniframe steps, not slides.
 5. **QA**: node qa/universal-tools-unit.mjs (trace contains only universal
    steps, keys/mask asserted, data:img dumps verified).

@@ -133,25 +133,9 @@ export function applyShapeMatte(x, mask, W, H) {
   x.globalCompositeOperation = 'source-over'
 }
 
-export function applySmartPatchMatte(x, patch, r, seq) {
-  // SmartPatchSlice semantics headless: donor-sample clone / blur / gradient
-  // fill of the region, feathered edge (smartPatchFeather).
-  const X0 = ((patch.x0 / seq.w) - r.x / seq.w) * x.canvas.width, X1 = ((patch.x1 / seq.w) - r.x / seq.w) * x.canvas.width
-  const Y0 = ((patch.y0 / seq.h) - r.y / seq.h) * x.canvas.height, Y1 = ((patch.y1 / seq.h) - r.y / seq.h) * x.canvas.height
-  const W = X1 - X0, H = Y1 - Y0
-  if (W <= 0 || H <= 0) return
-  const src = makeCanvas(x.canvas.width, x.canvas.height); src.getContext('2d').drawImage(x.canvas, 0, 0)
-  const p = makeCanvas(Math.max(2, Math.round(W)), Math.max(2, Math.round(H))), px = p.getContext('2d')
-  const strat = patch.strategy || 'clone'
-  if (strat === 'blur') { px.drawImage(src, X0, Y0, W, H, 0, 0, 12, 8); px.drawImage(px.canvas, 0, 0, 12, 8, 0, 0, W, H) }
-  else if (strat === 'gradient') { const g = px.createLinearGradient(0, 0, 0, H); g.addColorStop(0, sampleAt(src, X0 + W / 2, Math.max(0, Y0 - 6))); g.addColorStop(1, sampleAt(src, X0 + W / 2, Math.min(src.height - 1, Y1 + 6))); px.fillStyle = g; px.fillRect(0, 0, W, H) }
-  else { const d = patch.donor ? [((patch.donor[0] / seq.w) - r.x / seq.w) * x.canvas.width, ((patch.donor[1] / seq.h) - r.y / seq.h) * x.canvas.height] : [0, 0]; px.drawImage(src, d[0], d[1], W, H, 0, 0, W, H) }
-  const feather = (patch.feather ?? 5) * (x.canvas.width / seq.w)
-  const mm = makeCanvas(p.width, p.height), mx = mm.getContext('2d')
-  mx.filter = feather > 0 ? `blur(${feather}px)` : 'none'; mx.fillStyle = '#fff'; mx.fillRect(0, 0, W, H); mx.filter = 'none'
-  px.globalCompositeOperation = 'destination-in'; px.drawImage(mm, 0, 0); px.globalCompositeOperation = 'source-over'
-  x.drawImage(p, X0, Y0)
-}
+const PU = await loadAppTs('src/lib/patchUnder.ts')
+export function applySmartPatchMatte(x, patch, r, seq) { PU.applyPatchUnder(x, patch, r, seq.w, seq.h) }
+
 function sampleAt(canvas, x, y) {
   const d = canvas.getContext('2d').getImageData(Math.round(x), Math.round(y), 1, 1).data
   return `rgb(${d[0]},${d[1]},${d[2]})`

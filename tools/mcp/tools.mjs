@@ -14,7 +14,7 @@ const TAR = path.join(ROOT, 'test_ans_result')
 
 /* ---------- session (the booted headless app) ---------- */
 export const SESSION = {
-  seq: null, selection: null, trace: [], mode: 'omniframe',
+  seq: null, selection: null, trace: [], mode: 'omniframe', omniSelection: null,
   reset() { this.seq = null; this.selection = null; this.trace = []; },
   note(tool, params, out) { this.trace.push({ tool, params, out }); return out },
 }
@@ -84,13 +84,14 @@ class MaskClear extends MCPTool {
   async run() { const c = sel(); c.mask = undefined; return SESSION.note('mask_clear', {}, { clipId: c.id }) }
 }
 class KeyframeSet extends MCPTool {
-  constructor() { super('keyframe_set', 'Major tool: set a position/scale/rotation/opacity keyframe on the selected clip (app CurveEngine).', { property: 'position|scale|rotation|opacity|pivot', channel: 'X|Y|Z|Scalar', time: 's', value: '', interpolation: 'app InterpolationType' }) }
-  async run({ property, channel = 'Scalar', time, value, interpolation = 'linear' }) {
+  constructor() { super('keyframe_set', 'Major tool: set a position/scale/rotation/opacity keyframe on the selected clip (app CurveEngine). interpolation custom + points = your own dragged curve.', { property: 'position|scale|rotation|opacity|pivot', channel: 'X|Y|Z|Scalar', time: 's', value: '', interpolation: 'app InterpolationType', points: '[[x,y]..] for custom' }) }
+  async run({ property, channel = 'Scalar', time, value, interpolation = 'linear', points }) {
     const c = sel()
     const key = `${property}_${channel.toLowerCase()}`
     const curve = c.animation.curves[key]
     if (!curve) throw new Error(`no curve ${key}; have ${Object.keys(c.animation.curves).join(',')}`)
     const { curve: updated, keyframe: kf } = CE.addOrUpdateKeyframe(curve, time, value, interpolation)
+    if (interpolation === 'custom' && Array.isArray(points)) kf.points = points.map(([x, y]) => ({ x, y }))
     c.animation.curves[key] = updated
     return SESSION.note('keyframe_set', { property, channel, time, value, interpolation }, { clipId: c.id, curve: key, keyframeId: kf.id })
   }
@@ -439,4 +440,147 @@ class RotoMask extends MCPTool {
 }
 
 export const registry = new MCPRegistry()
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot]) registry.register(new T())
+/* ---- omniframe selection maths: shared app module, identical in the booted app ---- */
+const SM = await loadAppTs('src/lib/selectionMattes.ts')
+function baseRect(s, c) {
+  return { x: s.w / 2 - c.natW / 2 + (c.transform?.x || 0), y: s.h / 2 - c.natH / 2 + (c.transform?.y || 0), w: c.natW, h: c.natH }
+}
+function mediaPixels(c) {
+  const mw = Math.max(2, Math.round(c.natW)), mh = Math.max(2, Math.round(c.natH))
+  const mc = makeCanvas(mw, mh)
+  c.draw(mc.getContext('2d'), mw, mh, 0)
+  return { mw, mh, data: mc.getContext('2d').getImageData(0, 0, mw, mh).data, canvas: mc }
+}
+function seqToLocal(s, c, r) {
+  const b = baseRect(s, c)
+  return { x0: ((r.x0 - b.x) / b.w) * c.natW, y0: ((r.y0 - b.y) / b.h) * c.natH, x1: ((r.x1 - b.x) / b.w) * c.natW, y1: ((r.y1 - b.y) / b.h) * c.natH }
+}
+function localToSeq(s, c, l) {
+  const b = baseRect(s, c)
+  return { x0: b.x + (l.x0 / c.natW) * b.w, y0: b.y + (l.y0 / c.natH) * b.h, x1: b.x + (l.x1 / c.natW) * b.w, y1: b.y + (l.y1 / c.natH) * b.h }
+}
+function parseCol(v, d) {
+  if (Array.isArray(v)) return v
+  if (typeof v === 'string' && v[0] === '#') return [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)]
+  return d
+}
+class ClipStretch extends MCPTool {
+  constructor() { super('clip_stretch', 'Major tool: drag a clip edge on the timeline. Images stretch infinitely (app rule); the 1s still becomes any length before compounding.', { clipId: '', duration: 's' }) }
+  async run({ clipId, duration }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const from = c.duration
+    c.duration = Math.max(0.1, duration)
+    return SESSION.note('clip_stretch', { clipId: c.id, from, to: c.duration }, { clipId: c.id, duration: c.duration })
+  }
+}
+class ClipRemove extends MCPTool {
+  constructor() { super('clip_remove', 'Major tool: delete a clip from the timeline (app clip context menu > remove).', { clipId: '' }) }
+  async run({ clipId }) {
+    const s = seq(); const i = s.clips.findIndex(k => k.id === clipId)
+    if (i < 0) throw new Error(`no clip ${clipId}`)
+    s.clips.splice(i, 1)
+    if (SESSION.selection?.id === clipId) SESSION.selection = s.clips[0] || null
+    return SESSION.note('clip_remove', { clipId }, { left: s.clips.length })
+  }
+}
+class TransparentSelect extends MCPTool {
+  constructor() { super('transparent_select', 'Omniframe transparent selection: draw a rect BIGGER than the element; the ignore colour (white bg) is skipped, only the target (black box) is selected.', { clipId: '', x0: '', y0: '', x1: '', y1: '', ignore: '#ffffff', ignoreTol: '', target: 'dark|light|[r,g,b]', targetTol: '' }) }
+  async run({ clipId, x0, y0, x1, y1, ignore = '#ffffff', ignoreTol = 40, target = 'dark', targetTol = 90 }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const { mw, mh, data } = mediaPixels(c)
+    const lr = seqToLocal(s, c, { x0, y0, x1, y1 })
+    const m = SM.transparentMatte(data, mw, mh, lr, { ignore: parseCol(ignore, [255, 255, 255]), ignoreTol, target: Array.isArray(target) ? target : target, targetTol })
+    SESSION.omniSelection = { clipId: c.id, method: 'transparent', matte: m, mw, mh }
+    const bq = m.bbox ? localToSeq(s, c, m.bbox) : null
+    return SESSION.note('transparent_select', { clipId: c.id, rect: [x0, y0, x1, y1], ignore, target }, { method: 'transparent', pixels: m.pixels, bbox: bq && [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
+  }
+}
+class BrushSelect extends MCPTool {
+  constructor() { super('brush_select', 'Omniframe brush selection: paint strokes (seq-space points + radius) into the selection matte.', { clipId: '', strokes: '[{points:[[x,y]..],radius}]' }) }
+  async run({ clipId, strokes = [] }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const { mw, mh } = mediaPixels(c)
+    const local = strokes.map(st => ({ radius: st.radius || 8, points: (st.points || []).map(([x, y]) => { const l = seqToLocal(s, c, { x0: x, y0: y, x1: x, y1: y }); return [l.x0, l.y0] }) }))
+    const m = SM.brushMatte(mw, mh, local)
+    SESSION.omniSelection = { clipId: c.id, method: 'brush', matte: m, mw, mh }
+    const bq = m.bbox ? localToSeq(s, c, m.bbox) : null
+    return SESSION.note('brush_select', { clipId: c.id, strokes: strokes.length }, { method: 'brush', pixels: m.pixels, bbox: bq && [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
+  }
+}
+class SelectMainElement extends MCPTool {
+  constructor() { super('select_main_element', 'Masking-mode "mind main element": flood the background from the rect border; whatever survives is the main element of the frame.', { clipId: '', x0: '', y0: '', x1: '', y1: '', tol: '' }) }
+  async run({ clipId, x0, y0, x1, y1, tol = 48 }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const { mw, mh, data } = mediaPixels(c)
+    const m = SM.mainElementMatte(data, mw, mh, seqToLocal(s, c, { x0, y0, x1, y1 }), tol)
+    SESSION.omniSelection = { clipId: c.id, method: 'main-element', matte: m, mw, mh }
+    const bq = m.bbox ? localToSeq(s, c, m.bbox) : null
+    return SESSION.note('select_main_element', { clipId: c.id, tol }, { method: 'main-element', pixels: m.pixels, bbox: bq && [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
+  }
+}
+class OmniExtract extends MCPTool {
+  constructor() { super('omniframe_extract', 'Omniframe button: from the active selection, create a NEW clip on the track above holding only the cut-out section (all frames); the source keeps the hole.', { trackId: '' }) }
+  async run({ trackId }) {
+    const s = seq(), o = SESSION.omniSelection
+    if (!o) throw new Error('no omniframe selection; use transparent_select / brush_select / select_main_element / roto_mask first')
+    const src = s.clips.find(k => k.id === o.clipId)
+    const { mw, mh, canvas } = mediaPixels(src)
+    const mcanvas = makeCanvas(mw, mh)
+    const md = mcanvas.getContext('2d').createImageData(mw, mh)
+    for (let i = 0, j = 0; i < o.matte.alpha.length; i++, j += 4) { md.data[j] = 255; md.data[j + 1] = 255; md.data[j + 2] = 255; md.data[j + 3] = o.matte.alpha[i] }
+    mcanvas.getContext('2d').putImageData(md, 0, 0)
+    const sx = canvas.getContext('2d')
+    sx.globalCompositeOperation = 'destination-in'
+    sx.drawImage(mcanvas, 0, 0)
+    sx.globalCompositeOperation = 'source-over'
+    const b = o.matte.bbox
+    if (!b) throw new Error('selection matte is empty')
+    const bw = b.x1 - b.x0 + 1, bh = b.y1 - b.y0 + 1
+    const crop = makeCanvas(bw, bh)
+    crop.getContext('2d').drawImage(canvas, b.x0, b.y0, bw, bh, 0, 0, bw, bh)
+    const rb = baseRect(s, src)
+    const natW = (bw / mw) * rb.w, natH = (bh / mh) * rb.h
+    const cxSeq = rb.x + ((b.x0 + bw / 2) / mw) * rb.w, cySeq = rb.y + ((b.y0 + bh / 2) / mh) * rb.h
+    let track = trackId
+    if (!track) { track = String(s.tracks.length); s.tracks.push({ id: s.tracks.length, name: 'omni cutout' }) }
+    const clip = makeClip({ id: `clip-${s.clips.length + 1}`, name: 'omni cutout', asset: 'omni-cutout', natW, natH, start: src.start, duration: src.duration, draw: (x, w, h) => x.drawImage(crop, 0, 0, w, h) })
+    clip.track = Number(track)
+    clip.transform.x = cxSeq - s.w / 2
+    clip.transform.y = cySeq - s.h / 2
+    s.addClip(clip)
+    src.omniHole = localToSeq(s, src, b)
+    SESSION.selection = clip
+    return SESSION.note('omniframe_extract', { src: src.id, track }, { clipId: clip.id, track, natW: Math.round(natW), natH: Math.round(natH), pixels: o.matte.pixels })
+  }
+}
+class PatchUnder extends MCPTool {
+  constructor() { super('patch_under', 'Omniframe toggle: patch UNDER the cut-out on the source clip for every frame (smart ring-average fill), hiding the hole.', { clipId: '', on: 'bool', feather: '' }) }
+  async run({ clipId, on = true, feather = 2 }) {
+    const s = seq()
+    const c = clipId ? s.clips.find(k => k.id === clipId) : (s.clips.find(k => k.omniHole) || sel())
+    if (!on) { delete c.mask; delete c.patch; return SESSION.note('patch_under', { clipId: c.id, on }, { clipId: c.id }) }
+    const hole = c.omniHole || SESSION.omniSelection && localToSeq(s, c, SESSION.omniSelection.matte.bbox)
+    if (!hole) throw new Error('no hole on this clip; run omniframe_extract first')
+    const b = baseRect(s, c)
+    c.mask = {
+      enabled: true, shape: 'rectangle', kind: 'rect',
+      centerX: ((hole.x0 + hole.x1) / 2 - b.x) / b.w, centerY: ((hole.y0 + hole.y1) / 2 - b.y) / b.h,
+      width: (hole.x1 - hole.x0) / b.w, height: (hole.y1 - hole.y0) / b.h,
+      feather: 0, inverted: true,
+    }
+    c.patch = { strategy: 'smart', x0: hole.x0, y0: hole.y0, x1: hole.x1, y1: hole.y1, feather }
+    return SESSION.note('patch_under', { clipId: c.id, on, feather }, { clipId: c.id, hole: [Math.round(hole.x0), Math.round(hole.y0), Math.round(hole.x1), Math.round(hole.y1)] })
+  }
+}
+class OmniMove extends MCPTool {
+  constructor() { super('omniframe_move', 'Omniframe move: reposition the cut-out with CONSTANT interpolation from t (step, no slide) — the same offset applies to every frame of the span, exactly like dragging in omniframe mode.', { x: '', y: '', t: '' }) }
+  async run({ x, y, t = 0 }) {
+    const c = sel()
+    let curve = c.animation.curves.position_x
+    const rx = CE.addOrUpdateKeyframe(curve, t, x, 'constant'); c.animation.curves.position_x = rx.curve
+    curve = c.animation.curves.position_y
+    const ry = CE.addOrUpdateKeyframe(curve, t, y, 'constant'); c.animation.curves.position_y = ry.curve
+    return SESSION.note('omniframe_move', { x, y, t }, { clipId: c.id, interpolation: 'constant', slide: false })
+  }
+}
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove]) registry.register(new T())

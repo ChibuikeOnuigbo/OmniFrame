@@ -286,6 +286,7 @@ import {
   type TimelineGap,
 } from './store/gapTools'
 import { createOmniframeCharacterSlice } from './store/omniframeCharacters'
+import { createOmniExtractSlice, type OmniExtractSlice, type OmniExtractState } from './store/omniExtract'
 import { createRotoMaskSlice } from './store/rotoMask'
 import { createSmartPatchSlice } from './store/smartPatch'
 import type { SmartPatchSlice } from './store/smartPatch'
@@ -316,7 +317,7 @@ import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
 import { markerColorHex, MARKER_KINDS } from './lib/markers'
 import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
 
-interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
+interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, OmniExtractSlice {
   selectionBrushAuto: boolean
   selectionBrushTolerance: number
   selectionWandTolerance: number
@@ -714,6 +715,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   // ---- OmniFrame & Character Manipulation ----
   omniframeMode: boolean
   omniframeCharacters: OmniframeCharacter[]
+  omniSelection: OmniExtractState['omniSelection']
   selectedCharacterId: string | null
   attachDirectlyToVideo: boolean
   attachedVideoClipId: string | null
@@ -1226,6 +1228,7 @@ export const useEditor = create<EditorState>((set, get) => {
     // ---- OmniFrame & Character Manipulation initial state ----
     omniframeMode: false,
     omniframeCharacters: INITIAL_DEATH_NOTE_CHARACTERS,
+    omniSelection: null,
     selectedCharacterId: 'char_light',
     attachDirectlyToVideo: true,
     attachedVideoClipId: null,
@@ -1474,6 +1477,7 @@ export const useEditor = create<EditorState>((set, get) => {
     // Universal gap tools + track targeting (see ./store/gapTools.ts).
     ...createGapToolsSlice(set, get, { pushSnapshot, recompute }),
     ...createOmniframeCharacterSlice(set, get, { pushSnapshot }),
+    ...createOmniExtractSlice(set, get, { pushSnapshot }),
     // RotoMask: click-to-segment rotoscoping (see ./store/rotoMask.ts).
     ...createRotoMaskSlice(set, get, { pushSnapshot }),
     ...createSmartPatchSlice(set, get, pushSnapshot),

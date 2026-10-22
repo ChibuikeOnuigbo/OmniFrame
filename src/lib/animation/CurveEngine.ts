@@ -18,6 +18,7 @@ export type InterpolationType =
   | 'back'
   | 'bounce'
   | 'elastic'
+  | 'custom'
 
 export type ExtrapolationMode = 'constant' | 'linear' | 'cycle' | 'ping-pong'
 
@@ -32,6 +33,8 @@ export interface KeyframeNode {
   id: string
   time: number // in seconds
   value: number
+  /** user-dragged custom curve: normalized [0..1]x[0..1] points, monotone in x */
+  points?: { x: number; y: number }[]
   interpolation: InterpolationType
   handleMode?: TangentHandleMode
   inHandle?: TangentHandle
@@ -162,6 +165,25 @@ function evalBezierValue(p0y: number, p1y: number, p2y: number, p3y: number, s: 
     3 * oneMinusS * s * s * p2y +
     s * s * s * p3y
   )
+}
+
+/**
+ * Progress through a user-dragged custom curve: piecewise-linear through the
+ * normalized points (x monotone). This is exactly what dragging handles in the
+ * curve editor produces — no preset easing involved.
+ */
+export function customProgress(points: { x: number; y: number }[], u: number): number {
+  const pts = [...points].sort((a, b) => a.x - b.x)
+  const cu = Math.max(0, Math.min(1, u))
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1]
+    if (cu >= a.x && cu <= b.x) {
+      const span = b.x - a.x
+      const t = span <= 1e-6 ? 0 : (cu - a.x) / span
+      return a.y + t * (b.y - a.y)
+    }
+  }
+  return cu <= pts[0].x ? pts[0].y : pts[pts.length - 1].y
 }
 
 /**
@@ -335,6 +357,11 @@ export function evaluateCurve(curve: PropertyCurve, time: number): number {
   // Linear interpolation
   if (k0.interpolation === 'linear') {
     return k0.value + u * (k1.value - k0.value)
+  }
+
+  // Custom curve: points the user dragged in the curve editor (polyline progress)
+  if (k0.interpolation === 'custom' && k0.points && k0.points.length >= 2) {
+    return k0.value + customProgress(k0.points, u) * (k1.value - k0.value)
   }
 
   // Custom 1D cubic Bezier with explicit tangent handles

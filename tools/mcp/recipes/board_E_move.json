@@ -1,6 +1,6 @@
 {
  "board": "E",
- "note": "mask existing rect -> pos1 key -> end key at destination -> full comp",
+ "note": "omniframe law: stretch->compound, cycle selections, extract cut-out, patch under, constant moves, all curves + 5 custom",
  "steps": [
   {
    "tool": "project_new",
@@ -8,8 +8,8 @@
     "w": 864,
     "h": 216,
     "fps": 24,
-    "duration": 2,
-    "bg": "#f2f4f8"
+    "duration": 24,
+    "bg": "#ffffff"
    }
   },
   {
@@ -26,43 +26,90 @@
    }
   },
   {
-   "tool": "import_media",
+   "tool": "clip_stretch",
    "params": {
-    "path": "test_ans_result/sources/src_move.png",
-    "fit": "contain"
+    "clipId": "clip-1",
+    "duration": 10
    }
   },
   {
-   "tool": "select",
+   "tool": "clip_stretch",
    "params": {
-    "clipId": "clip-2"
+    "clipId": "clip-1",
+    "duration": 24
+   }
+  },
+  {
+   "tool": "compound_clip_create",
+   "params": {
+    "ids": [
+     "clip-1"
+    ]
    }
   },
   {
    "tool": "snapshot",
    "params": {
     "time": 0,
-    "out": "test_ans_result/E_move/snap-00.png"
+    "out": "test_ans_result/evidence/E-snap-00.png"
    }
   },
   {
-   "tool": "click",
+   "tool": "roto_mask",
    "params": {
-    "x": 73,
-    "y": 146
+    "points": [
+     [
+      6,
+      92
+     ],
+     [
+      140,
+      92
+     ],
+     [
+      140,
+      201
+     ],
+     [
+      6,
+      201
+     ]
+    ],
+    "feather": 2
    }
   },
   {
-   "tool": "track_new",
+   "tool": "mask_clear",
+   "params": {}
+  },
+  {
+   "tool": "mask_draw",
    "params": {
-    "name": "cutout"
+    "shape": "rectangle",
+    "x0": 1,
+    "y0": 87,
+    "x1": 145,
+    "y1": 206,
+    "feather": 2
    }
   },
   {
-   "tool": "track_assign",
+   "tool": "snapshot",
    "params": {
-    "clipId": "clip-2",
-    "track": 1
+    "time": 0,
+    "out": "test_ans_result/evidence/E-snap-maskdimple.png"
+   }
+  },
+  {
+   "tool": "mask_clear",
+   "params": {}
+  },
+  {
+   "tool": "duplicate_paste",
+   "params": {
+    "copy": true,
+    "dx": 0,
+    "dy": 0
    }
   },
   {
@@ -77,66 +124,521 @@
    }
   },
   {
-   "tool": "keyframe_set",
+   "tool": "select",
    "params": {
-    "property": "position",
-    "channel": "X",
+    "clipId": "clip-1"
+   }
+  },
+  {
+   "tool": "mask_draw",
+   "params": {
+    "shape": "rectangle",
+    "x0": 1,
+    "y0": 87,
+    "x1": 145,
+    "y1": 206,
+    "inverted": true
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
     "time": 0,
-    "value": 0,
-    "interpolation": "ease-in-out"
+    "out": "test_ans_result/evidence/E-snap-viewmask.png"
    }
   },
   {
-   "tool": "keyframe_set",
+   "tool": "mask_clear",
+   "params": {}
+  },
+  {
+   "tool": "select",
    "params": {
-    "property": "position",
-    "channel": "Y",
-    "time": 0,
-    "value": 0,
-    "interpolation": "ease-in-out"
+    "clipId": "clip-2"
    }
   },
   {
-   "tool": "keyframe_set",
+   "tool": "mask_clear",
+   "params": {}
+  },
+  {
+   "tool": "clip_remove",
    "params": {
-    "property": "position",
-    "channel": "X",
-    "time": 2,
-    "value": 529,
-    "interpolation": "ease-in-out"
+    "clipId": "clip-2"
    }
   },
   {
-   "tool": "keyframe_set",
+   "tool": "select",
    "params": {
-    "property": "position",
-    "channel": "Y",
-    "time": 2,
-    "value": 9.5,
-    "interpolation": "ease-in-out"
+    "clipId": "clip-1"
    }
   },
   {
-   "tool": "curve_set",
+   "tool": "transparent_select",
    "params": {
-    "property": "position",
-    "channel": "X",
-    "interpolation": "ease-in-out"
+    "x0": -15,
+    "y0": 70,
+    "x1": 160,
+    "y1": 216,
+    "ignore": "#ffffff",
+    "ignoreTol": 40,
+    "target": "dark"
    }
   },
   {
-   "tool": "curve_set",
+   "tool": "brush_select",
    "params": {
-    "property": "position",
-    "channel": "Y",
-    "interpolation": "ease-in-out"
+    "strokes": [
+     {
+      "points": [
+       [
+        20,
+        140
+       ],
+       [
+        70,
+        140
+       ],
+       [
+        120,
+        140
+       ],
+       [
+        70,
+        100
+       ],
+       [
+        70,
+        180
+       ]
+      ],
+      "radius": 26
+     }
+    ]
+   }
+  },
+  {
+   "tool": "select_main_element",
+   "params": {
+    "x0": 0,
+    "y0": 60,
+    "x1": 200,
+    "y1": 216,
+    "tol": 48
+   }
+  },
+  {
+   "tool": "transparent_select",
+   "params": {
+    "x0": -15,
+    "y0": 70,
+    "x1": 160,
+    "y1": 216,
+    "ignore": "#ffffff",
+    "ignoreTol": 40,
+    "target": "dark"
+   }
+  },
+  {
+   "tool": "track_new",
+   "params": {
+    "name": "omni cutout"
+   }
+  },
+  {
+   "tool": "omniframe_extract",
+   "params": {
+    "trackId": 1
+   }
+  },
+  {
+   "tool": "patch_under",
+   "params": {
+    "on": true,
+    "feather": 2
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 1,
+    "out": "test_ans_result/evidence/E-snap-extract.png"
+   }
+  },
+  {
+   "tool": "omniframe_move",
+   "params": {
+    "x": -359,
+    "y": 38,
+    "t": 0
+   }
+  },
+  {
+   "tool": "omniframe_move",
+   "params": {
+    "x": -359,
+    "y": -7,
+    "t": 2
+   }
+  },
+  {
+   "tool": "omniframe_move",
+   "params": {
+    "x": -359,
+    "y": 83,
+    "t": 4
+   }
+  },
+  {
+   "tool": "omniframe_move",
+   "params": {
+    "x": -289,
+    "y": -7,
+    "t": 6
+   }
+  },
+  {
+   "tool": "omniframe_move",
+   "params": {
+    "x": -289,
+    "y": 83,
+    "t": 8
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 1.0,
+    "out": "test_ans_result/evidence/E-snap-hold-a.png"
    }
   },
   {
    "tool": "snapshot",
    "params": {
     "time": 1.9,
-    "out": "test_ans_result/E_move/snap-end.png"
+    "out": "test_ans_result/evidence/E-snap-hold-b.png"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 2.05,
+    "out": "test_ans_result/evidence/E-snap-jump.png"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 3,
+    "out": "test_ans_result/evidence/E-snap-flash-up.png"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 5,
+    "out": "test_ans_result/evidence/E-snap-flash-down.png"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 10,
+    "value": -359,
+    "interpolation": "linear"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 10.7,
+    "value": -209,
+    "interpolation": "cubic-in"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 11.4,
+    "value": -359,
+    "interpolation": "cubic-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 12.1,
+    "value": -209,
+    "interpolation": "ease-in"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 12.8,
+    "value": -359,
+    "interpolation": "ease-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 13.5,
+    "value": -209,
+    "interpolation": "ease-in-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 14.2,
+    "value": -359,
+    "interpolation": "back"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 14.9,
+    "value": -209,
+    "interpolation": "bounce"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 15.6,
+    "value": -359,
+    "interpolation": "elastic"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 16.3,
+    "value": -209,
+    "interpolation": "bezier"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 17.0,
+    "value": -359,
+    "interpolation": "custom",
+    "points": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      0.1
+     ],
+     [
+      0.6,
+      0.9
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 17.7,
+    "value": -209,
+    "interpolation": "custom",
+    "points": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      0.9
+     ],
+     [
+      0.8,
+      0.1
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 18.4,
+    "value": -359,
+    "interpolation": "custom",
+    "points": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      0.4
+     ],
+     [
+      0.6,
+      0.6
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 19.1,
+    "value": -209,
+    "interpolation": "custom",
+    "points": [
+     [
+      0,
+      0
+     ],
+     [
+      0.1,
+      0.8
+     ],
+     [
+      0.5,
+      0.2
+     ],
+     [
+      0.9,
+      0.9
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 19.8,
+    "value": -359,
+    "interpolation": "custom",
+    "points": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      0.05
+     ],
+     [
+      0.7,
+      0.95
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 20.5,
+    "value": -209,
+    "interpolation": "ease-in-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 22,
+    "value": -209,
+    "interpolation": "ease-in-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "X",
+    "time": 24,
+    "value": 170,
+    "interpolation": "ease-in-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "Y",
+    "time": 22,
+    "value": 83,
+    "interpolation": "ease-in-out"
+   }
+  },
+  {
+   "tool": "keyframe_set",
+   "params": {
+    "property": "position",
+    "channel": "Y",
+    "time": 24,
+    "value": 47,
+    "interpolation": "ease-in-out"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 23.9,
+    "out": "test_ans_result/evidence/E-snap-dest.png"
    }
   },
   {
@@ -149,7 +651,7 @@
    "tool": "timeline_screenshot",
    "params": {
     "out": "test_ans_result/evidence/timeline-E.png",
-    "playhead": 1.9
+    "playhead": 23.9
    }
   }
  ]

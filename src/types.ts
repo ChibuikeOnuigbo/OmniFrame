@@ -515,6 +515,8 @@ export interface MediaAsset {
   psdLayer?: PsdLayerAssetInfo
 }
 
+import type { PatchUnderSpec } from './lib/patchUnder'
+
 export type TrackType = 'video' | 'audio'
 
 export type MarkerColor = 'blue' | 'green' | 'red' | 'yellow' | 'purple' | 'orange'
@@ -1029,6 +1031,10 @@ export interface CustomWorkspace {
 }
 
 export interface Clip {
+  /** omniframe: sequence-space hole left by an extracted cut-out */
+  omniHole?: { x0: number; y0: number; x1: number; y1: number }
+  /** omniframe: patch-under fill applied beneath the hole every frame */
+  patch?: PatchUnderSpec
   id: string
   trackId: string
   assetId: string

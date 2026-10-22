@@ -23,6 +23,13 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Omniframe law (board E)
+One import, stretch 1s->10s->24s, compound, cycle all six selection methods
+(logged), transparent selection chosen, extract cut-out to track above,
+patch-under the hole, 5 flash holds x2s (constant, byte-identical frames),
+15 curve segments incl. 5 custom dragged curves on the CUT-OUT, eased move to
+destination. See PROOF.md + the research PDF for the audit.
+
 ## Tracks & timeline proof
 Cutouts/pastes/overlays live on their own tracks (track_new/track_assign);
 each recipe ends with timeline_screenshot → evidence/timeline-*.png drawn by

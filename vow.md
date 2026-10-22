@@ -71,3 +71,21 @@ itself: if a claim cannot be opened, run, watched or measured, it does not get s
   with cutouts on their own track, MASK/ROTO badges, keyframe diamonds,
   selection, playhead and the MCP call log — so a human sees it IS the app.
 - data_dump can embed data:video; timeline sidecars carry full data:img.
+
+## Omniframe law (same review)
+- Omniframe mode never copy-pastes: the moved element is a CUT-OUT of the
+  original clip (omniframe_extract -> new clip on the track above), the source
+  keeps the hole and patch_under fills it for every frame.
+- An imported still is 1s: stretch it on the timeline (clip_stretch, images
+  stretch infinitely) and compound it BEFORE it may move. No python/auto
+  conversion.
+- Flash moves use omniframe_move (constant interpolation): same offset for
+  every frame of the span, byte-identical frames, no slide. Keyframes and
+  curves (all presets + user-dragged custom) belong to the CUT-OUT, not the
+  video.
+- Transparent selection is omniframe's signature skill: rect bigger than the
+  element, ignore the bed colour, keep the target. Cycle every selection
+  method (roto, mask sub-tool, video-view-mask, transparent, brush, main
+  element) and log each before choosing.
+- Omniframe keeps only skills no other tool has; duplicates are deleted and
+  reported in Study_edits_videos/research-deprecated-and-overthought-tools.pdf.

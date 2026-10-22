@@ -41,9 +41,6 @@ const PANEL_SECTIONS = [
   },
   { id: 'select', label: 'Select', icon: Wand2, hint: 'Selection sub-tools: box, ellipse, lasso, brush' },
   { id: 'rotomask', label: 'Roto', icon: Crosshair, hint: 'Click-to-segment rotoscoping (RotoMask)' },
-  { id: 'transform', label: 'Transform', icon: Move, hint: 'Position, scale and rotation' },
-  { id: 'color', label: 'Color', icon: PaintBucket, hint: 'Recolor the segment; separate from Drawing layer blending' },
-  { id: 'scope', label: 'Scope', icon: Clock, hint: 'All frames, a section, or a single frame' },
   { id: 'actions', label: 'Actions', icon: Layers, hint: 'Duplicate, cut to track, remove, and verify' },
 ] as const
 
@@ -77,10 +74,15 @@ export function OmniFramePanel() {
   const recolorActiveSelection = useEditor((s) => s.recolorActiveSelection)
   const activeSubMode = useEditor((s) => s.activeSubMode)
   const openSubMode = useEditor((s) => s.openSubMode)
+  const omniTransparentSelect = useEditor((s) => s.omniTransparentSelect)
+  const omniSelectMainElement = useEditor((s) => s.omniSelectMainElement)
+  const omniExtractCutout = useEditor((s) => s.omniExtractCutout)
+  const omniSetPatchUnder = useEditor((s) => s.omniSetPatchUnder)
 
   const activeClip = clips.find((c) => c.id === selectedClipId) || clips[0]
   const selectedChar = omniframeCharacters.find((c) => c.id === selectedCharacterId) || omniframeCharacters[0]
   const currentFrame = Math.round(playhead * projectFps)
+  const patchUnderOn = !!((activeClip as unknown as { patch?: unknown } | undefined)?.patch)
 
   const handleAutoArrange = () => {
     const positions: Record<string, { x: number; y: number; scale: number }> = {
@@ -309,6 +311,28 @@ export function OmniFramePanel() {
       {(!activeSubMode || activeSubMode === 'omniframe-selection' || activeSubMode === 'omniframe-recolor') && (
         <SelectionMaskSubTool context="omniframe" />
       )}
+      <div className="grid grid-cols-2 gap-1 pt-1.5">
+        <button type="button" data-testid="omni-transparent-btn" title="Transparent selection: ignore the bg colour, keep the element"
+          onClick={() => { omniTransparentSelect().catch(() => undefined) }}
+          className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 border border-ink-700 text-ink-200 hover:text-white text-[10px] truncate">
+          <span className="truncate">Transparent</span>
+        </button>
+        <button type="button" data-testid="omni-main-element-btn" title="Mind main element: flood the bg from the borders, keep the subject"
+          onClick={() => { omniSelectMainElement().catch(() => undefined) }}
+          className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-ink-800 border border-ink-700 text-ink-200 hover:text-white text-[10px] truncate">
+          <span className="truncate">Main element</span>
+        </button>
+        <button type="button" data-testid="omni-extract-btn" title="Create a clip on the track above holding only the cut-out section"
+          onClick={() => { omniExtractCutout() }}
+          className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-brand/20 border border-brand/40 text-brand-400 hover:bg-brand/30 text-[10px] truncate">
+          <span className="truncate">Extract cut-out</span>
+        </button>
+        <button type="button" data-testid="omni-patchunder-btn" title="Patch under: smart-fill the hole on the source for every frame"
+          onClick={() => { omniSetPatchUnder(!patchUnderOn) }}
+          className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border text-[10px] truncate ${patchUnderOn ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400' : 'bg-ink-800 border-ink-700 text-ink-200 hover:text-white'}`}>
+          <span className="truncate">Patch under</span>
+        </button>
+      </div>
       </Section>
 
       <Section active={section === 'rotomask'}>
@@ -401,334 +425,6 @@ export function OmniFramePanel() {
 
       {selectedChar && (
         <div className="flex flex-col gap-3 p-2.5 rounded-xl bg-ink-900/90 border border-ink-800">
-          <Section active={section === 'transform'}>
-          <div className="flex items-center justify-between pb-1.5 border-b border-ink-800">
-            <span className="font-semibold text-ink-100 flex items-center gap-1 truncate pr-1" title={selectedChar.name}>
-              <Move size={15} className="text-brand-400 shrink-0" />
-              <span className="truncate">Transform: {selectedChar.name}</span>
-            </span>
-            <button
-              type="button"
-              data-testid="omniframe-reset-pos-btn"
-              title="Reset Position"
-              onClick={() => resetCharacterPosition(selectedChar.id)}
-              className="text-[10px] text-ink-400 hover:text-white flex items-center gap-1 shrink-0 px-1.5 py-1 rounded hover:bg-ink-800 min-h-[24px]"
-            >
-              <RotateCcw size={13} />
-              Reset
-            </button>
-          </div>
-
-          {/* Position X */}
-          <div className="space-y-1">
-            <div className="flex justify-between text-[10px] text-ink-400">
-              <span>Position X</span>
-              <span className="font-mono text-ink-200" data-testid="char-pos-x-val">
-                {selectedChar.transform.x > 0 ? `+${selectedChar.transform.x}` : selectedChar.transform.x} px
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                data-testid="omniframe-pos-x-slider"
-                aria-label="Position X"
-                min={-400}
-                max={400}
-                value={selectedChar.transform.x}
-                onChange={(e) => handleUpdateTransform({ x: Number(e.target.value) })}
-                className="of-range w-full"
-              />
-              <input
-                type="number"
-                data-testid="omniframe-pos-x-input"
-                min={-4000}
-                max={4000}
-                aria-label="Position X (px)"
-                value={selectedChar.transform.x}
-                onChange={(e) => handleUpdateTransform({ x: Number(e.target.value) })}
-                className="w-14 min-h-[24px] bg-ink-950 border border-ink-700 rounded px-1 py-1 text-[10px] font-mono text-center text-ink-100"
-              />
-            </div>
-          </div>
-
-          {/* Position Y */}
-          <div className="space-y-1">
-            <div className="flex justify-between text-[10px] text-ink-400">
-              <span>Position Y</span>
-              <span className="font-mono text-ink-200" data-testid="char-pos-y-val">
-                {selectedChar.transform.y > 0 ? `+${selectedChar.transform.y}` : selectedChar.transform.y} px
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                data-testid="omniframe-pos-y-slider"
-                aria-label="Position Y"
-                min={-300}
-                max={300}
-                value={selectedChar.transform.y}
-                onChange={(e) => handleUpdateTransform({ y: Number(e.target.value) })}
-                className="of-range w-full"
-              />
-              <input
-                type="number"
-                data-testid="omniframe-pos-y-input"
-                min={-4000}
-                max={4000}
-                aria-label="Position Y (px)"
-                value={selectedChar.transform.y}
-                onChange={(e) => handleUpdateTransform({ y: Number(e.target.value) })}
-                className="w-14 min-h-[24px] bg-ink-950 border border-ink-700 rounded px-1 py-1 text-[10px] font-mono text-center text-ink-100"
-              />
-            </div>
-          </div>
-
-          {/* Scale & Rotation */}
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <div className="flex justify-between text-[10px] text-ink-400 mb-0.5">
-                <span>Scale</span>
-                <span className="font-mono text-ink-200">{selectedChar.transform.scale.toFixed(2)}x</span>
-              </div>
-              <input
-                type="range"
-                data-testid="omniframe-scale-slider"
-                aria-label="Scale"
-                min={0.2}
-                max={2.5}
-                step={0.05}
-                value={selectedChar.transform.scale}
-                onChange={(e) => handleUpdateTransform({ scale: parseFloat(e.target.value) })}
-                className="of-range w-full"
-              />
-            </div>
-            <div>
-              <div className="flex justify-between text-[10px] text-ink-400 mb-0.5">
-                <span>Rotation</span>
-                <span className="font-mono text-ink-200">{selectedChar.transform.rotation}°</span>
-              </div>
-              <input
-                type="range"
-                data-testid="omniframe-rot-slider"
-                aria-label="Rotation"
-                min={-180}
-                max={180}
-                value={selectedChar.transform.rotation}
-                onChange={(e) => handleUpdateTransform({ rotation: parseInt(e.target.value, 10) })}
-                className="of-range w-full"
-              />
-            </div>
-          </div>
-
-          </Section>
-          <Section active={section === 'color'}>
-          {/* Object Recolor & Tint (Photorealistic Luminance Preservation) */}
-          <div className="pt-2 border-t border-ink-800 space-y-1.5">
-            <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
-              <div className="flex items-center gap-1">
-                <PaintBucket size={14} className="text-amber-400" />
-                <span>Object Color & Recolor</span>
-              </div>
-              <span className="font-mono text-[9px] text-brand-400">
-                {selectedChar.recolorColor || 'Original'}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {[
-                { label: 'Original', hex: '' },
-                { label: 'Royal Blue', hex: '#2563eb' },
-                { label: 'Crimson Red', hex: '#dc2626' },
-                { label: 'Golden Amber', hex: '#d97706' },
-                { label: 'Emerald Green', hex: '#059669' },
-                { label: 'Purple Violet', hex: '#7c3aed' },
-              ].map((c) => (
-                <button
-                  key={c.label}
-                  type="button"
-                  data-testid={`char-recolor-${c.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  title={`${c.label} (${c.hex || 'Default'})`}
-                  onClick={() => {
-                    if (!c.hex) {
-                      recolorActiveSelection('')
-                    } else {
-                      recolorActiveSelection(c.hex, recolorBlend)
-                    }
-                  }}
-                  className={`px-2 py-1 min-h-[24px] rounded text-[10px] border font-medium transition-all ${
-                    (selectedChar.recolorColor === c.hex || (!selectedChar.recolorColor && !c.hex))
-                      ? 'border-white bg-white/20 text-white font-bold'
-                      : 'border-ink-800 bg-ink-900 text-ink-300 hover:text-white'
-                  }`}
-                  style={c.hex ? { borderLeftColor: c.hex, borderLeftWidth: 3 } : undefined}
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Blend mode — how the colour is applied to the object's pixels.
-                Flat compositing is what made the towel read as a coloured
-                layer; these keep the object's own lightness structure. */}
-            <div className="flex items-center gap-1.5 pt-1">
-              <span className="text-[9px] uppercase tracking-wider text-ink-500 shrink-0">
-                Recolor Blend
-              </span>
-              <select
-                data-testid="recolor-blend-select"
-                aria-label="OmniFrame recolor blend"
-                value={recolorBlend}
-                onChange={(e) => setRecolorBlend(e.target.value as RecolorBlend)}
-                title="How OmniFrame applies colour to this segment; separate from Drawing paint-layer blending"
-                className="flex-1 min-w-0 min-h-[24px] bg-ink-950 border border-ink-800 rounded px-1.5 py-1 text-[10px] text-ink-200 outline-none focus:border-brand"
-              >
-                {RECOLOR_BLENDS.map((b) => (
-                  <option key={b.value} value={b.value}>
-                    {b.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <p
-              data-testid="recolor-blend-hint"
-              className="text-[9px] text-ink-500 leading-tight"
-            >
-              {RECOLOR_BLENDS.find((b) => b.value === recolorBlend)?.hint} · Applies to this OmniFrame segment only; Drawing layer blend is separate.
-            </p>
-          </div>
-
-          </Section>
-          <Section active={section === 'scope'}>
-          {/* Scope Selector: All Frames vs Section vs Only 1 Frame */}
-          <div className="pt-2 border-t border-ink-800 space-y-2">
-            <div className="flex items-center justify-between text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
-              <span>Propagation Scope</span>
-              <Clock size={14} />
-            </div>
-
-            <div className="grid grid-cols-3 gap-1 bg-ink-950 p-0.5 rounded-lg border border-ink-800">
-              <button
-                type="button"
-                data-testid="scope-all-frames"
-                onClick={() => handleScopeChange('all')}
-                className={`py-1 px-1 rounded text-[10px] font-medium transition-colors ${
-                  selectedChar.scope === 'all'
-                    ? 'bg-brand text-white shadow-xs'
-                    : 'text-ink-400 hover:text-white'
-                }`}
-              >
-                All Frames
-              </button>
-              <button
-                type="button"
-                data-testid="scope-section-frames"
-                onClick={() => handleScopeChange('section')}
-                className={`py-1 px-1 rounded text-[10px] font-medium transition-colors ${
-                  selectedChar.scope === 'section'
-                    ? 'bg-brand text-white shadow-xs'
-                    : 'text-ink-400 hover:text-white'
-                }`}
-              >
-                Section
-              </button>
-              <button
-                type="button"
-                data-testid="scope-one-frame"
-                onClick={() => handleScopeChange('frame')}
-                className={`py-1 px-1 rounded text-[10px] font-medium transition-colors ${
-                  selectedChar.scope === 'frame'
-                    ? 'bg-brand text-white shadow-xs'
-                    : 'text-ink-400 hover:text-white'
-                }`}
-              >
-                1 Frame
-              </button>
-            </div>
-
-            {/* Scope Parameter Controls */}
-            {selectedChar.scope === 'section' && (
-              <div className="p-2 rounded bg-ink-950/70 border border-ink-800 space-y-1.5 animate-in fade-in duration-100">
-                <div className="flex items-center justify-between text-[10px] text-ink-300">
-                  <span>Section Range (Seconds)</span>
-                  <span className="font-mono text-amber-400 font-bold">
-                    {sectionStart.toFixed(1)}s → {sectionEnd.toFixed(1)}s (Duration: {(sectionEnd - sectionStart).toFixed(1)}s)
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-[9px] text-ink-500">Start (s):</span>
-                    <input
-                      type="number"
-                      data-testid="section-start-time"
-                      step={0.1}
-                      min={0}
-                      max={sectionEnd - 0.1}
-                      value={sectionStart}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value) || 0
-                        setSectionStart(val)
-                        setOmniframeCharacterTransform(selectedChar.id, {}, 'section', { start: val, end: sectionEnd })
-                      }}
-                      className="w-full bg-ink-900 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] font-mono text-ink-100"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[9px] text-ink-500">End (s):</span>
-                    <input
-                      type="number"
-                      data-testid="section-end-time"
-                      step={0.1}
-                      min={sectionStart + 0.1}
-                      max={activeClip ? activeClip.duration : 10}
-                      value={sectionEnd}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value) || 5
-                        setSectionEnd(val)
-                        setOmniframeCharacterTransform(selectedChar.id, {}, 'section', { start: sectionStart, end: val })
-                      }}
-                      className="w-full bg-ink-900 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] font-mono text-ink-100"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {selectedChar.scope === 'frame' && (
-              <div className="p-2 rounded bg-ink-950/70 border border-ink-800 space-y-1.5 animate-in fade-in duration-100">
-                <div className="flex items-center justify-between text-[10px] text-ink-300">
-                  <span>Isolated Target Frame</span>
-                  <span className="font-mono text-emerald-400 font-bold">Frame #{targetFrame}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    data-testid="frame-target-input"
-                    min={0}
-                    max={240}
-                    value={targetFrame}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value, 10) || 0
-                      setTargetFrame(val)
-                      setOmniframeCharacterTransform(selectedChar.id, {}, 'frame', undefined, val)
-                    }}
-                    className="w-20 bg-ink-900 border border-ink-700 rounded px-1.5 py-0.5 text-[10px] font-mono text-ink-100"
-                  />
-                  <button
-                    type="button"
-                    data-testid="sync-playhead-frame-btn"
-                    onClick={() => {
-                      setTargetFrame(currentFrame)
-                      setOmniframeCharacterTransform(selectedChar.id, {}, 'frame', undefined, currentFrame)
-                    }}
-                    className="px-2 py-0.5 rounded bg-ink-800 hover:bg-ink-750 text-ink-300 text-[10px] truncate"
-                  >
-                    Sync to Current (F#{currentFrame})
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          </Section>
           <Section active={section === 'actions'}>
           {/* Action Operations */}
           <div className="pt-2 border-t border-ink-800 flex flex-col gap-1.5">
@@ -748,17 +444,6 @@ export function OmniFramePanel() {
                 <span className="truncate">Cut to Track</span>
               </button>
 
-              <button
-                type="button"
-                data-testid="omniframe-duplicate-btn"
-                title="Duplicate character instance"
-                aria-label="Duplicate character"
-                onClick={() => duplicateCharacter(selectedChar.id)}
-                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-ink-800 border border-ink-700 text-ink-200 hover:text-white hover:bg-ink-750 transition-colors truncate"
-              >
-                <Copy size={15} className="shrink-0" />
-                <span className="truncate">Duplicate</span>
-              </button>
 
               {selectedChar.transform.opacity === 0 ? (
                 <button

@@ -99,6 +99,13 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 85 timelineSnapshot.ts: app timeline renderer (tracks, MASK/ROTO badges, key diamonds, playhead, MCP log)
 86 MCP timeline_screenshot tool (headless + in-app bridge) — anti-cheat proof PNGs/data:img
 87 track_new/track_assign universal tools + data_dump data:video embedding
+88 selectionMattes.ts: transparent selection, brush strokes, mind-main-element flood (app+headless shared)
+89 omniframe_extract: cut-out section becomes a clip on the track above; source keeps the hole
+90 patchUnder.ts: smart ring-average patch-under, rendered by playback.ts AND appRender.mjs
+91 omniframe_move: constant-interpolation step moves (no slide) + clip_stretch/clip_remove
+92 CurveEngine 'custom' interpolation: user-dragged curve points (5 shipped in board E)
+93 omniframe panel audit: duplicate/transform/recolor/scope removed as redone; 4 real skill buttons added
+94 streaming VideoEncoder (raw frames to disk) — long exports no longer OOM
 
-**Total: 87 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 87) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 94 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 94) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).
