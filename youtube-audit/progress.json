@@ -14,11 +14,11 @@
  "inventoried_remaining": 243,
  "current_batch": 1,
  "checkpoint": {
-  "drive_batch_completed": 1,
-  "drive_videos_footage": 28,
-  "youtube_batch_completed": 3,
-  "watched_visual_total": 11,
-  "next_drive_batch": 2,
+  "drive_batches_completed": 2,
+  "drive_videos_footage": 56,
+  "youtube_batches_completed": 3,
+  "watched_visual_total": 15,
+  "next_drive_batch": 3,
   "next_yt_batch": 4
  },
  "last_media_access_test": {

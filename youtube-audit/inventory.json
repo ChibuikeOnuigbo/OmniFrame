@@ -3267,10 +3267,14 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Manga compositing: sky-plate chosen from variant thumbnail grid; character cutout over plate; mask softness A/B captions ('how soft it is' / 'doesn't look good' / 'feel more realistic'); FilmConvert panel for grade/chroma; uni.Heatwave heat distortion; curve graph tweak",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/pThVHJC3vA8.jpg"
+   ]
   },
   {
    "id": "RD2FTu1IL3I",
@@ -3326,10 +3330,14 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Speedx time remap: graph-editor speed curves shown stepwise (flat -> diagonal accel -> S-curve ease -> plateau hold); pre-comp before remap (caption: make the pre-comp here); AE UI",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/L9sssRAnN_A.jpg"
+   ]
   },
   {
    "id": "E2cu-RCruYg",
