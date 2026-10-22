@@ -1,15 +1,18 @@
-er         : Lavc60.31.102 pcm_s16le
-frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=37.1x    
-frame=  329 fps=0.0 q=-0.0 size=N/A time=00:00:13.66 bitrate=N/A speed=23.6x    
-frame=  611 fps=566 q=-0.0 size=N/A time=00:00:25.41 bitrate=N/A speed=23.6x    
-frame=  898 fps=569 q=-0.0 size=N/A time=00:00:37.41 bitrate=N/A speed=23.7x    
-frame= 1187 fps=571 q=-0.0 size=N/A time=00:00:49.41 bitrate=N/A speed=23.8x    
-frame= 1472 fps=571 q=-0.0 size=N/A time=00:01:01.33 bitrate=N/A speed=23.8x    
-frame= 1765 fps=573 q=-0.0 size=N/A time=00:01:13.50 bitrate=N/A speed=23.9x    
-frame= 2048 fps=572 q=-0.0 size=N/A time=00:01:25.33 bitrate=N/A speed=23.8x    
-[out#0/null @ 0x5651414eec80] video:993kB audio:66192kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-frame= 2118 fps=564 q=-0.0 Lsize=N/A time=00:01:28.20 bitrate=N/A speed=23.5x    
-[Parsed_loudnorm_0 @ 0x565141549880] 
+O Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:01:28.250000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:01:28.288000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=66.9x    
+frame=  603 fps=0.0 q=-0.0 size=N/A time=00:00:25.08 bitrate=N/A speed=46.1x    
+frame= 1175 fps=1125 q=-0.0 size=N/A time=00:00:48.91 bitrate=N/A speed=46.8x    
+frame= 1743 fps=1128 q=-0.0 size=N/A time=00:01:12.62 bitrate=N/A speed=  47x    
+[out#0/null @ 0x555bfa7f2c80] video:993kB audio:66192kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 2118 fps=1113 q=-0.0 Lsize=N/A time=00:01:28.20 bitrate=N/A speed=46.3x    
+[Parsed_loudnorm_0 @ 0x555bfa84d880] 
 {
 	"input_i" : "-24.22",
 	"input_tp" : "-4.37",

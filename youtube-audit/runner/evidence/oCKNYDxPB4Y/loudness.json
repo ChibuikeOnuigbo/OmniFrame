@@ -1,15 +1,17 @@
-0:26.70 bitrate=N/A speed=25.1x    
-frame=  949 fps=607 q=-0.0 size=N/A time=00:00:39.50 bitrate=N/A speed=25.2x    
-frame= 1254 fps=607 q=-0.0 size=N/A time=00:00:52.20 bitrate=N/A speed=25.3x    
-frame= 1525 fps=594 q=-0.0 size=N/A time=00:01:03.50 bitrate=N/A speed=24.7x    
-frame= 1804 fps=588 q=-0.0 size=N/A time=00:01:15.16 bitrate=N/A speed=24.5x    
-frame= 2111 fps=591 q=-0.0 size=N/A time=00:01:27.91 bitrate=N/A speed=24.6x    
-frame= 2403 fps=590 q=-0.0 size=N/A time=00:01:40.12 bitrate=N/A speed=24.6x    
-frame= 2665 fps=583 q=-0.0 size=N/A time=00:01:51.00 bitrate=N/A speed=24.3x    
-frame= 2943 fps=580 q=-0.0 size=N/A time=00:02:02.62 bitrate=N/A speed=24.2x    
-[out#0/null @ 0x560aa1a1bc80] video:1390kB audio:92688kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-frame= 2966 fps=575 q=-0.0 Lsize=N/A time=00:02:03.54 bitrate=N/A speed=  24x    
-[Parsed_loudnorm_0 @ 0x560aa1a76500] 
+frame
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:02:03.608000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=78.7x    
+frame=  630 fps=0.0 q=-0.0 size=N/A time=00:00:26.20 bitrate=N/A speed=48.8x    
+frame= 1170 fps=1128 q=-0.0 size=N/A time=00:00:48.70 bitrate=N/A speed=46.9x    
+frame= 1671 fps=1086 q=-0.0 size=N/A time=00:01:09.62 bitrate=N/A speed=45.3x    
+frame= 2276 fps=1116 q=-0.0 size=N/A time=00:01:34.83 bitrate=N/A speed=46.5x    
+frame= 2801 fps=1103 q=-0.0 size=N/A time=00:01:56.70 bitrate=N/A speed=  46x    
+[out#0/null @ 0x55a50fe32c80] video:1390kB audio:92688kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 2966 fps=1096 q=-0.0 Lsize=N/A time=00:02:03.54 bitrate=N/A speed=45.6x    
+[Parsed_loudnorm_0 @ 0x55a50fe8d500] 
 {
 	"input_i" : "-25.08",
 	"input_tp" : "-7.44",

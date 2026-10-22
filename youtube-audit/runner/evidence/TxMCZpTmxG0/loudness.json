@@ -1,17 +1,18 @@
-b/s (default)
+SO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:01:18.292000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
     Metadata:
       DURATION        : 00:01:18.308000000
       encoder         : Lavc60.31.102 pcm_s16le
-frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=28.5x    
-frame=  332 fps=0.0 q=-0.0 size=N/A time=00:00:13.83 bitrate=N/A speed=22.8x    
-frame=  599 fps=541 q=-0.0 size=N/A time=00:00:24.91 bitrate=N/A speed=22.5x    
-frame=  876 fps=545 q=-0.0 size=N/A time=00:00:36.50 bitrate=N/A speed=22.7x    
-frame= 1146 fps=543 q=-0.0 size=N/A time=00:00:47.70 bitrate=N/A speed=22.6x    
-frame= 1419 fps=544 q=-0.0 size=N/A time=00:00:59.08 bitrate=N/A speed=22.6x    
-frame= 1678 fps=540 q=-0.0 size=N/A time=00:01:09.87 bitrate=N/A speed=22.5x    
-[out#0/null @ 0x555c2e13ec80] video:881kB audio:58720kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-frame= 1879 fps=535 q=-0.0 Lsize=N/A time=00:01:18.25 bitrate=N/A speed=22.3x    
-[Parsed_loudnorm_0 @ 0x555c2e199640] 
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=50.8x    
+frame=  586 fps=0.0 q=-0.0 size=N/A time=00:00:24.41 bitrate=N/A speed=43.8x    
+frame= 1112 fps=1051 q=-0.0 size=N/A time=00:00:46.33 bitrate=N/A speed=43.8x    
+frame= 1627 fps=1044 q=-0.0 size=N/A time=00:01:07.75 bitrate=N/A speed=43.5x    
+[out#0/null @ 0x56428528cc80] video:881kB audio:58720kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 1879 fps=1037 q=-0.0 Lsize=N/A time=00:01:18.25 bitrate=N/A speed=43.2x    
+[Parsed_loudnorm_0 @ 0x5642852e7640] 
 {
 	"input_i" : "-22.66",
 	"input_tp" : "0.11",
