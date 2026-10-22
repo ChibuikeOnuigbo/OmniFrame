@@ -1,0 +1,31 @@
+file produced by Google Inc.
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=20.4x    
+frame=  306 fps=0.0 q=-0.0 size=N/A time=00:00:12.75 bitrate=N/A speed=19.8x    
+frame=  559 fps=489 q=-0.0 size=N/A time=00:00:23.25 bitrate=N/A speed=20.3x    
+frame=  807 fps=490 q=-0.0 size=N/A time=00:00:33.62 bitrate=N/A speed=20.4x    
+frame= 1054 fps=491 q=-0.0 size=N/A time=00:00:43.87 bitrate=N/A speed=20.4x    
+frame= 1311 fps=495 q=-0.0 size=N/A time=00:00:54.62 bitrate=N/A speed=20.6x    
+frame= 1541 fps=490 q=-0.0 size=N/A time=00:01:04.16 bitrate=N/A speed=20.4x    
+frame= 1784 fps=489 q=-0.0 size=N/A time=00:01:14.33 bitrate=N/A speed=20.4x    
+[out#0/null @ 0x5564eb7e7100] video:881kB audio:58720kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 1879 fps=485 q=-0.0 Lsize=N/A time=00:01:18.25 bitrate=N/A speed=20.2x    
+[Parsed_loudnorm_0 @ 0x5564eb87c5c0] 
+{
+	"input_i" : "-22.66",
+	"input_tp" : "0.11",
+	"input_lra" : "9.20",
+	"input_thresh" : "-32.71",
+	"output_i" : "-23.90",
+	"output_tp" : "-2.42",
+	"output_lra" : "6.70",
+	"output_thresh" : "-33.93",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.10"
+}
