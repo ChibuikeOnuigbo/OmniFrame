@@ -1,5 +1,5 @@
 {
- "count": 74,
+ "count": 75,
  "mp4": [
   "test_ans_result/A_analysis.mp4",
   "test_ans_result/A_composition/variant-01.mp4",
@@ -39,7 +39,7 @@
   "test_ans_result/E_analysis.mp4",
   "test_ans_result/E_move/solution.mp4"
  ],
- "sidecars": 37,
+ "sidecars": 38,
  "files": [
   "test_ans_result/A_analysis.json",
   "test_ans_result/A_analysis.mp4",
@@ -114,6 +114,7 @@
   "test_ans_result/E_analysis.json",
   "test_ans_result/E_analysis.mp4",
   "test_ans_result/E_move/solution.json",
-  "test_ans_result/E_move/solution.mp4"
+  "test_ans_result/E_move/solution.mp4",
+  "test_ans_result/INDEX.json"
  ]
 }

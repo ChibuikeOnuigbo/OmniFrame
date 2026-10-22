@@ -163,34 +163,50 @@ class ImageToVideoTool extends MCPTool {
 }
 
 class SolveMoveTool extends MCPTool {
-  constructor() { super('solve_move', 'Board E: animate the square from start to destination with an eased path.', {}) }
+  constructor() { super('solve_move', 'Board E the OmniFrame way: masking sub-tool rect over the EXISTING rectangle, pos key 1 + end key at destination, full comp render with keys + curve.', {}) }
   async run() {
-    const W = 640, H = 360, fps = 24, N = 48
-    const S = { x: 60, y: 150, s: 100 }, D = { x: 430, y: 120, s: 110 }
-    const enc = new VideoEncoder({ w: W, h: H, fps, out: path.join(TAR, 'E_move', 'solution.mp4') })
+    const { MaskedKeyframeMover } = await import('./moveComposition.mjs')
+    const mover = await new MaskedKeyframeMover(path.join(TAR, 'sources', 'src_move.png'), { duration: 2, curve: 'ease-in-out-cubic', fps: 24 }).analyze()
+    const SW = mover.img.width, SH = mover.img.height
+    const sc = 0.5
+    const W = Math.round(SW * sc / 2) * 2, H = Math.round(SH * sc / 2) * 2 + 44
+    const N = Math.round(mover.duration * mover.fps)
     fs.mkdirSync(path.join(TAR, 'E_move'), { recursive: true })
-    const keys = []
+    const enc = new VideoEncoder({ w: W, h: H, fps: mover.fps, out: path.join(TAR, 'E_move', 'solution.mp4') })
+    const sx = W / SW, sy = (H - 44) / SH
+    const perFrame = []
     for (let f = 0; f < N; f++) {
-      const p = f / (N - 1), u = evalCurve('ease-in-out-cubic', p)
+      const tt = f / mover.fps
       const c = makeCanvas(W, H), x = c.getContext('2d')
       x.fillStyle = '#f2f4f8'; x.fillRect(0, 0, W, H)
-      x.strokeStyle = '#111'; x.lineWidth = 5; x.strokeRect(S.x, S.y, S.s, S.s)
-      x.fillStyle = '#111'; x.font = 'bold 18px monospace'; x.fillText('move', S.x + 26, S.y + 58)
-      x.strokeStyle = '#d22'; x.lineWidth = 4; x.strokeRect(D.x, D.y, D.s, D.s)
-      x.strokeStyle = '#d22'; x.lineWidth = 3
-      x.beginPath(); x.moveTo(D.x + D.s, D.y); x.lineTo(D.x + D.s + 70, D.y - 50); x.stroke()
-      x.fillStyle = '#d22'; x.font = 'bold 16px monospace'; x.fillText('destination', D.x + D.s + 10, D.y - 58)
-      const mx = lerp(S.x, D.x, u), my = lerp(S.y, D.y, u)
-      x.fillStyle = 'rgba(210,34,34,0.25)'
-      for (let g = 1; g <= 3; g++) { const gu = evalCurve('ease-in-out-cubic', clamp01(p - g * 0.06)); x.fillRect(lerp(S.x, D.x, gu) + 8, lerp(S.y, D.y, gu) + 8, S.s - 16, S.s - 16) }
-      x.fillStyle = '#d22'; x.fillRect(mx + 6, my + 6, S.s - 12, S.s - 12)
-      keys.push({ frame: f, t: +p.toFixed(3), eased: +u.toFixed(4), x: Math.round(mx), y: Math.round(my) })
-      hud(x, W, H, `E move · p=${p.toFixed(2)} ease-in-out-cubic u=${u.toFixed(2)}`)
+      const off = mover.drawFrame(x, W, H - 44, tt, sx, sy)
+      const m = mover.maskRectPx
+      x.strokeStyle = 'rgba(255,90,90,0.9)'; x.lineWidth = 1.5; x.setLineDash([5, 4])
+      x.strokeRect((m.x + off.x) * sx, (m.y + off.y) * sy, m.w * sx, m.h * sy); x.setLineDash([])
+      const hy = H - 44
+      x.fillStyle = '#14161c'; x.fillRect(0, hy, W, 44)
+      x.strokeStyle = '#3a3f4b'; x.beginPath(); x.moveTo(10, hy + 14); x.lineTo(W - 130, hy + 14); x.stroke()
+      const kx = tt2 => 10 + (tt2 / mover.duration) * (W - 140)
+      for (const k of [0, mover.duration]) {
+        x.save(); x.translate(kx(k), hy + 14); x.rotate(Math.PI / 4); x.fillStyle = k === 0 ? '#ff5a5a' : '#8ef0c0'; x.fillRect(-4, -4, 8, 8); x.restore()
+      }
+      x.fillStyle = '#ff5a5a'; x.fillRect(kx(tt) - 1, hy + 6, 2, 16)
+      x.strokeStyle = '#5ac8ff'; x.beginPath()
+      for (let i = 0; i <= 60; i++) { const u = mover.evalCurve(i / 60); x.lineTo(W - 120 + i * 1.8, hy + 38 - u * 26) }
+      x.stroke()
+      x.fillStyle = '#cfd6e4'; x.font = '10px monospace'
+      x.fillText(`pos x=${Math.round(off.x)} y=${Math.round(off.y)} u=${off.u.toFixed(2)} curve=${mover.curve}`, 10, hy + 38)
+      perFrame.push({ frame: f, t: +tt.toFixed(3), x: Math.round(off.x), y: Math.round(off.y), u: +off.u.toFixed(4) })
       enc.addCanvas(c)
     }
     const info = enc.finish()
     const { ToolResult } = await import('./core.mjs')
-    const r = new ToolResult(this.name, true, { video: 'test_ans_result/E_move/solution.mp4', ...info, start: S, destination: D, curve: 'ease-in-out-cubic', keypoints: keys })
+    const r = new ToolResult(this.name, true, {
+      video: 'test_ans_result/E_move/solution.mp4', ...info,
+      method: 'omniframe masking sub-tool rect over existing rectangle + position keyframes (pos1 -> destination) + curve',
+      newElementsCreated: 0,
+      descriptor: mover.descriptor(), perFrame,
+    })
     sidecar(info.out, r)
     return r.data
   }

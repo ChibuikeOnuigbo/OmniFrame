@@ -11,7 +11,7 @@ any mp4 can be pulled on demand.
 - `B_inpaint/variant-01..10.mp4` — board B: matte/roto + 10 inpaint/smart-patch car-removal strategies, each with a measured blend-quality delta (lower = cleaner blend; best = blur-fill 0.0181). **10 results**.
 - `C_composition/variant-01..10.mp4` — board C: bg replacement × 10, each logging 15 edit ops (composition, lighting, speed curve, entrance, cc) = **150 edits total**. **10 results**.
 - `D_tank_fill/solution.mp4` — board D puzzle: cut obj (ctrl+x), computed 4×4 grid (cell 70×72) fills the tank exactly; placements in the sidecar JSON.
-- `E_move/solution.mp4` — board E puzzle: eased move start→destination with 48 keypoints in JSON.
+- `E_move/solution.mp4` — board E puzzle solved THE OMNIFRAME WAY: masking sub-tool draws a rectangle over the EXISTING black rectangle in the image (no new elements), position keyframe 1 set at its original position, end key at the destination rectangle, then the FULL composition is rendered (plate + masked layer + key diamonds + curve plot HUD). Sidecar carries the app-format descriptor (ClipVisualMask rectangle + ClipAnimation PropertyCurve keyframes, easing via src/lib/speedCurves.ts) and 48 per-frame key evaluations. QA: `node qa/move-composition-unit.mjs`.
 - Every mp4 has a `.json` sidecar (full ToolResult + chunk manifest). `INDEX.json` lists all files.
 
 ## Pull any frame (preview-friendly)

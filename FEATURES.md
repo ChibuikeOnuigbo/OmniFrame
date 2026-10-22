@@ -88,6 +88,7 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 74 Speed-curve engine: 15 presets + clip speedCurve remap in playback + RightPanel carousel group
 75 MCP utility layer (tools/mcp): OOP MCPTool/Registry, chunked sha256 JSON returns, FrameProvider
 76 test_ans_result grader pack: 37 solved mp4s + sidecars + INDEX (boards A-E)
+77 Masked-keyframe move solver (board E): mask existing rect -> pos1/end keys -> full comp render, app-format descriptors
 
-**Total: 76 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 76) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 77 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 77) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).
