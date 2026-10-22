@@ -4776,8 +4776,8 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
-   "access": "pending-batch"
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "user-null-batch11"
   },
   {
    "id": "iXZhEZPoNZY",
@@ -4789,8 +4789,8 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
-   "access": "pending-batch"
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "user-null-batch11"
   }
  ]
 }

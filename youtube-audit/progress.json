@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T11:26:21Z",
+ "updated": "2026-10-22T11:32:12Z",
  "total_discovered": 248,
  "by_status": {
   "BLOCKED": 5,
@@ -17,7 +17,7 @@
   "drive_batches_completed": 2,
   "drive_videos_footage": 56,
   "youtube_batches_completed": 9,
-  "watched_visual_total": 292,
+  "watched_visual_total": 294,
   "next_drive_batch": 3,
   "next_yt_batch": 4
  },
@@ -59,6 +59,11 @@
    "batch": "chat-3",
    "result": "16/18 watched; 2 unavailable",
    "ts": "2026-10-22T11:26:21Z"
+  },
+  {
+   "batch": "null-tuts",
+   "result": "2/2 user null tutorials watched (marquee typo style + AE null workflow on-screen)",
+   "ts": "2026-10-22T11:32:12Z"
   }
  ],
  "watched_ids": [
@@ -353,7 +358,9 @@
   "HHNTQkaGv-M",
   "KqUBgbk5u1k",
   "7WHDyTE9Mq8",
-  "ZrwjaDc__ZM"
+  "ZrwjaDc__ZM",
+  "rUzd5Y30O80",
+  "iXZhEZPoNZY"
  ],
  "extra_watched": {
   "JJK_S2E3_72": "JJK S2E3 raw: Yuji + Aoi on beach, bloodied Gojo face close-up, red/black logo sting; raw episode footage",

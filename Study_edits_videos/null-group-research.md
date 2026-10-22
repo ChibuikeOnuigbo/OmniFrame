@@ -102,3 +102,13 @@ has a separate compound-clip kind); they are the next research-to-code candidate
   `+` button > Null > parenting tool. OmniFrame equivalents: timeline clip context menu
   "New Null Object", LinkPanel "+ Null", TrackingPanel "Track → Null", LinkPanel
   Directional Parenting pick-list.
+
+## 6. Watched: the two user null tutorials (batch 11)
+
+- **rUzd5Y30O80** — talking-head bed with a GIANT white marquee caps typo scrolling
+  across the frame ("…W TOV TOV TO…") plus small yellow accent glyphs: the null talk
+  delivered in shout-typo style. Technique 69: marquee giant-typo scroll bed.
+- **iXZhEZPoNZY** — real AE session capture: comp panel shows the white solid with the
+  small null outline centred; timeline shows the parented layer stack with purple
+  keyframe spans on the null only — visual proof of "animate the null, children follow,
+  art keyframes stay clean". Confirms the track→null + parent architecture shipped above.
