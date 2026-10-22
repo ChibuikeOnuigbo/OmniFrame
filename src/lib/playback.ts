@@ -740,7 +740,7 @@ export class PreviewEngine {
   private renderFrame(time: number, st: ReturnType<typeof useEditor.getState>) {
     this.resolvedArtworkRigCache.clear()
     const ctx = this.backCtx
-    ctx.fillStyle = '#000000'
+    ctx.fillStyle = st.sequenceBackground || '#000000'
     ctx.fillRect(0, 0, this.width, this.height)
     this.usedThisFrame.clear()
     let visualPending = false
@@ -1427,7 +1427,7 @@ export class PreviewEngine {
     const ctx = this.backCtx
     this.usedThisFrame.clear()
     ctx.filter = 'none'
-    ctx.fillStyle = '#000000'
+    ctx.fillStyle = st.sequenceBackground || '#000000'
     ctx.fillRect(0, 0, this.width, this.height)
     if (clip.kind === 'compound') {
       this.drawCompoundClip(ctx, clip, time, st, true)

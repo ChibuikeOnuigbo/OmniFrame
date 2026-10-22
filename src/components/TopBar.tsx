@@ -8,6 +8,7 @@ import {
   Undo2,
   Redo2,
   Settings,
+  Settings2,
   LayoutGrid,
   Check,
   Maximize,
@@ -38,6 +39,7 @@ import {
 import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
 import { LayoutManagerModal } from './LayoutManagerModal'
+import CompositionSettingsModal from './CompositionSettingsModal'
 
 export function TopBar() {
   // Native desktop (Tauri) info — null in the plain browser build, so the
@@ -107,6 +109,7 @@ export function TopBar() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [layoutOpen, setLayoutOpen] = useState(false)
   const [layoutModalOpen, setLayoutModalOpen] = useState(false)
+  const [compOpen, setCompOpen] = useState(false)
   const layoutRef = useRef<HTMLDivElement>(null)
   const [settingsCategory, setSettingsCategory] = useState<SettingsCategory>('timeline')
   const [settingsSearch, setSettingsSearch] = useState('')
@@ -612,6 +615,19 @@ export function TopBar() {
           className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Settings size={15} />
+        </button>
+
+        <button
+          type="button"
+          data-testid="composition-settings-button"
+          title="Composition settings (size, frame rate, background)"
+          aria-label="Composition settings"
+          aria-haspopup="dialog"
+          aria-expanded={compOpen}
+          onClick={() => setCompOpen((open) => !open)}
+          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          <Settings2 size={15} />
         </button>
       </div>
 
@@ -1617,6 +1633,7 @@ export function TopBar() {
       )}
 
       <LayoutManagerModal isOpen={layoutModalOpen} onClose={() => setLayoutModalOpen(false)} />
+      {compOpen && <CompositionSettingsModal onClose={() => setCompOpen(false)} />}
     </header>
   )
 }

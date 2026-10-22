@@ -362,6 +362,9 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   playing: boolean
   speed: number
   projectFps: number
+  /** AE-style composition background colour painted under every frame. */
+  sequenceBackground: string
+  setSequenceBackground: (color: string) => void
   dropFrameTimecode: boolean
   previewQuality: PreviewQuality
   /** Hide horizontal overflow app-wide (default on): strips use hover arrows / wheel / drag instead of visible scrollbars. */
@@ -1156,6 +1159,7 @@ export const useEditor = create<EditorState>((set, get) => {
     playing: false,
     speed: 1,
     projectFps: 30,
+    sequenceBackground: '#000000',
     dropFrameTimecode: false,
     previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
@@ -3276,6 +3280,9 @@ export const useEditor = create<EditorState>((set, get) => {
     setProjectFps: (value) => {
       const supported = [23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120]
       if (supported.includes(value)) set({ projectFps: value, dropFrameTimecode: false })
+    },
+    setSequenceBackground: (color) => {
+      if (/^#[0-9a-fA-F]{6}$/.test(color)) set({ sequenceBackground: color })
     },
     setDropFrameTimecode: (enabled) => set((state) => ({
       dropFrameTimecode: enabled && (state.projectFps === 29.97 || state.projectFps === 59.94),

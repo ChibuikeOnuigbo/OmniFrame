@@ -37,3 +37,22 @@ recreations it fed.
 | Scene: 3D Thumbnail Wall | LqfUhkr2vcc |
 | Scene: Cut-Out Checker Proof | YHJUoaPcyqg |
 | Scene: Material Sphere Row | eB10bFHlz7Y / 2AuOLEmEAkU |
+
+## Products (MP4 exports)
+
+- `exports/<id>.mp4` — one 2s 640×360@24fps recreation clip per watched tutorial
+  (245 clips), rendered headlessly by `tools/render-study-mp4s.mjs` through the
+  REAL renderer code (pillarRenderers + particleFx). Each clip is captioned with
+  its video id + technique = "the steps".
+- `exports/ALL_STEPS_COMBINED.mp4` — every clip concatenated (~8 min master reel).
+- `exports/manifest.json` — id → style/particle/overlay/bg recipe map.
+- MP4s stay OUT of git (`.gitignore`); regenerate with
+  `node tools/render-study-mp4s.mjs` (needs @napi-rs/canvas + imageio-ffmpeg).
+
+## Chat-history links (WhatsApp zip)
+
+- `chat-history/links.json` — 105 YouTube ids + 38 reddit links harvested from
+  "WhatsApp Chat with @GameOver1089.zip" (Drive folder 1q0uf6vGTdsMl08Eoc16QTFiGgO1iTc7t).
+  The YouTube ids are merged into the audit inventory and fetched/watched via the
+  runner lane; reddit post text is collected by the runner into
+  `youtube-audit/runner/reddit/*.json`.
