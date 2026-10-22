@@ -156,3 +156,31 @@ videos**; the runner now filters titles matching
 `\b(ai|chatgpt|gpt-N|midjourney|sora|runway|stable diffusion|generated|generative|llm)\b`
 for his channel only (4 AI titles already filtered in batch 16: Seedance, Lovart AI,
 AI-agent sponsor, #ai tag repost). 21 editing shorts queued (batch 17).
+
+## Hancybox wave 1 (batch 17: 18/18 editing shorts watched)
+
+| id | grammar |
+|----|---------|
+| Qu9MxR8I5dM / ShCYvdqTQ3s / oKaAETJzLq4 | editor-UI bed + inset card (white typo card / preview card / stair-step timeline gag) |
+| 1kFJZf_6-7Q | topic title card: pink typo + glowing IG logo on dark gradient |
+| WJAO6OXE4kM | **dual-style two-line typo**: bold white sans line + italic serif yellow accent line |
+| rsUw8ijzPow | **white card inset with feathered bottom edge** on black bed |
+| xLs0M7fFfQA | tilted screen-record insert (rotated web-UI capture) |
+| _1fcL-aB1CU | blurred-blob bed |
+| T2TtWknCu60 | **prism light-leak bed** (warm diagonal + cyan streaks) |
+| uyHDHO7zP88 | flash-burst bed with colour specks |
+| N7-UHBSPs7Y | start/end-frame comparison card + prompt line (AI-workflow layout, grammar only) |
+| EtTwCO1tAD8 | UI bed + dialog-list inset card |
+| CyPgA10kl7o | red scribble doodle arrow over blurred bed |
+| vCrpT1dA6QU | **tilted gold card on grey vignette bed** |
+| Xk7JcX4yg5M | flat grey placeholder bed |
+| Q9Aka1vrJVQ | **diagonal colour wedge wipe** (red wedge from left over black) |
+| yZOfRXLI4iI | logo lockup bed + green-screen strip insert |
+| AQV-mQzAs-U | **glowing cyan wireframe object bed** (phone outline, float + glow) |
+
+Techniques 100–111: 100 dual-style two-line typo · 101 feathered white card inset ·
+102 tilted screen-record insert · 103 prism light-leak bed · 104 flash-burst speck bed ·
+105 editor-UI + inset card combo · 106 start/end comparison card · 107 dialog-list inset ·
+108 tilted gold card on vignette · 109 diagonal wedge wipe · 110 logo lockup + green strip ·
+111 glowing wireframe object bed.
+Recreated now: scenes `wedge`, `card`, `goldcard`, `wire`, `dualtypo` (#23–27).

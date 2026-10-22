@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T12:28:56Z",
+ "updated": "2026-10-22T12:42:37Z",
  "total_discovered": 248,
  "by_status": {
   "BLOCKED": 5,
@@ -16,8 +16,8 @@
  "checkpoint": {
   "drive_batches_completed": 2,
   "drive_videos_footage": 56,
-  "youtube_batches_completed": 13,
-  "watched_visual_total": 326,
+  "youtube_batches_completed": 17,
+  "watched_visual_total": 344,
   "next_drive_batch": 3,
   "next_yt_batch": 4
  },
@@ -79,6 +79,11 @@
    "batch": "repair",
    "result": "14 wave-5 statuses restored from sheet evidence after checkout clobber; watched=326",
    "ts": "2026-10-22T12:28:56Z"
+  },
+  {
+   "batch": "hancybox-wave1",
+   "result": "18/18 Hancybox editing shorts watched (techniques 100-111)",
+   "ts": "2026-10-22T12:42:37Z"
   }
  ],
  "watched_ids": [
@@ -407,7 +412,25 @@
   "zRfHqMf997Y",
   "zcKPdD9FLdk",
   "zlvUBx2aHbw",
-  "zwLfX0Bon2g"
+  "zwLfX0Bon2g",
+  "Qu9MxR8I5dM",
+  "1kFJZf_6-7Q",
+  "WJAO6OXE4kM",
+  "rsUw8ijzPow",
+  "xLs0M7fFfQA",
+  "_1fcL-aB1CU",
+  "T2TtWknCu60",
+  "uyHDHO7zP88",
+  "ShCYvdqTQ3s",
+  "N7-UHBSPs7Y",
+  "EtTwCO1tAD8",
+  "CyPgA10kl7o",
+  "vCrpT1dA6QU",
+  "oKaAETJzLq4",
+  "Xk7JcX4yg5M",
+  "Q9Aka1vrJVQ",
+  "yZOfRXLI4iI",
+  "AQV-mQzAs-U"
  ],
  "extra_watched": {
   "JJK_S2E3_72": "JJK S2E3 raw: Yuji + Aoi on beach, bloodied Gojo face close-up, red/black logo sting; raw episode footage",
