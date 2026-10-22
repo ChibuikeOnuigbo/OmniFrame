@@ -3844,9 +3844,10 @@
    "formats": [
     "explicit"
    ],
-   "status": "METADATA_ONLY",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "arena text gateway watch page (title/channel/description-level); runner metadata fetch bot-checked",
-   "next_action": "owner sets repo secret YT_COOKIES or residential worker; then batch re-run"
+   "next_action": "owner sets repo secret YT_COOKIES or residential worker; then batch re-run",
+   "visual_analysis": "AE relight tutorial: white light-orb comps w/ wire curves (comp lights rig) x3, red caption lines + orange-lit char scene inset; comp-light relight"
   },
   {
    "id": "9o8GT1Iurv0",
@@ -3858,9 +3859,10 @@
    "formats": [
     "explicit"
    ],
-   "status": "METADATA_ONLY",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "arena text gateway watch page (title/channel/description-level); runner metadata fetch bot-checked",
-   "next_action": "owner sets repo secret YT_COOKIES or residential worker; then batch re-run"
+   "next_action": "owner sets repo secret YT_COOKIES or residential worker; then batch re-run",
+   "visual_analysis": "Chainsaw Man AMV: extreme eye close-up (amber iris), white-dress char w/ arms spread + red tendrils, lone char on white minimal floor; AMV cut comps"
   }
  ]
 }
