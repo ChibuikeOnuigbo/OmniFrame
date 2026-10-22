@@ -100,10 +100,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Spaceless neon-grade AMV: B&W ink-splash char, magenta/cyan grade w/ SPACELESS watermark, glyph sparkles, white corridor symmetry"
   },
   {
    "id": "2nhSkl3mRoo",
@@ -115,10 +116,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Demon Slayer AMV: neon outline trace + spectrum bars overlay, saturated cyan/red close-up, sparkle glyph logos, grainy B&W"
   },
   {
    "id": "NORWR4gM_rA",
@@ -130,10 +132,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Spaceless sig: tiny white SPACELESS logo sting, magenta glow-blur frames, collab glyph row, cyan light-ray columns"
   },
   {
    "id": "C3f3qacltAE",
@@ -145,10 +148,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Demon Slayer AMV: saturated red/green grade w/ flame streaks, hooded figure + purple particles, gold flame swirl"
   },
   {
    "id": "zcKPdD9FLdk",
@@ -160,10 +164,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "glow-orb AMV: orange-haired char w/ blue orb, 'BLOW ME UP' typo w/ cyan/magenta glyphs + purple smoke, orange blur streaks"
   },
   {
    "id": "naPHMzs3OBA",
@@ -175,10 +180,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "teal glow-outline AMV: cyan outlined char, dark blue scene w/ pink glow dot, tiny pink logo, teal blur"
   },
   {
    "id": "Epeqg2oEY6A",
@@ -190,10 +196,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "typo-pop AMV: purple-eye face w/ WOAH/AIT type + purple particles, glow logo sting, profile shot w/ SO typo"
   },
   {
    "id": "Xw37Xu1YzNI",
@@ -205,10 +212,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "high-contrast flash AMV: neon rainbow ray X over tiny char, B&W fang face red eyes, bleeding-eye close-up"
   },
   {
    "id": "0_WXQKkgZU8",
@@ -239,10 +247,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "step-card tutorial: STEP 4 MAKING IT LOOK COOL / INNER MATTE / STEP 5 AFTERMATH captions, RGB parade scopes, colour wheels, 'ADDING CC', credits NULESSHUA; blue-lightning final"
   },
   {
    "id": "mcQUigny9-0",
@@ -254,10 +263,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "green-tint sharingan-eye close-up, white manga line-art w/ 'whatever you' typo, pastel blur; line-art typo edit"
   },
   {
    "id": "NuvqcJ2u2a0",
@@ -269,10 +279,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "white-bg motion graphics: green/purple curve sweeps + city silhouette, credits card ('DONT KNOW MUST ASK' list), glyph logos"
   },
   {
    "id": "aTZBXyuaQZU",
@@ -284,10 +295,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "silhouette flight: black winged char on white soft bg, soft-focus face close-up; minimal grade"
   },
   {
    "id": "MuZ0uEghR3Q",
@@ -299,10 +311,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "dark blue texture AMV: red streak lines, white smoke burst on black, cyan glow flash"
   },
   {
    "id": "zwLfX0Bon2g",
@@ -314,10 +327,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "pure effect frames: radial zoom-blur white/dark vortex + chromatic-dispersion wing blur (Deppey warp vocab)"
   },
   {
    "id": "GwAc6HYoXCs",
@@ -329,9 +343,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AI animate workflow: dark IDE/web panels w/ prompt logs, phone-UI motion preset card (STACK/Soft Wave), AE comp; Higgsfield MCP"
   },
   {
    "id": "-JLpm8uJBOo",
@@ -343,9 +358,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AI-edit test: web AI editor UI + avatar grid, AE crowd scene, CGI knight frame, talking-head w/ Claude-Gemini-Notion logos; hybrid review"
   },
   {
    "id": "uuFSBgUQbZI",
@@ -376,9 +392,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "plugin roundup: AE UI dark comp, cat test plate, Google search frame for plugins, AvoidAEP outro"
   },
   {
    "id": "lWNcAUXl5PE",
@@ -390,10 +407,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "'get better at editing': caption 'follow a tutorial 1:1 = repeating not learning'; anime comp + Sekiro-style gameplay practice footage"
   },
   {
    "id": "k9mJqpVADho",
@@ -424,9 +442,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "edit-faster beginner: AE UI, sword character plate, blank cream comp, yellow audio rows; workflow tutorial"
   },
   {
    "id": "4y9WdBpwrKc",
@@ -438,9 +457,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 8: B&W sword silhouette, RGB-split glitch w/ chain props, AE UI plates; showcase"
   },
   {
    "id": "4Nc-jJgODLA",
@@ -471,10 +491,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "pacing essay: white HEART line-art card w/ stars, caption 'Between what the', red/white manga burst; caption-card pacing"
   },
   {
    "id": "WiPVD2RjfRs",
@@ -486,9 +507,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "MOGRAPH: cream line-art cards (heartbeat line, heart outline, script 'see you', star art) animated in AE; typography mograph"
   },
   {
    "id": "dIP2lyY4vak",
@@ -500,9 +522,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "depth-maps guide: green/white graded char, AE UI blue-haired comp, white silhouette glow frame"
   },
   {
    "id": "SosJerTCjRc",
@@ -514,9 +537,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Sound Design curriculum card: I. Primary Events (punches/sword/swoosh/grunts) II. Secondary (whooshes/vocal/particles/high electrical/dirt scuffs); AE samurai comp"
   },
   {
    "id": "sEE7LrELTAE",
@@ -528,9 +552,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE PLUGINS PART 3: red particle-dissolve char comp on white, AvoidAEP text comp w/ palette panel, red wireframe particle comp"
   },
   {
    "id": "zlvUBx2aHbw",
@@ -542,9 +567,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE navigation beginner: grass-hidden char comp + long effect list, character/paragraph panels, red/green timeline rows"
   },
   {
    "id": "cxHP0WcMUkY",
@@ -556,9 +582,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "high-quality settings: AE UI w/ hair-strand comp + dark settings dialogs, KR-text outro; settings-driven quality"
   },
   {
    "id": "QN73XbEf5pk",
@@ -570,9 +597,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Twixtor tutorial: FlowFrames Video Interpolator plugin dialog on screen, white-haired char comp, BEFORE label frame; interpolation method"
   },
   {
    "id": "CQWub0iIw8U",
@@ -584,9 +612,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 7: flame character comp w/ bell-curve graph, feather/grass plate, sword-hand plate; showcase"
   },
   {
    "id": "XL8JSvTfJ2k",
@@ -617,9 +646,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE BASICS: white shape-layer rect on black comp, Frieren char comp, noise texture frame; beginner tutorial"
   },
   {
    "id": "cQQPjhaOP5I",
@@ -631,9 +661,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE PLUGINS PART 2: 'CRT' sting + plugin dialog w/ red pixel-dot char preview; plugin demo"
   },
   {
    "id": "wtLu8JZYQ1Q",
@@ -645,9 +676,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "ONE FRAMERS: RGB-split ghost char comp + curve panels, blue/yellow glow-outline comp; one-framer tutorial"
   },
   {
    "id": "EWG5XOQqtVw",
@@ -659,9 +691,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 6: white displacement-wave silhouette, RGB-split scanline character, noise texture frame"
   },
   {
    "id": "P0UsKgktnLs",
@@ -673,9 +706,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "EASY TRANSITIONS: graph-editor decay curve (orange falloff), anime boy comp, pink-sweater girl frame; transition tutorial"
   },
   {
    "id": "csL_SzJj9CY",
@@ -687,9 +721,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3 Shakes tutorial: kaleidoscope mirror comp demo, anime boy comp, pastel blur; shake variants"
   },
   {
    "id": "YjD2f0g0AV8",
@@ -701,9 +736,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "BEST Plugins: AE UI + colour wheels/scopes, Violet Evergarden comp, plugin vendor site grid (Tool Preview/Collage Pro/Grid Builder)"
   },
   {
    "id": "iNoogDwDo_c",
@@ -715,9 +751,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 5: white lightning/electric overlay on anime boy comp, red curve panel; electric effect"
   },
   {
    "id": "si35Ia6_RgQ",
@@ -729,9 +766,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "GOJO STYLE text: per-character colour patches on 'AVOID AEP' comp, curve graph + glyph panel, red-band text frame"
   },
   {
    "id": "kdCg3E7A8UI",
@@ -743,9 +781,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Photoshop thumbnails: white manga line-art head -> coloured red-accent version w/ texture overlay, colour pickers; thumbnail workflow"
   },
   {
    "id": "M7PWQ3NAenM",
@@ -757,9 +796,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "EASY COMPOSITING (AvoidAEP): warm char comp + comp-in-comp, final warm/pink grade w/ headphone char; outro"
   },
   {
    "id": "w1-NsMMAASE",
@@ -771,9 +811,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "PS->AE manga pipeline: B&W sword-pose cutout in PS, manga eye line-art comp in AE w/ coloured rows; matches Keditz method"
   },
   {
    "id": "GMAvCLnbCYI",
@@ -785,9 +826,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "manga animation: red/black action comp in AE, rounded TV-mask presentation frame w/ crowd scene; outro"
   },
   {
    "id": "OHVOL1oodKI",
@@ -799,9 +841,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 4: B&W mask/roto shape comp (mask visualisation), colour picker + pink crystal frame; mask workflow"
   },
   {
    "id": "tF_clYyo2FU",
@@ -831,9 +874,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Card Dance: shard/spike fragmentation on dark iris close-up w/ red type in eye; AE UI; noise frame"
   },
   {
    "id": "nni31LkmA-U",
@@ -845,9 +889,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "glow-outline showcase: AE UI teal glow face comp (negative-style), teal outline mask frame, teal glow burst"
   },
   {
    "id": "ih8WI_jKI2Q",
@@ -859,9 +904,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 3: pink neon line-swirl around Frieren, grey voronoi/shatter cell comp in AE; neon trail + shatter"
   },
   {
    "id": "pD9ac1NJvbA",
@@ -873,9 +919,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Unique Text Effects 2: 'TEXT EFFECT #1' serif on white comp, red ink-blot shapes reveal; text-effect tutorial"
   },
   {
    "id": "M5t-RkH5fqM",
@@ -905,9 +952,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "VIBE Shakes: long effect-controls stack list, blonde close-up comp, sky comp w/ red-wing char; shake tutorial"
   },
   {
    "id": "XQy_WfRtq6k",
@@ -1115,10 +1163,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "manga animation: white line-art head on transparency checker -> shaded manga bust in AE; outro"
   },
   {
    "id": "EHXQm3-alYo",
@@ -3076,10 +3125,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "meme typo 'huh?' + emoji over Naruto-style character; 3D-rig model pose on white (MMD-style segment)"
   },
   {
    "id": "PwIFc-kCNGE",
@@ -3091,10 +3141,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Keditz grayscale manga samurai edit: yellow subtitle lines, 'MADE BY KEDITZ' card, letterboxed manga frames"
   },
   {
    "id": "XWul_ogB69I",
@@ -3106,10 +3157,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "dark-grade AMV: water splash w/ credits line top, Tanjiro down in checkered haori, black + white fog frames"
   },
   {
    "id": "sWnoBrIrCoY",
@@ -3121,10 +3173,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "AE UI dark street scene w/ black-haired char, 4 near-identical graded variants + curve panel; subtle grade/scene work"
   },
   {
    "id": "WiXfmJGKteI",
@@ -3136,10 +3189,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "CapCut PC UI (thumb grids + teal timeline): dark red char comp, white clock-shadow frame, teal-graded swordsmen group"
   },
   {
    "id": "AL7T1E-AJhM",
@@ -3151,10 +3205,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "AE UI dark interior scene w/ teal bed shape, curve panel + pink/blue effect controls, minimal motion (slow graded scene)"
   },
   {
    "id": "wDrhErmtbaQ",
@@ -3166,10 +3221,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Keditz dark mono edit: 'KREDITZ ALL RIGHTS RESERVED' watermark, masked char close-up, white shard burst"
   },
   {
    "id": "Tvd7qiK_gUA",
@@ -3222,10 +3278,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "flag-prop edit: US flag overlay on eye close-up w/ AMERICAN glitch typo, red/blue duo chars, white hand-clasp frame"
   },
   {
    "id": "E6LIpT7DY58",
@@ -3237,10 +3294,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "fisheye/circular mask frame w/ pink smoke + sword girl, white/purple face close-up, yellow sphere prop scene"
   },
   {
    "id": "kFb52rNjvBA",
@@ -3252,10 +3310,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "soft mono AMV: grayscale char w/ flower, B&W silhouette w/ red sparks, red mirrored blur frame"
   },
   {
    "id": "pThVHJC3vA8",
@@ -3286,10 +3345,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "manga animation process: manga parts on white, tear-line face close-up, asset browser w/ red thumbs, spoken captions"
   },
   {
    "id": "asVucSdx7Aw",
@@ -3301,9 +3361,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Photoshop cutout/colouring process: colour picker panels, manga man w/ scroll, captions 'feathered part really quickly'/'cut out the head'/'put it under'"
   },
   {
    "id": "0ED7j_AFcLA",
@@ -3315,10 +3376,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Violet Evergarden AMV: soft warm grade, paper-tear strip transition w/ JP text, gold glow logo + sparkle bokeh"
   },
   {
    "id": "L9sssRAnN_A",
@@ -3349,10 +3411,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Warmpop cyberpunk: hand w/ cyan particle glow, amber close-up flash, white-glove on snow texture"
   },
   {
    "id": "sXj0SdaRV14",
@@ -3364,10 +3427,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "render settings tutorial: AE render dialog + captions 'that's the highest you can export in'/'export your project', Drive upload frame"
   },
   {
    "id": "HlCfYZQpDP8",
@@ -3379,10 +3443,11 @@
    "formats": [
     "videos"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "scrapbook collage: cutout chars + white frames on beige/pink/maroon, typo captions (HELL O, $400 PURSE), sticker props, glitch silhouette"
   },
   {
    "id": "L4x5Z4iuYS4",
@@ -3394,10 +3459,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "white manga line-art chars on black; faint text card 'UR WEIRD ...ATIVE AI' (AI-rant edit)"
   },
   {
    "id": "iwH2xDOYcP8",
@@ -3409,10 +3475,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "kaleidoscope mirror centre frame (black/orange), green duotone manga on cream, script typo card, CHOSEN tag"
   },
   {
    "id": "501V4sjJ2nU",
@@ -3424,10 +3491,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "B&W edit: manga blur frames, 'ANIMO' typo on hypnotic swirl bg, 'DT: BAW' card w/ tilted portrait, glitch corridor"
   },
   {
    "id": "u0zKDuUSz6o",
@@ -3439,10 +3507,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "pastel edit: potion-bottle props + chibi Frieren w/ 'I HA' typo, statue + petals scene, 'PHYSICAL' typo on grayscale"
   },
   {
    "id": "7i8sTj006xM",
@@ -3454,10 +3523,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Miku edit: MMD-style Miku cat-ears on pink/purple swirl bg, cyan pop palette, flat cyan flash frames"
   },
   {
    "id": "RQ4UyVv92H8",
@@ -3469,10 +3539,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Bait&Switch: red concentric-ring tunnel w/ tiny char, B&W cloth abstraction, grayscale twin-face + collage w/ blue triangle"
   },
   {
    "id": "YWbuNp0JlgE",
@@ -3484,10 +3555,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "chibi pop edit: chibi on red/white flag bg, rainbow swirl warp, cyan chibi + stars w/ RGB split, pink motion blur"
   },
   {
    "id": "q9sIMsv-ymE",
@@ -3499,10 +3571,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "chain-prop Makima edit: red bg w/ chains around pink-haired char, red-eye close-up w/ CHOSEN band, flat pink frame"
   },
   {
    "id": "6uWPi0Yhz2s",
@@ -3514,10 +3587,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "collab edit: dark anime close-up, filmstrip layout w/ room photo, CapCut logo sting, white-bg manga panel"
   },
   {
    "id": "iby4x8BLBVY",
@@ -3529,10 +3603,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "colour-silhouette style: bar scene, halo ring + 'cat' sticker, trio silhouettes w/ ZENITH typo + 'that's what morals', orange blur"
   },
   {
    "id": "0iXhGDuN400",
@@ -3544,10 +3619,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "midgraph tutorial: AE timeline context menu (Show Speed Graph), manga crop, tiktok caption card, white flash"
   },
   {
    "id": "EnnorIefSnk",
@@ -3559,10 +3635,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "process video: colour-picker UI, dark panels, caption 'so i'm gonna make this', tiktok chosen.ae4 card"
   },
   {
    "id": "pfXYoBaFVbE",
@@ -3574,10 +3651,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "colour-block typo portfolio: pink/cream/teal blocks, CHOSEN serif + KAHOSU glitch typos, RGB-split chars, fan prop"
   },
   {
    "id": "qx0fahwD7G4",
@@ -3589,10 +3667,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "poster-style edit: 'ME ENVENENA' propaganda poster w/ halo statue, dark orange figure frame, pale 'THE LIGHT' hand frame"
   },
   {
    "id": "cTGnSGs8YDk",
@@ -3604,10 +3683,11 @@
    "formats": [
     "shorts"
    ],
-   "status": "FOOTAGE_ACQUIRED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
    "next_action": "await batch slice (push batch-trigger batch=N)",
-   "source": "drive-zip (owner-packed)"
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Blue Lock manga edit: halftone/crosshatch face close-ups, red accent line, teal-bg smile frame, orange blur"
   },
   {
    "id": "M2_vjAseOns",
