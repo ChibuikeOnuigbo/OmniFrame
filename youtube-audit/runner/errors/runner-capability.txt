@@ -1,10 +1,10 @@
-RUNNER (github-hosted ubuntu-latest) capability test 2026-10-22T02:34:09Z
+RUNNER (github-hosted ubuntu-latest) capability test 2026-10-22T04:12:28Z
 -- DNS:
-2001:4860:4829:400:: www.youtube.com
-2001:4860:4828:400:: www.youtube.com
+2001:4860:482c:400:: www.youtube.com
+2001:4860:4827:400:: www.youtube.com
 -- TCP 443:
 tcp ok
 -- TLS+HTTP:
 http=200 tls=0
 -- media probe:
-http=200 type=text/html; charset=utf-8 bytes=1344467
+http=200 type=text/html; charset=utf-8 bytes=1300921
