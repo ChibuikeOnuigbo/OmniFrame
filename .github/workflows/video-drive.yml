@@ -33,9 +33,11 @@ jobs:
           python3 - <<'PY'
           import json, os, subprocess, shutil
           batch = 1
+          want = []
           try:
               for line in open("youtube-audit/drive-trigger.txt"):
                   if line.startswith("batch="): batch = int(line.split("=")[1])
+                  if line.startswith("entries="): want = [s.strip() for s in line.split("=",1)[1].split(",") if s.strip()]
           except Exception: pass
           cfg = json.load(open("youtube-audit/drive-zips.json"))
           os.makedirs("audit-drive/reports", exist_ok=True)
@@ -113,8 +115,12 @@ jobs:
                   records.append({"zip":label,"error":uz.stderr[-500:]}); return
               process_dir(work, label)
           entries = cfg["entries"]
-          start, end = ((batch-1)*4, batch*4) if batch <= 5 else (20+(batch-6)*8, 20+(batch-5)*8)
-          for e in entries[start:end]:
+          if want:
+              entries = [e for e in entries if any(w in e["name"] for w in want)]
+          else:
+              start, end = ((batch-1)*4, batch*4) if batch <= 5 else (20+(batch-6)*8, 20+(batch-5)*8)
+              entries = entries[start:end]
+          for e in entries:
               label = e["name"].replace(".zip","")
               prev = f"youtube-audit/runner-drive/evidence/{label}"
               if os.path.isdir(prev) and any(f.endswith(".jpg") for _,_,fs in os.walk(prev) for f in fs):

@@ -1,2 +1,3 @@
-batch=10
-nonce=drive-b10
+batch=11
+entries=other-references,anime-scene-packs__catalog,refernce-web-snapshot,reference-screenshots,media__part
+nonce=drive-sweep
