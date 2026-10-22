@@ -858,6 +858,141 @@ function sceneMosaicPix(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/** pztANrbFI3w — roto polygon as hero: polygon outline draws on alone over a
+ *  dark field, then sits over the footage, then fades into a graded hold. */
+function sceneRotoPoly(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const pts = 9
+  const poly = (scale: number) => {
+    ctx.beginPath()
+    for (let i = 0; i <= pts; i++) {
+      const t = (i / pts) * Math.PI * 2
+      const r = scale * (0.2 + 0.05 * Math.sin(t * 3))
+      const x = w * 0.5 + Math.cos(t) * r * w * 0.5
+      const y = h * 0.52 + Math.sin(t) * r * h * 0.62
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+    }
+    ctx.closePath()
+  }
+  if (p < 0.4) {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h)
+    const draw = SCENE_LOOK.fade(p / 0.4)
+    ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 2
+    ctx.setLineDash([draw * 900, 900])
+    poly(1); ctx.stroke(); ctx.restore()
+  } else {
+    const g = SCENE_LOOK.fade(Math.min(1, (p - 0.4) / 0.3))
+    if (a.hasFrom) { ctx.save(); ctx.filter = `saturate(${1 - 0.4 * g}) brightness(${1 - 0.15 * g})`; a.drawFrom(ctx); ctx.filter = 'none'; ctx.restore() }
+    else if (a.hasTo) a.drawTo(ctx)
+    ctx.save(); ctx.strokeStyle = `rgba(255,255,255,${0.9 * (1 - Math.max(0, (p - 0.75) / 0.25))})`; ctx.lineWidth = 2
+    poly(1); ctx.stroke(); ctx.restore()
+    if (p > 0.75) { ctx.save(); ctx.globalAlpha = (p - 0.75) * 1.6; ctx.fillStyle = 'rgba(60,90,200,0.16)'; ctx.fillRect(0, 0, w, h); ctx.restore() }
+  }
+  sceneFinish(a)
+}
+
+/** AsHnacGDo6E — rounded TV mask constant frame: content lives inside a rounded
+ *  TV with scanlines and a bottom reflection; static burst opens the cut. */
+function sceneTvMask(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  if (p < 0.12) {
+    const rnd = mulberry32(9)
+    for (let y = 0; y < h; y += 2) { ctx.fillStyle = `rgba(${rnd() * 255 | 0},${rnd() * 255 | 0},${rnd() * 255 | 0},0.5)`; ctx.fillRect(0, y, w, 1) }
+    sceneFinish(a); return
+  }
+  const grow = SCENE_LOOK.fade(Math.min(1, (p - 0.12) / 0.3))
+  const tw = w * 0.72 * grow, th = h * 0.6 * grow
+  const x = (w - tw) / 2, y = (h - th) / 2 - h * 0.05
+  const rr = Math.min(tw, th) * 0.12
+  const round = (c: CanvasRenderingContext2D, rx: number, ry: number, rw: number, rh: number, r: number) => {
+    c.beginPath()
+    c.moveTo(rx + r, ry); c.arcTo(rx + rw, ry, rx + rw, ry + rh, r); c.arcTo(rx + rw, ry + rh, rx, ry + rh, r)
+    c.arcTo(rx, ry + rh, rx, ry, r); c.arcTo(rx, ry, rx + rw, ry, r); c.closePath()
+  }
+  ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, w, h)
+  ctx.save(); round(ctx, x, y, tw, th, rr); ctx.clip()
+  if (p < 0.55 && a.hasFrom) a.drawFrom(ctx); else if (a.hasTo) a.drawTo(ctx); else if (a.hasFrom) a.drawFrom(ctx)
+  ctx.globalAlpha = 0.2; ctx.fillStyle = '#000'
+  for (let sy = y; sy < y + th; sy += 3) ctx.fillRect(x, sy, tw, 1)
+  ctx.restore()
+  // bottom reflection of the TV
+  ctx.save(); ctx.globalAlpha = 0.16; ctx.translate(0, y + th * 2 + h * 0.06); ctx.scale(1, -1)
+  round(ctx, x, y, tw, th, rr); ctx.clip()
+  if (a.hasFrom) a.drawFrom(ctx); else if (a.hasTo) a.drawTo(ctx)
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** Z8EAr0p6X14 — slit-scan red arch + halftone dot field: red arch band expands
+ *  over a red-tinted frame, halftone dots ramp in and become the outro bed. */
+function sceneSlitHalftone(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  if (a.hasFrom) { ctx.save(); ctx.filter = 'sepia(0.6) hue-rotate(-30deg) saturate(2.4)'; ctx.globalAlpha = 1 - e * 0.5; a.drawFrom(ctx); ctx.filter = 'none'; ctx.restore() }
+  // red slit arch: vertical band w/ arched top expanding from centre
+  const bw = w * 0.34 * e
+  ctx.save()
+  ctx.beginPath()
+  ctx.moveTo(w / 2 - bw, h); ctx.lineTo(w / 2 - bw, h * 0.42)
+  ctx.quadraticCurveTo(w / 2, h * (0.42 - 0.24 * e), w / 2 + bw, h * 0.42)
+  ctx.lineTo(w / 2 + bw, h); ctx.closePath()
+  ctx.fillStyle = 'rgba(200,20,30,0.5)'; ctx.fill()
+  ctx.strokeStyle = 'rgba(255,60,60,0.8)'; ctx.lineWidth = 2; ctx.stroke()
+  ctx.restore()
+  // halftone dot field ramps in over everything
+  const dot = Math.max(0, (p - 0.35) / 0.65)
+  if (dot > 0) {
+    ctx.save(); ctx.globalAlpha = 0.5 * dot
+    ctx.fillStyle = '#fff'
+    const step = Math.max(6, 14 - dot * 6)
+    for (let y = 0; y < h; y += step) for (let x = ((y / step) | 0) % 2 ? step / 2 : 0; x < w; x += step) {
+      ctx.beginPath(); ctx.arc(x, y, dot * 2.2, 0, Math.PI * 2); ctx.fill()
+    }
+    ctx.restore()
+  }
+  sceneFinish(a)
+}
+
+/** WC1tT1B5o_w — fisheye-circle typo sting: circular lens bulge of the incoming
+ *  clip with a white ring, glitch-warp bands around it on the attack. */
+function sceneFisheyeSting(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  if (a.hasFrom) a.drawFrom(ctx)
+  const e = SCENE_LOOK.fade(Math.min(1, p / 0.7))
+  const r = Math.min(w, h) * (0.12 + 0.34 * e)
+  // glitch-warp bands on the attack
+  if (p < 0.35) {
+    const rnd = mulberry32(31)
+    ctx.save(); ctx.globalAlpha = 0.5
+    for (let i = 0; i < 8; i++) {
+      const by = rnd() * h, bh = 4 + rnd() * 18, dx = (rnd() - 0.5) * 60 * (0.35 - p)
+      ctx.drawImage(ctx.canvas, 0, by, w, bh, dx, by, w, bh)
+    }
+    ctx.restore()
+  }
+  // fisheye lens: incoming clip magnified inside the circle
+  if (a.hasTo) {
+    const sc = a.takeScratch(); sc.width = w; sc.height = h
+    const sctx = sc.getContext('2d')!
+    a.drawTo(sctx)
+    ctx.save()
+    ctx.beginPath(); ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2); ctx.clip()
+    const m = 1.45
+    ctx.drawImage(sc, w / 2 - (w / 2) * m, h / 2 - (h / 2) * m, w * m, h * m)
+    ctx.restore()
+    a.releaseScratch(sc)
+  }
+  ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 3
+  ctx.beginPath(); ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore()
+  if (p > 0.45) {
+    ctx.save(); ctx.globalAlpha = Math.min(1, (p - 0.45) * 3)
+    ctx.fillStyle = '#fff'; ctx.font = '800 44px system-ui, sans-serif'
+    ctx.textAlign = 'center'; ctx.fillText('NIKA', w / 2, h / 2 + 14); ctx.textAlign = 'left'
+    ctx.restore()
+  }
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -866,5 +1001,9 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'line') sceneLineDraw(a)
   else if (style === 'rim') sceneRimGlow(a)
   else if (style === 'mosaic') sceneMosaicPix(a)
+  else if (style === 'roto') sceneRotoPoly(a)
+  else if (style === 'tv') sceneTvMask(a)
+  else if (style === 'slit') sceneSlitHalftone(a)
+  else if (style === 'fisheye') sceneFisheyeSting(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }

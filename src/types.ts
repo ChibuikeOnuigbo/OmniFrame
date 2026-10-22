@@ -408,6 +408,10 @@ export type TransitionType =
   | 'scene_line_draw'
   | 'scene_rim_glow'
   | 'scene_mosaic_pix'
+  | 'scene_roto_poly'
+  | 'scene_tv_mask'
+  | 'scene_slit_halftone'
+  | 'scene_fisheye_sting'
 
 export interface Transition {
   id: string

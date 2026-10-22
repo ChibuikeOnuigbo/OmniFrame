@@ -38,7 +38,7 @@ function stubCtx(log) {
   })
 }
 
-const styles = ['relight', 'crt', 'magna', 'line', 'rim', 'mosaic']
+const styles = ['relight', 'crt', 'magna', 'line', 'rim', 'mosaic', 'roto', 'tv', 'slit', 'fisheye']
 const ps = [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]
 let failures = 0
 for (const style of styles) {
@@ -65,12 +65,18 @@ for (const style of styles) {
     const drew = ops.includes('drawFrom') || ops.includes('drawTo')
     const vignette = ops.includes('createRadialGradient')
     const grain = ops.filter((o) => o === 'fillRect').length > 50
-    if (!drew || !vignette || !grain) {
+    // intentional field-only beats: roto hero polygon draws alone on black
+    // (p<0.4), TV static burst opens the cut (p<0.12) — verify those directly
+    const fillRects = ops.filter((o) => o === 'fillRect').length
+    const fieldBeat =
+      (style === 'roto' && p < 0.4 && ops.includes('setLineDash') && ops.includes('stroke')) ||
+      (style === 'tv' && p < 0.12 && fillRects >= 300)
+    if ((!drew && !fieldBeat) || !vignette || !grain) {
       failures++
-      console.error(`FAIL ${style} p=${p}: drew=${drew} vignette=${vignette} grain=${grain}`)
+      console.error(`FAIL ${style} p=${p}: drew=${drew} fieldBeat=${fieldBeat} vignette=${vignette} grain=${grain}`)
     }
   }
   console.log(`ok scene:${style} (${ps.length} progress samples, constant look verified)`)
 }
 if (failures) { console.error(`${failures} failures`); process.exit(1) }
-console.log('SCENE RECREATION UNIT QA: PASS (6 styles x 7 progress samples)')
+console.log('SCENE RECREATION UNIT QA: PASS (10 styles x 7 progress samples)')
