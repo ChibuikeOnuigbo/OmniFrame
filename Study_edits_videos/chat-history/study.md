@@ -64,3 +64,26 @@ Recreated in OmniFrame as scenes `quote_band` (49/51/54 bed) and `mono_typo` (50
 Techniques 55–60: 55 multi-line top typo stack · 56 radial zoom-blur sting ·
 57 band-mask strip framing · 58 tilted logo card · 59 chrome typo + accent underline ·
 60 credits-wall column layout.
+
+## Wave 3 (batch 9: 16 watched; fb-Ac9P4QZg + AzbvhLQZP3k private/deleted → BLOCKED_UNAVAILABLE)
+
+| id | grammar |
+|----|---------|
+| KZQGvYI8RuQ | numbered-list typo stack (4 lines) + red accent word over footage |
+| Hb9m7M-P15Y | social-post card insert (avatar + handle + 2-line text) top-left on black |
+| L7i8-vJ1b9c | repeated-word caption row ("Bro Bro Bro…") above dance footage |
+| DfnbdXs-JpI | header label ("Marketplace:") + footage band + caption typo |
+| mdpb03H-Y30 | evolution-list format: white bed + title + centred footage band + year caption |
+| GR8JPrlw1CM | **colour-row list menu** (rainbow stacked rows under a black question bar) |
+| edGUFZ3oS3g | POV 3-line outlined caps top stack over gameplay |
+| dy3CLJnnuto | colour band + micro script typo; star-shape row bed |
+| RnjxSQNvCuc | doodle annotation overlay (purple scribble arrow + chrome shard) |
+| yA_Rc0OzIxw | stick-figure doodle character insert over scene |
+| cBkNEvSsZwM | mono bold top typo ("THIS IS FNAF") + dark art + tiny corner card |
+| cv7X_Wodk8E / HHNTQkaGv-M / 7WHDyTE9Mq8 | full-bleed holds (clean close-up / dark bed / gradient bed) — pacing beats |
+| KqUBgbk5u1k | white-bed glow-up title card (small caps top + signature bottom) |
+| ZrwjaDc__ZM | **cutout sticker on white bed** (character cut-out w/ shadow line) |
+
+Techniques 61–68: 61 numbered-list typo stack · 62 social-post card insert ·
+63 colour-row list menu · 64 evolution-list format · 65 doodle annotation overlay ·
+66 repeated-word caption row · 67 full-bleed/dark-bed pacing holds · 68 cutout sticker on white bed.

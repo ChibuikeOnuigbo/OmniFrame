@@ -4200,145 +4200,163 @@
    "id": "KZQGvYI8RuQ",
    "title": "chat-history link KZQGvYI8RuQ",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=KZQGvYI8RuQ"
+   "url": "https://www.youtube.com/watch?v=KZQGvYI8RuQ",
+   "access": "chat-history-batch9"
   },
   {
    "id": "Hb9m7M-P15Y",
    "title": "chat-history link Hb9m7M-P15Y",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=Hb9m7M-P15Y"
+   "url": "https://www.youtube.com/watch?v=Hb9m7M-P15Y",
+   "access": "chat-history-batch9"
   },
   {
    "id": "L7i8-vJ1b9c",
    "title": "chat-history link L7i8-vJ1b9c",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=L7i8-vJ1b9c"
+   "url": "https://www.youtube.com/watch?v=L7i8-vJ1b9c",
+   "access": "chat-history-batch9"
   },
   {
    "id": "DfnbdXs-JpI",
    "title": "chat-history link DfnbdXs-JpI",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=DfnbdXs-JpI"
+   "url": "https://www.youtube.com/watch?v=DfnbdXs-JpI",
+   "access": "chat-history-batch9"
   },
   {
    "id": "mdpb03H-Y30",
    "title": "chat-history link mdpb03H-Y30",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=mdpb03H-Y30"
+   "url": "https://www.youtube.com/watch?v=mdpb03H-Y30",
+   "access": "chat-history-batch9"
   },
   {
    "id": "GR8JPrlw1CM",
    "title": "chat-history link GR8JPrlw1CM",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=GR8JPrlw1CM"
+   "url": "https://www.youtube.com/watch?v=GR8JPrlw1CM",
+   "access": "chat-history-batch9"
   },
   {
    "id": "edGUFZ3oS3g",
    "title": "chat-history link edGUFZ3oS3g",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=edGUFZ3oS3g"
+   "url": "https://www.youtube.com/watch?v=edGUFZ3oS3g",
+   "access": "chat-history-batch9"
   },
   {
    "id": "fb-Ac9P4QZg",
    "title": "chat-history link fb-Ac9P4QZg",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "BLOCKED_UNAVAILABLE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=fb-Ac9P4QZg"
+   "url": "https://www.youtube.com/watch?v=fb-Ac9P4QZg",
+   "failure": "private/deleted on YouTube (batch9 report)"
   },
   {
    "id": "dy3CLJnnuto",
    "title": "chat-history link dy3CLJnnuto",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=dy3CLJnnuto"
+   "url": "https://www.youtube.com/watch?v=dy3CLJnnuto",
+   "access": "chat-history-batch9"
   },
   {
    "id": "RnjxSQNvCuc",
    "title": "chat-history link RnjxSQNvCuc",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=RnjxSQNvCuc"
+   "url": "https://www.youtube.com/watch?v=RnjxSQNvCuc",
+   "access": "chat-history-batch9"
   },
   {
    "id": "yA_Rc0OzIxw",
    "title": "chat-history link yA_Rc0OzIxw",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=yA_Rc0OzIxw"
+   "url": "https://www.youtube.com/watch?v=yA_Rc0OzIxw",
+   "access": "chat-history-batch9"
   },
   {
    "id": "cBkNEvSsZwM",
    "title": "chat-history link cBkNEvSsZwM",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=cBkNEvSsZwM"
+   "url": "https://www.youtube.com/watch?v=cBkNEvSsZwM",
+   "access": "chat-history-batch9"
   },
   {
    "id": "AzbvhLQZP3k",
    "title": "chat-history link AzbvhLQZP3k",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "BLOCKED_UNAVAILABLE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=AzbvhLQZP3k"
+   "url": "https://www.youtube.com/watch?v=AzbvhLQZP3k",
+   "failure": "private/deleted on YouTube (batch9 report)"
   },
   {
    "id": "cv7X_WoDk8E",
    "title": "chat-history link cv7X_WoDk8E",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=cv7X_WoDk8E"
+   "url": "https://www.youtube.com/watch?v=cv7X_WoDk8E",
+   "access": "chat-history-batch9"
   },
   {
    "id": "HHNTQkaGv-M",
    "title": "chat-history link HHNTQkaGv-M",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=HHNTQkaGv-M"
+   "url": "https://www.youtube.com/watch?v=HHNTQkaGv-M",
+   "access": "chat-history-batch9"
   },
   {
    "id": "KqUBgbk5u1k",
    "title": "chat-history link KqUBgbk5u1k",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=KqUBgbk5u1k"
+   "url": "https://www.youtube.com/watch?v=KqUBgbk5u1k",
+   "access": "chat-history-batch9"
   },
   {
    "id": "7WHDyTE9Mq8",
    "title": "chat-history link 7WHDyTE9Mq8",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=7WHDyTE9Mq8"
+   "url": "https://www.youtube.com/watch?v=7WHDyTE9Mq8",
+   "access": "chat-history-batch9"
   },
   {
    "id": "ZrwjaDc__ZM",
    "title": "chat-history link ZrwjaDc__ZM",
    "channel": "chat-history",
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "source": "whatsapp-chat-history",
-   "url": "https://www.youtube.com/watch?v=ZrwjaDc__ZM"
+   "url": "https://www.youtube.com/watch?v=ZrwjaDc__ZM",
+   "access": "chat-history-batch9"
   },
   {
    "id": "-9UkBHVV9OA",
