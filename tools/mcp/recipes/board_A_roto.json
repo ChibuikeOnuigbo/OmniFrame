@@ -47,6 +47,19 @@
    }
   },
   {
+   "tool": "track_new",
+   "params": {
+    "name": "cutout"
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-2",
+    "track": 1
+   }
+  },
+  {
    "tool": "mask_draw",
    "params": {
     "shape": "rectangle",
@@ -106,9 +119,36 @@
    }
   },
   {
+   "tool": "track_new",
+   "params": {
+    "name": "overlays"
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-3",
+    "track": 2
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-4",
+    "track": 2
+   }
+  },
+  {
    "tool": "render_export",
    "params": {
     "out": "test_ans_result/A_composition/variant-{{vi}}.mp4"
+   }
+  },
+  {
+   "tool": "timeline_screenshot",
+   "params": {
+    "out": "test_ans_result/evidence/timeline-A-{{vi}}.png",
+    "playhead": 1.2
    }
   }
  ],

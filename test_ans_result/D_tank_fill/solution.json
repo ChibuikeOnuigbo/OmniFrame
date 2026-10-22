@@ -77,6 +77,26 @@
     }
    },
    {
+    "tool": "track_new",
+    "params": {
+     "name": "pastes"
+    },
+    "out": {
+     "trackId": 1
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "track": 1
+    }
+   },
+   {
     "tool": "mask_draw",
     "params": {
      "shape": "rectangle",
@@ -288,6 +308,15 @@
     },
     "out": {
      "png": "test_ans_result/D_tank_fill/snap-end.png"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/D_tank_fill/solution.mp4"
+    },
+    "out": {
+     "frames": 58
     }
    }
   ],
@@ -867,6 +896,26 @@
      }
     },
     {
+     "tool": "track_new",
+     "params": {
+      "name": "pastes"
+     },
+     "out": {
+      "trackId": 1
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "track": 1
+     }
+    },
+    {
      "tool": "mask_draw",
      "params": {
       "shape": "rectangle",
@@ -1078,6 +1127,15 @@
      },
      "out": {
       "png": "test_ans_result/D_tank_fill/snap-end.png"
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/D_tank_fill/solution.mp4"
+     },
+     "out": {
+      "frames": 58
      }
     }
    ]

@@ -66,6 +66,26 @@
     }
    },
    {
+    "tool": "track_new",
+    "params": {
+     "name": "keyed char"
+    },
+    "out": {
+     "trackId": 1
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "track": 1
+    }
+   },
+   {
     "tool": "remove_background",
     "params": {
      "method": "luma",
@@ -108,7 +128,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_a7p59oq"
+     "keyframeId": "kf_xypijd4"
     }
    },
    {
@@ -123,7 +143,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_sz83vh2"
+     "keyframeId": "kf_mvc9p9b"
     }
    },
    {
@@ -137,8 +157,8 @@
      "clipId": "clip-2",
      "curve": "position_x",
      "keys": [
-      "kf_a7p59oq",
-      "kf_sz83vh2"
+      "kf_xypijd4",
+      "kf_mvc9p9b"
      ]
     }
    },
@@ -170,6 +190,15 @@
     },
     "out": {
      "png": "test_ans_result/C_composition/snap-01.png"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/C_composition/variant-01.mp4"
+    },
+    "out": {
+     "frames": 43
     }
    }
   ],
@@ -248,13 +277,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_a7p59oq",
+        "id": "kf_xypijd4",
         "time": 0,
         "value": -300,
         "interpolation": "ease-out"
        },
        {
-        "id": "kf_sz83vh2",
+        "id": "kf_mvc9p9b",
         "time": 0.9,
         "value": 0,
         "interpolation": "ease-out"
@@ -333,6 +362,26 @@
      }
     },
     {
+     "tool": "track_new",
+     "params": {
+      "name": "keyed char"
+     },
+     "out": {
+      "trackId": 1
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "track": 1
+     }
+    },
+    {
      "tool": "remove_background",
      "params": {
       "method": "luma",
@@ -375,7 +424,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_a7p59oq"
+      "keyframeId": "kf_xypijd4"
      }
     },
     {
@@ -390,7 +439,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_sz83vh2"
+      "keyframeId": "kf_mvc9p9b"
      }
     },
     {
@@ -404,8 +453,8 @@
       "clipId": "clip-2",
       "curve": "position_x",
       "keys": [
-       "kf_a7p59oq",
-       "kf_sz83vh2"
+       "kf_xypijd4",
+       "kf_mvc9p9b"
       ]
      }
     },
@@ -437,6 +486,15 @@
      },
      "out": {
       "png": "test_ans_result/C_composition/snap-01.png"
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/C_composition/variant-01.mp4"
+     },
+     "out": {
+      "frames": 43
      }
     }
    ]

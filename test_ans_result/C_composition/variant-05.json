@@ -66,6 +66,26 @@
     }
    },
    {
+    "tool": "track_new",
+    "params": {
+     "name": "keyed char"
+    },
+    "out": {
+     "trackId": 1
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "track": 1
+    }
+   },
+   {
     "tool": "remove_background",
     "params": {
      "method": "luma",
@@ -108,7 +128,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_dm4uduw"
+     "keyframeId": "kf_9tbifhx"
     }
    },
    {
@@ -123,7 +143,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_dvi09bq"
+     "keyframeId": "kf_0eyo6eu"
     }
    },
    {
@@ -137,8 +157,8 @@
      "clipId": "clip-2",
      "curve": "position_x",
      "keys": [
-      "kf_dm4uduw",
-      "kf_dvi09bq"
+      "kf_9tbifhx",
+      "kf_0eyo6eu"
      ]
     }
    },
@@ -170,6 +190,15 @@
     },
     "out": {
      "png": "test_ans_result/C_composition/snap-05.png"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/C_composition/variant-05.mp4"
+    },
+    "out": {
+     "frames": 43
     }
    }
   ],
@@ -248,13 +277,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_dm4uduw",
+        "id": "kf_9tbifhx",
         "time": 0,
         "value": 260,
         "interpolation": "bounce"
        },
        {
-        "id": "kf_dvi09bq",
+        "id": "kf_0eyo6eu",
         "time": 0.9,
         "value": 60,
         "interpolation": "bounce"
@@ -333,6 +362,26 @@
      }
     },
     {
+     "tool": "track_new",
+     "params": {
+      "name": "keyed char"
+     },
+     "out": {
+      "trackId": 1
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "track": 1
+     }
+    },
+    {
      "tool": "remove_background",
      "params": {
       "method": "luma",
@@ -375,7 +424,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_dm4uduw"
+      "keyframeId": "kf_9tbifhx"
      }
     },
     {
@@ -390,7 +439,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_dvi09bq"
+      "keyframeId": "kf_0eyo6eu"
      }
     },
     {
@@ -404,8 +453,8 @@
       "clipId": "clip-2",
       "curve": "position_x",
       "keys": [
-       "kf_dm4uduw",
-       "kf_dvi09bq"
+       "kf_9tbifhx",
+       "kf_0eyo6eu"
       ]
      }
     },
@@ -437,6 +486,15 @@
      },
      "out": {
       "png": "test_ans_result/C_composition/snap-05.png"
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/C_composition/variant-05.mp4"
+     },
+     "out": {
+      "frames": 43
      }
     }
    ]

@@ -23,6 +23,12 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Tracks & timeline proof
+Cutouts/pastes/overlays live on their own tracks (track_new/track_assign);
+each recipe ends with timeline_screenshot → evidence/timeline-*.png drawn by
+src/lib/timelineSnapshot.ts (same code runs inside the booted app via
+window.omniMCP.call('timeline_screenshot') → data:img).
+
 ## Proof & feedback
 - every mp4 sidecar: `tool:"render_export"` + full recipe trace + inspect dump (never a puzzle name).
 - snapshots in */snap-*.png and evidence/ are taken THROUGH the snapshot tool.

@@ -66,6 +66,26 @@
     }
    },
    {
+    "tool": "track_new",
+    "params": {
+     "name": "keyed char"
+    },
+    "out": {
+     "trackId": 1
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "track": 1
+    }
+   },
+   {
     "tool": "remove_background",
     "params": {
      "method": "luma",
@@ -108,7 +128,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_3cmisa2"
+     "keyframeId": "kf_5c4ftjf"
     }
    },
    {
@@ -123,7 +143,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_bad5y95"
+     "keyframeId": "kf_wnnox7z"
     }
    },
    {
@@ -137,8 +157,8 @@
      "clipId": "clip-2",
      "curve": "position_x",
      "keys": [
-      "kf_3cmisa2",
-      "kf_bad5y95"
+      "kf_5c4ftjf",
+      "kf_wnnox7z"
      ]
     }
    },
@@ -170,6 +190,15 @@
     },
     "out": {
      "png": "test_ans_result/C_composition/snap-08.png"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/C_composition/variant-08.mp4"
+    },
+    "out": {
+     "frames": 43
     }
    }
   ],
@@ -248,13 +277,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_3cmisa2",
+        "id": "kf_5c4ftjf",
         "time": 0,
         "value": 300,
         "interpolation": "ease-out"
        },
        {
-        "id": "kf_bad5y95",
+        "id": "kf_wnnox7z",
         "time": 0.9,
         "value": -40,
         "interpolation": "ease-out"
@@ -333,6 +362,26 @@
      }
     },
     {
+     "tool": "track_new",
+     "params": {
+      "name": "keyed char"
+     },
+     "out": {
+      "trackId": 1
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "track": 1
+     }
+    },
+    {
      "tool": "remove_background",
      "params": {
       "method": "luma",
@@ -375,7 +424,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_3cmisa2"
+      "keyframeId": "kf_5c4ftjf"
      }
     },
     {
@@ -390,7 +439,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_bad5y95"
+      "keyframeId": "kf_wnnox7z"
      }
     },
     {
@@ -404,8 +453,8 @@
       "clipId": "clip-2",
       "curve": "position_x",
       "keys": [
-       "kf_3cmisa2",
-       "kf_bad5y95"
+       "kf_5c4ftjf",
+       "kf_wnnox7z"
       ]
      }
     },
@@ -437,6 +486,15 @@
      },
      "out": {
       "png": "test_ans_result/C_composition/snap-08.png"
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/C_composition/variant-08.mp4"
+     },
+     "out": {
+      "frames": 43
      }
     }
    ]

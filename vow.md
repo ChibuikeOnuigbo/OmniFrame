@@ -64,3 +64,10 @@ itself: if a claim cannot be opened, run, watched or measured, it does not get s
   the result USING the tool. No simulated look-alikes.
 - Sidecar JSON `tool:` field must name the major tool that ran (render_export,
   mask_draw, …) plus the recipe trace — never the puzzle's name.
+
+## Timeline-proof law (same review)
+- Every answer pack ships app-rendered timeline screenshots
+  (src/lib/timelineSnapshot.ts, identical pixels in app and headless): tracks
+  with cutouts on their own track, MASK/ROTO badges, keyframe diamonds,
+  selection, playhead and the MCP call log — so a human sees it IS the app.
+- data_dump can embed data:video; timeline sidecars carry full data:img.

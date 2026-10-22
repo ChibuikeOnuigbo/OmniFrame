@@ -38,6 +38,19 @@
    }
   },
   {
+   "tool": "track_new",
+   "params": {
+    "name": "keyed char"
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-2",
+    "track": 1
+   }
+  },
+  {
    "tool": "remove_background",
    "params": {
     "method": "luma",
@@ -100,6 +113,13 @@
    "tool": "render_export",
    "params": {
     "out": "test_ans_result/C_composition/variant-{{vi}}.mp4"
+   }
+  },
+  {
+   "tool": "timeline_screenshot",
+   "params": {
+    "out": "test_ans_result/evidence/timeline-C-{{vi}}.png",
+    "playhead": 1.7
    }
   }
  ],

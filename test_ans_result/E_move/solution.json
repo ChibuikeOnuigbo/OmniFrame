@@ -95,6 +95,26 @@
     }
    },
    {
+    "tool": "track_new",
+    "params": {
+     "name": "cutout"
+    },
+    "out": {
+     "trackId": 1
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "track": 1
+    }
+   },
+   {
     "tool": "mask_draw",
     "params": {
      "shape": "rectangle",
@@ -131,7 +151,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_u5pii25"
+     "keyframeId": "kf_5ztwrt0"
     }
    },
    {
@@ -146,7 +166,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_y",
-     "keyframeId": "kf_6mdis3e"
+     "keyframeId": "kf_7tu8hxx"
     }
    },
    {
@@ -161,7 +181,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_s2ub849"
+     "keyframeId": "kf_gku33df"
     }
    },
    {
@@ -176,7 +196,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_y",
-     "keyframeId": "kf_apzb4le"
+     "keyframeId": "kf_4rf1ueg"
     }
    },
    {
@@ -190,8 +210,8 @@
      "clipId": "clip-2",
      "curve": "position_x",
      "keys": [
-      "kf_u5pii25",
-      "kf_s2ub849"
+      "kf_5ztwrt0",
+      "kf_gku33df"
      ]
     }
    },
@@ -206,8 +226,8 @@
      "clipId": "clip-2",
      "curve": "position_y",
      "keys": [
-      "kf_6mdis3e",
-      "kf_apzb4le"
+      "kf_7tu8hxx",
+      "kf_4rf1ueg"
      ]
     }
    },
@@ -309,13 +329,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_u5pii25",
+        "id": "kf_5ztwrt0",
         "time": 0,
         "value": 0,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_s2ub849",
+        "id": "kf_gku33df",
         "time": 2,
         "value": 529,
         "interpolation": "ease-in-out"
@@ -323,13 +343,13 @@
       ],
       "position_y": [
        {
-        "id": "kf_6mdis3e",
+        "id": "kf_7tu8hxx",
         "time": 0,
         "value": 0,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_apzb4le",
+        "id": "kf_4rf1ueg",
         "time": 2,
         "value": 9.5,
         "interpolation": "ease-in-out"
@@ -436,6 +456,26 @@
      }
     },
     {
+     "tool": "track_new",
+     "params": {
+      "name": "cutout"
+     },
+     "out": {
+      "trackId": 1
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "track": 1
+     }
+    },
+    {
      "tool": "mask_draw",
      "params": {
       "shape": "rectangle",
@@ -472,7 +512,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_u5pii25"
+      "keyframeId": "kf_5ztwrt0"
      }
     },
     {
@@ -487,7 +527,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_y",
-      "keyframeId": "kf_6mdis3e"
+      "keyframeId": "kf_7tu8hxx"
      }
     },
     {
@@ -502,7 +542,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_s2ub849"
+      "keyframeId": "kf_gku33df"
      }
     },
     {
@@ -517,7 +557,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_y",
-      "keyframeId": "kf_apzb4le"
+      "keyframeId": "kf_4rf1ueg"
      }
     },
     {
@@ -531,8 +571,8 @@
       "clipId": "clip-2",
       "curve": "position_x",
       "keys": [
-       "kf_u5pii25",
-       "kf_s2ub849"
+       "kf_5ztwrt0",
+       "kf_gku33df"
       ]
      }
     },
@@ -547,8 +587,8 @@
       "clipId": "clip-2",
       "curve": "position_y",
       "keys": [
-       "kf_6mdis3e",
-       "kf_apzb4le"
+       "kf_7tu8hxx",
+       "kf_4rf1ueg"
       ]
      }
     },

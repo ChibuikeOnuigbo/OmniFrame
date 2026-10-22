@@ -96,6 +96,9 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 82 ClipEffect.lumaKey bg removal + remove_background tool + rack entry
 83 ClipEffect.cardFlip fold + pixelGrade maths + rack entry
 84 data_dump with data:img previews/clip thumbs for vision models
+85 timelineSnapshot.ts: app timeline renderer (tracks, MASK/ROTO badges, key diamonds, playhead, MCP log)
+86 MCP timeline_screenshot tool (headless + in-app bridge) — anti-cheat proof PNGs/data:img
+87 track_new/track_assign universal tools + data_dump data:video embedding
 
-**Total: 84 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 84) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 87 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 87) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).

@@ -86,6 +86,26 @@
     }
    },
    {
+    "tool": "track_new",
+    "params": {
+     "name": "cutout"
+    },
+    "out": {
+     "trackId": 1
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-2",
+     "track": 1
+    }
+   },
+   {
     "tool": "mask_draw",
     "params": {
      "shape": "rectangle",
@@ -212,6 +232,46 @@
       "pivotX": 0.5,
       "pivotY": 0.5
      }
+    }
+   },
+   {
+    "tool": "track_new",
+    "params": {
+     "name": "overlays"
+    },
+    "out": {
+     "trackId": 2
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-3",
+     "track": 2
+    },
+    "out": {
+     "clipId": "clip-3",
+     "track": 2
+    }
+   },
+   {
+    "tool": "track_assign",
+    "params": {
+     "clipId": "clip-4",
+     "track": 2
+    },
+    "out": {
+     "clipId": "clip-4",
+     "track": 2
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/A_composition/variant-02.mp4"
+    },
+    "out": {
+     "frames": 38
     }
    }
   ],
@@ -458,6 +518,26 @@
      }
     },
     {
+     "tool": "track_new",
+     "params": {
+      "name": "cutout"
+     },
+     "out": {
+      "trackId": 1
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-2",
+      "track": 1
+     }
+    },
+    {
      "tool": "mask_draw",
      "params": {
       "shape": "rectangle",
@@ -584,6 +664,46 @@
        "pivotX": 0.5,
        "pivotY": 0.5
       }
+     }
+    },
+    {
+     "tool": "track_new",
+     "params": {
+      "name": "overlays"
+     },
+     "out": {
+      "trackId": 2
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-3",
+      "track": 2
+     },
+     "out": {
+      "clipId": "clip-3",
+      "track": 2
+     }
+    },
+    {
+     "tool": "track_assign",
+     "params": {
+      "clipId": "clip-4",
+      "track": 2
+     },
+     "out": {
+      "clipId": "clip-4",
+      "track": 2
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/A_composition/variant-02.mp4"
+     },
+     "out": {
+      "frames": 38
      }
     }
    ]

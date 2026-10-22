@@ -47,6 +47,19 @@
    }
   },
   {
+   "tool": "track_new",
+   "params": {
+    "name": "pastes"
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-2",
+    "track": 1
+   }
+  },
+  {
    "tool": "mask_draw",
    "params": {
     "shape": "rectangle",
@@ -194,6 +207,13 @@
    "tool": "render_export",
    "params": {
     "out": "test_ans_result/D_tank_fill/solution.mp4"
+   }
+  },
+  {
+   "tool": "timeline_screenshot",
+   "params": {
+    "out": "test_ans_result/evidence/timeline-D.png",
+    "playhead": 2.3
    }
   }
  ]

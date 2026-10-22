@@ -40,6 +40,7 @@ export class Sequence {
   constructor({ w = 640, h = 360, fps = 24, duration = 2, bg = '#0d0f13' } = {}) {
     this.w = w; this.h = h; this.fps = fps; this.duration = duration; this.bg = bg
     this.clips = []
+    this.tracks = [{ id: 0, name: 'track 1' }]
     this.mode = 'omniframe'
   }
   addClip(clip) { this.clips.push(clip); return clip }
@@ -63,6 +64,7 @@ export class Sequence {
 export function makeClip({ id, name, asset, natW, natH, start = 0, duration = 2, draw }) {
   return {
     id, name, asset, natW, natH, start, duration, inPoint: 0,
+    track: 0,
     transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, pivotX: 0.5, pivotY: 0.5 },
     animation: CE.createDefaultClipAnimation({ x: 0, y: 0, z: 0, scale: 1, rotation: 0, opacity: 1, pivotX: 0.5, pivotY: 0.5 }),
     effects: {}, blendMode: 'source-over', opacity: 1, draw,

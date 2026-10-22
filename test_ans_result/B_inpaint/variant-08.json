@@ -108,6 +108,15 @@
     "out": {
      "png": "test_ans_result/B_inpaint/snap-end-08.png"
     }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/B_inpaint/variant-08.mp4"
+    },
+    "out": {
+     "frames": 42
+    }
    }
   ],
   "inspect": {
@@ -268,6 +277,15 @@
      },
      "out": {
       "png": "test_ans_result/B_inpaint/snap-end-08.png"
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/B_inpaint/variant-08.mp4"
+     },
+     "out": {
+      "frames": 42
      }
     }
    ]

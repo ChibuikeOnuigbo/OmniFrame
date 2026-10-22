@@ -67,6 +67,13 @@
    "params": {
     "out": "test_ans_result/B_inpaint/variant-{{vi}}.mp4"
    }
+  },
+  {
+   "tool": "timeline_screenshot",
+   "params": {
+    "out": "test_ans_result/evidence/timeline-B-{{vi}}.png",
+    "playhead": 1.6
+   }
   }
  ],
  "variants": [

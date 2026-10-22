@@ -6,6 +6,7 @@
  */
 import { useEditor } from '../store'
 import { addOrUpdateKeyframe, applyEasingPreset } from './animation/CurveEngine'
+import { drawTimelineSnapshot, timelineSnapshotSize, type TimelineSnapPayload } from './timelineSnapshot'
 
 export interface McpLogEntry { tool: string; params: Record<string, unknown>; ok: boolean; out?: unknown; error?: string; at: number }
 export const mcpLog: McpLogEntry[] = []
@@ -19,6 +20,7 @@ function push(e: McpLogEntry) {
 export const OMNI_MCP_CATALOG = [
   'help', 'select', 'click', 'mask_draw', 'mask_clear', 'keyframe_set', 'curve_set',
   'effect_set', 'remove_background', 'fill_composition_area', 'snapshot', 'dump',
+  'timeline_screenshot', 'track_assign', 'log',
 ]
 
 export async function omniMcpCall(tool: string, params: Record<string, any> = {}): Promise<{ ok: boolean; out?: unknown; error?: string }> {
@@ -97,6 +99,41 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         const el = document.querySelector('[data-testid="preview-stage"] canvas') as HTMLCanvasElement | null
         if (!el) throw new Error('preview canvas not mounted')
         out = { 'data:img': el.toDataURL('image/png') }
+        break
+      }
+      case 'track_assign': {
+        const c = selClip(); if (!c) throw new Error('nothing selected')
+        const tracks = (st().tracks || []) as any[]
+        if (!tracks.some(t => t.id === params.track)) tracks.push({ id: params.track, name: `track ${params.track + 1}`, type: 'video' })
+        c.trackId = params.track
+        useEditor.setState({ clips: [...clips()], tracks: [...tracks] })
+        out = { clipId: c.id, track: params.track }
+        break
+      }
+      case 'log':
+        out = { entries: mcpLog.slice(-(params.limit || 50)) }
+        break
+      case 'timeline_screenshot': {
+        const tracks = (st().tracks || []) as any[]
+        const payload: TimelineSnapPayload = {
+          sequence: { width: seq.width, height: seq.height, fps: st().projectFps || 30, duration: params.duration ?? 4 },
+          tracks: tracks.map((t: any, i: number) => ({ id: t.id ?? i, name: t.name || `track ${i + 1}` })),
+          clips: clips().map(c => ({
+            id: c.id, name: c.name, start: c.start, duration: c.duration,
+            track: tracks.findIndex((t: any) => t.id === c.trackId),
+            masked: Boolean(c.mask && c.mask.enabled), roto: c.mask?.kind === 'custom',
+            keyed: Object.entries((c.animation && (c.animation as any).curves) || {}).filter(([, v]: any) => v.keyframes && v.keyframes.length > 0).map(([k]) => k),
+            selected: (st().selectedClipIds || []).includes(c.id), kind: c.kind,
+          })),
+          playhead: params.playhead ?? st().playhead ?? 0,
+          log: mcpLog.map(e => ({ tool: e.tool, ok: e.ok })),
+          title: 'OmniFrame timeline (live app)',
+        }
+        const { w, h } = timelineSnapshotSize(payload)
+        const cv = document.createElement('canvas')
+        cv.width = w; cv.height = h
+        drawTimelineSnapshot(cv.getContext('2d')!, payload, w, h)
+        out = { 'data:img': cv.toDataURL('image/png') }
         break
       }
       case 'dump':

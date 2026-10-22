@@ -217,6 +217,55 @@ function inspectPayload() {
     trace: SESSION.trace,
   }
 }
+
+class TrackNew extends MCPTool {
+  constructor() { super('track_new', 'Major tool: add a timeline track (cutouts live on their own track).', { name: '' }) }
+  async run({ name }) {
+    const s = seq()
+    const id = Math.max(...s.tracks.map(t => t.id)) + 1
+    s.tracks.push({ id, name: name || `track ${id + 1}` })
+    return SESSION.note('track_new', { name }, { trackId: id })
+  }
+}
+class TrackAssign extends MCPTool {
+  constructor() { super('track_assign', 'Major tool: move selected (or named) clip to a track.', { clipId: '', track: 'id' }) }
+  async run({ clipId, track }) {
+    const s = seq()
+    const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
+    if (!s.tracks.some(t => t.id === track)) s.tracks.push({ id: track, name: `track ${track + 1}` })
+    c.track = track
+    return SESSION.note('track_assign', { clipId: c.id, track }, { clipId: c.id, track })
+  }
+}
+class TimelineScreenshot extends MCPTool {
+  constructor() { super('timeline_screenshot', 'Anti-cheat proof: the APP\'s own timeline renderer (src/lib/timelineSnapshot.ts) draws tracks, clip blocks, MASK/ROTO badges, keyframe diamonds, playhead and the MCP log → png + data:img.', { out: 'png path', playhead: 's' }) }
+  async run({ out, playhead = 0 }) {
+    const mod = await loadAppTs('src/lib/timelineSnapshot.ts')
+    const s = seq()
+    const payload = {
+      sequence: { width: s.w, height: s.h, fps: s.fps, duration: s.duration },
+      tracks: s.tracks,
+      clips: s.clips.map(c => ({
+        id: c.id, name: c.name, start: c.start, duration: c.duration, track: c.track ?? 0,
+        masked: Boolean(c.mask && c.mask.enabled), roto: c.mask?.kind === 'custom',
+        keyed: Object.entries(c.animation.curves).filter(([, v]) => v.keyframes.length > 0).map(([k]) => k),
+        selected: SESSION.selection === c, kind: c.asset && c.asset.startsWith('text:') ? 'text' : 'media',
+      })),
+      playhead, log: SESSION.trace.map(t => ({ tool: t.tool, ok: true })),
+      title: `OmniFrame timeline — ${SESSION.mode} mode`,
+    }
+    const { w, h } = mod.timelineSnapshotSize(payload)
+    const c = makeCanvas(w, h)
+    mod.drawTimelineSnapshot(c.getContext('2d'), payload, w, h)
+    const dest = out ? path.join(ROOT, out) : path.join(TAR, `timeline-${Date.now()}.png`)
+    fs.mkdirSync(path.dirname(dest), { recursive: true })
+    fs.writeFileSync(dest, c.toBuffer('image/png'))
+    const b64 = c.toBuffer('image/png').toString('base64')
+    const sidecar = `${dest}.json`
+    fs.writeFileSync(sidecar, JSON.stringify({ tool: 'timeline_screenshot', png: path.relative(ROOT, dest), 'data:img': `data:image/png;base64,${b64}` }, null, 1))
+    return SESSION.note('timeline_screenshot', { out, playhead }, { png: path.relative(ROOT, dest), sidecar: path.relative(ROOT, sidecar), bytes: Math.round(b64.length * 0.75) })
+  }
+}
 class RunRecipe extends MCPTool {
   constructor() { super('run_recipe', 'Execute a recipe: plain JSON list of universal tool calls (puzzles are data, not code).', { file: 'repo-relative json', overrides: '{}', variants: '[{overrides}]' }) }
   async run({ file, overrides = {}, variants }) {
@@ -342,8 +391,8 @@ class ContextMenu extends MCPTool {
   }
 }
 class DataDump extends MCPTool {
-  constructor() { super('data_dump', 'Full JSON dump: every clip pos/size/colour/curves + preview frames and per-clip thumbs as data:img for vision models.', { withImages: 'bool', times: '[s]' }) }
-  async run({ withImages = false, times = [0] }) {
+  constructor() { super('data_dump', 'Full JSON dump: every clip pos/size/colour/curves + preview frames and per-clip thumbs as data:img; withVideo embeds the exported mp4 as data:video (chunked).', { withImages: 'bool', times: '[s]', withVideo: 'mp4 path' }) }
+  async run({ withImages = false, times = [0], withVideo }) {
     const base = inspectPayload()
     const out = { ...base }
     if (withImages && SESSION.seq) {
@@ -357,7 +406,13 @@ class DataDump extends MCPTool {
         return { clipId: c.id, rect: r, 'data:img': `data:image/png;base64,${cc.toBuffer('image/png').toString('base64')}` }
       })
     }
-    return SESSION.note('data_dump', { withImages, times }, out)
+    if (withVideo) {
+      const v = path.isAbsolute(withVideo) ? withVideo : path.join(ROOT, withVideo)
+      const b64 = fs.readFileSync(v).toString('base64')
+      out['data:video'] = `data:video/mp4;base64,${b64}`
+      out.videoBytes = fs.statSync(v).size
+    }
+    return SESSION.note('data_dump', { withImages, times, withVideo }, out)
   }
 }
 function applyShapeMatteLocal(x, m, r, seq) {
@@ -384,4 +439,4 @@ class RotoMask extends MCPTool {
 }
 
 export const registry = new MCPRegistry()
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot]) registry.register(new T())
