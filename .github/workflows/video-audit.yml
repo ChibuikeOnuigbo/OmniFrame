@@ -93,7 +93,7 @@ jobs:
           mkdir -p audit-out
           python3 - <<'PY'
           import json, subprocess
-          channels = ["@spaceless2041","@Deppey","@AvoidAEP","@MatttVfx","@Keditz123","@chosensyt"]
+          channels = ["@spaceless2041","@Deppey","@AvoidAEP","@MatttVfx","@Keditz123","@chosensyt","@Hancybox"]
           explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
           inv = {}
           def add(vid, title, dur, chan, fmt):
@@ -109,8 +109,13 @@ jobs:
                       out = subprocess.run(["yt-dlp","--flat-playlist","--no-warnings",
                                             "--print","%(id)s\t%(title)s\t%(duration)s\t%(channel)s", url],
                                            capture_output=True, text=True, timeout=600)
+                      import re as _re
+                      _AI = _re.compile(r'\b(ai|chatgpt|gpt-?\d|midjourney|sora|runway|stable diffusion|generat(ed|ive)|llm)\b', _re.I)
                       for line in out.stdout.splitlines():
                           p = line.split("\t")
+                          # user mandate: Hancybox = editing tricks only, skip his AI-genre videos
+                          if len(p) >= 2 and 'hancybox' in ch.lower() and _AI.search(p[1] or ''):
+                              continue
                           if len(p) >= 4 and p[0]:
                               add(p[0], p[1], p[2], p[3], tab)
                       print(ch, tab, "ok", len(out.stdout.splitlines()))
