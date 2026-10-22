@@ -1328,9 +1328,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "captions 'create images and videos with IA' / 'Voxel sorter' / 'how it all went' over aerial footage, white voxel frame, blurred portrait; captioned montage"
   },
   {
    "id": "UE-352Rre5A",
@@ -1469,9 +1470,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "keyframe graph w/ 'sometimes that's true' caption + live office interview footage; live footage + graph caption"
   },
   {
    "id": "j3Lt0dU1Lok",
@@ -1656,9 +1658,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'hey everyone' typo comp w/ context menu open, 'Leave u guy' typo comp w/ blue glow; typo comps + menu"
   },
   {
    "id": "vU7aF460kHE",
@@ -1684,9 +1687,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "spark/explosion light comp (blue/pink), black comp w/ pink particles, gray vignette frame; spark/particle comps"
   },
   {
    "id": "XBLcpjthsBE",
@@ -1726,9 +1730,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark 3D card/red-sign scene comps + bright-light comp, white gradient frame; 3D sign scene"
   },
   {
    "id": "3OEHnIPQKlE",
@@ -1770,9 +1775,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "line-art eye comp (cyan), 3D char bust comp w/ glowing eyes, white frame w/ black ink strokes; line-art + 3D bust comps"
   },
   {
    "id": "khjRWWTYZcc",
@@ -1827,9 +1833,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "hooded manga char comp on wood bg, blue lens-flare dots comp, 'most editors have' caption on gray; flare comps + caption"
   },
   {
    "id": "Tbyfnw3FFSQ",
@@ -1972,9 +1979,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "particle/brush preset panel (dotted black swatches), char comp w/ plant overlay + curve graph, teal-graded char; particle presets + grade"
   },
   {
    "id": "lskzAXaFxp8",
@@ -1986,9 +1994,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white-haired anime char comp w/ glow + blue variant comp w/ hand glow; char glow comps"
   },
   {
    "id": "aiAi86bHlnE",
@@ -2114,9 +2123,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white-hooded kneeling char on black comp, 3D wireframe comp w/ red glow orb, red blur frame; 3D wireframe + glow"
   },
   {
    "id": "PT3cQa6WQ4A",
@@ -2142,9 +2152,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Creation-of-Adam hands comp in orange fire grade + smaller variant, orange blur frame; fire-grade art comp"
   },
   {
    "id": "bDNXk0t4d6w",
@@ -2156,9 +2167,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-haired anime char profile comp + scopes/colour-panel variant, soft blur frame; grade w/ scopes"
   },
   {
    "id": "ThBfRHGIs_0",
@@ -2314,9 +2326,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'EDITOR' typo comp w/ mask path, vertical phone comp 'U CAN (WIN)', red UI frame; typo comps + red UI"
   },
   {
    "id": "Z_kpQtAo2Rc",
@@ -2357,9 +2370,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'first install and extract the files' + 'copy it to the after effects folder' captions over explorer screenshots; install tutorial"
   },
   {
    "id": "pVN8I_PWXbo",
@@ -2442,9 +2456,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "gameplay footage (blue char) + AE comp of plank/stair scene, red frame w/ chars; gameplay VFX comp"
   },
   {
    "id": "inxk1Vz0qcQ",
@@ -2456,9 +2471,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "CapCut-style UI w/ orange-swirl anime frames, shouting char close-up, fiery final; CapCut anime edit"
   },
   {
    "id": "Ojw7zCrJ1Ew",
@@ -2499,9 +2515,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red planet/sphere comp w/ white curve stroke, black starfield frame, yellow gradient frame; planet sphere comp"
   },
   {
    "id": "2pqXZyICLvM",
@@ -2602,9 +2619,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red char on marble comps + 3D box comp, small comp variant, white/red radial-blur frame; 3D box comp + radial blur"
   },
   {
    "id": "wd2oJT3jas0",
@@ -2834,9 +2852,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "portrait comp w/ 'SHOULD I QUIT YOUTUBE' typo + green-typo variant, file explorer w/ thumbs; typo portrait comps"
   },
   {
    "id": "kj2ru1I3jXw",
