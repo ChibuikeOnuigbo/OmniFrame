@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T11:47:02Z",
+ "updated": "2026-10-22T12:25:07Z",
  "total_discovered": 248,
  "by_status": {
   "BLOCKED": 5,
@@ -17,7 +17,7 @@
   "drive_batches_completed": 2,
   "drive_videos_footage": 56,
   "youtube_batches_completed": 13,
-  "watched_visual_total": 311,
+  "watched_visual_total": 326,
   "next_drive_batch": 3,
   "next_yt_batch": 4
  },
@@ -69,6 +69,11 @@
    "batch": "chat-4+short",
    "result": "16/18 wave4 watched + user short K2mSI59wPvg watched; 2 unavailable",
    "ts": "2026-10-22T11:47:02Z"
+  },
+  {
+   "batch": "hancybox-1",
+   "result": "V9ApHueQbN0 watched: anamorphic flare sting on black (technique 99)",
+   "ts": "2026-10-22T12:25:07Z"
   }
  ],
  "watched_ids": [
@@ -382,7 +387,8 @@
   "fx55eFCUw_I",
   "p0cp8uUpc9M",
   "poKeVJZMFV4",
-  "K2mSI59wPvg"
+  "K2mSI59wPvg",
+  "V9ApHueQbN0"
  ],
  "extra_watched": {
   "JJK_S2E3_72": "JJK S2E3 raw: Yuji + Aoi on beach, bloodied Gojo face close-up, red/black logo sting; raw episode footage",

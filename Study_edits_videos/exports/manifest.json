@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-22T11:50:45.038Z",
- "count": 311,
+ "generated": "2026-10-22T12:27:57.773Z",
+ "count": 312,
  "clips": [
   {
    "id": "fGm0SBFTj3o",
@@ -3730,6 +3730,18 @@
    "family": "scene",
    "style": "spheres",
    "technique": "study recreation — spheres grammar",
+   "particleFx": "none",
+   "overlayFx": "none",
+   "replaceBg": "none"
+  },
+  {
+   "id": "V9ApHueQbN0",
+   "title": "Hancybox short V9ApHueQbN0",
+   "file": "exports/V9ApHueQbN0.mp4",
+   "seconds": 2,
+   "family": "scene",
+   "style": "roto",
+   "technique": "study recreation — roto grammar",
    "particleFx": "none",
    "overlayFx": "none",
    "replaceBg": "none"

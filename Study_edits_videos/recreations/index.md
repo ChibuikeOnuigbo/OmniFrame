@@ -142,3 +142,10 @@ Grammar: gradient sky bed (blue → pale horizon) + single paper-plane hero drif
 left→right on the shared fade curve with a thin white motion trail; incoming clip
 crossfades up from p 0.7. Params: none (constant look). Beats: drift 0–1 · handoff 0.7–1.
 QA: `node qa/scene-recreation-unit.mjs` (style `drift`, 7 samples) — 21 styles PASS.
+
+## 22 — scene_flare_sting (`flare`)
+Source: Hancybox short V9ApHueQbN0 (technique 99).
+Grammar: black bed, outgoing clip dimmed under a chromatic anamorphic streak
+(orange/blue fringes + white core dot + radial glow) swelling on the shared fade
+curve; incoming clip rises from p 0.6. Params: none (constant look).
+Beats: flare swell 0–0.6 · handoff 0.6–1. QA: style `flare`, 7 samples — 22 styles PASS.

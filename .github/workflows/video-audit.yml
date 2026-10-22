@@ -100,8 +100,11 @@ jobs:
               # yt-dlp prints 'NA' for unknown durations (shorts) — coerce so
               # downstream float() never crashes (crashed batches 5 & 15).
               dur = dur if str(dur).replace('.', '', 1).isdigit() else '0'
-              if vid in inv: 
-                  inv[vid]["formats"].append(fmt); return
+              if vid in inv:
+                  inv[vid]["formats"].append(fmt)
+                  if chan not in ('NA', None) and inv[vid].get("channel") == 'NA':
+                      inv[vid]["channel"] = chan
+                  return
               inv[vid] = {"id": vid, "url": f"https://www.youtube.com/watch?v={vid}", "title": title,
                           "duration": dur, "channel": chan, "format": fmt, "formats": [fmt],
                           "status": "INVENTORIED", "access": "pending-batch"}
@@ -120,7 +123,7 @@ jobs:
                           if len(p) >= 2 and 'hancybox' in ch.lower() and _AI.search(p[1] or ''):
                               continue
                           if len(p) >= 4 and p[0]:
-                              add(p[0], p[1], p[2], p[3], tab)
+                              add(p[0], p[1], p[2], ch, tab)
                       print(ch, tab, "ok", len(out.stdout.splitlines()))
                       open(f"audit-out/errors/scrape-{ch.strip('@')}-{tab}.txt", "w").write(out.stdout[:3000] + "\n--STDERR--\n" + out.stderr[:1500])
                   except Exception as e:

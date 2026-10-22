@@ -4833,8 +4833,8 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
-   "access": "pending-batch"
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch16"
   }
  ]
 }

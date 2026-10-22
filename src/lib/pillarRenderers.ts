@@ -1365,6 +1365,46 @@ function sceneDriftTrail(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/* Hancybox short V9ApHueQbN0: anamorphic lens-flare streak on a black bed —
+   technique 99. The flare swells on the shared fade curve, fringes chromatically,
+   then hands off to the incoming clip. */
+function sceneFlareSting(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, w, h)
+  if (a.hasFrom && p <= 0.6) { ctx.save(); ctx.globalAlpha = 0.06 + 0.08 * (1 - e); a.drawFrom(ctx); ctx.restore() }
+  const cx = w * (0.32 + 0.1 * e)
+  const cy = h * 0.52
+  const len = w * (0.1 + 0.16 * Math.sin(Math.PI * Math.min(1, p * 1.2)))
+  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, len * 1.6)
+  glow.addColorStop(0, `rgba(255,255,255,${0.85 * Math.sin(Math.PI * Math.min(1, p * 1.1))})`)
+  glow.addColorStop(0.25, 'rgba(160,190,255,0.35)')
+  glow.addColorStop(1, 'rgba(0,0,0,0)')
+  ctx.fillStyle = glow
+  ctx.fillRect(0, 0, w, h)
+  // horizontal anamorphic streak with chromatic fringes
+  const streak = (color: string, dy: number, alpha: number) => {
+    ctx.fillStyle = color
+    ctx.globalAlpha = alpha
+    ctx.beginPath()
+    ctx.ellipse(cx, cy + dy, len, Math.max(1, h * 0.006), 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.globalAlpha = 1
+  }
+  streak('rgba(255,140,60,0.8)', 1.2, 0.7)
+  streak('rgba(120,160,255,0.8)', -1.2, 0.7)
+  streak('rgba(255,255,255,0.95)', 0, 0.9)
+  // bright core dot (arc so headless stub-canvas QA can count it)
+  const core = Math.max(1.5, h * 0.02 * Math.sin(Math.PI * Math.min(1, p * 1.1)))
+  ctx.fillStyle = 'rgba(255,255,255,0.95)'
+  ctx.beginPath()
+  ctx.arc(cx, cy, core, 0, Math.PI * 2)
+  ctx.fill()
+  if (a.hasTo && p > 0.6) { ctx.save(); ctx.globalAlpha = ((p - 0.6) / 0.4) * 0.95; a.drawTo(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -1388,5 +1428,6 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'quote') sceneQuoteBand(a)
   else if (style === 'mono') sceneMonoTypo(a)
   else if (style === 'drift') sceneDriftTrail(a)
+  else if (style === 'flare') sceneFlareSting(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }

@@ -142,3 +142,17 @@ Techniques 86–98: 86 double-band typo lockup · 87 glitch tint + micro caps ·
 92 centred gothic name typo on band · 93 checker-grid tile bed · 94 vertical bar sweep overlay ·
 95 tint + vertical divider · 96 colour typo over footage + micro bar · 97 light blur bed ·
 98 letterboxed full-bleed hold.
+
+## Hancybox wave 0 — named short V9ApHueQbN0 (batch 16) + channel policy
+
+Frame evidence: near-black bed with a single horizontal **anamorphic lens-flare
+streak** (blue/orange chromatic fringe, white core) hovering left-of-centre — the
+classic flare-sting flash bed used as a cut accent.
+Technique 99: anamorphic flare sting on black → recreated as scene `flare`
+(recreation #22, `scene_flare_sting`).
+
+Channel policy (user mandate): watch ALL @Hancybox shorts **except his AI-genre
+videos**; the runner now filters titles matching
+`\b(ai|chatgpt|gpt-N|midjourney|sora|runway|stable diffusion|generated|generative|llm)\b`
+for his channel only (4 AI titles already filtered in batch 16: Seedance, Lovart AI,
+AI-agent sponsor, #ai tag repost). 21 editing shorts queued (batch 17).

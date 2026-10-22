@@ -423,6 +423,7 @@ export type TransitionType =
   | 'scene_quote_band'
   | 'scene_mono_typo'
   | 'scene_drift_trail'
+  | 'scene_flare_sting'
 
 export interface Transition {
   id: string
