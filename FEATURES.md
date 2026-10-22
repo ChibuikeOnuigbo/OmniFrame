@@ -33,9 +33,26 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 27 scene_dual_typo — dual-style two-line typo (WJAO6OXE4kM)
 
 ## FX layer kinds (particleFx / overlayFx / replaceBg)
-28 feathers · 29 embers · 30 dust · 31 bokeh · 32 sparkles · 33 snow · 34 rain · 35 petals
-36 scanlines · 37 halftone · 38 spotlight · 39 vignette · 40 lightleak · 41 frameglow
-42 synthwave · 43 aurora · 44 grid · 45 bokeh bed · 46 sunset · 47 studio
+28 feathers
+29 embers
+30 dust
+31 bokeh
+32 sparkles
+33 snow
+34 rain
+35 petals
+36 scanlines
+37 halftone
+38 spotlight
+39 vignette
+40 lightleak
+41 frameglow
+42 synthwave
+43 aurora
+44 grid
+45 bokeh bed
+46 sunset
+47 studio
 
 ## Null / parenting / groups (AE + Alight Motion + CapCut research)
 48 Null object layer kind (renders zero pixels, controller only)
@@ -69,5 +86,5 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 72 Reddit collector runner step
 73 vow.md accountability contract
 
-**Total: 73 shipped features** (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 73 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 73) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).
