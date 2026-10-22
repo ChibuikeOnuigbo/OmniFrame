@@ -1,34 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {
+  Activity,
+  AudioLines,
+  Columns2,
+  Diamond,
+  Eraser,
+  Feather,
+  FileVideo,
+  Flame,
+  FlipHorizontal2,
+  FlipVertical2,
+  FolderOpen,
+  FolderOutput,
+  Grid3x3,
+  Layers,
+  Lightbulb,
+  Palette,
   PanelRight,
   PanelRightClose,
   PanelRightOpen,
-  PictureInPicture2,
-  X,
-  Trash2,
-  Scissors,
-  AudioLines,
-  Volume2,
-  Diamond,
-  Activity,
-  FolderOpen,
-  FolderOutput,
-  Layers,
-  SlidersHorizontal,
-  ScanFace,
-  Sparkles,
-  Slice,
-  Columns2,
-  Square,
   PenTool,
-  Type,
-  FlipHorizontal2,
-  FlipVertical2,
+  PictureInPicture2,
+  Rainbow,
   Scaling,
-  Shapes,
-  Palette,
-  FileVideo,
+  Scan,
+  ScanFace,
+  ScanLine,
+  Scissors,
   Settings2,
+  Shapes,
+  Slice,
+  SlidersHorizontal,
+  Sparkles,
+  Square,
+  Trash2,
+  Tv,
+  Type,
+  Volume2,
+  Wand2,
+  Waves,
+  X,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
@@ -37,7 +48,7 @@ import { RotoMaskSubTool } from './RotoMaskSubTool'
 import { Tooltip } from './Tooltip'
 import { InfoTip } from './InfoTip'
 import { useEditor } from '../store'
-import type { Clip, ClipAdjustmentMask, ClipVisualMask } from '../types'
+import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
@@ -802,6 +813,8 @@ function ClipInspector({ clip }: { clip: Clip }) {
       )}
 
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <ClipMaskSection clip={clip} />}
+      {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <MaskingRotoSection clip={clip} />}
+      {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <AeToolRackSection clip={clip} />}
 
       <Section title="Transform">
         <Field label="Position X">
@@ -1251,6 +1264,81 @@ function ProjectInspector() {
         </ul>
       </Section>
     </div>
+  )
+}
+
+
+/** Dedicated Masking & Roto workspace section (extracted from the general
+ *  tool stack per review: masking sub-tools get their own right-panel
+ *  section with icon-first tiles, never mixed into generic sections). */
+function MaskingRotoSection({ clip }: { clip: Clip }) {
+  const toggleSelectionMaskView = useEditor((s) => s.toggleSelectionMaskView)
+  const runGuidedRectBackgroundRemoval = useEditor((s) => s.runGuidedRectBackgroundRemoval)
+  const rotoBrushRadius = useEditor((s) => s.rotoBrushRadius)
+  void clip
+  return (
+    <Section title="Masking & Roto">
+      <div className="space-y-2 rounded-md border border-rose-500/40 bg-rose-500/5 p-2" data-testid="masking-roto-section">
+        <div className="flex flex-wrap gap-1">
+          <button type="button" data-testid="mr-mask-view" title="Toggle selection mask view" aria-label="Toggle selection mask view"
+            onClick={() => toggleSelectionMaskView()}
+            className="flex h-7 w-7 items-center justify-center rounded border border-ink-700 bg-ink-900 text-ink-300 hover:text-white">
+            <Scan size={13} />
+          </button>
+          <button type="button" data-testid="mr-roto" title="Roto brush mask sub-tool (drawing panel)" aria-label="Roto brush mask sub-tool"
+            onClick={() => useEditor.setState({ leftTab: 'drawing' })}
+            className="flex h-7 w-7 items-center justify-center rounded border border-ink-700 bg-ink-900 text-ink-300 hover:text-white">
+            <PenTool size={13} />
+          </button>
+          <button type="button" data-testid="mr-guided-matte" title="Guided rect matte / background cut-out" aria-label="Guided rect matte"
+            onClick={() => { void runGuidedRectBackgroundRemoval() }}
+            className="flex h-7 w-7 items-center justify-center rounded border border-ink-700 bg-ink-900 text-ink-300 hover:text-white">
+            <Wand2 size={13} />
+          </button>
+          {[12, 24, 48].map((r) => (
+            <button key={r} type="button" data-testid={`mr-roto-radius-${r}`} title={`Roto brush radius ${r}px`} aria-label={`Roto brush radius ${r}px`}
+              onClick={() => useEditor.setState({ rotoBrushRadius: r })}
+              className={`flex h-7 min-w-7 items-center justify-center rounded border px-1 font-mono text-[9px] ${rotoBrushRadius === r ? 'border-rose-500 bg-rose-500/20 text-rose-200' : 'border-ink-700 bg-ink-900 text-ink-400 hover:text-white'}`}>
+              {r}
+            </button>
+          ))}
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/** One-click rack of the settings combos scanned off the AE tutorial popups
+ *  (Study_edits_videos/deep-study-*.md): comp light, CRT blotch, mosaic,
+ *  RGB fringe, wave warp, green key, feather/ember beds, scanlines. */
+const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Record<string, unknown> }> = [
+  { id: 'complight', label: 'Comp light (warm point light + falloff)', icon: Lightbulb, effect: { lightType: 'point', lightIntensity: 1.1, lightColor: '#ffd9a0', lightFalloff: 0.5 } },
+  { id: 'crt', label: 'CRT look (posterize + grain + fringe)', icon: Tv, effect: { posterize: 0.55, grain: 0.35, chromatic: 3 } },
+  { id: 'mosaic', label: 'Mosaic pixel shift bed', icon: Grid3x3, effect: { pixelate: 12 } },
+  { id: 'fringe', label: 'RGB fringe attack', icon: Rainbow, effect: { chromatic: 9 } },
+  { id: 'warp', label: 'Wave warp bend', icon: Waves, effect: { waveWarp: 10 } },
+  { id: 'greenkey', label: 'Green-screen key (CTA card)', icon: Eraser, effect: { chromaKey: 0.85 } },
+  { id: 'feathers', label: 'Feather particle bed', icon: Feather, effect: { particleFx: 'feathers', particleDensity: 0.6 } },
+  { id: 'embers', label: 'Ember particle bed', icon: Flame, effect: { particleFx: 'embers', particleDensity: 0.5 } },
+  { id: 'scan', label: 'Scanline overlay', icon: ScanLine, effect: { overlayFx: 'scanlines', overlayStrength: 0.6 } },
+]
+function AeToolRackSection({ clip }: { clip: Clip }) {
+  const setClipEffect = useEditor((s) => s.setClipEffect)
+  return (
+    <Section title="AE Tool Rack">
+      <div className="flex flex-wrap gap-1" data-testid="ae-tool-rack">
+        {AE_RACK.map((tool) => {
+          const Icon = tool.icon
+          return (
+            <button key={tool.id} type="button" data-testid={`ae-rack-${tool.id}`} title={tool.label} aria-label={tool.label}
+              onClick={() => setClipEffect(clip.id, tool.effect as Partial<ClipEffect>)}
+              className="flex h-7 w-7 items-center justify-center rounded border border-ink-700 bg-ink-900 text-ink-300 hover:text-white">
+              <Icon size={13} />
+            </button>
+          )
+        })}
+      </div>
+    </Section>
   )
 }
 

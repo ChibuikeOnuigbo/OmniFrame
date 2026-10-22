@@ -1,19 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import {
-  Activity,
-  Download,
-  Layers,
-  Play,
-  Plus,
-  Power,
-  RotateCcw,
-  Search,
-  SlidersHorizontal,
-  Trash2,
-  Upload,
-  Wand2,
-  X,
-} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { Activity, Aperture, Ban, Circle, CircleDot, CloudFog, CloudRain, Download, Feather, Flame, Flower2, Frame, Grid2x2, Grid3x3, Lamp, Layers, Orbit, Play, Plus, Power, RotateCcw, ScanLine, Search, SlidersHorizontal, Snowflake, Sparkles, SunMedium, Sunset, Trash2, Upload, Wand2, Waves, Wind, X } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, ClipEffect } from '../types'
 import { activeEffectKeys, placedEffectLabels } from '../lib/adjustment'
@@ -561,6 +548,40 @@ function EffectLayerButtons() {
   )
 }
 
+
+type FxTileGroup = { key: 'particleFx' | 'overlayFx' | 'replaceBg'; label: string; testPrefix: string; items: Array<{ id: string; label: string; icon: LucideIcon }> }
+const FX_TILE_GROUPS: FxTileGroup[] = [
+  { key: 'particleFx', label: 'Particles', testPrefix: 'particle-fx', items: [
+    { id: 'none', label: 'No particles', icon: Ban },
+    { id: 'feathers', label: 'Feathers drifting around the subject', icon: Feather },
+    { id: 'embers', label: 'Rising embers with glow', icon: Flame },
+    { id: 'dust', label: 'Dust motes', icon: CloudFog },
+    { id: 'bokeh', label: 'Bokeh blooms', icon: CircleDot },
+    { id: 'sparkles', label: 'Twinkling sparkles', icon: Sparkles },
+    { id: 'snow', label: 'Falling snow', icon: Snowflake },
+    { id: 'rain', label: 'Rain streaks', icon: CloudRain },
+    { id: 'petals', label: 'Falling petals', icon: Flower2 },
+  ] },
+  { key: 'overlayFx', label: 'Overlays', testPrefix: 'overlay-fx', items: [
+    { id: 'none', label: 'No overlay', icon: Ban },
+    { id: 'scanlines', label: 'CRT scanlines', icon: ScanLine },
+    { id: 'halftone', label: 'Halftone dots', icon: Grid3x3 },
+    { id: 'spotlight', label: 'Spotlight stage', icon: Lamp },
+    { id: 'vignette', label: 'Vignette', icon: Circle },
+    { id: 'lightleak', label: 'Warm light leak', icon: SunMedium },
+    { id: 'frameglow', label: 'Frame glow border', icon: Frame },
+  ] },
+  { key: 'replaceBg', label: 'Background bed (under keyed footage)', testPrefix: 'replace-bg', items: [
+    { id: 'none', label: 'No background bed', icon: Ban },
+    { id: 'synthwave', label: 'Synthwave sunset grid', icon: Waves },
+    { id: 'aurora', label: 'Aurora bands', icon: Wind },
+    { id: 'grid', label: 'Neon perspective grid', icon: Grid2x2 },
+    { id: 'bokeh', label: 'Warm bokeh field', icon: Orbit },
+    { id: 'sunset', label: 'Sunset gradient with sun disc', icon: Sunset },
+    { id: 'studio', label: 'Studio grey with softbox', icon: Aperture },
+  ] },
+]
+
 const CONTROL_DEFS: Array<{ key: keyof ClipEffect; label: string; min: number; max: number; step: number; valueLabel?: (value: number) => string }> = [
   { key: 'brightness', label: 'Brightness', min: 0, max: 2, step: 0.05, valueLabel: (value) => `${Math.round(value * 100)}%` },
   { key: 'contrast', label: 'Contrast', min: 0, max: 2, step: 0.05, valueLabel: (value) => `${Math.round(value * 100)}%` },
@@ -579,6 +600,8 @@ const CONTROL_DEFS: Array<{ key: keyof ClipEffect; label: string; min: number; m
   { key: 'pixelStretch', label: 'Pixel Stretch', min: 0, max: 60, step: 1, valueLabel: (value: number) => (value ? `${Math.round(value)}% smear` : 'Off') },
   { key: 'waveWarp', label: 'Wave Warp', min: 0, max: 24, step: 0.5, valueLabel: (value: number) => (value ? `${Math.round(value)}px` : 'Off') },
   { key: 'chromaKey', label: 'Chroma Key (green)', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => (value ? `${Math.round(value * 100)}%` : 'Off') },
+  { key: 'particleDensity', label: 'Particle density', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
+  { key: 'overlayStrength', label: 'Overlay strength', min: 0, max: 1, step: 0.05, valueLabel: (value: number) => `${Math.round(value * 100)}%` },
 ]
 
 function ClipEffectsControls({ clip }: { clip?: Clip }) {
@@ -671,6 +694,35 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           />
         </label>
       ))}
+      {/* Particle / overlay / background beds — scanned from the AE tutorial
+          corpus (Study_edits_videos/deep-study-*.md). Icon-first tiles. */}
+      <div className="space-y-2" data-testid="clip-fx-layers">
+        {FX_TILE_GROUPS.map((group) => (
+          <div key={group.key} className="space-y-1">
+            <span className="text-[9px] uppercase tracking-wide text-ink-500">{group.label}</span>
+            <div className="flex flex-wrap gap-1">
+              {group.items.map((item) => {
+                const Icon = item.icon
+                const active = effects[group.key as keyof ClipEffect] === item.id
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    data-testid={`${group.testPrefix}-${item.id}`}
+                    title={item.label}
+                    aria-label={item.label}
+                    aria-pressed={active}
+                    onClick={() => setClipEffect(clip.id, { [group.key]: item.id } as Partial<ClipEffect>)}
+                    className={`flex h-7 w-7 items-center justify-center rounded border ${active ? 'border-sky-500 bg-sky-500/20 text-sky-200' : 'border-ink-700 bg-ink-900 text-ink-400 hover:text-white'}`}
+                  >
+                    <Icon size={13} />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
       {isLayer ? (
         <div className="space-y-1.5 rounded-md border border-ink-800 bg-ink-950/40 px-2 py-2" data-testid="light-controls">
           <div className="flex items-center justify-between gap-2">

@@ -26,6 +26,7 @@ function applyRotationXY(ctx: CanvasRenderingContext2D, rotationX?: number, rota
 }
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
+import { applyClipFxLayers, hasClipFxLayers } from './particleFx'
 import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
 import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtworkMetadata'
@@ -610,6 +611,7 @@ export class PreviewEngine {
         }
         if (stack.length) applyLutStackToCanvas(graded, stack)
         if (hasPixelGrade(effects)) applyPixelGrade(graded, effects!, Math.round(time * 24))
+        if (hasClipFxLayers(effects)) applyClipFxLayers(graded, effects!, time)
         this.applyAdjustmentMask(graded, clip.adjustmentMask)
         ctx.save()
         ctx.setTransform(1, 0, 0, 1, 0, 0)
@@ -637,6 +639,7 @@ export class PreviewEngine {
     }
     if (stack.length) applyLutStackToCanvas(target, stack)
     if (hasPixelGrade(effects)) applyPixelGrade(target, effects!, Math.round(time * 24))
+    if (hasClipFxLayers(effects)) applyClipFxLayers(target, effects!, time)
     applyLightComposite(ctx, this.width, this.height, effects)
     return pending
   }
@@ -1822,6 +1825,7 @@ export class PreviewEngine {
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
       if (hasPixelGrade(clip.effects)) applyPixelGrade(scratch, clip.effects!, Math.round(time * 24))
+      if (hasClipFxLayers(clip.effects)) applyClipFxLayers(scratch, clip.effects!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of
       // an enclosing compound must keep applying to this clip's pixels).
@@ -2048,6 +2052,7 @@ export class PreviewEngine {
       this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
       if (hasPixelGrade(clip.effects)) applyPixelGrade(scratch, clip.effects!, Math.round(time * 24))
+      if (hasClipFxLayers(clip.effects)) applyClipFxLayers(scratch, clip.effects!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state intact (outer opacity /
       // filter / transform keep applying, exactly like non-isolated draws).

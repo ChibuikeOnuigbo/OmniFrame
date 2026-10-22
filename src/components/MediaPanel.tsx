@@ -154,7 +154,7 @@ export function MediaPanel() {
             title="Import media files"
             aria-label="Import media files"
             onClick={() => fileInput.current?.click()}
-            className="grid place-items-center h-8 w-8 shrink-0 rounded-md bg-brand text-white hover:bg-brand-600 transition-colors shadow-xs"
+            className="grid place-items-center h-8 w-8 shrink-0 rounded-md bg-amber-400 text-black hover:bg-amber-300 transition-colors shadow-xs ring-1 ring-amber-200/70"
           >
             <Upload size={14} />
           </button>

@@ -1,6 +1,6 @@
 # Deep Study Pass 2 — 12 technique-heavy videos (18-frame scene analysis)
 
-Same method as pass 1: deep sheets `youtube-audit/evidence/sheets-drive/deep-<id>.jpg`
+Same method as pass 1: deep sheets `Study_edits_videos/deep-sheets/deep-<id>.jpg`
 (u00–u11 uniform + s1–s6 scene cuts), read frame-by-frame. Per scene: composition,
 effects, inferred speed curve.
 

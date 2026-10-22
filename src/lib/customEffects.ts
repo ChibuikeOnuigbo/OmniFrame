@@ -1,4 +1,5 @@
 import type { ClipEffect, ClipLut, CustomEffect } from '../types'
+import { OVERLAY_KINDS, PARTICLE_KINDS, REPLACE_BG_KINDS } from './particleFx'
 
 /**
  * Custom effects — OmniFrame's take on Gold Motion's "Custom Effects"
@@ -39,9 +40,17 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   lightFalloff: 0.45,
   lightX: 0.5,
   lightY: 0.4,
+  particleFx: 'none',
+  particleDensity: 0.5,
+  particleTint: '#ffffff',
+  overlayFx: 'none',
+  overlayStrength: 0.5,
+  replaceBg: 'none',
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
+  particleDensity: [0, 1],
+  overlayStrength: [0, 1],
   brightness: [0, 2],
   contrast: [0, 2],
   saturation: [0, 2],
@@ -80,6 +89,10 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   }
   if (raw.lightType === 'point' || raw.lightType === 'spot') out.lightType = raw.lightType
   if (typeof raw.lightColor === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.lightColor)) out.lightColor = raw.lightColor
+  if (typeof raw.particleFx === 'string' && (PARTICLE_KINDS as readonly string[]).includes(raw.particleFx)) out.particleFx = raw.particleFx as ClipEffect['particleFx']
+  if (typeof raw.overlayFx === 'string' && (OVERLAY_KINDS as readonly string[]).includes(raw.overlayFx)) out.overlayFx = raw.overlayFx as ClipEffect['overlayFx']
+  if (typeof raw.replaceBg === 'string' && (REPLACE_BG_KINDS as readonly string[]).includes(raw.replaceBg)) out.replaceBg = raw.replaceBg as ClipEffect['replaceBg']
+  if (typeof raw.particleTint === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.particleTint)) out.particleTint = raw.particleTint
   return out
 }
 
@@ -126,6 +139,9 @@ const LABELS: Partial<Record<keyof ClipEffect, string>> = {
   sepia: 'Sepia',
   hueRotate: 'Hue shift',
   lightIntensity: 'Light',
+  particleFx: 'Particles',
+  overlayFx: 'Overlay',
+  replaceBg: 'BG bed',
 }
 
 /** Short human summary of what a custom effect does, e.g. "Sepia · Hue shift · LUT: Warm". */

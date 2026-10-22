@@ -1,6 +1,6 @@
 # Deep Study Pass 1 — 12 key tutorial/technique videos (18-frame scene analysis)
 
-Method: deep 18-frame contact sheets (`youtube-audit/evidence/sheets-drive/deep-<id>.jpg`,
+Method: deep 18-frame contact sheets (`Study_edits_videos/deep-sheets/deep-<id>.jpg`,
 uniform u00–u11 + scene-cut s1–s6 frames) read frame-by-frame. Per scene: composition,
 effects, inferred speed curve (frame-delta spacing across the uniform picks).
 

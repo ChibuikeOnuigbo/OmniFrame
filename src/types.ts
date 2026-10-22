@@ -584,6 +584,16 @@ export interface ClipEffect {
   lightFalloff?: number // radius as a fraction of the frame's long edge, 0.1..1 (default 0.45)
   lightX?: number // 0..1 horizontal center (default 0.5)
   lightY?: number // 0..1 vertical center (default 0.4)
+  // Particle / overlay / background-replace layers scanned from the AE
+  // tutorial corpus (Study_edits_videos/deep-study-*.md): feather & ember
+  // beds, dust/bokeh/sparkle overlays, scanline & halftone looks, spotlight
+  // stages and "cool background" composite beds under keyed footage.
+  particleFx?: 'none' | 'feathers' | 'embers' | 'dust' | 'bokeh' | 'sparkles' | 'snow' | 'rain' | 'petals'
+  particleDensity?: number // 0..1 (default 0.5)
+  particleTint?: string // css hex colour for tintable kinds (feathers/snow)
+  overlayFx?: 'none' | 'scanlines' | 'halftone' | 'spotlight' | 'vignette' | 'lightleak' | 'frameglow'
+  overlayStrength?: number // 0..1 (default 0.5)
+  replaceBg?: 'none' | 'synthwave' | 'aurora' | 'grid' | 'bokeh' | 'sunset' | 'studio'
 }
 
 /** One LUT inside an adjustment layer (or a clip's own grade). */

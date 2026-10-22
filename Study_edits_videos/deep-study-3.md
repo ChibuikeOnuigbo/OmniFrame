@@ -1,6 +1,6 @@
 # Deep Study Pass 3 — 12 more videos (18-frame scene analysis)
 
-Same method: deep sheets `youtube-audit/evidence/sheets-drive/deep-<id>.jpg`,
+Same method: deep sheets `Study_edits_videos/deep-sheets/deep-<id>.jpg`,
 read frame-by-frame; per scene composition / effects / inferred speed curve.
 
 ---
