@@ -1,0 +1,26 @@
+    DURATION        : 00:00:59.200000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:00:59.228000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=48.3x    
+frame=  425 fps=0.0 q=-0.0 size=N/A time=00:00:14.13 bitrate=N/A speed=25.2x    
+frame=  794 fps=748 q=-0.0 size=N/A time=00:00:26.43 bitrate=N/A speed=24.9x    
+frame= 1166 fps=746 q=-0.0 size=N/A time=00:00:38.83 bitrate=N/A speed=24.9x    
+frame= 1547 fps=749 q=-0.0 size=N/A time=00:00:51.53 bitrate=N/A speed=  25x    
+[out#0/null @ 0x5639effc2c80] video:832kB audio:44408kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 1776 fps=736 q=-0.0 Lsize=N/A time=00:00:59.16 bitrate=N/A speed=24.5x    
+[Parsed_loudnorm_0 @ 0x5639f001d2c0] 
+{
+	"input_i" : "-9.42",
+	"input_tp" : "2.41",
+	"input_lra" : "3.50",
+	"input_thresh" : "-19.42",
+	"output_i" : "-23.44",
+	"output_tp" : "-9.92",
+	"output_lra" : "3.70",
+	"output_thresh" : "-33.44",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.56"
+}
