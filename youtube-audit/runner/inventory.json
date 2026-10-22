@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-22T10:21:44Z",
- "total": 248,
+ "generated": "2026-10-22T10:30:39Z",
+ "total": 353,
  "videos": [
   {
    "id": "fGm0SBFTj3o",
@@ -3222,6 +3222,1371 @@
    "format": "shorts",
    "formats": [
     "shorts"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "DY-0ntGxoPo",
+   "url": "https://www.youtube.com/watch?v=DY-0ntGxoPo",
+   "title": "chat-history link DY-0ntGxoPo",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "xhgCzz2qyXs",
+   "url": "https://www.youtube.com/watch?v=xhgCzz2qyXs",
+   "title": "chat-history link xhgCzz2qyXs",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "PMvN6KSYQhU",
+   "url": "https://www.youtube.com/watch?v=PMvN6KSYQhU",
+   "title": "chat-history link PMvN6KSYQhU",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "F5RcdSwzUVw",
+   "url": "https://www.youtube.com/watch?v=F5RcdSwzUVw",
+   "title": "chat-history link F5RcdSwzUVw",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "5aFDj54RWQw",
+   "url": "https://www.youtube.com/watch?v=5aFDj54RWQw",
+   "title": "chat-history link 5aFDj54RWQw",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "MX3yw9gT0DI",
+   "url": "https://www.youtube.com/watch?v=MX3yw9gT0DI",
+   "title": "chat-history link MX3yw9gT0DI",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "FJ08jHDgRk4",
+   "url": "https://www.youtube.com/watch?v=FJ08jHDgRk4",
+   "title": "chat-history link FJ08jHDgRk4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "I1JR_9NJlB4",
+   "url": "https://www.youtube.com/watch?v=I1JR_9NJlB4",
+   "title": "chat-history link I1JR_9NJlB4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "ixEoA7z5jmQ",
+   "url": "https://www.youtube.com/watch?v=ixEoA7z5jmQ",
+   "title": "chat-history link ixEoA7z5jmQ",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "0rNqPArnpB0",
+   "url": "https://www.youtube.com/watch?v=0rNqPArnpB0",
+   "title": "chat-history link 0rNqPArnpB0",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "fdPMTGq6BdE",
+   "url": "https://www.youtube.com/watch?v=fdPMTGq6BdE",
+   "title": "chat-history link fdPMTGq6BdE",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "FAHi0jH7FJ4",
+   "url": "https://www.youtube.com/watch?v=FAHi0jH7FJ4",
+   "title": "chat-history link FAHi0jH7FJ4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "VA_p4aqYaIc",
+   "url": "https://www.youtube.com/watch?v=VA_p4aqYaIc",
+   "title": "chat-history link VA_p4aqYaIc",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "uFnoKD-4cpM",
+   "url": "https://www.youtube.com/watch?v=uFnoKD-4cpM",
+   "title": "chat-history link uFnoKD-4cpM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "v2g0zap6LQc",
+   "url": "https://www.youtube.com/watch?v=v2g0zap6LQc",
+   "title": "chat-history link v2g0zap6LQc",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "ENRtNTNtV8M",
+   "url": "https://www.youtube.com/watch?v=ENRtNTNtV8M",
+   "title": "chat-history link ENRtNTNtV8M",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "6Stj_5zLyiM",
+   "url": "https://www.youtube.com/watch?v=6Stj_5zLyiM",
+   "title": "chat-history link 6Stj_5zLyiM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "Uew3Znl3Fl8",
+   "url": "https://www.youtube.com/watch?v=Uew3Znl3Fl8",
+   "title": "chat-history link Uew3Znl3Fl8",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "umTDI962BhM",
+   "url": "https://www.youtube.com/watch?v=umTDI962BhM",
+   "title": "chat-history link umTDI962BhM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "oqzbIOKic90",
+   "url": "https://www.youtube.com/watch?v=oqzbIOKic90",
+   "title": "chat-history link oqzbIOKic90",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "h_D720n75B4",
+   "url": "https://www.youtube.com/watch?v=h_D720n75B4",
+   "title": "chat-history link h_D720n75B4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "48ze7aZ8NdE",
+   "url": "https://www.youtube.com/watch?v=48ze7aZ8NdE",
+   "title": "chat-history link 48ze7aZ8NdE",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "n9JOpkEqtS4",
+   "url": "https://www.youtube.com/watch?v=n9JOpkEqtS4",
+   "title": "chat-history link n9JOpkEqtS4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "iB-TehC1kOs",
+   "url": "https://www.youtube.com/watch?v=iB-TehC1kOs",
+   "title": "chat-history link iB-TehC1kOs",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "L6WUvXUf0es",
+   "url": "https://www.youtube.com/watch?v=L6WUvXUf0es",
+   "title": "chat-history link L6WUvXUf0es",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "hSTkYAdWJek",
+   "url": "https://www.youtube.com/watch?v=hSTkYAdWJek",
+   "title": "chat-history link hSTkYAdWJek",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "JuxN-ccLRmA",
+   "url": "https://www.youtube.com/watch?v=JuxN-ccLRmA",
+   "title": "chat-history link JuxN-ccLRmA",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "dibSGfA3LAk",
+   "url": "https://www.youtube.com/watch?v=dibSGfA3LAk",
+   "title": "chat-history link dibSGfA3LAk",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "FPSxFSjCxPo",
+   "url": "https://www.youtube.com/watch?v=FPSxFSjCxPo",
+   "title": "chat-history link FPSxFSjCxPo",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "Nt7yP-e06Oo",
+   "url": "https://www.youtube.com/watch?v=Nt7yP-e06Oo",
+   "title": "chat-history link Nt7yP-e06Oo",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "lypaZpeWoJg",
+   "url": "https://www.youtube.com/watch?v=lypaZpeWoJg",
+   "title": "chat-history link lypaZpeWoJg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "5Wy0zVw5wgg",
+   "url": "https://www.youtube.com/watch?v=5Wy0zVw5wgg",
+   "title": "chat-history link 5Wy0zVw5wgg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "4fK8ITqD0ME",
+   "url": "https://www.youtube.com/watch?v=4fK8ITqD0ME",
+   "title": "chat-history link 4fK8ITqD0ME",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "2ZP_6YGkKQE",
+   "url": "https://www.youtube.com/watch?v=2ZP_6YGkKQE",
+   "title": "chat-history link 2ZP_6YGkKQE",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "6sB6CO56cq8",
+   "url": "https://www.youtube.com/watch?v=6sB6CO56cq8",
+   "title": "chat-history link 6sB6CO56cq8",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "yOjYKje861U",
+   "url": "https://www.youtube.com/watch?v=yOjYKje861U",
+   "title": "chat-history link yOjYKje861U",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "KZQGvYI8RuQ",
+   "url": "https://www.youtube.com/watch?v=KZQGvYI8RuQ",
+   "title": "chat-history link KZQGvYI8RuQ",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "Hb9m7M-P15Y",
+   "url": "https://www.youtube.com/watch?v=Hb9m7M-P15Y",
+   "title": "chat-history link Hb9m7M-P15Y",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "L7i8-vJ1b9c",
+   "url": "https://www.youtube.com/watch?v=L7i8-vJ1b9c",
+   "title": "chat-history link L7i8-vJ1b9c",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "DfnbdXs-JpI",
+   "url": "https://www.youtube.com/watch?v=DfnbdXs-JpI",
+   "title": "chat-history link DfnbdXs-JpI",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "mdpb03H-Y30",
+   "url": "https://www.youtube.com/watch?v=mdpb03H-Y30",
+   "title": "chat-history link mdpb03H-Y30",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "GR8JPrlw1CM",
+   "url": "https://www.youtube.com/watch?v=GR8JPrlw1CM",
+   "title": "chat-history link GR8JPrlw1CM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "edGUFZ3oS3g",
+   "url": "https://www.youtube.com/watch?v=edGUFZ3oS3g",
+   "title": "chat-history link edGUFZ3oS3g",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "fb-Ac9P4QZg",
+   "url": "https://www.youtube.com/watch?v=fb-Ac9P4QZg",
+   "title": "chat-history link fb-Ac9P4QZg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "dy3CLJnnuto",
+   "url": "https://www.youtube.com/watch?v=dy3CLJnnuto",
+   "title": "chat-history link dy3CLJnnuto",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "RnjxSQNvCuc",
+   "url": "https://www.youtube.com/watch?v=RnjxSQNvCuc",
+   "title": "chat-history link RnjxSQNvCuc",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "yA_Rc0OzIxw",
+   "url": "https://www.youtube.com/watch?v=yA_Rc0OzIxw",
+   "title": "chat-history link yA_Rc0OzIxw",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "cBkNEvSsZwM",
+   "url": "https://www.youtube.com/watch?v=cBkNEvSsZwM",
+   "title": "chat-history link cBkNEvSsZwM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "AzbvhLQZP3k",
+   "url": "https://www.youtube.com/watch?v=AzbvhLQZP3k",
+   "title": "chat-history link AzbvhLQZP3k",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "cv7X_WoDk8E",
+   "url": "https://www.youtube.com/watch?v=cv7X_WoDk8E",
+   "title": "chat-history link cv7X_WoDk8E",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "HHNTQkaGv-M",
+   "url": "https://www.youtube.com/watch?v=HHNTQkaGv-M",
+   "title": "chat-history link HHNTQkaGv-M",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "KqUBgbk5u1k",
+   "url": "https://www.youtube.com/watch?v=KqUBgbk5u1k",
+   "title": "chat-history link KqUBgbk5u1k",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "7WHDyTE9Mq8",
+   "url": "https://www.youtube.com/watch?v=7WHDyTE9Mq8",
+   "title": "chat-history link 7WHDyTE9Mq8",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "ZrwjaDc__ZM",
+   "url": "https://www.youtube.com/watch?v=ZrwjaDc__ZM",
+   "title": "chat-history link ZrwjaDc__ZM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "-9UkBHVV9OA",
+   "url": "https://www.youtube.com/watch?v=-9UkBHVV9OA",
+   "title": "chat-history link -9UkBHVV9OA",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "9_uwkoUiERE",
+   "url": "https://www.youtube.com/watch?v=9_uwkoUiERE",
+   "title": "chat-history link 9_uwkoUiERE",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "Qxf_bMMc_ZE",
+   "url": "https://www.youtube.com/watch?v=Qxf_bMMc_ZE",
+   "title": "chat-history link Qxf_bMMc_ZE",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "ylFdwE6sSWU",
+   "url": "https://www.youtube.com/watch?v=ylFdwE6sSWU",
+   "title": "chat-history link ylFdwE6sSWU",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "rY2RTuJEJpw",
+   "url": "https://www.youtube.com/watch?v=rY2RTuJEJpw",
+   "title": "chat-history link rY2RTuJEJpw",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "sx7ogrJD5KQ",
+   "url": "https://www.youtube.com/watch?v=sx7ogrJD5KQ",
+   "title": "chat-history link sx7ogrJD5KQ",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "hTEZOX48TN4",
+   "url": "https://www.youtube.com/watch?v=hTEZOX48TN4",
+   "title": "chat-history link hTEZOX48TN4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "5RXGg3T4WlQ",
+   "url": "https://www.youtube.com/watch?v=5RXGg3T4WlQ",
+   "title": "chat-history link 5RXGg3T4WlQ",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "UuTKuhcqv2M",
+   "url": "https://www.youtube.com/watch?v=UuTKuhcqv2M",
+   "title": "chat-history link UuTKuhcqv2M",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "4hqpWf38W5s",
+   "url": "https://www.youtube.com/watch?v=4hqpWf38W5s",
+   "title": "chat-history link 4hqpWf38W5s",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "7nFduBo1Stk",
+   "url": "https://www.youtube.com/watch?v=7nFduBo1Stk",
+   "title": "chat-history link 7nFduBo1Stk",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "WmkdYFcXCtg",
+   "url": "https://www.youtube.com/watch?v=WmkdYFcXCtg",
+   "title": "chat-history link WmkdYFcXCtg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "F8mlolILu7A",
+   "url": "https://www.youtube.com/watch?v=F8mlolILu7A",
+   "title": "chat-history link F8mlolILu7A",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "99hY2x1CLEU",
+   "url": "https://www.youtube.com/watch?v=99hY2x1CLEU",
+   "title": "chat-history link 99hY2x1CLEU",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "b5yB6khnrmc",
+   "url": "https://www.youtube.com/watch?v=b5yB6khnrmc",
+   "title": "chat-history link b5yB6khnrmc",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "fx55eFCUw_I",
+   "url": "https://www.youtube.com/watch?v=fx55eFCUw_I",
+   "title": "chat-history link fx55eFCUw_I",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "p0cp8uUpc9M",
+   "url": "https://www.youtube.com/watch?v=p0cp8uUpc9M",
+   "title": "chat-history link p0cp8uUpc9M",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "poKeVJZMFV4",
+   "url": "https://www.youtube.com/watch?v=poKeVJZMFV4",
+   "title": "chat-history link poKeVJZMFV4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "8WMyqJKRgzw",
+   "url": "https://www.youtube.com/watch?v=8WMyqJKRgzw",
+   "title": "chat-history link 8WMyqJKRgzw",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "RnDgLkdlTC4",
+   "url": "https://www.youtube.com/watch?v=RnDgLkdlTC4",
+   "title": "chat-history link RnDgLkdlTC4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "vh65StXSx7o",
+   "url": "https://www.youtube.com/watch?v=vh65StXSx7o",
+   "title": "chat-history link vh65StXSx7o",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "oNVxf9UZY-0",
+   "url": "https://www.youtube.com/watch?v=oNVxf9UZY-0",
+   "title": "chat-history link oNVxf9UZY-0",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "xflSQX3CS3o",
+   "url": "https://www.youtube.com/watch?v=xflSQX3CS3o",
+   "title": "chat-history link xflSQX3CS3o",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "RZpyeu25Kis",
+   "url": "https://www.youtube.com/watch?v=RZpyeu25Kis",
+   "title": "chat-history link RZpyeu25Kis",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "FnPJWMBya6U",
+   "url": "https://www.youtube.com/watch?v=FnPJWMBya6U",
+   "title": "chat-history link FnPJWMBya6U",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "b7uYVubI7jg",
+   "url": "https://www.youtube.com/watch?v=b7uYVubI7jg",
+   "title": "chat-history link b7uYVubI7jg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "DMwM6F15sNg",
+   "url": "https://www.youtube.com/watch?v=DMwM6F15sNg",
+   "title": "chat-history link DMwM6F15sNg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "sdgMG3sZ3nE",
+   "url": "https://www.youtube.com/watch?v=sdgMG3sZ3nE",
+   "title": "chat-history link sdgMG3sZ3nE",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "vtsTN2a4L2U",
+   "url": "https://www.youtube.com/watch?v=vtsTN2a4L2U",
+   "title": "chat-history link vtsTN2a4L2U",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "EuMrlKcNnLM",
+   "url": "https://www.youtube.com/watch?v=EuMrlKcNnLM",
+   "title": "chat-history link EuMrlKcNnLM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "XE_Gx_m6MLQ",
+   "url": "https://www.youtube.com/watch?v=XE_Gx_m6MLQ",
+   "title": "chat-history link XE_Gx_m6MLQ",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "qa1Cprn1QLc",
+   "url": "https://www.youtube.com/watch?v=qa1Cprn1QLc",
+   "title": "chat-history link qa1Cprn1QLc",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "pGd7t371kAk",
+   "url": "https://www.youtube.com/watch?v=pGd7t371kAk",
+   "title": "chat-history link pGd7t371kAk",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "miloyuZe3Jw",
+   "url": "https://www.youtube.com/watch?v=miloyuZe3Jw",
+   "title": "chat-history link miloyuZe3Jw",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "5cubb_lXKAA",
+   "url": "https://www.youtube.com/watch?v=5cubb_lXKAA",
+   "title": "chat-history link 5cubb_lXKAA",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "i2HrbsXlV04",
+   "url": "https://www.youtube.com/watch?v=i2HrbsXlV04",
+   "title": "chat-history link i2HrbsXlV04",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "vTyefIjQ8_Q",
+   "url": "https://www.youtube.com/watch?v=vTyefIjQ8_Q",
+   "title": "chat-history link vTyefIjQ8_Q",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "yXSlgdbaA_Q",
+   "url": "https://www.youtube.com/watch?v=yXSlgdbaA_Q",
+   "title": "chat-history link yXSlgdbaA_Q",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "EZF9JEpL6L8",
+   "url": "https://www.youtube.com/watch?v=EZF9JEpL6L8",
+   "title": "chat-history link EZF9JEpL6L8",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "KmqhJjAP3wM",
+   "url": "https://www.youtube.com/watch?v=KmqhJjAP3wM",
+   "title": "chat-history link KmqhJjAP3wM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "l1GF8APyVTg",
+   "url": "https://www.youtube.com/watch?v=l1GF8APyVTg",
+   "title": "chat-history link l1GF8APyVTg",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "SsXi5rqVlvA",
+   "url": "https://www.youtube.com/watch?v=SsXi5rqVlvA",
+   "title": "chat-history link SsXi5rqVlvA",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "evsxqvwn65o",
+   "url": "https://www.youtube.com/watch?v=evsxqvwn65o",
+   "title": "chat-history link evsxqvwn65o",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "79jfvp-5f0g",
+   "url": "https://www.youtube.com/watch?v=79jfvp-5f0g",
+   "title": "chat-history link 79jfvp-5f0g",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "3HC5ml9Wy3o",
+   "url": "https://www.youtube.com/watch?v=3HC5ml9Wy3o",
+   "title": "chat-history link 3HC5ml9Wy3o",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "JJLJHPUjnlI",
+   "url": "https://www.youtube.com/watch?v=JJLJHPUjnlI",
+   "title": "chat-history link JJLJHPUjnlI",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "exRqiCBW-u8",
+   "url": "https://www.youtube.com/watch?v=exRqiCBW-u8",
+   "title": "chat-history link exRqiCBW-u8",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "-89cPyk7lQU",
+   "url": "https://www.youtube.com/watch?v=-89cPyk7lQU",
+   "title": "chat-history link -89cPyk7lQU",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "tQIlQt4dTiM",
+   "url": "https://www.youtube.com/watch?v=tQIlQt4dTiM",
+   "title": "chat-history link tQIlQt4dTiM",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "Tmki6M1_PWI",
+   "url": "https://www.youtube.com/watch?v=Tmki6M1_PWI",
+   "title": "chat-history link Tmki6M1_PWI",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "5SZAK4WFPK4",
+   "url": "https://www.youtube.com/watch?v=5SZAK4WFPK4",
+   "title": "chat-history link 5SZAK4WFPK4",
+   "duration": "NA",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
    ],
    "status": "INVENTORIED",
    "access": "pending-batch"

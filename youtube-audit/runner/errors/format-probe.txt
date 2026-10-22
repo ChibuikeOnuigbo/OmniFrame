@@ -1,1 +1,84 @@
-probe failed: list index out of range
+[youtube] Extracting URL: https://www.youtube.com/watch?v=DY-0ntGxoPo
+[youtube] DY-0ntGxoPo: Downloading webpage
+[youtube] DY-0ntGxoPo: Downloading web embedded client config
+[youtube] DY-0ntGxoPo: Downloading player 55de7e60-main
+[youtube] DY-0ntGxoPo: Downloading web embedded player API JSON
+[youtube] DY-0ntGxoPo: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] DY-0ntGxoPo: Downloading m3u8 information
+[info] Available formats for DY-0ntGxoPo:
+ID      EXT   RESOLUTION FPS CH |   FILESIZE   TBR PROTO | VCODEC          VBR ACODEC      ABR ASR MORE INFO
+--------------------------------------------------------------------------------------------------------------------------------
+sb3     mhtml 48x27        0    |                  mhtml | images                                  storyboard
+sb2     mhtml 80x45        0    |                  mhtml | images                                  storyboard
+sb1     mhtml 160x90       0    |                  mhtml | images                                  storyboard
+sb0     mhtml 320x180      0    |                  mhtml | images                                  storyboard
+249-drc webm  audio only      2 |    2.05MiB   47k https | audio only          opus        47k 48k low, DRC, WEB-E, webm_dash
+250-drc webm  audio only      2 |    2.71MiB   63k https | audio only          opus        63k 48k low, DRC, WEB-E, webm_dash
+249     webm  audio only      2 |    2.05MiB   47k https | audio only          opus        47k 48k low, WEB-E, webm_dash
+250     webm  audio only      2 |    2.70MiB   62k https | audio only          opus        62k 48k low, WEB-E, webm_dash
+140-drc m4a   audio only      2 |    5.60MiB  129k https | audio only          mp4a.40.2  129k 44k medium, DRC, WEB-E, m4a_dash
+251-drc webm  audio only      2 |    5.39MiB  125k https | audio only          opus       125k 48k medium, DRC, WEB-E, webm_dash
+140     m4a   audio only      2 |    5.60MiB  129k https | audio only          mp4a.40.2  129k 44k medium, WEB-E, m4a_dash
+251     webm  audio only      2 |    5.38MiB  125k https | audio only          opus       125k 48k medium, WEB-E, webm_dash
+91      mp4   256x144     25    | ~  8.19MiB  189k m3u8  | avc1.4D400C         mp4a.40.5           WEB-E
+160     mp4   256x144     25    |    3.28MiB   76k https | avc1.4D400C     76k video only          144p, WEB-E, mp4_dash
+278     webm  256x144     25    |    3.20MiB   74k https | vp9             74k video only          144p, WEB-E, webm_dash
+394     mp4   256x144     25    |    2.68MiB   62k https | av01.0.00M.08   62k video only          144p, WEB-E, mp4_dash
+92      mp4   426x240     25    | ~ 14.90MiB  344k m3u8  | avc1.4D4015         mp4a.40.5           WEB-E
+133     mp4   426x240     25    |    6.09MiB  141k https | avc1.4D4015    141k video only          240p, WEB-E, mp4_dash
+242     webm  426x240     25    |    5.58MiB  129k https | vp9            129k video only          240p, WEB-E, webm_dash
+395     mp4   426x240     25    |    4.79MiB  111k https | av01.0.00M.08  111k video only          240p, WEB-E, mp4_dash
+93      mp4   640x360     25    | ~ 33.49MiB  774k m3u8  | avc1.4D401E         mp4a.40.2           WEB-E
+134     mp4   640x360     25    |   11.61MiB  269k https | avc1.4D401E    269k video only          360p, WEB-E, mp4_dash
+18      mp4   640x360     25  2 | ≈ 17.19MiB  398k https | avc1.42001E         mp4a.40.2       44k 360p, WEB-E
+243     webm  640x360     25    |   11.94MiB  276k https | vp9            276k video only          360p, WEB-E, webm_dash
+396     mp4   640x360     25    |    9.56MiB  221k https | av01.0.01M.08  221k video only          360p, WEB-E, mp4_dash
+94      mp4   854x480     25    | ~ 56.28MiB 1301k m3u8  | avc1.4D401E         mp4a.40.2           WEB-E
+135     mp4   854x480     25    |   17.91MiB  415k https | avc1.4D401E    415k video only          480p, WEB-E, mp4_dash
+244     webm  854x480     25    |   17.91MiB  414k https | vp9            414k video only          480p, WEB-E, webm_dash
+397     mp4   854x480     25    |   15.36MiB  356k https | av01.0.04M.08  356k video only          480p, WEB-E, mp4_dash
+95      mp4   1280x720    25    | ~ 93.63MiB 2164k m3u8  | avc1.4D401F         mp4a.40.2           WEB-E
+136     mp4   1280x720    25    |   31.72MiB  734k https | avc1.4D401F    734k video only          720p, WEB-E, mp4_dash
+247     webm  1280x720    25    |   33.20MiB  768k https | vp9            768k video only          720p, WEB-E, webm_dash
+398     mp4   1280x720    25    |   27.24MiB  630k https | av01.0.05M.08  630k video only          720p, WEB-E, mp4_dash
+96      mp4   1920x1080   25    | ~206.67MiB 4776k m3u8  | avc1.640028         mp4a.40.2           WEB-E
+137     mp4   1920x1080   25    |  100.92MiB 2336k https | avc1.640028   2336k video only          1080p, WEB-E, mp4_dash
+248     webm  1920x1080   25    |   56.22MiB 1301k https | vp9           1301k video only          1080p, WEB-E, webm_dash
+399     mp4   1920x1080   25    |   47.38MiB 1096k https | av01.0.08M.08 1096k video only          1080p, WEB-E, mp4_dash
+
+--STDERR--
+[debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=DY-0ntGxoPo']
+[debug] User config "/home/runner/.config/yt-dlp/config": ['--remote-components', 'ejs:github']
+[debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
+[debug] yt-dlp version stable@2026.10.21 from yt-dlp/yt-dlp [8cdf4fea4]
+[debug] Lazy loading extractors is disabled
+[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
+[debug] exe versions: ffmpeg 6.1.1 (setts), ffprobe 6.1.1
+[debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.0, certifi-2026.10.19, mutagen-1.48.1, requests-2.34.2, sqlite3-3.45.1, urllib3-2.8.0, websockets-17.3, yt_dlp_ejs-0.8.0
+[debug] JS runtimes: deno-2.5.4
+[debug] Proxy map: {}
+[debug] Request Handlers: urllib, requests, websockets
+[debug] Plugin directories: /home/runner/.local/lib/python3.12/site-packages/yt_dlp_plugins
+[debug] Loaded 1747 extractors
+[debug] [youtube] Found YouTube account cookies
+[debug] [youtube] [pot:bgutil:script-node] No server_home or script_path passed, defaulting to /home/runner/bgutil-ytdlp-pot-provider/server
+[debug] [youtube] [pot:bgutil:script-node] Script path doesn't exist: /home/runner/bgutil-ytdlp-pot-provider/server/build/generate_once.js
+[debug] [youtube] [pot:bgutil:script-deno] No server_home or script_path passed, defaulting to /home/runner/bgutil-ytdlp-pot-provider/server
+[debug] [youtube] [pot:bgutil:script-deno] Script path doesn't exist: /home/runner/bgutil-ytdlp-pot-provider/server/src/generate_once.ts
+[debug] [youtube] [pot] PO Token Providers: bgutil:http-2.0.2 (external), bgutil:script-node-2.0.2 (external, unavailable), bgutil:script-deno-2.0.2 (external, unavailable)
+[debug] [youtube] [pot] PO Token Cache Providers: memory
+[debug] [youtube] [pot] PO Token Cache Spec Providers: webpo
+[debug] [youtube] [jsc] JS Challenge Providers: bun (unavailable), deno, node (unavailable), quickjs (unavailable)
+[debug] [youtube] Forcing "main" player JS variant for player 55de7e60
+        original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
+[debug] [youtube] DY-0ntGxoPo: Detected experiment to bind GVS PO Token to video ID for web_embedded client
+[debug] [youtube] DY-0ntGxoPo: Detected a 6s ad skippable after 5s for web_embedded
+[debug] [youtube] DY-0ntGxoPo: Detected a 15s ad skippable after 5s for tv_samsung
+[debug] [youtube] DY-0ntGxoPo: Detected a 15s ad skippable after 5s for web
+[debug] [youtube] DY-0ntGxoPo: Detected a 30s ad skippable after 5s for web
+[debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
+[debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
+[debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -
+[debug] Sort order given by extractor: quality, res, fps, hdr:12, source, vcodec, channels, acodec, lang, proto
+[debug] Formats sorted by: hasvid, ie_pref, quality, res, fps, hdr:12(7), source, vcodec, channels, acodec, lang, proto, size, br, asr, vext, aext, hasaud, id
