@@ -3,10 +3,10 @@
 Everything produced by the frame-by-frame study of the Drive-zip footage and the
 recreations it fed.
 
-- `deep-study-1.md` / `-2.md` / `-3.md` — 36 videos deep-passed on 18-frame contact
+- `deep-study-1.md` … `-4.md` — 48 videos deep-passed on 18-frame contact
   sheets (uniform u00–u11 + scene cuts s1–s6); per scene: composition, effects,
   inferred speed curve; cross-video technique inventory (36 entries).
-- `deep-sheets/` — the 36 deep contact sheets (`deep-<videoId>.jpg`).
+- `deep-sheets/` — the 48 deep contact sheets (`deep-<videoId>.jpg`).
 - `recreations/` — recreation output notes; the live recreations themselves are the
   **Scene pillar** in OmniFrame (`src/lib/pillarRenderers.ts` `scene` family,
   catalogue in `src/lib/pillarPresets.ts`, 14 presets) plus the AE-scanned settings
@@ -33,3 +33,7 @@ recreations it fed.
 | Overlays (scanlines/halftone/spotlight/vignette/lightleak/frameglow) | AsHnacGDo6E, Z8EAr0p6X14, BP4xGE9iUtU |
 | Background beds (synthwave/aurora/grid/bokeh/sunset/studio) | "replace bg with a cool one" composite beats |
 | AE Tool Rack combos | settings popups scanned in all three passes |
+| Scene: X-Slash Speed Graph | chIJCGNoGls |
+| Scene: 3D Thumbnail Wall | LqfUhkr2vcc |
+| Scene: Cut-Out Checker Proof | YHJUoaPcyqg |
+| Scene: Material Sphere Row | eB10bFHlz7Y / 2AuOLEmEAkU |

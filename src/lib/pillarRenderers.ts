@@ -13,6 +13,7 @@
  * Motion camera-object overlays (viewfinder / device pull-out).
  */
 import type { PillarParams } from './pillarPresets'
+import { drawReplaceBg } from './particleFx'
 
 export interface PillarDrawArgs {
   ctx: CanvasRenderingContext2D
@@ -1127,6 +1128,136 @@ function sceneGradeCompare(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/** chIJCGNoGls — X-slash sky: red X-slash strokes draw on with their diagonal
+ *  speed-graph inset bottom-right, radial ray burst at the impact beat. */
+function sceneXslashGraph(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  if (a.hasFrom) { ctx.save(); ctx.filter = 'saturate(1.2) brightness(1.1)'; a.drawFrom(ctx); ctx.filter = 'none'; ctx.restore() }
+  const draw = SCENE_LOOK.fade(Math.min(1, p / 0.55))
+  ctx.save()
+  ctx.strokeStyle = 'rgba(230,30,60,0.95)'
+  ctx.lineWidth = 7
+  ctx.shadowColor = 'rgba(230,30,60,0.8)'; ctx.shadowBlur = 14
+  const cx = w / 2, cy = h * 0.42, len = Math.max(w, h) * 0.75 * draw
+  ctx.beginPath(); ctx.moveTo(cx - len / 2, cy - len / 4); ctx.lineTo(cx - len / 2 + len * draw, cy - len / 4 + len / 2 * draw); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(cx + len / 2, cy - len / 4); ctx.lineTo(cx + len / 2 - len * draw, cy - len / 4 + len / 2 * draw); ctx.stroke()
+  ctx.restore()
+  // radial ray burst at the impact beat
+  const burst = Math.sin(Math.min(1, Math.max(0, (p - 0.5) / 0.3)) * Math.PI)
+  if (burst > 0.02) {
+    ctx.save(); ctx.globalAlpha = burst * 0.85
+    ctx.strokeStyle = 'rgba(255,250,235,0.9)'; ctx.lineWidth = 3
+    for (let i = 0; i < 16; i++) {
+      const t = (i / 16) * Math.PI * 2
+      ctx.beginPath()
+      ctx.moveTo(cx + Math.cos(t) * w * 0.06, cy + Math.sin(t) * w * 0.06)
+      ctx.lineTo(cx + Math.cos(t) * w * (0.06 + 0.3 * burst), cy + Math.sin(t) * w * (0.06 + 0.3 * burst))
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
+  // diagonal speed-graph inset bottom-right (the curve that drives the slash)
+  const gx = w - 200, gy = h - 130, gs = 110
+  ctx.save()
+  ctx.fillStyle = 'rgba(15,15,15,0.85)'; ctx.fillRect(gx, gy, gs, gs)
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1; ctx.strokeRect(gx, gy, gs, gs)
+  ctx.strokeStyle = 'rgba(120,220,120,0.95)'; ctx.lineWidth = 2
+  ctx.beginPath(); ctx.moveTo(gx, gy + gs); ctx.lineTo(gx + gs * draw, gy + gs - gs * draw); ctx.stroke()
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** LqfUhkr2vcc — 3D thumbnail card wall: perspective grid of cards flies the
+ *  incoming clip in as the hero thumb; green grid + yellow typo constant. */
+function sceneThumbWall(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  ctx.fillStyle = '#0b0d10'; ctx.fillRect(0, 0, w, h)
+  const e = SCENE_LOOK.fade(p)
+  const cols = 4, rows = 3
+  const cw = w * 0.16, ch = h * 0.2
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const z = 0.55 + 0.45 * e
+    const px = w / 2 + (c - (cols - 1) / 2) * cw * 1.35 * z - (c - (cols - 1) / 2) * w * 0.06 * (1 - e)
+    const py = h / 2 + (r - (rows - 1) / 2) * ch * 1.5 * z
+    const hero = r === 1 && c === 2
+    ctx.save()
+    ctx.translate(px, py)
+    ctx.scale(z, z)
+    ctx.fillStyle = hero ? '#123' : '#1a1e24'
+    ctx.fillRect(-cw / 2, -ch / 2, cw, ch)
+    ctx.strokeStyle = hero ? 'rgba(255,220,60,0.9)' : 'rgba(80,200,120,0.5)'
+    ctx.lineWidth = hero ? 3 : 1.2
+    ctx.strokeRect(-cw / 2, -ch / 2, cw, ch)
+    if (hero && a.hasTo) { ctx.beginPath(); ctx.rect(-cw / 2, -ch / 2, cw, ch); ctx.clip(); a.drawTo(ctx); }
+    else if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 0.35; ctx.beginPath(); ctx.rect(-cw / 2, -ch / 2, cw, ch); ctx.clip(); a.drawFrom(ctx); ctx.restore() }
+    ctx.restore()
+  }
+  ctx.save(); ctx.fillStyle = 'rgba(255,220,60,0.95)'; ctx.font = '800 30px system-ui, sans-serif'
+  ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 8
+  ctx.fillText('editing videos', w * 0.08, h * 0.86)
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** YHJUoaPcyqg — cut-out proof: transparency checker field with the cut-out
+ *  subject, then the neutral-grey hold the channel ends on. */
+function sceneCutoutChecker(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const neutral = p > 0.55
+  if (neutral) { ctx.fillStyle = '#3f4348'; ctx.fillRect(0, 0, w, h) }
+  else {
+    const cell = 18
+    for (let y = 0; y < h; y += cell) for (let x = 0; x < w; x += cell) {
+      ctx.fillStyle = ((x / cell + y / cell) | 0) % 2 ? '#c9ccd1' : '#eef0f2'
+      ctx.fillRect(x, y, cell, cell)
+    }
+  }
+  const src = a.hasFrom ? a.drawFrom : a.drawTo
+  if (src) { ctx.save(); ctx.globalAlpha = neutral ? 1 : 0.96; src(ctx); ctx.restore() }
+  // red spiral-eye accent sting on the proof half
+  if (!neutral) {
+    ctx.save(); ctx.strokeStyle = 'rgba(220,30,40,0.9)'; ctx.lineWidth = 3
+    ctx.beginPath()
+    for (let t = 0; t < Math.PI * 5; t += 0.2) {
+      const r = t * 4
+      const x = w * 0.78 + Math.cos(t) * r, y = h * 0.3 + Math.sin(t) * r
+      t === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+    }
+    ctx.stroke(); ctx.restore()
+  }
+  sceneFinish(a)
+}
+
+/** eB10bFHlz7Y / 2AuOLEmEAkU — 3D proof beats: material sphere row along the
+ *  bottom + wireframe camera arc over a warm bokeh bed behind the incoming. */
+function sceneMaterialSpheres(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  drawReplaceBg(ctx, w, h, p * 2, 'bokeh')
+  const e = SCENE_LOOK.fade(p)
+  if (a.hasTo) { ctx.save(); ctx.globalAlpha = 0.35 + 0.65 * e; a.drawTo(ctx); ctx.restore() }
+  else if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 0.5; a.drawFrom(ctx); ctx.restore() }
+  // wireframe camera arc
+  ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.2
+  ctx.beginPath(); ctx.moveTo(w * 0.15, h * 0.55); ctx.quadraticCurveTo(w * 0.5, h * (0.18 - 0.06 * e), w * 0.85, h * 0.55); ctx.stroke()
+  const camX = w * (0.15 + 0.7 * e), camY = h * 0.55 - Math.sin(Math.PI * e) * h * 0.3
+  ctx.strokeRect(camX - 10, camY - 7, 20, 14)
+  ctx.beginPath(); ctx.moveTo(camX, camY); ctx.lineTo(w * 0.5, h * 0.5); ctx.stroke()
+  ctx.restore()
+  // material sphere row
+  const n = 8
+  for (let i = 0; i < n; i++) {
+    const x = w * (0.14 + (i / (n - 1)) * 0.72), y = h * 0.86, r = Math.min(w, h) * 0.035
+    const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.15, x, y, r)
+    const hues = ['200,200,205', '150,90,200', '220,180,90', '90,160,90', '200,60,60', '240,240,245', '60,120,200', '230,140,60']
+    g.addColorStop(0, `rgba(255,255,255,0.95)`)
+    g.addColorStop(0.35, `rgba(${hues[i]},0.9)`)
+    g.addColorStop(1, `rgba(20,20,25,0.95)`)
+    ctx.fillStyle = g
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
+  }
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -1143,5 +1274,9 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'arc') sceneNeonArc(a)
   else if (style === 'cloud') sceneLogoCloud(a)
   else if (style === 'compare') sceneGradeCompare(a)
+  else if (style === 'xslash') sceneXslashGraph(a)
+  else if (style === 'wall') sceneThumbWall(a)
+  else if (style === 'cutout') sceneCutoutChecker(a)
+  else if (style === 'spheres') sceneMaterialSpheres(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }

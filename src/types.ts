@@ -416,6 +416,10 @@ export type TransitionType =
   | 'scene_neon_arc'
   | 'scene_logo_cloud'
   | 'scene_grade_compare'
+  | 'scene_xslash_graph'
+  | 'scene_thumb_wall'
+  | 'scene_cutout_checker'
+  | 'scene_material_spheres'
 
 export interface Transition {
   id: string
