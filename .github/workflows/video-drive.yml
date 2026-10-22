@@ -45,14 +45,14 @@ jobs:
               r = subprocess.run(["curl","-sSL","--retry","2","-m","1800","-o",dest,DL.format(fid)],
                                  capture_output=True, text=True, timeout=1900)
               ok = os.path.exists(dest) and os.path.getsize(dest) > 500000
+              if not ok and os.path.exists(dest):
+                  with open(dest,'rb') as fh: head=fh.read(300)
+                  os.makedirs("audit-drive/errors", exist_ok=True)
+                  open(f"audit-drive/errors/dl-{fid[:12]}.txt","wb").write(head)
+                  os.remove(dest)
               return ok, r.returncode
           records = []
-          def process_zip(path, label):
-              work = f"work/{label}"
-              os.makedirs(work, exist_ok=True)
-              uz = subprocess.run(["unzip","-o","-q",path,"-d",work], capture_output=True, text=True, timeout=1800)
-              if uz.returncode != 0:
-                  records.append({"zip":label,"error":uz.stderr[-500:]}); return
+          def process_dir(work, label):
               media = []
               for root,_,fs in os.walk(work):
                   for f in fs:
@@ -105,17 +105,38 @@ jobs:
                   records.append({"zip":"manifest","status":"EXTRACTED"})
               else:
                   records.append({"zip":"manifest","status":"FAILED","rc":rc})
+          def process_zip(path, label):
+              work = f"work/{label}"
+              os.makedirs(work, exist_ok=True)
+              uz = subprocess.run(["unzip","-o","-q",path,"-d",work], capture_output=True, text=True, timeout=1800)
+              if uz.returncode != 0:
+                  records.append({"zip":label,"error":uz.stderr[-500:]}); return
+              process_dir(work, label)
           entries = cfg["entries"]
           start, end = (batch-1)*4, batch*4
           for e in entries[start:end]:
               label = e["name"].replace(".zip","")
+              prev = f"youtube-audit/runner-drive/evidence/{label}"
+              if os.path.isdir(prev) and any(f.endswith(".jpg") for _,_,fs in os.walk(prev) for f in fs):
+                  records.append({"zip":label,"status":"SKIP_EXISTING"}); continue
               if e.get("z01"):
-                  ok1,_ = fetch(e["z01"], "part.z01")
-                  ok2,_ = fetch(e["id"], "part.zip")
+                  ok1,_ = fetch(e["z01"], "split.z01")
+                  ok2,_ = fetch(e["id"], "split.zip")
                   if ok1 and ok2:
+                      z7 = subprocess.run(["7z","x","-y",f"-owork/{label}","split.zip"],
+                                          capture_output=True, text=True, timeout=1800)
+                      if z7.returncode == 0:
+                          records.append({"zip":label,"status":"EXTRACTED_7Z"})
+                          for m in []: pass
+                          # media walked below via process_dir
+                          process_dir(f"work/{label}", label); 
+                          for pf in ("split.zip","split.z01"):
+                              if os.path.exists(pf): os.remove(pf)
+                          shutil.rmtree("work", ignore_errors=True)
+                          continue
                       with open("joined.zip","wb") as out:
-                          for p in ("part.z01","part.zip"):
-                              with open(p,"rb") as inn: shutil.copyfileobj(inn, out)
+                          for pn in ("split.z01","split.zip"):
+                              with open(pn,"rb") as inn: shutil.copyfileobj(inn, out)
                       zp = "joined.zip"
                   else:
                       records.append({"zip":label,"status":"DOWNLOAD_FAILED"}); continue

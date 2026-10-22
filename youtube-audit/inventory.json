@@ -390,9 +390,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "k9mJqpVADho",
@@ -470,9 +471,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "WiPVD2RjfRs",
@@ -1113,9 +1115,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "EHXQm3-alYo",
@@ -3219,9 +3222,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "E6LIpT7DY58",
@@ -3233,9 +3237,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "kFb52rNjvBA",
@@ -3247,9 +3252,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "pThVHJC3vA8",
@@ -3261,9 +3267,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "RD2FTu1IL3I",
@@ -3275,9 +3282,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "asVucSdx7Aw",
@@ -3303,9 +3311,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "L9sssRAnN_A",
@@ -3317,9 +3326,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "E2cu-RCruYg",
@@ -3331,9 +3341,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "sXj0SdaRV14",
@@ -3345,9 +3356,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "HlCfYZQpDP8",
@@ -3359,9 +3371,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "L4x5Z4iuYS4",
@@ -3373,9 +3386,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "iwH2xDOYcP8",
@@ -3387,9 +3401,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "501V4sjJ2nU",
@@ -3401,9 +3416,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "u0zKDuUSz6o",
@@ -3415,9 +3431,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "7i8sTj006xM",
@@ -3429,9 +3446,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "RQ4UyVv92H8",
@@ -3443,9 +3461,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "YWbuNp0JlgE",
@@ -3457,9 +3476,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "q9sIMsv-ymE",
@@ -3471,9 +3491,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "6uWPi0Yhz2s",
@@ -3485,9 +3506,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "iby4x8BLBVY",
@@ -3499,9 +3521,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "0iXhGDuN400",
@@ -3513,9 +3536,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "EnnorIefSnk",
@@ -3527,9 +3551,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "pfXYoBaFVbE",
@@ -3541,9 +3566,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "qx0fahwD7G4",
@@ -3555,9 +3581,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "cTGnSGs8YDk",
@@ -3569,9 +3596,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "FOOTAGE_ACQUIRED",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)"
   },
   {
    "id": "M2_vjAseOns",
