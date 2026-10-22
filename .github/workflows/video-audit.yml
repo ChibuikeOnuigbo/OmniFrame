@@ -138,10 +138,12 @@ jobs:
           python3 - <<'PY'
           import json, os, subprocess, math
           batch = 1
+          explicit_ids = []
           try:
               txt = open("youtube-audit/batch-trigger.txt").read()
               for line in txt.splitlines():
                   if line.startswith("batch="): batch = int(line.split("=")[1])
+                  if line.startswith("ids="): explicit_ids = [x.strip() for x in line.split("=",1)[1].split(",") if x.strip()]
           except Exception: pass
           inv = json.load(open("audit-out/inventory.json"))["videos"]
           explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
@@ -156,6 +158,9 @@ jobs:
           # resumable slicing: batch N processes items [(N-1)*20, N*20)
           start, end = (batch-1)*20, batch*20
           selection = selection[start:end] or selection[:20]
+          # retry lane: trigger ids= line overrides slicing with an explicit id list
+          if explicit_ids:
+              selection = [v for v in inv if v["id"] in explicit_ids]
           os.makedirs("audit-out/evidence", exist_ok=True)
           os.makedirs("audit-out/reports", exist_ok=True)
           os.makedirs("audit-out/errors", exist_ok=True)
