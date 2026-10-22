@@ -1,0 +1,46 @@
+# Chat-history link study (WhatsApp zip → 105 YouTube ids, wave 1 = first 18 watched)
+
+Source: `WhatsApp Chat with @GameOver1089.zip` (Drive folder `1q0uf6vGTdsMl08Eoc16QTFiGgO1iTc7t`),
+links harvested to `links.json`. Footage fetched via runner batch 7; watch sheets in
+`youtube-audit/evidence/micro/<id>.jpg`. These are SHORT-form motivation/meme/car edits —
+a different grammar family from the Drive-zip AE tutorials: the craft lives in **typo
+cards, quote bands, mono grades and velocity blur**, not in effect-stack builds.
+
+| # | id | what the frames show | reproducible grammar |
+|---|----|----------------------|----------------------|
+| 1 | DY-0ntGxoPo | anime city skyline, pink sunset, slow parallax pan | painted-bg parallax pan bed (loopable outro) |
+| 2 | xhgCzz2qyXs | terminal/GitHub screen recording, "Never Give up" glow text, modal dialog insert, orange channel watermark | screen-record insert + glow typo + corner watermark |
+| 3 | PMvN6KSYQhU | wolf silhouette on snow, top "Use this audio" chip, bottom serif subtitle "In the Night" | audio-chip top caption + bottom serif subtitle |
+| 4 | F5RcdSwzUVw | dark gameplay, red caps title "MY GAMEPLAY AFTER LOSING 7 MATCH.." | red caps meme title over dark gameplay |
+| 5 | 5aFDj54RWQw | letterboxed desk, "java" vs "python" monitor labels, tiny logo card centred in black bars | black-bar mask w/ centred logo card + side labels |
+| 6 | MX3yw9gT0DI | white quote strip top: "If You are Struggling in Life, Read this" over black | QUOTE BAND: white strip + serif quote over black bed |
+| 7 | FJ08jHDgRk4 | live skit, yellow caps top banner "HOW TO HANDLE A RIVAL FRIEND" | repeated yellow caps banner typo |
+| 8 | I1JR_9NJlB4 | anime char on red bg, yellow outlined typo "BRO I AM IN LOVE WITH A GIRL" + pink icon | anime typo card: outline caps + accent icon |
+| 9 | ixEoA7z5jmQ | dark teal macro smear frames | whip/velocity-blur transition bed |
+| 10 | 0rNqPArnpB0 | yellow car whip-pan, green bg, heavy motion blur | velocity blur whip pan (car edit) |
+| 11 | fdPMTGq6BdE | camo sports car street pass, letterbox | cinematic letterbox car pass |
+| 12 | FAHi0jH7FJ4 | silver BMW front shot, clean letterbox grade | showcase grade + letterbox |
+| 13 | VA_p4aqYaIc | white strip quote "Real growth starts within.." | QUOTE BAND variant (thin strip, black bed) |
+| 14 | uFnoKD-4cpM | dark mono portrait, tiny caps typo "YOU CAN'T BREAK A PERSON" centred | MONO TYPE: desaturated bed + centred micro-caps |
+| 15 | v2g0zap6LQc | letterbox mono clip, white banner 2-line typo "Trust yourself / You've survived a lot" (accent word red) | two-line quote banner w/ accent word colour |
+| 16 | ENRtNTNtV8M | blown white/pink flash frame, tiny typo bottom | flash-frame transition bed |
+| 17 | 6Stj_5zLyiM | high-contrast mono Joker face, tiny serif typo "MAYBE IT WAS.." | MONO TYPE variant: contrast crush + serif micro typo |
+| 18 | Uew3Znl3Fl8 | white band "THE ARTIST" caps + peach gradient bed + signature | artist outro card: band typo + gradient bed |
+
+## Techniques extracted (49–54, continues deep-study numbering)
+
+49. **Quote band** — a full-width white strip (top or bottom) carrying one serif quote
+    line over a black/mono bed; the strip is the whole composition device (6, 13, 15, 18).
+50. **Mono micro-caps typo** — desaturate/contrast-crush the bed, then a very small
+    letter-spaced caps line centred (14, 17); scale contrast = mood.
+51. **Accent-word colour** — inside a mono/white typo, ONE word flips to red for the
+    emotional beat (15); cheap, huge retention effect.
+52. **Velocity whip bed** — 4–8 frame directional blur smear as the cut itself (9, 10);
+    no transition plugin, just blur ramp in/out.
+53. **Black-bar logo card** — letterbox bars deep enough to host a centred logo card or
+    side labels (5, 11, 12); bars are layout, not crop.
+54. **Flash-frame sting** — 1–2 blown-white frames with a tiny typo underneath as a
+    section break (16).
+
+Recreated in OmniFrame as scenes `quote_band` (49/51/54 bed) and `mono_typo` (50/52 bed)
+— see recreations/index.md #19–20 and `src/lib/pillarRenderers.ts`.

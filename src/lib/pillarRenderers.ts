@@ -1258,6 +1258,86 @@ function sceneMaterialSpheres(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/* ------------------------------------------------------------------ */
+/* Chat-history wave (WhatsApp zip links, techniques 49-54): quote     */
+/* band card + mono micro-caps typo. Same SCENE_LOOK finish so they    */
+/* cut as one family with the Drive-zip recreations.                   */
+/* ------------------------------------------------------------------ */
+
+function sceneQuoteBand(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, w, h)
+  const e = SCENE_LOOK.fade(p)
+  if (p < 0.8) {
+    if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 0.5 * e; ctx.filter = 'grayscale(1)'; a.drawFrom(ctx); ctx.restore(); ctx.filter = 'none' }
+  } else if (a.hasTo) {
+    const fl = Math.sin(Math.PI * clamp01((p - 0.8) / 0.2))
+    ctx.save(); ctx.globalAlpha = 0.85; a.drawTo(ctx); ctx.restore()
+    if (fl > 0.35) { ctx.fillStyle = `rgba(255,240,244,${0.75 * fl})`; ctx.fillRect(0, 0, w, h) }
+  }
+  const bandH = Math.max(34, h * 0.13)
+  const y = -bandH + bandH * SCENE_LOOK.fade(clamp01(p / 0.3))
+  ctx.fillStyle = '#f5f2ec'
+  ctx.fillRect(0, y, w, bandH)
+  const q1 = "Trust yourself — you've "
+  const acc = 'survived'
+  const q2 = ' a lot'
+  ctx.font = `italic bold ${Math.round(bandH * 0.42)}px Georgia, serif`
+  ctx.textBaseline = 'middle'
+  const fs = Math.round(bandH * 0.42)
+  const mw = (t: string) => ctx.measureText(t)?.width ?? fs * 0.5 * t.length
+  const w1 = mw(q1)
+  const wa = mw(acc)
+  const w2 = mw(q2)
+  const x0 = (w - (w1 + wa + w2)) / 2
+  const reveal = clamp01((p - 0.18) / 0.3)
+  ctx.save()
+  ctx.beginPath(); ctx.rect(0, y, w * reveal, bandH); ctx.clip()
+  ctx.fillStyle = '#141414'; ctx.fillText(q1, x0, y + bandH / 2)
+  ctx.fillStyle = '#c22323'; ctx.fillText(acc, x0 + w1, y + bandH / 2)
+  ctx.fillStyle = '#141414'; ctx.fillText(q2, x0 + w1 + wa, y + bandH / 2)
+  ctx.restore()
+  ctx.textBaseline = 'alphabetic'
+  if (p > 0.75) {
+    ctx.fillStyle = 'rgba(255,255,255,0.75)'
+    ctx.font = `${Math.max(9, Math.round(h * 0.035))}px sans-serif`
+    ctx.textAlign = 'center'; ctx.fillText('real growth starts within', w / 2, h * 0.94); ctx.textAlign = 'left'
+  }
+  sceneFinish(a)
+}
+
+function sceneMonoTypo(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  const whip = p > 0.45 && p < 0.62
+  const draw = (fn: (c: CanvasRenderingContext2D) => void, alpha: number, dx = 0) => {
+    ctx.save(); ctx.globalAlpha = alpha; ctx.filter = 'grayscale(1) contrast(1.35)'
+    if (dx) ctx.translate(dx, 0)
+    fn(ctx); ctx.restore(); ctx.filter = 'none'
+  }
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h)
+  if (p < 0.62) {
+    if (a.hasFrom) {
+      draw(a.drawFrom, 0.9)
+      if (whip) for (let i = 1; i <= 4; i++) draw(a.drawFrom, 0.16, -i * w * 0.03 * ((p - 0.45) / 0.17))
+    }
+  } else if (a.hasTo) draw(a.drawTo, 0.9)
+  ctx.fillStyle = `rgba(0,0,0,${0.28 + 0.1 * (1 - e)})`; ctx.fillRect(0, 0, w, h)
+  const line = "YOU CAN'T BREAK A PERSON"
+  const size = Math.max(9, Math.round(h * 0.045))
+  ctx.font = `600 ${size}px sans-serif`
+  const ls = size * 0.42
+  const chars = [...line]
+  const widths = chars.map((c) => ctx.measureText(c)?.width ?? size * 0.62)
+  const total = widths.reduce((s2, x) => s2 + x, 0) + ls * (chars.length - 1)
+  let x = (w - total) / 2
+  const appear = clamp01((p - 0.2) / 0.25)
+  ctx.fillStyle = `rgba(240,240,240,${0.85 * appear})`
+  chars.forEach((c, i) => { ctx.fillText(c, x, h * 0.52); x += widths[i] + ls })
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -1278,5 +1358,7 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'wall') sceneThumbWall(a)
   else if (style === 'cutout') sceneCutoutChecker(a)
   else if (style === 'spheres') sceneMaterialSpheres(a)
+  else if (style === 'quote') sceneQuoteBand(a)
+  else if (style === 'mono') sceneMonoTypo(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }

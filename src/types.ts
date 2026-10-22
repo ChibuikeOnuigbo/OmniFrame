@@ -420,6 +420,8 @@ export type TransitionType =
   | 'scene_thumb_wall'
   | 'scene_cutout_checker'
   | 'scene_material_spheres'
+  | 'scene_quote_band'
+  | 'scene_mono_typo'
 
 export interface Transition {
   id: string

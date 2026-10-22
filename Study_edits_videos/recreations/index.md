@@ -120,3 +120,18 @@ placed per-clip from Effects-panel tiles or the right-panel AE Tool Rack:
 - replaceBg (drawn UNDER keyed/cut-out footage): synthwave · aurora · grid ·
   bokeh · sunset · studio
 QA: `node qa/particle-fx-unit.mjs`.
+## 19 — scene_quote_band (`quote`)
+Source: chat-history links MX3yw9gT0DI / VA_p4aqYaIc / v2g0zap6LQc / Uew3Znl3Fl8 (techniques 49/51/54).
+Grammar: black bed → mono from-clip fades under → white serif quote band slides from top
+(reveal-clip wipes the quote line left→right) with ONE red accent word → p>0.8 flash-frame
+sting hands off to the to-clip + micro typo bottom-centre. Params: none (constant look).
+Beats: band slide 0–0.3 · quote reveal 0.18–0.48 · sting 0.8–1.0.
+QA: `node qa/scene-recreation-unit.mjs` (style `quote`, 7 samples).
+
+## 20 — scene_mono_typo (`mono`)
+Source: chat-history links uFnoKD-4cpM / 6Stj_5zLyiM + whip of ixEoA7z5jmQ / 0rNqPArnpB0 (techniques 50/52).
+Grammar: grayscale+contrast-crushed from-clip bed, black crush overlay easing out →
+letter-spaced micro-caps typo fades in centred → p 0.45–0.62 directional 4-ghost smear
+(the cut itself) → mono to-clip hold. Params: none (constant look).
+Beats: typo 0.2–0.45 · whip 0.45–0.62 · hold 0.62–1.
+QA: style `mono`, 7 samples.
