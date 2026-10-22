@@ -87,3 +87,33 @@ Techniques 55–60: 55 multi-line top typo stack · 56 radial zoom-blur sting ·
 Techniques 61–68: 61 numbered-list typo stack · 62 social-post card insert ·
 63 colour-row list menu · 64 evolution-list format · 65 doodle annotation overlay ·
 66 repeated-word caption row · 67 full-bleed/dark-bed pacing holds · 68 cutout sticker on white bed.
+
+## Wave 4 (batch 12: 16 watched; WmkdYFcXCtg + 99hY2x1CLEU unavailable) + user short K2mSI59wPvg (batch 13)
+
+| id | grammar |
+|----|---------|
+| 9UkBHVV9OA | sketch/high-key invert bed (manga line-art on white) |
+| 9_uwkoUiERE | colour-wash gradient bed (magenta blur) |
+| Qxf_bMMc_ZE | background-label card ("AMONG US BACKGROUND" 2-line caps) |
+| ylFdwE6sSWU | quote band variant: black typo on white band over sepia footage |
+| rY2RTuJEJpw | **triptych split panels** (white manga / blue streak / pink) under 4-line top stack |
+| sx7ogrJD5KQ | **framed inset card** (white border frame around footage + header typo) |
+| hTEZOX48TN4 | ripple-ring effect + serif name typo + © micro credit line |
+| 5RXGg3T4WlQ | media-player UI overlay gag (play-bar strip over tinted bed) |
+| UuTKuhcqv2M | full-bleed anime hold |
+| 4hqpWf38W5s | **combo meme card**: post card + two side-by-side insets + "What bro found:" caption |
+| 7nFduBo1Stk | centred inset portrait on white bed w/ blurred edges + name typo |
+| F8mlolILu7A | mono desat bed + micro white typo ("No consequences") |
+| b5yB6khnrmc | editor-UI screen-record bed (CapCut-style timeline) |
+| fx55eFCUw_I | blurred-blob bed |
+| p0cp8uUpc9M | split-band letterbox (dark top band + desk scene bottom) |
+| poKeVJZMFV4 | cutout row + brand typo + colour band footer |
+| K2mSI59wPvg | **minimal gradient-sky bed + one drifting paper-plane hero with thin motion trail** |
+
+Techniques 70–85: 70 sketch/high-key invert bed · 71 colour-wash bed · 72 background-label card ·
+73 triptych split panels · 74 framed inset card · 75 ripple-ring + © micro credit ·
+76 media-player UI overlay · 77 combo meme card (post + dual insets) · 78 centred inset portrait ·
+79 editor-UI screen-record bed · 80 blurred-blob bed · 81 split-band letterbox ·
+82 cutout row + brand typo · 83 black-on-white quote band · 84 full-bleed anime hold ·
+85 drifting hero object + motion trail on gradient bed → recreated as scene `drift`
+(recreation #21, `scene_drift_trail`, QA 21×7 PASS).

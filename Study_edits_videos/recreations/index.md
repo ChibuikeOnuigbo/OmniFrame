@@ -135,3 +135,10 @@ letter-spaced micro-caps typo fades in centred → p 0.45–0.62 directional 4-g
 (the cut itself) → mono to-clip hold. Params: none (constant look).
 Beats: typo 0.2–0.45 · whip 0.45–0.62 · hold 0.62–1.
 QA: style `mono`, 7 samples.
+
+## 21 — scene_drift_trail (`drift`)
+Source: user short K2mSI59wPvg (technique 85).
+Grammar: gradient sky bed (blue → pale horizon) + single paper-plane hero drifting
+left→right on the shared fade curve with a thin white motion trail; incoming clip
+crossfades up from p 0.7. Params: none (constant look). Beats: drift 0–1 · handoff 0.7–1.
+QA: `node qa/scene-recreation-unit.mjs` (style `drift`, 7 samples) — 21 styles PASS.

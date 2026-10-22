@@ -1,3 +1,4 @@
+import SegmentCarousel from './SegmentCarousel'
 import { useState } from 'react'
 import { AlertCircle, Check, Clock, Play, Sparkles, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
@@ -209,6 +210,18 @@ export function TransitionsPanel() {
               </button>
             )
           })}
+        </div>
+        <div className="mt-1.5">
+          <SegmentCarousel
+            ariaLabel={`${pillar} presets`}
+            testId={`pillar-carousel-${pillar}`}
+            segments={TRANSITION_PRESETS.filter((p) => (PILLARS.find((pl) => pl.key === pillar)?.cats || []).includes(p.category)).map((p) => ({ id: p.id, label: p.name }))}
+            value={selectedId || TRANSITION_PRESETS.filter((p) => (PILLARS.find((pl) => pl.key === pillar)?.cats || []).includes(p.category))[0]?.id || ''}
+            onChange={(id) => {
+              const p = TRANSITION_PRESETS.find((x) => x.id === id)
+              if (p) selectPreset(p)
+            }}
+          />
         </div>
         <div data-testid="transition-variant-list" className="mt-1.5 max-h-[430px] overflow-y-auto pr-1 space-y-1.5">
           {TRANSITION_PRESETS.filter((p) => (PILLARS.find((pl) => pl.key === pillar)?.cats || []).includes(p.category)).map((preset) => (

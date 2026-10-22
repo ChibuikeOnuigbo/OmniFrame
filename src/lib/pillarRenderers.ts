@@ -1338,6 +1338,33 @@ function sceneMonoTypo(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/* Chat-history short K2mSI59wPvg: minimal gradient-sky bed + one drifting
+   hero object (paper plane) with a thin motion trail — technique 85. */
+function sceneDriftTrail(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  const g = ctx.createLinearGradient(0, 0, 0, h)
+  g.addColorStop(0, '#4d94e8')
+  g.addColorStop(0.75, '#cfe3f7')
+  g.addColorStop(1, '#e8f1fb')
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, w, h)
+  const x = w * (-0.08 + 1.16 * e)
+  const y = h * (0.62 - 0.06 * Math.sin(Math.PI * e))
+  ctx.save()
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)'
+  ctx.lineWidth = 1.1
+  ctx.beginPath(); ctx.moveTo(w * 0.02, y + 2); ctx.lineTo(x - 10, y + 1); ctx.stroke()
+  ctx.translate(x, y)
+  ctx.rotate(-0.12 + 0.1 * Math.sin(Math.PI * e))
+  ctx.fillStyle = '#ffffff'
+  ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-8, -4); ctx.lineTo(-4, 0); ctx.lineTo(-8, 4); ctx.closePath(); ctx.fill()
+  ctx.restore()
+  if (a.hasTo && p > 0.7) { ctx.save(); ctx.globalAlpha = ((p - 0.7) / 0.3) * 0.9; a.drawTo(ctx); ctx.restore() }
+  else if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 0.12; a.drawFrom(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -1360,5 +1387,6 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'spheres') sceneMaterialSpheres(a)
   else if (style === 'quote') sceneQuoteBand(a)
   else if (style === 'mono') sceneMonoTypo(a)
+  else if (style === 'drift') sceneDriftTrail(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }
