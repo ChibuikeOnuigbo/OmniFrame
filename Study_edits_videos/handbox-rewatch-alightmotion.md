@@ -40,3 +40,7 @@ Evidence: test_ans_result/evidence/F-*.png, F_amfx/*.mp4, timeline-F.png.
 ## Not implemented (mandate: no AI features)
 ElevenLabs voice UI, KlingAI/Nano-Banana start-end gen, Seedance/Lovart
 sponsor beats — logged only.
+
+## Channel-wide explanation pack (2026-10-23)
+Full per-video explanation of the whole channel (48 shorts + 31 long-form, tools per video,
+seven document formats) lives in `yt_hancy/hancy_explantion.*` — see `yt_hancy/README.md`.
