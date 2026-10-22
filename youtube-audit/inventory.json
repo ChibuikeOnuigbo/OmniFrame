@@ -995,9 +995,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "caption-card essay: 'They work the same for Tutorials'/'Because new accounts', TV-mask light-streak frame"
   },
   {
    "id": "R-pFi08xkjk",
@@ -1023,9 +1024,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "noise/static frame, dark-red blurred manga face, rounded TV-mask scanline frame w/ manga girl; TV-mask+noise style"
   },
   {
    "id": "chIJCGNoGls",
@@ -1037,9 +1039,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE UI red X-sword sky comp, symmetric blue glow-burst comp, halftone-dot manga head; glow burst + halftone"
   },
   {
    "id": "4dPBXQGWVdM",
@@ -1135,9 +1138,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "PS->AE manga intro: orange-haired manga head in PS w/ hand-written 'Ta', red-eye white-haired char on pink grid w/ TE..ANIM type"
   },
   {
    "id": "nb--54G-CL8",
@@ -1149,9 +1153,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE UI fire/explosion comp w/ purple mask outline, red X-swords over char comp, caption 'Spot = AB = Y'; mask/spot workflow"
   },
   {
    "id": "07HDwXwXYms",
@@ -1221,9 +1226,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "clone-grid char comp in AE, plugin-site slider UI, purple/orange pop-art face w/ big round glasses; clone+pop grade"
   },
   {
    "id": "IK9Ksx3h1Tw",
@@ -1263,9 +1269,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "OFF-label compare on dark One-Piece-style char, film scratch/dust overlay w/ caption, white-cloak low-angle; OFF/ON + film damage"
   },
   {
    "id": "MikYBbqNiPo",
