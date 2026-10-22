@@ -1511,9 +1511,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'TextAnimation' warp-grid comp + plugin thumb grid, SIMPLE FIX dialog, 'how u can animate text in just 1 click' typo on orange grid; text-anim plugin promo"
   },
   {
    "id": "TGzvLuyQEnM",
@@ -1553,9 +1554,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "photo-inset comp + gradient thumb panel, white-flower kaleidoscope comp, 3D flying-cards cloud; 3D card flight"
   },
   {
    "id": "oj-OMBrUNyw",
@@ -1595,9 +1597,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white comp w/ tiny eye element + CapCut-style green-button panel inset, manga head w/ mask path, dark blurred char; AE+CapCut hybrid"
   },
   {
    "id": "RvIiIj6xVg0",
@@ -1735,9 +1738,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "small pink char comp, white/orange particle-burst comp, warm blurred char close-up; particle burst"
   },
   {
    "id": "i1lgRsjK89Y",
@@ -1833,9 +1837,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark car/scene comp variants in AE, pink/blue blur w/ 'g to show you' caption; comp variants"
   },
   {
    "id": "UArGI-27qdo",
@@ -1945,9 +1950,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark comp + mask rect, purple char comp w/ mask outline, 'UPGRADE YOUR EDITS' cyan typo on blur; mask+typo promo"
   },
   {
    "id": "Ia6I12TiyZk",
@@ -2001,9 +2007,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "green-glow aura char comp in AE, rotated comp-in-comp, purple/green blur close-up; glow aura"
   },
   {
    "id": "RktZGRjji5g",
@@ -2057,9 +2064,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "seated char photo comp, red slit/curtain comp w/ mask outline + purple effect panel, caption 'is gonna change your edits'; plugin promo w/ mask"
   },
   {
    "id": "1UpuLy6qrPw",
@@ -2211,9 +2219,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark red comps w/ card/photo insets (2 variants), dark stage frame w/ spotlighted char; card inset + spotlight"
   },
   {
    "id": "YtZ6gEx-chc",
@@ -2253,9 +2262,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "file browser w/ purple/white thumbs, red slit-scan char comp, halftone-dot orange/white frame; slit-scan + halftone"
   },
   {
    "id": "2AuOLEmEAkU",
@@ -2267,9 +2277,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D terrain comp + sphere grid panel, sunset torii scene comp, blue ink-splash bg + suited char + 'Wanna Today' typo"
   },
   {
    "id": "DgIhrwH0C70",
@@ -2366,9 +2377,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "pack setup guide: dark file browser + captions 'just extract the file and click on setup', 'pack contains all Adobe programs + plugins, scripts, panels, 800GB+'"
   },
   {
    "id": "z8hSWKwFO1w",
@@ -2492,9 +2504,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "photo/keyboard comp + context menus, dark comp w/ red circle path (mask/path), yellow gradient blur"
   },
   {
    "id": "HlprqEm8zmM",
@@ -2549,9 +2562,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "green/red mask outline around char head + file-list dialog, mask comp w/ DI typo + 3D frame, white smoke/ink frame; mask demo"
   },
   {
    "id": "xTLfDYLDQV4",
@@ -2746,9 +2760,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "pink/white manga face close-up (orange eyes) PS-style, pink strand element on black in AE, white/teal graded profile"
   },
   {
    "id": "DUxni95nIA4",
@@ -2789,9 +2804,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark teal dot-grid comp + rectangle, dialog over dark comp w/ small preview, wide comp w/ pink centre; grid/preview comps"
   },
   {
    "id": "7TfndLKnvDg",
@@ -2887,9 +2903,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "small red-hood char comp + black comp, eye close-up comp, soft teal/white graded face render; soft-grade render"
   },
   {
    "id": "jlDIX3Ky-hs",
@@ -2999,9 +3016,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "2023 recap: year cards w/ chrome/liquid-metal frames, blue crystalline 3D render, white chrome blob"
   },
   {
    "id": "bPEAycw2G3Y",
@@ -3013,9 +3031,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "meme caption 'When creativity suddenly pops in at midnight' x2 over sci-fi control room w/ teal screens"
   },
   {
    "id": "YOCiH8zHGic",
@@ -3027,9 +3046,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Adobe app logo cloud (Premiere/PS/AI/ID/Acrobat) over Creation-of-Adam hands w/ 'After Effects' label; app-compare intro"
   },
   {
    "id": "GikA0GVJE04",
@@ -3055,9 +3075,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "era-compare meme: 'Edit anime in 2015: / in 2025:' cards w/ small blue edit frames repeated"
   },
   {
    "id": "N79DDI_qWXQ",
@@ -3069,9 +3090,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "comment-reply edit: 'hey man could u try changing the music? its too fast' x3 over dense-keyframe AE timelines"
   },
   {
    "id": "vEyey3tWhbQ",
@@ -3083,9 +3105,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "plugin promo: 'This plugin has 500+ ready made PSDs' over manga thumb grid, red card w/ manga face, green search bar '27 RESULTS FOUND'; PSD-pack search UI"
   },
   {
    "id": "BEGTtDZd9Cg",
@@ -3111,9 +3134,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "screen-recording workflow: AE splash + donut 3D render, timeline keyframe dots close-up, manga eye on monitor"
   },
   {
    "id": "S_qC4Kr4YQk",
@@ -3125,9 +3149,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-dark frame w/ white disc + UI card, glowing Ae/Pr/ME logo cluster, dark red blur; app-logo glow sting"
   },
   {
    "id": "xO9c1ciNBuA",
