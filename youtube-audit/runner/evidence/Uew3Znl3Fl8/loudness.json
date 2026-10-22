@@ -1,0 +1,27 @@
+me, yuv420p(tv, smpte170m/bt470bg/bt709, progressive), 360x400 [SAR 1:1 DAR 9:10], q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
+    Metadata:
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:21.066000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:00:21.108000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=  44x    
+frame=  519 fps=0.0 q=-0.0 size=N/A time=00:00:17.30 bitrate=N/A speed=30.5x    
+[out#0/null @ 0x56410c5cdc80] video:296kB audio:15808kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  632 fps=0.0 q=-0.0 Lsize=N/A time=00:00:21.03 bitrate=N/A speed=29.3x    
+[Parsed_loudnorm_0 @ 0x56410c621f40] 
+{
+	"input_i" : "-10.84",
+	"input_tp" : "2.46",
+	"input_lra" : "6.40",
+	"input_thresh" : "-21.02",
+	"output_i" : "-24.38",
+	"output_tp" : "-12.06",
+	"output_lra" : "4.30",
+	"output_thresh" : "-34.61",
+	"normalization_type" : "dynamic",
+	"target_offset" : "0.38"
+}

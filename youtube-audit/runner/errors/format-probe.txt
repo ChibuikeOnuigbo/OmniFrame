@@ -73,10 +73,10 @@ sb0     mhtml 320x180      0    |                  mhtml | images               
 [debug] [youtube] Forcing "main" player JS variant for player 55de7e60
         original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
 [debug] [youtube] DY-0ntGxoPo: Detected experiment to bind GVS PO Token to video ID for web_embedded client
-[debug] [youtube] DY-0ntGxoPo: Detected a 6s ad skippable after 5s for web_embedded
+[debug] [youtube] DY-0ntGxoPo: Detected a 15s ad skippable after 5s for web_embedded
 [debug] [youtube] DY-0ntGxoPo: Detected a 15s ad skippable after 5s for tv_samsung
 [debug] [youtube] DY-0ntGxoPo: Detected a 15s ad skippable after 5s for web
-[debug] [youtube] DY-0ntGxoPo: Detected a 30s ad skippable after 5s for web
+[debug] [youtube] DY-0ntGxoPo: Detected a 15s ad skippable after 5s for web
 [debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -
