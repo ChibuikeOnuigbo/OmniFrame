@@ -133,6 +133,29 @@ jobs:
           PY
           sed -i "s/__TS__/$(date -u +%FT%TZ)/" audit-out/inventory.json
 
+      - name: Collect reddit link text from chat history (runner egress)
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          src = 'Study_edits_videos/chat-history/links.json'
+          if not os.path.exists(src):
+              print('no chat-history links file; skipping'); raise SystemExit(0)
+          links = json.load(open(src)).get('reddit', [])
+          os.makedirs('audit-out/reddit', exist_ok=True)
+          for i, u in enumerate(links):
+              try:
+                  r = subprocess.run(['curl','-sSL','-m','45','-A','omniframe-study/0.1 (+audit)', u],
+                                     capture_output=True, text=True, timeout=60)
+                  html = r.stdout or ''
+                  title = (re.search(r'<title[^>]*>(.*?)</title>', html, re.S|re.I) or [None,''])[1]
+                  desc = (re.search(r'<meta[^>]+property="og:description"[^>]+content="([^"]*)"', html) or [None,''])[1]
+                  json.dump({'url': u, 'title': title.strip()[:300], 'description': desc.strip()[:800]},
+                            open(f'audit-out/reddit/{i:02d}.json','w'), indent=1)
+              except Exception as e:
+                  json.dump({'url': u, 'error': str(e)[:200]}, open(f'audit-out/reddit/{i:02d}.json','w'), indent=1)
+          print('reddit collected:', len(links))
+          PY
+
       - name: Batch download + frame/audio evidence
         run: |
           python3 - <<'PY'
