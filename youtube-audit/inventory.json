@@ -1526,9 +1526,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark char comp + red-thumb plugin panel in AE, blurred red-haired char close-up; plugin panel + blur"
   },
   {
    "id": "bnidLFxk1RY",
@@ -1569,9 +1570,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "hallway comp + pink char thumb-grid panel, 3D flying-cards over street frame; 3D card flight"
   },
   {
    "id": "vWVcUwxkr54",
@@ -1753,9 +1755,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "grayscale 3D scene w/ red sword prop, red/pink sky variant comp, white/pink blur; 3D scene + sky grade"
   },
   {
    "id": "IOOFDnmhVbk",
@@ -1795,9 +1798,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "tablet mockup w/ char card + 'Completed' check card, 'Hours of work in a few seconds', purple gradient card w/ green-haired char; app promo"
   },
   {
    "id": "kFQTtIp9Hrg",
@@ -1866,9 +1870,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "black box comp w/ 3D gizmo, checkerboard plane comp (3D floor), 'in this video' caption on blur; 3D checker floor"
   },
   {
    "id": "juKpzbMj2q0",
@@ -1880,9 +1885,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "web-page comp (dark UI + buttons) + video-call insets, tilted screen comp, teal bokeh frame; screen comps"
   },
   {
    "id": "Ke2ZbmxJOwA",
@@ -1922,9 +1928,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Sasuke char comp w/ dark trees + variant w/ green plant overlay, 'what's' caption on white smear; comp variants"
   },
   {
    "id": "BQQJ0Sadgmo",
@@ -2205,9 +2212,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "char comp (white shirt) + purple/pink grade variant in AE, cyan glow-burst frame; grade variants + glow"
   },
   {
    "id": "54VUNC498VY",
@@ -2476,9 +2484,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'SNOWVFX' yellow typo on black comp, two chibi chars comp, yellow gradient blur; SNOWVFX typo + chibi"
   },
   {
    "id": "wytMbq2QVsw",
@@ -2533,9 +2542,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark comps w/ green V logo + text panel, tilted logo comp w/ blue cards, dark browser frame; logo sting comps"
   },
   {
    "id": "wV2_PmT0fio",
@@ -2577,9 +2587,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "newspaper comp w/ green photo inset, smaller newspaper comp, credit page 'By @Neo Snedrics' + green neon scene; newspaper comps"
   },
   {
    "id": "PdjSRGZSMC8",
@@ -2647,9 +2658,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "B&W manga char w/ colour wheels (PS-style), white-cloth + teal-glow comp w/ 3D frame, full manga sketch page (mountains); sketch-page comp"
   },
   {
    "id": "KK-aOWCD1Gg",
@@ -2661,9 +2673,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white circle on black comp, 3D cube comp w/ orange sphere inside, tiny purple cube icon; 3D cube/sphere comp"
   },
   {
    "id": "vaF0P33kt4c",
@@ -2689,9 +2702,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "PS B&W manga swordswoman cutout on white -> same comp in AE; PS->AE cutout pipeline"
   },
   {
    "id": "WXVa6XYFk6M",
@@ -2790,9 +2804,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'ROSES' pink typo comp, 'NEVER HOLD A BAG' typo card, download-site page w/ green buttons; typo comps + site"
   },
   {
    "id": "X7ZG3mXEd98",
@@ -2833,9 +2848,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "paper-strip collage comp on wood bg, 3D photo-card rig w/ wireframes, final polaroid cards on wall w/ manga portraits; polaroid 3D wall"
   },
   {
    "id": "oC-CDc8B4Gw",
@@ -2861,9 +2877,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "soft-grade portrait study: white-haired char teal eyes, eye close-ups w/ pink/teal grades"
   },
   {
    "id": "VIMvuNw4g3o",
@@ -2918,9 +2935,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'THUMB PULLING better chin and jaw' title over profile photos, After label, pixelated profile compares; thumb face retouch"
   },
   {
    "id": "0s3wX_LevjI",
@@ -2988,9 +3006,10 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "adidas logo comp (red/teal), PUMA vs adidas split comp w/ globe, final split logos on galaxy bg; logo split comp"
   },
   {
    "id": "kZskcvTkAjs",
@@ -3061,9 +3080,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'Text animation kit' glow title + SIMPLE TEXT dialog + 'Pov: Must have Text animation presets' captions; kit promo"
   },
   {
    "id": "2jFdVNSiAeU",
@@ -3120,9 +3140,10 @@
    "formats": [
     "shorts"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'Capcut Users: Editing is Easy' caption over colour-bars glitch frames + AE timelines; capcut meme"
   },
   {
    "id": "YtWtj8dLVRA",
