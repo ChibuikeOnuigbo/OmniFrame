@@ -38,7 +38,7 @@ function stubCtx(log) {
   })
 }
 
-const styles = ['relight', 'crt', 'magna', 'line', 'rim', 'mosaic', 'roto', 'tv', 'slit', 'fisheye']
+const styles = ['relight', 'crt', 'magna', 'line', 'rim', 'mosaic', 'roto', 'tv', 'slit', 'fisheye', 'spotlight', 'arc', 'cloud', 'compare']
 const ps = [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]
 let failures = 0
 for (const style of styles) {
@@ -79,4 +79,4 @@ for (const style of styles) {
   console.log(`ok scene:${style} (${ps.length} progress samples, constant look verified)`)
 }
 if (failures) { console.error(`${failures} failures`); process.exit(1) }
-console.log('SCENE RECREATION UNIT QA: PASS (10 styles x 7 progress samples)')
+console.log('SCENE RECREATION UNIT QA: PASS (14 styles x 7 progress samples)')

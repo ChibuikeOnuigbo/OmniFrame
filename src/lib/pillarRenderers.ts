@@ -993,6 +993,140 @@ function sceneFisheyeSting(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/** BP4xGE9iUtU — spotlight typo stage: grey field + spotlight ellipse; scattered
+ *  inverted 3D typo fragments with drop shadows settle onto the stage. */
+function sceneSpotlightTypo(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  ctx.fillStyle = '#8f8f8f'; ctx.fillRect(0, 0, w, h)
+  const sp = ctx.createRadialGradient(w / 2, h * 0.42, 10, w / 2, h * 0.42, w * 0.42)
+  sp.addColorStop(0, 'rgba(255,255,255,0.95)')
+  sp.addColorStop(0.7, 'rgba(255,255,255,0.55)')
+  sp.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = sp
+  ctx.beginPath(); ctx.ellipse(w / 2, h * 0.42, w * 0.42, h * 0.3, 0, 0, Math.PI * 2); ctx.fill()
+  if (p > 0.35 && a.hasTo) { ctx.save(); ctx.globalAlpha = (p - 0.35) * 1.2; ctx.globalCompositeOperation = 'multiply'; a.drawTo(ctx); ctx.restore() }
+  else if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 0.25; ctx.globalCompositeOperation = 'multiply'; a.drawFrom(ctx); ctx.restore() }
+  // scattered inverted typo fragments settle with eased offsets + shadows
+  const frags = ['SO', 'THIS', 'SHIT']
+  ctx.save()
+  ctx.font = '900 64px system-ui, sans-serif'
+  frags.forEach((t, i) => {
+    const settle = SCENE_LOOK.fade(Math.min(1, Math.max(0, (p - 0.15 - i * 0.12) / 0.4)))
+    const bx = w * (0.3 + i * 0.16) + (1 - settle) * (i % 2 ? 90 : -90)
+    const by = h * (0.34 + i * 0.14) + (1 - settle) * 60
+    ctx.save()
+    ctx.translate(bx, by); ctx.rotate((i - 1) * 0.22 + Math.PI)
+    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillText(t, 4, 5)
+    ctx.fillStyle = i === 2 ? 'rgba(160,30,40,0.9)' : 'rgba(70,70,70,0.9)'
+    ctx.fillText(t, 0, 0)
+    ctx.restore()
+  })
+  ctx.restore()
+  void e
+  sceneFinish(a)
+}
+
+/** jZiwWHV7M54 — neon crescent arc sting: two red neon arcs frame the mouth
+ *  where stacked CTA typos enter; arc glow breathes on the shared fade. */
+function sceneNeonArc(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  ctx.fillStyle = '#0a0000'; ctx.fillRect(0, 0, w, h)
+  if (p > 0.5 && a.hasTo) { ctx.save(); ctx.globalAlpha = (p - 0.5) * 0.5; a.drawTo(ctx); ctx.restore() }
+  else if (p <= 0.5 && a.hasFrom) { ctx.save(); ctx.globalAlpha = 0.25; a.drawFrom(ctx); ctx.restore() }
+  const breathe = 0.75 + 0.25 * Math.sin(SCENE_LOOK.fade(p) * Math.PI)
+  ctx.save()
+  ctx.strokeStyle = `rgba(255,40,50,${0.9 * breathe})`
+  ctx.lineWidth = 5
+  ctx.shadowColor = 'rgba(255,30,40,0.9)'; ctx.shadowBlur = 24
+  ctx.beginPath(); ctx.arc(w / 2, -h * 0.28, h * 0.62, Math.PI * 0.22, Math.PI * 0.78); ctx.stroke()
+  ctx.beginPath(); ctx.arc(w / 2, h * 1.28, h * 0.62, -Math.PI * 0.78, -Math.PI * 0.22); ctx.stroke()
+  ctx.restore()
+  const ctas = ['AvoidAEP', 'Discord', 'Link in Bio']
+  ctx.save(); ctx.textAlign = 'center'
+  ctas.forEach((t, i) => {
+    const on = SCENE_LOOK.fade(Math.min(1, Math.max(0, (p - 0.2 - i * 0.15) / 0.3)))
+    if (on <= 0) return
+    ctx.globalAlpha = on
+    ctx.fillStyle = i === 2 ? 'rgba(255,80,80,0.95)' : 'rgba(255,120,120,0.8)'
+    ctx.font = `${i === 2 ? '800 40px' : '700 26px'} system-ui, sans-serif`
+    ctx.fillText(t, w / 2, h * (0.42 + i * 0.1))
+  })
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** YOCiH8zHGic — logo cloud over classical art: app-name typos float placed
+ *  around the frame; the hero app name enters late with a glow. */
+function sceneLogoCloud(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  if (a.hasFrom) { ctx.save(); ctx.filter = 'sepia(0.7) brightness(0.9)'; a.drawFrom(ctx); ctx.filter = 'none'; ctx.restore() }
+  else if (a.hasTo) { ctx.save(); ctx.filter = 'sepia(0.7) brightness(0.9)'; a.drawTo(ctx); ctx.filter = 'none'; ctx.restore() }
+  const names: [string, number, number][] = [
+    ['Premiere', 0.5, 0.18], ['Photoshop', 0.26, 0.3], ['Illustrator', 0.72, 0.3],
+    ['InDesign', 0.5, 0.44], ['Lightroom', 0.2, 0.62], ['Acrobat', 0.42, 0.74], ['Canva', 0.68, 0.62],
+  ]
+  ctx.save(); ctx.textAlign = 'center'
+  names.forEach(([t, fx, fy], i) => {
+    const on = SCENE_LOOK.fade(Math.min(1, Math.max(0, (p - i * 0.06) / 0.25)))
+    if (on <= 0) return
+    ctx.globalAlpha = on * 0.9
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'
+    ctx.font = '600 22px system-ui, sans-serif'
+    ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 6
+    ctx.fillText(t, w * fx, h * fy + (1 - on) * 14)
+  })
+  const hero = SCENE_LOOK.fade(Math.min(1, Math.max(0, (p - 0.6) / 0.3)))
+  if (hero > 0) {
+    ctx.globalAlpha = hero
+    ctx.fillStyle = '#fff'
+    ctx.font = '800 40px system-ui, sans-serif'
+    ctx.shadowColor = 'rgba(120,160,255,0.9)'; ctx.shadowBlur = 18
+    ctx.fillText('After Effects', w / 2, h * 0.32 - (1 - hero) * 20)
+  }
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** GP-dx6ruQQA / -SZcpYq49v8 — grade-compare rhythm: one comp cut through
+ *  graded states (plain / desat / dark / warm) on the shared fade, with a
+ *  curve-graph proof inset on the second state. */
+function sceneGradeCompare(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const states = [
+    'none',
+    'saturate(0.25) brightness(1.05)',
+    'saturate(1.5) contrast(1.25) brightness(0.85)',
+    'sepia(0.5) hue-rotate(-18deg) saturate(2.2)',
+  ]
+  const idx = Math.min(states.length - 1, Math.floor(p * states.length))
+  const src = idx % 2 === 0 ? a.hasFrom : a.hasTo
+  const draw = idx % 2 === 0 ? a.drawFrom : a.drawTo
+  if (src) { ctx.save(); ctx.filter = states[idx]; draw(ctx); ctx.filter = 'none'; ctx.restore() }
+  else if (a.hasFrom) { ctx.save(); ctx.filter = states[idx]; a.drawFrom(ctx); ctx.filter = 'none'; ctx.restore() }
+  // state label chip
+  ctx.save()
+  ctx.fillStyle = 'rgba(0,0,0,0.55)'
+  ctx.fillRect(16, h - 44, 150, 28)
+  ctx.fillStyle = '#fff'; ctx.font = '600 16px system-ui, sans-serif'
+  ctx.fillText(['plain', 'desat', 'crush', 'warm'][idx], 28, h - 24)
+  ctx.restore()
+  // curve-graph proof inset on the second state
+  if (idx === 1) {
+    const gx = w - 190, gy = h - 150, gs = 130
+    ctx.save()
+    ctx.strokeStyle = 'rgba(190,80,255,0.95)'; ctx.lineWidth = 3
+    ctx.strokeRect(gx - 6, gy - 6, gs + 12, gs + 12)
+    ctx.fillStyle = 'rgba(20,20,20,0.9)'; ctx.fillRect(gx, gy, gs, gs)
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2
+    ctx.beginPath(); ctx.moveTo(gx, gy + gs)
+    ctx.bezierCurveTo(gx + gs * 0.5, gy + gs, gx + gs * 0.35, gy, gx + gs, gy)
+    ctx.stroke()
+    ctx.restore()
+  }
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -1005,5 +1139,9 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'tv') sceneTvMask(a)
   else if (style === 'slit') sceneSlitHalftone(a)
   else if (style === 'fisheye') sceneFisheyeSting(a)
+  else if (style === 'spotlight') sceneSpotlightTypo(a)
+  else if (style === 'arc') sceneNeonArc(a)
+  else if (style === 'cloud') sceneLogoCloud(a)
+  else if (style === 'compare') sceneGradeCompare(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }

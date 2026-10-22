@@ -412,6 +412,10 @@ export type TransitionType =
   | 'scene_tv_mask'
   | 'scene_slit_halftone'
   | 'scene_fisheye_sting'
+  | 'scene_spotlight_typo'
+  | 'scene_neon_arc'
+  | 'scene_logo_cloud'
+  | 'scene_grade_compare'
 
 export interface Transition {
   id: string
