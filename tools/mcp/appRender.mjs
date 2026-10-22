@@ -157,7 +157,18 @@ export function renderFrame(seq, t) {
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, s.width, s.height) }
     applyEffects(sx, clip, s.width, s.height)
-    if (clip.mask?.enabled) {
+    if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) {
+      const m = clip.mask
+      const mc = makeCanvas(m.mw, m.mh)
+      const md = mc.getContext('2d').createImageData(m.mw, m.mh)
+      for (let i = 0, j = 0; i < m.alpha.length; i++, j += 4) { md.data[j] = 255; md.data[j + 1] = 255; md.data[j + 2] = 255; md.data[j + 3] = m.alpha[i] }
+      mc.getContext('2d').putImageData(md, 0, 0)
+      sx.save()
+      sx.filter = m.feather > 0 ? `blur(${m.feather * s.width}px)` : 'none'
+      sx.globalCompositeOperation = 'destination-in'
+      sx.drawImage(mc, 0, 0, s.width, s.height)
+      sx.restore(); sx.filter = 'none'
+    } else if (clip.mask?.enabled) {
       // mask is CLIP-LOCAL (moves with the layer): map sequence-space mask onto
       // the clip's base rect (transform without keyframe offsets)
       const lm = { ...clip.mask, feather: (clip.mask.feather || 0) * s.width }

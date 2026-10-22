@@ -7,7 +7,7 @@
   "out": "/home/user/OmniFrame/test_ans_result/D_tank_fill/solution.mp4",
   "frames": 58,
   "fps": 24,
-  "size": 9610,
+  "size": 9452,
   "mode": "omniframe",
   "recipe": [
    {
@@ -66,14 +66,25 @@
     }
    },
    {
-    "tool": "duplicate_paste",
+    "tool": "roto_mask",
     "params": {
-     "dx": 0,
-     "dy": 0,
-     "copy": true
+     "mode": "click",
+     "add": 3,
+     "sub": 2,
+     "tol": 30,
+     "exportMatte": "test_ans_result/evidence/D-luma.png",
+     "setMask": true
     },
     "out": {
-     "clipId": "clip-2"
+     "clipId": "clip-1",
+     "engine": "click-segment+matting",
+     "pixels": 8168,
+     "bbox": [
+      4,
+      170,
+      96,
+      258
+     ]
     }
    },
    {
@@ -86,39 +97,34 @@
     }
    },
    {
-    "tool": "track_assign",
+    "tool": "omniframe_extract",
     "params": {
-     "clipId": "clip-2",
+     "src": "clip-1",
      "track": 1
     },
     "out": {
      "clipId": "clip-2",
-     "track": 1
+     "track": 1,
+     "natW": 93,
+     "natH": 89,
+     "pixels": 8168
     }
    },
    {
-    "tool": "mask_draw",
+    "tool": "patch_under",
     "params": {
-     "shape": "rectangle",
-     "x0": 0,
-     "y0": 167,
-     "x1": 99,
-     "y1": 261,
-     "feather": 0
+     "clipId": "clip-1",
+     "on": true,
+     "feather": 2
     },
     "out": {
-     "clipId": "clip-2",
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     }
+     "clipId": "clip-1",
+     "hole": [
+      4,
+      170,
+      96,
+      258
+     ]
     }
    },
    {
@@ -345,6 +351,59 @@
       "pivotX": 0.5,
       "pivotY": 0.5
      },
+     "mask": {
+      "enabled": true,
+      "shape": "rectangle",
+      "kind": "rect",
+      "centerX": 0.078125,
+      "centerY": 0.6330063169984687,
+      "width": 0.14375,
+      "height": 0.3438552833078101,
+      "feather": 0,
+      "inverted": true
+     },
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": {
+      "strategy": "smart",
+      "x0": 4,
+      "y0": 170.03919167176974,
+      "x1": 96,
+      "y1": 258.03919167176974,
+      "feather": 2
+     },
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "omni cutout",
+     "start": 0,
+     "duration": 2.4,
+     "transform": {
+      "x": -269.5,
+      "y": 34.48943661971833,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
      "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
@@ -368,76 +427,20 @@
      }
     },
     {
-     "id": "clip-2",
-     "name": "src_tank.png",
-     "start": 0,
-     "duration": 2.4,
-     "transform": {
-      "x": 0,
-      "y": 0,
-      "scale": 1,
-      "rotation": 0,
-      "opacity": 1,
-      "pivotX": 0.5,
-      "pivotY": 0.5
-     },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
-     "blendMode": "source-over",
-     "opacity": 1,
-     "effects": {},
-     "patch": null,
-     "curves": {
-      "position_x": [],
-      "position_y": [],
-      "position_z": [],
-      "rotation_x": [],
-      "rotation_y": [],
-      "rotation_z": [],
-      "scale_x": [],
-      "scale_y": [],
-      "scale_z": [],
-      "opacity": [],
-      "pivot_x": [],
-      "pivot_y": [],
-      "playback_speed": [],
-      "wheel_rotation": []
-     }
-    },
-    {
      "id": "clip-3",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 339.3,
-      "y": -119.5,
+      "x": 69.80000000000001,
+      "y": -85.01056338028167,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -461,29 +464,19 @@
     },
     {
      "id": "clip-4",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 439,
-      "y": -119.5,
+      "x": 169.5,
+      "y": -85.01056338028167,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -507,29 +500,19 @@
     },
     {
      "id": "clip-5",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 538.7,
-      "y": -119.5,
+      "x": 269.20000000000005,
+      "y": -85.01056338028167,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -553,29 +536,19 @@
     },
     {
      "id": "clip-6",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 339.3,
-      "y": -34.5,
+      "x": 69.80000000000001,
+      "y": -0.010563380281666923,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -599,29 +572,19 @@
     },
     {
      "id": "clip-7",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 439,
-      "y": -34.5,
+      "x": 169.5,
+      "y": -0.010563380281666923,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -645,29 +608,19 @@
     },
     {
      "id": "clip-8",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 538.7,
-      "y": -34.5,
+      "x": 269.20000000000005,
+      "y": -0.010563380281666923,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -691,29 +644,19 @@
     },
     {
      "id": "clip-9",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 339.3,
-      "y": 50.5,
+      "x": 69.80000000000001,
+      "y": 84.98943661971833,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -737,29 +680,19 @@
     },
     {
      "id": "clip-10",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 439,
-      "y": 50.5,
+      "x": 169.5,
+      "y": 84.98943661971833,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -783,29 +716,19 @@
     },
     {
      "id": "clip-11",
-     "name": "src_tank.png",
+     "name": "omni cutout",
      "start": 0,
      "duration": 2.4,
      "transform": {
-      "x": 538.7,
-      "y": 50.5,
+      "x": 269.20000000000005,
+      "y": 84.98943661971833,
       "scale": 1,
       "rotation": 0,
       "opacity": 1,
       "pivotX": 0.5,
       "pivotY": 0.5
      },
-     "mask": {
-      "shape": "rectangle",
-      "kind": "shape",
-      "centerX": 0.07734375,
-      "centerY": 0.6328531776416539,
-      "width": 0.1546875,
-      "height": 0.3672999617151608,
-      "feather": 0,
-      "inverted": false,
-      "enabled": true
-     },
+     "mask": null,
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
@@ -885,14 +808,25 @@
      }
     },
     {
-     "tool": "duplicate_paste",
+     "tool": "roto_mask",
      "params": {
-      "dx": 0,
-      "dy": 0,
-      "copy": true
+      "mode": "click",
+      "add": 3,
+      "sub": 2,
+      "tol": 30,
+      "exportMatte": "test_ans_result/evidence/D-luma.png",
+      "setMask": true
      },
      "out": {
-      "clipId": "clip-2"
+      "clipId": "clip-1",
+      "engine": "click-segment+matting",
+      "pixels": 8168,
+      "bbox": [
+       4,
+       170,
+       96,
+       258
+      ]
      }
     },
     {
@@ -905,39 +839,34 @@
      }
     },
     {
-     "tool": "track_assign",
+     "tool": "omniframe_extract",
      "params": {
-      "clipId": "clip-2",
+      "src": "clip-1",
       "track": 1
      },
      "out": {
       "clipId": "clip-2",
-      "track": 1
+      "track": 1,
+      "natW": 93,
+      "natH": 89,
+      "pixels": 8168
      }
     },
     {
-     "tool": "mask_draw",
+     "tool": "patch_under",
      "params": {
-      "shape": "rectangle",
-      "x0": 0,
-      "y0": 167,
-      "x1": 99,
-      "y1": 261,
-      "feather": 0
+      "clipId": "clip-1",
+      "on": true,
+      "feather": 2
      },
      "out": {
-      "clipId": "clip-2",
-      "mask": {
-       "shape": "rectangle",
-       "kind": "shape",
-       "centerX": 0.07734375,
-       "centerY": 0.6328531776416539,
-       "width": 0.1546875,
-       "height": 0.3672999617151608,
-       "feather": 0,
-       "inverted": false,
-       "enabled": true
-      }
+      "clipId": "clip-1",
+      "hole": [
+       4,
+       170,
+       96,
+       258
+      ]
      }
     },
     {

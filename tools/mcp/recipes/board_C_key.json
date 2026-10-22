@@ -44,17 +44,24 @@
    }
   },
   {
-   "tool": "track_assign",
+   "tool": "transparent_select",
    "params": {
-    "clipId": "clip-2",
-    "track": 1
+    "ignore": "#000000",
+    "ignoreTol": 40,
+    "target": "light"
    }
   },
   {
-   "tool": "remove_background",
+   "tool": "omniframe_extract",
    "params": {
-    "method": "luma",
-    "strength": 0.85
+    "trackId": 1
+   }
+  },
+  {
+   "tool": "patch_under",
+   "params": {
+    "on": true,
+    "feather": 2
    }
   },
   {

@@ -7,7 +7,7 @@
   "out": "/home/user/OmniFrame/test_ans_result/C_composition/variant-06.mp4",
   "frames": 43,
   "fps": 24,
-  "size": 36274,
+  "size": 17332,
   "mode": "omniframe",
   "recipe": [
    {
@@ -75,27 +75,58 @@
     }
    },
    {
-    "tool": "track_assign",
+    "tool": "transparent_select",
     "params": {
      "clipId": "clip-2",
-     "track": 1
+     "rect": [
+      null,
+      null,
+      null,
+      null
+     ],
+     "ignore": "#000000",
+     "target": "light"
     },
     "out": {
-     "clipId": "clip-2",
-     "track": 1
+     "method": "transparent",
+     "pixels": 16101,
+     "bbox": [
+      13,
+      2,
+      609,
+      359
+     ]
     }
    },
    {
-    "tool": "remove_background",
+    "tool": "omniframe_extract",
     "params": {
-     "method": "luma",
-     "strength": 0.85
+     "src": "clip-2",
+     "track": 1
+    },
+    "out": {
+     "clipId": "clip-3",
+     "track": 1,
+     "natW": 597,
+     "natH": 358,
+     "pixels": 16101
+    }
+   },
+   {
+    "tool": "patch_under",
+    "params": {
+     "clipId": "clip-2",
+     "on": true,
+     "feather": 2
     },
     "out": {
      "clipId": "clip-2",
-     "effects": {
-      "lumaKey": 0.85
-     }
+     "hole": [
+      13,
+      2,
+      609,
+      359
+     ]
     }
    },
    {
@@ -104,10 +135,10 @@
      "scale": 1.15
     },
     "out": {
-     "clipId": "clip-2",
+     "clipId": "clip-3",
      "transform": {
-      "x": 0,
-      "y": 0,
+      "x": -8.001406497235848,
+      "y": 1,
       "scale": 1.15,
       "rotation": 0,
       "opacity": 1,
@@ -126,9 +157,9 @@
      "interpolation": "elastic"
     },
     "out": {
-     "clipId": "clip-2",
+     "clipId": "clip-3",
      "curve": "position_x",
-     "keyframeId": "kf_xhv8s7a"
+     "keyframeId": "kf_o7t5iwn"
     }
    },
    {
@@ -141,9 +172,9 @@
      "interpolation": "elastic"
     },
     "out": {
-     "clipId": "clip-2",
+     "clipId": "clip-3",
      "curve": "position_x",
-     "keyframeId": "kf_9xoeym4"
+     "keyframeId": "kf_jhjcole"
     }
    },
    {
@@ -154,11 +185,11 @@
      "interpolation": "elastic"
     },
     "out": {
-     "clipId": "clip-2",
+     "clipId": "clip-3",
      "curve": "position_x",
      "keys": [
-      "kf_xhv8s7a",
-      "kf_9xoeym4"
+      "kf_o7t5iwn",
+      "kf_jhjcole"
      ]
     }
    },
@@ -173,9 +204,8 @@
      }
     },
     "out": {
-     "clipId": "clip-2",
+     "clipId": "clip-3",
      "effects": {
-      "lumaKey": 0.85,
       "chromatic": 2,
       "lightType": "point",
       "lightIntensity": 1.1,
@@ -211,7 +241,7 @@
     "duration": 1.8,
     "bg": "#000000"
    },
-   "selection": "clip-2",
+   "selection": "clip-3",
    "clips": [
     {
      "id": "clip-1",
@@ -257,6 +287,59 @@
      "transform": {
       "x": 0,
       "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": {
+      "enabled": true,
+      "shape": "rectangle",
+      "kind": "rect",
+      "centerX": 0.4866124131944445,
+      "centerY": 0.5013888888888889,
+      "width": 0.9325434027777778,
+      "height": 0.9916666666666667,
+      "feather": 0,
+      "inverted": true
+     },
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": {
+      "strategy": "smart",
+      "x0": 13.443828016643579,
+      "y0": 2,
+      "x1": 609.4438280166436,
+      "y1": 359,
+      "feather": 2
+     },
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-3",
+     "name": "omni cutout",
+     "start": 0,
+     "duration": 1.8,
+     "transform": {
+      "x": -8.001406497235848,
+      "y": 1,
       "scale": 1.15,
       "rotation": 0,
       "opacity": 1,
@@ -267,7 +350,6 @@
      "blendMode": "source-over",
      "opacity": 1,
      "effects": {
-      "lumaKey": 0.85,
       "chromatic": 2,
       "lightType": "point",
       "lightIntensity": 1.1,
@@ -277,13 +359,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_xhv8s7a",
+        "id": "kf_o7t5iwn",
         "time": 0,
         "value": 0,
         "interpolation": "elastic"
        },
        {
-        "id": "kf_9xoeym4",
+        "id": "kf_jhjcole",
         "time": 0.9,
         "value": -40,
         "interpolation": "elastic"
@@ -371,27 +453,58 @@
      }
     },
     {
-     "tool": "track_assign",
+     "tool": "transparent_select",
      "params": {
       "clipId": "clip-2",
-      "track": 1
+      "rect": [
+       null,
+       null,
+       null,
+       null
+      ],
+      "ignore": "#000000",
+      "target": "light"
      },
      "out": {
-      "clipId": "clip-2",
-      "track": 1
+      "method": "transparent",
+      "pixels": 16101,
+      "bbox": [
+       13,
+       2,
+       609,
+       359
+      ]
      }
     },
     {
-     "tool": "remove_background",
+     "tool": "omniframe_extract",
      "params": {
-      "method": "luma",
-      "strength": 0.85
+      "src": "clip-2",
+      "track": 1
+     },
+     "out": {
+      "clipId": "clip-3",
+      "track": 1,
+      "natW": 597,
+      "natH": 358,
+      "pixels": 16101
+     }
+    },
+    {
+     "tool": "patch_under",
+     "params": {
+      "clipId": "clip-2",
+      "on": true,
+      "feather": 2
      },
      "out": {
       "clipId": "clip-2",
-      "effects": {
-       "lumaKey": 0.85
-      }
+      "hole": [
+       13,
+       2,
+       609,
+       359
+      ]
      }
     },
     {
@@ -400,10 +513,10 @@
       "scale": 1.15
      },
      "out": {
-      "clipId": "clip-2",
+      "clipId": "clip-3",
       "transform": {
-       "x": 0,
-       "y": 0,
+       "x": -8.001406497235848,
+       "y": 1,
        "scale": 1.15,
        "rotation": 0,
        "opacity": 1,
@@ -422,9 +535,9 @@
       "interpolation": "elastic"
      },
      "out": {
-      "clipId": "clip-2",
+      "clipId": "clip-3",
       "curve": "position_x",
-      "keyframeId": "kf_xhv8s7a"
+      "keyframeId": "kf_o7t5iwn"
      }
     },
     {
@@ -437,9 +550,9 @@
       "interpolation": "elastic"
      },
      "out": {
-      "clipId": "clip-2",
+      "clipId": "clip-3",
       "curve": "position_x",
-      "keyframeId": "kf_9xoeym4"
+      "keyframeId": "kf_jhjcole"
      }
     },
     {
@@ -450,11 +563,11 @@
       "interpolation": "elastic"
      },
      "out": {
-      "clipId": "clip-2",
+      "clipId": "clip-3",
       "curve": "position_x",
       "keys": [
-       "kf_xhv8s7a",
-       "kf_9xoeym4"
+       "kf_o7t5iwn",
+       "kf_jhjcole"
       ]
      }
     },
@@ -469,9 +582,8 @@
       }
      },
      "out": {
-      "clipId": "clip-2",
+      "clipId": "clip-3",
       "effects": {
-       "lumaKey": 0.85,
        "chromatic": 2,
        "lightType": "point",
        "lightIntensity": 1.1,

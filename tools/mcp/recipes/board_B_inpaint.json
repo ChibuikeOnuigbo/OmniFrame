@@ -40,6 +40,29 @@
    }
   },
   {
+   "tool": "roto_mask",
+   "params": {
+    "mode": "click",
+    "add": [
+     [
+      320,
+      230
+     ],
+     [
+      280,
+      210
+     ],
+     [
+      360,
+      240
+     ]
+    ],
+    "tol": 22,
+    "setMask": false,
+    "exportMatte": "test_ans_result/evidence/B-luma-{{vi}}.png"
+   }
+  },
+  {
    "tool": "smart_patch",
    "params": {
     "x0": 58,

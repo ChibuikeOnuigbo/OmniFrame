@@ -89,3 +89,15 @@ itself: if a claim cannot be opened, run, watched or measured, it does not get s
   element) and log each before choosing.
 - Omniframe keeps only skills no other tool has; duplicates are deleted and
   reported in Study_edits_videos/research-deprecated-and-overthought-tools.pdf.
+
+## Same principle everywhere + roto law (same review)
+- The omniframe principle (select -> extract cut-out -> patch under -> tracks
+  -> timeline proof, never copy-paste as the move) applies to EVERY board:
+  D fills the tank by CUTTING the object out and pasting the cut piece;
+  C keys by transparent-select extract; A rotos with the improved engine;
+  B probes the patch region with roto clicks.
+- Roto mask v2: per-click colour models (multi-cluster union), hole-fill for
+  dark details inside the subject, soft matting band on edges, luma-matte
+  export (white-on-black, AE-ready). The booted app's Smart engine delegates
+  to the same src/lib/rotoClick.ts maths. Click mode segments; polygon mode
+  draws; exportMatte proves what was segmented.

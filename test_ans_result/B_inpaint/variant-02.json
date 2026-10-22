@@ -7,7 +7,7 @@
   "out": "/home/user/OmniFrame/test_ans_result/B_inpaint/variant-02.mp4",
   "frames": 42,
   "fps": 24,
-  "size": 16897,
+  "size": 18470,
   "mode": "omniframe",
   "recipe": [
    {
@@ -71,6 +71,28 @@
       "w": 360,
       "h": 640
      }
+    }
+   },
+   {
+    "tool": "roto_mask",
+    "params": {
+     "mode": "click",
+     "add": 3,
+     "sub": 0,
+     "tol": 22,
+     "exportMatte": "test_ans_result/evidence/B-luma-02.png",
+     "setMask": false
+    },
+    "out": {
+     "clipId": "clip-1",
+     "engine": "click-segment+matting",
+     "pixels": 216665,
+     "bbox": [
+      0,
+      24,
+      359,
+      639
+     ]
     }
    },
    {
@@ -241,6 +263,28 @@
        "w": 360,
        "h": 640
       }
+     }
+    },
+    {
+     "tool": "roto_mask",
+     "params": {
+      "mode": "click",
+      "add": 3,
+      "sub": 0,
+      "tol": 22,
+      "exportMatte": "test_ans_result/evidence/B-luma-02.png",
+      "setMask": false
+     },
+     "out": {
+      "clipId": "clip-1",
+      "engine": "click-segment+matting",
+      "pixels": 216665,
+      "bbox": [
+       0,
+       24,
+       359,
+       639
+      ]
      }
     },
     {

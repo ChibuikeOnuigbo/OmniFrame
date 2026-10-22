@@ -23,6 +23,13 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Same principle on every board
+D: object is CUT out (roto click -> extract -> patch under) and the cut piece
+fills the tank grid. A: roto click-matte exported as luma proof + polygon roto
+mask for the composition. B: roto clicks probe the patch region (luma proof).
+C: transparent-select (ignore black) -> extract -> patch under replaces the
+old remove_background shortcut. Evidence luma mattes: evidence/*-luma*.png.
+
 ## Omniframe law (board E)
 One import, stretch 1s->10s->24s, compound, cycle all six selection methods
 (logged), transparent selection chosen, extract cut-out to track above,

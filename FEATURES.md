@@ -106,6 +106,10 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 92 CurveEngine 'custom' interpolation: user-dragged curve points (5 shipped in board E)
 93 omniframe panel audit: duplicate/transform/recolor/scope removed as redone; 4 real skill buttons added
 94 streaming VideoEncoder (raw frames to disk) — long exports no longer OOM
+95 rotoClick.ts shared lib: per-click colour models, hole-fill, soft matting band, luma-matte export
+96 roto_mask v2: click-segment mode + polygon mode + exportMatte; app Smart engine delegates to same maths
+97 pixel-matte mask kind rendered by headless appRender (clip.mask.kind 'matte')
+98 boards D/A/B/C rebuilt on the omniframe principle: D cut+paste fill, A roto probe+polygon, B roto probe, C transparent-select extract
 
-**Total: 94 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 94) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 98 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 98) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **344** (see youtube-audit/progress.json watched_ids).

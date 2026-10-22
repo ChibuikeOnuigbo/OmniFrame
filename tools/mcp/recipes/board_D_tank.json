@@ -1,6 +1,6 @@
 {
  "board": "D",
- "note": "cut obj (ctrl+x) + paste grid until tank filled; sizes/pos computed from snapshot",
+ "note": "fill box by CUTTING the object (extract+patch under) then pasting the cut piece; computed grid",
  "steps": [
   {
    "tool": "project_new",
@@ -39,11 +39,36 @@
    }
   },
   {
-   "tool": "duplicate_paste",
+   "tool": "roto_mask",
    "params": {
-    "dx": 0,
-    "dy": 0,
-    "copy": true
+    "mode": "click",
+    "add": [
+     [
+      50,
+      214
+     ],
+     [
+      40,
+      190
+     ],
+     [
+      60,
+      240
+     ]
+    ],
+    "sub": [
+     [
+      300,
+      60
+     ],
+     [
+      500,
+      300
+     ]
+    ],
+    "tol": 30,
+    "feather": 2,
+    "exportMatte": "test_ans_result/evidence/D-luma.png"
    }
   },
   {
@@ -53,21 +78,16 @@
    }
   },
   {
-   "tool": "track_assign",
+   "tool": "omniframe_extract",
    "params": {
-    "clipId": "clip-2",
-    "track": 1
+    "trackId": 1
    }
   },
   {
-   "tool": "mask_draw",
+   "tool": "patch_under",
    "params": {
-    "shape": "rectangle",
-    "x0": 0,
-    "y0": 167,
-    "x1": 99,
-    "y1": 261,
-    "feather": 0
+    "on": true,
+    "feather": 2
    }
   },
   {

@@ -429,16 +429,37 @@ class RemoveBackground extends MCPTool {
   }
 }
 class RotoMask extends MCPTool {
-  constructor() { super('roto_mask', 'Roto masking sub-tool: custom point polygon mask over the clicked subject.', { points: '[[x,y]…] preview px', feather: 'px', curved: 'bool' }) }
-  async run({ points, feather = 4, curved = false }) {
+  constructor() { super('roto_mask', 'Roto masking sub-tool v2 (Sammie-Roto-2 Smart shape): mode click = add/sub clicks segment with soft matting band; mode polygon = custom point polygon. exportMatte writes an AE-ready white-on-black luma matte png.', { mode: 'click|polygon', add: '[[x,y]..] seq px', sub: '[[x,y]..]', tol: '0..100', points: '[[x,y]..] polygon', feather: 'px', exportMatte: 'png path', setMask: 'bool default true' }) }
+  async run({ mode, add = [], sub = [], tol = 26, points, feather = 4, curved = false, exportMatte, setMask = true }) {
+    mode = mode || (points ? 'polygon' : 'click')
     const s = seq(), c = sel()
-    const r0 = s.clipRect(c, 0)
-    const bw = r0.w, bh = r0.h, bx = r0.x, by = r0.y
-    c.mask = { shape: 'rectangle', kind: 'custom', points: points.map(([x, y]) => ({ x: (x - bx) / bw, y: (y - by) / bh })), curved, centerX: 0.5, centerY: 0.5, width: 1, height: 1, feather: feather / bw, inverted: false, enabled: true }
-    return SESSION.note('roto_mask', { n: points.length, feather }, { clipId: c.id, kind: 'custom' })
+    if (mode === 'polygon') {
+      const r0 = s.clipRect(c, 0)
+      c.mask = { shape: 'rectangle', kind: 'custom', points: points.map(([x, y]) => ({ x: (x - r0.x) / r0.w, y: (y - r0.y) / r0.h })), curved, centerX: 0.5, centerY: 0.5, width: 1, height: 1, feather: feather / r0.w, inverted: false, enabled: true }
+      return SESSION.note('roto_mask', { mode, n: points.length, feather }, { clipId: c.id, kind: 'custom' })
+    }
+    const RC = await loadAppTs('src/lib/rotoClick.ts')
+    const { mw, mh, data } = mediaPixels(c)
+    const toN = ([x, y]) => { const l = seqToLocal(s, c, { x0: x, y0: y, x1: x, y1: y }); return { x: l.x0 / mw, y: l.y0 / mh } }
+    const r = RC.clickSegment(data, mw, mh, add.map(toN), sub.map(toN), tol, true)
+    if (!r.bbox) throw new Error('roto click segment found nothing: adjust clicks/tol')
+    SESSION.omniSelection = { clipId: c.id, method: 'roto-click', matte: r, mw, mh }
+    if (exportMatte) {
+      const dest = path.isAbsolute(exportMatte) ? exportMatte : path.join(ROOT, exportMatte)
+      fs.mkdirSync(path.dirname(dest), { recursive: true })
+      const lc = makeCanvas(mw, mh)
+      const ld = lc.getContext('2d').createImageData(mw, mh)
+      ld.data.set(RC.lumaMatteBytes(r.alpha))
+      lc.getContext('2d').putImageData(ld, 0, 0)
+      fs.writeFileSync(dest, lc.toBuffer('image/png'))
+    }
+    if (setMask) {
+      c.mask = { kind: 'matte', alpha: r.alpha, mw, mh, feather: feather / mw, enabled: true, shape: 'rectangle', centerX: 0.5, centerY: 0.5, width: 1, height: 1, inverted: false }
+    }
+    const bq = localToSeq(s, c, r.bbox)
+    return SESSION.note('roto_mask', { mode, add: add.length, sub: sub.length, tol, exportMatte: exportMatte || null, setMask }, { clipId: c.id, engine: 'click-segment+matting', pixels: r.pixels, bbox: [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
   }
 }
-
 export const registry = new MCPRegistry()
 /* ---- omniframe selection maths: shared app module, identical in the booted app ---- */
 const SM = await loadAppTs('src/lib/selectionMattes.ts')
@@ -488,7 +509,7 @@ class TransparentSelect extends MCPTool {
   async run({ clipId, x0, y0, x1, y1, ignore = '#ffffff', ignoreTol = 40, target = 'dark', targetTol = 90 }) {
     const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
     const { mw, mh, data } = mediaPixels(c)
-    const lr = seqToLocal(s, c, { x0, y0, x1, y1 })
+    const lr = x0 == null ? { x0: 0, y0: 0, x1: mw, y1: mh } : seqToLocal(s, c, { x0, y0, x1, y1 })
     const m = SM.transparentMatte(data, mw, mh, lr, { ignore: parseCol(ignore, [255, 255, 255]), ignoreTol, target: Array.isArray(target) ? target : target, targetTol })
     SESSION.omniSelection = { clipId: c.id, method: 'transparent', matte: m, mw, mh }
     const bq = m.bbox ? localToSeq(s, c, m.bbox) : null
@@ -512,7 +533,8 @@ class SelectMainElement extends MCPTool {
   async run({ clipId, x0, y0, x1, y1, tol = 48 }) {
     const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
     const { mw, mh, data } = mediaPixels(c)
-    const m = SM.mainElementMatte(data, mw, mh, seqToLocal(s, c, { x0, y0, x1, y1 }), tol)
+    const mr = x0 == null ? { x0: 0, y0: 0, x1: mw, y1: mh } : seqToLocal(s, c, { x0, y0, x1, y1 })
+    const m = SM.mainElementMatte(data, mw, mh, mr, tol)
     SESSION.omniSelection = { clipId: c.id, method: 'main-element', matte: m, mw, mh }
     const bq = m.bbox ? localToSeq(s, c, m.bbox) : null
     return SESSION.note('select_main_element', { clipId: c.id, tol }, { method: 'main-element', pixels: m.pixels, bbox: bq && [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
