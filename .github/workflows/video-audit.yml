@@ -294,4 +294,6 @@ jobs:
           find youtube-audit/runner -type f -name 'src*' -size +2M -delete
           git add youtube-audit/runner
           git commit -m "youtube-audit: runner evidence batch (frames, audio, inventory) [ci skip]" || echo "nothing to commit"
-          git push origin HEAD:${{ github.ref_name }}
+          git fetch origin "${{ github.ref_name }}" || true
+          git rebase origin/${{ github.ref_name }} || { git rebase --abort || true; }
+          git push origin HEAD:${{ github.ref_name }} || { sleep 20; git fetch origin "${{ github.ref_name }}"; git rebase origin/${{ github.ref_name }} || { git rebase --abort || true; }; git push origin HEAD:${{ github.ref_name }}; }
