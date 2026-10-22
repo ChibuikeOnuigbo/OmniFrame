@@ -524,6 +524,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
 
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
+  setClipSpeedCurve: (id: string, curve: import('./lib/speedCurves').SpeedCurveId | undefined) => void
   setClipNotes: (id: string, notes: string) => void
   customFonts: CustomFont[]
   customPalettes: ImportedPalette[]
@@ -1710,6 +1711,11 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
+    setClipSpeedCurve: (id, curve) => {
+      set(st => ({
+        clips: st.clips.map(c => (c.id === id ? { ...c, speedCurve: curve } : c)),
+      }))
+    },
     setClipEffect: (id, effect) => {
       set((s) => ({
         clips: s.clips.map((c) =>

@@ -1,0 +1,20 @@
+{
+ "tool": "image_to_video",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/A_analysis.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/A_analysis.mp4",
+  "frames": 48,
+  "fps": 24,
+  "size": 63411,
+  "image": "A",
+  "captions": [
+   "BRIEF A: roto mask character",
+   "replace bg -> parchment",
+   "height-chart = overlay on new bg",
+   "more overlays: smoke/film/window",
+   "ANSWER: A_composition/variant-01..10"
+  ]
+ }
+}

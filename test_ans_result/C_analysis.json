@@ -1,0 +1,20 @@
+{
+ "tool": "image_to_video",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/C_analysis.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/C_analysis.mp4",
+  "frames": 48,
+  "fps": 24,
+  "size": 87565,
+  "image": "C",
+  "captions": [
+   "BRIEF C: replace background",
+   "150 edits (10 results x 15 ops)",
+   "tweak composition + lighting",
+   "15 speed curves + entrance + cc",
+   "ANSWER: C_composition/variant-01..10"
+  ]
+ }
+}

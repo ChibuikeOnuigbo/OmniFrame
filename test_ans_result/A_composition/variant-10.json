@@ -1,0 +1,36 @@
+{
+ "tool": "compose_A_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "variant": 10,
+  "video": "test_ans_result/A_composition/variant-10.mp4",
+  "frames": 40,
+  "bg": "parchment",
+  "rotoMask": "polygon 12-pt feather 10px",
+  "overlays": [
+   {
+    "asset": "ov_film.png",
+    "blend": "multiply",
+    "opacity": 0.3
+   },
+   {
+    "asset": "ov_smoke.png",
+    "blend": "overlay",
+    "opacity": 0.35
+   },
+   {
+    "asset": "ov_windowlight.png",
+    "blend": "soft-light",
+    "opacity": 0.4
+   },
+   {
+    "asset": "ov_heightchart.png",
+    "blend": "screen",
+    "opacity": 0.35
+   }
+  ],
+  "charPosition": "left",
+  "grade": null
+ }
+}

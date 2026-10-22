@@ -1,0 +1,31 @@
+{
+ "tool": "compose_A_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "variant": 9,
+  "video": "test_ans_result/A_composition/variant-09.mp4",
+  "frames": 40,
+  "bg": "parchment",
+  "rotoMask": "polygon 12-pt feather 10px",
+  "overlays": [
+   {
+    "asset": "ov_smoke.png",
+    "blend": "screen",
+    "opacity": 0.4
+   },
+   {
+    "asset": "ov_windowlight.png",
+    "blend": "overlay",
+    "opacity": 0.45
+   },
+   {
+    "asset": "ov_heightchart.png",
+    "blend": "screen",
+    "opacity": 0.3
+   }
+  ],
+  "charPosition": "center",
+  "grade": "rgba(220,60,180,0.08)"
+ }
+}

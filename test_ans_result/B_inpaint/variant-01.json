@@ -1,0 +1,19 @@
+{
+ "tool": "inpaint_B_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "variant": 1,
+  "video": "test_ans_result/B_inpaint/variant-01.mp4",
+  "strategy": "blur-fill",
+  "maskBox": {
+   "x": 0.16,
+   "y": 0.385,
+   "w": 0.54,
+   "h": 0.23
+  },
+  "featherPx": 6,
+  "blendQualityDelta": 0.0181,
+  "lowerIsBetter": true
+ }
+}

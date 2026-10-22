@@ -1,0 +1,26 @@
+{
+ "tool": "compose_A_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "variant": 8,
+  "video": "test_ans_result/A_composition/variant-08.mp4",
+  "frames": 40,
+  "bg": "parchment",
+  "rotoMask": "polygon 12-pt feather 10px",
+  "overlays": [
+   {
+    "asset": "ov_heightchart.png",
+    "blend": "multiply",
+    "opacity": 0.55
+   },
+   {
+    "asset": "ov_film.png",
+    "blend": "overlay",
+    "opacity": 0.3
+   }
+  ],
+  "charPosition": "right",
+  "grade": "rgba(255,190,40,0.10)"
+ }
+}

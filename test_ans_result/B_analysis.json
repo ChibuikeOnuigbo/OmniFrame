@@ -1,0 +1,20 @@
+{
+ "tool": "image_to_video",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/B_analysis.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/B_analysis.mp4",
+  "frames": 48,
+  "fps": 24,
+  "size": 34808,
+  "image": "B",
+  "captions": [
+   "BRIEF B: matte + roto brush test",
+   "inpainter / smart patch per scene",
+   "remove car naturally + blend",
+   "grade the blend quality",
+   "ANSWER: B_inpaint/variant-01..10"
+  ]
+ }
+}

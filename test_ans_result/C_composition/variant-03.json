@@ -1,0 +1,78 @@
+{
+ "tool": "compose_C_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/C_composition/variant-03.mp4",
+  "frames": 44,
+  "variant": 3,
+  "bg": "grid",
+  "entrance": "scale-pop",
+  "speedCurve": "expo-out",
+  "composition": 0.5,
+  "lighting": "rgba(90,200,255,0.10)",
+  "cc": "contrast(1.2)",
+  "editOps": [
+   [
+    "import-source",
+    "src_charC.png"
+   ],
+   [
+    "key-black-matte",
+    "lum<20→α0, 20-40 feather"
+   ],
+   [
+    "despill",
+    "edge α erode 1px"
+   ],
+   [
+    "feather-mask",
+    "2px"
+   ],
+   [
+    "bg-replace",
+    "grid"
+   ],
+   [
+    "bg-scale",
+    "cover 640x360"
+   ],
+   [
+    "compose-pos",
+    "thirds u=0.5"
+   ],
+   [
+    "anchor",
+    "center-bottom"
+   ],
+   [
+    "entrance",
+    "scale-pop"
+   ],
+   [
+    "speed-curve",
+    "expo-out"
+   ],
+   [
+    "light-tint",
+    "rgba(90,200,255,0.10)"
+   ],
+   [
+    "cc-saturate",
+    "1.0"
+   ],
+   [
+    "cc-contrast",
+    "1.2"
+   ],
+   [
+    "motion-settle",
+    "hold 45%→100%"
+   ],
+   [
+    "export-mp4",
+    "test_ans_result/C_composition/variant-03.mp4"
+   ]
+  ]
+ }
+}

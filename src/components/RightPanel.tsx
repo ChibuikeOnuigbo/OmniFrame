@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ExpandableToolGroup from './ExpandableToolGroup'
+import { SPEED_CURVES, type SpeedCurveId } from '../lib/speedCurves'
 import SegmentCarousel from './SegmentCarousel'
 import {
   Activity,
@@ -42,6 +43,7 @@ import {
   Wand2,
   Waves,
   X,
+  Gauge,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
@@ -817,6 +819,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <ClipMaskSection clip={clip} />}
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <MaskingRotoSection clip={clip} />}
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <AeToolRackSection clip={clip} />}
+      {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <SpeedCurveSection clip={clip} />}
 
       <Section title="Transform">
         <Field label="Position X">
@@ -1324,6 +1327,28 @@ const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Recor
   { id: 'embers', group: 'beds', label: 'Ember particle bed', icon: Flame, effect: { particleFx: 'embers', particleDensity: 0.5 } },
   { id: 'scan', group: 'beds', label: 'Scanline overlay', icon: ScanLine, effect: { overlayFx: 'scanlines', overlayStrength: 0.6 } },
 ]
+
+/** Speed-curve rack (board C brief: 15 curves). One main tool with a down
+ *  arrow; the connected sub-tool beneath is the segment carousel of curves. */
+function SpeedCurveSection({ clip }: { clip: Clip }) {
+  const setClipSpeedCurve = useEditor((s) => s.setClipSpeedCurve)
+  return (
+    <Section title="Speed Curves">
+      <div className="space-y-2" data-testid="speed-curve-group">
+        <ExpandableToolGroup testId="speedcurve-main" icon={Gauge} label="Speed curve (time remap)">
+          <SegmentCarousel
+            ariaLabel="Speed curves"
+            testId="speedcurve-carousel"
+            segments={SPEED_CURVES.map((c) => ({ id: c.id, label: c.name }))}
+            value={clip.speedCurve || 'linear'}
+            onChange={(id) => setClipSpeedCurve(clip.id, id as SpeedCurveId)}
+          />
+        </ExpandableToolGroup>
+      </div>
+    </Section>
+  )
+}
+
 function AeToolRackSection({ clip }: { clip: Clip }) {
   const setClipEffect = useEditor((s) => s.setClipEffect)
   return (

@@ -12,6 +12,7 @@
 //   - audio tracks are synced/played in lock-step
 //   - drift is corrected by occasional currentTime seeks, not per-frame seeks
 
+import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
 import { clamp } from './time'
@@ -1484,7 +1485,7 @@ export class PreviewEngine {
     if (asset.kind === 'image') {
       const sequence = asset.imageSequence
       if (sequence?.frames?.length) {
-        const sourceTime = Math.max(0, clip.inPoint + (time - clip.start))
+        const sourceTime = Math.max(0, clip.inPoint + remapClipLocal(clip, time - clip.start))
         let frameIndex = 0
         for (let i = 1; i < sequence.frames.length; i++) {
           if (sequence.frames[i].time > sourceTime) break
@@ -1502,7 +1503,7 @@ export class PreviewEngine {
     const el = (asset.kind === 'video'
       ? this.pickVideo(asset)
       : this.pickAudio(asset)) as HTMLVideoElement | HTMLAudioElement
-    const rawTarget = clip.inPoint + (time - clip.start)
+    const rawTarget = clip.inPoint + remapClipLocal(clip, time - clip.start)
     const srcDur = asset.duration || (el as HTMLVideoElement).duration || 0
     if (!allowClamping && (rawTarget < -0.05 || rawTarget > srcDur + 0.05)) return null
     const target = clamp(rawTarget, 0, Math.max(0, srcDur))
@@ -2132,7 +2133,7 @@ export class PreviewEngine {
     // they paint in absolute frame coordinates).
     ctx.translate(-this.width / 2, -this.height / 2)
 
-    const innerTime = time - clip.start + clip.inPoint
+    const innerTime = remapClipLocal(clip, time - clip.start) + clip.inPoint
 
     const renderChildTracks = [...childTracks].reverse()
     for (const childTrack of renderChildTracks) {

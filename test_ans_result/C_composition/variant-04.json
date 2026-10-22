@@ -1,0 +1,78 @@
+{
+ "tool": "compose_C_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/C_composition/variant-04.mp4",
+  "frames": 44,
+  "variant": 4,
+  "bg": "bokeh",
+  "entrance": "fade",
+  "speedCurve": "sine-in-out",
+  "composition": 0.34,
+  "lighting": "rgba(255,190,120,0.12)",
+  "cc": "saturate(1.35)",
+  "editOps": [
+   [
+    "import-source",
+    "src_charC.png"
+   ],
+   [
+    "key-black-matte",
+    "lum<20→α0, 20-40 feather"
+   ],
+   [
+    "despill",
+    "edge α erode 1px"
+   ],
+   [
+    "feather-mask",
+    "2px"
+   ],
+   [
+    "bg-replace",
+    "bokeh"
+   ],
+   [
+    "bg-scale",
+    "cover 640x360"
+   ],
+   [
+    "compose-pos",
+    "thirds u=0.34"
+   ],
+   [
+    "anchor",
+    "center-bottom"
+   ],
+   [
+    "entrance",
+    "fade"
+   ],
+   [
+    "speed-curve",
+    "sine-in-out"
+   ],
+   [
+    "light-tint",
+    "rgba(255,190,120,0.12)"
+   ],
+   [
+    "cc-saturate",
+    "1.35"
+   ],
+   [
+    "cc-contrast",
+    "1.0"
+   ],
+   [
+    "motion-settle",
+    "hold 45%→100%"
+   ],
+   [
+    "export-mp4",
+    "test_ans_result/C_composition/variant-04.mp4"
+   ]
+  ]
+ }
+}

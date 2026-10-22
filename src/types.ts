@@ -1046,6 +1046,8 @@ export interface Clip {
   mask?: ClipVisualMask
   /** Canvas composite op for this clip (watermark lighten/splice etc.). */
   blendMode?: GlobalCompositeOperation
+  /** Speed-curve time remap (15 presets, src/lib/speedCurves.ts). */
+  speedCurve?: import('./lib/speedCurves').SpeedCurveId
   textStyle?: TextTitleStyle
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
   /** Drawing clips (kind: 'drawing'): strokes baked into a timeline clip.

@@ -1,0 +1,19 @@
+{
+ "tool": "inpaint_B_variants",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "variant": 10,
+  "video": "test_ans_result/B_inpaint/variant-10.mp4",
+  "strategy": "panel-composite",
+  "maskBox": {
+   "x": 0.16,
+   "y": 0.385,
+   "w": 0.54,
+   "h": 0.23
+  },
+  "featherPx": 6,
+  "blendQualityDelta": 0.054,
+  "lowerIsBetter": true
+ }
+}
