@@ -44,3 +44,23 @@ cards, quote bands, mono grades and velocity blur**, not in effect-stack builds.
 
 Recreated in OmniFrame as scenes `quote_band` (49/51/54 bed) and `mono_typo` (50/52 bed)
 — see recreations/index.md #19–20 and `src/lib/pillarRenderers.ts`.
+
+## Wave 2 (batch 8, 13 watched; 5 private/deleted → BLOCKED_UNAVAILABLE)
+
+| id | grammar |
+|----|---------|
+| oqzbIOKic90 | blown-white bed + micro typo bottom (flash bed variant) |
+| h_D720n75B4 | warm blurred light-streak bed + red serif micro-caps + bottom micro typo |
+| 48ze7aZ8NdE / n9JOpkEqtS4 / Z8P_6YGkKQE | **multi-line top typo stack** (3-4 outlined caps lines pinned top, over footage OR over white bed) |
+| iB-TehC1kOs | single white typo line over anime footage (mid-frame) |
+| L6WUvXUf0es | **radial zoom-blur sting** (centre-rushing blur as the cut) |
+| hSTkYAdWJek | shape-row outro bed (yellow chevrons marching on white) |
+| JuxN-ccLRmA | **band mask strip** (letterbox squeezed to a horizontal band around the subject) |
+| dibSGfA3LAk | **tilted logo card** (rotated pink outline logo plate over footage) |
+| lypaZpeWoJg | chrome/metal 3D typo + yellow accent underline inside white oval vignette |
+| 5Wy0zVw5wgg | **credits wall**: caption bar + dense multi-column micro text over red mono bed |
+| 4Nc-jJgODLA | centred multi-line bold meme typo on dark bed |
+
+Techniques 55–60: 55 multi-line top typo stack · 56 radial zoom-blur sting ·
+57 band-mask strip framing · 58 tilted logo card · 59 chrome typo + accent underline ·
+60 credits-wall column layout.

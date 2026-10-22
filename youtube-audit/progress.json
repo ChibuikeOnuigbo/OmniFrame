@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T10:39:19Z",
+ "updated": "2026-10-22T11:12:53Z",
  "total_discovered": 248,
  "by_status": {
   "BLOCKED": 5,
@@ -16,8 +16,8 @@
  "checkpoint": {
   "drive_batches_completed": 2,
   "drive_videos_footage": 56,
-  "youtube_batches_completed": 7,
-  "watched_visual_total": 263,
+  "youtube_batches_completed": 8,
+  "watched_visual_total": 276,
   "next_drive_batch": 3,
   "next_yt_batch": 4
  },
@@ -48,6 +48,12 @@
    "run": 39763998819,
    "result": "18/18 chat-history FOOTAGE_ACQUIRED -> sheets built + inspected",
    "ts": "2026-10-22T10:39:19Z"
+  },
+  {
+   "batch": "chat-2",
+   "run": 0,
+   "result": "13/18 chat-history watched; 5 private/deleted BLOCKED_UNAVAILABLE",
+   "ts": "2026-10-22T11:12:53Z"
   }
  ],
  "watched_ids": [
@@ -313,7 +319,20 @@
   "v2g0zap6LQc",
   "ENRtNTNtV8M",
   "6Stj_5zLyiM",
-  "Uew3Znl3Fl8"
+  "Uew3Znl3Fl8",
+  "oqzbIOKic90",
+  "h_D720n75B4",
+  "48ze7aZ8NdE",
+  "n9JOpkEqtS4",
+  "iB-TehC1kOs",
+  "L6WUvXUf0es",
+  "hSTkYAdWJek",
+  "JuxN-ccLRmA",
+  "dibSGfA3LAk",
+  "lypaZpeWoJg",
+  "5Wy0zVw5wgg",
+  "4fK8ITqD0ME",
+  "2ZP_6YGkKQE"
  ],
  "extra_watched": {
   "JJK_S2E3_72": "JJK S2E3 raw: Yuji + Aoi on beach, bloodied Gojo face close-up, red/black logo sting; raw episode footage",
@@ -326,5 +345,12 @@
   "Lg_7-Wift8E": "YouTube members-only paywall; all yt-dlp clients + owner cookies refused (batch4 report)",
   "v-cM5D3qc7s": "YouTube members-only paywall; all yt-dlp clients + owner cookies refused (batch4 report)",
   "HFkb60azqN0": "YouTube members-only paywall; all yt-dlp clients + owner cookies refused (batch4 report)"
+ },
+ "blocked_unavailable": {
+  "umTDI962BhM": "private/deleted YouTube video (batch8)",
+  "FPSxFSjCxPo": "private/deleted YouTube video (batch8)",
+  "Nt7yP-e06Oo": "private/deleted YouTube video (batch8)",
+  "6sB6CO56cq8": "private/deleted YouTube video (batch8)",
+  "yOjYKje861U": "private/deleted YouTube video (batch8)"
  }
 }
