@@ -133,7 +133,7 @@ jobs:
               n0 = len(inv)
               for vid in links.get('youtube_ids', []):
                   if vid not in inv:
-                      add(vid, f'chat-history link {vid}', 'NA', 'chat-history', 'chat')
+                      add(vid, f'chat-history link {vid}', '0', 'chat-history', 'chat')
               print('chat-history ids merged:', len(inv) - n0)
           except Exception as e:
               print('chat merge FAIL', e)
