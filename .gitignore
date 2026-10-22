@@ -48,7 +48,6 @@ google_drive/
 # correct BrandBird mirror (RAR extraction, third-party, study only)
 ui_downlaod_study/brandbird-rar-extract/
 
-# study MP4 products (workspace artifacts, not git)
-Study_edits_videos/exports/*.mp4
+# study MP4 products live IN git (vow.md §2: user must run verdict on them)
 Study_edits_videos/exports/concat-list.txt
 Study_edits_videos/chat-history/*.txt

@@ -78,3 +78,27 @@ implements is mapped in §4.
 Honesty note: expression-control hosting, Create-Nulls-from-Paths generators and
 compound-clip nesting are documented above but NOT implemented yet (OmniFrame already
 has a separate compound-clip kind); they are the next research-to-code candidates.
+## 5. Addendum — user-supplied null tutorials (rUzd5Y30O80, iXZhEZPoNZY) + overview synthesis
+
+- **Motion-tracking hand-off** (the pro pattern): raw tracker position keyframes are
+  messy; applying them straight to clean art destroys tweakability. Send the track to a
+  NULL, parent the art to the null → the art inherits the track while keeping its own
+  curves untouched. → OmniFrame: `bakeTrackingToNull()` store action + "Track → Null"
+  button in TrackingPanel: bakes a TrackingSession's points into a new null clip's
+  position_x/position_y linear keyframes (project px, 1280×720 space); parent via the
+  existing LinkPanel pick-whip equivalent.
+- **Null vs Compound/Pre-comp vs Adjustment** (comparison table): null = transforms only,
+  layers stay independent on the main timeline; compound/pre-comp = physical bundle into
+  a nested timeline (scale/cut affects everything inside); adjustment = visual effects
+  pass-down only, no transforms. OmniFrame has all three kinds now: `null` clip kind,
+  `compound` kind, `adjustment` kind — the distinction is honoured in rendering.
+- **Why null over pre-comp for group scaling**: pre-comping hides the clips in a
+  sub-timeline (constant click-back-and-forth); nulls keep every clip visible and
+  individually animatable while following global motion. → OmniFrame nulls never nest or
+  hide their children; children keep full keyframe access.
+- **Rigging**: shoulder→elbow→hand chains = parent chains; OmniFrame's
+  `buildParentChain`/`inheritedWorld` support arbitrary depth with per-link gates.
+- **Entry points**: AE Layer > New > Null (Ctrl+Alt+Shift+Y) + pick-whip; Alight Motion:
+  `+` button > Null > parenting tool. OmniFrame equivalents: timeline clip context menu
+  "New Null Object", LinkPanel "+ Null", TrackingPanel "Track → Null", LinkPanel
+  Directional Parenting pick-list.

@@ -37,6 +37,7 @@ import type {
   LinkSet,
   ParentRelationship,
   GroupInstance,
+  TrackPoint,
   CursorConfig,
   TrackingSession,
   TextureAsset,
@@ -844,6 +845,9 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice {
   ungroupSelection: () => void
   /** AE Layer > New > Null Object: invisible transform-controller clip. */
   addNullObject: () => string
+  /** AE motion-track workflow: bake tracker points into a NULL's position curves,
+   *  then parent the art to the null (graphic keyframes stay clean). */
+  bakeTrackingToNull: (sessionId?: string) => string | null
 
   // ---- tracking subsystem ----
   trackingSessions: TrackingSession[]
@@ -4700,6 +4704,61 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({
         tracks: s.tracks.some((t) => t.id === track.id) ? s.tracks : [track, ...s.tracks],
         clips: [...s.clips, clip],
+        selectedClipId: id,
+        selectedClipIds: [id],
+      }))
+      return id
+    },
+    bakeTrackingToNull: (sessionId) => {
+      const st = get()
+      const sessions = st.trackingSessions || []
+      const session =
+        (sessionId && sessions.find((t) => t.id === sessionId)) ||
+        [...sessions].reverse().find((t) => (t.points || []).length > 1)
+      if (!session || session.points.length < 2) return null
+      const fps = st.projectFps || 30
+      const target = st.clips.find((c) => c.id === session.targetClipId)
+      const t0 = target?.start ?? 0
+      const f0 = session.points[0].frame
+      const span = (session.points[session.points.length - 1].frame - f0) / fps
+      const duration = Math.max(0.5, Math.min(5, span + 0.4))
+      // project space matches playback (PW/PH = 1280x720); transform x/y are px, 0 = centred
+      const kf = (pt: TrackPoint, axis: 'x' | 'y'): KeyframeNode => ({
+        id: uid(`kf-${axis}`),
+        time: t0 + (pt.frame - f0) / fps,
+        value: axis === 'x' ? (pt.x - 0.5) * 1280 : (pt.y - 0.5) * 720,
+        interpolation: 'linear',
+      })
+      const curve = (pid: string, ch: 'X' | 'Y', label: string, color: string, pts: KeyframeNode[]) => ({
+        id: pid, property: 'position', channel: ch, label, color, defaultValue: 0, unit: 'px', keyframes: pts,
+        extrapolationBefore: 'constant' as const, extrapolationAfter: 'constant' as const,
+      })
+      const id = uid('clip-null')
+      const n = st.clips.filter((c) => c.kind === 'null').length + 1
+      const track = st.tracks.find((t) => t.type === 'video') || makeTrack('video', 'Nulls')
+      const clip: Clip = {
+        id,
+        trackId: track.id,
+        assetId: '',
+        start: t0,
+        duration,
+        inPoint: 0,
+        name: `Null Track ${n}`,
+        kind: 'null',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        animation: {
+          curves: {
+            position_x: curve('position_x', 'X', 'Position X', '#ef4444', session.points.map((pt) => kf(pt, 'x'))),
+            position_y: curve('position_y', 'Y', 'Position Y', '#22c55e', session.points.map((pt) => kf(pt, 'y'))),
+          },
+        },
+      }
+      pushSnapshot()
+      set((s2) => ({
+        tracks: s2.tracks.some((t) => t.id === track.id) ? s2.tracks : [track, ...s2.tracks],
+        clips: [...s2.clips, clip],
         selectedClipId: id,
         selectedClipIds: [id],
       }))
