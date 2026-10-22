@@ -127,6 +127,16 @@ jobs:
               except Exception as e:
                   print(vid, "meta FAIL", e)
                   open(f"audit-out/errors/meta-{vid}.txt","w").write(str(e))
+          # chat-history (WhatsApp zip) links become first-class inventory ids
+          try:
+              links = json.load(open('Study_edits_videos/chat-history/links.json'))
+              n0 = len(inv)
+              for vid in links.get('youtube_ids', []):
+                  if vid not in inv:
+                      add(vid, f'chat-history link {vid}', 'NA', 'chat-history', 'chat')
+              print('chat-history ids merged:', len(inv) - n0)
+          except Exception as e:
+              print('chat merge FAIL', e)
           json.dump({"generated": "__TS__", "total": len(inv), "videos": list(inv.values())},
                     open("audit-out/inventory.json","w"), indent=1)
           print("inventory total", len(inv))
@@ -137,22 +147,34 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, os, re, subprocess
+          UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
           src = 'Study_edits_videos/chat-history/links.json'
           if not os.path.exists(src):
               print('no chat-history links file; skipping'); raise SystemExit(0)
           links = json.load(open(src)).get('reddit', [])
           os.makedirs('audit-out/reddit', exist_ok=True)
+          def curl(u):
+              return subprocess.run(['curl','-sSL','-m','45','-A',UA,u], capture_output=True, text=True, timeout=60).stdout
           for i, u in enumerate(links):
+              out = {'url': u, 'title': '', 'description': ''}
               try:
-                  r = subprocess.run(['curl','-sSL','-m','45','-A','omniframe-study/0.1 (+audit)', u],
-                                     capture_output=True, text=True, timeout=60)
-                  html = r.stdout or ''
-                  title = (re.search(r'<title[^>]*>(.*?)</title>', html, re.S|re.I) or [None,''])[1]
-                  desc = (re.search(r'<meta[^>]+property="og:description"[^>]+content="([^"]*)"', html) or [None,''])[1]
-                  json.dump({'url': u, 'title': title.strip()[:300], 'description': desc.strip()[:800]},
-                            open(f'audit-out/reddit/{i:02d}.json','w'), indent=1)
+                  final = subprocess.run(['curl','-sSL','-o','/dev/null','-w','%{url_effective}','-m','45','-A',UA,u],
+                                         capture_output=True, text=True, timeout=60).stdout.strip() or u
+                  out['resolved'] = final
+                  try:
+                      js = json.loads(curl(final.rstrip('/') + '.json'))
+                      d = js['data']['children'][0]['data']
+                      out['title'] = (d.get('title') or '')[:300]
+                      out['description'] = (d.get('selftext') or d.get('link_flair_text') or '')[:800]
+                  except Exception:
+                      html = curl(final)
+                      m = re.search(r'<title[^>]*>(.*?)</title>', html, re.S|re.I)
+                      out['title'] = (m.group(1).strip() if m else '')[:300]
+                      m = re.search(r'<meta[^>]+property="og:description"[^>]+content="([^"]*)"', html)
+                      out['description'] = (m.group(1).strip() if m else '')[:800]
               except Exception as e:
-                  json.dump({'url': u, 'error': str(e)[:200]}, open(f'audit-out/reddit/{i:02d}.json','w'), indent=1)
+                  out['error'] = str(e)[:200]
+              json.dump(out, open(f'audit-out/reddit/{i:02d}.json','w'), indent=1)
           print('reddit collected:', len(links))
           PY
 
