@@ -44,7 +44,7 @@ jobs:
           def fetch(fid, dest):
               r = subprocess.run(["curl","-sSL","--retry","2","-m","1800","-o",dest,DL.format(fid)],
                                  capture_output=True, text=True, timeout=1900)
-              ok = os.path.exists(dest) and os.path.getsize(dest) > 500000
+              ok = os.path.exists(dest) and os.path.getsize(dest) > 20000
               if not ok and os.path.exists(dest):
                   with open(dest,'rb') as fh: head=fh.read(300)
                   os.makedirs("audit-drive/errors", exist_ok=True)
