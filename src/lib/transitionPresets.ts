@@ -22,7 +22,7 @@ export const TRANSITION_MAX_DURATION = 5
 export interface TransitionPresetDef {
   id: TransitionType
   name: string
-  category: 'Dissolve' | 'Wipe' | 'Slide' | 'Shapes' | 'Zoom & Motion' | 'Special' | 'Blur' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay'
+  category: 'Dissolve' | 'Wipe' | 'Slide' | 'Shapes' | 'Zoom & Motion' | 'Special' | 'Blur' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay' | 'Scene'
   /** Out-of-the-box duration in seconds. Users can lower/raise it, but the
    *  applied duration is always capped to TRANSITION_MIN/MAX_DURATION. */
   baseDuration: number

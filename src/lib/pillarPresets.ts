@@ -13,8 +13,8 @@ export interface PillarParams { [key: string]: number | string }
 export interface PillarPresetDef {
   id: TransitionType
   name: string
-  category: 'Blur' | 'Dissolve' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay'
-  family: 'glitch' | 'blur' | 'dissolve' | 'light' | 'flicker' | 'tv' | 'overlay'
+  category: 'Blur' | 'Dissolve' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay' | 'Scene'
+  family: 'glitch' | 'blur' | 'dissolve' | 'light' | 'flicker' | 'tv' | 'overlay' | 'scene'
   baseDuration: number
   params: PillarParams
   description: string
@@ -371,5 +371,14 @@ export const PILLAR_PRESETS: PillarPresetDef[] = [
   { id: 'overlay_cinema_swing', name: "Overlay Cinema Swing", category: 'Overlay', family: 'overlay', baseDuration: 1.6, params: { scene: "cinema", motion: "swing", seed: 245 }, description: "cinema screen between curtains; pendulum swing of the device swaps the picture." },
   { id: 'overlay_cinema_zoom', name: "Overlay Cinema Zoom", category: 'Overlay', family: 'overlay', baseDuration: 1.4, params: { scene: "cinema", motion: "zoom", seed: 933 }, description: "cinema screen between curtains; zoom through the screen into the new picture." },
   { id: 'overlay_cinema_channel', name: "Overlay Cinema Channel", category: 'Overlay', family: 'overlay', baseDuration: 1.5, params: { scene: "cinema", motion: "channel", seed: 855 }, description: "cinema screen between curtains; static channel-change on the screen swaps the picture." },
+  // Scene-recreation pillar — named scenes recreated from the Drive-zip footage
+  // study (youtube-audit/study/deep-study-1.md). All six share SCENE_LOOK in
+  // pillarRenderers.ts: one fade curve, one grain, one vignette = constant look.
+  { id: 'scene_comp_light', name: "Scene: Comp-Light Relight", category: 'Scene', family: 'scene', baseDuration: 1.6, params: { style: "relight" }, description: "Recreated from 'How to relight scenes with ae comp lights' (M2_vjAseOns): dimmed roto-matte proof w/ feathered silhouette ring, travelling light orb + falloff ring on an eased arc, then warm-key/cool-ambient relit reveal." },
+  { id: 'scene_crt_blotch', name: "Scene: CRT Emulator Blotch", category: 'Scene', family: 'scene', baseDuration: 1.2, params: { style: "crt" }, description: "Recreated from 'How To Make A CRT LOOK' (RktZGRjji5g): scanlines + grey blotch amplitude-map (mask visualised) peaking mid-cut + RGB fringe on the attack only." },
+  { id: 'scene_magna_split', name: "Scene: Magna Split Proof", category: 'Scene', family: 'scene', baseDuration: 1.4, params: { style: "magna" }, description: "Recreated from 'magnatesmedia style editing' (jlDIX3Ky-hs): before/after halves on a sweeping gold divider with sparkle accent and the small 'After' label." },
+  { id: 'scene_line_draw', name: "Scene: Line Draw-On Split", category: 'Scene', family: 'scene', baseDuration: 1.3, params: { style: "line" }, description: "Recreated from 'how to animate lines' (kZskcvTkAjs): green stroke trims on with a travelling bend (ease-in-out), then splits open vertically to reveal the next clip." },
+  { id: 'scene_rim_glow', name: "Scene: Manga Rim-Glow Pulse", category: 'Scene', family: 'scene', baseDuration: 1.5, params: { style: "rim" }, description: "Recreated from 'Animate Manga Like a PRO' (khjRWWTYZcc): magenta rim-glow pulses around the outgoing silhouette, then warm/cool grade crossfade into the next clip." },
+  { id: 'scene_mosaic_pix', name: "Scene: Mosaic Pixel Shift", category: 'Scene', family: 'scene', baseDuration: 1.1, params: { style: "mosaic" }, description: "Recreated from the magnatesmedia mosaic transition (jlDIX3Ky-hs): mosaic cells shrink and row-shift out of the outgoing frame into the incoming clip." },
 ]
 

@@ -400,6 +400,14 @@ export type TransitionType =
   | 'overlay_cinema_swing'
   | 'overlay_cinema_zoom'
   | 'overlay_cinema_channel'
+  // Scene-recreation pillar — named scenes recreated from the Drive-zip
+  // footage study (youtube-audit/study/deep-study-1.md), constant look.
+  | 'scene_comp_light'
+  | 'scene_crt_blotch'
+  | 'scene_magna_split'
+  | 'scene_line_draw'
+  | 'scene_rim_glow'
+  | 'scene_mosaic_pix'
 
 export interface Transition {
   id: string

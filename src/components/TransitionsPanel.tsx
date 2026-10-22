@@ -54,6 +54,7 @@ const PILLARS: { key: string; label: string; cats: TransitionPresetDef['category
   { key: 'flicker', label: 'Flicker', cats: ['Flicker'] },
   { key: 'tv', label: 'TV', cats: ['TV'] },
   { key: 'overlay', label: 'Overlay', cats: ['Overlay'] },
+  { key: 'scene', label: 'Scene', cats: ['Scene'] },
   { key: 'classic', label: 'Classic', cats: ['Wipe', 'Slide', 'Shapes', 'Zoom & Motion', 'Special'] },
 ]
 

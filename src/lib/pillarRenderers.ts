@@ -634,5 +634,237 @@ export function drawPillarFamily(family: string, a: PillarDrawArgs) {
   else if (family === 'flicker') renderFlicker(a)
   else if (family === 'tv') renderTV(a)
   else if (family === 'overlay') renderOverlay(a)
+  else if (family === 'scene') renderScene(a)
+  else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
+}
+
+/* ------------------------------------------------------------------ */
+/* Scene-recreation pillar — named scenes from the Drive-zip footage   */
+/* study (youtube-audit/study/deep-study-1.md). Every renderer below    */
+/* recreates one watched scene grammar and finishes through the SAME   */
+/* constant-look pass (SCENE_LOOK): one fade curve, one grain, one      */
+/* vignette — so all six recreations cut as one family.                */
+/* ------------------------------------------------------------------ */
+
+const SCENE_LOOK = {
+  /** single shared fade curve: easeInOutCubic (the orb/line/divider all ride it) */
+  fade: (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+  grain: 0.05,
+  vignette: 0.16,
+  warm: '255, 140, 60',   // comp-light key (M2 relight)
+  cool: '120, 80, 200',   // comp-light ambient
+  magenta: '255, 40, 200', // manga rim-glow pulse
+  gold: '212, 175, 55',   // magnates divider
+  line: '60, 255, 120',   // line draw-on stroke
+}
+
+function sceneFinish(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h } = a
+  // constant vignette
+  const v = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.42, w / 2, h / 2, Math.max(w, h) * 0.72)
+  v.addColorStop(0, 'rgba(0,0,0,0)')
+  v.addColorStop(1, `rgba(0,0,0,${SCENE_LOOK.vignette})`)
+  ctx.fillStyle = v
+  ctx.fillRect(0, 0, w, h)
+  // constant grain (seeded per progress bucket so it breathes, never dances)
+  const rnd = mulberry32(1000 + Math.floor(a.p * 12))
+  ctx.fillStyle = `rgba(255,255,255,${SCENE_LOOK.grain})`
+  for (let i = 0; i < 140; i++) ctx.fillRect(rnd() * w, rnd() * h, 1, 1)
+}
+
+/** M2_vjAseOns — comp-light relight: roto-matte dim, travelling light orb with
+ *  falloff ring on an eased arc, then warm-key / cool-ambient relit incoming. */
+function sceneCompLight(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  if (p < 0.5) {
+    if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 1; ctx.filter = 'brightness(0.38) saturate(0.7)'; a.drawFrom(ctx); ctx.filter = 'none'; ctx.restore() }
+    // roto-matte proof: feathered silhouette ring around subject centre
+    ctx.save()
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'
+    ctx.lineWidth = 2
+    ctx.setLineDash([6, 5])
+    ctx.beginPath(); ctx.ellipse(w * 0.62, h * 0.55, w * 0.16, h * 0.3, 0, 0, Math.PI * 2); ctx.stroke()
+    ctx.restore()
+  } else {
+    if (a.hasTo) { ctx.save(); ctx.globalAlpha = (p - 0.5) * 2; a.drawTo(ctx); ctx.restore() }
+    const g = ctx.createLinearGradient(0, 0, w, h)
+    g.addColorStop(0, `rgba(${SCENE_LOOK.warm},${0.28 * (1 - (p - 0.5) * 1.2)})`)
+    g.addColorStop(1, `rgba(${SCENE_LOOK.cool},${0.22 * (1 - (p - 0.5) * 1.2)})`)
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h)
+  }
+  // travelling orb + falloff ring on the eased arc (accelerate then settle)
+  const t = e
+  const ox = w * (0.18 + 0.6 * t)
+  const oy = h * (0.32 + 0.26 * Math.sin(Math.PI * t))
+  const orb = ctx.createRadialGradient(ox, oy, 2, ox, oy, w * 0.16)
+  orb.addColorStop(0, 'rgba(255,255,255,0.95)')
+  orb.addColorStop(0.35, 'rgba(255,240,220,0.5)')
+  orb.addColorStop(1, 'rgba(255,220,180,0)')
+  ctx.fillStyle = orb
+  ctx.fillRect(ox - w * 0.16, oy - w * 0.16, w * 0.32, w * 0.32)
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)'
+  ctx.lineWidth = 1.5
+  ctx.beginPath(); ctx.arc(ox, oy, w * 0.11, 0, Math.PI * 2); ctx.stroke()
+  sceneFinish(a)
+}
+
+/** RktZGRjji5g — CRT emulator: scanlines + posterize blotches (mask shown as
+ *  grey amplitude map mid-cut) + RGB fringe on the attack. */
+function sceneCrtBlotch(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const base = p < 0.5 ? a.hasFrom : a.hasTo
+  if (p < 0.5 && a.hasFrom) a.drawFrom(ctx); else if (a.hasTo) a.drawTo(ctx)
+  if (!base && p >= 0.5 && !a.hasTo && a.hasFrom) a.drawFrom(ctx)
+  // RGB fringe on the attack only (smooth-text grammar: flicker at entry)
+  if (p < 0.3) {
+    const dx = (0.3 - p) * 40
+    ctx.save(); ctx.globalAlpha = 0.25; ctx.globalCompositeOperation = 'screen'
+    ctx.translate(dx, 0); if (a.hasFrom) a.drawFrom(ctx); ctx.translate(-dx * 2, 0)
+    ctx.fillStyle = 'rgba(255,0,60,0.08)'; ctx.fillRect(0, 0, w, h)
+    ctx.restore()
+  }
+  // grey blotch amplitude-map (mask visualised) peaks mid-cut
+  const blot = Math.sin(p * Math.PI)
+  if (blot > 0.05) {
+    const rnd = mulberry32(4242)
+    ctx.save(); ctx.globalAlpha = blot * 0.5
+    for (let i = 0; i < 14; i++) {
+      const bx = rnd() * w, by = rnd() * h, br = (0.04 + rnd() * 0.1) * w
+      ctx.fillStyle = rnd() > 0.5 ? 'rgba(160,160,160,0.8)' : 'rgba(40,40,40,0.8)'
+      ctx.beginPath(); ctx.ellipse(bx, by, br, br * (0.5 + rnd() * 0.8), rnd() * 3, 0, Math.PI * 2); ctx.fill()
+    }
+    ctx.restore()
+  }
+  // scanlines, constant across the family look
+  ctx.save(); ctx.globalAlpha = 0.22; ctx.fillStyle = '#000'
+  for (let y = 0; y < h; y += 3) ctx.fillRect(0, y, w, 1)
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** jlDIX3Ky-hs — magnates split proof: before/after halves on a gold divider
+ *  sweep with sparkle accent and the small "After" label. */
+function sceneMagnaSplit(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  const dx = w * e
+  if (a.hasFrom) { ctx.save(); ctx.beginPath(); ctx.rect(dx, 0, w - dx, h); ctx.clip(); a.drawFrom(ctx); ctx.restore() }
+  if (a.hasTo) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, dx, h); ctx.clip(); a.drawTo(ctx); ctx.restore() }
+  // gold divider + soft glow
+  const g = ctx.createLinearGradient(dx - 14, 0, dx + 14, 0)
+  g.addColorStop(0, 'rgba(212,175,55,0)')
+  g.addColorStop(0.5, `rgba(${SCENE_LOOK.gold},0.95)`)
+  g.addColorStop(1, 'rgba(212,175,55,0)')
+  ctx.fillStyle = g; ctx.fillRect(dx - 14, 0, 28, h)
+  ctx.fillStyle = `rgba(${SCENE_LOOK.gold},1)`; ctx.fillRect(dx - 1.5, 0, 3, h)
+  // sparkle accent riding the divider top
+  const sy = h * (0.22 + 0.1 * Math.sin(p * 9))
+  ctx.save(); ctx.strokeStyle = 'rgba(255,250,230,0.95)'; ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.moveTo(dx - 12, sy); ctx.lineTo(dx + 12, sy)
+  ctx.moveTo(dx, sy - 12); ctx.lineTo(dx, sy + 12)
+  ctx.stroke(); ctx.restore()
+  if (p > 0.55) {
+    ctx.save(); ctx.globalAlpha = Math.min(1, (p - 0.55) * 4)
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'
+    ctx.font = '600 22px system-ui, sans-serif'
+    ctx.fillText('After', 24, h - 26)
+    ctx.restore()
+  }
+  sceneFinish(a)
+}
+
+/** kZskcvTkAjs — line draw-on: green stroke trims on with a travelling bend,
+ *  then splits open vertically to reveal the incoming clip. */
+function sceneLineDraw(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  if (p < 0.68) { if (a.hasFrom) a.drawFrom(ctx) } else {
+    const open = SCENE_LOOK.fade((p - 0.68) / 0.32) * h / 2
+    if (a.hasFrom) { ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h / 2 - open); ctx.rect(0, h / 2 + open, w, h); ctx.clip(); a.drawFrom(ctx); ctx.restore() }
+    if (a.hasTo) { ctx.save(); ctx.beginPath(); ctx.rect(0, h / 2 - open, w, open * 2); ctx.clip(); a.drawTo(ctx); ctx.restore() }
+  }
+  const trim = SCENE_LOOK.fade(Math.min(1, p / 0.6))
+  const x0 = w * 0.12, x1 = x0 + (w * 0.76) * trim
+  ctx.save()
+  ctx.strokeStyle = `rgba(${SCENE_LOOK.line},0.95)`
+  ctx.lineWidth = 3.5
+  ctx.shadowColor = `rgba(${SCENE_LOOK.line},0.8)`
+  ctx.shadowBlur = 10
+  ctx.beginPath()
+  for (let x = x0; x <= x1; x += 6) {
+    const y = h / 2 + Math.sin((x / w) * 5 + p * 6) * 9 * trim
+    x === x0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+  }
+  ctx.stroke()
+  ctx.restore()
+  sceneFinish(a)
+}
+
+/** khjRWWTYZcc — manga rim-glow pulse: magenta rim pulses around the outgoing
+ *  silhouette, then a warm grade crossfade into the incoming clip. */
+function sceneRimGlow(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const pulse = Math.sin(p * Math.PI) * (0.6 + 0.4 * Math.sin(p * 22))
+  if (p < 0.6) {
+    if (a.hasFrom) a.drawFrom(ctx)
+    // rim glow: blurred magenta silhouette behind a re-drawn subject
+    const sc = a.takeScratch()
+    sc.width = w; sc.height = h
+    const sctx = sc.getContext('2d')!
+    sctx.filter = 'blur(10px)'
+    if (a.hasFrom) a.drawFrom(sctx)
+    sctx.filter = 'none'
+    sctx.globalCompositeOperation = 'source-in'
+    sctx.fillStyle = `rgba(${SCENE_LOOK.magenta},${0.85 * pulse})`
+    sctx.fillRect(0, 0, w, h)
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.drawImage(sc, 0, 0); ctx.restore()
+    a.releaseScratch(sc)
+  } else {
+    const t = (p - 0.6) / 0.4
+    if (a.hasFrom) { ctx.save(); ctx.globalAlpha = 1 - t; a.drawFrom(ctx); ctx.restore() }
+    if (a.hasTo) { ctx.save(); ctx.globalAlpha = t; a.drawTo(ctx); ctx.restore() }
+    ctx.save(); ctx.globalAlpha = (1 - t) * 0.3
+    const g = ctx.createLinearGradient(0, h, w, 0)
+    g.addColorStop(0, `rgba(${SCENE_LOOK.warm},0.8)`); g.addColorStop(1, `rgba(${SCENE_LOOK.cool},0.6)`)
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); ctx.restore()
+  }
+  sceneFinish(a)
+}
+
+/** jlDIX3Ky-hs — mosaic pixel shift: mosaic cells shrink & row-shift out of
+ *  the outgoing frame into the incoming clip (documentary pixel transition). */
+function sceneMosaicPix(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  if (a.hasTo) { ctx.save(); ctx.globalAlpha = e; a.drawTo(ctx); ctx.restore() }
+  const cell = Math.max(8, Math.round(72 * (1 - e) + 8))
+  const sc = a.takeScratch()
+  sc.width = Math.max(2, Math.floor(w / cell)); sc.height = Math.max(2, Math.floor(h / cell))
+  const sctx = sc.getContext('2d')!
+  if (a.hasFrom) a.drawFrom(sctx)
+  ctx.save()
+  ctx.globalAlpha = 1 - e
+  ctx.imageSmoothingEnabled = false
+  const rnd = mulberry32(77)
+  const rows = Math.ceil(h / cell)
+  for (let r = 0; r < rows; r++) {
+    const off = (rnd() - 0.5) * 2 * cell * 3 * (1 - e)
+    ctx.drawImage(sc, 0, (r * sc.height) / rows, sc.width, sc.height / rows, off, r * cell, w, cell)
+  }
+  ctx.imageSmoothingEnabled = true
+  ctx.restore()
+  a.releaseScratch(sc)
+  sceneFinish(a)
+}
+
+function renderScene(a: PillarDrawArgs) {
+  const style = str(a.params, 'style', 'relight')
+  if (style === 'relight') sceneCompLight(a)
+  else if (style === 'crt') sceneCrtBlotch(a)
+  else if (style === 'magna') sceneMagnaSplit(a)
+  else if (style === 'line') sceneLineDraw(a)
+  else if (style === 'rim') sceneRimGlow(a)
+  else if (style === 'mosaic') sceneMosaicPix(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }
