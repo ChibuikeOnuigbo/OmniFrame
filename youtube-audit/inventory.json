@@ -811,9 +811,13 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D lighting via depth maps: depth-panel (model/threshold settings), false-colour green/red debug depth view, crackle depth-map texture, 3D light+camera gizmo, purple glow light layer masked by depth -> volumetric relight of face; AvoidAEP outro",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets/tF_clYyo2FU.jpg"
+   ]
   },
   {
    "id": "TxMCZpTmxG0",
@@ -881,9 +885,13 @@
    "formats": [
     "videos"
    ],
-   "status": "INVENTORIED",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
    "access": "pending-batch",
-   "next_action": "await batch slice (push batch-trigger batch=N)"
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Colour correction curriculum: OFF/ON compare labels, S-curve graphs, colour-wheels panel, RGB parade/vectorscope scopes, teal-orange action grade, secondary grade on detail shot; AvoidAEP outro",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets/M5t-RkH5fqM.jpg"
+   ]
   },
   {
    "id": "oCKNYDxPB4Y",
