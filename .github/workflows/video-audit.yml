@@ -97,6 +97,9 @@ jobs:
           explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
           inv = {}
           def add(vid, title, dur, chan, fmt):
+              # yt-dlp prints 'NA' for unknown durations (shorts) — coerce so
+              # downstream float() never crashes (crashed batches 5 & 15).
+              dur = dur if str(dur).replace('.', '', 1).isdigit() else '0'
               if vid in inv: 
                   inv[vid]["formats"].append(fmt); return
               inv[vid] = {"id": vid, "url": f"https://www.youtube.com/watch?v={vid}", "title": title,
@@ -119,6 +122,7 @@ jobs:
                           if len(p) >= 4 and p[0]:
                               add(p[0], p[1], p[2], p[3], tab)
                       print(ch, tab, "ok", len(out.stdout.splitlines()))
+                      open(f"audit-out/errors/scrape-{ch.strip('@')}-{tab}.txt", "w").write(out.stdout[:3000] + "\n--STDERR--\n" + out.stderr[:1500])
                   except Exception as e:
                       print(ch, tab, "FAIL", e)
                       open(f"audit-out/errors/inventory-{ch}-{tab}.txt","w").write(str(e))

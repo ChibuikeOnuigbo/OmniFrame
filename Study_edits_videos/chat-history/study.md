@@ -117,3 +117,28 @@ Techniques 70–85: 70 sketch/high-key invert bed · 71 colour-wash bed · 72 ba
 82 cutout row + brand typo · 83 black-on-white quote band · 84 full-bleed anime hold ·
 85 drifting hero object + motion trail on gradient bed → recreated as scene `drift`
 (recreation #21, `scene_drift_trail`, QA 21×7 PASS).
+
+## Wave 5 (batch 14: 14 watched; 8WMyqJKRgzw, EuMrlKcNnLM, XE_Gx_m6MLQ, pGd7t371kAk unavailable)
+
+| id | grammar |
+|----|---------|
+| RnDgLkdlTC4 | **double-band typo lockup** (gothic blackletter top band + giant display caps bottom band) |
+| vh65StXSx7o | glitch tint face + bottom micro caps ("YOUR NAME") |
+| oNVxf9UZY-0 | cutout blob mask over dark footage + micro typo |
+| xflSQX3CS3o | minimal sky bed + tiny bottom typo |
+| RZpyeu25Kis | manga panel card + name typo + **dual-colour two-line bottom typo** |
+| FnPJWMBya6U | streak-smear bed + micro typo |
+| b7uYVubI7jg | light blur bed |
+| DMwM6F15sNg | colour typo over footage + bottom micro bar |
+| sdgMG3sZ3nE | letterboxed full-bleed anime hold |
+| vtsTN2a4L2U | **name-plate pill card** (dark rounded pill, white gothic name) |
+| qa1Cprn1QLc | letterbox band + centred gothic name typo |
+| miloyuZe3Jw | **checker-grid tile bed** (chessboard + piece icon tiles) |
+| 5cubb_lXKAA | vertical translucent bar sweep overlay |
+| i2HrbsXlV04 | red tint + thin vertical divider line |
+
+Techniques 86–98: 86 double-band typo lockup · 87 glitch tint + micro caps · 88 cutout blob mask ·
+89 dual-colour two-line bottom typo · 90 streak-smear bed · 91 name-plate pill card ·
+92 centred gothic name typo on band · 93 checker-grid tile bed · 94 vertical bar sweep overlay ·
+95 tint + vertical divider · 96 colour typo over footage + micro bar · 97 light blur bed ·
+98 letterboxed full-bleed hold.
