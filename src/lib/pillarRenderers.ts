@@ -1405,6 +1405,116 @@ function sceneFlareSting(a: PillarDrawArgs) {
   sceneFinish(a)
 }
 
+/* Hancybox wave-1 tricks (techniques 100-111): five new scene grammars. */
+function sceneWedgeWipe(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, w, h)
+  if (a.hasFrom && p <= 0.6) { ctx.save(); ctx.globalAlpha = 0.25 * (1 - e); a.drawFrom(ctx); ctx.restore() }
+  const g = ctx.createLinearGradient(0, 0, w * 0.6, h)
+  g.addColorStop(0, '#8c0d0d'); g.addColorStop(1, '#e01818')
+  ctx.fillStyle = g
+  ctx.beginPath()
+  ctx.moveTo(0, 0)
+  ctx.lineTo(w * (0.15 + 0.95 * e), 0)
+  ctx.lineTo(w * (0.0 + 0.8 * e), h)
+  ctx.lineTo(0, h)
+  ctx.closePath()
+  ctx.fill()
+  if (a.hasTo && p > 0.6) { ctx.save(); ctx.globalAlpha = ((p - 0.6) / 0.4) * 0.95; a.drawTo(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
+function sceneCardInset(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, w, h)
+  if (a.hasFrom && p <= 0.6) { ctx.save(); ctx.globalAlpha = 0.1; a.drawFrom(ctx); ctx.restore() }
+  const cw = w * 0.62, ch = h * 0.5
+  const cx = (w - cw) / 2, cy = h * 0.12 + h * 0.06 * (1 - e)
+  ctx.fillStyle = '#f4f4f2'
+  ctx.fillRect(cx, cy, cw, ch)
+  // feathered bottom edge
+  const fg = ctx.createLinearGradient(0, cy + ch - h * 0.12, 0, cy + ch + h * 0.06)
+  fg.addColorStop(0, 'rgba(244,244,242,1)'); fg.addColorStop(1, 'rgba(244,244,242,0)')
+  ctx.fillStyle = fg
+  ctx.fillRect(cx, cy + ch - h * 0.12, cw, h * 0.18)
+  ctx.fillStyle = '#111'
+  ctx.font = `bold ${Math.round(h * 0.05)}px sans-serif`
+  ctx.textAlign = 'center'
+  ctx.fillText('Reliable', w / 2, cy + ch * 0.5)
+  ctx.textAlign = 'left'
+  if (a.hasTo && p > 0.6) { ctx.save(); ctx.globalAlpha = ((p - 0.6) / 0.4) * 0.95; a.drawTo(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
+function sceneGoldCard(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  const vg = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.7)
+  vg.addColorStop(0, '#b9b9b9'); vg.addColorStop(1, '#5c5c5c')
+  ctx.fillStyle = vg
+  ctx.fillRect(0, 0, w, h)
+  if (a.hasFrom && p <= 0.6) { ctx.save(); ctx.globalAlpha = 0.15; a.drawFrom(ctx); ctx.restore() }
+  ctx.save()
+  ctx.translate(w / 2, h / 2)
+  ctx.rotate(-0.16 + 0.06 * e)
+  const cw = w * 0.3, ch = h * 0.42
+  const gg = ctx.createLinearGradient(-cw / 2, -ch / 2, cw / 2, ch / 2)
+  gg.addColorStop(0, '#f6e27a'); gg.addColorStop(0.5, '#c9a227'); gg.addColorStop(1, '#f6e27a')
+  ctx.fillStyle = gg
+  ctx.fillRect(-cw / 2, -ch / 2, cw, ch)
+  ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 1.5
+  ctx.strokeRect(-cw / 2 + 4, -ch / 2 + 4, cw - 8, ch - 8)
+  ctx.restore()
+  if (a.hasTo && p > 0.6) { ctx.save(); ctx.globalAlpha = ((p - 0.6) / 0.4) * 0.95; a.drawTo(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
+function sceneWireGlow(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, w, h)
+  if (a.hasFrom && p <= 0.6) { ctx.save(); ctx.globalAlpha = 0.08; a.drawFrom(ctx); ctx.restore() }
+  ctx.save()
+  ctx.translate(w / 2, h / 2 + Math.sin(Math.PI * e) * h * 0.04)
+  ctx.rotate(0.5 - 0.15 * e)
+  ctx.shadowColor = 'rgba(60,220,255,0.9)'; ctx.shadowBlur = 18
+  ctx.strokeStyle = 'rgba(120,235,255,0.95)'; ctx.lineWidth = 2
+  ctx.strokeRect(-w * 0.06, -h * 0.2, w * 0.12, h * 0.4)
+  ctx.strokeStyle = 'rgba(255,120,220,0.7)'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(-w * 0.03, -h * 0.16); ctx.lineTo(w * 0.03, h * 0.16); ctx.stroke()
+  ctx.shadowBlur = 0
+  ctx.restore()
+  if (a.hasTo && p > 0.6) { ctx.save(); ctx.globalAlpha = ((p - 0.6) / 0.4) * 0.95; a.drawTo(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
+function sceneDualTypo(a: PillarDrawArgs) {
+  const { ctx, width: w, height: h, p } = a
+  const e = SCENE_LOOK.fade(p)
+  ctx.fillStyle = '#0a0c10'
+  ctx.fillRect(0, 0, w, h)
+  if (a.hasFrom && p <= 0.6) { ctx.save(); ctx.globalAlpha = 0.35; a.drawFrom(ctx); ctx.restore() }
+  const reveal = clamp01((p - 0.15) / 0.35)
+  ctx.save()
+  ctx.beginPath(); ctx.rect(0, 0, w * reveal, h); ctx.clip()
+  ctx.textAlign = 'center'
+  ctx.fillStyle = '#ffffff'
+  ctx.font = `bold ${Math.round(h * 0.075)}px sans-serif`
+  ctx.fillText('Building blocks', w / 2, h * 0.46)
+  ctx.fillStyle = '#e8d44d'
+  ctx.font = `italic bold ${Math.round(h * 0.065)}px Georgia, serif`
+  ctx.fillText('prompt', w / 2, h * 0.58)
+  ctx.textAlign = 'left'
+  ctx.restore()
+  if (a.hasTo && p > 0.6) { ctx.save(); ctx.globalAlpha = ((p - 0.6) / 0.4) * 0.95; a.drawTo(ctx); ctx.restore() }
+  sceneFinish(a)
+}
+
 function renderScene(a: PillarDrawArgs) {
   const style = str(a.params, 'style', 'relight')
   if (style === 'relight') sceneCompLight(a)
@@ -1429,5 +1539,10 @@ function renderScene(a: PillarDrawArgs) {
   else if (style === 'mono') sceneMonoTypo(a)
   else if (style === 'drift') sceneDriftTrail(a)
   else if (style === 'flare') sceneFlareSting(a)
+  else if (style === 'wedge') sceneWedgeWipe(a)
+  else if (style === 'card') sceneCardInset(a)
+  else if (style === 'goldcard') sceneGoldCard(a)
+  else if (style === 'wire') sceneWireGlow(a)
+  else if (style === 'dualtypo') sceneDualTypo(a)
   else { if (a.hasFrom) a.drawFrom(a.ctx); else if (a.hasTo) a.drawTo(a.ctx) }
 }

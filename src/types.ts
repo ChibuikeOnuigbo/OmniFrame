@@ -424,6 +424,11 @@ export type TransitionType =
   | 'scene_mono_typo'
   | 'scene_drift_trail'
   | 'scene_flare_sting'
+  | 'scene_wedge_wipe'
+  | 'scene_card_inset'
+  | 'scene_gold_card'
+  | 'scene_wire_glow'
+  | 'scene_dual_typo'
 
 export interface Transition {
   id: string
