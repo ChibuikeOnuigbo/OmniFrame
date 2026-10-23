@@ -1,0 +1,30 @@
+{
+ "docs": [
+  {
+   "file": "adobe-after-effects-tools.html",
+   "title": "Adobe After Effects \u2014 every tool & feature explained (from Adobe docs)",
+   "tools": 45
+  },
+  {
+   "file": "alight-motion-tools.html",
+   "title": "Alight Motion \u2014 full effects catalog + core tools (from official guide)",
+   "tools": 54
+  },
+  {
+   "file": "capcut-tools.html",
+   "title": "CapCut \u2014 tools & panels explained",
+   "tools": 15
+  },
+  {
+   "file": "davinci-resolve-tools.html",
+   "title": "DaVinci Resolve \u2014 tools per page (from Blackmagic official training + manual)",
+   "tools": 21
+  },
+  {
+   "file": "blender-tools.html",
+   "title": "Blender \u2014 Video Sequencer + Compositor tools (from official manual)",
+   "tools": 11
+  }
+ ],
+ "images": 12
+}
