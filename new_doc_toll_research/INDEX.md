@@ -16,6 +16,11 @@ editor's official documentation, plus 12 fresh reference images in images/.
 - resolve-fairlight-mixer-buses.jpg, resolve-fairlight-meters-loudness.jpg, resolve-fairlight-izotope-rx-external.png, resolve-fairlight-batch-fades.png — Fairlight mixer/meters/RX round-trip/batch fades
 - blender-compositor-viewport.jpg, blender-mix-node.jpg, blender-compositor-editor.png, blender-node-connections.png — Blender compositor & node sockets
 
+## images/ batch 2 (8 more, 2026-10-23)
+- ae-blending-bevel-emboss.jpg, ae-layer-styles-menu.jpg, ae-advanced-blending-rgb.jpg — AE blending modes / layer styles / advanced blending (Adobe docs)
+- am-krita-export-layers.webp — Krita→Alight Motion transparent-layer export workflow
+- resolve-cut-page.jpg, resolve-cut-page-full.jpg, resolve-cut-page-dual-viewers.png, resolve-media-pool-viewer.png — Resolve Cut page + media pool
+
 ## Why
 Feeds OmniFrame parity work: AE effect categories vs our effect rack, AM catalog vs pixelGrade/proceduralFx
 (Oscillate, Raster Extrude, Linear/Radial Repeat, Magnify Background etc. confirmed by official names),

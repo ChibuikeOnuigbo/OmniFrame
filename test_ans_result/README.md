@@ -23,6 +23,11 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Board H — AE one-framer family (MatttVfx j3Lt0dU1Lok)
+`effect_set` keys minimax/minimaxAngle/minimaxMode, vhs, dirColorize(+From/To/Angle) in pixelGrade
+applyOneFramer. Recipe `tools/mcp/recipes/board_H_oneframer.json` (3 variants) →
+`H_oneframer/oneframer-{all,vhs,minimax-colorize}.mp4`; frames `evidence/H-oneframer-*.png`.
+
 ## Board G — NothingxArt ibisPaint X sunset (shorts/2yAZqtdc_qk)
 Painted on the universal paint canvas with `draw_stroke` (gradient sky, filled sun disc, 12-ray radial
 ruler, smudge clouds, reflections, silhouette bezier, birds), exported as an ibisPaint-style process

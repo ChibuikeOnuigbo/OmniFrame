@@ -42,7 +42,10 @@
   "test_ans_result/G_paint/dreamcore-timelapse.mp4",
   "test_ans_result/G_paint/paint-timelapse.mp4",
   "test_ans_result/G_paint/qa-dreamcore.mp4",
-  "test_ans_result/G_paint/qa-timelapse.mp4"
+  "test_ans_result/G_paint/qa-timelapse.mp4",
+  "test_ans_result/H_oneframer/oneframer-all.mp4",
+  "test_ans_result/H_oneframer/oneframer-minimax-colorize.mp4",
+  "test_ans_result/H_oneframer/oneframer-vhs.mp4"
  ],
  "json": [
   "test_ans_result/A_analysis.json",
@@ -88,6 +91,9 @@
   "test_ans_result/G_paint/paint-timelapse.json",
   "test_ans_result/G_paint/qa-dreamcore.json",
   "test_ans_result/G_paint/qa-timelapse.json",
+  "test_ans_result/H_oneframer/oneframer-all.json",
+  "test_ans_result/H_oneframer/oneframer-minimax-colorize.json",
+  "test_ans_result/H_oneframer/oneframer-vhs.json",
   "test_ans_result/INDEX.json",
   "test_ans_result/evidence/timeline-A-01.png.json",
   "test_ans_result/evidence/timeline-A-02.png.json",

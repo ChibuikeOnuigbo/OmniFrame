@@ -623,6 +623,17 @@ export interface ClipEffect {
   gradientMap?: number
   gradientMapFrom?: string
   gradientMapTo?: string
+  /** AE one-framer family (MatttVfx j3Lt0dU1Lok): morphological luminance min/max along a direction. */
+  minimax?: number
+  minimaxAngle?: number
+  minimaxMode?: 'max' | 'min'
+  /** VHS aesthetic: scanlines + tape noise + chroma bleed + band wobble. */
+  vhs?: number
+  /** Directional colorize: two-colour ramp mixed along a direction. */
+  dirColorize?: number
+  dirColorizeFrom?: string
+  dirColorizeTo?: string
+  dirColorizeAngle?: number
   /** AM Threshold: hard luma cut 0..1 (0 = off). */
   threshold?: number
   /** AM Unsharp Mask: sharpen 0..1. */

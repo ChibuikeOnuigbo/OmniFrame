@@ -111,3 +111,4 @@ itself: if a claim cannot be opened, run, watched or measured, it does not get s
 - Every rewatched non-AI tool he clicks gets researched by name first, then
   implemented with its maths in BOTH renderers (one shared source).
 - 2026-10-22 (NothingxArt sunset 2yAZqtdc_qk): every tool harvested from the ibisPaint X short ships as a UNIVERSAL tool (draw_stroke/paint_timelapse/paint_clear) usable by any project; the time-lapse mp4 and dreamcore frames are rendered by the app engine (drawingEngine + pixelGrade) via appRender, never hand-composed. Evidence: test_ans_result/G_paint/ + evidence/G-*.png.
+- 2026-10-23 (MatttVfx j3Lt0dU1L one-framers): minimax/VHS/directional-colorize shipped as UNIVERSAL pixelGrade keys (app + headless one maths), proven by recipe board_H_oneframer variants (3 mp4s + frames); Nova Vision asset library logged only, never redistributed.

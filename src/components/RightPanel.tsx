@@ -1351,6 +1351,9 @@ const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Recor
   { id: 'amstrobe', group: 'pixel', label: 'Time quantization (AM)', icon: Tv, effect: { timeQuantization: 0.2 } },
   { id: 'ammblur', group: 'pixel', label: 'Motion blur (AM)', icon: Waves, effect: { motionBlur: 0.8 } },
   { id: 'dreamcore', group: 'pixel', label: 'Dreamcore sunset (NothingxArt)', icon: Sparkles, effect: { glow: 0.5, grain: 0.35, chromatic: 2, vignette: 0.5, gradientMap: 0.35, gradientMapFrom: '#2b1e5a', gradientMapTo: '#ffb86b' } },
+  { id: 'aeminimax', group: 'pixel', label: 'Minimax smear (AE)', icon: Tv, effect: { minimax: 0.7, minimaxAngle: 30 } },
+  { id: 'aevhs', group: 'pixel', label: 'VHS aesthetic (AE)', icon: Sparkles, effect: { vhs: 0.7 } },
+  { id: 'aedircolor', group: 'pixel', label: 'Directional colorize (AE)', icon: Sparkles, effect: { dirColorize: 0.8, dirColorizeFrom: '#0028ff', dirColorizeTo: '#ff2800', dirColorizeAngle: 45 } },
 ]
 
 /** Speed-curve rack (board C brief: 15 curves). One main tool with a down

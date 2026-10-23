@@ -118,6 +118,9 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 104 universal paint canvas tools draw_stroke/paint_clear — the app paint engine exposed headless, seq-px in, normalized store
 105 paint_timelapse: process-recording export to mp4 (strokes appear in draw order) + dreamcore grade preset (glow/grain/chromatic/vignette/dusk gradientMap) on rack + ToolResult sidecar
 106 shape fill honoured on circle/ellipse tools (filled flag) for solid sun discs / planets
+107 AE one-framer directional minimax smear (minimax/minimaxAngle/minimaxMode) in pixelGrade applyOneFramer
+108 AE one-framer VHS aesthetic (scanlines + tape noise + chroma bleed + per-frame band wobble) as `vhs` key
+109 AE one-framer directional colorize (dirColorize + From/To/Angle two-colour ramp) + rack entries for all three
 
-**Total: 106 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 106) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
-Watched videos at this commit: **345** (see youtube-audit/progress.json watched_ids).
+**Total: 109 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 109) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+Watched videos at this commit: **346** (see youtube-audit/progress.json watched_ids).

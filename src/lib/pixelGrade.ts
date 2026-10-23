@@ -281,8 +281,73 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.gradientMap && effect.gradientMap > 0) ||
     (effect.threshold && effect.threshold > 0) ||
     (effect.sharpen && effect.sharpen > 0) ||
-    (effect.findEdges && effect.findEdges > 0),
+    (effect.findEdges && effect.findEdges > 0) ||
+    (effect.minimax && effect.minimax > 0) ||
+    (effect.vhs && effect.vhs > 0) ||
+    (effect.dirColorize && effect.dirColorize > 0),
   )
+}
+
+/** AE "one-framer" family harvested from MatttVfx (j3Lt0dU1Lok):
+ *  directional minimax blur, VHS aesthetic, directional colorize. */
+function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  const mm = e.minimax ?? 0
+  const vhs = e.vhs ?? 0
+  const dc = e.dirColorize ?? 0
+  if (mm <= 0 && vhs <= 0 && dc <= 0) return
+  const img = ctx.getImageData(0, 0, w, h)
+  const d = img.data
+  const src = new Uint8ClampedArray(d)
+  const aRad = ((e.minimaxAngle ?? 0) * Math.PI) / 180
+  const r = Math.round(1 + 6 * Math.min(1, mm))
+  const ddx = Math.round(Math.cos(aRad) * r)
+  const ddy = Math.round(Math.sin(aRad) * r)
+  const modeMin = (e.minimaxMode ?? 'max') === 'min'
+  const a2 = ((e.dirColorizeAngle ?? 45) * Math.PI) / 180
+  const cxA = Math.cos(a2)
+  const cyA = Math.sin(a2)
+  const span = Math.max(1, Math.abs(cxA) * w + Math.abs(cyA) * h)
+  const [f0, f1, f2] = amHex(e.dirColorizeFrom, [0, 40, 255])
+  const [t0, t1, t2] = amHex(e.dirColorizeTo, [255, 40, 0])
+  let st = (seed * 2654435761 + 12345) % 4294967296
+  const rnd = () => (st = (st * 1664525 + 1013904223) % 4294967296) / 4294967296
+  for (let y = 0; y < h; y++) {
+    const wobble = vhs > 0 ? Math.round(Math.sin(y / 9 + seed * 0.7) * 2.2 * vhs) : 0
+    const scan = vhs > 0 && (y & 3) === 0 ? 1 - 0.25 * vhs : 1
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4
+      const sx = wobble ? Math.min(w - 1, Math.max(0, x + wobble)) : x
+      const bi = (y * w + sx) * 4
+      let R = src[bi]
+      let G = src[bi + 1]
+      let B = src[bi + 2]
+      if (mm > 0) {
+        const nx = Math.min(w - 1, Math.max(0, sx + ddx))
+        const ny = Math.min(h - 1, Math.max(0, y + ddy))
+        const j = (ny * w + nx) * 4
+        const l0 = R + G + B
+        const l1 = src[j] + src[j + 1] + src[j + 2]
+        if (modeMin ? l1 < l0 : l1 > l0) { R = src[j]; G = src[j + 1]; B = src[j + 2] }
+      }
+      if (dc > 0) {
+        const t = Math.min(1, Math.max(0, (x * cxA + y * cyA) / span))
+        R = R * (1 - dc) + (f0 + (t0 - f0) * t) * dc
+        G = G * (1 - dc) + (f1 + (t1 - f1) * t) * dc
+        B = B * (1 - dc) + (f2 + (t2 - f2) * t) * dc
+      }
+      if (vhs > 0) {
+        const xs1 = Math.min(w - 1, sx + 2)
+        const xs2 = Math.max(0, sx - 2)
+        R = R * (1 - 0.5 * vhs) + src[(y * w + xs1) * 4] * 0.5 * vhs
+        B = B * (1 - 0.5 * vhs) + src[(y * w + xs2) * 4 + 2] * 0.5 * vhs
+        R *= scan; G *= scan; B *= scan
+        const n = (rnd() - 0.5) * 46 * vhs
+        R += n; G += n; B += n
+      }
+      d[i] = R; d[i + 1] = G; d[i + 2] = B
+    }
+  }
+  ctx.putImageData(img, 0, 0)
 }
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -441,5 +506,6 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
   }
   ctx.putImageData(image, 0, 0)
   applyAmFamily(ctx, effect, canvas.width, canvas.height, seed)
+  applyOneFramer(ctx, effect, canvas.width, canvas.height, seed)
 
 }
