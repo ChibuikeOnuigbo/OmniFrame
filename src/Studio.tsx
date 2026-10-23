@@ -137,6 +137,12 @@ export default function Studio() {
         e.shiftKey ? redo() : undo()
         return
       }
+      if (meta && e.key.toLowerCase() === 'y') {
+        // Ctrl+Y = redo (CapCut/Windows convention), alongside Ctrl+Shift+Z.
+        e.preventDefault()
+        redo()
+        return
+      }
       if (meta && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         st().splitAt(st().playhead)
@@ -186,9 +192,18 @@ export default function Studio() {
           setTool('select')
           break
         case 'Delete':
-        case 'Backspace':
+        case 'Backspace': {
+          // An active (selected) effect instance dies first — it comes back
+          // with Ctrl+Z like every other action.
+          const af = st().activeFx
+          if (af) {
+            e.preventDefault()
+            st().removeActiveFx()
+            break
+          }
           if (selectedClipId) removeClip(selectedClipId)
           break
+        }
         case '+':
         case '=':
           zoomBy(1.25)

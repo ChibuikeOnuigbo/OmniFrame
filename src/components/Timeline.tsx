@@ -58,6 +58,12 @@ import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { placedEffectLabels } from '../lib/adjustment'
+import { FX_QUICK_IDS, fxCatalogById } from '../lib/effectCatalog'
+import { FX_MIN_DUR } from '../lib/fxInstances'
+import type { FxInstance } from '../types'
+
+/** Drag-and-drop payload for effects dragged out of the Effects tab. */
+const FX_MIME = 'application/x-omniframe-fx'
 import { MARKER_KINDS, groupMarkers, markerColorHex, markerGroupBackground, resolveMarkerTime } from '../lib/markers'
 import type { MarkerKind } from '../types'
 import { detectBeatGrid, detectCustomBeat } from '../lib/beatDetect'
@@ -756,6 +762,7 @@ function ClipView({
   selected,
   onStartDrag,
   onContextMenu,
+  onFxContextMenu,
 }: {
   clip: Clip
   asset?: MediaAsset
@@ -764,6 +771,7 @@ function ClipView({
   selected: boolean
   onStartDrag: (clip: Clip, e: React.PointerEvent) => void
   onContextMenu: (e: React.MouseEvent, clip: Clip) => void
+  onFxContextMenu?: (e: React.MouseEvent, clip: Clip, fxId: string) => void
 }) {
   const trimClip = useEditor((s) => s.trimClip)
   const selectClip = useEditor((s) => s.selectClip)
@@ -771,6 +779,13 @@ function ClipView({
   const splitAt = useEditor((s) => s.splitAt)
   const beginHistory = useEditor((s) => s.beginHistory)
   const endHistory = useEditor((s) => s.endHistory)
+  // ---- CapCut-style effect instances dropped onto this clip ----
+  const activeFx = useEditor((s) => s.activeFx)
+  const setActiveFx = useEditor((s) => s.setActiveFx)
+  const addFxInstance = useEditor((s) => s.addFxInstance)
+  const setFxRange = useEditor((s) => s.setFxRange)
+  const requestRightSection = useEditor((s) => s.requestRightSection)
+  const fxDrag = useRef<{ fxId: string; mode: 'move' | 'left' | 'right'; startX: number; origIn: number; origDur: number } | null>(null)
   const trimRef = useRef<{ mode: 'left' | 'right'; startX: number; origStart: number; origDur: number } | null>(null)
 
   const onDown = (mode: 'move' | 'left' | 'right') => (e: React.PointerEvent) => {
@@ -838,6 +853,39 @@ function ClipView({
     }
   }
 
+  const onFxDown = (inst: FxInstance, mode: 'move' | 'left' | 'right') => (e: React.PointerEvent) => {
+    if (e.button === 2) return // right button belongs to the fx context menu
+    if (e.button !== 0) return
+    e.stopPropagation()
+    e.preventDefault()
+    selectClip(clip.id)
+    setActiveFx({ clipId: clip.id, fxId: inst.id })
+    requestRightSection('fxstack')
+    beginHistory()
+    fxDrag.current = { fxId: inst.id, mode, startX: e.clientX, origIn: inst.inP, origDur: inst.duration }
+    ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onFxMove = (e: React.PointerEvent) => {
+    const d = fxDrag.current
+    if (!d) return
+    const dx = (e.clientX - d.startX) / px
+    // The container is closed: setFxRange re-clamps against the parent's
+    // CURRENT length every step, so the white bars can never leak outside.
+    if (d.mode === 'move') setFxRange(clip.id, d.fxId, d.origIn + dx, d.origDur)
+    else if (d.mode === 'left') setFxRange(clip.id, d.fxId, d.origIn + dx, d.origDur - dx)
+    else setFxRange(clip.id, d.fxId, d.origIn, d.origDur + dx)
+  }
+  const onFxUp = (e: React.PointerEvent) => {
+    if (!fxDrag.current) return
+    fxDrag.current = null
+    endHistory()
+    try {
+      ;(e.target as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      /* noop */
+    }
+  }
+
   const left = clip.start * px
   const width = Math.max(6, clip.duration * px)
   const isCompound = clip.kind === 'compound'
@@ -847,6 +895,9 @@ function ClipView({
   const isImage = clip.kind === 'image' || asset?.kind === 'image'
   const isAdjustment = clip.kind === 'adjustment'
   const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage && !isAdjustment)
+  // Only image / video / compound clips host dropped effects (closed container).
+  const canHostFx = (isCompound || isImage || isVideo) && !isAdjustment && !isAudio && !isText && !is3D
+  const fxInsts = clip.fxInstances || []
 
   // Effects/LUTs placed on this clip (own filters + LUT stack + nested
   // adjustment layers for compounds) drive the badge + selection affordance.
@@ -924,6 +975,21 @@ function ClipView({
         e.stopPropagation()
         if (clip.kind === 'compound' && clip.sourceSequenceId) {
           useEditor.getState().openSequence(clip.sourceSequenceId)
+        }
+      }}
+      onDragOver={(e) => {
+        if (canHostFx && e.dataTransfer.types.includes(FX_MIME)) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.dataTransfer.dropEffect = 'copy'
+        }
+      }}
+      onDrop={(e) => {
+        const catalogId = e.dataTransfer.getData(FX_MIME)
+        if (catalogId && canHostFx) {
+          e.preventDefault()
+          e.stopPropagation()
+          addFxInstance(clip.id, catalogId) // full clip length, tagged + auto-opens settings
         }
       }}
       onContextMenu={(e) => onContextMenu(e, clip)}
@@ -1050,6 +1116,72 @@ function ClipView({
       </div>
       {!isCompound && !isAudio && !isText && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}
 
+      {/* Effect instances dropped on this clip: inner bars inside a CLOSED
+          container — drag the body to move, the white end bars to trim; the
+          app clamps every step against the clip's current length. */}
+      {canHostFx && fxInsts.length > 0 && (
+        <div
+          data-testid={`clip-fx-strip-${clip.id}`}
+          className="absolute inset-x-0 bottom-0 z-[22] h-[13px] border-t border-black/60 bg-black/35"
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          {fxInsts.map((inst) => {
+            const fxActive = activeFx?.clipId === clip.id && activeFx.fxId === inst.id
+            return (
+              <div
+                key={inst.id}
+                data-testid={`clip-fx-bar-${inst.id}`}
+                data-fx-id={inst.id}
+                data-in={inst.inP.toFixed(4)}
+                data-duration={inst.duration.toFixed(4)}
+                data-enabled={inst.enabled ? 'true' : 'false'}
+                title={`${inst.name} — ${inst.inP.toFixed(2)}s → ${(inst.inP + inst.duration).toFixed(2)}s · drag body to move, white bars to trim`}
+                onPointerDown={onFxDown(inst, 'move')}
+                onPointerMove={onFxMove}
+                onPointerUp={onFxUp}
+                onContextMenu={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  selectClip(clip.id)
+                  setActiveFx({ clipId: clip.id, fxId: inst.id })
+                  onFxContextMenu?.(e, clip, inst.id)
+                }}
+                className={`absolute top-[2px] bottom-[1px] overflow-hidden rounded-[3px] cursor-grab active:cursor-grabbing ${
+                  inst.enabled
+                    ? 'bg-gradient-to-r from-cyan-400/95 via-sky-500/95 to-blue-500/95'
+                    : 'bg-slate-500/50'
+                } ${fxActive ? 'z-10 ring-1 ring-white shadow-[0_0_8px_rgba(255,255,255,.6)]' : ''}`}
+                style={{ left: inst.inP * px, width: Math.max(6, inst.duration * px) }}
+              >
+                <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-[5px] text-[8px] font-bold tracking-wide text-ink-950 truncate">
+                  {inst.name}
+                </span>
+                <div
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-label={`Trim start of effect ${inst.name}`}
+                  data-testid={`fx-trim-left-${inst.id}`}
+                  onPointerDown={onFxDown(inst, 'left')}
+                  onPointerMove={onFxMove}
+                  onPointerUp={onFxUp}
+                  className="absolute left-0 top-0 bottom-0 z-30 w-[4px] cursor-ew-resize bg-white/95 hover:bg-white"
+                />
+                <div
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-label={`Trim end of effect ${inst.name}`}
+                  data-testid={`fx-trim-right-${inst.id}`}
+                  onPointerDown={onFxDown(inst, 'right')}
+                  onPointerMove={onFxMove}
+                  onPointerUp={onFxUp}
+                  className="absolute right-0 top-0 bottom-0 z-30 w-[4px] cursor-ew-resize bg-white/95 hover:bg-white"
+                />
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {/* trim handles */}
       <div
         role="separator"
@@ -1085,6 +1217,7 @@ export function Timeline() {
   const FPS = useEditor((s) => s.projectFps)
   const dropFrameTimecode = useEditor((s) => s.dropFrameTimecode)
   const duration = useEditor((s) => s.duration)
+  const setLeftTab = useEditor((s) => s.setLeftTab)
   const timelineHeight = useEditor((s) => s.timelineHeight)
   const timelineCollapsed = useEditor((s) => s.timelineCollapsed)
   const setTimelineCollapsed = useEditor((s) => s.setTimelineCollapsed)
@@ -1489,7 +1622,7 @@ export function Timeline() {
 
   // Context Menu State
   const [contextMenu, setContextMenu] = useState<{
-    type: 'clip' | 'transition' | 'empty-track' | 'marker'
+    type: 'clip' | 'transition' | 'empty-track' | 'marker' | 'fx'
     x: number
     y: number
     clip?: Clip
@@ -1497,6 +1630,7 @@ export function Timeline() {
     trackId?: string
     markerId?: string
     groupIds?: string[]
+    fxId?: string
   } | null>(null)
   const [markerPopover, setMarkerPopover] = useState<{ x: number; y: number; ids: string[] } | null>(null)
   const [beatDlg, setBeatDlg] = useState<{
@@ -2364,12 +2498,35 @@ export function Timeline() {
                 }
               }}
               onDragOver={(e) => {
-                if (e.dataTransfer.types.includes('application/x-omniframe-asset')) {
+                if (e.dataTransfer.types.includes('application/x-omniframe-asset') || e.dataTransfer.types.includes(FX_MIME)) {
                   e.preventDefault()
                   e.dataTransfer.dropEffect = 'copy'
                 }
               }}
               onDrop={(e) => {
+                const fxCatalogId = e.dataTransfer.getData(FX_MIME)
+                if (fxCatalogId) {
+                  // Dropped on the track area (not on a clip): becomes a
+                  // standalone effect clip that grades every track BELOW it.
+                  e.preventDefault()
+                  const lanesEl = lanesRef.current
+                  if (!lanesEl) return
+                  const laneRect = lanesEl.getBoundingClientRect()
+                  const startAt = Math.max(0, (e.clientX - laneRect.left) / px)
+                  const fxTarget = evaluateDragTarget(e.clientY, lanesEl, tracks, 'video')
+                  let fxTrackId: string
+                  if (fxTarget.mode === 'above' && fxTarget.referenceTrackId) {
+                    fxTrackId = useEditor.getState().createTrack('video', 'above', fxTarget.referenceTrackId)
+                  } else if (fxTarget.mode === 'below' && fxTarget.referenceTrackId) {
+                    fxTrackId = useEditor.getState().createTrack('video', 'below', fxTarget.referenceTrackId)
+                  } else if (fxTarget.mode === 'dock' && fxTarget.trackId) {
+                    fxTrackId = fxTarget.trackId
+                  } else {
+                    fxTrackId = useEditor.getState().ensureTrack('video')
+                  }
+                  useEditor.getState().addFxAdjustment(fxCatalogId, { trackId: fxTrackId, start: startAt, duration: 2 })
+                  return
+                }
                 const assetId = e.dataTransfer.getData('application/x-omniframe-asset')
                 const asset = assets.find((a) => a.id === assetId)
                 const lanes = lanesRef.current
@@ -2483,6 +2640,9 @@ export function Timeline() {
                         tool={tool}
                         selected={c.id === selectedClipId || selectedClipIds.includes(c.id)}
                         onStartDrag={startClipDrag}
+                        onFxContextMenu={(e, clp, fxId) => {
+                          setContextMenu({ type: 'fx', x: e.clientX, y: e.clientY, clip: clp, fxId })
+                        }}
                         onContextMenu={(e, clp) => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -2869,6 +3029,54 @@ export function Timeline() {
               )
             })()}
 
+            {contextMenu.type === 'fx' && contextMenu.clip && contextMenu.fxId && (() => {
+              const stf = useEditor.getState()
+              const instF = stf.clips.find((c) => c.id === contextMenu.clip!.id)?.fxInstances?.find((f) => f.id === contextMenu.fxId)
+              if (!instF) return null
+              const closeF = () => setContextMenu(null)
+              return (
+                <>
+                  <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={instF.name}>
+                    <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 align-middle" />
+                    {instF.name}
+                  </div>
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-edit"
+                    onClick={() => { stf.setActiveFx({ clipId: contextMenu.clip!.id, fxId: instF.id }); stf.requestRightSection('fxstack'); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                  >
+                    <Sliders size={14} /> Edit properties…
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-dup"
+                    onClick={() => { stf.duplicateFxInstance(contextMenu.clip!.id, instF.id); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                  >
+                    Duplicate (inside container)
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-toggle"
+                    onClick={() => { stf.toggleFxEnabled(contextMenu.clip!.id, instF.id); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                  >
+                    {instF.enabled ? 'Disable' : 'Enable'}
+                  </button>
+                  <div className="my-1 border-t border-ink-700" />
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-del"
+                    onClick={() => { stf.removeFxInstance(contextMenu.clip!.id, instF.id); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-red-400 hover:bg-red-500/20"
+                  >
+                    Delete effect <kbd className="ml-auto text-[10px] text-ink-500">Del</kbd>
+                  </button>
+                </>
+              )
+            })()}
+
             {contextMenu.type === 'clip' && contextMenu.clip && (
               <>
                 <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={contextMenu.clip.name}>
@@ -2914,6 +3122,38 @@ export function Timeline() {
                   <Scissors size={14} />
                   <span>Split at Playhead</span>
                   <kbd className="ml-auto text-[10px] text-ink-500">B</kbd>
+                </button>
+                <div className="my-1 border-t border-ink-700" />
+                <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Add effect</div>
+                {FX_QUICK_IDS.map((qid) => {
+                  const qe = fxCatalogById(qid)
+                  if (!qe) return null
+                  return (
+                    <button
+                      key={qid}
+                      type="button"
+                      data-testid={`ctx-fx-${qid}`}
+                      onClick={() => {
+                        const stq = useEditor.getState()
+                        const added = stq.addFxInstance(contextMenu.clip!.id, qid)
+                        if (!added) stq.addFxAdjustment(qid) // clip can't host → grades tracks below
+                        setContextMenu(null)
+                      }}
+                      className="flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-cyan-500/15"
+                    >
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500" />
+                      <span className="truncate">{qe.name}</span>
+                    </button>
+                  )
+                })}
+                <button
+                  type="button"
+                  data-testid="ctx-fx-browse"
+                  onClick={() => { setLeftTab('effects'); setContextMenu(null) }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                >
+                  <Sliders size={14} />
+                  <span>Browse all effects…</span>
                 </button>
                 <button
                   type="button"

@@ -73,10 +73,16 @@ export function SectionsNavigator({
   children,
   label = 'Panel sections',
   rail,
+  focusRequest,
 }: {
   mode: SidebarSectionMode
   children: React.ReactNode
   label?: string
+  /**
+   * Programmatic focus: when the app adds/selects an effect it auto-opens
+   * the connected section here (store.rightFocus → {id, nonce}).
+   */
+  focusRequest?: { id: string; nonce: number } | null
   /**
    * "General" sections lifted out of the horizontal tab train into a
    * vertical icon rail pinned to the panel's right edge (inspector pattern:
@@ -124,6 +130,17 @@ export function SectionsNavigator({
   useEffect(() => {
     setActiveId((cur) => cur ?? sections[0]?.id ?? null)
   }, [sections])
+
+  // Auto-open the connected section when the store requests focus (e.g. an
+  // effect was dropped on a clip → show its settings immediately).
+  const focusNonce = focusRequest?.nonce
+  useEffect(() => {
+    if (focusRequest && focusRequest.id) {
+      touched.current = true
+      setActiveId(focusRequest.id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusNonce])
 
   // Keyboard arrow navigation across the tab list.
   const onTablistKeyDown = (e: React.KeyboardEvent) => {

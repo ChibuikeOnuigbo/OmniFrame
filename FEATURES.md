@@ -124,6 +124,10 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 110 AM Oscillate with OFFICIAL properties (Magnitude/Frequency/Angle/Wave sine+triangle/Phase) in proceduralFx, wired playback + appRender rect pass
 111 turbulent/fractal-style warp pixel key (sin-domain displacement) in applyOneFramer
 112 lasso_select: freeform polygon selection (7th selection method) via selectionMattes.lassoMatte
+113 CapCut-style effect instances: drop effects ONTO image/video/compound clips (closed container — white trim handles clamp inside the parent every drag step, min 0.1s, infinite stacking), inner timeline bars, Del/Backspace deletes the active one
+114 Effects tab with 9 sub-tabs + search: 9,170 REAL presets (honest count; combinatorial colour-ramp families × angles + glitchology/AM/AE-traced curations) — click applies & auto-opens the right-panel FX Stack, drag tags a clip, L places an adjustment layer
+115 Glitch as an EFFECT (moved out of transitions): intensity/style/scanlines/static/seed/step-rate all editable + keyframeable; transition picker no longer offers glitch (legacy projects still render)
+116 Undo/redo audit: Ctrl+Y redo (with Ctrl+Shift+Z), every fx action snapshot-undoable, clip split/trim carries & re-clamps fx instances
 
-**Total: 112 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 112) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 116 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 116) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **347** (see youtube-audit/progress.json watched_ids).

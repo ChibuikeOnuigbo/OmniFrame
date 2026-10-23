@@ -60,6 +60,7 @@ import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/v
 import { isDemucsModelAvailable } from '../lib/demucs/index.ts'
 import { loudnessGain, measureIntegratedLufs } from '../lib/loudness'
 import { SectionsNavigator } from './SectionsNav'
+import { FxStackSection } from './FxStackSection'
 import { placedEffectLabels, activeEffectKeys } from '../lib/adjustment'
 
 /**
@@ -1199,6 +1200,8 @@ function ClipInspector({ clip }: { clip: Clip }) {
 
       <PlacedEffectsSection clip={clip} />
 
+      <FxStackSection clip={clip} />
+
       {clip.effects && (
         <Section title="Effects">
           <Field label="Brightness">
@@ -1455,6 +1458,7 @@ function AeToolRackSection({ clip }: { clip: Clip }) {
 
 export function RightPanel() {
   const rightOpen = useEditor((s) => s.rightOpen)
+  const rightFocus = useEditor((s) => s.rightFocus)
   const setRightOpen = useEditor((s) => s.setRightOpen)
   const selectedClipId = useEditor((s) => s.selectedClipId)
   const rightPanelWidth = useEditor((s) => s.rightPanelWidth)
@@ -1529,6 +1533,7 @@ export function RightPanel() {
     <SectionsNavigator
       mode={sidebarSectionMode}
       label="Inspector sections"
+      focusRequest={rightFocus}
       rail={[
         { id: 'clip', label: 'General', icon: Settings2 },
         { id: 'transform', label: 'Transform', icon: Scaling },
@@ -1536,6 +1541,7 @@ export function RightPanel() {
         { id: 'appearance', label: 'Appearance', icon: Palette },
         { id: 'audio', label: 'Audio', icon: Volume2 },
         { id: 'effects', label: 'Effects', icon: Sparkles },
+        { id: 'fxstack', label: 'FX Stack', icon: Sparkles },
         { id: 'text-&-title', label: 'Text', icon: Type },
         { id: 'source', label: 'Source', icon: FileVideo },
       ]}

@@ -285,7 +285,8 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.minimax && effect.minimax > 0) ||
     (effect.vhs && effect.vhs > 0) ||
     (effect.dirColorize && effect.dirColorize > 0) ||
-    (effect.turbulent && effect.turbulent > 0),
+    (effect.turbulent && effect.turbulent > 0) ||
+    (effect.glitch && effect.glitch > 0),
   )
 }
 
@@ -363,6 +364,111 @@ function hexToRgb(hex: string): [number, number, number] {
   const v = h.length === 3 ? h.split('').map((c) => c + c).join('') : h
   const n = parseInt(v || '00ff00', 16)
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+}
+
+/**
+ * Glitch — MOVED OUT OF TRANSITIONS into the effect system (board J):
+ * a per-frame signal-damage look with fully editable, fully keyframeable
+ * properties (intensity / style / scanlines / static / seed / step rate).
+ * Ported from the glitchology pillar taxonomy (renderGlitch) so the same
+ * damage vocabulary now lives on clips instead of between them.
+ */
+function glitchRnd(seed: number, step: number): () => number {
+  let s0 = ((seed >>> 0) * 2654435761 + (step >>> 0) * 40503) >>> 0 || 1
+  return () => {
+    s0 = (s0 * 1664525 + 1013904223) >>> 0
+    return s0 / 4294967296
+  }
+}
+
+function applyGlitchGrade(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  const I = Math.max(0, Math.min(1, e.glitch ?? 0))
+  if (I <= 0 || w < 4 || h < 4) return
+  const style = e.glitchStyle ?? 'slice'
+  const speed = Math.max(1, e.glitchSpeed ?? 12)
+  // seed counts frames at 24fps; step the pattern at glitchSpeed Hz
+  const step = Math.floor((seed / 24) * speed)
+  const rnd = glitchRnd(e.glitchSeed ?? 1, step)
+  const scr = document.createElement('canvas')
+  scr.width = w; scr.height = h
+  const sctx = scr.getContext('2d')!
+  sctx.drawImage(ctx.canvas as CanvasImageSource, 0, 0)
+
+  let ox = 0, oy = 0
+  if (style === 'shake') { ox = (rnd() - 0.5) * I * 46; oy = (rnd() - 0.5) * I * 22 }
+  ctx.save()
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  // slice displacement — big bands, not hairlines
+  const slices = Math.round((3 + I * 11) * (style === 'vhs' ? 0.6 : 1))
+  for (let i = 0; i < slices; i++) {
+    const sy = rnd() * h
+    const sh = (0.035 + rnd() * 0.16) * h * (0.6 + I)
+    const dx = (rnd() - 0.5) * 2 * I * 0.38 * w * (style === 'vhs' ? 0.35 : 1)
+    ctx.drawImage(scr as CanvasImageSource, 0, sy, w, sh, dx + ox, sy + oy, w, sh)
+  }
+  // corrupted macroblocks / datamosh self-smear
+  if (style === 'block' || style === 'mosh' || I > 0.7) {
+    const n = Math.round(4 + I * 16)
+    ctx.globalAlpha = style === 'mosh' ? 0.45 : 1
+    for (let i = 0; i < n; i++) {
+      const bw = (0.05 + rnd() * 0.16) * w, bh = (0.04 + rnd() * 0.12) * h
+      const bx = rnd() * (w - bw), by = rnd() * (h - bh)
+      const dx = (rnd() - 0.5) * I * 0.5 * w, dy = (rnd() - 0.5) * I * 0.2 * h
+      ctx.drawImage(scr as CanvasImageSource, bx, by, bw, bh, bx + dx, by + dy, bw, bh)
+    }
+    ctx.globalAlpha = 1
+  }
+  // pixel-sort streaks
+  if (style === 'sort') {
+    const bands = Math.round(3 + I * 8)
+    for (let i = 0; i < bands; i++) {
+      const sy = rnd() * h, sh = 2 + rnd() * 7
+      const off = (rnd() - 0.3) * I * w * 0.9
+      ctx.globalAlpha = 0.5 + rnd() * 0.5
+      ctx.drawImage(scr as CanvasImageSource, 0, sy, w, sh, off, sy, w * (1 + rnd() * 0.3), sh)
+    }
+    ctx.globalAlpha = 1
+  }
+  // signal tears with white gap
+  if (style === 'tear') {
+    const tears = 1 + Math.round(I * 2)
+    for (let i = 0; i < tears; i++) {
+      const sy = rnd() * h, sh = (0.05 + rnd() * 0.12) * h
+      const dx = (rnd() - 0.5) * I * 0.7 * w
+      ctx.drawImage(scr as CanvasImageSource, 0, sy, w, sh, dx, sy + (rnd() - 0.5) * 14, w, sh)
+      ctx.fillStyle = `rgba(255,255,255,${0.5 + rnd() * 0.4})`
+      ctx.fillRect(0, sy - 2, w, 2 + rnd() * 3)
+    }
+  }
+  // RGB split ghosts
+  const rgb = I * (style === 'rgb' ? 44 : 16)
+  if (rgb > 1.5) {
+    ctx.globalAlpha = 0.32
+    ctx.globalCompositeOperation = 'lighter'
+    ctx.filter = 'hue-rotate(115deg) saturate(2.4)'
+    ctx.drawImage(scr as CanvasImageSource, rgb + ox, oy)
+    ctx.filter = 'hue-rotate(-115deg) saturate(2.4)'
+    ctx.drawImage(scr as CanvasImageSource, -rgb + ox, oy)
+    ctx.filter = 'none'
+    ctx.globalAlpha = 1
+    ctx.globalCompositeOperation = 'source-over'
+  }
+  // static patches + scanlines
+  const stN = e.glitchStatic ?? 0.25
+  if (stN > 0) {
+    const n = Math.round(stN * 130 * (0.4 + I))
+    for (let i = 0; i < n; i++) {
+      const g = rnd() > 0.5 ? 255 : 0
+      ctx.fillStyle = `rgba(${g},${g},${g},${0.12 + rnd() * 0.4})`
+      ctx.fillRect(rnd() * w, rnd() * h, 2 + rnd() * 26, 1 + rnd() * 3)
+    }
+  }
+  const sc = e.glitchScan ?? 0.18
+  if (sc > 0) {
+    ctx.fillStyle = `rgba(0,0,0,${sc * 0.4})`
+    for (let y = 0; y < h; y += 4) ctx.fillRect(0, y, w, 1)
+  }
+  ctx.restore()
 }
 
 export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, seed = 0): void {
@@ -515,5 +621,5 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
   ctx.putImageData(image, 0, 0)
   applyAmFamily(ctx, effect, canvas.width, canvas.height, seed)
   applyOneFramer(ctx, effect, canvas.width, canvas.height, seed)
-
+  applyGlitchGrade(ctx, effect, canvas.width, canvas.height, seed)
 }

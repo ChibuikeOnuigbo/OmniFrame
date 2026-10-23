@@ -47,8 +47,10 @@ function findNearestTransitionCandidate(duration: number): TransitionCandidate |
 
 // One tile per pillar (BrandBird-style sub-modes): selecting a pillar shows
 // only its variants in an inner-scroll list, keeping the panel short.
+// Glitch is NOT a transition anymore — it moved to the Effects tab where
+// every property (intensity, style, scanlines, static, seed, rate) is
+// editable and keyframeable. The pillar remains for legacy saved projects.
 const PILLARS: { key: string; label: string; cats: TransitionPresetDef['category'][] }[] = [
-  { key: 'glitch', label: 'Glitch', cats: ['Glitch'] },
   { key: 'blur', label: 'Blur', cats: ['Blur'] },
   { key: 'dissolve', label: 'Dissolve', cats: ['Dissolve'] },
   { key: 'light', label: 'Light', cats: ['Light'] },
@@ -65,7 +67,7 @@ export function TransitionsPanel() {
   const startVisualPreview = useEditor((s) => s.startVisualPreview)
   const [duration, setDuration] = useState(1.0)
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [pillar, setPillar] = useState('glitch')
+  const [pillar, setPillar] = useState('blur')
   const [notice, setNotice] = useState<string | null>(null)
   const [placedMsg, setPlacedMsg] = useState<string | null>(null)
 

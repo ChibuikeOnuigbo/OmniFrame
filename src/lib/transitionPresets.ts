@@ -177,7 +177,13 @@ if (typeof window !== 'undefined') {
 // --- Pillar merge -----------------------------------------------------------
 /** The 350 pillar presets adapted to the shared def shape; family renderers
  *  in pillarRenderers.ts read their `params`. */
-const pillarAsDefs: TransitionPresetDef[] = PILLAR_PRESETS.map((p) => ({ ...p }) as unknown as TransitionPresetDef)
+// Glitch left the transition catalog (board J): it is an EFFECT now — every
+// property editable + keyframeable, dropped on clips or placed as a layer.
+// Legacy projects with saved glitch transitions still render (the pillar
+// renderer stays), but no new glitch transitions can be created.
+const pillarAsDefs: TransitionPresetDef[] = PILLAR_PRESETS
+  .filter((p) => p.family !== 'glitch')
+  .map((p) => ({ ...p }) as unknown as TransitionPresetDef)
 TRANSITION_PRESETS.push(...pillarAsDefs)
 
 export const PILLAR_DEF_BY_TYPE: Partial<Record<TransitionType, PillarPresetDef>> = Object.fromEntries(

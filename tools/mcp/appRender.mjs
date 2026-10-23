@@ -37,6 +37,7 @@ export async function loadAppTs(rel) {
 export const CE = await loadAppTs('src/lib/animation/CurveEngine.ts')
 export const PG = await loadAppTs('src/lib/pixelGrade.ts')
 export const PFX = await loadAppTs('src/lib/proceduralFx.ts')
+export const FXI = await loadAppTs('src/lib/fxInstances.ts')
 
 export class Sequence {
   constructor({ w = 640, h = 360, fps = 24, duration = 2, bg = '#0d0f13' } = {}) {
@@ -75,8 +76,10 @@ export function makeClip({ id, name, asset, natW, natH, start = 0, duration = 2,
 
 /* effect maths — mirrored 1:1 into playback.ts as app features */
 export function applyEffects(x, clip, w, h, t = 0) {
-  // single source of truth: the app's own pixelGrade (AM-named family included)
-  PG.applyPixelGrade(x.canvas, clip.effects || {}, Math.round(t * 24))
+  // single source of truth: the app's own pixelGrade (AM-named family included),
+  // with dropped effect instances merged in (CapCut model, board J)
+  const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}
+  PG.applyPixelGrade(x.canvas, eff, Math.round(t * 24))
 }
 
 export function cardFlipFactor(clip, t) {
@@ -107,6 +110,20 @@ export function applyShapeMatte(x, mask, W, H) {
 const PU = await loadAppTs('src/lib/patchUnder.ts')
 export function applySmartPatchMatte(x, patch, r, seq) { PU.applyPatchUnder(x, patch, r, seq.w, seq.h) }
 
+/** Headless mirror of playback's effectFilterString (CSS-filter keys). */
+function cssFilterOf(eff) {
+  const f = []
+  if (eff.brightness != null && eff.brightness !== 1) f.push(`brightness(${eff.brightness})`)
+  if (eff.contrast != null && eff.contrast !== 1) f.push(`contrast(${eff.contrast})`)
+  if (eff.saturation != null && eff.saturation !== 1) f.push(`saturate(${eff.saturation})`)
+  if (eff.grayscale) f.push(`grayscale(${eff.grayscale})`)
+  if (eff.sepia) f.push(`sepia(${eff.sepia})`)
+  if (eff.invert) f.push(`invert(${eff.invert})`)
+  if (eff.hueRotate) f.push(`hue-rotate(${eff.hueRotate}deg)`)
+  if (eff.blur) f.push(`blur(${eff.blur}px)`)
+  return f.join(' ')
+}
+
 function sampleAt(canvas, x, y) {
   const d = canvas.getContext('2d').getImageData(Math.round(x), Math.round(y), 1, 1).data
   return `rgb(${d[0]},${d[1]},${d[2]})`
@@ -117,7 +134,22 @@ export function renderFrame(seq, t) {
   x.fillStyle = seq.bg; x.fillRect(0, 0, seq.w, seq.h)
   for (const clip of seq.clips) {
     if (t < clip.start || t >= clip.start + clip.duration) continue
-    const eff = clip.effects || {}
+    // Standalone effect clip (adjustment): grades everything already drawn —
+    // clips earlier in the list are the tracks BELOW it. Same law as playback.
+    if (clip.kind === 'adjustment') {
+      const aEff = FXI.mergeFxInstances(clip, t - clip.start) || {}
+      const flt = cssFilterOf(aEff)
+      if (flt) {
+        const tmp = makeCanvas(seq.w, seq.h)
+        const tx = tmp.getContext('2d')
+        tx.filter = flt
+        tx.drawImage(c, 0, 0)
+        c.getContext('2d').drawImage(tmp, 0, 0)
+      }
+      PG.applyPixelGrade(c, aEff, Math.round(t * 24))
+      continue
+    }
+    const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}
     const tt = PFX.pfxLocalTime(eff, t, clip.start, clip.duration)
     const sh = PFX.pfxShake(eff, t)
   const osc = PFX.pfxOscillate(eff, t)
@@ -142,7 +174,7 @@ export function renderFrame(seq, t) {
     clip.draw(sx, s.width, s.height, Math.max(0, tt - clip.start))
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, s.width, s.height) }
-    applyEffects(sx, clip, s.width, s.height)
+    applyEffects(sx, clip, s.width, s.height, t)
     if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) {
       const m = clip.mask
       const mc = makeCanvas(m.mw, m.mh)

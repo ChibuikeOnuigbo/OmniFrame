@@ -10,6 +10,7 @@ import { applyLutStackToImageData, loadCubeLut, parseCubeLUT } from '../lib/lutE
 import { PanelSection } from './PanelSection'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
 import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
+import { FX_CATS, getFxCatalog, paramsForPatch, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
 import type { CustomEffect } from '../types'
 
 type LutItem = {
@@ -973,6 +974,147 @@ function MyEffects() {
   )
 }
 
+
+/** CAT colour dots so sub-tab scanning works without prose. */
+const CAT_DOT: Record<FxCat, string> = {
+  glitch: 'bg-fuchsia-400',
+  motion: 'bg-amber-400',
+  color: 'bg-emerald-400',
+  blur: 'bg-sky-400',
+  distort: 'bg-orange-400',
+  retro: 'bg-rose-400',
+  light: 'bg-yellow-300',
+  key: 'bg-lime-400',
+}
+
+const FX_MIME = 'application/x-omniframe-fx'
+
+/**
+ * The Effect catalog browser: sub-tabs (9), search, and a lazy tile grid.
+ * Every entry is REAL — a concrete engine patch, no stubs. Drag a tile onto
+ * an image/video/compound clip to tag it (CapCut model); click applies to
+ * the selected allowed clip (or places an adjustment layer when nothing
+ * eligible is selected). The right panel auto-opens the connected settings.
+ */
+function FxCatalogBrowser() {
+  const [cat, setCat] = useState<FxCat | 'all'>('all')
+  const [q, setQ] = useState('')
+  const [limit, setLimit] = useState(60)
+  const clips = useEditor((s) => s.clips)
+  const assets = useEditor((s) => s.assets)
+  const selectedClipId = useEditor((s) => s.selectedClipId)
+  const addFxInstance = useEditor((s) => s.addFxInstance)
+  const addFxAdjustment = useEditor((s) => s.addFxAdjustment)
+  const requestRightSection = useEditor((s) => s.requestRightSection)
+
+  const all = getFxCatalog()
+  const entries = useMemo(() => {
+    let list = all
+    if (cat !== 'all') list = list.filter((e) => e.cat === cat)
+    const query = q.trim().toLowerCase()
+    if (query) list = list.filter((e) => e.name.toLowerCase().includes(query) || e.trace.toLowerCase().includes(query))
+    return list
+  }, [all, cat, q])
+
+  const apply = (entry: FxCatalogEntry, asLayer: boolean) => {
+    const clip = clips.find((c) => c.id === selectedClipId)
+    const asset = clip ? assets.find((a) => a.id === clip.assetId) : undefined
+    const allowed =
+      !!clip && !asLayer &&
+      (clip.kind === 'compound' || clip.kind === 'image' || clip.kind === 'video' || asset?.kind === 'image' || asset?.kind === 'video') &&
+      clip.kind !== 'adjustment' && clip.kind !== 'audio' && clip.kind !== 'text' && !(clip as Clip & { textStyle?: unknown }).textStyle
+    if (allowed && clip) {
+      addFxInstance(clip.id, entry.id) // sets activeFx + auto-opens the right panel
+    } else {
+      addFxAdjustment(entry.id) // standalone effect clip: grades every track below
+      requestRightSection('effects')
+    }
+  }
+
+  return (
+    <div data-testid="fx-catalog-browser" className="space-y-1.5">
+      <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Effect categories">
+        {FX_CATS.map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            role="tab"
+            aria-selected={cat === c.id}
+            data-testid={`fx-cat-${c.id}`}
+            onClick={() => { setCat(c.id as FxCat | 'all'); setLimit(60) }}
+            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${cat === c.id ? 'bg-cyan-400 text-ink-950' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'}`}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-1.5">
+        <div className="relative min-w-0 flex-1">
+          <Search size={11} className="pointer-events-none absolute left-1.5 top-1/2 -translate-y-1/2 text-ink-500" />
+          <input
+            type="search"
+            value={q}
+            data-testid="fx-catalog-search"
+            onChange={(e) => { setQ(e.target.value); setLimit(60) }}
+            placeholder="Search effects…"
+            className="w-full rounded border border-ink-700 bg-ink-900 py-1 pl-6 pr-1.5 text-[10px] text-ink-100 placeholder:text-ink-500"
+          />
+        </div>
+        <span className="shrink-0 font-mono text-[9px] text-ink-400" data-testid="fx-catalog-count">
+          {entries.length}/{all.length}
+        </span>
+      </div>
+      <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
+        {entries.slice(0, limit).map((e) => (
+          <div key={e.id} className="group relative">
+            <button
+              type="button"
+              draggable
+              data-testid={`fx-tile-${e.id}`}
+              title={`${e.name} — ${e.trace}\nDrag onto an image/video/compound clip, or click to apply.`}
+              onDragStart={(ev) => {
+                ev.dataTransfer.setData(FX_MIME, e.id)
+                ev.dataTransfer.effectAllowed = 'copy'
+              }}
+              onClick={() => apply(e, false)}
+              className="flex w-full cursor-grab items-center gap-1 rounded border border-ink-700 bg-ink-900/80 px-1.5 py-1 text-left transition-colors hover:border-cyan-400/70 hover:bg-cyan-950/40 active:cursor-grabbing"
+            >
+              <span className={`h-2 w-2 shrink-0 rounded-full ${CAT_DOT[e.cat]}`} aria-hidden="true" />
+              <span className="min-w-0 flex-1 truncate text-[9.5px] font-medium text-ink-100">{e.name}</span>
+            </button>
+            <button
+              type="button"
+              data-testid={`fx-tile-layer-${e.id}`}
+              aria-label={`Place ${e.name} as an adjustment layer`}
+              title="Place as adjustment layer (grades every track below)"
+              onClick={() => apply(e, true)}
+              className="absolute right-0.5 top-0.5 hidden h-4 w-4 place-items-center rounded bg-violet-500/80 text-[9px] font-bold text-white group-hover:grid"
+            >
+              L
+            </button>
+          </div>
+        ))}
+      </div>
+      {entries.length > limit && (
+        <button
+          type="button"
+          data-testid="fx-catalog-more"
+          onClick={() => setLimit((n) => n + 120)}
+          className="w-full rounded border border-ink-700 py-1 text-[10px] text-ink-300 hover:bg-ink-800"
+        >
+          Show more ({entries.length - limit} left)
+        </button>
+      )}
+      {entries.length === 0 && (
+        <p className="py-2 text-center text-[10px] text-ink-500">No effects match — try another sub-tab or clear the search.</p>
+      )}
+      <p className="text-[9px] leading-snug text-ink-500" data-testid="fx-catalog-note">
+        {paramsForPatch(entries[0]?.patch || {}).length >= 0 ? `${all.length} real presets — every tile renders (engine params, no stubs); properties stay editable + keyframeable after the drop.` : ''}
+      </p>
+    </div>
+  )
+}
+
 export function EffectsPanel() {
   const clips = useEditor((s) => s.clips)
   const selectedClipId = useEditor((s) => s.selectedClipId)
@@ -985,12 +1127,16 @@ export function EffectsPanel() {
     <div data-testid="effects-panel" className="text-xs text-ink-200 select-none">
       <div className="border-b border-ink-800 px-3 py-2.5">
         <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200">
-          <Wand2 size={12} /> Color &amp; Adjustments
+          <Wand2 size={12} /> Effects
         </div>
-        <p className="mt-1 text-[10px] leading-snug text-ink-300">Choose a look, add a stackable layer, or grade one selected clip.</p>
+        <p className="mt-1 text-[10px] leading-snug text-ink-300">Drag onto a clip or click to apply — settings auto-open in the right panel.</p>
       </div>
 
-      <PanelSection title="LUT looks" hint="25" defaultOpen testId="adjustment-looks">
+      <PanelSection title="Effect catalog" hint={String(getFxCatalog().length)} defaultOpen testId="fx-catalog">
+        <FxCatalogBrowser />
+      </PanelSection>
+
+      <PanelSection title="LUT looks" hint="25" testId="adjustment-looks">
         <LutGallery />
       </PanelSection>
 

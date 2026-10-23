@@ -1,5 +1,13 @@
 # Glitch pillar — tutorial demand map (25,000 entries per pillar)
 
+> **MOVED (board J, 2026-10-23):** glitch is an **EFFECT**, not a transition.
+> The technique family (slice/rgb/block/sort/vhs/mosh/tear/shake x intensity
+> tiers) now lives in the Effects catalog (`fx_catalog`, ids `glitch-*`) where
+> every property — intensity, style, scanlines, static, seed, step rate — is
+> editable AND keyframeable, dropped onto clips CapCut-style or placed as an
+> adjustment layer. The Transitions picker no longer offers glitch; the pillar
+> renderer stays so legacy saved projects still play.
+
 **Honesty first:** generated demand map, NOT a watch log. Each line is a
 real YouTube SEARCH link for a researched title pattern; nothing was
 watched frame-by-frame. Matrix: 211 channels from your subscriptions.csv

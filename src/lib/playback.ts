@@ -16,16 +16,21 @@ import { applyPatchUnder, type PatchUnderSpec } from './patchUnder'
 
 /** AM-named procedural family: warped local time + auto-shake offset. */
 function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<typeof evaluateClipAnimation> {
-  const t2 = pfxLocalTime(clip.effects, time, clip.start, clip.duration)
+  // Effect instances dropped on the clip join its own effects for the
+  // procedural pass too (oscillate/auto-shake/strobe/echo are keyframeable
+  // from the Effects tab exactly like the pixel engines).
+  const eff = mergeFxInstances(clip, fxLocalTime(clip, time))
+  const t2 = pfxLocalTime(eff, time, clip.start, clip.duration)
   const ev = evaluateClipAnimation(clip, t2)
-  const sh = pfxShake(clip.effects, time)
-    const osc = pfxOscillate(clip.effects, time)
+  const sh = pfxShake(eff, time)
+    const osc = pfxOscillate(eff, time)
     sh.dx += osc.dx; sh.dy += osc.dy
   ev.x += sh.dx
   ev.y += sh.dy
   return ev
 }
 import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
+import { mergeFxInstances, fxLocalTime } from './fxInstances'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -550,8 +555,11 @@ export class PreviewEngine {
 
   private effectsForRender(clip: Clip, time: number): ClipEffect | undefined {
     const preview = this.activeVisualPreviewAt(time)
-    if (preview?.kind !== 'clip-effect' || preview.clipId !== clip.id) return clip.effects
-    return { ...clip.effects, ...preview.effect }
+    // CapCut-style instances dropped on the clip merge over its own effects
+    // (per-property keyframes evaluated at instance-local time).
+    const base = mergeFxInstances(clip, fxLocalTime(clip, time))
+    if (preview?.kind !== 'clip-effect' || preview.clipId !== clip.id) return base
+    return { ...base, ...preview.effect }
   }
 
   private hasPreviewLutFor(clip: Clip, time: number) {
@@ -1865,14 +1873,15 @@ export class PreviewEngine {
     // into an isolated scratch canvas, grade it there, composite back so
     // sibling content on the target canvas is untouched. A clip Mask uses the
     // same isolation: it mattes the clip's own graded pixels (only).
-    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(clip.effects) || !!(clip as unknown as { patch?: unknown }).patch)) {
+    const fxEff = this.effectsForRender(clip, time)
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(fxEff) || hasClipFxLayers(fxEff) || !!(clip as unknown as { patch?: unknown }).patch)) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawClip(octx, el, clip, asset, time, true)
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
-      if (hasPixelGrade(clip.effects)) applyPixelGrade(scratch, clip.effects!, Math.round(time * 24))
-      if (hasClipFxLayers(clip.effects)) applyClipFxLayers(scratch, clip.effects!, time)
+      if (hasPixelGrade(fxEff)) applyPixelGrade(scratch, fxEff!, Math.round(time * 24))
+      if (hasClipFxLayers(fxEff)) applyClipFxLayers(scratch, fxEff!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of
       // an enclosing compound must keep applying to this clip's pixels).
@@ -1883,7 +1892,7 @@ export class PreviewEngine {
         ctx.drawImage(scratch, -this.width / 2, -this.height / 2) // compound-local target
       }
       // AM Echo Keyframes / Motion Blur: ghost the rendered clip at past times
-      const ghosts = [...pfxEchoTimes(clip.effects, time), ...pfxMotionBlurSamples(clip.effects, time, (this as unknown as { projectFps?: number }).projectFps || 24)]
+      const ghosts = [...pfxEchoTimes(fxEff, time), ...pfxMotionBlurSamples(fxEff, time, (this as unknown as { projectFps?: number }).projectFps || 24)]
       for (const g of ghosts) {
         if (g.time < clip.start) continue
         const gev = evalClipPfx(clip, g.time)
@@ -2108,13 +2117,14 @@ export class PreviewEngine {
     // compound's pixels only.
     const hasNestedAdjustment = childClips.some((c) => c.kind === 'adjustment')
     const { stack: ownLuts } = this.buildLutStack(clip, time)
-    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled)) {
+    const cFxEff = this.effectsForRender(clip, time)
+    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled || hasPixelGrade(cFxEff) || hasClipFxLayers(cFxEff))) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
-      if (hasPixelGrade(clip.effects)) applyPixelGrade(scratch, clip.effects!, Math.round(time * 24))
-      if (hasClipFxLayers(clip.effects)) applyClipFxLayers(scratch, clip.effects!, time)
+      if (hasPixelGrade(cFxEff)) applyPixelGrade(scratch, cFxEff!, Math.round(time * 24))
+      if (hasClipFxLayers(cFxEff)) applyClipFxLayers(scratch, cFxEff!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state intact (outer opacity /
       // filter / transform keep applying, exactly like non-isolated draws).

@@ -48,7 +48,10 @@
   "test_ans_result/H_oneframer/oneframer-vhs.mp4",
   "test_ans_result/I_gaps/gaps-all.mp4",
   "test_ans_result/I_gaps/gaps-oscillate.mp4",
-  "test_ans_result/I_gaps/gaps-turbulent.mp4"
+  "test_ans_result/I_gaps/gaps-turbulent.mp4",
+  "test_ans_result/J_effects/fx-glitch-keyframed.mp4",
+  "test_ans_result/J_effects/fx-layer-noir.mp4",
+  "test_ans_result/J_effects/fx-ranged-vhs.mp4"
  ],
  "json": [
   "test_ans_result/A_analysis.json",
@@ -101,6 +104,9 @@
   "test_ans_result/I_gaps/gaps-all.json",
   "test_ans_result/I_gaps/gaps-oscillate.json",
   "test_ans_result/I_gaps/gaps-turbulent.json",
+  "test_ans_result/J_effects/fx-glitch-keyframed.json",
+  "test_ans_result/J_effects/fx-layer-noir.json",
+  "test_ans_result/J_effects/fx-ranged-vhs.json",
   "test_ans_result/evidence/timeline-A-01.png.json",
   "test_ans_result/evidence/timeline-A-02.png.json",
   "test_ans_result/evidence/timeline-A-03.png.json",

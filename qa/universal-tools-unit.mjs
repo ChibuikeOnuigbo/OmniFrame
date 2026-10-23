@@ -72,6 +72,31 @@ const ls = await registry.call('lasso_select', { clipId: 'clip-1', points: [[60,
 if (!ls.ok || ls.data.method !== 'lasso' || !(ls.data.pixels > 0)) { console.error('FAIL lasso_select', ls.data); fail++ }
 if (!registry.list().some(x => x.name === 'lasso_select')) { console.error('FAIL lasso_select missing from catalog'); fail++ }
 
+// ---- Board J: CapCut-style effect system (catalog, drop-on-clip, closed container, keyframes, layers, glitch-out-of-transitions) ----
+await registry.call('project_new', { w: 320, h: 180, fps: 12, duration: 2 })
+await registry.call('import_media', { path: 'qa/shots/01-home.png', fit: 'contain', scale: 1 })
+const catJ = await registry.call('fx_catalog', { limit: 1 })
+if (!catJ.ok || !(catJ.data.total > 5000) || !(catJ.data.byCat.glitch >= 40)) { console.error('FAIL fx_catalog real counts', catJ.data && catJ.data.total); fail++ }
+const ga = await registry.call('fx_add', { catalogId: 'glitch-rgb-heavy', keys: { glitch: [[0, 0], [1.5, 1]] } })
+if (!ga.ok || ga.data.fxId !== 'fx-1' || ga.data.inP !== 0 || ga.data.duration !== 2) { console.error('FAIL fx_add full-length drop', ga.data); fail++ }
+const gcl = await registry.call('fx_update', { clipId: 'clip-1', fxId: 'fx-1', inP: 999, duration: 50 })
+if (!gcl.ok || gcl.data.inP !== 0 || gcl.data.duration !== 2) { console.error('FAIL closed-container clamp (bars pushed out!)', gcl.data); fail++ }
+const { renderFrame: rfJ } = await import('../tools/mcp/appRender.mjs')
+const grabJ = (t) => rfJ(SESSION.seq, t).getContext('2d').getImageData(0, 0, 320, 180).data
+const diffJ = (a, b) => { let n = 0; for (let i = 0; i < a.length; i += 4) if (a[i] !== b[i] || a[i + 1] !== b[i + 1] || a[i + 2] !== b[i + 2]) n++; return n }
+const gdiff = diffJ(grabJ(0.1), grabJ(1.4))
+if (gdiff < 1000) { console.error('FAIL keyframed glitch intensity is static', gdiff); fail++ }
+await registry.call('fx_remove', { clipId: 'clip-1', fxId: 'fx-1' })
+const halfJ = await registry.call('fx_add', { catalogId: 'vhs-2', inP: 1, duration: 1 })
+if (!halfJ.ok || halfJ.data.inP !== 1 || halfJ.data.duration !== 1) { console.error('FAIL ranged drop', halfJ.data); fail++ }
+if (diffJ(grabJ(0.5), grabJ(1.5)) < 1000) { console.error('FAIL effect range not honoured inside clip'); fail++ }
+const beforeL = grabJ(0.5)
+const layJ = await registry.call('fx_add', { catalogId: 'look-noir', asLayer: true })
+if (!layJ.ok || layJ.data.kind !== 'adjustment') { console.error('FAIL fx adjustment layer', layJ.data); fail++ }
+if (diffJ(beforeL, grabJ(0.5)) < 1000) { console.error('FAIL adjustment layer did not grade tracks below'); fail++ }
+for (const t of ['fx_catalog', 'fx_add', 'fx_update', 'fx_remove'])
+  if (!registry.list().some(x => x.name === t)) { console.error('FAIL missing tool', t); fail++ }
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })

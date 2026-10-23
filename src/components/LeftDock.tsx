@@ -60,7 +60,7 @@ const TABS: TabDef[] = [
   { id: 'media', label: 'Media Library', icon: LibraryBig, category: 'video', desc: 'Import video, audio & images; ORA raster layers, PSD RGB/8-bit subset & KRA merged still (no Procreate)' },
   { id: 'text', label: 'Text & Titles', icon: Type, category: 'video', desc: 'Typography, Captions & Subtitles' },
   { id: 'transitions', label: 'Transitions', icon: Shuffle, category: 'video', desc: 'Dissolves, Wipes & Light Leaks' },
-  { id: 'effects', label: 'LUTs & Adjustments', icon: SlidersHorizontal, category: 'video', desc: '25 built-in LUT looks, .cube import, clip grades, adjustment layers & masks' },
+  { id: 'effects', label: 'Effects', icon: SlidersHorizontal, category: 'video', desc: 'Effect catalog (drag onto clips — all properties editable + keyframeable), LUT looks, adjustment layers & masks' },
   { id: 'audio', label: 'Audio', icon: Volume2, category: 'video', desc: 'Voice isolation, music split, mic recording, EQ/reverb, pitch/tempo, four stems & vocal patching' },
   { id: 'relationships', label: 'Link & Groups', icon: Link2, category: 'video', desc: 'Parenting & Ripple Groups' },
   { id: 'pack', label: 'Desktop Pack', icon: AppWindow, category: 'video', desc: 'Screen-life pack: fake macOS/Windows desktops, Chrome & Safari bars, cursor assets, overlay frames, edit presets & quick 3D' },

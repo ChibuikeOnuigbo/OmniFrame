@@ -10,6 +10,7 @@
 <h2>Looks</h2><ul class='grid'>
 <li><b>Effects panel (video/body/face categories)</b> — stackable clip effects</li>
 <li><b>Transitions panel (+ Apply to all, preset duration)</b> — clip-joint transitions</li>
+<li><b>Effects drag-and-drop (board J implementation)</b> — drag an effect onto an image/video/compound clip: it becomes a tagged inner clip spanning the full length with white trim handles inside a closed container (never leaks outside the parent, min 0.1s, stack infinite); dropping on the track area makes an adjustment-style effect clip grading every track below; right-click → Add effect for the quick popup. Glitch lives here as an effect (keyframeable intensity), NOT as a transition.</li>
 <li><b>Filters &amp; LUTs</b> — colour looks</li>
 <li><b>Chroma key / remove background</b> — keying &amp; cutout</li>
 <li><b>Background blur / canvas</b> — frame fills</li>

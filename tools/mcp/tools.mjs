@@ -366,9 +366,9 @@ const APP_FUNCTION_CATALOG = {
   edit: ['transform (pos/size/rot)', 'mask draw/clear', 'roto points mask', 'effects inside', 'blend+opacity', 'speed curve', 'convert to compound'],
   select: ['click preview coords', 'select by id', 'expand to group'],
   contextMenu: ['group', 'ungroup', 'new-null', 'compound', 'duplicate', 'delete', 'bring-front', 'send-back'],
-  effects: ['pixelate', 'waveWarp', 'chromaKey', 'lumaKey (bg removal)', 'fractalBlur', 'cardFlip', 'posterize', 'grain', 'chromatic', 'lightType/intensity/color/falloff', 'particleFx: feathers/embers/dust/bokeh/sparkles/snow/rain/petals', 'overlayFx: scanlines/halftone/spotlight/vignette/lightleak/frameglow', 'replaceBg: synthwave/aurora/grid/bokeh/sunset/studio'],
+  effects: ['pixelate', 'waveWarp', 'chromaKey', 'lumaKey (bg removal)', 'fractalBlur', 'cardFlip', 'posterize', 'grain', 'chromatic', 'lightType/intensity/color/falloff', 'particleFx: feathers/embers/dust/bokeh/sparkles/snow/rain/petals', 'overlayFx: scanlines/halftone/spotlight/vignette/lightleak/frameglow', 'replaceBg: synthwave/aurora/grid/bokeh/sunset/studio', 'fx catalog (9k+ real presets, 8 sub-tabs) via fx_catalog/fx_add/fx_update/fx_remove', 'glitch EFFECT (intensity/style/scan/static/seed/rate, keyframeable — no longer a transition)'],
   keyframes: ['position_x/y/z', 'rotation_x/y/z', 'scale_x/y/z', 'opacity', 'pivot_x/y', 'interpolations: constant/linear/bezier/ease-in/ease-out/ease-in-out/cubic-in/cubic-out/back/bounce/elastic'],
-  presetsCatalogs: ['TEXT_PRESETS', 'PILLAR_PRESETS', 'TRANSITION_PRESETS', 'RATIO_PRESETS', 'speedCurves (15)'],
+  presetsCatalogs: ['TEXT_PRESETS', 'PILLAR_PRESETS (glitch family now EFFECTS)', 'TRANSITION_PRESETS (glitch removed)', 'RATIO_PRESETS', 'speedCurves (15)', 'effectCatalog (9k+)'],
 }
 class Help extends MCPTool {
   constructor() { super('help', 'Explains EVERY tool + lists all app functions/creation types so an agent can discover instead of guess.', {}) }
@@ -683,4 +683,77 @@ class OmniMove extends MCPTool {
     return SESSION.note('omniframe_move', { x, y, t }, { clipId: c.id, interpolation: 'constant', slide: false })
   }
 }
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect]) registry.register(new T())
+/* ---------- CapCut-style effect instances (board J) ---------- */
+const FXC = await loadAppTs('src/lib/effectCatalog.ts')
+const FXI = await loadAppTs('src/lib/fxInstances.ts')
+
+class FxCatalog extends MCPTool {
+  constructor() { super('fx_catalog', 'Major tool: the Effects tab catalog — real engine presets (glitch/motion/color/blur/distort/retro/light/key). Every entry renders; all properties stay editable + keyframeable after the drop.', { cat: 'all|glitch|motion|color|blur|distort|retro|light|key', q: 'name search', limit: 'max entries returned (default 12)' }) }
+  async run({ cat = 'all', q = '', limit = 12 }) {
+    const all = FXC.getFxCatalog()
+    let list = cat && cat !== 'all' ? all.filter(e => e.cat === cat) : all
+    if (q) list = list.filter(e => e.name.toLowerCase().includes(String(q).toLowerCase()))
+    const byCat = {}
+    for (const e of all) byCat[e.cat] = (byCat[e.cat] || 0) + 1
+    return SESSION.note('fx_catalog', { cat, q, limit }, {
+      total: all.length, byCat,
+      entries: list.slice(0, Number(limit) || 12).map(e => ({ id: e.id, name: e.name, cat: e.cat, params: Object.keys(e.patch), trace: e.trace })),
+    })
+  }
+}
+class FxAdd extends MCPTool {
+  constructor() { super('fx_add', 'Major tool: drop a catalog effect ONTO a clip (image/video/compound) — CapCut model. Defaults to FULL clip length inside the closed container; or asLayer=true places a standalone effect clip that grades every track below it. keyParam/keyFrom/keyTo build a 2-point keyframe ramp (every numeric property is keyframeable).', { clipId: '(default selected)', catalogId: 'fx_catalog id', inP: 's from clip start', duration: 's (min 0.1)', params: '{key:value} overrides', keys: '{param:[[t,v],...]} keyframes', keyParam: 'ramp property', keyFrom: 'ramp start value', keyTo: 'ramp end value', asLayer: 'bool' }) }
+  async run({ clipId, catalogId, inP, duration, params, keys, keyParam, keyFrom, keyTo, asLayer }) {
+    const s = seq()
+    const entry = FXC.fxCatalogById(catalogId)
+    if (!entry) throw new Error(`unknown catalog id "${catalogId}": browse fx_catalog first`)
+    if (asLayer) {
+      const layer = makeClip({ id: `fxlayer-${s.clips.length + 1}`, name: `FX: ${entry.name}`, asset: 'fx-layer', natW: s.w, natH: s.h, start: inP || 0, duration: duration || s.duration, draw: () => {} })
+      layer.kind = 'adjustment'
+      layer.effects = { ...entry.patch, ...(params || {}) }
+      if (keys) layer.fxInstances = undefined
+      s.addClip(layer) // drawn last = above = grades everything below it
+      SESSION.selection = layer
+      return SESSION.note('fx_add', { catalogId, asLayer: true }, { clipId: layer.id, kind: 'adjustment', affects: 'all tracks below' })
+    }
+    const c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    if (!c) throw new Error('no target clip')
+    const range = FXI.clampFxToClip(Number(inP) || 0, Number(duration) || c.duration, c.duration)
+    const fxId = `fx-${(c.fxInstances || []).length + 1}`
+    const inst = { id: fxId, catalogId, name: entry.name, inP: range.inP, duration: range.duration, params: { ...entry.patch, ...(params || {}) }, keys: keys || {}, enabled: true }
+    if (keyParam) inst.keys[keyParam] = [{ t: 0, v: Number(keyFrom) || 0 }, { t: inst.duration, v: Number(keyTo) || 0 }]
+    c.fxInstances = [...(c.fxInstances || []), inst]
+    return SESSION.note('fx_add', { clipId: c.id, catalogId }, { fxId, inP: +range.inP.toFixed(3), duration: +range.duration.toFixed(3), params: inst.params })
+  }
+}
+class FxUpdate extends MCPTool {
+  constructor() { super('fx_update', 'Major tool: edit a dropped effect instance — params, per-property keyframes, enabled, and range (the closed container re-clamps inP/duration against the parent clip every call).', { clipId: '', fxId: '', params: '{key:value}', keys: '{param:[[t,v],...]}', inP: '', duration: '', enabled: 'bool' }) }
+  async run({ clipId, fxId, params, keys, inP, duration, enabled }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const inst = (c?.fxInstances || []).find(f => f.id === fxId)
+    if (!inst) throw new Error(`no fx instance "${fxId}" on clip ${c?.id}`)
+    if (params) inst.params = { ...inst.params, ...params }
+    if (keys) {
+      inst.keys = inst.keys || {}
+      for (const [k, pts] of Object.entries(keys)) inst.keys[k] = (pts || []).map(([t, v]) => ({ t: Number(t), v: Number(v) })).sort((a, b) => a.t - b.t)
+    }
+    if (enabled !== undefined) inst.enabled = !!enabled
+    if (inP !== undefined || duration !== undefined) {
+      const range = FXI.clampFxToClip(inP !== undefined ? Number(inP) : inst.inP, duration !== undefined ? Number(duration) : inst.duration, c.duration)
+      inst.inP = range.inP; inst.duration = range.duration
+    }
+    return SESSION.note('fx_update', { clipId: c.id, fxId }, { inP: +inst.inP.toFixed(3), duration: +inst.duration.toFixed(3), params: inst.params, keys: Object.fromEntries(Object.entries(inst.keys || {}).map(([k, v]) => [k, v.length])) })
+  }
+}
+class FxRemove extends MCPTool {
+  constructor() { super('fx_remove', 'Major tool: delete a dropped effect instance (Del/Backspace in the app; Ctrl+Z brings it back there).', { clipId: '', fxId: '' }) }
+  async run({ clipId, fxId }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const before = (c?.fxInstances || []).length
+    if (c) c.fxInstances = (c.fxInstances || []).filter(f => f.id !== fxId)
+    if (!c || (c.fxInstances || []).length === before) throw new Error(`no fx instance "${fxId}" on clip ${c?.id}`)
+    return SESSION.note('fx_remove', { clipId: c.id, fxId }, { remaining: c.fxInstances.length })
+  }
+}
+
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())

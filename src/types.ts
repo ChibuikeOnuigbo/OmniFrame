@@ -642,6 +642,14 @@ export interface ClipEffect {
   oscillatePhase?: number // AM Phase 0..1000
   /** AM-style turbulent/fractal warp: sin-domain pixel displacement. */
   turbulent?: number
+  /** Glitch — moved OUT of transitions into the effect system (all properties
+   *  editable + keyframeable): signal-damage look rendered per frame. */
+  glitch?: number // intensity 0..1 (0 = off)
+  glitchStyle?: 'slice' | 'rgb' | 'block' | 'sort' | 'vhs' | 'mosh' | 'tear' | 'shake'
+  glitchScan?: number // scanline darkness 0..1
+  glitchStatic?: number // static patch density 0..1
+  glitchSeed?: number // deterministic pattern seed
+  glitchSpeed?: number // pattern step rate, Hz (steps per second of change)
   /** AM Threshold: hard luma cut 0..1 (0 = off). */
   threshold?: number
   /** AM Unsharp Mask: sharpen 0..1. */
@@ -683,6 +691,37 @@ export interface ClipEffect {
   overlayFx?: 'none' | 'scanlines' | 'halftone' | 'spotlight' | 'vignette' | 'lightleak' | 'frameglow'
   overlayStrength?: number // 0..1 (default 0.5)
   replaceBg?: 'none' | 'synthwave' | 'aurora' | 'grid' | 'bokeh' | 'sunset' | 'studio'
+}
+
+/**
+ * CapCut-style effect instances dropped ONTO a clip (image / video /
+ * compound only). An instance is a clip-of-a-clip: it lives inside the
+ * parent clip's time range [inP, inP+duration], can be moved/trimmed but
+ * NEVER pushed outside the parent (the app clamps every drag), can be
+ * keyframed per property, stacks infinitely, and renders as an inner bar
+ * with white trim handles on the timeline. Standalone effect clips keep
+ * using kind 'adjustment' (they grade every track below them).
+ */
+export interface FxKey {
+  /** seconds inside the instance (0 = instance start) */
+  t: number
+  v: number
+}
+
+export interface FxInstance {
+  id: string
+  /** effectCatalog entry this instance was created from */
+  catalogId: string
+  name: string
+  /** seconds from parent clip start */
+  inP: number
+  /** >= FX_MIN_DUR (0.1s); clamped inside the parent clip at all times */
+  duration: number
+  /** editable properties (ClipEffect keys + glitch family) */
+  params: Record<string, number | string>
+  /** per-property keyframes; every numeric property is keyframeable */
+  keys?: Record<string, FxKey[]>
+  enabled: boolean
 }
 
 /** One LUT inside an adjustment layer (or a clip's own grade). */
@@ -1121,6 +1160,8 @@ export interface Clip {
   notes?: string
   transform: ClipTransform
   effects?: ClipEffect
+  /** Effect instances dropped onto this clip (CapCut-style inner effect bars). */
+  fxInstances?: FxInstance[]
   /** LUT stack: adjustment layers grade everything below them; regular
    *  clips carrying this grade only their own output (effect placed "inside"). */
   adjustment?: ClipAdjustment

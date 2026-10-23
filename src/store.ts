@@ -67,6 +67,9 @@ import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, data
 import { parseSubtitles, parsePalette } from './lib/importUtils'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
+import { clampFxToClip, splitFxInstances, FX_MIN_DUR } from './lib/fxInstances'
+import { fxCatalogById } from './lib/effectCatalog'
+import type { FxInstance } from './types'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
 import { parseCubeLUT } from './lib/lutEngine'
@@ -250,7 +253,7 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
   copy: 'Ctrl+C',
   paste: 'Ctrl+V',
   undo: 'Ctrl+Z',
-  redo: 'Ctrl+Shift+Z',
+  redo: 'Ctrl+Y / Ctrl+Shift+Z',
   playPause: 'Space',
   omniframe: 'Alt+O',
   threed: '3',
@@ -801,6 +804,24 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   setCursorConfig: (patch: Partial<CursorConfig>) => void
   resetCursorConfig: () => void
 
+  // ---- CapCut-style effect instances on clips (board J) ----
+  /** Currently active effect instance (selected via bar, menu or on add). */
+  activeFx: { clipId: string; fxId: string } | null
+  setActiveFx: (sel: { clipId: string; fxId: string } | null) => void
+  /** Ask the right panel to focus a section (auto-open on effect add/select). */
+  rightFocus: { id: string; nonce: number } | null
+  requestRightSection: (id: string) => void
+  addFxInstance: (clipId: string, catalogId: string, opts?: { inP?: number; duration?: number }) => string | null
+  addFxAdjustment: (catalogId: string, opts?: { trackId?: string; start?: number; duration?: number }) => string | null
+  updateFxParams: (clipId: string, fxId: string, patch: Record<string, number | string>) => void
+  setFxRange: (clipId: string, fxId: string, inP?: number, duration?: number) => void
+  setFxKey: (clipId: string, fxId: string, param: string, t: number, v: number) => void
+  removeFxKey: (clipId: string, fxId: string, param: string, t?: number) => void
+  toggleFxEnabled: (clipId: string, fxId: string) => void
+  duplicateFxInstance: (clipId: string, fxId: string) => string | null
+  removeFxInstance: (clipId: string, fxId: string) => void
+  removeActiveFx: () => void
+
   // ---- history ----
   beginHistory: () => void
   endHistory: () => void
@@ -1203,6 +1224,8 @@ export const useEditor = create<EditorState>((set, get) => {
     audioIsolationModel: 'omni-voicetarget',
     selectedClipId: null,
     selectedClipIds: [],
+    activeFx: null,
+    rightFocus: null,
     sequences: [],
     activeSequenceId: 'main',
     breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
@@ -2620,6 +2643,14 @@ export const useEditor = create<EditorState>((set, get) => {
           if (c.id !== id) return c
           const asset = s.assets.find((a) => a.id === c.assetId)
           const srcMax = asset ? asset.duration : c.duration
+          // The fx container closes on trim: instances shift/re-clamp with it.
+          const reclampFx = (shift: number, dur: number) =>
+            (c.fxInstances || [])
+              .map((f) => {
+                const r = clampFxToClip(f.inP + shift, f.duration, dur)
+                return { ...f, inP: r.inP, duration: r.duration }
+              })
+              .filter((f) => f.duration >= FX_MIN_DUR - 1e-9)
           if (edge === 'left') {
             const maxStart = c.start + c.duration - MIN_CLIP
             const newStart = Math.min(maxStart, Math.max(0, value))
@@ -2627,10 +2658,10 @@ export const useEditor = create<EditorState>((set, get) => {
             const newIn = Math.max(0, c.inPoint + delta)
             const newDur = c.duration - (newIn - c.inPoint)
             if (newDur < MIN_CLIP) return c
-            return { ...c, start: newStart, inPoint: newIn, duration: newDur }
+            return { ...c, start: newStart, inPoint: newIn, duration: newDur, fxInstances: c.fxInstances ? reclampFx(-delta, newDur) : c.fxInstances }
           } else {
             const newDur = clamp(value - c.start, MIN_CLIP, (srcMax || c.duration) - c.inPoint)
-            return { ...c, duration: newDur }
+            return { ...c, duration: newDur, fxInstances: c.fxInstances ? reclampFx(0, newDur) : c.fxInstances }
           }
         })
         return { clips, duration: recompute(clips) }
@@ -2652,13 +2683,15 @@ export const useEditor = create<EditorState>((set, get) => {
           continue
         }
         const offset = time - c.start
-        const left: Clip = { ...c, duration: offset }
+        const fx = c.fxInstances?.length ? splitFxInstances(c.fxInstances, offset) : null
+        const left: Clip = { ...c, duration: offset, fxInstances: fx ? fx.left : c.fxInstances }
         const right: Clip = {
           ...c,
           id: uid('clip'),
           start: time,
           duration: c.duration - offset,
           inPoint: c.inPoint + offset,
+          fxInstances: fx ? fx.right : c.fxInstances,
         }
         newClips.push(left, right)
       }
@@ -4379,6 +4412,185 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     resetLayoutToDefault: () => {
       get().setWorkspacePreset('default')
+    },
+
+    // ---- CapCut-style effect instances on clips (board J) ----
+    setActiveFx: (sel) => set({ activeFx: sel }),
+
+    requestRightSection: (id) => set({ rightFocus: { id, nonce: Date.now() }, rightOpen: true }),
+
+    addFxInstance: (clipId, catalogId, opts) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      if (!clip) return null
+      // Only image / video / compound clips accept dropped effects.
+      const asset = s.assets.find((a) => a.id === clip.assetId)
+      const allowed =
+        clip.kind === 'compound' ||
+        clip.kind === 'image' ||
+        clip.kind === 'video' ||
+        asset?.kind === 'image' ||
+        asset?.kind === 'video'
+      if (!allowed || clip.kind === 'adjustment' || clip.kind === 'audio' || clip.kind === 'text' || !!clip.textStyle) return null
+      const entry = fxCatalogById(catalogId)
+      if (!entry) return null
+      pushSnapshot()
+      const fxId = uid('fx')
+      // A dropped effect spans the FULL clip length by default; the closed
+      // container clamp keeps it inside the parent forever.
+      const range = clampFxToClip(opts?.inP ?? 0, opts?.duration ?? clip.duration, clip.duration)
+      const inst: FxInstance = {
+        id: fxId,
+        catalogId,
+        name: entry.name,
+        inP: range.inP,
+        duration: range.duration,
+        params: { ...entry.patch },
+        keys: {},
+        enabled: true,
+      }
+      set((st) => ({
+        clips: st.clips.map((c) => (c.id === clipId ? { ...c, fxInstances: [...(c.fxInstances || []), inst] } : c)),
+        selectedClipId: clipId,
+        activeFx: { clipId, fxId },
+      }))
+      // Auto-open the connected right-panel section for the settings.
+      get().requestRightSection('fxstack')
+      return fxId
+    },
+
+    addFxAdjustment: (catalogId, opts) => {
+      const entry = fxCatalogById(catalogId)
+      if (!entry) return null
+      // Standalone effect clip: grades every track BELOW it (track 1 fx hits
+      // tracks 2..5; track 2 fx never touches track 1).
+      return get().addAdjustmentLayer({
+        name: `FX: ${entry.name}`,
+        effects: { ...(entry.patch as unknown as import('./types').ClipEffect) },
+        start: opts?.start,
+        duration: opts?.duration,
+        trackId: opts?.trackId,
+      })
+    },
+
+    updateFxParams: (clipId, fxId, patch) => {
+      if (!get().inInteraction) pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => (f.id !== fxId ? f : { ...f, params: { ...f.params, ...patch } })),
+          },
+        ),
+      }))
+    },
+
+    setFxRange: (clipId, fxId, inP, duration) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      const inst = clip?.fxInstances?.find((f) => f.id === fxId)
+      if (!clip || !inst) return
+      // The container is closed: every drag step re-clamps against the
+      // parent's CURRENT length so handles can never leak outside.
+      const range = clampFxToClip(inP ?? inst.inP, duration ?? inst.duration, clip.duration)
+      if (range.inP === inst.inP && range.duration === inst.duration) return
+      if (!s.inInteraction) pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => (f.id !== fxId ? f : { ...f, inP: range.inP, duration: range.duration })),
+          },
+        ),
+      }))
+    },
+
+    setFxKey: (clipId, fxId, param, t, v) => {
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => {
+              if (f.id !== fxId) return f
+              const keys = { ...(f.keys || {}) }
+              const list = [...(keys[param] || [])].filter((k) => Math.abs(k.t - t) > 1e-6)
+              list.push({ t, v })
+              list.sort((a, b) => a.t - b.t)
+              keys[param] = list
+              return { ...f, keys }
+            }),
+          },
+        ),
+      }))
+    },
+
+    removeFxKey: (clipId, fxId, param, t) => {
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => {
+              if (f.id !== fxId) return f
+              const keys = { ...(f.keys || {}) }
+              if (t === undefined) delete keys[param]
+              else keys[param] = (keys[param] || []).filter((k) => Math.abs(k.t - t) > 1e-6)
+              if (keys[param] && keys[param].length === 0) delete keys[param]
+              return { ...f, keys }
+            }),
+          },
+        ),
+      }))
+    },
+
+    toggleFxEnabled: (clipId, fxId) => {
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => (f.id !== fxId ? f : { ...f, enabled: !f.enabled })),
+          },
+        ),
+      }))
+    },
+
+    duplicateFxInstance: (clipId, fxId) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      const inst = clip?.fxInstances?.find((f) => f.id === fxId)
+      if (!clip || !inst) return null
+      pushSnapshot()
+      const newId = uid('fx')
+      // Offset the copy when it still fits inside the closed container.
+      const wantIn = inst.inP + inst.duration <= clip.duration - FX_MIN_DUR ? inst.inP + inst.duration : inst.inP
+      const range = clampFxToClip(wantIn, inst.duration, clip.duration)
+      const copy: FxInstance = { ...inst, id: newId, inP: range.inP, duration: range.duration, keys: inst.keys ? structuredClone(inst.keys) : {} }
+      set((st) => ({
+        clips: st.clips.map((c) => (c.id === clipId ? { ...c, fxInstances: [...(c.fxInstances || []), copy] } : c)),
+        activeFx: { clipId, fxId: newId },
+      }))
+      get().requestRightSection('fxstack')
+      return newId
+    },
+
+    removeFxInstance: (clipId, fxId) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      if (!clip?.fxInstances?.some((f) => f.id === fxId)) return
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : { ...c, fxInstances: (c.fxInstances || []).filter((f) => f.id !== fxId) },
+        ),
+        activeFx: st.activeFx && st.activeFx.fxId === fxId ? null : st.activeFx,
+      }))
+    },
+
+    removeActiveFx: () => {
+      const a = get().activeFx
+      if (a) get().removeFxInstance(a.clipId, a.fxId)
     },
 
     beginHistory: () => {

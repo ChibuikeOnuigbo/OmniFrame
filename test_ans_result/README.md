@@ -23,6 +23,17 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Board J — CapCut-style effect system (drop-on-clip, closed container, keyframes)
+Effects tab (9 sub-tabs, 9,170 real presets — honest count, every tile renders) + fx instances:
+dropped onto image/video/compound clips (full clip length, white trim handles, closed container
+clamped every drag step), per-property keyframes (◆ at playhead), standalone effect clips grade every
+track BELOW them, glitch moved out of transitions into keyframeable effects, context-menu quick-add,
+Del/Backspace deletes the active effect, Ctrl+Y = redo alongside Ctrl+Shift+Z.
+Recipe `tools/mcp/recipes/board_J_effects.json` (3 variants) → `J_effects/fx-{glitch-keyframed,ranged-vhs,layer-noir}.mp4`;
+evidence frames `evidence/J-fx-*.png` (glitch early≠late proves the keyframed intensity; ranged clean≠graded
+proves the inner range; noir frame proves the layer grades everything below). MCP tools: fx_catalog / fx_add /
+fx_update / fx_remove (48 tools total).
+
 ## Board I — GAP queue (am_research sweep)
 AM Oscillate (official Magnitude/Frequency/Angle/Wave/Phase), turbulent warp, lasso_select polygon
 selection. Recipe `tools/mcp/recipes/board_I_gaps.json` (3 variants) → `I_gaps/gaps-{all,oscillate,turbulent}.mp4`;
