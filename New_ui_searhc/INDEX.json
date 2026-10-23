@@ -1,0 +1,182 @@
+{
+ "folder": "New_ui_searhc",
+ "total": 44,
+ "images": {
+  "after-effects/adobe-after-effects-interface-timeline-c-1.jpg": {
+   "desc": "AE Composition Settings dialog: 3D Renderer options (Classic 3D / Advanced 3D / C4D)",
+   "source": "helpx.adobe.com composition-basics"
+  },
+  "after-effects/adobe-after-effects-interface-timeline-c-2.jpg": {
+   "desc": "AE workspace callouts: title bar, Composition panel tab, workspace switcher, account menu",
+   "source": "helpx.adobe.com workspaces-panels-viewers"
+  },
+  "after-effects/adobe-after-effects-interface-timeline-c-3.jpg": {
+   "desc": "AE Timeline panel with current-time indicator (CTI) highlighted",
+   "source": "helpx.adobe.com previewing"
+  },
+  "after-effects/adobe-after-effects-interface-timeline-c-4.jpg": {
+   "desc": "AE general UI items: Auto-Open Panel option",
+   "source": "helpx.adobe.com general-user-interface-items"
+  },
+  "after-effects/adobe-after-effects-interface-timeline-c-5.png": {
+   "desc": "AE Composition panel docking zones (Info panel drop areas)",
+   "source": "ittrainingcontent.iu.edu"
+  },
+  "after-effects/after-effects-graph-editor-keyframe-curv-1.gif": {
+   "desc": "AE Graph Editor: open graph editor (animated)",
+   "source": "blog.pond5.com smoothing-keyframes"
+  },
+  "after-effects/after-effects-graph-editor-keyframe-curv-2.gif": {
+   "desc": "AE Graph Editor: create curves (animated)",
+   "source": "blog.pond5.com"
+  },
+  "after-effects/after-effects-graph-editor-keyframe-curv-3.gif": {
+   "desc": "AE Graph Editor: animation curves (animated)",
+   "source": "blog.pond5.com"
+  },
+  "after-effects/after-effects-graph-editor-keyframe-curv-4.gif": {
+   "desc": "AE Graph Editor: set keyframes (animated)",
+   "source": "blog.pond5.com"
+  },
+  "alight-motion/alight-motion-mobile-app-projects-home-s-1.webp": {
+   "desc": "AM home: template carousel, recent projects, bottom nav",
+   "source": "screensdesign.com/apps/alight-motion"
+  },
+  "alight-motion/alight-motion-mobile-app-projects-home-s-2.webp": {
+   "desc": "AM projects home: XML upload card, project list",
+   "source": "screensdesign.com"
+  },
+  "alight-motion/alight-motion-mobile-app-projects-home-s-3.webp": {
+   "desc": "AM home tab selected: templates + get-started cards",
+   "source": "screensdesign.com"
+  },
+  "alight-motion/alight-motion-mobile-app-projects-home-s-4.webp": {
+   "desc": "AM projects: tabs, scrollable video projects, floating create button",
+   "source": "screensdesign.com"
+  },
+  "capcut/capcut-desktop-interface-timeline-editin-1.png": {
+   "desc": "CapCut desktop: media pool, preview, timeline, tool panels",
+   "source": "capcut.com/resource/capcut-for-laptop"
+  },
+  "capcut/capcut-desktop-interface-timeline-editin-2.png": {
+   "desc": "CapCut desktop: dancer preview + layered timeline (overlay effects article)",
+   "source": "capcut.com/resource/free-video-overlay-effects"
+  },
+  "capcut/capcut-desktop-interface-timeline-editin-3.png": {
+   "desc": "CapCut desktop: stock library, preview canvas, project timeline",
+   "source": "capcut.com"
+  },
+  "capcut/capcut-desktop-interface-timeline-editin-4.png": {
+   "desc": "CapCut desktop editor (screen-recording edit workflow)",
+   "source": "capcut.com"
+  },
+  "capcut/capcut-desktop-interface-timeline-editin-5.png": {
+   "desc": "CapCut desktop editor (record + edit workflow)",
+   "source": "capcut.com"
+  },
+  "capcut/capcut-effects-transitions-panel-screens-1.webp": {
+   "desc": "CapCut mobile transition panel: preset duration + Apply-to-all",
+   "source": "capcutguide.com/capcut-transitions"
+  },
+  "capcut/capcut-effects-transitions-panel-screens-2.png": {
+   "desc": "CapCut desktop Effects panel",
+   "source": "capcut.com/resource/video-effects-guidance"
+  },
+  "capcut/capcut-effects-transitions-panel-screens-3.png": {
+   "desc": "CapCut desktop Transitions panel applied between clips",
+   "source": "capcut.com"
+  },
+  "capcut/capcut-effects-transitions-panel-screens-4.jpg": {
+   "desc": "CapCut mobile adding effects (Filmora comparison article)",
+   "source": "filmora.wondershare.com"
+  },
+  "davinci-resolve/davinci-resolve-color-page-nodes-color-w-1.png": {
+   "desc": "Resolve Color page: Offset wheel white-balance",
+   "source": "storyblocks.com color-grading"
+  },
+  "davinci-resolve/davinci-resolve-color-page-nodes-color-w-2.png": {
+   "desc": "Resolve Color page: Primaries color wheels tab",
+   "source": "storyblocks.com"
+  },
+  "davinci-resolve/davinci-resolve-color-page-nodes-color-w-3.png": {
+   "desc": "Resolve Color page: HDR color wheels tab",
+   "source": "storyblocks.com"
+  },
+  "davinci-resolve/davinci-resolve-color-page-nodes-color-w-4.webp": {
+   "desc": "Resolve Color page: Lift/Gamma/Gain wheels diagram",
+   "source": "davinciresolve21.com"
+  },
+  "davinci-resolve/davinci-resolve-color-page-nodes-color-w-5.png": {
+   "desc": "Resolve Color page: Offset wheel hue shift on footage",
+   "source": "storyblocks.com"
+  },
+  "davinci-resolve/davinci-resolve-edit-page-interface-time-1.jpg": {
+   "desc": "Resolve 19 Edit page: create-new-timeline view",
+   "source": "creativesnext.com"
+  },
+  "davinci-resolve/davinci-resolve-edit-page-interface-time-2.jpg": {
+   "desc": "Resolve 19 Edit page: media pool",
+   "source": "creativesnext.com"
+  },
+  "davinci-resolve/davinci-resolve-edit-page-interface-time-3.jpg": {
+   "desc": "Resolve 19 Edit page: full interface",
+   "source": "creativesnext.com"
+  },
+  "davinci-resolve/davinci-resolve-edit-page-interface-time-4.jpg": {
+   "desc": "Resolve 19 Edit page screenshot",
+   "source": "creativebloq.com"
+  },
+  "davinci-resolve/davinci-resolve-edit-page-interface-time-5.jpg": {
+   "desc": "Resolve 19 Edit page: toggle media pool",
+   "source": "creativesnext.com"
+  },
+  "davinci-resolve/davinci-resolve-fusion-page-node-editor--1.png": {
+   "desc": "Resolve Fusion: node-based edit structure",
+   "source": "storyblocks.com fusion-tutorial"
+  },
+  "davinci-resolve/davinci-resolve-fusion-page-node-editor--2.webp": {
+   "desc": "Resolve Fusion: Text+ node keyframed in Spline Editor",
+   "source": "davinciresolve21.com"
+  },
+  "davinci-resolve/davinci-resolve-fusion-page-node-editor--3.jpg": {
+   "desc": "Fusion nodes graph",
+   "source": "pie.med.utoronto.ca node-based-compositing"
+  },
+  "davinci-resolve/davinci-resolve-fusion-page-node-editor--4.jpg": {
+   "desc": "Fusion Merge node modes",
+   "source": "pie.med.utoronto.ca"
+  },
+  "blender/blender-interface-3d-viewport-screenshot-1.png": {
+   "desc": "Blender interface: 3D view panel selected (Wikimedia)",
+   "source": "commons.wikimedia.org"
+  },
+  "blender/blender-interface-3d-viewport-screenshot-2.jpg": {
+   "desc": "Blender interface: modeling/shading/texturing/render panels",
+   "source": "recraft.ai community"
+  },
+  "blender/blender-interface-3d-viewport-screenshot-3.jpg": {
+   "desc": "Blender UI diagram: 3D viewport + properties labelled",
+   "source": "brandon3d.com"
+  },
+  "blender/blender-interface-3d-viewport-screenshot-4.jpg": {
+   "desc": "Blender viewport with detailed temple scene",
+   "source": "recraft.ai community"
+  },
+  "blender/blender-video-sequence-editor-vse-interf-1.png": {
+   "desc": "Blender VSE: sequence editor strips",
+   "source": "packtpub.com VSE part 2"
+  },
+  "blender/blender-video-sequence-editor-vse-interf-2.png": {
+   "desc": "Blender VSE: editing workflow",
+   "source": "packtpub.com"
+  },
+  "blender/blender-video-sequence-editor-vse-interf-3.png": {
+   "desc": "Blender VSE: strip operations",
+   "source": "packtpub.com"
+  },
+  "blender/blender-video-sequence-editor-vse-interf-4.png": {
+   "desc": "Blender VSE: preview + sequencer layout",
+   "source": "packtpub.com"
+  }
+ }
+}

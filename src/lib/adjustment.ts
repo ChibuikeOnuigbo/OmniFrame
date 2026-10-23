@@ -12,6 +12,19 @@ export function activeEffectKeys(effects?: ClipEffect): string[] {
   if (typeof effects.invert === 'number' && effects.invert > 0) keys.push('invert')
   if (typeof effects.sepia === 'number' && effects.sepia > 0) keys.push('sepia')
   if (typeof effects.hueRotate === 'number' && effects.hueRotate > 0) keys.push('hue-rotate')
+  if (typeof effects.lightIntensity === 'number' && effects.lightIntensity > 0) keys.push('light')
+  if (typeof effects.vibrance === 'number' && effects.vibrance !== 1) keys.push('vibrance')
+  if (typeof effects.solarize === 'number' && effects.solarize > 0) keys.push('solarize')
+  if (typeof effects.posterize === 'number' && effects.posterize > 0) keys.push('posterize')
+  if (typeof effects.grain === 'number' && effects.grain > 0) keys.push('grain')
+  if (typeof effects.pixelate === 'number' && effects.pixelate > 0) keys.push('pixelate')
+  if (typeof effects.chromatic === 'number' && effects.chromatic > 0) keys.push('chromatic')
+  if (typeof effects.pixelStretch === 'number' && effects.pixelStretch > 0) keys.push('pixelStretch')
+  if (typeof effects.waveWarp === 'number' && effects.waveWarp > 0) keys.push('waveWarp')
+  if (typeof effects.chromaKey === 'number' && effects.chromaKey > 0) keys.push('chromaKey')
+  if (typeof effects.fractalBlur === 'number' && effects.fractalBlur > 0) keys.push('fractalBlur')
+  if (typeof effects.lumaKey === 'number' && effects.lumaKey > 0) keys.push('lumaKey')
+  if (typeof effects.cardFlip === 'number' && effects.cardFlip > 0) keys.push('cardFlip')
   return keys
 }
 
@@ -24,6 +37,19 @@ const EFFECT_LABEL: Record<string, string> = {
   invert: 'Invert',
   sepia: 'Sepia',
   hueRotate: 'Hue Rotate',
+  vibrance: 'Vibrance',
+  solarize: 'Solarize',
+  posterize: 'Posterize',
+  grain: 'Grain',
+  pixelate: 'Pixelate',
+  chromatic: 'Chromatic Aberration',
+  pixelStretch: 'Pixel Stretch',
+  waveWarp: 'Wave Warp',
+  chromaKey: 'Chroma Key',
+  fractalBlur: 'Fractal Blur',
+  lumaKey: 'Luma Key (bg removal)',
+  cardFlip: 'Card Flip',
+  light: 'Light',
 }
 
 /**
@@ -36,6 +62,11 @@ export function placedEffectLabels(clip: Clip, sequences: Sequence[] = []): stri
   for (const lut of clip.adjustment?.luts || []) {
     if (lut.enabled) labels.push(lut.name)
   }
+  // Dropped effect instances (board J) are placed effects too.
+  for (const fx of clip.fxInstances || []) {
+    if (fx.enabled) labels.push(`FX: ${fx.name}`)
+  }
+  if (clip.adjustmentMask) labels.push(`${clip.adjustmentMask.shape} mask`)
   if (clip.kind === 'compound') {
     const seq = sequences.find((s) => s.id === clip.sourceSequenceId)
     const children = seq ? seq.clips : clip.originalChildClips || []
@@ -44,6 +75,7 @@ export function placedEffectLabels(clip: Clip, sequences: Sequence[] = []): stri
       const inner = [
         ...activeEffectKeys(child.effects).map((k) => EFFECT_LABEL[k] || k),
         ...(child.adjustment?.luts || []).filter((l) => l.enabled).map((l) => l.name),
+        ...(child.adjustmentMask ? [`${child.adjustmentMask.shape} mask`] : []),
       ]
       if (inner.length) labels.push(`Adj: ${inner.join(' + ')}`)
     }

@@ -1,0 +1,7 @@
+yt-dlp android+cookies: ERROR: [youtube] FPSxFSjCxPo: This video is unavailable
+; yt-dlp default+cookies: ERROR: [youtube] FPSxFSjCxPo: This video is unavailable
+; yt-dlp web_embedded+cookies: ERROR: [youtube] FPSxFSjCxPo: This video is unavailable
+; yt-dlp web_safari+cookies: ERROR: [youtube] FPSxFSjCxPo: This video is unavailable
+; yt-dlp mweb+cookies: ERROR: [youtube] FPSxFSjCxPo: This video is unavailable
+; yt-dlp client=tv+cookies: ERROR: [youtube] FPSxFSjCxPo: This video is unavailable
+; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>

@@ -1,9 +1,14 @@
+import { regroupFor, expandGroupSelection } from './lib/parentChain'
 import { recolorImage } from './lib/recolor'
+import { planDrawingToClips } from './lib/drawingToClips'
+import { importPsdDocument } from './lib/psdImport'
+import { getLayeredArtworkInfo } from './lib/layeredArtworkMetadata'
 import type { RecolorBlend } from './lib/recolor'
 import { create } from 'zustand'
 import type {
   Clip,
   MediaAsset,
+  SourceDocument,
   Track,
   TrackType,
   ClipTransform,
@@ -24,6 +29,7 @@ import type {
   MonitorMode,
   TimelineInsertionMode,
   ClipEffect,
+  CustomEffect,
   ClipLut,
   TimelineMarker,
   MarkerColor,
@@ -31,6 +37,7 @@ import type {
   LinkSet,
   ParentRelationship,
   GroupInstance,
+  TrackPoint,
   CursorConfig,
   TrackingSession,
   TextureAsset,
@@ -46,14 +53,23 @@ import type {
   OmniframeScopeType,
   SelectionModeType,
   ClipMask,
+  ClipVisualMask,
   Sequence,
   TransparencyMask,
   BrushDynamics,
   GuidedMatteRecord,
   SidebarSectionMode,
+  CustomFont,
+  ImportedPalette,
 } from './types'
+import { DEFAULT_CLIP_MASK } from './types'
+import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, dataUrlByteSize, registerCustomFont, registerAllCustomFonts, unregisterCustomFont } from './lib/fonts'
+import { parseSubtitles, parsePalette } from './lib/importUtils'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp } from './lib/time'
+import { clampFxToClip, splitFxInstances, FX_MIN_DUR } from './lib/fxInstances'
+import { fxCatalogById } from './lib/effectCatalog'
+import type { FxInstance } from './types'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
 import { parseCubeLUT } from './lib/lutEngine'
@@ -88,6 +104,8 @@ export type LeftTab =
   | 'text'
   | 'threed'
   | 'rigging'
+  | 'pack'
+  | 'storyboard'
 
 export const INITIAL_DEATH_NOTE_CHARACTERS: OmniframeCharacter[] = [
   {
@@ -235,7 +253,7 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
   copy: 'Ctrl+C',
   paste: 'Ctrl+V',
   undo: 'Ctrl+Z',
-  redo: 'Ctrl+Shift+Z',
+  redo: 'Ctrl+Y / Ctrl+Shift+Z',
   playPause: 'Space',
   omniframe: 'Alt+O',
   threed: '3',
@@ -271,13 +289,17 @@ import {
   type TimelineGap,
 } from './store/gapTools'
 import { createOmniframeCharacterSlice } from './store/omniframeCharacters'
+import { createOmniExtractSlice, type OmniExtractSlice, type OmniExtractState } from './store/omniExtract'
 import { createRotoMaskSlice } from './store/rotoMask'
+import { createSmartPatchSlice } from './store/smartPatch'
+import type { SmartPatchSlice } from './store/smartPatch'
 import type {
   RotoMaskSlice,
   RotoMaskFrameResult,
   RotoMaskRecord,
   RotoStatus,
   RotoFrameScope,
+  RotoInpaintState,
   RotoToolMode,
 } from './store/rotoMask'
 import type { RotoModelDescriptor } from './lib/rotoModels'
@@ -293,8 +315,12 @@ import { measureIntegratedLufs } from './lib/loudness'
 // INEFFECTIVE_DYNAMIC_IMPORT warnings without moving any chunk.
 import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } from './lib/rotoBrush'
 import { denoiseAudioBuffer } from './lib/aiDenoise'
+import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
+import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
+import { markerColorHex, MARKER_KINDS } from './lib/markers'
+import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
 
-interface EditorState extends RiggingSlice, RotoMaskSlice {
+interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, OmniExtractSlice {
   selectionBrushAuto: boolean
   selectionBrushTolerance: number
   selectionWandTolerance: number
@@ -308,23 +334,92 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   rotoScope: RotoFrameScope
   rotoFrames: RotoMaskFrameResult[]
   rotoTracking: { running: boolean; done: number; total: number }
+  rotoInpaint: RotoInpaintState
   rotoTool: RotoToolMode
   rotoTolerance: number
   rotoBrushRadius: number
   rotoLumaExport: { url: string; frame: number; at: number } | null
   assets: MediaAsset[]
+  sourceDocuments: SourceDocument[]
+  projectName: string
+  saveOmniProject: (name?: string) => Promise<Blob>
+  setProjectName: (name: string) => void
+  loadOmniProject: (file: File) => Promise<void>
+  mediaImportNotice: string | null
+  clearMediaImportNotice: () => void
   tracks: Track[]
   clips: Clip[]
   transitions: Transition[]
   selectedTransitionId: string | null
+  /** Transient visual audition state; excluded from Doc/project serialization. */
+  visualPreview: VisualPreview | null
+  startVisualPreview: (preview: VisualPreviewInput) => void
+  stopVisualPreview: () => void
+  applyVisualPreview: () => void
+  /** Clip whose Mask outline is drawn/edited on the monitor (transient). */
+  maskEditClipId: string | null
+  setMaskEditClip: (id: string | null) => void
+  addClipMask: (clipId: string) => void
+  updateClipMask: (clipId: string, patch: Partial<ClipVisualMask>) => void
+  removeClipMask: (clipId: string) => void
   playhead: number
   duration: number
   pxPerSec: number
   playing: boolean
   speed: number
   projectFps: number
+  /** AE-style composition background colour painted under every frame. */
+  sequenceBackground: string
+  setSequenceBackground: (color: string) => void
   dropFrameTimecode: boolean
   previewQuality: PreviewQuality
+  /** Hide horizontal overflow app-wide (default on): strips use hover arrows / wheel / drag instead of visible scrollbars. */
+  hideOverflowX: boolean
+  uiStyle: string
+  uiPalette: string
+  setUiStyle: (v: string) => void
+  setUiPalette: (v: string) => void
+  // Provider connection (BYOK). The API key lives in memory ONLY — never
+  // persisted, never in .omni files. Provider/model/endpoint persist.
+  aiProvider: string
+  aiModel: string
+  aiEndpoint: string
+  aiApiKey: string
+  aiCapabilityModels: Record<string, string>
+  aiConnection: { status: 'idle' | 'testing' | 'connected' | 'error'; message: string; latencyMs: number | null; modelAvailable: boolean | null; at: number }
+  setAiProvider: (v: string) => void
+  setAiModel: (v: string) => void
+  setAiEndpoint: (v: string) => void
+  setAiApiKey: (v: string) => void
+  setAiCapabilityModel: (capability: string, model: string) => void
+  setAiConnection: (c: { status: 'idle' | 'testing' | 'connected' | 'error'; message: string; latencyMs: number | null; modelAvailable?: boolean | null }) => void
+  // Saved watermarks (Watermark Studio presets, from the CapCut study).
+  watermarks: { id: string; name: string; level: number; color: string; characterAssetId?: string; voiceAssetId?: string; seed: number }[]
+  addWatermark: (w: { name: string; level: number; color: string; characterAssetId?: string; voiceAssetId?: string; seed: number }) => string
+  removeWatermark: (id: string) => void
+  // Library taste: the pack learns from likes + what you actually place.
+  /** Drawing: treat selected video clips as paint layers (drawing sits in
+   *  the clip stack) instead of always compositing on top of everything. */
+  viewVideosAsLayers: boolean
+  setViewVideosAsLayers: (v: boolean) => void
+  /** Convert all unconverted drawing strokes into timeline drawing clips. */
+  convertDrawingToClips: () => { clips: number; tracks: number; strokes: number }
+  /** Docker customization (Settings > Dockers): which left tabs and right
+   *  sub-tools the user keeps on their rails. Persisted per user. */
+  dockerPrefs: { leftTabs: Record<string, boolean>; rightSubtools: Record<string, boolean> }
+  setDockerPref: (kind: 'leftTabs' | 'rightSubtools', id: string, visible: boolean) => void
+  /** One-shot request for a panel to bring a section forward (rail flyouts). */
+  drawingSectionRequest: string | null
+  /** When inside a compound clip: the parent clip's visible window into
+   *  this sequence (trimmed head/tail show as cut voids in the timeline). */
+  compoundWindow: { in: number; out: number; total: number } | null
+  /** CapCut-style In/Out export range: exports render only this slice. */
+  exportRange: { in: number; out: number } | null
+  setExportIn: () => void
+  setExportOut: () => void
+  clearExportRange: () => void
+  requestDrawingSection: (section: string | null) => void
+  setHideOverflowX: (v: boolean) => void
   audioIsolationModel: VoiceIsolationModel
   selectedClipId: string | null
   tool: Tool
@@ -353,6 +448,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   drawingOpacity: number
   drawingScope: TemporalScope
   drawingEnabled: boolean
+  pivotEditEnabled: boolean
   drawingFillTolerance: number
   drawingPreserveLuminance: boolean
   /** Number of sides for the Krita Polygon Tool, 3..12. */
@@ -432,20 +528,43 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
 
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
+  setClipSpeedCurve: (id: string, curve: import('./lib/speedCurves').SpeedCurveId | undefined) => void
+  setClipNotes: (id: string, notes: string) => void
+  customFonts: CustomFont[]
+  customPalettes: ImportedPalette[]
+  importCustomFontFile: (file: File) => Promise<CustomFont>
+  removeCustomFont: (id: string) => void
+  importPaletteFile: (file: File) => Promise<ImportedPalette>
+  removeCustomPalette: (id: string) => void
+  importSubtitleFile: (file: File, fontFamily?: string) => Promise<{ cues: number; trackId: string }>
   addTextTitleClip: (text?: string, duration?: number) => void
 
   // ---- adjustment layers & LUTs ----
   /** Built-in LUT library (public/luts/manifest.json). */
-  lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string }> }
+  lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string; tags?: string[] }> }
   /** User-uploaded .cube LUTs (persisted to localStorage when they fit). */
   userLuts: Array<{ id: string; name: string; cubeText: string }>
   loadLutLibrary: () => Promise<void>
   addUserLut: (name: string, cubeText: string) => string | null
   removeUserLut: (id: string) => void
+  clearUserLuts: () => void
+  /** User-created custom effects (Gold Motion-style): named effect+LUT
+   * snapshots, persisted to localStorage and inside .omni projects. */
+  customEffects: CustomEffect[]
+  /** Snapshot the selected clip's effect settings + LUT stack as a custom effect. Returns its id, or null when the clip has nothing to save. */
+  saveCustomEffect: (name: string, clipId: string, thumbnail?: string) => string | null
+  /** Replace a clip's effect settings + LUT stack with the custom effect's. */
+  applyCustomEffect: (id: string, clipId?: string) => boolean
+  /** Place the custom effect as an adjustment layer (grades what's below). */
+  placeCustomEffectAsLayer: (id: string) => string | null
+  deleteCustomEffect: (id: string) => void
+  importCustomEffects: (items: CustomEffect[]) => number
   /**
-   * Creates an adjustment-layer clip (kind 'adjustment') that grades every
-   * track below it. With no args it spans playhead→content end on the
-   * topmost video track.
+   * Creates a timeline adjustment clip that grades content below its track.
+   * With a visual clip selected it is placed immediately above that clip,
+   * matches its time range, and stays below any higher title/overlay tracks.
+   * With no visual selection it is placed above the lowest active video clip
+   * at the playhead and spans the remaining content.
    */
   addAdjustmentLayer: (partial?: {
     name?: string
@@ -474,7 +593,20 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
 
   // ---- media ----
   addAsset: (a: MediaAsset) => void
+  /** Demo fixtures (test/demo loaders). Library starts EMPTY for users;
+   *  fixtures seed only inside automated test rigs, or on explicit load. */
+  ensureDemoAssets: () => void
+  helpOpen: boolean
+  setHelpOpen: (v: boolean) => void
+  panelMaximized: boolean
+  setPanelMaximized: (v: boolean) => void
   importFiles: (files: FileList | File[]) => Promise<void>
+  /** Adds one undoable generated-audio operation: assets, synchronized audio
+   * tracks/clips, and optional source/stem mute changes. */
+  addGeneratedAudioTracks: (
+    entries: { asset: MediaAsset; clip: Omit<Clip, 'trackId'>; trackName: string }[],
+    options?: { extraAssets?: MediaAsset[]; muteClipIds?: string[]; selectedClipId?: string },
+  ) => { trackIds: string[]; clipIds: string[] }
 
   // ---- tracks / clips ----
   ensureTrack: (type: TrackType) => string
@@ -484,6 +616,10 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   setTrackHeight: (id: string, height: number) => void
   setTrackName: (id: string, name: string) => void
   addClipToTrack: (trackId: string, assetId: string, atTime?: number) => void
+  /** Place visible raster layers from imported layered artwork as aligned still clips. */
+  placeLayeredArtworkOnTimeline: (documentId: string, atTime?: number) => string[]
+  /** @deprecated PSD-specific alias retained for older callers. */
+  placePsdDocumentOnTimeline: (documentId: string, atTime?: number) => string[]
   moveClip: (id: string, newStart: number, newTrackId?: string) => void
   moveClipToNewTrack: (
     clipId: string,
@@ -528,6 +664,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   setDrawingScope: (scope: TemporalScope) => void
   setDrawingEnabled: (enabled: boolean) => void
   toggleDrawingEnabled: () => void
+  setPivotEditEnabled: (enabled: boolean) => void
   setDrawingFillTolerance: (tolerance: number) => void
   setDrawingPolygonSides: (sides: number) => void
   setDrawingShapeFilled: (filled: boolean) => void
@@ -581,6 +718,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   // ---- OmniFrame & Character Manipulation ----
   omniframeMode: boolean
   omniframeCharacters: OmniframeCharacter[]
+  omniSelection: OmniExtractState['omniSelection']
   selectedCharacterId: string | null
   attachDirectlyToVideo: boolean
   attachedVideoClipId: string | null
@@ -666,6 +804,24 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   setCursorConfig: (patch: Partial<CursorConfig>) => void
   resetCursorConfig: () => void
 
+  // ---- CapCut-style effect instances on clips (board J) ----
+  /** Currently active effect instance (selected via bar, menu or on add). */
+  activeFx: { clipId: string; fxId: string } | null
+  setActiveFx: (sel: { clipId: string; fxId: string } | null) => void
+  /** Ask the right panel to focus a section (auto-open on effect add/select). */
+  rightFocus: { id: string; nonce: number } | null
+  requestRightSection: (id: string) => void
+  addFxInstance: (clipId: string, catalogId: string, opts?: { inP?: number; duration?: number }) => string | null
+  addFxAdjustment: (catalogId: string, opts?: { trackId?: string; start?: number; duration?: number }) => string | null
+  updateFxParams: (clipId: string, fxId: string, patch: Record<string, number | string>) => void
+  setFxRange: (clipId: string, fxId: string, inP?: number, duration?: number) => void
+  setFxKey: (clipId: string, fxId: string, param: string, t: number, v: number) => void
+  removeFxKey: (clipId: string, fxId: string, param: string, t?: number) => void
+  toggleFxEnabled: (clipId: string, fxId: string) => void
+  duplicateFxInstance: (clipId: string, fxId: string) => string | null
+  removeFxInstance: (clipId: string, fxId: string) => void
+  removeActiveFx: () => void
+
   // ---- history ----
   beginHistory: () => void
   endHistory: () => void
@@ -683,6 +839,17 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   jumpToMarker: (id: string) => void
   jumpToNextMarker: () => void
   jumpToPrevMarker: () => void
+  /** User-saved custom marker colours (persisted), beyond the 5 kind colours. */
+  markerCustomColors: string[]
+  addCustomMarkerColor: (hex: string) => void
+  /** Last-used marker kind, remembered so M stays one-keystroke fast. */
+  lastMarkerKind: string
+  setLastMarkerKind: (kind: string) => void
+  addMarkersBulk: (items: Array<Omit<TimelineMarker, 'id'>>) => string[]
+  /** Move timeline markers inside the clip's range ONTO the clip (range-limited, CapCut-style). Returns how many moved. */
+  moveMarkersToClip: (clipId: string) => number
+  /** Move a clip's markers back to the main timeline at their resolved positions. */
+  moveMarkersToTimeline: (clipId: string) => number
 
   // ---- link sets, parenting & groups ----
   linkSets: LinkSet[]
@@ -696,6 +863,15 @@ interface EditorState extends RiggingSlice, RotoMaskSlice {
   removeParentRelationship: (childId: string) => void
   createGroup: (memberIds: string[], name?: string) => string
   removeGroup: (groupId: string) => void
+  /** CapCut-style: group the current multi-selection (Ctrl+G). */
+  groupSelection: () => string | null
+  /** CapCut-style: dissolve every group touching the selection (Ctrl+Shift+G). */
+  ungroupSelection: () => void
+  /** AE Layer > New > Null Object: invisible transform-controller clip. */
+  addNullObject: () => string
+  /** AE motion-track workflow: bake tracker points into a NULL's position curves,
+   *  then parent the art to the null (graphic keyframes stay clean). */
+  bakeTrackingToNull: (sessionId?: string) => string | null
 
   // ---- tracking subsystem ----
   trackingSessions: TrackingSession[]
@@ -904,7 +1080,43 @@ async function loadDrawableSource(
   return canvas
 }
 
+export const DEMO_ASSETS = [
+  {
+    id: 'asset-death-note-vid',
+    name: 'Death Note Chibi - 5 Characters.mp4',
+    kind: 'video',
+    url: '/death_note_video.mp4',
+    duration: 8.0,
+    width: 1672,
+    height: 940,
+    fps: 30,
+    size: 1548200,
+  },
+  {
+    id: 'asset-death-note-img',
+    name: 'Death Note Chibi - 5 Characters.jfif',
+    kind: 'image',
+    url: '/death_note_composite.jfif',
+    duration: 5.0,
+    width: 1672,
+    height: 941,
+    size: 158400,
+  },
+  {
+    id: 'asset-room-chair-towel',
+    name: 'Room Leather Chair & Towel (Real Photo).jpg',
+    kind: 'image',
+    url: '/room_chair_towel.jpg',
+    duration: 5.0,
+    width: 1448,
+    height: 1086,
+    size: 384000,
+  },
+] as MediaAsset[]
+
 export const useEditor = create<EditorState>((set, get) => {
+  let maskUndoAt = 0
+  let maskUndoClipId = ''
   const pushSnapshot = () => {
     const snap = cloneDoc(get())
     set((s) => ({ past: [...s.past.slice(-49), snap], future: [] }))
@@ -917,43 +1129,52 @@ export const useEditor = create<EditorState>((set, get) => {
   }
 
   return {
-    assets: [
-      {
-        id: 'asset-death-note-vid',
-        name: 'Death Note Chibi - 5 Characters.mp4',
-        kind: 'video',
-        url: '/death_note_video.mp4',
-        duration: 8.0,
-        width: 1672,
-        height: 940,
-        fps: 30,
-        size: 1548200,
-      },
-      {
-        id: 'asset-death-note-img',
-        name: 'Death Note Chibi - 5 Characters.jfif',
-        kind: 'image',
-        url: '/death_note_composite.jfif',
-        duration: 5.0,
-        width: 1672,
-        height: 941,
-        size: 158400,
-      },
-      {
-        id: 'asset-room-chair-towel',
-        name: 'Room Leather Chair & Towel (Real Photo).jpg',
-        kind: 'image',
-        url: '/room_chair_towel.jpg',
-        duration: 5.0,
-        width: 1448,
-        height: 1086,
-        size: 384000,
-      },
-    ],
+    // Library starts empty. The three demo fixtures below exist for the
+    // OmniFrame region-edit demo loaders and the automated QA rigs
+    // (navigator.webdriver); real users import their own media.
+    assets: typeof navigator !== 'undefined' && (navigator as { webdriver?: boolean }).webdriver ? DEMO_ASSETS : [],
+    sourceDocuments: [],
+    customFonts: [],
+    customPalettes: [],
+    projectName: 'Untitled',
+    saveOmniProject: async (name) => buildOmniProjectBundle(get(), name || get().projectName),
+    setProjectName: (name) => set({ projectName: name.trim() || 'Untitled' }),
+    loadOmniProject: async (file) => {
+      const loaded = await parseOmniProjectBundle(file)
+      set({
+        ...loaded.state as Partial<EditorState>,
+        projectName: loaded.projectName,
+        playing: false,
+        visualPreview: null,
+        scrubbing: false,
+        inInteraction: false,
+        rotoBusy: false,
+        guidedMatteBusy: false,
+        mediaImportNotice: null,
+        past: [],
+        future: [],
+      })
+      // Fonts travel inside the bundle; re-register them with the document.
+      void registerAllCustomFonts(get().customFonts || [])
+    },
+    mediaImportNotice: null,
     tracks: [],
     clips: [],
     transitions: [],
     lutLibrary: { loaded: false, luts: [] },
+    customEffects: (() => {
+      try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.customEffects') : null
+        if (!raw) return []
+        const parsed = JSON.parse(raw)
+        if (!Array.isArray(parsed)) return []
+        return parsed
+          .filter((fx) => fx && typeof fx.id === 'string' && typeof fx.name === 'string')
+          .map((fx) => ({ ...fx, effect: sanitizeEffect(fx.effect), luts: sanitizeLuts(fx.luts) }))
+      } catch {
+        return []
+      }
+    })(),
     userLuts: (() => {
       try {
         const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.userLuts') : null
@@ -965,17 +1186,46 @@ export const useEditor = create<EditorState>((set, get) => {
       }
     })(),
     selectedTransitionId: null,
+    visualPreview: null,
+    maskEditClipId: null,
     playhead: 0,
     duration: 10,
     pxPerSec: 100,
     playing: false,
     speed: 1,
     projectFps: 30,
+    sequenceBackground: '#000000',
     dropFrameTimecode: false,
     previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
+    hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
+    uiStyle: typeof localStorage === 'undefined' ? 'omniframe' : (localStorage.getItem('omniframe.uiStyle') || 'omniframe'),
+    uiPalette: typeof localStorage === 'undefined' ? 'violet' : (localStorage.getItem('omniframe.uiPalette') || 'violet'),
+    aiProvider: typeof localStorage === 'undefined' ? 'openrouter' : (localStorage.getItem('omniframe.aiProvider') || 'openrouter'),
+    aiModel: typeof localStorage === 'undefined' ? 'openai/gpt-4o-mini' : (localStorage.getItem('omniframe.aiModel') || 'openai/gpt-4o-mini'),
+    aiEndpoint: typeof localStorage === 'undefined' ? '' : (localStorage.getItem('omniframe.aiEndpoint') || ''),
+    aiApiKey: '',
+    aiCapabilityModels: (() => { try { return JSON.parse(localStorage.getItem('omniframe.aiCapabilityModels') || '{}') } catch { return {} } })(),
+    aiConnection: { status: 'idle', message: '', latencyMs: null, modelAvailable: null, at: 0 },
+    watermarks: (() => { try { return JSON.parse(localStorage.getItem('omniframe.watermarks') || '[]') } catch { return [] } })(),
+    viewVideosAsLayers: false,
+    dockerPrefs: (() => {
+      try {
+        const raw = localStorage.getItem('omniframe.dockerPrefs')
+        if (raw) {
+          const parsed = JSON.parse(raw)
+          return { leftTabs: parsed.leftTabs || {}, rightSubtools: parsed.rightSubtools || {} }
+        }
+      } catch { /* private mode / bad json */ }
+      return { leftTabs: {}, rightSubtools: {} }
+    })(),
+    drawingSectionRequest: null,
+    compoundWindow: null,
+    exportRange: null,
     audioIsolationModel: 'omni-voicetarget',
     selectedClipId: null,
     selectedClipIds: [],
+    activeFx: null,
+    rightFocus: null,
     sequences: [],
     activeSequenceId: 'main',
     breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
@@ -1001,6 +1251,7 @@ export const useEditor = create<EditorState>((set, get) => {
     // ---- OmniFrame & Character Manipulation initial state ----
     omniframeMode: false,
     omniframeCharacters: INITIAL_DEATH_NOTE_CHARACTERS,
+    omniSelection: null,
     selectedCharacterId: 'char_light',
     attachDirectlyToVideo: true,
     attachedVideoClipId: null,
@@ -1056,6 +1307,8 @@ export const useEditor = create<EditorState>((set, get) => {
         scale: { x: 1, y: 1, z: 1 },
         color: '#8b5cf6',
         wireframe: false,
+        roughness: 0.25,
+        metalness: 0.8,
       },
     ],
     selected3DObjectId: '3d-wheel-1',
@@ -1247,8 +1500,10 @@ export const useEditor = create<EditorState>((set, get) => {
     // Universal gap tools + track targeting (see ./store/gapTools.ts).
     ...createGapToolsSlice(set, get, { pushSnapshot, recompute }),
     ...createOmniframeCharacterSlice(set, get, { pushSnapshot }),
+    ...createOmniExtractSlice(set, get, { pushSnapshot }),
     // RotoMask: click-to-segment rotoscoping (see ./store/rotoMask.ts).
     ...createRotoMaskSlice(set, get, { pushSnapshot }),
+    ...createSmartPatchSlice(set, get, pushSnapshot),
     rotoModelId: 'smart',
     rotoImportedModels: [],
     rotoStatus: { state: 'idle', message: 'Smart engine ready - no model needed' },
@@ -1258,6 +1513,19 @@ export const useEditor = create<EditorState>((set, get) => {
     rotoScope: { mode: 'current', start: 0, end: 2, step: 1 },
     rotoFrames: [],
     rotoTracking: { running: false, done: 0, total: 0 },
+    rotoInpaint: {
+      phase: 'idle',
+      done: 0,
+      total: 0,
+      message: '',
+      candidates: [],
+      selectedDonorFrame: null,
+      targetFrames: [],
+      donorByTarget: [],
+      maskGrow: 4,
+      donorDirection: 'both',
+      donorWindow: 0,
+    },
     rotoTool: null,
     rotoTolerance: 26,
     rotoBrushRadius: 24,
@@ -1278,6 +1546,7 @@ export const useEditor = create<EditorState>((set, get) => {
     drawingOpacity: 1,
     drawingScope: { type: 'global' },
     drawingEnabled: false,
+    pivotEditEnabled: false,
     drawingFillTolerance: 32,
     drawingPreserveLuminance: false,
     drawingPolygonSides: 5,
@@ -1291,6 +1560,7 @@ export const useEditor = create<EditorState>((set, get) => {
       opacity: 0.35,
       tintBefore: '#ef4444',
       tintAfter: '#10b981',
+      tintStrength: 1,
     },
     activeSelection: null,
     selectionMode: 'rect',
@@ -1468,6 +1738,11 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
+    setClipSpeedCurve: (id, curve) => {
+      set(st => ({
+        clips: st.clips.map(c => (c.id === id ? { ...c, speedCurve: curve } : c)),
+      }))
+    },
     setClipEffect: (id, effect) => {
       set((s) => ({
         clips: s.clips.map((c) =>
@@ -1476,11 +1751,179 @@ export const useEditor = create<EditorState>((set, get) => {
       }))
     },
 
+    setClipNotes: (id: string, notes: string) => {
+      set((s) => ({
+        clips: s.clips.map((c) => (c.id === id ? { ...c, notes } : c)),
+      }))
+    },
+    importCustomFontFile: async (file) => {
+      const format = fontFormatFromFileName(file.name)
+      if (!/\.(ttf|otf|woff2?)$/i.test(file.name)) {
+        throw new Error('That file is not a font - pick a .ttf, .otf, .woff or .woff2 file.')
+      }
+      const MAX_FONT_BYTES = 16 * 1024 * 1024
+      if (file.size > MAX_FONT_BYTES) {
+        throw new Error(`"${file.name}" is ${(file.size / 1048576).toFixed(1)} MB - fonts up to 16 MB can be embedded in a project.`)
+      }
+      const dataUrl = await readFileAsDataUrl(file)
+      const font: CustomFont = {
+        id: uid('font'),
+        name: fontFamilyFromFileName(file.name),
+        fileName: file.name,
+        format,
+        sizeBytes: dataUrlByteSize(dataUrl) || file.size,
+        dataUrl,
+        importedAt: Date.now(),
+      }
+      const registered = await registerCustomFont(font)
+      if (!registered) {
+        throw new Error(`"${file.name}" could not be loaded as a font - the file may be corrupt or an unsupported variant.`)
+      }
+      set((s) => ({ customFonts: [...s.customFonts.filter((f) => f.name !== font.name), font] }))
+      try {
+        const list = JSON.parse(localStorage.getItem('omniframe.customFonts') || '[]') as { name: string; dataUrl: string }[]
+        localStorage.setItem('omniframe.customFonts', JSON.stringify([...list.filter((f) => f.name !== font.name), { name: font.name, dataUrl }]))
+      } catch { /* storage full/blocked: project save still embeds the font */ }
+      return font
+    },
+    removeCustomFont: (id) => {
+      const font = get().customFonts.find((f) => f.id === id)
+      if (font) unregisterCustomFont(font.name)
+      set((s) => ({ customFonts: s.customFonts.filter((f) => f.id !== id) }))
+    },
+    importPaletteFile: async (file) => {
+      const text = await file.text()
+      const parsed = parsePalette(text, file.name)
+      if (!parsed) {
+        throw new Error('No colours could be read - use a GIMP .gpl, JASC .pal, or JSON palette file.')
+      }
+      const palette: ImportedPalette = {
+        id: uid('palette'),
+        name: parsed.name,
+        colors: parsed.colors.slice(0, 512),
+        source: file.name,
+        importedAt: Date.now(),
+      }
+      set((s) => ({ customPalettes: [...s.customPalettes.filter((pl) => pl.name !== palette.name), palette] }))
+      return palette
+    },
+    removeCustomPalette: (id) => {
+      set((s) => ({ customPalettes: s.customPalettes.filter((pl) => pl.id !== id) }))
+    },
+    importSubtitleFile: async (file, fontFamily) => {
+      const text = await file.text()
+      const cues = parseSubtitles(text, file.name).slice(0, 1000)
+      if (cues.length === 0) {
+        throw new Error('No subtitle cues found - use a SubRip .srt or WebVTT .vtt file.')
+      }
+      pushSnapshot()
+      const trackName = `${file.name.replace(/\.(srt|vtt)$/i, '').trim() || 'Captions'} - Captions`
+      const track = { ...makeTrack('video', trackName), height: 44 }
+      const newClips: Clip[] = cues.map((cue, idx) => ({
+        id: uid('clip-caption'),
+        trackId: track.id,
+        assetId: '',
+        start: cue.start,
+        duration: Math.max(0.4, cue.end - cue.start),
+        inPoint: 0,
+        name: cue.text.split('\n')[0].slice(0, 60) || `Caption ${idx + 1}`,
+        kind: 'text',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 250, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        textStyle: {
+          text: cue.text,
+          fontSize: 30,
+          color: '#ffffff',
+          backgroundColor: 'rgba(0,0,0,0.65)',
+          fontFamily: fontFamily || 'sans-serif',
+          bold: false,
+          italic: false,
+        },
+      }))
+      set((s) => ({
+        tracks: [track, ...s.tracks],
+        clips: [...s.clips, ...newClips],
+        selectedClipId: newClips[0].id,
+        selectedClipIds: [newClips[0].id],
+      }))
+      return { cues: newClips.length, trackId: track.id }
+    },
+
+    // ---- custom effects (user-built, shareable) ----------------------
+    saveCustomEffect: (name, clipId, thumbnail) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return null
+      const effect = sanitizeEffect(clip.effects)
+      const luts = sanitizeLuts(clip.adjustment?.luts)
+      const hasEffect = Object.keys(effect).length > 0
+      if (!hasEffect && !luts.length) return null
+      const fx: CustomEffect = {
+        id: `fx-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+        name: name.trim().slice(0, 80) || 'My effect',
+        effect,
+        ...(luts.length ? { luts } : {}),
+        ...(thumbnail ? { thumbnail } : {}),
+        createdAt: Date.now(),
+      }
+      const next = [fx, ...get().customEffects]
+      set({ customEffects: next })
+      try {
+        localStorage.setItem('omniframe.customEffects', JSON.stringify(next))
+      } catch { /* quota: still kept in memory + .omni */ }
+      return fx.id
+    },
+
+    applyCustomEffect: (id, clipId) => {
+      const fx = get().customEffects.find((f) => f.id === id)
+      const targetId = clipId ?? get().selectedClipId
+      if (!fx || !targetId) return false
+      const clip = get().clips.find((c) => c.id === targetId)
+      if (!clip) return false
+      const luts = sanitizeLuts(fx.luts)
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === targetId
+            ? { ...c, effects: sanitizeEffect(fx.effect), adjustment: { ...(c.adjustment ?? { luts: [] }), luts } }
+            : c,
+        ),
+      }))
+      return true
+    },
+
+    placeCustomEffectAsLayer: (id) => {
+      const fx = get().customEffects.find((f) => f.id === id)
+      if (!fx) return null
+      return get().addAdjustmentLayer({
+        name: fx.name,
+        effects: sanitizeEffect(fx.effect),
+        luts: sanitizeLuts(fx.luts),
+      })
+    },
+
+    deleteCustomEffect: (id) => {
+      const next = get().customEffects.filter((f) => f.id !== id)
+      set({ customEffects: next })
+      try {
+        localStorage.setItem('omniframe.customEffects', JSON.stringify(next))
+      } catch { /* ignore */ }
+    },
+
+    importCustomEffects: (items) => {
+      if (!items.length) return 0
+      const next = [...items, ...get().customEffects]
+      set({ customEffects: next })
+      try {
+        localStorage.setItem('omniframe.customEffects', JSON.stringify(next))
+      } catch { /* quota: kept in memory */ }
+      return items.length
+    },
+
     // ---- adjustment layers & LUTs ------------------------------------
     loadLutLibrary: async () => {
       if (get().lutLibrary.loaded) return
       try {
-        const res = await fetch('luts/manifest.json')
+        const res = await fetch('/luts/manifest.json')
         if (!res.ok) throw new Error(String(res.status))
         const manifest = await res.json()
         set({ lutLibrary: { loaded: true, luts: manifest.luts || [] } })
@@ -1513,31 +1956,79 @@ export const useEditor = create<EditorState>((set, get) => {
       } catch { /* ignore */ }
     },
 
+    clearUserLuts: () => {
+      set({ userLuts: [] })
+      try {
+        localStorage.removeItem('omniframe.userLuts')
+      } catch { /* ignore */ }
+    },
+
     addAdjustmentLayer: (partial = {}) => {
       pushSnapshot()
       const s = get()
-      const start = Math.max(0, partial.start ?? s.playhead)
       const contentEnd = s.clips.reduce((m, c) => Math.max(m, c.start + c.duration), 0)
-      const duration = Math.max(0.5, partial.duration ?? Math.max(2, contentEnd - start))
+      const selected = s.clips.find((c) => c.id === s.selectedClipId)
+      const selectedIsVisual =
+        !!selected &&
+        selected.kind !== 'adjustment' &&
+        selected.kind !== 'audio' &&
+        selected.kind !== 'text' &&
+        !selected.textStyle
+      const selectedAnchor = selectedIsVisual ? selected : undefined
+      const start = Math.max(0, partial.start ?? selectedAnchor?.start ?? s.playhead)
+      const duration = Math.max(
+        0.5,
+        partial.duration ?? selectedAnchor?.duration ?? Math.max(2, contentEnd - start),
+      )
 
-      // Default target: the topmost video track with no overlapping clip, so
-      // the layer grades everything below it while tracks above (e.g. text)
-      // stay untouched.
-      const videoTracks = s.tracks.filter((t) => t.type === 'video')
-      const overlaps = (trackId: string) =>
-        s.clips.some(
-          (c) =>
-            c.trackId === trackId &&
-            !(c.start + c.duration <= start || c.start >= start + duration),
+      // Tracks are stored top-to-bottom; the compositor draws them bottom-up.
+      // Put the new adjustment immediately above its target base clip. That
+      // makes it affect that clip and tracks below, while titles/overlays on
+      // higher tracks stay clean. Without a selected base clip, choose the
+      // lowest active non-adjustment visual at the playhead.
+      const trackIndex = (trackId: string) => s.tracks.findIndex((t) => t.id === trackId)
+      const activeVideoClips = s.clips.filter((c) => {
+        const track = s.tracks.find((t) => t.id === c.trackId)
+        return (
+          track?.type === 'video' &&
+          !track.hidden &&
+          !c.hidden &&
+          c.kind !== 'adjustment' &&
+          s.playhead >= c.start &&
+          s.playhead < c.start + c.duration
         )
+      })
+      const activeBaseClip = activeVideoClips
+        .filter((c) => c.kind !== 'text' && !c.textStyle)
+        .sort((a, b) => trackIndex(b.trackId) - trackIndex(a.trackId))[0]
+      const activeTextClip = activeVideoClips
+        .filter((c) => c.kind === 'text' || !!c.textStyle)
+        .sort((a, b) => trackIndex(b.trackId) - trackIndex(a.trackId))[0]
+      const anchor = selectedAnchor || activeBaseClip
+
+      let tracks = s.tracks
       let targetTrackId = partial.trackId || ''
       if (!targetTrackId) {
-        const free = videoTracks.find((t) => !overlaps(t.id))
-        targetTrackId =
-          free?.id ||
-          (videoTracks[0]
-            ? get().createTrack('video', 'above', videoTracks[0].id)
-            : get().ensureTrack('video'))
+        const anchorIndex = anchor ? trackIndex(anchor.trackId) : -1
+        const textTrackIndex = activeTextClip ? trackIndex(activeTextClip.trackId) + 1 : -1
+        const bottomVideoIndex = s.tracks.reduce(
+          (last, track, index) => (track.type === 'video' ? index : last),
+          -1,
+        )
+        // If there is only a title at the playhead, place the layer underneath
+        // it rather than grading the title itself.
+        const insertAt = anchorIndex >= 0
+          ? anchorIndex
+          : textTrackIndex >= 0
+            ? textTrackIndex
+            : bottomVideoIndex >= 0
+              ? bottomVideoIndex
+              : 0
+        const videoCount = s.tracks.filter((t) => t.type === 'video').length
+        const layerTrack = makeTrack('video', `V${videoCount + 1}`)
+        tracks = [...s.tracks]
+        tracks.splice(insertAt, 0, layerTrack)
+        targetTrackId = layerTrack.id
       }
 
       const id = `clip-adjustment-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
@@ -1559,12 +2050,16 @@ export const useEditor = create<EditorState>((set, get) => {
         effects: partial.effects,
         adjustment: partial.luts?.length ? { luts: partial.luts } : undefined,
       }
-      set((st) => ({
-        clips: [...st.clips, clip],
-        selectedClipId: id,
-        selectedClipIds: [id],
-        duration: recompute([...st.clips, clip]),
-      }))
+      set((st) => {
+        const clips = [...st.clips, clip]
+        return {
+          tracks,
+          clips,
+          selectedClipId: id,
+          selectedClipIds: [id],
+          duration: recompute(clips),
+        }
+      })
       return id
     },
 
@@ -1677,18 +2172,27 @@ export const useEditor = create<EditorState>((set, get) => {
 
     placeEffectAsLayer: (name, effect) => {
       const s = get()
-      // Prefer the selected adjustment layer, else one active at playhead.
       const selected = s.clips.find((c) => c.id === s.selectedClipId)
-      const target =
-        selected?.kind === 'adjustment'
-          ? selected
-          : s.clips.find(
+      // Explicitly selecting an adjustment clip means "add to this layer".
+      // With no selection, reuse the layer already covering the playhead.
+      // Selecting ordinary media instead creates a separate timeline layer
+      // above that clip (and below any existing titles or overlays).
+      const activeAdjustment = selected
+        ? undefined
+        : s.clips
+            .filter(
               (c) =>
                 c.kind === 'adjustment' &&
                 s.playhead >= c.start &&
                 s.playhead < c.start + c.duration &&
                 !c.hidden,
             )
+            .sort((a, b) => {
+              const ai = s.tracks.findIndex((t) => t.id === a.trackId)
+              const bi = s.tracks.findIndex((t) => t.id === b.trackId)
+              return ai - bi
+            })[0]
+      const target = selected?.kind === 'adjustment' ? selected : activeAdjustment
       if (target) {
         pushSnapshot()
         set((st) => ({
@@ -1765,16 +2269,104 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     addAsset: (a) => set((s) => ({ assets: [...s.assets, a] })),
+    ensureDemoAssets: () => set((s) => ({ assets: [...s.assets, ...DEMO_ASSETS.filter((d) => !s.assets.some((a) => a.id === d.id))] })),
+    helpOpen: false,
+    setHelpOpen: (v) => set({ helpOpen: v }),
+    panelMaximized: false,
+    setPanelMaximized: (v) => set({ panelMaximized: v }),
+    clearMediaImportNotice: () => set({ mediaImportNotice: null }),
+
+    addGeneratedAudioTracks: (entries, options = {}) => {
+      if (entries.length === 0 && !(options.extraAssets?.length)) {
+        return { trackIds: [], clipIds: [] }
+      }
+      pushSnapshot()
+      const tracks = entries.map((entry) => makeTrack('audio', entry.trackName))
+      const newClips = entries.map((entry, index): Clip => ({
+        ...entry.clip,
+        trackId: tracks[index].id,
+      }))
+      const mutedIds = new Set(options.muteClipIds || [])
+      set((s) => {
+        const clips = [
+          ...s.clips.map((clip) => mutedIds.has(clip.id) ? { ...clip, volume: 0 } : clip),
+          ...newClips,
+        ]
+        return {
+          assets: [...s.assets, ...(options.extraAssets || []), ...entries.map((entry) => entry.asset)],
+          tracks: [...s.tracks, ...tracks],
+          clips,
+          selectedClipId: options.selectedClipId ?? newClips[newClips.length - 1]?.id ?? s.selectedClipId,
+          duration: recompute(clips),
+        }
+      })
+      return { trackIds: tracks.map((track) => track.id), clipIds: newClips.map((clip) => clip.id) }
+    },
 
     importFiles: async (files) => {
       const list = Array.from(files as ArrayLike<File>)
+      set({ mediaImportNotice: null })
       for (const file of list) {
-        const asset = await readMediaFile(file)
-        if (!asset) continue
-        get().addAsset(asset)
-        // Invariant I-10: Media import adds to project library ONLY.
-        // It does NOT insert into timeline. Loads into Source Monitor for preview.
-        get().setSourcePreviewAsset(asset.id)
+        try {
+          if (/\.omni$/i.test(file.name)) {
+            await get().loadOmniProject(file)
+            set({ mediaImportNotice: `Opened OmniFrame project “${file.name}”; project state and embedded media were restored.` })
+            continue
+          }
+
+          if (/\.psd$/i.test(file.name) || (!/\.psb$/i.test(file.name) && file.type === 'image/vnd.adobe.photoshop')) {
+            const result = await importPsdDocument(file)
+            const sourceDocument = sourceDocumentFromFile(file, result.sourceDocumentId)
+            set((s) => ({
+              assets: [...s.assets, ...result.assets],
+              sourceDocuments: [...s.sourceDocuments, sourceDocument],
+            }))
+            set({ mediaImportNotice: result.notice })
+            // PSD import adds either its supported raster layers or one saved
+            // flattened composite to the library only; the user explicitly
+            // chooses which artwork to place/rig next.
+            if (result.assets[0]) get().setSourcePreviewAsset(result.assets[0].id)
+            continue
+          }
+
+          if (/\.(?:ora|kra)$/i.test(file.name)) {
+            const { importArtworkArchive } = await import('./lib/layeredArtworkImport')
+            const result = await importArtworkArchive(file)
+            const sourceDocument = sourceDocumentFromFile(file, result.sourceDocumentId)
+            set((s) => ({
+              assets: [...s.assets, ...result.assets],
+              sourceDocuments: [...s.sourceDocuments, sourceDocument],
+            }))
+            set({ mediaImportNotice: result.notice })
+            if (result.assets[0]) get().setSourcePreviewAsset(result.assets[0].id)
+            continue
+          }
+
+          if (/\.(?:psb|xcf|clip|cmc|procreate|afphoto|afdesign|pdn|mdp|rif|ai)$/i.test(file.name)) {
+            const extension = file.name.split('.').pop()?.toLowerCase() || ''
+            const sourceApp: Record<string, string> = {
+              psb: 'Photoshop PSB', xcf: 'GIMP', clip: 'Clip Studio Paint', cmc: 'Clip Studio Paint',
+              procreate: 'Procreate', afphoto: 'Affinity Photo', afdesign: 'Affinity Designer',
+              pdn: 'Paint.NET', mdp: 'FireAlpaca/MediBang', rif: 'Corel Painter', ai: 'Adobe Illustrator',
+            }
+            const conversion = extension === 'xcf'
+              ? 'Export as OpenRaster (.ora) for its supported raster subset, or PNG for a flat render.'
+              : extension === 'ai'
+                ? 'Export a checked PDF, SVG, or PNG from Illustrator; fonts, links, live effects, and native editability are not transferred.'
+                : 'Export PNG for a flat render, or PSD/ORA only when the source app offers it; verify that export in the source application before relying on its layers.'
+            throw new Error(`${sourceApp[extension] || 'This application'} native files are not safely decoded as complete projects. ${conversion}`)
+          }
+
+          const asset = await readMediaFile(file)
+          if (!asset) continue
+          get().addAsset(asset)
+          // Invariant I-10: Media import adds to project library ONLY.
+          // It does NOT insert into timeline. Loads into Source Monitor for preview.
+          get().setSourcePreviewAsset(asset.id)
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
+          set({ mediaImportNotice: `Could not import “${file.name}”: ${message}` })
+        }
       }
     },
 
@@ -1954,6 +2546,55 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
+    placeLayeredArtworkOnTimeline: (documentId, atTime) => {
+      const state = get()
+      const layers = state.assets
+        .map((asset) => ({ asset, meta: getLayeredArtworkInfo(asset) }))
+        .filter((entry) => entry.asset.kind === 'image' && entry.meta?.documentId === documentId)
+        .sort((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
+      if (layers.length === 0) return []
+
+      const start = Math.max(0, atTime ?? state.playhead)
+      // Keep the still layers synchronized as a single static composite.
+      const duration = Math.max(...layers.map(({ asset }) => asset.duration || 5))
+      const tracks = layers.map(({ asset, meta }) => {
+        const layerName = meta?.layerName || asset.name
+        return makeTrack('video', `${(meta?.sourceFormat || 'artwork').toUpperCase()} · ${layerName}`)
+      })
+      const clips: Clip[] = layers.map(({ asset, meta }, index) => ({
+        id: uid('clip'),
+        trackId: tracks[index].id,
+        assetId: asset.id,
+        start,
+        duration,
+        inPoint: 0,
+        name: meta?.layerName || asset.name,
+        kind: asset.kind,
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+      }))
+
+      // Source layer order is front-to-back. New tracks keep that order at the
+      // top; playback reverses tracks so the front layer composites last.
+      pushSnapshot()
+      set((s) => {
+        const nextClips = [...s.clips, ...clips]
+        return {
+          tracks: [...tracks, ...s.tracks],
+          clips: nextClips,
+          selectedClipId: clips[0].id,
+          selectedClipIds: clips.map((clip) => clip.id),
+          monitorMode: 'program',
+          duration: recompute(nextClips),
+        }
+      })
+      return clips.map((clip) => clip.id)
+    },
+
+    placePsdDocumentOnTimeline: (documentId, atTime) =>
+      get().placeLayeredArtworkOnTimeline(documentId, atTime),
+
     moveClip: (id, newStart, newTrackId) => {
       const current = get().clips.find((c) => c.id === id)
       if (!current || get().tracks.find((t) => t.id === current.trackId)?.locked) return
@@ -2002,6 +2643,14 @@ export const useEditor = create<EditorState>((set, get) => {
           if (c.id !== id) return c
           const asset = s.assets.find((a) => a.id === c.assetId)
           const srcMax = asset ? asset.duration : c.duration
+          // The fx container closes on trim: instances shift/re-clamp with it.
+          const reclampFx = (shift: number, dur: number) =>
+            (c.fxInstances || [])
+              .map((f) => {
+                const r = clampFxToClip(f.inP + shift, f.duration, dur)
+                return { ...f, inP: r.inP, duration: r.duration }
+              })
+              .filter((f) => f.duration >= FX_MIN_DUR - 1e-9)
           if (edge === 'left') {
             const maxStart = c.start + c.duration - MIN_CLIP
             const newStart = Math.min(maxStart, Math.max(0, value))
@@ -2009,10 +2658,10 @@ export const useEditor = create<EditorState>((set, get) => {
             const newIn = Math.max(0, c.inPoint + delta)
             const newDur = c.duration - (newIn - c.inPoint)
             if (newDur < MIN_CLIP) return c
-            return { ...c, start: newStart, inPoint: newIn, duration: newDur }
+            return { ...c, start: newStart, inPoint: newIn, duration: newDur, fxInstances: c.fxInstances ? reclampFx(-delta, newDur) : c.fxInstances }
           } else {
             const newDur = clamp(value - c.start, MIN_CLIP, (srcMax || c.duration) - c.inPoint)
-            return { ...c, duration: newDur }
+            return { ...c, duration: newDur, fxInstances: c.fxInstances ? reclampFx(0, newDur) : c.fxInstances }
           }
         })
         return { clips, duration: recompute(clips) }
@@ -2034,13 +2683,15 @@ export const useEditor = create<EditorState>((set, get) => {
           continue
         }
         const offset = time - c.start
-        const left: Clip = { ...c, duration: offset }
+        const fx = c.fxInstances?.length ? splitFxInstances(c.fxInstances, offset) : null
+        const left: Clip = { ...c, duration: offset, fxInstances: fx ? fx.left : c.fxInstances }
         const right: Clip = {
           ...c,
           id: uid('clip'),
           start: time,
           duration: c.duration - offset,
           inPoint: c.inPoint + offset,
+          fxInstances: fx ? fx.right : c.fxInstances,
         }
         newClips.push(left, right)
       }
@@ -2081,8 +2732,15 @@ export const useEditor = create<EditorState>((set, get) => {
         const selectedClipId =
           s.selectedClipId && targetIds.has(s.selectedClipId) ? null : s.selectedClipId
 
+        // Deleting a converted drawing clip returns its strokes to the
+        // live drawing pass (they were never destroyed by conversion).
+        const drawingStrokes = s.drawingStrokes.some((st) => st.convertedClipId && targetIds.has(st.convertedClipId))
+          ? s.drawingStrokes.map((st) => (st.convertedClipId && targetIds.has(st.convertedClipId) ? { ...st, convertedClipId: undefined } : st))
+          : s.drawingStrokes
+
         return {
           clips,
+          drawingStrokes,
           transitions,
           linkSets,
           parentRelationships,
@@ -2276,12 +2934,20 @@ export const useEditor = create<EditorState>((set, get) => {
       })
     },
 
-    selectClip: (id) => set({ selectedClipId: id, selectedClipIds: id ? [id] : [] }),
-    selectClips: (ids) => set({ selectedClipIds: ids, selectedClipId: ids[0] || null }),
+    selectClip: (id) => {
+      // CapCut/Shotcut rule: clicking any group member selects the whole group.
+      const ids = id ? expandGroupSelection(get().groups, [id]) : []
+      set({ selectedClipId: id, selectedClipIds: ids })
+    },
+    selectClips: (ids) => {
+      const exp = expandGroupSelection(get().groups, ids)
+      set({ selectedClipIds: exp, selectedClipId: exp[0] || null })
+    },
     toggleClipSelection: (id, multi = false) => {
       const s = get()
       if (!multi) {
-        set({ selectedClipId: id, selectedClipIds: id ? [id] : [] })
+        const ids = id ? expandGroupSelection(get().groups, [id]) : []
+        set({ selectedClipId: id, selectedClipIds: ids })
         return
       }
       const exists = s.selectedClipIds.includes(id)
@@ -2291,6 +2957,37 @@ export const useEditor = create<EditorState>((set, get) => {
 
     setClipProp: (id, partial) => {
       set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...partial } : c)) }))
+    },
+
+    // ---- Clip Mask (CapCut/AE-style visibility mask; undoable) ----
+    // Slider/drag updates coalesce: at most one undo snapshot per burst.
+    setMaskEditClip: (id) => set({ maskEditClipId: id }),
+    addClipMask: (clipId) => {
+      pushSnapshot()
+      set((s) => ({
+        clips: s.clips.map((c) => (c.id === clipId ? { ...c, mask: { ...DEFAULT_CLIP_MASK } } : c)),
+        maskEditClipId: clipId,
+      }))
+    },
+    updateClipMask: (clipId, patch) => {
+      const now = Date.now()
+      if (maskUndoClipId !== clipId || now - maskUndoAt > 1200) {
+        pushSnapshot()
+        maskUndoClipId = clipId
+      }
+      maskUndoAt = now
+      set((s) => ({
+        clips: s.clips.map((c) =>
+          c.id === clipId ? { ...c, mask: { ...DEFAULT_CLIP_MASK, ...c.mask, ...patch } } : c,
+        ),
+      }))
+    },
+    removeClipMask: (clipId) => {
+      pushSnapshot()
+      set((s) => ({
+        clips: s.clips.map((c) => (c.id === clipId ? { ...c, mask: undefined } : c)),
+        maskEditClipId: s.maskEditClipId === clipId ? null : s.maskEditClipId,
+      }))
     },
 
     setClipTransform: (id, partial) => {
@@ -2460,6 +3157,7 @@ export const useEditor = create<EditorState>((set, get) => {
         if (mainSeq) {
           set({
             activeSequenceId: 'main',
+            compoundWindow: null,
             breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
             tracks: mainSeq.tracks,
             clips: mainSeq.clips,
@@ -2486,7 +3184,24 @@ export const useEditor = create<EditorState>((set, get) => {
 
       const newBreadcrumbs = [{ id: 'main', name: 'Main Timeline' }, { id: targetSeq.id, name: targetSeq.name }]
 
+      // The parent compound clip's trim defines the visible window; the
+      // trimmed head/tail render inside as faint cut voids.
+      let compoundWindow: { in: number; out: number; total: number } | null = null
+      if (targetSeq.compoundClipId) {
+        const parentClip =
+          currentSnapshot.clips.find((c) => c.id === targetSeq.compoundClipId) ||
+          updatedSequences.flatMap((seq) => seq.clips).find((c) => c.id === targetSeq.compoundClipId)
+        if (parentClip) {
+          compoundWindow = {
+            in: Math.max(0, parentClip.inPoint || 0),
+            out: Math.max(0, (parentClip.inPoint || 0) + parentClip.duration),
+            total: targetSeq.duration,
+          }
+        }
+      }
+
       set({
+        compoundWindow,
         activeSequenceId: targetSeq.id,
         breadcrumbs: newBreadcrumbs,
         tracks: structuredClone(targetSeq.tracks),
@@ -2503,6 +3218,102 @@ export const useEditor = create<EditorState>((set, get) => {
       get().openSequence(sequenceId)
     },
 
+    startVisualPreview: (input) => set((s) => {
+      const minimumWindow = 0.05
+      const start = clamp(input.startTime, 0, Math.max(0, s.duration - minimumWindow))
+      const end = Math.min(Math.max(start + minimumWindow, input.endTime), Math.max(s.duration, start + minimumWindow))
+      const previousPreview = s.visualPreview
+      return {
+        visualPreview: {
+          ...input,
+          startTime: start,
+          endTime: end,
+          id: uid('visual-preview'),
+          // Replacing an audition still returns to the playhead/speed from
+          // before the first audition, not the middle of the previous one.
+          returnPlayhead: previousPreview?.returnPlayhead ?? s.playhead,
+          returnSpeed: previousPreview?.returnSpeed ?? s.speed,
+        },
+        playhead: start,
+        playing: true,
+        speed: 1,
+        monitorMode: 'program',
+      }
+    }),
+    stopVisualPreview: () => {
+      const preview = get().visualPreview
+      if (!preview) return
+      set((s) => ({
+        visualPreview: null,
+        playing: false,
+        playhead: clamp(preview.returnPlayhead, 0, s.duration),
+        speed: preview.returnSpeed,
+      }))
+    },
+    applyVisualPreview: () => {
+      const preview = get().visualPreview
+      if (!preview || preview.kind === 'clip-playback' || preview.kind === 'range-playback') return
+      if (preview.kind === 'clip-effect') {
+        if (!get().clips.some((clip) => clip.id === preview.clipId)) return get().stopVisualPreview()
+        pushSnapshot()
+        set((s) => ({
+          clips: s.clips.map((clip) => clip.id === preview.clipId
+            ? { ...clip, effects: { ...clip.effects, ...preview.effect } }
+            : clip),
+        }))
+      } else if (preview.kind === 'clip-lut') {
+        if (!get().clips.some((clip) => clip.id === preview.clipId)) return get().stopVisualPreview()
+        get().addLutToClip(preview.clipId, preview.lut)
+      } else if (preview.kind === 'adjustment-layer') {
+        const anchor = get().clips.find((clip) => clip.id === preview.anchorClipId)
+        if (!anchor) return get().stopVisualPreview()
+        get().selectClip(anchor.id)
+        if (preview.effect) {
+          get().placeEffectAsLayer(preview.label, preview.effect)
+        } else if (preview.lut) {
+          get().addAdjustmentLayer({
+            name: `Adjustment: ${preview.lut.name}`,
+            start: anchor.start,
+            duration: anchor.duration,
+            luts: [{ ...preview.lut, id: uid('clip-lut') }],
+          })
+        }
+      } else if (preview.kind === 'transition') {
+        const { id: _previewId, ...transition } = preview.transition
+        get().addTransition(transition)
+      } else if (preview.kind === 'text-clip') {
+        const state = get()
+        const clipData = structuredClone(preview.clip)
+        let trackId = state.tracks.some((track) => track.id === clipData.trackId) ? clipData.trackId : ''
+        if (!trackId) {
+          const videoTracks = state.tracks.filter((track) => track.type === 'video')
+          const overlaps = (candidateId: string) => state.clips.some(
+            (clip) => clip.trackId === candidateId && !(clip.start + clip.duration <= clipData.start || clip.start >= clipData.start + clipData.duration),
+          )
+          const baseTrack = videoTracks[0]
+          const availableTrack = baseTrack && !overlaps(baseTrack.id)
+            ? baseTrack
+            : videoTracks.find((track) => !overlaps(track.id))
+          if (availableTrack) {
+            trackId = availableTrack.id
+            pushSnapshot()
+          } else if (baseTrack) {
+            // createTrack records the pre-commit snapshot itself.
+            trackId = get().createTrack('video', 'above', baseTrack.id)
+          } else {
+            trackId = get().ensureTrack('video')
+          }
+        } else {
+          pushSnapshot()
+        }
+        const clip: Clip = { ...clipData, id: uid('text'), trackId }
+        set((s) => {
+          const clips = [...s.clips, clip]
+          return { clips, selectedClipId: clip.id, selectedClipIds: [clip.id], duration: recompute(clips) }
+        })
+      }
+      get().stopVisualPreview()
+    },
     setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
     // Importing or clicking a media asset sets monitorMode to 'source', and the
     // preview then tears down the engine that owns the playhead clock. Playing
@@ -2532,12 +3343,58 @@ export const useEditor = create<EditorState>((set, get) => {
       const supported = [23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120]
       if (supported.includes(value)) set({ projectFps: value, dropFrameTimecode: false })
     },
+    setSequenceBackground: (color) => {
+      if (/^#[0-9a-fA-F]{6}$/.test(color)) set({ sequenceBackground: color })
+    },
     setDropFrameTimecode: (enabled) => set((state) => ({
       dropFrameTimecode: enabled && (state.projectFps === 29.97 || state.projectFps === 59.94),
     })),
     setPreviewQuality: (previewQuality) => {
       localStorage.setItem('omniframe.previewQuality', previewQuality)
       set({ previewQuality })
+    },
+    setHideOverflowX: (v) => {
+      try { localStorage.setItem('omniframe.hideOverflowX', v ? 'yes' : 'no') } catch { /* private mode */ }
+      set({ hideOverflowX: v })
+    },
+    setUiStyle: (v: string) => {
+      try { localStorage.setItem('omniframe.uiStyle', v) } catch { /* private mode */ }
+      set({ uiStyle: v })
+    },
+    setUiPalette: (v: string) => {
+      try { localStorage.setItem('omniframe.uiPalette', v) } catch { /* private mode */ }
+      set({ uiPalette: v })
+    },
+    setAiProvider: (v: string) => {
+      try { localStorage.setItem('omniframe.aiProvider', v) } catch { /* private mode */ }
+      set({ aiProvider: v, aiConnection: { status: 'idle', message: '', latencyMs: null, modelAvailable: null, at: 0 } })
+    },
+    setAiModel: (v: string) => {
+      try { localStorage.setItem('omniframe.aiModel', v) } catch { /* private mode */ }
+      set({ aiModel: v })
+    },
+    setAiEndpoint: (v: string) => {
+      try { localStorage.setItem('omniframe.aiEndpoint', v) } catch { /* private mode */ }
+      set({ aiEndpoint: v })
+    },
+    setAiApiKey: (v: string) => set({ aiApiKey: v }), // memory only, by design
+    setAiCapabilityModel: (capability: string, model: string) => {
+      const next = { ...get().aiCapabilityModels, [capability]: model }
+      try { localStorage.setItem('omniframe.aiCapabilityModels', JSON.stringify(next)) } catch { /* private mode */ }
+      set({ aiCapabilityModels: next })
+    },
+    setAiConnection: (c) => set({ aiConnection: { status: c.status, message: c.message, latencyMs: c.latencyMs, modelAvailable: c.modelAvailable ?? null, at: Date.now() } }),
+    addWatermark: (w) => {
+      const id = `wm_${Date.now().toString(36)}${Math.floor(Math.random() * 1e6).toString(36)}`
+      const next = [...get().watermarks, { id, ...w }]
+      try { localStorage.setItem('omniframe.watermarks', JSON.stringify(next)) } catch { /* private mode */ }
+      set({ watermarks: next })
+      return id
+    },
+    removeWatermark: (id: string) => {
+      const next = get().watermarks.filter((w) => w.id !== id)
+      try { localStorage.setItem('omniframe.watermarks', JSON.stringify(next)) } catch { /* private mode */ }
+      set({ watermarks: next })
     },
     setAudioIsolationModel: (model) => set({ audioIsolationModel: model }),
 
@@ -2596,7 +3453,24 @@ export const useEditor = create<EditorState>((set, get) => {
     // ---- drawing actions ----
     addDrawingStroke: (stroke) => {
       pushSnapshot()
-      set((s) => ({ drawingStrokes: [...s.drawingStrokes, stroke] }))
+      set((s) => {
+        // Strict layered stamping: a stroke joins the layer stack only when
+        // "View videos as layers" was ON at the moment it was drawn, and it
+        // passes through exactly the clips selected at that moment.
+        const stamped: DrawingStroke = s.viewVideosAsLayers
+          ? {
+              ...stroke,
+              layered: true,
+              anchorClipIds: (s.selectedClipIds.length > 0
+                ? s.selectedClipIds
+                : s.selectedClipId
+                  ? [s.selectedClipId]
+                  : []
+              ).filter((id) => s.clips.some((c) => c.id === id)),
+            }
+          : { ...stroke, layered: false }
+        return { drawingStrokes: [...s.drawingStrokes, stamped] }
+      })
     },
     clearDrawingStrokes: (layerId) => {
       pushSnapshot()
@@ -2612,7 +3486,92 @@ export const useEditor = create<EditorState>((set, get) => {
     setDrawingOpacity: (opacity) => set({ drawingOpacity: Math.max(0, Math.min(1, opacity)) }),
     setDrawingScope: (scope) => set({ drawingScope: scope }),
     setDrawingEnabled: (enabled) => set({ drawingEnabled: enabled }),
+    setViewVideosAsLayers: (v) => set({ viewVideosAsLayers: v }),
+    setDockerPref: (kind, id, visible) => {
+      set((s) => ({ dockerPrefs: { ...s.dockerPrefs, [kind]: { ...s.dockerPrefs[kind], [id]: visible } } }))
+      try {
+        localStorage.setItem('omniframe.dockerPrefs', JSON.stringify(get().dockerPrefs))
+      } catch { /* private mode */ }
+    },
+    requestDrawingSection: (section) => set({ drawingSectionRequest: section }),
+    setExportIn: () =>
+      set((s) => ({
+        exportRange: { in: Math.max(0, s.playhead), out: Math.max(Math.max(0, s.playhead) + 0.1, s.exportRange?.out ?? s.duration) },
+      })),
+    setExportOut: () =>
+      set((s) => ({
+        exportRange: { in: Math.max(0, Math.min(s.exportRange?.in ?? 0, s.playhead)), out: Math.max((s.exportRange?.in ?? 0) + 0.1, s.playhead) },
+      })),
+    clearExportRange: () => set({ exportRange: null }),
+    convertDrawingToClips: () => {
+      const s = get()
+      const plan = planDrawingToClips({
+        strokes: s.drawingStrokes,
+        clips: s.clips,
+        trackIdsTopToBottom: s.tracks.map((t) => t.id),
+        fps: s.projectFps || 30,
+        projectDuration: s.duration || 10,
+      })
+      if (plan.clips.length === 0) return { clips: 0, tracks: 0, strokes: 0 }
+      pushSnapshot()
+      // Materialize tracks bottom-stratum first so each insert lands
+      // directly above its anchor (or at the very top for unanchored art).
+      const tracks = [...s.tracks]
+      const trackIdByKey = new Map<string, string>()
+      const insertedByStratum = new Map<string, string>()
+      for (const tp of [...plan.tracks].sort((a, b) => a.stratum - b.stratum || a.slot - b.slot)) {
+        const id = uid('track-drawing')
+        trackIdByKey.set(tp.key, id)
+        const newTrack: Track = {
+          id,
+          name: tp.stratum === Number.POSITIVE_INFINITY ? 'Drawing Clips' : 'Drawing Clips (layered)',
+          type: 'video',
+          height: 44,
+        } as Track
+        const stratumKey = String(tp.stratum)
+        const previous = insertedByStratum.get(stratumKey)
+        if (previous) {
+          const at = tracks.findIndex((t) => t.id === previous)
+          tracks.splice(Math.max(0, at), 0, newTrack)
+        } else if (tp.insertAboveTrackId) {
+          const at = tracks.findIndex((t) => t.id === tp.insertAboveTrackId)
+          tracks.splice(at >= 0 ? at : 0, 0, newTrack)
+        } else {
+          tracks.splice(0, 0, newTrack)
+        }
+        insertedByStratum.set(stratumKey, id)
+      }
+      const layerName = new Map(s.paintLayers.map((l) => [l.id, l.name]))
+      const newClips: Clip[] = plan.clips.map((pc) => ({
+        id: uid('clip-drawing'),
+        trackId: trackIdByKey.get(pc.trackKey) || tracks[0].id,
+        assetId: '',
+        start: pc.start,
+        duration: pc.duration,
+        inPoint: 0,
+        name: `Drawing · ${layerName.get(pc.layerId) || 'Paint'} · f${pc.startFrame}-${pc.endFrame - 1}`,
+        kind: 'drawing',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        drawingStrokeIds: pc.strokeIds,
+        drawingLayerId: pc.layerId,
+      }))
+      const clipIdByStroke = new Map<string, string>()
+      for (const c of newClips) for (const sid of c.drawingStrokeIds || []) clipIdByStroke.set(sid, c.id)
+      set({
+        tracks,
+        clips: [...s.clips, ...newClips],
+        drawingStrokes: s.drawingStrokes.map((st) =>
+          clipIdByStroke.has(st.id) ? { ...st, convertedClipId: clipIdByStroke.get(st.id) } : st,
+        ),
+        selectedClipId: newClips[0]?.id || s.selectedClipId,
+        selectedClipIds: newClips[0] ? [newClips[0].id] : s.selectedClipIds,
+      })
+      return { clips: newClips.length, tracks: trackIdByKey.size, strokes: plan.convertedStrokeIds.length }
+    },
     toggleDrawingEnabled: () => set((s) => ({ drawingEnabled: !s.drawingEnabled })),
+    setPivotEditEnabled: (enabled) => set({ pivotEditEnabled: enabled }),
     createPaintLayer: (name) => {
       const id = uid('layer')
       const newLayer: PaintLayer = {
@@ -3254,6 +4213,25 @@ export const useEditor = create<EditorState>((set, get) => {
             drawingEnabled: true,
           })
           break
+        case 'alight':
+          // Alight Motion-style (from the Nova study): phone-editor DNA —
+          // layer stack first, big timeline, inspector on the right.
+          set({
+            workspacePreset: preset,
+            focusMode: 'none',
+            leftOpen: true,
+            leftTab: 'media',
+            leftDockWidth: 264,
+            rightOpen: true,
+            rightPanelWidth: 288,
+            timelineHeight: 380,
+            drawingEnabled: false,
+            leftPanelFloating: false,
+            rightPanelFloating: false,
+            timelineFloating: false,
+            timelineCollapsed: false,
+          })
+          break
         case 'capcut':
           // CapCut-style: media-first left dock, right inspector, tall timeline.
           set({
@@ -3436,6 +4414,185 @@ export const useEditor = create<EditorState>((set, get) => {
       get().setWorkspacePreset('default')
     },
 
+    // ---- CapCut-style effect instances on clips (board J) ----
+    setActiveFx: (sel) => set({ activeFx: sel }),
+
+    requestRightSection: (id) => set({ rightFocus: { id, nonce: Date.now() }, rightOpen: true }),
+
+    addFxInstance: (clipId, catalogId, opts) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      if (!clip) return null
+      // Only image / video / compound clips accept dropped effects.
+      const asset = s.assets.find((a) => a.id === clip.assetId)
+      const allowed =
+        clip.kind === 'compound' ||
+        clip.kind === 'image' ||
+        clip.kind === 'video' ||
+        asset?.kind === 'image' ||
+        asset?.kind === 'video'
+      if (!allowed || clip.kind === 'adjustment' || clip.kind === 'audio' || clip.kind === 'text' || !!clip.textStyle) return null
+      const entry = fxCatalogById(catalogId)
+      if (!entry) return null
+      pushSnapshot()
+      const fxId = uid('fx')
+      // A dropped effect spans the FULL clip length by default; the closed
+      // container clamp keeps it inside the parent forever.
+      const range = clampFxToClip(opts?.inP ?? 0, opts?.duration ?? clip.duration, clip.duration)
+      const inst: FxInstance = {
+        id: fxId,
+        catalogId,
+        name: entry.name,
+        inP: range.inP,
+        duration: range.duration,
+        params: { ...entry.patch },
+        keys: {},
+        enabled: true,
+      }
+      set((st) => ({
+        clips: st.clips.map((c) => (c.id === clipId ? { ...c, fxInstances: [...(c.fxInstances || []), inst] } : c)),
+        selectedClipId: clipId,
+        activeFx: { clipId, fxId },
+      }))
+      // Auto-open the connected right-panel section for the settings.
+      get().requestRightSection('fxstack')
+      return fxId
+    },
+
+    addFxAdjustment: (catalogId, opts) => {
+      const entry = fxCatalogById(catalogId)
+      if (!entry) return null
+      // Standalone effect clip: grades every track BELOW it (track 1 fx hits
+      // tracks 2..5; track 2 fx never touches track 1).
+      return get().addAdjustmentLayer({
+        name: `FX: ${entry.name}`,
+        effects: { ...(entry.patch as unknown as import('./types').ClipEffect) },
+        start: opts?.start,
+        duration: opts?.duration,
+        trackId: opts?.trackId,
+      })
+    },
+
+    updateFxParams: (clipId, fxId, patch) => {
+      if (!get().inInteraction) pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => (f.id !== fxId ? f : { ...f, params: { ...f.params, ...patch } })),
+          },
+        ),
+      }))
+    },
+
+    setFxRange: (clipId, fxId, inP, duration) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      const inst = clip?.fxInstances?.find((f) => f.id === fxId)
+      if (!clip || !inst) return
+      // The container is closed: every drag step re-clamps against the
+      // parent's CURRENT length so handles can never leak outside.
+      const range = clampFxToClip(inP ?? inst.inP, duration ?? inst.duration, clip.duration)
+      if (range.inP === inst.inP && range.duration === inst.duration) return
+      if (!s.inInteraction) pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => (f.id !== fxId ? f : { ...f, inP: range.inP, duration: range.duration })),
+          },
+        ),
+      }))
+    },
+
+    setFxKey: (clipId, fxId, param, t, v) => {
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => {
+              if (f.id !== fxId) return f
+              const keys = { ...(f.keys || {}) }
+              const list = [...(keys[param] || [])].filter((k) => Math.abs(k.t - t) > 1e-6)
+              list.push({ t, v })
+              list.sort((a, b) => a.t - b.t)
+              keys[param] = list
+              return { ...f, keys }
+            }),
+          },
+        ),
+      }))
+    },
+
+    removeFxKey: (clipId, fxId, param, t) => {
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => {
+              if (f.id !== fxId) return f
+              const keys = { ...(f.keys || {}) }
+              if (t === undefined) delete keys[param]
+              else keys[param] = (keys[param] || []).filter((k) => Math.abs(k.t - t) > 1e-6)
+              if (keys[param] && keys[param].length === 0) delete keys[param]
+              return { ...f, keys }
+            }),
+          },
+        ),
+      }))
+    },
+
+    toggleFxEnabled: (clipId, fxId) => {
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : {
+            ...c,
+            fxInstances: (c.fxInstances || []).map((f) => (f.id !== fxId ? f : { ...f, enabled: !f.enabled })),
+          },
+        ),
+      }))
+    },
+
+    duplicateFxInstance: (clipId, fxId) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      const inst = clip?.fxInstances?.find((f) => f.id === fxId)
+      if (!clip || !inst) return null
+      pushSnapshot()
+      const newId = uid('fx')
+      // Offset the copy when it still fits inside the closed container.
+      const wantIn = inst.inP + inst.duration <= clip.duration - FX_MIN_DUR ? inst.inP + inst.duration : inst.inP
+      const range = clampFxToClip(wantIn, inst.duration, clip.duration)
+      const copy: FxInstance = { ...inst, id: newId, inP: range.inP, duration: range.duration, keys: inst.keys ? structuredClone(inst.keys) : {} }
+      set((st) => ({
+        clips: st.clips.map((c) => (c.id === clipId ? { ...c, fxInstances: [...(c.fxInstances || []), copy] } : c)),
+        activeFx: { clipId, fxId: newId },
+      }))
+      get().requestRightSection('fxstack')
+      return newId
+    },
+
+    removeFxInstance: (clipId, fxId) => {
+      const s = get()
+      const clip = s.clips.find((c) => c.id === clipId)
+      if (!clip?.fxInstances?.some((f) => f.id === fxId)) return
+      pushSnapshot()
+      set((st) => ({
+        clips: st.clips.map((c) =>
+          c.id !== clipId ? c : { ...c, fxInstances: (c.fxInstances || []).filter((f) => f.id !== fxId) },
+        ),
+        activeFx: st.activeFx && st.activeFx.fxId === fxId ? null : st.activeFx,
+      }))
+    },
+
+    removeActiveFx: () => {
+      const a = get().activeFx
+      if (a) get().removeFxInstance(a.clipId, a.fxId)
+    },
+
     beginHistory: () => {
       if (!get().inInteraction) {
         pushSnapshot()
@@ -3499,6 +4656,19 @@ export const useEditor = create<EditorState>((set, get) => {
 
     // ---- markers initial state & actions ----
     markers: [],
+    markerCustomColors: (() => {
+      try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.markerColors') : null
+        const parsed = raw ? JSON.parse(raw) : []
+        return Array.isArray(parsed) ? parsed.filter((c) => typeof c === 'string' && /^#[0-9a-fA-F]{6}$/.test(c)).slice(0, 24) : []
+      } catch { return [] }
+    })(),
+    lastMarkerKind: (() => {
+      try {
+        const k = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.markerKind') : null
+        return k && MARKER_KINDS.some((d) => d.id === k) ? k : 'beat'
+      } catch { return 'beat' }
+    })(),
     activeMarkerModalId: null,
     setActiveMarkerModalId: (id) => set({ activeMarkerModalId: id }),
     addMarker: (marker) => {
@@ -3509,7 +4679,9 @@ export const useEditor = create<EditorState>((set, get) => {
         duration: Math.max(0, marker.duration || 0),
         label: marker.label.trim() || 'Marker',
         notes: marker.notes || '',
-        color: marker.color || 'blue',
+        color: markerColorHex(marker.color, marker.kind),
+        kind: marker.kind || 'custom',
+        ...(marker.clipId ? { clipId: marker.clipId, clipOffset: Math.max(0, marker.clipOffset || 0) } : {}),
       }
       pushSnapshot()
       set((s) => ({
@@ -3547,6 +4719,71 @@ export const useEditor = create<EditorState>((set, get) => {
       const { markers, playhead } = get()
       const prev = [...markers].reverse().find((m) => m.time < playhead - 0.05)
       if (prev) get().setPlayhead(prev.time)
+    },
+
+    addCustomMarkerColor: (hex) => {
+      if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return
+      const next = [hex.toLowerCase(), ...get().markerCustomColors.filter((c) => c.toLowerCase() !== hex.toLowerCase())].slice(0, 24)
+      set({ markerCustomColors: next })
+      try { localStorage.setItem('omniframe.markerColors', JSON.stringify(next)) } catch { /* ignore */ }
+    },
+
+    setLastMarkerKind: (kind) => {
+      set({ lastMarkerKind: kind })
+      try { localStorage.setItem('omniframe.markerKind', kind) } catch { /* ignore */ }
+    },
+
+    addMarkersBulk: (items) => {
+      if (!items.length) return []
+      pushSnapshot()
+      const created = items.map((item) => ({
+        id: uid('marker'),
+        time: Math.max(0, item.time),
+        duration: Math.max(0, item.duration || 0),
+        label: (item.label || 'Marker').trim() || 'Marker',
+        notes: item.notes || '',
+        color: markerColorHex(item.color, item.kind),
+        kind: item.kind || 'custom',
+        ...(item.clipId ? { clipId: item.clipId, clipOffset: Math.max(0, item.clipOffset || 0) } : {}),
+      }))
+      set((s) => ({ markers: [...s.markers, ...created].sort((a, b) => a.time - b.time) }))
+      return created.map((m) => m.id)
+    },
+
+    moveMarkersToClip: (clipId) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return 0
+      const end = clip.start + clip.duration
+      let moved = 0
+      pushSnapshot()
+      set((s) => ({
+        markers: s.markers.map((m) => {
+          if (m.clipId) return m
+          if (m.time >= clip.start - 0.001 && m.time <= end + 0.001) {
+            moved++
+            return { ...m, clipId, clipOffset: Math.max(0, m.time - clip.start) }
+          }
+          return m
+        }),
+      }))
+      return moved
+    },
+
+    moveMarkersToTimeline: (clipId) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return 0
+      let moved = 0
+      pushSnapshot()
+      set((s) => ({
+        markers: s.markers.map((m) => {
+          if (m.clipId !== clipId) return m
+          moved++
+          const { clipId: _drop, clipOffset, ...rest } = m
+          void _drop
+          return { ...rest, time: clip.start + (clipOffset ?? 0) }
+        }),
+      }))
+      return moved
     },
 
     // ---- master audio ----
@@ -3649,6 +4886,104 @@ export const useEditor = create<EditorState>((set, get) => {
       }
       pushSnapshot()
       set((s) => ({ groups: [...s.groups, newGroup] }))
+      return id
+    },
+    groupSelection: () => {
+      const ids = [...new Set(get().selectedClipIds || [])]
+      if (ids.length < 2) return null
+      pushSnapshot()
+      const id = uid('group')
+      const groups = regroupFor(get().groups, ids)
+      const g: GroupInstance = { id, name: `Group ${get().groups.length + 1}`, memberIds: ids, collapsed: false, locked: false, hidden: false }
+      set({ groups: [...groups, g] })
+      return id
+    },
+    ungroupSelection: () => {
+      const ids = new Set(get().selectedClipIds || [])
+      if (!get().groups.some((g) => g.memberIds.some((m) => ids.has(m)))) return
+      pushSnapshot()
+      set((s) => ({ groups: s.groups.filter((g) => !g.memberIds.some((m) => ids.has(m))) }))
+    },
+    addNullObject: () => {
+      const st = get()
+      const track = st.tracks.find((t) => t.type === 'video') || makeTrack('video', 'Nulls')
+      const id = uid('clip-null')
+      const n = st.clips.filter((c) => c.kind === 'null').length + 1
+      const clip: Clip = {
+        id,
+        trackId: track.id,
+        assetId: '',
+        start: st.playhead ?? 0,
+        duration: 5,
+        inPoint: 0,
+        name: `Null ${n}`,
+        kind: 'null',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+      }
+      pushSnapshot()
+      set((s) => ({
+        tracks: s.tracks.some((t) => t.id === track.id) ? s.tracks : [track, ...s.tracks],
+        clips: [...s.clips, clip],
+        selectedClipId: id,
+        selectedClipIds: [id],
+      }))
+      return id
+    },
+    bakeTrackingToNull: (sessionId) => {
+      const st = get()
+      const sessions = st.trackingSessions || []
+      const session =
+        (sessionId && sessions.find((t) => t.id === sessionId)) ||
+        [...sessions].reverse().find((t) => (t.points || []).length > 1)
+      if (!session || session.points.length < 2) return null
+      const fps = st.projectFps || 30
+      const target = st.clips.find((c) => c.id === session.targetClipId)
+      const t0 = target?.start ?? 0
+      const f0 = session.points[0].frame
+      const span = (session.points[session.points.length - 1].frame - f0) / fps
+      const duration = Math.max(0.5, Math.min(5, span + 0.4))
+      // project space matches playback (PW/PH = 1280x720); transform x/y are px, 0 = centred
+      const kf = (pt: TrackPoint, axis: 'x' | 'y'): KeyframeNode => ({
+        id: uid(`kf-${axis}`),
+        time: t0 + (pt.frame - f0) / fps,
+        value: axis === 'x' ? (pt.x - 0.5) * 1280 : (pt.y - 0.5) * 720,
+        interpolation: 'linear',
+      })
+      const curve = (pid: string, ch: 'X' | 'Y', label: string, color: string, pts: KeyframeNode[]) => ({
+        id: pid, property: 'position', channel: ch, label, color, defaultValue: 0, unit: 'px', keyframes: pts,
+        extrapolationBefore: 'constant' as const, extrapolationAfter: 'constant' as const,
+      })
+      const id = uid('clip-null')
+      const n = st.clips.filter((c) => c.kind === 'null').length + 1
+      const track = st.tracks.find((t) => t.type === 'video') || makeTrack('video', 'Nulls')
+      const clip: Clip = {
+        id,
+        trackId: track.id,
+        assetId: '',
+        start: t0,
+        duration,
+        inPoint: 0,
+        name: `Null Track ${n}`,
+        kind: 'null',
+        volume: 1,
+        hidden: false,
+        transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, z: 0, rotationX: 0, rotationY: 0 },
+        animation: {
+          curves: {
+            position_x: curve('position_x', 'X', 'Position X', '#ef4444', session.points.map((pt) => kf(pt, 'x'))),
+            position_y: curve('position_y', 'Y', 'Position Y', '#22c55e', session.points.map((pt) => kf(pt, 'y'))),
+          },
+        },
+      }
+      pushSnapshot()
+      set((s2) => ({
+        tracks: s2.tracks.some((t) => t.id === track.id) ? s2.tracks : [track, ...s2.tracks],
+        clips: [...s2.clips, clip],
+        selectedClipId: id,
+        selectedClipIds: [id],
+      }))
       return id
     },
     removeGroup: (groupId) => {
@@ -3934,6 +5269,18 @@ async function captureVideoThumbnail(video: HTMLVideoElement): Promise<string | 
     return canvas.toDataURL('image/jpeg', 0.85)
   } catch {
     return undefined
+  }
+}
+
+function sourceDocumentFromFile(file: File, id: string): SourceDocument {
+  return {
+    id,
+    fileName: file.name,
+    format: file.name.split('.').pop()?.toLowerCase() || 'unknown',
+    mimeType: file.type || 'application/octet-stream',
+    size: file.size,
+    url: URL.createObjectURL(file),
+    importedAt: Date.now(),
   }
 }
 

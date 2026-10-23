@@ -12,12 +12,14 @@ import {
   autoRig,
   composeTransforms,
   descendantsOf,
+  deformPuppetPoint,
   identityTransform,
   normaliseZ,
   paintOrder,
   resolveRig,
   rotateAboutPivot,
   sampleBend,
+  sampleSway,
   sampleWind,
   suggestPartName,
   wouldCycle,
@@ -212,6 +214,28 @@ console.log('=== rigging engine ===')
     }
     return peak(3) > peak(0)
   })())
+}
+
+// --- puppet pins + hair sway --------------------------------------------
+{
+  const sway = { enabled: true, distance: 0.2, speed: 1, direction: 'horizontal' }
+  ok('disabled sway returns a zero offset', sampleSway({ ...sway, enabled: false }, 0.25, { x: 0.5, y: 1 }).dx === 0)
+  ok('root pin is fixed while the hair tip moves',
+     sampleSway(sway, 0.25, { x: 0.5, y: 0 }).dx === 0 && Math.abs(sampleSway(sway, 0.25, { x: 0.5, y: 1 }).dx) > 0.1)
+  ok('pin sway remains within the configured travel distance', (() => {
+    for (let t = 0; t < 3; t += 0.01) {
+      if (Math.abs(sampleSway(sway, t, { x: 0.5, y: 1 }).dx) > sway.distance + 1e-9) return false
+    }
+    return true
+  })())
+  const pins = [{ id: 'pin', x: 0.5, y: 0.5, radius: 0.2, dx: 0.1, dy: 0 }]
+  const atPin = deformPuppetPoint(50, 50, 100, 100, pins, undefined, 0)
+  const farPoint = deformPuppetPoint(0, 0, 100, 100, pins, undefined, 0)
+  ok('puppet pin drags nearby artwork', atPin.x > 59.9 && atPin.x < 60.1, `got ${atPin.x.toFixed(2)}`)
+  ok('puppet influence fades with distance', atPin.x - 50 > farPoint.x)
+  const animatedA = deformPuppetPoint(50, 90, 100, 100, [{ ...pins[0], x: 0.5, y: 0.9, dx: 0, dy: 0 }], sway, 0.25)
+  const animatedB = deformPuppetPoint(50, 90, 100, 100, [{ ...pins[0], x: 0.5, y: 0.9, dx: 0, dy: 0 }], sway, 0.75)
+  ok('hair warp changes with preview time', Math.abs(animatedA.x - animatedB.x) > 1)
 }
 
 // --- auto-rig ------------------------------------------------------------

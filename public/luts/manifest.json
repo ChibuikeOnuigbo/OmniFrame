@@ -1,214 +1,291 @@
 {
-  "generated": "2026-10-10T02:55:39.520Z",
-  "count": 26,
+  "version": 1,
+  "count": 25,
   "luts": [
     {
-      "id": "teal-orange",
-      "name": "Teal Orange",
-      "file": "luts/teal-orange.cube",
-      "description": "The cinematic classic: teal shadows, warm highlights.",
+      "id": "clean-neutral",
+      "name": "Clean Neutral",
+      "file": "luts/clean-neutral.cube",
+      "description": "Balanced Rec.709-style color with a gentle contrast lift.",
+      "category": "Clean",
+      "swatch": "rgb(125, 150, 156)",
+      "tags": [
+        "neutral",
+        "natural",
+        "clean"
+      ]
+    },
+    {
+      "id": "soft-portrait",
+      "name": "Soft Portrait",
+      "file": "luts/soft-portrait.cube",
+      "description": "Soft contrast, warm midtones and restrained saturation for faces.",
+      "category": "Clean",
+      "swatch": "rgb(192, 143, 121)",
+      "tags": [
+        "skin",
+        "portrait",
+        "soft"
+      ]
+    },
+    {
+      "id": "bright-air",
+      "name": "Bright Air",
+      "file": "luts/bright-air.cube",
+      "description": "An airy exposure lift with open shadows and quiet color.",
+      "category": "Clean",
+      "swatch": "rgb(178, 197, 196)",
+      "tags": [
+        "bright",
+        "airy",
+        "lift"
+      ]
+    },
+    {
+      "id": "crisp-daylight",
+      "name": "Crisp Daylight",
+      "file": "luts/crisp-daylight.cube",
+      "description": "Clear daylight with crisp definition and a subtle cool balance.",
+      "category": "Clean",
+      "swatch": "rgb(105, 151, 174)",
+      "tags": [
+        "daylight",
+        "crisp",
+        "cool"
+      ]
+    },
+    {
+      "id": "shadow-detail",
+      "name": "Shadow Detail",
+      "file": "luts/shadow-detail.cube",
+      "description": "Lifts the toe gently so darker footage keeps more readable detail.",
+      "category": "Clean",
+      "swatch": "rgb(129, 143, 151)",
+      "tags": [
+        "shadows",
+        "lifted",
+        "low light"
+      ]
+    },
+    {
+      "id": "teal-amber",
+      "name": "Teal / Amber",
+      "file": "luts/teal-amber.cube",
+      "description": "Cooler shadows and a restrained amber highlight split.",
       "category": "Cinematic",
-      "swatch": "rgb(142, 135, 153)"
+      "swatch": "rgb(72, 151, 161)",
+      "tags": [
+        "teal",
+        "orange",
+        "film"
+      ]
     },
     {
-      "id": "gojo-blue",
-      "name": "Gojo Blue",
-      "file": "luts/gojo-blue.cube",
-      "description": "Anime-edit CC: infinite-void blues, cyan highlights, crushed blacks.",
-      "category": "Anime CC",
-      "swatch": "rgb(102, 139, 194)"
-    },
-    {
-      "id": "toji-noir",
-      "name": "Toji Noir",
-      "file": "luts/toji-noir.cube",
-      "description": "Dark, restrained, slightly warm monochrome-leaning grade.",
-      "category": "Anime CC",
-      "swatch": "rgb(133, 128, 123)"
-    },
-    {
-      "id": "sukuna-crimson",
-      "name": "Sukuna Crimson",
-      "file": "luts/sukuna-crimson.cube",
-      "description": "Menacing red/magenta push with hard contrast.",
-      "category": "Anime CC",
-      "swatch": "rgb(189, 107, 129)"
-    },
-    {
-      "id": "neon-tokyo",
-      "name": "Neon Tokyo",
-      "file": "luts/neon-tokyo.cube",
-      "description": "Cyberpunk magenta + cyan, saturated for night-city and glow edits.",
-      "category": "Anime CC",
-      "swatch": "rgb(174, 104, 190)"
+      "id": "steel-blue",
+      "name": "Steel Blue",
+      "file": "luts/steel-blue.cube",
+      "description": "A cool steel bias with controlled highlights and firm contrast.",
+      "category": "Cinematic",
+      "swatch": "rgb(89, 123, 167)",
+      "tags": [
+        "blue",
+        "cool",
+        "dramatic"
+      ]
     },
     {
       "id": "golden-hour",
       "name": "Golden Hour",
       "file": "luts/golden-hour.cube",
-      "description": "Warm sunset light, gently lifted shadows.",
-      "category": "Warm",
-      "swatch": "rgb(159, 139, 106)"
-    },
-    {
-      "id": "cold-winter",
-      "name": "Cold Winter",
-      "file": "luts/cold-winter.cube",
-      "description": "Icy, desaturated blue wash.",
-      "category": "Cool",
-      "swatch": "rgb(123, 130, 154)"
-    },
-    {
-      "id": "film-noir",
-      "name": "Film Noir",
-      "file": "luts/film-noir.cube",
-      "description": "High-contrast black & white with silver highlights.",
-      "category": "Mono",
-      "swatch": "rgb(135, 135, 135)"
-    },
-    {
-      "id": "vintage-fade",
-      "name": "Vintage Fade",
-      "file": "luts/vintage-fade.cube",
-      "description": "Faded film: lifted blacks, muted warmth.",
-      "category": "Vintage",
-      "swatch": "rgb(140, 135, 129)"
-    },
-    {
-      "id": "dreamy-pastel",
-      "name": "Dreamy Pastel",
-      "file": "luts/dreamy-pastel.cube",
-      "description": "Soft, low-contrast, airy pastel wash.",
-      "category": "Soft",
-      "swatch": "rgb(136, 134, 139)"
-    },
-    {
-      "id": "bleach-bypass",
-      "name": "Bleach Bypass",
-      "file": "luts/bleach-bypass.cube",
-      "description": "Silver, harsh contrast, near-mono.",
+      "description": "Warm light and golden highlights without turning whites orange.",
       "category": "Cinematic",
-      "swatch": "rgb(153, 152, 149)"
+      "swatch": "rgb(205, 153, 89)",
+      "tags": [
+        "warm",
+        "sunset",
+        "gold"
+      ]
     },
     {
-      "id": "sepia-tone",
-      "name": "Sepia Tone",
-      "file": "luts/sepia-tone.cube",
-      "description": "Classic warm monochrome.",
-      "category": "Mono",
-      "swatch": "rgb(141, 141, 141)"
-    },
-    {
-      "id": "autumn-warmth",
-      "name": "Autumn Warmth",
-      "file": "luts/autumn-warmth.cube",
-      "description": "Amber and rust, rich midtones.",
-      "category": "Warm",
-      "swatch": "rgb(158, 136, 93)"
-    },
-    {
-      "id": "moody-dark",
-      "name": "Moody Dark",
-      "file": "luts/moody-dark.cube",
-      "description": "Crushed blacks, muted, heavy mood.",
+      "id": "silver-bypass",
+      "name": "Silver Bypass",
+      "file": "luts/silver-bypass.cube",
+      "description": "A desaturated, higher-contrast silver finish with preserved highlights.",
       "category": "Cinematic",
-      "swatch": "rgb(121, 118, 120)"
+      "swatch": "rgb(157, 164, 166)",
+      "tags": [
+        "silver",
+        "bleach",
+        "mono"
+      ]
     },
     {
-      "id": "bright-airy",
-      "name": "Bright Airy",
-      "file": "luts/bright-airy.cube",
-      "description": "High-key lift, clean and open.",
-      "category": "Bright",
-      "swatch": "rgb(143, 143, 143)"
+      "id": "midnight-noir",
+      "name": "Midnight Noir",
+      "file": "luts/midnight-noir.cube",
+      "description": "Deep blue shadows and low-key contrast for night scenes.",
+      "category": "Cinematic",
+      "swatch": "rgb(50, 75, 120)",
+      "tags": [
+        "night",
+        "dark",
+        "noir"
+      ]
     },
     {
-      "id": "vhs-2000s",
-      "name": "Vhs 2000s",
-      "file": "luts/vhs-2000s.cube",
-      "description": "Consumer-camcorder wash: green shift, faded blacks.",
+      "id": "crimson-pulse",
+      "name": "Crimson Pulse",
+      "file": "luts/crimson-pulse.cube",
+      "description": "Bold crimson highs and cool shadows for high-energy edits.",
+      "category": "Graphic",
+      "swatch": "rgb(191, 64, 93)",
+      "tags": [
+        "red",
+        "crimson",
+        "energy"
+      ]
+    },
+    {
+      "id": "cyan-surge",
+      "name": "Cyan Surge",
+      "file": "luts/cyan-surge.cube",
+      "description": "Electric cyan highlights over a dense, cool blue base.",
+      "category": "Graphic",
+      "swatch": "rgb(40, 176, 198)",
+      "tags": [
+        "cyan",
+        "blue",
+        "electric"
+      ]
+    },
+    {
+      "id": "violet-dream",
+      "name": "Violet Dream",
+      "file": "luts/violet-dream.cube",
+      "description": "Lavender-magenta color separation with a soft violet haze.",
+      "category": "Graphic",
+      "swatch": "rgb(143, 95, 186)",
+      "tags": [
+        "violet",
+        "purple",
+        "magenta"
+      ]
+    },
+    {
+      "id": "golden-impact",
+      "name": "Golden Impact",
+      "file": "luts/golden-impact.cube",
+      "description": "Punchy golden mids with clean whites and strong subject separation.",
+      "category": "Graphic",
+      "swatch": "rgb(209, 160, 56)",
+      "tags": [
+        "gold",
+        "yellow",
+        "impact"
+      ]
+    },
+    {
+      "id": "ink-cut",
+      "name": "Ink Cut",
+      "file": "luts/ink-cut.cube",
+      "description": "High-contrast monochrome with a small black lift to retain texture.",
+      "category": "Graphic",
+      "swatch": "rgb(144, 148, 151)",
+      "tags": [
+        "black and white",
+        "mono",
+        "contrast"
+      ]
+    },
+    {
+      "id": "35mm-fade",
+      "name": "35mm Fade",
+      "file": "luts/35mm-fade.cube",
+      "description": "Muted film color, lifted blacks and a gentle warm bias.",
       "category": "Vintage",
-      "swatch": "rgb(135, 145, 128)"
+      "swatch": "rgb(165, 133, 111)",
+      "tags": []
     },
     {
-      "id": "y2k-digicam",
-      "name": "Y2k Digicam",
-      "file": "luts/y2k-digicam.cube",
-      "description": "Harsh early-2000s point-and-shoot: cool, contrasty, clinical.",
+      "id": "super8-sun",
+      "name": "Super 8 Sun",
+      "file": "luts/super8-sun.cube",
+      "description": "Soft sun-warmed mids with a nostalgic, slightly faded roll-off.",
       "category": "Vintage",
-      "swatch": "rgb(138, 137, 154)"
+      "swatch": "rgb(198, 151, 83)",
+      "tags": []
     },
     {
-      "id": "purple-haze",
-      "name": "Purple Haze",
-      "file": "luts/purple-haze.cube",
-      "description": "Lavender shadows, soft magenta air.",
-      "category": "Cool",
-      "swatch": "rgb(144, 124, 159)"
+      "id": "digicam-flash",
+      "name": "Digicam Flash",
+      "file": "luts/digicam-flash.cube",
+      "description": "Cool, direct-flash character with crisp edges and a restrained palette.",
+      "category": "Vintage",
+      "swatch": "rgb(149, 163, 191)",
+      "tags": []
     },
     {
-      "id": "ocean-deep",
-      "name": "Ocean Deep",
-      "file": "luts/ocean-deep.cube",
-      "description": "Dark teal dive: cold shadows, restrained highlights.",
-      "category": "Cool",
-      "swatch": "rgb(104, 130, 159)"
+      "id": "vhs-soft-green",
+      "name": "VHS Soft Green",
+      "file": "luts/vhs-soft-green.cube",
+      "description": "Softened contrast, raised blacks and a faint analog green cast.",
+      "category": "Vintage",
+      "swatch": "rgb(115, 145, 116)",
+      "tags": []
     },
     {
-      "id": "forest-emerald",
-      "name": "Forest Emerald",
-      "file": "luts/forest-emerald.cube",
-      "description": "Rich green midtones, earthy shadows.",
-      "category": "Warm",
-      "swatch": "rgb(119, 152, 116)"
+      "id": "warm-negative",
+      "name": "Warm Negative",
+      "file": "luts/warm-negative.cube",
+      "description": "Warm, low-contrast film response with quiet reds and open shadows.",
+      "category": "Vintage",
+      "swatch": "rgb(174, 133, 101)",
+      "tags": []
+    },
+    {
+      "id": "winter-glass",
+      "name": "Winter Glass",
+      "file": "luts/winter-glass.cube",
+      "description": "Icy blue shadows, neutral skin highlights and a clean winter finish.",
+      "category": "Atmosphere",
+      "swatch": "rgb(123, 162, 196)",
+      "tags": []
+    },
+    {
+      "id": "forest-cinema",
+      "name": "Forest Cinema",
+      "file": "luts/forest-cinema.cube",
+      "description": "Earthy green shadows and natural, slightly warm highlights.",
+      "category": "Atmosphere",
+      "swatch": "rgb(91, 144, 96)",
+      "tags": []
     },
     {
       "id": "desert-dust",
       "name": "Desert Dust",
       "file": "luts/desert-dust.cube",
-      "description": "Sandy, dry warmth with soft contrast.",
-      "category": "Warm",
-      "swatch": "rgb(148, 137, 117)"
+      "description": "Dry sand warmth, softened contrast and gently muted color.",
+      "category": "Atmosphere",
+      "swatch": "rgb(174, 145, 109)",
+      "tags": []
     },
     {
-      "id": "cinematic-contrast",
-      "name": "Cinematic Contrast",
-      "file": "luts/cinematic-contrast.cube",
-      "description": "Neutral S-curve punch — color untouched, contrast only.",
-      "category": "Cinematic",
-      "swatch": "rgb(129, 129, 129)"
+      "id": "lavender-haze",
+      "name": "Lavender Haze",
+      "file": "luts/lavender-haze.cube",
+      "description": "Pastel lavender highlights with an airy, low-contrast bloom-like base.",
+      "category": "Atmosphere",
+      "swatch": "rgb(164, 140, 188)",
+      "tags": []
     },
     {
-      "id": "soft-bloom",
-      "name": "Soft Bloom",
-      "file": "luts/soft-bloom.cube",
-      "description": "Raised blacks, gentle desaturation — glow-edit base.",
-      "category": "Soft",
-      "swatch": "rgb(136, 135, 142)"
-    },
-    {
-      "id": "clean-brighten",
-      "name": "Clean Brighten",
-      "file": "luts/clean-brighten.cube",
-      "description": "The honest auto-grade: a gentle +EV lift, nothing creative.",
-      "category": "Bright",
-      "swatch": "rgb(137, 137, 137)"
-    },
-    {
-      "id": "midnight-blue",
-      "name": "Midnight Blue",
-      "file": "luts/midnight-blue.cube",
-      "description": "Blue hour: deep, cool, quiet.",
-      "category": "Cool",
-      "swatch": "rgb(97, 113, 158)"
-    },
-    {
-      "id": "honored-gold",
-      "name": "Honored Gold",
-      "file": "luts/honored-gold.cube",
-      "description": "The honorary finish: warm gold highlights over cool shadows.",
-      "category": "Anime CC",
-      "swatch": "rgb(150, 136, 127)"
+      "id": "neon-afterdark",
+      "name": "Neon Afterdark",
+      "file": "luts/neon-afterdark.cube",
+      "description": "Dense night contrast with separate cyan shadows and magenta lights.",
+      "category": "Atmosphere",
+      "swatch": "rgb(135, 70, 170)",
+      "tags": []
     }
   ]
 }

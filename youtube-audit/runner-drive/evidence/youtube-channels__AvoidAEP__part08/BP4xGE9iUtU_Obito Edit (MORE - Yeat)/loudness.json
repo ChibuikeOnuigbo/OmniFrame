@@ -1,0 +1,36 @@
+ve))
+Press [q] to stop, [?] for help
+Output #0, null, to 'pipe:':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomav01iso2mp41
+    encoder         : Lavf60.16.100
+  Stream #0:0(und): Video: wrapped_avframe, yuv420p(tv, bt709, progressive), 480x648 [SAR 1:1 DAR 20:27], q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
+    Metadata:
+      handler_name    : ISO Media file produced by Google Inc.
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=30.2x    
+frame=  386 fps=0.0 q=-0.0 size=N/A time=00:00:12.83 bitrate=N/A speed=21.4x    
+frame=  689 fps=627 q=-0.0 size=N/A time=00:00:22.93 bitrate=N/A speed=20.9x    
+[out#0/null @ 0x564fdf94d1c0] video:392kB audio:20935kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  837 fps=614 q=-0.0 Lsize=N/A time=00:00:27.86 bitrate=N/A speed=20.4x    
+[Parsed_loudnorm_0 @ 0x564fdf9ba080] 
+{
+	"input_i" : "-19.15",
+	"input_tp" : "-6.05",
+	"input_lra" : "8.60",
+	"input_thresh" : "-30.03",
+	"output_i" : "-24.21",
+	"output_tp" : "-11.22",
+	"output_lra" : "1.00",
+	"output_thresh" : "-34.66",
+	"normalization_type" : "dynamic",
+	"target_offset" : "0.21"
+}

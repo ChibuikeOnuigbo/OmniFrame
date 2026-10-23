@@ -49,3 +49,84 @@ export async function testAiConnection(config: AiConnectionConfig, signal?: Abor
     throw new Error(detail || `Provider returned HTTP ${response.status}.`)
   }
 }
+
+export interface AiConnectionReport {
+  latencyMs: number
+  reply: string
+  modelsListed: number | null
+  modelAvailable: boolean | null
+}
+
+/**
+ * Full connection check: ping the chosen model, measure latency, and (for
+ * OpenAI-protocol providers) list /models to confirm the chosen model ID
+ * actually exists on the account. This is what "connected" means here.
+ */
+export async function testAiConnectionFull(config: AiConnectionConfig, signal?: AbortSignal): Promise<AiConnectionReport> {
+  const started = performance.now()
+  await testAiConnection(config, signal)
+  const latencyMs = Math.round(performance.now() - started)
+  const provider = AI_PROVIDERS.find((item) => item.id === config.provider)!
+  const base = (config.provider === 'custom' ? config.endpoint : provider.endpoint)?.trim().replace(/\/$/, '')
+  const key = config.apiKey.trim()
+  let modelsListed: number | null = null
+  let modelAvailable: boolean | null = null
+  if (provider.protocol === 'openai' && base) {
+    try {
+      const res = await fetch(`${base}/models`, { signal, headers: { authorization: `Bearer ${key}` } })
+      if (res.ok) {
+        const data = (await res.json()) as { data?: { id: string }[] }
+        const ids = (data.data || []).map((m) => m.id)
+        modelsListed = ids.length
+        modelAvailable = ids.includes(config.model.trim())
+      }
+    } catch { /* listing is best-effort; the ping already proved the key */ }
+  }
+  return { latencyMs, reply: 'OK', modelsListed, modelAvailable }
+}
+
+/** Fine-tune submit (OpenAI-compatible): upload JSONL, create the job. */
+export async function submitFineTuneJob(
+  config: AiConnectionConfig,
+  opts: { jsonl: string; baseModel: string; suffix: string; epochs: number },
+  signal?: AbortSignal,
+): Promise<{ jobId: string; status: string }> {
+  const provider = AI_PROVIDERS.find((item) => item.id === config.provider)
+  if (!provider || provider.protocol !== 'openai') throw new Error('Fine-tune submit needs an OpenAI-compatible provider (OpenAI / Together / Mistral).')
+  const base = (config.provider === 'custom' ? config.endpoint : provider.endpoint)?.trim().replace(/\/$/, '')
+  const key = config.apiKey.trim()
+  if (!base || !key) throw new Error('Connect a provider first (API key required).')
+  const form = new FormData()
+  form.append('purpose', 'fine-tune')
+  form.append('file', new Blob([opts.jsonl], { type: 'application/jsonl' }), 'omniframe-training.jsonl')
+  const up = await fetch(`${base}/files`, { method: 'POST', signal, headers: { authorization: `Bearer ${key}` }, body: form })
+  if (!up.ok) throw new Error(`Training file upload failed (HTTP ${up.status}).`)
+  const file = (await up.json()) as { id: string }
+  const job = await fetch(`${base}/fine_tuning/jobs`, {
+    method: 'POST',
+    signal,
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      training_file: file.id,
+      model: opts.baseModel,
+      suffix: opts.suffix || undefined,
+      hyperparameters: { n_epochs: opts.epochs },
+    }),
+  })
+  if (!job.ok) {
+    let detail = ''
+    try { detail = String(((await job.json()) as { error?: { message?: string } }).error?.message ?? '') } catch { /* non-JSON */ }
+    throw new Error(detail || `Fine-tune job failed (HTTP ${job.status}).`)
+  }
+  const created = (await job.json()) as { id: string; status: string }
+  return { jobId: created.id, status: created.status }
+}
+
+export async function getFineTuneJobStatus(config: AiConnectionConfig, jobId: string, signal?: AbortSignal): Promise<{ status: string; fineTunedModel: string | null }> {
+  const provider = AI_PROVIDERS.find((item) => item.id === config.provider)!
+  const base = (config.provider === 'custom' ? config.endpoint : provider.endpoint)?.trim().replace(/\/$/, '')
+  const res = await fetch(`${base}/fine_tuning/jobs/${encodeURIComponent(jobId)}`, { signal, headers: { authorization: `Bearer ${config.apiKey.trim()}` } })
+  if (!res.ok) throw new Error(`Status check failed (HTTP ${res.status}).`)
+  const job = (await res.json()) as { status: string; fine_tuned_model?: string | null }
+  return { status: job.status, fineTunedModel: job.fine_tuned_model ?? null }
+}

@@ -29,10 +29,13 @@
  */
 
 import type * as Ort from 'onnxruntime-web'
+import { clickSegment } from './rotoClick'
 import { isDesktopApp } from './desktop'
 import {
   colorDistance,
   featherMask,
+  dilateMaskBitmap,
+  maskCentroid,
   gradientMagnitude,
   maskToDataUrl,
   type MaskBitmap,
@@ -200,134 +203,17 @@ function sampleDisk(img: ImageData, cx: number, cy: number, r: number): number[]
 // ---------------------------------------------------------------------------
 
 function segmentSmart(frame: WorkingFrame, clicks: RotoClick[], tolerance: number): MaskBitmap {
-  const { imageData: img, width: w, height: h } = frame
-  const pos = clicks.filter((c) => c.positive)
-  const neg = clicks.filter((c) => !c.positive)
-  if (pos.length === 0) return { width: w, height: h, data: new Uint8Array(w * h) }
-
-  const diskR = Math.max(3, Math.round(Math.min(w, h) * 0.012))
-  const fit = (pts: RotoClick[]) => {
-    let r = 0
-    let g = 0
-    let b = 0
-    const all: number[] = []
-    for (const p of pts) {
-      for (const px of sampleDisk(img, Math.round(p.x * w), Math.round(p.y * h), diskR)) all.push(px)
-    }
-    for (const px of all) {
-      r += img.data[px]
-      g += img.data[px + 1]
-      b += img.data[px + 2]
-    }
-    const n = Math.max(1, all.length)
-    return { r: r / n, g: g / n, b: b / n }
-  }
-  const posModel = fit(pos)
-  const negModel = neg.length ? fit(neg) : null
-  const tol = tolerance * 0.95
-
-  const score = new Float32Array(w * h)
-  const grad = gradientMagnitude(img)
-  for (let i = 0; i < w * h; i++) {
-    const pix = i * 4
-    const dPos = colorDistance(img.data, pix, posModel.r, posModel.g, posModel.b)
-    const dNeg = negModel ? colorDistance(img.data, pix, negModel.r, negModel.g, negModel.b) : Infinity
-    // Positive when closer to the subject clicks than background clicks and
-    // inside tolerance; strong gradients slightly demote uncertain pixels.
-    let s = dPos <= tol ? 1 - dPos / (tol * 1.6) : 0
-    if (negModel && dNeg < dPos) s *= 0.25
-    s *= 1 - grad[i] * 0.25
-    score[i] = s
-  }
-  const bin = new Uint8Array(w * h)
-  for (let i = 0; i < score.length; i++) bin[i] = score[i] > 0.18 ? 255 : 0
-
-  // Keep the component of each positive click, minus negative components.
-  let mask = new Uint8Array(w * h)
-  const minSize = Math.max(24, Math.floor((w * h) * 0.0004))
-  const comps = connectedComponents(bin, w, h, minSize)
-  const negSet = new Set<number>()
-  if (neg.length) {
-    for (const c of comps) {
-      for (const p of neg) {
-        const px = Math.round(p.x * w)
-        const py = Math.round(p.y * h)
-        if (px >= c.minX - 2 && px <= c.maxX + 2 && py >= c.minY - 2 && py <= c.maxY + 2) {
-          const inside = c.pixels.some((idx) => {
-            const x = idx % w
-            const y = (idx - x) / w
-            return Math.abs(x - px) <= 3 && Math.abs(y - py) <= 3
-          })
-          if (inside) {
-            for (const idx of c.pixels) negSet.add(idx)
-          }
-        }
-      }
-    }
-  }
-  for (const p of pos) {
-    const px = Math.round(p.x * w)
-    const py = Math.round(p.y * h)
-    // Prefer the component actually containing the click.
-    let chosen = comps.find((c) =>
-      c.pixels.some((idx) => {
-        const x = idx % w
-        const y = (idx - x) / w
-        return Math.abs(x - px) <= 3 && Math.abs(y - py) <= 3
-      }),
-    )
-    if (!chosen) {
-      // Fall back to the component whose bbox is nearest the click.
-      let bestD = Infinity
-      for (const c of comps) {
-        const cx = Math.max(c.minX, Math.min(px, c.maxX))
-        const cy = Math.max(c.minY, Math.min(py, c.maxY))
-        const d = Math.hypot(cx - px, cy - py)
-        if (d < bestD) {
-          bestD = d
-          chosen = c
-        }
-      }
-      if (chosen && bestD > Math.max(w, h) * 0.25) chosen = undefined
-    }
-    if (chosen) for (const idx of chosen.pixels) if (!negSet.has(idx)) mask[idx] = 255
-  }
-
-  // Relaxed grow from the picked components: a single click often lands on
-  // one body part whose exact-colour component is small, so widen the
-  // tolerance and let the mask spread across the whole subject (still
-  // connectivity-bound and still stopped by negative clicks' colours).
-  const relaxTol = tol * 1.8
-  const maxDist = Math.round(Math.min(w, h) * 0.32)
-  const dist = new Int32Array(w * h).fill(-1)
-  const growQueue: number[] = []
-  for (let i = 0; i < mask.length; i++) {
-    if (mask[i]) {
-      dist[i] = 0
-      growQueue.push(i)
-    }
-  }
-  let head = 0
-  while (head < growQueue.length) {
-    const idx = growQueue[head++]
-    const d = dist[idx]
-    if (d >= maxDist) continue
-    const x = idx % w
-    const y = (idx - x) / w
-    for (let k = 0; k < 4; k++) {
-      const nx = x + (k === 0 ? 1 : k === 1 ? -1 : 0)
-      const ny = y + (k === 2 ? 1 : k === 3 ? -1 : 0)
-      if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue
-      const nIdx = ny * w + nx
-      if (mask[nIdx] || dist[nIdx] >= 0) continue
-      if (negModel && colorDistance(img.data, nIdx * 4, negModel.r, negModel.g, negModel.b) < tol) continue
-      if (colorDistance(img.data, nIdx * 4, posModel.r, posModel.g, posModel.b) > relaxTol) continue
-      mask[nIdx] = 255
-      dist[nIdx] = d + 1
-      growQueue.push(nIdx)
-    }
-  }
-  return { width: w, height: h, data: mask }
+  // Delegated to the shared click-segment maths (src/lib/rotoClick.ts) so the
+  // booted app, the headless MCP roto tool and any future prototype all
+  // segment identically — including the soft matting band.
+  const { width: w, height: h, imageData: img } = frame
+  const add = clicks.filter((c) => c.positive).map((c) => ({ x: c.x, y: c.y }))
+  const sub = clicks.filter((c) => !c.positive).map((c) => ({ x: c.x, y: c.y }))
+  if (!add.length) return { width: w, height: h, data: new Uint8Array(w * h) }
+  const r = clickSegment(img.data, w, h, add, sub, tolerance, true)
+  const data = new Uint8Array(w * h)
+  for (let i2 = 0; i2 < data.length; i2++) data[i2] = r.alpha[i2] > 127 ? 255 : r.alpha[i2]
+  return { width: w, height: h, data }
 }
 
 // ---------------------------------------------------------------------------
@@ -858,6 +744,45 @@ export function propagateMaskToFrame(
  * painted (patched background) and every other pixel transparent — so it
  * can be layered directly above the original video as a background patch.
  */
+export function inpaintMaskedHoleWithDonor(
+  donor: CanvasImageSource,
+  sourceWidth: number,
+  sourceHeight: number,
+  mask: MaskBitmap,
+  feather = 2,
+  offset?: { dx: number; dy: number },
+): string {
+  const softened = feather > 0 ? featherMask(mask, feather) : mask
+  const matte = document.createElement('canvas')
+  matte.width = softened.width
+  matte.height = softened.height
+  const matteCtx = matte.getContext('2d')
+  if (!matteCtx) return ''
+  const image = matteCtx.createImageData(softened.width, softened.height)
+  for (let i = 0; i < softened.data.length; i++) {
+    image.data[i * 4] = 255
+    image.data[i * 4 + 1] = 255
+    image.data[i * 4 + 2] = 255
+    image.data[i * 4 + 3] = softened.data[i]
+  }
+  matteCtx.putImageData(image, 0, 0)
+
+  // Keep only the donor pixels inside the target-frame matte. The soft alpha
+  // feathers the seam; the caller adds this transparent patch above the clip.
+  const patch = document.createElement('canvas')
+  patch.width = sourceWidth
+  patch.height = sourceHeight
+  const patchCtx = patch.getContext('2d')
+  if (!patchCtx) return ''
+  // Flow alignment: the donor is drawn shifted by the mask-centroid delta
+  // so propagated pixels land where the target frame needs them.
+  patchCtx.drawImage(donor, offset?.dx ?? 0, offset?.dy ?? 0, sourceWidth, sourceHeight)
+  patchCtx.globalCompositeOperation = 'destination-in'
+  patchCtx.drawImage(matte, 0, 0, sourceWidth, sourceHeight)
+  patchCtx.globalCompositeOperation = 'source-over'
+  return patch.toDataURL('image/png')
+}
+
 export function inpaintMaskedHole(
   source: CanvasImageSource,
   sourceWidth: number,

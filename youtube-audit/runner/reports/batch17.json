@@ -1,0 +1,876 @@
+{
+ "batch": 17,
+ "processed": 18,
+ "records": [
+  {
+   "id": "Qu9MxR8I5dM",
+   "url": "https://www.youtube.com/watch?v=Qu9MxR8I5dM",
+   "title": "Old repost \ud83c\udf1d",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "1kFJZf_6-7Q",
+   "url": "https://www.youtube.com/watch?v=1kFJZf_6-7Q",
+   "title": "Use it wisely, It\u2019s gonna help a lot. \ud83c\udf1d\ud83e\udef6\ud83c\udffb",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "WJAO6OXE4kM",
+   "url": "https://www.youtube.com/watch?v=WJAO6OXE4kM",
+   "title": "Check pinned comment! @Reve Image #revepartner #reve",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "rsUw8ijzPow",
+   "url": "https://www.youtube.com/watch?v=rsUw8ijzPow",
+   "title": "Reve : Hyper Anime in 1 prompt \u26a1#reveai #revepartner #reve #hancybox",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "xLs0M7fFfQA",
+   "url": "https://www.youtube.com/watch?v=xLs0M7fFfQA",
+   "title": "MiniMax Audio - Better than ElevenLabs? For creators\u2026 YES.  \ud83d\ude4c\ud83c\udffb - #minimaxaudio #texttospeech",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "6383/250"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "_1fcL-aB1CU",
+   "url": "https://www.youtube.com/watch?v=_1fcL-aB1CU",
+   "title": "Linear repeat Advance  - Alight motion tutorial: [ #hancybox #alightmotiontutorial #motiongraphics",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "T2TtWknCu60",
+   "url": "https://www.youtube.com/watch?v=T2TtWknCu60",
+   "title": "Magnify Background - Alight motion | #shorts #alightmotiontutorial #alightmotion",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "uyHDHO7zP88",
+   "url": "https://www.youtube.com/watch?v=uyHDHO7zP88",
+   "title": "Timelines \u274c Nasa equations \u2713 #shorts #alightmotiontutorial #alightmotion #videoediting",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "ShCYvdqTQ3s",
+   "url": "https://www.youtube.com/watch?v=ShCYvdqTQ3s",
+   "title": "Insane Reel Editing! \ud83d\udd25 - Alight Motion Tutorial #Shorts #Reels #alightmotion",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "N7-UHBSPs7Y",
+   "url": "https://www.youtube.com/watch?v=N7-UHBSPs7Y",
+   "title": "Click for Full tutorial \u2b06\ufe0f #nanobanana #veo3 #klingai",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "EtTwCO1tAD8",
+   "url": "https://www.youtube.com/watch?v=EtTwCO1tAD8",
+   "title": "PR/Resolve keeps crashing? Here\u2019s the FIX! \ud83d\udd25 #uniconverter #formatconversion",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "CyPgA10kl7o",
+   "url": "https://www.youtube.com/watch?v=CyPgA10kl7o",
+   "title": "Scale cut effect - Alight motion \ud83d\udcd0 #alightmotiontutorial #hancybox  #motiongraphics",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "vCrpT1dA6QU",
+   "url": "https://www.youtube.com/watch?v=vCrpT1dA6QU",
+   "title": "Raster extrude - Alight motion #phonk #alightmotiontutorial",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "oKaAETJzLq4",
+   "url": "https://www.youtube.com/watch?v=oKaAETJzLq4",
+   "title": "Null Control Like Ae In alight motion. | #alightmotiontutorial #breakingbad #editingtutorial",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "Xk7JcX4yg5M",
+   "url": "https://www.youtube.com/watch?v=Xk7JcX4yg5M",
+   "title": "Apple style animation In alight motion \ud83d\udd3a #alightmotiontutorial #alaightmotionedit #appleui",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "Q9Aka1vrJVQ",
+   "url": "https://www.youtube.com/watch?v=Q9Aka1vrJVQ",
+   "title": "Alight Motion Flip Layer effect\ud83c\udccf#alightmotion #alightmotiontutorial #animation #hancybox",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "yZOfRXLI4iI",
+   "url": "https://www.youtube.com/watch?v=yZOfRXLI4iI",
+   "title": "Hologram effect Alight motion #shorts #alightmotiontutorial #tutorial",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "AQV-mQzAs-U",
+   "url": "https://www.youtube.com/watch?v=AQV-mQzAs-U",
+   "title": "Alight motion Glass Morphic tutorial #alightmotiontutorial #alightmotionedit #shorts #edit",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  }
+ ]
+}

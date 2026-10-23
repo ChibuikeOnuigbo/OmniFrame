@@ -253,7 +253,7 @@ await page.waitForTimeout(1200)
   assert('store marks the left panel docked again', backDocked === false)
 
   // Header drag-out gesture: dragging the docked header tears the panel off.
-  const dockHeader = page.locator('#left-panel .h-8\\.5').first()
+  const dockHeader = page.locator('[data-testid="left-panel-header"]').first()
   const dhCount = await dockHeader.count()
   if (dhCount) {
     const dhb = await dockHeader.boundingBox()

@@ -229,7 +229,11 @@ export class LutRenderer {
     gl.bindTexture(gl.TEXTURE_3D, t)
     // gl.texImage3D expects rows in the order r-major, g-middle, b-fastest —
     // which is exactly the .cube file layout we parsed.
-    gl.texImage3D(gl.TEXTURE_3D, 0, gl.RGBA32F, lut.size, lut.size, lut.size, 0, gl.RGBA, gl.FLOAT, padToRGBA(lut))
+    // An 8-bit texture is consistently filterable in WebGL2, including on
+    // software-rendered/headless GPUs where RGBA32F can be incomplete or
+    // silently sample as black. The compositor is 8-bit as well, so the
+    // quantization matches the final canvas precision.
+    gl.texImage3D(gl.TEXTURE_3D, 0, gl.RGBA8, lut.size, lut.size, lut.size, 0, gl.RGBA, gl.UNSIGNED_BYTE, padToRGBA8(lut))
     gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
@@ -311,15 +315,15 @@ export class LutRenderer {
   }
 }
 
-/** expands an RGB float LUT to RGBA floats for texImage3D */
-function padToRGBA(lut: CubeLut): Float32Array {
+/** Expands an RGB float LUT to filterable RGBA8 values for texImage3D. */
+function padToRGBA8(lut: CubeLut): Uint8Array {
   const n = lut.size ** 3
-  const out = new Float32Array(n * 4)
+  const out = new Uint8Array(n * 4)
   for (let i = 0; i < n; i++) {
-    out[i * 4] = lut.data[i * 3]
-    out[i * 4 + 1] = lut.data[i * 3 + 1]
-    out[i * 4 + 2] = lut.data[i * 3 + 2]
-    out[i * 4 + 3] = 1
+    out[i * 4] = Math.round(clamp01(lut.data[i * 3]) * 255)
+    out[i * 4 + 1] = Math.round(clamp01(lut.data[i * 3 + 1]) * 255)
+    out[i * 4 + 2] = Math.round(clamp01(lut.data[i * 3 + 2]) * 255)
+    out[i * 4 + 3] = 255
   }
   return out
 }
@@ -394,7 +398,15 @@ export function resolveLutRef(ref: LutRef): CubeLut | undefined {
       ? loadCubeLut(`luts/${ref.builtin}.cube`)
       : Promise.resolve().then(() => parseCubeLUT(ref.text || ''))
     refPending.set(key, p)
-    p.then((lut) => refCache.set(key, lut)).catch(() => refPending.delete(key))
+    p.then(
+      (lut) => {
+        refCache.set(key, lut)
+        refPending.delete(key)
+      },
+      () => {
+        refPending.delete(key)
+      },
+    )
   }
   return undefined
 }

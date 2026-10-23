@@ -131,7 +131,7 @@ function collectStrict() {
   for (const el of controls) {
     if (el.tagName !== 'BUTTON') continue
     const tid = (el.getAttribute('data-testid') || '') + ' ' + (el.getAttribute('aria-label') || '')
-    if (!/toggle|mute|loop|snap|solo|repeat|shuffle|lock|visible|enabled/i.test(tid)) continue
+    if (!/\b(?:toggle|mute|loop|snap|solo|repeat|shuffle|lock|visible|enabled)\b/i.test(tid)) continue
     if (el.hasAttribute('aria-pressed') || el.getAttribute('role') === 'switch') continue
     if (el.getAttribute('aria-checked') !== null) continue
     // A collapse/expand control is a disclosure, correctly described by

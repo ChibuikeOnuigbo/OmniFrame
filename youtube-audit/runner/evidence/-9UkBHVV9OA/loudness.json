@@ -1,0 +1,27 @@
+Video: wrapped_avframe, yuv420p(tv, bt709, progressive), 480x480 [SAR 1:1 DAR 1:1], q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
+    Metadata:
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:12.233000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:00:12.248000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=33.5x    
+frame=  365 fps=0.0 q=-0.0 size=N/A time=00:00:12.13 bitrate=N/A speed=  20x    
+[out#0/null @ 0x5595a5f77c80] video:172kB audio:9169kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  367 fps=0.0 q=-0.0 Lsize=N/A time=00:00:12.20 bitrate=N/A speed=  20x    
+[Parsed_loudnorm_0 @ 0x5595a5fd3440] 
+{
+	"input_i" : "-6.88",
+	"input_tp" : "0.97",
+	"input_lra" : "5.10",
+	"input_thresh" : "-16.91",
+	"output_i" : "-22.50",
+	"output_tp" : "-13.15",
+	"output_lra" : "2.80",
+	"output_thresh" : "-32.50",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-1.50"
+}

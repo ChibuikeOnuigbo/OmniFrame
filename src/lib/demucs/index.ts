@@ -35,12 +35,24 @@ const DEMUCS_SAMPLE_RATE = 44100
  * and rapid duplicate HEADs are exactly what chromium dedup-aborts
  * (net::ERR_ABORTED, visible as request-failure noise in E2E runs). */
 let demucsAvailableProbe: Promise<boolean> | null = null
+
+/** Reject SPA fallback HTML and truncated/missing weight files, not merely 404s. */
+export function isDemucsModelResponseAvailable(response: Pick<Response, 'ok' | 'headers'>): boolean {
+  if (!response.ok) return false
+  const contentType = (response.headers.get('content-type') || '').toLowerCase()
+  const contentLength = Number.parseInt(response.headers.get('content-length') || '0', 10)
+  return !contentType.includes('text/html') && contentLength >= 100_000_000
+}
+
 export function isDemucsModelAvailable(): Promise<boolean> {
   if (!demucsAvailableProbe) {
     demucsAvailableProbe = (async () => {
       try {
         const res = await fetch(DEMUCS_MODEL_URL, { method: 'HEAD' })
-        return res.ok
+        // SPA dev servers commonly answer a missing asset path with index.html
+        // (HTTP 200). A status-only probe falsely advertises the 174 MB model
+        // as installed, so validate binary MIME type and expected file size.
+        return isDemucsModelResponseAvailable(res)
       } catch {
         return false
       }
@@ -99,6 +111,10 @@ function sumStems(stems: RawAudio[], length: number, sampleRate: number): RawAud
 export interface DemucsSeparationResult {
   /** full stem layout as produced by the model */
   stems: Record<string, RawAudio>
+  /** Time-aligned, timeline-rate versions of every stem. When a slowed
+   * production was speed-normalized for inference, these are resampled back
+   * to the input duration so they can be placed directly on the timeline. */
+  timelineStems: Record<string, AudioBuffer>
   /** isolated vocal stem */
   vocals: AudioBuffer
   /** drums + bass + other (karaoke instrumental) */
@@ -322,7 +338,11 @@ export async function separateWithDemucs(
 ): Promise<DemucsSeparationResult> {
   const passes = Math.max(1, Math.min(4, options.passes ?? 3))
   const speedFactor = Math.max(1, Math.min(2, options.speedFactor ?? 1))
-  const originalLength = buffer.length
+  // Demucs runs at 44.1 kHz. Keep the original duration rather than the
+  // source sample count: a 48 kHz input has more samples than the 44.1 kHz
+  // model output, but the timeline length in seconds must remain unchanged.
+  const originalDuration = buffer.duration
+  const timelineLength = Math.ceil(originalDuration * DEMUCS_SAMPLE_RATE)
   if (speedFactor > 1.001) {
     onProgress?.(6, `Demucs v4: speed-normalizing ×${speedFactor.toFixed(2)} (slowed production)…`)
     buffer = await renderAtRate(buffer, speedFactor)
@@ -434,31 +454,42 @@ export async function separateWithDemucs(
 
   let vocals = rawAudioToBuffer(ctx, vocalsRaw)
   let instrumental = rawAudioToBuffer(ctx, instrumentalRaw)
-  if (speedFactor > 1.001) {
-    // restore the original time base: slow both outputs back and pad/trim to
-    // the exact input length so the isolated clip stays frame-aligned
-    const restore = async (b: AudioBuffer): Promise<AudioBuffer> => {
-      const slowed = await renderAtRate(b, 1 / speedFactor)
-      if (slowed.length === originalLength) return slowed
-      // pad/trim to the exact input length so the clip stays frame-aligned
-      const out = ctx.createBuffer(slowed.numberOfChannels, originalLength, slowed.sampleRate)
-      const n = Math.min(slowed.length, originalLength)
-      for (let c = 0; c < slowed.numberOfChannels; c++) {
-        const dst = new Float32Array(originalLength)
-        dst.set(slowed.getChannelData(c).subarray(0, n))
-        out.copyToChannel(dst as Float32Array<ArrayBuffer>, c)
+  const restoreToTimeline = async (b: AudioBuffer): Promise<AudioBuffer> => {
+    if (speedFactor <= 1.001) {
+      if (b.length === timelineLength && b.sampleRate === DEMUCS_SAMPLE_RATE) return b
+      const aligned = ctx.createBuffer(b.numberOfChannels, timelineLength, DEMUCS_SAMPLE_RATE)
+      const n = Math.min(b.length, timelineLength)
+      for (let c = 0; c < b.numberOfChannels; c++) {
+        aligned.copyToChannel(b.getChannelData(c).subarray(0, n) as Float32Array<ArrayBuffer>, c)
       }
-      return out
+      return aligned
     }
-    instrumental = await restore(instrumental)
-    if (options.speedRestoreVocals !== false) {
-      vocals = await restore(vocals)
+    const slowed = await renderAtRate(b, 1 / speedFactor)
+    if (slowed.length === timelineLength && slowed.sampleRate === DEMUCS_SAMPLE_RATE) return slowed
+    const out = ctx.createBuffer(slowed.numberOfChannels, timelineLength, DEMUCS_SAMPLE_RATE)
+    const n = Math.min(slowed.length, timelineLength)
+    for (let c = 0; c < slowed.numberOfChannels; c++) {
+      out.copyToChannel(slowed.getChannelData(c).subarray(0, n) as Float32Array<ArrayBuffer>, c)
     }
+    return out
+  }
+  const timelineStems: Record<string, AudioBuffer> = {}
+  for (const [name, stem] of Object.entries(stems)) {
+    timelineStems[name] = await restoreToTimeline(rawAudioToBuffer(ctx, stem))
+  }
+  if (speedFactor > 1.001) {
+    // Restore the original time base. A separate natural-pitch vocal output
+    // can remain sped-up, but the four-stem set is always timeline-aligned.
+    instrumental = await restoreToTimeline(instrumental)
+    if (options.speedRestoreVocals !== false) vocals = await restoreToTimeline(vocals)
     // else: keep the sped-domain vocals — natural pitch, deliberately a
     // different (shorter) length than the input
+  } else {
+    vocals = await restoreToTimeline(vocals)
+    instrumental = await restoreToTimeline(instrumental)
   }
   onProgress?.(92, 'Demucs v4 separation complete')
-  return { stems, vocals, instrumental, backend: 'onnxruntime-web worker (webgpu → wasm fallback)' }
+  return { stems, timelineStems, vocals, instrumental, backend: 'onnxruntime-web worker (webgpu → wasm fallback)' }
 }
 
 /** Bridges samples where every pass was non-finite by linear interpolation. */

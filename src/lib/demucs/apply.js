@@ -260,10 +260,13 @@ async function applySplits(model, mix, progressCallback, overlap = 0.25) {
         chunkIndex++;
         progressCallback?.(chunkIndex, total);
     }
-    // Normalize by sum of weights
+    // Normalize by sum of weights. Non-finite samples (any residual model
+    // or ISTFT numeric edge) become silence rather than poisoning the stem.
     for (let i = 0; i < outData.length; i++) {
         const timeIdx = i % length;
-        outData[i] /= sumWeight[timeIdx];
+        const w = sumWeight[timeIdx];
+        const v = w > 0 ? outData[i] / w : 0;
+        outData[i] = Number.isFinite(v) ? v : 0;
     }
     return {
         data: outData,

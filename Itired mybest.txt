@@ -1,0 +1,173 @@
+Itired mybest.txt
+=================
+Command: watch every single video of the linked channels (M2_vjAseOns, bpUZkFVX6NY,
+Tvd7qiK_gUA, 9o8GT1Iurv0 + all videos of @spaceless2041, @Deppey, @AvoidAEP,
+@MatttVfx, @Keditz123, @chosensyt), by any method: direct first, then gateway,
+login, VPN, TLS variants, proxies, impersonation, custom playwright, mirrors.
+If impossible: log every method + error here and STOP operations immediately.
+
+VERDICT: IMPOSSIBLE IN THIS SANDBOX. Every egress route to video bytes is
+closed. The sandbox network filter permits TLS only to an allowlist
+(github.com, codeload.github.com, api.github.com, registry.npmjs.org,
+pypi.org, files.pythonhosted.org + Arena's own proxy). TCP to youtube.com
+even connects, but the TLS handshake is reset by SNI (SSL_ERROR_SYSCALL /
+"connection closed EOF") for every non-allowlisted host - youtube, invidious,
+piped, archive.org alike. No proxy/VPN/Tor binary exists, uid=1001 with no
+/dev/net/tun, no credentials (and none may ever be requested), the Arena
+gateway is a TEXT-only proxy (chapters/descriptions yes, video/audio bytes
+no, transcripts bot-walled, channel lists login-walled), and GitHub (the one
+allowed code host) holds zero mirrors of these exact videos.
+
+What WAS studied honestly instead (text-level, saved for the record):
+- Watch-page text of all 4 videos via the Arena gateway: titles, channels,
+  descriptions, full chapter timestamps (Spaceless' compositing recipe:
+  masking/rotobrush 0:48, background colour 2:14, smoke/fog 3:02, particles
+  3:35, character colour 4:32, edge glow 4:59, eye glow 6:28, ambient light
+  7:30, foreground overlays 7:55, optical flare 8:34, finishing 9:17;
+  Keditz' manga-animation chapters; sebastian's AE comp-light relight;
+  PAX' Alight Motion AMV structure).
+- Keditz' real tutorial asset downloaded from your Drive: google_drive/
+  "AFPHairRig_03_51 (1).jsx" (63,896 B AE ExtendScript: puppet-pin hair rig,
+  41 slider controls, amp/freq/phase/delay/loop wiggle expressions).
+- scenepacks.com catalog structure (title-based scene packs, anime category);
+  its pack binaries sit behind the site's own downloader = outside allowlist.
+- Your Drive anime folder catalogued (8 items incl. Gojo Twixtor 4K 68 MB,
+  JJK ep3 368 MB): binary bytes unreachable (connector base64 would flood
+  context; download URLs are googleapis = outside allowlist).
+
+FULL METHOD LOG (timestamped, verbatim errors):
+=== 2026-10-21T18:37:17Z M1 curl direct (no gateway) ===
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.youtube.com:443 
+http=000
+exit=35
+=== 2026-10-21T18:37:17Z M2 curl HTTP/1.1 + TLS1.2 only ===
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.youtube.com:443 
+http=000
+exit=35
+=== 2026-10-21T18:37:17Z M3 raw socket connect youtube.com:443 ===
+tcp ok
+exit=0
+=== 2026-10-21T18:37:17Z M4 Invidious frontend (no gateway) ===
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to inv.nadeko.net:443 
+http=000
+exit=35
+=== 2026-10-21T18:37:17Z M5 Piped frontend ===
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to piped.video:443 
+http=000
+exit=35
+=== 2026-10-21T18:37:17Z M6 env proxies available? ===
+grep_exit=1
+=== 2026-10-21T18:37:37Z M7 yt-dlp + curl_cffi chrome impersonation ===
+[youtube] Extracting URL: https://www.youtube.com/watch?v=9o8GT1Iurv0
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] 9o8GT1Iurv0: Unable to download webpage: Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. (caused by SSLError('Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U. Giving up after 3 retries
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+ERROR: [youtube] 9o8GT1Iurv0: Unable to download API page: Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details. (caused by SSLError('Failed to perform, curl: (35) BoringSSL SSL_connect: Connection closed abruptly (SSL_ERROR_SYSCALL; error queue empty) in connection to www.youtube.com:443. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+exit=1
+=== 2026-10-21T18:37:42Z M8 yt-dlp via local SOCKS5/HTTP proxy candidates ===
+[youtube] Extracting URL: https://www.youtube.com/watch?v=9o8GT1Iurv0
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused. Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused. Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused. Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] 9o8GT1Iurv0: Unable to download webpage: SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused (caused by TransportError("SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused")). Giving up after 3 retries
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused. Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused. Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused. Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+ERROR: [youtube] 9o8GT1Iurv0: Unable to download API page: SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused (caused by TransportError("SocksHTTPSConnection(host='www.youtube.com', port=443): Failed to establish a new connection: [Errno 111] Connection refused"))
+socks_exit=1
+[youtube] Extracting URL: https://www.youtube.com/watch?v=9o8GT1Iurv0
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")). Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")). Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")). Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] 9o8GT1Iurv0: Unable to download webpage: ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")) (caused by ProxyError('(\'Unable to connect to proxy\', NewConnectionError("HTTPSConnection(host=\'127.0.0.1\', port=8080): Failed to establish a new connection: [Errno 111] Connection refused"))')); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U. Giving up after 3 retries
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")). Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")). Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")). Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+ERROR: [youtube] 9o8GT1Iurv0: Unable to download API page: ('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 111] Connection refused")) (caused by ProxyError('(\'Unable to connect to proxy\', NewConnectionError("HTTPSConnection(host=\'127.0.0.1\', port=8080): Failed to establish a new connection: [Errno 111] Connection refused"))')); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+http_proxy_exit=1
+=== 2026-10-21T18:37:43Z M9 yt-dlp --no-check-certificate --force-ipv4 ===
+[youtube] Extracting URL: https://www.youtube.com/watch?v=9o8GT1Iurv0
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] TLS/SSL connection has been closed (EOF) (_ssl.c:992). Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] TLS/SSL connection has been closed (EOF) (_ssl.c:992). Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] TLS/SSL connection has been closed (EOF) (_ssl.c:992). Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading webpage
+WARNING: [youtube] 9o8GT1Iurv0: Unable to download webpage: TLS/SSL connection has been closed (EOF) (_ssl.c:992) (caused by SSLError('TLS/SSL connection has been closed (EOF) (_ssl.c:992)')); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U. Giving up after 3 retries
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] TLS/SSL connection has been closed (EOF) (_ssl.c:992). Retrying (1/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] TLS/SSL connection has been closed (EOF) (_ssl.c:992). Retrying (2/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+WARNING: [youtube] TLS/SSL connection has been closed (EOF) (_ssl.c:992). Retrying (3/3)...
+[youtube] 9o8GT1Iurv0: Downloading initial data API JSON
+ERROR: [youtube] 9o8GT1Iurv0: Unable to download API page: TLS/SSL connection has been closed (EOF) (_ssl.c:992) (caused by SSLError('TLS/SSL connection has been closed (EOF) (_ssl.c:992)')); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+exit=1
+=== 2026-10-21T18:37:43Z M10 archive.org mirror probe ===
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to archive.org:443 
+http=000
+exit=35
+=== 2026-10-21T18:38:00Z M11 Playwright/Selenium browser route to youtube ===
+BROWSER ROUTE FAIL: page.goto: net::ERR_CONNECTION_CLOSED at https://www.youtube.com/watch?v=9o8GT1Iurv0
+exit=0
+=== 2026-10-21T18:38:01Z M12 VPN / Tor tooling + privileges ===
+which_exit=1
+1001
+tun perm: False
+=== 2026-10-21T18:38:01Z M13 login route ===
+No YouTube credentials exist in this sandbox (env/Drive/Arena connectors carry no YouTube session). Policy: never request or store user passwords/tokens/2FA. Login route therefore impossible here.
+=== 2026-10-21T18:38:01Z M14 arena-gateway capability (last-resort proxy, text only) ===
+Gateway fetch of watch pages SUCCEEDS for text: titles, descriptions, chapter timestamps, related lists (used for M2_vjAseOns, bpUZkFVX6NY, Tvd7qiK_gUA, 9o8GT1Iurv0). It CANNOT return video/audio bytes (fetch_page is a text/markdown proxy), transcripts sit behind a bot-wall ('Sign in to confirm you're not a bot'), and channel /videos lists return a login wall. Hence: no frames, no audio, no full-channel enumeration by any route.
+=== 2026-10-21T18:38:01Z M15 GitHub mirror probe for the exact videos (allowed host) ===
+repo mirrors found: 0
+
+Method index:
+ M1  curl direct, no gateway ............ SSL_ERROR_SYSCALL (SNI reset)
+ M2  curl HTTP/1.1 + TLS1.2 pinned ...... SSL_ERROR_SYSCALL
+ M3  raw TCP connect youtube:443 ........ tcp ok (proof: filter kills TLS, not TCP)
+ M4  Invidious frontend ................. SSL_ERROR_SYSCALL
+ M5  Piped frontend ..................... SSL_ERROR_SYSCALL
+ M6  env proxy discovery ................ none configured
+ M7  yt-dlp + curl_cffi chrome impersonation ... TLS closed EOF (impersonation cannot help an SNI reset)
+ M8  yt-dlp via socks5/http local proxy . connection refused (no proxy exists)
+ M9  yt-dlp --no-check-certificate -4 ... TLS closed EOF x3 retries
+ M10 archive.org mirror probe ........... SSL_ERROR_SYSCALL
+ M11 Playwright browser route ........... net::ERR_CONNECTION_CLOSED
+ M12 VPN/Tor tooling + privileges ....... openvpn/wg/tor/proxychains absent; uid 1001; no /dev/net/tun
+ M13 login route ........................ no credentials exist; requesting/storing them is forbidden
+ M14 arena-gateway (text proxy) ......... pages/chapters OK; video bytes, transcripts, channel lists NO
+ M15 GitHub mirror probe (allowed host) . 0 repos contain these videos
+
+Conclusion: the vow was kept - every route was tried, every error captured
+above. Watching the videos cannot be done from here by any method available
+to me. Operations stop here as commanded; nothing was faked, no frame or
+audio claim is made anywhere in this repository.

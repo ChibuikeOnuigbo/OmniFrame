@@ -1,0 +1,352 @@
+{
+ "board": "A",
+ "note": "roto/mask character + bg replace + overlay layering via universal tools",
+ "steps": [
+  {
+   "tool": "project_new",
+   "params": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 1.6,
+    "bg": "#101216"
+   }
+  },
+  {
+   "tool": "omniframe_mode",
+   "params": {
+    "on": true
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "test_ans_result/assets/bg_parchment.png",
+    "fit": "cover"
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "test_ans_result/sources/src_overlays.png",
+    "fit": "cover"
+   }
+  },
+  {
+   "tool": "snapshot",
+   "params": {
+    "time": 0,
+    "out": "test_ans_result/A_composition/snap-{{vi}}.png"
+   }
+  },
+  {
+   "tool": "click",
+   "params": {
+    "x": 192,
+    "y": 238
+   }
+  },
+  {
+   "tool": "track_new",
+   "params": {
+    "name": "cutout"
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-2",
+    "track": 1
+   }
+  },
+  {
+   "tool": "roto_mask",
+   "params": {
+    "mode": "click",
+    "add": [
+     [
+      150,
+      160
+     ],
+     [
+      170,
+      190
+     ],
+     [
+      192,
+      238
+     ],
+     [
+      192,
+      340
+     ]
+    ],
+    "sub": [
+     [
+      30,
+      30
+     ]
+    ],
+    "tol": 30,
+    "setMask": false,
+    "exportMatte": "test_ans_result/evidence/A-luma-{{vi}}.png"
+   }
+  },
+  {
+   "tool": "roto_mask",
+   "params": {
+    "mode": "polygon",
+    "feather": 6,
+    "points": [
+     [
+      150,
+      125
+     ],
+     [
+      185,
+      118
+     ],
+     [
+      220,
+      125
+     ],
+     [
+      245,
+      150
+     ],
+     [
+      250,
+      190
+     ],
+     [
+      240,
+      225
+     ],
+     [
+      255,
+      255
+     ],
+     [
+      262,
+      300
+     ],
+     [
+      265,
+      360
+     ],
+     [
+      200,
+      360
+     ],
+     [
+      150,
+      360
+     ],
+     [
+      120,
+      330
+     ],
+     [
+      112,
+      280
+     ],
+     [
+      118,
+      235
+     ],
+     [
+      125,
+      180
+     ],
+     [
+      132,
+      145
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "transform_set",
+   "params": {
+    "x": "{{charx}}"
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "test_ans_result/assets/ov_heightchart.png",
+    "fit": "contain"
+   }
+  },
+  {
+   "tool": "blend_set",
+   "params": {
+    "mode": "screen",
+    "opacity": "{{hop}}"
+   }
+  },
+  {
+   "tool": "transform_set",
+   "params": {
+    "x": 150,
+    "y": -30,
+    "scale": 1.4
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "test_ans_result/assets/ov_smoke.png",
+    "fit": "contain"
+   }
+  },
+  {
+   "tool": "blend_set",
+   "params": {
+    "mode": "screen",
+    "opacity": "{{sop}}"
+   }
+  },
+  {
+   "tool": "transform_set",
+   "params": {
+    "scale": 1.6
+   }
+  },
+  {
+   "tool": "track_new",
+   "params": {
+    "name": "overlays"
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-3",
+    "track": 2
+   }
+  },
+  {
+   "tool": "track_assign",
+   "params": {
+    "clipId": "clip-4",
+    "track": 2
+   }
+  },
+  {
+   "tool": "render_export",
+   "params": {
+    "out": "test_ans_result/A_composition/variant-{{vi}}.mp4"
+   }
+  },
+  {
+   "tool": "timeline_screenshot",
+   "params": {
+    "out": "test_ans_result/evidence/timeline-A-{{vi}}.png",
+    "playhead": 1.2
+   }
+  }
+ ],
+ "variants": [
+  {
+   "name": "v01",
+   "overrides": {
+    "vi": "01",
+    "charx": -140,
+    "hop": 0.5,
+    "sblend": "screen",
+    "sop": 0.45
+   }
+  },
+  {
+   "name": "v02",
+   "overrides": {
+    "vi": "02",
+    "charx": 0,
+    "hop": 0.4,
+    "sblend": "screen",
+    "sop": 0.35
+   }
+  },
+  {
+   "name": "v03",
+   "overrides": {
+    "vi": "03",
+    "charx": 140,
+    "hop": 0.35,
+    "sblend": "screen",
+    "sop": 0.5
+   }
+  },
+  {
+   "name": "v04",
+   "overrides": {
+    "vi": "04",
+    "charx": -140,
+    "hop": 0.45,
+    "sblend": "screen",
+    "sop": 0.4
+   }
+  },
+  {
+   "name": "v05",
+   "overrides": {
+    "vi": "05",
+    "charx": 0,
+    "hop": 0.5,
+    "sblend": "screen",
+    "sop": 0.3
+   }
+  },
+  {
+   "name": "v06",
+   "overrides": {
+    "vi": "06",
+    "charx": 140,
+    "hop": 0.4,
+    "sblend": "screen",
+    "sop": 0.45
+   }
+  },
+  {
+   "name": "v07",
+   "overrides": {
+    "vi": "07",
+    "charx": -140,
+    "hop": 0.35,
+    "sblend": "screen",
+    "sop": 0.35
+   }
+  },
+  {
+   "name": "v08",
+   "overrides": {
+    "vi": "08",
+    "charx": 0,
+    "hop": 0.45,
+    "sblend": "screen",
+    "sop": 0.5
+   }
+  },
+  {
+   "name": "v09",
+   "overrides": {
+    "vi": "09",
+    "charx": 140,
+    "hop": 0.5,
+    "sblend": "screen",
+    "sop": 0.4
+   }
+  },
+  {
+   "name": "v10",
+   "overrides": {
+    "vi": "10",
+    "charx": -140,
+    "hop": 0.4,
+    "sblend": "screen",
+    "sop": 0.45
+   }
+  }
+ ]
+}

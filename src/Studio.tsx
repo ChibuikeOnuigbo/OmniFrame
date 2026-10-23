@@ -22,15 +22,17 @@ import {
   Target,
   FolderOutput,
   FolderOpen,
-  Bookmark,
+  Bookmark,  CircleHelp,
 } from 'lucide-react'
 import { useEditor } from './store'
+import { HelpModal } from './components/HelpModal'
 import type { Clip, Transition } from './types'
 import { readClipClipboard, writeClipClipboard } from './lib/clipClipboard'
 import { VoiceIsolationModal } from './components/VoiceIsolationModal'
 import { BackgroundRemovalModal } from './components/BackgroundRemovalModal'
 import { executeVoiceIsolationForClip } from './lib/voiceIsolation'
-import { MarkerModal } from './components/MarkerModal'
+import { MarkerPopup } from './components/MarkerPopup'
+import { MARKER_KINDS } from './lib/markers'
 
 type ContextTarget =
   | { type: 'EMPTY_EDITOR' }
@@ -115,6 +117,14 @@ export default function Studio() {
     }
   }, [contextMenu])
 
+  // UI style + palette (Settings → Appearance) drive html[data-ui-*] rules.
+  const uiStyle = useEditor((s) => s.uiStyle)
+  const uiPalette = useEditor((s) => s.uiPalette)
+  useEffect(() => {
+    document.documentElement.dataset.uiStyle = uiStyle
+    document.documentElement.dataset.uiPalette = uiPalette
+  }, [uiStyle, uiPalette])
+
   // Global keyboard shortcuts (disabled while typing in inputs).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -125,6 +135,12 @@ export default function Studio() {
       if (meta && e.key.toLowerCase() === 'z') {
         e.preventDefault()
         e.shiftKey ? redo() : undo()
+        return
+      }
+      if (meta && e.key.toLowerCase() === 'y') {
+        // Ctrl+Y = redo (CapCut/Windows convention), alongside Ctrl+Shift+Z.
+        e.preventDefault()
+        redo()
         return
       }
       if (meta && e.key.toLowerCase() === 'b') {
@@ -176,9 +192,18 @@ export default function Studio() {
           setTool('select')
           break
         case 'Delete':
-        case 'Backspace':
+        case 'Backspace': {
+          // An active (selected) effect instance dies first — it comes back
+          // with Ctrl+Z like every other action.
+          const af = st().activeFx
+          if (af) {
+            e.preventDefault()
+            st().removeActiveFx()
+            break
+          }
           if (selectedClipId) removeClip(selectedClipId)
           break
+        }
         case '+':
         case '=':
           zoomBy(1.25)
@@ -217,14 +242,22 @@ export default function Studio() {
         case 'M': {
           e.preventDefault()
           const s = st()
+          // CapCut navigation: Shift+M next marker, Alt+Shift+M previous.
+          if (e.shiftKey && e.altKey) { s.jumpToPrevMarker(); break }
+          if (e.shiftKey) { s.jumpToNextMarker(); break }
           const existing = s.markers.find((m) => Math.abs(m.time - s.playhead) < 0.1)
           if (existing) {
             s.setActiveMarkerModalId(existing.id)
           } else {
+            // M = quick marker in the last-used purpose; Alt+M = Fix-it
+            // (CapCut's "new colour" marker). The popup opens for naming.
+            const kind = e.altKey ? 'fix' : (s.lastMarkerKind || 'beat')
+            const def = MARKER_KINDS.find((d) => d.id === kind) || MARKER_KINDS[0]
             const id = s.addMarker({
               time: s.playhead,
-              label: `Marker ${s.markers.length + 1}`,
-              color: 'blue',
+              label: `${def.label} ${s.markers.length + 1}`,
+              color: def.color,
+              kind: def.id,
             })
             s.setActiveMarkerModalId(id)
           }
@@ -321,6 +354,7 @@ export default function Studio() {
           { id: 'copy', label: 'Copy', shortcut: 'Ctrl+C', icon: Copy, run: () => { writeClipClipboard(contextMenu.clip) } },
           ...(clipboardClip ? [{ id: 'paste', label: 'Paste at playhead', shortcut: 'Ctrl+V', icon: Clipboard, run: () => insertClipCopy(clipboardClip!, useEditor.getState().playhead) }] : []),
           { id: 'duplicate', label: 'Duplicate', shortcut: 'Ctrl+D', icon: Files, run: () => insertClipCopy(contextMenu.clip, contextMenu.clip.start + contextMenu.clip.duration) },
+          { id: 'help-info', label: 'Tutorial & Info', icon: CircleHelp, run: () => useEditor.getState().setHelpOpen(true) },
           { id: 'split', label: 'Split at Playhead', shortcut: 'Ctrl+B', icon: Scissors, run: () => useEditor.getState().splitAt(useEditor.getState().playhead) },
           {
             id: 'marker',
@@ -329,10 +363,12 @@ export default function Studio() {
             icon: Bookmark,
             run: () => {
               const s = useEditor.getState()
+              const def = MARKER_KINDS.find((d) => d.id === s.lastMarkerKind) || MARKER_KINDS[0]
               const id = s.addMarker({
                 time: s.playhead,
-                label: `Marker ${s.markers.length + 1}`,
-                color: 'blue',
+                label: `${def.label} ${s.markers.length + 1}`,
+                color: def.color,
+                kind: def.id,
               })
               s.setActiveMarkerModalId(id)
             },
@@ -380,6 +416,31 @@ export default function Studio() {
                   icon: Mic,
                   run: () => {
                     void executeVoiceIsolationForClip(contextMenu.clip.id, { mode: 'keep_vocal' })
+                  },
+                },
+              ],
+            },
+          ] : []),
+          ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'AUDIO_CLIP' ? [
+            {
+              id: 'auto-beat',
+              label: 'Auto Beat',
+              icon: Music2,
+              submenu: [
+                {
+                  id: 'auto-beat-run',
+                  label: 'Auto Beat — find the beat',
+                  icon: Music2,
+                  run: () => {
+                    window.dispatchEvent(new CustomEvent('omniframe:auto-beat', { detail: { clipId: contextMenu.clip.id, mode: 'auto' } }))
+                  },
+                },
+                {
+                  id: 'auto-beat-custom',
+                  label: 'Custom Auto Beat… — teach it one beat',
+                  icon: AudioLines,
+                  run: () => {
+                    window.dispatchEvent(new CustomEvent('omniframe:auto-beat', { detail: { clipId: contextMenu.clip.id, mode: 'custom' } }))
                   },
                 },
               ],
@@ -561,6 +622,8 @@ export default function Studio() {
         const element = event.target as HTMLElement
         // Preserve native editing commands for genuine editable fields.
         if (element.closest('input, textarea, [contenteditable="true"]')) return
+        // Timeline markers own their right-click (marker menu in Timeline).
+        if (element.closest('[data-testid="timeline-marker"], [data-testid="timeline-marker-group"], [data-testid="clip-marker-flag"]')) return
         // Do not open context menu when right-clicking in 3D viewport or Graph Editor canvas (used for camera/viewport panning)
         if (element.closest('[data-testid="three-canvas-wrapper"], [data-testid="graph-svg-canvas"]')) {
           event.preventDefault()
@@ -625,6 +688,7 @@ export default function Studio() {
         if (e.dataTransfer.files.length) importFiles(e.dataTransfer.files)
       }}
     >
+      <HelpModal />
       <TopBar />
       {focusMode !== 'none' && (
         <div
@@ -666,7 +730,7 @@ export default function Studio() {
           data-anchor-y={contextMenu.anchorY}
           role="menu"
           aria-label={`${contextMenu.type.toLowerCase().replace(/_/g, ' ')} actions`}
-          className="fixed z-[70] w-56 max-h-[min(420px,calc(100vh-16px))] overflow-y-auto rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-2 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.42)] backdrop-blur-xl"
+          className="fixed z-[70] w-56 max-h-[min(420px,calc(100vh-16px))] overflow-y-auto rounded-xl border border-ink-600 bg-ink-900/[0.98] p-2 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.42)] backdrop-blur-xl"
           style={{
             left: typeof window !== 'undefined' ? Math.min(contextMenu.x, window.innerWidth - 232) : contextMenu.x,
             top: typeof window !== 'undefined' ? Math.min(contextMenu.y, window.innerHeight - 250) : contextMenu.y,
@@ -714,7 +778,7 @@ export default function Studio() {
                   {isSubmenuOpen && (
                     <div
                       data-testid={`ctx-submenu-${command.id}`}
-                      className={`absolute ${openSubmenuLeft ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-0 w-56 rounded-xl border border-ink-600 bg-[#11131d]/[0.98] p-1.5 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.5)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95 duration-100`}
+                      className={`absolute ${openSubmenuLeft ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-0 w-56 rounded-xl border border-ink-600 bg-ink-900/[0.98] p-1.5 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.5)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95 duration-100`}
                     >
                       {command.submenu?.map((subItem) => {
                         const SubIcon = subItem.icon
@@ -792,7 +856,7 @@ export default function Studio() {
         clipId={bgModalClipId}
       />
 
-      <MarkerModal />
+      <MarkerPopup />
     </div>
   )
 }

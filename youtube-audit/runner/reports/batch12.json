@@ -1,0 +1,824 @@
+{
+ "batch": 12,
+ "processed": 18,
+ "records": [
+  {
+   "id": "-9UkBHVV9OA",
+   "url": "https://www.youtube.com/watch?v=-9UkBHVV9OA",
+   "title": "chat-history link -9UkBHVV9OA",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "9_uwkoUiERE",
+   "url": "https://www.youtube.com/watch?v=9_uwkoUiERE",
+   "title": "chat-history link 9_uwkoUiERE",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "Qxf_bMMc_ZE",
+   "url": "https://www.youtube.com/watch?v=Qxf_bMMc_ZE",
+   "title": "chat-history link Qxf_bMMc_ZE",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "ylFdwE6sSWU",
+   "url": "https://www.youtube.com/watch?v=ylFdwE6sSWU",
+   "title": "chat-history link ylFdwE6sSWU",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 360,
+      "height": 450,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "rY2RTuJEJpw",
+   "url": "https://www.youtube.com/watch?v=rY2RTuJEJpw",
+   "title": "chat-history link rY2RTuJEJpw",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "sx7ogrJD5KQ",
+   "url": "https://www.youtube.com/watch?v=sx7ogrJD5KQ",
+   "title": "chat-history link sx7ogrJD5KQ",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "hTEZOX48TN4",
+   "url": "https://www.youtube.com/watch?v=hTEZOX48TN4",
+   "title": "chat-history link hTEZOX48TN4",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "5RXGg3T4WlQ",
+   "url": "https://www.youtube.com/watch?v=5RXGg3T4WlQ",
+   "title": "chat-history link 5RXGg3T4WlQ",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "UuTKuhcqv2M",
+   "url": "https://www.youtube.com/watch?v=UuTKuhcqv2M",
+   "title": "chat-history link UuTKuhcqv2M",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "4hqpWf38W5s",
+   "url": "https://www.youtube.com/watch?v=4hqpWf38W5s",
+   "title": "chat-history link 4hqpWf38W5s",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "7nFduBo1Stk",
+   "url": "https://www.youtube.com/watch?v=7nFduBo1Stk",
+   "title": "chat-history link 7nFduBo1Stk",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "WmkdYFcXCtg",
+   "url": "https://www.youtube.com/watch?v=WmkdYFcXCtg",
+   "title": "chat-history link WmkdYFcXCtg",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp default+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp web_embedded+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp web_safari+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp mweb+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp client=tv+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "F8mlolILu7A",
+   "url": "https://www.youtube.com/watch?v=F8mlolILu7A",
+   "title": "chat-history link F8mlolILu7A",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "21/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "99hY2x1CLEU",
+   "url": "https://www.youtube.com/watch?v=99hY2x1CLEU",
+   "title": "chat-history link 99hY2x1CLEU",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; yt-dlp default+cookies: ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; yt-dlp web_embedded+cookies: ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; yt-dlp web_safari+cookies: ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; yt-dlp mweb+cookies: ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; yt-dlp client=tv+cookies: ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "b5yB6khnrmc",
+   "url": "https://www.youtube.com/watch?v=b5yB6khnrmc",
+   "title": "chat-history link b5yB6khnrmc",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 212,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "fx55eFCUw_I",
+   "url": "https://www.youtube.com/watch?v=fx55eFCUw_I",
+   "title": "chat-history link fx55eFCUw_I",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 360,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "p0cp8uUpc9M",
+   "url": "https://www.youtube.com/watch?v=p0cp8uUpc9M",
+   "title": "chat-history link p0cp8uUpc9M",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "poKeVJZMFV4",
+   "url": "https://www.youtube.com/watch?v=poKeVJZMFV4",
+   "title": "chat-history link poKeVJZMFV4",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 360,
+      "height": 450,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  }
+ ]
+}

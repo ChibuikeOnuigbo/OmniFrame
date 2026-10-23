@@ -26,6 +26,7 @@ export function LinkPanel() {
   const linkSets = useEditor((s) => s.linkSets)
   const parentRelationships = useEditor((s) => s.parentRelationships)
   const groups = useEditor((s) => s.groups)
+  const selectedClipIds = useEditor((s) => s.selectedClipIds)
   const createLinkSet = useEditor((s) => s.createLinkSet)
   const removeLinkSet = useEditor((s) => s.removeLinkSet)
   const toggleLinkRule = useEditor((s) => s.toggleLinkRule)
@@ -227,6 +228,15 @@ export function LinkPanel() {
           <span className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
             Directional Parenting
           </span>
+          <button
+            type="button"
+            data-testid="add-null-btn"
+            onClick={() => useEditor.getState().addNullObject()}
+            title="AE Layer > New > Null Object: invisible transform controller"
+            className="text-[10px] text-brand-400 hover:text-brand-300"
+          >
+            + Null
+          </button>
           {activeParentRel && (
             <button
               type="button"
@@ -263,6 +273,16 @@ export function LinkPanel() {
           <span className="text-[10px] font-semibold text-ink-400 uppercase tracking-wider">
             Spatial Groups ({groups.length})
           </span>
+          <button
+            type="button"
+            data-testid="group-selection-btn"
+            disabled={(selectedClipIds || []).length < 2}
+            onClick={() => useEditor.getState().groupSelection()}
+            title="CapCut-style group (Ctrl+G)"
+            className="text-[10px] text-brand-400 hover:text-brand-300 disabled:text-ink-600"
+          >
+            Group sel.
+          </button>
         </div>
 
         {activeGroup ? (

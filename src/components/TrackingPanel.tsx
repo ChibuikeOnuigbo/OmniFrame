@@ -270,6 +270,17 @@ export function TrackingPanel() {
 
   return (
     <div data-testid="tracking-panel" tabIndex={0} aria-label="Masking and tracking controls, scrollable" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">
+      <div className="flex justify-end px-3 pt-2">
+        <button
+          type="button"
+          data-testid="bake-track-to-null-btn"
+          title="AE workflow: send tracking data to a null, then parent the art to it"
+          onClick={() => useEditor.getState().bakeTrackingToNull()}
+          className="text-[10px] text-brand-400 hover:text-brand-300"
+        >
+          Track → Null
+        </button>
+      </div>
       {/* Compact hint (full description on hover) */}
       <div className="flex items-center justify-between gap-2 text-[10px] text-ink-400" title="Spatial mask generation connected directly to LumaCut optical flow tracking and deformation.">
         <span className="truncate">Spatial masks + LumaCut optical-flow tracking</span>

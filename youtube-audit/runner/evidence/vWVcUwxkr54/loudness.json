@@ -1,0 +1,28 @@
+ #0, null, to 'pipe:':
+  Metadata:
+    encoder         : Lavf60.16.100
+  Stream #0:0(eng): Video: wrapped_avframe, yuv420p(tv, bt709, progressive), 640x360 [SAR 1:1 DAR 16:9], q=2-31, 200 kb/s, 29.97 fps, 29.97 tbn (default)
+    Metadata:
+      DURATION        : 00:00:34.034000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:00:34.068000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   86 fps=0.0 q=-0.0 size=N/A time=00:00:02.83 bitrate=N/A speed=87.4x    
+frame=  809 fps=0.0 q=-0.0 size=N/A time=00:00:26.96 bitrate=N/A speed=50.6x    
+[out#0/null @ 0x561b6a8dc8c0] video:478kB audio:25536kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 1020 fps=0.0 q=-0.0 Lsize=N/A time=00:00:34.00 bitrate=N/A speed=49.1x    
+[Parsed_loudnorm_0 @ 0x561b6a9298c0] 
+{
+	"input_i" : "-14.28",
+	"input_tp" : "-0.13",
+	"input_lra" : "1.60",
+	"input_thresh" : "-24.59",
+	"output_i" : "-24.26",
+	"output_tp" : "-10.08",
+	"output_lra" : "1.40",
+	"output_thresh" : "-34.58",
+	"normalization_type" : "dynamic",
+	"target_offset" : "0.26"
+}

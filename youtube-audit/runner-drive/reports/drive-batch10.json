@@ -1,0 +1,134 @@
+[
+ {
+  "zip": "individual-videos__part01",
+  "file": "9o8GT1Iurv0_2000 \ud83d\udd25 - Chainsaw Man [AMV\u29f8EDIT].mp4",
+  "status": "FOOTAGE_ACQUIRED",
+  "probe": {
+   "programs": [],
+   "streams": [
+    {
+     "codec_type": "video",
+     "width": 1280,
+     "height": 720,
+     "r_frame_rate": "24000/1001"
+    },
+    {
+     "codec_type": "audio",
+     "r_frame_rate": "0/0"
+    }
+   ],
+   "format": {
+    "duration": "32.061000"
+   }
+  },
+  "duration": 32.061,
+  "frames": [
+   "s1.jpg",
+   "s2.jpg",
+   "s3.jpg",
+   "s4.jpg",
+   "s5.jpg",
+   "s6.jpg",
+   "u00.jpg",
+   "u01.jpg",
+   "u02.jpg",
+   "u03.jpg",
+   "u04.jpg",
+   "u05.jpg",
+   "u06.jpg",
+   "u07.jpg",
+   "u08.jpg",
+   "u09.jpg",
+   "u10.jpg",
+   "u11.jpg"
+  ]
+ },
+ {
+  "zip": "individual-videos__part01",
+  "file": "M2_vjAseOns_How to relight scenes with ae comp lights.mp4",
+  "status": "FOOTAGE_ACQUIRED",
+  "probe": {
+   "programs": [],
+   "streams": [
+    {
+     "codec_type": "video",
+     "width": 1280,
+     "height": 634,
+     "r_frame_rate": "19000/1001"
+    },
+    {
+     "codec_type": "audio",
+     "r_frame_rate": "0/0"
+    }
+   ],
+   "format": {
+    "duration": "165.021000"
+   }
+  },
+  "duration": 165.021,
+  "frames": [
+   "s1.jpg",
+   "s2.jpg",
+   "s3.jpg",
+   "s4.jpg",
+   "s5.jpg",
+   "s6.jpg",
+   "u00.jpg",
+   "u01.jpg",
+   "u02.jpg",
+   "u03.jpg",
+   "u04.jpg",
+   "u05.jpg",
+   "u06.jpg",
+   "u07.jpg",
+   "u08.jpg",
+   "u09.jpg",
+   "u10.jpg",
+   "u11.jpg"
+  ]
+ },
+ {
+  "zip": "individual-videos__part01",
+  "file": "Tvd7qiK_gUA_How to do Manga Animations Like me \uff5c After Effects.mp4",
+  "status": "FOOTAGE_ACQUIRED",
+  "probe": {
+   "programs": [],
+   "streams": [
+    {
+     "codec_type": "video",
+     "width": 1280,
+     "height": 720,
+     "r_frame_rate": "30/1"
+    },
+    {
+     "codec_type": "audio",
+     "r_frame_rate": "0/0"
+    }
+   ],
+   "format": {
+    "duration": "977.081000"
+   }
+  },
+  "duration": 977.081,
+  "frames": [
+   "s1.jpg",
+   "s2.jpg",
+   "s3.jpg",
+   "s4.jpg",
+   "s5.jpg",
+   "s6.jpg",
+   "u00.jpg",
+   "u01.jpg",
+   "u02.jpg",
+   "u03.jpg",
+   "u04.jpg",
+   "u05.jpg",
+   "u06.jpg",
+   "u07.jpg",
+   "u08.jpg",
+   "u09.jpg",
+   "u10.jpg",
+   "u11.jpg"
+  ]
+ }
+]

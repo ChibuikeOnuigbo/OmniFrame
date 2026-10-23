@@ -19,7 +19,8 @@
  * below speech level (old DSP scores ~0.6 dB / -25 dB).
  *
  * Requires: dev server :5173, public/models/htdemucs.onnx (npm run fetch:demucs).
- * Runtime: ~6-8 min in headless WASM (model load + 3 separation passes).
+ * Runtime: ~1-2 min in headless WASM (model load + one 5 s pass); the
+ * 20 s / three-pass WebGPU path takes longer.
  */
 import { chromium as pwChromium } from 'playwright'
 import serverlessChromium, { inflate } from '@sparticuz/chromium'
@@ -138,7 +139,10 @@ const hasWebGPU = await page.evaluate(async () => {
     return !!(await navigator.gpu.requestAdapter())
   } catch { return false }
 })
-const FIXTURE_S = hasWebGPU ? 20 : 6
+// With the worker's 25% overlap, the 7.8 s model segment stride is 5.85 s.
+// A six-second WASM fixture unexpectedly schedules two inferences in one
+// worker and can exceed headless Chromium's memory limit; stay below stride.
+const FIXTURE_S = hasWebGPU ? 20 : 5
 // trim a canonical 16-bit WAV to FIXTURE_S seconds. The WASM window starts
 // at 7 s — the pause-densest stretch of the showcase mix (22% voice-silent
 // vs 17% at 0 s), giving the VAD pause-gate check the most material.
@@ -282,17 +286,17 @@ const demucsScore = scoreOutput(outWav, join(TMP, voiceFile), join(TMP, musicFil
 // ---- 5. verdict -----------------------------------------------------------
 let pass = 0, total = 0
 const check = (name, ok) => { total++; console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`); if (ok) pass++ }
-check('Demucs SI-SDR > 14 dB (3-pass shift-averaged separation)', demucsScore.sdr > 14)
+check(`Demucs SI-SDR > 14 dB (${hasWebGPU ? 3 : 1}-pass shift-averaged separation)`, demucsScore.sdr > 14)
 check('Demucs music-bleed < -35 dB (music inaudible)', demucsScore.bleed < -35)
 check('Demucs at least 10 dB better than old DSP', demucsScore.sdr > dspScore.sdr + 10)
 // Pause-gate bar: the full 20 s 3-pass WebGPU run must keep pauses ≥ 20 dB
-// below speech. The constrained WASM path (6 s window, 1 pass) measures on
-// a third of the pause material without shift-averaging — proportionate
-// tolerance 15 dB, still proving the gate closes in the pauses.
+// below speech. The constrained WASM path (5 s window, 1 pass) samples less
+// pause material without shift-averaging — proportionate tolerance 15 dB,
+// still proving the gate closes in the pauses.
 if (hasWebGPU) {
   check('VAD pause cleanup: pauses >= 20 dB below speech', (globalThis.__pauseDelta ?? 0) < -20)
 } else {
-  check('VAD pause cleanup (WASM 6s/1-pass fixture): pauses >= 15 dB below speech', (globalThis.__pauseDelta ?? 0) < -15)
+  check(`VAD pause cleanup (WASM ${FIXTURE_S.toFixed(0)}s/1-pass fixture): pauses >= 15 dB below speech`, (globalThis.__pauseDelta ?? 0) < -15)
 }
 check(`Duration preserved (${FIXTURE_S.toFixed(2)}s ± 0.05)`, Math.abs(outInfo.duration - FIXTURE_S) < 0.05)
 check('Zero runtime page errors', pageErrors.length === 0)

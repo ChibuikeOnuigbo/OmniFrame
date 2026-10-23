@@ -1,0 +1,36 @@
+{
+  "preset": "neon-outline",
+  "name": "Neon Outline Only",
+  "category": "Glow / Neon",
+  "source": "Outline neon sign tutorials (subscription scan)",
+  "idealCharacters": [
+    3,
+    10
+  ],
+  "demoText": "OUTLINE",
+  "clipsBuilt": 1,
+  "video": "preview.mp4 (with sound cues) · preview.webm (raw)",
+  "soundCues": [
+    {
+      "t": 0.03,
+      "kind": "whoosh",
+      "label": "whoosh-in"
+    },
+    {
+      "t": 0.9,
+      "kind": "pop",
+      "label": "settle-pop"
+    },
+    {
+      "t": 2.35,
+      "kind": "ding",
+      "label": "out-ding"
+    }
+  ],
+  "frames": [
+    "frame-1-early.png @ 0.12s",
+    "frame-2-mid.png @ 0.55s",
+    "frame-3-settled.png @ 1.8s"
+  ],
+  "recreate": "Open OmniFrame → Text panel → Text Preset Library, type the demo text, click the preset."
+}

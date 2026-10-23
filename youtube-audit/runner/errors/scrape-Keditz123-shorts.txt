@@ -1,0 +1,3 @@
+
+--STDERR--
+ERROR: [youtube:tab] @Keditz123: This channel does not have a shorts tab

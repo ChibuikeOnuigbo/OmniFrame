@@ -1,0 +1,340 @@
+import type { ClipEffect } from '../types'
+
+/**
+ * The Effects catalog (board J): every entry maps to REAL engine params
+ * (ClipEffect keys) so every listed effect actually renders — curated
+ * presets traced to the scanned editor corpus (Alight Motion guide,
+ * AE effects reference, MatttVfx one-framers, glitchology pillar taxonomy,
+ * CapCut/Hancybox shorts, Wizzy course, Gold Motion) PLUS generative
+ * combinatorial families (colour-pair ramps × angles). No dead entries.
+ *
+ * Counts are real: `getFxCatalog().length` is what the UI prints.
+ */
+
+export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'retro' | 'light' | 'key'
+
+export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'glitch', label: 'Glitch' },
+  { id: 'motion', label: 'Motion' },
+  { id: 'color', label: 'Color' },
+  { id: 'blur', label: 'Blur' },
+  { id: 'distort', label: 'Distort' },
+  { id: 'retro', label: 'Retro' },
+  { id: 'light', label: 'Light' },
+  { id: 'key', label: 'Key' },
+]
+
+export interface FxParamDef {
+  key: string
+  label: string
+  kind: 'number' | 'color' | 'select'
+  min?: number
+  max?: number
+  step?: number
+  options?: string[]
+}
+
+export interface FxCatalogEntry {
+  id: string
+  name: string
+  cat: FxCat
+  /** where the effect name/technique was scanned from */
+  trace: string
+  /** concrete ClipEffect patch — the engine already renders these keys */
+  patch: Record<string, number | string>
+}
+
+/** Schema for every catalogued property: all editable, all numerics keyframeable. */
+const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
+  brightness: { label: 'Brightness', kind: 'number', min: 0, max: 2, step: 0.01 },
+  contrast: { label: 'Contrast', kind: 'number', min: 0, max: 2, step: 0.01 },
+  saturation: { label: 'Saturation', kind: 'number', min: 0, max: 2, step: 0.01 },
+  blur: { label: 'Blur (px)', kind: 'number', min: 0, max: 20, step: 0.5 },
+  grayscale: { label: 'Grayscale', kind: 'number', min: 0, max: 1, step: 0.01 },
+  invert: { label: 'Invert', kind: 'number', min: 0, max: 1, step: 0.01 },
+  sepia: { label: 'Sepia', kind: 'number', min: 0, max: 1, step: 0.01 },
+  hueRotate: { label: 'Hue Rotate (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  vibrance: { label: 'Vibrance', kind: 'number', min: 0, max: 2, step: 0.01 },
+  solarize: { label: 'Solarize', kind: 'number', min: 0, max: 1, step: 0.01 },
+  posterize: { label: 'Posterize', kind: 'number', min: 0, max: 1, step: 0.01 },
+  grain: { label: 'Grain', kind: 'number', min: 0, max: 1, step: 0.01 },
+  pixelate: { label: 'Pixelate (px)', kind: 'number', min: 0, max: 24, step: 1 },
+  chromatic: { label: 'Chromatic (px)', kind: 'number', min: 0, max: 24, step: 0.5 },
+  pixelStretch: { label: 'Pixel Stretch', kind: 'number', min: 0, max: 1, step: 0.01 },
+  waveWarp: { label: 'Wave Warp (px)', kind: 'number', min: 0, max: 40, step: 1 },
+  chromaKey: { label: 'Chroma Key', kind: 'number', min: 0, max: 1, step: 0.01 },
+  chromaColor: { label: 'Key Colour', kind: 'color' },
+  fractalBlur: { label: 'Fractal Blur (px)', kind: 'number', min: 0, max: 20, step: 1 },
+  lumaKey: { label: 'Luma Key', kind: 'number', min: 0, max: 1, step: 0.01 },
+  cardFlip: { label: 'Card Flip (half-turns)', kind: 'number', min: 0, max: 2, step: 0.05 },
+  zoomBlur: { label: 'Zoom Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
+  directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
+  directionalBlurAngle: { label: 'Blur Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  glow: { label: 'Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
+  edgeGlow: { label: 'Edge Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
+  edgeGlowColor: { label: 'Edge Colour', kind: 'color' },
+  tiltShift: { label: 'Tilt Shift', kind: 'number', min: 0, max: 1, step: 0.01 },
+  vignette: { label: 'Vignette', kind: 'number', min: 0, max: 1, step: 0.01 },
+  flicker: { label: 'Flicker', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiles: { label: 'Tiles / Mirror', kind: 'number', min: 0, max: 6, step: 1 },
+  pinchBulge: { label: 'Pinch / Bulge', kind: 'number', min: -1, max: 1, step: 0.05 },
+  swirl: { label: 'Swirl (°)', kind: 'number', min: -720, max: 720, step: 5 },
+  gradientMap: { label: 'Gradient Map', kind: 'number', min: 0, max: 1, step: 0.01 },
+  gradientMapFrom: { label: 'Map From', kind: 'color' },
+  gradientMapTo: { label: 'Map To', kind: 'color' },
+  minimax: { label: 'Minimax (px)', kind: 'number', min: 0, max: 20, step: 1 },
+  minimaxAngle: { label: 'Minimax Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  minimaxMode: { label: 'Minimax Mode', kind: 'select', options: ['max', 'min'] },
+  vhs: { label: 'VHS', kind: 'number', min: 0, max: 1, step: 0.01 },
+  dirColorize: { label: 'Dir Colorize', kind: 'number', min: 0, max: 1, step: 0.01 },
+  dirColorizeFrom: { label: 'Ramp From', kind: 'color' },
+  dirColorizeTo: { label: 'Ramp To', kind: 'color' },
+  dirColorizeAngle: { label: 'Ramp Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  oscillate: { label: 'Magnitude (px)', kind: 'number', min: 0, max: 120, step: 1 },
+  oscillateFreq: { label: 'Frequency (Hz)', kind: 'number', min: 0, max: 16, step: 0.1 },
+  oscillateAngle: { label: 'Angle (°)', kind: 'number', min: -3600, max: 3600, step: 1 },
+  oscillateWave: { label: 'Wave', kind: 'select', options: ['sine', 'triangle'] },
+  oscillatePhase: { label: 'Phase', kind: 'number', min: 0, max: 1000, step: 1 },
+  turbulent: { label: 'Turbulent Warp', kind: 'number', min: 0, max: 1, step: 0.01 },
+  threshold: { label: 'Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
+  sharpen: { label: 'Sharpen', kind: 'number', min: 0, max: 1, step: 0.01 },
+  findEdges: { label: 'Find Edges', kind: 'number', min: 0, max: 1, step: 0.01 },
+  echo: { label: 'Echo Ghosts', kind: 'number', min: 0, max: 6, step: 1 },
+  echoDecay: { label: 'Echo Decay', kind: 'number', min: 0, max: 1, step: 0.01 },
+  echoSpacing: { label: 'Echo Spacing (s)', kind: 'number', min: 0, max: 1, step: 0.01 },
+  autoShake: { label: 'Shake (px)', kind: 'number', min: 0, max: 60, step: 1 },
+  autoShakeFreq: { label: 'Shake Freq (Hz)', kind: 'number', min: 0, max: 40, step: 1 },
+  timeQuantization: { label: 'Strobe Step (s)', kind: 'number', min: 0, max: 1, step: 0.01 },
+  motionBlur: { label: 'Motion Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
+  reverse: { label: 'Reverse', kind: 'number', min: 0, max: 1, step: 1 },
+  freezeHold: { label: 'Freeze Hold (s)', kind: 'number', min: 0, max: 10, step: 0.1 },
+  freezeAt: { label: 'Freeze At (s)', kind: 'number', min: 0, max: 60, step: 0.1 },
+  glitch: { label: 'Glitch Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
+  glitchStyle: { label: 'Glitch Style', kind: 'select', options: ['slice', 'rgb', 'block', 'sort', 'vhs', 'mosh', 'tear', 'shake'] },
+  glitchScan: { label: 'Scanlines', kind: 'number', min: 0, max: 1, step: 0.01 },
+  glitchStatic: { label: 'Static', kind: 'number', min: 0, max: 1, step: 0.01 },
+  glitchSeed: { label: 'Seed', kind: 'number', min: 1, max: 999, step: 1 },
+  glitchSpeed: { label: 'Step Rate (Hz)', kind: 'number', min: 1, max: 30, step: 1 },
+  overlayFx: { label: 'Overlay', kind: 'select', options: ['none', 'scanlines', 'halftone', 'spotlight', 'vignette', 'lightleak', 'frameglow'] },
+  overlayStrength: { label: 'Overlay Strength', kind: 'number', min: 0, max: 1, step: 0.01 },
+  particleFx: { label: 'Particles', kind: 'select', options: ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals'] },
+  particleDensity: { label: 'Particle Density', kind: 'number', min: 0, max: 1, step: 0.01 },
+  lightType: { label: 'Light Type', kind: 'select', options: ['point', 'spot'] },
+  lightColor: { label: 'Light Colour', kind: 'color' },
+  lightIntensity: { label: 'Light Intensity', kind: 'number', min: 0, max: 1.5, step: 0.05 },
+  lightFalloff: { label: 'Light Falloff', kind: 'number', min: 0.1, max: 1, step: 0.01 },
+}
+
+/** Editable/keyframeable property schema for any catalog patch. */
+export function paramsForPatch(patch: Record<string, number | string>): FxParamDef[] {
+  const out: FxParamDef[] = []
+  for (const key of Object.keys(patch)) {
+    const meta = KEY_META[key]
+    if (meta) out.push({ key, ...meta })
+  }
+  return out
+}
+
+export function fxParamMeta(key: string): FxParamDef | undefined {
+  const meta = KEY_META[key]
+  return meta ? { key, ...meta } : undefined
+}
+
+// ------------------------------------------------------------- generative families
+
+const PALETTE: [string, string][] = [
+  ['Ice', '#dff3ff'], ['Ember', '#ff6a2a'], ['Cobalt', '#2b53d6'], ['Crimson', '#d51f3f'],
+  ['Gold', '#ffc93c'], ['Jade', '#1fd68f'], ['Violet', '#8b3cf6'], ['Rose', '#ff5d8f'],
+  ['Cyan', '#22d3ee'], ['Amber', '#ff9f1c'], ['Lime', '#a3e635'], ['Magenta', '#e935c1'],
+  ['Navy', '#152a63'], ['Coral', '#ff7f6e'], ['Teal', '#0f9b8e'], ['Plum', '#6d2077'],
+  ['Sand', '#e7d3a1'], ['Sky', '#7cc4ff'], ['Wine', '#7a1330'], ['Mint', '#b8ffe3'],
+  ['Rust', '#a4441d'], ['Indigo', '#4338ca'], ['Lemon', '#f7f06a'], ['Orchid', '#c77dff'],
+  ['Slate', '#64748b'], ['Peach', '#ffcba4'], ['Forest', '#14532d'], ['Fuchsia', '#ff38d0'],
+  ['Steel', '#9fb3c8'], ['Tangerine', '#ff8400'], ['Iris', '#5a5bd6'], ['Snow', '#ffffff'],
+]
+
+const GLITCH_TIERS: [string, number, number, number][] = [
+  // name, intensity, scan, static — the glitchology taxonomy that used to
+  // live under transitions; glitch is an EFFECT now (all props keyframeable).
+  ['Mild', 0.35, 0.18, 0.25],
+  ['Medium', 0.55, 0.18, 0.25],
+  ['Heavy', 0.75, 0.2, 0.3],
+  ['Extreme', 0.92, 0.22, 0.35],
+  ['TV', 0.65, 0.5, 0.55],
+]
+const GLITCH_STYLES: [string, string, number][] = [
+  ['slice', 'Slice', 237], ['rgb', 'RGB Split', 848], ['block', 'Block', 411],
+  ['sort', 'Pixel Sort', 623], ['vhs', 'VHS Damage', 129], ['mosh', 'Datamosh', 977],
+  ['tear', 'Signal Tear', 356], ['shake', 'Shake', 559],
+]
+
+function buildCatalog(): FxCatalogEntry[] {
+  const out: FxCatalogEntry[] = []
+  const add = (id: string, name: string, cat: FxCat, trace: string, patch: Record<string, number | string>) => {
+    out.push({ id, name, cat, trace, patch })
+  }
+
+  // ---- Glitch (moved out of transitions: 8 styles × 5 tiers) ----
+  for (const [style, styleName, seedBase] of GLITCH_STYLES) {
+    GLITCH_TIERS.forEach(([tier, I, scan, stat], ti) => {
+      add(`glitch-${style}-${tier.toLowerCase()}`, `Glitch ${styleName} ${tier}`, 'glitch',
+        'glitchology taxonomy (transition pillars research) — now a keyframeable effect',
+        { glitch: I, glitchStyle: style, glitchScan: scan, glitchStatic: stat, glitchSeed: seedBase + ti * 131, glitchSpeed: 12 })
+    })
+  }
+
+  // ---- Motion: AM Oscillate matrix (official guide) + shake/echo/strobe ----
+  for (const angle of [0, 45, 90, 135, 180, 270]) {
+    for (const wave of ['sine', 'triangle'] as const) {
+      for (const mag of [6, 16, 40]) {
+        add(`osc-${angle}-${wave}-${mag}`, `Oscillate ${mag}px ${angle}° ${wave}`, 'motion',
+          'AM Oscillate — guide.alightmotion.com/effects/oscillate (official props)',
+          { oscillate: mag, oscillateFreq: 2, oscillateAngle: angle, oscillateWave: wave, oscillatePhase: 0 })
+      }
+    }
+  }
+  for (const mag of [4, 10, 22, 40]) {
+    add(`shake-${mag}`, `Auto Shake ${mag}px`, 'motion', 'AM Auto-Shake (Hancybox rewatch corpus)',
+      { autoShake: mag, autoShakeFreq: mag > 20 ? 22 : 14 })
+  }
+  ;[[2, 0.55, 0.12], [4, 0.4, 0.08], [3, 0.7, 0.2]].forEach(([n, decay, spacing], i) => {
+    add(`echo-${i}`, `Echo Ghosts ×${n}`, 'motion', 'AM Echo Keyframes (Hancybox rewatch corpus)',
+      { echo: n, echoDecay: decay, echoSpacing: spacing })
+  })
+  add('mblur-1', 'Motion Blur Soft', 'motion', 'AM Motion Blur (official guide)', { motionBlur: 0.4 })
+  add('mblur-2', 'Motion Blur Strong', 'motion', 'AM Motion Blur (official guide)', { motionBlur: 0.85 })
+  ;[0.5, 1, 1.5].forEach((f, i) => add(`cardflip-${i}`, `Card Flip ${f * 180}°`, 'motion', 'CapCut flip / pillar cardFold research', { cardFlip: f }))
+  ;[1 / 12, 1 / 8, 1 / 4, 1 / 2].forEach((q, i) => add(`strobe-${i}`, `Strobe ${Math.round(1 / q)}fps`, 'motion', 'AM Time Quantization (Hancybox rewatch corpus)', { timeQuantization: q }))
+  add('reverse-1', 'Reverse Motion', 'motion', 'AM Speed reverse (official guide)', { reverse: 1 })
+
+  // ---- Color tiers + combo looks ----
+  const colorTiers: [string, string, number][] = [
+    ['brightness', 'Brightness', 0.7], ['brightness', 'Brightness', 1.35],
+    ['contrast', 'Contrast', 0.75], ['contrast', 'Contrast', 1.4],
+    ['saturation', 'Saturation', 0.4], ['saturation', 'Saturation', 1.6],
+    ['vibrance', 'Vibrance', 0.5], ['vibrance', 'Vibrance', 1.6],
+    ['hueRotate', 'Hue Shift', 90], ['hueRotate', 'Hue Shift', 180],
+    ['grayscale', 'Grayscale', 1], ['invert', 'Invert', 1],
+    ['sepia', 'Sepia', 0.6], ['sepia', 'Sepia', 1],
+    ['solarize', 'Solarize', 0.5], ['solarize', 'Solarize', 0.9],
+    ['posterize', 'Posterize', 0.4], ['posterize', 'Posterize', 0.75],
+    ['threshold', 'Threshold', 0.5], ['threshold', 'Threshold', 0.8],
+    ['sharpen', 'Sharpen', 0.5], ['findEdges', 'Find Edges', 0.8],
+  ]
+  colorTiers.forEach(([key, label, v], i) => {
+    add(`c-${key}-${i}`, `${label} ${v}`, 'color', 'AE effects reference / CapCut Adjust (scanned docs)', { [key]: v })
+  })
+  const looks: [string, string, Record<string, number>][] = [
+    ['Teal Print', 'teal-print', { contrast: 1.25, saturation: 1.1, vibrance: 1.2 }],
+    ['Faded Film', 'faded-film', { contrast: 0.85, brightness: 1.1, saturation: 0.8 }],
+    ['Noir', 'noir', { grayscale: 1, contrast: 1.45, brightness: 0.95 }],
+    ['Sun Bleach', 'sun-bleach', { brightness: 1.3, saturation: 0.65, contrast: 1.05 }],
+    ['Deep Night', 'deep-night', { brightness: 0.72, contrast: 1.3, saturation: 0.9 }],
+    ['Candy Pop', 'candy-pop', { saturation: 1.55, vibrance: 1.4, contrast: 1.1 }],
+    ['Muted Matte', 'muted-matte', { saturation: 0.7, contrast: 0.92, brightness: 1.06 }],
+    ['Golden Hour', 'golden-hour', { brightness: 1.12, saturation: 1.2, sepia: 0.25 }],
+  ]
+  for (const [name, id, patch] of looks) add(`look-${id}`, name, 'color', 'Editor-corpus look presets (Hancybox/CapCut scans)', patch)
+
+  // ---- Blur ----
+  ;[2, 5, 10, 18].forEach((b, i) => add(`blur-${i}`, `Gaussian Blur ${b}px`, 'blur', 'AE Fast Box Blur / CapCut blur (scanned docs)', { blur: b }))
+  ;[0.35, 0.6, 0.9].forEach((z, i) => add(`zblur-${i}`, `Zoom Blur ${Math.round(z * 100)}%`, 'blur', 'AM Zoom Blur (official guide)', { zoomBlur: z }))
+  for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
+    add(`dblur-${a}`, `Directional Blur ${a}°`, 'blur', 'AM Directional Blur (official guide)', { directionalBlur: 0.7, directionalBlurAngle: a })
+  }
+  add('tilt-1', 'Tilt Shift Mini', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.55 })
+  add('tilt-2', 'Tilt Shift Strong', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.95 })
+  ;[4, 8, 14].forEach((f, i) => add(`fblur-${i}`, `Fractal Blur ${f}px`, 'blur', 'AE Fractal Blur family (effects reference)', { fractalBlur: f }))
+
+  // ---- Distort ----
+  ;[4, 8, 14, 22].forEach((w, i) => add(`wave-${i}`, `Wave Warp ${w}px`, 'distort', 'AE Wave Warp / AM wave (scanned docs)', { waveWarp: w }))
+  for (const sw of [-180, -90, 90, 180, 360]) add(`swirl-${sw}`, `Swirl ${sw}°`, 'distort', 'AM Swirl / AE Twirl (official guides)', { swirl: sw })
+  ;[-0.6, -0.3, 0.3, 0.6].forEach((p, i) => add(`pinch-${i}`, p < 0 ? `Pinch ${Math.abs(p)}` : `Bulge ${p}`, 'distort', 'AM Pinch/Bulge (official guide)', { pinchBulge: p }))
+  ;[0.35, 0.7, 1].forEach((t, i) => add(`turb-${i}`, `Turbulent Warp ${Math.round(t * 100)}%`, 'distort', 'AE Turbulent Displace / Wizzy course "Turbs"', { turbulent: t }))
+  ;[0.25, 0.5].forEach((p, i) => add(`pstretch-${i}`, `Pixel Stretch ${Math.round(p * 100)}%`, 'distort', 'AM Pixel Stretch (Hancybox rewatch corpus)', { pixelStretch: p }))
+  for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
+    for (const mode of ['max', 'min'] as const) {
+      add(`minimax-${a}-${mode}`, `Minimax ${mode.toUpperCase()} ${a}°`, 'distort',
+        'AE one-framer Minimax — MatttVfx j3Lt0dU1Lok (watched corpus)', { minimax: 10, minimaxAngle: a, minimaxMode: mode })
+    }
+  }
+  ;[3, 6, 12].forEach((c, i) => add(`chroma-${i}`, `RGB Fringe ${c}px`, 'distort', 'glitchology RGB split (pillar research)', { chromatic: c }))
+
+  // ---- Retro ----
+  ;[0.35, 0.6, 0.85, 1].forEach((v, i) => add(`vhs-${i}`, `VHS Tape ${Math.round(v * 100)}%`, 'retro', 'MatttVfx VHS one-framer j3Lt0dU1Lok (watched corpus)', { vhs: v }))
+  ;[0.2, 0.4, 0.65].forEach((g, i) => add(`grain-${i}`, `Film Grain ${Math.round(g * 100)}%`, 'retro', 'AE Add Grain / CapCut noise (scanned docs)', { grain: g }))
+  ;[4, 8, 14, 20].forEach((p, i) => add(`pixl-${i}`, `Mosaic ${p}px`, 'retro', 'AE Mosaic / CapCut pixelate (scanned docs)', { pixelate: p }))
+  ;[['scanlines', 0.5], ['scanlines', 0.8], ['halftone', 0.5], ['halftone', 0.8], ['vignette', 0.6]].forEach(([fx, s], i) =>
+    add(`ovl-${i}`, `Overlay ${String(fx)[0].toUpperCase()}${String(fx).slice(1)} ${Math.round(Number(s) * 100)}%`, 'retro', 'AE tutorial corpus scanlines/halftone beds', { overlayFx: fx as string, overlayStrength: s as number }))
+  add('crt-1', 'CRT Look', 'retro', 'Gold Motion CRT recipe (custom-effects rack)', { posterize: 0.55, grain: 0.35, chromatic: 3 })
+  add('retro-vignette', 'Vintage Vignette', 'retro', 'Resolve Color chapter (training docs)', { vignette: 0.55, sepia: 0.2, contrast: 1.08 })
+
+  // ---- Light ----
+  ;[0.4, 0.7, 1].forEach((g, i) => add(`glow-${i}`, `Glow ${Math.round(g * 100)}%`, 'light', 'AM Glow (official guide)', { glow: g }))
+  for (const [name, hex] of PALETTE.slice(0, 8)) {
+    add(`edgeglow-${name.toLowerCase()}`, `Edge Glow ${name}`, 'light', 'AM Edge Glow / Stroke Color (official guide)', { edgeGlow: 0.9, edgeGlowColor: hex })
+  }
+  for (const type of ['point', 'spot'] as const) {
+    for (const [name, hex] of [['Warm', '#ffd9a0'], ['Gold', '#ffc93c'], ['Cool', '#a8d8ff'], ['Blue', '#4f7dff'], ['Magenta', '#ff5df0'], ['Green', '#7dff9b']] as [string, string][]) {
+      add(`light-${type}-${name.toLowerCase()}`, `${type[0].toUpperCase()}${type.slice(1)} Light ${name}`, 'light', 'Gold Motion point/spot light layers (watched corpus)',
+        { lightType: type, lightColor: hex, lightIntensity: 1.1, lightFalloff: 0.5 })
+    }
+  }
+  ;[0.4, 0.8].forEach((v, i) => add(`vig-${i}`, `Vignette ${Math.round(v * 100)}%`, 'light', 'AM Vignette (official guide)', { vignette: v }))
+  ;[0.3, 0.65].forEach((f, i) => add(`flicker-${i}`, `Flicker ${Math.round(f * 100)}%`, 'light', 'AM Flicker / pillar flicker family', { flicker: f }))
+  ;[['lightleak', 0.6], ['frameglow', 0.6], ['spotlight', 0.7]].forEach(([fx, s], i) =>
+    add(`lightovl-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Overlay`, 'light', 'AE tutorial corpus light overlays', { overlayFx: fx as string, overlayStrength: s as number }))
+  ;[['feathers', 0.6], ['embers', 0.5], ['dust', 0.5], ['bokeh', 0.5], ['sparkles', 0.55], ['snow', 0.6], ['rain', 0.5], ['petals', 0.5]].forEach(([fx, d], i) =>
+    add(`part-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Bed`, 'light', 'AE particle beds (deep-study corpus)', { particleFx: fx as string, particleDensity: d as number }))
+
+  // ---- Key ----
+  for (const [name, hex] of [['Green', '#00ff00'], ['Blue', '#1b3fe0'], ['Red', '#e01b1b'], ['Magenta', '#e01be0']] as [string, string][]) {
+    add(`ckey-${name.toLowerCase()}`, `Chroma Key ${name}`, 'key', 'CapCut/AM chroma key (scanned docs)', { chromaKey: 0.85, chromaColor: hex })
+  }
+  add('lkey-1', 'Luma Key Soft', 'key', 'AE Luma Key (effects reference)', { lumaKey: 0.5 })
+  add('lkey-2', 'Luma Key Hard', 'key', 'AE Luma Key (effects reference)', { lumaKey: 0.85 })
+
+  // ---- Generative colour-ramp families (every pair × angle is a real look) ----
+  for (let i = 0; i < PALETTE.length; i++) {
+    for (let j = 0; j < PALETTE.length; j++) {
+      if (i === j) continue
+      const [na, ha] = PALETTE[i]
+      const [nb, hb] = PALETTE[j]
+      add(`gmap-${i}-${j}`, `Gradient Map ${na}→${nb}`, 'color', 'AM Gradient Map (official guide) — combinatorial family',
+        { gradientMap: 1, gradientMapFrom: ha, gradientMapTo: hb })
+      for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
+        add(`dirc-${i}-${j}-${a}`, `Dir Colorize ${na}→${nb} ${a}°`, 'color',
+          'MatttVfx directional colorize one-framer j3Lt0dU1Lok — combinatorial family',
+          { dirColorize: 1, dirColorizeFrom: ha, dirColorizeTo: hb, dirColorizeAngle: a })
+      }
+    }
+  }
+  return out
+}
+
+let _catalog: FxCatalogEntry[] | null = null
+export function getFxCatalog(): FxCatalogEntry[] {
+  if (!_catalog) _catalog = buildCatalog()
+  return _catalog
+}
+
+export function fxCatalogById(id: string): FxCatalogEntry | undefined {
+  return getFxCatalog().find((e) => e.id === id)
+}
+
+export function fxCatalogCount(cat?: FxCat | 'all'): number {
+  const all = getFxCatalog()
+  return !cat || cat === 'all' ? all.length : all.filter((e) => e.cat === cat).length
+}
+
+/** Quick-add set for the timeline context menu (≤ 9 items, UI law). */
+export const FX_QUICK_IDS = [
+  'glitch-rgb-medium', 'glitch-slice-heavy', 'vhs-2', 'look-noir',
+  'osc-90-sine-16', 'minimax-0-max', 'glow-1', 'dirc-2-3-45',
+]
+
+/** Build the ClipEffect patch an instance starts with (defaults for the entry). */
+export function patchForEntry(entry: FxCatalogEntry): ClipEffect {
+  return { ...(entry.patch as unknown as ClipEffect) }
+}

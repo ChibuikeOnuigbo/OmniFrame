@@ -1,0 +1,347 @@
+{
+ "name": "board_G_nothingxart_sunset",
+ "description": "Recreate the NothingxArt ibisPaint X sunset short (2yAZqtdc_qk) on the universal paint canvas: gradient sky, sun, radial-ruler rays, smudge clouds, reflections, silhouette \u2014 then export the process time-lapse plain and with the dreamcore grade.",
+ "steps": [
+  {
+   "tool": "project_new",
+   "params": {
+    "w": 640,
+    "h": 360,
+    "fps": 30,
+    "duration": 6,
+    "bg": "#0b0a14"
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "gradient",
+    "points": [
+     [
+      320,
+      0
+     ],
+     [
+      320,
+      240
+     ]
+    ],
+    "color": "#2b1e5a",
+    "gradientColor": "#ff8c42",
+    "size": 400,
+    "opacity": 1
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "circle",
+    "points": [
+     [
+      272,
+      157
+     ],
+     [
+      368,
+      253
+     ]
+    ],
+    "color": "#ffd9a0",
+    "filled": true,
+    "size": 3,
+    "opacity": 0.95
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "line",
+    "points": [
+     [
+      320,
+      205
+     ],
+     [
+      320,
+      120
+     ]
+    ],
+    "color": "#ffb86b",
+    "size": 3,
+    "opacity": 0.5,
+    "radialCopies": 12
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "smudge",
+    "points": [
+     [
+      120,
+      90
+     ],
+     [
+      220,
+      84
+     ],
+     [
+      320,
+      92
+     ],
+     [
+      430,
+      86
+     ]
+    ],
+    "size": 34,
+    "opacity": 0.8
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "smudge",
+    "points": [
+     [
+      200,
+      140
+     ],
+     [
+      330,
+      134
+     ],
+     [
+      470,
+      142
+     ]
+    ],
+    "size": 28,
+    "opacity": 0.7
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      150,
+      70
+     ],
+     [
+      240,
+      64
+     ],
+     [
+      330,
+      72
+     ]
+    ],
+    "color": "#7a4fbf",
+    "size": 20,
+    "opacity": 0.35
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      350,
+      120
+     ],
+     [
+      440,
+      112
+     ],
+     [
+      530,
+      120
+     ]
+    ],
+    "color": "#ff9d5c",
+    "size": 16,
+    "opacity": 0.3
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      200,
+      260
+     ],
+     [
+      440,
+      260
+     ]
+    ],
+    "color": "#ffb86b",
+    "size": 6,
+    "opacity": 0.5
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      240,
+      285
+     ],
+     [
+      400,
+      285
+     ]
+    ],
+    "color": "#ff8c42",
+    "size": 5,
+    "opacity": 0.45
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      270,
+      310
+     ],
+     [
+      370,
+      310
+     ]
+    ],
+    "color": "#ffd9a0",
+    "size": 4,
+    "opacity": 0.4
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "bezier",
+    "points": [
+     [
+      0,
+      340
+     ],
+     [
+      120,
+      300
+     ],
+     [
+      200,
+      330
+     ],
+     [
+      320,
+      340
+     ]
+    ],
+    "color": "#0b0618",
+    "size": 26,
+    "opacity": 1
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "bezier",
+    "points": [
+     [
+      320,
+      340
+     ],
+     [
+      440,
+      306
+     ],
+     [
+      540,
+      330
+     ],
+     [
+      640,
+      340
+     ]
+    ],
+    "color": "#0b0618",
+    "size": 26,
+    "opacity": 1
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      470,
+      70
+     ],
+     [
+      478,
+      64
+     ],
+     [
+      486,
+      70
+     ]
+    ],
+    "color": "#1a1030",
+    "size": 2,
+    "opacity": 0.9
+   }
+  },
+  {
+   "tool": "draw_stroke",
+   "params": {
+    "tool": "brush",
+    "points": [
+     [
+      500,
+      90
+     ],
+     [
+      506,
+      85
+     ],
+     [
+      512,
+      90
+     ]
+    ],
+    "color": "#1a1030",
+    "size": 2,
+    "opacity": 0.8
+   }
+  },
+  {
+   "tool": "paint_timelapse",
+   "params": {
+    "out": "test_ans_result/G_paint/paint-timelapse.mp4",
+    "grade": "none",
+    "fps": 30
+   }
+  },
+  {
+   "tool": "paint_timelapse",
+   "params": {
+    "out": "test_ans_result/G_paint/dreamcore-timelapse.mp4",
+    "grade": "dreamcore",
+    "fps": 30
+   }
+  },
+  {
+   "tool": "inspect",
+   "params": {}
+  }
+ ]
+}

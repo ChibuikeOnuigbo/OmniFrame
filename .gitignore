@@ -37,3 +37,17 @@ public/models/htdemucs.onnx
 
 # local training checkpoints (large, regenerable)
 training-runs/
+
+# User-supplied screenshots for processing (may contain personal info — never commit)
+img_data_pack/
+
+# downloaded reference app (third-party site mirror, study only)
+ui_downlaod_study/zip-extract/
+google_drive/
+
+# correct BrandBird mirror (RAR extraction, third-party, study only)
+ui_downlaod_study/brandbird-rar-extract/
+
+# study MP4 products live IN git (vow.md §2: user must run verdict on them)
+Study_edits_videos/exports/concat-list.txt
+Study_edits_videos/chat-history/*.txt

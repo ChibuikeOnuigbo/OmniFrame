@@ -1,0 +1,231 @@
+{
+ "batch": 4,
+ "processed": 8,
+ "records": [
+  {
+   "id": "iw8lJAt_8z8",
+   "url": "https://www.youtube.com/watch?v=iw8lJAt_8z8",
+   "title": "ProjectFile + footage (How I Edit 5x Faster Than You)",
+   "duration": "68",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] iw8lJAt_8z8: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp default+cookies: ERROR: [youtube] iw8lJAt_8z8: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_embedded+cookies: ERROR: [youtube] iw8lJAt_8z8: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_safari+cookies: ERROR: [youtube] iw8lJAt_8z8: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp mweb+cookies: ERROR: [youtube] iw8lJAt_8z8: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp client=tv+cookies: ERROR: [youtube] iw8lJAt_8z8: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "kyrBkGnfFsI",
+   "url": "https://www.youtube.com/watch?v=kyrBkGnfFsI",
+   "title": "01 - Iman Gadhzi module",
+   "duration": "1166",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] kyrBkGnfFsI: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp default+cookies: ERROR: [youtube] kyrBkGnfFsI: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_embedded+cookies: ERROR: [youtube] kyrBkGnfFsI: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_safari+cookies: ERROR: [youtube] kyrBkGnfFsI: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp mweb+cookies: ERROR: [youtube] kyrBkGnfFsI: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp client=tv+cookies: ERROR: [youtube] kyrBkGnfFsI: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "Lg_7-Wift8E",
+   "url": "https://www.youtube.com/watch?v=Lg_7-Wift8E",
+   "title": "Matsya style - 04",
+   "duration": "618",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] Lg_7-Wift8E: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp default+cookies: ERROR: [youtube] Lg_7-Wift8E: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_embedded+cookies: ERROR: [youtube] Lg_7-Wift8E: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_safari+cookies: ERROR: [youtube] Lg_7-Wift8E: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp mweb+cookies: ERROR: [youtube] Lg_7-Wift8E: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp client=tv+cookies: ERROR: [youtube] Lg_7-Wift8E: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "v-cM5D3qc7s",
+   "url": "https://www.youtube.com/watch?v=v-cM5D3qc7s",
+   "title": "Matsya style - 03",
+   "duration": "441",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] v-cM5D3qc7s: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp default+cookies: ERROR: [youtube] v-cM5D3qc7s: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_embedded+cookies: ERROR: [youtube] v-cM5D3qc7s: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_safari+cookies: ERROR: [youtube] v-cM5D3qc7s: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp mweb+cookies: ERROR: [youtube] v-cM5D3qc7s: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp client=tv+cookies: ERROR: [youtube] v-cM5D3qc7s: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "HFkb60azqN0",
+   "url": "https://www.youtube.com/watch?v=HFkb60azqN0",
+   "title": "ProjectFile + footage (How I Made $7,795 Editing Videos (And How You Can Too)",
+   "duration": "61",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] HFkb60azqN0: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp default+cookies: ERROR: [youtube] HFkb60azqN0: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_embedded+cookies: ERROR: [youtube] HFkb60azqN0: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp web_safari+cookies: ERROR: [youtube] HFkb60azqN0: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp mweb+cookies: ERROR: [youtube] HFkb60azqN0: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; yt-dlp client=tv+cookies: ERROR: [youtube] HFkb60azqN0: Join this channel to get access to members-only content like this video, and other exclusive perks.\n; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1000)>"
+  },
+  {
+   "id": "vWVcUwxkr54",
+   "url": "https://www.youtube.com/watch?v=vWVcUwxkr54",
+   "title": "NovaVision Model 1.0",
+   "duration": "35",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 640,
+      "height": 360,
+      "r_frame_rate": "2997/100"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "khjRWWTYZcc",
+   "url": "https://www.youtube.com/watch?v=khjRWWTYZcc",
+   "title": "Animate Manga Like a PRO in After Effects \u26a1",
+   "duration": "992",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30000/1001"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "Ojw7zCrJ1Ew",
+   "url": "https://www.youtube.com/watch?v=Ojw7zCrJ1Ew",
+   "title": "How to Make Anime Trends Edits in After Effects   Beginner Tutorial",
+   "duration": "809",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 640,
+      "height": 360,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  }
+ ]
+}

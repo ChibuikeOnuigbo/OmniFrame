@@ -1,0 +1,20 @@
+{
+ "tool": "image_to_video",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/D_analysis.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/D_analysis.mp4",
+  "frames": 48,
+  "fps": 24,
+  "size": 60254,
+  "image": "D",
+  "captions": [
+   "BRIEF D: fill the tank",
+   "cut obj (ctrl+x), paste inside",
+   "calc grid size + positions",
+   "border touching allowed",
+   "ANSWER: D_tank_fill/solution.mp4"
+  ]
+ }
+}

@@ -18,6 +18,7 @@ export type InterpolationType =
   | 'back'
   | 'bounce'
   | 'elastic'
+  | 'custom'
 
 export type ExtrapolationMode = 'constant' | 'linear' | 'cycle' | 'ping-pong'
 
@@ -32,11 +33,15 @@ export interface KeyframeNode {
   id: string
   time: number // in seconds
   value: number
+  /** user-dragged custom curve: normalized [0..1]x[0..1] points, monotone in x */
+  points?: { x: number; y: number }[]
   interpolation: InterpolationType
   handleMode?: TangentHandleMode
   inHandle?: TangentHandle
   outHandle?: TangentHandle
   easingPreset?: string
+  /** Jitter-style easing intensity: 1 = preset as-is, 0 = linear, up to 1.5 = exaggerated (default 1) */
+  easingIntensity?: number
 }
 
 export interface PropertyCurve {
@@ -70,6 +75,8 @@ export interface EvaluatedClipTransform {
   scaleZ: number
   opacity: number
   speed: number
+  pivotX: number
+  pivotY: number
   width?: number
   height?: number
 }
@@ -158,6 +165,25 @@ function evalBezierValue(p0y: number, p1y: number, p2y: number, p3y: number, s: 
     3 * oneMinusS * s * s * p2y +
     s * s * s * p3y
   )
+}
+
+/**
+ * Progress through a user-dragged custom curve: piecewise-linear through the
+ * normalized points (x monotone). This is exactly what dragging handles in the
+ * curve editor produces — no preset easing involved.
+ */
+export function customProgress(points: { x: number; y: number }[], u: number): number {
+  const pts = [...points].sort((a, b) => a.x - b.x)
+  const cu = Math.max(0, Math.min(1, u))
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1]
+    if (cu >= a.x && cu <= b.x) {
+      const span = b.x - a.x
+      const t = span <= 1e-6 ? 0 : (cu - a.x) / span
+      return a.y + t * (b.y - a.y)
+    }
+  }
+  return cu <= pts[0].x ? pts[0].y : pts[pts.length - 1].y
 }
 
 /**
@@ -333,6 +359,11 @@ export function evaluateCurve(curve: PropertyCurve, time: number): number {
     return k0.value + u * (k1.value - k0.value)
   }
 
+  // Custom curve: points the user dragged in the curve editor (polyline progress)
+  if (k0.interpolation === 'custom' && k0.points && k0.points.length >= 2) {
+    return k0.value + customProgress(k0.points, u) * (k1.value - k0.value)
+  }
+
   // Custom 1D cubic Bezier with explicit tangent handles
   if (k0.interpolation === 'bezier') {
     const p0x = k0.time
@@ -354,7 +385,10 @@ export function evaluateCurve(curve: PropertyCurve, time: number): number {
   }
 
   // Standard easing presets (cubic-in, cubic-out, ease-in, ease-out, back, bounce, etc.)
-  const progress = evaluateEasingProgress(u, k0.interpolation)
+  // Easing intensity (Jitter-style): blend the eased progress toward/away from linear.
+  const rawProgress = evaluateEasingProgress(u, k0.interpolation)
+  const intensity = Math.min(1.5, Math.max(0, k0.easingIntensity ?? 1))
+  const progress = u + (rawProgress - u) * intensity
   return k0.value + progress * (k1.value - k0.value)
 }
 
@@ -484,6 +518,8 @@ export function createDefaultClipAnimation(
       scale_y: makeCurve('scale_y', 'scale', 'Y', 'Scale Y', '#a855f7', initial.scale, '%', 0.01, 10),
       scale_z: makeCurve('scale_z', 'scale', 'Z', 'Scale Z', '#ec4899', 1.0, '%', 0.01, 10),
       opacity: makeCurve('opacity', 'opacity', 'Scalar', 'Opacity', '#14b8a6', initial.opacity, '%', 0, 1),
+      pivot_x: makeCurve('pivot_x', 'pivot', 'X', 'Pivot X', '#f472b6', initial.pivotX ?? 0.5, '', -1, 2),
+      pivot_y: makeCurve('pivot_y', 'pivot', 'Y', 'Pivot Y', '#fb923c', initial.pivotY ?? 0.5, '', -1, 2),
       playback_speed: makeCurve('playback_speed', 'speed', 'Scalar', 'Playback Speed', '#eab308', 1.0, 'x', 0.1, 10),
       wheel_rotation: makeCurve('wheel_rotation', 'wheel', 'Z', '3D Wheel Rotation', '#8b5cf6', 0, '°', -3600, 3600),
     },
@@ -493,6 +529,81 @@ export function createDefaultClipAnimation(
 /**
  * Evaluate all clip animation channels at a given timeline time
  */
+/**
+ * Orthographic 3-axis rotation matrix for canvas 2D (Gold Motion / Alight-style
+ * Rotation X/Y flip): returns the affine {a,b,c,d} for ctx.transform(a,b,c,d,0,0).
+ * rotationY foreshortens horizontally (cos), rotationX foreshortens vertically,
+ * and combined angles add the correct diagonal shear (Rx·Ry orthographic
+ * projection). 90° = edge-on, 180° = mirrored flip. Canvas 2D has no true
+ * perspective, so this is the standard orthographic model, not a fake 3D claim.
+ */
+export function rotationXYMatrix(
+  rotationXDeg: number,
+  rotationYDeg: number,
+): { a: number; b: number; c: number; d: number } {
+  const rx = ((rotationXDeg || 0) * Math.PI) / 180
+  const ry = ((rotationYDeg || 0) * Math.PI) / 180
+  const sx = Math.sin(rx)
+  const cx = Math.cos(rx)
+  const sy = Math.sin(ry)
+  const cy = Math.cos(ry)
+  return { a: cy, b: sx * sy, c: 0, d: cx }
+}
+
+/** Format evaluated progress samples (0..1 time) as a CSS linear() timing function. */
+function progressToCssLinear(samples: number[]): string {
+  const stops = samples.map((p, i) => {
+    const pct = Math.round((i / (samples.length - 1)) * 1000) / 10
+    const val = Math.round(p * 1000) / 10
+    return `${val}% ${pct}%`
+  })
+  return `linear(${stops.join(', ')})`
+}
+
+/**
+ * CSS timing-function for an easing preset (Jitter-style "Copy as CSS").
+ * Standard presets are sampled from the exact evaluated curve (including
+ * intensity), so back/bounce/elastic overshoot survives as linear() stops;
+ * only the trivially exact cases use keyword forms.
+ */
+export function easingToCss(interpolation: InterpolationType, intensity = 1): string {
+  if (interpolation === 'constant') return 'steps(1, end)'
+  const inten = Math.min(1.5, Math.max(0, intensity))
+  if (interpolation === 'linear' && inten === 1) return 'linear'
+  const N = 20
+  const samples: number[] = []
+  for (let i = 0; i <= N; i++) {
+    const u = i / N
+    const raw = evaluateEasingProgress(u, interpolation)
+    samples.push(u + (raw - u) * inten)
+  }
+  return progressToCssLinear(samples)
+}
+
+/**
+ * CSS timing-function for one concrete keyframe segment, sampled from the
+ * real evaluated curve — bezier handles and easing intensity included.
+ * Returns null when the keyframe has no following segment to describe.
+ */
+export function keyframeSegmentToCss(curve: PropertyCurve, keyframeId: string): string | null {
+  const keys = [...curve.keyframes].sort((a, b) => a.time - b.time)
+  const idx = keys.findIndex((k) => k.id === keyframeId)
+  if (idx < 0 || idx >= keys.length - 1) return null
+  const k0 = keys[idx]
+  const k1 = keys[idx + 1]
+  if (k0.interpolation === 'constant') return 'steps(1, end)'
+  const dt = k1.time - k0.time
+  const dv = k1.value - k0.value
+  if (dt <= 1e-6 || Math.abs(dv) <= 1e-9) return null
+  const N = 20
+  const samples: number[] = []
+  for (let i = 0; i <= N; i++) {
+    const t = k0.time + (i / N) * dt
+    samples.push((evaluateCurve(curve, t) - k0.value) / dv)
+  }
+  return progressToCssLinear(samples)
+}
+
 export function evaluateClipAnimation(clip: Clip, timelineTime: number): EvaluatedClipTransform {
   const base = clip.transform
   const anim = clip.animation
@@ -502,14 +613,16 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
       x: base.x,
       y: base.y,
       z: 0,
-      rotationX: 0,
-      rotationY: 0,
+      rotationX: base.rotationX ?? 0,
+      rotationY: base.rotationY ?? 0,
       rotationZ: base.rotation,
       scaleX: base.scale,
       scaleY: base.scale,
       scaleZ: 1,
       opacity: base.opacity,
       speed: 1.0,
+      pivotX: base.pivotX ?? 0.5,
+      pivotY: base.pivotY ?? 0.5,
     }
   }
 
@@ -526,13 +639,15 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
     x: getVal('position_x', base.x),
     y: getVal('position_y', base.y),
     z: getVal('position_z', 0),
-    rotationX: getVal('rotation_x', 0),
-    rotationY: getVal('rotation_y', 0),
+    rotationX: getVal('rotation_x', base.rotationX ?? 0),
+    rotationY: getVal('rotation_y', base.rotationY ?? 0),
     rotationZ: getVal('rotation_z', base.rotation),
     scaleX: getVal('scale_x', base.scale),
     scaleY: getVal('scale_y', base.scale),
     scaleZ: getVal('scale_z', 1.0),
     opacity: getVal('opacity', base.opacity),
     speed: getVal('playback_speed', 1.0),
+    pivotX: getVal('pivot_x', base.pivotX ?? 0.5),
+    pivotY: getVal('pivot_y', base.pivotY ?? 0.5),
   }
 }

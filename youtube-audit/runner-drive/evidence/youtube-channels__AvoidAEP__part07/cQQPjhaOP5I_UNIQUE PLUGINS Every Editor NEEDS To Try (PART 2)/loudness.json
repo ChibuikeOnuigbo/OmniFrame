@@ -1,0 +1,29 @@
+andler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=26.8x    
+frame=  306 fps=0.0 q=-0.0 size=N/A time=00:00:12.70 bitrate=N/A speed=20.8x    
+frame=  543 fps=489 q=-0.0 size=N/A time=00:00:22.62 bitrate=N/A speed=20.4x    
+frame=  780 fps=484 q=-0.0 size=N/A time=00:00:32.45 bitrate=N/A speed=20.1x    
+frame= 1045 fps=495 q=-0.0 size=N/A time=00:00:43.50 bitrate=N/A speed=20.6x    
+frame= 1277 fps=488 q=-0.0 size=N/A time=00:00:53.16 bitrate=N/A speed=20.3x    
+frame= 1522 fps=488 q=-0.0 size=N/A time=00:01:03.41 bitrate=N/A speed=20.4x    
+frame= 1739 fps=481 q=-0.0 size=N/A time=00:01:12.41 bitrate=N/A speed=  20x    
+frame= 1976 fps=480 q=-0.0 size=N/A time=00:01:22.33 bitrate=N/A speed=  20x    
+frame= 2250 fps=487 q=-0.0 size=N/A time=00:01:33.70 bitrate=N/A speed=20.3x    
+frame= 2516 fps=491 q=-0.0 size=N/A time=00:01:44.83 bitrate=N/A speed=20.5x    
+[out#0/null @ 0x559ea3c5ba80] video:1208kB audio:80515kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 2576 fps=488 q=-0.0 Lsize=N/A time=00:01:47.29 bitrate=N/A speed=20.3x    
+[Parsed_loudnorm_0 @ 0x559ea3cf0bc0] 
+{
+	"input_i" : "-24.15",
+	"input_tp" : "-4.11",
+	"input_lra" : "10.20",
+	"input_thresh" : "-34.18",
+	"output_i" : "-23.60",
+	"output_tp" : "-2.00",
+	"output_lra" : "5.10",
+	"output_thresh" : "-33.61",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.40"
+}

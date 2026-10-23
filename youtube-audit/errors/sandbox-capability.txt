@@ -1,0 +1,20 @@
+SANDBOX (normal bash/playwright environment) capability test 2026-10-21T18:55:44Z
+-- DNS:
+2001:4860:482b:400:: www.youtube.com
+2001:4860:482d:400:: www.youtube.com
+2001:4860:482a:400:: www.youtube.com
+2001:4860:4826:400:: www.youtube.com
+2001:4860:4828:400:: www.youtube.com
+2001:4860:4829:400:: www.youtube.com
+2001:4860:482c:400:: www.youtube.com
+2001:4860:4827:400:: www.youtube.com
+-- TCP 443:
+tcp ok
+-- TLS:
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.youtube.com:443 
+http=000
+-- HTTP via text gateway:
+gateway returns markdown/text of watch pages (chapters/descriptions); no media bytes (fetch_page is a text proxy)
+-- browser render:
+Playwright+Chromium: net::ERR_CONNECTION_CLOSED on youtube.com (logged in Itired mybest.txt M11)
+-- frames/audio inspectable: NO media retrievable from this environment

@@ -1,0 +1,5088 @@
+{
+ "generated": "2026-10-21T19:03:34Z",
+ "total": 250,
+ "videos": [
+  {
+   "id": "fGm0SBFTj3o",
+   "url": "https://www.youtube.com/watch?v=fGm0SBFTj3o",
+   "title": "Playboi Carti - JUMPIN \ud83e\udd64 \u300c Kuiro MEP \u300d AMV / Flow Edit (4K)",
+   "duration": "49",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] fGm0SBFTj3o: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
+   "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "credits block naming Kuiro/Exe/EzO/Chosen/JRVY/Spaceless; oversized typo; flame-glow plates; sword-slash splatter; B&W inversion w/ magenta; purple energy burst; gold explosion; end logo row",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/fGm0SBFTj3o/",
+    "youtube-audit/evidence/sheets/fGm0SBFTj3o.jpg"
+   ]
+  },
+  {
+   "id": "L7RueAR-5Zc",
+   "url": "https://www.youtube.com/watch?v=L7RueAR-5Zc",
+   "title": "Y Not? \u26d4 - JJK Shibuya Incident Arc \u300c Flow / Edit \u300d4K",
+   "duration": "19",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] L7RueAR-5Zc: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
+   "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "blue/white duotone grade; heavy bloom+blur intro; lyric typo overlays; glowing blue-iris close-ups; white-flash transitions; dust bokeh",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/L7RueAR-5Zc/",
+    "youtube-audit/evidence/sheets/L7RueAR-5Zc.jpg"
+   ]
+  },
+  {
+   "id": "bpUZkFVX6NY",
+   "url": "https://www.youtube.com/watch?v=bpUZkFVX6NY",
+   "title": "AMV COMPOSITING tutorial | After Effects (Step-by-Step + Free Overlays)",
+   "duration": "649",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] bpUZkFVX6NY: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
+   "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "AE UI; roto'd character isolated on black; separate grayscale fog plate; bg color pass (chapter card visible); particle specks; purple mood-light wash; final = purple duotone comp w/ rim+eye glow",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/bpUZkFVX6NY/",
+    "youtube-audit/evidence/sheets/bpUZkFVX6NY.jpg"
+   ]
+  },
+  {
+   "id": "xeXhlkoOyrw",
+   "url": "https://www.youtube.com/watch?v=xeXhlkoOyrw",
+   "title": "\u300cScenario \ud83c\udfad\ud83d\udda4\u300d JJK\u300cAMV/EDIT\u300d(FREE PF)",
+   "duration": "13",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] xeXhlkoOyrw: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
+   "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "white-bg smiley logo intro; cyan aura on Yuji then magenta variant; neon line-art skull trace; pink duotone silhouettes; white-flash cuts; dual-character outro w/ sparkle overlays",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/xeXhlkoOyrw/",
+    "youtube-audit/evidence/sheets/xeXhlkoOyrw.jpg"
+   ]
+  },
+  {
+   "id": "u3A3Y3qzFzM",
+   "url": "https://www.youtube.com/watch?v=u3A3Y3qzFzM",
+   "title": "Zoo York \ud83e\udd81 - Demon Slayer [Amv/Edit] (Free PF)",
+   "duration": "13",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Spaceless neon-grade AMV: B&W ink-splash char, magenta/cyan grade w/ SPACELESS watermark, glyph sparkles, white corridor symmetry"
+  },
+  {
+   "id": "2nhSkl3mRoo",
+   "url": "https://www.youtube.com/watch?v=2nhSkl3mRoo",
+   "title": "Chanel \ud83d\udc98 - Demon Slayer AMV - 4k (Free PF)",
+   "duration": "11",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Demon Slayer AMV: neon outline trace + spectrum bars overlay, saturated cyan/red close-up, sparkle glyph logos, grainy B&W"
+  },
+  {
+   "id": "NORWR4gM_rA",
+   "url": "https://www.youtube.com/watch?v=NORWR4gM_rA",
+   "title": "The Woo - Fire Force 4k [Amv/Edit] (quick one) 4K (project file)",
+   "duration": "17",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Spaceless sig: tiny white SPACELESS logo sting, magenta glow-blur frames, collab glyph row, cyan light-ray columns"
+  },
+  {
+   "id": "C3f3qacltAE",
+   "url": "https://www.youtube.com/watch?v=C3f3qacltAE",
+   "title": "Tiger \ud83d\udc2f - Demon Slayer/Kimetsu no Yaiba [Amv/Edit] 4K (PF)",
+   "duration": "11",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Demon Slayer AMV: saturated red/green grade w/ flame streaks, hooded figure + purple particles, gold flame swirl"
+  },
+  {
+   "id": "zcKPdD9FLdk",
+   "url": "https://www.youtube.com/watch?v=zcKPdD9FLdk",
+   "title": "\u300c SHOW ME UP \ud83d\udda4\ud83d\ude0d \u300dJujutsu Kaisen\u300c Edit/AMV \u300d(PF)",
+   "duration": "24",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "glow-orb AMV: orange-haired char w/ blue orb, 'BLOW ME UP' typo w/ cyan/magenta glyphs + purple smoke, orange blur streaks"
+  },
+  {
+   "id": "naPHMzs3OBA",
+   "url": "https://www.youtube.com/watch?v=naPHMzs3OBA",
+   "title": "Alors On Dance - Demon Slayer AMV",
+   "duration": "15",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "teal glow-outline AMV: cyan outlined char, dark blue scene w/ pink glow dot, tiny pink logo, teal blur"
+  },
+  {
+   "id": "Epeqg2oEY6A",
+   "url": "https://www.youtube.com/watch?v=Epeqg2oEY6A",
+   "title": "Pocket Rocket - My Dress Up Darling [Amv/Edit] (quick one)",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "typo-pop AMV: purple-eye face w/ WOAH/AIT type + purple particles, glow logo sting, profile shot w/ SO typo"
+  },
+  {
+   "id": "Xw37Xu1YzNI",
+   "url": "https://www.youtube.com/watch?v=Xw37Xu1YzNI",
+   "title": "\u300eMONEY ft. @dnte \ud83c\udf61\ud83d\udcb0\u300fDemon Slayer\u300eAMV/EDIT\u300f4K",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "high-contrast flash AMV: neon rainbow ray X over tiny char, B&W fang face red eyes, bleeding-eye close-up"
+  },
+  {
+   "id": "0_WXQKkgZU8",
+   "url": "https://www.youtube.com/watch?v=0_WXQKkgZU8",
+   "title": "KEEP IT COOL | 4K",
+   "duration": "20",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Deppey KEEP IT COOL: white-flash open, particle logo burst, radial zoom-blur vortex w/ chromatic dispersion, radial ray bursts, saturated gold flash, corridor perspective warp, pastel colour-splash overlays, neon logo sting outro",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/0_WXQKkgZU8.jpg"
+   ]
+  },
+  {
+   "id": "pSCG5Y7KlKw",
+   "url": "https://www.youtube.com/watch?v=pSCG5Y7KlKw",
+   "title": "HOW TO MAKE EFFECTS LIKE @inuleeshua5055 | BEGINNER TUTORIAL",
+   "duration": "1326",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "step-card tutorial: STEP 4 MAKING IT LOOK COOL / INNER MATTE / STEP 5 AFTERMATH captions, RGB parade scopes, colour wheels, 'ADDING CC', credits NULESSHUA; blue-lightning final"
+  },
+  {
+   "id": "mcQUigny9-0",
+   "url": "https://www.youtube.com/watch?v=mcQUigny9-0",
+   "title": "VYZEE | 2HC MEP",
+   "duration": "18",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "green-tint sharingan-eye close-up, white manga line-art w/ 'whatever you' typo, pastel blur; line-art typo edit"
+  },
+  {
+   "id": "NuvqcJ2u2a0",
+   "url": "https://www.youtube.com/watch?v=NuvqcJ2u2a0",
+   "title": "2010 JUSTIN BIEBER | 4K",
+   "duration": "17",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "white-bg motion graphics: green/purple curve sweeps + city silhouette, credits card ('DONT KNOW MUST ASK' list), glyph logos"
+  },
+  {
+   "id": "aTZBXyuaQZU",
+   "url": "https://www.youtube.com/watch?v=aTZBXyuaQZU",
+   "title": "CHANEL (4HC) | FREE PF #loopvember",
+   "duration": "14",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "silhouette flight: black winged char on white soft bg, soft-focus face close-up; minimal grade"
+  },
+  {
+   "id": "MuZ0uEghR3Q",
+   "url": "https://www.youtube.com/watch?v=MuZ0uEghR3Q",
+   "title": "CRANK | 4K #shdw1koc",
+   "duration": "30",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "dark blue texture AMV: red streak lines, white smoke burst on black, cyan glow flash"
+  },
+  {
+   "id": "zwLfX0Bon2g",
+   "url": "https://www.youtube.com/watch?v=zwLfX0Bon2g",
+   "title": "EGOTISTICAL | 4K",
+   "duration": "22",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "pure effect frames: radial zoom-blur white/dark vortex + chromatic-dispersion wing blur (Deppey warp vocab)"
+  },
+  {
+   "id": "GwAc6HYoXCs",
+   "url": "https://www.youtube.com/watch?v=GwAc6HYoXCs",
+   "title": "How to Animate in After Effects With AI (Higgsfield MCP)",
+   "duration": "362",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AI animate workflow: dark IDE/web panels w/ prompt logs, phone-UI motion preset card (STACK/Soft Wave), AE comp; Higgsfield MCP"
+  },
+  {
+   "id": "-JLpm8uJBOo",
+   "url": "https://www.youtube.com/watch?v=-JLpm8uJBOo",
+   "title": "Can You Make a Good Edit With AI?",
+   "duration": "395",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AI-edit test: web AI editor UI + avatar grid, AE crowd scene, CGI knight frame, talking-head w/ Claude-Gemini-Notion logos; hybrid review"
+  },
+  {
+   "id": "uuFSBgUQbZI",
+   "url": "https://www.youtube.com/watch?v=uuFSBgUQbZI",
+   "title": "EASY Glitch Transition in After Effects",
+   "duration": "100",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; glitch transition on samurai plate; on-screen effect-stack menu (~9 steps: displacement/waves/magnitude/colour/blur/repeat/sound); RGB slice-offset glitch frames; yellow colour-pass variant",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/uuFSBgUQbZI/",
+    "youtube-audit/evidence/sheets/uuFSBgUQbZI.jpg"
+   ]
+  },
+  {
+   "id": "-NkNwjKEB_g",
+   "url": "https://www.youtube.com/watch?v=-NkNwjKEB_g",
+   "title": "3 After Effects Plugins That Save You HOURS",
+   "duration": "166",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "plugin roundup: AE UI dark comp, cat test plate, Google search frame for plugins, AvoidAEP outro"
+  },
+  {
+   "id": "lWNcAUXl5PE",
+   "url": "https://www.youtube.com/watch?v=lWNcAUXl5PE",
+   "title": "How To Actually Get Better At Editing",
+   "duration": "501",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "'get better at editing': caption 'follow a tutorial 1:1 = repeating not learning'; anime comp + Sekiro-style gameplay practice footage"
+  },
+  {
+   "id": "k9mJqpVADho",
+   "url": "https://www.youtube.com/watch?v=k9mJqpVADho",
+   "title": "How To Create ANY Shake in After Effects",
+   "duration": "366",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; shake theory cards comparing amp/freq pairs (1amp2freq vs 1amp1.5freq, 0.5amp5freq, 2amp1freq); caption: position-only shake = consistent pattern (add properties to break it); graph-editor shake curves; slider-rig effect controls",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/k9mJqpVADho/",
+    "youtube-audit/evidence/sheets/k9mJqpVADho.jpg"
+   ]
+  },
+  {
+   "id": "1AWoTraBxWY",
+   "url": "https://www.youtube.com/watch?v=1AWoTraBxWY",
+   "title": "How To Edit FASTER in After Effects (Beginner Tutorial)",
+   "duration": "298",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "edit-faster beginner: AE UI, sword character plate, blank cream comp, yellow audio rows; workflow tutorial"
+  },
+  {
+   "id": "4y9WdBpwrKc",
+   "url": "https://www.youtube.com/watch?v=4y9WdBpwrKc",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 8)",
+   "duration": "172",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 8: B&W sword silhouette, RGB-split glitch w/ chain props, AE UI plates; showcase"
+  },
+  {
+   "id": "4Nc-jJgODLA",
+   "url": "https://www.youtube.com/watch?v=4Nc-jJgODLA",
+   "title": "How To Create The CRT Look in After Effects",
+   "duration": "210",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; CRT look = S-curve grade + scanline/aperture-grille overlay + final teal colour shift; caption 'Dont just copy everything im doing'; AvoidAEP outro card",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/4Nc-jJgODLA/",
+    "youtube-audit/evidence/sheets/4Nc-jJgODLA.jpg"
+   ]
+  },
+  {
+   "id": "yslq1ZE0ITM",
+   "url": "https://www.youtube.com/watch?v=yslq1ZE0ITM",
+   "title": "Why Your Edits Feel BORING (It's Your Pacing)",
+   "duration": "458",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "pacing essay: white HEART line-art card w/ stars, caption 'Between what the', red/white manga burst; caption-card pacing"
+  },
+  {
+   "id": "WiPVD2RjfRs",
+   "url": "https://www.youtube.com/watch?v=WiPVD2RjfRs",
+   "title": "How To Make MOGRAPH Edits (After Effects Tutorial)",
+   "duration": "456",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "MOGRAPH: cream line-art cards (heartbeat line, heart outline, script 'see you', star art) animated in AE; typography mograph"
+  },
+  {
+   "id": "dIP2lyY4vak",
+   "url": "https://www.youtube.com/watch?v=dIP2lyY4vak",
+   "title": "What ARE Depth Maps? (After Effects Guide)",
+   "duration": "155",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "depth-maps guide: green/white graded char, AE UI blue-haired comp, white silhouette glow frame"
+  },
+  {
+   "id": "SosJerTCjRc",
+   "url": "https://www.youtube.com/watch?v=SosJerTCjRc",
+   "title": "Why Your Edits DON'T Feel IMPACTFUL \u2014 Sound Design",
+   "duration": "282",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Sound Design curriculum card: I. Primary Events (punches/sword/swoosh/grunts) II. Secondary (whooshes/vocal/particles/high electrical/dirt scuffs); AE samurai comp"
+  },
+  {
+   "id": "sEE7LrELTAE",
+   "url": "https://www.youtube.com/watch?v=sEE7LrELTAE",
+   "title": "UNIQUE PLUGINS Every Editor NEEDS To Try (PART 3)",
+   "duration": "169",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE PLUGINS PART 3: red particle-dissolve char comp on white, AvoidAEP text comp w/ palette panel, red wireframe particle comp"
+  },
+  {
+   "id": "zlvUBx2aHbw",
+   "url": "https://www.youtube.com/watch?v=zlvUBx2aHbw",
+   "title": "How To Navigate AFTER EFFECTS (Beginner Tutorial)",
+   "duration": "315",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE navigation beginner: grass-hidden char comp + long effect list, character/paragraph panels, red/green timeline rows"
+  },
+  {
+   "id": "cxHP0WcMUkY",
+   "url": "https://www.youtube.com/watch?v=cxHP0WcMUkY",
+   "title": "The SECRET To HIGH QUALITY Edits",
+   "duration": "209",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "high-quality settings: AE UI w/ hair-strand comp + dark settings dialogs, KR-text outro; settings-driven quality"
+  },
+  {
+   "id": "QN73XbEf5pk",
+   "url": "https://www.youtube.com/watch?v=QN73XbEf5pk",
+   "title": "STOP Using Twixtor Wrong \u2014 Do This Instead (Quick Tutorial)",
+   "duration": "157",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Twixtor tutorial: FlowFrames Video Interpolator plugin dialog on screen, white-haired char comp, BEFORE label frame; interpolation method"
+  },
+  {
+   "id": "CQWub0iIw8U",
+   "url": "https://www.youtube.com/watch?v=CQWub0iIw8U",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 7)",
+   "duration": "136",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 7: flame character comp w/ bell-curve graph, feather/grass plate, sword-hand plate; showcase"
+  },
+  {
+   "id": "XL8JSvTfJ2k",
+   "url": "https://www.youtube.com/watch?v=XL8JSvTfJ2k",
+   "title": "EASY COMPOSITING in After Effects (Quick Tutorial)",
+   "duration": "242",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "audio loudnorm re-run queued after coverage batches",
+   "visual_analysis": "AE UI; compositing = bg plate grade + light-streak overlay + bokeh particles (asset folder window shown) + character grade + speed ramp (graph editor); mistakes-list caption card",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/XL8JSvTfJ2k/",
+    "youtube-audit/evidence/sheets/XL8JSvTfJ2k.jpg"
+   ]
+  },
+  {
+   "id": "L_vS0GAM8_g",
+   "url": "https://www.youtube.com/watch?v=L_vS0GAM8_g",
+   "title": "After Effects BASICS Explained (Beginner Tutorial)",
+   "duration": "313",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE BASICS: white shape-layer rect on black comp, Frieren char comp, noise texture frame; beginner tutorial"
+  },
+  {
+   "id": "cQQPjhaOP5I",
+   "url": "https://www.youtube.com/watch?v=cQQPjhaOP5I",
+   "title": "UNIQUE PLUGINS Every Editor NEEDS To Try (PART 2)",
+   "duration": "108",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE PLUGINS PART 2: 'CRT' sting + plugin dialog w/ red pixel-dot char preview; plugin demo"
+  },
+  {
+   "id": "wtLu8JZYQ1Q",
+   "url": "https://www.youtube.com/watch?v=wtLu8JZYQ1Q",
+   "title": "Advanced ONE FRAMERS in After Effects (Quick Tutorial)",
+   "duration": "136",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "ONE FRAMERS: RGB-split ghost char comp + curve panels, blue/yellow glow-outline comp; one-framer tutorial"
+  },
+  {
+   "id": "EWG5XOQqtVw",
+   "url": "https://www.youtube.com/watch?v=EWG5XOQqtVw",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 6)",
+   "duration": "201",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 6: white displacement-wave silhouette, RGB-split scanline character, noise texture frame"
+  },
+  {
+   "id": "P0UsKgktnLs",
+   "url": "https://www.youtube.com/watch?v=P0UsKgktnLs",
+   "title": "EASY TRANSITIONS in After Effects (Quick Tutorial)",
+   "duration": "171",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "EASY TRANSITIONS: graph-editor decay curve (orange falloff), anime boy comp, pink-sweater girl frame; transition tutorial"
+  },
+  {
+   "id": "csL_SzJj9CY",
+   "url": "https://www.youtube.com/watch?v=csL_SzJj9CY",
+   "title": "3 Shakes Every Editor NEEDS To Know (After Effects Tutorial)",
+   "duration": "146",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3 Shakes tutorial: kaleidoscope mirror comp demo, anime boy comp, pastel blur; shake variants"
+  },
+  {
+   "id": "YjD2f0g0AV8",
+   "url": "https://www.youtube.com/watch?v=YjD2f0g0AV8",
+   "title": "BEST Plugins Every Editor NEEDS To Try (After Effects Tutorial)",
+   "duration": "187",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "BEST Plugins: AE UI + colour wheels/scopes, Violet Evergarden comp, plugin vendor site grid (Tool Preview/Collage Pro/Grid Builder)"
+  },
+  {
+   "id": "iNoogDwDo_c",
+   "url": "https://www.youtube.com/watch?v=iNoogDwDo_c",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 5)",
+   "duration": "136",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 5: white lightning/electric overlay on anime boy comp, red curve panel; electric effect"
+  },
+  {
+   "id": "si35Ia6_RgQ",
+   "url": "https://www.youtube.com/watch?v=si35Ia6_RgQ",
+   "title": "GOJO STYLE Text Effects in After Effects (Quick Tutorial)",
+   "duration": "102",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "GOJO STYLE text: per-character colour patches on 'AVOID AEP' comp, curve graph + glyph panel, red-band text frame"
+  },
+  {
+   "id": "kdCg3E7A8UI",
+   "url": "https://www.youtube.com/watch?v=kdCg3E7A8UI",
+   "title": "How to Make Thumbnails in Photoshop (Quick Tutorial)",
+   "duration": "181",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Photoshop thumbnails: white manga line-art head -> coloured red-accent version w/ texture overlay, colour pickers; thumbnail workflow"
+  },
+  {
+   "id": "M7PWQ3NAenM",
+   "url": "https://www.youtube.com/watch?v=M7PWQ3NAenM",
+   "title": "EASY COMPOSITING in After Effects (Quick Tutorial)",
+   "duration": "183",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "EASY COMPOSITING (AvoidAEP): warm char comp + comp-in-comp, final warm/pink grade w/ headphone char; outro"
+  },
+  {
+   "id": "w1-NsMMAASE",
+   "url": "https://www.youtube.com/watch?v=w1-NsMMAASE",
+   "title": "EASY MANGA ANIMATION in After Effects (Quick Tutorial)",
+   "duration": "192",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "PS->AE manga pipeline: B&W sword-pose cutout in PS, manga eye line-art comp in AE w/ coloured rows; matches Keditz method"
+  },
+  {
+   "id": "GMAvCLnbCYI",
+   "url": "https://www.youtube.com/watch?v=GMAvCLnbCYI",
+   "title": "How to make Flow Edits in After Effects (Quick Tutorial)",
+   "duration": "187",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "manga animation: red/black action comp in AE, rounded TV-mask presentation frame w/ crowd scene; outro"
+  },
+  {
+   "id": "OHVOL1oodKI",
+   "url": "https://www.youtube.com/watch?v=OHVOL1oodKI",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 4)",
+   "duration": "199",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 4: B&W mask/roto shape comp (mask visualisation), colour picker + pink crystal frame; mask workflow"
+  },
+  {
+   "id": "tF_clYyo2FU",
+   "url": "https://www.youtube.com/watch?v=tF_clYyo2FU",
+   "title": "How to make 3D Lighting using Depth Maps in After Effects (Quick Tutorial)",
+   "duration": "143",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D lighting via depth maps: depth-panel (model/threshold settings), false-colour green/red debug depth view, crackle depth-map texture, 3D light+camera gizmo, purple glow light layer masked by depth -> volumetric relight of face; AvoidAEP outro",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets/tF_clYyo2FU.jpg"
+   ]
+  },
+  {
+   "id": "TxMCZpTmxG0",
+   "url": "https://www.youtube.com/watch?v=TxMCZpTmxG0",
+   "title": "How to Use Card Dance in After Effects (Quick Tutorial)",
+   "duration": "79",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Card Dance: shard/spike fragmentation on dark iris close-up w/ red type in eye; AE UI; noise frame"
+  },
+  {
+   "id": "nni31LkmA-U",
+   "url": "https://www.youtube.com/watch?v=nni31LkmA-U",
+   "title": "Advanced ONE FRAMERS in After Effects (Quick Tutorial)",
+   "duration": "103",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "glow-outline showcase: AE UI teal glow face comp (negative-style), teal outline mask frame, teal glow burst"
+  },
+  {
+   "id": "ih8WI_jKI2Q",
+   "url": "https://www.youtube.com/watch?v=ih8WI_jKI2Q",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 3)",
+   "duration": "119",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "UNIQUE Effects PART 3: pink neon line-swirl around Frieren, grey voronoi/shatter cell comp in AE; neon trail + shatter"
+  },
+  {
+   "id": "pD9ac1NJvbA",
+   "url": "https://www.youtube.com/watch?v=pD9ac1NJvbA",
+   "title": "Unique Text Effects Every Editor NEEDS To Try (Part 2)",
+   "duration": "89",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Unique Text Effects 2: 'TEXT EFFECT #1' serif on white comp, red ink-blot shapes reveal; text-effect tutorial"
+  },
+  {
+   "id": "M5t-RkH5fqM",
+   "url": "https://www.youtube.com/watch?v=M5t-RkH5fqM",
+   "title": "COLOR CORRECTIONS Every Editor NEEDS To Know (Quick Tutorial)",
+   "duration": "128",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Colour correction curriculum: OFF/ON compare labels, S-curve graphs, colour-wheels panel, RGB parade/vectorscope scopes, teal-orange action grade, secondary grade on detail shot; AvoidAEP outro",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets/M5t-RkH5fqM.jpg"
+   ]
+  },
+  {
+   "id": "oCKNYDxPB4Y",
+   "url": "https://www.youtube.com/watch?v=oCKNYDxPB4Y",
+   "title": "How To Make VIBE Shakes in After Effects (Quick Tutorial)",
+   "duration": "124",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "VIBE Shakes: long effect-controls stack list, blonde close-up comp, sky comp w/ red-wing char; shake tutorial"
+  },
+  {
+   "id": "XQy_WfRtq6k",
+   "url": "https://www.youtube.com/watch?v=XQy_WfRtq6k",
+   "title": "How To Make FLOW Shakes in After Effects (Quick Tutorial)",
+   "duration": "117",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "effect stack list + S-curve + APPLY buttons, hammer prop over sky, B&W mirrored kaleidoscope char, hand close-up"
+  },
+  {
+   "id": "pztANrbFI3w",
+   "url": "https://www.youtube.com/watch?v=pztANrbFI3w",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 2)",
+   "duration": "115",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "roto/mask polygon demo: B&W checkered-floor scene, polygon mask outline over char head, coloured Tanjiro close-up"
+  },
+  {
+   "id": "To1-I2gL76Q",
+   "url": "https://www.youtube.com/watch?v=To1-I2gL76Q",
+   "title": "How Edits Actually Go Viral (Quick Tutorial)",
+   "duration": "194",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "caption-card essay: 'They work the same for Tutorials'/'Because new accounts', TV-mask light-streak frame"
+  },
+  {
+   "id": "R-pFi08xkjk",
+   "url": "https://www.youtube.com/watch?v=R-pFi08xkjk",
+   "title": "5 Mistakes That Are Holding Your Edits Back (Quick Tutorial)",
+   "duration": "149",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark minimalist: small AE comp window w/ white card/phone mockup on black"
+  },
+  {
+   "id": "AsHnacGDo6E",
+   "url": "https://www.youtube.com/watch?v=AsHnacGDo6E",
+   "title": "Why Your Edits Feel Off \u2014 You\u2019re Using SFX Wrong",
+   "duration": "183",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "noise/static frame, dark-red blurred manga face, rounded TV-mask scanline frame w/ manga girl; TV-mask+noise style"
+  },
+  {
+   "id": "chIJCGNoGls",
+   "url": "https://www.youtube.com/watch?v=chIJCGNoGls",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (After Effects Tutorial)",
+   "duration": "133",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE UI red X-sword sky comp, symmetric blue glow-burst comp, halftone-dot manga head; glow burst + halftone"
+  },
+  {
+   "id": "4dPBXQGWVdM",
+   "url": "https://www.youtube.com/watch?v=4dPBXQGWVdM",
+   "title": "3 Shakes Every Editor NEEDS To Know (After Effects Tutorial)",
+   "duration": "228",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE comps: black frame, red-eye char w/ plane prop, Kurapika-style char w/ dotted mask-path overlay; mask path demo"
+  },
+  {
+   "id": "vjKjAAdElfI",
+   "url": "https://www.youtube.com/watch?v=vjKjAAdElfI",
+   "title": "The RIGHT Way to Pick Clips for Anime Edits (Quick Tutorial)",
+   "duration": "109",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Discord server card (AvoidAEP, Go to Server), caption 'These clips work', TV-mask cyan hooded char; clip-pack promo"
+  },
+  {
+   "id": "jZiwWHV7M54",
+   "url": "https://www.youtube.com/watch?v=jZiwWHV7M54",
+   "title": "Master 3D CAMERA Movement in After Effects (in Under 2 Minutes)",
+   "duration": "133",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red neon arcs w/ 'Link in Bio' typo on grid, caption card w/ red spec lines (10-20 mm...); neon arc typography"
+  },
+  {
+   "id": "zRfHqMf997Y",
+   "url": "https://www.youtube.com/watch?v=zRfHqMf997Y",
+   "title": "STOP Using Twixtor Wrong \u2014 Do This Instead (Quick Tutorial)",
+   "duration": "103",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "black comp + diagonal speed-graph line, flame/explosion comp w/ dialog overlay, dark blur; explosion + speed graph"
+  },
+  {
+   "id": "GP-dx6ruQQA",
+   "url": "https://www.youtube.com/watch?v=GP-dx6ruQQA",
+   "title": "GRUNGE COLOR CORRECTIONS in After Effects That\u2019ll Make Your Edits LOOK INSANE (Quick Tutorial)",
+   "duration": "187",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "grade/mask compare: Tanjiro crouch comp grey grade vs TV-mask blue grade variant in AE"
+  },
+  {
+   "id": "luN039CW3Us",
+   "url": "https://www.youtube.com/watch?v=luN039CW3Us",
+   "title": "EASY TEXT EFFECTS That Look INSANE (Quick Tutorial)",
+   "duration": "93",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'Text Effect 2'/'Text Effect 4' numbered title cards on black comps, AVOID graffiti logo; text-effect series"
+  },
+  {
+   "id": "UGp9KHkN5-A",
+   "url": "https://www.youtube.com/watch?v=UGp9KHkN5-A",
+   "title": "How To Make Thumbnails That Actually Get Clicked (Quick Tutorial)",
+   "duration": "161",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "PS->AE manga intro: orange-haired manga head in PS w/ hand-written 'Ta', red-eye white-haired char on pink grid w/ TE..ANIM type"
+  },
+  {
+   "id": "nb--54G-CL8",
+   "url": "https://www.youtube.com/watch?v=nb--54G-CL8",
+   "title": "2 Transitions That'll LEVEL UP YOUR EDITS (Quick Tutorial)",
+   "duration": "201",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE UI fire/explosion comp w/ purple mask outline, red X-swords over char comp, caption 'Spot = AB = Y'; mask/spot workflow"
+  },
+  {
+   "id": "07HDwXwXYms",
+   "url": "https://www.youtube.com/watch?v=07HDwXwXYms",
+   "title": "EASY MANGA ANIMATION in After Effects (Quick Tutorial)",
+   "duration": "180",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "manga animation: white line-art head on transparency checker -> shaded manga bust in AE; outro"
+  },
+  {
+   "id": "EHXQm3-alYo",
+   "url": "https://www.youtube.com/watch?v=EHXQm3-alYo",
+   "title": "3 Text Animations YOU NEED TO TRY in After Effects (Quick Tutorial)",
+   "duration": "136",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark minimal comps w/ tiny red typo lines, dark TV-mask frame w/ manga char + Tiktok caption"
+  },
+  {
+   "id": "-SZcpYq49v8",
+   "url": "https://www.youtube.com/watch?v=-SZcpYq49v8",
+   "title": "How to Make MOLOB Shakes in After Effects (Quick Tutorial)",
+   "duration": "85",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "grade-compare variants: 3 near-identical warm/orange Tanjiro close-ups in AE w/ pip corner + curve panel"
+  },
+  {
+   "id": "2StXpBZqbAs",
+   "url": "https://www.youtube.com/watch?v=2StXpBZqbAs",
+   "title": "How to Make BLUBZ Shakes in After Effects (Quick Tutorial)",
+   "duration": "167",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "manga eye close-up framing variants in AE (full/letterbox/tilted) + curve graph; composition compare"
+  },
+  {
+   "id": "PfsvExZNvq0",
+   "url": "https://www.youtube.com/watch?v=PfsvExZNvq0",
+   "title": "Unique After Effects Plugins YOU'VE NEVER HEARD OF",
+   "duration": "86",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "clone-grid char comp in AE, plugin-site slider UI, purple/orange pop-art face w/ big round glasses; clone+pop grade"
+  },
+  {
+   "id": "IK9Ksx3h1Tw",
+   "url": "https://www.youtube.com/watch?v=IK9Ksx3h1Tw",
+   "title": "How to Make a ONE FRAMER in After Effects (Quick Tutorial)",
+   "duration": "94",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "spiral comps: green swirl bg + blue char, glasses lens reflecting swirl (lens-reflection comp), colour-labelled layer list"
+  },
+  {
+   "id": "WC1tT1B5o_w",
+   "url": "https://www.youtube.com/watch?v=WC1tT1B5o_w",
+   "title": "Gear 5 Edit (Nun Less - dadanny) / Avoid.AEP",
+   "duration": "8",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "TV-mask B&W manga frames, 'NIKA' typo on fisheye circular char, green/purple glitch warp frame"
+  },
+  {
+   "id": "gPSWULmCJFM",
+   "url": "https://www.youtube.com/watch?v=gPSWULmCJFM",
+   "title": "ACE Edit \u2660 [Romantic Homicide] / Avoid.aep",
+   "duration": "73",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "OFF-label compare on dark One-Piece-style char, film scratch/dust overlay w/ caption, white-cloak low-angle; OFF/ON + film damage"
+  },
+  {
+   "id": "MikYBbqNiPo",
+   "url": "https://www.youtube.com/watch?v=MikYBbqNiPo",
+   "title": "How to Make a ONE FRAMER in After Effects (Quick Tutorial)",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "blurred purple-stripe transition frames w/ AE swirl comp inset, glasses-reflection blur, socials bar; blur variants"
+  },
+  {
+   "id": "BP4xGE9iUtU",
+   "url": "https://www.youtube.com/watch?v=BP4xGE9iUtU",
+   "title": "Obito Edit (MORE - Yeat)",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "B&W manga collage (Naruto char + spirals), halftone face close-up, white spotlight w/ scattered 'SO THIS SHIT' typo"
+  },
+  {
+   "id": "3b9GpqVeRNY",
+   "url": "https://www.youtube.com/watch?v=3b9GpqVeRNY",
+   "title": "I Made My Own CapCut in 60 Days",
+   "duration": "348",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "captions 'create images and videos with IA' / 'Voxel sorter' / 'how it all went' over aerial footage, white voxel frame, blurred portrait; captioned montage"
+  },
+  {
+   "id": "UE-352Rre5A",
+   "url": "https://www.youtube.com/watch?v=UE-352Rre5A",
+   "title": "My free editing pack ;)",
+   "duration": "74",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "space/planet frame w/ char + file-list overlay, white-cards dialog on dark UI, Elden-Ring-like gameplay frame; game capture + file list"
+  },
+  {
+   "id": "LqfUhkr2vcc",
+   "url": "https://www.youtube.com/watch?v=LqfUhkr2vcc",
+   "title": "The editing style that makes you money",
+   "duration": "1795",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D grid floor comp + project browser w/ colourful thumb grid, dark 3D corridor w/ yellow 'editing videos' typo"
+  },
+  {
+   "id": "iw8lJAt_8z8",
+   "url": "https://www.youtube.com/watch?v=iw8lJAt_8z8",
+   "title": "ProjectFile + footage (How I Edit 5x Faster Than You)",
+   "duration": "68",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED_MEMBERS_ONLY",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
+  },
+  {
+   "id": "r2KfQ9tEvgI",
+   "url": "https://www.youtube.com/watch?v=r2KfQ9tEvgI",
+   "title": "How to Edit Videos 7.5x Faster",
+   "duration": "411",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "pink grid panel + char card comp, YouTube grid of tutorial thumbs (ANIMATION KITS, TOP 5 FREE AE, FLOW STYLE), dark lamp frame; YT grid + panel"
+  },
+  {
+   "id": "e45vvQtdEcY",
+   "url": "https://www.youtube.com/watch?v=e45vvQtdEcY",
+   "title": "Master the After Effects 3D Camera in Just 2 Minutes",
+   "duration": "137",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "gray swirl comp w/ magenta typo, tilted card comp, swirl + green frame comp, giant blue 'today' typo; swirl comps + giant typo"
+  },
+  {
+   "id": "kyrBkGnfFsI",
+   "url": "https://www.youtube.com/watch?v=kyrBkGnfFsI",
+   "title": "01 - Iman Gadhzi module",
+   "duration": "1166",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED_MEMBERS_ONLY",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
+  },
+  {
+   "id": "Lg_7-Wift8E",
+   "url": "https://www.youtube.com/watch?v=Lg_7-Wift8E",
+   "title": "Matsya style - 04",
+   "duration": "618",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED_MEMBERS_ONLY",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
+  },
+  {
+   "id": "v-cM5D3qc7s",
+   "url": "https://www.youtube.com/watch?v=v-cM5D3qc7s",
+   "title": "Matsya style - 03",
+   "duration": "441",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED_MEMBERS_ONLY",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
+  },
+  {
+   "id": "HFkb60azqN0",
+   "url": "https://www.youtube.com/watch?v=HFkb60azqN0",
+   "title": "ProjectFile + footage (How I Made $7,795 Editing Videos (And How You Can Too)",
+   "duration": "61",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "BLOCKED_MEMBERS_ONLY",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "block_reason": "members-only paywall; user action: channel membership on cookie account or supply files via Drive"
+  },
+  {
+   "id": "AS2AJA-O5gU",
+   "url": "https://www.youtube.com/watch?v=AS2AJA-O5gU",
+   "title": "How I Make $7,795 Editing Videos (And How You Can Too)",
+   "duration": "482",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "keyframe graph w/ 'sometimes that's true' caption + live office interview footage; live footage + graph caption"
+  },
+  {
+   "id": "j3Lt0dU1Lok",
+   "url": "https://www.youtube.com/watch?v=j3Lt0dU1Lok",
+   "title": "3 Advanced ONE FRAMERS in After Effects",
+   "duration": "423",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "blurred comp + anime eye close-up comp, vertical strip collage w/ eye/red frames; eye close-up + strip collage"
+  },
+  {
+   "id": "3vUtz3lb1J8",
+   "url": "https://www.youtube.com/watch?v=3vUtz3lb1J8",
+   "title": "The ULTIMATE FREE EDITING PACK",
+   "duration": "57",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red gradient frame w/ small caption (After Effects mention), green/red thumb-grid panel in AE, yellow grid-warp frame; thumb grid + warp"
+  },
+  {
+   "id": "SpHvhnOjLyY",
+   "url": "https://www.youtube.com/watch?v=SpHvhnOjLyY",
+   "title": "Create Smooth Text Animations with Just 1 Click! + FREE Plugin",
+   "duration": "96",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'TextAnimation' warp-grid comp + plugin thumb grid, SIMPLE FIX dialog, 'how u can animate text in just 1 click' typo on orange grid; text-anim plugin promo"
+  },
+  {
+   "id": "TGzvLuyQEnM",
+   "url": "https://www.youtube.com/watch?v=TGzvLuyQEnM",
+   "title": "The ULTIMATE ANIME EDIT Guide in After Effects",
+   "duration": "1288",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark char comp + red-thumb plugin panel in AE, blurred red-haired char close-up; plugin panel + blur"
+  },
+  {
+   "id": "bnidLFxk1RY",
+   "url": "https://www.youtube.com/watch?v=bnidLFxk1RY",
+   "title": "5 FREE AFTER EFFECTS PLUGINS (YOU MUST KNOW!!)",
+   "duration": "293",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "meadow comp + phone-style grid panel (blue thumbs), black comp + Instagram-icons panel, white '???' typo blur frame; IG panel + ??? typo"
+  },
+  {
+   "id": "v3gTHgRpsTI",
+   "url": "https://www.youtube.com/watch?v=v3gTHgRpsTI",
+   "title": "How to make FLOW EDITS in after effects pt 2",
+   "duration": "1647",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "photo-inset comp + gradient thumb panel, white-flower kaleidoscope comp, 3D flying-cards cloud; 3D card flight"
+  },
+  {
+   "id": "oj-OMBrUNyw",
+   "url": "https://www.youtube.com/watch?v=oj-OMBrUNyw",
+   "title": "How to make FLOW EDITS in after effects",
+   "duration": "1092",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "hallway comp + pink char thumb-grid panel, 3D flying-cards over street frame; 3D card flight"
+  },
+  {
+   "id": "vWVcUwxkr54",
+   "url": "https://www.youtube.com/watch?v=vWVcUwxkr54",
+   "title": "NovaVision Model 1.0",
+   "duration": "35",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "line-art white-haired anime girl (braids, surprised) on dark-blue patterned bg, black + dark-blue frames; NovaVision line-art output"
+  },
+  {
+   "id": "kPq-jncT-Jg",
+   "url": "https://www.youtube.com/watch?v=kPq-jncT-Jg",
+   "title": "How to Animate Characters in After Effects (Complete Guide)",
+   "duration": "1415",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white comp w/ tiny eye element + CapCut-style green-button panel inset, manga head w/ mask path, dark blurred char; AE+CapCut hybrid"
+  },
+  {
+   "id": "RvIiIj6xVg0",
+   "url": "https://www.youtube.com/watch?v=RvIiIj6xVg0",
+   "title": "Insane COMPOSITING in After Effects (Step by step)",
+   "duration": "528",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D scene comp w/ glow text + green panel grid, black comp w/ dot + green thumb column, gray 3D structure frame; 3D scene + panels"
+  },
+  {
+   "id": "I6uoPn_12Ps",
+   "url": "https://www.youtube.com/watch?v=I6uoPn_12Ps",
+   "title": "This Plugin CHANGES EVERYTHING for MMV Editors in After Effects...",
+   "duration": "231",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'NOVAVISION' green typo title + captions, manga comp + green grid panels in AE, 'the best plug in for manga editors and AMV editors'; NOVAVISION plugin promo"
+  },
+  {
+   "id": "qlWOc-2yvu0",
+   "url": "https://www.youtube.com/watch?v=qlWOc-2yvu0",
+   "title": "3 Crazy After Effects Plugins You\u2019ve Never Seen Before",
+   "duration": "246",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "B&W char comp + green settings panel + dialog in AE, black frame, blue 'I wanna' typo blur; settings panel + typo blur"
+  },
+  {
+   "id": "sJLXHm7wpwM",
+   "url": "https://www.youtube.com/watch?v=sJLXHm7wpwM",
+   "title": "You\u2019re Using the 3D Camera WRONG in After Effects Fix This NOW",
+   "duration": "775",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'hey everyone' typo comp w/ context menu open, 'Leave u guy' typo comp w/ blue glow; typo comps + menu"
+  },
+  {
+   "id": "vU7aF460kHE",
+   "url": "https://www.youtube.com/watch?v=vU7aF460kHE",
+   "title": "6 After Effects Mistakes You NEED to Stop NOW",
+   "duration": "307",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'this moments feel small' caption + small char card, Yuji frame on rounded card, pink circle gradient; rounded card + caption"
+  },
+  {
+   "id": "lzVm52XPYX4",
+   "url": "https://www.youtube.com/watch?v=lzVm52XPYX4",
+   "title": "Advanced ONE FRAMERS in After Effects Quick Tutorial",
+   "duration": "167",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "spark/explosion light comp (blue/pink), black comp w/ pink particles, gray vignette frame; spark/particle comps"
+  },
+  {
+   "id": "XBLcpjthsBE",
+   "url": "https://www.youtube.com/watch?v=XBLcpjthsBE",
+   "title": "Your Impacts Suck \u2014 Do This Instead (After Effects)",
+   "duration": "378",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "three AE comps progression: dark starfield, golden light streaks, white flash; light streak/flash comps"
+  },
+  {
+   "id": "ZmgQ95OZbBg",
+   "url": "https://www.youtube.com/watch?v=ZmgQ95OZbBg",
+   "title": "Free Editing Pack for After Effects | Ultimate Editing Pack \ud83d\udd25",
+   "duration": "48",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "green section labels 'Ccs' / 'Overlays' / '1 Framers' w/ thumb cards (purple glow char, black rain overlay, white/blue flash); pack section cards"
+  },
+  {
+   "id": "1hSsLUwUg2E",
+   "url": "https://www.youtube.com/watch?v=1hSsLUwUg2E",
+   "title": "How To Create Realistic 3D Scenes In after effects",
+   "duration": "1101",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark 3D card/red-sign scene comps + bright-light comp, white gradient frame; 3D sign scene"
+  },
+  {
+   "id": "3OEHnIPQKlE",
+   "url": "https://www.youtube.com/watch?v=3OEHnIPQKlE",
+   "title": "How to Do Jugg Style Editing FULL Tutorial  Twixtors,Transitions & Effects",
+   "duration": "593",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "small pink char comp, white/orange particle-burst comp, warm blurred char close-up; particle burst"
+  },
+  {
+   "id": "i1lgRsjK89Y",
+   "url": "https://www.youtube.com/watch?v=i1lgRsjK89Y",
+   "title": "The Ultimate Manga Animation Guide in After Effects (Hair, Body, MMV)",
+   "duration": "958",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "grayscale 3D scene w/ red sword prop, red/pink sky variant comp, white/pink blur; 3D scene + sky grade"
+  },
+  {
+   "id": "IOOFDnmhVbk",
+   "url": "https://www.youtube.com/watch?v=IOOFDnmhVbk",
+   "title": "How to Animate MANGA in After Effects (Beginner Guide)",
+   "duration": "931",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "line-art eye comp (cyan), 3D char bust comp w/ glowing eyes, white frame w/ black ink strokes; line-art + 3D bust comps"
+  },
+  {
+   "id": "khjRWWTYZcc",
+   "url": "https://www.youtube.com/watch?v=khjRWWTYZcc",
+   "title": "Animate Manga Like a PRO in After Effects \u26a1",
+   "duration": "992",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "manga hand w/ glowing pen comp + pink-tinted char comp, white frame w/ tiny b&w sphere + strokes; manga hand comps"
+  },
+  {
+   "id": "RfQZjjyBYeg",
+   "url": "https://www.youtube.com/watch?v=RfQZjjyBYeg",
+   "title": "This Tool Will Save You HOURS",
+   "duration": "9",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "tablet mockup w/ char card + 'Completed' check card, 'Hours of work in a few seconds', purple gradient card w/ green-haired char; app promo"
+  },
+  {
+   "id": "kFQTtIp9Hrg",
+   "url": "https://www.youtube.com/watch?v=kFQTtIp9Hrg",
+   "title": "3 Insane One Frame Effects in After Effects Editors Are Sleeping On These",
+   "duration": "156",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "pink blob/orb comp, warm char comp, orange streak blur frame; orb comps + streaks"
+  },
+  {
+   "id": "fLsLnUD_hMU",
+   "url": "https://www.youtube.com/watch?v=fLsLnUD_hMU",
+   "title": "The SECRET to INSANE Impacts in After Effects",
+   "duration": "698",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "hooded manga char comp on wood bg, blue lens-flare dots comp, 'most editors have' caption on gray; flare comps + caption"
+  },
+  {
+   "id": "Tbyfnw3FFSQ",
+   "url": "https://www.youtube.com/watch?v=Tbyfnw3FFSQ",
+   "title": "How to Make INSANE Impacts in After Effects",
+   "duration": "325",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark car/scene comp variants in AE, pink/blue blur w/ 'g to show you' caption; comp variants"
+  },
+  {
+   "id": "UArGI-27qdo",
+   "url": "https://www.youtube.com/watch?v=UArGI-27qdo",
+   "title": "3 Underrated Plugins Nobody Is Using",
+   "duration": "155",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "blue 3D shard comp, framed dark scene comp, 'i'm ... in this video' caption on pink/blue blur; shard comp + caption"
+  },
+  {
+   "id": "b24jixhP-04",
+   "url": "https://www.youtube.com/watch?v=b24jixhP-04",
+   "title": "MMV 3D Advanced Composition \u2013 Complete After Effects Masterclass",
+   "duration": "1227",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "black box comp w/ 3D gizmo, checkerboard plane comp (3D floor), 'in this video' caption on blur; 3D checker floor"
+  },
+  {
+   "id": "juKpzbMj2q0",
+   "url": "https://www.youtube.com/watch?v=juKpzbMj2q0",
+   "title": "Master Screenshot Animations in After Effects - Step By Step",
+   "duration": "924",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "web-page comp (dark UI + buttons) + video-call insets, tilted screen comp, teal bokeh frame; screen comps"
+  },
+  {
+   "id": "Ke2ZbmxJOwA",
+   "url": "https://www.youtube.com/watch?v=Ke2ZbmxJOwA",
+   "title": "WHY  I Stopped Making Anime Edits\u2026",
+   "duration": "130",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'2026 CHEGANDO' red card typo, dark blurred UI w/ comment card, blue blurred UI w/ card; PT typo card + comment"
+  },
+  {
+   "id": "rxLzoPZWKw4",
+   "url": "https://www.youtube.com/watch?v=rxLzoPZWKw4",
+   "title": "3 INSANE CCs You\u2019ve NEVER Seen Before in After Effects",
+   "duration": "119",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white-dress char blue/purple comp, purple char comp + explorer w/ 'fx FFX' icons, gray smoke frame; FFX icons + smoke"
+  },
+  {
+   "id": "RgBdVFYxBiE",
+   "url": "https://www.youtube.com/watch?v=RgBdVFYxBiE",
+   "title": "\ud835\uddd4\ud835\uddd7\ud835\udde9\ud835\uddd4\ud835\udde1\ud835\uddd6\ud835\uddd8\ud835\uddd7 \ud835\uddd6\ud835\udde2\ud835\udde0\ud835\udde3\ud835\udde2\ud835\udde6\ud835\udddc\ud835\udde7\ud835\udddc\ud835\udde2\ud835\udde1 \ud835\udde7\ud835\udde8\ud835\udde7\ud835\udde2\ud835\udde5\ud835\udddc\ud835\uddd4\ud835\udddf | \ud835\uddd4\ud835\uddd9\ud835\udde7\ud835\uddd8\ud835\udde5 \ud835\uddd8\ud835\uddd9\ud835\uddd9\ud835\uddd8\ud835\uddd6\ud835\udde7\ud835\udde6 \ud835\udde7\ud835\udde8\ud835\udde7\ud835\udde2\ud835\udde5\ud835\udddc\ud835\uddd4\ud835\udddf",
+   "duration": "1240",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Sasuke char comp w/ dark trees + variant w/ green plant overlay, 'what's' caption on white smear; comp variants"
+  },
+  {
+   "id": "BQQJ0Sadgmo",
+   "url": "https://www.youtube.com/watch?v=BQQJ0Sadgmo",
+   "title": "3 After Effects Plugins Nobody Is Using (But Should)",
+   "duration": "140",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "B&W eye close-up comp, framed purple char comp, white smoke frame; eye comp + smoke"
+  },
+  {
+   "id": "vFTXmhTIDH4",
+   "url": "https://www.youtube.com/watch?v=vFTXmhTIDH4",
+   "title": "3 Next Level Transition Shakes Nobody Is Using These",
+   "duration": "191",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark comp + mask rect, purple char comp w/ mask outline, 'UPGRADE YOUR EDITS' cyan typo on blur; mask+typo promo"
+  },
+  {
+   "id": "Ia6I12TiyZk",
+   "url": "https://www.youtube.com/watch?v=Ia6I12TiyZk",
+   "title": "THE ULTIMATE MMV Editing Masterclass in After Effects  Full MMV & Compositing Tutorial",
+   "duration": "704",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "particle/brush preset panel (dotted black swatches), char comp w/ plant overlay + curve graph, teal-graded char; particle presets + grade"
+  },
+  {
+   "id": "lskzAXaFxp8",
+   "url": "https://www.youtube.com/watch?v=lskzAXaFxp8",
+   "title": "Make Your Edits Look EXPENSIVE Simple Tips",
+   "duration": "527",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white-haired anime char comp w/ glow + blue variant comp w/ hand glow; char glow comps"
+  },
+  {
+   "id": "aiAi86bHlnE",
+   "url": "https://www.youtube.com/watch?v=aiAi86bHlnE",
+   "title": "Master After Effects Basics in 10 Minutes (2026 Beginner Guide)",
+   "duration": "410",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "small white smoke comp + dark castle/smoke comp variant, magenta blob frame; smoke comps"
+  },
+  {
+   "id": "SKzruGczz20",
+   "url": "https://www.youtube.com/watch?v=SKzruGczz20",
+   "title": "How to Make MMV Edits (Beginner \u2192 Pro)",
+   "duration": "1194",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "green-glow aura char comp in AE, rotated comp-in-comp, purple/green blur close-up; glow aura"
+  },
+  {
+   "id": "RktZGRjji5g",
+   "url": "https://www.youtube.com/watch?v=RktZGRjji5g",
+   "title": "How To Make A CRT LOOK In After Effects",
+   "duration": "64",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red char comp + 'CRT-EMULATOR' panel w/ thumbs, blue/purple CRT blur frame, red posterized char frame; CRT emulator plugin"
+  },
+  {
+   "id": "FhHs2HMTQBE",
+   "url": "https://www.youtube.com/watch?v=FhHs2HMTQBE",
+   "title": "Your Transitions Are Killing Your Edits",
+   "duration": "377",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "purple anime eye close-up comp + 'GausSwap?' plugin panel, pink streak variant comp; plugin panel + eye comps"
+  },
+  {
+   "id": "M6bRWYalp6o",
+   "url": "https://www.youtube.com/watch?v=M6bRWYalp6o",
+   "title": "Stop Using Basic Shake \u2014 Try These 3 Instead",
+   "duration": "156",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "yellow/pink blur comp + 'Polyscope' panel, purple eye/hair comp w/ panel, yellow/pink blur frame; Polyscope panel comps"
+  },
+  {
+   "id": "hPnOEsy6kRg",
+   "url": "https://www.youtube.com/watch?v=hPnOEsy6kRg",
+   "title": "Hidden After Effects Plugins That Level Up Your Edits",
+   "duration": "278",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "seated char photo comp, red slit/curtain comp w/ mask outline + purple effect panel, caption 'is gonna change your edits'; plugin promo w/ mask"
+  },
+  {
+   "id": "1UpuLy6qrPw",
+   "url": "https://www.youtube.com/watch?v=1UpuLy6qrPw",
+   "title": "Ripple Shake Transition on After Effects",
+   "duration": "92",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "two AE comps of blue char w/ keypad panels, blue blur frame; char comp + keypad"
+  },
+  {
+   "id": "EN7NL2QQg0s",
+   "url": "https://www.youtube.com/watch?v=EN7NL2QQg0s",
+   "title": "Insane Speed Lines in After Effects Easy Method",
+   "duration": "144",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark comp w/ red char inset + panel, purple streak comp w/ menu open, orange blur frame; streak comps + menu"
+  },
+  {
+   "id": "X5g99tqsuC4",
+   "url": "https://www.youtube.com/watch?v=X5g99tqsuC4",
+   "title": "You\u2019re Doing 3D Manga Composition Wrong - After effects",
+   "duration": "770",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white-hooded kneeling char on black comp, 3D wireframe comp w/ red glow orb, red blur frame; 3D wireframe + glow"
+  },
+  {
+   "id": "PT3cQa6WQ4A",
+   "url": "https://www.youtube.com/watch?v=PT3cQa6WQ4A",
+   "title": "3 After Effects Scripts That Will Change Your Workflow Forever",
+   "duration": "172",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white comp w/ black-clothed kneeling char, explorer window w/ yellow folders, white streak frame; kneeling char comp + folders"
+  },
+  {
+   "id": "D8V5kf_7rzU",
+   "url": "https://www.youtube.com/watch?v=D8V5kf_7rzU",
+   "title": "Master the 3D Camera in After Effects (Beginner to Pro in 15 Minutes)",
+   "duration": "943",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Creation-of-Adam hands comp in orange fire grade + smaller variant, orange blur frame; fire-grade art comp"
+  },
+  {
+   "id": "bDNXk0t4d6w",
+   "url": "https://www.youtube.com/watch?v=bDNXk0t4d6w",
+   "title": "AMV Compositing TUTORIAL Step By Step",
+   "duration": "826",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-haired anime char profile comp + scopes/colour-panel variant, soft blur frame; grade w/ scopes"
+  },
+  {
+   "id": "ThBfRHGIs_0",
+   "url": "https://www.youtube.com/watch?v=ThBfRHGIs_0",
+   "title": "3 After Effects Effects You\u2019re Not Using\u2026 But Should!",
+   "duration": "221",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D wireframe comp w/ white/blue char burst, black comp w/ small red elements, purple gradient frame; 3D wireframe burst"
+  },
+  {
+   "id": "HI9M-zvtCio",
+   "url": "https://www.youtube.com/watch?v=HI9M-zvtCio",
+   "title": "3 Insanely Useful After Effects Plugins You Probably Never Heard Of pt 2",
+   "duration": "168",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-hooded char comp w/ glowing eyes, 3D-frame comp w/ photo cards, magenta blob frame; glow eyes + 3D cards"
+  },
+  {
+   "id": "5QJUlFTAz24",
+   "url": "https://www.youtube.com/watch?v=5QJUlFTAz24",
+   "title": "3 Insanely Useful After Effects Plugins You Probably Never Heard Of",
+   "duration": "245",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red comp w/ wireframe triangle, Makima-like orange-haired char comp, white/black blur frame; wireframe + char comp"
+  },
+  {
+   "id": "r0nmQLed1NY",
+   "url": "https://www.youtube.com/watch?v=r0nmQLed1NY",
+   "title": "After Effects - Manga Compositing TUTORIAL",
+   "duration": "754",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "char comp (white shirt) + purple/pink grade variant in AE, cyan glow-burst frame; grade variants + glow"
+  },
+  {
+   "id": "54VUNC498VY",
+   "url": "https://www.youtube.com/watch?v=54VUNC498VY",
+   "title": "Create Smooth 3D Camera Typography in After Effects Step by Step Tutorial",
+   "duration": "738",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark red comps w/ card/photo insets (2 variants), dark stage frame w/ spotlighted char; card inset + spotlight"
+  },
+  {
+   "id": "YtZ6gEx-chc",
+   "url": "https://www.youtube.com/watch?v=YtZ6gEx-chc",
+   "title": "3 Unique After Effects Plugins YOU'VE NEVER HEARD OF",
+   "duration": "175",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "green-bg red-haired anime char comp + RGB-shift variant comp, blue/white glitch burst frame; green screen + RGB shift"
+  },
+  {
+   "id": "Hey01kcHKjY",
+   "url": "https://www.youtube.com/watch?v=Hey01kcHKjY",
+   "title": "3D Advanced Composition - After Effects Tutorial",
+   "duration": "399",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D checker-floor comp w/ card rig, red char comp w/ gizmo + curve graph, explorer window frame; 3D floor + curve"
+  },
+  {
+   "id": "Z8EAr0p6X14",
+   "url": "https://www.youtube.com/watch?v=Z8EAr0p6X14",
+   "title": "INSANE Anime 3D Scene in After Effects \u2014 Full AMV Tutorial!",
+   "duration": "1438",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "file browser w/ purple/white thumbs, red slit-scan char comp, halftone-dot orange/white frame; slit-scan + halftone"
+  },
+  {
+   "id": "2AuOLEmEAkU",
+   "url": "https://www.youtube.com/watch?v=2AuOLEmEAkU",
+   "title": "How to Build 3D VFX SCENE Like Wyrux | After Effects Tutorial",
+   "duration": "1012",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D terrain comp + sphere grid panel, sunset torii scene comp, blue ink-splash bg + suited char + 'Wanna Today' typo"
+  },
+  {
+   "id": "DgIhrwH0C70",
+   "url": "https://www.youtube.com/watch?v=DgIhrwH0C70",
+   "title": "How To Make 3D BACKGROUND anime in after effects",
+   "duration": "213",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "vertical chrome/metal mask comp on black + vertical strip comp variant; vertical chrome mask comps"
+  },
+  {
+   "id": "Zndz2MPT9o8",
+   "url": "https://www.youtube.com/watch?v=Zndz2MPT9o8",
+   "title": "How to Edit Viral Videos in After Effects \u2014 Make Trending Reels & Instagram Edits Like a Pro",
+   "duration": "706",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'EDITOR' typo comp w/ mask path, vertical phone comp 'U CAN (WIN)', red UI frame; typo comps + red UI"
+  },
+  {
+   "id": "Z_kpQtAo2Rc",
+   "url": "https://www.youtube.com/watch?v=Z_kpQtAo2Rc",
+   "title": "How to Make the Viral Anime Girl Dancing Effect in After Effects",
+   "duration": "182",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "chibi cat-ear char sticker page (many poses) + car-on-meadow comp w/ 3D frame, yellow gradient frame; chibi stickers + car comp"
+  },
+  {
+   "id": "YHJUoaPcyqg",
+   "url": "https://www.youtube.com/watch?v=YHJUoaPcyqg",
+   "title": "The Ultimate Anime Compositing Tutorial in After Effects Step by Step",
+   "duration": "2024",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-spiral iris manga eye close-up (PS), AE char on white w/ green mask edges, clean final cutout render"
+  },
+  {
+   "id": "g3ah_mKmZyc",
+   "url": "https://www.youtube.com/watch?v=g3ah_mKmZyc",
+   "title": "How to Install Element 3D in After Effects \u2013 Step by Step Guide",
+   "duration": "41",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'first install and extract the files' + 'copy it to the after effects folder' captions over explorer screenshots; install tutorial"
+  },
+  {
+   "id": "pVN8I_PWXbo",
+   "url": "https://www.youtube.com/watch?v=pVN8I_PWXbo",
+   "title": "Viral Instagram Post UI Animation - After Effects Tutorial",
+   "duration": "491",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white comp, char photo comp w/ 3D frame on white bg; photo comp on white"
+  },
+  {
+   "id": "PXG5AwYzkgQ",
+   "url": "https://www.youtube.com/watch?v=PXG5AwYzkgQ",
+   "title": "How to Install After Effects 2022 on PC \u2013 Step by Step Tutorial",
+   "duration": "26",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "pack setup guide: dark file browser + captions 'just extract the file and click on setup', 'pack contains all Adobe programs + plugins, scripts, panels, 800GB+'"
+  },
+  {
+   "id": "z8hSWKwFO1w",
+   "url": "https://www.youtube.com/watch?v=z8hSWKwFO1w",
+   "title": "How to Create 3D Background In the after effects",
+   "duration": "275",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "black comp w/ tiny colour-dot gizmo, Goku char comp w/ skull bg, pink glow blur frame; Goku comp + glow"
+  },
+  {
+   "id": "96jYPhcZt5I",
+   "url": "https://www.youtube.com/watch?v=96jYPhcZt5I",
+   "title": "popular after effects plugins and what they do",
+   "duration": "70",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "caption cards '2. MBL photo matrix used for color grading' / '4. AUTOSWAY super position for edits' w/ photo insets; numbered plugin list"
+  },
+  {
+   "id": "cI_5_T9-Cws",
+   "url": "https://www.youtube.com/watch?v=cI_5_T9-Cws",
+   "title": "3D Room In After Effects - step by step",
+   "duration": "661",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "tiny icon comp on black, two-char warm comp, yellow gradient frame; minimal comps + yellow gradient"
+  },
+  {
+   "id": "e5ADXD0NJ5I",
+   "url": "https://www.youtube.com/watch?v=e5ADXD0NJ5I",
+   "title": "I Tried to Make an EDIT in After Effects\u2026 It Went Wrong",
+   "duration": "299",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "gameplay footage (blue char) + AE comp of plank/stair scene, red frame w/ chars; gameplay VFX comp"
+  },
+  {
+   "id": "inxk1Vz0qcQ",
+   "url": "https://www.youtube.com/watch?v=inxk1Vz0qcQ",
+   "title": "How to Make Edits Look 4K with Topaz Topaz Gigapixel AI Tutorial",
+   "duration": "67",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "CapCut-style UI w/ orange-swirl anime frames, shouting char close-up, fiery final; CapCut anime edit"
+  },
+  {
+   "id": "Ojw7zCrJ1Ew",
+   "url": "https://www.youtube.com/watch?v=Ojw7zCrJ1Ew",
+   "title": "How to Make Anime Trends Edits in After Effects   Beginner Tutorial",
+   "duration": "809",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "classical painting comp (two figures, red robes) + 'AEAPIO FANTAZIO' logo comp w/ menu, yellow gradient frame; painting comp + logo"
+  },
+  {
+   "id": "xnf7OpeSssU",
+   "url": "https://www.youtube.com/watch?v=xnf7OpeSssU",
+   "title": "Learn How to Use After Effects  Full Guide for Beginners 2025",
+   "duration": "929",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'SNOWVFX' yellow typo on black comp, two chibi chars comp, yellow gradient blur; SNOWVFX typo + chibi"
+  },
+  {
+   "id": "wytMbq2QVsw",
+   "url": "https://www.youtube.com/watch?v=wytMbq2QVsw",
+   "title": "How to Edit Like Iman Gadzhi in After Effects Step By Step",
+   "duration": "619",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red planet/sphere comp w/ white curve stroke, black starfield frame, yellow gradient frame; planet sphere comp"
+  },
+  {
+   "id": "2pqXZyICLvM",
+   "url": "https://www.youtube.com/watch?v=2pqXZyICLvM",
+   "title": "How to Animate with 3D Objects in After Effects using Element 3D Plugin",
+   "duration": "419",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "photo/keyboard comp + context menus, dark comp w/ red circle path (mask/path), yellow gradient blur"
+  },
+  {
+   "id": "HlprqEm8zmM",
+   "url": "https://www.youtube.com/watch?v=HlprqEm8zmM",
+   "title": "Create Stunning Parallax Effect in After Effects",
+   "duration": "248",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red ring/arc comps w/ char (2 variants), yellow gradient frame; red ring comps"
+  },
+  {
+   "id": "B6tO57XtiIU",
+   "url": "https://www.youtube.com/watch?v=B6tO57XtiIU",
+   "title": "How To Animate Screenshots Like A Pro - After Effects",
+   "duration": "783",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark comps w/ green V logo + text panel, tilted logo comp w/ blue cards, dark browser frame; logo sting comps"
+  },
+  {
+   "id": "wV2_PmT0fio",
+   "url": "https://www.youtube.com/watch?v=wV2_PmT0fio",
+   "title": "How to Make 3D Typography in After Effects  Step by Step Typography Animation",
+   "duration": "1559",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white paper-collage comp + dialog, vintage paper comp w/ caped char + TH typo, red/white blur w/ EL MAT.. typo"
+  },
+  {
+   "id": "ujTa67O_WOk",
+   "url": "https://www.youtube.com/watch?v=ujTa67O_WOk",
+   "title": "Master Map Animation After Effects 3D Maps & Routes",
+   "duration": "1212",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "green/red mask outline around char head + file-list dialog, mask comp w/ DI typo + 3D frame, white smoke/ink frame; mask demo"
+  },
+  {
+   "id": "xTLfDYLDQV4",
+   "url": "https://www.youtube.com/watch?v=xTLfDYLDQV4",
+   "title": "How to Create This insane Newspaper Slideshow in After Effects",
+   "duration": "582",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "newspaper comp w/ green photo inset, smaller newspaper comp, credit page 'By @Neo Snedrics' + green neon scene; newspaper comps"
+  },
+  {
+   "id": "PdjSRGZSMC8",
+   "url": "https://www.youtube.com/watch?v=PdjSRGZSMC8",
+   "title": "\ud83c\udfac Learn How to Animate and Composite Manga in After Effects \u2013 Step by Step!",
+   "duration": "728",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red char on marble comps + 3D box comp, small comp variant, white/red radial-blur frame; 3D box comp + radial blur"
+  },
+  {
+   "id": "wd2oJT3jas0",
+   "url": "https://www.youtube.com/watch?v=wd2oJT3jas0",
+   "title": "How to Create a Stunning Glass Effect in After Effects  Frosted Glass Animation Tutorial",
+   "duration": "216",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark blue comp w/ black card, blue circle + card comp, explorer window frame; circle/card comps + explorer"
+  },
+  {
+   "id": "49NwGV23HqQ",
+   "url": "https://www.youtube.com/watch?v=49NwGV23HqQ",
+   "title": "How to Do Manga Compositing in After Effects Beginner Tutorial",
+   "duration": "500",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "char comp on B&W checker floor (cape), web UI w/ blue buttons (asset site), explorer w/ thumbs; checker floor + asset site"
+  },
+  {
+   "id": "rUn0pvaiG8Q",
+   "url": "https://www.youtube.com/watch?v=rUn0pvaiG8Q",
+   "title": "How to Make a Bloody Text Animation in After Effects",
+   "duration": "144",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red drippy typo comps 'SHADOW?' x3 sizes w/ panels; drippy typo comps"
+  },
+  {
+   "id": "XdvOoBaf9IA",
+   "url": "https://www.youtube.com/watch?v=XdvOoBaf9IA",
+   "title": "Learn How to Create Stunning Manga Compositing in After Effects  Manga Animation Tutorial",
+   "duration": "384",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "B&W manga char w/ colour wheels (PS-style), white-cloth + teal-glow comp w/ 3D frame, full manga sketch page (mountains); sketch-page comp"
+  },
+  {
+   "id": "KK-aOWCD1Gg",
+   "url": "https://www.youtube.com/watch?v=KK-aOWCD1Gg",
+   "title": "How to Create a 3D Cube in After Effects | Motion Graphics Tutorial",
+   "duration": "812",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white circle on black comp, 3D cube comp w/ orange sphere inside, tiny purple cube icon; 3D cube/sphere comp"
+  },
+  {
+   "id": "vaF0P33kt4c",
+   "url": "https://www.youtube.com/watch?v=vaF0P33kt4c",
+   "title": "\ud83c\udfa8 Learn How to Create an Eye Animation in After Effects \ud83d\udc41\ufe0f\u2728",
+   "duration": "325",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "purple-eyed anime char face comps (2 variants), teal glow char frame; char face comps + glow"
+  },
+  {
+   "id": "GkJFtb1XK_k",
+   "url": "https://www.youtube.com/watch?v=GkJFtb1XK_k",
+   "title": "Character Animation in After Effects \u2013 Full Beginner Guide",
+   "duration": "603",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "PS B&W manga swordswoman cutout on white -> same comp in AE; PS->AE cutout pipeline"
+  },
+  {
+   "id": "WXVa6XYFk6M",
+   "url": "https://www.youtube.com/watch?v=WXVa6XYFk6M",
+   "title": "Animate Any Texture in After Effects \u2013 Fast & Easy Tutorial",
+   "duration": "100",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "browser asset grid (pink/red thumbs) + pink texture comp in AE, pink coral/sand texture frame; asset grid + texture comp"
+  },
+  {
+   "id": "6JUAQlB0w8c",
+   "url": "https://www.youtube.com/watch?v=6JUAQlB0w8c",
+   "title": "manga animation - after effects",
+   "duration": "37",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "purple/pink char comp, B&W swordswoman cutout comp, teal glow frame; cutout + glow"
+  },
+  {
+   "id": "8LxieagUY2A",
+   "url": "https://www.youtube.com/watch?v=8LxieagUY2A",
+   "title": "Smooth Text Animation in After Effects",
+   "duration": "109",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'text animation' typo comp variants x3 (white, cyan glitch, cyan) w/ panels; text animation typo variants"
+  },
+  {
+   "id": "eB10bFHlz7Y",
+   "url": "https://www.youtube.com/watch?v=eB10bFHlz7Y",
+   "title": "How to Build 3D VFX SCENE Like Wyrux,Xsense | After Effects",
+   "duration": "1404",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "AE dialog over pink/white comp, 3D camera rig w/ tree scene-plane + camera path, orange blur; 3D scene-plane rig"
+  },
+  {
+   "id": "HXFuhKAUbEY",
+   "url": "https://www.youtube.com/watch?v=HXFuhKAUbEY",
+   "title": "How to Animate Manga Hair in After Effects | EASY WAY",
+   "duration": "660",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "pink/white manga face close-up (orange eyes) PS-style, pink strand element on black in AE, white/teal graded profile"
+  },
+  {
+   "id": "DUxni95nIA4",
+   "url": "https://www.youtube.com/watch?v=DUxni95nIA4",
+   "title": "Popular 3D Article Animation   After Effects Tutorial",
+   "duration": "1508",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "3D camera paper-plane anim: vintage newspaper 'VENEATIS' comp, paper plane w/ green camera path in 3D rig, blue solid rows"
+  },
+  {
+   "id": "Lt8kd9QAQDo",
+   "url": "https://www.youtube.com/watch?v=Lt8kd9QAQDo",
+   "title": "How to Make a Lyric Video in After Effects  Easy After Effects Tutorial for Beginners\u2728",
+   "duration": "818",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'ROSES' pink typo comp, 'NEVER HOLD A BAG' typo card, download-site page w/ green buttons; typo comps + site"
+  },
+  {
+   "id": "X7ZG3mXEd98",
+   "url": "https://www.youtube.com/watch?v=X7ZG3mXEd98",
+   "title": "\ud83c\udfaf Master 3D Typography in After Effects! | Typography Animation Tutorial \u2728",
+   "duration": "1414",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "dark teal dot-grid comp + rectangle, dialog over dark comp w/ small preview, wide comp w/ pink centre; grid/preview comps"
+  },
+  {
+   "id": "7TfndLKnvDg",
+   "url": "https://www.youtube.com/watch?v=7TfndLKnvDg",
+   "title": "\ud83d\udd25 How to Edit Like Iman Gadzhi \u2013 After Effects Tutorial Step by Step Guide",
+   "duration": "1182",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "portrait comp w/ 'SHOULD I QUIT YOUTUBE' typo + green-typo variant, file explorer w/ thumbs; typo portrait comps"
+  },
+  {
+   "id": "kj2ru1I3jXw",
+   "url": "https://www.youtube.com/watch?v=kj2ru1I3jXw",
+   "title": "how to create stunning typography in after effects full tutorial",
+   "duration": "1032",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "paper-strip collage comp on wood bg, 3D photo-card rig w/ wireframes, final polaroid cards on wall w/ manga portraits; polaroid 3D wall"
+  },
+  {
+   "id": "oC-CDc8B4Gw",
+   "url": "https://www.youtube.com/watch?v=oC-CDc8B4Gw",
+   "title": "iman gadzhi editing style",
+   "duration": "21",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "three icon cards (eye, brow pencil, teal eye) on dark red + 'If your brows' caption + castor-oil & supplement bottles; brow product promo"
+  },
+  {
+   "id": "OlX2T5JqdjY",
+   "url": "https://www.youtube.com/watch?v=OlX2T5JqdjY",
+   "title": "eye transition - after effects",
+   "duration": "4",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "soft-grade portrait study: white-haired char teal eyes, eye close-ups w/ pink/teal grades"
+  },
+  {
+   "id": "VIMvuNw4g3o",
+   "url": "https://www.youtube.com/watch?v=VIMvuNw4g3o",
+   "title": "magnets media editing breakdown",
+   "duration": "16",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'DIFFERENT APPROACHES' caption + char cards w/ Pinterest logo, curved search UI 'Curly hair hairstyles for...', red grid of curly-hair photos; Pinterest search montage"
+  },
+  {
+   "id": "3YjNvUKpnAo",
+   "url": "https://www.youtube.com/watch?v=3YjNvUKpnAo",
+   "title": "How to Make Videos Like Iman Gadzhi Step by Step Editing Guide",
+   "duration": "716",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-lit silhouette at monitors comps (2 variants), final red desk-setup silhouette; silhouette grade comps"
+  },
+  {
+   "id": "jnrFFqwzaPs",
+   "url": "https://www.youtube.com/watch?v=jnrFFqwzaPs",
+   "title": "Eye Zoom Transition After Effects Tutorial Beginner Friendly",
+   "duration": "422",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "small red-hood char comp + black comp, eye close-up comp, soft teal/white graded face render; soft-grade render"
+  },
+  {
+   "id": "jlDIX3Ky-hs",
+   "url": "https://www.youtube.com/watch?v=jlDIX3Ky-hs",
+   "title": "magnatesmedia style editing",
+   "duration": "16",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'THUMB PULLING better chin and jaw' title over profile photos, After label, pixelated profile compares; thumb face retouch"
+  },
+  {
+   "id": "0s3wX_LevjI",
+   "url": "https://www.youtube.com/watch?v=0s3wX_LevjI",
+   "title": "3d camera like magnatesmedia - after effects",
+   "duration": "22",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "photo cards floating in dark-red space, three roman columns w/ app icons, 'enhance your overall facial harmony' caption; app promo w/ columns"
+  },
+  {
+   "id": "Agw11OMiGpE",
+   "url": "https://www.youtube.com/watch?v=Agw11OMiGpE",
+   "title": "edit like magnestmedia in after effects",
+   "duration": "20",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "hand w/ sparkle stickers, photo cards floating in red space, 'can make it a visible difference' caption; photo-card space"
+  },
+  {
+   "id": "Dj95Si-mmVA",
+   "url": "https://www.youtube.com/watch?v=Dj95Si-mmVA",
+   "title": "HOW TO INSTALL PLUGINS IN AFTER EFFECTS |Step by step",
+   "duration": "85",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "purple synthwave city desktop w/ explorer windows x2, neon grid + white glow 'O' logo frame; synthwave desktop + neon logo"
+  },
+  {
+   "id": "liXdXTh6DRY",
+   "url": "https://www.youtube.com/watch?v=liXdXTh6DRY",
+   "title": "HOW TO MAKE INSANE THUMBNAILS IN After Effects",
+   "duration": "478",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "white/red char comp variants x3 (red glow, purple glow) w/ panels; glow variant comps"
+  },
+  {
+   "id": "wSlv5aRlnzk",
+   "url": "https://www.youtube.com/watch?v=wSlv5aRlnzk",
+   "title": "How to edit like magnatesmedia in after effects | STEP BY STEP",
+   "duration": "567",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "adidas logo comp (red/teal), PUMA vs adidas split comp w/ globe, final split logos on galaxy bg; logo split comp"
+  },
+  {
+   "id": "kZskcvTkAjs",
+   "url": "https://www.youtube.com/watch?v=kZskcvTkAjs",
+   "title": "how to animate lines in after effects",
+   "duration": "101",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "black comp, green line-stroke comp, 'LINES TRANSITIONS' red typo card w/ colour bars; lines transitions pack card"
+  },
+  {
+   "id": "7biCZWx50zY",
+   "url": "https://www.youtube.com/watch?v=7biCZWx50zY",
+   "title": "Diddy I?",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "2023 recap: year cards w/ chrome/liquid-metal frames, blue crystalline 3D render, white chrome blob"
+  },
+  {
+   "id": "bPEAycw2G3Y",
+   "url": "https://www.youtube.com/watch?v=bPEAycw2G3Y",
+   "title": "so real \ud83d\ude2d #videoediting #motiongraphics",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "meme caption 'When creativity suddenly pops in at midnight' x2 over sci-fi control room w/ teal screens"
+  },
+  {
+   "id": "YOCiH8zHGic",
+   "url": "https://www.youtube.com/watch?v=YOCiH8zHGic",
+   "title": "\ud83d\udc80#motiongraphics #videoeditor",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Adobe app logo cloud (Premiere/PS/AI/ID/Acrobat) over Creation-of-Adam hands w/ 'After Effects' label; app-compare intro"
+  },
+  {
+   "id": "GikA0GVJE04",
+   "url": "https://www.youtube.com/watch?v=GikA0GVJE04",
+   "title": "\"Comment\" KIT to receive the plugin",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'Text animation kit' glow title + SIMPLE TEXT dialog + 'Pov: Must have Text animation presets' captions; kit promo"
+  },
+  {
+   "id": "2jFdVNSiAeU",
+   "url": "https://www.youtube.com/watch?v=2jFdVNSiAeU",
+   "title": "\ud83d\ude2d #video#videoediting",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "era-compare meme: 'Edit anime in 2015: / in 2025:' cards w/ small blue edit frames repeated"
+  },
+  {
+   "id": "N79DDI_qWXQ",
+   "url": "https://www.youtube.com/watch?v=N79DDI_qWXQ",
+   "title": "now what...? #videoediting #videoeditor",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "comment-reply edit: 'hey man could u try changing the music? its too fast' x3 over dense-keyframe AE timelines"
+  },
+  {
+   "id": "vEyey3tWhbQ",
+   "url": "https://www.youtube.com/watch?v=vEyey3tWhbQ",
+   "title": "STOP NOW!! #videoediting #aftereffects",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "plugin promo: 'This plugin has 500+ ready made PSDs' over manga thumb grid, red card w/ manga face, green search bar '27 RESULTS FOUND'; PSD-pack search UI"
+  },
+  {
+   "id": "BEGTtDZd9Cg",
+   "url": "https://www.youtube.com/watch?v=BEGTtDZd9Cg",
+   "title": "After effects editors\ud83d\udd25",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "'Capcut Users: Editing is Easy' caption over colour-bars glitch frames + AE timelines; capcut meme"
+  },
+  {
+   "id": "YtWtj8dLVRA",
+   "url": "https://www.youtube.com/watch?v=YtWtj8dLVRA",
+   "title": "what is this #aftereffects #editor #editing",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "screen-recording workflow: AE splash + donut 3D render, timeline keyframe dots close-up, manga eye on monitor"
+  },
+  {
+   "id": "S_qC4Kr4YQk",
+   "url": "https://www.youtube.com/watch?v=S_qC4Kr4YQk",
+   "title": "Link in the bio",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "red-dark frame w/ white disc + UI card, glowing Ae/Pr/ME logo cluster, dark red blur; app-logo glow sting"
+  },
+  {
+   "id": "xO9c1ciNBuA",
+   "url": "https://www.youtube.com/watch?v=xO9c1ciNBuA",
+   "title": "car girl effect in the after effects #aftereffects #aftereffectstutorial",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "car + meadow comp w/ white bar, car comp w/ chibi on roof + green corner-pins + 'this layer' caption, 'now get your' caption; corner-pin car comp"
+  },
+  {
+   "id": "GmnFikNLZXg",
+   "url": "https://www.youtube.com/watch?v=GmnFikNLZXg",
+   "title": "U Fancy",
+   "duration": "20",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "meme typo 'huh?' + emoji over Naruto-style character; 3D-rig model pose on white (MMD-style segment)"
+  },
+  {
+   "id": "PwIFc-kCNGE",
+   "url": "https://www.youtube.com/watch?v=PwIFc-kCNGE",
+   "title": "Warmth",
+   "duration": "36",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Keditz grayscale manga samurai edit: yellow subtitle lines, 'MADE BY KEDITZ' card, letterboxed manga frames"
+  },
+  {
+   "id": "XWul_ogB69I",
+   "url": "https://www.youtube.com/watch?v=XWul_ogB69I",
+   "title": "SKYWARD",
+   "duration": "28",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "dark-grade AMV: water splash w/ credits line top, Tanjiro down in checkered haori, black + white fog frames"
+  },
+  {
+   "id": "sWnoBrIrCoY",
+   "url": "https://www.youtube.com/watch?v=sWnoBrIrCoY",
+   "title": "Basic One Framers",
+   "duration": "372",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "AE UI dark street scene w/ black-haired char, 4 near-identical graded variants + curve panel; subtle grade/scene work"
+  },
+  {
+   "id": "WiXfmJGKteI",
+   "url": "https://www.youtube.com/watch?v=WiXfmJGKteI",
+   "title": "maki edit effects breakdown",
+   "duration": "1037",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "CapCut PC UI (thumb grids + teal timeline): dark red char comp, white clock-shadow frame, teal-graded swordsmen group"
+  },
+  {
+   "id": "AL7T1E-AJhM",
+   "url": "https://www.youtube.com/watch?v=AL7T1E-AJhM",
+   "title": "My Shake Tutorial",
+   "duration": "322",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "AE UI dark interior scene w/ teal bed shape, curve panel + pink/blue effect controls, minimal motion (slow graded scene)"
+  },
+  {
+   "id": "wDrhErmtbaQ",
+   "url": "https://www.youtube.com/watch?v=wDrhErmtbaQ",
+   "title": "cannot get over you",
+   "duration": "16",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Keditz dark mono edit: 'KREDITZ ALL RIGHTS RESERVED' watermark, masked char close-up, white shard burst"
+  },
+  {
+   "id": "Tvd7qiK_gUA",
+   "url": "https://www.youtube.com/watch?v=Tvd7qiK_gUA",
+   "title": "How to do Manga Animations Like me | After Effects",
+   "duration": "978",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "failure": "yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies\n; yt-dlp client=tv: ERROR: [youtube] Tvd7qiK_gUA: Sign in to confirm you\u2019re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp",
+   "access_method": "github-runner ladder: yt-dlp(default,tv,android,web_embedded) + 10+ Invidious registry instances",
+   "next_action": "re-run batch containing this id after coverage batches to capture loudnorm JSON (then FULL_ANALYSIS_COMPLETE)",
+   "visual_analysis": "PS stage: asset grid, colored blonde character, hair-strand layers, separated eye layer (blink swap); AE stage: isolated hair strand, head comp, eye cut-in, final on white -> confirms PS-prep->AE puppet-pin pipeline",
+   "audio_analysis": "spectrogram+waveform PNGs captured; loudnorm JSON empty due to ffmpeg -v error bug (fixed in workflow; regenerate on re-run)",
+   "evidence_paths": [
+    "youtube-audit/runner/evidence/Tvd7qiK_gUA/",
+    "youtube-audit/evidence/sheets/Tvd7qiK_gUA.jpg"
+   ]
+  },
+  {
+   "id": "0NLd3Ng0SKI",
+   "url": "https://www.youtube.com/watch?v=0NLd3Ng0SKI",
+   "title": "3D Poster Tutorial on Capcut PC",
+   "duration": "349",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "3D Poster Tutorial on CapCut PC: CapCut UI confirmed; photo-fragment grid arranged in 3D space, dense per-clip keyframe rows, keyframe/curve panel, parallax camera move, white canvas frame element; subject = Blue Lock poster",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/0NLd3Ng0SKI.jpg"
+   ]
+  },
+  {
+   "id": "vRDKfGGRqE4",
+   "url": "https://www.youtube.com/watch?v=vRDKfGGRqE4",
+   "title": "American Girl",
+   "duration": "21",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "flag-prop edit: US flag overlay on eye close-up w/ AMERICAN glitch typo, red/blue duo chars, white hand-clasp frame"
+  },
+  {
+   "id": "E6LIpT7DY58",
+   "url": "https://www.youtube.com/watch?v=E6LIpT7DY58",
+   "title": "Just Your Doll feat:@livresi",
+   "duration": "20",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "fisheye/circular mask frame w/ pink smoke + sword girl, white/purple face close-up, yellow sphere prop scene"
+  },
+  {
+   "id": "kFb52rNjvBA",
+   "url": "https://www.youtube.com/watch?v=kFb52rNjvBA",
+   "title": "Risk - (Reze Arc AMV)",
+   "duration": "22",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "soft mono AMV: grayscale char w/ flower, B&W silhouette w/ red sparks, red mirrored blur frame"
+  },
+  {
+   "id": "pThVHJC3vA8",
+   "url": "https://www.youtube.com/watch?v=pThVHJC3vA8",
+   "title": "How to Composite Manga in After Effects",
+   "duration": "564",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Manga compositing: sky-plate chosen from variant thumbnail grid; character cutout over plate; mask softness A/B captions ('how soft it is' / 'doesn't look good' / 'feel more realistic'); FilmConvert panel for grade/chroma; uni.Heatwave heat distortion; curve graph tweak",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/pThVHJC3vA8.jpg"
+   ]
+  },
+  {
+   "id": "RD2FTu1IL3I",
+   "url": "https://www.youtube.com/watch?v=RD2FTu1IL3I",
+   "title": "How to Animate Manga in After Effects",
+   "duration": "565",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "manga animation process: manga parts on white, tear-line face close-up, asset browser w/ red thumbs, spoken captions"
+  },
+  {
+   "id": "asVucSdx7Aw",
+   "url": "https://www.youtube.com/watch?v=asVucSdx7Aw",
+   "title": "How to Cut and Redraw Colored Manga in Photoshop 2024",
+   "duration": "1368",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "visual_analysis": "Photoshop cutout/colouring process: colour picker panels, manga man w/ scroll, captions 'feathered part really quickly'/'cut out the head'/'put it under'"
+  },
+  {
+   "id": "0ED7j_AFcLA",
+   "url": "https://www.youtube.com/watch?v=0ED7j_AFcLA",
+   "title": "Violet Evergarden AMV [ Roommates - Malcolm Todd ]",
+   "duration": "46",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Violet Evergarden AMV: soft warm grade, paper-tear strip transition w/ JP text, gold glow logo + sparkle bokeh"
+  },
+  {
+   "id": "L9sssRAnN_A",
+   "url": "https://www.youtube.com/watch?v=L9sssRAnN_A",
+   "title": "How To Use Speedx To Time Remap in After Effects",
+   "duration": "308",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Speedx time remap: graph-editor speed curves shown stepwise (flat -> diagonal accel -> S-curve ease -> plateau hold); pre-comp before remap (caption: make the pre-comp here); AE UI",
+   "evidence_paths": [
+    "youtube-audit/evidence/sheets-drive/L9sssRAnN_A.jpg"
+   ]
+  },
+  {
+   "id": "E2cu-RCruYg",
+   "url": "https://www.youtube.com/watch?v=E2cu-RCruYg",
+   "title": "Warmpop (Cyberpunk edit/animation)",
+   "duration": "14",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Warmpop cyberpunk: hand w/ cyan particle glow, amber close-up flash, white-glove on snow texture"
+  },
+  {
+   "id": "sXj0SdaRV14",
+   "url": "https://www.youtube.com/watch?v=sXj0SdaRV14",
+   "title": "Best Quality Render Setting for After Effects",
+   "duration": "214",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "render settings tutorial: AE render dialog + captions 'that's the highest you can export in'/'export your project', Drive upload frame"
+  },
+  {
+   "id": "HlCfYZQpDP8",
+   "url": "https://www.youtube.com/watch?v=HlCfYZQpDP8",
+   "title": "GOTHKASA - Timeless by Playboi Carti",
+   "duration": "13",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "scrapbook collage: cutout chars + white frames on beige/pink/maroon, typo captions (HELL O, $400 PURSE), sticker props, glitch silhouette"
+  },
+  {
+   "id": "L4x5Z4iuYS4",
+   "url": "https://www.youtube.com/watch?v=L4x5Z4iuYS4",
+   "title": "if you use generative ai PLEASE move out the way bro yall are disgusting",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "white manga line-art chars on black; faint text card 'UR WEIRD ...ATIVE AI' (AI-rant edit)"
+  },
+  {
+   "id": "iwH2xDOYcP8",
+   "url": "https://www.youtube.com/watch?v=iwH2xDOYcP8",
+   "title": "Bachira edit",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "kaleidoscope mirror centre frame (black/orange), green duotone manga on cream, script typo card, CHOSEN tag"
+  },
+  {
+   "id": "501V4sjJ2nU",
+   "url": "https://www.youtube.com/watch?v=501V4sjJ2nU",
+   "title": "#fumiko  First and last edit I make of fumiko",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "B&W edit: manga blur frames, 'ANIMO' typo on hypnotic swirl bg, 'DT: BAW' card w/ tilted portrait, glitch corridor"
+  },
+  {
+   "id": "u0zKDuUSz6o",
+   "url": "https://www.youtube.com/watch?v=u0zKDuUSz6o",
+   "title": "Physical (frieren edit)",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "pastel edit: potion-bottle props + chibi Frieren w/ 'I HA' typo, statue + petals scene, 'PHYSICAL' typo on grayscale"
+  },
+  {
+   "id": "7i8sTj006xM",
+   "url": "https://www.youtube.com/watch?v=7i8sTj006xM",
+   "title": "Miku Edit",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Miku edit: MMD-style Miku cat-ears on pink/purple swirl bg, cyan pop palette, flat cyan flash frames"
+  },
+  {
+   "id": "RQ4UyVv92H8",
+   "url": "https://www.youtube.com/watch?v=RQ4UyVv92H8",
+   "title": "Bait and Switch (Yoru/Asa edit)",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Bait&Switch: red concentric-ring tunnel w/ tiny char, B&W cloth abstraction, grayscale twin-face + collage w/ blue triangle"
+  },
+  {
+   "id": "YWbuNp0JlgE",
+   "url": "https://www.youtube.com/watch?v=YWbuNp0JlgE",
+   "title": "TETO EDIT (old)",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "chibi pop edit: chibi on red/white flag bg, rainbow swirl warp, cyan chibi + stars w/ RGB split, pink motion blur"
+  },
+  {
+   "id": "q9sIMsv-ymE",
+   "url": "https://www.youtube.com/watch?v=q9sIMsv-ymE",
+   "title": "Makima edit (old) #makima  #makimaedit  #csm  #edit",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "chain-prop Makima edit: red bg w/ chains around pink-haired char, red-eye close-up w/ CHOSEN band, flat pink frame"
+  },
+  {
+   "id": "6uWPi0Yhz2s",
+   "url": "https://www.youtube.com/watch?v=6uWPi0Yhz2s",
+   "title": "Collab with oat :3 #makima #yoru #csm #csmedit #makimaedit #edit #manga",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "collab edit: dark anime close-up, filmstrip layout w/ room photo, CapCut logo sting, white-bg manga panel"
+  },
+  {
+   "id": "iby4x8BLBVY",
+   "url": "https://www.youtube.com/watch?v=iby4x8BLBVY",
+   "title": "Dare  #edit #anime  #aftereffects  #animeedit #chainsawman #csm #chainsawmanedit #foryou",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "colour-silhouette style: bar scene, halo ring + 'cat' sticker, trio silhouettes w/ ZENITH typo + 'that's what morals', orange blur"
+  },
+  {
+   "id": "0iXhGDuN400",
+   "url": "https://www.youtube.com/watch?v=0iXhGDuN400",
+   "title": "HOW TO MAKE MIDGRAPHS IN AE #aetutorial #aftereffects #edit #editingtutorial #tutorial",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "midgraph tutorial: AE timeline context menu (Show Speed Graph), manga crop, tiktok caption card, white flash"
+  },
+  {
+   "id": "EnnorIefSnk",
+   "url": "https://www.youtube.com/watch?v=EnnorIefSnk",
+   "title": "Like and sub for more tutorials! #tutorial #aftereffects #editing #aetutorial",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "process video: colour-picker UI, dark panels, caption 'so i'm gonna make this', tiktok chosen.ae4 card"
+  },
+  {
+   "id": "pfXYoBaFVbE",
+   "url": "https://www.youtube.com/watch?v=pfXYoBaFVbE",
+   "title": "Atlanta Lock  #anime #bluelock #edit #bllk #fyp #viralvideo",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "colour-block typo portfolio: pink/cream/teal blocks, CHOSEN serif + KAHOSU glitch typos, RGB-split chars, fan prop"
+  },
+  {
+   "id": "qx0fahwD7G4",
+   "url": "https://www.youtube.com/watch?v=qx0fahwD7G4",
+   "title": "Me Envenena #makima #anime #animeedit #makimaedit #chainsawman #chainsawmanmanga #mangaanimation",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "poster-style edit: 'ME ENVENENA' propaganda poster w/ halo statue, dark orange figure frame, pale 'THE LIGHT' hand frame"
+  },
+  {
+   "id": "cTGnSGs8YDk",
+   "url": "https://www.youtube.com/watch?v=cTGnSGs8YDk",
+   "title": "Who is the best? #bluelock #bluelockedit #bluelockmangaedit #bluelockmanga",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "pending-batch",
+   "next_action": "await batch slice (push batch-trigger batch=N)",
+   "source": "drive-zip (owner-packed)",
+   "visual_analysis": "Blue Lock manga edit: halftone/crosshatch face close-ups, red accent line, teal-bg smile frame, orange blur"
+  },
+  {
+   "id": "M2_vjAseOns",
+   "url": "https://www.youtube.com/watch?v=M2_vjAseOns",
+   "title": "How to relight scenes with ae comp lights",
+   "duration": null,
+   "channel": "sebastian",
+   "format": "explicit",
+   "formats": [
+    "explicit"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "arena text gateway watch page (title/channel/description-level); runner metadata fetch bot-checked",
+   "next_action": "owner sets repo secret YT_COOKIES or residential worker; then batch re-run",
+   "visual_analysis": "AE relight tutorial: white light-orb comps w/ wire curves (comp lights rig) x3, red caption lines + orange-lit char scene inset; comp-light relight"
+  },
+  {
+   "id": "9o8GT1Iurv0",
+   "url": "https://www.youtube.com/watch?v=9o8GT1Iurv0",
+   "title": "2000 \ud83d\udd25 - Chainsaw Man [AMV/EDIT]",
+   "duration": null,
+   "channel": "PAX",
+   "format": "explicit",
+   "formats": [
+    "explicit"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "arena text gateway watch page (title/channel/description-level); runner metadata fetch bot-checked",
+   "next_action": "owner sets repo secret YT_COOKIES or residential worker; then batch re-run",
+   "visual_analysis": "Chainsaw Man AMV: extreme eye close-up (amber iris), white-dress char w/ arms spread + red tendrils, lone char on white minimal floor; AMV cut comps"
+  },
+  {
+   "id": "DY-0ntGxoPo",
+   "title": "chat-history link DY-0ntGxoPo",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=DY-0ntGxoPo",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "xhgCzz2qyXs",
+   "title": "chat-history link xhgCzz2qyXs",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=xhgCzz2qyXs",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "PMvN6KSYQhU",
+   "title": "chat-history link PMvN6KSYQhU",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=PMvN6KSYQhU",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "F5RcdSwzUVw",
+   "title": "chat-history link F5RcdSwzUVw",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=F5RcdSwzUVw",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "5aFDj54RWQw",
+   "title": "chat-history link 5aFDj54RWQw",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=5aFDj54RWQw",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "MX3yw9gT0DI",
+   "title": "chat-history link MX3yw9gT0DI",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=MX3yw9gT0DI",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "FJ08jHDgRk4",
+   "title": "chat-history link FJ08jHDgRk4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=FJ08jHDgRk4",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "I1JR_9NJlB4",
+   "title": "chat-history link I1JR_9NJlB4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=I1JR_9NJlB4",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "ixEoA7z5jmQ",
+   "title": "chat-history link ixEoA7z5jmQ",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=ixEoA7z5jmQ",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "0rNqPArnpB0",
+   "title": "chat-history link 0rNqPArnpB0",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=0rNqPArnpB0",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "fdPMTGq6BdE",
+   "title": "chat-history link fdPMTGq6BdE",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=fdPMTGq6BdE",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "FAHi0jH7FJ4",
+   "title": "chat-history link FAHi0jH7FJ4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=FAHi0jH7FJ4",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "VA_p4aqYaIc",
+   "title": "chat-history link VA_p4aqYaIc",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=VA_p4aqYaIc",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "uFnoKD-4cpM",
+   "title": "chat-history link uFnoKD-4cpM",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=uFnoKD-4cpM",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "v2g0zap6LQc",
+   "title": "chat-history link v2g0zap6LQc",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=v2g0zap6LQc",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "ENRtNTNtV8M",
+   "title": "chat-history link ENRtNTNtV8M",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=ENRtNTNtV8M",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "6Stj_5zLyiM",
+   "title": "chat-history link 6Stj_5zLyiM",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=6Stj_5zLyiM",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "Uew3Znl3Fl8",
+   "title": "chat-history link Uew3Znl3Fl8",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=Uew3Znl3Fl8",
+   "access": "chat-history-batch7"
+  },
+  {
+   "id": "umTDI962BhM",
+   "title": "chat-history link umTDI962BhM",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=umTDI962BhM",
+   "failure": "private/deleted on YouTube (batch8 report): video unavailable or private"
+  },
+  {
+   "id": "oqzbIOKic90",
+   "title": "chat-history link oqzbIOKic90",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=oqzbIOKic90",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "h_D720n75B4",
+   "title": "chat-history link h_D720n75B4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=h_D720n75B4",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "48ze7aZ8NdE",
+   "title": "chat-history link 48ze7aZ8NdE",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=48ze7aZ8NdE",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "n9JOpkEqtS4",
+   "title": "chat-history link n9JOpkEqtS4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=n9JOpkEqtS4",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "iB-TehC1kOs",
+   "title": "chat-history link iB-TehC1kOs",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=iB-TehC1kOs",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "L6WUvXUf0es",
+   "title": "chat-history link L6WUvXUf0es",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=L6WUvXUf0es",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "hSTkYAdWJek",
+   "title": "chat-history link hSTkYAdWJek",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=hSTkYAdWJek",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "JuxN-ccLRmA",
+   "title": "chat-history link JuxN-ccLRmA",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=JuxN-ccLRmA",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "dibSGfA3LAk",
+   "title": "chat-history link dibSGfA3LAk",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=dibSGfA3LAk",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "FPSxFSjCxPo",
+   "title": "chat-history link FPSxFSjCxPo",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=FPSxFSjCxPo",
+   "failure": "private/deleted on YouTube (batch8 report): video unavailable or private"
+  },
+  {
+   "id": "Nt7yP-e06Oo",
+   "title": "chat-history link Nt7yP-e06Oo",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=Nt7yP-e06Oo",
+   "failure": "private/deleted on YouTube (batch8 report): video unavailable or private"
+  },
+  {
+   "id": "lypaZpeWoJg",
+   "title": "chat-history link lypaZpeWoJg",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=lypaZpeWoJg",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "5Wy0zVw5wgg",
+   "title": "chat-history link 5Wy0zVw5wgg",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=5Wy0zVw5wgg",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "4fK8ITqD0ME",
+   "title": "chat-history link 4fK8ITqD0ME",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=4fK8ITqD0ME",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "2ZP_6YGkKQE",
+   "title": "chat-history link 2ZP_6YGkKQE",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=2ZP_6YGkKQE",
+   "access": "chat-history-batch8"
+  },
+  {
+   "id": "6sB6CO56cq8",
+   "title": "chat-history link 6sB6CO56cq8",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=6sB6CO56cq8",
+   "failure": "private/deleted on YouTube (batch8 report): video unavailable or private"
+  },
+  {
+   "id": "yOjYKje861U",
+   "title": "chat-history link yOjYKje861U",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=yOjYKje861U",
+   "failure": "private/deleted on YouTube (batch8 report): video unavailable or private"
+  },
+  {
+   "id": "KZQGvYI8RuQ",
+   "title": "chat-history link KZQGvYI8RuQ",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=KZQGvYI8RuQ",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "Hb9m7M-P15Y",
+   "title": "chat-history link Hb9m7M-P15Y",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=Hb9m7M-P15Y",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "L7i8-vJ1b9c",
+   "title": "chat-history link L7i8-vJ1b9c",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=L7i8-vJ1b9c",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "DfnbdXs-JpI",
+   "title": "chat-history link DfnbdXs-JpI",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=DfnbdXs-JpI",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "mdpb03H-Y30",
+   "title": "chat-history link mdpb03H-Y30",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=mdpb03H-Y30",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "GR8JPrlw1CM",
+   "title": "chat-history link GR8JPrlw1CM",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=GR8JPrlw1CM",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "edGUFZ3oS3g",
+   "title": "chat-history link edGUFZ3oS3g",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=edGUFZ3oS3g",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "fb-Ac9P4QZg",
+   "title": "chat-history link fb-Ac9P4QZg",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=fb-Ac9P4QZg",
+   "failure": "private/deleted on YouTube (batch9 report)"
+  },
+  {
+   "id": "dy3CLJnnuto",
+   "title": "chat-history link dy3CLJnnuto",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=dy3CLJnnuto",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "RnjxSQNvCuc",
+   "title": "chat-history link RnjxSQNvCuc",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=RnjxSQNvCuc",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "yA_Rc0OzIxw",
+   "title": "chat-history link yA_Rc0OzIxw",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=yA_Rc0OzIxw",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "cBkNEvSsZwM",
+   "title": "chat-history link cBkNEvSsZwM",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=cBkNEvSsZwM",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "AzbvhLQZP3k",
+   "title": "chat-history link AzbvhLQZP3k",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=AzbvhLQZP3k",
+   "failure": "private/deleted on YouTube (batch9 report)"
+  },
+  {
+   "id": "cv7X_WoDk8E",
+   "title": "chat-history link cv7X_WoDk8E",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=cv7X_WoDk8E",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "HHNTQkaGv-M",
+   "title": "chat-history link HHNTQkaGv-M",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=HHNTQkaGv-M",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "KqUBgbk5u1k",
+   "title": "chat-history link KqUBgbk5u1k",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=KqUBgbk5u1k",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "7WHDyTE9Mq8",
+   "title": "chat-history link 7WHDyTE9Mq8",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=7WHDyTE9Mq8",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "ZrwjaDc__ZM",
+   "title": "chat-history link ZrwjaDc__ZM",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=ZrwjaDc__ZM",
+   "access": "chat-history-batch9"
+  },
+  {
+   "id": "-9UkBHVV9OA",
+   "title": "chat-history link -9UkBHVV9OA",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=-9UkBHVV9OA",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "9_uwkoUiERE",
+   "title": "chat-history link 9_uwkoUiERE",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=9_uwkoUiERE",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "Qxf_bMMc_ZE",
+   "title": "chat-history link Qxf_bMMc_ZE",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=Qxf_bMMc_ZE",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "ylFdwE6sSWU",
+   "title": "chat-history link ylFdwE6sSWU",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=ylFdwE6sSWU",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "rY2RTuJEJpw",
+   "title": "chat-history link rY2RTuJEJpw",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=rY2RTuJEJpw",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "sx7ogrJD5KQ",
+   "title": "chat-history link sx7ogrJD5KQ",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=sx7ogrJD5KQ",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "hTEZOX48TN4",
+   "title": "chat-history link hTEZOX48TN4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=hTEZOX48TN4",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "5RXGg3T4WlQ",
+   "title": "chat-history link 5RXGg3T4WlQ",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=5RXGg3T4WlQ",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "UuTKuhcqv2M",
+   "title": "chat-history link UuTKuhcqv2M",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=UuTKuhcqv2M",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "4hqpWf38W5s",
+   "title": "chat-history link 4hqpWf38W5s",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=4hqpWf38W5s",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "7nFduBo1Stk",
+   "title": "chat-history link 7nFduBo1Stk",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=7nFduBo1Stk",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "WmkdYFcXCtg",
+   "title": "chat-history link WmkdYFcXCtg",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=WmkdYFcXCtg",
+   "failure": "unavailable on YouTube (batch12 report)"
+  },
+  {
+   "id": "F8mlolILu7A",
+   "title": "chat-history link F8mlolILu7A",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=F8mlolILu7A",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "99hY2x1CLEU",
+   "title": "chat-history link 99hY2x1CLEU",
+   "channel": "chat-history",
+   "status": "BLOCKED_UNAVAILABLE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=99hY2x1CLEU",
+   "failure": "unavailable on YouTube (batch12 report)"
+  },
+  {
+   "id": "b5yB6khnrmc",
+   "title": "chat-history link b5yB6khnrmc",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=b5yB6khnrmc",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "fx55eFCUw_I",
+   "title": "chat-history link fx55eFCUw_I",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=fx55eFCUw_I",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "p0cp8uUpc9M",
+   "title": "chat-history link p0cp8uUpc9M",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=p0cp8uUpc9M",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "poKeVJZMFV4",
+   "title": "chat-history link poKeVJZMFV4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=poKeVJZMFV4",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "8WMyqJKRgzw",
+   "title": "chat-history link 8WMyqJKRgzw",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=8WMyqJKRgzw"
+  },
+  {
+   "id": "RnDgLkdlTC4",
+   "title": "chat-history link RnDgLkdlTC4",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=RnDgLkdlTC4",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "vh65StXSx7o",
+   "title": "chat-history link vh65StXSx7o",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=vh65StXSx7o",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "oNVxf9UZY-0",
+   "title": "chat-history link oNVxf9UZY-0",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=oNVxf9UZY-0",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "xflSQX3CS3o",
+   "title": "chat-history link xflSQX3CS3o",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=xflSQX3CS3o",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "RZpyeu25Kis",
+   "title": "chat-history link RZpyeu25Kis",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=RZpyeu25Kis",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "FnPJWMBya6U",
+   "title": "chat-history link FnPJWMBya6U",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=FnPJWMBya6U",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "b7uYVubI7jg",
+   "title": "chat-history link b7uYVubI7jg",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=b7uYVubI7jg",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "DMwM6F15sNg",
+   "title": "chat-history link DMwM6F15sNg",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=DMwM6F15sNg",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "sdgMG3sZ3nE",
+   "title": "chat-history link sdgMG3sZ3nE",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=sdgMG3sZ3nE",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "vtsTN2a4L2U",
+   "title": "chat-history link vtsTN2a4L2U",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=vtsTN2a4L2U",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "EuMrlKcNnLM",
+   "title": "chat-history link EuMrlKcNnLM",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=EuMrlKcNnLM"
+  },
+  {
+   "id": "XE_Gx_m6MLQ",
+   "title": "chat-history link XE_Gx_m6MLQ",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=XE_Gx_m6MLQ"
+  },
+  {
+   "id": "qa1Cprn1QLc",
+   "title": "chat-history link qa1Cprn1QLc",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=qa1Cprn1QLc",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "pGd7t371kAk",
+   "title": "chat-history link pGd7t371kAk",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=pGd7t371kAk"
+  },
+  {
+   "id": "miloyuZe3Jw",
+   "title": "chat-history link miloyuZe3Jw",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=miloyuZe3Jw",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "5cubb_lXKAA",
+   "title": "chat-history link 5cubb_lXKAA",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=5cubb_lXKAA",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "i2HrbsXlV04",
+   "title": "chat-history link i2HrbsXlV04",
+   "channel": "chat-history",
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=i2HrbsXlV04",
+   "access": "sheet-evidence-repair"
+  },
+  {
+   "id": "vTyefIjQ8_Q",
+   "title": "chat-history link vTyefIjQ8_Q",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=vTyefIjQ8_Q"
+  },
+  {
+   "id": "yXSlgdbaA_Q",
+   "title": "chat-history link yXSlgdbaA_Q",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=yXSlgdbaA_Q"
+  },
+  {
+   "id": "EZF9JEpL6L8",
+   "title": "chat-history link EZF9JEpL6L8",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=EZF9JEpL6L8"
+  },
+  {
+   "id": "KmqhJjAP3wM",
+   "title": "chat-history link KmqhJjAP3wM",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=KmqhJjAP3wM"
+  },
+  {
+   "id": "l1GF8APyVTg",
+   "title": "chat-history link l1GF8APyVTg",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=l1GF8APyVTg"
+  },
+  {
+   "id": "SsXi5rqVlvA",
+   "title": "chat-history link SsXi5rqVlvA",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=SsXi5rqVlvA"
+  },
+  {
+   "id": "evsxqvwn65o",
+   "title": "chat-history link evsxqvwn65o",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=evsxqvwn65o"
+  },
+  {
+   "id": "79jfvp-5f0g",
+   "title": "chat-history link 79jfvp-5f0g",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=79jfvp-5f0g"
+  },
+  {
+   "id": "3HC5ml9Wy3o",
+   "title": "chat-history link 3HC5ml9Wy3o",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=3HC5ml9Wy3o"
+  },
+  {
+   "id": "JJLJHPUjnlI",
+   "title": "chat-history link JJLJHPUjnlI",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=JJLJHPUjnlI"
+  },
+  {
+   "id": "exRqiCBW-u8",
+   "title": "chat-history link exRqiCBW-u8",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=exRqiCBW-u8"
+  },
+  {
+   "id": "-89cPyk7lQU",
+   "title": "chat-history link -89cPyk7lQU",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=-89cPyk7lQU"
+  },
+  {
+   "id": "tQIlQt4dTiM",
+   "title": "chat-history link tQIlQt4dTiM",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=tQIlQt4dTiM"
+  },
+  {
+   "id": "Tmki6M1_PWI",
+   "title": "chat-history link Tmki6M1_PWI",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=Tmki6M1_PWI"
+  },
+  {
+   "id": "5SZAK4WFPK4",
+   "title": "chat-history link 5SZAK4WFPK4",
+   "channel": "chat-history",
+   "status": "INVENTORIED",
+   "source": "whatsapp-chat-history",
+   "url": "https://www.youtube.com/watch?v=5SZAK4WFPK4"
+  },
+  {
+   "id": "rUzd5Y30O80",
+   "url": "https://www.youtube.com/watch?v=rUzd5Y30O80",
+   "title": "null-object tutorial rUzd5Y30O80",
+   "duration": "0",
+   "channel": "user-null-links",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "user-null-batch11"
+  },
+  {
+   "id": "iXZhEZPoNZY",
+   "url": "https://www.youtube.com/watch?v=iXZhEZPoNZY",
+   "title": "null-object tutorial iXZhEZPoNZY",
+   "duration": "0",
+   "channel": "user-null-links",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "user-null-batch11"
+  },
+  {
+   "id": "K2mSI59wPvg",
+   "url": "https://www.youtube.com/shorts/K2mSI59wPvg",
+   "title": "user short K2mSI59wPvg",
+   "duration": "0",
+   "channel": "user-links",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "chat-history-batch12/13"
+  },
+  {
+   "id": "V9ApHueQbN0",
+   "url": "https://www.youtube.com/shorts/V9ApHueQbN0",
+   "title": "Hancybox short V9ApHueQbN0",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch16"
+  },
+  {
+   "id": "Qu9MxR8I5dM",
+   "url": "https://www.youtube.com/shorts/Qu9MxR8I5dM",
+   "title": "Old repost \ud83c\udf1d",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "1kFJZf_6-7Q",
+   "url": "https://www.youtube.com/shorts/1kFJZf_6-7Q",
+   "title": "Use it wisely, It\u2019s gonna help a lot. \ud83c\udf1d\ud83e\udef6\ud83c\udffb",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "WJAO6OXE4kM",
+   "url": "https://www.youtube.com/shorts/WJAO6OXE4kM",
+   "title": "Check pinned comment! @Reve Image #revepartner #reve",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "rsUw8ijzPow",
+   "url": "https://www.youtube.com/shorts/rsUw8ijzPow",
+   "title": "Reve : Hyper Anime in 1 prompt \u26a1#reveai #revepartner #reve #hancybox",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "xLs0M7fFfQA",
+   "url": "https://www.youtube.com/shorts/xLs0M7fFfQA",
+   "title": "MiniMax Audio - Better than ElevenLabs? For creators\u2026 YES.  \ud83d\ude4c\ud83c\udffb - #minimaxaudio #texttospeech",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "_1fcL-aB1CU",
+   "url": "https://www.youtube.com/shorts/_1fcL-aB1CU",
+   "title": "Linear repeat Advance  - Alight motion tutorial: [ #hancybox #alightmotiontutorial #motiongraphics",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "T2TtWknCu60",
+   "url": "https://www.youtube.com/shorts/T2TtWknCu60",
+   "title": "Magnify Background - Alight motion | #shorts #alightmotiontutorial #alightmotion",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "uyHDHO7zP88",
+   "url": "https://www.youtube.com/shorts/uyHDHO7zP88",
+   "title": "Timelines \u274c Nasa equations \u2713 #shorts #alightmotiontutorial #alightmotion #videoediting",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "ShCYvdqTQ3s",
+   "url": "https://www.youtube.com/shorts/ShCYvdqTQ3s",
+   "title": "Insane Reel Editing! \ud83d\udd25 - Alight Motion Tutorial #Shorts #Reels #alightmotion",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "N7-UHBSPs7Y",
+   "url": "https://www.youtube.com/shorts/N7-UHBSPs7Y",
+   "title": "Click for Full tutorial \u2b06\ufe0f #nanobanana #veo3 #klingai",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "EtTwCO1tAD8",
+   "url": "https://www.youtube.com/shorts/EtTwCO1tAD8",
+   "title": "PR/Resolve keeps crashing? Here\u2019s the FIX! \ud83d\udd25 #uniconverter #formatconversion",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "CyPgA10kl7o",
+   "url": "https://www.youtube.com/shorts/CyPgA10kl7o",
+   "title": "Scale cut effect - Alight motion \ud83d\udcd0 #alightmotiontutorial #hancybox  #motiongraphics",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "vCrpT1dA6QU",
+   "url": "https://www.youtube.com/shorts/vCrpT1dA6QU",
+   "title": "Raster extrude - Alight motion #phonk #alightmotiontutorial",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "oKaAETJzLq4",
+   "url": "https://www.youtube.com/shorts/oKaAETJzLq4",
+   "title": "Null Control Like Ae In alight motion. | #alightmotiontutorial #breakingbad #editingtutorial",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "Xk7JcX4yg5M",
+   "url": "https://www.youtube.com/shorts/Xk7JcX4yg5M",
+   "title": "Apple style animation In alight motion \ud83d\udd3a #alightmotiontutorial #alaightmotionedit #appleui",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "Q9Aka1vrJVQ",
+   "url": "https://www.youtube.com/shorts/Q9Aka1vrJVQ",
+   "title": "Alight Motion Flip Layer effect\ud83c\udccf#alightmotion #alightmotiontutorial #animation #hancybox",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "yZOfRXLI4iI",
+   "url": "https://www.youtube.com/shorts/yZOfRXLI4iI",
+   "title": "Hologram effect Alight motion #shorts #alightmotiontutorial #tutorial",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  },
+  {
+   "id": "AQV-mQzAs-U",
+   "url": "https://www.youtube.com/shorts/AQV-mQzAs-U",
+   "title": "Alight motion Glass Morphic tutorial #alightmotiontutorial #alightmotionedit #shorts #edit",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "VISUAL_ANALYSIS_COMPLETE",
+   "access": "hancybox-batch17"
+  }
+ ]
+}

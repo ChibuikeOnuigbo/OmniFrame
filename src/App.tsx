@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Landing } from './components/Landing'
 import Studio from './Studio'
 import { CustomCursor } from './components/CustomCursor'
+import { useEditor } from './store'
 
 function isStudioRoute() {
   return window.location.hash === '#studio'
 }
 
 export default function App() {
+  const hideOverflowX = useEditor((s) => s.hideOverflowX)
   const [studio, setStudio] = useState(isStudioRoute)
   const [transitioning, setTransitioning] = useState(false)
   const timer = useRef<number | null>(null)
@@ -38,7 +40,7 @@ export default function App() {
   return (
     <div className="relative h-full w-full overflow-hidden bg-ink-950">
       {(studio || transitioning) && (
-        <div data-testid="studio-scene" className="absolute inset-0 z-0">
+        <div data-testid="studio-scene" data-overflow-x={hideOverflowX ? 'hidden' : 'visible'} className="absolute inset-0 z-0">
           <Studio />
         </div>
       )}

@@ -1,0 +1,287 @@
+[
+  {
+    "name": "01-welcome-modal",
+    "url": "/",
+    "buttons": 31,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "02-studio-clean",
+    "url": "/",
+    "buttons": 29,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "03-section-ai",
+    "url": "/",
+    "buttons": 25,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "04-section-uploads",
+    "url": "/",
+    "buttons": 29,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "05-section-templates",
+    "url": "/",
+    "buttons": 27,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "06-section-images",
+    "url": "/",
+    "buttons": 29,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "07-section-annotation",
+    "url": "/",
+    "buttons": 23,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "08-section-background",
+    "url": "/",
+    "buttons": 32,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "09-section-mockup",
+    "url": "/",
+    "buttons": 23,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "10-section-position",
+    "url": "/",
+    "buttons": 24,
+    "sliders": 3,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "11-section-shadow",
+    "url": "/",
+    "buttons": 23,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "12-section-border",
+    "url": "/",
+    "buttons": 23,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "13-section-layout",
+    "url": "/",
+    "buttons": 29,
+    "sliders": 2,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "14-section-watermark",
+    "url": "/",
+    "buttons": 30,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "15-section-brands",
+    "url": "/",
+    "buttons": 24,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "16-export-menu",
+    "url": "/",
+    "buttons": 35,
+    "sliders": 0,
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | Position | 3D | Shadow | Border | Layout | Header | W"
+  },
+  {
+    "name": "17-section-3d",
+    "url": "/",
+    "buttons": 23,
+    "sliders": 0,
+    "ranges": []
+  },
+  {
+    "name": "18-section-header",
+    "url": "/",
+    "buttons": 24,
+    "sliders": 0,
+    "ranges": []
+  },
+  {
+    "name": "19-image-added",
+    "url": "/",
+    "buttons": 25,
+    "sliders": 1,
+    "ranges": []
+  },
+  {
+    "name": "20-image-selected",
+    "url": "/",
+    "buttons": 35,
+    "sliders": 2,
+    "ranges": []
+  },
+  {
+    "name": "21-mockup-controls",
+    "url": "/",
+    "buttons": 33,
+    "sliders": 1,
+    "ranges": []
+  },
+  {
+    "name": "22-shadow-controls",
+    "url": "/",
+    "buttons": 39,
+    "sliders": 0,
+    "ranges": []
+  },
+  {
+    "name": "23-border-controls",
+    "url": "/",
+    "buttons": 29,
+    "sliders": 2,
+    "ranges": []
+  },
+  {
+    "name": "24-position-controls",
+    "url": "/",
+    "buttons": 30,
+    "sliders": 3,
+    "ranges": []
+  },
+  {
+    "name": "25-export-menu",
+    "url": "/",
+    "buttons": 41,
+    "sliders": 3,
+    "ranges": []
+  },
+  {
+    "name": "26-bg-settings",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "27-bg-effects",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "28-bg-saved",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "29-annotation-text",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "30-annotation-arrow",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "31-annotation-rectangle",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "32-annotation-icons",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "33-templates-saved",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "34-template-applied",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "35-uploads-backgrounds",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "36-header-on",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "37-layout-picker",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "38-canvas-size-menu",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "39-export-advanced",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "40-corner-help",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "41-sign-in",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "42-image-toolbar",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "43-ai-tools-menu",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "44-crop-mode",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "45-3d-with-image",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "46-mockup-frame-picker",
+    "url": "/",
+    "head": "FREE | 2400 x 1350 px | Save as Template | Export | Sign In | AI | Uploads | Templates | Images | Annotation | Background | Mockup | P"
+  },
+  {
+    "name": "47-dashboard",
+    "url": "/dashboard",
+    "head": "FREE | Sign In | 👋 Welcome ! | Integrations |  | Install Chrome extension |  | Install Figma plugin |  | Download Mac App |  | Usef"
+  }
+]

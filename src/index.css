@@ -24,7 +24,19 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 8px; }
 ::-webkit-scrollbar-thumb:hover { background: #3c475d; }
+
+/* Hide-overflow-x mode (default on): no visible horizontal scrollbars in the
+   studio; horizontal strips (.of-hstrip) scroll via hover arrows, mouse
+   wheel, or drag instead. Turning the setting off restores native bars. */
+[data-overflow-x="hidden"] ::-webkit-scrollbar:horizontal { height: 0 !important; display: none; }
+[data-overflow-x="hidden"] .of-hstrip { scrollbar-width: none; }
+.of-hstrip { scrollbar-width: thin; }
+.of-hstrip::-webkit-scrollbar:horizontal { height: 6px; }
+[data-overflow-x="hidden"] .of-hstrip::-webkit-scrollbar:horizontal { height: 0 !important; display: none; }
+
 .no-select { user-select: none; -webkit-user-select: none; }
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
 
 .of-range {
   -webkit-appearance: none;
@@ -74,6 +86,10 @@ body {
   cursor: pointer;
 }
 
+@keyframes of-nudge-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(2.5px); }
+}
 @keyframes of-fade {
   from { opacity: 0; transform: translateY(2px); }
   to { opacity: 1; transform: translateY(0); }
@@ -157,3 +173,112 @@ html.of-custom-cursor-active svg {
   cursor: none !important;
 }
 
+
+/* ── UI styles (Settings → Appearance; study in data.md) ─────────────────
+   Five structural looks driven by html[data-ui-style], three accent
+   palettes via html[data-ui-palette]. Styles regroup corner language,
+   density and panel depth; palettes only move the accent. The default
+   (omniframe/violet) needs no rules — it is the shipped look. */
+
+/* Palettes */
+html[data-ui-palette='amber'] .bg-brand, html[data-ui-palette='amber'] .bg-brand-500 { background-color: #d97706; }
+html[data-ui-palette='amber'] .bg-brand-600 { background-color: #b45309; }
+html[data-ui-palette='amber'] .text-brand-400 { color: #fbbf24; }
+html[data-ui-palette='amber'] .text-brand { color: #f59e0b; }
+html[data-ui-palette='amber'] .border-brand { border-color: #d97706; }
+html[data-ui-palette='teal'] .bg-brand, html[data-ui-palette='teal'] .bg-brand-500 { background-color: #0d9488; }
+html[data-ui-palette='teal'] .bg-brand-600 { background-color: #0f766e; }
+html[data-ui-palette='teal'] .text-brand-400 { color: #2dd4bf; }
+html[data-ui-palette='teal'] .text-brand { color: #14b8a6; }
+html[data-ui-palette='teal'] .border-brand { border-color: #0d9488; }
+
+/* Clean Cut (CapCut study): lifted charcoal, big radii, pill-ish buttons */
+html[data-ui-style='capcut'] .bg-ink-950 { background-color: #0e0f12; }
+html[data-ui-style='capcut'] .bg-ink-900 { background-color: #141519; }
+html[data-ui-style='capcut'] .bg-ink-850 { background-color: #1a1b20; }
+html[data-ui-style='capcut'] .bg-ink-800 { background-color: #212228; }
+html[data-ui-style='capcut'] .bg-ink-750 { background-color: #26272e; }
+html[data-ui-style='capcut'] .bg-ink-700 { background-color: #2f3038; }
+html[data-ui-style='capcut'] .bg-ink-600 { background-color: #3d3e46; }
+html[data-ui-style='capcut'] .border-ink-800 { border-color: #26272e; }
+html[data-ui-style='capcut'] .border-ink-750 { border-color: #2c2d34; }
+html[data-ui-style='capcut'] .border-ink-700 { border-color: #33343c; }
+html[data-ui-style='capcut'] .border-ink-600 { border-color: #45464f; }
+html[data-ui-style='capcut'] .rounded-md { border-radius: 10px; }
+html[data-ui-style='capcut'] .rounded-lg { border-radius: 14px; }
+html[data-ui-style='capcut'] .rounded-xl { border-radius: 18px; }
+html[data-ui-style='capcut'] button:not(.rounded-full) { border-radius: 10px; }
+
+/* Workshop (Krita study): warm neutral grays, square corners, dense */
+html[data-ui-style='krita'] { font-size: 15px; }
+html[data-ui-style='krita'] .bg-ink-950 { background-color: #232324; }
+html[data-ui-style='krita'] .bg-ink-900 { background-color: #2b2b2d; }
+html[data-ui-style='krita'] .bg-ink-850 { background-color: #323234; }
+html[data-ui-style='krita'] .bg-ink-800 { background-color: #3a3a3c; }
+html[data-ui-style='krita'] .bg-ink-750 { background-color: #424244; }
+html[data-ui-style='krita'] .bg-ink-700 { background-color: #4c4c4f; }
+html[data-ui-style='krita'] .bg-ink-600 { background-color: #5d5d60; }
+html[data-ui-style='krita'] .border-ink-800 { border-color: #3f3f41; }
+html[data-ui-style='krita'] .border-ink-750 { border-color: #48484a; }
+html[data-ui-style='krita'] .border-ink-700 { border-color: #525255; }
+html[data-ui-style='krita'] .border-ink-600 { border-color: #66666a; }
+html[data-ui-style='krita'] .rounded, html[data-ui-style='krita'] .rounded-md,
+html[data-ui-style='krita'] .rounded-lg, html[data-ui-style='krita'] .rounded-xl,
+html[data-ui-style='krita'] .rounded-2xl, html[data-ui-style='krita'] button:not(.rounded-full) { border-radius: 3px; }
+
+/* Pro Blue (NLE study): blue-gray stack, crisp 4px corners */
+html[data-ui-style='premiere'] .bg-ink-950 { background-color: #141518; }
+html[data-ui-style='premiere'] .bg-ink-900 { background-color: #1d1e22; }
+html[data-ui-style='premiere'] .bg-ink-850 { background-color: #232428; }
+html[data-ui-style='premiere'] .bg-ink-800 { background-color: #2a2b30; }
+html[data-ui-style='premiere'] .bg-ink-750 { background-color: #313237; }
+html[data-ui-style='premiere'] .bg-ink-700 { background-color: #3b3c42; }
+html[data-ui-style='premiere'] .bg-ink-600 { background-color: #4a4b53; }
+html[data-ui-style='premiere'] .border-ink-800 { border-color: #2e2f34; }
+html[data-ui-style='premiere'] .border-ink-750 { border-color: #36373d; }
+html[data-ui-style='premiere'] .border-ink-700 { border-color: #414249; }
+html[data-ui-style='premiere'] .border-ink-600 { border-color: #55565f; }
+html[data-ui-style='premiere'] .rounded-md, html[data-ui-style='premiere'] .rounded-lg,
+html[data-ui-style='premiere'] .rounded-xl, html[data-ui-style='premiere'] button:not(.rounded-full) { border-radius: 4px; }
+
+/* Daylight (the light theme): paper surfaces, dark text, soft borders */
+html[data-ui-style='daylight'] { color-scheme: light; }
+html[data-ui-style='daylight'] .bg-ink-950 { background-color: #e8eaef; }
+html[data-ui-style='daylight'] .bg-ink-900 { background-color: #f2f3f7; }
+html[data-ui-style='daylight'] .bg-ink-850 { background-color: #ffffff; }
+html[data-ui-style='daylight'] .bg-ink-800 { background-color: #eef0f4; }
+html[data-ui-style='daylight'] .bg-ink-750 { background-color: #e6e9ef; }
+html[data-ui-style='daylight'] .bg-ink-700 { background-color: #dde1e9; }
+html[data-ui-style='daylight'] .bg-ink-600 { background-color: #ccd2dd; }
+html[data-ui-style='daylight'] .border-ink-800 { border-color: #e0e3ea; }
+html[data-ui-style='daylight'] .border-ink-750 { border-color: #d8dce4; }
+html[data-ui-style='daylight'] .border-ink-700 { border-color: #d2d7e0; }
+html[data-ui-style='daylight'] .border-ink-600 { border-color: #c2c9d4; }
+html[data-ui-style='daylight'] .text-ink-50 { color: #101216; }
+html[data-ui-style='daylight'] .text-ink-100 { color: #17191f; }
+html[data-ui-style='daylight'] .text-ink-200 { color: #2a2d34; }
+html[data-ui-style='daylight'] .text-ink-300 { color: #3f434d; }
+html[data-ui-style='daylight'] .text-ink-400 { color: #565c68; }
+html[data-ui-style='daylight'] .text-ink-500 { color: #6e7480; }
+html[data-ui-style='daylight'] .text-white { color: #14161a; }
+html[data-ui-style='daylight'] .bg-brand.text-white,
+html[data-ui-style='daylight'] .bg-brand .text-white,
+html[data-ui-style='daylight'] .bg-brand-500.text-white,
+html[data-ui-style='daylight'] .bg-brand-600.text-white,
+html[data-ui-style='daylight'] .bg-red-500 .text-white,
+html[data-ui-style='daylight'] .bg-red-600 .text-white { color: #ffffff; }
+html[data-ui-style='daylight'] ::-webkit-scrollbar-thumb { background: #b9bfc9; }
+html[data-ui-style='daylight'] .rounded-md { border-radius: 8px; }
+html[data-ui-style='daylight'] .rounded-lg { border-radius: 10px; }
+html[data-ui-style='daylight'] .rounded-xl { border-radius: 12px; }
+html[data-ui-style='daylight'] body { color: #17191f; }
+html[data-ui-style='daylight'] input, html[data-ui-style='daylight'] select, html[data-ui-style='daylight'] textarea { color: #17191f; }
+
+/* Floating panels use bg-ink-900/<alpha> (a distinct generated class);
+   restyle those too so popups/menus follow the active style. */
+html[data-ui-style='capcut'] [class*="bg-ink-900/"] { background-color: rgb(20 21 25 / 0.97); }
+html[data-ui-style='krita'] [class*="bg-ink-900/"] { background-color: rgb(43 43 45 / 0.97); }
+html[data-ui-style='premiere'] [class*="bg-ink-900/"] { background-color: rgb(29 30 34 / 0.97); }
+html[data-ui-style='daylight'] [class*="bg-ink-900/"] { background-color: rgb(242 243 247 / 0.98); }
+html[data-ui-style='daylight'] .text-violet-200 { color: #4c3fd6; }
+html[data-ui-style='daylight'] .text-violet-300 { color: #5a4be0; }

@@ -11,14 +11,16 @@ before/after. Play every file below by clicking it.
 
 ## Track 2 — UPAST · HELLBLADE (Ultra Slowed) — FIXED in v2
 
-**Diagnosis.** The track measures 117.5 BPM — but it is an *ultra-slowed*
-edit. Scanning speed factors on the raw mix showed vocals becoming clearly
-detectable only when the audio is sped back up (Silero on the raw mix:
-0.0% at ×1.00 → 26% of frames firing at ×1.36 ≈ 160 BPM, the likely
-original tempo). In other words: **the vocals are pitched so far down that
-they fall outside the pitch range Demucs learned as "vocals"** — the
-direct separation recovered only a smeared fraction (23% vocal-like energy,
-13% of frames voiced). That is the failure you heard.
+**Diagnosis.** The onset-tempo estimate has a strong half/double-time
+ambiguity: **117.5 BPM (autocorrelation 0.80) and 58.7 BPM (0.76)**, so BPM
+alone cannot tell whether the source is slowed or at its intended pulse. The
+app's separate Silero voice-detectability scan does identify this as an
+ultra-slowed edit: it picks ×1.45 on the full track, where the raw mix is
+nearly undetectable (0.05% baseline voice-detectability) and the voice is
+clearer after speed-up. The vocals are pitched down far enough that they fall
+outside Demucs' learned "vocals" range in many sections; direct separation
+recovers only a fraction (23.2% vocal-like energy, 13.0% voiced frames). That
+is the failure you heard.
 
 **Fix (v2).** Speed-normalize before separation, then slow the stems back:
 
@@ -99,7 +101,8 @@ Audit reports from this study: [track1](../../../qa/reports/voice-realtrack-stud
   the corrected speed and restores the original timing, on by default.
   End-to-end proof on this very track (plus a buried-vocal window and a
   ground-truth synthetic): [`evidence/voice/slowed/`](../slowed/README.md) —
-  15/15 checks, [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs).
+  18/18 checks on 12 Oct 2026 (short one-pass action excerpts for sandbox
+  memory), [`qa/voice-slowed-fix-e2e.mjs`](../../../qa/voice-slowed-fix-e2e.mjs).
 - **Update 2 — v3: the app's exact algorithm at production strength.**
   [`qa/voice-fulltrack-v3.mjs`](../../../qa/voice-fulltrack-v3.mjs) runs the
   full 108 s at 3 passes with the app's own polyphase-sinc resampler

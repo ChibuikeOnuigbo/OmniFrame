@@ -11,7 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useEditor } from '../store'
-import { executeVoiceIsolationForClip, type VoiceIsolationOptions } from '../lib/voiceIsolation'
+import { executeVoiceIsolationForClip, type VoiceIsolationModel, type VoiceIsolationOptions } from '../lib/voiceIsolation'
 
 interface VoiceIsolationModalProps {
   isOpen: boolean
@@ -21,7 +21,17 @@ interface VoiceIsolationModalProps {
 
 export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIsolationModalProps) {
   const clips = useEditor((s) => s.clips)
+  const isolationModel = useEditor((s) => s.audioIsolationModel)
   const audioVideoClips = clips.filter((c) => c.kind === 'audio' || c.kind === 'video')
+  const modelLabels: Record<VoiceIsolationModel, string> = {
+    'omni-voicetarget': 'Omni VoiceTarget DSP',
+    'htdemucs-v4': 'Demucs v4 separator',
+    'bs-roformer-lite': 'BS-Roformer',
+    'dsp-crossover-fast': 'Fast crossover DSP',
+    'omni-denoise-onnx': 'Omni speech denoiser',
+    'rnnoise-xiph': 'RNNoise denoiser',
+    'omni-unified': 'Omni Unified model',
+  }
 
   const [selectedClipId, setSelectedClipId] = useState<string>(initialClipId || '')
   const [mode, setMode] = useState<'keep_vocal' | 'remove_vocal'>('keep_vocal')
@@ -111,7 +121,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 Isolate Voice & Vocal Removal
               </h2>
               <p className="text-[11px] text-ink-400">
-                Stereo DSP vocal isolation and removal
+                {modelLabels[isolationModel]} · synchronized local processing
               </p>
             </div>
           </div>

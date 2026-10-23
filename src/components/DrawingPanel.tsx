@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useEditor } from '../store'
 import type { DrawingToolType, TemporalScopeType } from '../types'
 import {
@@ -22,17 +22,23 @@ import {
   PaintBucket,
   Sliders,
   Sparkles,
+  Stamp,
   Layers,
+  Clapperboard,
   ChevronLeft,
   ChevronRight,
   RotateCcw,
+  Upload,
   CornerDownRight,
   Shield,
   type LucideIcon,
 } from 'lucide-react'
 import { SelectionMaskSubTool } from './SelectionMaskSubTool'
 import { RotoMaskSubTool } from './RotoMaskSubTool'
+import { SmartPatchSubTool } from './SmartPatchSubTool'
 import PanelSection from './PanelSection'
+import { useSectionsNav } from './SectionsNav'
+import { InfoTip } from './InfoTip'
 import { Tooltip } from './Tooltip'
 
 const COLOR_SWATCHES = [
@@ -70,6 +76,10 @@ export function DrawingPanel() {
   const drawingTool = useEditor((s) => s.drawingTool)
   const setDrawingTool = useEditor((s) => s.setDrawingTool)
   const drawingColor = useEditor((s) => s.drawingColor)
+  const customPalettes = useEditor((s) => s.customPalettes)
+  const importPaletteFile = useEditor((s) => s.importPaletteFile)
+  const removeCustomPalette = useEditor((s) => s.removeCustomPalette)
+  const [paletteStatus, setPaletteStatus] = useState('')
   const setDrawingColor = useEditor((s) => s.setDrawingColor)
   const drawingSize = useEditor((s) => s.drawingSize)
   const setDrawingSize = useEditor((s) => s.setDrawingSize)
@@ -104,6 +114,12 @@ export function DrawingPanel() {
   const setPaintLayerOpacity = useEditor((s) => s.setPaintLayerOpacity)
   const clearPaintLayerRasterMask = useEditor((s) => s.clearPaintLayerRasterMask)
   const drawingStrokes = useEditor((s) => s.drawingStrokes)
+  const viewVideosAsLayers = useEditor((s) => s.viewVideosAsLayers)
+  const setViewVideosAsLayers = useEditor((s) => s.setViewVideosAsLayers)
+  const convertDrawingToClips = useEditor((s) => s.convertDrawingToClips)
+  const drawingSectionRequest = useEditor((s) => s.drawingSectionRequest)
+  const requestDrawingSection = useEditor((s) => s.requestDrawingSection)
+  const [convertReport, setConvertReport] = useState<string | null>(null)
   const clearDrawingStrokes = useEditor((s) => s.clearDrawingStrokes)
   const activeMaskId = useEditor((s) => s.activeMaskId)
   const setActiveMask = useEditor((s) => s.setActiveMask)
@@ -143,6 +159,13 @@ export function DrawingPanel() {
       ],
     },
     {
+      group: 'Retouch',
+      items: [
+        { id: 'clone' as DrawingToolType, label: 'Stamp', icon: Stamp },
+        { id: 'smart-patch' as DrawingToolType, label: 'Smart Patch', icon: Sparkles },
+      ],
+    },
+    {
       group: 'Color & Tools',
       items: [
         { id: 'fill' as DrawingToolType, label: 'Fill / Recolor', icon: PaintBucket },
@@ -151,6 +174,22 @@ export function DrawingPanel() {
       ],
     },
   ]
+
+  // Krita behavior: picking a tool brings its options forward instead of
+  // making the user hunt through sections.
+  const sectionsNav = useSectionsNav()
+  useEffect(() => {
+    if (drawingSectionRequest && sectionsNav) {
+      sectionsNav.activate(drawingSectionRequest)
+      requestDrawingSection(null)
+    }
+  }, [drawingSectionRequest, sectionsNav, requestDrawingSection])
+  const activateToolOptions = (tool: DrawingToolType) => {
+    if (!sectionsNav) return
+    if (tool === 'smart-patch') sectionsNav.activate('smart-patch')
+    else if (['line', 'rectangle', 'circle', 'arrow', 'star', 'polygon', 'polyline', 'bezier', 'gradient'].includes(tool)) sectionsNav.activate('tool-params')
+    else sectionsNav.activate('brush')
+  }
 
   const handleScopeChange = (type: TemporalScopeType) => {
     if (type === 'global') {
@@ -253,18 +292,55 @@ export function DrawingPanel() {
         </div>
       )}
 
-      <PanelSection title="Tool & Selection" defaultOpen={true} testId="tools">
-        <PanelSection title="Drawing Tools" defaultOpen={true} testId="drawing-tools">
+      {/* Krita-style toolbox: a permanent icon grid (never tabbed away,
+          never an accordion) sitting above the tabbed option dockers. */}
+      {/* Layer behaviour + conversion: icon-first, explanations in tips. */}
+      <section aria-label="Drawing layer behaviour" className="flex items-center gap-1.5 rounded-lg border border-ink-800 bg-ink-950/20 px-2 py-1.5">
+        <Tooltip label={viewVideosAsLayers ? 'Videos as layers: ON — drawing joins the clip stack of the selected clips' : 'Videos as layers: OFF — drawing floats on top of all video'}>
+          <button
+            type="button"
+            data-testid="view-as-layers-toggle"
+            aria-pressed={viewVideosAsLayers}
+            aria-label="View videos as layers"
+            onClick={() => setViewVideosAsLayers(!viewVideosAsLayers)}
+            className={`flex h-7 flex-1 items-center justify-center gap-1.5 rounded-md border text-[11px] font-medium transition-colors ${viewVideosAsLayers ? 'border-brand bg-brand/20 text-brand-200' : 'border-ink-700 text-ink-300 hover:text-white'}`}
+          >
+            <Layers size={13} />
+            <span>As layers</span>
+          </button>
+        </Tooltip>
+        <InfoTip testId="view-as-layers-info" label="When ON, selected clips are the only drawing targets: art sits in the clip stack (a clip above can cover it) and clips to the selected clips' view region. When OFF, drawing floats on top of all video. Only art drawn while ON joins the stack." />
+        <Tooltip label="Convert drawing to clips: bake strokes into timeline clips spanning exactly the frames they cover">
+          <button
+            type="button"
+            data-testid="convert-drawing-to-clips-btn"
+            aria-label="Convert drawing to clips"
+            onClick={() => {
+              const r = convertDrawingToClips()
+              setConvertReport(r.clips > 0 ? `${r.clips} clip${r.clips === 1 ? '' : 's'} · ${r.strokes} strokes` : 'Nothing to convert')
+            }}
+            className="flex h-7 flex-1 items-center justify-center gap-1.5 rounded-md border border-ink-700 text-[11px] font-medium text-ink-300 transition-colors hover:text-white"
+          >
+            <Clapperboard size={13} />
+            <span>To clips</span>
+          </button>
+        </Tooltip>
+        <InfoTip testId="convert-drawing-info" label="Each clip spans exactly the frames its strokes cover (frames 1-15 and 123-126 become two clips). Blend, colour and timing ride along unchanged; layered art stays directly above the clip it was drawn on." />
+      </section>
+      {convertReport && (
+        <p data-testid="convert-drawing-report" className="px-1 text-[10px] text-ink-400">{convertReport}</p>
+      )}
+      <section data-testid="drawing-toolbox" aria-label="Drawing toolbox" className="rounded-lg border border-ink-800 bg-ink-950/20 px-2 py-2">
       {/* Tools Selection */}
       <div className="flex flex-col gap-2.5">
-        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Drawing Tools</div>
+        <div className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Toolbox</div>
         {toolGroups.map((grp) => (
           <div key={grp.group} className="space-y-1">
             <span className="text-[10px] text-ink-500 font-semibold uppercase">{grp.group}</span>
             {/* Icon-first, like Krita/Photoshop toolbars: at three columns a
                 10px label truncates to noise, so the name moves to the
                 tooltip and the accessible name instead of being shown. */}
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-5 gap-1">
               {grp.items.map((t) => {
                 const Icon = t.icon
                 const active = drawingTool === t.id
@@ -278,8 +354,9 @@ export function DrawingPanel() {
                     onClick={() => {
                       setDrawingTool(t.id)
                       if (!drawingEnabled) setDrawingEnabled(true)
+                      activateToolOptions(t.id)
                     }}
-                    className={`flex h-8 items-center justify-center rounded-md border transition-colors ${
+                    className={`flex h-9 items-center justify-center rounded-md border transition-colors ${
                       active
                         ? 'bg-brand/20 border-brand text-brand-400'
                         : 'bg-ink-900 border-ink-800 text-ink-300 hover:bg-ink-800 hover:text-white'
@@ -293,11 +370,15 @@ export function DrawingPanel() {
           </div>
         ))}
       </div>
-        </PanelSection>
+      </section>
 
         <PanelSection title="Selection & Masking" defaultOpen={true} testId="masking">
       {/* Unified Selection & Masking Sub-Tool */}
       <SelectionMaskSubTool context="drawing" />
+        </PanelSection>
+
+        <PanelSection title="Smart Patch" defaultOpen={true} testId="smart-patch">
+          <SmartPatchSubTool />
         </PanelSection>
 
         <PanelSection title="RotoMask" defaultOpen={false} testId="rotomask">
@@ -346,8 +427,6 @@ export function DrawingPanel() {
       </div>
         </PanelSection>
 
-      </PanelSection>
-      <PanelSection title="Colour & Frames" defaultOpen={true} testId="colour-frames">
         <PanelSection
           title="Frame Hold"
           hint={`${drawingHoldFrames} ${drawingHoldFrames === 1 ? 'frame' : 'frames'}`}
@@ -472,9 +551,74 @@ export function DrawingPanel() {
             className="h-7 w-7 rounded-full border border-ink-700 cursor-pointer bg-transparent p-0 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           />
         </div>
+
+      {/* Imported palettes (.gpl/.pal/.json) — saved inside the project */}
+      <div data-testid="imported-palettes" className="mt-2 space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-medium text-ink-400 uppercase tracking-wider">Imported Palettes</span>
+          <label
+            data-testid="palette-import-btn"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-ink-800 hover:bg-brand text-ink-200 hover:text-white text-[10px] cursor-pointer transition-colors"
+            title="Import a GIMP .gpl, JASC .pal or JSON colour palette"
+          >
+            <Upload size={11} />
+            <span>Import palette</span>
+            <input
+              type="file"
+              data-testid="palette-import-input"
+              accept=".gpl,.pal,.json,.txt"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                e.target.value = ''
+                if (!file) return
+                importPaletteFile(file)
+                  .then((pal) => setPaletteStatus(`Imported "${pal.name}" - ${pal.colors.length} colours, saved in the project.`))
+                  .catch((err) => setPaletteStatus(err instanceof Error ? err.message : String(err)))
+              }}
+            />
+          </label>
+        </div>
+        {customPalettes.map((pal) => (
+          <div key={pal.id} data-testid={`palette-row-${pal.id}`} className="rounded bg-ink-900/60 border border-ink-800 p-1.5">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] text-ink-300 truncate" title={pal.source}>{pal.name}</span>
+              <button
+                type="button"
+                data-testid={`palette-remove-${pal.id}`}
+                aria-label={`Remove palette ${pal.name}`}
+                title={`Remove palette ${pal.name}`}
+                onClick={() => removeCustomPalette(pal.id)}
+                className="p-0.5 rounded bg-ink-800 hover:bg-red-600 text-ink-300 hover:text-white transition-colors shrink-0"
+              >
+                <Trash2 size={10} />
+              </button>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {pal.colors.map((hex) => (
+                <button
+                  key={hex}
+                  type="button"
+                  data-testid={`palette-swatch-${pal.id}-${hex.replace('#', '')}`}
+                  aria-label={`Set drawing colour to ${hex} from ${pal.name}`}
+                  aria-pressed={drawingColor === hex}
+                  title={`${hex} - ${pal.name}`}
+                  onClick={() => setDrawingColor(hex)}
+                  className={`h-5 w-5 rounded-full border transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                    drawingColor === hex ? 'border-white scale-110 shadow-sm' : 'border-ink-700 hover:scale-105'
+                  }`}
+                  style={{ backgroundColor: hex }}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+        {paletteStatus && (
+          <p data-testid="palette-status" role="status" className="text-[10px] text-ink-400">{paletteStatus}</p>
+        )}
+      </div>
       </div>
         </PanelSection>
-      </PanelSection>
       <PanelSection title="Tool Parameters" defaultOpen={true} testId="tool-params">
       {/* Tool Parameters */}
       {(drawingTool === 'polygon' || drawingTool === 'gradient') ? (
@@ -736,6 +880,20 @@ export function DrawingPanel() {
                     max={80}
                     value={Math.round(onionSkin.opacity * 100)}
                     onChange={(e) => setOnionSkin({ opacity: Number(e.target.value) / 100 })}
+                    className="of-range w-full"
+                  />
+
+                  <div className="flex justify-between items-center">
+                    <span>Tint Strength</span>
+                    <span className="font-mono text-ink-200">{Math.round((onionSkin.tintStrength ?? 1) * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    data-testid="onion-tint-strength-slider"
+                    min={0}
+                    max={100}
+                    value={Math.round((onionSkin.tintStrength ?? 1) * 100)}
+                    onChange={(e) => setOnionSkin({ tintStrength: Number(e.target.value) / 100 })}
                     className="of-range w-full"
                   />
                 </div>
