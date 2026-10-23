@@ -1354,6 +1354,8 @@ const AE_RACK: Array<{ id: string; label: string; icon: typeof Tv; effect: Recor
   { id: 'aeminimax', group: 'pixel', label: 'Minimax smear (AE)', icon: Tv, effect: { minimax: 0.7, minimaxAngle: 30 } },
   { id: 'aevhs', group: 'pixel', label: 'VHS aesthetic (AE)', icon: Sparkles, effect: { vhs: 0.7 } },
   { id: 'aedircolor', group: 'pixel', label: 'Directional colorize (AE)', icon: Sparkles, effect: { dirColorize: 0.8, dirColorizeFrom: '#0028ff', dirColorizeTo: '#ff2800', dirColorizeAngle: 45 } },
+  { id: 'amosc', group: 'pixel', label: 'Oscillate (AM)', icon: Waves, effect: { oscillate: 8, oscillateFreq: 3 } },
+  { id: 'aeturb', group: 'pixel', label: 'Turbulent warp (AM)', icon: Sparkles, effect: { turbulent: 0.6 } },
 ]
 
 /** Speed-curve rack (board C brief: 15 curves). One main tool with a down

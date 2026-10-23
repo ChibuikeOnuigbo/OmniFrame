@@ -120,14 +120,20 @@ export function renderFrame(seq, t) {
     const eff = clip.effects || {}
     const tt = PFX.pfxLocalTime(eff, t, clip.start, clip.duration)
     const sh = PFX.pfxShake(eff, t)
+  const osc = PFX.pfxOscillate(eff, t)
+  sh.dx += osc.dx; sh.dy += osc.dy
     const evAt = (time) => {
       const e2 = CE.evaluateClipAnimation(clip, PFX.pfxLocalTime(eff, time, clip.start, clip.duration))
       const s2 = PFX.pfxShake(eff, time)
+      const o2 = PFX.pfxOscillate(eff, time)
+      s2.dx += o2.dx; s2.dy += o2.dy
       e2.x += s2.dx; e2.y += s2.dy
       return e2
     }
     const ev = evAt(t)
-    const r = seq.clipRectAt ? seq.clipRectAt(clip, ev) : seq.clipRect(clip, tt)
+    const rBase = seq.clipRect(clip, tt)
+    const bAnim = CE.evaluateClipAnimation(clip, PFX.pfxLocalTime(eff, t, clip.start, clip.duration))
+    const r = { ...rBase, x: rBase.x + (ev.x - bAnim.x), y: rBase.y + (ev.y - bAnim.y) }
     const s = makeCanvas(Math.max(2, Math.round(r.w)), Math.max(2, Math.round(r.h)))
     const sx = s.getContext('2d')
     const flip = cardFlipFactor(clip, t)

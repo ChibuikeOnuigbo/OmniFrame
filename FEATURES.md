@@ -121,6 +121,9 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 107 AE one-framer directional minimax smear (minimax/minimaxAngle/minimaxMode) in pixelGrade applyOneFramer
 108 AE one-framer VHS aesthetic (scanlines + tape noise + chroma bleed + per-frame band wobble) as `vhs` key
 109 AE one-framer directional colorize (dirColorize + From/To/Angle two-colour ramp) + rack entries for all three
+110 AM Oscillate with OFFICIAL properties (Magnitude/Frequency/Angle/Wave sine+triangle/Phase) in proceduralFx, wired playback + appRender rect pass
+111 turbulent/fractal-style warp pixel key (sin-domain displacement) in applyOneFramer
+112 lasso_select: freeform polygon selection (7th selection method) via selectionMattes.lassoMatte
 
-**Total: 109 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 109) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
-Watched videos at this commit: **346** (see youtube-audit/progress.json watched_ids).
+**Total: 112 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 112) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+Watched videos at this commit: **347** (see youtube-audit/progress.json watched_ids).

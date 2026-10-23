@@ -21,6 +21,10 @@ editor's official documentation, plus 12 fresh reference images in images/.
 - am-krita-export-layers.webp — Krita→Alight Motion transparent-layer export workflow
 - resolve-cut-page.jpg, resolve-cut-page-full.jpg, resolve-cut-page-dual-viewers.png, resolve-media-pool-viewer.png — Resolve Cut page + media pool
 
+## images/ batch 3 (7 more, 2026-10-23)
+- capcut-keyframe-diamonds-opacity.png, capcut-keyframes-panel.webp, capcut-adjust-button.png — CapCut keyframe diamonds + adjust button
+- resolve-deliver-render-settings.png, resolve-delivery-page.jpg, resolve-deliver-render-in-place.webp, resolve-deliver-bitrate.png — Resolve Deliver page / render settings / bitrate
+
 ## Why
 Feeds OmniFrame parity work: AE effect categories vs our effect rack, AM catalog vs pixelGrade/proceduralFx
 (Oscillate, Raster Extrude, Linear/Radial Repeat, Magnify Background etc. confirmed by official names),

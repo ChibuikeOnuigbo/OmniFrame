@@ -23,6 +23,11 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Board I — GAP queue (am_research sweep)
+AM Oscillate (official Magnitude/Frequency/Angle/Wave/Phase), turbulent warp, lasso_select polygon
+selection. Recipe `tools/mcp/recipes/board_I_gaps.json` (3 variants) → `I_gaps/gaps-{all,oscillate,turbulent}.mp4`;
+frames `evidence/I-gaps-*.png` (osc-a vs osc-b prove the wobble moves).
+
 ## Board H — AE one-framer family (MatttVfx j3Lt0dU1Lok)
 `effect_set` keys minimax/minimaxAngle/minimaxMode, vhs, dirColorize(+From/To/Angle) in pixelGrade
 applyOneFramer. Recipe `tools/mcp/recipes/board_H_oneframer.json` (3 variants) →

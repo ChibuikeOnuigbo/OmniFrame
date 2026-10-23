@@ -57,6 +57,7 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   freezeHold: 0, freezeAt: 0,
   minimax: 0, minimaxAngle: 0, minimaxMode: 'max', vhs: 0,
   dirColorize: 0, dirColorizeFrom: '#0028ff', dirColorizeTo: '#ff2800', dirColorizeAngle: 45,
+  oscillate: 0, oscillateFreq: 2, oscillateAngle: 45, oscillateWave: 'sine', oscillatePhase: 0, turbulent: 0,
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {

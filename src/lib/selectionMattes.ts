@@ -95,6 +95,26 @@ export function brushMatte(
 }
 
 /** Mind-main-element: flood background from the rect border, keep the rest. */
+/** AM-style lasso: freeform polygon selection (point-in-polygon scanline fill). */
+export function lassoMatte(w: number, h: number, poly: [number, number][]): MatteResult {
+  const alpha = new Uint8ClampedArray(w * h)
+  const n = poly.length
+  if (n >= 3) {
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        let inside = false
+        for (let i = 0, j = n - 1; i < n; j = i++) {
+          const [xi, yi] = poly[i]
+          const [xj, yj] = poly[j]
+          if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
+        }
+        if (inside) alpha[y * w + x] = 255
+      }
+    }
+  }
+  return finish(alpha, w, h)
+}
+
 export function mainElementMatte(
   px: Uint8ClampedArray, w: number, h: number, rect: MatteRect, tol = 48,
 ): MatteResult {

@@ -594,6 +594,18 @@ class BrushSelect extends MCPTool {
     return SESSION.note('brush_select', { clipId: c.id, strokes: strokes.length }, { method: 'brush', pixels: m.pixels, bbox: bq && [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
   }
 }
+class LassoSelect extends MCPTool {
+  constructor() { super('lasso_select', 'AM-style lasso: freeform polygon selection (seq-space points) into the omniframe selection matte — 7th selection method alongside roto/sub-tool/video-view/transparent/brush/main-element.', { clipId: '', points: '[[x,y],...] seq px (>=3)' }) }
+  async run({ clipId, points = [] }) {
+    const s = seq(), c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    const { mw, mh } = mediaPixels(c)
+    const poly = (points || []).map(([x, y]) => { const l = seqToLocal(s, c, { x0: x, y0: y, x1: x, y1: y }); return [l.x0, l.y0] })
+    const m = SM.lassoMatte(mw, mh, poly)
+    SESSION.omniSelection = { clipId: c.id, method: 'lasso', matte: m, mw, mh }
+    const bq = m.bbox ? localToSeq(s, c, m.bbox) : null
+    return SESSION.note('lasso_select', { clipId: c.id, points: poly.length }, { method: 'lasso', pixels: m.pixels, bbox: bq && [Math.round(bq.x0), Math.round(bq.y0), Math.round(bq.x1), Math.round(bq.y1)] })
+  }
+}
 class SelectMainElement extends MCPTool {
   constructor() { super('select_main_element', 'Masking-mode "mind main element": flood the background from the rect border; whatever survives is the main element of the frame.', { clipId: '', x0: '', y0: '', x1: '', y1: '', tol: '' }) }
   async run({ clipId, x0, y0, x1, y1, tol = 48 }) {
@@ -671,4 +683,4 @@ class OmniMove extends MCPTool {
     return SESSION.note('omniframe_move', { x, y, t }, { clipId: c.id, interpolation: 'constant', slide: false })
   }
 }
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect]) registry.register(new T())

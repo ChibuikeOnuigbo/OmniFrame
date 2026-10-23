@@ -66,15 +66,15 @@ Creators surfaced via Videos/Shorts tabs: @zack_indo (Zack_), @Exal.Visuals, @de
 | AM tool/term seen | where | OmniFrame |
 |-------------------|-------|-----------|
 | Time Remapping / Reverse / Twixtor-style slow-mo | Wizzy course | speed curves (board C) + proceduralFx reverse ✔ |
-| Shake & "Turbs" (Turbulent Displace) | Wizzy course | autoShake ✔ / turbulent = GAP |
-| Oscillate | viriri tutorial summary | GAP |
+| Shake & "Turbs" (Turbulent Displace) | Wizzy course | autoShake ✔ / turbulent warp shipped ✔ |
+| Oscillate | viriri tutorial summary + official guide page | shipped ✔ proceduralFx pfxOscillate (official props) |
 | Pivot / anchor point per layer | viriri | partial (transform) |
 | Layer parenting + Null object | many | null/group family ✔ |
 | Camera object / 3D camera rig | images 10-12, Hancybox | null camera rig ✔ |
 | Effect Browser categories | images 07-09 | AE-style rack ✔ |
 | Keyframe graph editor / curves | images 04-06 | curve_set custom curves ✔ |
 | Timeline & layer controls | images 01-03 | tracks/layer stack ✔ |
-| Lasso selection | short AZ3yV1b_gH8 | GAP (selection has roto/brush/transparent/main-element, no lasso) |
+| Lasso selection | short AZ3yV1b_gH8 | shipped ✔ lasso_select (7th selection method) |
 | Headbop / sprite rigging (body-part layers) | shorts + viriri | partial (null parenting) |
 
 ## Reference images (am_research/images/)
@@ -88,5 +88,4 @@ Creators surfaced via Videos/Shorts tabs: @zack_indo (Zack_), @Exal.Visuals, @de
 Search tabs return only their first render page through the proxy (no infinite scroll),
 so each table is "top results of that tab on 2026-10-23", not the full corpus. Video
 frames are still un-downloadable here; "teaches" columns come from titles, descriptions
-and YouTube's own AI summaries as labelled. GAP rows are research notes for the next
-implementation pass — nothing is claimed implemented unless marked ✔.
+and YouTube's own AI summaries as labelled. Shipped rows landed 2026-10-23 (board I). Remaining GAPs: per-layer pivot/anchor UI.

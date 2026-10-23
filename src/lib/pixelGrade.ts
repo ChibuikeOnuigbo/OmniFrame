@@ -284,7 +284,8 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.findEdges && effect.findEdges > 0) ||
     (effect.minimax && effect.minimax > 0) ||
     (effect.vhs && effect.vhs > 0) ||
-    (effect.dirColorize && effect.dirColorize > 0),
+    (effect.dirColorize && effect.dirColorize > 0) ||
+    (effect.turbulent && effect.turbulent > 0),
   )
 }
 
@@ -294,7 +295,8 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
   const mm = e.minimax ?? 0
   const vhs = e.vhs ?? 0
   const dc = e.dirColorize ?? 0
-  if (mm <= 0 && vhs <= 0 && dc <= 0) return
+  const tb = e.turbulent ?? 0
+  if (mm <= 0 && vhs <= 0 && dc <= 0 && tb <= 0) return
   const img = ctx.getImageData(0, 0, w, h)
   const d = img.data
   const src = new Uint8ClampedArray(d)
@@ -316,14 +318,20 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
     const scan = vhs > 0 && (y & 3) === 0 ? 1 - 0.25 * vhs : 1
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 4
-      const sx = wobble ? Math.min(w - 1, Math.max(0, x + wobble)) : x
-      const bi = (y * w + sx) * 4
+      let sx = wobble ? Math.min(w - 1, Math.max(0, x + wobble)) : x
+      let sy = y
+      if (tb > 0) {
+        const A = 10 * tb
+        sx = Math.min(w - 1, Math.max(0, Math.round(sx + A * Math.sin(y * 0.055 + seed * 0.9))))
+        sy = Math.min(h - 1, Math.max(0, Math.round(y + A * Math.sin(x * 0.043 + seed * 1.31))))
+      }
+      const bi = (sy * w + sx) * 4
       let R = src[bi]
       let G = src[bi + 1]
       let B = src[bi + 2]
       if (mm > 0) {
         const nx = Math.min(w - 1, Math.max(0, sx + ddx))
-        const ny = Math.min(h - 1, Math.max(0, y + ddy))
+        const ny = Math.min(h - 1, Math.max(0, sy + ddy))
         const j = (ny * w + nx) * 4
         const l0 = R + G + B
         const l1 = src[j] + src[j + 1] + src[j + 2]
@@ -338,8 +346,8 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
       if (vhs > 0) {
         const xs1 = Math.min(w - 1, sx + 2)
         const xs2 = Math.max(0, sx - 2)
-        R = R * (1 - 0.5 * vhs) + src[(y * w + xs1) * 4] * 0.5 * vhs
-        B = B * (1 - 0.5 * vhs) + src[(y * w + xs2) * 4 + 2] * 0.5 * vhs
+        R = R * (1 - 0.5 * vhs) + src[(sy * w + xs1) * 4] * 0.5 * vhs
+        B = B * (1 - 0.5 * vhs) + src[(sy * w + xs2) * 4 + 2] * 0.5 * vhs
         R *= scan; G *= scan; B *= scan
         const n = (rnd() - 0.5) * 46 * vhs
         R += n; G += n; B += n

@@ -634,6 +634,14 @@ export interface ClipEffect {
   dirColorizeFrom?: string
   dirColorizeTo?: string
   dirColorizeAngle?: number
+  /** AM Oscillate: sine wobble of position over time (one-framer/GAP queue). */
+  oscillate?: number // AM Magnitude (px)
+  oscillateFreq?: number // AM Frequency (Hz)
+  oscillateAngle?: number // AM Angle deg, clockwise, 0=horizontal
+  oscillateWave?: 'sine' | 'triangle' // AM Wave
+  oscillatePhase?: number // AM Phase 0..1000
+  /** AM-style turbulent/fractal warp: sin-domain pixel displacement. */
+  turbulent?: number
   /** AM Threshold: hard luma cut 0..1 (0 = off). */
   threshold?: number
   /** AM Unsharp Mask: sharpen 0..1. */

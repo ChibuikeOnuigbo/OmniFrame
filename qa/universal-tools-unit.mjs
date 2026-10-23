@@ -65,6 +65,13 @@ if (!pc.ok || SESSION.paint.strokes.length !== 0) { console.error('FAIL paint_cl
 for (const t of ['draw_stroke', 'paint_timelapse', 'paint_clear'])
   if (!registry.list().some(x => x.name === t)) { console.error('FAIL missing tool', t); fail++ }
 
+// ---- GAP queue (am_research): lasso selection + oscillate/turbulent keys ----
+await registry.call('project_new', { w: 320, h: 180, fps: 12, duration: 1 })
+await registry.call('new_background', { kind: 'sunset' })
+const ls = await registry.call('lasso_select', { clipId: 'clip-1', points: [[60, 40], [160, 50], [150, 140], [70, 130]] })
+if (!ls.ok || ls.data.method !== 'lasso' || !(ls.data.pixels > 0)) { console.error('FAIL lasso_select', ls.data); fail++ }
+if (!registry.list().some(x => x.name === 'lasso_select')) { console.error('FAIL lasso_select missing from catalog'); fail++ }
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })

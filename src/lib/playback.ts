@@ -19,11 +19,13 @@ function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<ty
   const t2 = pfxLocalTime(clip.effects, time, clip.start, clip.duration)
   const ev = evaluateClipAnimation(clip, t2)
   const sh = pfxShake(clip.effects, time)
+    const osc = pfxOscillate(clip.effects, time)
+    sh.dx += osc.dx; sh.dy += osc.dy
   ev.x += sh.dx
   ev.y += sh.dy
   return ev
 }
-import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples } from './proceduralFx'
+import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
