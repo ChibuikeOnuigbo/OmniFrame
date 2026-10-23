@@ -62,6 +62,10 @@ export function placedEffectLabels(clip: Clip, sequences: Sequence[] = []): stri
   for (const lut of clip.adjustment?.luts || []) {
     if (lut.enabled) labels.push(lut.name)
   }
+  // Dropped effect instances (board J) are placed effects too.
+  for (const fx of clip.fxInstances || []) {
+    if (fx.enabled) labels.push(`FX: ${fx.name}`)
+  }
   if (clip.adjustmentMask) labels.push(`${clip.adjustmentMask.shape} mask`)
   if (clip.kind === 'compound') {
     const seq = sequences.find((s) => s.id === clip.sourceSequenceId)

@@ -970,6 +970,7 @@ function ClipView({
       data-in-point={clip.inPoint.toFixed(4)}
       data-volume={clip.volume.toFixed(3)}
       data-hidden={clip.hidden ? 'true' : 'false'}
+      data-fx-count={fxInsts.length}
       onPointerDown={onDown('move')}
       onDoubleClick={(e) => {
         e.stopPropagation()
@@ -1156,6 +1157,18 @@ function ClipView({
                 <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-[5px] text-[8px] font-bold tracking-wide text-ink-950 truncate">
                   {inst.name}
                 </span>
+                {/* keyframe diamonds ride on the bar at their inst-local time */}
+                {Object.entries(inst.keys || {}).flatMap(([pk, ks]) =>
+                  ks.map((k, ki) => (
+                    <span
+                      key={`${pk}-${ki}`}
+                      aria-hidden="true"
+                      data-testid={`fx-key-dot-${inst.id}-${pk}-${ki}`}
+                      className="pointer-events-none absolute top-1/2 h-[5px] w-[5px] -translate-y-1/2 rotate-45 bg-white shadow-[0_0_2px_rgba(0,0,0,.8)]"
+                      style={{ left: `calc(${((k.t / Math.max(0.0001, inst.duration)) * 100).toFixed(2)}% - 2px)` }}
+                    />
+                  )),
+                )}
                 <div
                   role="separator"
                   aria-orientation="vertical"

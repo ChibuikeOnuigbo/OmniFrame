@@ -118,6 +118,28 @@ export function FxStackSection({ clip }: { clip: Clip }) {
                       Playhead is outside this effect's range ({inst.inP.toFixed(1)}–{(inst.inP + inst.duration).toFixed(1)}s of the clip) — keys land at its nearest edge.
                     </p>
                   )}
+                  <div className="flex items-center gap-1.5" data-testid={`fxstack-range-inputs-${inst.id}`}>
+                    <span className="w-24 shrink-0 truncate text-[10px] text-ink-300">In / Length (s)</span>
+                    <input
+                      type="number" min={0} max={Math.max(0, clip.duration - FX_MIN_DUR)} step={0.05}
+                      value={Number(inst.inP.toFixed(2))}
+                      aria-label="Effect in point (seconds into the clip)"
+                      onFocus={() => beginHistory()}
+                      onBlur={() => endHistory()}
+                      onChange={(e) => useEditor.getState().setFxRange(clip.id, inst.id, Number(e.target.value), undefined)}
+                      className="w-16 rounded border border-ink-700 bg-ink-900 px-1 py-0.5 text-right font-mono text-[10px] text-ink-100"
+                    />
+                    <input
+                      type="number" min={FX_MIN_DUR} max={clip.duration} step={0.05}
+                      value={Number(inst.duration.toFixed(2))}
+                      aria-label="Effect length (seconds)"
+                      onFocus={() => beginHistory()}
+                      onBlur={() => endHistory()}
+                      onChange={(e) => useEditor.getState().setFxRange(clip.id, inst.id, undefined, Number(e.target.value))}
+                      className="w-16 rounded border border-ink-700 bg-ink-900 px-1 py-0.5 text-right font-mono text-[10px] text-ink-100"
+                    />
+                    <span className="font-mono text-[9px] text-ink-500">of {clip.duration.toFixed(1)}s</span>
+                  </div>
                   {params.map((pd) => {
                     const raw = inst.params[pd.key]
                     const keys = inst.keys?.[pd.key] || []

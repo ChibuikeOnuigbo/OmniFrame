@@ -580,7 +580,7 @@ export function LeftDock() {
       >
         <div
           style={{
-            width: panelMaximized && leftOpen ? '100%' : `${Math.min(leftDockWidth - 48, typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48)}px`,
+            width: panelMaximized && leftOpen ? '100%' : `${Math.min(leftDockWidth - 48 + (leftTab === 'effects' ? 96 : 0), typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48 + (leftTab === 'effects' ? 96 : 0))}px`,
           }}
           className="h-full flex flex-col relative"
         >

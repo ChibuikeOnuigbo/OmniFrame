@@ -33,6 +33,10 @@ Recipe `tools/mcp/recipes/board_J_effects.json` (3 variants) → `J_effects/fx-{
 evidence frames `evidence/J-fx-*.png` (glitch early≠late proves the keyframed intensity; ranged clean≠graded
 proves the inner range; noir frame proves the layer grades everything below). MCP tools: fx_catalog / fx_add /
 fx_update / fx_remove (48 tools total).
+Follow-ups (same board): keyframe diamonds render on the fx bars; FX Stack gained precise In/Length
+inputs; dropped fx names join the clip effects badge; the Effects dock auto-widens +96px; and
+`new_doc_toll_research/effects-tutorials.html` holds the generated tutorial corpus — 9,170 real
+tutorials (23 step cards, 12 rendered proofs, full recipe index, official AM crosswalk).
 
 ## Board I — GAP queue (am_research sweep)
 AM Oscillate (official Magnitude/Frequency/Angle/Wave/Phase), turbulent warp, lasso_select polygon
