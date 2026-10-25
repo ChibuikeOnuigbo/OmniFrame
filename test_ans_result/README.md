@@ -23,6 +23,15 @@ snapshot · render_export · inspect · data_dump · help · list_presets · run
 - board_B_inpaint ×10 — smart_patch strategies (clone/blur/gradient) with feather + donor.
 - board_C_key ×10 — replaceBg beds + luma-key bg removal + keyed entrances + lighting/chromatic effects.
 
+## Board K — MCP-driven ALL-ELEMENTS sweep (no py/ffmpeg authoring anywhere)
+Every proof pixel comes from the app: `data_dump` data:img previews decoded straight to
+`evidence/K-*.png` (16 frames). Sweep asserts, through MCP registry calls only: glow → edge glow →
+light layer (each visibly different), rectangle mask → inverted feathered ellipse → mask_clear
+restore, drawing shape strokes (rectangle/star/polygon/bezier/fill, normalized points), and one live
+render per Effects sub-tab (glitch/motion/color/blur/distort/retro/light/particles). The sweep also
+forced headless effect parity: CSS-filter keys, particle/overlay layers and light layers now apply in
+appRender exactly as in playback.
+
 ## Board J — CapCut-style effect system (drop-on-clip, closed container, keyframes)
 Effects tab (9 sub-tabs, 9,170 real presets — honest count, every tile renders) + fx instances:
 dropped onto image/video/compound clips (full clip length, white trim handles, closed container

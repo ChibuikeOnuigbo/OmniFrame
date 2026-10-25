@@ -28,3 +28,4 @@ Honesty: video frames and audio cannot be downloaded in this sandbox (YouTube
 confirmed by each video's own description where fetched, otherwise mapped from
 the video's own title/tags (his titles name the technique) — the evidence
 column says which. AI-only videos are logged, never implemented in OmniFrame.
+- **Consolidated ONCE list (2026-10-25):** `yt_hancy/hancybox-all-tools-once.md` — every tool/effect/feature clicked in the video TEXT across all 79 scanned videos, deduplicated (33 buckets) with per-video ids + OmniFrame status; AI rows logged-only.

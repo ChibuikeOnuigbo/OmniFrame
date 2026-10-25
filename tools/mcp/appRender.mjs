@@ -38,6 +38,7 @@ export const CE = await loadAppTs('src/lib/animation/CurveEngine.ts')
 export const PG = await loadAppTs('src/lib/pixelGrade.ts')
 export const PFX = await loadAppTs('src/lib/proceduralFx.ts')
 export const FXI = await loadAppTs('src/lib/fxInstances.ts')
+export const PRT = await loadAppTs('src/lib/particleFx.ts')
 
 export class Sequence {
   constructor({ w = 640, h = 360, fps = 24, duration = 2, bg = '#0d0f13' } = {}) {
@@ -75,11 +76,59 @@ export function makeClip({ id, name, asset, natW, natH, start = 0, duration = 2,
 }
 
 /* effect maths — mirrored 1:1 into playback.ts as app features */
+function withAlphaK(hex, a) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')
+  if (!m) return `rgba(255,217,160,${a})`
+  const n = parseInt(m[1], 16)
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`
+}
+/** Headless mirror of playback.applyLightComposite (Gold Motion light layers). */
+function applyLightCompositeK(ctx, width, height, effect) {
+  const intensity = effect?.lightIntensity ?? 0
+  if (!effect || intensity <= 0) return
+  const cx = (effect.lightX ?? 0.5) * width
+  const cy = (effect.lightY ?? 0.4) * height
+  const radius = Math.max(24, (effect.lightFalloff ?? 0.45) * Math.max(width, height))
+  const color = effect.lightColor || '#ffd9a0'
+  const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius)
+  gradient.addColorStop(0, withAlphaK(color, Math.min(1, intensity)))
+  gradient.addColorStop(1, withAlphaK(color, 0))
+  ctx.save()
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  ctx.globalCompositeOperation = 'screen'
+  ctx.globalAlpha = 1
+  ctx.filter = 'none'
+  if (effect.lightType === 'spot') {
+    ctx.translate(cx, cy); ctx.scale(1, 0.55); ctx.translate(-cx, -cy)
+  }
+  ctx.fillStyle = gradient
+  ctx.fillRect(0, 0, width, height)
+  ctx.restore()
+}
+
 export function applyEffects(x, clip, w, h, t = 0) {
   // single source of truth: the app's own pixelGrade (AM-named family included),
-  // with dropped effect instances merged in (CapCut model, board J)
+  // with dropped effect instances merged in (CapCut model, board J). Full parity
+  // with playback: CSS-filter keys, particle/overlay fx layers and light layers
+  // all apply here too — headless proofs must match what the app shows.
   const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}
+  const flt = cssFilterOf(eff)
+  if (flt) {
+    const tmp = makeCanvas(w, h)
+    const tx = tmp.getContext('2d')
+    tx.filter = flt
+    tx.drawImage(x.canvas, 0, 0)
+    const back = x.canvas.getContext('2d')
+    back.save()
+    back.setTransform(1, 0, 0, 1, 0, 0)
+    back.filter = 'none'
+    back.globalCompositeOperation = 'copy'
+    back.drawImage(tmp, 0, 0)
+    back.restore()
+  }
   PG.applyPixelGrade(x.canvas, eff, Math.round(t * 24))
+  if (PRT.hasClipFxLayers(eff)) PRT.applyClipFxLayers(x.canvas, eff, t)
+  applyLightCompositeK(x, w, h, eff)
 }
 
 export function cardFlipFactor(clip, t) {
@@ -147,6 +196,8 @@ export function renderFrame(seq, t) {
         c.getContext('2d').drawImage(tmp, 0, 0)
       }
       PG.applyPixelGrade(c, aEff, Math.round(t * 24))
+      if (PRT.hasClipFxLayers(aEff)) PRT.applyClipFxLayers(c, aEff, t)
+      applyLightCompositeK(c.getContext('2d'), seq.w, seq.h, aEff)
       continue
     }
     const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}

@@ -130,6 +130,7 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 116 Undo/redo audit: Ctrl+Y redo (with Ctrl+Shift+Z), every fx action snapshot-undoable, clip split/trim carries & re-clamps fx instances
 117 FX polish: keyframe diamonds on the timeline fx bars, precise In/Length numeric inputs in FX Stack, dropped-fx names in the clip effects badge, Effects dock auto-widens for listing space
 118 Generated effects-engine tutorial corpus: qa/generate-fx-tutorials.mjs → 9,170 real tutorials (23 step cards + 12 headless-rendered proofs + full recipe index + official AM effects-index crosswalk with honest shipped/backlog split)
+119 Board K all-elements sweep (MCP-only proofs via data_dump data:img): glow/edge-glow/light, shape masks + restore, drawing shape strokes, one render per effect sub-tab — plus headless effect parity fixed (CSS filters, particle/overlay layers, light layers in appRender)
 
-**Total: 118 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 118) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 119 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 119) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **347** (see youtube-audit/progress.json watched_ids).

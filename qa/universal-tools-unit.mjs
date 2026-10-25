@@ -97,6 +97,70 @@ if (diffJ(beforeL, grabJ(0.5)) < 1000) { console.error('FAIL adjustment layer di
 for (const t of ['fx_catalog', 'fx_add', 'fx_update', 'fx_remove'])
   if (!registry.list().some(x => x.name === t)) { console.error('FAIL missing tool', t); fail++ }
 
+// ---- Board K: MCP-driven ALL-ELEMENTS sweep — glow, shapes, drawing, every effect sub-tab.
+// Proofs are app-made only: pixels come from data_dump's data:img (the app renderer),
+// never from python/ffmpeg authoring. Each proof is filed to evidence/K-*.png. ----
+const { loadImage: loadK, makeCanvas: mkK } = await import('../tools/mcp/core.mjs')
+await registry.call('project_new', { w: 320, h: 180, fps: 12, duration: 2 })
+await registry.call('import_media', { path: 'qa/shots/01-home.png', fit: 'contain', scale: 1 })
+const dumpK = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/K-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+const diffK = (a, b) => { let n = 0; for (let i = 0; i < a.length; i += 4) if (a[i] !== b[i] || a[i + 1] !== b[i + 1] || a[i + 2] !== b[i + 2]) n++; return n }
+const baseK = await dumpK('base')
+// glow family first (mandated test): glow → edge glow → light layer
+await registry.call('fx_add', { catalogId: 'glow-2' })
+const glowK = await dumpK('glow')
+if (!glowK || diffK(baseK, glowK) < 300) { console.error('FAIL glow engine invisible'); fail++ }
+await registry.call('fx_add', { catalogId: 'edgeglow-cobalt' })
+const edgeK = await dumpK('edgeglow')
+if (!edgeK || diffK(glowK, edgeK) < 300) { console.error('FAIL edge glow invisible'); fail++ }
+await registry.call('fx_add', { catalogId: 'light-point-gold', asLayer: true })
+const litK = await dumpK('lightlayer')
+if (!litK || diffK(edgeK, litK) < 300) { console.error('FAIL light layer invisible'); fail++ }
+for (const id of ['fx-1', 'fx-2']) await registry.call('fx_remove', { clipId: 'clip-1', fxId: id })
+// the light adjustment layer still grades everything below — re-baseline AFTER
+// the fx cleanup so mask proofs compare like-for-like
+const baseK2 = await dumpK('base-postfx')
+// shape tools: rectangle mask, then inverted feathered ellipse mask
+await registry.call('select', { clipId: 'clip-1' })
+await registry.call('mask_draw', { shape: 'rectangle', x0: 80, y0: 40, x1: 240, y1: 140 })
+const mrectK = await dumpK('mask-rect')
+if (!mrectK || diffK(baseK2, mrectK) < 300) { console.error('FAIL rectangle mask shape'); fail++ }
+await registry.call('mask_draw', { shape: 'ellipse', x0: 60, y0: 30, x1: 260, y1: 150, inverted: true, feather: 8 })
+const mellK = await dumpK('mask-ellipse-inv')
+if (!mellK || diffK(mrectK, mellK) < 300) { console.error('FAIL inverted ellipse mask'); fail++ }
+await registry.call('mask_clear', {})
+const mclearK = await dumpK('mask-cleared')
+if (!mclearK || diffK(baseK2, mclearK) > 50) { console.error('FAIL mask_clear did not restore'); fail++ }
+// drawing engine: shape strokes (rectangle/star/polygon/bezier/fill)
+const shapeTools = ['rectangle', 'star', 'polygon', 'bezier', 'fill']
+for (const tl of shapeTools) {
+  const rr = await registry.call('draw_stroke', { tool: tl, points: [[40, 40], [90, 50], [70, 90]], color: '#ffd9a0', size: 6, filled: tl === 'fill' })
+  if (!rr.ok) { console.error('FAIL draw_stroke shape tool', tl, rr.data); fail++ }
+}
+const kindSet = new Set(SESSION.paint.strokes.map((st) => st.tool))
+for (const tl of shapeTools) if (!kindSet.has(tl)) { console.error('FAIL stroke kind missing', tl); fail++ }
+if (SESSION.paint.strokes.some((st) => st.points.some((pt) => pt.x > 1 || pt.y > 1))) { console.error('FAIL stroke points must stay normalized'); fail++ }
+await registry.call('paint_clear', {})
+// effects: one live render per catalog sub-tab
+const sweepFx = ['glitch-slice-medium', 'osc-90-sine-40', 'look-noir', 'blur-2', 'swirl-90', 'vhs-2', 'part-1', 'gmap-0-4']
+for (const id of sweepFx) {
+  const ad = await registry.call('fx_add', { catalogId: id })
+  if (!ad.ok) { console.error('FAIL fx_add sweep', id, ad.data); fail++; continue }
+  const pxK = await dumpK(`fx-${id}`, id.startsWith('osc-') ? 0.5625 : 0.5) // osc: avoid the sine zero-crossing at t=0.5
+  if (!pxK || diffK(baseK, pxK) < 200) { console.error('FAIL effect rendered identically to base:', id); fail++ }
+  await registry.call('fx_remove', { clipId: 'clip-1', fxId: ad.data.fxId })
+}
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })
