@@ -66,3 +66,20 @@ screens are consistent across sources (no fakery).
 | Audio Converter | partial (extractAudio ✔) |
 | Upscale Quality (AI) | ✖ logged only — AI mandate |
 | Twixtor optical flow / DFR / Project Doctor | backlog (researched, not built) |
+
+## AI explainer diagrams — `ai_explain/` (VIEWING ONLY, never evidence)
+Generated with generate_image from the real screenshots above so the section breakdown is easy to
+read at a glance in chat. They are illustrations of my analysis, NOT captures of the apps. The
+evidence remains the real files: toji-ui-1..4, gold-settings-1..2, gold-effects-ref.
+
+### `ai_explain/toji-ui-explained.png` (from toji-ui-1.png + toji-ui-3.png)
+1 PREVIEW viewport · 2 TRANSPORT row (undo/redo, step, play, loop, bookmark) · 3 RULER + timecode
+00:00:24 · 4 CLIP LANE w/ Shape clips + trim chevrons · 5 OPACITY readout 98% · 6 BLEND CHIPS
+(Multiply selected, Darken, Color Burn) · 7 KEY RAIL ◆ markers · 8 POINT EDITOR inset (bézier
+handles, swipe pad, vertical value column).
+
+### `ai_explain/gold-ui-explained.png` (from gold-settings-1.png + gold-effects-ref.webp)
+1 APP BAR (hamburger, wordmark, coin badge) · 2 LIBRARY PILLS Projects/Elements/Cloud ·
+3 ELEMENTS GRID + Sort by Date · 4 GOLD MOTION EXTRA menu (Upscale Quality, Project Doctor,
+Reverse, Twixtor, DFR, Audio Converter) · 5 BOTTOM NAV Home/Tutorials/＋/Projects/Templates ·
+6 MULTI-TRACK TIMELINE (6 eye-toggle lanes, stair-step clips, playhead 00:02:24, ＋ FAB).
