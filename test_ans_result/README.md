@@ -97,3 +97,12 @@ window.omniMCP.call('timeline_screenshot') → data:img).
 - booted app: RightPanel → MCP Console shows the live window.omniMCP call log
   (✓/✗ per call, copy-log-json); window.omniMCP.call('snapshot') returns data:img
   of the real preview canvas. QA: node qa/universal-tools-unit.mjs.
+
+## Board L — backlog→engine proofs (2026-10-26)
+App-made only (data_dump data:img), never python/ffmpeg authoring:
+- L-base.png — clean baseline frame (imported qa/shots/01-home.png)
+- L-kaleido-6.png — 6-wedge mirror rosette (kaleidoSegments=6)
+- L-flare-anamorphic.png — core bloom + horizontal anamorphic streak + ghost rings (flare-0)
+- L-kelvin-3200.png / L-kelvin-10000.png — tungsten warm cast vs deep-shade cool cast (R−B channel shift asserted)
+- L-kelvin-ramp-warm.png / L-kelvin-ramp-cool.png — same instance, 2-point colorTemp keyframe ramp sampled at t=0.1 / t=1.4 (animation asserted)
+QA assertions: visibility diff ≥300 px vs base; flare lifts luminance (screen blend); 3200K shifts R−B warmer by >6; 10000K cooler than 3200K by >6; ramp animates; catalog exposes kaleido params. UNIVERSAL TOOLS QA: PASS, 0 FAIL.
