@@ -133,6 +133,10 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   flareGhosts: { label: 'Ghost Rings', kind: 'number', min: 0, max: 8, step: 1 },
   flareColor: { label: 'Flare Colour', kind: 'color' },
   colorTemp: { label: 'Temperature (K)', kind: 'number', min: 1500, max: 15000, step: 100 },
+  voronoi: { label: 'Voronoi Overlay', kind: 'number', min: 0, max: 1, step: 0.01 },
+  voronoiCells: { label: 'Cell Sites', kind: 'number', min: 4, max: 48, step: 2 },
+  voronoiColor: { label: 'Cell Colour', kind: 'color' },
+  spectralMap: { label: 'Spectral Map', kind: 'number', min: 0, max: 1, step: 0.01 },
 }
 
 /** Editable/keyframeable property schema for any catalog patch. */
@@ -312,6 +316,16 @@ function buildCatalog(): FxCatalogEntry[] {
   ;[[2500, 'Candle'], [3200, 'Tungsten'], [4500, 'Warm White'], [8000, 'Overcast'], [10000, 'Deep Shade']].forEach(([k, name]) =>
     add(`kelvin-${k}`, `Color Temp ${k}K ${name}`, 'color',
       'Board L backlog conversion: Kelvin white-balance scale (colour-science / Resolve color chapter docs)', { colorTemp: k as number }))
+
+  // ---- Board O: next backlog names converted into REAL engines ----
+  ;[[8, '#7dff9b'], [16, '#22d3ee'], [32, '#ff5df0']].forEach(([c, hex]) =>
+    add(`voronoi-${c}`, `Voronoi Cells ${c}`, 'light',
+      'Board O backlog conversion: AM Voronoi Cells (official guide deep-scan) — generative cell-edge overlay',
+      { voronoi: 0.8, voronoiCells: c as number, voronoiColor: hex as string }))
+  ;[0.5, 1].forEach((v, i) =>
+    add(`spectral-${i}`, `Spectral Map ${v}`, 'color',
+      'Board O backlog conversion: AM Spectral Map (official guide deep-scan) — luma→hue-spectrum remap',
+      { spectralMap: v }))
 
   // ---- Key ----
   for (const [name, hex] of [['Green', '#00ff00'], ['Blue', '#1b3fe0'], ['Red', '#e01b1b'], ['Magenta', '#e01be0']] as [string, string][]) {

@@ -655,6 +655,12 @@ export interface ClipEffect {
   flareColor?: string
   /** Board L: white-balance Kelvin (1500-15000, 6500 = neutral). */
   colorTemp?: number
+  /** Board O: AM Voronoi Cells overlay intensity 0..1 (generative cell-edge glow). */
+  voronoi?: number
+  voronoiCells?: number // site count 4..48
+  voronoiColor?: string
+  /** Board O: AM Spectral Map 0..1 — luma remapped into the hue spectrum. */
+  spectralMap?: number
   /** Glitch — moved OUT of transitions into the effect system (all properties
    *  editable + keyframeable): signal-damage look rendered per frame. */
   glitch?: number // intensity 0..1 (0 = off)

@@ -60,6 +60,7 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   oscillate: 0, oscillateFreq: 2, oscillateAngle: 45, oscillateWave: 'sine', oscillatePhase: 0, turbulent: 0,
   kaleidoSegments: 0, kaleidoRotate: 0, flare: 0, flareX: 72, flareY: 28, flareStreak: 0.6, flareGhosts: 4, flareColor: '#ffd9a0',
   colorTemp: 6500,
+  voronoi: 0, voronoiCells: 16, voronoiColor: '#22d3ee', spectralMap: 0,
   glitch: 0, glitchStyle: 'slice', glitchScan: 0.18, glitchStatic: 0.25, glitchSeed: 1, glitchSpeed: 12,
 }
 

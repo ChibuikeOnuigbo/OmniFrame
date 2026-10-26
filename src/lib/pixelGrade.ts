@@ -289,7 +289,9 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.glitch && effect.glitch > 0) ||
     (effect.kaleidoSegments && effect.kaleidoSegments >= 2) ||
     (effect.flare && effect.flare > 0) ||
-    (effect.colorTemp !== undefined && Math.abs(effect.colorTemp - 6500) > 1),
+    (effect.colorTemp !== undefined && Math.abs(effect.colorTemp - 6500) > 1) ||
+    (effect.voronoi && effect.voronoi > 0) ||
+    (effect.spectralMap && effect.spectralMap > 0),
   )
 }
 
@@ -519,6 +521,53 @@ function applyBoardL(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h:
       }
     }
     ctx.putImageData(out, 0, 0)
+  }
+  const vor = e.voronoi ?? 0
+  if (vor > 0) {
+    const n = Math.min(48, Math.max(4, Math.floor(e.voronoiCells ?? 16)))
+    const [vr, vg, vb] = amHex(e.voronoiColor, [34, 211, 238])
+    let st = 987654321
+    const rnd = () => (st = (st * 1664525 + 1013904223) % 4294967296) / 4294967296
+    const sites: number[] = []
+    for (let i = 0; i < n; i++) sites.push(rnd() * w, rnd() * h)
+    const d = ctx.getImageData(0, 0, w, h)
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        let d1 = Infinity, d2 = Infinity
+        for (let i = 0; i < n; i++) {
+          const dx = x - sites[i * 2], dy = y - sites[i * 2 + 1]
+          const dd = dx * dx + dy * dy
+          if (dd < d1) { d2 = d1; d1 = dd } else if (dd < d2) d2 = dd
+        }
+        const edge = Math.sqrt(d2) - Math.sqrt(d1)
+        const line = edge < 2.2 ? 1 - edge / 2.2 : 0
+        const tint = 0.12 // faint cell-body tint so cells read as regions
+        const a = Math.min(1, line * vor + tint * vor * 0.35)
+        const i4 = (y * w + x) * 4
+        d.data[i4] = d.data[i4] * (1 - a) + vr * a
+        d.data[i4 + 1] = d.data[i4 + 1] * (1 - a) + vg * a
+        d.data[i4 + 2] = d.data[i4 + 2] * (1 - a) + vb * a
+      }
+    }
+    ctx.putImageData(d, 0, 0)
+  }
+  const spec = e.spectralMap ?? 0
+  if (spec > 0) {
+    const d = ctx.getImageData(0, 0, w, h)
+    for (let i = 0; i < d.data.length; i += 4) {
+      const lum = (0.299 * d.data[i] + 0.587 * d.data[i + 1] + 0.114 * d.data[i + 2]) / 255
+      const hue = lum * 300 // spectral sweep red→magenta
+      const hh = hue / 60
+      const c = 255
+      const xx = c * (1 - Math.abs((hh % 2) - 1))
+      let r = 0, g = 0, b = 0
+      if (hh < 1) { r = c; g = xx } else if (hh < 2) { r = xx; g = c } else if (hh < 3) { g = c; b = xx }
+      else if (hh < 4) { g = xx; b = c } else if (hh < 5) { r = xx; b = c } else { r = c; b = xx }
+      d.data[i] = d.data[i] * (1 - spec) + r * spec
+      d.data[i + 1] = d.data[i + 1] * (1 - spec) + g * spec
+      d.data[i + 2] = d.data[i + 2] * (1 - spec) + b * spec
+    }
+    ctx.putImageData(d, 0, 0)
   }
   const fl = e.flare ?? 0
   if (fl > 0) {
