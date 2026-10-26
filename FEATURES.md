@@ -130,6 +130,8 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 116 Undo/redo audit: Ctrl+Y redo (with Ctrl+Shift+Z), every fx action snapshot-undoable, clip split/trim carries & re-clamps fx instances
 117 FX polish: keyframe diamonds on the timeline fx bars, precise In/Length numeric inputs in FX Stack, dropped-fx names in the clip effects badge, Effects dock auto-widens for listing space
 118 Generated effects-engine tutorial corpus: qa/generate-fx-tutorials.mjs → 9,170 real tutorials (23 step cards + 12 headless-rendered proofs + full recipe index + official AM effects-index crosswalk with honest shipped/backlog split)
+126 Voronoi Cells engine (AM official guide deep-scan): seeded random sites 4-48, nearest/second-nearest cell-edge glow + cell tint, colour/intensity keyframeable — O-voronoi-16.png
+127 Spectral Map engine (AM official guide deep-scan): luma→hue-spectrum remap 0-300°, intensity keyframeable, chroma-rise asserted — O-spectral-1.png
 125 Krita Freehand Brush stabilizer sub-tool: smoothing 0..1 weighted moving-average shake correction (freehand tools only, Krita tool-options scan) — proven N-stabilizer-raw vs N-stabilizer-095.png
 123 Drawing toolbar regrouped Krita-style (official toolbox scan): 7 primary group tiles (Brushes/Shapes/Paths/Fills/Repair/Erase/Select) + scrollable icon sub-mode rows — shapes/paths/fills/7 select modes inside groups, no wrapped flat row, ≤9 primary law kept
 124 Krita Multibrush mirror sub-tools (mirrorX/mirrorY, X/Y/both reflected copies) + Gradient radial shape (gradientShape) — MCP-controllable, proven M-multibrush-mirrorX/gradient-radial.png; headless renderer gained paint-layer parity (renderAllPaintLayers) so data_dump previews show strokes
@@ -138,5 +140,5 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 122 Board L Color Temperature engine — Kelvin white balance 1500-15000K (6500 neutral), 5 catalog presets, 2-point keyframe ramp proven animating (L-kelvin-ramp-warm/cool.png)
 119 Board K all-elements sweep (MCP-only proofs via data_dump data:img): glow/edge-glow/light, shape masks + restore, drawing shape strokes, one render per effect sub-tab — plus headless effect parity fixed (CSS filters, particle/overlay layers, light layers in appRender)
 
-**Total: 125 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 125) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 127 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 127) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **347** (see youtube-audit/progress.json watched_ids).

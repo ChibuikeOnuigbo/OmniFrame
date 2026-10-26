@@ -285,6 +285,33 @@ const smN = await dumpN('stabilizer-095')
 if (!smN || diffK(rawN, smN) < 100) { console.error('FAIL smoothing must visibly correct the jagged stroke'); fail++ }
 await registry.call('paint_clear', {})
 
+// ---- Board O: Voronoi Cells + Spectral Map engines. Proofs app-made only:
+// data_dump data:img -> O-*.png. ----
+const dumpO = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump O', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/O-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+const satMean = (d) => { let s = 0, n = 0; for (let i = 0; i < d.length; i += 4) { const mx = Math.max(d[i], d[i + 1], d[i + 2]), mn = Math.min(d[i], d[i + 1], d[i + 2]); s += mx - mn; n++ } return s / n }
+const baseO = await dumpO('base')
+const voA = await registry.call('fx_add', { catalogId: 'voronoi-16' })
+if (!voA.ok) { console.error('FAIL fx_add voronoi-16', voA.data); fail++ }
+const vorO = voA.ok ? await dumpO('voronoi-16') : null
+if (!vorO || diffK(baseO, vorO) < 300) { console.error('FAIL voronoi overlay invisible'); fail++ }
+if (voA.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: voA.data.fxId })
+const spA = await registry.call('fx_add', { catalogId: 'spectral-1' })
+if (!spA.ok) { console.error('FAIL fx_add spectral-1', spA.data); fail++ }
+const speO = spA.ok ? await dumpO('spectral-1') : null
+if (!speO || diffK(baseO, speO) < 300) { console.error('FAIL spectral map invisible'); fail++ }
+if (speO && satMean(speO) - satMean(baseO) < 6) { console.error('FAIL spectral map must raise chroma (luma→hue sweep)'); fail++ }
+if (spA.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: spA.data.fxId })
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })

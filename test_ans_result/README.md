@@ -119,3 +119,8 @@ QA assertions: line visible ≥100 px diff; mirror adds reflected copy; radial �
 - N-stabilizer-raw.png — jagged 8-point brush stroke, smoothing 0
 - N-stabilizer-095.png — same points, smoothing 0.95 (weighted moving-average correction)
 QA assertion: corrected stroke differs from raw by ≥100 px. UNIVERSAL TOOLS QA: PASS, 0 FAIL.
+
+## Board O — Voronoi Cells + Spectral Map engines (2026-10-26)
+- O-base.png / O-voronoi-16.png — 16-site cell-edge network overlay (≥300 px diff asserted)
+- O-spectral-1.png — luma→hue sweep; mean channel-spread (chroma) rise ≥6 asserted
+QA: UNIVERSAL TOOLS QA PASS, 0 FAIL. Proofs app-made only (data_dump data:img).
