@@ -124,3 +124,9 @@ QA assertion: corrected stroke differs from raw by ≥100 px. UNIVERSAL TOOLS QA
 - O-base.png / O-voronoi-16.png — 16-site cell-edge network overlay (≥300 px diff asserted)
 - O-spectral-1.png — luma→hue sweep; mean channel-spread (chroma) rise ≥6 asserted
 QA: UNIVERSAL TOOLS QA PASS, 0 FAIL. Proofs app-made only (data_dump data:img).
+
+## Board P — Timecode / Translate / Gradient-repeat (2026-10-26)
+- P-base.png, P-timecode-burnin.png (t=1.0 → 00:00:01:00, ≥60 px diff)
+- P-translate-single.png vs P-translate-ring4.png (ring copies ≥200 px diff)
+- P-gradient-repeat-none/forward/alternating.png (pairwise ≥200 px diffs)
+QA: UNIVERSAL TOOLS QA PASS, 0 FAIL. App-made data:img proofs only.

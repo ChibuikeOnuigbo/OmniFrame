@@ -38,3 +38,4 @@ Companion folders: am_research/ (channel+tab sweep), yt_hancy/ (Hancybox pack), 
 - 2026-10-26: krita-tools.html + krita-tools-research.md (official Krita 5.3 toolbox scan: 37 tool pages indexed, 3 deep-scanned, honest crosswalk; Drive pack_data Krita screenshot catalogued w/ id) + images/boardM-krita-* (2 refs)
 - 2026-10-26: krita-window-shots-catalog.md (8 Krita window/interface screenshots in Drive pack_data identified via OCR 'Tool Options'/'Brush Presets'/'krita' w/ ids+sizes; hard context limit on full-res pull documented + 3 options) + images/boardN-krita-* (2 refs)
 - 2026-10-26: board-O-deepscan-voronoi-spectral.md (AM official detail pages voronoi-cells + spectral-map, definitions verbatim + engine mapping) + images/boardO-voronoi-* (2 refs)
+- 2026-10-26: board-P-deepscan-timecode-translate-repeat.md (AM Timecode official definition + Krita Translate/repeat modes → engine mapping; off-topic image hits discarded, URL kept as text ref)

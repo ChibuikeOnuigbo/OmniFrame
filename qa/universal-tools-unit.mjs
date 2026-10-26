@@ -312,6 +312,45 @@ if (!speO || diffK(baseO, speO) < 300) { console.error('FAIL spectral map invisi
 if (speO && satMean(speO) - satMean(baseO) < 6) { console.error('FAIL spectral map must raise chroma (luma→hue sweep)'); fail++ }
 if (spA.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: spA.data.fxId })
 
+// ---- Board P: Timecode burn-in + Multibrush Translate + Gradient repeat.
+// Proofs app-made only: data_dump data:img -> P-*.png. ----
+const dumpP = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump P', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/P-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+const baseP = await dumpP('base')
+const tcA = await registry.call('fx_add', { catalogId: 'timecode-1' })
+if (!tcA.ok) { console.error('FAIL fx_add timecode-1', tcA.data); fail++ }
+const tcP = tcA.ok ? await dumpP('timecode-burnin', 1.0) : null
+if (!tcP || diffK(baseP, tcP) < 60) { console.error('FAIL timecode burn-in invisible'); fail++ }
+if (tcA.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: tcA.data.fxId })
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'brush', points: [[150, 80], [170, 100]], color: '#ffc93c', size: 5, appearAt: 0.1 })
+const trOne = await dumpP('translate-single')
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'brush', points: [[150, 80], [170, 100]], color: '#ffc93c', size: 5, translateCopies: 4, translateRadius: 40, appearAt: 0.1 })
+const trRing = await dumpP('translate-ring4')
+if (!trRing || diffK(trOne, trRing) < 200) { console.error('FAIL multibrush translate ring copies invisible'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'gradient', points: [[30, 30], [280, 150]], color: '#22d3ee', gradientColor: '#7a1330', appearAt: 0.1 })
+const gNone = await dumpP('gradient-repeat-none')
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'gradient', points: [[30, 30], [280, 150]], color: '#22d3ee', gradientColor: '#7a1330', gradientRepeat: 'forward', appearAt: 0.1 })
+const gFwd = await dumpP('gradient-repeat-forward')
+if (!gFwd || diffK(gNone, gFwd) < 200) { console.error('FAIL gradient forward repeat must differ from none'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'gradient', points: [[30, 30], [280, 150]], color: '#22d3ee', gradientColor: '#7a1330', gradientRepeat: 'alternating', appearAt: 0.1 })
+const gAlt = await dumpP('gradient-repeat-alternating')
+if (!gAlt || diffK(gFwd, gAlt) < 200) { console.error('FAIL gradient alternating repeat must differ from forward'); fail++ }
+await registry.call('paint_clear', {})
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })
