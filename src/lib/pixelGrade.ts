@@ -291,7 +291,8 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.flare && effect.flare > 0) ||
     (effect.colorTemp !== undefined && Math.abs(effect.colorTemp - 6500) > 1) ||
     (effect.voronoi && effect.voronoi > 0) ||
-    (effect.spectralMap && effect.spectralMap > 0),
+    (effect.spectralMap && effect.spectralMap > 0) ||
+    (effect.timecode && effect.timecode > 0),
   )
 }
 
@@ -568,6 +569,29 @@ function applyBoardL(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h:
       d.data[i + 2] = d.data[i + 2] * (1 - spec) + b * spec
     }
     ctx.putImageData(d, 0, 0)
+  }
+  const tc = e.timecode ?? 0
+  if (tc > 0) {
+    // AM Timecode: HH:MM:SS:FF burn-in; seed carries the frame index (t*24).
+    const fps = 24
+    const tSec = seed / fps
+    const hh = Math.floor(tSec / 3600)
+    const mm = Math.floor(tSec / 60) % 60
+    const ss = Math.floor(tSec) % 60
+    const ff = seed % fps
+    const label = [hh, mm, ss].map((v) => String(v).padStart(2, '0')).join(':') + ':' + String(ff).padStart(2, '0')
+    const size = Math.min(64, Math.max(8, Math.floor(e.timecodeSize ?? 18)))
+    ctx.save()
+    ctx.globalAlpha = tc
+    ctx.font = `bold ${size}px monospace`
+    ctx.lineWidth = Math.max(2, size / 6)
+    ctx.strokeStyle = 'rgba(0,0,0,0.65)'
+    ctx.fillStyle = '#ffffff'
+    const tx = 8
+    const ty = h - 8
+    ctx.strokeText(label, tx, ty)
+    ctx.fillText(label, tx, ty)
+    ctx.restore()
   }
   const fl = e.flare ?? 0
   if (fl > 0) {

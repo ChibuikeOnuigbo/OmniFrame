@@ -137,6 +137,8 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   voronoiCells: { label: 'Cell Sites', kind: 'number', min: 4, max: 48, step: 2 },
   voronoiColor: { label: 'Cell Colour', kind: 'color' },
   spectralMap: { label: 'Spectral Map', kind: 'number', min: 0, max: 1, step: 0.01 },
+  timecode: { label: 'Timecode Overlay', kind: 'number', min: 0, max: 1, step: 0.01 },
+  timecodeSize: { label: 'Timecode Size (px)', kind: 'number', min: 8, max: 64, step: 1 },
 }
 
 /** Editable/keyframeable property schema for any catalog patch. */
@@ -326,6 +328,12 @@ function buildCatalog(): FxCatalogEntry[] {
     add(`spectral-${i}`, `Spectral Map ${v}`, 'color',
       'Board O backlog conversion: AM Spectral Map (official guide deep-scan) — luma→hue-spectrum remap',
       { spectralMap: v }))
+
+  // ---- Board P: Timecode burn-in (AM official index S–Z) ----
+  ;[[18, 'timecode-1'], [32, 'timecode-2']].forEach(([sz, id]) =>
+    add(id as string, `Timecode Burn-In ${sz}px`, 'retro',
+      'Board P backlog conversion: AM Timecode (official guide S–Z index) — HH:MM:SS:FF burn-in overlay',
+      { timecode: 0.9, timecodeSize: sz as number }))
 
   // ---- Key ----
   for (const [name, hex] of [['Green', '#00ff00'], ['Blue', '#1b3fe0'], ['Red', '#e01b1b'], ['Magenta', '#e01be0']] as [string, string][]) {

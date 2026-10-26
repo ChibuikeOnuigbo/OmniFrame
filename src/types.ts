@@ -661,6 +661,9 @@ export interface ClipEffect {
   voronoiColor?: string
   /** Board O: AM Spectral Map 0..1 — luma remapped into the hue spectrum. */
   spectralMap?: number
+  /** Board P: AM Timecode burn-in overlay opacity 0..1 (HH:MM:SS:FF). */
+  timecode?: number
+  timecodeSize?: number // px 8..64
   /** Glitch — moved OUT of transitions into the effect system (all properties
    *  editable + keyframeable): signal-damage look rendered per frame. */
   glitch?: number // intensity 0..1 (0 = off)
@@ -1083,6 +1086,11 @@ export interface DrawingStroke {
   gradientShape?: 'linear' | 'radial'
   /** Krita Freehand Brush smoothing/stabilizer 0..1: weighted moving-average stroke correction. */
   smoothing?: number
+  /** Krita Multibrush Translate mode: copies ringed around the path at radius (px). */
+  translateCopies?: number
+  translateRadius?: number
+  /** Krita Gradient repeat: none | forward (saw) | alternating (triangle). */
+  gradientRepeat?: 'none' | 'forward' | 'alternating'
   radialCenter?: [number, number] // stage px, default canvas centre
   filled?: boolean // shape tools fill as well as stroke
   fillTolerance?: number // threshold 1..100 for flood fill

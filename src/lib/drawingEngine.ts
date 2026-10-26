@@ -321,6 +321,20 @@ export function renderStroke(
     }
     return
   }
+  // Krita Multibrush Translate mode: constant ring offsets around the path —
+  // every copy traces the same stroke shifted by (R·cosθ, R·sinθ).
+  const trn = Math.floor(stroke.translateCopies || 0)
+  if (trn >= 2) {
+    const R = Math.max(2, stroke.translateRadius ?? 24)
+    for (let i = 0; i < trn; i++) {
+      const ang = (i * Math.PI * 2) / trn
+      ctx.save()
+      ctx.translate(Math.cos(ang) * R, Math.sin(ang) * R)
+      renderStrokeCore(ctx, stroke, width, height)
+      ctx.restore()
+    }
+    return
+  }
   const n = Math.max(1, Math.floor(stroke.radialCopies || 1))
   if (n > 1) {
     const [cx, cy] = [
@@ -662,8 +676,23 @@ function renderStrokeCore(
           gStart.x * width, gStart.y * height,
           gEnd.x * width, gEnd.y * height,
         )
-    grad.addColorStop(0, stroke.color)
-    grad.addColorStop(1, stroke.gradientColor || 'rgba(0,0,0,0)')
+    const gc = stroke.gradientColor || 'rgba(0,0,0,0)'
+    const rep = stroke.gradientRepeat ?? 'none'
+    if (rep === 'none') {
+      grad.addColorStop(0, stroke.color)
+      grad.addColorStop(1, gc)
+    } else {
+      // Krita Gradient repeat: Forward = saw (hard jump each cycle),
+      // Alternating = triangle (mirrored cycle).
+      const cycles = 3
+      for (let ci = 0; ci < cycles; ci++) {
+        const a0 = ci / cycles
+        const a1 = (ci + 1) / cycles
+        const fwd = rep === 'forward' ? true : ci % 2 === 0
+        grad.addColorStop(a0, fwd ? stroke.color : gc)
+        grad.addColorStop(Math.min(1, Math.max(0, a1 - 0.0001)), fwd ? gc : stroke.color)
+      }
+    }
     ctx.save()
     ctx.globalAlpha = stroke.opacity
     ctx.fillStyle = grad

@@ -201,7 +201,7 @@ class RenderExport extends MCPTool {
 /* ---------- paint canvas: ibisPaint X workflow harvested from the NothingxArt
    sunset short (2yAZqtdc_qk): time-lapse recording, radial ruler, smudge ---------- */
 class DrawStroke extends MCPTool {
-  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/circle/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24 (Krita Multibrush symmetry)', mirrorX: 'bool — Krita Multibrush mirror across vertical axis', mirrorY: 'bool — mirror across horizontal axis', gradientShape: 'linear|radial (Krita Gradient tool shapes)', smoothing: '0..1 Krita Freehand Brush stabilizer (weighted moving-average shake correction, freehand tools)', filled: 'bool', appearAt: 's' }) }
+  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/circle/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24 (Krita Multibrush symmetry)', mirrorX: 'bool — Krita Multibrush mirror across vertical axis', mirrorY: 'bool — mirror across horizontal axis', gradientShape: 'linear|radial (Krita Gradient tool shapes)', smoothing: '0..1 Krita Freehand Brush stabilizer', translateCopies: '2..12 Krita Multibrush Translate ring copies', translateRadius: 'px ring radius for translate copies', gradientRepeat: 'none|forward|alternating (Krita Gradient repeat modes)', filled: 'bool', appearAt: 's' }) }
   async run(p) {
     const st = SESSION.paint
     const w = SESSION.seq?.w || 640, h = SESSION.seq?.h || 360
@@ -220,6 +220,9 @@ class DrawStroke extends MCPTool {
       mirrorY: !!p.mirrorY || undefined,
       gradientShape: p.gradientShape === 'radial' ? 'radial' : undefined,
       smoothing: typeof p.smoothing === 'number' ? Math.min(1, Math.max(0, p.smoothing)) : undefined,
+      translateCopies: p.translateCopies ? Math.min(12, Math.max(2, Math.round(p.translateCopies))) : undefined,
+      translateRadius: typeof p.translateRadius === 'number' ? Math.max(2, Math.round(p.translateRadius)) : undefined,
+      gradientRepeat: p.gradientRepeat === 'forward' || p.gradientRepeat === 'alternating' ? p.gradientRepeat : undefined,
       radialCenter: Array.isArray(p.radialCenter) ? [+(p.radialCenter[0] / w).toFixed(5), +(p.radialCenter[1] / h).toFixed(5)] : undefined,
       gradientColor: p.gradientColor,
       filled: !!p.filled,
