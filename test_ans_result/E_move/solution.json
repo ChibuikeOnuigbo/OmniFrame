@@ -76,15 +76,20 @@
     "params": {
      "ids": [
       "clip-1"
-     ]
+     ],
+     "name": "Compound 1"
     },
     "out": {
      "id": "compound-1",
      "kind": "compound",
+     "name": "Compound 1",
      "memberIds": [
       "clip-1"
      ],
-     "nestedTrackCount": 1
+     "nestedTrackCount": 1,
+     "createdFrom": [
+      "clip-1"
+     ]
     }
    },
    {
@@ -529,7 +534,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_rhhb25q"
+     "keyframeId": "kf_lexp01v"
     }
    },
    {
@@ -544,7 +549,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_lx06d36"
+     "keyframeId": "kf_e1flqsw"
     }
    },
    {
@@ -559,7 +564,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_jsz0c67"
+     "keyframeId": "kf_z9lnevu"
     }
    },
    {
@@ -574,7 +579,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_4exhip2"
+     "keyframeId": "kf_72vaa6x"
     }
    },
    {
@@ -589,7 +594,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_eej0505"
+     "keyframeId": "kf_spkzf5t"
     }
    },
    {
@@ -604,7 +609,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_9g6n3p9"
+     "keyframeId": "kf_98qi4b9"
     }
    },
    {
@@ -619,7 +624,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_c9lk6qe"
+     "keyframeId": "kf_zi6efrd"
     }
    },
    {
@@ -634,7 +639,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_p1w998w"
+     "keyframeId": "kf_8xd18v2"
     }
    },
    {
@@ -649,7 +654,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_xve38hv"
+     "keyframeId": "kf_xj91pix"
     }
    },
    {
@@ -664,7 +669,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_txhd3ql"
+     "keyframeId": "kf_2k6qi6j"
     }
    },
    {
@@ -679,7 +684,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_59en28m"
+     "keyframeId": "kf_oo6f525"
     }
    },
    {
@@ -694,7 +699,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_g7t32jw"
+     "keyframeId": "kf_stg6raw"
     }
    },
    {
@@ -709,7 +714,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_cx3cnf8"
+     "keyframeId": "kf_u783rpb"
     }
    },
    {
@@ -724,7 +729,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_kb275np"
+     "keyframeId": "kf_xm71kh8"
     }
    },
    {
@@ -739,7 +744,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_ocg9tc6"
+     "keyframeId": "kf_m6rlwpb"
     }
    },
    {
@@ -754,7 +759,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_jbaa24w"
+     "keyframeId": "kf_tusjl2n"
     }
    },
    {
@@ -769,7 +774,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_gan3kum"
+     "keyframeId": "kf_5lfd484"
     }
    },
    {
@@ -784,7 +789,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_t5j6rvh"
+     "keyframeId": "kf_9akwszd"
     }
    },
    {
@@ -799,7 +804,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_y",
-     "keyframeId": "kf_1oawou1"
+     "keyframeId": "kf_larzlyj"
     }
    },
    {
@@ -814,7 +819,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_y",
-     "keyframeId": "kf_r2njhdh"
+     "keyframeId": "kf_ahpo1ea"
     }
    },
    {
@@ -922,139 +927,139 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_4pq58rr",
+        "id": "kf_5urbvls",
         "time": 0,
         "value": -359,
         "interpolation": "constant"
        },
        {
-        "id": "kf_fpk8so7",
+        "id": "kf_5db6koj",
         "time": 2,
         "value": -359,
         "interpolation": "constant"
        },
        {
-        "id": "kf_pcf8x8g",
+        "id": "kf_6ua0kt1",
         "time": 4,
         "value": -359,
         "interpolation": "constant"
        },
        {
-        "id": "kf_p8yuz3j",
+        "id": "kf_09exocv",
         "time": 6,
         "value": -289,
         "interpolation": "constant"
        },
        {
-        "id": "kf_bmfhob8",
+        "id": "kf_ba20zlp",
         "time": 8,
         "value": -289,
         "interpolation": "constant"
        },
        {
-        "id": "kf_rhhb25q",
+        "id": "kf_lexp01v",
         "time": 10,
         "value": -359,
         "interpolation": "linear"
        },
        {
-        "id": "kf_lx06d36",
+        "id": "kf_e1flqsw",
         "time": 10.7,
         "value": -209,
         "interpolation": "cubic-in"
        },
        {
-        "id": "kf_jsz0c67",
+        "id": "kf_z9lnevu",
         "time": 11.4,
         "value": -359,
         "interpolation": "cubic-out"
        },
        {
-        "id": "kf_4exhip2",
+        "id": "kf_72vaa6x",
         "time": 12.1,
         "value": -209,
         "interpolation": "ease-in"
        },
        {
-        "id": "kf_eej0505",
+        "id": "kf_spkzf5t",
         "time": 12.8,
         "value": -359,
         "interpolation": "ease-out"
        },
        {
-        "id": "kf_9g6n3p9",
+        "id": "kf_98qi4b9",
         "time": 13.5,
         "value": -209,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_c9lk6qe",
+        "id": "kf_zi6efrd",
         "time": 14.2,
         "value": -359,
         "interpolation": "back"
        },
        {
-        "id": "kf_p1w998w",
+        "id": "kf_8xd18v2",
         "time": 14.9,
         "value": -209,
         "interpolation": "bounce"
        },
        {
-        "id": "kf_xve38hv",
+        "id": "kf_xj91pix",
         "time": 15.6,
         "value": -359,
         "interpolation": "elastic"
        },
        {
-        "id": "kf_txhd3ql",
+        "id": "kf_2k6qi6j",
         "time": 16.3,
         "value": -209,
         "interpolation": "bezier"
        },
        {
-        "id": "kf_59en28m",
+        "id": "kf_oo6f525",
         "time": 17,
         "value": -359,
         "interpolation": "custom"
        },
        {
-        "id": "kf_g7t32jw",
+        "id": "kf_stg6raw",
         "time": 17.7,
         "value": -209,
         "interpolation": "custom"
        },
        {
-        "id": "kf_cx3cnf8",
+        "id": "kf_u783rpb",
         "time": 18.4,
         "value": -359,
         "interpolation": "custom"
        },
        {
-        "id": "kf_kb275np",
+        "id": "kf_xm71kh8",
         "time": 19.1,
         "value": -209,
         "interpolation": "custom"
        },
        {
-        "id": "kf_ocg9tc6",
+        "id": "kf_m6rlwpb",
         "time": 19.8,
         "value": -359,
         "interpolation": "custom"
        },
        {
-        "id": "kf_jbaa24w",
+        "id": "kf_tusjl2n",
         "time": 20.5,
         "value": -209,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_gan3kum",
+        "id": "kf_5lfd484",
         "time": 22,
         "value": -209,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_t5j6rvh",
+        "id": "kf_9akwszd",
         "time": 24,
         "value": 170,
         "interpolation": "ease-in-out"
@@ -1062,43 +1067,43 @@
       ],
       "position_y": [
        {
-        "id": "kf_788u3tl",
+        "id": "kf_10utkj4",
         "time": 0,
         "value": 38,
         "interpolation": "constant"
        },
        {
-        "id": "kf_tliczx1",
+        "id": "kf_yyrrcnp",
         "time": 2,
         "value": -7,
         "interpolation": "constant"
        },
        {
-        "id": "kf_jl0q4sk",
+        "id": "kf_n18tm5f",
         "time": 4,
         "value": 83,
         "interpolation": "constant"
        },
        {
-        "id": "kf_uin2w35",
+        "id": "kf_eolntw4",
         "time": 6,
         "value": -7,
         "interpolation": "constant"
        },
        {
-        "id": "kf_3wmgo08",
+        "id": "kf_alflubb",
         "time": 8,
         "value": 83,
         "interpolation": "constant"
        },
        {
-        "id": "kf_1oawou1",
+        "id": "kf_larzlyj",
         "time": 22,
         "value": 83,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_r2njhdh",
+        "id": "kf_ahpo1ea",
         "time": 24,
         "value": 47,
         "interpolation": "ease-in-out"
@@ -1186,15 +1191,20 @@
      "params": {
       "ids": [
        "clip-1"
-      ]
+      ],
+      "name": "Compound 1"
      },
      "out": {
       "id": "compound-1",
       "kind": "compound",
+      "name": "Compound 1",
       "memberIds": [
        "clip-1"
       ],
-      "nestedTrackCount": 1
+      "nestedTrackCount": 1,
+      "createdFrom": [
+       "clip-1"
+      ]
      }
     },
     {
@@ -1639,7 +1649,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_rhhb25q"
+      "keyframeId": "kf_lexp01v"
      }
     },
     {
@@ -1654,7 +1664,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_lx06d36"
+      "keyframeId": "kf_e1flqsw"
      }
     },
     {
@@ -1669,7 +1679,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_jsz0c67"
+      "keyframeId": "kf_z9lnevu"
      }
     },
     {
@@ -1684,7 +1694,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_4exhip2"
+      "keyframeId": "kf_72vaa6x"
      }
     },
     {
@@ -1699,7 +1709,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_eej0505"
+      "keyframeId": "kf_spkzf5t"
      }
     },
     {
@@ -1714,7 +1724,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_9g6n3p9"
+      "keyframeId": "kf_98qi4b9"
      }
     },
     {
@@ -1729,7 +1739,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_c9lk6qe"
+      "keyframeId": "kf_zi6efrd"
      }
     },
     {
@@ -1744,7 +1754,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_p1w998w"
+      "keyframeId": "kf_8xd18v2"
      }
     },
     {
@@ -1759,7 +1769,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_xve38hv"
+      "keyframeId": "kf_xj91pix"
      }
     },
     {
@@ -1774,7 +1784,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_txhd3ql"
+      "keyframeId": "kf_2k6qi6j"
      }
     },
     {
@@ -1789,7 +1799,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_59en28m"
+      "keyframeId": "kf_oo6f525"
      }
     },
     {
@@ -1804,7 +1814,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_g7t32jw"
+      "keyframeId": "kf_stg6raw"
      }
     },
     {
@@ -1819,7 +1829,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_cx3cnf8"
+      "keyframeId": "kf_u783rpb"
      }
     },
     {
@@ -1834,7 +1844,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_kb275np"
+      "keyframeId": "kf_xm71kh8"
      }
     },
     {
@@ -1849,7 +1859,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_ocg9tc6"
+      "keyframeId": "kf_m6rlwpb"
      }
     },
     {
@@ -1864,7 +1874,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_jbaa24w"
+      "keyframeId": "kf_tusjl2n"
      }
     },
     {
@@ -1879,7 +1889,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_gan3kum"
+      "keyframeId": "kf_5lfd484"
      }
     },
     {
@@ -1894,7 +1904,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_x",
-      "keyframeId": "kf_t5j6rvh"
+      "keyframeId": "kf_9akwszd"
      }
     },
     {
@@ -1909,7 +1919,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_y",
-      "keyframeId": "kf_1oawou1"
+      "keyframeId": "kf_larzlyj"
      }
     },
     {
@@ -1924,7 +1934,7 @@
      "out": {
       "clipId": "clip-2",
       "curve": "position_y",
-      "keyframeId": "kf_r2njhdh"
+      "keyframeId": "kf_ahpo1ea"
      }
     },
     {

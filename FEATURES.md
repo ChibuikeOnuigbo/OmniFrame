@@ -133,6 +133,11 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 128 Timecode burn-in engine (AM official guide): running HH:MM:SS:FF overlay, opacity+size keyframeable — P-timecode-burnin.png
 129 Krita Multibrush Translate sub-tool: translateCopies 2-12 ring copies at translateRadius — P-translate-ring4.png
 130 Krita Gradient repeat sub-tool: gradientRepeat forward (saw) / alternating (triangle) — P-gradient-repeat-*.png
+131 align_clips tool: hcenter/vcenter/left/right/top/bottom/distribute-h against seq frame, writes clip.transform — Q-align-centered.png
+132 motion_analyze tool: changedRatio + bbox + centroid + 8×6 activity grid + morphScore between t0/t1 renders — Q-motion-osc.png
+133 shape_detect tool: B/W matte (thresh) → connected components → square/rect/circle/line/blob classification; matte scans saved to data_motiondesijg/scans/ — Q-shape-rect.png
+134 Prism advanced effect: per-column hue-rotate sweep 0..1 across width, keyframeable, catalog prism-1/prism-2 — Q-prism.png
+135 Compound clip persistence: compound_clip_create registers compound-N + compound_list / compound_rename / compound_expand (returns memberIds)
 126 Voronoi Cells engine (AM official guide deep-scan): seeded random sites 4-48, nearest/second-nearest cell-edge glow + cell tint, colour/intensity keyframeable — O-voronoi-16.png
 127 Spectral Map engine (AM official guide deep-scan): luma→hue-spectrum remap 0-300°, intensity keyframeable, chroma-rise asserted — O-spectral-1.png
 125 Krita Freehand Brush stabilizer sub-tool: smoothing 0..1 weighted moving-average shake correction (freehand tools only, Krita tool-options scan) — proven N-stabilizer-raw vs N-stabilizer-095.png
@@ -143,5 +148,5 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 122 Board L Color Temperature engine — Kelvin white balance 1500-15000K (6500 neutral), 5 catalog presets, 2-point keyframe ramp proven animating (L-kelvin-ramp-warm/cool.png)
 119 Board K all-elements sweep (MCP-only proofs via data_dump data:img): glow/edge-glow/light, shape masks + restore, drawing shape strokes, one render per effect sub-tab — plus headless effect parity fixed (CSS filters, particle/overlay layers, light layers in appRender)
 
-**Total: 130 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 130) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+**Total: 135 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 135) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **347** (see youtube-audit/progress.json watched_ids).

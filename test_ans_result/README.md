@@ -130,3 +130,11 @@ QA: UNIVERSAL TOOLS QA PASS, 0 FAIL. Proofs app-made only (data_dump data:img).
 - P-translate-single.png vs P-translate-ring4.png (ring copies ≥200 px diff)
 - P-gradient-repeat-none/forward/alternating.png (pairwise ≥200 px diffs)
 QA: UNIVERSAL TOOLS QA PASS, 0 FAIL. App-made data:img proofs only.
+
+## Board Q — Alignment / Motion analysis / Shape detection / Prism / Compounds (2026-10-26)
+- Q-base.png (clip-2 offset 70,40) → Q-align-centered.png (align_clips hcenter+vcenter → cx=160±2, cy=90±2)
+- Q-motion-osc.png (fx osc-90-sine-40 → motion_analyze changedRatio ≥0.005, grid lights)
+- Q-shape-rect.png (draw_stroke rectangle filled white → shape_detect class rect; matte in data_motiondesijg/scans/)
+- Q-prism.png (prism-1: ≥200 px diff vs base, left/right mean(R−B) delta ≥4)
+- compound create→list→rename→expand round-trip (memberIds returned)
+QA: UNIVERSAL TOOLS QA PASS (63 steps, 54 tools), 0 FAIL. App-made data:img proofs only.
