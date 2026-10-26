@@ -138,3 +138,10 @@ QA: UNIVERSAL TOOLS QA PASS, 0 FAIL. App-made data:img proofs only.
 - Q-prism.png (prism-1: ≥200 px diff vs base, left/right mean(R−B) delta ≥4)
 - compound create→list→rename→expand round-trip (memberIds returned)
 QA: UNIVERSAL TOOLS QA PASS (63 steps, 54 tools), 0 FAIL. App-made data:img proofs only.
+
+## Board R — AI-slop purge / custom UI pass (2026-10-26)
+- Requested reddit scan (r/foss short-link) 403-bot-walled → same Reddit-mined slop-tell corpus fetched via search + dev.to full article; audit in new_doc_toll_research/DESIGN-STUDY-ai-slop-custom-ui.md
+- Removed: violet brand/gradients/glows/glass, Inter font, uniform radius, duplicate Sparkles icons, decorative fillers, double/redundant tooltips
+- Kept (semantic): track-kind category colors, mask/compound info banners, Cyber Violet cursor theme
+- Radius census: 198/1047 kept (18.9% ≈ user's 19%), values varied 2px/3px/999px
+- Verify: tsc clean + vite build clean + QA PASS (63 steps, 54 tools). DOM screenshots impossible in sandbox — no fake captures; census greps + QA are the proof.

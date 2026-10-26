@@ -138,6 +138,12 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 133 shape_detect tool: B/W matte (thresh) → connected components → square/rect/circle/line/blob classification; matte scans saved to data_motiondesijg/scans/ — Q-shape-rect.png
 134 Prism advanced effect: per-column hue-rotate sweep 0..1 across width, keyframeable, catalog prism-1/prism-2 — Q-prism.png
 135 Compound clip persistence: compound_clip_create registers compound-N + compound_list / compound_rename / compound_expand (returns memberIds)
+136 Flame identity de-slop: brand #6d5efc vibecode violet → #ff6b35 flame ramp (200/300/400/600), desktopPack canvas fills + range thumb + wave rebranded; semantic category colors (IMG purple / CMP indigo / adjustment / amber / emerald) deliberately kept
+137 Personality font stack: Inter → Avenir Next / Segoe UI Variable Display / Trebuchet MS / DejaVu Sans (no webfont download); mono stack unchanged for timecodes
+138 Sharp-corner system: ~81% of 1047 radius tokens forced to 0 via index.css omniframe overrides; kept ~19% varies on purpose (md 3px, sm 2px, full 999px, scrollbar 2px); capcut/krita/premiere/daylight theme skins still override per data-ui-style
+139 Anti-glass/anti-glow: backdrop-blur disabled in default style, 5 timeline neon selection glows removed, Landing + VoiceIsolation gradient hero cards flattened to solid ink
+140 Tooltip overhaul: DrawingToolbar 6 native titles → custom Tooltip, 3 double-tooltips deduped, 4 redundant menu title attrs removed, bubble solid/sharp/roomier (px-2.5 py-1.5)
+141 Icon cleanup: 7 duplicate Sparkles purged from transition menu (Blend / ImageOff / none), decorative Layers filler icons removed (ClipFilmstrip, DrawingToolbar subtool row), filmstrip placeholder bars neutralized
 126 Voronoi Cells engine (AM official guide deep-scan): seeded random sites 4-48, nearest/second-nearest cell-edge glow + cell tint, colour/intensity keyframeable — O-voronoi-16.png
 127 Spectral Map engine (AM official guide deep-scan): luma→hue-spectrum remap 0-300°, intensity keyframeable, chroma-rise asserted — O-spectral-1.png
 125 Krita Freehand Brush stabilizer sub-tool: smoothing 0..1 weighted moving-average shake correction (freehand tools only, Krita tool-options scan) — proven N-stabilizer-raw vs N-stabilizer-095.png
@@ -148,5 +154,5 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 122 Board L Color Temperature engine — Kelvin white balance 1500-15000K (6500 neutral), 5 catalog presets, 2-point keyframe ramp proven animating (L-kelvin-ramp-warm/cool.png)
 119 Board K all-elements sweep (MCP-only proofs via data_dump data:img): glow/edge-glow/light, shape masks + restore, drawing shape strokes, one render per effect sub-tab — plus headless effect parity fixed (CSS filters, particle/overlay layers, light layers in appRender)
 
-**Total: 135 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 135) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
-Watched videos at this commit: **347** (see youtube-audit/progress.json watched_ids).
+**Total: 141 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 141) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+Watched videos at this commit: **416** (see youtube-audit/progress.json watched_ids).

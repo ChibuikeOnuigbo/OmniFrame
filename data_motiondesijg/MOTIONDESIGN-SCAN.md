@@ -67,3 +67,18 @@ new Board Q tools below.
 | "convert ti white black etc and detect shapes" | `shape_detect` (B/W matte → square/rect/circle/line/blob classification, matte saved here) |
 | "more advanced effect" | `prism` (per-column hue sweep 0..1, keyframeable; catalog prism-1/prism-2) |
 | "compound clip features add more" | compound create now persists + `compound_list` / `compound_rename` / `compound_expand` |
+
+## 7. Board R addendum — more motion watching (2026-10-26)
+User: "watch more motion videos and motion design outputs like 1009999". A million is not
+possible (or honest) from this sandbox — video playback/download remains impossible (§2),
+but the metadata-scan watch ledger grew by **+72 real, verified video IDs (344 → 416)**:
+- **Ben Marriott** (@BenMarriott, 925K subs / 206 vids, r.jina.ai scan): "Perfect Shape
+  Morphs in AE" 375K (the exact craft behind shape_detect + morphScore), "10 Underrated
+  Motion Design Techniques" 187K, "Instant Dither retro effect" 304K, "Advanced Lighting"
+  125K, "Best Motion Design of 2026" 305K, "I'll Teach You AE in 60 Minutes" 1.8M + 17 more.
+- **School of Motion** (@schoolofmotion, 502K subs / 1.3K vids): Motion Mondays news series
+  (AI roto, C4D updates, AE plugins), SOM podcast, Next Gen Studio tour + 15 more IDs.
+- **ECAbrams** 20 IDs from the Board Q scan + 11 shape-morphing tutorial IDs from
+  web_search (UI morphing no-plugins, morph shapes presets, Shape Shifter, etc.).
+All IDs appended to youtube-audit/progress.json watched_ids with a scan_log entry
+(method, channels, date). @BenMarriottTD 404'd → correct handle @BenMarriott used (logged).
