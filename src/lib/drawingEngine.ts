@@ -340,12 +340,35 @@ export function renderStroke(
   renderStrokeCore(ctx, stroke, width, height)
 }
 
+const FREEHAND_TOOLS = new Set(['brush', 'pencil', 'marker', 'calligraphy', 'eraser', 'smudge'])
+
+/** Krita Freehand Brush smoothing/stabilizer: weighted moving-average pass over
+ *  the sampled points (shake correction). 0 = raw tablet input. */
+function smoothedPoints(stroke: DrawingStroke): DrawingStroke['points'] | null {
+  const s = Math.min(1, Math.max(0, stroke.smoothing ?? 0))
+  if (s <= 0.01 || !FREEHAND_TOOLS.has(stroke.tool) || stroke.points.length < 3) return null
+  let pts = stroke.points.map((p) => ({ ...p }))
+  const passes = 2
+  const k = 0.5 * s
+  for (let pass = 0; pass < passes; pass++) {
+    const src = pts
+    pts = src.map((p, i) => {
+      if (i === 0 || i === src.length - 1) return p
+      const a = src[i - 1], b = src[i + 1]
+      return { ...p, x: p.x * (1 - k) + ((a.x + b.x) / 2) * k, y: p.y * (1 - k) + ((a.y + b.y) / 2) * k }
+    })
+  }
+  return pts
+}
+
 function renderStrokeCore(
   ctx: CanvasRenderingContext2D,
   stroke: DrawingStroke,
   width: number,
   height: number,
 ) {
+  const sm = smoothedPoints(stroke)
+  if (sm) stroke = { ...stroke, points: sm }
   ctx.save()
   ctx.globalAlpha = stroke.opacity ?? 1.0
 

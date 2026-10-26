@@ -1075,6 +1075,8 @@ export interface DrawingStroke {
   mirrorY?: boolean
   /** Krita Gradient tool shape: linear ramp (default) or radial from stroke start. */
   gradientShape?: 'linear' | 'radial'
+  /** Krita Freehand Brush smoothing/stabilizer 0..1: weighted moving-average stroke correction. */
+  smoothing?: number
   radialCenter?: [number, number] // stage px, default canvas centre
   filled?: boolean // shape tools fill as well as stroke
   fillTolerance?: number // threshold 1..100 for flood fill

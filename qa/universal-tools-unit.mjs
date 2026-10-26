@@ -261,6 +261,30 @@ const radM = await dumpM('multibrush-sym8')
 if (!radM || diffK(oneM, radM) < 200) { console.error('FAIL radial symmetry copies invisible'); fail++ }
 await registry.call('paint_clear', {})
 
+// ---- Board N: Krita Freehand Brush stabilizer (smoothing 0..1). Proof app-made:
+// data_dump data:img -> N-*.png. Same jagged input, raw vs corrected. ----
+const dumpN = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump N', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/N-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+const jagN = [[40, 90], [70, 50], [100, 95], [130, 45], [160, 95], [190, 50], [220, 90], [250, 55]]
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'brush', points: jagN, color: '#7dff9b', size: 4, appearAt: 0.1 })
+const rawN = await dumpN('stabilizer-raw')
+if (!rawN || diffK(baseM || rawN, rawN) < 0) { console.error('FAIL raw stroke render'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'brush', points: jagN, color: '#7dff9b', size: 4, smoothing: 0.95, appearAt: 0.1 })
+const smN = await dumpN('stabilizer-095')
+if (!smN || diffK(rawN, smN) < 100) { console.error('FAIL smoothing must visibly correct the jagged stroke'); fail++ }
+await registry.call('paint_clear', {})
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })

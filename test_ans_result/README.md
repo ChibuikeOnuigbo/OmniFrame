@@ -114,3 +114,8 @@ App-made only (data_dump data:img after renderFrame gained renderAllPaintLayers 
 - M-gradient-linear.png / M-gradient-radial.png — Krita Gradient tool shapes (linear ramp vs radial from stroke start)
 - M-sym-single.png / M-multibrush-sym8.png — radialCopies=8 symmetry ring vs single dab
 QA assertions: line visible ≥100 px diff; mirror adds reflected copy; radial ≠ linear ≥300 px; sym-8 ≠ single ≥200 px. UNIVERSAL TOOLS QA: PASS, 0 FAIL.
+
+## Board N — Krita stabilizer sub-tool (2026-10-26)
+- N-stabilizer-raw.png — jagged 8-point brush stroke, smoothing 0
+- N-stabilizer-095.png — same points, smoothing 0.95 (weighted moving-average correction)
+QA assertion: corrected stroke differs from raw by ≥100 px. UNIVERSAL TOOLS QA: PASS, 0 FAIL.
