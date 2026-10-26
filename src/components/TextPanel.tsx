@@ -213,7 +213,7 @@ export function TextPanel() {
             <button
               type="button"
               data-testid="text-submode-presets-btn"
-              onClick={() => openSubMode('text', 'text-presets', 'Title Templates & Presets', 'Sparkles')}
+              onClick={() => openSubMode('text', 'text-presets', 'Title Templates & Presets', 'Type')}
               className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
             >
               <div>
@@ -226,7 +226,7 @@ export function TextPanel() {
             <button
               type="button"
               data-testid="text-submode-library-btn"
-              onClick={() => openSubMode('text', 'text-library', 'Text Preset Library', 'Wand2')}
+              onClick={() => openSubMode('text', 'text-library', 'Text Preset Library', 'LibraryBig')}
               className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
               title="42 procedural text presets with animation settings"
             >

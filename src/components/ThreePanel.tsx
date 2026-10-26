@@ -76,7 +76,7 @@ export function ThreePanel() {
               <button
                 type="button"
                 data-testid="threed-submode-materials-btn"
-                onClick={() => openSubMode('threed', 'threed-materials', '3D Materials & Textures', 'Sphere')}
+                onClick={() => openSubMode('threed', 'threed-materials', '3D Materials & Textures', 'Shapes')}
                 className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
               >
                 <div>

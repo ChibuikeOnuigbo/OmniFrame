@@ -16,7 +16,13 @@ import {
   X,
   Scissors,
   ChevronLeft,
-  Sparkles,
+  Replace,
+  BoxSelect,
+  History,
+  Move,
+  PaintBucket,
+  Shapes,
+  Stamp,
   Layers,
   Camera,
   Paintbrush,
@@ -27,6 +33,10 @@ import {
   PictureInPicture2,
   PanelLeft,
   Search, Maximize2, Minimize2, CircleHelp } from 'lucide-react'
+const SUB_ICON_BY_NAME: Record<string, LucideIcon> = {
+  BoxSelect, History, Layers, Move, PaintBucket, Paintbrush, Shapes, Stamp, Type, LibraryBig,
+}
+
 import { useEditor, type LeftTab } from '../store'
 import { FloatingWindow } from './FloatingWindow'
 import { SectionsNavigator } from './SectionsNav'
@@ -452,7 +462,7 @@ export function LeftDock() {
             const flyoutItems = [
               { id: 'brush', label: 'Paint tools', icon: Paintbrush, section: 'brush' },
               { id: 'masking', label: 'Selection & masking', icon: Scan, section: 'masking' },
-              { id: 'smart-patch', label: 'Smart Patch', icon: Sparkles, section: 'smart-patch' },
+              { id: 'smart-patch', label: 'Smart Patch', icon: Replace, section: 'smart-patch' },
               { id: 'layers', label: 'Paint layers', icon: Layers, section: 'layers' },
               { id: 'colour', label: 'Colour', icon: Palette, section: 'drawing-colour' },
             ] as const
@@ -516,6 +526,7 @@ export function LeftDock() {
               SUB
             </span>
             {contextualSubModes.map((sub) => {
+              const SubIcon = SUB_ICON_BY_NAME[sub.icon] ?? Layers
               const isSubActive = activeSubMode === sub.id && leftOpen
               return (
                 <div key={sub.id} className="relative group shrink-0">
@@ -533,7 +544,7 @@ export function LeftDock() {
                         : 'bg-ink-950 border-ink-800 text-ink-300 hover:text-white hover:border-ink-700'
                     }`}
                   >
-                    <Sparkles size={14} className={isSubActive ? 'text-brand-400 animate-pulse' : 'text-amber-400'} />
+                    <SubIcon size={14} className={isSubActive ? 'text-brand-400' : 'text-amber-400'} />
                   </button>
                   <button
                     type="button"
