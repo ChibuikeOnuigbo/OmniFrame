@@ -664,6 +664,8 @@ export interface ClipEffect {
   /** Board P: AM Timecode burn-in overlay opacity 0..1 (HH:MM:SS:FF). */
   timecode?: number
   timecodeSize?: number // px 8..64
+  /** Board Q: prism — hue-rotate sweep across X, 0..1 (advanced colour effect). */
+  prism?: number
   /** Glitch — moved OUT of transitions into the effect system (all properties
    *  editable + keyframeable): signal-damage look rendered per frame. */
   glitch?: number // intensity 0..1 (0 = off)

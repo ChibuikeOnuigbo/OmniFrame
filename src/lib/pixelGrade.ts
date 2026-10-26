@@ -292,7 +292,8 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.colorTemp !== undefined && Math.abs(effect.colorTemp - 6500) > 1) ||
     (effect.voronoi && effect.voronoi > 0) ||
     (effect.spectralMap && effect.spectralMap > 0) ||
-    (effect.timecode && effect.timecode > 0),
+    (effect.timecode && effect.timecode > 0) ||
+    (effect.prism && effect.prism > 0),
   )
 }
 
@@ -567,6 +568,30 @@ function applyBoardL(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h:
       d.data[i] = d.data[i] * (1 - spec) + r * spec
       d.data[i + 1] = d.data[i + 1] * (1 - spec) + g * spec
       d.data[i + 2] = d.data[i + 2] * (1 - spec) + b * spec
+    }
+    ctx.putImageData(d, 0, 0)
+  }
+  const prism = e.prism ?? 0
+  if (prism > 0) {
+    const d = ctx.getImageData(0, 0, w, h)
+    const cosT = new Float32Array(w + 1)
+    const sinT = new Float32Array(w + 1)
+    for (let x = 0; x <= w; x++) {
+      const ang = ((x / Math.max(1, w)) * 360 * prism * Math.PI) / 180
+      cosT[x] = Math.cos(ang); sinT[x] = Math.sin(ang)
+    }
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4
+        const r = d.data[i], g = d.data[i + 1], b = d.data[i + 2]
+        const c = cosT[x], s2 = sinT[x]
+        const nr = (0.213 + c * 0.787 - s2 * 0.213) * r + (0.715 - c * 0.715 - s2 * 0.715) * g + (0.072 - c * 0.072 + s2 * 0.928) * b
+        const ng = (0.213 - c * 0.213 + s2 * 0.143) * r + (0.715 + c * 0.285 + s2 * 0.140) * g + (0.072 - c * 0.072 - s2 * 0.283) * b
+        const nb = (0.213 - c * 0.213 - s2 * 0.787) * r + (0.715 - c * 0.715 + s2 * 0.715) * g + (0.072 + c * 0.928 + s2 * 0.072) * b
+        d.data[i] = Math.max(0, Math.min(255, nr))
+        d.data[i + 1] = Math.max(0, Math.min(255, ng))
+        d.data[i + 2] = Math.max(0, Math.min(255, nb))
+      }
     }
     ctx.putImageData(d, 0, 0)
   }

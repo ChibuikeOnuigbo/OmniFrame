@@ -62,6 +62,7 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   colorTemp: 6500,
   voronoi: 0, voronoiCells: 16, voronoiColor: '#22d3ee', spectralMap: 0,
   timecode: 0, timecodeSize: 18,
+  prism: 0,
   glitch: 0, glitchStyle: 'slice', glitchScan: 0.18, glitchStatic: 0.25, glitchSeed: 1, glitchSpeed: 12,
 }
 

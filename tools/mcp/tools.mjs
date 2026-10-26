@@ -151,12 +151,160 @@ class FillCompositionArea extends MCPTool {
   }
 }
 class CompoundClipCreate extends MCPTool {
-  constructor() { super('compound_clip_create', 'Major tool: nest selected clips into a compound clip descriptor.', { ids: '[]' }) }
-  async run({ ids }) {
+  constructor() { super('compound_clip_create', 'Major tool: nest selected clips into a compound clip descriptor (persisted — list/rename/expand afterwards).', { ids: '[]', name: 'label' }) }
+  async run({ ids, name }) {
     const s = seq()
-    const members = s.clips.filter(c => ids.includes(c.id))
-    const comp = { id: `compound-${ids.length}`, kind: 'compound', memberIds: ids, nestedTrackCount: 1 }
-    return SESSION.note('compound_clip_create', { ids }, comp)
+    SESSION.compounds = SESSION.compounds || []
+    const comp = { id: `compound-${SESSION.compounds.length + 1}`, kind: 'compound', name: name || `Compound ${SESSION.compounds.length + 1}`, memberIds: ids, nestedTrackCount: 1, createdFrom: s.clips.filter(c => ids.includes(c.id)).map(c => c.id) }
+    SESSION.compounds.push(comp)
+    return SESSION.note('compound_clip_create', { ids, name: comp.name }, comp)
+  }
+}
+class AlignClips extends MCPTool {
+  constructor() { super('align_clips', 'Major tool (alignment): align every target clip (or ids) — hcenter/vcenter/left/right/top/bottom against the frame, or distribute-h to space centres evenly.', { mode: 'hcenter|vcenter|left|right|top|bottom|distribute-h', ids: '[] optional subset' }) }
+  async run({ mode = 'hcenter', ids }) {
+    const s = seq()
+    const targets = s.clips.filter(c => c.kind !== 'adjustment' && c.kind !== 'compound' && (!ids || ids.includes(c.id)))
+    if (!targets.length) throw new Error('no alignable clips')
+    const rects = targets.map(c => ({ c, r: s.clipRect(c, 0) }))
+    if (mode === 'distribute-h') {
+      rects.sort((a, b) => (a.r.x + a.r.w / 2) - (b.r.x + b.r.w / 2))
+      const first = rects[0].r.x + rects[0].r.w / 2
+      const last = rects.at(-1).r.x + rects.at(-1).r.w / 2
+      const n = rects.length
+      rects.forEach(({ c, r }, i) => { const want = n === 1 ? first : first + ((last - first) * i) / (n - 1); c.x += want - (r.x + r.w / 2) })
+    } else {
+      for (const { c, r } of rects) {
+        if (mode === 'hcenter') c.x += s.w / 2 - (r.x + r.w / 2)
+        else if (mode === 'vcenter') c.y += s.h / 2 - (r.y + r.h / 2)
+        else if (mode === 'left') c.x += 0 - r.x
+        else if (mode === 'right') c.x += s.w - (r.x + r.w)
+        else if (mode === 'top') c.y += 0 - r.y
+        else if (mode === 'bottom') c.y += s.h - (r.y + r.h)
+        else throw new Error(`unknown align mode ${mode}`)
+      }
+    }
+    return SESSION.note('align_clips', { mode }, { clips: targets.map(c => { const r = s.clipRect(c, 0); return { id: c.id, cx: Math.round(r.x + r.w / 2), cy: Math.round(r.y + r.h / 2) } }) })
+  }
+}
+class MotionAnalyze extends MCPTool {
+  constructor() { super('motion_analyze', 'Major tool (detection): app-pixel motion/behaviour/micro-animation analysis between two times — changed-pixel ratio, changed bbox, centroid shift, 8x6 motion grid, morphScore (centroid travel + bbox aspect delta).', { t0: 's', t1: 's' }) }
+  async run({ t0 = 0, t1 = 0.5 }) {
+    const s = seq()
+    const A = renderFrame(s, Number(t0)).getContext('2d')
+    const B = renderFrame(s, Number(t1)).getContext('2d')
+    const w = s.w, h = s.h
+    const da = A.getImageData(0, 0, w, h).data
+    const db = B.getImageData(0, 0, w, h).data
+    let changed = 0, sx = 0, sy = 0, x0 = 1e9, y0 = 1e9, x1 = -1, y1 = -1
+    const GW = 8, GH = 6
+    const grid = new Array(GW * GH).fill(0)
+    const gcnt = new Array(GW * GH).fill(0)
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4
+        const la = 0.299 * da[i] + 0.587 * da[i + 1] + 0.114 * da[i + 2]
+        const lb = 0.299 * db[i] + 0.587 * db[i + 1] + 0.114 * db[i + 2]
+        const dd = Math.abs(la - lb)
+        const gi = Math.min(GH - 1, Math.floor((y / h) * GH)) * GW + Math.min(GW - 1, Math.floor((x / w) * GW))
+        grid[gi] += dd; gcnt[gi]++
+        if (dd > 24) { changed++; sx += x; sy += y; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y }
+      }
+    }
+    const n = w * h
+    const cxA = changed ? sx / changed : w / 2
+    const cyA = changed ? sy / changed : h / 2
+    const bw = x1 >= 0 ? x1 - x0 + 1 : 0
+    const bh = y1 >= 0 ? y1 - y0 + 1 : 0
+    const aspect = bw && bh ? bw / bh : 0
+    return SESSION.note('motion_analyze', { t0, t1 }, {
+      changedRatio: +(changed / n).toFixed(4),
+      bbox: changed ? [x0, y0, bw, bh] : null,
+      centroid: changed ? [Math.round(cxA), Math.round(cyA)] : null,
+      grid: grid.map((v, i) => +(v / Math.max(1, gcnt[i])).toFixed(2)),
+      morphScore: +((changed / n) * 10 + Math.abs(aspect - 1) * 0.5).toFixed(4),
+    })
+  }
+}
+class ShapeDetect extends MCPTool {
+  constructor() { super('shape_detect', 'Major tool (detection): threshold a rendered frame to a black/white matte, connected-component the white blobs and classify each (square/rect/circle/line/blob). Matte scan saved to data_motiondesijg/scans/.', { t: 's', thresh: '0..255 luma cut', minPx: 'min blob px' }) }
+  async run({ t = 0, thresh = 128, minPx = 40 }) {
+    const s = seq()
+    const cv = renderFrame(s, Number(t))
+    const x = cv.getContext('2d')
+    const w = s.w, h = s.h
+    const d = x.getImageData(0, 0, w, h)
+    const bw = new Uint8Array(w * h)
+    for (let i = 0, j = 0; i < d.data.length; i += 4, j++) {
+      bw[j] = 0.299 * d.data[i] + 0.587 * d.data[i + 1] + 0.114 * d.data[i + 2] > thresh ? 1 : 0
+    }
+    const matte = makeCanvas(w, h)
+    const mx = matte.getContext('2d')
+    const mi = mx.createImageData(w, h)
+    for (let j = 0; j < bw.length; j++) { const v = bw[j] ? 255 : 0; mi.data[j * 4] = v; mi.data[j * 4 + 1] = v; mi.data[j * 4 + 2] = v; mi.data[j * 4 + 3] = 255 }
+    mx.putImageData(mi, 0, 0)
+    const dir = path.join(ROOT, 'data_motiondesijg', 'scans')
+    fs.mkdirSync(dir, { recursive: true })
+    const mattePath = path.join(dir, `shape-matte-${Number(t).toFixed(2)}.png`)
+    fs.writeFileSync(mattePath, matte.toBuffer('image/png'))
+    const label = new Int32Array(w * h)
+    const shapes = []
+    let next = 1
+    const stack = []
+    for (let j = 0; j < bw.length; j++) {
+      if (!bw[j] || label[j]) continue
+      const id = next++
+      stack.length = 0
+      stack.push(j)
+      label[j] = id
+      let px = 0, bx0 = 1e9, by0 = 1e9, bx1 = -1, by1 = -1
+      while (stack.length) {
+        const q = stack.pop()
+        const qy = Math.floor(q / w), qx = q % w
+        px++
+        if (qx < bx0) bx0 = qx; if (qx > bx1) bx1 = qx
+        if (qy < by0) by0 = qy; if (qy > by1) by1 = qy
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx2 = qx + dx, ny2 = qy + dy
+          if (nx2 < 0 || ny2 < 0 || nx2 >= w || ny2 >= h) continue
+          const ni = ny2 * w + nx2
+          if (bw[ni] && !label[ni]) { label[ni] = id; stack.push(ni) }
+        }
+      }
+      if (px < minPx) continue
+      const bwid = bx1 - bx0 + 1, bhid = by1 - by0 + 1
+      const fill = px / (bwid * bhid)
+      const aspect = bwid / bhid
+      let cls = 'blob'
+      if (fill > 0.88) cls = aspect > 0.8 && aspect < 1.25 ? 'square' : 'rect'
+      else if (fill > 0.7 && aspect > 0.8 && aspect < 1.25) cls = 'circle'
+      else if (fill < 0.3 && (aspect > 3 || aspect < 0.33)) cls = 'line'
+      shapes.push({ class: cls, px, bbox: [bx0, by0, bwid, bhid], fill: +fill.toFixed(3), aspect: +aspect.toFixed(3) })
+    }
+    shapes.sort((a, b) => b.px - a.px)
+    return SESSION.note('shape_detect', { t, thresh }, { matte: path.relative(ROOT, mattePath), shapes: shapes.slice(0, 12) })
+  }
+}
+class CompoundList extends MCPTool {
+  constructor() { super('compound_list', 'Compound extra: list persisted compound clip descriptors.', {}) }
+  async run() { return SESSION.note('compound_list', {}, { compounds: SESSION.compounds || [] }) }
+}
+class CompoundRename extends MCPTool {
+  constructor() { super('compound_rename', 'Compound extra: rename a persisted compound descriptor.', { id: '', name: '' }) }
+  async run({ id, name }) {
+    const c = (SESSION.compounds || []).find(k => k.id === id)
+    if (!c) throw new Error(`no compound ${id}`)
+    c.name = String(name || c.name)
+    return SESSION.note('compound_rename', { id, name: c.name }, c)
+  }
+}
+class CompoundExpand extends MCPTool {
+  constructor() { super('compound_expand', 'Compound extra: expand (drop) a compound descriptor back to its member clips.', { id: '' }) }
+  async run({ id }) {
+    const i = (SESSION.compounds || []).findIndex(k => k.id === id)
+    if (i < 0) throw new Error(`no compound ${id}`)
+    const [c] = SESSION.compounds.splice(i, 1)
+    return SESSION.note('compound_expand', { id }, { memberIds: c.memberIds })
   }
 }
 class SmartPatch extends MCPTool {
@@ -764,4 +912,4 @@ class FxRemove extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
