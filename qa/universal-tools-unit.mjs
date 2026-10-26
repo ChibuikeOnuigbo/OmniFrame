@@ -161,6 +161,67 @@ for (const id of sweepFx) {
   await registry.call('fx_remove', { clipId: 'clip-1', fxId: ad.data.fxId })
 }
 
+// ---- Board L: top backlog names converted into REAL engines (kaleidoscope /
+// lens flare / color temperature). Proofs app-made only: data_dump data:img ->
+// evidence/L-*.png. Never python/ffmpeg authoring. ----
+await registry.call('project_new', { w: 320, h: 180, fps: 12, duration: 2 })
+await registry.call('import_media', { path: 'qa/shots/01-home.png', fit: 'contain', scale: 1 })
+const dumpL = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump L', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/L-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+const meansL = (d) => { let r = 0, g = 0, b = 0, n = 0; for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; n++ } return { r: r / n, g: g / n, b: b / n } }
+const catL = await registry.call('fx_catalog', { limit: 50000 })
+if (!catL.ok) { console.error('FAIL fx_catalog L', catL.data); fail++ }
+const catIds = new Set((catL.data.entries || []).map((en) => en.id))
+for (const id of ['kaleido-6', 'flare-0', 'kelvin-3200', 'kelvin-10000']) {
+  if (!catIds.has(id)) { console.error('FAIL catalog missing board-L id', id); fail++ }
+}
+const kaleidoEntry = (catL.data.entries || []).find((en) => en.id === 'kaleido-6')
+if (!kaleidoEntry || !kaleidoEntry.params.includes('kaleidoSegments') || !kaleidoEntry.params.includes('kaleidoRotate')) { console.error('FAIL kaleido params not exposed'); fail++ }
+const baseL = await dumpL('base')
+const kaL = await registry.call('fx_add', { catalogId: 'kaleido-6' })
+if (!kaL.ok) { console.error('FAIL fx_add kaleido', kaL.data); fail++; }
+const kalL = kaL.ok ? await dumpL('kaleido-6') : null
+if (!kalL || diffK(baseL, kalL) < 300) { console.error('FAIL kaleidoscope engine invisible'); fail++ }
+if (kaL.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: kaL.data.fxId })
+const faL = await registry.call('fx_add', { catalogId: 'flare-0' })
+if (!faL.ok) { console.error('FAIL fx_add flare', faL.data); fail++ }
+const flL = faL.ok ? await dumpL('flare-anamorphic') : null
+if (!flL || diffK(baseL, flL) < 300) { console.error('FAIL lens flare engine invisible'); fail++ }
+const mBaseL = meansL(baseL)
+const mFlL = flL ? meansL(flL) : mBaseL
+if (!(mFlL.r > mBaseL.r + 2 && mFlL.g > mBaseL.g + 2)) { console.error('FAIL flare must lift luminance (screen blend)'); fail++ }
+if (faL.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: faL.data.fxId })
+const twL = await registry.call('fx_add', { catalogId: 'kelvin-3200' })
+if (!twL.ok) { console.error('FAIL fx_add kelvin-3200', twL.data); fail++ }
+const warmL = twL.ok ? await dumpL('kelvin-3200') : null
+if (!warmL || diffK(baseL, warmL) < 300) { console.error('FAIL color temp warm invisible'); fail++ }
+const mWL = warmL ? meansL(warmL) : mBaseL
+if (!((mWL.r - mWL.b) - (mBaseL.r - mBaseL.b) > 6)) { console.error('FAIL 3200K must shift R-B warmer'); fail++ }
+if (twL.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: twL.data.fxId })
+const tcL = await registry.call('fx_add', { catalogId: 'kelvin-10000' })
+if (!tcL.ok) { console.error('FAIL fx_add kelvin-10000', tcL.data); fail++ }
+const coolL = tcL.ok ? await dumpL('kelvin-10000') : null
+const mCL = coolL ? meansL(coolL) : mBaseL
+if (!((mWL.r - mWL.b) - (mCL.r - mCL.b) > 6)) { console.error('FAIL 10000K must be cooler than 3200K'); fail++ }
+// keyframeable: 2-point ramp on colorTemp must actually animate across time
+const kfL = await registry.call('fx_update', { clipId: 'clip-1', fxId: tcL.data.fxId, keys: { colorTemp: [[0, 2500], [1.5, 12000]] } })
+if (!kfL.ok || !kfL.data.keys || kfL.data.keys.colorTemp !== 2) { console.error('FAIL colorTemp keyframes not stored', kfL.data); fail++ }
+const rampAL = await dumpL('kelvin-ramp-warm', 0.1)
+const rampBL = await dumpL('kelvin-ramp-cool', 1.4)
+const mRAL = rampAL ? meansL(rampAL) : mBaseL
+const mRBL = rampBL ? meansL(rampBL) : mBaseL
+if (!((mRAL.r - mRAL.b) - (mRBL.r - mRBL.b) > 6)) { console.error('FAIL colorTemp keyframe ramp does not animate'); fail++ }
+if (tcL.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: tcL.data.fxId })
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })
