@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 import { MCPTool, MCPRegistry, ToolResult, VideoEncoder, FrameProvider, makeCanvas, loadImage, cover } from './core.mjs'
-import { Sequence, makeClip, renderFrame, CE, applyEffects, cardFlipFactor, loadAppTs, applyShapeMatte } from './appRender.mjs'
+import { Sequence, makeClip, renderFrame, CE, applyEffects, cardFlipFactor, loadAppTs, applyShapeMatte , setPaintGetter } from './appRender.mjs'
 import { bedPainterLocal } from './beds.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -460,6 +460,7 @@ class ContextMenu extends MCPTool {
     return SESSION.note('context_menu', { action }, { note: 'group/ungroup operate on multi-selection in the app UI' })
   }
 }
+setPaintGetter(() => ({ strokes: SESSION.paint.strokes, layers: SESSION.paint.paintLayers || [] }))
 class DataDump extends MCPTool {
   constructor() { super('data_dump', 'Full JSON dump: every clip pos/size/colour/curves + preview frames and per-clip thumbs as data:img; withVideo embeds the exported mp4 as data:video (chunked).', { withImages: 'bool', times: '[s]', withVideo: 'mp4 path' }) }
   async run({ withImages = false, times = [0], withVideo }) {

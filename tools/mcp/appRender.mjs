@@ -36,6 +36,12 @@ export async function loadAppTs(rel) {
 
 export const CE = await loadAppTs('src/lib/animation/CurveEngine.ts')
 export const PG = await loadAppTs('src/lib/pixelGrade.ts')
+export const DE = await loadAppTs('src/lib/drawingEngine.ts')
+// Paint-canvas parity hook: playback.ts composites paint layers via
+// renderAllPaintLayers; the headless renderer must do the same or data_dump
+// previews silently drop every drawn stroke.
+let paintGetter = null
+export function setPaintGetter(fn) { paintGetter = fn }
 export const PFX = await loadAppTs('src/lib/proceduralFx.ts')
 export const FXI = await loadAppTs('src/lib/fxInstances.ts')
 export const PRT = await loadAppTs('src/lib/particleFx.ts')
@@ -181,6 +187,11 @@ function sampleAt(canvas, x, y) {
 export function renderFrame(seq, t) {
   const c = makeCanvas(seq.w, seq.h), x = c.getContext('2d')
   x.fillStyle = seq.bg; x.fillRect(0, 0, seq.w, seq.h)
+  const paint = paintGetter ? paintGetter() : null
+  if (paint && paint.strokes && paint.strokes.length) {
+    // paint underlay first? no — playback paints OVER clips; keep same order:
+    // defer until after the clip loop below.
+  }
   for (const clip of seq.clips) {
     if (t < clip.start || t >= clip.start + clip.duration) continue
     // Standalone effect clip (adjustment): grades everything already drawn —
@@ -268,6 +279,9 @@ export function renderFrame(seq, t) {
       x.drawImage(gs, gr.x, gr.y, gr.w, gr.h)
       x.restore()
     }
+  }
+  if (paint && paint.strokes && paint.strokes.length) {
+    DE.renderAllPaintLayers(x, seq.w, seq.h, paint.strokes, paint.layers && paint.layers.length ? paint.layers : [{ id: 'paint-1', visible: true }], t, seq.fps || 30)
   }
   return c
 }

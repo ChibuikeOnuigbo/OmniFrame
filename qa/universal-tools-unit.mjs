@@ -222,6 +222,45 @@ const mRBL = rampBL ? meansL(rampBL) : mBaseL
 if (!((mRAL.r - mRAL.b) - (mRBL.r - mRBL.b) > 6)) { console.error('FAIL colorTemp keyframe ramp does not animate'); fail++ }
 if (tcL.ok) await registry.call('fx_remove', { clipId: 'clip-1', fxId: tcL.data.fxId })
 
+// ---- Board M: Krita-scan sub-tools — Multibrush mirror modes, Gradient radial
+// shape, symmetry copies. Proofs app-made only: data_dump data:img -> M-*.png. ----
+const dumpM = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump M', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/M-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+await registry.call('paint_clear', {})
+const baseM = await dumpM('base')
+await registry.call('draw_stroke', { tool: 'line', points: [[60, 40], [120, 90]], color: '#ff5d8f', size: 6, appearAt: 0.1 })
+const lineM = await dumpM('line-plain')
+if (!lineM || diffK(baseM, lineM) < 100) { console.error('FAIL line stroke invisible'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'line', points: [[60, 40], [120, 90]], color: '#ff5d8f', size: 6, mirrorX: true, appearAt: 0.1 })
+const mirM = await dumpM('multibrush-mirrorX')
+if (!mirM || diffK(lineM, mirM) < 100) { console.error('FAIL mirrorX must add reflected copy'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'gradient', points: [[40, 40], [240, 140]], color: '#22d3ee', gradientColor: '#7a1330', appearAt: 0.1 })
+const glM = await dumpM('gradient-linear')
+if (!glM || diffK(baseM, glM) < 300) { console.error('FAIL linear gradient invisible'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'gradient', points: [[40, 40], [240, 140]], color: '#22d3ee', gradientColor: '#7a1330', gradientShape: 'radial', appearAt: 0.1 })
+const grM = await dumpM('gradient-radial')
+if (!grM || diffK(glM, grM) < 300) { console.error('FAIL radial gradient shape must differ from linear'); fail++ }
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'brush', points: [[160, 40], [180, 60]], color: '#ffc93c', size: 5, appearAt: 0.1 })
+const oneM = await dumpM('sym-single')
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'brush', points: [[160, 40], [180, 60]], color: '#ffc93c', size: 5, radialCopies: 8, appearAt: 0.1 })
+const radM = await dumpM('multibrush-sym8')
+if (!radM || diffK(oneM, radM) < 200) { console.error('FAIL radial symmetry copies invisible'); fail++ }
+await registry.call('paint_clear', {})
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })
