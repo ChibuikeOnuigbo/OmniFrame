@@ -302,6 +302,25 @@ export function renderStroke(
 ) {
   // Radial / symmetry ruler (ibisPaint X): the same stroke repeated rotated
   // around a centre — sun rays, mandalas, kaleidoscopic skies.
+  // Krita Multibrush mirror modes: reflect the stroke across centre axes
+  // (X, Y, or both) — mirror-drawing sub-tool parity.
+  const mx = !!stroke.mirrorX
+  const my = !!stroke.mirrorY
+  if (mx || my) {
+    const variants: [number, number][] = [[1, 1]]
+    if (mx) variants.push([-1, 1])
+    if (my) variants.push([1, -1])
+    if (mx && my) variants.push([-1, -1])
+    for (const [sx, sy] of variants) {
+      ctx.save()
+      ctx.translate(width / 2, height / 2)
+      ctx.scale(sx, sy)
+      ctx.translate(-width / 2, -height / 2)
+      renderStrokeCore(ctx, stroke, width, height)
+      ctx.restore()
+    }
+    return
+  }
   const n = Math.max(1, Math.floor(stroke.radialCopies || 1))
   if (n > 1) {
     const [cx, cy] = [
@@ -610,10 +629,16 @@ function renderStrokeCore(
     // secondary colour across the drag vector.
     const gStart = pts[0]
     const gEnd = pts[pts.length - 1]
-    const grad = ctx.createLinearGradient(
-      gStart.x * width, gStart.y * height,
-      gEnd.x * width, gEnd.y * height,
-    )
+    const grad = stroke.gradientShape === 'radial'
+      ? ctx.createRadialGradient(
+          gStart.x * width, gStart.y * height, 0,
+          gStart.x * width, gStart.y * height,
+          Math.max(4, Math.hypot((gEnd.x - gStart.x) * width, (gEnd.y - gStart.y) * height)),
+        )
+      : ctx.createLinearGradient(
+          gStart.x * width, gStart.y * height,
+          gEnd.x * width, gEnd.y * height,
+        )
     grad.addColorStop(0, stroke.color)
     grad.addColorStop(1, stroke.gradientColor || 'rgba(0,0,0,0)')
     ctx.save()

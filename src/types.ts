@@ -1069,6 +1069,12 @@ export interface DrawingStroke {
   gradientColor?: string // end colour of the linear gradient ramp
   /** ibisPaint-style radial/symmetry ruler: duplicate the stroke rotated N times. */
   radialCopies?: number
+  /** Krita Multibrush mirror mode: reflect the stroke across the vertical centre axis. */
+  mirrorX?: boolean
+  /** Krita Multibrush mirror mode: reflect the stroke across the horizontal centre axis. */
+  mirrorY?: boolean
+  /** Krita Gradient tool shape: linear ramp (default) or radial from stroke start. */
+  gradientShape?: 'linear' | 'radial'
   radialCenter?: [number, number] // stage px, default canvas centre
   filled?: boolean // shape tools fill as well as stroke
   fillTolerance?: number // threshold 1..100 for flood fill
