@@ -172,15 +172,16 @@ class AlignClips extends MCPTool {
       const first = rects[0].r.x + rects[0].r.w / 2
       const last = rects.at(-1).r.x + rects.at(-1).r.w / 2
       const n = rects.length
-      rects.forEach(({ c, r }, i) => { const want = n === 1 ? first : first + ((last - first) * i) / (n - 1); c.x += want - (r.x + r.w / 2) })
+      rects.forEach(({ c, r }, i) => { const want = n === 1 ? first : first + ((last - first) * i) / (n - 1); const tr = (c.transform = c.transform || {}); tr.x = (tr.x || 0) + (want - (r.x + r.w / 2)) })
     } else {
       for (const { c, r } of rects) {
-        if (mode === 'hcenter') c.x += s.w / 2 - (r.x + r.w / 2)
-        else if (mode === 'vcenter') c.y += s.h / 2 - (r.y + r.h / 2)
-        else if (mode === 'left') c.x += 0 - r.x
-        else if (mode === 'right') c.x += s.w - (r.x + r.w)
-        else if (mode === 'top') c.y += 0 - r.y
-        else if (mode === 'bottom') c.y += s.h - (r.y + r.h)
+        const tr = (c.transform = c.transform || {})
+        if (mode === 'hcenter') tr.x = (tr.x || 0) + (s.w / 2 - (r.x + r.w / 2))
+        else if (mode === 'vcenter') tr.y = (tr.y || 0) + (s.h / 2 - (r.y + r.h / 2))
+        else if (mode === 'left') tr.x = (tr.x || 0) + (0 - r.x)
+        else if (mode === 'right') tr.x = (tr.x || 0) + (s.w - (r.x + r.w))
+        else if (mode === 'top') tr.y = (tr.y || 0) + (0 - r.y)
+        else if (mode === 'bottom') tr.y = (tr.y || 0) + (s.h - (r.y + r.h))
         else throw new Error(`unknown align mode ${mode}`)
       }
     }

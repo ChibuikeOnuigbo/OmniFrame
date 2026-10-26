@@ -351,6 +351,60 @@ const gAlt = await dumpP('gradient-repeat-alternating')
 if (!gAlt || diffK(gFwd, gAlt) < 200) { console.error('FAIL gradient alternating repeat must differ from forward'); fail++ }
 await registry.call('paint_clear', {})
 
+// ---- Board Q: alignment + detection (motion/shape) + prism + compound extras.
+// Proofs app-made only: data_dump data:img -> Q-*.png. ----
+const dumpQ = async (name, t = 0.5) => {
+  const r = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r.ok || !r.data.previews || !r.data.previews[0]) { console.error('FAIL data_dump Q', name); fail++; return null }
+  const b64 = r.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/Q-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx = cv.getContext('2d')
+  cx.drawImage(img, 0, 0)
+  return cx.getImageData(0, 0, img.width, img.height).data
+}
+const meanRB = (d, w, x0, x1) => { let s2 = 0, n = 0; for (let y = 0; y < 180; y++) for (let x = x0; x < x1; x++) { const i = (y * w + x) * 4; s2 += d[i] - d[i + 2]; n++ } return s2 / n }
+await registry.call('import_media', { path: 'qa/shots/01-home.png', fit: 'contain', scale: 0.5 })
+await registry.call('select', { clipId: 'clip-2' })
+await registry.call('transform_set', { x: 70, y: 40 })
+const baseQ = await dumpQ('base')
+const alQ = await registry.call('align_clips', { mode: 'hcenter' })
+if (!alQ.ok || alQ.data.clips.some((k) => Math.abs(k.cx - 160) > 2)) { console.error('FAIL align hcenter', alQ.data); fail++ }
+const alvQ = await registry.call('align_clips', { mode: 'vcenter' })
+if (!alvQ.ok || alvQ.data.clips.some((k) => Math.abs(k.cy - 90) > 2)) { console.error('FAIL align vcenter', alvQ.data); fail++ }
+await dumpQ('align-centered')
+await registry.call('select', { clipId: 'clip-1' })
+const ma0 = await registry.call('motion_analyze', { t0: 0.5, t1: 0.5625 })
+if (!ma0.ok || ma0.data.changedRatio > 0.001) { console.error('FAIL static scene must read ~zero motion', ma0.data); fail++ }
+const osQ = await registry.call('fx_add', { catalogId: 'osc-90-sine-40' })
+const ma1 = await registry.call('motion_analyze', { t0: 0.5, t1: 0.5625 })
+if (!ma1.ok || ma1.data.changedRatio < 0.005) { console.error('FAIL oscillating clip must register motion', ma1.data); fail++ }
+if (!ma1.data.grid.some((v) => v > 1)) { console.error('FAIL motion grid must light up'); fail++ }
+await dumpQ('motion-osc', 0.5625)
+await registry.call('fx_remove', { clipId: 'clip-1', fxId: osQ.data.fxId })
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'rectangle', points: [[80, 40], [200, 120]], color: '#ffffff', filled: true, appearAt: 0.1 })
+const sdR = await registry.call('shape_detect', { t: 0.5, thresh: 128 })
+if (!sdR.ok || !sdR.data.shapes.length || !['rect', 'square'].includes(sdR.data.shapes[0].class)) { console.error('FAIL shape_detect rect', sdR.data); fail++ }
+await dumpQ('shape-rect')
+await registry.call('paint_clear', {})
+await registry.call('draw_stroke', { tool: 'circle', points: [[120, 60], [180, 120]], color: '#ffffff', filled: true, appearAt: 0.1 })
+const sdC = await registry.call('shape_detect', { t: 0.5, thresh: 128 })
+if (!sdC.ok || !sdC.data.shapes.length || sdC.data.shapes[0].class !== 'circle') { console.error('FAIL shape_detect circle', sdC.data); fail++ }
+await registry.call('paint_clear', {})
+const prQ = await registry.call('fx_add', { catalogId: 'prism-1' })
+const prPx = await dumpQ('prism')
+if (!prPx || diffK(baseQ, prPx) < 200) { console.error('FAIL prism sweep invisible'); fail++ }
+if (Math.abs(meanRB(prPx, 320, 0, 100) - meanRB(prPx, 320, 220, 320)) < 4) { console.error('FAIL prism must sweep hue across X'); fail++ }
+await registry.call('fx_remove', { clipId: 'clip-1', fxId: prQ.data.fxId })
+const ccQ = await registry.call('compound_clip_create', { ids: ['clip-1'], name: 'HeroComp' })
+const clQ = await registry.call('compound_list', {})
+if (!clQ.ok || !clQ.data.compounds.some((k) => k.id === ccQ.data.id && k.name === 'HeroComp')) { console.error('FAIL compound persist', clQ.data); fail++ }
+await registry.call('compound_rename', { id: ccQ.data.id, name: 'HeroComp2' })
+const ceQ = await registry.call('compound_expand', { id: ccQ.data.id })
+if (!ceQ.ok || ceQ.data.memberIds[0] !== 'clip-1') { console.error('FAIL compound expand', ceQ.data); fail++ }
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })

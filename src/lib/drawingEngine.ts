@@ -555,6 +555,10 @@ function renderStrokeCore(
     const w = Math.abs(end.x - start.x) * width
     const h = Math.abs(end.y - start.y) * height
     ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    if (stroke.filled) {
+      ctx.fillStyle = stroke.color
+      ctx.fillRect(x, y, w, h)
+    }
     ctx.strokeRect(x, y, w, h)
   } else if (stroke.tool === 'circle') {
     const start = pts[0]
