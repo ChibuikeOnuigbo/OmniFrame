@@ -14,7 +14,7 @@ body {
   margin: 0;
   background: #08090d;
   color: #e6e8ee;
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Avenir Next', 'Segoe UI Variable Display', 'Trebuchet MS', 'DejaVu Sans', sans-serif;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -22,7 +22,7 @@ body {
 * { box-sizing: border-box; }
 ::-webkit-scrollbar { width: 9px; height: 9px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #3c475d; }
 
 /* Hide-overflow-x mode (default on): no visible horizontal scrollbars in the
@@ -64,7 +64,7 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #6d5efc;
+  background: #ff6b35;
   border: 2px solid #0c0e13;
   cursor: pointer;
   transition: transform 0.08s ease;
@@ -81,7 +81,7 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #6d5efc;
+  background: #ff6b35;
   border: 2px solid #0c0e13;
   cursor: pointer;
 }
@@ -178,7 +178,7 @@ html.of-custom-cursor-active svg {
    Five structural looks driven by html[data-ui-style], three accent
    palettes via html[data-ui-palette]. Styles regroup corner language,
    density and panel depth; palettes only move the accent. The default
-   (omniframe/violet) needs no rules — it is the shipped look. */
+   (omniframe/flame) ships the de-slopped default rules at the bottom of this file. */
 
 /* Palettes */
 html[data-ui-palette='amber'] .bg-brand, html[data-ui-palette='amber'] .bg-brand-500 { background-color: #d97706; }
@@ -282,3 +282,29 @@ html[data-ui-style='premiere'] [class*="bg-ink-900/"] { background-color: rgb(29
 html[data-ui-style='daylight'] [class*="bg-ink-900/"] { background-color: rgb(242 243 247 / 0.98); }
 html[data-ui-style='daylight'] .text-violet-200 { color: #4c3fd6; }
 html[data-ui-style='daylight'] .text-violet-300 { color: #5a4be0; }
+
+/* ---- Board R: de-slopped default (omniframe) look --------------------------
+   Reddit-mined "AI slop tells" audit → new_doc_toll_research/DESIGN-STUDY-ai-slop-custom-ui.md.
+   Identity: flame orange (#ff6b35) brand instead of vibecode violet; font stack
+   with personality instead of Inter. Corners: NO uniform radius on everything —
+   ~81% of UI is sharp; the kept ~19% varies on purpose (randomizer, not one
+   value everywhere): .rounded-md controls 3px, .rounded-sm chips 2px,
+   .rounded-full pills 999px, scrollbar thumb 2px. Glass: backdrop-blur is off
+   in the default style (other UI-style themes keep their own looks). */
+html:not([data-ui-style]) .rounded,
+html[data-ui-style='omniframe'] .rounded,
+html:not([data-ui-style]) .rounded-lg,
+html[data-ui-style='omniframe'] .rounded-lg,
+html:not([data-ui-style]) .rounded-xl,
+html[data-ui-style='omniframe'] .rounded-xl,
+html:not([data-ui-style]) .rounded-2xl,
+html[data-ui-style='omniframe'] .rounded-2xl { border-radius: 0; }
+html:not([data-ui-style]) .rounded-md,
+html[data-ui-style='omniframe'] .rounded-md { border-radius: 3px; }
+html:not([data-ui-style]) .rounded-sm,
+html[data-ui-style='omniframe'] .rounded-sm { border-radius: 2px; }
+html:not([data-ui-style]) [class*='backdrop-blur'],
+html[data-ui-style='omniframe'] [class*='backdrop-blur'] { backdrop-filter: none; -webkit-backdrop-filter: none; }
+/* daylight theme: flame text must darken for the light surface */
+html[data-ui-style='daylight'] .text-brand-200 { color: #a63c00; }
+html[data-ui-style='daylight'] .text-brand-300 { color: #c24e10; }

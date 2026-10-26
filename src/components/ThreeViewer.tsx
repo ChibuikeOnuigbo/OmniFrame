@@ -911,7 +911,7 @@ export function ThreeViewer({
           }}
           className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
             activeBlenderMode === 'animation'
-              ? 'bg-violet-600 text-white font-semibold shadow-xs'
+              ? 'bg-brand-600 text-white font-semibold shadow-xs'
               : 'text-ink-400 hover:text-white hover:bg-ink-800'
           }`}
         >

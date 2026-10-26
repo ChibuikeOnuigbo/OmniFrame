@@ -11,7 +11,8 @@ import {
   Redo2,
   Eye,
   EyeOff,
-  Sparkles,
+  Blend,
+  ImageOff,
   Minimize2,
   Plus,
   Mic,
@@ -339,13 +340,13 @@ export default function Studio() {
   const contextCommands = contextMenu ? (
     contextMenu.type === 'TRANSITION'
       ? [
-          { id: 'trans-dissolve', label: 'Cross Dissolve', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'cross_dissolve' }) },
-          { id: 'trans-dip-black', label: 'Dip to Black', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'dip_to_black' }) },
-          { id: 'trans-dip-white', label: 'Dip to White', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'dip_to_white' }) },
-          { id: 'trans-wipe-left', label: 'Wipe Left', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'wipe_left' }) },
-          { id: 'trans-slide-left', label: 'Slide Left', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'slide_left' }) },
-          { id: 'trans-zoom', label: 'Zoom Push', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'zoom' }) },
-          { id: 'trans-dur-15', label: 'Duration: 1.5s', icon: Sparkles, run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { duration: 1.5 }) },
+          { id: 'trans-dissolve', label: 'Cross Dissolve', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'cross_dissolve' }) },
+          { id: 'trans-dip-black', label: 'Dip to Black', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'dip_to_black' }) },
+          { id: 'trans-dip-white', label: 'Dip to White', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'dip_to_white' }) },
+          { id: 'trans-wipe-left', label: 'Wipe Left', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'wipe_left' }) },
+          { id: 'trans-slide-left', label: 'Slide Left', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'slide_left' }) },
+          { id: 'trans-zoom', label: 'Zoom Push', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { type: 'zoom' }) },
+          { id: 'trans-dur-15', label: 'Duration: 1.5s', run: () => useEditor.getState().updateTransition(contextMenu.transition.id, { duration: 1.5 }) },
           { id: 'delete', label: 'Delete Transition', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => useEditor.getState().removeTransition(contextMenu.transition.id) },
         ]
       : 'clip' in contextMenu
@@ -376,7 +377,7 @@ export default function Studio() {
           ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'IMAGE_CLIP' ? [{
             id: 'add-transition',
             label: 'Add Transition',
-            icon: Sparkles,
+            icon: Blend,
             run: () => {
               const clp = contextMenu.clip
               const st = useEditor.getState()
@@ -450,7 +451,7 @@ export default function Studio() {
             {
               id: 'remove-bg-modal',
               label: 'AI Background Removal…',
-              icon: Sparkles,
+              icon: ImageOff,
               run: () => {
                 setBgModalClipId(contextMenu.clip.id)
                 setIsBgModalOpen(true)
@@ -742,7 +743,7 @@ export default function Studio() {
             {contextMenu.type.replace(/_/g, ' ')}
           </div>
           {filteredCommands.map((command, index) => {
-            const Icon = command.icon
+            const Icon = 'icon' in command ? command.icon : undefined
             const destructive = 'destructive' in command && command.destructive
             const primary = 'primary' in command && command.primary
             const hasSubmenu = 'submenu' in command && Array.isArray(command.submenu)
@@ -760,7 +761,7 @@ export default function Studio() {
                     type="button"
                     data-testid={`ctx-cmd-${command.id}`}
                     role="menuitem"
-                    title={command.label}
+                   
                     aria-label={command.label}
                     aria-haspopup="true"
                     aria-expanded={isSubmenuOpen}
@@ -769,8 +770,8 @@ export default function Studio() {
                       isSubmenuOpen ? 'bg-ink-700 text-white' : 'hover:bg-ink-700 text-ink-200'
                     }`}
                   >
-                    <Icon size={15} aria-hidden="true" className="shrink-0 text-brand-400" />
-                    <span className="min-w-0 flex-1 truncate" title={command.label}>{command.label}</span>
+                    {Icon ? <Icon size={15} aria-hidden="true" className="shrink-0 text-brand-400" /> : null}
+                    <span className="min-w-0 flex-1 truncate">{command.label}</span>
                     <ChevronRight size={13} className="text-ink-400 shrink-0" />
                   </button>
 
@@ -812,7 +813,7 @@ export default function Studio() {
                 key={command.id}
                 data-testid={`ctx-cmd-${command.id}`}
                 role="menuitem"
-                title={command.label}
+               
                 aria-label={command.label}
                 autoFocus={index === 0}
                 onClick={() => {
@@ -824,12 +825,12 @@ export default function Studio() {
                   destructive
                     ? 'text-red-400 hover:bg-red-500/10'
                     : primary
-                    ? 'bg-brand/10 text-violet-200 hover:bg-brand/20'
+                    ? 'bg-brand/10 text-brand-200 hover:bg-brand/20'
                     : 'hover:bg-ink-700'
                 }`}
               >
-                <Icon size={15} aria-hidden="true" className="shrink-0" />
-                <span className="min-w-0 flex-1 truncate" title={command.label}>{command.label}</span>
+                {Icon ? <Icon size={15} aria-hidden="true" className="shrink-0" /> : null}
+                <span className="min-w-0 flex-1 truncate">{command.label}</span>
                 {'shortcut' in command && command.shortcut && (
                   <span className="shrink-0 text-[10px] font-normal text-ink-500">
                     {command.shortcut}

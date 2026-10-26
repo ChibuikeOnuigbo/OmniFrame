@@ -730,7 +730,7 @@ export function TrackingPanel() {
       {/* Progress Card */}
       {isTracking && (
         <div data-testid="tracking-progress-card" className="p-2.5 rounded-lg border border-brand/40 bg-brand/10 space-y-1.5">
-          <div className="flex items-center justify-between text-violet-200 text-[11px] font-medium">
+          <div className="flex items-center justify-between text-brand-200 text-[11px] font-medium">
             <span className="flex items-center gap-1.5">
               <RefreshCw size={12} className="animate-spin text-brand-400" />
               <span>{mode === 'mask' ? 'Tracking & deforming mask contour...' : 'Matching Sobel gradients...'}</span>

@@ -316,7 +316,7 @@ export function Preview() {
         <Tooltip label="Drawing & Paint">
         <IconButton
           data-testid="toggle-drawing-btn"
-          title="Toggle drawing and paint tools"
+
           active={drawingEnabled}
           onClick={() => toggleDrawingEnabled()}
         >

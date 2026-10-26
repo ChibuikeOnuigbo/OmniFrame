@@ -227,7 +227,7 @@ function LutGallery() {
       {previewNotice && <p className="rounded border border-amber-900/70 bg-amber-950/25 px-2 py-1 text-[9px] text-amber-200" role="status">{previewNotice}</p>}
 
       <div data-testid="lut-search-section" role="group" aria-label="Find or import looks" className="flex items-center gap-1.5">
-        <label className="flex min-w-0 flex-1 items-center gap-1.5 rounded-md border border-ink-800 bg-ink-950/70 px-2 focus-within:border-brand">
+        <label className="flex min-w-0 flex-1 items-center gap-1.5 rounded-none border border-ink-800 bg-ink-950/70 px-2 focus-within:border-brand">
           <Search size={12} className="shrink-0 text-ink-500" aria-hidden="true" />
           <input
             type="search"
@@ -249,7 +249,7 @@ function LutGallery() {
           data-testid="upload-lut-btn"
           onClick={() => fileRef.current?.click()}
           title="Import one or more .cube 3D LUT files"
-          className="flex h-7 shrink-0 items-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-[10px] text-ink-300 transition-colors hover:border-emerald-500 hover:text-white"
+          className="flex h-7 shrink-0 items-center gap-1 rounded-none border border-ink-700 bg-ink-800 px-2 text-[10px] text-ink-300 transition-colors hover:border-emerald-500 hover:text-white"
         >
           <Upload size={11} /> Import
         </button>
@@ -302,7 +302,7 @@ function LutGallery() {
         <p className="text-[10px] text-ink-600" role="status">Loading built-in looks…</p>
       )}
       {lutLibrary.loaded && lutLibrary.luts.length === 0 && (
-        <p className="rounded-md border border-amber-900/70 bg-amber-950/30 p-2 text-[10px] text-amber-200" role="status">
+        <p className="rounded-none border border-amber-900/70 bg-amber-950/30 p-2 text-[10px] text-amber-200" role="status">
           The built-in LUT catalog could not be loaded. You can still import .cube files.
         </p>
       )}
@@ -310,7 +310,7 @@ function LutGallery() {
       {(filteredBuiltins.length > 0 || filteredUploads.length > 0) ? (
         <>
           {filteredBuiltins.length > 0 && (
-            <p data-testid="lut-look-description" className="min-h-9 rounded-md border border-ink-800 bg-ink-950/45 px-2 py-1.5 text-[10px] leading-snug text-ink-300">
+            <p data-testid="lut-look-description" className="min-h-9 rounded-none border border-ink-800 bg-ink-950/45 px-2 py-1.5 text-[10px] leading-snug text-ink-300">
               {lookDetail ? <><strong className="text-ink-100">{lookDetail.name}</strong> — {lookDetail.description}</> : 'Focus or hover a built-in look to read its description.'}
             </p>
           )}
@@ -326,7 +326,7 @@ function LutGallery() {
               onFocus={() => setLookDetailId(lut.id)}
               onMouseEnter={() => setLookDetailId(lut.id)}
               onClick={() => handlePreviewLook({ id: lut.id, name: lut.name })}
-              className="group min-w-0 overflow-hidden rounded-md border border-ink-800 bg-ink-900/80 text-left transition-colors hover:border-brand hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              className="group min-w-0 overflow-hidden rounded-none border border-ink-800 bg-ink-900/80 text-left transition-colors hover:border-brand hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <LutPreview id={lut.id} file={lut.file} swatch={lut.swatch} category={lut.category} />
               <span className="block truncate px-1.5 py-1.5 text-[10px] font-medium text-ink-100 group-hover:text-white">{lut.name}</span>
@@ -334,7 +334,7 @@ function LutGallery() {
             </button>
           ))}
           {filteredUploads.map((lut) => (
-            <div key={lut.id} data-testid={`lut-tile-user-${lut.id}`} className="group relative min-w-0 overflow-hidden rounded-md border border-emerald-900/80 bg-ink-900/80 transition-colors hover:border-emerald-400">
+            <div key={lut.id} data-testid={`lut-tile-user-${lut.id}`} className="group relative min-w-0 overflow-hidden rounded-none border border-emerald-900/80 bg-ink-900/80 transition-colors hover:border-emerald-400">
               <button
                 type="button"
                 title={`Preview ${lut.name}; Apply from the monitor to commit.`}
@@ -363,7 +363,7 @@ function LutGallery() {
               data-testid="lut-show-all"
               aria-expanded={showAllLooks}
               onClick={() => setShowAllLooks((expanded) => !expanded)}
-              className="min-h-7 w-full rounded-md border border-ink-800 bg-ink-950/50 px-2 text-[10px] font-medium text-ink-300 transition-colors hover:border-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              className="min-h-7 w-full rounded-none border border-ink-800 bg-ink-950/50 px-2 text-[10px] font-medium text-ink-300 transition-colors hover:border-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               {showAllLooks ? 'Show fewer looks' : `Show all ${filteredBuiltins.length} looks`}
             </button>
@@ -371,7 +371,7 @@ function LutGallery() {
           </div>
         </>
       ) : (
-        <p className="rounded-md border border-ink-800 bg-ink-950/40 p-2 text-[10px] text-ink-500" data-testid="lut-empty-state">
+        <p className="rounded-none border border-ink-800 bg-ink-950/40 p-2 text-[10px] text-ink-500" data-testid="lut-empty-state">
           {query ? 'No looks match that search.' : 'No uploaded LUTs yet. Import one or more .cube files.'}
         </p>
       )}
@@ -413,7 +413,7 @@ function PlacedAdjustments() {
 
   if (!carriers.length) {
     return (
-      <div className="rounded-md border border-dashed border-ink-800 px-2.5 py-3 text-center text-[10px] text-ink-500" data-testid="placed-adjustments-empty">
+      <div className="rounded-none border border-dashed border-ink-800 px-2.5 py-3 text-center text-[10px] text-ink-500" data-testid="placed-adjustments-empty">
         No effects placed yet. Add a layer or apply a look above.
       </div>
     )
@@ -435,7 +435,7 @@ function PlacedAdjustments() {
             key={clip.id}
             data-testid={`placed-adjustment-${clip.id}`}
             data-selected={isSelected ? 'true' : 'false'}
-            className={`rounded-md border p-2 transition-colors ${isSelected ? 'border-cyan-400/70 bg-cyan-950/30' : 'border-ink-800 bg-ink-950/35 hover:border-ink-600'}`}
+            className={`rounded-none border p-2 transition-colors ${isSelected ? 'border-cyan-400/70 bg-cyan-950/30' : 'border-ink-800 bg-ink-950/35 hover:border-ink-600'}`}
           >
             <div className="flex min-w-0 items-center gap-1.5">
               <button
@@ -539,7 +539,7 @@ function EffectLayerButtons() {
             aria-label={`Preview ${layer.label}`}
             title={`Preview ${layer.label}; Apply in the monitor to place it above the footage`}
             onClick={() => setNotice(previewEffectLayer(layer.label, layer.effect) ? null : 'Add visible timeline footage to audition this layer.')}
-            className="flex min-h-8 min-w-0 items-center gap-1.5 rounded-md border border-ink-800 bg-ink-950/50 px-2 py-1.5 text-left text-[10px] text-ink-300 transition-colors hover:border-cyan-500/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+            className="flex min-h-8 min-w-0 items-center gap-1.5 rounded-none border border-ink-800 bg-ink-950/50 px-2 py-1.5 text-left text-[10px] text-ink-300 transition-colors hover:border-cyan-500/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
           >
             <Play size={10} className="shrink-0 text-cyan-400" />
             <span className="truncate">{layer.label}</span>
@@ -612,7 +612,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
   const isLayer = clip?.kind === 'adjustment'
   if (!clip) {
     return (
-      <div className="rounded-md border border-dashed border-ink-800 p-3 text-center" data-testid="clip-effects-empty">
+      <div className="rounded-none border border-dashed border-ink-800 p-3 text-center" data-testid="clip-effects-empty">
         <SlidersHorizontal size={18} className="mx-auto mb-1.5 text-ink-600" />
         <p className="text-[10px] font-medium text-ink-300">Select a clip or adjustment layer</p>
       </div>
@@ -635,7 +635,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
 
   return (
     <div className="space-y-2" data-testid="clip-effects-controls">
-      <div className="flex min-w-0 items-center justify-between gap-2 rounded-md border border-ink-800 bg-ink-950/55 px-2 py-1.5">
+      <div className="flex min-w-0 items-center justify-between gap-2 rounded-none border border-ink-800 bg-ink-950/55 px-2 py-1.5">
         <div className="min-w-0">
           <span className="block text-[9px] font-semibold uppercase tracking-wider text-brand-300">{isLayer ? 'Selected adjustment layer' : 'Selected clip'}</span>
           <span className="block truncate text-[10px] text-ink-200" title={clip.name}>{clip.name}</span>
@@ -739,7 +739,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
         })}
       </div>
       {isLayer ? (
-        <div className="space-y-1.5 rounded-md border border-ink-800 bg-ink-950/40 px-2 py-2" data-testid="light-controls">
+        <div className="space-y-1.5 rounded-none border border-ink-800 bg-ink-950/40 px-2 py-2" data-testid="light-controls">
           <div className="flex items-center justify-between gap-2">
             <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-200/90">Light layer</span>
             <div className="flex gap-1">
@@ -801,7 +801,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
         </div>
       ) : null}
       {labels.length > 0 && (
-        <div className="rounded-md border border-ink-800 bg-ink-950/40 px-2 py-1.5" data-testid="clip-effect-summary">
+        <div className="rounded-none border border-ink-800 bg-ink-950/40 px-2 py-1.5" data-testid="clip-effect-summary">
           <span className="block text-[9px] font-semibold uppercase tracking-wider text-ink-600">Active filters</span>
           <span className="block truncate text-[10px] text-ink-300" title={labels.join(', ')}>{labels.join(' · ')}</span>
         </div>
@@ -899,7 +899,7 @@ function MyEffects() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name your effect…"
-          className="h-8 min-w-0 flex-1 rounded-md border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100 outline-none focus:border-brand"
+          className="h-8 min-w-0 flex-1 rounded-none border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100 outline-none focus:border-brand"
         />
         <button
           type="button"
@@ -907,7 +907,7 @@ function MyEffects() {
           disabled={!canSave}
           onClick={handleSave}
           title={canSave ? 'Save the selected clip’s effect settings + LUT stack as a reusable custom effect' : 'Select a clip with effect settings or LUTs first'}
-          className="flex h-8 shrink-0 items-center gap-1 rounded-md bg-brand px-2.5 text-[11px] font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 shrink-0 items-center gap-1 rounded-none bg-brand px-2.5 text-[11px] font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Plus size={13} /> Save look
         </button>
@@ -917,7 +917,7 @@ function MyEffects() {
           type="button"
           data-testid="import-custom-effects-btn"
           onClick={() => fileRef.current?.click()}
-          className="flex h-7 items-center gap-1 rounded-md border border-ink-700 bg-ink-900 px-2 text-[10px] text-ink-200 hover:border-ink-500"
+          className="flex h-7 items-center gap-1 rounded-none border border-ink-700 bg-ink-900 px-2 text-[10px] text-ink-200 hover:border-ink-500"
         >
           <Upload size={11} /> Import .json
         </button>
@@ -934,13 +934,13 @@ function MyEffects() {
       />
       {notice && <p className="text-[10px] text-ink-400" data-testid="custom-effect-notice" role="status">{notice}</p>}
       {customEffects.length === 0 ? (
-        <p className="rounded-md border border-dashed border-ink-800 px-2.5 py-3 text-center text-[10px] text-ink-500" data-testid="custom-effects-empty">
+        <p className="rounded-none border border-dashed border-ink-800 px-2.5 py-3 text-center text-[10px] text-ink-500" data-testid="custom-effects-empty">
           No custom effects yet. Dial in a look on a clip (Clip controls or LUTs), name it, and Save look — it appears here like a built-in, ready to apply or share.
         </p>
       ) : (
         <div className="grid grid-cols-2 gap-1.5">
           {customEffects.map((fx) => (
-            <div key={fx.id} data-testid={`custom-effect-${fx.id}`} className="overflow-hidden rounded-md border border-ink-800 bg-ink-950/40">
+            <div key={fx.id} data-testid={`custom-effect-${fx.id}`} className="overflow-hidden rounded-none border border-ink-800 bg-ink-950/40">
               <button type="button" onClick={() => audition(fx)} title="Audition (temporary preview — nothing is committed)" className="block w-full text-left">
                 {fx.thumbnail ? (
                   <img src={fx.thumbnail} alt="" className="block aspect-video w-full object-cover" />
@@ -1088,7 +1088,7 @@ function FxCatalogBrowser() {
               aria-label={`Place ${e.name} as an adjustment layer`}
               title="Place as adjustment layer (grades every track below)"
               onClick={() => apply(e, true)}
-              className="absolute right-0.5 top-0.5 hidden h-4 w-4 place-items-center rounded bg-violet-500/80 text-[9px] font-bold text-white group-hover:grid"
+              className="absolute right-0.5 top-0.5 hidden h-4 w-4 place-items-center rounded bg-brand/80 text-[9px] font-bold text-white group-hover:grid"
             >
               L
             </button>
@@ -1149,7 +1149,7 @@ export function EffectsPanel() {
           type="button"
           data-testid="new-adjustment-layer-btn"
           onClick={() => addAdjustmentLayer()}
-          className="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-md border border-cyan-700/70 bg-cyan-950/45 px-2 text-[11px] font-medium text-cyan-100 transition-colors hover:border-cyan-400 hover:bg-cyan-900/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          className="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-none border border-cyan-700/70 bg-cyan-950/45 px-2 text-[11px] font-medium text-cyan-100 transition-colors hover:border-cyan-400 hover:bg-cyan-900/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
         >
           <Plus size={13} /> New adjustment layer
         </button>

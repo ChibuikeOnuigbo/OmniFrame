@@ -270,7 +270,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
           {/* Processing Status & Progress */}
           {processing && (
             <div data-testid="voice-isolation-progress-card" className="space-y-2 p-3.5 rounded-xl border border-brand/40 bg-brand/10 text-xs">
-              <div className="flex items-center justify-between text-violet-200 font-medium">
+              <div className="flex items-center justify-between text-brand-200 font-medium">
                 <span className="flex items-center gap-2">
                   <Loader2 size={14} className="animate-spin text-brand-400" />
                   <span>{status}</span>

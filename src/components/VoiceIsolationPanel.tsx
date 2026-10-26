@@ -412,10 +412,10 @@ export function VoiceIsolationPanel() {
 
   return (
     <div role="region" aria-label="Audio studio tools and results" tabIndex={0} data-testid="voice-isolation-panel" className="flex h-full flex-col gap-3.5 overflow-y-auto p-3 text-xs text-ink-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand">
-      <div className="rounded-xl border border-violet-500/25 bg-gradient-to-br from-violet-500/10 via-ink-900/80 to-ink-950 p-3">
+      <div className="border border-ink-700 bg-ink-900/60 p-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
-            <div className="rounded-lg border border-violet-400/25 bg-violet-500/15 p-1.5 text-violet-300"><AudioLines size={16} /></div>
+            <div className="border border-ink-700 bg-brand/15 p-1.5 text-brand-300"><AudioLines size={16} /></div>
             <div className="min-w-0">
               <div className="truncate text-[13px] font-semibold text-white">Audio Studio · Voice & Music</div>
               <div className="text-[10px] text-ink-400">Record · analyze · isolate · patch</div>
@@ -470,9 +470,9 @@ export function VoiceIsolationPanel() {
                   data-testid="panel-separate-audio-btn"
                   title="Create an audio-only timeline clip from this video"
                   onClick={() => extractAudio(currentClip.id)}
-                  className="flex min-w-0 flex-1 items-center justify-center gap-1 rounded border border-ink-700 bg-ink-900/80 px-2 py-1.5 text-[10px] text-ink-300 hover:border-violet-500/40 hover:text-white"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-1 rounded border border-ink-700 bg-ink-900/80 px-2 py-1.5 text-[10px] text-ink-300 hover:border-brand/40 hover:text-white"
                 >
-                  <AudioLines size={12} className="shrink-0 text-violet-300" />
+                  <AudioLines size={12} className="shrink-0 text-brand-300" />
                   <span className="truncate">Separate video audio</span>
                 </button>
               )}
@@ -492,7 +492,7 @@ export function VoiceIsolationPanel() {
             data-testid="panel-audio-analysis-btn"
             onClick={handleAnalyzeMusic}
             disabled={!currentAsset || analysisBusy || processing}
-            className="flex shrink-0 items-center gap-1.5 rounded border border-ink-700 bg-ink-950 px-2 py-1.5 text-[9px] font-medium text-ink-300 hover:border-violet-400/50 hover:text-white disabled:opacity-40"
+            className="flex shrink-0 items-center gap-1.5 rounded border border-ink-700 bg-ink-950 px-2 py-1.5 text-[9px] font-medium text-ink-300 hover:border-brand-400/50 hover:text-white disabled:opacity-40"
           >
             {analysisBusy ? <Loader2 size={11} className="animate-spin" /> : <Music2 size={11} />}
             Analyze
@@ -503,12 +503,12 @@ export function VoiceIsolationPanel() {
           <div data-testid="panel-audio-analysis-result" className="mt-2 grid grid-cols-2 gap-1.5">
             <div className="rounded-md border border-ink-800 bg-ink-950/70 p-2">
               <div className="text-[9px] uppercase tracking-wide text-ink-400">Estimated key</div>
-              <div className="mt-0.5 truncate text-[12px] font-semibold text-violet-200">{analysisResult.key || 'Not detected'}</div>
+              <div className="mt-0.5 truncate text-[12px] font-semibold text-brand-200">{analysisResult.key || 'Not detected'}</div>
               <div className="text-[9px] text-ink-400">12-tone chroma profile</div>
             </div>
             <div className="rounded-md border border-ink-800 bg-ink-950/70 p-2">
               <div className="text-[9px] uppercase tracking-wide text-ink-400">Estimated tempo</div>
-              <div className="mt-0.5 truncate text-[12px] font-semibold text-violet-200">{analysisResult.bpm ? `≈ ${analysisResult.bpm} BPM` : 'Not detected'}</div>
+              <div className="mt-0.5 truncate text-[12px] font-semibold text-brand-200">{analysisResult.bpm ? `≈ ${analysisResult.bpm} BPM` : 'Not detected'}</div>
               {analysisResult.alternativeBpms.length > 0 && <div className="truncate text-[9px] text-ink-400">Half/double: {analysisResult.alternativeBpms.join(' / ')}</div>}
             </div>
             <div className="col-span-2 text-[9px] text-ink-400">Estimated from {analysisResult.analyzedSeconds.toFixed(0)}s · verify by ear; slowed pitch and unusual meters can affect results.</div>
@@ -680,7 +680,7 @@ export function VoiceIsolationPanel() {
           onClick={handleStemSeparation}
           disabled={processing || audioVideoClips.length === 0 || !demucsSelected || demucsReady === false}
           title={!demucsSelected ? 'Select Demucs v4 to split drums, bass, other and vocals' : 'Create four aligned stems and detect likely vocal ranges'}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-violet-500/35 bg-violet-500/10 px-3 py-2 text-[11px] font-semibold text-violet-200 transition-colors hover:bg-violet-500/20 disabled:opacity-40"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand/35 bg-brand/10 px-3 py-2 text-[11px] font-semibold text-brand-200 transition-colors hover:bg-brand/20 disabled:opacity-40"
         >
           {processingTask === 'stems' ? <Loader2 size={13} className="animate-spin" /> : <AudioLines size={13} />}
           <span>Split 4 stems + find vocal ranges</span>
@@ -690,7 +690,7 @@ export function VoiceIsolationPanel() {
 
       {processing && (
         <div data-testid="panel-processing-status" className="space-y-1.5 rounded-lg border border-brand/40 bg-brand/10 p-2.5 text-[10px]">
-          <div className="flex items-center justify-between gap-2 text-violet-200">
+          <div className="flex items-center justify-between gap-2 text-brand-200">
             <span className="flex min-w-0 items-center gap-1.5"><Loader2 size={12} className="shrink-0 animate-spin text-brand-400" /><span className="truncate">{status}</span></span>
             <span className="font-mono">{progress}%</span>
           </div>
@@ -706,7 +706,7 @@ export function VoiceIsolationPanel() {
       {error && <div data-testid="panel-error-alert" role="alert" className="rounded-lg border border-red-500/30 bg-red-500/10 p-2.5 text-[10px] text-red-300">{error}</div>}
 
       {stemSession && (
-        <section data-testid="panel-vocal-range-workflow" className="space-y-2 rounded-xl border border-violet-500/30 bg-violet-500/[0.06] p-2.5">
+        <section data-testid="panel-vocal-range-workflow" className="space-y-2 rounded-xl border border-brand/30 bg-brand/[0.06] p-2.5">
           <div className="flex items-start justify-between gap-2">
             <div>
               <div className="text-[11px] font-semibold text-violet-100">Vocal range review</div>
@@ -754,7 +754,7 @@ export function VoiceIsolationPanel() {
           <div className="grid grid-cols-[1fr_1fr_auto] items-end gap-1.5 border-t border-ink-800 pt-2">
             <label className="text-[9px] text-ink-400">Start (s)<input type="number" min="0" step="0.05" value={manualStart} onChange={(e) => setManualStart(e.target.value)} disabled={processing || patchCreated} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-950 px-1.5 font-mono text-[10px] text-ink-200" /></label>
             <label className="text-[9px] text-ink-400">End (s)<input type="number" min="0" step="0.05" value={manualEnd} onChange={(e) => setManualEnd(e.target.value)} disabled={processing || patchCreated} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-950 px-1.5 font-mono text-[10px] text-ink-200" /></label>
-            <button type="button" data-testid="panel-add-vocal-range-btn" onClick={addManualInterval} disabled={processing || patchCreated} className="h-7 rounded border border-ink-700 bg-ink-900 px-2 text-[9px] text-ink-300 hover:border-violet-400/50 disabled:opacity-40">Add range</button>
+            <button type="button" data-testid="panel-add-vocal-range-btn" onClick={addManualInterval} disabled={processing || patchCreated} className="h-7 rounded border border-ink-700 bg-ink-900 px-2 text-[9px] text-ink-300 hover:border-brand-400/50 disabled:opacity-40">Add range</button>
           </div>
 
           <div className="space-y-1.5 border-t border-ink-800 pt-2">

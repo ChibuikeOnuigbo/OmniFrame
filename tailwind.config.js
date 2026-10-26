@@ -35,10 +35,14 @@ export default {
           300: '#b6c1d4',
         },
         brand: {
-          DEFAULT: '#6d5efc',
-          600: '#5a4be0',
-          500: '#6d5efc',
-          400: '#9083ff',
+          // Board R: "flame" identity — committed direction (dense/technical,
+          // signal-orange on ink) instead of the AI-slop vibecode violet.
+          DEFAULT: '#ff6b35',
+          200: '#ffd0bd',
+          300: '#ffb08e',
+          400: '#ff8c61',
+          500: '#ff6b35',
+          600: '#e85520',
         },
         accent: '#22d3ee',
         ok: '#34d399',
@@ -46,7 +50,7 @@ export default {
         bad: '#f87171',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        sans: ['Avenir Next', 'Segoe UI Variable Display', 'Trebuchet MS', 'DejaVu Sans', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
     },

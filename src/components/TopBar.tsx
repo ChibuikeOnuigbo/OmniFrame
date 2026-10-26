@@ -373,7 +373,7 @@ export function TopBar() {
         aria-expanded={leftOpen}
         aria-controls="left-panel"
         onClick={() => setLeftOpen(!leftOpen)}
-        className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        className="grid h-8 w-8 place-items-center rounded-none text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
         {leftOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
       </button>
@@ -421,7 +421,7 @@ export function TopBar() {
           onClick={() => fileInput.current?.click()}
           title="Import media"
           aria-label="Import media"
-          className="flex h-8 items-center gap-2 rounded-md bg-brand px-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 sm:px-3"
+          className="flex h-8 items-center gap-2 rounded-none bg-brand px-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 sm:px-3"
         >
           <Upload size={15} aria-hidden="true" />
           <span className="hidden sm:inline">Import</span>
@@ -436,7 +436,7 @@ export function TopBar() {
           onClick={onSaveOmniProject}
           title="Save the complete OmniFrame project as .omni"
           aria-label="Save .omni — complete OmniFrame project"
-          className="flex h-8 shrink-0 items-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-1 text-xs font-medium text-ink-200 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:gap-1.5 sm:px-2"
+          className="flex h-8 shrink-0 items-center gap-1 rounded-none border border-ink-700 bg-ink-800 px-1 text-xs font-medium text-ink-200 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:gap-1.5 sm:px-2"
         >
           <Save size={14} aria-hidden="true" />
           <span className="hidden lg:inline">Save .omni</span>
@@ -447,7 +447,7 @@ export function TopBar() {
           onClick={() => projectInput.current?.click()}
           title="Open a saved OmniFrame .omni project"
           aria-label="Open OmniFrame project"
-          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          className="grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <FolderOpen size={15} aria-hidden="true" />
         </button>
@@ -478,7 +478,7 @@ export function TopBar() {
           aria-controls={layoutOpen ? 'layout-popup' : undefined}
           onPointerDown={(event) => event.stopPropagation()}
           onClick={() => setLayoutOpen((open) => !open)}
-          className={`grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+          className={`grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             layoutOpen ? 'bg-ink-700 text-white' : 'text-ink-400'
           }`}
         >
@@ -535,7 +535,7 @@ export function TopBar() {
                     setWorkspacePreset(p.id as WorkspacePreset)
                     setLayoutOpen(false)
                   }}
-                  className={`flex min-h-8 items-center justify-between gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
+                  className={`flex min-h-8 items-center justify-between gap-2 rounded-none px-2 py-1.5 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
                     workspacePreset === p.id && focusMode === 'none' ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
                   }`}
                 >
@@ -570,7 +570,7 @@ export function TopBar() {
                     setFocusMode(m.id as FocusMode)
                     setLayoutOpen(false)
                   }}
-                  className={`flex min-h-8 items-center justify-between rounded-md px-2 py-1.5 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
+                  className={`flex min-h-8 items-center justify-between rounded-none px-2 py-1.5 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${
                     focusMode === m.id ? 'bg-brand/20 text-brand-400 font-medium' : 'text-ink-300'
                   }`}
                 >
@@ -597,7 +597,7 @@ export function TopBar() {
             setSettingsCategory('cursor')
             setSettingsOpen(true)
           }}
-          className="hidden h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:grid"
+          className="hidden h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:grid"
         >
           <HelpCircle size={15} />
         </button>
@@ -612,7 +612,7 @@ export function TopBar() {
           aria-controls={settingsOpen ? 'settings-popup' : undefined}
           onPointerDown={(event) => event.stopPropagation()}
           onClick={() => setSettingsOpen((open) => !open)}
-          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          className="grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Settings size={15} />
         </button>
@@ -625,7 +625,7 @@ export function TopBar() {
           aria-haspopup="dialog"
           aria-expanded={compOpen}
           onClick={() => setCompOpen((open) => !open)}
-          className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          className="grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Settings2 size={15} />
         </button>
@@ -640,7 +640,7 @@ export function TopBar() {
             disabled={exporting}
             title={exporting ? 'Exporting video' : 'Export the complete timeline as video'}
             aria-label={exporting ? 'Exporting video' : 'Export video'}
-            className="flex h-8 items-center gap-2 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs font-medium transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3"
+            className="flex h-8 items-center gap-2 rounded-none border border-ink-700 bg-ink-800 px-2 text-xs font-medium transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3"
           >
             <Download size={15} />
             <span className="hidden sm:inline">{exporting ? 'Exporting…' : 'Export video'}</span>
@@ -655,7 +655,7 @@ export function TopBar() {
             aria-haspopup="menu"
             aria-expanded={exportMenuOpen}
             title="Choose a content-compatible export format"
-            className="grid h-8 w-8 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            className="grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <ChevronDown size={14} />
           </button>
@@ -687,7 +687,7 @@ export function TopBar() {
                     <Film size={14} className="text-amber-300" />
                     <span><strong>Video sequence</strong><span className="ml-1 text-ink-400">— rendered timeline; layers become frames</span></span>
                   </button>
-                  <p data-testid="video-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                  <p data-testid="video-export-loss-warning" className="mx-2 my-1 rounded-none border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
                     Video is a rendered copy, not an editable timeline. MediaRecorder chooses MP4 or WebM based on browser support.
                   </p>
                 </>
@@ -704,7 +704,7 @@ export function TopBar() {
                     <ImageIcon size={14} className="text-sky-300" />
                     <span><strong>PNG still</strong><span className="ml-1 text-ink-400">— flattened frame at playhead</span></span>
                   </button>
-                  <p data-testid="png-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                  <p data-testid="png-export-loss-warning" className="mx-2 my-1 rounded-none border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
                     PNG contains one flattened frame only; clip/layer structure, animation and all other frames are lost.
                   </p>
                 </>
@@ -717,7 +717,7 @@ export function TopBar() {
                   onClick={onExportObj}
                   className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-ink-200 transition-colors hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                 >
-                  <Box size={14} className="text-violet-300" />
+                  <Box size={14} className="text-brand-300" />
                   <span><strong>OBJ 3D geometry</strong><span className="ml-1 text-ink-400">— scene primitives only</span></span>
                 </button>
               )}
@@ -725,17 +725,17 @@ export function TopBar() {
                 <p data-testid="no-subset-export" className="px-2 py-2 text-xs text-ink-400">No compatible subset export is available for the current visible content. Save the editable project as .omni.</p>
               )}
               {(hasVisibleNonStillTimelineContent || is3DMode) && !canExportPng && (
-                <p data-testid="png-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                <p data-testid="png-export-loss-warning" className="mx-2 my-1 rounded-none border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
                   PNG is withheld for this timeline because it contains video, audio, 3D, or compound content that a still image cannot represent.
                 </p>
               )}
               {canExportObj && (
-                <p data-testid="obj-export-loss-warning" className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                <p data-testid="obj-export-loss-warning" className="mx-2 my-1 rounded-none border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
                   OBJ contains geometry only; animation, materials/textures, effects, timeline media and 2D layers are omitted.
                 </p>
               )}
               {canExportObj && hasImported3DModels && (
-                <p className="mx-2 my-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
+                <p className="mx-2 my-1 rounded-none border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
                   Imported model files are also omitted; only OmniFrame scene primitives are written.
                 </p>
               )}
@@ -763,7 +763,7 @@ export function TopBar() {
                 type="button"
                 aria-label="Close settings"
                 onClick={() => setSettingsOpen(false)}
-                className="grid h-8 w-8 place-items-center rounded-md text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="grid h-8 w-8 place-items-center rounded-none text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 <X size={14} />
               </button>
@@ -774,7 +774,7 @@ export function TopBar() {
               placeholder="Search settings"
               value={settingsSearch}
               onChange={(event) => setSettingsSearch(event.target.value)}
-              className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 outline-none placeholder:text-ink-500 focus:border-brand"
+              className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 outline-none placeholder:text-ink-500 focus:border-brand"
             />
           </header>
           <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
@@ -792,7 +792,7 @@ export function TopBar() {
                   onClick={() => setSettingsCategory(category)}
                   className={`h-8 sm:h-9 shrink-0 rounded-lg px-2.5 sm:px-3 text-left text-xs capitalize outline-none transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand truncate ${
                     settingsCategory === category
-                      ? 'bg-brand/20 text-violet-200 font-medium'
+                      ? 'bg-brand/20 text-brand-200 font-medium'
                       : 'text-ink-400 hover:bg-ink-700 hover:text-white'
                   }`}
                 >
@@ -830,7 +830,7 @@ export function TopBar() {
                           setSettingsCategory(item.category)
                           setSettingsSearch('')
                         }}
-                        className="block w-full rounded-md px-2 py-2 text-left hover:bg-ink-700"
+                        className="block w-full rounded-none px-2 py-2 text-left hover:bg-ink-700"
                       >
                         <span className="block text-xs text-ink-200">{item.label}</span>
                         <span className="mt-0.5 block text-[10px] capitalize text-ink-500">
@@ -850,7 +850,7 @@ export function TopBar() {
                       aria-label="Project frame rate"
                       value={projectFps}
                       onChange={(event) => setProjectFps(Number(event.target.value))}
-                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200"
+                      className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200"
                     >
                       {[23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120].map((rate) => (
                         <option key={rate} value={rate}>
@@ -872,7 +872,7 @@ export function TopBar() {
                         type="checkbox"
                         checked={dropFrameTimecode}
                         onChange={(event) => setDropFrameTimecode(event.target.checked)}
-                        className="h-4 w-4 accent-violet-500"
+                        className="h-4 w-4 accent-brand"
                       />
                     </label>
                   )}
@@ -890,9 +890,9 @@ export function TopBar() {
                         role="radio"
                         aria-checked={previewQuality === quality}
                         onClick={() => setPreviewQuality(quality)}
-                        className={`h-9 rounded-md border px-3 text-xs capitalize ${
+                        className={`h-9 rounded-none border px-3 text-xs capitalize ${
                           previewQuality === quality
-                            ? 'border-brand bg-brand/15 text-violet-200'
+                            ? 'border-brand bg-brand/15 text-brand-200'
                             : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700'
                         }`}
                       >
@@ -962,7 +962,7 @@ export function TopBar() {
                             type="checkbox"
                             checked={enabled}
                             onChange={() => toggleContextMenuCommand(item.id)}
-                            className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                            className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-brand cursor-pointer"
                           />
                         </label>
                       )
@@ -1081,7 +1081,7 @@ export function TopBar() {
                       type="checkbox"
                       checked={cursorConfig.enabled}
                       onChange={(e) => setCursorConfig({ enabled: e.target.checked })}
-                      className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                      className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-brand cursor-pointer"
                     />
                   </label>
 
@@ -1110,7 +1110,7 @@ export function TopBar() {
                           onClick={() => setCursorConfig({ pack: item.id, theme: item.id })}
                           className={`p-2 rounded-lg border text-left transition-all ${
                             (cursorConfig.pack || cursorConfig.theme) === item.id
-                              ? 'border-brand bg-brand/20 text-violet-200 shadow-sm'
+                              ? 'border-brand bg-brand/20 text-brand-200 shadow-sm'
                               : 'border-ink-700 bg-ink-850 text-ink-400 hover:bg-ink-800 hover:text-ink-200'
                           }`}
                         >
@@ -1140,7 +1140,7 @@ export function TopBar() {
                           onClick={() => setCursorConfig({ size: item.id })}
                           className={`p-2 rounded-lg border text-left transition-all ${
                             cursorConfig.size === item.id
-                              ? 'border-brand bg-brand/20 text-violet-200 shadow-sm'
+                              ? 'border-brand bg-brand/20 text-brand-200 shadow-sm'
                               : 'border-ink-700 bg-ink-850 text-ink-400 hover:bg-ink-800 hover:text-ink-200'
                           }`}
                         >
@@ -1170,7 +1170,7 @@ export function TopBar() {
                         type="checkbox"
                         checked={cursorConfig.showBadges}
                         onChange={(e) => setCursorConfig({ showBadges: e.target.checked })}
-                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-brand cursor-pointer"
                       />
                     </label>
 
@@ -1187,7 +1187,7 @@ export function TopBar() {
                         type="checkbox"
                         checked={cursorConfig.showDropReticle !== false}
                         onChange={(e) => setCursorConfig({ showDropReticle: e.target.checked })}
-                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-brand cursor-pointer"
                       />
                     </label>
 
@@ -1204,7 +1204,7 @@ export function TopBar() {
                         type="checkbox"
                         checked={cursorConfig.showDragPill !== false}
                         onChange={(e) => setCursorConfig({ showDragPill: e.target.checked })}
-                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-brand cursor-pointer"
                       />
                     </label>
 
@@ -1221,7 +1221,7 @@ export function TopBar() {
                         type="checkbox"
                         checked={cursorConfig.showClickBurst}
                         onChange={(e) => setCursorConfig({ showClickBurst: e.target.checked })}
-                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-violet-500 cursor-pointer"
+                        className="h-4 w-4 rounded border-ink-700 bg-ink-800 accent-brand cursor-pointer"
                       />
                     </label>
                   </div>
@@ -1290,7 +1290,7 @@ export function TopBar() {
                     type="checkbox"
                     checked={hideOverflowX}
                     onChange={(event) => setHideOverflowX(event.target.checked)}
-                    className="h-4 w-4 shrink-0 accent-violet-500"
+                    className="h-4 w-4 shrink-0 accent-brand"
                   />
                 </label>
                 <label className="flex items-center justify-between gap-4 text-xs">
@@ -1303,7 +1303,7 @@ export function TopBar() {
                     type="checkbox"
                     checked={reducedMotion}
                     onChange={(event) => setReducedMotion(event.target.checked)}
-                    className="h-4 w-4 accent-violet-500"
+                    className="h-4 w-4 accent-brand"
                   />
                 </label>
                 </div>
@@ -1347,7 +1347,7 @@ export function TopBar() {
                           data-testid={`ui-palette-${palette.id}`}
                           aria-pressed={uiPalette === palette.id}
                           onClick={() => setUiPalette(palette.id)}
-                          className={`flex h-8 flex-1 items-center justify-center gap-1.5 rounded-md border text-[11px] ${uiPalette === palette.id ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500'}`}
+                          className={`flex h-8 flex-1 items-center justify-center gap-1.5 rounded-none border text-[11px] ${uiPalette === palette.id ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500'}`}
                         >
                           <span className="h-3 w-3 rounded-full" style={{ backgroundColor: palette.accent }} />
                           {palette.name}
@@ -1382,7 +1382,7 @@ export function TopBar() {
                             type="checkbox"
                             checked={dockerPrefs.leftTabs[id] !== false}
                             onChange={(event) => setDockerPref('leftTabs', id, event.target.checked)}
-                            className="h-4 w-4 shrink-0 accent-violet-500"
+                            className="h-4 w-4 shrink-0 accent-brand"
                           />
                         </label>
                       ))}
@@ -1402,7 +1402,7 @@ export function TopBar() {
                             type="checkbox"
                             checked={dockerPrefs.rightSubtools[id] !== false}
                             onChange={(event) => setDockerPref('rightSubtools', id, event.target.checked)}
-                            className="h-4 w-4 shrink-0 accent-violet-500"
+                            className="h-4 w-4 shrink-0 accent-brand"
                           />
                         </label>
                       ))}
@@ -1413,7 +1413,7 @@ export function TopBar() {
 
               {!settingsSearch && settingsCategory === 'ai' && (
                 <div className="space-y-3 text-xs">
-                  <div className="rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-[10px] leading-relaxed text-amber-200">
+                  <div className="rounded-none border border-amber-500/30 bg-amber-500/10 p-2 text-[10px] leading-relaxed text-amber-200">
                     <strong>Enter an API key only.</strong> Never paste source code, prompts, passwords, recovery
                     codes, or other private information here. Browser requests expose the key to this tab and the
                     selected provider; use a restricted key with spending limits.
@@ -1425,7 +1425,7 @@ export function TopBar() {
                       aria-label="AI provider"
                       value={aiProvider}
                       onChange={(event) => selectAiProvider(event.target.value as AiProviderId)}
-                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                      className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
                     >
                       {AI_PROVIDERS.map((provider) => (
                         <option key={provider.id} value={provider.id}>
@@ -1443,7 +1443,7 @@ export function TopBar() {
                         placeholder="https://example.com/v1"
                         value={aiEndpoint}
                         onChange={(event) => setAiEndpoint(event.target.value)}
-                        className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                        className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
                       />
                       <span className="mt-1 block text-[10px] text-ink-500">
                         Must implement the OpenAI compatible /chat/completions endpoint. Do not paste JavaScript or
@@ -1459,7 +1459,7 @@ export function TopBar() {
                       autoComplete="off"
                       value={aiModel}
                       onChange={(event) => setAiModel(event.target.value)}
-                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                      className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
                     />
                     <span className="mt-1 block text-[10px] text-ink-500">
                       Use the exact model ID shown by your provider, not code or a model description.
@@ -1476,7 +1476,7 @@ export function TopBar() {
                       placeholder={AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.keyPrefixHint}
                       value={aiApiKey}
                       onChange={(event) => setAiApiKey(event.target.value)}
-                      className="h-8 w-full rounded-md border border-ink-700 bg-ink-800 px-2 text-xs"
+                      className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
                     />
                     <span className="mt-1 block text-[10px] text-ink-500">
                       Stored in memory only; cleared when the tab closes. Obtain it from the provider's official
@@ -1487,7 +1487,7 @@ export function TopBar() {
                     type="button"
                     disabled={aiTestState === 'testing'}
                     onClick={testProvider}
-                    className="h-8 rounded-md border border-ink-600 bg-ink-800 px-3 text-xs text-ink-200 hover:bg-ink-700 disabled:opacity-50"
+                    className="h-8 rounded-none border border-ink-600 bg-ink-800 px-3 text-xs text-ink-200 hover:bg-ink-700 disabled:opacity-50"
                   >
                     {aiTestState === 'testing' ? 'Testing…' : 'Test connection'}
                   </button>
@@ -1500,7 +1500,7 @@ export function TopBar() {
                     </p>
                   )}
 
-                  <div className="rounded-md border border-ink-700 bg-ink-900 p-2" data-testid="ai-connection-card">
+                  <div className="rounded-none border border-ink-700 bg-ink-900 p-2" data-testid="ai-connection-card">
                     <div className="flex items-center gap-2">
                       <span className={`h-2 w-2 rounded-full ${aiConnection.status === 'connected' ? 'bg-emerald-400' : aiConnection.status === 'error' ? 'bg-red-400' : aiConnection.status === 'testing' ? 'bg-amber-400' : 'bg-ink-500'}`} />
                       <span className="font-semibold text-ink-100" data-testid="ai-connection-status">
@@ -1514,7 +1514,7 @@ export function TopBar() {
                     </p>
                   </div>
 
-                  <div className="rounded-md border border-ink-700 bg-ink-900 p-2" data-testid="model-equivalents">
+                  <div className="rounded-none border border-ink-700 bg-ink-900 p-2" data-testid="model-equivalents">
                     <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Choose a model — equivalents per job</p>
                     <div className="mb-2 flex flex-wrap gap-1" role="group" aria-label="Model capability">
                       {MODEL_CAPABILITIES.map((cap) => (
@@ -1543,7 +1543,7 @@ export function TopBar() {
                           className={`flex w-full items-center gap-2 rounded border px-2 py-1.5 text-left ${aiModel === eq.model ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 text-ink-300 hover:border-ink-500'}`}
                         >
                           <span className="min-w-0 flex-1 truncate font-mono text-[10px]">{eq.model}</span>
-                          <span className={`shrink-0 rounded-full px-1.5 py-px text-[9px] ${eq.tier === 'flagship' ? 'bg-violet-500/25 text-violet-200' : eq.tier === 'fast' ? 'bg-sky-500/20 text-sky-200' : 'bg-emerald-500/20 text-emerald-200'}`}>{eq.tier}</span>
+                          <span className={`shrink-0 rounded-full px-1.5 py-px text-[9px] ${eq.tier === 'flagship' ? 'bg-brand/25 text-brand-200' : eq.tier === 'fast' ? 'bg-sky-500/20 text-sky-200' : 'bg-emerald-500/20 text-emerald-200'}`}>{eq.tier}</span>
                           {aiCapabilityModels[modelCap] === eq.model && <span className="shrink-0 text-[9px] text-brand-400">in use</span>}
                         </button>
                       )) : (
@@ -1567,7 +1567,7 @@ export function TopBar() {
                     </div>
                   </div>
 
-                  <div className="rounded-md border border-ink-700 bg-ink-900 p-2" data-testid="training-center">
+                  <div className="rounded-none border border-ink-700 bg-ink-900 p-2" data-testid="training-center">
                     <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Train your own model</p>
                     <p className="text-[10px] leading-snug text-ink-500">
                       Your saved Custom Effects become training pairs (brief → effect JSON). Export the dataset, or submit a fine-tune job with your key — the tuned model is then yours to select above.

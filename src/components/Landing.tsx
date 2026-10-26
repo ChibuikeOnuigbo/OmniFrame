@@ -67,7 +67,7 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
                   <div
                     key={String(title)}
                     data-testid="landing-feature-card"
-                    className="relative z-10 overflow-hidden rounded-xl border border-violet-300/10 bg-gradient-to-br from-[#191526]/95 via-[#11131d]/95 to-[#0a0d14]/95 p-3 shadow-[0_14px_35px_rgba(0,0,0,.38)] backdrop-blur-xl"
+                    className="relative z-10 overflow-hidden border border-ink-700 bg-ink-900 p-3.5 shadow-[0_8px_24px_rgba(0,0,0,.45)]"
                   >
                     <div className="pointer-events-none absolute -right-7 -top-8 h-16 w-16 rounded-full bg-brand/15 blur-2xl" />
                     <FeatureIcon size={15} className="relative mb-3 text-brand-400" />
@@ -98,7 +98,7 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
                     <div className="mb-3 flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-brand" /><span className="h-px flex-1 bg-white/10" /></div>
                     <div className="relative space-y-2">
                       <div className="flex h-7 gap-1"><span className="w-[27%] rounded bg-brand/35" /><span className="w-[36%] rounded bg-brand/25" /><span className="w-[22%] rounded bg-cyan-400/20" /></div>
-                      <div className="flex h-5 gap-1 pl-[12%]"><span className="w-[42%] rounded bg-violet-400/15" /><span className="w-[20%] rounded bg-violet-400/10" /></div>
+                      <div className="flex h-5 gap-1 pl-[12%]"><span className="w-[42%] rounded bg-brand/20" /><span className="w-[20%] rounded bg-brand/10" /></div>
                       <span className="absolute -top-3 bottom-0 left-[48%] w-px bg-brand"><i className="absolute -left-1 -top-1 h-2 w-2 rotate-45 bg-brand" /></span>
                     </div>
                   </div>

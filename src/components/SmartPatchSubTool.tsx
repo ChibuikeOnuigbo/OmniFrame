@@ -118,7 +118,7 @@ export function SmartPatchSubTool() {
       </div>
 
       {selection && source && (
-        <button type="button" data-testid="smart-patch-selection-btn" onClick={useSelection} className={`${buttonClass} w-full border-violet-500/30 bg-violet-500/10 text-violet-200 hover:bg-violet-500/20`}>
+        <button type="button" data-testid="smart-patch-selection-btn" onClick={useSelection} className={`${buttonClass} w-full border-brand/30 bg-brand/10 text-brand-200 hover:bg-brand/20`}>
           <Sparkles size={12} /> Apply to active selection
         </button>
       )}

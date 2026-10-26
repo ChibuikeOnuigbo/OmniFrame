@@ -316,7 +316,7 @@ function TrackTargetMenu() {
         aria-label="Track targeting"
         onClick={() => setOpen((o) => !o)}
         className={
-          'flex h-8 max-w-[132px] items-center justify-center gap-1 rounded-md border px-1.5 text-xs transition-colors ' +
+          'flex h-8 max-w-[132px] items-center justify-center gap-1 rounded-none border px-1.5 text-xs transition-colors ' +
           (allInScope
             ? 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white'
             : 'border-brand bg-brand/20 text-white hover:bg-brand/30')
@@ -335,7 +335,7 @@ function TrackTargetMenu() {
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div
             data-testid="track-target-menu"
-            className="fixed z-50 w-52 rounded-md border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
+            className="fixed z-50 w-52 rounded-none border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
             style={{
               left: btnRef.current ? btnRef.current.getBoundingClientRect().left : 0,
               top: btnRef.current ? btnRef.current.getBoundingClientRect().bottom + 4 : 0,
@@ -351,7 +351,7 @@ function TrackTargetMenu() {
                 setTrackTargets([])
                 setOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Check size={12} className={allInScope ? 'opacity-100' : 'opacity-0'} />
               <span>All tracks (default)</span>
@@ -365,7 +365,7 @@ function TrackTargetMenu() {
                   type="button"
                   data-testid={`track-target-item-${t.id}`}
                   onClick={() => toggleTrackTarget(t.id)}
-                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <span
                     className={
@@ -389,7 +389,7 @@ function TrackTargetMenu() {
                     setTrackTargets([])
                     setOpen(false)
                   }}
-                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <X size={12} />
                   <span>Clear targeting</span>
@@ -554,7 +554,7 @@ function TrackHeader({
         <>
           <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
           <div
-            className="fixed z-50 w-44 rounded-md border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
+            className="fixed z-50 w-44 rounded-none border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
             style={{
               left: btnRef.current ? btnRef.current.getBoundingClientRect().right + 4 : 172,
               top: btnRef.current ? btnRef.current.getBoundingClientRect().top : 100,
@@ -567,7 +567,7 @@ function TrackHeader({
                 useEditor.getState().closeTrackGaps(track.id)
                 setMenuOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Minimize2 size={13} />
               <span>Close Gaps</span>
@@ -580,7 +580,7 @@ function TrackHeader({
                 createTrack(track.type, 'above', track.id)
                 setMenuOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Plus size={13} />
               <span>Add Track Above</span>
@@ -592,7 +592,7 @@ function TrackHeader({
                 createTrack(track.type, 'below', track.id)
                 setMenuOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Plus size={13} />
               <span>Add Track Below</span>
@@ -907,17 +907,17 @@ function ClipView({
 
   const clipBorderClass = selected
     ? isAdjustment
-      ? 'border-2 border-violet-300 ring-2 ring-violet-300/90 shadow-[0_0_18px_rgba(167,139,250,0.65)] z-10'
+      ? 'border-2 border-violet-300 ring-2 ring-violet-300/90 z-10'
       : hasEffects
-      ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 shadow-[0_0_16px_rgba(147,197,253,0.6)] z-10'
+      ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 z-10'
       : isCompound
-      ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 shadow-[0_0_16px_rgba(129,140,248,0.6)] z-10'
+      ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 z-10'
       : isText
-      ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
+      ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 z-10'
       : isAudio
-      ? 'border-2 border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_14px_rgba(52,211,153,0.5)] z-10'
+      ? 'border-2 border-emerald-400 ring-2 ring-emerald-400/80 z-10'
       : isImage
-      ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_14px_rgba(192,132,252,0.5)] z-10'
+      ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 z-10'
       : is3D
       ? 'border-2 border-fuchsia-400 ring-2 ring-fuchsia-400/80 shadow-[0_0_14px_rgba(232,121,249,0.5)] z-10'
       : 'border-2 border-sky-400 ring-2 ring-sky-400/80 shadow-[0_0_14px_rgba(56,189,248,0.5)] z-10'
@@ -997,7 +997,7 @@ function ClipView({
       className={[
         // CapCut model: an effect is a thin purple clip (text-clip height),
         // centred in its track — it grades whatever is underneath it.
-        isAdjustment ? 'absolute top-[23%] bottom-[23%] pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]' : 'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
+        isAdjustment ? 'absolute top-[23%] bottom-[23%] pointer-events-auto rounded-none overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]' : 'absolute top-1 bottom-1 pointer-events-auto rounded-none overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
         tool === 'select' ? 'cursor-grab active:cursor-grabbing' : 'cursor-inherit',
         clipBorderClass,
         clip.hidden
@@ -1011,7 +1011,7 @@ function ClipView({
       {clip.kind === 'null' && (
         <div
           data-testid="null-tile-overlay"
-          className="pointer-events-none absolute inset-0 grid place-items-center rounded-md border border-dashed border-slate-300/70 bg-slate-400/10"
+          className="pointer-events-none absolute inset-0 grid place-items-center rounded-none border border-dashed border-slate-300/70 bg-slate-400/10"
         >
           <span className="font-mono text-[9px] tracking-widest text-slate-200">NULL</span>
         </div>
@@ -2088,7 +2088,7 @@ export function Timeline() {
               setToolMenuOpen(false)
               setSpeedMenuOpen((open) => !open)
             }}
-            className="flex h-8 min-w-[62px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
+            className="flex h-8 min-w-[62px] items-center justify-center gap-1 rounded-none border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
           >
             <Gauge size={15} />
             <span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span>
@@ -2106,7 +2106,7 @@ export function Timeline() {
           title="Split at playhead (Ctrl+B / B)"
           aria-label="Split at playhead"
           onClick={() => splitAt(useEditor.getState().playhead)}
-          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-none border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
         >
           <Scissors size={15} />
         </button>
@@ -2120,7 +2120,7 @@ export function Timeline() {
             setSpeedMenuOpen(false)
             setToolMenuOpen((open) => !open)
           }}
-          className="flex h-8 min-w-[36px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-1.5 text-ink-200 hover:bg-ink-700"
+          className="flex h-8 min-w-[36px] items-center justify-center gap-1 rounded-none border border-ink-700 bg-ink-800 px-1.5 text-ink-200 hover:bg-ink-700"
         >
           {tool === 'select' ? <MousePointer2 size={15} /> : <Slash size={15} />}
           <ChevronDown size={12} />
@@ -2144,7 +2144,7 @@ export function Timeline() {
           aria-pressed={gapSelectMode}
           onClick={() => setGapSelectMode(!gapSelectMode)}
           className={
-            'flex h-8 items-center justify-center gap-1.5 rounded-md border px-2 text-xs transition-colors ' +
+            'flex h-8 items-center justify-center gap-1.5 rounded-none border px-2 text-xs transition-colors ' +
             (gapSelectMode
               ? 'border-amber-400 bg-amber-400/20 text-amber-200 hover:bg-amber-400/30'
               : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white')
@@ -2163,7 +2163,7 @@ export function Timeline() {
           title="Add Marker at playhead (M)"
           aria-label="Add marker"
           onClick={handleAddMarker}
-          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-none border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
         >
           <Bookmark size={15} />
         </button>
@@ -2179,7 +2179,7 @@ export function Timeline() {
         {/* View and snapping controls */}
         <div role="group" aria-label="Timeline zoom and snapping" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         {/* zoom group */}
-        <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-md border border-ink-700 bg-ink-800">
+        <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-none border border-ink-700 bg-ink-800">
           <IconButton title="Zoom out" onClick={() => zoomBy(0.8)} className="rounded-none border-r border-ink-700">
             <ZoomOut size={15} />
           </IconButton>
@@ -2220,7 +2220,7 @@ export function Timeline() {
           aria-label="Toggle snapping"
           aria-pressed={snapping}
           onClick={toggleSnapping}
-          className={`grid place-items-center h-8 w-8 rounded-md border transition-colors ${
+          className={`grid place-items-center h-8 w-8 rounded-none border transition-colors ${
             snapping
               ? 'border-brand/60 bg-brand/15 text-violet-200'
               : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
@@ -2234,7 +2234,7 @@ export function Timeline() {
           title={`Graph Editor / Curves (${graphEditorOpen ? 'Active' : 'Hidden'})`}
           aria-pressed={graphEditorOpen}
           onClick={() => setGraphEditorOpen(!graphEditorOpen)}
-          className={`flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs transition-colors ${
+          className={`flex h-8 items-center gap-1.5 rounded-none border px-2.5 text-xs transition-colors ${
             graphEditorOpen
               ? 'border-brand/60 bg-brand/20 text-white font-medium shadow-xs'
               : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
@@ -2271,7 +2271,7 @@ export function Timeline() {
                 setTool(item.id)
                 setToolMenuOpen(false)
               }}
-              className={`flex h-9 w-full items-center gap-2 rounded-md px-2.5 text-xs ${
+              className={`flex h-9 w-full items-center gap-2 rounded-none px-2.5 text-xs ${
                 tool === item.id ? 'bg-brand/15 text-violet-200' : 'text-ink-300 hover:bg-ink-700'
               }`}
             >
@@ -2300,7 +2300,7 @@ export function Timeline() {
                   setSpeed(value)
                   setCustomSpeed(value)
                 }}
-                className={`h-8 rounded-md text-xs ${
+                className={`h-8 rounded-none text-xs ${
                   Math.abs(speed) === value ? 'bg-brand text-white' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'
                 }`}
               >
@@ -2868,7 +2868,7 @@ export function Timeline() {
               {dragState && (
                 <div
                   data-testid="timeline-drag-ghost"
-                  className="absolute rounded-md border-2 border-dashed border-amber-400 bg-amber-500/35 pointer-events-none z-30 flex items-center justify-between px-2 text-amber-100 font-mono text-[10px] shadow-[0_0_16px_rgba(251,191,36,0.6)]"
+                  className="absolute rounded-none border-2 border-dashed border-amber-400 bg-amber-500/35 pointer-events-none z-30 flex items-center justify-between px-2 text-amber-100 font-mono text-[10px] shadow-[0_0_16px_rgba(251,191,36,0.6)]"
                   style={{
                     left: dragState.curTime * px,
                     width: Math.max(10, dragState.origDuration * px),
@@ -2896,7 +2896,7 @@ export function Timeline() {
           <div className="fixed inset-0 z-[96]" onClick={() => setMarkerPopover(null)} />
           <div
             data-testid="marker-group-popover"
-            className="fixed z-[101] w-60 rounded-md border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
+            className="fixed z-[101] w-60 rounded-none border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
             style={{ left: Math.min(markerPopover.x, window.innerWidth - 250), top: Math.min(markerPopover.y, window.innerHeight - 260) }}
           >
             <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-400">{markerPopover.ids.length} markers at this point</div>
@@ -2986,7 +2986,7 @@ export function Timeline() {
           <div
             data-testid="timeline-context-menu"
             role="menu"
-            className="fixed z-[100] w-52 rounded-md border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
+            className="fixed z-[100] w-52 rounded-none border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
             style={{
               left: Math.min(contextMenu.x, window.innerWidth - 220),
               top: Math.min(contextMenu.y, window.innerHeight - 240),
@@ -3057,7 +3057,7 @@ export function Timeline() {
                     type="button"
                     data-testid="ctx-fxmenu-edit"
                     onClick={() => { stf.setActiveFx({ clipId: contextMenu.clip!.id, fxId: instF.id }); stf.requestRightSection('fxstack'); closeF() }}
-                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
                   >
                     <Sliders size={14} /> Edit properties…
                   </button>
@@ -3065,7 +3065,7 @@ export function Timeline() {
                     type="button"
                     data-testid="ctx-fxmenu-dup"
                     onClick={() => { stf.duplicateFxInstance(contextMenu.clip!.id, instF.id); closeF() }}
-                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
                   >
                     Duplicate (inside container)
                   </button>
@@ -3073,7 +3073,7 @@ export function Timeline() {
                     type="button"
                     data-testid="ctx-fxmenu-toggle"
                     onClick={() => { stf.toggleFxEnabled(contextMenu.clip!.id, instF.id); closeF() }}
-                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
                   >
                     {instF.enabled ? 'Disable' : 'Enable'}
                   </button>
@@ -3099,7 +3099,7 @@ export function Timeline() {
                   type="button"
                   data-testid="ctx-group-btn"
                   onClick={() => { useEditor.getState().groupSelection(); setContextMenu(null) }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Group size={14} />
                   <span>Group</span>
@@ -3109,7 +3109,7 @@ export function Timeline() {
                   type="button"
                   data-testid="ctx-ungroup-btn"
                   onClick={() => { useEditor.getState().ungroupSelection(); setContextMenu(null) }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Ungroup size={14} />
                   <span>Ungroup</span>
@@ -3119,7 +3119,7 @@ export function Timeline() {
                   type="button"
                   data-testid="ctx-new-null-btn"
                   onClick={() => { useEditor.getState().addNullObject(); setContextMenu(null) }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <SquareDashed size={14} />
                   <span>New Null Object</span>
@@ -3130,7 +3130,7 @@ export function Timeline() {
                     splitAt(useEditor.getState().playhead)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Scissors size={14} />
                   <span>Split at Playhead</span>
@@ -3163,7 +3163,7 @@ export function Timeline() {
                   type="button"
                   data-testid="ctx-fx-browse"
                   onClick={() => { setLeftTab('effects'); setContextMenu(null) }}
-                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-violet-200"
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
                 >
                   <Sliders size={14} />
                   <span>Browse all effects…</span>
@@ -3205,7 +3205,7 @@ export function Timeline() {
                     }
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Sparkles size={14} />
                   <span>Add Transition</span>
@@ -3216,7 +3216,7 @@ export function Timeline() {
                     toggleClipHidden(contextMenu.clip!.id)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   {contextMenu.clip.hidden ? <Eye size={14} /> : <EyeOff size={14} />}
                   <span>{contextMenu.clip.hidden ? 'Show Clip' : 'Hide Clip'}</span>
@@ -3227,7 +3227,7 @@ export function Timeline() {
                     insertClipCopy(contextMenu.clip!, contextMenu.clip!.start + contextMenu.clip!.duration)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Copy size={14} />
                   <span>Duplicate</span>
@@ -3401,7 +3401,7 @@ export function Timeline() {
                     useEditor.getState().closeTrackGaps(contextMenu.trackId!)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Minimize2 size={14} />
                   <span>Close Gaps on Track</span>
@@ -3414,7 +3414,7 @@ export function Timeline() {
                     createTrack(tracks.find((t) => t.id === contextMenu.trackId)?.type || 'video', 'above', contextMenu.trackId)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Plus size={14} />
                   <span>Add Track Above</span>
@@ -3426,7 +3426,7 @@ export function Timeline() {
                     createTrack(tracks.find((t) => t.id === contextMenu.trackId)?.type || 'video', 'below', contextMenu.trackId)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Plus size={14} />
                   <span>Add Track Below</span>
@@ -3477,7 +3477,7 @@ export function Timeline() {
               type="button"
               data-testid="timeline-dock-back-btn"
               onClick={() => setTimelineFloating(false)}
-              className="rounded-md border border-ink-700 bg-ink-800 px-2 py-0.5 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              className="rounded-none border border-ink-700 bg-ink-800 px-2 py-0.5 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               Dock back
             </button>

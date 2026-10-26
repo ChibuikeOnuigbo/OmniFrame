@@ -392,7 +392,7 @@ function postCard(ctx: CanvasRenderingContext2D) {
   roundRect(ctx, x, y, w, h, 16)
   ctx.strokeStyle = 'rgba(255,255,255,0.16)'
   ctx.stroke()
-  ctx.fillStyle = '#6d5efc'
+  ctx.fillStyle = '#ff6b35'
   ctx.beginPath(); ctx.arc(x + 44, y + 44, 22, 0, Math.PI * 2); ctx.fill()
   textLines(ctx, x + 80, y + 30, [120, 70], 'rgba(230,234,240,0.75)', 18)
   textLines(ctx, x + 26, y + 92, [440, 420, 300], 'rgba(190,198,212,0.55)', 22)
@@ -446,7 +446,7 @@ function progressBar(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.fillStyle = 'rgba(255,255,255,0.18)'
   roundRect(ctx, 90, h - 64, w - 180, 10, 5)
   ctx.fill()
-  ctx.fillStyle = '#6d5efc'
+  ctx.fillStyle = '#ff6b35'
   roundRect(ctx, 90, h - 64, (w - 180) * 0.62, 10, 5)
   ctx.fill()
   ctx.beginPath()
@@ -813,10 +813,10 @@ function figmaDesktop(ctx: CanvasRenderingContext2D) {
   ctx.strokeStyle = 'rgba(255,255,255,0.5)'
   ctx.lineWidth = 1.5
   roundRect(ctx, x + 420, y + 80, 190, 340, 18); ctx.stroke()
-  ctx.fillStyle = '#6d5efc'
+  ctx.fillStyle = '#ff6b35'
   roundRect(ctx, x + 436, y + 100, 158, 60, 8); ctx.fill()
   demoRows(ctx, x + 440, y + 210, ['Title (demo)', 'Body (demo)'], '#b78bff')
-  ctx.fillStyle = '#6d5efc'
+  ctx.fillStyle = '#ff6b35'
   roundRect(ctx, x + 436, y + 350, 158, 34, 17); ctx.fill()
 }
 
@@ -832,7 +832,7 @@ function chromeWebpage(ctx: CanvasRenderingContext2D) {
   ctx.fillStyle = '#4a5160'
   ctx.fillText('Replace this page with your own screen recording.', x + 60, y + 182)
   ctx.fillText('Second demo paragraph — no real data here.', x + 60, y + 206)
-  ctx.fillStyle = '#6d5efc'
+  ctx.fillStyle = '#ff6b35'
   roundRect(ctx, x + 60, y + 240, 170, 40, 20); ctx.fill()
   ctx.fillStyle = '#fff'
   ctx.font = '600 14px system-ui, sans-serif'
@@ -973,7 +973,7 @@ function podcastPlayer(ctx: CanvasRenderingContext2D) {
   windowChrome(ctx, 'win', { title: 'Podcast Player — Demo' })
   const x = 110, y = 70
   ctx.fillStyle = '#181423'; ctx.fillRect(x + 1, y + 45, PACK_W - 222, 420)
-  ctx.fillStyle = '#6d5efc'; roundRect(ctx, x + 34, y + 78, 190, 190, 16); ctx.fill()
+  ctx.fillStyle = '#ff6b35'; roundRect(ctx, x + 34, y + 78, 190, 190, 16); ctx.fill()
   ctx.fillStyle = '#fff'; ctx.font = '700 22px system-ui, sans-serif'; ctx.fillText('DEMO CAST', x + 62, y + 182)
   ctx.font = '600 20px system-ui, sans-serif'; ctx.fillText('Episode 01 — Test Topic', x + 258, y + 116)
   ctx.font = '13px system-ui, sans-serif'; ctx.fillStyle = '#b7b0d8'; ctx.fillText('Demo voices · Sample chapter markers', x + 258, y + 144)
@@ -1057,7 +1057,7 @@ function podcastStudioWindow(ctx: CanvasRenderingContext2D) {
     const gy = y + 262 + i * 40
     ctx.fillStyle = '#9aa3af'; ctx.font = '11px system-ui, sans-serif'; ctx.fillText(label, x + 30, gy + 4)
     ctx.fillStyle = '#2a2f3a'; roundRect(ctx, x + 190, gy - 5, 560, 8, 4); ctx.fill()
-    ctx.fillStyle = '#6d5efc'; roundRect(ctx, x + 190, gy - 5, 560 * v, 8, 4); ctx.fill()
+    ctx.fillStyle = '#ff6b35'; roundRect(ctx, x + 190, gy - 5, 560 * v, 8, 4); ctx.fill()
     ctx.beginPath(); ctx.arc(x + 190 + 560 * v, gy - 1, 7, 0, Math.PI * 2); ctx.fillStyle = '#e8eaed'; ctx.fill()
   })
   ctx.fillStyle = '#ff5f57'; ctx.beginPath(); ctx.arc(x + 42, y + 408, 6, 0, Math.PI * 2); ctx.fill()
@@ -1128,7 +1128,7 @@ function foodDeliveryPhone(ctx: CanvasRenderingContext2D) {
 function videoPlayerPhone(ctx: CanvasRenderingContext2D) {
   const { x, y, w } = phoneSceneBase(ctx, '#0c0e13')
   ctx.fillStyle = '#20242c'; roundRect(ctx, x + 16, y + 70, w - 32, 190, 14); ctx.fill()
-  ctx.fillStyle = '#6d5efc'; ctx.beginPath(); ctx.arc(x + w / 2, y + 165, 28, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#ff6b35'; ctx.beginPath(); ctx.arc(x + w / 2, y + 165, 28, 0, Math.PI * 2); ctx.fill()
   ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(x + w / 2 - 8, y + 152); ctx.lineTo(x + w / 2 - 8, y + 178); ctx.lineTo(x + w / 2 + 12, y + 165); ctx.closePath(); ctx.fill()
   ctx.fillStyle = 'rgba(255,255,255,0.22)'; roundRect(ctx, x + 34, y + 232, w - 68, 6, 3); ctx.fill()
   ctx.fillStyle = '#ff5f57'; roundRect(ctx, x + 34, y + 232, 104, 6, 3); ctx.fill()

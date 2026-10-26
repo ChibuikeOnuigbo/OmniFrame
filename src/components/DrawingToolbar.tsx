@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useEditor } from '../store'
 import { SlideDock } from './SlideDock'
+import { Tooltip } from './Tooltip'
 import type { DrawingToolType } from '../types'
 import {
   Paintbrush,
@@ -23,7 +24,6 @@ import {
   Blend,
   Scissors,
   Pipette,
-  Layers,
   Fingerprint,
   SquareDashed,
   CircleDashed,
@@ -115,7 +115,7 @@ export function DrawingToolbar() {
     >
     <div
       data-testid="drawing-toolbar"
-      className="flex min-w-0 w-full max-w-full flex-col items-stretch gap-1 rounded-xl border border-ink-700 bg-ink-900/95 px-1.5 py-1 text-xs text-ink-200 shadow-xl backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150 overflow-hidden"
+      className="flex min-w-0 w-full max-w-full flex-col items-stretch gap-1 rounded-xl border border-ink-700 bg-ink-900 px-1.5 py-1.5 text-xs text-ink-200 shadow-md select-none animate-in fade-in zoom-in-95 duration-150 overflow-hidden"
     >
       {/* Row 1: primary group tiles (≤ 9) + colour + size + clear + close */}
       <div className="flex min-w-0 items-center gap-1">
@@ -127,11 +127,10 @@ export function DrawingToolbar() {
             const Icon = g.icon
             const active = g.id === openGroup
             return (
-              <button
+              <Tooltip label={g.label}><button
                 key={g.id}
                 type="button"
                 data-testid={`drawing-group-${g.id}`}
-                title={g.label}
                 aria-label={g.label}
                 aria-pressed={active}
                 onClick={() => pickGroup(g.id, g.tools)}
@@ -142,18 +141,17 @@ export function DrawingToolbar() {
                 }`}
               >
                 <Icon size={13} />
-              </button>
+              </button></Tooltip>
             )
           })}
         </div>
 
         <div className="flex items-center gap-1 border-r border-ink-800 pr-1 shrink-0">
           {QUICK_COLORS.map((hex) => (
-            <button
+            <Tooltip label={`Color ${hex}`}><button
               key={hex}
               type="button"
               data-testid={`color-swatch-${hex.replace('#', '')}`}
-              title={`Color ${hex}`}
               aria-label={`Color ${hex}`}
               onClick={() => setDrawingColor(hex)}
               aria-pressed={drawingColor === hex}
@@ -166,17 +164,16 @@ export function DrawingToolbar() {
                 }`}
                 style={{ backgroundColor: hex }}
               />
-            </button>
+            </button></Tooltip>
           ))}
-          <input
+          <Tooltip label="Custom color"><input
             type="color"
             data-testid="drawing-color-picker"
             value={drawingColor}
             onChange={(e) => setDrawingColor(e.target.value)}
-            title="Color"
             aria-label="Custom color picker"
             className="h-6 w-6 shrink-0 cursor-pointer rounded-full border border-ink-600 bg-transparent p-1 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand max-sm:min-h-8 max-sm:min-w-8"
-          />
+          /></Tooltip>
         </div>
 
         <div className="flex items-center gap-1 border-r border-ink-800 pr-1 shrink-0">
@@ -193,27 +190,25 @@ export function DrawingToolbar() {
           <span className="w-3 text-right font-mono text-[10px] text-ink-300">{drawingSize}</span>
         </div>
 
-        <button
+        <Tooltip label="Clear strokes"><button
           type="button"
           data-testid="clear-drawing-strokes-btn"
-          title="Clear"
           aria-label="Clear drawing strokes"
           onClick={() => clearDrawingStrokes()}
           className="flex h-6 w-6 shrink-0 items-center justify-center rounded p-0.5 text-ink-400 transition-colors hover:bg-ink-800 hover:text-red-400 max-sm:min-h-8 max-sm:min-w-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Trash2 size={13} />
-        </button>
+        </button></Tooltip>
 
-        <button
+        <Tooltip label="Close drawing mode"><button
           type="button"
           data-testid="close-drawing-mode-btn"
-          title="Close"
           aria-label="Close drawing mode"
           onClick={() => setDrawingEnabled(false)}
           className="flex h-6 w-6 shrink-0 items-center justify-center rounded p-0.5 text-ink-400 transition-colors hover:bg-ink-800 hover:text-white max-sm:min-h-8 max-sm:min-w-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <X size={13} />
-        </button>
+        </button></Tooltip>
       </div>
 
       {/* Row 2: icon sub-mode tiles for the open group (inner scroll, never wraps) */}
@@ -221,17 +216,15 @@ export function DrawingToolbar() {
         data-testid={`drawing-subtools-${group.id}`}
         className="flex min-w-0 items-center gap-0.5 overflow-x-auto border-t border-ink-800 pt-1"
       >
-        <Layers size={11} className="mx-1 shrink-0 text-ink-500" aria-hidden="true" />
         {group.tools.map((id) => {
           const def = TOOL_DEFS[id]
           const Icon = def.icon
           const active = drawingTool === id
           return (
-            <button
+            <Tooltip label={def.label}><button
               key={id}
               type="button"
               data-testid={`drawing-tool-${id}`}
-              title={def.label}
               aria-label={def.label}
               aria-pressed={active}
               onClick={() => setDrawingTool(id)}
@@ -242,7 +235,7 @@ export function DrawingToolbar() {
               }`}
             >
               <Icon size={13} />
-            </button>
+            </button></Tooltip>
           )
         })}
       </div>

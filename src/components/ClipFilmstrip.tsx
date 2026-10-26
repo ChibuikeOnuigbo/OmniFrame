@@ -9,7 +9,6 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { Layers } from 'lucide-react'
 import { useEditor } from '../store'
 import {
   compoundContentKey,
@@ -110,10 +109,9 @@ export function ClipFilmstrip({
     >
       {isCompound ? (
         <div className="absolute inset-0 flex flex-col justify-around py-1 px-1 opacity-15">
-          <div className="h-1.5 w-3/4 rounded bg-indigo-400" />
-          <div className="h-1.5 w-1/2 rounded bg-purple-400 ml-4" />
-          <div className="h-1.5 w-2/3 rounded bg-sky-400" />
-          <Layers size={10} className="mx-auto text-indigo-300" />
+          <div className="h-1.5 w-3/4 rounded bg-ink-500" />
+          <div className="h-1.5 w-1/2 rounded bg-ink-600 ml-4" />
+          <div className="h-1.5 w-2/3 rounded bg-ink-500" />
         </div>
       ) : posterUrl ? (
         <div
