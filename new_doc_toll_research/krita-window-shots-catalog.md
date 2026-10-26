@@ -26,3 +26,11 @@ images/boardM-krita-*.png and the official docs scan (krita-tools.html).
 Options recorded for the user: (a) dedicate one turn to a single full-res pull of a chosen number,
 (b) re-export a compressed (<100 KB) copy into Drive and it can be pulled cheaply, (c) proceed on
 catalog + docs imagery (current path).
+
+## DECISION 2026-10-26 (user chose option b — compressed copies)
+User will re-export compressed copies into the Drive pack; I pull + section-analyze them next turn.
+Export spec requested (keeps each file ≤ ~100 KB = ≤ ~35k tokens base64, safe to inline + persist):
+- resize to ≤ 1200 px wide, save as JPG quality ~70 (or PNG ≤ 100 KB)
+- name them `krita-win-<original number>.jpg` (e.g. krita-win-107.jpg) so OCR/name search finds them
+- drop them anywhere in Drive (pack_data preferred) — I will search by name prefix `krita-win`
+Priority order for analysis: 107 (full window + Brush Presets), 41, 40, 39 (Tool Options sessions).
