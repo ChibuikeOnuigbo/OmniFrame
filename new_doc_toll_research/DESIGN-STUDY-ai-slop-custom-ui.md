@@ -60,3 +60,25 @@ KEPT (semantic, per Notion rule "color must mean something"):
   + sm 18 + full 81 + l/r 2 = 198/1047 ≈ **18.9% kept** ≈ user's 19%.
 - Remaining violet/purple/indigo grep = only the semantic list above (+ day-light theme
   overrides for text-brand-200/300 added so flame text stays readable on light skin).
+
+## 6. Continue pass (same request re-sent 2026-10-27)
+- reddit short-link retried via old.reddit through proxy → still 403 "network policy"
+  (block code 01a17a8b-aa83-7fea-a819-447bdb7e3b53 logged). Substitute corpus stands.
+- NEW tells purged this pass:
+  - LeftDock temporary sub-mode rail rendered a hardcoded decorative Sparkles + animate-pulse
+    INSTEAD of each sub-mode's real icon (names were already stored!) → name→component
+    resolver (BoxSelect/History/Layers/Move/PaintBucket/Paintbrush/Shapes/Stamp/Type/
+    LibraryBig); TextPanel callers 'Sparkles'/'Wand2' renamed to 'Type'/'LibraryBig'
+    (sparkle-family names purged at the source); smart-patch menu icon Sparkles → Replace.
+  - Heavy diffuse shadows (26× shadow-2xl, 4× shadow-xl) tempered in the default style to
+    tight functional elevation (0 6px 18px / 0 4px 12px) via the same omniframe CSS pattern.
+  - Functional pulses kept on purpose: ModelLoadOverlay phase pulse + CustomCursor status
+    dot (they MEAN loading/live — semantic, per Notion rule).
+- Design study refs added: imgs/lumina-studio-flat-ui-ref.jpg (Vecteezy "Lumina Studio"
+  editor mockup) — NEGATIVE ref for uniform rounded cards + light-theme glass look, POSITIVE
+  ref for clear preview / color-grading / timeline-strip sectioning. Off-topic sibling hit
+  (vecteezy character-illustration, https://www.vecteezy.com/free-vector/video-editing)
+  discarded, URL kept as text ref.
+- Jake In Motion scan yields design-theory material: "Animation Principles Work Everywhere
+  (Even Your Website)" — easing/spacing principles now inform the motion language of the
+  flame UI (fast, purposeful transitions; no bounce easing anywhere: census = 0 decorative).

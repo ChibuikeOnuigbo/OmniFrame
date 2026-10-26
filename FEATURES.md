@@ -144,6 +144,8 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 139 Anti-glass/anti-glow: backdrop-blur disabled in default style, 5 timeline neon selection glows removed, Landing + VoiceIsolation gradient hero cards flattened to solid ink
 140 Tooltip overhaul: DrawingToolbar 6 native titles → custom Tooltip, 3 double-tooltips deduped, 4 redundant menu title attrs removed, bubble solid/sharp/roomier (px-2.5 py-1.5)
 141 Icon cleanup: 7 duplicate Sparkles purged from transition menu (Blend / ImageOff / none), decorative Layers filler icons removed (ClipFilmstrip, DrawingToolbar subtool row), filmstrip placeholder bars neutralized
+142 Sub-mode rail real icons: hardcoded Sparkles+animate-pulse placeholder replaced by lucide name→component resolver (10 names); TextPanel sparkle-family submode names renamed (Type/LibraryBig); smart-patch menu icon Replace; Shapes for 3D materials
+143 Shadow tempering: 26× shadow-2xl + 4× shadow-xl tightened to functional elevation in default (omniframe) style via index.css overrides; semantic pulses (model-load phase, cursor status dot) deliberately kept
 126 Voronoi Cells engine (AM official guide deep-scan): seeded random sites 4-48, nearest/second-nearest cell-edge glow + cell tint, colour/intensity keyframeable — O-voronoi-16.png
 127 Spectral Map engine (AM official guide deep-scan): luma→hue-spectrum remap 0-300°, intensity keyframeable, chroma-rise asserted — O-spectral-1.png
 125 Krita Freehand Brush stabilizer sub-tool: smoothing 0..1 weighted moving-average shake correction (freehand tools only, Krita tool-options scan) — proven N-stabilizer-raw vs N-stabilizer-095.png
@@ -154,5 +156,5 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 122 Board L Color Temperature engine — Kelvin white balance 1500-15000K (6500 neutral), 5 catalog presets, 2-point keyframe ramp proven animating (L-kelvin-ramp-warm/cool.png)
 119 Board K all-elements sweep (MCP-only proofs via data_dump data:img): glow/edge-glow/light, shape masks + restore, drawing shape strokes, one render per effect sub-tab — plus headless effect parity fixed (CSS filters, particle/overlay layers, light layers in appRender)
 
-**Total: 141 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 141) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
-Watched videos at this commit: **416** (see youtube-audit/progress.json watched_ids).
+**Total: 143 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 143) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+Watched videos at this commit: **454** (see youtube-audit/progress.json watched_ids).

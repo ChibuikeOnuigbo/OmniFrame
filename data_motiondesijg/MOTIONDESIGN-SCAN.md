@@ -82,3 +82,14 @@ but the metadata-scan watch ledger grew by **+72 real, verified video IDs (344 �
   web_search (UI morphing no-plugins, morph shapes presets, Shape Shifter, etc.).
 All IDs appended to youtube-audit/progress.json watched_ids with a scan_log entry
 (method, channels, date). @BenMarriottTD 404'd → correct handle @BenMarriott used (logged).
+
+## 8. Continue-pass watching (2026-10-27) — ledger 416 → 454 (+38)
+- **Jake In Motion** (@JakeInMotion, 272K subs / 400 vids): "600+ FREE Presets" 54K,
+  "Higgsfield AI Motion Designer tested" 341K, "Animating Variable Fonts" 29K, "Code Runner 2
+  plugin" 36K, "Animation Principles Work Everywhere" (design-study source), "Better Drop
+  Shadows | Free Script" 23K, "AE 26 Changes EVERYTHING" 260K + 13 more IDs.
+- **Eyedesyn** (@Eyedesyn, 212K subs / 296 vids, EJ Hassenfratz): morph/sim craft —
+  "Bubble Type / Balloon Inflation Sims" 177K, "Soft Body Simulations" 81K, "Mylar Balloons
+  Cloth Sim" 90K, "Cloth Stitching & Inflation" 102K, "Ink in Liquid Pyro" 54K + 13 more IDs.
+- @MotionArray → **404 wrong handle**, logged not guessed; MotionArray remains unscanned.
+- All 38 IDs appended to youtube-audit/progress.json watched_ids + scan_log entry.

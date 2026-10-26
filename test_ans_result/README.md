@@ -145,3 +145,9 @@ QA: UNIVERSAL TOOLS QA PASS (63 steps, 54 tools), 0 FAIL. App-made data:img proo
 - Kept (semantic): track-kind category colors, mask/compound info banners, Cyber Violet cursor theme
 - Radius census: 198/1047 kept (18.9% ≈ user's 19%), values varied 2px/3px/999px
 - Verify: tsc clean + vite build clean + QA PASS (63 steps, 54 tools). DOM screenshots impossible in sandbox — no fake captures; census greps + QA are the proof.
+
+### Continue pass (2026-10-27)
+- Sub-mode rail: real lucide icons via resolver (Sparkles placeholder + pulse gone); TextPanel sparkle names renamed at source; smart-patch icon Replace
+- Shadows: shadow-2xl/xl tempered in default style; semantic pulses kept (documented)
+- Watch ledger 416 → 454 (+38 Jake In Motion / Eyedesyn scans; @MotionArray 404 logged)
+- Verify: tsc clean + vite build clean + QA PASS (63 steps, 54 tools)
