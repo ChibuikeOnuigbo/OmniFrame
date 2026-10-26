@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Krita official toolbox scan — Board M</title>
+<style>body{font:14px/1.5 system-ui,sans-serif;margin:24px;background:#10121a;color:#e8eaf2}a{color:#8fd3ff}table{border-collapse:collapse}td,th{border:1px solid #2c3040;padding:6px 10px;text-align:left}code{color:#ffd9a0}</style></head><body>
+<h1>Krita official docs scan (docs.krita.org, manual 5.3.0) — harvested 2026-10-26</h1>
+<p>Full toolbox index: <a href="https://docs.krita.org/en/reference_manual/tools.html">reference_manual/tools.html</a> — 37 tools, every page URL listed. Deep-scanned this batch: <code>freehand_brush</code>, <code>multibrush</code>, <code>gradient_draw</code>. Status column = honest OmniFrame crosswalk.</p>
+<h2>Deep-scan notes</h2>
+<ul>
+<li><b>Freehand Brush</b>: smoothing family = None / Basic / Weighted (Distance, Stroke Ending, Smooth Pressure, Scalable Distance) / Stabilizer (Sample Count at Max/Min Speed, Delay dead-zone for sharp corners, Finish Line, Stabilize sensors, Pixel mode for 1px lines). Assistants snapping slider 0-1000 + Snap Single + Snap Eraser. → OmniFrame backlog: stroke smoothing/stabilizer params.</li>
+<li><b>Multibrush</b>: modes Symmetry (count slider = our <code>radialCopies</code>), Mirror (X / Y / both = our new <code>mirrorX/mirrorY</code>), Translate (radius ring), Snowflake (mirrored symmetry), Copy Translate (placed copies), Copy Translate at Interval (X/Y grid, max 50). Axis defaults to canvas centre. → shipped: symmetry + mirror; backlog: translate/snowflake/copy-translate.</li>
+<li><b>Gradient Tool</b>: shapes Linear, Bilinear, Radial, Square, Conical, Conical-symmetric, Spiral, Reverse Spiral, Shaped; Repeat None/Forward/Alternating; Antialias threshold; Reverse; Dither (blue-noise for 8-bit). → shipped: linear + radial (<code>gradientShape</code>); backlog: remaining shapes + repeat modes.</li>
+</ul>
+<h2>Toolbox index + crosswalk</h2>
+<table><tr><th>#</th><th>Krita tool (official)</th><th>OmniFrame status</th></tr>
+<tr><td>1</td><td><a href="https://docs.krita.org/en/reference_manual/tools/shape_selection.html">Shape Selection Tool</a></td><td>shipped (select-rect/ellipse/polygon/lasso/brush/magic-wand/character sub-modes)</td></tr>
+<tr><td>2</td><td><a href="https://docs.krita.org/en/reference_manual/tools/shape_edit.html">Shape Edit Tool</a></td><td>backlog</td></tr>
+<tr><td>3</td><td><a href="https://docs.krita.org/en/reference_manual/tools/text.html">Text Tool</a></td><td>shipped (text clips)</td></tr>
+<tr><td>4</td><td><a href="https://docs.krita.org/en/reference_manual/tools/calligraphy.html">Calligraphy Tool</a></td><td>shipped (Chisel sub-tool)</td></tr>
+<tr><td>5</td><td><a href="https://docs.krita.org/en/reference_manual/tools/comic_panel_editing_tool.html">Comic Panel Editing Tool</a></td><td>backlog</td></tr>
+<tr><td>6</td><td><a href="https://docs.krita.org/en/reference_manual/tools/freehand_brush.html">Freehand Brush Tool</a></td><td>shipped (Brush/Pencil/Marker + smoothing backlog)</td></tr>
+<tr><td>7</td><td><a href="https://docs.krita.org/en/reference_manual/tools/line.html">Straight Line Tool</a></td><td>shipped (Line sub-tool)</td></tr>
+<tr><td>8</td><td><a href="https://docs.krita.org/en/reference_manual/tools/rectangle.html">Rectangle Tool</a></td><td>shipped (Box sub-tool)</td></tr>
+<tr><td>9</td><td><a href="https://docs.krita.org/en/reference_manual/tools/ellipse.html">Ellipse Tool</a></td><td>shipped (Circle sub-tool)</td></tr>
+<tr><td>10</td><td><a href="https://docs.krita.org/en/reference_manual/tools/polygon.html">Polygon Tool</a></td><td>shipped (Polygon sub-tool)</td></tr>
+<tr><td>11</td><td><a href="https://docs.krita.org/en/reference_manual/tools/polyline.html">Polyline Tool</a></td><td>shipped (Polyline sub-tool)</td></tr>
+<tr><td>12</td><td><a href="https://docs.krita.org/en/reference_manual/tools/path.html">Bezier Curve Tool</a></td><td>shipped (Bezier Path sub-tool)</td></tr>
+<tr><td>13</td><td><a href="https://docs.krita.org/en/reference_manual/tools/freehand_path.html">Freehand Path Tool</a></td><td>backlog</td></tr>
+<tr><td>14</td><td><a href="https://docs.krita.org/en/reference_manual/tools/dyna.html">Dynamic Brush Tool</a></td><td>backlog (inertia smoothing)</td></tr>
+<tr><td>15</td><td><a href="https://docs.krita.org/en/reference_manual/tools/multibrush.html">Multibrush Tool</a></td><td>shipped Board M (radialCopies symmetry + mirrorX/mirrorY; translate/snowflake/copy-translate backlog)</td></tr>
+<tr><td>16</td><td><a href="https://docs.krita.org/en/reference_manual/tools/crop.html">Crop Tool</a></td><td>shipped (clip trim/crop)</td></tr>
+<tr><td>17</td><td><a href="https://docs.krita.org/en/reference_manual/tools/move.html">Move Tool</a></td><td>shipped (position keys)</td></tr>
+<tr><td>18</td><td><a href="https://docs.krita.org/en/reference_manual/tools/transform.html">Transform Tool</a></td><td>shipped (scale/rotate/rotXY)</td></tr>
+<tr><td>19</td><td><a href="https://docs.krita.org/en/reference_manual/tools/fill.html">Fill Tool</a></td><td>shipped (Fill sub-tool)</td></tr>
+<tr><td>20</td><td><a href="https://docs.krita.org/en/reference_manual/tools/enclose_and_fill.html">Enclose and Fill Tool</a></td><td>partial (fill + mask)</td></tr>
+<tr><td>21</td><td><a href="https://docs.krita.org/en/reference_manual/tools/gradient_draw.html">Gradient Tool</a></td><td>shipped Board M (linear + radial shapes; bilinear/conical/spiral/shaped + repeat modes backlog)</td></tr>
+<tr><td>22</td><td><a href="https://docs.krita.org/en/reference_manual/tools/color_sampler.html">Color Sampler Tool</a></td><td>shipped (Color Sampler sub-tool)</td></tr>
+<tr><td>23</td><td><a href="https://docs.krita.org/en/reference_manual/tools/colorize_mask.html">Colorize Mask</a></td><td>backlog</td></tr>
+<tr><td>24</td><td><a href="https://docs.krita.org/en/reference_manual/tools/smart_patch.html">Smart Patch Tool</a></td><td>shipped (Smart Patch sub-tool)</td></tr>
+<tr><td>25</td><td><a href="https://docs.krita.org/en/reference_manual/tools/assistant.html">Assistant Tool</a></td><td>backlog</td></tr>
+<tr><td>26</td><td><a href="https://docs.krita.org/en/reference_manual/tools/reference_images_tool.html">Reference Images Tool</a></td><td>backlog</td></tr>
+<tr><td>27</td><td><a href="https://docs.krita.org/en/reference_manual/tools/measure.html">Measure Tool</a></td><td>backlog</td></tr>
+<tr><td>28</td><td><a href="https://docs.krita.org/en/reference_manual/tools/rectangular_select.html">Rectangular Selection Tool</a></td><td>shipped (select-rect)</td></tr>
+<tr><td>29</td><td><a href="https://docs.krita.org/en/reference_manual/tools/elliptical_select.html">Elliptical Selection Tool</a></td><td>shipped (select-ellipse)</td></tr>
+<tr><td>30</td><td><a href="https://docs.krita.org/en/reference_manual/tools/freehand_select.html">Freehand Selection Tool</a></td><td>shipped (select-lasso)</td></tr>
+<tr><td>31</td><td><a href="https://docs.krita.org/en/reference_manual/tools/polygonal_select.html">Polygonal Selection Tool</a></td><td>shipped (select-polygon)</td></tr>
+<tr><td>32</td><td><a href="https://docs.krita.org/en/reference_manual/tools/contiguous_select.html">Contiguous Selection Tool</a></td><td>shipped (select-magic-wand)</td></tr>
+<tr><td>33</td><td><a href="https://docs.krita.org/en/reference_manual/tools/path_select.html">Path Selection Tool</a></td><td>partial (select-polygon/lasso)</td></tr>
+<tr><td>34</td><td><a href="https://docs.krita.org/en/reference_manual/tools/similar_select.html">Similar Color Selection Tool</a></td><td>shipped (magic-wand family)</td></tr>
+<tr><td>35</td><td><a href="https://docs.krita.org/en/reference_manual/tools/magnetic_select.html">Magnetic Selection Tool</a></td><td>backlog</td></tr>
+<tr><td>36</td><td><a href="https://docs.krita.org/en/reference_manual/tools/zoom.html">Zoom Tool</a></td><td>shipped (stage zoom)</td></tr>
+<tr><td>37</td><td><a href="https://docs.krita.org/en/reference_manual/tools/pan.html">Pan Tool</a></td><td>shipped (stage pan)</td></tr>
+</table>
+<p>Images: <code>images/boardM-krita-toolbox-docker.png</code> (toolbox docker, r/krita), <code>images/boardM-krita-configure-toolbars.png</code> (docs Configure Toolbars). Drive pack: <code>pack_data/Screenshot (107).png</code> (id 1asCtL2P3Upru5mIaXc6M8Sb5J_WswZnz, 553,583 B) is the user's own Krita screenshot — catalogued, not inlined (connector returns binaries as inline base64 only).</p>
+</body></html>

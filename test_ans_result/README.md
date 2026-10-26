@@ -106,3 +106,11 @@ App-made only (data_dump data:img), never python/ffmpeg authoring:
 - L-kelvin-3200.png / L-kelvin-10000.png — tungsten warm cast vs deep-shade cool cast (R−B channel shift asserted)
 - L-kelvin-ramp-warm.png / L-kelvin-ramp-cool.png — same instance, 2-point colorTemp keyframe ramp sampled at t=0.1 / t=1.4 (animation asserted)
 QA assertions: visibility diff ≥300 px vs base; flare lifts luminance (screen blend); 3200K shifts R−B warmer by >6; 10000K cooler than 3200K by >6; ramp animates; catalog exposes kaleido params. UNIVERSAL TOOLS QA: PASS, 0 FAIL.
+
+## Board M — Krita-scan sub-tools + paint parity (2026-10-26)
+App-made only (data_dump data:img after renderFrame gained renderAllPaintLayers parity):
+- M-base.png / M-line-plain.png — baseline vs single line stroke
+- M-multibrush-mirrorX.png — line + reflected copy across vertical centre axis (Krita Multibrush mirror)
+- M-gradient-linear.png / M-gradient-radial.png — Krita Gradient tool shapes (linear ramp vs radial from stroke start)
+- M-sym-single.png / M-multibrush-sym8.png — radialCopies=8 symmetry ring vs single dab
+QA assertions: line visible ≥100 px diff; mirror adds reflected copy; radial ≠ linear ≥300 px; sym-8 ≠ single ≥200 px. UNIVERSAL TOOLS QA: PASS, 0 FAIL.

@@ -35,3 +35,4 @@ Feeds OmniFrame parity work: AE effect categories vs our effect rack, AM catalog
 Resolve wheels vs our LUT/adjustments, Fairlight vs our audio panel, VSE/compositor vs track model.
 Companion folders: am_research/ (channel+tab sweep), yt_hancy/ (Hancybox pack), New_ui_searhc/ (UI imagery).
 - 2026-10-26: am-effects-s-z.html (official AM effects index chunk 2, R–Z, 53 entries w/ thumbs + honest crosswalk) + board-L-engines-research.md (kaleidoscope/lens-flare/kelvin sources) + images/boardL-* (5 refs)
+- 2026-10-26: krita-tools.html + krita-tools-research.md (official Krita 5.3 toolbox scan: 37 tool pages indexed, 3 deep-scanned, honest crosswalk; Drive pack_data Krita screenshot catalogued w/ id) + images/boardM-krita-* (2 refs)
