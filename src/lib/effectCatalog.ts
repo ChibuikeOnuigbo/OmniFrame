@@ -124,6 +124,15 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   lightColor: { label: 'Light Colour', kind: 'color' },
   lightIntensity: { label: 'Light Intensity', kind: 'number', min: 0, max: 1.5, step: 0.05 },
   lightFalloff: { label: 'Light Falloff', kind: 'number', min: 0.1, max: 1, step: 0.01 },
+  kaleidoSegments: { label: 'Segments', kind: 'number', min: 0, max: 12, step: 1 },
+  kaleidoRotate: { label: 'Wedge Rotate (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  flare: { label: 'Flare Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
+  flareX: { label: 'Flare X (%)', kind: 'number', min: 0, max: 100, step: 1 },
+  flareY: { label: 'Flare Y (%)', kind: 'number', min: 0, max: 100, step: 1 },
+  flareStreak: { label: 'Anamorphic Streak', kind: 'number', min: 0, max: 1, step: 0.01 },
+  flareGhosts: { label: 'Ghost Rings', kind: 'number', min: 0, max: 8, step: 1 },
+  flareColor: { label: 'Flare Colour', kind: 'color' },
+  colorTemp: { label: 'Temperature (K)', kind: 'number', min: 1500, max: 15000, step: 100 },
 }
 
 /** Editable/keyframeable property schema for any catalog patch. */
@@ -287,6 +296,22 @@ function buildCatalog(): FxCatalogEntry[] {
     add(`lightovl-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Overlay`, 'light', 'AE tutorial corpus light overlays', { overlayFx: fx as string, overlayStrength: s as number }))
   ;[['feathers', 0.6], ['embers', 0.5], ['dust', 0.5], ['bokeh', 0.5], ['sparkles', 0.55], ['snow', 0.6], ['rain', 0.5], ['petals', 0.5]].forEach(([fx, d], i) =>
     add(`part-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Bed`, 'light', 'AE particle beds (deep-study corpus)', { particleFx: fx as string, particleDensity: d as number }))
+
+  // ---- Board L: top backlog names converted into REAL engines ----
+  for (const seg of [4, 6, 8, 12]) {
+    add(`kaleido-${seg}`, `Kaleidoscope ${seg}-seg`, 'distort',
+      'Board L backlog conversion: mirror-wedge kaleidoscope family (AE CC Kaleida / AM Tiles-mirror, effects reference scan)',
+      { kaleidoSegments: seg, kaleidoRotate: 0 })
+  }
+  add('kaleido-6-rot30', 'Kaleidoscope 6-seg 30°', 'distort',
+    'Board L backlog conversion: rotating-wedge kaleidoscope (CC Kaleida family)', { kaleidoSegments: 6, kaleidoRotate: 30 })
+  ;[['Anamorphic Gold', '#ffd9a0', 0.9, 4], ['Sunburst Warm', '#ffc93c', 0.5, 6], ['Cool Optical', '#a8d8ff', 0.35, 3], ['Magenta Pulse', '#ff5df0', 0.75, 5]].forEach(([name, hex, st, gh], i) =>
+    add(`flare-${i}`, `Lens Flare ${name}`, 'light',
+      'Board L backlog conversion: optical lens-flare family (core bloom + anamorphic streak + ghost rings)',
+      { flare: 0.85, flareX: 72, flareY: 28, flareStreak: st as number, flareGhosts: gh as number, flareColor: hex as string }))
+  ;[[2500, 'Candle'], [3200, 'Tungsten'], [4500, 'Warm White'], [8000, 'Overcast'], [10000, 'Deep Shade']].forEach(([k, name]) =>
+    add(`kelvin-${k}`, `Color Temp ${k}K ${name}`, 'color',
+      'Board L backlog conversion: Kelvin white-balance scale (colour-science / Resolve color chapter docs)', { colorTemp: k as number }))
 
   // ---- Key ----
   for (const [name, hex] of [['Green', '#00ff00'], ['Blue', '#1b3fe0'], ['Red', '#e01b1b'], ['Magenta', '#e01be0']] as [string, string][]) {

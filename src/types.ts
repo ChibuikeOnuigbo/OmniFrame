@@ -642,6 +642,19 @@ export interface ClipEffect {
   oscillatePhase?: number // AM Phase 0..1000
   /** AM-style turbulent/fractal warp: sin-domain pixel displacement. */
   turbulent?: number
+  /** Board L: kaleidoscope mirror wedges (0/1 off, 2-12 segments). */
+  kaleidoSegments?: number
+  /** Board L: kaleidoscope wedge rotation (deg). */
+  kaleidoRotate?: number
+  /** Board L: procedural optical lens flare 0..1 (core + streak + ghosts + halo). */
+  flare?: number
+  flareX?: number // light position, % of frame width
+  flareY?: number // light position, % of frame height
+  flareStreak?: number // anamorphic streak length 0..1
+  flareGhosts?: number // ghost rings along the optical axis 0..8
+  flareColor?: string
+  /** Board L: white-balance Kelvin (1500-15000, 6500 = neutral). */
+  colorTemp?: number
   /** Glitch — moved OUT of transitions into the effect system (all properties
    *  editable + keyframeable): signal-damage look rendered per frame. */
   glitch?: number // intensity 0..1 (0 = off)

@@ -286,7 +286,10 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.vhs && effect.vhs > 0) ||
     (effect.dirColorize && effect.dirColorize > 0) ||
     (effect.turbulent && effect.turbulent > 0) ||
-    (effect.glitch && effect.glitch > 0),
+    (effect.glitch && effect.glitch > 0) ||
+    (effect.kaleidoSegments && effect.kaleidoSegments >= 2) ||
+    (effect.flare && effect.flare > 0) ||
+    (effect.colorTemp !== undefined && Math.abs(effect.colorTemp - 6500) > 1),
   )
 }
 
@@ -471,6 +474,104 @@ function applyGlitchGrade(ctx: CanvasRenderingContext2D, e: ClipEffect, w: numbe
   ctx.restore()
 }
 
+/** Board L backlog→engine conversions: Kelvin white balance, mirror-wedge
+ *  kaleidoscope (CC Kaleida family) and a procedural optical lens flare
+ *  (core bloom + anamorphic streak + ghost rings + halo). Every numeric
+ *  property is editable + keyframeable like the rest of the fx system. */
+function applyBoardL(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  const kelvin = e.colorTemp ?? 6500
+  if (Math.abs(kelvin - 6500) > 1) {
+    const warm = Math.max(-1, Math.min(1, (6500 - kelvin) / 5000)) // >0 warm cast, <0 cool cast
+    const rG = warm > 0 ? 1 + 0.38 * warm : 1 + 0.22 * warm
+    const gG = warm > 0 ? 1 + 0.06 * warm : 1 + 0.02 * warm
+    const bG = warm > 0 ? 1 - 0.42 * warm : 1 - 0.35 * warm
+    const d = ctx.getImageData(0, 0, w, h)
+    for (let i = 0; i < d.data.length; i += 4) {
+      d.data[i] = Math.min(255, d.data[i] * rG)
+      d.data[i + 1] = Math.min(255, d.data[i + 1] * gG)
+      d.data[i + 2] = Math.min(255, d.data[i + 2] * bG)
+    }
+    ctx.putImageData(d, 0, 0)
+  }
+  const seg = Math.floor(e.kaleidoSegments ?? 0)
+  if (seg >= 2) {
+    const n = Math.min(12, seg)
+    const rot = ((e.kaleidoRotate ?? 0) * Math.PI) / 180
+    const srcC = document.createElement('canvas')
+    srcC.width = w; srcC.height = h
+    srcC.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
+    const sd = srcC.getContext('2d')!.getImageData(0, 0, w, h).data
+    const out = ctx.createImageData(w, h)
+    const wedge = (Math.PI * 2) / n
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const dx = x - w / 2, dy = y - h / 2
+        const r = Math.sqrt(dx * dx + dy * dy)
+        let ang = Math.atan2(dy, dx) - rot
+        ang = ((ang % wedge) + wedge) % wedge
+        if (ang > wedge / 2) ang = wedge - ang // mirror fold = true kaleidoscope
+        const sa = ang + rot
+        const sx = Math.min(w - 1, Math.max(0, Math.round(w / 2 + Math.cos(sa) * r)))
+        const sy = Math.min(h - 1, Math.max(0, Math.round(h / 2 + Math.sin(sa) * r)))
+        const si = (sy * w + sx) * 4
+        const i = (y * w + x) * 4
+        out.data[i] = sd[si]; out.data[i + 1] = sd[si + 1]; out.data[i + 2] = sd[si + 2]; out.data[i + 3] = sd[si + 3]
+      }
+    }
+    ctx.putImageData(out, 0, 0)
+  }
+  const fl = e.flare ?? 0
+  if (fl > 0) {
+    const fx = ((e.flareX ?? 72) / 100) * w
+    const fy = ((e.flareY ?? 28) / 100) * h
+    const [cr, cg, cb] = amHex(e.flareColor, [255, 217, 160])
+    const col = (al: number) => `rgba(${cr},${cg},${cb},${Math.max(0, Math.min(1, al)).toFixed(3)})`
+    ctx.save()
+    ctx.globalCompositeOperation = 'screen'
+    const R = Math.max(w, h) * 0.42
+    const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, R)
+    g.addColorStop(0, col(0.95 * fl))
+    g.addColorStop(0.25, col(0.4 * fl))
+    g.addColorStop(1, col(0))
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, w, h)
+    const st = e.flareStreak ?? 0.6
+    if (st > 0.01) {
+      ctx.save()
+      ctx.translate(fx, fy)
+      ctx.scale(1, 0.045 + 0.03 * (1 - st))
+      const sr = Math.max(8, w * 0.55 * st)
+      const gs = ctx.createRadialGradient(0, 0, 0, 0, 0, sr)
+      gs.addColorStop(0, col(0.85 * fl))
+      gs.addColorStop(1, col(0))
+      ctx.fillStyle = gs
+      ctx.fillRect(-sr, -sr, sr * 2, sr * 2)
+      ctx.restore()
+    }
+    const ghosts = Math.min(8, Math.floor(e.flareGhosts ?? 4))
+    for (let gi = 1; gi <= ghosts; gi++) {
+      const k = gi * 0.38
+      const gx = w / 2 + (w / 2 - fx) * k
+      const gy = h / 2 + (h / 2 - fy) * k
+      const gr = Math.max(w, h) * (0.05 + 0.035 * gi)
+      const gg = ctx.createRadialGradient(gx, gy, gr * 0.55, gx, gy, gr)
+      gg.addColorStop(0, col(0))
+      gg.addColorStop(0.75, col(0.16 * fl * (gi % 2 ? 1 : 0.6)))
+      gg.addColorStop(1, col(0))
+      ctx.fillStyle = gg
+      ctx.fillRect(gx - gr, gy - gr, gr * 2, gr * 2)
+    }
+    const hr = Math.max(w, h) * 0.62
+    const hg = ctx.createRadialGradient(fx, fy, hr * 0.8, fx, fy, hr)
+    hg.addColorStop(0, col(0))
+    hg.addColorStop(0.9, col(0.1 * fl))
+    hg.addColorStop(1, col(0))
+    ctx.fillStyle = hg
+    ctx.fillRect(0, 0, w, h)
+    ctx.restore()
+  }
+}
+
 export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, seed = 0): void {
   const ctx = canvas.getContext('2d')
   if (!ctx || !canvas.width || !canvas.height) return
@@ -622,4 +723,5 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
   applyAmFamily(ctx, effect, canvas.width, canvas.height, seed)
   applyOneFramer(ctx, effect, canvas.width, canvas.height, seed)
   applyGlitchGrade(ctx, effect, canvas.width, canvas.height, seed)
+  applyBoardL(ctx, effect, canvas.width, canvas.height, seed)
 }

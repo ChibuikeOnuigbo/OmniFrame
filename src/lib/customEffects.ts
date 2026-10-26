@@ -58,11 +58,15 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   minimax: 0, minimaxAngle: 0, minimaxMode: 'max', vhs: 0,
   dirColorize: 0, dirColorizeFrom: '#0028ff', dirColorizeTo: '#ff2800', dirColorizeAngle: 45,
   oscillate: 0, oscillateFreq: 2, oscillateAngle: 45, oscillateWave: 'sine', oscillatePhase: 0, turbulent: 0,
+  kaleidoSegments: 0, kaleidoRotate: 0, flare: 0, flareX: 72, flareY: 28, flareStreak: 0.6, flareGhosts: 4, flareColor: '#ffd9a0',
+  colorTemp: 6500,
   glitch: 0, glitchStyle: 'slice', glitchScan: 0.18, glitchStatic: 0.25, glitchSeed: 1, glitchSpeed: 12,
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   glitch: [0, 1], glitchScan: [0, 1], glitchStatic: [0, 1], glitchSeed: [1, 999], glitchSpeed: [1, 30],
+  kaleidoSegments: [0, 12], kaleidoRotate: [0, 360], flare: [0, 1], flareX: [0, 100], flareY: [0, 100],
+  flareStreak: [0, 1], flareGhosts: [0, 8], colorTemp: [1500, 15000],
   particleDensity: [0, 1],
   overlayStrength: [0, 1],
   brightness: [0, 2],
