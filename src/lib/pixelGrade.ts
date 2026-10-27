@@ -70,9 +70,15 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     ctx.filter = 'none'
   }
   if (e.edgeGlow && e.edgeGlow > 0) {
-    const src = document.createElement('canvas')
-    src.width = w; src.height = h
+    // Reuse module-level scratch surfaces: per-frame createElement('canvas')
+    // leaks native surfaces in the headless (node-canvas) renderer — long
+    // exports grew ~4MB/frame and OOM-killed the process (measured 2026-10-27).
+    if (!egSrc) egSrc = document.createElement('canvas')
+    if (!egEdge) egEdge = document.createElement('canvas')
+    const src = egSrc
+    if (src.width !== w || src.height !== h) { src.width = w; src.height = h }
     const sx = src.getContext('2d')!
+    sx.clearRect(0, 0, w, h)
     sx.drawImage(ctx.canvas, 0, 0)
     const d = sx.getImageData(0, 0, w, h)
     const edge = sx.createImageData(w, h)
@@ -88,8 +94,8 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
         }
       }
     }
-    const ec = document.createElement('canvas')
-    ec.width = w; ec.height = h
+    const ec = egEdge
+    if (ec.width !== w || ec.height !== h) { ec.width = w; ec.height = h }
     ec.getContext('2d')!.putImageData(edge, 0, 0)
     ctx.save()
     ctx.filter = `blur(${Math.max(1, 3 * e.edgeGlow)}px)`
@@ -253,6 +259,9 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
   }
   if (e.flicker === 0 && e.grain && e.grain > 0) void 0
 }
+
+let egSrc: HTMLCanvasElement | null = null
+let egEdge: HTMLCanvasElement | null = null
 
 export function hasPixelGrade(effect?: ClipEffect): boolean {
   if (!effect) return false
