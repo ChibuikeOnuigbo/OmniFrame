@@ -134,3 +134,9 @@ All IDs appended to youtube-audit/progress.json watched_ids with a scan_log entr
 - New engine feature from the vet: textStyle.chroma = RGB-split chromatic fringes (cyan/red tinted silhouettes offset under the glyph) in playback.ts (browser) + appRender (headless) + TextPanel 'RGB split' slider + buildTextPreset opts; QA asserts chroma pixels via MCP patch.
 - Gen-2: 20 more versions (v21-v40) with chroma + graded fills in the policy; elite reward improved -1.329 -> -1.111; vet kept 7 / deleted 13; learned best = test_ans_result/board_S_rdt_best2.mp4 (graded fill + chroma fringes visible, S-rdt-best2-cut1.png).
 - Kept artifacts: 16 vetted version mp4s + scores.json + scores-gen2.json + vet.json + vet-gen2.json in test_ans_result/rdt-versions/.
+
+## Board S (cont.3): official-docs scan — chromatic aberration (theme of the vet-improve turn)
+- Blackmagic official (documents.blackmagicdesign.com DaVinci_Resolve_16_New_Features_Guide.pdf, Ch.4): "Chromatic Aberration (studio only) — A Revival category plug-in that lets you manually correct the slight color fringing that results from chromatic aberration in a lens... using the Scale and Edge controls to individually adjust Red/Cyan and Blue/Yellow fringing." (PDF beyond 30-page parse cap; language kept from citing snippets, URL kept as text ref — honest.)
+- Community-verified inverse use (reddit r/davinciresolve, glitchest.com 2026): the same Revival tool ADDS fringing with negative Red/Cyan scale; the Color-page Splitter/Combiner method offsets R and B channel sizing in opposite directions = exactly the RGB-split look shipped as textStyle.chroma.
+- Crosswalk: OmniFrame chroma = cyan silhouette at -offset + red silhouette at +offset under the glyph (playback.ts browser + appRender headless), i.e. the channel-offset grammar of the official tool, applied to title layers; TextPanel 'RGB split' slider 0-8 px.
+- Drive duty: krita-win re-check -> still 0 files.
