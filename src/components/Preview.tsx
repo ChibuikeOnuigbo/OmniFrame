@@ -346,7 +346,7 @@ export function Preview() {
           </span>
           <span className="min-w-0 flex-1">
             <span className="block truncate font-semibold text-amber-200" title={visualPreview.label}>{visualPreview.label}</span>
-            <span className="block text-[9px] text-ink-500">Temporary audition · not in the project until applied</span>
+            <span className="block text-[9px] text-ink-500">Temporary audition, not in the project until applied</span>
           </span>
           {visualPreview.kind !== 'clip-playback' && visualPreview.kind !== 'range-playback' && (
             <button
@@ -467,7 +467,7 @@ export function Preview() {
                 <Volume2 size={32} className="text-brand-400" />
               </div>
               <h3 className="text-sm font-semibold text-ink-100 max-w-[280px] truncate" title={previewAsset.name}>{previewAsset.name}</h3>
-              <p className="text-xs text-ink-400 mt-1">Audio Track · {formatTimecode(assetDuration, projectFps)}</p>
+              <p className="text-xs text-ink-400 mt-1">Audio Track, {formatTimecode(assetDuration, projectFps)}</p>
             </div>
           )}
         </div>
@@ -808,10 +808,10 @@ export function Preview() {
                 )}
                 <div className="pointer-events-none absolute bottom-1 left-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] text-teal-100">
                   {m.kind === 'split'
-                    ? `Split view (${m.inverted ? 'Exclude' : 'Include'}): drag to move the line · handle rotates · Esc done`
+                    ? `Split view (${m.inverted ? 'Exclude' : 'Include'}): drag to move the line, handle rotates, Esc done`
                     : m.kind === 'custom'
-                      ? `Custom view (${m.inverted ? 'Exclude' : 'Include'}): click to add points · drag points · Esc done`
-                      : `Mask (${m.inverted ? 'Outside' : 'Inside'}): drag to draw · inside moves · corners resize · Esc done`}
+                      ? `Custom view (${m.inverted ? 'Exclude' : 'Include'}): click to add points, drag points, Esc done`
+                      : `Mask (${m.inverted ? 'Outside' : 'Inside'}): drag to draw, inside moves, corners resize, Esc done`}
                 </div>
               </div>
             )

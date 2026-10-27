@@ -84,7 +84,7 @@ export function PackBrowserModal({ open, onClose }: { open: boolean; onClose: ()
             <Search size={13} className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-ink-500" />
             <input data-testid="pack-browser-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search packs, windows, cursors…" className="h-8 w-full rounded-md border border-ink-700 bg-ink-900 pl-7 pr-2 text-xs text-white outline-none focus:border-brand" />
           </label>
-          <span className="text-[10px] text-ink-500">{assets.length} assets · {bundles.length} packs</span>
+          <span className="text-[10px] text-ink-500">{assets.length} assets, {bundles.length} packs</span>
           <button type="button" data-testid="pack-browser-close" onClick={onClose} className="grid h-7 w-7 place-items-center rounded text-ink-400 hover:bg-ink-800 hover:text-white" aria-label="Close pack browser"><X size={15} /></button>
         </div>
 
@@ -125,7 +125,7 @@ export function PackBrowserModal({ open, onClose }: { open: boolean; onClose: ()
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-sm font-semibold text-white">{activeBundle.name}</h3>
-                    <p className="mt-0.5 text-[11px] text-ink-400">{activeBundle.desc} · {activeBundle.items.length} layers, bottom first.</p>
+                    <p className="mt-0.5 text-[11px] text-ink-400">{activeBundle.desc}, {activeBundle.items.length} layers, bottom first.</p>
                     <button type="button" data-testid={`pack-browser-add-bundle-${activeBundle.id}`} onClick={() => addBundle(activeBundle.id)} className="mt-2 flex items-center gap-1 rounded bg-brand px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-brand/85"><Plus size={12} /> Add whole pack at playhead</button>
                     <button type="button" data-testid="pack-browser-back" onClick={() => setBundleId(null)} className="mt-1.5 block text-[10px] text-ink-400 hover:text-white">← Back to browser</button>
                   </div>
@@ -155,7 +155,7 @@ export function PackBrowserModal({ open, onClose }: { open: boolean; onClose: ()
 
             {!activeBundle && (
               <>
-                <span className="mb-2 block text-[10px] font-semibold uppercase tracking-wider text-ink-500">{activeBundle ? 'In this pack' : folder === 'all' || folder === 'bundles' ? 'Assets' : SECTIONS.find((s) => s.id === folder)?.label} · click to add at playhead</span>
+                <span className="mb-2 block text-[10px] font-semibold uppercase tracking-wider text-ink-500">{activeBundle ? 'In this pack' : folder === 'all' || folder === 'bundles' ? 'Assets' : SECTIONS.find((s) => s.id === folder)?.label}, click to add at playhead</span>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-3">
                   {assets.map((a) => (
                     <button key={a.id} type="button" data-testid={`pack-browser-asset-${a.id}`} onClick={() => addPackClip(a)} className="group overflow-hidden rounded-lg border border-ink-800 bg-ink-900 text-left hover:border-brand" title={`${a.name} — ${a.desc}`}>

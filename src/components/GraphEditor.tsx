@@ -525,7 +525,7 @@ export function GraphEditor() {
             {/* Axis semantics, CapCut-graph style: X = time between
                 keyframes, Y = the value of the motion. */}
             <text x="8" y="16" fontSize="10" fill="#64748b" aria-hidden="true">
-              Y · value ({activeCurve?.unit || 'units'})
+              Y, value ({activeCurve?.unit || 'units'})
             </text>
             <text
               x={dims.width - 8}
@@ -535,7 +535,7 @@ export function GraphEditor() {
               textAnchor="end"
               aria-hidden="true"
             >
-              X · time (s)
+              X, time (s)
             </text>
 
             {/* Selected-segment band: CapCut edits the graph keyframe-pair by
@@ -693,7 +693,7 @@ export function GraphEditor() {
             {selectedKeyframe ? (
               <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none w-full">
                 <span className="font-semibold text-ink-200 shrink-0">
-                  Key {selectedKeyframe.time.toFixed(2)}s · {selectedKeyframe.value.toFixed(1)}{activeCurve?.unit || ''}
+                  Key {selectedKeyframe.time.toFixed(2)}s, {selectedKeyframe.value.toFixed(1)}{activeCurve?.unit || ''}
                   {(() => {
                     // CapCut graphs think in keyframe pairs — show where this
                     // key's segment ends.
@@ -701,10 +701,10 @@ export function GraphEditor() {
                     const keys = [...activeCurve.keyframes].sort((a, b) => a.time - b.time)
                     const idx = keys.findIndex((k) => k.id === selectedKeyframe.id)
                     const next = keys[idx + 1]
-                    if (!next) return <span className="text-ink-500"> · last key</span>
+                    if (!next) return <span className="text-ink-500">, last key</span>
                     return (
                       <span className="text-ink-500">
-                        {' '}→ {next.time.toFixed(2)}s · {next.value.toFixed(1)}
+                        {' '}→ {next.time.toFixed(2)}s, {next.value.toFixed(1)}
                         {activeCurve.unit || ''}
                       </span>
                     )
@@ -920,7 +920,7 @@ export function GraphEditor() {
               </div>
             ) : (
               <div className="text-ink-400 text-[11px]">
-                X = time between keys · Y = value of the motion. Double-click the curve to add a
+                X = time between keys, Y = value of the motion. Double-click the curve to add a
                 point, drag diamonds to move keys, drag handle squares to reshape the segment.
               </div>
             )}

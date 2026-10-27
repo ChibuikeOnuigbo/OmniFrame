@@ -268,7 +268,7 @@ export function TextPanel() {
                 <Stamp size={14} className="text-sky-300 shrink-0" />
                 <div>
                   <div className="font-semibold text-[11px] text-ink-100">Watermark</div>
-                  <div className="text-[9px] text-ink-400">Levels 1–6 · stamps</div>
+                  <div className="text-[9px] text-ink-400">Levels 1–6, stamps</div>
                 </div>
               </div>
               <ChevronRight size={13} className="text-ink-400" />
@@ -567,7 +567,7 @@ export function TextPanel() {
               },
               {
                 label: 'Lower Third Subtitle',
-                text: 'DIRECTOR · OMNIFRAME',
+                text: 'DIRECTOR, OMNIFRAME',
                 style: { fontSize: 32, color: '#38bdf8', backgroundColor: 'rgba(15,23,42,0.85)', bold: true },
               },
               {
@@ -626,10 +626,10 @@ export function TextPanel() {
                   setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
                 }}
                 className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
-                title={`${p.source} · best with ${p.ideal[0]}–${p.ideal[1]} characters`}
+                title={`${p.source}, best with ${p.ideal[0]}–${p.ideal[1]} characters`}
               >
                 <span className="block text-[11px] font-medium text-ink-100">{p.name}</span>
-                <span className="block text-[9px] text-ink-500">{p.category} · best {p.ideal[0]}–{p.ideal[1]} chars</span>
+                <span className="block text-[9px] text-ink-500">{p.category}, best {p.ideal[0]}–{p.ideal[1]} chars</span>
               </button>
             </div>
           ))}
@@ -653,8 +653,8 @@ export function TextPanel() {
               </div>
               <label className="flex items-center gap-1 text-[9px] text-ink-400">Typewriter cursor
                 <select data-testid="preset-tw-cursor-select" value={presetTwCursor} onChange={(e) => setPresetTwCursor(e.target.value as 'follow' | 'end')} className="h-6 rounded border border-ink-700 bg-ink-950 px-1 text-[10px] text-white outline-none" title="Follow: cursor trails each letter (1_ 12_ 123_). End: cursor waits at the final position while letters fill in.">
-                  <option value="follow">Follow each letter · 1_ 12_ 123_</option>
-                  <option value="end">Fixed at end · letters fill to cursor</option>
+                  <option value="follow">Follow each letter, 1_ 12_ 123_</option>
+                  <option value="end">Fixed at end, letters fill to cursor</option>
                 </select>
               </label>
               <div className="space-y-1">
@@ -770,7 +770,7 @@ export function TextPanel() {
               </div>
                 </>)
               })()}
-              <p className="text-[9px] text-ink-600" data-testid="preset-caps">Auto caps for “{presetText || 'YOUR TEXT'}”: character spacing ≤ {caps.charMax}px · word spacing ≤ {caps.wordMax}px (text ≈{caps.textWidth}px of 1766px usable — maths in animation_study.md).</p>
+              <p className="text-[9px] text-ink-600" data-testid="preset-caps">Auto caps for “{presetText || 'YOUR TEXT'}”: character spacing ≤ {caps.charMax}px, word spacing ≤ {caps.wordMax}px (text ≈{caps.textWidth}px of 1766px usable — maths in animation_study.md).</p>
             </div>
           )
         })()}
@@ -878,7 +878,7 @@ export function TextPanel() {
             {watermarks.map((w) => (
               <div key={w.id} className="flex items-center gap-1.5 rounded border border-ink-800 bg-ink-900 px-2 py-1">
                 <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: w.color }} />
-                <span className="min-w-0 flex-1 truncate text-[10px] text-ink-200">{w.name} · L{w.level}</span>
+                <span className="min-w-0 flex-1 truncate text-[10px] text-ink-200">{w.name}, L{w.level}</span>
                 <button
                   type="button"
                   data-testid={`wm-apply-${w.id}`}

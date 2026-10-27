@@ -317,7 +317,7 @@ export function DrawingPanel() {
             aria-label="Convert drawing to clips"
             onClick={() => {
               const r = convertDrawingToClips()
-              setConvertReport(r.clips > 0 ? `${r.clips} clip${r.clips === 1 ? '' : 's'} · ${r.strokes} strokes` : 'Nothing to convert')
+              setConvertReport(r.clips > 0 ? `${r.clips} clip${r.clips === 1 ? '' : 's'}, ${r.strokes} strokes` : 'Nothing to convert')
             }}
             className="flex h-7 flex-1 items-center justify-center gap-1.5 rounded-md border border-ink-700 text-[11px] font-medium text-ink-300 transition-colors hover:text-white"
           >

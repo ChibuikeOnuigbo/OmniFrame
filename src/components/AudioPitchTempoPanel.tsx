@@ -65,7 +65,7 @@ export function AudioPitchTempoPanel() {
         setProgress(update.percent)
         setStatus(update.status)
       })
-      setSuccess(`Rendered ${formatTime(result.duration)} to a new audio track${muteSource ? ' · source muted' : ''}.`)
+      setSuccess(`Rendered ${formatTime(result.duration)} to a new audio track${muteSource ? ', source muted' : ''}.`)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause))
       setStatus('')
@@ -87,7 +87,7 @@ export function AudioPitchTempoPanel() {
       >
         <span className="flex min-w-0 items-center gap-2">
           <span className="rounded-md border border-sky-400/25 bg-sky-500/10 p-1.5 text-sky-300"><SlidersHorizontal size={13} /></span>
-          <span className="min-w-0"><span className="block text-[10px] font-semibold text-ink-100">Pitch & tempo · independent</span><span className="block text-[9px] leading-snug text-ink-400">Render a new audio clip · local processing</span></span>
+          <span className="min-w-0"><span className="block text-[10px] font-semibold text-ink-100">Pitch & tempo, independent</span><span className="block text-[9px] leading-snug text-ink-400">Render a new audio clip, local processing</span></span>
         </span>
         <ChevronDown size={13} className={`shrink-0 text-ink-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
       </button>
@@ -111,7 +111,7 @@ export function AudioPitchTempoPanel() {
                 >
                   {audioClips.map((clip) => {
                     const asset = assets.find((item) => item.id === clip.assetId)
-                    return <option key={clip.id} value={clip.id}>{asset?.name || clip.name} · {formatTime(clip.duration)}</option>
+                    return <option key={clip.id} value={clip.id}>{asset?.name || clip.name}, {formatTime(clip.duration)}</option>
                   })}
                 </select>
               </label>
@@ -161,8 +161,8 @@ export function AudioPitchTempoPanel() {
                   onChange={(event) => setPitchCharacter(event.target.value as 'music' | 'voice')}
                   className="mt-1 h-8 w-full rounded-md border border-ink-700 bg-ink-900 px-2 text-[10px] text-ink-200 outline-none focus:border-sky-400"
                 >
-                  <option value="music">Mixed music · transient-aware</option>
-                  <option value="voice">Solo voice · preserve formants</option>
+                  <option value="music">Mixed music, transient-aware</option>
+                  <option value="voice">Solo voice, preserve formants</option>
                 </select>
               </label>
 
@@ -205,7 +205,7 @@ export function AudioPitchTempoPanel() {
               {processing && (
                 <div className="space-y-1" data-testid="audio-pitch-tempo-progress">
                   <div className="h-1 overflow-hidden rounded-full bg-ink-800"><div className="h-full rounded-full bg-sky-400 transition-[width]" style={{ width: `${Math.max(0, Math.min(100, progress))}%` }} /></div>
-                  <div data-testid="audio-pitch-tempo-status" className="text-[9px] text-ink-400">{Math.round(progress)}% · {status}</div>
+                  <div data-testid="audio-pitch-tempo-status" className="text-[9px] text-ink-400">{Math.round(progress)}%, {status}</div>
                 </div>
               )}
               {!processing && success && <div data-testid="audio-pitch-tempo-success" className="flex items-start gap-1.5 rounded-md border border-emerald-500/25 bg-emerald-500/[0.06] p-2 text-[9px] text-emerald-300"><CheckCircle2 size={11} className="mt-0.5 shrink-0" />{success}</div>}

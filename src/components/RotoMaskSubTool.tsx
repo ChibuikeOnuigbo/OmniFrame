@@ -100,7 +100,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
           <span>RotoMask Sub-Tool</span>
         </div>
         <span className="text-[11px] px-1.5 py-0.5 rounded font-mono uppercase bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30">
-          Click · Track · Apply
+          Click, Track, Apply
         </span>
       </div>
 
@@ -155,7 +155,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
                     {m.domain === 'human' ? '🧑' : m.domain === 'anime' ? '🎞️' : m.domain === 'hair' ? '💇' : '🧩'}
                   </span>
                   <span className="text-[11px] font-medium leading-tight truncate max-w-full">
-                    {m.label.replace('OmniRoto · ', '')}
+                    {m.label.replace('OmniRoto, ', '')}
                   </span>
                 </button>
               )
@@ -242,7 +242,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
                   addRotoModelFromCatalog(m.id)
                   setCatalogOpen(false)
                 }}
-                title={`${m.homepage} · ~${m.approxMb}MB · ${m.notes}`}
+                title={`${m.homepage}, ~${m.approxMb}MB, ${m.notes}`}
                 className="flex items-center justify-between gap-2 rounded-md border border-ink-800 bg-ink-900 px-2 py-1 text-left text-[10px] text-ink-300 hover:bg-ink-800 hover:text-white"
               >
                 <span className="truncate font-medium">{m.label}</span>
@@ -313,7 +313,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
             className="flex-1 font-mono text-[10px] text-ink-400"
           >
             {rotoClicks.length
-              ? `${rotoClicks.length} clicks · +${posCount} subject · −${negCount} background`
+              ? `${rotoClicks.length} clicks, +${posCount} subject, −${negCount} background`
               : 'no clicks yet'}
           </div>
           <button
@@ -335,11 +335,11 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
                 data-testid="roto-matte-preview"
                 src={rotoResult.maskDataUrl}
                 alt="RotoMask matte"
-                title={`matte · engine ${rotoResult.engine} · cover ${(rotoResult.coverage * 100).toFixed(1)}%`}
+                title={`matte, engine ${rotoResult.engine}, cover ${(rotoResult.coverage * 100).toFixed(1)}%`}
                 className="w-full h-14 object-contain"
               />
               <span className="absolute bottom-0 left-0 right-0 text-center text-[10px] bg-black/60 text-ink-300">
-                Matte · f{rotoResult.frame}
+                Matte, f{rotoResult.frame}
               </span>
             </div>
             <div className="relative rounded overflow-hidden border border-ink-800 bg-[repeating-conic-gradient(#222_0%_25%,#333_0%_50%)] bg-[length:8px_8px]">
@@ -475,7 +475,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
               <div
                 key={f.frame}
                 className="relative shrink-0 rounded border border-ink-800 bg-ink-950 overflow-hidden"
-                title={`frame ${f.frame} · cover ${(f.coverage * 100).toFixed(1)}%`}
+                title={`frame ${f.frame}, cover ${(f.coverage * 100).toFixed(1)}%`}
               >
                 <img src={f.maskDataUrl} alt={`frame ${f.frame} mask`} className="h-10 w-auto object-contain" />
                 <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-black/60 text-ink-400 font-mono">
@@ -519,7 +519,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
             </select>
           </div>
           <label className="flex items-center justify-between gap-2 text-[10px] text-ink-400">
-            <span>Mask grow · {rotoInpaint.maskGrow}px</span>
+            <span>Mask grow, {rotoInpaint.maskGrow}px</span>
             <input
               type="range"
               min={0}
@@ -533,7 +533,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
             />
           </label>
           <label className="flex items-center justify-between gap-2 text-[10px] text-ink-400">
-            <span>Donor window · {rotoInpaint.donorWindow === 0 ? 'whole clip' : `±${rotoInpaint.donorWindow} frames`}</span>
+            <span>Donor window, {rotoInpaint.donorWindow === 0 ? 'whole clip' : `±${rotoInpaint.donorWindow} frames`}</span>
             <input
               type="range"
               min={0}
@@ -561,7 +561,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
             <div className="flex items-center justify-between gap-2 pt-1">
               <span className="text-[10px] font-medium text-ink-300">Source selection</span>
               <button type="button" data-testid="roto-inpaint-auto-source" aria-pressed={rotoInpaint.selectedDonorFrame === null} onClick={() => selectRotoInpaintDonor(null)} className={`rounded border px-1.5 py-1 text-[9px] ${rotoInpaint.selectedDonorFrame === null ? 'border-cyan-400 bg-cyan-500/15 text-cyan-100' : 'border-ink-700 bg-ink-900 text-ink-400'}`}>
-                Auto · per frame
+                Auto, per frame
               </button>
             </div>
             {rotoInpaint.candidates.length > 0 && (
@@ -573,7 +573,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
                     data-testid={`roto-inpaint-donor-${candidate.frame}`}
                     aria-pressed={rotoInpaint.selectedDonorFrame === candidate.frame}
                     onClick={() => selectRotoInpaintDonor(candidate.frame)}
-                    title={`Frame ${candidate.frame} · match ${(candidate.score * 100).toFixed(0)}% · overlap ${(candidate.overlap * 100).toFixed(0)}%`}
+                    title={`Frame ${candidate.frame}, match ${(candidate.score * 100).toFixed(0)}%, overlap ${(candidate.overlap * 100).toFixed(0)}%`}
                     className={`relative overflow-hidden rounded border text-left ${rotoInpaint.selectedDonorFrame === candidate.frame ? 'border-cyan-300 ring-1 ring-cyan-400/60' : 'border-ink-800 hover:border-ink-600'}`}
                   >
                     <img src={candidate.thumbnail} alt={`Donor frame ${candidate.frame}`} className="h-12 w-full object-cover" />
@@ -589,7 +589,7 @@ export function RotoMaskSubTool({ context = 'omniframe' }: { context?: 'drawing'
               disabled={inpaintBusy || !rotoInpaint.targetFrames.length}
               onClick={async () => {
                 const id = await applyRotoInpaint()
-                if (id) setApplyNote(`Temporal patch added · ${rotoInpaint.targetFrames.length} target frames`)
+                if (id) setApplyNote(`Temporal patch added, ${rotoInpaint.targetFrames.length} target frames`)
               }}
               title="Apply best-match donor frames to the selected target scope; spatial inpaint is the per-frame fallback"
               className={`${btnIdle} w-full border-emerald-500/35 bg-emerald-500/10 text-emerald-200 hover:bg-emerald-500/20`}

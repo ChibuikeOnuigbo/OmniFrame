@@ -449,7 +449,7 @@ export function AspectRatioSelector() {
                         </span>
                       </div>
                       <div className="text-[9px] text-ink-500 truncate leading-tight">
-                        {preset.platforms.slice(0, 3).join(' · ')}
+                        {preset.platforms.slice(0, 3).join(', ')}
                       </div>
                     </div>
                   </div>

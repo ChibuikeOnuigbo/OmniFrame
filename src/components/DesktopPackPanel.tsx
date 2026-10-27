@@ -202,7 +202,7 @@ const SCENE_RECIPES: SceneRecipe[] = [
     run: async () => {
       const s = useEditor.getState()
       s.addAdjustmentLayer({
-        name: 'Light · Warm Point',
+        name: 'Light, Warm Point',
         effects: { lightType: 'point', lightColor: '#ffd9a0', lightIntensity: 0.8, lightFalloff: 0.5, lightX: 0.5, lightY: 0.35 },
       })
       return 'Warm light layer added — tune color, intensity, falloff in Color & Adjustments'
@@ -786,7 +786,7 @@ export function DesktopPackPanel() {
         {section === 'windows' && (
           <>
             {(searching ? visibleBundles.length > 0 : true) && (
-              <PackFolder folderKey="packs" title="Packs · one-click bundles" count={visibleBundles.length} open={isOpen('packs', true)} onToggle={toggleFolder}>
+              <PackFolder folderKey="packs" title="Packs, one-click bundles" count={visibleBundles.length} open={isOpen('packs', true)} onToggle={toggleFolder}>
                 <div className="space-y-1.5">
                   {visibleBundles.map((bundle) => (
                     <button
@@ -804,11 +804,11 @@ export function DesktopPackPanel() {
                   ))}
                   <div className="grid grid-cols-2 gap-1.5">
                     <button type="button" data-testid="pack-desktop-mac" onClick={() => addFakeDesktop('mac')} className="rounded-lg border border-ink-700 bg-ink-900 px-2 py-2 text-left transition-colors hover:border-brand/70">
-                      <span className="block text-[11px] font-medium text-ink-100">Fake Desktop · macOS</span>
+                      <span className="block text-[11px] font-medium text-ink-100">Fake Desktop, macOS</span>
                       <span className="mt-0.5 block text-[10px] leading-snug text-ink-500">Wallpaper + Chrome + cursor</span>
                     </button>
                     <button type="button" data-testid="pack-desktop-win" onClick={() => addFakeDesktop('win')} className="rounded-lg border border-ink-700 bg-ink-900 px-2 py-2 text-left transition-colors hover:border-brand/70">
-                      <span className="block text-[11px] font-medium text-ink-100">Fake Desktop · Windows</span>
+                      <span className="block text-[11px] font-medium text-ink-100">Fake Desktop, Windows</span>
                       <span className="mt-0.5 block text-[10px] leading-snug text-ink-500">Wallpaper + Chrome + cursor</span>
                     </button>
                   </div>
@@ -850,18 +850,18 @@ export function DesktopPackPanel() {
                     <option value="1:1">Square 1:1</option>
                   </select>
                 </label>
-                <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-duration">Duration · {briefDuration}s
+                <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-duration">Duration, {briefDuration}s
                   <input id="pack-brief-duration" data-testid="pack-brief-duration" type="range" min={3} max={12} step={1} value={briefDuration} onChange={(e) => setBriefDuration(Number(e.target.value))} className="mt-2 w-full accent-cyan-400" />
                 </label>
                 <label className="block text-[10px] text-ink-400" htmlFor="pack-brief-backdrop">Backdrop / device
                   <select id="pack-brief-backdrop" data-testid="pack-brief-backdrop" value={briefBackdrop} onChange={(e) => setBriefBackdrop(e.target.value)} className="mt-1 h-7 w-full rounded border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-100">
                     <option value="post-card">Social post card</option>
-                    <option value="desktop-mac">Fake desktop · macOS</option>
-                    <option value="desktop-win">Fake desktop · Windows</option>
+                    <option value="desktop-mac">Fake desktop, macOS</option>
+                    <option value="desktop-win">Fake desktop, Windows</option>
                     <option value="phone-frame">Phone frame</option>
-                    <option value="chrome-webpage">Chrome webpage · demo</option>
-                    <option value="spotify-phone">Music player · phone</option>
-                    <option value="maps-phone">Maps · phone</option>
+                    <option value="chrome-webpage">Chrome webpage, demo</option>
+                    <option value="spotify-phone">Music player, phone</option>
+                    <option value="maps-phone">Maps, phone</option>
                     <option value="none">No backdrop</option>
                   </select>
                 </label>

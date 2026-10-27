@@ -672,7 +672,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
           />
         </div>
         <div className="text-[10px] text-ink-500 mt-1">
-          {clip.kind === 'adjustment' ? 'Adjustment layer' : asset?.kind || clip.kind} · {formatClock(clip.duration)} on track
+          {clip.kind === 'adjustment' ? 'Adjustment layer' : asset?.kind || clip.kind}, {formatClock(clip.duration)} on track
         </div>
         {clip.kind === 'adjustment' && (
           <p className="mt-1 rounded border border-cyan-900/70 bg-cyan-950/25 px-2 py-1 text-[10px] leading-snug text-cyan-100/75" data-testid="adjustment-layer-scope-note">
@@ -704,7 +704,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
                 <span>Compound Sequence</span>
               </span>
               <span className="text-[10px] font-mono text-indigo-300">
-                {clip.nestedTrackCount || 1} Tracks · {clip.nestedClipCount || 1} Clips
+                {clip.nestedTrackCount || 1} Tracks, {clip.nestedClipCount || 1} Clips
               </span>
             </div>
             <div className="flex gap-2 mt-1">
@@ -1077,17 +1077,17 @@ function ClipInspector({ clip }: { clip: Clip }) {
                     }}
                     className="w-full h-7 rounded border border-ink-700 bg-ink-800 px-2 text-xs text-ink-100 outline-none focus:border-brand"
                   >
-                    <option value="htdemucs-v4">Demucs v4 · real neural{demucsReady === false ? ' (weights not downloaded)' : ' — best quality'}</option>
-                    <option value="omni-voicetarget">omni-voicetarget · fast DSP (mid/side crossover)</option>
+                    <option value="htdemucs-v4">Demucs v4, real neural{demucsReady === false ? ' (weights not downloaded)' : ' — best quality'}</option>
+                    <option value="omni-voicetarget">omni-voicetarget, fast DSP (mid/side crossover)</option>
                     <option value="bs-roformer-lite" disabled>BS-Roformer Lite (planned, unavailable)</option>
                     <option value="dsp-crossover-fast">Fast Crossover DSP (Offline)</option>
                     {isolationMode === 'keep_vocal' && (
-                      <option value="omni-denoise-onnx">AI Denoise ONNX (voice extractor · keep-vocal only)</option>
+                      <option value="omni-denoise-onnx">AI Denoise ONNX (voice extractor, keep-vocal only)</option>
                     )}
                     {isolationMode === 'keep_vocal' && (
-                      <option value="rnnoise-xiph">RNNoise (Xiph) · trained speech denoiser</option>
+                      <option value="rnnoise-xiph">RNNoise (Xiph), trained speech denoiser</option>
                     )}
-                    <option value="omni-unified">omni-unified-v1 · isolation + denoise + normalize (both modes)</option>
+                    <option value="omni-unified">omni-unified-v1, isolation + denoise + normalize (both modes)</option>
                   </select>
                 </div>
 
@@ -1400,7 +1400,7 @@ function McpConsoleSection() {
             </div>
           ))}
         </div>
-        <div className="truncate font-mono text-[8px] text-ink-500">{OMNI_MCP_CATALOG.join(' · ')}</div>
+        <div className="truncate font-mono text-[8px] text-ink-500">{OMNI_MCP_CATALOG.join(', ')}</div>
       </div>
     </Section>
   )

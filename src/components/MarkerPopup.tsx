@@ -83,7 +83,7 @@ export function MarkerPopup() {
         <button type="button" onClick={() => jumpToMarker(marker.id)} className="flex items-center gap-1.5 text-[11px] text-ink-300 hover:text-white" title="Jump playhead to this marker">
           <Bookmark size={11} style={{ color: hex }} />
           <span className="font-mono">{formatTimecode(resolved)}</span>
-          <span className="text-ink-500">· {marker.clipId ? `on clip “${hostClip?.name ?? 'clip'}”` : 'main timeline'}</span>
+          <span className="text-ink-500">{marker.clipId ? `on clip “${hostClip?.name ?? 'clip'}”` : 'main timeline'}</span>
         </button>
 
         <div>

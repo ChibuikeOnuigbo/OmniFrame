@@ -250,7 +250,7 @@ export function AudioRecorderPanel() {
       >
         <span className="flex min-w-0 items-center gap-2">
           <span className="rounded-md border border-rose-400/25 bg-rose-500/10 p-1.5 text-rose-300"><Mic size={13} /></span>
-          <span className="min-w-0"><span className="block text-[10px] font-semibold text-ink-100">Voice recorder · EQ & reverb</span><span className="block text-[9px] leading-snug text-ink-400">Capture a local mic take and place it at the playhead</span></span>
+          <span className="min-w-0"><span className="block text-[10px] font-semibold text-ink-100">Voice recorder, EQ & reverb</span><span className="block text-[9px] leading-snug text-ink-400">Capture a local mic take and place it at the playhead</span></span>
         </span>
         <ChevronDown size={13} className={`shrink-0 text-ink-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
       </button>
@@ -259,7 +259,7 @@ export function AudioRecorderPanel() {
           <div className="flex items-center justify-between gap-2 rounded-lg border border-ink-800 bg-ink-900/50 px-2.5 py-2">
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 text-[10px] font-medium text-ink-200"><Waves size={12} className="text-rose-300" />Microphone capture</div>
-              <div className="mt-0.5 text-[9px] text-ink-400">Up to 3 minutes · processed and stored locally</div>
+              <div className="mt-0.5 text-[9px] text-ink-400">Up to 3 minutes, processed and stored locally</div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <span data-testid="audio-recorder-timer" className={`font-mono text-[11px] ${recording ? 'text-rose-300' : 'text-ink-400'}`}>{formatDuration(elapsed)}</span>

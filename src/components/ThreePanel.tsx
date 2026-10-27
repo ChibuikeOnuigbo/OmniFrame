@@ -316,7 +316,7 @@ export function ThreePanel() {
                 </div>
                 <div className="truncate text-ink-300">{threeMaskSelection.targetName}</div>
                 <div className="text-ink-500">
-                  Bounds {Math.round(threeMaskSelection.bounds.x * 100)}%, {Math.round(threeMaskSelection.bounds.y * 100)}% · {Math.round(threeMaskSelection.bounds.width * 100)}% × {Math.round(threeMaskSelection.bounds.height * 100)}%
+                  Bounds {Math.round(threeMaskSelection.bounds.x * 100)}%, {Math.round(threeMaskSelection.bounds.y * 100)}%, {Math.round(threeMaskSelection.bounds.width * 100)}% × {Math.round(threeMaskSelection.bounds.height * 100)}%
                 </div>
               </div>
               <button

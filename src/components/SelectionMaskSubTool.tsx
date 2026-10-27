@@ -534,10 +534,10 @@ export function SelectionMaskSubTool({ onOpenBgModal, compact = false, context =
             <div
               data-testid="guided-matte-status"
               className="text-[10px] font-mono text-cyan-200 leading-relaxed"
-              title={`coverage ${(guidedMatte.coverage * 100).toFixed(1)}% · confidence ${(guidedMatte.confidence * 100).toFixed(1)}%`}
+              title={`coverage ${(guidedMatte.coverage * 100).toFixed(1)}%, confidence ${(guidedMatte.confidence * 100).toFixed(1)}%`}
             >
-              cover {(guidedMatte.coverage * 100).toFixed(1)}% · conf{' '}
-              {(guidedMatte.confidence * 100).toFixed(1)}% · {guidedMatte.iterations} iters ·{' '}
+              cover {(guidedMatte.coverage * 100).toFixed(1)}%, conf{' '}
+              {(guidedMatte.confidence * 100).toFixed(1)}%, {guidedMatte.iterations} iters ·{' '}
               {guidedMatte.timings.total.toFixed(0)}ms
             </div>
             <div className="grid grid-cols-2 gap-1">

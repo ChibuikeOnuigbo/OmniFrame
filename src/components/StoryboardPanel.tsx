@@ -58,7 +58,7 @@ export function StoryboardPanel() {
           <Clapperboard size={12} /> Storyboard
         </div>
         <p className="mt-1 font-mono text-[9px] text-ink-500" data-testid="storyboard-summary">
-          {shots.length} shots · {fmt(total)} total
+          {shots.length} shots, {fmt(total)} total
         </p>
       </div>
 
@@ -98,10 +98,10 @@ export function StoryboardPanel() {
                     <span className="truncate text-[11px] font-medium text-ink-100">{clip.name}</span>
                   </span>
                   <span className="mt-0.5 block font-mono text-[9px] text-ink-500">
-                    {fmt(clip.start)} → {fmt(clip.start + clip.duration)} · {clip.duration.toFixed(1)}s ·{' '}
+                    {fmt(clip.start)} → {fmt(clip.start + clip.duration)}, {clip.duration.toFixed(1)}s ·{' '}
                     {trackName(clip.trackId)}
                     {clip.kind === 'compound' && clip.nestedClipCount != null
-                      ? ` · ${clip.nestedClipCount} nested`
+                      ? `, ${clip.nestedClipCount} nested`
                       : ''}
                   </span>
                 </span>

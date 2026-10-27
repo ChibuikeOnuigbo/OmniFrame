@@ -459,8 +459,8 @@ function PlacedAdjustments() {
                 </button>
               )}
             </div>
-            <div className="truncate pl-[18px] pt-0.5 text-[9px] text-ink-600" title={`${trackName} · ${labels.join(', ')}`}>
-              {trackName} · {clip.start.toFixed(1)}s–{(clip.start + clip.duration).toFixed(1)}s{labels.length ? ` · ${labels.join(', ')}` : ''}
+            <div className="truncate pl-[18px] pt-0.5 text-[9px] text-ink-600" title={`${trackName}, ${labels.join(', ')}`}>
+              {trackName}, {clip.start.toFixed(1)}s–{(clip.start + clip.duration).toFixed(1)}s{labels.length ? `, ${labels.join(', ')}` : ''}
             </div>
             {(clip.adjustment?.luts?.length ?? 0) > 0 && (
               <div className="mt-1.5 space-y-1 border-t border-ink-800/70 pt-1.5">
@@ -644,7 +644,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           <button
             type="button"
             data-testid="preview-selected-clip-btn"
-            onClick={() => previewClipPlayback(clip.id, `Current look · ${clip.name}`)}
+            onClick={() => previewClipPlayback(clip.id, `Current look, ${clip.name}`)}
             title="Play this clip from its beginning with its current look"
             aria-label={`Preview ${clip.name} from the beginning`}
             className="grid h-7 w-7 place-items-center rounded border border-brand/60 bg-brand/15 text-brand-300 hover:bg-brand hover:text-white"
@@ -803,7 +803,7 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
       {labels.length > 0 && (
         <div className="rounded-none border border-ink-800 bg-ink-950/40 px-2 py-1.5" data-testid="clip-effect-summary">
           <span className="block text-[9px] font-semibold uppercase tracking-wider text-ink-600">Active filters</span>
-          <span className="block truncate text-[10px] text-ink-300" title={labels.join(', ')}>{labels.join(' · ')}</span>
+          <span className="block truncate text-[10px] text-ink-300" title={labels.join(', ')}>{labels.join(', ')}</span>
         </div>
       )}
     </div>

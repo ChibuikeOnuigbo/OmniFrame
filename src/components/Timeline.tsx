@@ -1136,7 +1136,7 @@ function ClipView({
                 data-in={inst.inP.toFixed(4)}
                 data-duration={inst.duration.toFixed(4)}
                 data-enabled={inst.enabled ? 'true' : 'false'}
-                title={`${inst.name} — ${inst.inP.toFixed(2)}s → ${(inst.inP + inst.duration).toFixed(2)}s · drag body to move, white bars to trim`}
+                title={`${inst.name} — ${inst.inP.toFixed(2)}s → ${(inst.inP + inst.duration).toFixed(2)}s, drag body to move, white bars to trim`}
                 onPointerDown={onFxDown(inst, 'move')}
                 onPointerMove={onFxMove}
                 onPointerUp={onFxUp}
@@ -1986,7 +1986,7 @@ export function Timeline() {
         onPointerMove={onTlHeaderDragMove}
         onPointerUp={onTlHeaderDragUp}
         onPointerCancel={onTlHeaderDragUp}
-        title="Drag to pop the timeline out into a window · − folds it to a strip"
+        title="Drag to pop the timeline out into a window, − folds it to a strip"
         className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none touch-none"
       >
         <div className="flex items-center gap-1.5 flex-wrap">
@@ -2244,7 +2244,7 @@ export function Timeline() {
           <span className="hidden xl:inline">Curves</span>
         </button>
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
-          {px.toFixed(0)} px/s{frameMode ? ' · frame' : ''}
+          {px.toFixed(0)} px/s{frameMode ? ', frame' : ''}
         </span>
         </div>
       </div>
@@ -2573,7 +2573,7 @@ export function Timeline() {
                     style={{ left: exportRange.in * px + 4 }}
                     title="Clear the In/Out export range (exports will use the full timeline again)"
                   >
-                    Range {exportRange.in.toFixed(1)}–{exportRange.out.toFixed(1)}s · Cancel
+                    Range {exportRange.in.toFixed(1)}–{exportRange.out.toFixed(1)}s, Cancel
                   </button>
                 </>
               )}
@@ -2913,7 +2913,7 @@ export function Timeline() {
                   onClick={() => setPlayhead(t)}
                   onDoubleClick={() => { setActiveMarkerModalId(id); setMarkerPopover(null) }}
                   className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700"
-                  title="Click to jump · double-click to edit"
+                  title="Click to jump, double-click to edit"
                 >
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: markerColorHex(mk.color, mk.kind) }} />
                   <span className="min-w-0 flex-1 truncate">{mk.label}</span>
@@ -2964,7 +2964,7 @@ export function Timeline() {
                 ? 'Listening for the beat…'
                 : beatDlg.scanned
                   ? beatDlg.times.length
-                    ? `Found ${beatDlg.times.length} beats${beatDlg.periodSec ? ` · one every ${beatDlg.periodSec.toFixed(2)}s (${(60 / beatDlg.periodSec).toFixed(0)} BPM)` : ''}. Where should the markers go?`
+                    ? `Found ${beatDlg.times.length} beats${beatDlg.periodSec ? `, one every ${beatDlg.periodSec.toFixed(2)}s (${(60 / beatDlg.periodSec).toFixed(0)} BPM)` : ''}. Where should the markers go?`
                     : 'No clear beat found in this clip — try Custom Auto Beat with a clean single hit.'
                   : 'Set your beat segment, then scan.'}
             </p>

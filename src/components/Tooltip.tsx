@@ -253,7 +253,7 @@ export function Tooltip({
               )}
             </span>
             <span className="mt-0.5 block text-[9px] text-ink-500">
-              {moved ? 'Drag to move · R to reset' : 'Drag to move'}
+              {moved ? 'Drag to move, R to reset' : 'Drag to move'}
             </span>
           </div>,
           document.body,

@@ -250,8 +250,8 @@ export function MediaPanel() {
                   <div className="px-2 py-1.5">
                     <div className="text-[11px] text-ink-200 truncate font-medium" title={a.name}>{a.name}</div>
                     {artwork && (
-                      <div className="mt-0.5 truncate text-[9px] text-brand-300/80" title={`${artwork.documentName} · ${artwork.groupPath?.join(' / ')}${artwork.groupPath?.length ? ' / ' : ''}${artwork.layerName}`}>
-                        {artwork.sourceFormat.toUpperCase()} layer · {artwork.layerName}
+                      <div className="mt-0.5 truncate text-[9px] text-brand-300/80" title={`${artwork.documentName}, ${artwork.groupPath?.join(' / ')}${artwork.groupPath?.length ? ' / ' : ''}${artwork.layerName}`}>
+                        {artwork.sourceFormat.toUpperCase()} layer, {artwork.layerName}
                       </div>
                     )}
                     <div className="text-[10px] text-ink-500 flex items-center justify-between mt-0.5">
@@ -328,9 +328,9 @@ export function MediaPanel() {
               {infoArtwork && (
                 <div className="space-y-1 pt-1 border-t border-ink-800/80" data-testid="layered-artwork-details">
                   <span className="text-ink-500 block text-[10px] uppercase font-mono">Layered {infoArtwork.sourceFormat.toUpperCase()} source</span>
-                  <div className="text-[10px] text-ink-300">{infoArtwork.documentName} · {[...(infoArtwork.groupPath || []), infoArtwork.layerName].join(' / ')}</div>
+                  <div className="text-[10px] text-ink-300">{infoArtwork.documentName}, {[...(infoArtwork.groupPath || []), infoArtwork.layerName].join(' / ')}</div>
                   <div className="font-mono text-[10px] text-ink-400">
-                    Canvas {infoArtwork.documentWidth}×{infoArtwork.documentHeight} · offset {infoArtwork.left},{infoArtwork.top}
+                    Canvas {infoArtwork.documentWidth}×{infoArtwork.documentHeight}, offset {infoArtwork.left},{infoArtwork.top}
                   </div>
                   <div className="text-[10px] text-ink-500">Imported as an independent raster layer; unsupported source-app features are not reconstructed.</div>
                 </div>

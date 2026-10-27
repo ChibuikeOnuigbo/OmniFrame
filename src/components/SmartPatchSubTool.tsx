@@ -26,7 +26,7 @@ export function SmartPatchSubTool() {
   }
 
   const statusHint = source
-    ? 'Donor ready · click/brush target'
+    ? 'Donor ready, click/brush target'
     : 'Alt-click canvas for donor'
   const statusHelp = source
     ? 'Click or brush target points, or use an active selection to define the patch mask.'
@@ -75,8 +75,8 @@ export function SmartPatchSubTool() {
 
       {scope.mode === 'omniframe' && (
         <div data-testid="smart-patch-omniframe-scope" className="rounded-md border border-ink-800 bg-ink-950/55 px-2 py-1 text-[9px] text-ink-400">
-          OmniFrame · {omniScope.mode === 'range'
-            ? `${omniScope.start.toFixed(1)}–${omniScope.end.toFixed(1)}s · step ${omniScope.step}`
+          OmniFrame, {omniScope.mode === 'range'
+            ? `${omniScope.start.toFixed(1)}–${omniScope.end.toFixed(1)}s, step ${omniScope.step}`
             : omniScope.mode === 'all' ? 'all clip frames' : 'current frame'}
         </div>
       )}
@@ -100,7 +100,7 @@ export function SmartPatchSubTool() {
           {source?.sampleDataUrl ? <img src={source.sampleDataUrl} alt="Donor frame preview" className="h-full w-full object-cover" /> : <Crosshair size={15} className="text-ink-500" />}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[10px] font-semibold text-ink-200">{source ? `Donor · ${Math.round(source.x * 100)}%, ${Math.round(source.y * 100)}%` : 'No donor selected'}</div>
+          <div className="truncate text-[10px] font-semibold text-ink-200">{source ? `Donor, ${Math.round(source.x * 100)}%, ${Math.round(source.y * 100)}%` : 'No donor selected'}</div>
           <div className="truncate text-[9px] text-ink-500">{source ? 'Draw or click a target on the preview' : 'Choose a clean source point first'}</div>
         </div>
         {source && <Check size={14} className="shrink-0 text-emerald-300" />}
@@ -125,11 +125,11 @@ export function SmartPatchSubTool() {
 
       <div className="grid grid-cols-2 gap-2">
         <label className="flex flex-col gap-1 text-[9px] text-ink-400">
-          Brush · {radius}px
+          Brush, {radius}px
           <input data-testid="smart-patch-radius" type="range" min={4} max={160} value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="of-range w-full" />
         </label>
         <label className="flex flex-col gap-1 text-[9px] text-ink-400">
-          Feather · {feather}px
+          Feather, {feather}px
           <input data-testid="smart-patch-feather" type="range" min={0} max={24} value={feather} onChange={(e) => setFeather(Number(e.target.value))} className="of-range w-full" />
         </label>
       </div>

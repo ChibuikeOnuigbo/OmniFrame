@@ -94,3 +94,8 @@ Image: imgs/reddit-vibeslop-annotated.jpg. Nine tells, each with this app's audi
 7. Serif display font on laggy site — font stack is Avenir Next/Segoe UI Variable/Trebuchet/DejaVu (Board R); no serif display face.
 8. Small all-caps text — kept ONLY where functional (track headers, badge labels like CMP) at readable sizes; decorative all-caps eyebrows: none.
 9. Endless summarization of own accomplishments — this ledger is count-audited (grep -c) with proof files per row; no prose padding.
+
+## Board S cont.: the ORIGINAL reddit screenshot audited (uploads Screenshot_20261027_092715_Reddit.jpg, kept at imgs/reddit-slop-screenshot_20261027.jpg)
+Full-res original adds nuance to the 9 tells: ③ = eyebrow + dramatic title + self-referential paragraph as one block; ⑥ dots also appear IN FRONT of words; ⑨ = hero "up-to-datedness" changelog summary. Re-audit results in OmniFrame:
+- ① "I built" voice: none in app strings/README. ② blur animations: none (decor purged Board R). ③ hero paragraph block: app opens straight into editor, no marketing hero. ④ light-margin buttons: rings are focus-visible a11y only. ⑤ gradient-border buttons: none. ⑦ serif: font stack sans-only. ⑧ small all-caps eyebrows: zero tracking-widest eyebrows. ⑨ changelog-summary hero: none.
+- ⑥ REAL HIT: 135 ' · ' middle-dot separators across 28 components + 1 leading dot (MarkerPopup) — the exact flagged pattern. All replaced with commas / removed; tsc green. Functional breadcrumbs keep '/' separators.

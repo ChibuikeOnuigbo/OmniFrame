@@ -121,7 +121,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 Isolate Voice & Vocal Removal
               </h2>
               <p className="text-[11px] text-ink-400">
-                {modelLabels[isolationModel]} · synchronized local processing
+                {modelLabels[isolationModel]}, synchronized local processing
               </p>
             </div>
           </div>
@@ -156,7 +156,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
               >
                 {audioVideoClips.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} ({c.kind} · {c.duration.toFixed(1)}s)
+                    {c.name} ({c.kind}, {c.duration.toFixed(1)}s)
                   </option>
                 ))}
               </select>

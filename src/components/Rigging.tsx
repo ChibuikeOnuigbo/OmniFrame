@@ -803,7 +803,7 @@ export default function Rigging() {
                       <option value="">Import PSD or OpenRaster layers first</option>
                     ) : layeredDocuments.map((document) => (
                       <option key={document.id} value={document.id}>
-                        {document.name} · {document.format.toUpperCase()} ({document.layers} layers)
+                        {document.name}, {document.format.toUpperCase()} ({document.layers} layers)
                       </option>
                     ))}
                   </select>
@@ -1117,7 +1117,7 @@ export default function Rigging() {
               <PanelSection title="Transform" defaultOpen>
                 <SliderField
                   id="rig-tx"
-                  label={isDocumentSpaceRig ? `X · ${documentPixelLabel}` : 'X'}
+                  label={isDocumentSpaceRig ? `X, ${documentPixelLabel}` : 'X'}
                   value={part.transform.x}
                   min={-rigXLimit}
                   max={rigXLimit}
@@ -1125,7 +1125,7 @@ export default function Rigging() {
                 />
                 <SliderField
                   id="rig-ty"
-                  label={isDocumentSpaceRig ? `Y · ${documentPixelLabel}` : 'Y'}
+                  label={isDocumentSpaceRig ? `Y, ${documentPixelLabel}` : 'Y'}
                   value={part.transform.y}
                   min={-rigYLimit}
                   max={rigYLimit}

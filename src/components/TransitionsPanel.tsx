@@ -98,7 +98,7 @@ export function TransitionsPanel() {
     startVisualPreview({
       kind: 'transition',
       transition,
-      label: `${preset.name} · ${candidate.fromClip.name} → ${candidate.toClip.name}`,
+      label: `${preset.name}, ${candidate.fromClip.name} → ${candidate.toClip.name}`,
       startTime,
       endTime: startTime + dur,
     })
@@ -128,7 +128,7 @@ export function TransitionsPanel() {
     setNotice(null)
     startVisualPreview({
       kind: 'range-playback',
-      label: `${transition.type.replace(/_/g, ' ')} · placed transition`,
+      label: `${transition.type.replace(/_/g, ' ')}, placed transition`,
       startTime: transition.startTime,
       endTime: transition.startTime + transition.duration,
     })

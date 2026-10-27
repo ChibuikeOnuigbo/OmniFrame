@@ -141,7 +141,7 @@ export function FloatingWindow({
           if ((e.target as HTMLElement).closest('button')) return
           toggleMaximize()
         }}
-        title="Drag to move · double-click to maximize · drag to the left edge to dock back"
+        title="Drag to move, double-click to maximize, drag to the left edge to dock back"
         className="h-9 shrink-0 flex items-center justify-between gap-2 px-3 border-b border-ink-700 bg-ink-900/90 text-xs font-semibold uppercase tracking-wider text-ink-300 cursor-grab active:cursor-grabbing select-none touch-none"
       >
         <span className="truncate" title={title}>

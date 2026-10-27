@@ -270,7 +270,7 @@ export function TopBar() {
       anchor.click()
       anchor.remove()
       window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
-      setProjectStatus(`Saved ${safeName}.omni · complete OmniFrame project bundle`)
+      setProjectStatus(`Saved ${safeName}.omni, complete OmniFrame project bundle`)
     } catch (error) {
       setProjectStatus(`Could not save .omni: ${error instanceof Error ? error.message : String(error)}`)
     }
@@ -282,7 +282,7 @@ export function TopBar() {
     if (!file) return
     setProjectStatus(`Opening ${file.name}…`)
     void loadOmniProject(file).then(() => {
-      setProjectStatus(`Opened ${file.name} · project state and embedded source media restored`)
+      setProjectStatus(`Opened ${file.name}, project state and embedded source media restored`)
     }).catch((error) => {
       setProjectStatus(`Could not open .omni: ${error instanceof Error ? error.message : String(error)}`)
     })
@@ -345,7 +345,7 @@ export function TopBar() {
       await new Promise((resolve) => window.setTimeout(resolve, 80))
       const blob = await exportProgramFramePng()
       downloadSubset(blob, 'png')
-      setProjectStatus('Exported PNG · flattened current still frame only; use .omni for the editable project.')
+      setProjectStatus('Exported PNG, flattened current still frame only; use .omni for the editable project.')
     } catch (error) {
       setProjectStatus(`Could not export PNG: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
@@ -358,7 +358,7 @@ export function TopBar() {
     try {
       const blob = await exportPrimitiveSceneObj(export3DObjects)
       downloadSubset(blob, 'obj')
-      setProjectStatus('Exported OBJ geometry subset · materials, animation, timeline, media and effects are not included.')
+      setProjectStatus('Exported OBJ geometry subset, materials, animation, timeline, media and effects are not included.')
     } catch (error) {
       setProjectStatus(`Could not export OBJ: ${error instanceof Error ? error.message : String(error)}`)
     }
@@ -386,7 +386,7 @@ export function TopBar() {
             type="button"
             data-testid="desktop-badge"
             aria-label={`Desktop build ${desktopInfo.appVersion} on ${desktopInfo.os} ${desktopInfo.arch}. Toggle fullscreen.`}
-            title={`Desktop build ${desktopInfo.appVersion} · ${desktopInfo.os}/${desktopInfo.arch} — click to toggle fullscreen`}
+            title={`Desktop build ${desktopInfo.appVersion}, ${desktopInfo.os}/${desktopInfo.arch} — click to toggle fullscreen`}
             onClick={async () => {
               const fullscreen = await toggleDesktopFullscreen()
               if (fullscreen !== null) {
@@ -396,7 +396,7 @@ export function TopBar() {
             className="hidden md:inline-flex items-center gap-1 rounded border border-ok/40 bg-ok/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ok transition-colors hover:bg-ok/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <Monitor size={10} aria-hidden="true" />
-            Desktop · {desktopInfo.os}
+            Desktop, {desktopInfo.os}
           </button>
         )}
       </div>
@@ -834,7 +834,7 @@ export function TopBar() {
                       >
                         <span className="block text-xs text-ink-200">{item.label}</span>
                         <span className="mt-0.5 block text-[10px] capitalize text-ink-500">
-                          {item.category} · {item.scope}
+                          {item.category}, {item.scope}
                         </span>
                       </button>
                     ))
@@ -1363,7 +1363,7 @@ export function TopBar() {
                 <div className="space-y-3" data-testid="settings-dockers">
                   <p className="text-[11px] leading-snug text-ink-400">
                     Active mode: <span className="text-ink-100" data-testid="dockers-active-mode">{workspacePreset}</span>
-                    {drawingEnabledTop ? ' · Drawing on' : ''}{is3DMode ? ' · 3D on' : ''} · showing the{' '}
+                    {drawingEnabledTop ? ', Drawing on' : ''}{is3DMode ? ', 3D on' : ''}, showing the{' '}
                     <span className="text-ink-100">{leftTab}</span> panel. Toggle what stays on your rails — nothing here blocks the canvas.
                   </p>
                   <div>
@@ -1530,7 +1530,7 @@ export function TopBar() {
                         </button>
                       ))}
                     </div>
-                    <p className="mb-1 text-[10px] text-ink-500">{MODEL_CAPABILITIES.find((c) => c.id === modelCap)?.note} · on {AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.label}:</p>
+                    <p className="mb-1 text-[10px] text-ink-500">{MODEL_CAPABILITIES.find((c) => c.id === modelCap)?.note}, on {AI_PROVIDERS.find((provider) => provider.id === aiProvider)?.label}:</p>
                     <div className="space-y-1">
                       {equivalentsFor(modelCap, aiProvider).length ? equivalentsFor(modelCap, aiProvider).map((eq) => (
                         <button
@@ -1573,7 +1573,7 @@ export function TopBar() {
                       Your saved Custom Effects become training pairs (brief → effect JSON). Export the dataset, or submit a fine-tune job with your key — the tuned model is then yours to select above.
                     </p>
                     <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[10px] text-ink-400">
-                      <span data-testid="finetune-stats">{ftDataset.examples} examples · ≈{ftDataset.estTokens} tokens</span>
+                      <span data-testid="finetune-stats">{ftDataset.examples} examples, ≈{ftDataset.estTokens} tokens</span>
                       <button type="button" data-testid="finetune-download" disabled={!ftDataset.examples} onClick={() => downloadTextFile('omniframe-training.jsonl', ftDataset.jsonl)} className="h-6 rounded border border-ink-600 bg-ink-800 px-2 text-[10px] text-ink-100 hover:border-brand disabled:opacity-40">
                         Download JSONL
                       </button>
@@ -1612,7 +1612,7 @@ export function TopBar() {
                         </button>
                       )}
                     </div>
-                    {ftJob && <p className="mt-1 font-mono text-[9px] text-ink-500" data-testid="finetune-job">{ftJob.id} · {ftJob.status}{ftJob.model ? ` · ${ftJob.model}` : ''}</p>}
+                    {ftJob && <p className="mt-1 font-mono text-[9px] text-ink-500" data-testid="finetune-job">{ftJob.id}, {ftJob.status}{ftJob.model ? `, ${ftJob.model}` : ''}</p>}
                     {ftMessage && <p className="mt-1 text-[10px] leading-snug text-ink-400" role="status">{ftMessage}</p>}
                                       </div>
                 </div>

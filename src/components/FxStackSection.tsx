@@ -218,7 +218,7 @@ export function FxStackSection({ clip }: { clip: Clip }) {
                     )
                   })}
                   <p className="text-[9px] text-ink-500">
-                    Source: {fxCatalogById(inst.catalogId)?.trace || 'OmniFrame engine'} · min length {FX_MIN_DUR}s · keys interpolate inside the instance.
+                    Source: {fxCatalogById(inst.catalogId)?.trace || 'OmniFrame engine'}, min length {FX_MIN_DUR}s, keys interpolate inside the instance.
                   </p>
                 </div>
               )}

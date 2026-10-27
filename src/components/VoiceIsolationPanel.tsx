@@ -172,7 +172,7 @@ export function VoiceIsolationPanel() {
     try {
       const result = await analyzeAudioUrl(currentAsset.url, (_pct, message) => setAnalysisStatus(message))
       setAnalysisResult(result)
-      setAnalysisStatus('Estimate ready · local analysis only')
+      setAnalysisStatus('Estimate ready, local analysis only')
     } catch (err) {
       setError((err as Error).message || 'Key/BPM analysis failed')
       setAnalysisStatus('Analysis failed')
@@ -249,7 +249,7 @@ export function VoiceIsolationPanel() {
     setProcessing(true)
     setProcessingTask('batch')
     setProgress(0)
-    setStatus(`Batch 1/${batchIds.length} · preparing audio…`)
+    setStatus(`Batch 1/${batchIds.length}, preparing audio…`)
     setError(null)
     setSuccess(null)
     try {
@@ -257,7 +257,7 @@ export function VoiceIsolationPanel() {
         const currentIndex = index
         await executeVoiceIsolationForClip(batchIds[index], options, (pct, message) => {
           setProgress(Math.round((currentIndex * 100 + pct) / batchIds.length))
-          setStatus(`Batch ${currentIndex + 1}/${batchIds.length} · ${message}`)
+          setStatus(`Batch ${currentIndex + 1}/${batchIds.length}, ${message}`)
         })
       }
       useEditor.getState().selectClips(batchIds)
@@ -417,8 +417,8 @@ export function VoiceIsolationPanel() {
           <div className="flex min-w-0 items-center gap-2">
             <div className="border border-ink-700 bg-brand/15 p-1.5 text-brand-300"><AudioLines size={16} /></div>
             <div className="min-w-0">
-              <div className="truncate text-[13px] font-semibold text-white">Audio Studio · Voice & Music</div>
-              <div className="text-[10px] text-ink-400">Record · analyze · isolate · patch</div>
+              <div className="truncate text-[13px] font-semibold text-white">Audio Studio, Voice & Music</div>
+              <div className="text-[10px] text-ink-400">Record, analyze, isolate, patch</div>
             </div>
           </div>
           <span className="shrink-0 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-emerald-300">Local</span>
@@ -448,7 +448,7 @@ export function VoiceIsolationPanel() {
               className="h-8 w-full rounded-md border border-ink-700 bg-ink-900 px-2 text-xs text-ink-200 outline-none focus:border-brand"
             >
               {audioVideoClips.map((clip) => (
-                <option key={clip.id} value={clip.id}>{clip.name} ({clip.kind} · {clip.duration.toFixed(1)}s)</option>
+                <option key={clip.id} value={clip.id}>{clip.name} ({clip.kind}, {clip.duration.toFixed(1)}s)</option>
               ))}
             </select>
             <div className="flex gap-1.5">
@@ -485,7 +485,7 @@ export function VoiceIsolationPanel() {
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0">
             <div className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">Music key & tempo</div>
-            <div className="text-[9px] text-ink-400">Local estimate · analyzes up to 90 seconds</div>
+            <div className="text-[9px] text-ink-400">Local estimate, analyzes up to 90 seconds</div>
           </div>
           <button
             type="button"
@@ -511,7 +511,7 @@ export function VoiceIsolationPanel() {
               <div className="mt-0.5 truncate text-[12px] font-semibold text-brand-200">{analysisResult.bpm ? `≈ ${analysisResult.bpm} BPM` : 'Not detected'}</div>
               {analysisResult.alternativeBpms.length > 0 && <div className="truncate text-[9px] text-ink-400">Half/double: {analysisResult.alternativeBpms.join(' / ')}</div>}
             </div>
-            <div className="col-span-2 text-[9px] text-ink-400">Estimated from {analysisResult.analyzedSeconds.toFixed(0)}s · verify by ear; slowed pitch and unusual meters can affect results.</div>
+            <div className="col-span-2 text-[9px] text-ink-400">Estimated from {analysisResult.analyzedSeconds.toFixed(0)}s, verify by ear; slowed pitch and unusual meters can affect results.</div>
           </div>
         )}
         {!analysisResult && !analysisBusy && analysisStatus && <div className="mt-1.5 truncate text-[9px] text-ink-400">{analysisStatus}</div>}
@@ -531,20 +531,20 @@ export function VoiceIsolationPanel() {
           onChange={(e) => handleEngineChange(e.target.value as VoiceIsolationModel)}
           className="h-8 w-full rounded-md border border-ink-700 bg-ink-950 px-2 text-[11px] text-ink-100 outline-none focus:border-brand disabled:opacity-50"
         >
-          <option value="htdemucs-v4">Demucs v4 · four-stem neural {demucsReady === false ? '(model missing)' : '· best installed local model'}</option>
-          <option value="omni-unified">Omni Unified · voice isolation + denoise</option>
-          <option value="omni-voicetarget">Omni VoiceTarget · fast stereo DSP</option>
-          <option value="dsp-crossover-fast">Crossover DSP · fast/offline</option>
-          <option value="omni-denoise-onnx" disabled={mode === 'remove_vocal'}>AI Denoise · voice-focused (keep vocal)</option>
-          <option value="rnnoise-xiph" disabled={mode === 'remove_vocal'}>RNNoise · speech-noise cleanup</option>
-          <option value="bs-roformer-lite" disabled>BS-Roformer Lite · not installed</option>
+          <option value="htdemucs-v4">Demucs v4, four-stem neural {demucsReady === false ? '(model missing)' : '· best installed local model'}</option>
+          <option value="omni-unified">Omni Unified, voice isolation + denoise</option>
+          <option value="omni-voicetarget">Omni VoiceTarget, fast stereo DSP</option>
+          <option value="dsp-crossover-fast">Crossover DSP, fast/offline</option>
+          <option value="omni-denoise-onnx" disabled={mode === 'remove_vocal'}>AI Denoise, voice-focused (keep vocal)</option>
+          <option value="rnnoise-xiph" disabled={mode === 'remove_vocal'}>RNNoise, speech-noise cleanup</option>
+          <option value="bs-roformer-lite" disabled>BS-Roformer Lite, not installed</option>
         </select>
         {isKeepOnlyEngine && <div className="mt-1 text-[9px] text-amber-300/80">This engine is voice-only; switch to Demucs or Omni Unified for instrumental removal.</div>}
         <div data-testid="panel-demucs-status" className={`mt-1.5 flex items-start gap-1.5 text-[10px] ${demucsReady ? 'text-emerald-300' : demucsReady === false ? 'text-amber-300' : 'text-ink-400'}`}>
           <Info size={12} className="mt-0.5 shrink-0" />
           <span>
             {demucsReady === true
-              ? 'Demucs v4 weights found locally · WAV output · no upload to a third-party service.'
+              ? 'Demucs v4 weights found locally, WAV output, no upload to a third-party service.'
               : demucsReady === false
                 ? 'Install the local model with npm run fetch:demucs to enable high-quality four-stem separation.'
                 : 'Checking for the local Demucs v4 model…'}
@@ -581,7 +581,7 @@ export function VoiceIsolationPanel() {
       <div className="space-y-2 rounded-xl border border-ink-800 bg-ink-900/45 p-2.5">
         <div className="flex items-center justify-between text-[10px]">
           <span className="text-ink-300">Separation quality</span>
-          <span className="font-mono text-ink-400">{strength >= 0.85 ? 'High · 3 passes' : strength >= 0.6 ? 'Balanced · 2 passes' : 'Fast · 1 pass'}</span>
+          <span className="font-mono text-ink-400">{strength >= 0.85 ? 'High, 3 passes' : strength >= 0.6 ? 'Balanced, 2 passes' : 'Fast, 1 pass'}</span>
         </div>
         <input
           type="range"
@@ -607,7 +607,7 @@ export function VoiceIsolationPanel() {
               <div className="ml-5 space-y-1 rounded-md border border-ink-800 bg-ink-950/60 p-2">
                 <label className="flex cursor-pointer items-center gap-1.5 text-[9px] text-ink-300" data-testid="panel-manual-speed-override-toggle">
                   <input type="checkbox" checked={manualSpeedCorrection} disabled={processing} onChange={(e) => setManualSpeedCorrection(e.target.checked)} className="h-3 w-3 rounded border-ink-700 bg-ink-800 text-brand-400" />
-                  I know the correction factor · override auto
+                  I know the correction factor, override auto
                 </label>
                 {manualSpeedCorrection && (
                   <>
@@ -668,9 +668,9 @@ export function VoiceIsolationPanel() {
               className="flex w-full items-center justify-center gap-2 rounded border border-ink-700 bg-ink-950 px-3 py-2 text-[10px] font-medium text-ink-200 hover:border-brand/50 hover:text-white disabled:opacity-40"
             >
               {processingTask === 'batch' ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-              Process {selectedBatchClipIds.length} selected audio clips · {mode === 'keep_vocal' ? 'voice' : 'instrumental'}
+              Process {selectedBatchClipIds.length} selected audio clips, {mode === 'keep_vocal' ? 'voice' : 'instrumental'}
             </button>
-            <div className="text-center text-[9px] text-ink-400">Sequential local processing · separate synchronized result for each clip</div>
+            <div className="text-center text-[9px] text-ink-400">Sequential local processing, separate synchronized result for each clip</div>
           </div>
         )}
 
@@ -710,7 +710,7 @@ export function VoiceIsolationPanel() {
           <div className="flex items-start justify-between gap-2">
             <div>
               <div className="text-[11px] font-semibold text-violet-100">Vocal range review</div>
-              <div className="text-[9px] text-ink-400">{stemSession.speedFactor > 1 ? `Speed-corrected ×${stemSession.speedFactor.toFixed(2)} before analysis · ` : ''}times are source-media time</div>
+              <div className="text-[9px] text-ink-400">{stemSession.speedFactor > 1 ? `Speed-corrected ×${stemSession.speedFactor.toFixed(2)} before analysis, ` : ''}times are source-media time</div>
             </div>
             <span className="shrink-0 rounded border border-ink-700 px-1.5 py-0.5 text-[9px] text-ink-400">{includedRangeCount} selected</span>
           </div>
@@ -772,7 +772,7 @@ export function VoiceIsolationPanel() {
             className="flex w-full items-center justify-center gap-2 rounded-lg border border-emerald-500/35 bg-emerald-500/10 px-3 py-2 text-[10px] font-semibold text-emerald-200 transition-colors hover:bg-emerald-500/20 disabled:opacity-40"
           >
             {processingTask === 'patch' ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-            {patchCreated ? 'Patched mix created' : `Create vocal-free patch mix · ${includedRangeCount} range${includedRangeCount === 1 ? '' : 's'}`}
+            {patchCreated ? 'Patched mix created' : `Create vocal-free patch mix, ${includedRangeCount} range${includedRangeCount === 1 ? '' : 's'}`}
           </button>
         </section>
       )}
@@ -803,7 +803,7 @@ export function VoiceIsolationPanel() {
                 </button>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[9px] font-medium text-ink-200" title={asset.name}>{asset.name}</div>
-                  <div className="text-[9px] text-ink-400">{asset.audioStemRole ? `${asset.audioStemRole} · ` : ''}{asset.duration.toFixed(1)}s · WAV</div>
+                  <div className="text-[9px] text-ink-400">{asset.audioStemRole ? `${asset.audioStemRole}, ` : ''}{asset.duration.toFixed(1)}s, WAV</div>
                 </div>
                 <a href={asset.url} download={asset.name.replace(/[^a-z0-9._-]+/gi, '_')} title="Download WAV" className="shrink-0 rounded border border-ink-700 p-1.5 text-ink-400 hover:border-ink-500 hover:text-white"><Download size={11} /></a>
                 <button
