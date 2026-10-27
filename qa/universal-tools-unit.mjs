@@ -442,7 +442,7 @@ await registry.call('keyframe_set', { property: 'opacity', time: 0.55, value: 1,
 // 3. oversized element + own LUT (forces isolated render) + compound + scale: corners must keep pixels
 await registry.call('select', { clipId: 'clip-2' })
 await registry.call('transform_set', { x: 0, y: 0, scale: 4 })
-await registry.call('edit_element', { clipId: 'clip-2', patch: { adjustment: { luts: [{ id: 'lut-qs', name: 'cyan-surge', builtin: 'cyan-surge', intensity: 1, enabled: true }] } } })
+await registry.call('edit_element', { clipId: 'clip-2', patch: { adjustment: { luts: [{ id: 'lut-qs', name: 'bright-air', builtin: 'bright-air', intensity: 1, enabled: true }] } } })
 const ccS = await registry.call('compound_clip_create', { ids: ['clip-2'], name: 'BigS', nest: true })
 const cidS = ccS.data.id
 await registry.call('select', { clipId: cidS })
@@ -462,7 +462,12 @@ const unS = await registry.call('uncompound_clip', { id: cidS })
 if (!unS.ok) { console.error('FAIL uncompound_clip', unS.data); fail++ }
 // 5. the requested edit: LUT pack grade + adjustment layer + image overlay at reduced opacity
 await registry.call('select', { clipId: 'clip-2' })
+await registry.call('edit_element', { clipId: 'clip-2', patch: { adjustment: { luts: [] } } })
+const sPreLut = await dumpS('pre-lut')
 const edS = await registry.call('edit_element', { clipId: 'clip-2', patch: { adjustment: { luts: [{ id: 'lut-demo', name: 'crimson-pulse', builtin: 'crimson-pulse', intensity: 0.8, enabled: true }] } } })
+const sPostLut = await dumpS('post-lut')
+const sLutDiff = (sPreLut && sPostLut) ? diffPx(sPreLut, sPostLut) : 0
+if (sLutDiff < 3) { console.error('FAIL LUT pack grade must change pixels headless', sLutDiff.toFixed(2)); fail++ }
 if (!edS.ok || !edS.data?.adjustment?.luts?.length) { console.error('FAIL LUT pack grade not stored on clip', edS.ok); fail++ }
 const fcS = await registry.call('fx_catalog', { limit: 3 })
 const fxS = (fcS.data.entries || [])[0]

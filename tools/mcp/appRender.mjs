@@ -48,6 +48,64 @@ export async function loadAppTs(rel) {
   return mod
 }
 
+/* ---------- LUT pack parity: real .cube 3D LUTs, trilinear (same packs playback.ts grades with) ---------- */
+const _lutCache = new Map()
+function loadCubeLut(lut) {
+  const key = lut.builtin || lut.id
+  if (_lutCache.has(key)) return _lutCache.get(key)
+  let text = lut.cubeText
+  if (!text && lut.builtin) {
+    const f = path.join(ROOT, 'public', 'luts', lut.builtin + '.cube')
+    if (fs.existsSync(f)) text = fs.readFileSync(f, 'utf8')
+  }
+  let rec = null
+  if (text) {
+    const vals = []
+    let n = 0
+    for (const raw of text.split(/\r?\n/)) {
+      const l = raw.trim()
+      if (!l || l.startsWith('#')) continue
+      if (l.startsWith('LUT_3D_SIZE')) { n = parseInt(l.split(/\s+/)[1], 10); continue }
+      if (!/^[-0-9.eE+ ]+$/.test(l)) continue
+      const p = l.split(/\s+/).map(Number)
+      if (p.length >= 3) vals.push(p[0], p[1], p[2])
+    }
+    if (n && vals.length >= n * n * n * 3) rec = { n, data: new Float32Array(vals) }
+  }
+  _lutCache.set(key, rec)
+  return rec
+}
+export function applyClipLutsK(sx, w, h, luts) {
+  for (const lut of luts || []) {
+    if (lut.enabled === false) continue
+    const inten = lut.intensity ?? 1
+    if (inten <= 0) continue
+    const rec = loadCubeLut(lut)
+    if (!rec) continue
+    const { n, data } = rec
+    const m = n - 1
+    const img = sx.getImageData(0, 0, w, h)
+    const d = img.data
+    for (let i = 0; i < d.length; i += 4) {
+      const r = (d[i] / 255) * m, g = (d[i + 1] / 255) * m, b = (d[i + 2] / 255) * m
+      const r0 = Math.min(m, r | 0), g0 = Math.min(m, g | 0), b0 = Math.min(m, b | 0)
+      const r1 = Math.min(m, r0 + 1), g1 = Math.min(m, g0 + 1), b1 = Math.min(m, b0 + 1)
+      const fr = r - r0, fg = g - g0, fb = b - b0
+      for (let ch = 0; ch < 3; ch++) {
+        // .cube lattice order: red fastest, then green, then blue
+        const idx = (rr, gg, bb) => ((bb * n + gg) * n + rr) * 3 + ch
+        const v = (data[idx(r0, g0, b0)] * (1 - fr) + data[idx(r1, g0, b0)] * fr) * (1 - fg) * (1 - fb)
+          + (data[idx(r0, g1, b0)] * (1 - fr) + data[idx(r1, g1, b0)] * fr) * fg * (1 - fb)
+          + (data[idx(r0, g0, b1)] * (1 - fr) + data[idx(r1, g0, b1)] * fr) * (1 - fg) * fb
+          + (data[idx(r0, g1, b1)] * (1 - fr) + data[idx(r1, g1, b1)] * fr) * fg * fb
+        const cl = Math.max(0, Math.min(1, v)) * 255
+        d[i + ch] += (cl - d[i + ch]) * inten
+      }
+    }
+    sx.putImageData(img, 0, 0)
+  }
+}
+
 export const CE = await loadAppTs('src/lib/animation/CurveEngine.ts')
 export const PG = await loadAppTs('src/lib/pixelGrade.ts')
 export const DE = await loadAppTs('src/lib/drawingEngine.ts')
@@ -288,6 +346,7 @@ function drawSeq(x, seq, t) {
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, s.width, s.height) }
     applyEffects(sx, clip, s.width, s.height, t)
+    if (clip.adjustment?.luts?.length) applyClipLutsK(sx, s.width, s.height, clip.adjustment.luts)
     if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) {
       const m = clip.mask
       const mc = makeCanvas(m.mw, m.mh)

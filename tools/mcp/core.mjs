@@ -18,7 +18,16 @@ export function ffmpegExe() {
 
 export class ChunkedPayload {
   constructor(payload, chunkBytes = 1500) {
-    this.string = typeof payload === 'string' ? payload : JSON.stringify(payload)
+    this.string = typeof payload === 'string' ? payload : JSON.stringify(payload, (k, val) => {
+      // cycle-safe: live engine objects (seq/clip graphs) may self-reference in
+      // nested tool payloads; mark repeats instead of throwing (anti-cheat manifest must always write)
+      if (val && typeof val === 'object') {
+        const seen = (this._seen ||= new WeakSet())
+        if (seen.has(val)) return '[same-object-ref]'
+        seen.add(val)
+      }
+      return val
+    })
     this.chunkBytes = chunkBytes
     this.sha256 = crypto.createHash('sha256').update(this.string).digest('hex')
   }

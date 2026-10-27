@@ -84,9 +84,7 @@
      "id": "compound-1",
      "kind": "compound",
      "name": "Compound 1",
-     "memberIds": [
-      "clip-1"
-     ],
+     "memberIds": "[same-object-ref]",
      "nestedTrackCount": 1,
      "createdFrom": [
       "clip-1"
@@ -535,7 +533,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_jmtmxde"
+     "keyframeId": "kf_pmi98hy"
     }
    },
    {
@@ -550,7 +548,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_1y3rf52"
+     "keyframeId": "kf_e7uk4pl"
     }
    },
    {
@@ -565,7 +563,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_sh5lyis"
+     "keyframeId": "kf_2ipg52r"
     }
    },
    {
@@ -580,7 +578,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_2yxlgzo"
+     "keyframeId": "kf_ip97wl0"
     }
    },
    {
@@ -595,7 +593,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_mz1m0fe"
+     "keyframeId": "kf_o9upkwq"
     }
    },
    {
@@ -610,7 +608,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_a8n11ss"
+     "keyframeId": "kf_q9gcif3"
     }
    },
    {
@@ -625,7 +623,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_2hlq66a"
+     "keyframeId": "kf_xmc068x"
     }
    },
    {
@@ -640,7 +638,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_8yfke01"
+     "keyframeId": "kf_c9gq3q8"
     }
    },
    {
@@ -655,7 +653,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_t757v4n"
+     "keyframeId": "kf_qfh2ssy"
     }
    },
    {
@@ -670,7 +668,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_87tt6fb"
+     "keyframeId": "kf_q7sznki"
     }
    },
    {
@@ -685,7 +683,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_k8xz7oi"
+     "keyframeId": "kf_xe5d00e"
     }
    },
    {
@@ -700,7 +698,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_s2he52p"
+     "keyframeId": "kf_o6vcdet"
     }
    },
    {
@@ -715,7 +713,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_qz0tyrc"
+     "keyframeId": "kf_b7o69ph"
     }
    },
    {
@@ -730,7 +728,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_yc31xhc"
+     "keyframeId": "kf_px5kw2p"
     }
    },
    {
@@ -745,7 +743,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_b6wq5am"
+     "keyframeId": "kf_5gris2g"
     }
    },
    {
@@ -760,7 +758,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_qd9c5qt"
+     "keyframeId": "kf_j4id8dd"
     }
    },
    {
@@ -775,7 +773,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_gzd25mn"
+     "keyframeId": "kf_mzp3a1c"
     }
    },
    {
@@ -790,7 +788,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_x",
-     "keyframeId": "kf_uqyzb8l"
+     "keyframeId": "kf_z8i4ddc"
     }
    },
    {
@@ -805,7 +803,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_y",
-     "keyframeId": "kf_ly2wby5"
+     "keyframeId": "kf_ea4e5ji"
     }
    },
    {
@@ -820,7 +818,7 @@
     "out": {
      "clipId": "clip-2",
      "curve": "position_y",
-     "keyframeId": "kf_9rk7oup"
+     "keyframeId": "kf_ns26dbn"
     }
    },
    {
@@ -928,139 +926,139 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_6he3q6n",
+        "id": "kf_jvqix0x",
         "time": 0,
         "value": -359,
         "interpolation": "constant"
        },
        {
-        "id": "kf_m7mfz47",
+        "id": "kf_fl63qic",
         "time": 2,
         "value": -359,
         "interpolation": "constant"
        },
        {
-        "id": "kf_xa8mueu",
+        "id": "kf_8pz1ge6",
         "time": 4,
         "value": -359,
         "interpolation": "constant"
        },
        {
-        "id": "kf_ngbvqpm",
+        "id": "kf_usg4ij1",
         "time": 6,
         "value": -289,
         "interpolation": "constant"
        },
        {
-        "id": "kf_089xz9g",
+        "id": "kf_812iar4",
         "time": 8,
         "value": -289,
         "interpolation": "constant"
        },
        {
-        "id": "kf_jmtmxde",
+        "id": "kf_pmi98hy",
         "time": 10,
         "value": -359,
         "interpolation": "linear"
        },
        {
-        "id": "kf_1y3rf52",
+        "id": "kf_e7uk4pl",
         "time": 10.7,
         "value": -209,
         "interpolation": "cubic-in"
        },
        {
-        "id": "kf_sh5lyis",
+        "id": "kf_2ipg52r",
         "time": 11.4,
         "value": -359,
         "interpolation": "cubic-out"
        },
        {
-        "id": "kf_2yxlgzo",
+        "id": "kf_ip97wl0",
         "time": 12.1,
         "value": -209,
         "interpolation": "ease-in"
        },
        {
-        "id": "kf_mz1m0fe",
+        "id": "kf_o9upkwq",
         "time": 12.8,
         "value": -359,
         "interpolation": "ease-out"
        },
        {
-        "id": "kf_a8n11ss",
+        "id": "kf_q9gcif3",
         "time": 13.5,
         "value": -209,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_2hlq66a",
+        "id": "kf_xmc068x",
         "time": 14.2,
         "value": -359,
         "interpolation": "back"
        },
        {
-        "id": "kf_8yfke01",
+        "id": "kf_c9gq3q8",
         "time": 14.9,
         "value": -209,
         "interpolation": "bounce"
        },
        {
-        "id": "kf_t757v4n",
+        "id": "kf_qfh2ssy",
         "time": 15.6,
         "value": -359,
         "interpolation": "elastic"
        },
        {
-        "id": "kf_87tt6fb",
+        "id": "kf_q7sznki",
         "time": 16.3,
         "value": -209,
         "interpolation": "bezier"
        },
        {
-        "id": "kf_k8xz7oi",
+        "id": "kf_xe5d00e",
         "time": 17,
         "value": -359,
         "interpolation": "custom"
        },
        {
-        "id": "kf_s2he52p",
+        "id": "kf_o6vcdet",
         "time": 17.7,
         "value": -209,
         "interpolation": "custom"
        },
        {
-        "id": "kf_qz0tyrc",
+        "id": "kf_b7o69ph",
         "time": 18.4,
         "value": -359,
         "interpolation": "custom"
        },
        {
-        "id": "kf_yc31xhc",
+        "id": "kf_px5kw2p",
         "time": 19.1,
         "value": -209,
         "interpolation": "custom"
        },
        {
-        "id": "kf_b6wq5am",
+        "id": "kf_5gris2g",
         "time": 19.8,
         "value": -359,
         "interpolation": "custom"
        },
        {
-        "id": "kf_qd9c5qt",
+        "id": "kf_j4id8dd",
         "time": 20.5,
         "value": -209,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_gzd25mn",
+        "id": "kf_mzp3a1c",
         "time": 22,
         "value": -209,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_uqyzb8l",
+        "id": "kf_z8i4ddc",
         "time": 24,
         "value": 170,
         "interpolation": "ease-in-out"
@@ -1068,43 +1066,43 @@
       ],
       "position_y": [
        {
-        "id": "kf_0nfq64o",
+        "id": "kf_nqmif37",
         "time": 0,
         "value": 38,
         "interpolation": "constant"
        },
        {
-        "id": "kf_rx3o26w",
+        "id": "kf_v8znul4",
         "time": 2,
         "value": -7,
         "interpolation": "constant"
        },
        {
-        "id": "kf_j352jrb",
+        "id": "kf_pvf9ra1",
         "time": 4,
         "value": 83,
         "interpolation": "constant"
        },
        {
-        "id": "kf_t7n1lk0",
+        "id": "kf_5zb0dhf",
         "time": 6,
         "value": -7,
         "interpolation": "constant"
        },
        {
-        "id": "kf_8obkbhn",
+        "id": "kf_eqp3mqh",
         "time": 8,
         "value": 83,
         "interpolation": "constant"
        },
        {
-        "id": "kf_ly2wby5",
+        "id": "kf_ea4e5ji",
         "time": 22,
         "value": 83,
         "interpolation": "ease-in-out"
        },
        {
-        "id": "kf_9rk7oup",
+        "id": "kf_ns26dbn",
         "time": 24,
         "value": 47,
         "interpolation": "ease-in-out"
@@ -1125,839 +1123,7 @@
      }
     }
    ],
-   "trace": [
-    {
-     "tool": "project_new",
-     "params": {
-      "w": 864,
-      "h": 216,
-      "fps": 24,
-      "duration": 24,
-      "bg": "#ffffff"
-     },
-     "out": {
-      "w": 864,
-      "h": 216,
-      "fps": 24,
-      "duration": 24
-     }
-    },
-    {
-     "tool": "omniframe_mode",
-     "params": {
-      "on": true
-     },
-     "out": {
-      "mode": "omniframe"
-     }
-    },
-    {
-     "tool": "import_media",
-     "params": {
-      "path": "test_ans_result/sources/src_move.png",
-      "fit": "contain"
-     },
-     "out": {
-      "clipId": "clip-1",
-      "natW": 864,
-      "natH": 216
-     }
-    },
-    {
-     "tool": "clip_stretch",
-     "params": {
-      "clipId": "clip-1",
-      "from": 24,
-      "to": 10
-     },
-     "out": {
-      "clipId": "clip-1",
-      "duration": 10
-     }
-    },
-    {
-     "tool": "clip_stretch",
-     "params": {
-      "clipId": "clip-1",
-      "from": 10,
-      "to": 24
-     },
-     "out": {
-      "clipId": "clip-1",
-      "duration": 24
-     }
-    },
-    {
-     "tool": "compound_clip_create",
-     "params": {
-      "ids": [
-       "clip-1"
-      ],
-      "name": "Compound 1",
-      "nest": false
-     },
-     "out": {
-      "id": "compound-1",
-      "kind": "compound",
-      "name": "Compound 1",
-      "memberIds": [
-       "clip-1"
-      ],
-      "nestedTrackCount": 1,
-      "createdFrom": [
-       "clip-1"
-      ]
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 0
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-00.png"
-     }
-    },
-    {
-     "tool": "roto_mask",
-     "params": {
-      "mode": "polygon",
-      "n": 4,
-      "feather": 2
-     },
-     "out": {
-      "clipId": "clip-1",
-      "kind": "custom"
-     }
-    },
-    {
-     "tool": "mask_clear",
-     "params": {},
-     "out": {
-      "clipId": "clip-1"
-     }
-    },
-    {
-     "tool": "mask_draw",
-     "params": {
-      "shape": "rectangle",
-      "x0": 1,
-      "y0": 87,
-      "x1": 145,
-      "y1": 206,
-      "feather": 2
-     },
-     "out": {
-      "clipId": "clip-1",
-      "mask": {
-       "shape": "rectangle",
-       "kind": "shape",
-       "centerX": 0.08449074074074074,
-       "centerY": 0.6784475165420641,
-       "width": 0.16666666666666666,
-       "height": 0.5515650511300163,
-       "feather": 0.0023148148148148147,
-       "inverted": false,
-       "enabled": true
-      }
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 0
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-maskdimple.png"
-     }
-    },
-    {
-     "tool": "mask_clear",
-     "params": {},
-     "out": {
-      "clipId": "clip-1"
-     }
-    },
-    {
-     "tool": "duplicate_paste",
-     "params": {
-      "dx": 0,
-      "dy": 0,
-      "copy": true
-     },
-     "out": {
-      "clipId": "clip-2"
-     }
-    },
-    {
-     "tool": "mask_draw",
-     "params": {
-      "shape": "rectangle",
-      "x0": 1,
-      "y0": 87,
-      "x1": 145,
-      "y1": 206,
-      "feather": 0
-     },
-     "out": {
-      "clipId": "clip-2",
-      "mask": {
-       "shape": "rectangle",
-       "kind": "shape",
-       "centerX": 0.08449074074074074,
-       "centerY": 0.6784475165420641,
-       "width": 0.16666666666666666,
-       "height": 0.5515650511300163,
-       "feather": 0,
-       "inverted": false,
-       "enabled": true
-      }
-     }
-    },
-    {
-     "tool": "select",
-     "params": {
-      "clipId": "clip-1"
-     },
-     "out": {
-      "selected": "clip-1"
-     }
-    },
-    {
-     "tool": "mask_draw",
-     "params": {
-      "shape": "rectangle",
-      "x0": 1,
-      "y0": 87,
-      "x1": 145,
-      "y1": 206,
-      "feather": 0
-     },
-     "out": {
-      "clipId": "clip-1",
-      "mask": {
-       "shape": "rectangle",
-       "kind": "shape",
-       "centerX": 0.08449074074074074,
-       "centerY": 0.6784475165420641,
-       "width": 0.16666666666666666,
-       "height": 0.5515650511300163,
-       "feather": 0,
-       "inverted": true,
-       "enabled": true
-      }
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 0
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-viewmask.png"
-     }
-    },
-    {
-     "tool": "mask_clear",
-     "params": {},
-     "out": {
-      "clipId": "clip-1"
-     }
-    },
-    {
-     "tool": "select",
-     "params": {
-      "clipId": "clip-2"
-     },
-     "out": {
-      "selected": "clip-2"
-     }
-    },
-    {
-     "tool": "mask_clear",
-     "params": {},
-     "out": {
-      "clipId": "clip-2"
-     }
-    },
-    {
-     "tool": "clip_remove",
-     "params": {
-      "clipId": "clip-2"
-     },
-     "out": {
-      "left": 1
-     }
-    },
-    {
-     "tool": "select",
-     "params": {
-      "clipId": "clip-1"
-     },
-     "out": {
-      "selected": "clip-1"
-     }
-    },
-    {
-     "tool": "transparent_select",
-     "params": {
-      "clipId": "clip-1",
-      "rect": [
-       -15,
-       70,
-       160,
-       216
-      ],
-      "ignore": "#ffffff",
-      "target": "dark"
-     },
-     "out": {
-      "method": "transparent",
-      "pixels": 2285,
-      "bbox": [
-       0,
-       87,
-       145,
-       206
-      ]
-     }
-    },
-    {
-     "tool": "brush_select",
-     "params": {
-      "clipId": "clip-1",
-      "strokes": 1
-     },
-     "out": {
-      "method": "brush",
-      "pixels": 11212,
-      "bbox": [
-       0,
-       74,
-       145,
-       205
-      ]
-     }
-    },
-    {
-     "tool": "select_main_element",
-     "params": {
-      "clipId": "clip-1",
-      "tol": 48
-     },
-     "out": {
-      "method": "main-element",
-      "pixels": 667,
-      "bbox": [
-       1,
-       86,
-       145,
-       206
-      ]
-     }
-    },
-    {
-     "tool": "transparent_select",
-     "params": {
-      "clipId": "clip-1",
-      "rect": [
-       -15,
-       70,
-       160,
-       216
-      ],
-      "ignore": "#ffffff",
-      "target": "dark"
-     },
-     "out": {
-      "method": "transparent",
-      "pixels": 2285,
-      "bbox": [
-       0,
-       87,
-       145,
-       206
-      ]
-     }
-    },
-    {
-     "tool": "track_new",
-     "params": {
-      "name": "omni cutout"
-     },
-     "out": {
-      "trackId": 1
-     }
-    },
-    {
-     "tool": "omniframe_extract",
-     "params": {
-      "src": "clip-1",
-      "track": 1
-     },
-     "out": {
-      "clipId": "clip-2",
-      "track": 1,
-      "natW": 146,
-      "natH": 120,
-      "pixels": 2285
-     }
-    },
-    {
-     "tool": "patch_under",
-     "params": {
-      "clipId": "clip-1",
-      "on": true,
-      "feather": 2
-     },
-     "out": {
-      "clipId": "clip-1",
-      "hole": [
-       0,
-       87,
-       145,
-       206
-      ]
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 1
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-extract.png"
-     }
-    },
-    {
-     "tool": "omniframe_move",
-     "params": {
-      "x": -359,
-      "y": 38,
-      "t": 0
-     },
-     "out": {
-      "clipId": "clip-2",
-      "interpolation": "constant",
-      "slide": false
-     }
-    },
-    {
-     "tool": "omniframe_move",
-     "params": {
-      "x": -359,
-      "y": -7,
-      "t": 2
-     },
-     "out": {
-      "clipId": "clip-2",
-      "interpolation": "constant",
-      "slide": false
-     }
-    },
-    {
-     "tool": "omniframe_move",
-     "params": {
-      "x": -359,
-      "y": 83,
-      "t": 4
-     },
-     "out": {
-      "clipId": "clip-2",
-      "interpolation": "constant",
-      "slide": false
-     }
-    },
-    {
-     "tool": "omniframe_move",
-     "params": {
-      "x": -289,
-      "y": -7,
-      "t": 6
-     },
-     "out": {
-      "clipId": "clip-2",
-      "interpolation": "constant",
-      "slide": false
-     }
-    },
-    {
-     "tool": "omniframe_move",
-     "params": {
-      "x": -289,
-      "y": 83,
-      "t": 8
-     },
-     "out": {
-      "clipId": "clip-2",
-      "interpolation": "constant",
-      "slide": false
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 1
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-hold-a.png"
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 1.9
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-hold-b.png"
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 2.05
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-jump.png"
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 3
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-flash-up.png"
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 5
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-flash-down.png"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 10,
-      "value": -359,
-      "interpolation": "linear"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_jmtmxde"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 10.7,
-      "value": -209,
-      "interpolation": "cubic-in"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_1y3rf52"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 11.4,
-      "value": -359,
-      "interpolation": "cubic-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_sh5lyis"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 12.1,
-      "value": -209,
-      "interpolation": "ease-in"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_2yxlgzo"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 12.8,
-      "value": -359,
-      "interpolation": "ease-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_mz1m0fe"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 13.5,
-      "value": -209,
-      "interpolation": "ease-in-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_a8n11ss"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 14.2,
-      "value": -359,
-      "interpolation": "back"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_2hlq66a"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 14.9,
-      "value": -209,
-      "interpolation": "bounce"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_8yfke01"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 15.6,
-      "value": -359,
-      "interpolation": "elastic"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_t757v4n"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 16.3,
-      "value": -209,
-      "interpolation": "bezier"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_87tt6fb"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 17,
-      "value": -359,
-      "interpolation": "custom"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_k8xz7oi"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 17.7,
-      "value": -209,
-      "interpolation": "custom"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_s2he52p"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 18.4,
-      "value": -359,
-      "interpolation": "custom"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_qz0tyrc"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 19.1,
-      "value": -209,
-      "interpolation": "custom"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_yc31xhc"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 19.8,
-      "value": -359,
-      "interpolation": "custom"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_b6wq5am"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 20.5,
-      "value": -209,
-      "interpolation": "ease-in-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_qd9c5qt"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 22,
-      "value": -209,
-      "interpolation": "ease-in-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_gzd25mn"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "X",
-      "time": 24,
-      "value": 170,
-      "interpolation": "ease-in-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_x",
-      "keyframeId": "kf_uqyzb8l"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "Y",
-      "time": 22,
-      "value": 83,
-      "interpolation": "ease-in-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_y",
-      "keyframeId": "kf_ly2wby5"
-     }
-    },
-    {
-     "tool": "keyframe_set",
-     "params": {
-      "property": "position",
-      "channel": "Y",
-      "time": 24,
-      "value": 47,
-      "interpolation": "ease-in-out"
-     },
-     "out": {
-      "clipId": "clip-2",
-      "curve": "position_y",
-      "keyframeId": "kf_9rk7oup"
-     }
-    },
-    {
-     "tool": "snapshot",
-     "params": {
-      "time": 23.9
-     },
-     "out": {
-      "png": "test_ans_result/evidence/E-snap-dest.png"
-     }
-    },
-    {
-     "tool": "render_export",
-     "params": {
-      "out": "test_ans_result/E_move/solution.mp4"
-     },
-     "out": {
-      "frames": 576
-     }
-    }
-   ]
+   "trace": "[same-object-ref]"
   }
  }
 }

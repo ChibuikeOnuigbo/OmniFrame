@@ -88,7 +88,8 @@ class KeyframeSet extends MCPTool {
   constructor() { super('keyframe_set', 'Major tool: set a position/scale/rotation/opacity keyframe on the selected clip (app CurveEngine). interpolation custom + points = your own dragged curve.', { property: 'position|scale|rotation|opacity|pivot', channel: 'X|Y|Z|Scalar', time: 's', value: '', interpolation: 'app InterpolationType', points: '[[x,y]..] for custom' }) }
   async run({ property, channel = 'Scalar', time, value, interpolation = 'linear', points }) {
     const c = sel()
-    const key = `${property}_${channel.toLowerCase()}`
+    const SCALAR = new Set(['opacity', 'playback_speed', 'wheel_rotation'])
+    const key = SCALAR.has(property) ? property : `${property}_${channel.toLowerCase()}`
     const curve = c.animation.curves[key]
     if (!curve) throw new Error(`no curve ${key}; have ${Object.keys(c.animation.curves).join(',')}`)
     const { curve: updated, keyframe: kf } = CE.addOrUpdateKeyframe(curve, time, value, interpolation)
@@ -101,7 +102,8 @@ class CurveSet extends MCPTool {
   constructor() { super('curve_set', 'Major tool: apply an app easing/interpolation preset to a property curve of the selected clip.', { property: '', channel: '', interpolation: 'app InterpolationType' }) }
   async run({ property, channel = 'Scalar', interpolation }) {
     const c = sel()
-    const key = `${property}_${channel.toLowerCase()}`
+    const SCALAR = new Set(['opacity', 'playback_speed', 'wheel_rotation'])
+    const key = SCALAR.has(property) ? property : `${property}_${channel.toLowerCase()}`
     let curve = c.animation.curves[key]
     for (const k of curve.keyframes) curve = CE.applyEasingPreset(curve, k.id, interpolation)
     c.animation.curves[key] = curve
@@ -400,7 +402,14 @@ class RenderExport extends MCPTool {
       video: path.relative(ROOT, dest), ...info, mode: SESSION.mode,
       recipe: SESSION.trace, inspect: inspectPayload(),
     })
-    fs.writeFileSync(dest.replace(/\.mp4$/, '.json'), JSON.stringify({ ...r.toJSON(), chunks: r.chunkManifest(1500).manifest }, null, 1))
+    const safeStringify = (v) => {
+      const seen = new WeakSet()
+      return JSON.stringify(v, (k, val) => {
+        if (val && typeof val === 'object') { if (seen.has(val)) return '[same-object-ref]'; seen.add(val) }
+        return val
+      }, 1)
+    }
+    fs.writeFileSync(dest.replace(/\.mp4$/, '.json'), safeStringify({ ...r.toJSON(), chunks: r.chunkManifest(1500).manifest }))
     return r.data
   }
 }
