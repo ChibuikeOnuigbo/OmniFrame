@@ -92,8 +92,8 @@ export function applyClipLutsK(sx, w, h, luts) {
       const r1 = Math.min(m, r0 + 1), g1 = Math.min(m, g0 + 1), b1 = Math.min(m, b0 + 1)
       const fr = r - r0, fg = g - g0, fb = b - b0
       for (let ch = 0; ch < 3; ch++) {
-        // .cube lattice order: red fastest, then green, then blue
-        const idx = (rr, gg, bb) => ((bb * n + gg) * n + rr) * 3 + ch
+        // our .cube packs are blue-fastest (first lattice component = blue)
+        const idx = (rr, gg, bb) => ((rr * n + gg) * n + bb) * 3 + ch
         const v = (data[idx(r0, g0, b0)] * (1 - fr) + data[idx(r1, g0, b0)] * fr) * (1 - fg) * (1 - fb)
           + (data[idx(r0, g1, b0)] * (1 - fr) + data[idx(r1, g1, b0)] * fr) * fg * (1 - fb)
           + (data[idx(r0, g0, b1)] * (1 - fr) + data[idx(r1, g0, b1)] * fr) * (1 - fg) * fb

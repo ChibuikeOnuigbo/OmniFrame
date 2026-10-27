@@ -184,6 +184,17 @@ class CompoundClipCreate extends MCPTool {
     return SESSION.note('compound_clip_create', { ids, name: comp.name }, { id: cid, memberIds: ids, name: comp.name })
   }
 }
+class ClipMoveTime extends MCPTool {
+  constructor() { super('clip_move_time', 'Major tool (timeline): drag a clip horizontally — set its start time on the timeline (the CapCut/AM horizontal drag).', { clipId: '', start: 's' }) }
+  async run({ clipId, start }) {
+    const s = seq()
+    const c = clipId ? s.clips.find(k => k.id === clipId) : sel()
+    if (!c) throw new Error('no clip ' + clipId)
+    const from = c.start
+    c.start = Math.max(0, Number(start) || 0)
+    return SESSION.note('clip_move_time', { clipId: c.id, start: c.start }, { clipId: c.id, from, to: c.start })
+  }
+}
 class AlignClips extends MCPTool {
   constructor() { super('align_clips', 'Major tool (alignment): align every target clip (or ids) — hcenter/vcenter/left/right/top/bottom against the frame, or distribute-h to space centres evenly.', { mode: 'hcenter|vcenter|left|right|top|bottom|distribute-h', ids: '[] optional subset' }) }
   async run({ mode = 'hcenter', ids }) {
@@ -981,4 +992,4 @@ class FxRemove extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
