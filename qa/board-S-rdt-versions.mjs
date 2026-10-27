@@ -55,7 +55,7 @@ const BLEND = ['screen', 'overlay', 'lighten']
 const LUT1 = ['cyan-surge', 'steel-blue', 'winter-glass', 'teal-amber']      // cool cut 1
 const LUT2 = ['crimson-pulse', 'violet-dream', 'golden-hour', 'warm-negative'] // warm/magenta cut 2
 const LUT3 = ['midnight-noir', 'ink-cut', '35mm-fade', 'shadow-detail']        // dark cut 3
-const base = { glitch: 1, blend: 0, opacity: 0.85, glow: 10, grade: 1, band: 1, blackbars: 0, punch: 0, lut1: 0, lut2: 0, lut3: 0 }
+const base = { glitch: 1, blend: 0, opacity: 0.85, glow: 10, grade: 1, band: 1, blackbars: 0, punch: 0, chroma: 2, lut1: 0, lut2: 0, lut3: 0 }
 const sample = (mean, std) => ({
   glitch: Math.max(0, Math.min(3, Math.round(mean.glitch + (rng() * 2 - 1) * std.glitch))),
   blend: Math.max(0, Math.min(2, Math.round(mean.blend + (rng() * 2 - 1) * std.blend))),
@@ -68,21 +68,25 @@ const sample = (mean, std) => ({
   lut1: Math.max(0, Math.min(3, Math.round(mean.lut1 + (rng() * 2 - 1) * std.lut1))),
   lut2: Math.max(0, Math.min(3, Math.round(mean.lut2 + (rng() * 2 - 1) * std.lut2))),
   lut3: Math.max(0, Math.min(3, Math.round(mean.lut3 + (rng() * 2 - 1) * std.lut3))),
+  chroma: Math.max(0, Math.min(5, mean.chroma + (rng() * 2 - 1) * std.chroma)),
 })
 
 const step = async (tool, args = {}) => { const r = await registry.call(tool, args); if (!r.ok) throw new Error(tool + ' ' + JSON.stringify(r.data).slice(0, 120)); return r }
 async function buildVersion(p, vi) {
   await step('project_new', { w: 360, h: 640, fps: 12, duration: 7.5, bg: '#000000' })
-  const bg = await step('import_media', { path: PHOTO, fit: 'cover', scale: 1.15 })
-  await step('clip_stretch', { clipId: bg.data.clipId, duration: 7.5 })
-  await step('select', { clipId: bg.data.clipId })
-  if (!p.blackbars) await step('fx_add', { catalogId: 'blur-2' })
   const cuts = [
     { start: 0, dur: 2.5, scale: p.band, lut: LUT1[p.lut1], word: 'HALLMARK' },
     { start: 2.5, dur: 2.5, scale: p.band * 0.72, lut: LUT2[p.lut2], word: 'ME' },
     { start: 5, dur: 2.5, scale: p.band, lut: LUT3[p.lut3], word: 'UNDER' },
   ]
   for (const cut of cuts) {
+    // the reference grades the WHOLE frame per cut — blur fill included
+    const bgc = await step('import_media', { path: PHOTO, fit: 'cover', scale: 1.15 })
+    await step('clip_stretch', { clipId: bgc.data.clipId, duration: cut.dur })
+    await step('clip_move_time', { clipId: bgc.data.clipId, start: cut.start })
+    await step('select', { clipId: bgc.data.clipId })
+    if (!p.blackbars) await step('fx_add', { catalogId: 'blur-2' })
+    await step('edit_element', { clipId: bgc.data.clipId, patch: { adjustment: { luts: [{ id: 'bg', name: cut.lut, builtin: cut.lut, intensity: p.grade, enabled: true }] } } })
     const c = await step('import_media', { path: PHOTO, fit: 'contain', scale: cut.scale })
     await step('clip_stretch', { clipId: c.data.clipId, duration: cut.dur })
     await step('clip_move_time', { clipId: c.data.clipId, start: cut.start })
@@ -101,7 +105,7 @@ async function buildVersion(p, vi) {
     await step('blend_set', { mode: BLEND[p.blend] })
     await step('transform_set', { opacity: p.opacity })
     if (GLITCH[p.glitch]) await step('fx_add', { catalogId: GLITCH[p.glitch] })
-    if (p.glow > 0.5) await step('edit_element', { clipId: t.data.clipId, patch: { textStyle: { glowColor: '#22d3ee', glowBlur: p.glow, glowMode: 'outward' } } })
+    if (p.glow > 0.5) await step('edit_element', { clipId: t.data.clipId, patch: { textStyle: { glowColor: '#22d3ee', glowBlur: p.glow, glowMode: 'outward', chroma: p.chroma } } })
   }
   return SESSION.seq
 }
@@ -110,9 +114,9 @@ const refs = [await descFile('new_doc_toll_research/imgs/rdt-frames/f03.png'), a
 const TIMES = [1.2, 3.7, 6.2]
 fs.mkdirSync('test_ans_result/rdt-versions', { recursive: true })
 
-let mean = { ...base }, std = { glitch: 1.5, blend: 1, opacity: 0.15, glow: 7, grade: 0.2, band: 0.15, blackbars: 0.4, punch: 0.4, lut1: 1.5, lut2: 1.5, lut3: 1.5 }
+let mean = { ...base }, std = { glitch: 1.5, blend: 1, opacity: 0.15, glow: 7, grade: 0.2, band: 0.15, blackbars: 0.4, punch: 0.4, lut1: 1.5, lut2: 1.5, lut3: 1.5, chroma: 2 }
 const scores = []
-for (let v = 1; v <= 20; v++) {
+for (let v = 21; v <= 40; v++) {
   const p = v === 1 ? { ...base } : sample(mean, std)
   const seq = await buildVersion(p, v)
   let d = 0
@@ -132,8 +136,8 @@ for (const k of Object.keys(mean)) {
   std[k] = (std[k] || 0.2) * 0.5
 }
 for (const k of ['glitch', 'blend', 'blackbars', 'punch', 'lut1', 'lut2', 'lut3']) mean[k] = Math.max(0, Math.min(3, Math.round(mean[k])))
-fs.writeFileSync('test_ans_result/rdt-versions/scores.json', JSON.stringify({ method: 'CEM reward-shaped hill climb vs reference-frame descriptors', scores, learnedMean: mean }, null, 1))
+fs.writeFileSync('test_ans_result/rdt-versions/scores-gen2.json', JSON.stringify({ method: 'CEM reward-shaped hill climb vs reference-frame descriptors', scores, learnedMean: mean }, null, 1))
 // learned best at full quality
 await buildVersion(mean, 99)
-const ex = await registry.call('render_export', { out: 'test_ans_result/board_S_rdt_best.mp4', fps: 30, duration: 7.5 })
+const ex = await registry.call('render_export', { out: 'test_ans_result/board_S_rdt_best2.mp4', fps: 30, duration: 7.5 })
 console.log('BEST', ex.ok, ex.data.video, 'elite rewards', elite.map(e => e.reward.toFixed(3)).join(','))

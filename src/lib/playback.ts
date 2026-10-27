@@ -1741,6 +1741,23 @@ export class PreviewEngine {
         x += widths[ci] + tracking
       })
     }
+    // RGB-split chromatic fringes (the reference-edit look): tinted glyph
+    // silhouettes offset UNDER the main pass so colour fringes ride the edges
+    if ((t.chroma || 0) > 0) {
+      const co = (t.chroma as number) * scaleFactor
+      const fringes: [number, string][] = [[-co, 'rgba(0, 255, 255, 0.8)'], [co, 'rgba(255, 0, 90, 0.8)']]
+      for (const [dx, col] of fringes) {
+        ctx.save()
+        ctx.translate(dx, 0)
+        ctx.shadowColor = 'rgba(0, 0, 0, 0)'
+        ctx.shadowBlur = 0
+        ctx.shadowOffsetX = 0
+        ctx.shadowOffsetY = 0
+        ctx.fillStyle = col
+        lines.forEach((line, i) => drawLine(ctx, line, startY + i * lineHeight))
+        ctx.restore()
+      }
+    }
     if (!needsInner) {
       lines.forEach((line, i) => {
         // double-pass for a stronger glow core

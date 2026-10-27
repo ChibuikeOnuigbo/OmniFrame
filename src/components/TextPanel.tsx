@@ -59,6 +59,7 @@ export function TextPanel() {
   const [glowIntensity, setGlowIntensity] = useState(1)
   const [glowSpread, setGlowSpread] = useState(0)
   const [glowBlur, setGlowBlur] = useState(1)
+  const [chromaSplit, setChromaSplit] = useState(0)
   const [glowSmooth, setGlowSmooth] = useState(0)
   const [glowSharp, setGlowSharp] = useState<'text' | 'effect'>('text')
   const [glowClarity, setGlowClarity] = useState(0)
@@ -622,7 +623,7 @@ export function TextPanel() {
                 onClick={() => {
                   const glow: GlowSettings = { enabled: glowEnabled, mode: glowMode, angle: glowAngle, intensity: glowIntensity, spread: glowSpread, blur: glowBlur, smoothness: glowSmooth, sharpness: glowSharp, clarity: glowClarity }
                   const shadow: ShadowSettings = { enabled: shadowEnabled, mode: shadowMode, angle: shadowAngle, distance: shadowDistance, blur: shadowBlurS, opacity: shadowOpacity, color: shadowColor }
-                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, shadow, typewriterCursor: presetTwCursor, cursorForm: cursorForme, cursorCustomText: cursorCustomText || undefined, cursorImageAssetId: cursorImageId ?? undefined })
+                  const ids = buildTextPreset(p.id, presetText, { seed: presetSeed, color: presetColor, duration: presetDuration, delay: presetDelay, charSpacing: presetSpacing, wordSpacing: presetWordSpacing, graph: presetGraph, glow, shadow, chroma: chromaSplit, typewriterCursor: presetTwCursor, cursorForm: cursorForme, cursorCustomText: cursorCustomText || undefined, cursorImageAssetId: cursorImageId ?? undefined })
                   setPresetMsg(`${p.name}: ${ids.length} editable clips built for “${(presetText || p.demo).trim()}”. ${lengthGuidance(p, presetText)}`)
                 }}
                 className="flex-1 rounded border border-ink-700 bg-ink-900 px-2 py-1.5 text-left hover:border-brand"
@@ -744,6 +745,7 @@ export function TextPanel() {
                 {slider('Intensity', 'preset-glow-intensity', glowIntensity, setGlowIntensity, 0, 2, 0.1)}
                 {slider('Spread px', 'preset-glow-spread', glowSpread, setGlowSpread, 0, 80)}
                 {slider('Blur', 'preset-glow-blur', glowBlur, setGlowBlur, 0, 2, 0.1)}
+                {slider('RGB split', 'preset-chroma', chromaSplit, setChromaSplit, 0, 8, 0.5)}
                 {slider('Smooth', 'preset-glow-smooth', glowSmooth, setGlowSmooth, 0, 1, 0.1)}
                 {slider('Clarity', 'preset-glow-clarity', glowClarity, setGlowClarity, 0, 1, 0.1)}
                 <label className="flex items-center gap-1 text-[9px] text-ink-400">Sharpness

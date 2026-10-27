@@ -329,6 +329,17 @@ function drawSeq(x, seq, t) {
     sx.translate(s.width / 2, s.height / 2); sx.scale(flip.sx, 1); sx.translate(-s.width / 2, -s.height / 2)
     const tsP = clip.textStyle
     const pxScale = s.width / 640
+    if (tsP && (tsP.chroma || 0) > 0) {
+      const off = tsP.chroma * pxScale
+      for (const [dx, col] of [[-off, '#00ffff'], [off, '#ff005a']]) {
+        const tc = makeCanvas(s.width, s.height), tx = tc.getContext('2d')
+        clip.draw(tx, s.width, s.height, Math.max(0, tt - clip.start))
+        tx.globalCompositeOperation = 'source-in'
+        tx.fillStyle = col
+        tx.fillRect(0, 0, s.width, s.height)
+        sx.save(); sx.globalAlpha = 0.8; sx.translate(dx, 0); sx.drawImage(tc, 0, 0); sx.restore()
+      }
+    }
     if (tsP && tsP.shadowMode === 'outer') {
       sx.save()
       sx.translate((tsP.shadowOffsetX || 0) * pxScale, (tsP.shadowOffsetY || 0) * pxScale)

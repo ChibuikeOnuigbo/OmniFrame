@@ -3,11 +3,11 @@
  "ok": true,
  "meta": {},
  "data": {
-  "video": "test_ans_result/rdt-versions/v06.mp4",
-  "out": "/home/user/OmniFrame/test_ans_result/rdt-versions/v06.mp4",
-  "frames": 90,
-  "fps": 12,
-  "size": 97971,
+  "video": "test_ans_result/board_S_rdt_best2.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/board_S_rdt_best2.mp4",
+  "frames": 225,
+  "fps": 30,
+  "size": 117092,
   "mode": "omniframe",
   "recipe": [
    {
@@ -43,11 +43,23 @@
     "params": {
      "clipId": "clip-1",
      "from": 7.5,
-     "to": 7.5
+     "to": 2.5
     },
     "out": {
      "clipId": "clip-1",
-     "duration": 7.5
+     "duration": 2.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-1",
+     "start": 0
+    },
+    "out": {
+     "clipId": "clip-1",
+     "from": 0,
+     "to": 0
     }
    },
    {
@@ -60,6 +72,47 @@
     }
    },
    {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-1",
+     "catalogId": "blur-2"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 2.5,
+     "params": {
+      "blur": 10
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "adjustment": {
+       "luts": [
+        {
+         "id": "bg",
+         "name": "cyan-surge",
+         "builtin": "cyan-surge",
+         "intensity": 0.9776716339588166,
+         "enabled": true
+        }
+       ]
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null,
+     "adjustment": {
+      "luts": "[same-object-ref]"
+     }
+    }
+   },
+   {
     "tool": "import_media",
     "params": {
      "path": "public/uploads/17908683167065917032696543501299.jpg",
@@ -67,8 +120,8 @@
     },
     "out": {
      "clipId": "clip-2",
-     "natW": 338,
-     "natH": 253
+     "natW": 349,
+     "natH": 262
     }
    },
    {
@@ -104,9 +157,9 @@
        "luts": [
         {
          "id": "g",
-         "name": "steel-blue",
-         "builtin": "steel-blue",
-         "intensity": 0.9136827930808067,
+         "name": "cyan-surge",
+         "builtin": "cyan-surge",
+         "intensity": 0.9776716339588166,
          "enabled": true
         }
        ]
@@ -170,18 +223,18 @@
    {
     "tool": "blend_set",
     "params": {
-     "mode": "overlay"
+     "mode": "screen"
     },
     "out": {
      "clipId": "text-3",
-     "blendMode": "overlay",
+     "blendMode": "screen",
      "opacity": 1
     }
    },
    {
     "tool": "transform_set",
     "params": {
-     "opacity": 0.8523988867877051
+     "opacity": 0.7887564771343023
     },
     "out": {
      "clipId": "text-3",
@@ -190,7 +243,7 @@
       "y": 0,
       "scale": 1,
       "rotation": 0,
-      "opacity": 0.8523988867877051,
+      "opacity": 0.7887564771343023,
       "pivotX": 0.5,
       "pivotY": 0.5
      }
@@ -200,18 +253,18 @@
     "tool": "fx_add",
     "params": {
      "clipId": "text-3",
-     "catalogId": "glitch-slice-medium"
+     "catalogId": "glitch-slice-mild"
     },
     "out": {
      "fxId": "fx-1",
      "inP": 0,
      "duration": 2.1,
      "params": {
-      "glitch": 0.55,
+      "glitch": 0.35,
       "glitchStyle": "slice",
       "glitchScan": 0.18,
       "glitchStatic": 0.25,
-      "glitchSeed": 368,
+      "glitchSeed": 237,
       "glitchSpeed": 12
      }
     }
@@ -223,8 +276,9 @@
      "patch": {
       "textStyle": {
        "glowColor": "#22d3ee",
-       "glowBlur": 5.8586613717488945,
-       "glowMode": "outward"
+       "glowBlur": 10.723652931395918,
+       "glowMode": "outward",
+       "chroma": 2.1127240067347883
       }
      }
     },
@@ -233,8 +287,9 @@
      "compounded": null,
      "textStyle": {
       "glowColor": "#22d3ee",
-      "glowBlur": 5.8586613717488945,
-      "glowMode": "outward"
+      "glowBlur": 10.723652931395918,
+      "glowMode": "outward",
+      "chroma": 2.1127240067347883
      }
     }
    },
@@ -242,12 +297,12 @@
     "tool": "import_media",
     "params": {
      "path": "public/uploads/17908683167065917032696543501299.jpg",
-     "fit": "contain"
+     "fit": "cover"
     },
     "out": {
      "clipId": "clip-4",
-     "natW": 243,
-     "natH": 182
+     "natW": 981,
+     "natH": 736
     }
    },
    {
@@ -275,6 +330,30 @@
     }
    },
    {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-4"
+    },
+    "out": {
+     "selected": "clip-4"
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-4",
+     "catalogId": "blur-2"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 2.5,
+     "params": {
+      "blur": 10
+     }
+    }
+   },
+   {
     "tool": "edit_element",
     "params": {
      "clipId": "clip-4",
@@ -282,10 +361,10 @@
       "adjustment": {
        "luts": [
         {
-         "id": "g",
+         "id": "bg",
          "name": "violet-dream",
          "builtin": "violet-dream",
-         "intensity": 0.9136827930808067,
+         "intensity": 0.9776716339588166,
          "enabled": true
         }
        ]
@@ -294,6 +373,68 @@
     },
     "out": {
      "clipId": "clip-4",
+     "compounded": null,
+     "adjustment": {
+      "luts": "[same-object-ref]"
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "public/uploads/17908683167065917032696543501299.jpg",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-5",
+     "natW": 251,
+     "natH": 188
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-5",
+     "from": 7.5,
+     "to": 2.5
+    },
+    "out": {
+     "clipId": "clip-5",
+     "duration": 2.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-5",
+     "start": 2.5
+    },
+    "out": {
+     "clipId": "clip-5",
+     "from": 0,
+     "to": 2.5
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-5",
+     "patch": {
+      "adjustment": {
+       "luts": [
+        {
+         "id": "g",
+         "name": "violet-dream",
+         "builtin": "violet-dream",
+         "intensity": 0.9776716339588166,
+         "enabled": true
+        }
+       ]
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-5",
      "compounded": null,
      "adjustment": {
       "luts": "[same-object-ref]"
@@ -309,18 +450,18 @@
      "y": 0
     },
     "out": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "presetApplied": "retro-traditional"
     }
    },
    {
     "tool": "clip_move_time",
     "params": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "start": 2.7
     },
     "out": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "from": 0,
      "to": 2.7
     }
@@ -328,48 +469,48 @@
    {
     "tool": "clip_stretch",
     "params": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "from": 7.5,
      "to": 2.1
     },
     "out": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "duration": 2.1
     }
    },
    {
     "tool": "select",
     "params": {
-     "clipId": "text-5"
+     "clipId": "text-6"
     },
     "out": {
-     "selected": "text-5"
+     "selected": "text-6"
     }
    },
    {
     "tool": "blend_set",
     "params": {
-     "mode": "overlay"
+     "mode": "screen"
     },
     "out": {
-     "clipId": "text-5",
-     "blendMode": "overlay",
+     "clipId": "text-6",
+     "blendMode": "screen",
      "opacity": 1
     }
    },
    {
     "tool": "transform_set",
     "params": {
-     "opacity": 0.8523988867877051
+     "opacity": 0.7887564771343023
     },
     "out": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "transform": {
       "x": 0,
       "y": 0,
       "scale": 1,
       "rotation": 0,
-      "opacity": 0.8523988867877051,
+      "opacity": 0.7887564771343023,
       "pivotX": 0.5,
       "pivotY": 0.5
      }
@@ -378,19 +519,19 @@
    {
     "tool": "fx_add",
     "params": {
-     "clipId": "text-5",
-     "catalogId": "glitch-slice-medium"
+     "clipId": "text-6",
+     "catalogId": "glitch-slice-mild"
     },
     "out": {
      "fxId": "fx-1",
      "inP": 0,
      "duration": 2.1,
      "params": {
-      "glitch": 0.55,
+      "glitch": 0.35,
       "glitchStyle": "slice",
       "glitchScan": 0.18,
       "glitchStatic": 0.25,
-      "glitchSeed": 368,
+      "glitchSeed": 237,
       "glitchSpeed": 12
      }
     }
@@ -398,22 +539,110 @@
    {
     "tool": "edit_element",
     "params": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "patch": {
       "textStyle": {
        "glowColor": "#22d3ee",
-       "glowBlur": 5.8586613717488945,
-       "glowMode": "outward"
+       "glowBlur": 10.723652931395918,
+       "glowMode": "outward",
+       "chroma": 2.1127240067347883
       }
      }
     },
     "out": {
-     "clipId": "text-5",
+     "clipId": "text-6",
      "compounded": null,
      "textStyle": {
       "glowColor": "#22d3ee",
-      "glowBlur": 5.8586613717488945,
-      "glowMode": "outward"
+      "glowBlur": 10.723652931395918,
+      "glowMode": "outward",
+      "chroma": 2.1127240067347883
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "public/uploads/17908683167065917032696543501299.jpg",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-7",
+     "natW": 981,
+     "natH": 736
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-7",
+     "from": 7.5,
+     "to": 2.5
+    },
+    "out": {
+     "clipId": "clip-7",
+     "duration": 2.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-7",
+     "start": 5
+    },
+    "out": {
+     "clipId": "clip-7",
+     "from": 0,
+     "to": 5
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-7"
+    },
+    "out": {
+     "selected": "clip-7"
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-7",
+     "catalogId": "blur-2"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 2.5,
+     "params": {
+      "blur": 10
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-7",
+     "patch": {
+      "adjustment": {
+       "luts": [
+        {
+         "id": "bg",
+         "name": "midnight-noir",
+         "builtin": "midnight-noir",
+         "intensity": 0.9776716339588166,
+         "enabled": true
+        }
+       ]
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-7",
+     "compounded": null,
+     "adjustment": {
+      "luts": "[same-object-ref]"
      }
     }
    },
@@ -424,31 +653,31 @@
      "fit": "contain"
     },
     "out": {
-     "clipId": "clip-6",
-     "natW": 338,
-     "natH": 253
+     "clipId": "clip-8",
+     "natW": 349,
+     "natH": 262
     }
    },
    {
     "tool": "clip_stretch",
     "params": {
-     "clipId": "clip-6",
+     "clipId": "clip-8",
      "from": 7.5,
      "to": 2.5
     },
     "out": {
-     "clipId": "clip-6",
+     "clipId": "clip-8",
      "duration": 2.5
     }
    },
    {
     "tool": "clip_move_time",
     "params": {
-     "clipId": "clip-6",
+     "clipId": "clip-8",
      "start": 5
     },
     "out": {
-     "clipId": "clip-6",
+     "clipId": "clip-8",
      "from": 0,
      "to": 5
     }
@@ -456,15 +685,15 @@
    {
     "tool": "edit_element",
     "params": {
-     "clipId": "clip-6",
+     "clipId": "clip-8",
      "patch": {
       "adjustment": {
        "luts": [
         {
          "id": "g",
-         "name": "ink-cut",
-         "builtin": "ink-cut",
-         "intensity": 0.9136827930808067,
+         "name": "midnight-noir",
+         "builtin": "midnight-noir",
+         "intensity": 0.9776716339588166,
          "enabled": true
         }
        ]
@@ -472,7 +701,7 @@
      }
     },
     "out": {
-     "clipId": "clip-6",
+     "clipId": "clip-8",
      "compounded": null,
      "adjustment": {
       "luts": "[same-object-ref]"
@@ -488,18 +717,18 @@
      "y": 0
     },
     "out": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "presetApplied": "retro-traditional"
     }
    },
    {
     "tool": "clip_move_time",
     "params": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "start": 5.2
     },
     "out": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "from": 0,
      "to": 5.2
     }
@@ -507,48 +736,48 @@
    {
     "tool": "clip_stretch",
     "params": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "from": 7.5,
      "to": 2.1
     },
     "out": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "duration": 2.1
     }
    },
    {
     "tool": "select",
     "params": {
-     "clipId": "text-7"
+     "clipId": "text-9"
     },
     "out": {
-     "selected": "text-7"
+     "selected": "text-9"
     }
    },
    {
     "tool": "blend_set",
     "params": {
-     "mode": "overlay"
+     "mode": "screen"
     },
     "out": {
-     "clipId": "text-7",
-     "blendMode": "overlay",
+     "clipId": "text-9",
+     "blendMode": "screen",
      "opacity": 1
     }
    },
    {
     "tool": "transform_set",
     "params": {
-     "opacity": 0.8523988867877051
+     "opacity": 0.7887564771343023
     },
     "out": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "transform": {
       "x": 0,
       "y": 0,
       "scale": 1,
       "rotation": 0,
-      "opacity": 0.8523988867877051,
+      "opacity": 0.7887564771343023,
       "pivotX": 0.5,
       "pivotY": 0.5
      }
@@ -557,19 +786,19 @@
    {
     "tool": "fx_add",
     "params": {
-     "clipId": "text-7",
-     "catalogId": "glitch-slice-medium"
+     "clipId": "text-9",
+     "catalogId": "glitch-slice-mild"
     },
     "out": {
      "fxId": "fx-1",
      "inP": 0,
      "duration": 2.1,
      "params": {
-      "glitch": 0.55,
+      "glitch": 0.35,
       "glitchStyle": "slice",
       "glitchScan": 0.18,
       "glitchStatic": 0.25,
-      "glitchSeed": 368,
+      "glitchSeed": 237,
       "glitchSpeed": 12
      }
     }
@@ -577,32 +806,34 @@
    {
     "tool": "edit_element",
     "params": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "patch": {
       "textStyle": {
        "glowColor": "#22d3ee",
-       "glowBlur": 5.8586613717488945,
-       "glowMode": "outward"
+       "glowBlur": 10.723652931395918,
+       "glowMode": "outward",
+       "chroma": 2.1127240067347883
       }
      }
     },
     "out": {
-     "clipId": "text-7",
+     "clipId": "text-9",
      "compounded": null,
      "textStyle": {
       "glowColor": "#22d3ee",
-      "glowBlur": 5.8586613717488945,
-      "glowMode": "outward"
+      "glowBlur": 10.723652931395918,
+      "glowMode": "outward",
+      "chroma": 2.1127240067347883
      }
     }
    },
    {
     "tool": "render_export",
     "params": {
-     "out": "test_ans_result/rdt-versions/v06.mp4"
+     "out": "test_ans_result/board_S_rdt_best2.mp4"
     },
     "out": {
-     "frames": 90
+     "frames": 225
     }
    }
   ],
@@ -615,13 +846,13 @@
     "duration": 7.5,
     "bg": "#000000"
    },
-   "selection": "text-7",
+   "selection": "text-9",
    "clips": [
     {
      "id": "clip-1",
      "name": "17908683167065917032696543501299.jpg",
      "start": 0,
-     "duration": 7.5,
+     "duration": 2.5,
      "transform": {
       "x": 0,
       "y": 0,
@@ -696,7 +927,7 @@
      "duration": 2.1,
      "transform": "[same-object-ref]",
      "mask": null,
-     "blendMode": "overlay",
+     "blendMode": "screen",
      "opacity": 1,
      "effects": {},
      "patch": null,
@@ -754,13 +985,21 @@
      }
     },
     {
-     "id": "text-5",
-     "name": "text:ME",
-     "start": 2.7,
-     "duration": 2.1,
-     "transform": "[same-object-ref]",
+     "id": "clip-5",
+     "name": "17908683167065917032696543501299.jpg",
+     "start": 2.5,
+     "duration": 2.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
      "mask": null,
-     "blendMode": "overlay",
+     "blendMode": "source-over",
      "opacity": 1,
      "effects": {},
      "patch": null,
@@ -782,7 +1021,35 @@
      }
     },
     {
-     "id": "clip-6",
+     "id": "text-6",
+     "name": "text:ME",
+     "start": 2.7,
+     "duration": 2.1,
+     "transform": "[same-object-ref]",
+     "mask": null,
+     "blendMode": "screen",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-7",
      "name": "17908683167065917032696543501299.jpg",
      "start": 5,
      "duration": 2.5,
@@ -818,13 +1085,49 @@
      }
     },
     {
-     "id": "text-7",
+     "id": "clip-8",
+     "name": "17908683167065917032696543501299.jpg",
+     "start": 5,
+     "duration": 2.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-9",
      "name": "text:UNDER",
      "start": 5.2,
      "duration": 2.1,
      "transform": "[same-object-ref]",
      "mask": null,
-     "blendMode": "overlay",
+     "blendMode": "screen",
      "opacity": 1,
      "effects": {},
      "patch": null,

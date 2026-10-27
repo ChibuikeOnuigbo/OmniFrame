@@ -872,6 +872,8 @@ export interface TextTitleStyle {
   strokeOnly?: boolean
   glowColor?: string
   glowBlur?: number
+  /** RGB-split chromatic fringe offset in px (reference-edit look) */
+  chroma?: number
   /** Glow direction: 'outward' blooms outside the glyphs (canvas shadow),
    *  'inward' lights the glyph interior from its edges (Photoshop Inner Glow).
    *  Default 'outward'. */

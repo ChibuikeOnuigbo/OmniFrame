@@ -433,7 +433,7 @@ const tS = await registry.call('create_text', { text: 'BOARD S', preset: 'bar', 
 const tId = tS.data.clipId
 await registry.call('select', { clipId: tId })
 const sTextBase = await dumpS('text-base')
-await registry.call('edit_element', { clipId: tId, patch: { textStyle: { glowColor: '#22d3ee', glowBlur: 26, glowMode: 'outward', shadowMode: 'outer', shadowColor: '#000000', shadowBlur: 8, shadowOffsetX: 5, shadowOffsetY: 5 } } })
+await registry.call('edit_element', { clipId: tId, patch: { textStyle: { glowColor: '#22d3ee', glowBlur: 26, glowMode: 'outward', shadowMode: 'outer', shadowColor: '#000000', shadowBlur: 8, shadowOffsetX: 5, shadowOffsetY: 5, chroma: 3 } } })
 const sTextGlow = await dumpS('text-glowshadow')
 const sTextDiff = (sTextBase && sTextGlow) ? diffPx(sTextBase, sTextGlow) : 0
 if (sTextDiff < 3) { console.error('FAIL text glow+shadow must change pixels', sTextDiff.toFixed(2)); fail++ }

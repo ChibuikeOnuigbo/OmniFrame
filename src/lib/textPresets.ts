@@ -63,6 +63,8 @@ export interface PresetBuildOpts {
   graph?: string
   glow?: GlowSettings
   shadow?: ShadowSettings
+  /** RGB-split chromatic fringe px applied to every built clip's textStyle */
+  chroma?: number
   /** Typewriter cursor: 'follow' trails each typed letter (1_ 12_ 123_);
    *  'end' parks the cursor at the final position while letters fill in. */
   typewriterCursor?: 'follow' | 'end'
@@ -858,6 +860,13 @@ export function buildTextPreset(id: string, text: string, opts?: Partial<PresetB
       }
     }
     if (copies.length) extraIds = pushClips(copies)
+  }
+  if (o.chroma && o.chroma > 0) {
+    const st = useEditor.getState()
+    for (const id of ids) {
+      const c = st.clips.find((k2) => k2.id === id)
+      if (c) c.textStyle = { ...(c.textStyle || {}), chroma: o.chroma } as typeof c.textStyle
+    }
   }
   return [...ids, ...extraIds]
 }

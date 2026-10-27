@@ -1,0 +1,206 @@
+{
+ "refs": [
+  {
+   "textFrac": 0.33,
+   "warmth": -0.05,
+   "borderHF": 1.87,
+   "borderLum": 0.272
+  },
+  {
+   "textFrac": 0.112,
+   "warmth": -0.022,
+   "borderHF": 1.39,
+   "borderLum": 0.213
+  },
+  {
+   "textFrac": 0.021,
+   "warmth": -0.098,
+   "borderHF": 1.63,
+   "borderLum": 0.08
+  }
+ ],
+ "vet": [
+  {
+   "v": 1,
+   "reward": -1.449627064792602,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 2,
+   "reward": -1.6695327416660286,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 3,
+   "reward": -1.4302862481223688,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 4,
+   "reward": -1.3739874452471033,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 5,
+   "reward": -1.5161939354013985,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 6,
+   "reward": -1.7535729884358724,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "cut3 not darker than cut1",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 7,
+   "reward": -1.7415966997073027,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "cut3 not darker than cut1",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 8,
+   "reward": -1.3995052905815943,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 9,
+   "reward": -1.74378193105881,
+   "fails": [
+    "cut2 not warm/magenta side",
+    "cut3 not darker than cut1",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 10,
+   "reward": -1.3499477632156012,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 11,
+   "reward": -1.3746607531113133,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 12,
+   "reward": -1.744592784228758,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 13,
+   "reward": -1.7530299289336266,
+   "fails": [
+    "cut2 not warm/magenta side",
+    "cut3 not darker than cut1",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 14,
+   "reward": -1.3723091674828272,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 15,
+   "reward": -1.6085999301489613,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 16,
+   "reward": -1.328581575302812,
+   "fails": [
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "KEEP"
+  },
+  {
+   "v": 17,
+   "reward": -1.5021613057398628,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 18,
+   "reward": -1.5252524770750613,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 19,
+   "reward": -1.7726890378054505,
+   "fails": [
+    "cut1 border not blur-fill",
+    "cut2 not warm/magenta side",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  },
+  {
+   "v": 20,
+   "reward": -1.5650036277115933,
+   "fails": [
+    "cut2 not warm/magenta side",
+    "reward below median"
+   ],
+   "verdict": "RUBBISH"
+  }
+ ]
+}
