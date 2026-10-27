@@ -107,3 +107,13 @@ All IDs appended to youtube-audit/progress.json watched_ids with a scan_log entr
 
 ### scenepack.com — PARKED
 - Domain parked; redirects to answerharbor.com 2025-12-15 "How to Download and Install Scene Packs" (pack types: transitions/overlays/grades/titles/SFX). Text reference only; no primary content scannable.
+
+## Board S official-docs fetch: DaVinci Resolve compound-clip semantics (continuing-research mandate)
+- Direct fetch of the VFXPedia Resolve 18 manual mirror (steakunderwater.com part1049/part1050 "Compositing With and Grading Compound Clips" / "Nested Timelines") → **404 on every part page; mirror dead** (honest log, no fabricated quotes).
+- Manual language recovered via search snippets quoting the Resolve 21/18 Reference Manual (davinciresolveclub.com/davinci-resolve-compound-clips/ 2026-10-21; davinciresolve21.com/blog/compound-clip-vs-nested-timeline-...):
+  - compound clip = "an editable nested container that shows selected timeline items as one clip in a parent timeline; Resolve doesn't render or merge the source files; the clips inside stay editable through Open in Timeline"
+  - Open in Timeline → nested clips shown as an editable timeline, "while the enclosing timeline still sees one compound result"; close returns to parent
+  - Decompose in Place → "replaces that instance with its internal clips at the same spot"; compound stays in Media Pool; parent-level grade/effect NOT carried over automatically; extra tracks are added if children need them
+  - processing order: children processed inside first → combined result → parent Transform/Effect/Grade → output
+- Crosswalk to OmniFrame (all shipped): double-click compound = Open in Timeline (Timeline.tsx onDoubleClick → openSequence) ✓; breadcrumbs bar + back = close/path control ✓; uncompound (RightPanel + context menu, undo-registered, Ctrl+Z also reverses) = Decompose in Place ✓; parent transform/blend/fx applied to the combined child render = playback drawCompoundClip + the Board S padded-scratch fix (parent processing must never bitmap-crop oversized children) ✓; MCP mirror: compound_enter/compound_exit/uncompound_clip ✓.
+- Drive duty re-check: krita-win search → still 0 files.
