@@ -82,3 +82,15 @@ KEPT (semantic, per Notion rule "color must mean something"):
 - Jake In Motion scan yields design-theory material: "Animation Principles Work Everywhere
   (Even Your Website)" — easing/spacing principles now inform the motion language of the
   flame UI (fast, purposeful transitions; no bounce easing anywhere: census = 0 decorative).
+
+## Board S: the user's own annotated tell list (r/ClaudeAI "HOUSEMEN OF VIBE SLOP", via uploaded screenshot — reddit unreachable, see MOTIONDESIGN-SCAN)
+Image: imgs/reddit-vibeslop-annotated.jpg. Nine tells, each with this app's audit status:
+1. "I built" phrasing in copy — README/UI copy audited; no self-congratulating builder voice in app strings.
+2. Blur animations (decorative backdrop motion) — none shipped; glass/blur decor was purged in Board R.
+3. Dramatic-title paragraph block (hero headline + soft paragraph) — OmniFrame has no marketing hero; app opens straight into the editor.
+4. Buttons with light-colored margin — audited: buttons use solid fills/1px semantic borders, no white-ring margins.
+5. Buttons with colored+gradient border — none; gradient borders removed with the violet rebrand purge (Board R).
+6. Random center-dots between/in-front-of words — none; separators only in breadcrumbs (functional, labeled).
+7. Serif display font on laggy site — font stack is Avenir Next/Segoe UI Variable/Trebuchet/DejaVu (Board R); no serif display face.
+8. Small all-caps text — kept ONLY where functional (track headers, badge labels like CMP) at readable sizes; decorative all-caps eyebrows: none.
+9. Endless summarization of own accomplishments — this ledger is count-audited (grep -c) with proof files per row; no prose padding.

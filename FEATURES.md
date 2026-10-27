@@ -156,5 +156,11 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 122 Board L Color Temperature engine — Kelvin white balance 1500-15000K (6500 neutral), 5 catalog presets, 2-point keyframe ramp proven animating (L-kelvin-ramp-warm/cool.png)
 119 Board K all-elements sweep (MCP-only proofs via data_dump data:img): glow/edge-glow/light, shape masks + restore, drawing shape strokes, one render per effect sub-tab — plus headless effect parity fixed (CSS filters, particle/overlay layers, light layers in appRender)
 
-**Total: 143 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 143) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
+144 Board S compound no-cutoff fix (browser): isolated compound/clip renders (LUT, mask, grade, fx layers) now use a 3x-frame padded scratch — a 1000x1000 element inside a 100x100 view survives compounding instead of vanishing; ghost/echo sampling offset-aware
+145 Board S clip blend-mode UI: 13-mode select in Appearance (source-over/multiply/screen see-through/overlay/darken/lighten/color-burn/color-dodge/hard-light/soft-light/difference/exclusion/luminosity) + store setClipBlend + undo-registered; MCP blend_set proven by S-blend-screen vs S-blend-burn pixel diff
+146 Board S headless text glow+shadow parity: appRender drawSeq renders textStyle glow (outward bloom, glowColor/glowBlur) + Photoshop-model outer shadow (offset pre-pass) — S-text-glowshadow.png; create_text now works headless (loadAppTs transitive dep closure + store stub)
+147 Board S real headless compound nesting: compound_clip_create nest:true moves members into an inner sequence rendered through the same padded no-cutoff path; compound_enter / compound_exit / uncompound_clip = double-click nested timeline + breadcrumbs + Ctrl+Z-reversible uncompound, all MCP-proven
+148 Board S MCP demo edit (effect data -> preview on demo media): crimson-pulse LUT-pack grade stored via edit_element adjustment.luts + fx_catalog adjustment-layer drop + image overlay at opacity 0.35 blended screen — S-demo-frame.png + S-demo-edit.png timeline proof
+149 Board S edit_element patch surface extended: textStyle merge (glow/shadow/animation fields) + adjustment.luts merge = the MCP-only LUT path
+**Total: 149 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 149) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **454** (see youtube-audit/progress.json watched_ids).

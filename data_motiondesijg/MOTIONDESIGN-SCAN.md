@@ -93,3 +93,17 @@ All IDs appended to youtube-audit/progress.json watched_ids with a scan_log entr
   Cloth Sim" 90K, "Cloth Stitching & Inflation" 102K, "Ink in Liquid Pyro" 54K + 13 more IDs.
 - @MotionArray → **404 wrong handle**, logged not guessed; MotionArray remains unscanned.
 - All 38 IDs appended to youtube-audit/progress.json watched_ids + scan_log entry.
+
+## Board S scan (2026-10-27): reddit r/ClaudeAI edit post + Drive vid section + scenepack
+
+### reddit.com/r/ClaudeAI/s/aPNyHPEqvy — ALL METHODS FAILED (honest log, no fabrication)
+- fetch_page → 403 (bot wall); old.reddit.com → 403; www + i.reddit → TLS SSL_ERROR_SYSCALL from sandbox curl/python; requests+UA spoof → SSLError; selenium/playwright → not installable (no browser binaries, pip reset-prone); Google cache/wayback → no snapshot for the short link.
+- User-supplied substitutes used instead: annotated screenshot (new_doc_toll_research/imgs/reddit-vibeslop-annotated.jpg) + the RDT mp4 uploaded to Drive (id 15pq2qW7qMQSpB1xtnJEeaJ2-ByDtEhCQ, 1,454,482 bytes — metadata catalogued; bytes cannot enter the sandbox: inline base64 = context bomb, download URLs blocked).
+
+### Drive "vid section" catalog (mimeType video/*, ids kept for later reference)
+- JK / anime edit sources: JJK S2E3 (1N8rpklnnaHYYTPtFDteB_piadCOIpFn1, 368MB); Gojo Twixtor 4K (1m8TTt6kx6-NFJvSbwi0CmdepwtjkS3ru, 68MB); Gojo Ep8 raws (1HdBsYdWNMhyN-Ph4UEsh-0vhQcAhvQQ5, 94MB); koji animations (17KWTH9L9Sk-yzi3gfZjjILeF-tZ2nz-i, 248MB)
+- Overlays/SFX: Black White Transition Overlay (13Cs6IiPjLKBBKKJQpII9p1TE-ALIuobp); Sfx for edit (10yzFd-LLZ89iTPXNRRP5hBG3_E0EXNSp); Broken Glass Overlay (1tR4KWjAxpdSNH0MZNEG3wRsbzvrhBVxy); 3D sword greenscreen (167jAO7JhSdbetzREAHV0u_jgu4nKE49q); MONTAGEM ADEUS effect (1CQy5lLMw7Gh3Xn7OvV1HQC-t02HDnntz); MONTAGEM ADEUS (1lee4Uu5HxruC7BJofbF7qWA-0I, 40MB); Sept 03 2025 mov (17f7G30D_zguyojLKZ32qfJyCjFHGSX3f)
+- Too large to inline; MCP demo edits therefore run on local repo media (qa/shots/01-home.png) per the honesty law.
+
+### scenepack.com — PARKED
+- Domain parked; redirects to answerharbor.com 2025-12-15 "How to Download and Install Scene Packs" (pack types: transitions/overlays/grades/titles/SFX). Text reference only; no primary content scannable.
