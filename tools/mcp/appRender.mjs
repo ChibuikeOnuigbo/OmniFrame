@@ -20,13 +20,27 @@ export async function loadAppTs(rel) {
   const { code } = transform(src, { transforms: ['typescript'] })
   const dir = mkdtempSync(join(tmpdir(), 'appmod-'))
   const f = join(dir, 'mod.mjs')
-  writeFileSync(f, code.replace(/from '(\.\.?\/[^']+)'/g, (m, p) => `from '${p}.mjs'`))
-  // ship sibling deps the module imports (types-only imports vanish in sucrase)
-  for (const m of code.matchAll(/from '(\.\.?\/[^']+)'/g)) {
-    const dep = path.join(path.dirname(path.join(ROOT, rel)), m[1] + '.ts')
-    if (fs.existsSync(dep)) {
-      const d = transform(fs.readFileSync(dep, 'utf8'), { transforms: ['typescript'] }).code
-      writeFileSync(join(dir, path.basename(m[1]) + '.mjs'), d)
+  writeFileSync(f, code.replace(/from '(\.\.?\/[^']+)'/g, (m, p) => `from './${path.basename(p)}.mjs'`))
+  // ship the transitive closure of relative .ts deps, flattened next to mod.mjs
+  // (types-only imports vanish in sucrase; the zustand store gets a stub since
+  // react/zustand cannot resolve from tmpdir — preset builds only need the symbol).
+  const STORE_STUB = "export const useEditor = { getState: () => ({ clips: [], sequences: [], breadcrumbs: [], activeSequenceId: 'main', set: () => {} }) }\n"
+  const seen = new Set()
+  const queue = [[path.dirname(path.join(ROOT, rel)), code]]
+  while (queue.length) {
+    const [baseDir, src] = queue.shift()
+    for (const m of src.matchAll(/from '(\.\.?\/[^']+)'/g)) {
+      const name = path.basename(m[1])
+      if (seen.has(name)) continue
+      seen.add(name)
+      if (name === 'store') { writeFileSync(join(dir, 'store.mjs'), STORE_STUB); continue }
+      const depTs = path.resolve(baseDir, m[1]) + '.ts'
+      if (fs.existsSync(depTs)) {
+        const raw = transform(fs.readFileSync(depTs, 'utf8'), { transforms: ['typescript'] }).code
+        const d = raw.replace(/from '(\.\.?\/[^']+)'/g, (mm, pp) => `from './${path.basename(pp)}.mjs'`)
+        writeFileSync(join(dir, name + '.mjs'), d)
+        queue.push([path.dirname(depTs), raw])
+      }
     }
   }
   const mod = await import(f)
@@ -187,6 +201,10 @@ function sampleAt(canvas, x, y) {
 export function renderFrame(seq, t) {
   const c = makeCanvas(seq.w, seq.h), x = c.getContext('2d')
   x.fillStyle = seq.bg; x.fillRect(0, 0, seq.w, seq.h)
+  drawSeq(x, seq, t)
+  return c
+}
+function drawSeq(x, seq, t) {
   const paint = paintGetter ? paintGetter() : null
   if (paint && paint.strokes && paint.strokes.length) {
     // paint underlay first? no — playback paints OVER clips; keep same order:
@@ -203,12 +221,12 @@ export function renderFrame(seq, t) {
         const tmp = makeCanvas(seq.w, seq.h)
         const tx = tmp.getContext('2d')
         tx.filter = flt
-        tx.drawImage(c, 0, 0)
-        c.getContext('2d').drawImage(tmp, 0, 0)
+        tx.drawImage(x.canvas, 0, 0)
+        x.canvas.getContext('2d').drawImage(tmp, 0, 0)
       }
-      PG.applyPixelGrade(c, aEff, Math.round(t * 24))
-      if (PRT.hasClipFxLayers(aEff)) PRT.applyClipFxLayers(c, aEff, t)
-      applyLightCompositeK(c.getContext('2d'), seq.w, seq.h, aEff)
+      PG.applyPixelGrade(x.canvas, aEff, Math.round(t * 24))
+      if (PRT.hasClipFxLayers(aEff)) PRT.applyClipFxLayers(x.canvas, aEff, t)
+      applyLightCompositeK(x.canvas.getContext('2d'), seq.w, seq.h, aEff)
       continue
     }
     const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}
@@ -228,12 +246,45 @@ export function renderFrame(seq, t) {
     const rBase = seq.clipRect(clip, tt)
     const bAnim = CE.evaluateClipAnimation(clip, PFX.pfxLocalTime(eff, t, clip.start, clip.duration))
     const r = { ...rBase, x: rBase.x + (ev.x - bAnim.x), y: rBase.y + (ev.y - bAnim.y) }
+    if (clip.kind === 'compound' && clip.childSeq) {
+      // Padded (3x frame) child render: children bigger than the view must NOT
+      // be bitmap-clipped to the view — mirrors the playback.ts pad fix.
+      const innerT = Math.max(0, t - clip.start) + (clip.inPoint || 0)
+      const pad = makeCanvas(seq.w * 3, seq.h * 3)
+      const pxc = pad.getContext('2d')
+      pxc.translate(seq.w, seq.h)
+      drawSeq(pxc, clip.childSeq, innerT)
+      x.save()
+      x.translate(r.x + r.w / 2, r.y + r.h / 2)
+      x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
+      x.scale(ev.scaleX || 1, ev.scaleY || 1)
+      x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
+      x.globalCompositeOperation = clip.blendMode || 'source-over'
+      x.drawImage(pad, -1.5 * seq.w, -1.5 * seq.h)
+      x.restore()
+      continue
+    }
     const s = makeCanvas(Math.max(2, Math.round(r.w)), Math.max(2, Math.round(r.h)))
     const sx = s.getContext('2d')
     const flip = cardFlipFactor(clip, t)
     sx.save()
     sx.translate(s.width / 2, s.height / 2); sx.scale(flip.sx, 1); sx.translate(-s.width / 2, -s.height / 2)
+    const tsP = clip.textStyle
+    const pxScale = s.width / 640
+    if (tsP && tsP.shadowMode === 'outer') {
+      sx.save()
+      sx.translate((tsP.shadowOffsetX || 0) * pxScale, (tsP.shadowOffsetY || 0) * pxScale)
+      sx.shadowColor = tsP.shadowColor || 'rgba(0,0,0,0.85)'
+      sx.shadowBlur = (tsP.shadowBlur || 6) * pxScale
+      clip.draw(sx, s.width, s.height, Math.max(0, tt - clip.start))
+      sx.restore()
+    }
+    if (tsP && tsP.glowBlur && tsP.glowMode !== 'inward') {
+      sx.shadowColor = tsP.glowColor || '#ffffff'
+      sx.shadowBlur = tsP.glowBlur * pxScale
+    }
     clip.draw(sx, s.width, s.height, Math.max(0, tt - clip.start))
+    sx.shadowBlur = 0
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, s.width, s.height) }
     applyEffects(sx, clip, s.width, s.height, t)
@@ -283,5 +334,5 @@ export function renderFrame(seq, t) {
   if (paint && paint.strokes && paint.strokes.length) {
     DE.renderAllPaintLayers(x, seq.w, seq.h, paint.strokes, paint.layers && paint.layers.length ? paint.layers : [{ id: 'paint-1', visible: true }], t, seq.fps || 30)
   }
-  return c
+
 }

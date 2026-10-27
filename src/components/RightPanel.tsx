@@ -915,6 +915,19 @@ function ClipInspector({ clip }: { clip: Clip }) {
       </Section>
 
       <Section title="Appearance">
+        <Field label="Blend">
+          <select
+            data-testid="clip-blend-select"
+            aria-label="Clip blend mode"
+            className="h-7 w-full rounded-none border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            value={clip.blendMode || 'source-over'}
+            onChange={(e) => useEditor.getState().setClipBlend(clip.id, e.target.value)}
+          >
+            {['source-over','multiply','screen','overlay','darken','lighten','color-burn','color-dodge','hard-light','soft-light','difference','exclusion','luminosity'].map((m) => (
+              <option key={m} value={m}>{m === 'source-over' ? 'normal' : m}</option>
+            ))}
+          </select>
+        </Field>
         <Field label="Opacity">
           <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>

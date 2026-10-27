@@ -643,6 +643,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   selectClip: (id: string | null) => void
   setClipProp: (id: string, partial: Partial<Clip>) => void
   setClipTransform: (id: string, partial: Partial<ClipTransform>) => void
+  setClipBlend: (id: string, mode: string) => void
   toggleTrackMute: (id: string) => void
   toggleTrackHidden: (id: string) => void
   toggleTrackLock: (id: string) => void
@@ -2996,6 +2997,12 @@ export const useEditor = create<EditorState>((set, get) => {
           c.id === id ? { ...c, transform: { ...c.transform, ...partial } } : c,
         ),
       }))
+    },
+    setClipBlend: (id, mode) => {
+      const c = get().clips.find((k) => k.id === id)
+      if (!c) return
+      c.blendMode = mode as Clip['blendMode']
+      set((s) => ({ clips: [...s.clips] }))
     },
 
     toggleTrackMute: (id) =>

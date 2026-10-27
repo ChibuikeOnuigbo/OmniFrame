@@ -288,6 +288,8 @@ export class PreviewEngine {
   // ---- adjustment layers & LUT rendering -------------------------------
 
   /** Offscreen canvases used to isolate per-clip/compound LUT grading. */
+  private padPool: HTMLCanvasElement[] = []
+  private padInUse = new Set<HTMLCanvasElement>()
   private scratchPool: HTMLCanvasElement[] = []
   private scratchInUse = new Set<HTMLCanvasElement>()
   private adjustmentMaskCanvas: HTMLCanvasElement | null = null
@@ -296,6 +298,30 @@ export class PreviewEngine {
   private puppetCanvas: HTMLCanvasElement | null = null
   /** Resolve each PSD rig's hierarchy once per rendered frame. */
   private resolvedArtworkRigCache = new Map<string, Map<string, RigResolvedPart>>()
+  /** Oversized (3× frame) scratch pool: isolated renders (LUT/mask/grade inside a
+   *  compound, or a graded oversized clip) must NOT bitmap-clip children at the
+   *  frame edge — a 1000×1000 element in a 100×100 view used to lose everything
+   *  outside the view once compounded+graded, then scaling the compound showed
+   *  only the clipped snapshot. ±1 frame of margin keeps the element alive. */
+  private takePadScratch(): HTMLCanvasElement {
+    let c = this.padPool.find((x) => !this.padInUse.has(x))
+    if (!c) {
+      c = document.createElement('canvas')
+      c.width = this.width * 3
+      c.height = this.height * 3
+      this.padPool.push(c)
+    }
+    this.padInUse.add(c)
+    const c2 = c.getContext('2d')!
+    c2.setTransform(1, 0, 0, 1, 0, 0)
+    c2.filter = 'none'
+    c2.globalAlpha = 1
+    c2.globalCompositeOperation = 'source-over'
+    c2.clearRect(0, 0, c.width, c.height)
+    return c
+  }
+  private releasePadScratch(c: HTMLCanvasElement) { this.padInUse.delete(c) }
+
   private takeScratch(): HTMLCanvasElement {
     let c = this.scratchPool.find((x) => !this.scratchInUse.has(x))
     if (!c) {
@@ -1875,8 +1901,9 @@ export class PreviewEngine {
     // same isolation: it mattes the clip's own graded pixels (only).
     const fxEff = this.effectsForRender(clip, time)
     if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(fxEff) || hasClipFxLayers(fxEff) || !!(clip as unknown as { patch?: unknown }).patch)) {
-      const scratch = this.takeScratch()
+      const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
+      octx.translate(this.width, this.height) // frame origin at pad centre
       this.drawClip(octx, el, clip, asset, time, true)
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
@@ -1887,9 +1914,9 @@ export class PreviewEngine {
       // an enclosing compound must keep applying to this clip's pixels).
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
-        ctx.drawImage(scratch, 0, 0) // screen-space target
+        ctx.drawImage(scratch, -this.width, -this.height) // screen-space target
       } else {
-        ctx.drawImage(scratch, -this.width / 2, -this.height / 2) // compound-local target
+        ctx.drawImage(scratch, -this.width / 2 - this.width, -this.height / 2 - this.height) // compound-local target
       }
       // AM Echo Keyframes / Motion Blur: ghost the rendered clip at past times
       const ghosts = [...pfxEchoTimes(fxEff, time), ...pfxMotionBlurSamples(fxEff, time, (this as unknown as { projectFps?: number }).projectFps || 24)]
@@ -1902,10 +1929,10 @@ export class PreviewEngine {
         const gy = this.height / 2 + gev.y * (this.height / PH) - vh / 2
         ctx.save()
         ctx.globalAlpha = (ctx.globalAlpha || 1) * g.alpha
-        ctx.drawImage(scratch, gx, gy, vw, vh)
+        ctx.drawImage(scratch, gx + this.width, gy + this.height, vw, vh)
         ctx.restore()
       }
-      this.releaseScratch(scratch)
+      this.releasePadScratch(scratch)
       return
     }
     const vw =
@@ -2119,8 +2146,9 @@ export class PreviewEngine {
     const { stack: ownLuts } = this.buildLutStack(clip, time)
     const cFxEff = this.effectsForRender(clip, time)
     if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled || hasPixelGrade(cFxEff) || hasClipFxLayers(cFxEff))) {
-      const scratch = this.takeScratch()
+      const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
+      octx.translate(this.width, this.height) // frame origin at pad centre
       this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
       if (hasPixelGrade(cFxEff)) applyPixelGrade(scratch, cFxEff!, Math.round(time * 24))
@@ -2130,11 +2158,11 @@ export class PreviewEngine {
       // filter / transform keep applying, exactly like non-isolated draws).
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
-        ctx.drawImage(scratch, 0, 0)
+        ctx.drawImage(scratch, -this.width, -this.height)
       } else {
-        ctx.drawImage(scratch, -this.width / 2, -this.height / 2)
+        ctx.drawImage(scratch, -this.width / 2 - this.width, -this.height / 2 - this.height)
       }
-      this.releaseScratch(scratch)
+      this.releasePadScratch(scratch)
       return
     }
     this.drawCompoundContents(ctx, clip, time, st, trackMuted, childClips, childTracks)

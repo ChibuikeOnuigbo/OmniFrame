@@ -151,13 +151,35 @@ class FillCompositionArea extends MCPTool {
   }
 }
 class CompoundClipCreate extends MCPTool {
-  constructor() { super('compound_clip_create', 'Major tool: nest selected clips into a compound clip descriptor (persisted — list/rename/expand afterwards).', { ids: '[]', name: 'label' }) }
-  async run({ ids, name }) {
+  constructor() { super('compound_clip_create', 'Major tool: nest selected clips into a compound clip (persisted — list/rename/expand afterwards). nest:true builds the real inner sequence (compound_enter/uncompound_clip then work, children keep their native scale with no view cutoff); default records the descriptor only.', { ids: '[]', name: 'label', nest: 'bool (real inner sequence)' }) }
+  async run({ ids, name, nest = false }) {
     const s = seq()
     SESSION.compounds = SESSION.compounds || []
-    const comp = { id: `compound-${SESSION.compounds.length + 1}`, kind: 'compound', name: name || `Compound ${SESSION.compounds.length + 1}`, memberIds: ids, nestedTrackCount: 1, createdFrom: s.clips.filter(c => ids.includes(c.id)).map(c => c.id) }
-    SESSION.compounds.push(comp)
-    return SESSION.note('compound_clip_create', { ids, name: comp.name }, comp)
+    if (!nest) {
+      const comp = { id: `compound-${SESSION.compounds.length + 1}`, kind: 'compound', name: name || `Compound ${SESSION.compounds.length + 1}`, memberIds: ids, nestedTrackCount: 1, createdFrom: s.clips.filter(c => ids.includes(c.id)).map(c => c.id) }
+      SESSION.compounds.push(comp)
+      return SESSION.note('compound_clip_create', { ids, name: comp.name, nest }, comp)
+    }
+    const members = s.clips.filter(c => ids.includes(c.id))
+    if (!members.length) throw new Error('no member clips found for ids ' + JSON.stringify(ids))
+    const cid = `compound-${SESSION.compounds.length + 1}`
+    const { Sequence: Seq } = await import('./appRender.mjs')
+    const child = new Seq({ w: s.w, h: s.h, fps: s.fps, duration: s.duration, bg: 'rgba(0,0,0,0)' })
+    child.id = `seq-${cid}`
+    child.clips = members
+    child.tracks = [...s.tracks]
+    s.clips = s.clips.filter(c => !ids.includes(c.id))
+    const start = Math.min(...members.map(m => m.start))
+    const end = Math.max(...members.map(m => m.start + m.duration))
+    const comp = makeClip({ id: cid, name: name || `Compound ${SESSION.compounds.length + 1}`, natW: s.w, natH: s.h, duration: end - start, draw: () => {} })
+    comp.kind = 'compound'
+    comp.sourceSequenceId = child.id
+    comp.childSeq = child
+    comp.memberIds = ids
+    comp.start = start
+    s.addClip(comp)
+    SESSION.compounds.push({ id: cid, kind: 'compound', name: comp.name, memberIds: ids, nestedTrackCount: 1, createdFrom: ids })
+    return SESSION.note('compound_clip_create', { ids, name: comp.name }, { id: cid, memberIds: ids, name: comp.name })
   }
 }
 class AlignClips extends MCPTool {
@@ -297,6 +319,41 @@ class CompoundRename extends MCPTool {
     if (!c) throw new Error(`no compound ${id}`)
     c.name = String(name || c.name)
     return SESSION.note('compound_rename', { id, name: c.name }, c)
+  }
+}
+class CompoundEnter extends MCPTool {
+  constructor() { super('compound_enter', 'Double-click equivalent: open a compound clip\'s inner sequence as the active timeline (compound_exit returns).', { id: 'compound clip id' }) }
+  async run({ id }) {
+    const s = seq()
+    const c = s.clips.find((k) => k.id === id && k.kind === 'compound' && k.childSeq)
+    if (!c) throw new Error(`compound ${id} not found in active sequence or has no inner sequence`)
+    SESSION.seqStack = SESSION.seqStack || []
+    SESSION.seqStack.push(s)
+    SESSION.seq = c.childSeq
+    SESSION.selection = null
+    return SESSION.note('compound_enter', { id }, { activeSequenceId: c.childSeq.id })
+  }
+}
+class CompoundExit extends MCPTool {
+  constructor() { super('compound_exit', 'Leave the current nested sequence: pops back to the parent timeline.', {}) }
+  async run() {
+    if (!SESSION.seqStack || !SESSION.seqStack.length) throw new Error('already at the top-level timeline')
+    SESSION.seq = SESSION.seqStack.pop()
+    SESSION.selection = null
+    return SESSION.note('compound_exit', {}, { activeSequenceId: SESSION.seq.id || 'main' })
+  }
+}
+class UncompoundClip extends MCPTool {
+  constructor() { super('uncompound_clip', 'Reverse a compound: restores the original child clips into the active timeline (app: undo-registered, Ctrl+Z also reverses).', { id: 'compound clip id' }) }
+  async run({ id }) {
+    const s = seq()
+    const i = s.clips.findIndex((k) => k.id === id && k.kind === 'compound')
+    if (i < 0) throw new Error(`no compound ${id} in active sequence`)
+    const c = s.clips[i]
+    const kids = c.childSeq ? c.childSeq.clips : []
+    s.clips.splice(i, 1, ...kids)
+    SESSION.compounds = (SESSION.compounds || []).filter((k) => k.id !== id)
+    return SESSION.note('uncompound_clip', { id }, { ok: true, restored: kids.map(k => k.id) })
   }
 }
 class CompoundExpand extends MCPTool {
@@ -579,7 +636,7 @@ class CreateText extends MCPTool {
   }
 }
 class EditElement extends MCPTool {
-  constructor() { super('edit_element', 'Edit an existing element: pos/size/rot, mask, effects inside, blend, or convert to compound clip.', { clipId: '', patch: '{transform?,mask?,effects?,opacity?,blendMode?}', convert: 'compound|null' }) }
+  constructor() { super('edit_element', 'Edit an existing element: pos/size/rot, mask, effects inside, blend, or convert to compound clip.', { clipId: '', patch: '{transform?,mask?,effects?,opacity?,blendMode?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
   async run({ clipId, patch = {}, convert }) {
     const s = seq()
     const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
@@ -589,9 +646,11 @@ class EditElement extends MCPTool {
     if (patch.effects) c.effects = { ...c.effects, ...patch.effects }
     if (patch.opacity !== undefined) c.opacity = patch.opacity
     if (patch.blendMode) c.blendMode = patch.blendMode
+    if (patch.textStyle) c.textStyle = Object.assign({}, c.textStyle || {}, patch.textStyle)
+    if (patch.adjustment) c.adjustment = { ...(c.adjustment || { luts: [] }), ...patch.adjustment }
     let compounded = null
     if (convert === 'compound') compounded = { id: `compound-${c.id}`, memberIds: [c.id], nestedTrackCount: 1 }
-    return SESSION.note('edit_element', { clipId: c.id, patch, convert }, { clipId: c.id, compounded })
+    return SESSION.note('edit_element', { clipId: c.id, patch, convert }, { clipId: c.id, compounded, textStyle: c.textStyle, adjustment: c.adjustment })
   }
 }
 class Select extends MCPTool {
@@ -913,4 +972,4 @@ class FxRemove extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())

@@ -405,6 +405,77 @@ await registry.call('compound_rename', { id: ccQ.data.id, name: 'HeroComp2' })
 const ceQ = await registry.call('compound_expand', { id: ccQ.data.id })
 if (!ceQ.ok || ceQ.data.memberIds[0] !== 'clip-1') { console.error('FAIL compound expand', ceQ.data); fail++ }
 
+// ---- Board S: blend modes / text glow+shadow / padded compound / nest / demo edit ----
+const dumpS = async (name, t = 0.5) => {
+  const r2 = await registry.call('data_dump', { withImages: true, times: [t] })
+  if (!r2.ok || !r2.data.previews || !r2.data.previews[0]) { console.error('FAIL data_dump S', name); fail++; return null }
+  const b64 = r2.data.previews[0]['data:img'].split(',')[1]
+  fs.writeFileSync(`test_ans_result/evidence/S-${name}.png`, Buffer.from(b64, 'base64'))
+  const img = await loadK(Buffer.from(b64, 'base64'))
+  const cv = mkK(img.width, img.height)
+  const cx2 = cv.getContext('2d')
+  cx2.drawImage(img, 0, 0)
+  return cx2.getImageData(0, 0, img.width, img.height).data
+}
+const lumBox = (d, w, x0, x1, y0, y1) => { let s3 = 0, n3 = 0; for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { const i = (y * w + x) * 4; s3 += (d[i] + d[i + 1] + d[i + 2]) / 3; n3++ } return s3 / n3 }
+const diffPx = (a, b) => { let s4 = 0; for (let i = 0; i < a.length; i += 4) s4 += Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]); return s4 / (a.length / 4) }
+// 1. clip blend modes: see-through (screen) vs color-burn must composite differently
+await registry.call('select', { clipId: 'clip-2' })
+await registry.call('blend_set', { mode: 'screen' })
+const sScreen = await dumpS('blend-screen')
+await registry.call('blend_set', { mode: 'color-burn' })
+const sBurn = await dumpS('blend-burn')
+const sBlendDiff = (sScreen && sBurn) ? diffPx(sScreen, sBurn) : 0
+if (sBlendDiff < 6) { console.error('FAIL blend screen vs color-burn must differ', sBlendDiff.toFixed(2)); fail++ }
+await registry.call('blend_set', { mode: 'source-over' })
+// 2. text preset + explicit glow + Photoshop-model shadow + small keys with a custom curve
+const tS = await registry.call('create_text', { text: 'BOARD S', preset: 'bar', x: 0, y: -50 })
+const tId = tS.data.clipId
+await registry.call('select', { clipId: tId })
+const sTextBase = await dumpS('text-base')
+await registry.call('edit_element', { clipId: tId, patch: { textStyle: { glowColor: '#22d3ee', glowBlur: 26, glowMode: 'outward', shadowMode: 'outer', shadowColor: '#000000', shadowBlur: 8, shadowOffsetX: 5, shadowOffsetY: 5 } } })
+const sTextGlow = await dumpS('text-glowshadow')
+const sTextDiff = (sTextBase && sTextGlow) ? diffPx(sTextBase, sTextGlow) : 0
+if (sTextDiff < 3) { console.error('FAIL text glow+shadow must change pixels', sTextDiff.toFixed(2)); fail++ }
+await registry.call('keyframe_set', { property: 'opacity', time: 0.15, value: 0.35, interpolation: 'linear' })
+await registry.call('keyframe_set', { property: 'opacity', time: 0.55, value: 1, interpolation: 'custom', points: [[0.15, 0.35], [0.3, 0.9], [0.55, 1]] })
+// 3. oversized element + own LUT (forces isolated render) + compound + scale: corners must keep pixels
+await registry.call('select', { clipId: 'clip-2' })
+await registry.call('transform_set', { x: 0, y: 0, scale: 4 })
+await registry.call('edit_element', { clipId: 'clip-2', patch: { adjustment: { luts: [{ id: 'lut-qs', name: 'cyan-surge', builtin: 'cyan-surge', intensity: 1, enabled: true }] } } })
+const ccS = await registry.call('compound_clip_create', { ids: ['clip-2'], name: 'BigS', nest: true })
+const cidS = ccS.data.id
+await registry.call('select', { clipId: cidS })
+await registry.call('transform_set', { scale: 1.6 })
+const sComp = await dumpS('compound-scaled')
+if (!sComp) { console.error('FAIL compound dump missing'); fail++ }
+else {
+  const corners = lumBox(sComp, 320, 0, 48, 0, 48) + lumBox(sComp, 320, 272, 320, 132, 180)
+  if (corners < 4) { console.error('FAIL compound cutoff: scaled corners empty', corners.toFixed(2)); fail++ }
+}
+// 4. nested timeline enter/exit (double-click equivalent) + uncompound (Ctrl+Z-registered)
+const enS = await registry.call('compound_enter', { id: cidS })
+if (!enS.ok || !enS.data.activeSequenceId || enS.data.activeSequenceId === 'main') { console.error('FAIL compound_enter', enS.data); fail++ }
+const exS = await registry.call('compound_exit', {})
+if (!exS.ok || exS.data.activeSequenceId !== 'main') { console.error('FAIL compound_exit', exS.data); fail++ }
+const unS = await registry.call('uncompound_clip', { id: cidS })
+if (!unS.ok) { console.error('FAIL uncompound_clip', unS.data); fail++ }
+// 5. the requested edit: LUT pack grade + adjustment layer + image overlay at reduced opacity
+await registry.call('select', { clipId: 'clip-2' })
+const edS = await registry.call('edit_element', { clipId: 'clip-2', patch: { adjustment: { luts: [{ id: 'lut-demo', name: 'crimson-pulse', builtin: 'crimson-pulse', intensity: 0.8, enabled: true }] } } })
+if (!edS.ok || !edS.data?.adjustment?.luts?.length) { console.error('FAIL LUT pack grade not stored on clip', edS.ok); fail++ }
+const fcS = await registry.call('fx_catalog', { limit: 3 })
+const fxS = (fcS.data.entries || [])[0]
+if (fxS) await registry.call('fx_add', { catalogId: fxS.id, asLayer: true })
+const impS = await registry.call('import_media', { path: 'qa/shots/01-home.png', fit: 'cover', scale: 1 })
+const ovId = impS.data.clipId || 'clip-3'
+await registry.call('select', { clipId: ovId })
+await registry.call('transform_set', { opacity: 0.35 })
+await registry.call('blend_set', { mode: 'screen' })
+await dumpS('demo-frame')
+const tlS = await registry.call('timeline_screenshot', { out: 'test_ans_result/evidence/S-demo-edit.png' })
+if (!tlS.ok) { console.error('FAIL demo timeline_screenshot'); fail++ }
+
 const h = await registry.call('help', {})
 if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.data.tools && h.data.tools.length); fail++ }
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })
