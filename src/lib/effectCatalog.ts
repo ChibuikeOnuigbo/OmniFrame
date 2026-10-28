@@ -11,7 +11,8 @@ import type { ClipEffect } from '../types'
  * Counts are real: `getFxCatalog().length` is what the UI prints.
  */
 
-export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'retro' | 'light' | 'key'
+export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'retro' | 'light' | 'key' | 'Glitch NG'
+
 
 export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
   { id: 'all', label: 'All' },
@@ -303,6 +304,13 @@ function buildCatalog(): FxCatalogEntry[] {
     add(`lightovl-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Overlay`, 'light', 'AE tutorial corpus light overlays', { overlayFx: fx as string, overlayStrength: s as number }))
   ;[['feathers', 0.6], ['embers', 0.5], ['dust', 0.5], ['bokeh', 0.5], ['sparkles', 0.55], ['snow', 0.6], ['rain', 0.5], ['petals', 0.5]].forEach(([fx, d], i) =>
     add(`part-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Bed`, 'light', 'AE particle beds (deep-study corpus)', { particleFx: fx as string, particleDensity: d as number }))
+  ;(['digital-slice', 'rgb-shock', 'vhs-tear', 'datamosh-inspired', 'scan-burst', 'phantom-echo', 'neon-corrupt', 'pixel-collapse', 'vector-edge', 'spectral-logo'] as const).forEach((fam) =>
+    add(`ng-${fam}`, `NG ${fam}`, 'Glitch NG', 'OmniFrame_Glitch_Audit pack family (deterministic RGBA kernel glitchNG.ts)', {
+      ngFamily: fam, ngSeed: 8156, ngPrimary: '#a568ff', ngSecondary: '#15e4f3',
+      ngLead: 0.0, ngAttack: 0.15, ngHold: 1.2, ngDecay: 0.3,
+      ngSliceAmp: 12, ngSliceDensity: 10, ngChroma: 4, ngScanOpacity: 0.18, ngScanSpacing: 3,
+      ngNoise: 0.09, ngBlock: 18, ngBlockRate: 0.09,
+    }))
 
   // ---- Board L: top backlog names converted into REAL engines ----
   for (const seg of [4, 6, 8, 12]) {

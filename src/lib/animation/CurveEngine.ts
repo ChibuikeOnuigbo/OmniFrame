@@ -23,6 +23,12 @@ export type InterpolationType =
   | 'rebound-in'
   | 'rebound-out'
   | 'physical'
+  | 'sine-in' | 'sine-out' | 'sine-in-out' | 'quad-in' | 'quad-out' | 'quad-in-out'
+  | 'cubic-in-out' | 'quart-in' | 'quart-out' | 'quart-in-out' | 'quint-in' | 'quint-out' | 'quint-in-out'
+  | 'expo-in' | 'expo-out' | 'expo-in-out' | 'circ-in' | 'circ-out' | 'circ-in-out'
+  | 'back-in' | 'back-out' | 'back-in-out' | 'elastic-in' | 'elastic-out' | 'elastic-in-out'
+  | 'bounce-in' | 'bounce-out' | 'bounce-in-out' | 'smoothstep' | 'smootherstep' | 'hold'
+  | 'spring-soft' | 'spring-wild' | 'anticipate-settle'
   | 'custom'
 
 export type ExtrapolationMode = 'constant' | 'linear' | 'cycle' | 'ping-pong'
@@ -198,111 +204,103 @@ export function customProgress(points: { x: number; y: number }[], u: number): n
 /**
  * Standard Easing Formulas
  */
+/** Canonical value-curves ported from the Engine Repair Pack tools/curves.py
+ * (deterministic, endpoints pinned): full Penner family + normalized
+ * underdamped-spring rebounds + equal-contact decaying bounce + springs.
+ * bounce-param maps the uploaded Easing-Curve popup params
+ * (steps->cycles, bounciness->decay, firstBounce->amplitude). */
+function springRaw(u: number, damping = 6, frequency = 11): number {
+  return 1 - Math.exp(-damping * u) * (Math.cos(frequency * u) + (damping / frequency) * Math.sin(frequency * u))
+}
+function normSpring(u: number, damping = 6, frequency = 11): number {
+  const d = springRaw(1, damping, frequency)
+  return d === 0 ? u : springRaw(u, damping, frequency) / d
+}
+function bounceOutEqual(t: number, contact = 0.52, cycles = 3, amplitude = 0.24, decay = 0.5): number {
+  if (t <= contact) return 1 - (1 - t / contact) ** 2
+  const interval = (1 - contact) / cycles
+  const i = Math.min(cycles - 1, Math.floor((t - contact) / interval))
+  const u = (t - contact - i * interval) / interval
+  return 1 - amplitude * decay ** i * Math.sin(Math.PI * u) ** 2
+}
+function elasticOut(t: number): number {
+  if (t === 0 || t === 1) return t
+  return 2 ** (-10 * t) * Math.sin((10 * t - 0.75) * ((2 * Math.PI) / 3)) + 1
+}
+function backIn(t: number): number {
+  const c = 1.70158
+  return (c + 1) * t * t * t - c * t * t
+}
 export function evaluateEasingProgress(u: number, interpolation: InterpolationType, ep?: KeyframeNode['easeParams']): number {
-  const clampedU = Math.max(0, Math.min(1, u))
-
+  const t = Math.max(0, Math.min(1, u))
+  if (t === 0) return 0
+  if (t === 1) return 1
+  const cycles = Math.max(1, Math.round(ep?.steps ?? 3))
+  const decay = Math.max(0.05, Math.min(0.98, ep?.bounciness ?? 0.5))
+  const amp = Math.max(0.02, Math.min(0.9, ep?.firstBounce ?? 0.24))
+  const ov = Math.max(0.01, Math.min(0.9, ep?.overshoot ?? 0.15))
+  const damp = ep?.damping ?? 5.5
+  const freq = ep?.freq ?? 11
+  const bo = (x: number) => bounceOutEqual(x, 0.52, cycles, amp, decay)
   switch (interpolation) {
-    case 'constant':
-      return 0
-    case 'linear':
-      return clampedU
-    case 'cubic-in':
-      return clampedU * clampedU * clampedU
-    case 'cubic-out': {
-      const inv = 1 - clampedU
-      return 1 - inv * inv * inv
+    case 'constant': return 0
+    case 'linear': return t
+    case 'smoothstep': return t * t * (3 - 2 * t)
+    case 'smootherstep': return t * t * t * (t * (t * 6 - 15) + 10)
+    case 'hold': return 0
+    case 'sine-in': return 1 - Math.cos((t * Math.PI) / 2)
+    case 'sine-out': return Math.sin((t * Math.PI) / 2)
+    case 'sine-in-out': return (1 - Math.cos(Math.PI * t)) / 2
+    case 'ease-in': case 'quad-in': return t * t
+    case 'ease-out': case 'quad-out': return 1 - (1 - t) ** 2
+    case 'ease-in-out': case 'quad-in-out': return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2
+    case 'cubic-in': return t ** 3
+    case 'cubic-out': return 1 - (1 - t) ** 3
+    case 'cubic-in-out': return t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2
+    case 'quart-in': return t ** 4
+    case 'quart-out': return 1 - (1 - t) ** 4
+    case 'quart-in-out': return t < 0.5 ? 8 * t ** 4 : 1 - (-2 * t + 2) ** 4 / 2
+    case 'quint-in': return t ** 5
+    case 'quint-out': return 1 - (1 - t) ** 5
+    case 'quint-in-out': return t < 0.5 ? 16 * t ** 5 : 1 - (-2 * t + 2) ** 5 / 2
+    case 'expo-in': return 2 ** (10 * (t - 1))
+    case 'expo-out': return 1 - 2 ** (-10 * t)
+    case 'expo-in-out': return t < 0.5 ? 2 ** (20 * t - 10) / 2 : (2 - 2 ** (-20 * t + 10)) / 2
+    case 'circ-in': return 1 - Math.sqrt(1 - t * t)
+    case 'circ-out': return Math.sqrt(1 - (t - 1) ** 2)
+    case 'circ-in-out': return t < 0.5 ? (1 - Math.sqrt(1 - (2 * t) ** 2)) / 2 : (Math.sqrt(1 - (-2 * t + 2) ** 2) + 1) / 2
+    case 'back': case 'back-in': return backIn(t)
+    case 'back-out': return 1 - backIn(1 - t)
+    case 'back-in-out': {
+      const c = 1.70158 * 1.525
+      return t < 0.5
+        ? ((2 * t) ** 2 * ((c + 1) * 2 * t - c)) / 2
+        : ((2 * t - 2) ** 2 * ((c + 1) * (2 * t - 2) + c) + 2) / 2
     }
-    case 'ease-in':
-      return clampedU * clampedU
-    case 'ease-out': {
-      const inv = 1 - clampedU
-      return 1 - inv * inv
-    }
-    case 'ease-in-out':
-      return clampedU < 0.5
-        ? 2 * clampedU * clampedU
-        : 1 - Math.pow(-2 * clampedU + 2, 2) / 2
-    case 'back': {
-      const c1 = 1.70158
-      const c3 = c1 + 1
-      return c3 * clampedU * clampedU * clampedU - c1 * clampedU * clampedU
-    }
-    case 'bounce': {
-      let n1 = 7.5625
-      let d1 = 2.75
-      let x = clampedU
-      if (x < 1 / d1) {
-        return n1 * x * x
-      } else if (x < 2 / d1) {
-        return n1 * (x -= 1.5 / d1) * x + 0.75
-      } else if (x < 2.5 / d1) {
-        return n1 * (x -= 2.25 / d1) * x + 0.9375
-      } else {
-        return n1 * (x -= 2.625 / d1) * x + 0.984375
-      }
-    }
-    case 'elastic': {
-      if (clampedU === 0) return 0
-      if (clampedU === 1) return 1
-      return (
-        -Math.pow(2, 10 * clampedU - 10) *
-        Math.sin((clampedU * 10 - 10.75) * ((2 * Math.PI) / 3))
-      )
-    }
-    case 'bounce-param':
-    case 'bounce-uniform': {
-      // Damped multi-arc bounce (solenoid-coil look): rise to 1, then `steps`
-      // valleys of height firstBounce * bounciness^i. Arc widths follow
-      // sqrt(height) (physical fall time) unless uniform widths requested.
-      const steps = Math.max(1, Math.round(ep?.steps ?? 3))
-      const b = Math.max(0.05, Math.min(0.98, ep?.bounciness ?? 0.7))
-      const h0 = Math.max(0.02, Math.min(0.9, ep?.firstBounce ?? 0.2))
-      const hs = Array.from({ length: steps }, (_, i) => h0 * Math.pow(b, i))
-      const rise = 0.3
-      const ws = hs.map(h => (interpolation === 'bounce-uniform' ? 1 : Math.sqrt(h)))
-      const wSum = ws.reduce((a, c) => a + c, 0)
-      const arcTotal = 1 - rise
-      if (clampedU <= rise) {
-        const s2 = clampedU / rise
-        return s2 * s2 * (3 - 2 * s2)
-      }
-      let acc = rise
-      for (let i = 0; i < steps; i++) {
-        const w = (ws[i] / wSum) * arcTotal
-        if (clampedU <= acc + w || i === steps - 1) {
-          const s2 = Math.max(0, Math.min(1, (clampedU - acc) / w))
-          return 1 - hs[i] * Math.sin(Math.PI * s2) ** 2
-        }
-        acc += w
-      }
-      return 1
-    }
-    case 'rebound-out': {
-      // Fast rise, single overshoot peak (~overshoot above 1 near u~0.35),
-      // gentle settle back to 1 (uploaded 'Rebound Out' graph ref).
-      const ov = Math.max(0.01, Math.min(0.6, ep?.overshoot ?? 0.15))
-      const bell = (x: number) => Math.sin(Math.PI * Math.pow(x, 0.62)) * Math.pow(1 - x, 1.15)
-      const norm = bell(0.35) || 1
-      const base = 1 - Math.pow(1 - clampedU, 2.2)
-      return base + (ov * bell(clampedU)) / norm
-    }
+    case 'elastic': case 'elastic-out': return elasticOut(t)
+    case 'elastic-in': return 1 - elasticOut(1 - t)
+    case 'elastic-in-out': return t < 0.5 ? (1 - elasticOut(1 - 2 * t)) / 2 : (1 + elasticOut(2 * t - 1)) / 2
+    case 'bounce': case 'bounce-out': case 'bounce-param': return bo(t)
+    case 'bounce-in': return 1 - bo(1 - t)
+    case 'bounce-in-out': return t < 0.5 ? (1 - bo(1 - 2 * t)) / 2 : (1 + bo(2 * t - 1)) / 2
+    case 'bounce-uniform': return bounceOutEqual(t, 0.52, cycles, amp, decay)
+    case 'rebound-out': return normSpring(t, damp, freq)
     case 'rebound-in': {
-      // Anticipation dip below 0 first, then strong ease-in rise (mirror of out).
-      const ov = Math.max(0.01, Math.min(0.6, ep?.overshoot ?? 0.15))
-      const dip = Math.sin(Math.PI * Math.pow(1 - clampedU, 0.62)) * Math.pow(clampedU, 1.15)
-      return clampedU * clampedU * clampedU - ov * dip * 2.2
+      // Anticipation dip BELOW 0, then steep launch that overshoots past 1
+      // and regresses with damped up-down corrections (uploaded refs: both
+      // rebounds move more than intended, then correct themselves).
+      if (t < 0.38) { const x = t / 0.38; return -ov * (x * x * (3 - 2 * x)) }
+      return -ov + (1 + ov) * normSpring((t - 0.38) / 0.62, damp, freq)
     }
-    case 'physical': {
-      // Underdamped spring step response: PHYSICAL freq,damping families.
-      const f = Math.max(0.5, ep?.freq ?? 3)
-      const d = Math.max(0.5, ep?.damping ?? 3)
-      if (clampedU <= 0) return 0
-      if (clampedU >= 1) return 1
-      return 1 - Math.exp(-d * clampedU) * Math.cos(f * Math.PI * clampedU)
+    case 'physical': case 'spring-soft': return normSpring(t, ep?.damping ?? 9, ep?.freq ?? 10)
+    case 'spring-wild': return normSpring(t, 3.5, 16)
+    case 'anticipate-settle': {
+      if (t < 0.38) { const x = t / 0.38; return -0.15 * (x * x * (3 - 2 * x)) }
+      return -0.15 + 1.15 * normSpring((t - 0.38) / 0.62, 6, 10)
     }
     case 'bezier':
     default:
-      return clampedU
+      return t
   }
 }
 

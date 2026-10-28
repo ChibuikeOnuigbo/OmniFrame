@@ -978,6 +978,7 @@ function MyEffects() {
 /** CAT colour dots so sub-tab scanning works without prose. */
 const CAT_DOT: Record<FxCat, string> = {
   glitch: 'bg-fuchsia-400',
+  'Glitch NG': 'bg-cyan-300',
   motion: 'bg-amber-400',
   color: 'bg-emerald-400',
   blur: 'bg-sky-400',

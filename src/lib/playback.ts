@@ -48,6 +48,7 @@ import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
 import { applyClipFxLayers, hasClipFxLayers, drawReplaceBg, drawParticleFx } from './particleFx'
 import { evalNumKeys, evalColorKeys, type CharRange } from './textRuns'
+import { applyGlitchNG, hasNg, type NgEffect } from './glitchNG'
 import { inheritedWorld } from './parentChain'
 import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
@@ -662,6 +663,7 @@ export class PreviewEngine {
         }
         if (stack.length) applyLutStackToCanvas(graded, stack)
         if (hasPixelGrade(effects)) applyPixelGrade(graded, effects!, Math.round(time * 24))
+        if (hasNg(effects as NgEffect)) applyGlitchNG(graded, effects as NgEffect, time)
         if (hasClipFxLayers(effects)) applyClipFxLayers(graded, effects!, time)
         this.applyAdjustmentMask(graded, clip.adjustmentMask)
         ctx.save()
@@ -690,6 +692,7 @@ export class PreviewEngine {
     }
     if (stack.length) applyLutStackToCanvas(target, stack)
     if (hasPixelGrade(effects)) applyPixelGrade(target, effects!, Math.round(time * 24))
+    if (hasNg(effects as NgEffect)) applyGlitchNG(target, effects as NgEffect, time)
     if (hasClipFxLayers(effects)) applyClipFxLayers(target, effects!, time)
     applyLightComposite(ctx, this.width, this.height, effects)
     return pending
@@ -1985,6 +1988,7 @@ export class PreviewEngine {
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
       if (hasPixelGrade(fxEff)) applyPixelGrade(scratch, fxEff!, Math.round(time * 24))
+      if (hasNg(fxEff as NgEffect)) applyGlitchNG(scratch, fxEff as NgEffect, time)
       if (hasClipFxLayers(fxEff)) applyClipFxLayers(scratch, fxEff!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of

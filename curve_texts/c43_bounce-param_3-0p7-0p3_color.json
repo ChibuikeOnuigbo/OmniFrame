@@ -7,7 +7,7 @@
   "out": "/home/user/OmniFrame/curve_texts/c43_bounce-param_3-0p7-0p3_color.mp4",
   "frames": 24,
   "fps": 12,
-  "size": 29015,
+  "size": 24064,
   "mode": "omniframe",
   "recipe": [
    {
@@ -60,53 +60,7 @@
     },
     "out": {
      "clipId": "text-2",
-     "presetApplied": "plain",
-     "charMetrics": [
-      {
-       "pos": 0,
-       "ch": "C",
-       "x": 25.4,
-       "y": 27.8,
-       "w": 33.5,
-       "h": 48
-      },
-      {
-       "pos": 1,
-       "ch": "U",
-       "x": 58.9,
-       "y": 27.8,
-       "w": 35.1,
-       "h": 48
-      },
-      {
-       "pos": 2,
-       "ch": "R",
-       "x": 94.1,
-       "y": 27.8,
-       "w": 33.4,
-       "h": 48
-      },
-      {
-       "pos": 3,
-       "ch": "V",
-       "x": 127.4,
-       "y": 27.8,
-       "w": 32.8,
-       "h": 48
-      },
-      {
-       "pos": 4,
-       "ch": "E",
-       "x": 160.3,
-       "y": 27.8,
-       "w": 30.3,
-       "h": 48
-      }
-     ],
-     "project": {
-      "w": 360,
-      "h": 480
-     }
+     "presetApplied": "plain"
     }
    },
    {
@@ -116,38 +70,6 @@
     },
     "out": {
      "selected": "text-2"
-    }
-   },
-   {
-    "tool": "keyframe_set",
-    "params": {
-     "property": "charStyle",
-     "channel": "0.color",
-     "time": 0.2,
-     "value": "#ffffff",
-     "interpolation": "linear"
-    },
-    "out": {
-     "clipId": "text-2",
-     "range": 0,
-     "prop": "color",
-     "keys": 1
-    }
-   },
-   {
-    "tool": "keyframe_set",
-    "params": {
-     "property": "charStyle",
-     "channel": "0.color",
-     "time": 1.6,
-     "value": "#ff2d55",
-     "interpolation": "bounce-param"
-    },
-    "out": {
-     "clipId": "text-2",
-     "range": 0,
-     "prop": "color",
-     "keys": 2
     }
    },
    {

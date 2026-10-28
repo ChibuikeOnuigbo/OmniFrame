@@ -87,6 +87,7 @@ for (let i = 0; i < specs.length; i++) {
 fs.writeFileSync('curve_texts/specs.json', JSON.stringify(curveLog, null, 1))
 console.log('CURVES DONE', curveLog.length)
 
+if (process.env.CURVES_ONLY) { console.log('CURVES ONLY DONE'); process.exit(0) }
 // ---------------- 2) preset + char-demo battery ----------------
 const presetIds = ['plain', 'inv-synthwave-clean', 'inv-synthwave-embers', 'inv-synthwave-rain', 'inv-synthwave-snow', 'inv-synthwave-sparkles', 'inv-synthwave-bokeh', 'inv-synthwave-dust', 'inv-synthwave-petals',
   'inv-aurora-clean', 'inv-aurora-embers', 'inv-aurora-rain', 'inv-aurora-snow', 'inv-aurora-sparkles', 'inv-aurora-bokeh', 'inv-aurora-dust', 'inv-aurora-petals',

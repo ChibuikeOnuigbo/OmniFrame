@@ -108,6 +108,7 @@ export function applyClipLutsK(sx, w, h, luts) {
 
 export const CE = await loadAppTs('src/lib/animation/CurveEngine.ts')
 export const PG = await loadAppTs('src/lib/pixelGrade.ts')
+const NG = await loadAppTs('src/lib/glitchNG.ts')
 export const DE = await loadAppTs('src/lib/drawingEngine.ts')
 // Paint-canvas parity hook: playback.ts composites paint layers via
 // renderAllPaintLayers; the headless renderer must do the same or data_dump
@@ -205,6 +206,7 @@ export function applyEffects(x, clip, w, h, t = 0) {
     back.restore()
   }
   PG.applyPixelGrade(x.canvas, eff, Math.round(t * 24))
+  NG.applyGlitchNG(x.canvas, eff, t)
   if (PRT.hasClipFxLayers(eff)) PRT.applyClipFxLayers(x.canvas, eff, t)
   applyLightCompositeK(x, w, h, eff)
 }
@@ -283,6 +285,7 @@ function drawSeq(x, seq, t) {
         x.canvas.getContext('2d').drawImage(tmp, 0, 0)
       }
       PG.applyPixelGrade(x.canvas, aEff, Math.round(t * 24))
+      NG.applyGlitchNG(x.canvas, aEff, t)
       if (PRT.hasClipFxLayers(aEff)) PRT.applyClipFxLayers(x.canvas, aEff, t)
       applyLightCompositeK(x.canvas.getContext('2d'), seq.w, seq.h, aEff)
       continue

@@ -1,0 +1,317 @@
+{
+ "linear": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "sine-in": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "sine-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "sine-in-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "quad-in": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "quad-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "quad-in-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "cubic-in": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "cubic-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "cubic-in-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "quart-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "quint-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "expo-in": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "expo-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "circ-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "back-in": {
+  "max": 1,
+  "min": -0.1,
+  "argmax": 1,
+  "argmin": 0.42,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": false
+ },
+ "back-out": {
+  "max": 1.1,
+  "min": 0,
+  "argmax": 0.58,
+  "argmin": 0,
+  "crossings1": 1,
+  "peaksAt1": 1,
+  "monotonic": false
+ },
+ "back-in-out": {
+  "max": 1.1002,
+  "min": -0.1002,
+  "argmax": 0.759,
+  "argmin": 0.241,
+  "crossings1": 1,
+  "peaksAt1": 1,
+  "monotonic": false
+ },
+ "elastic-in": {
+  "max": 1,
+  "min": -0.3731,
+  "argmax": 1,
+  "argmin": 0.865,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": false
+ },
+ "elastic-out": {
+  "max": 1.3731,
+  "min": 0,
+  "argmax": 0.135,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 4,
+  "monotonic": false
+ },
+ "elastic-in-out": {
+  "max": 1.1865,
+  "min": -0.1865,
+  "argmax": 0.567,
+  "argmin": 0.433,
+  "crossings1": 7,
+  "peaksAt1": 4,
+  "monotonic": false
+ },
+ "bounce-in": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": false
+ },
+ "bounce-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 0.52,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 3,
+  "monotonic": false
+ },
+ "bounce-in-out": {
+  "max": 1,
+  "min": 0,
+  "argmax": 0.76,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 3,
+  "monotonic": false
+ },
+ "bounce-param": {
+  "max": 1,
+  "min": 0,
+  "argmax": 0.52,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 3,
+  "monotonic": false
+ },
+ "bounce-uniform": {
+  "max": 1,
+  "min": 0,
+  "argmax": 0.52,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 4,
+  "monotonic": false
+ },
+ "rebound-in": {
+  "max": 1.2363,
+  "min": -0.15,
+  "argmax": 0.557,
+  "argmin": 0.38,
+  "crossings1": 3,
+  "peaksAt1": 2,
+  "monotonic": false
+ },
+ "rebound-out": {
+  "max": 1.2054,
+  "min": 0,
+  "argmax": 0.286,
+  "argmin": 0,
+  "crossings1": 3,
+  "peaksAt1": 2,
+  "monotonic": false
+ },
+ "physical": {
+  "max": 1.2054,
+  "min": 0,
+  "argmax": 0.286,
+  "argmin": 0,
+  "crossings1": 3,
+  "peaksAt1": 2,
+  "monotonic": false
+ },
+ "spring-soft": {
+  "max": 1.059,
+  "min": 0,
+  "argmax": 0.314,
+  "argmin": 0,
+  "crossings1": 3,
+  "peaksAt1": 2,
+  "monotonic": false
+ },
+ "spring-wild": {
+  "max": 1.458,
+  "min": 0,
+  "argmax": 0.196,
+  "argmin": 0,
+  "crossings1": 5,
+  "peaksAt1": 3,
+  "monotonic": false
+ },
+ "anticipate-settle": {
+  "max": 1.1708,
+  "min": -0.15,
+  "argmax": 0.575,
+  "argmin": 0.38,
+  "crossings1": 3,
+  "peaksAt1": 2,
+  "monotonic": false
+ },
+ "smoothstep": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "smootherstep": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ },
+ "custom": {
+  "max": 1,
+  "min": 0,
+  "argmax": 1,
+  "argmin": 0,
+  "crossings1": 0,
+  "peaksAt1": 0,
+  "monotonic": true
+ }
+}
