@@ -43,10 +43,9 @@ for (let i = 0; i < cuts.length; i++) {
   await step('clip_stretch', { clipId: bd.data.clipId, duration: CUT })
   await step('clip_move_time', { clipId: bd.data.clipId, start })
   await step('select', { clipId: bd.data.clipId })
-  await step('fx_add', { catalogId: 'edgeglow-ember' })
+  await step('fx_add', { clipId: bd.data.clipId, catalogId: 'edgeglow-ember', params: { edgeGlowColor: i % 2 ? '#22d3ee' : '#ff2d55' } })
   // study-driven tune: MONTAGEM grade = crimson bed + cyan rims, not amber wash
-  await step('edit_element', { clipId: bd.data.clipId, effect: { edgeGlowColor: i % 2 ? '#22d3ee' : '#ff2d55' } })
-  await step('edit_element', { clipId: bg.data.clipId, effect: { temp: -0.18, tint: 0.10, sat: 1.18, contrast: 1.10 } })
+  await step('edit_element', { clipId: bg.data.clipId, patch: { effects: { temp: -0.18, tint: 0.10, sat: 1.18, contrast: 1.10 } } })
   await step('edit_element', { clipId: bd.data.clipId, patch: { adjustment: { luts: [{ id: 'bd', builtin: c0.lut, name: c0.lut, intensity: 1, enabled: true }] } } })
   // whip-pop on the band at cut start
   await step('keyframe_set', { property: 'scale', channel: 'X', time: start + 0.03, value: 1.14, interpolation: 'linear' })

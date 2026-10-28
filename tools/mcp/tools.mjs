@@ -648,7 +648,33 @@ class CreateText extends MCPTool {
     const m = await loadAppTs('src/lib/textPresets.ts')
     const def = m.TEXT_PRESETS.find(p => p.id === preset) || m.TEXT_PRESETS[0]
     const s = seq()
-    const clip = makeClip({ id: `text-${s.clips.length + 1}`, name: `text:${text}`, asset: `text:${preset}`, natW: s.w * 0.6 * scale, natH: s.h * 0.2 * scale, duration: s.duration, draw: (sx, w, h) => { sx.fillStyle = (def.style && def.style.color) || '#ffffff'; sx.font = `bold ${Math.round(h * 0.5)}px ${(def.style && def.style.fontFamily) || 'sans-serif'}`; sx.textAlign = 'center'; sx.fillText(text, w / 2, h * 0.65); sx.textAlign = 'left' } })
+    const clip = makeClip({ id: `text-${s.clips.length + 1}`, name: `text:${text}`, asset: `text:${preset}`, natW: s.w * 0.6 * scale, natH: s.h * 0.2 * scale, duration: s.duration, draw: (sx, w, h) => {
+        // Live-read clip.textStyle so headless edit_element textStyle edits
+        // (fontSize/family/color/weight/italic/tracking) actually repaint —
+        // the old baked closure ignored them (found 2026-10-28, Board S cont.6).
+        const ts = clip.textStyle || {}
+        const ds = def.style || {}
+        const k = h / (s.h * 0.2 * scale)
+        const size = ts.fontSize ? ts.fontSize * k : h * 0.5
+        const fam = ts.fontFamily || ds.fontFamily || 'sans-serif'
+        const weight = (ts.bold ?? ds.bold ?? true) ? 'bold ' : ''
+        const ital = (ts.italic ?? ds.italic) ? 'italic ' : ''
+        sx.fillStyle = ts.color || ds.color || '#ffffff'
+        sx.font = `${ital}${weight}${Math.round(size)}px ${fam}`
+        const ls = (ts.letterSpacing || 0) * k
+        if (ls > 0.5) {
+          const chars = [...text]
+          const widths = chars.map(ch => sx.measureText(ch).width)
+          const total = widths.reduce((a, b) => a + b, 0) + ls * (chars.length - 1)
+          let cx = w / 2 - total / 2
+          sx.textAlign = 'left'
+          chars.forEach((ch, ci) => { sx.fillText(ch, cx, h * 0.65); cx += widths[ci] + ls })
+        } else {
+          sx.textAlign = 'center'
+          sx.fillText(text, w / 2, h * 0.65)
+        }
+        sx.textAlign = 'left'
+      } })
     clip.transform.x = x; clip.transform.y = y; clip.textPreset = def.id
     s.addClip(clip)
     SESSION.selection = clip
