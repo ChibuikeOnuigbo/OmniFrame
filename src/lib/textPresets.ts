@@ -318,6 +318,13 @@ function makeTypewriterFormes(): TextPresetDef[] {
 
 export const TEXT_PRESETS: TextPresetDef[] = [
   {
+    id: 'plain', name: 'Normal Text', category: 'Basic', source: 'Board T mandate: plain text is FIRST in every preset list', ideal: [1, 30], demo: 'Text',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: false, fontSize: 48, color: '#ffffff' }, o)
+      return pushClips([c])
+    },
+  },
+  {
     id: 'retro-traditional', name: 'Retro Glitch (Traditional)', category: 'Retro / Glitch', source: 'Alight Motion — Noelle Tutorials (UxfwndLF8cY)', ideal: [4, 10], demo: 'NOELLE',
     build: (text, o) => buildRetroText({ text, sub: '', color: o.color, seed: o.seed, method: 'traditional', duration: o.duration }),
   },
@@ -765,6 +772,390 @@ export const TEXT_PRESETS: TextPresetDef[] = [
       withKeys(c, 'opacity', [[0, 0], [d, 0], [d + 0.04, 1], [ctx.dur - 0.25, 1], [ctx.dur, 0]])
       return [c]
     }),
+  },
+  {
+    id: 'inv-synthwave-none', name: 'Synthwave Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffffff', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'none', insideTint: '#ffffff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-embers', name: 'Synthwave Embers Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ff9a4d', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'embers', insideTint: '#ff9a4d', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-rain', name: 'Synthwave Rain Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#9fd8ff', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'rain', insideTint: '#9fd8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-snow', name: 'Synthwave Snow Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#e8f6ff', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'snow', insideTint: '#e8f6ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-sparkles', name: 'Synthwave Sparkles Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#22d3ee', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'sparkles', insideTint: '#22d3ee', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-bokeh', name: 'Synthwave Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffd166', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'bokeh', insideTint: '#ffd166', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-dust', name: 'Synthwave Dust Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#c9b8ff', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'dust', insideTint: '#c9b8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-synthwave-petals', name: 'Synthwave Petals Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffb3c8', glowBlur: 12, insideBed: 'synthwave', insideParticle: 'petals', insideTint: '#ffb3c8', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-none', name: 'Aurora Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffffff', glowBlur: 12, insideBed: 'aurora', insideParticle: 'none', insideTint: '#ffffff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-embers', name: 'Aurora Embers Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ff9a4d', glowBlur: 12, insideBed: 'aurora', insideParticle: 'embers', insideTint: '#ff9a4d', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-rain', name: 'Aurora Rain Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#9fd8ff', glowBlur: 12, insideBed: 'aurora', insideParticle: 'rain', insideTint: '#9fd8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-snow', name: 'Aurora Snow Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#e8f6ff', glowBlur: 12, insideBed: 'aurora', insideParticle: 'snow', insideTint: '#e8f6ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-sparkles', name: 'Aurora Sparkles Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#22d3ee', glowBlur: 12, insideBed: 'aurora', insideParticle: 'sparkles', insideTint: '#22d3ee', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-bokeh', name: 'Aurora Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffd166', glowBlur: 12, insideBed: 'aurora', insideParticle: 'bokeh', insideTint: '#ffd166', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-dust', name: 'Aurora Dust Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#c9b8ff', glowBlur: 12, insideBed: 'aurora', insideParticle: 'dust', insideTint: '#c9b8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-aurora-petals', name: 'Aurora Petals Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffb3c8', glowBlur: 12, insideBed: 'aurora', insideParticle: 'petals', insideTint: '#ffb3c8', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-none', name: 'Grid Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffffff', glowBlur: 12, insideBed: 'grid', insideParticle: 'none', insideTint: '#ffffff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-embers', name: 'Grid Embers Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ff9a4d', glowBlur: 12, insideBed: 'grid', insideParticle: 'embers', insideTint: '#ff9a4d', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-rain', name: 'Grid Rain Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#9fd8ff', glowBlur: 12, insideBed: 'grid', insideParticle: 'rain', insideTint: '#9fd8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-snow', name: 'Grid Snow Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#e8f6ff', glowBlur: 12, insideBed: 'grid', insideParticle: 'snow', insideTint: '#e8f6ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-sparkles', name: 'Grid Sparkles Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#22d3ee', glowBlur: 12, insideBed: 'grid', insideParticle: 'sparkles', insideTint: '#22d3ee', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-bokeh', name: 'Grid Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffd166', glowBlur: 12, insideBed: 'grid', insideParticle: 'bokeh', insideTint: '#ffd166', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-dust', name: 'Grid Dust Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#c9b8ff', glowBlur: 12, insideBed: 'grid', insideParticle: 'dust', insideTint: '#c9b8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-grid-petals', name: 'Grid Petals Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffb3c8', glowBlur: 12, insideBed: 'grid', insideParticle: 'petals', insideTint: '#ffb3c8', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-none', name: 'Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffffff', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'none', insideTint: '#ffffff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-embers', name: 'Bokeh Embers Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ff9a4d', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'embers', insideTint: '#ff9a4d', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-rain', name: 'Bokeh Rain Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#9fd8ff', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'rain', insideTint: '#9fd8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-snow', name: 'Bokeh Snow Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#e8f6ff', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'snow', insideTint: '#e8f6ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-sparkles', name: 'Bokeh Sparkles Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#22d3ee', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'sparkles', insideTint: '#22d3ee', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-bokeh', name: 'Bokeh Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffd166', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'bokeh', insideTint: '#ffd166', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-dust', name: 'Bokeh Dust Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#c9b8ff', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'dust', insideTint: '#c9b8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-bokeh-petals', name: 'Bokeh Petals Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffb3c8', glowBlur: 12, insideBed: 'bokeh', insideParticle: 'petals', insideTint: '#ffb3c8', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-none', name: 'Sunset Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffffff', glowBlur: 12, insideBed: 'sunset', insideParticle: 'none', insideTint: '#ffffff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-embers', name: 'Sunset Embers Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ff9a4d', glowBlur: 12, insideBed: 'sunset', insideParticle: 'embers', insideTint: '#ff9a4d', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-rain', name: 'Sunset Rain Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#9fd8ff', glowBlur: 12, insideBed: 'sunset', insideParticle: 'rain', insideTint: '#9fd8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-snow', name: 'Sunset Snow Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#e8f6ff', glowBlur: 12, insideBed: 'sunset', insideParticle: 'snow', insideTint: '#e8f6ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-sparkles', name: 'Sunset Sparkles Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#22d3ee', glowBlur: 12, insideBed: 'sunset', insideParticle: 'sparkles', insideTint: '#22d3ee', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-bokeh', name: 'Sunset Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffd166', glowBlur: 12, insideBed: 'sunset', insideParticle: 'bokeh', insideTint: '#ffd166', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-dust', name: 'Sunset Dust Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#c9b8ff', glowBlur: 12, insideBed: 'sunset', insideParticle: 'dust', insideTint: '#c9b8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-sunset-petals', name: 'Sunset Petals Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffb3c8', glowBlur: 12, insideBed: 'sunset', insideParticle: 'petals', insideTint: '#ffb3c8', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-none', name: 'Studio Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffffff', glowBlur: 12, insideBed: 'studio', insideParticle: 'none', insideTint: '#ffffff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-embers', name: 'Studio Embers Inside', category: 'In-Video Text / Fire', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ff9a4d', glowBlur: 12, insideBed: 'studio', insideParticle: 'embers', insideTint: '#ff9a4d', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-rain', name: 'Studio Rain Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#9fd8ff', glowBlur: 12, insideBed: 'studio', insideParticle: 'rain', insideTint: '#9fd8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-snow', name: 'Studio Snow Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#e8f6ff', glowBlur: 12, insideBed: 'studio', insideParticle: 'snow', insideTint: '#e8f6ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-sparkles', name: 'Studio Sparkles Inside', category: 'In-Video Text / Neon', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#22d3ee', glowBlur: 12, insideBed: 'studio', insideParticle: 'sparkles', insideTint: '#22d3ee', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-bokeh', name: 'Studio Bokeh Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffd166', glowBlur: 12, insideBed: 'studio', insideParticle: 'bokeh', insideTint: '#ffd166', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-dust', name: 'Studio Dust Inside', category: 'In-Video Text / Sky', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#c9b8ff', glowBlur: 12, insideBed: 'studio', insideParticle: 'dust', insideTint: '#c9b8ff', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'inv-studio-petals', name: 'Studio Petals Inside', category: 'In-Video Text / Weather', source: 'Board T — Drive overlay-pack composition study (fire/rain/wind/cloud beds inside glyphs)', ideal: [2, 12], demo: 'FLOW',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: '#ffb3c8', glowBlur: 12, insideBed: 'studio', insideParticle: 'petals', insideTint: '#ffb3c8', insideDensity: 0.7 }, o)
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [o.duration * 0.2, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
   },
 ]
 

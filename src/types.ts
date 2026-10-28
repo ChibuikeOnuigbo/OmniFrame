@@ -864,6 +864,19 @@ export interface TextTitleStyle {
   fontFamily?: string
   bold?: boolean
   italic?: boolean
+  /** Board T: per-character-range overrides + their own keyframes (CapCut-style
+   *  subrange editing). Ranges may overlap; later ranges win per property. */
+  /** In-Video Text presets: animated bed/particles painted INSIDE glyphs. */
+  insideBed?: string
+  insideParticle?: string
+  insideTint?: string
+  insideDensity?: number
+  charRanges?: {
+    start: number
+    end: number
+    style?: Partial<TextTitleStyle>
+    keys?: Record<string, { t: number; v: number | string; interp?: string; params?: { steps?: number; bounciness?: number; firstBounce?: number; overshoot?: number; freq?: number; damping?: number } }[]>
+  }[]
   /** Extra tracking in project px (Alight-style text spacing). */
   letterSpacing?: number
   strokeColor?: string

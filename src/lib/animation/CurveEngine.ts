@@ -18,6 +18,11 @@ export type InterpolationType =
   | 'back'
   | 'bounce'
   | 'elastic'
+  | 'bounce-param'
+  | 'bounce-uniform'
+  | 'rebound-in'
+  | 'rebound-out'
+  | 'physical'
   | 'custom'
 
 export type ExtrapolationMode = 'constant' | 'linear' | 'cycle' | 'ping-pong'
@@ -42,6 +47,10 @@ export interface KeyframeNode {
   easingPreset?: string
   /** Jitter-style easing intensity: 1 = preset as-is, 0 = linear, up to 1.5 = exaggerated (default 1) */
   easingIntensity?: number
+  /** Params for the parametric families (Board T): bounce-param / bounce-uniform
+   *  (steps, bounciness, firstBounce — uploaded Easing-Curve popup ref),
+   *  rebound-in/out (overshoot), physical (freq, damping). */
+  easeParams?: { steps?: number; bounciness?: number; firstBounce?: number; overshoot?: number; freq?: number; damping?: number }
 }
 
 export interface PropertyCurve {
@@ -189,7 +198,7 @@ export function customProgress(points: { x: number; y: number }[], u: number): n
 /**
  * Standard Easing Formulas
  */
-export function evaluateEasingProgress(u: number, interpolation: InterpolationType): number {
+export function evaluateEasingProgress(u: number, interpolation: InterpolationType, ep?: KeyframeNode['easeParams']): number {
   const clampedU = Math.max(0, Math.min(1, u))
 
   switch (interpolation) {
@@ -239,6 +248,57 @@ export function evaluateEasingProgress(u: number, interpolation: InterpolationTy
         -Math.pow(2, 10 * clampedU - 10) *
         Math.sin((clampedU * 10 - 10.75) * ((2 * Math.PI) / 3))
       )
+    }
+    case 'bounce-param':
+    case 'bounce-uniform': {
+      // Damped multi-arc bounce (solenoid-coil look): rise to 1, then `steps`
+      // valleys of height firstBounce * bounciness^i. Arc widths follow
+      // sqrt(height) (physical fall time) unless uniform widths requested.
+      const steps = Math.max(1, Math.round(ep?.steps ?? 3))
+      const b = Math.max(0.05, Math.min(0.98, ep?.bounciness ?? 0.7))
+      const h0 = Math.max(0.02, Math.min(0.9, ep?.firstBounce ?? 0.2))
+      const hs = Array.from({ length: steps }, (_, i) => h0 * Math.pow(b, i))
+      const rise = 0.3
+      const ws = hs.map(h => (interpolation === 'bounce-uniform' ? 1 : Math.sqrt(h)))
+      const wSum = ws.reduce((a, c) => a + c, 0)
+      const arcTotal = 1 - rise
+      if (clampedU <= rise) {
+        const s2 = clampedU / rise
+        return s2 * s2 * (3 - 2 * s2)
+      }
+      let acc = rise
+      for (let i = 0; i < steps; i++) {
+        const w = (ws[i] / wSum) * arcTotal
+        if (clampedU <= acc + w || i === steps - 1) {
+          const s2 = Math.max(0, Math.min(1, (clampedU - acc) / w))
+          return 1 - hs[i] * Math.sin(Math.PI * s2) ** 2
+        }
+        acc += w
+      }
+      return 1
+    }
+    case 'rebound-out': {
+      // Fast rise, single overshoot peak (~overshoot above 1 near u~0.35),
+      // gentle settle back to 1 (uploaded 'Rebound Out' graph ref).
+      const ov = Math.max(0.01, Math.min(0.6, ep?.overshoot ?? 0.15))
+      const bell = (x: number) => Math.sin(Math.PI * Math.pow(x, 0.62)) * Math.pow(1 - x, 1.15)
+      const norm = bell(0.35) || 1
+      const base = 1 - Math.pow(1 - clampedU, 2.2)
+      return base + (ov * bell(clampedU)) / norm
+    }
+    case 'rebound-in': {
+      // Anticipation dip below 0 first, then strong ease-in rise (mirror of out).
+      const ov = Math.max(0.01, Math.min(0.6, ep?.overshoot ?? 0.15))
+      const dip = Math.sin(Math.PI * Math.pow(1 - clampedU, 0.62)) * Math.pow(clampedU, 1.15)
+      return clampedU * clampedU * clampedU - ov * dip * 2.2
+    }
+    case 'physical': {
+      // Underdamped spring step response: PHYSICAL freq,damping families.
+      const f = Math.max(0.5, ep?.freq ?? 3)
+      const d = Math.max(0.5, ep?.damping ?? 3)
+      if (clampedU <= 0) return 0
+      if (clampedU >= 1) return 1
+      return 1 - Math.exp(-d * clampedU) * Math.cos(f * Math.PI * clampedU)
     }
     case 'bezier':
     default:

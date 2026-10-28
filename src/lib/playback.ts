@@ -46,7 +46,8 @@ function applyRotationXY(ctx: CanvasRenderingContext2D, rotationX?: number, rota
 }
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
-import { applyClipFxLayers, hasClipFxLayers } from './particleFx'
+import { applyClipFxLayers, hasClipFxLayers, drawReplaceBg, drawParticleFx } from './particleFx'
+import { evalNumKeys, evalColorKeys, type CharRange } from './textRuns'
 import { inheritedWorld } from './parentChain'
 import { resolveRig, stablePartSeed } from './rigging'
 import { drawPuppetWarp } from './puppetWarp'
@@ -1720,16 +1721,54 @@ export class PreviewEngine {
       ctx.shadowOffsetY = 2 * scaleFactor
     }
 
+    // Board T ("omega change"): per-character-range overrides with their OWN
+    // keyframes (CapCut sub-range editing). Ranges may overlap; later wins.
+    const ranges = (t as unknown as { charRanges?: CharRange[] }).charRanges
+    const localT = Math.max(0, time - clip.start)
+    const lineStarts: number[] = []
+    { let acc = 0; for (const ln of lines) { lineStarts.push(acc); acc += ln.length + 1 } }
+    const charAt = (gpos: number) => {
+      if (!ranges || !ranges.length) return null
+      const st: Record<string, unknown> = {}
+      let ks: Record<string, { t: number; v: number | string; interp?: string; params?: unknown }[]> = {}
+      let hit = false
+      for (const r of ranges) if (gpos >= r.start && gpos < r.end) {
+        hit = true
+        Object.assign(st, r.style || {})
+        if (r.keys) ks = { ...ks, ...r.keys }
+      }
+      if (!hit) return null
+      const has = (p: string) => st[p] != null || !!ks[p]
+      return {
+        color: st.color || ks.color ? evalColorKeys(ks.color as never, localT, String(st.color ?? t.color ?? '#ffffff')) : undefined,
+        fontSize: has('fontSize') ? evalNumKeys(ks.fontSize as never, localT, Number(st.fontSize ?? t.fontSize ?? 0)) : undefined,
+        opacity: has('opacity') ? evalNumKeys(ks.opacity as never, localT, Number(st.opacity ?? 1)) : undefined,
+        spacing: has('letterSpacing') ? evalNumKeys(ks.letterSpacing as never, localT, Number(st.letterSpacing ?? 0)) : undefined,
+      }
+    }
     // Draw text lines (per-glyph when tracking/stroke needs it)
     ctx.fillStyle = t.color || '#ffffff'
     const startY = -(lines.length - 1) * (lineHeight / 2)
-    const drawLine = (c2: CanvasRenderingContext2D, line: string, y: number) => {
-      if (!tracking && !t.strokeWidth) { c2.fillText(line, 0, y); return }
-      const widths = [...line].map((ch) => c2.measureText(ch).width)
-      const total = widths.reduce((a, b) => a + b, 0) + Math.max(0, line.length - 1) * tracking
+    const drawLine = (c2: CanvasRenderingContext2D, line: string, y: number, gstart = 0) => {
+      const csArr = ranges && ranges.length ? [...line].map((_, ci) => charAt(gstart + ci)) : null
+      if (!tracking && !t.strokeWidth && !csArr) { c2.fillText(line, 0, y); return }
+      const chars = [...line]
+      const widths = chars.map((ch) => c2.measureText(ch).width)
+      const extra = csArr ? csArr.map((cs) => (cs && cs.spacing ? cs.spacing * scaleFactor : 0)) : chars.map(() => 0)
+      const total = widths.reduce((a, b) => a + b, 0) + Math.max(0, line.length - 1) * tracking + extra.reduce((a, b) => a + b, 0)
       let x = -total / 2
-      ;[...line].forEach((ch, ci) => {
-        if (!t.strokeOnly) c2.fillText(ch, x + widths[ci] / 2, y)
+      ;chars.forEach((ch, ci) => {
+        const cs = csArr ? csArr[ci] : null
+        if (!t.strokeOnly) {
+          if (cs && (cs.color || cs.fontSize || cs.opacity)) {
+            c2.save()
+            if (cs.opacity != null) c2.globalAlpha = Math.max(0, Math.min(1, c2.globalAlpha * cs.opacity))
+            if (cs.color) c2.fillStyle = cs.color
+            if (cs.fontSize) c2.font = `${t.bold ? 'bold ' : ''}${t.italic ? 'italic ' : ''}${Math.round(cs.fontSize * scaleFactor)}px ${fam}`
+            c2.fillText(ch, x + widths[ci] / 2, y)
+            c2.restore()
+          } else c2.fillText(ch, x + widths[ci] / 2, y)
+        }
         if (t.strokeWidth && t.strokeColor) {
           c2.save()
           c2.shadowBlur = 0
@@ -1738,7 +1777,7 @@ export class PreviewEngine {
           c2.strokeText(ch, x + widths[ci] / 2, y)
           c2.restore()
         }
-        x += widths[ci] + tracking
+        x += widths[ci] + tracking + extra[ci]
       })
     }
     // RGB-split chromatic fringes (the reference-edit look): tinted glyph
@@ -1758,11 +1797,32 @@ export class PreviewEngine {
         ctx.restore()
       }
     }
-    if (!needsInner) {
+    const insideBed = (t as unknown as { insideBed?: string }).insideBed
+    if (insideBed && insideBed !== 'none') {
+      // In-Video Text: faint base pass for legibility, then the animated bed
+      // (fire/rain/cloud/…) confined INSIDE the glyph silhouettes.
+      ctx.save()
+      ctx.globalAlpha *= 0.28
+      lines.forEach((line, i) => drawLine(ctx, line, startY + i * lineHeight, lineStarts[i]))
+      ctx.restore()
+      const bw = Math.max(2, Math.ceil(boxW)), bh = Math.max(2, Math.ceil(boxH))
+      const boff = document.createElement('canvas')
+      boff.width = bw; boff.height = bh
+      const bctx = boff.getContext('2d')!
+      bctx.font = ctx.font; bctx.textAlign = 'center'; bctx.textBaseline = 'middle'
+      bctx.translate(bw / 2, bh / 2)
+      lines.forEach((line, i) => drawLine(bctx, line, startY + i * lineHeight, lineStarts[i]))
+      bctx.setTransform(1, 0, 0, 1, 0, 0)
+      bctx.globalCompositeOperation = 'source-atop'
+      drawReplaceBg(bctx, bw, bh, localT, insideBed as never)
+      const ip = (t as unknown as { insideParticle?: string }).insideParticle
+      if (ip && ip !== 'none') drawParticleFx(bctx, bw, bh, localT, ip as never, (t as unknown as { insideDensity?: number }).insideDensity ?? 0.6, (t as unknown as { insideTint?: string }).insideTint || '#ffffff')
+      ctx.drawImage(boff, -bw / 2, -bh / 2)
+    } else if (!needsInner) {
       lines.forEach((line, i) => {
         // double-pass for a stronger glow core
-        drawLine(ctx, line, startY + i * lineHeight)
-        if (glowActive && !glowInward) drawLine(ctx, line, startY + i * lineHeight)
+        drawLine(ctx, line, startY + i * lineHeight, lineStarts[i])
+        if (glowActive && !glowInward) drawLine(ctx, line, startY + i * lineHeight, lineStarts[i])
       })
     } else {
       // Inward effects: render glyphs offscreen, then let blurred shadows of
@@ -1780,7 +1840,7 @@ export class PreviewEngine {
       octx.textBaseline = 'middle'
       octx.fillStyle = ctx.fillStyle
       octx.translate(offW / 2, offH / 2)
-      lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight))
+      lines.forEach((line, i) => drawLine(octx, line, startY + i * lineHeight, lineStarts[i]))
       octx.save()
       octx.globalCompositeOperation = 'source-atop'
       if (glowInward) {

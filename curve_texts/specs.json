@@ -1,0 +1,338 @@
+[
+ {
+  "file": "c01_linear.mp4",
+  "interp": "linear"
+ },
+ {
+  "file": "c02_ease-in.mp4",
+  "interp": "ease-in"
+ },
+ {
+  "file": "c03_ease-out.mp4",
+  "interp": "ease-out"
+ },
+ {
+  "file": "c04_ease-in-out.mp4",
+  "interp": "ease-in-out"
+ },
+ {
+  "file": "c05_cubic-in.mp4",
+  "interp": "cubic-in"
+ },
+ {
+  "file": "c06_cubic-out.mp4",
+  "interp": "cubic-out"
+ },
+ {
+  "file": "c07_back.mp4",
+  "interp": "back"
+ },
+ {
+  "file": "c08_bounce.mp4",
+  "interp": "bounce"
+ },
+ {
+  "file": "c09_elastic.mp4",
+  "interp": "elastic"
+ },
+ {
+  "file": "c10_constant.mp4",
+  "interp": "constant"
+ },
+ {
+  "file": "c11_bounce-param_1-0p7-0p3.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 1,
+   "bounciness": 0.7,
+   "firstBounce": 0.3
+  }
+ },
+ {
+  "file": "c12_bounce-param_2-0p7-0p2.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 2,
+   "bounciness": 0.7,
+   "firstBounce": 0.2
+  }
+ },
+ {
+  "file": "c13_bounce-param_3-0p6-0p25.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 3,
+   "bounciness": 0.6,
+   "firstBounce": 0.25
+  }
+ },
+ {
+  "file": "c14_bounce-param_4-0p7-0p2.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 4,
+   "bounciness": 0.7,
+   "firstBounce": 0.2
+  }
+ },
+ {
+  "file": "c15_bounce-param_5-0p75-0p3.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 5,
+   "bounciness": 0.75,
+   "firstBounce": 0.3
+  }
+ },
+ {
+  "file": "c16_bounce-param_3-0p4-0p4.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 3,
+   "bounciness": 0.4,
+   "firstBounce": 0.4
+  }
+ },
+ {
+  "file": "c17_bounce-param_3-0p9-0p15.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 3,
+   "bounciness": 0.9,
+   "firstBounce": 0.15
+  }
+ },
+ {
+  "file": "c18_bounce-param_6-0p65-0p35.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 6,
+   "bounciness": 0.65,
+   "firstBounce": 0.35
+  }
+ },
+ {
+  "file": "c19_bounce-param_4-0p5-0p5.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 4,
+   "bounciness": 0.5,
+   "firstBounce": 0.5
+  }
+ },
+ {
+  "file": "c20_bounce-uniform_3-0p7-0p3.mp4",
+  "interp": "bounce-uniform",
+  "params": {
+   "steps": 3,
+   "bounciness": 0.7,
+   "firstBounce": 0.3
+  }
+ },
+ {
+  "file": "c21_bounce-uniform_4-0p6-0p25.mp4",
+  "interp": "bounce-uniform",
+  "params": {
+   "steps": 4,
+   "bounciness": 0.6,
+   "firstBounce": 0.25
+  }
+ },
+ {
+  "file": "c22_bounce-uniform_5-0p8-0p2.mp4",
+  "interp": "bounce-uniform",
+  "params": {
+   "steps": 5,
+   "bounciness": 0.8,
+   "firstBounce": 0.2
+  }
+ },
+ {
+  "file": "c23_bounce-uniform_2-0p7-0p4.mp4",
+  "interp": "bounce-uniform",
+  "params": {
+   "steps": 2,
+   "bounciness": 0.7,
+   "firstBounce": 0.4
+  }
+ },
+ {
+  "file": "c24_rebound-in_0p1.mp4",
+  "interp": "rebound-in",
+  "params": {
+   "overshoot": 0.1
+  }
+ },
+ {
+  "file": "c25_rebound-in_0p2.mp4",
+  "interp": "rebound-in",
+  "params": {
+   "overshoot": 0.2
+  }
+ },
+ {
+  "file": "c26_rebound-in_0p4.mp4",
+  "interp": "rebound-in",
+  "params": {
+   "overshoot": 0.4
+  }
+ },
+ {
+  "file": "c27_rebound-in_0p6.mp4",
+  "interp": "rebound-in",
+  "params": {
+   "overshoot": 0.6
+  }
+ },
+ {
+  "file": "c28_rebound-out_0p08.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.08
+  }
+ },
+ {
+  "file": "c29_rebound-out_0p15.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.15
+  }
+ },
+ {
+  "file": "c30_rebound-out_0p25.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.25
+  }
+ },
+ {
+  "file": "c31_rebound-out_0p35.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.35
+  }
+ },
+ {
+  "file": "c32_rebound-out_0p5.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.5
+  }
+ },
+ {
+  "file": "c33_rebound-out_0p6.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.6
+  }
+ },
+ {
+  "file": "c34_physical_2-2.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 2,
+   "damping": 2
+  }
+ },
+ {
+  "file": "c35_physical_3-2.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 3,
+   "damping": 2
+  }
+ },
+ {
+  "file": "c36_physical_4-2.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 4,
+   "damping": 2
+  }
+ },
+ {
+  "file": "c37_physical_3-3.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 3,
+   "damping": 3
+  }
+ },
+ {
+  "file": "c38_physical_4-5.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 4,
+   "damping": 5
+  }
+ },
+ {
+  "file": "c39_physical_2-5.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 2,
+   "damping": 5
+  }
+ },
+ {
+  "file": "c40_physical_5-3.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 5,
+   "damping": 3
+  }
+ },
+ {
+  "file": "c41_physical_3-5.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 3,
+   "damping": 5
+  }
+ },
+ {
+  "file": "c42_physical_4-3.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 4,
+   "damping": 3
+  }
+ },
+ {
+  "file": "c43_bounce-param_3-0p7-0p3_color.mp4",
+  "interp": "bounce-param",
+  "params": {
+   "steps": 3,
+   "bounciness": 0.7,
+   "firstBounce": 0.3
+  },
+  "color": true
+ },
+ {
+  "file": "c44_rebound-out_0p2_color.mp4",
+  "interp": "rebound-out",
+  "params": {
+   "overshoot": 0.2
+  },
+  "color": true
+ },
+ {
+  "file": "c45_physical_3-3_color.mp4",
+  "interp": "physical",
+  "params": {
+   "freq": 3,
+   "damping": 3
+  },
+  "color": true
+ },
+ {
+  "file": "c46_elastic_color.mp4",
+  "interp": "elastic",
+  "color": true
+ },
+ {
+  "file": "c47_bounce_color.mp4",
+  "interp": "bounce",
+  "color": true
+ }
+]

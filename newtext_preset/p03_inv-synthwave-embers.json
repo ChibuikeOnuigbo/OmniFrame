@@ -1,0 +1,201 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "newtext_preset/p03_inv-synthwave-embers.mp4",
+  "out": "/home/user/OmniFrame/newtext_preset/p03_inv-synthwave-embers.mp4",
+  "frames": 19,
+  "fps": 12,
+  "size": 30411,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 360,
+     "h": 480,
+     "fps": 30,
+     "duration": 1.6,
+     "bg": "#101418"
+    },
+    "out": {
+     "w": 360,
+     "h": 480,
+     "fps": 30,
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "new_doc_toll_research/imgs/montagem-full-frames/f04.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 853,
+     "natH": 480
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-1",
+     "from": 1.6,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "clip-1",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "FLOW",
+     "preset": "inv-synthwave-embers",
+     "x": 0,
+     "y": 0
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "inv-synthwave-embers",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "F",
+       "x": 3.3,
+       "y": 16.3,
+       "w": 43.7,
+       "h": 64
+      },
+      {
+       "pos": 1,
+       "ch": "L",
+       "x": 47,
+       "y": 16.3,
+       "w": 40.8,
+       "h": 64
+      },
+      {
+       "pos": 2,
+       "ch": "O",
+       "x": 87.8,
+       "y": 16.3,
+       "w": 54.4,
+       "h": 64
+      },
+      {
+       "pos": 3,
+       "ch": "W",
+       "x": 142.2,
+       "y": 16.3,
+       "w": 70.6,
+       "h": 64
+      }
+     ],
+     "project": {
+      "w": 360,
+      "h": 480
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "newtext_preset/p03_inv-synthwave-embers.mp4"
+    },
+    "out": {
+     "frames": 19
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 360,
+    "h": 480,
+    "fps": 30,
+    "duration": 1.6,
+    "bg": "#101418"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "f04.png",
+     "start": 0,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:FLOW",
+     "start": 0,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}
