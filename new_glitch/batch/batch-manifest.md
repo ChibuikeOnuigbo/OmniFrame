@@ -1,6 +1,6 @@
 # New Glitch batch manifest (rendered + validated in-app)
 
-Checkpoint: recipe 276 of 5000 queued next · kept 145 · dup-skipped 119 · failed 0
+Checkpoint: recipe 364 of 5000 queued next · kept 183 · dup-skipped 169 · failed 0
 
 | # | recipe | family | palette | seed | file | sha256:16 |
 |---|---|---|---|---|---|---|
@@ -149,3 +149,41 @@ Checkpoint: recipe 276 of 5000 queued next · kept 145 · dup-skipped 119 · fai
 | 274 | ng-0274 | digital-slice | #25d7fb/#ff3ac2 | 2170043 | [b0274_digital-slice.mp4](new_glitch/batch/b0274_digital-slice.mp4) | d7a0962c7c5dce65 |
 | 275 | ng-0275 | digital-slice | #25d7fb/#ff3ac2 | 2177962 | [b0275_digital-slice.mp4](new_glitch/batch/b0275_digital-slice.mp4) | ef251296cd3ef9e6 |
 | 276 | ng-0276 | digital-slice | #25d7fb/#ff3ac2 | 2185881 | [b0276_digital-slice.mp4](new_glitch/batch/b0276_digital-slice.mp4) | 17472328035a2b1c |
+| 278 | ng-0278 | digital-slice | #25d7fb/#ff3ac2 | 2201719 | [b0278_digital-slice.mp4](new_glitch/batch/b0278_digital-slice.mp4) | 43238741610ab156 |
+| 279 | ng-0279 | digital-slice | #25d7fb/#ff3ac2 | 2209638 | [b0279_digital-slice.mp4](new_glitch/batch/b0279_digital-slice.mp4) | 71e61c4aa3a1cdb8 |
+| 281 | ng-0281 | digital-slice | #25d7fb/#ff3ac2 | 2225476 | [b0281_digital-slice.mp4](new_glitch/batch/b0281_digital-slice.mp4) | 09ab04d3a5ad3943 |
+| 283 | ng-0283 | digital-slice | #25d7fb/#ff3ac2 | 2241314 | [b0283_digital-slice.mp4](new_glitch/batch/b0283_digital-slice.mp4) | 8cecbeff9b66873f |
+| 284 | ng-0284 | digital-slice | #25d7fb/#ff3ac2 | 2249233 | [b0284_digital-slice.mp4](new_glitch/batch/b0284_digital-slice.mp4) | a150549af7080b11 |
+| 285 | ng-0285 | digital-slice | #25d7fb/#ff3ac2 | 2257152 | [b0285_digital-slice.mp4](new_glitch/batch/b0285_digital-slice.mp4) | f68de8811a4e599c |
+| 286 | ng-0286 | digital-slice | #25d7fb/#ff3ac2 | 2265071 | [b0286_digital-slice.mp4](new_glitch/batch/b0286_digital-slice.mp4) | 1fd88625235ed20e |
+| 288 | ng-0288 | digital-slice | #25d7fb/#ff3ac2 | 2280909 | [b0288_digital-slice.mp4](new_glitch/batch/b0288_digital-slice.mp4) | 6eee870e7c8ded82 |
+| 289 | ng-0289 | digital-slice | #25d7fb/#ff3ac2 | 2288828 | [b0289_digital-slice.mp4](new_glitch/batch/b0289_digital-slice.mp4) | 4229715c9a92a506 |
+| 291 | ng-0291 | digital-slice | #25d7fb/#ff3ac2 | 2304666 | [b0291_digital-slice.mp4](new_glitch/batch/b0291_digital-slice.mp4) | 8be357584738aba9 |
+| 293 | ng-0293 | digital-slice | #25d7fb/#ff3ac2 | 2320504 | [b0293_digital-slice.mp4](new_glitch/batch/b0293_digital-slice.mp4) | dcdd97ba2f9dabfe |
+| 294 | ng-0294 | digital-slice | #25d7fb/#ff3ac2 | 2328423 | [b0294_digital-slice.mp4](new_glitch/batch/b0294_digital-slice.mp4) | 33610e9c1e54561a |
+| 295 | ng-0295 | digital-slice | #25d7fb/#ff3ac2 | 2336342 | [b0295_digital-slice.mp4](new_glitch/batch/b0295_digital-slice.mp4) | 2a96e94fb24d0e71 |
+| 296 | ng-0296 | digital-slice | #25d7fb/#ff3ac2 | 2344261 | [b0296_digital-slice.mp4](new_glitch/batch/b0296_digital-slice.mp4) | 274412bb12500a3f |
+| 298 | ng-0298 | digital-slice | #25d7fb/#ff3ac2 | 2360099 | [b0298_digital-slice.mp4](new_glitch/batch/b0298_digital-slice.mp4) | 272d273b00213753 |
+| 299 | ng-0299 | digital-slice | #25d7fb/#ff3ac2 | 2368018 | [b0299_digital-slice.mp4](new_glitch/batch/b0299_digital-slice.mp4) | 62202df2ebd096b6 |
+| 301 | ng-0301 | digital-slice | #a0ff3c/#fffa8b | 2383856 | [b0301_digital-slice.mp4](new_glitch/batch/b0301_digital-slice.mp4) | 3b3aa15d73594275 |
+| 308 | ng-0308 | digital-slice | #a0ff3c/#fffa8b | 2439289 | [b0308_digital-slice.mp4](new_glitch/batch/b0308_digital-slice.mp4) | ac56564724d95caa |
+| 313 | ng-0313 | digital-slice | #a0ff3c/#fffa8b | 2478884 | [b0313_digital-slice.mp4](new_glitch/batch/b0313_digital-slice.mp4) | 8cb3dcea00a3b1ab |
+| 323 | ng-0323 | digital-slice | #a0ff3c/#fffa8b | 2558074 | [b0323_digital-slice.mp4](new_glitch/batch/b0323_digital-slice.mp4) | 3b8fc84dc4de5312 |
+| 326 | ng-0326 | digital-slice | #a0ff3c/#fffa8b | 2581831 | [b0326_digital-slice.mp4](new_glitch/batch/b0326_digital-slice.mp4) | 9953eaebdf299cdb |
+| 328 | ng-0328 | digital-slice | #a0ff3c/#fffa8b | 2597669 | [b0328_digital-slice.mp4](new_glitch/batch/b0328_digital-slice.mp4) | 2a07031cb8f32da1 |
+| 331 | ng-0331 | digital-slice | #a0ff3c/#fffa8b | 2621426 | [b0331_digital-slice.mp4](new_glitch/batch/b0331_digital-slice.mp4) | 3f618987a6451f4a |
+| 333 | ng-0333 | digital-slice | #a0ff3c/#fffa8b | 2637264 | [b0333_digital-slice.mp4](new_glitch/batch/b0333_digital-slice.mp4) | 77937fd06d36dec5 |
+| 336 | ng-0336 | digital-slice | #a0ff3c/#fffa8b | 2661021 | [b0336_digital-slice.mp4](new_glitch/batch/b0336_digital-slice.mp4) | c313a2bf1ed884d5 |
+| 338 | ng-0338 | digital-slice | #a0ff3c/#fffa8b | 2676859 | [b0338_digital-slice.mp4](new_glitch/batch/b0338_digital-slice.mp4) | 8c9b072e20741a8c |
+| 343 | ng-0343 | digital-slice | #a0ff3c/#fffa8b | 2716454 | [b0343_digital-slice.mp4](new_glitch/batch/b0343_digital-slice.mp4) | d7825d66fe76c983 |
+| 346 | ng-0346 | digital-slice | #a0ff3c/#fffa8b | 2740211 | [b0346_digital-slice.mp4](new_glitch/batch/b0346_digital-slice.mp4) | 78e2b05f48940346 |
+| 348 | ng-0348 | digital-slice | #a0ff3c/#fffa8b | 2756049 | [b0348_digital-slice.mp4](new_glitch/batch/b0348_digital-slice.mp4) | d074014f488528f8 |
+| 349 | ng-0349 | digital-slice | #a0ff3c/#fffa8b | 2763968 | [b0349_digital-slice.mp4](new_glitch/batch/b0349_digital-slice.mp4) | da0f7e7656c6ee92 |
+| 351 | ng-0351 | digital-slice | #a0ff3c/#fffa8b | 2779806 | [b0351_digital-slice.mp4](new_glitch/batch/b0351_digital-slice.mp4) | 30d772c6b033f692 |
+| 353 | ng-0353 | digital-slice | #a0ff3c/#fffa8b | 2795644 | [b0353_digital-slice.mp4](new_glitch/batch/b0353_digital-slice.mp4) | 1762ce74577cc09f |
+| 354 | ng-0354 | digital-slice | #a0ff3c/#fffa8b | 2803563 | [b0354_digital-slice.mp4](new_glitch/batch/b0354_digital-slice.mp4) | d03e31864664a133 |
+| 356 | ng-0356 | digital-slice | #a0ff3c/#fffa8b | 2819401 | [b0356_digital-slice.mp4](new_glitch/batch/b0356_digital-slice.mp4) | a83a891402de1520 |
+| 358 | ng-0358 | digital-slice | #a0ff3c/#fffa8b | 2835239 | [b0358_digital-slice.mp4](new_glitch/batch/b0358_digital-slice.mp4) | 22a7d9056fe24301 |
+| 359 | ng-0359 | digital-slice | #a0ff3c/#fffa8b | 2843158 | [b0359_digital-slice.mp4](new_glitch/batch/b0359_digital-slice.mp4) | f204e9b9ea4bdaf6 |
+| 361 | ng-0361 | digital-slice | #a0ff3c/#fffa8b | 2858996 | [b0361_digital-slice.mp4](new_glitch/batch/b0361_digital-slice.mp4) | 1171a93287a57822 |
+| 363 | ng-0363 | digital-slice | #a0ff3c/#fffa8b | 2874834 | [b0363_digital-slice.mp4](new_glitch/batch/b0363_digital-slice.mp4) | fa9ee0b099deaaa1 |

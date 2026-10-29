@@ -11,6 +11,7 @@
 - Browser UI: template mode in clip context menu (Capture / Apply submenu); built-in Shake pack section in EffectsPanel; Media panel Export Alight XML / Export Template XML buttons.
 - QA (all green this turn): `ALIGHT XML ROUND-TRIP QA: PASS` (proof test_ans_result/xml-roundtrip.mp4); NEW `REPLACE+TEMPLATE UI E2E: PASS` (real Chromium via vite dev :5173 — replace window math, drag clamp to 3 s, carry-effects+LUT, template capture→XML→idempotent re-import→chain replay, project XML round-trip in browser, TYMM LUTs first batch, 98 stem font faces, shake pack 8 buttons + NANIMALO 7-fx apply); universal-tools PASS (69 tools); replace-template PASS; tymm-lut-parity PASS.
 - Glitch batch slice 3: recipes 188→276 validated IN-APP, checkpoint next=276, 145 kept / 119 dup-skipped / 0 failed, batch_reel.mp4 rebuilt 00:09:40.
+- Glitch batch slice 4: recipes 276→364 validated IN-APP, checkpoint next=364, 183 kept / 169 dup-skipped / 0 failed, batch_reel.mp4 rebuilt 00:12:12.
 - NOT MEASURED: ≥80% similarity vs AM (no declared metric). mega.nz corpus still unreachable. CC media bytes (~120MB) still not downloaded.
 
 Branch `arena/212bca02-omniframe`. Previous: Board T cont.3 (QA PASS 63/59).

@@ -8,7 +8,7 @@ only what is verified shipped.
 
 1. **5000-recipe mandate:** keep producing glitch/effect recipes until 5,000
    are rendered + validated IN-APP (combined MP4 + manifest per batch;
-   checkpoint `new_glitch/batch/checkpoint.json` — **next = 276**; 145 kept /
+   checkpoint `new_glitch/batch/checkpoint.json` — **next = 364**; 183 kept /
    91 dups / 0 failed so far (slices 13–100 and 100–188)). Bounded honest sets + md indexes for mass
    renders; user rates keep/delete/improve. **After every special task, go
    BACK to the 5000 recipes and keep adding.**
@@ -35,7 +35,7 @@ only what is verified shipped.
 - [ ] `node qa/tymm-lut-parity.mjs` → PASS (lossless 64³ TYMM LUTs)
 - [ ] `node qa/alight-roundtrip.mjs` → PASS (XML export/import round-trip:
       project + template + shake pack; proof test_ans_result/xml-roundtrip.mp4)
-- [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=276)
+- [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=364)
 - [x] video-study corpus scan (Drive 1KlxUlem…): 41-video index + gap analysis in new_doc_toll_research/video_study/; acceptance tests green (`node qa/video-study-e2e.mjs` against vite :5173, `node qa/video-study-render.mjs` headless proof)
 - [ ] update STATE.md + FEATURES.md, commit, push to the session branch
 
@@ -82,7 +82,7 @@ only what is verified shipped.
 
 ## Open items (resume here)
 
-- 5000 recipes: continue from checkpoint **next=276** (batch_reel.mp4 = 9:40 combined review of all 145 kept, 0 failed; user keep/delete/improve rating pending).
+- 5000 recipes: continue from checkpoint **next=276** (batch_reel.mp4 = 12:12 combined review of all 183 kept, 0 failed; user keep/delete/improve rating pending).
 - mega.nz overlay folder when network allows (or user drops files into
   `new_doc_toll_research/`).
 - Overlays/Sfx/Back Grounds media: download + wire as an in-app pack browser
