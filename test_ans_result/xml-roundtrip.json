@@ -43,10 +43,10 @@
    {
     "tool": "template_import",
     "params": {
-     "path": "data_motiondesijg/templates/tmpl-mvtscr6p-4zl.xml"
+     "path": "data_motiondesijg/templates/tmpl-mvu1zd7n-4kx.xml"
     },
     "out": {
-     "templateId": "tmpl-mvtscr6p-4zl",
+     "templateId": "tmpl-mvu1zd7n-4kx",
      "name": "RT chain",
      "fields": [
       "transform",
@@ -62,7 +62,7 @@
    {
     "tool": "template_apply",
     "params": {
-     "templateId": "tmpl-mvtscr6p-4zl",
+     "templateId": "tmpl-mvu1zd7n-4kx",
      "clipId": "clip-1"
     },
     "out": {
@@ -128,13 +128,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_dd12nuf",
+        "id": "kf_r0vbd8a",
         "time": 0,
         "value": -50,
         "interpolation": "custom"
        },
        {
-        "id": "kf_oz6zsbj",
+        "id": "kf_b5bjueb",
         "time": 2,
         "value": 50,
         "interpolation": "custom"

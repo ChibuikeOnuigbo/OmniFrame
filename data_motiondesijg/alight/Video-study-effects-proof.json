@@ -1,0 +1,481 @@
+{
+ "source": "data_motiondesijg/alight/video-study-effects.xml",
+ "imported": {
+  "project": {
+   "title": "Video-study effects proof",
+   "w": 640,
+   "h": 360,
+   "fps": 24,
+   "duration": 4,
+   "bg": "#000000"
+  },
+  "clips": [
+   {
+    "amId": "text:EXP",
+    "name": "AM text text:EXP",
+    "kind": "text",
+    "fontFamily": "Inter",
+    "fontSize": 52,
+    "align": "center",
+    "start": 0,
+    "duration": 4,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -160,
+    "y": -90,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#ffd76a",
+    "text": "EXP",
+    "effects": {
+     "exposure": 0.9,
+     "gamma": 1.25
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.exposure",
+      "short": "exposure",
+      "props": {}
+     },
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "exposure": {
+        "name": "exposure",
+        "type": "float",
+        "value": "0.9",
+        "kfs": []
+       },
+       "gamma": {
+        "name": "gamma",
+        "type": "float",
+        "value": "1.25",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-exposure"
+    ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "text:3D",
+    "name": "AM text text:3D",
+    "kind": "text",
+    "fontFamily": "Inter",
+    "fontSize": 58,
+    "align": "center",
+    "start": 0,
+    "duration": 4,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 160,
+    "y": -90,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#eaf9ff",
+    "text": "3D",
+    "effects": {
+     "extrude": 12,
+     "extrudeAngle": 135,
+     "extrudeColor": "#3a1220"
+    },
+    "amEffects": [
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "extrude": {
+        "name": "extrude",
+        "type": "float",
+        "value": "12",
+        "kfs": []
+       },
+       "extrudeAngle": {
+        "name": "extrudeAngle",
+        "type": "float",
+        "value": "135",
+        "kfs": []
+       },
+       "extrudeColor": {
+        "name": "extrudeColor",
+        "type": "string",
+        "value": "#3a1220",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
+    "amId": "text:SWRL",
+    "name": "AM text text:SWRL",
+    "kind": "text",
+    "fontFamily": "Inter",
+    "fontSize": 40,
+    "align": "center",
+    "start": 0,
+    "duration": 4,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -160,
+    "y": 90,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#25d7fb",
+    "text": "SWRL",
+    "effects": {
+     "radialRepeat": 6
+    },
+    "amEffects": [
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "radialRepeat": {
+        "name": "radialRepeat",
+        "type": "float",
+        "value": "6",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
+    "amId": "text:LONG",
+    "name": "AM text text:LONG",
+    "kind": "text",
+    "fontFamily": "Inter",
+    "fontSize": 40,
+    "align": "center",
+    "start": 0,
+    "duration": 4,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 160,
+    "y": 90,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#ffffff",
+    "text": "LONG",
+    "effects": {
+     "longShadow": 26,
+     "longShadowAngle": 45,
+     "longShadowColor": "#ff375f"
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.longshadow2",
+      "short": "longshadow2",
+      "props": {}
+     },
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "longShadow": {
+        "name": "longShadow",
+        "type": "float",
+        "value": "26",
+        "kfs": []
+       },
+       "longShadowAngle": {
+        "name": "longShadowAngle",
+        "type": "float",
+        "value": "45",
+        "kfs": []
+       },
+       "longShadowColor": {
+        "name": "longShadowColor",
+        "type": "string",
+        "value": "#ff375f",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-longshadow2"
+    ],
+    "unmappedFx": []
+   }
+  ],
+  "bookmarks": [],
+  "stats": {
+   "shapes": 4,
+   "effectsTotal": 6,
+   "mapped": 6,
+   "unmapped": 0,
+   "keyframed": 0,
+   "mediaRefs": []
+  }
+ },
+ "raw": {
+  "title": "Video-study effects proof",
+  "width": 640,
+  "height": 360,
+  "fps": 24,
+  "totalTime": 4,
+  "bgcolor": "#ff000000",
+  "amVersion": "omniframe/export-1.0",
+  "bookmarks": [],
+  "shapes": [
+   {
+    "id": "text:EXP",
+    "label": "",
+    "startTime": 0,
+    "endTime": 4,
+    "fillType": "text",
+    "font": "imported?name=Inter.ttf",
+    "fontSize": 52,
+    "align": "center",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 160,
+     "y": 90,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.exposure",
+      "short": "exposure",
+      "props": {}
+     },
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "exposure": {
+        "name": "exposure",
+        "type": "float",
+        "value": "0.9",
+        "kfs": []
+       },
+       "gamma": {
+        "name": "gamma",
+        "type": "float",
+        "value": "1.25",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "fillColor": "#ffffd76a",
+    "text": "EXP"
+   },
+   {
+    "id": "text:3D",
+    "label": "",
+    "startTime": 0,
+    "endTime": 4,
+    "fillType": "text",
+    "font": "imported?name=Inter.ttf",
+    "fontSize": 58,
+    "align": "center",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 480,
+     "y": 90,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "extrude": {
+        "name": "extrude",
+        "type": "float",
+        "value": "12",
+        "kfs": []
+       },
+       "extrudeAngle": {
+        "name": "extrudeAngle",
+        "type": "float",
+        "value": "135",
+        "kfs": []
+       },
+       "extrudeColor": {
+        "name": "extrudeColor",
+        "type": "string",
+        "value": "#3a1220",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "fillColor": "#ffeaf9ff",
+    "text": "3D"
+   },
+   {
+    "id": "text:SWRL",
+    "label": "",
+    "startTime": 0,
+    "endTime": 4,
+    "fillType": "text",
+    "font": "imported?name=Inter.ttf",
+    "fontSize": 40,
+    "align": "center",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 160,
+     "y": 270,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "radialRepeat": {
+        "name": "radialRepeat",
+        "type": "float",
+        "value": "6",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "fillColor": "#ff25d7fb",
+    "text": "SWRL"
+   },
+   {
+    "id": "text:LONG",
+    "label": "",
+    "startTime": 0,
+    "endTime": 4,
+    "fillType": "text",
+    "font": "imported?name=Inter.ttf",
+    "fontSize": 40,
+    "align": "center",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 480,
+     "y": 270,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.longshadow2",
+      "short": "longshadow2",
+      "props": {}
+     },
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "longShadow": {
+        "name": "longShadow",
+        "type": "float",
+        "value": "26",
+        "kfs": []
+       },
+       "longShadowAngle": {
+        "name": "longShadowAngle",
+        "type": "float",
+        "value": "45",
+        "kfs": []
+       },
+       "longShadowColor": {
+        "name": "longShadowColor",
+        "type": "string",
+        "value": "#ff375f",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "fillColor": "#ffffffff",
+    "text": "LONG"
+   }
+  ]
+ }
+}

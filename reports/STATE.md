@@ -1,5 +1,12 @@
 # OmniFrame STATE — Mega-turn cont.: XML export/import + Shake pack (2026-10-29)
 
+## Increment 2026-10-29 (video-study turn)
+- Scanned Drive folder 1KlxUlem-Qjyd61dLkqs9nk3Ob4bou1Kp (41 MP4s + 2 docs + 2 sheets): research dump new_doc_toll_research/video_study/ (folder-index.json, STUDY.md). Honest: doc middle sections beyond 4.2 truncated by Drive API limit; videos are sampled-frame research only; MP4s NOT downloaded.
+- Gap-closed with REAL engine keys: exposure/gamma, Raster Extrude (look, not true 3D), Radial Repeat, Long Shadow + 17 vs-* catalog entries + AM map upgrades; XML export/import verified for all new keys.
+- QA green: video-study acceptance e2e (6/6 tests, real Chromium), video-study render proof mp4, alight-roundtrip PASS, universal-tools PASS (69 tools), replace-template PASS, tymm-lut-parity PASS.
+- Rollback #7 recovered this turn (fetch+reset --hard origin 56236c2a + npm ci + pip imageio-ffmpeg + Pillow).
+- NOT MEASURED: >=80% similarity vs AM (no metric); mega.nz still unreachable; CC media bytes still not downloaded; doc middle sections unavailable.
+
 ## Increment 2026-10-29 (XML export turn, part 2)
 - Browser UI: template mode in clip context menu (Capture / Apply submenu); built-in Shake pack section in EffectsPanel; Media panel Export Alight XML / Export Template XML buttons.
 - QA (all green this turn): `ALIGHT XML ROUND-TRIP QA: PASS` (proof test_ans_result/xml-roundtrip.mp4); NEW `REPLACE+TEMPLATE UI E2E: PASS` (real Chromium via vite dev :5173 — replace window math, drag clamp to 3 s, carry-effects+LUT, template capture→XML→idempotent re-import→chain replay, project XML round-trip in browser, TYMM LUTs first batch, 98 stem font faces, shake pack 8 buttons + NANIMALO 7-fx apply); universal-tools PASS (69 tools); replace-template PASS; tymm-lut-parity PASS.

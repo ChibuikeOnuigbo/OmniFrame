@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?><!--
+Created by OmniFrame — Alight Motion v5 XML dialect (export)
+Round-trip: OmniFrame reads this back losslessly (omniframe.* effect blocks carry exact engine values).
+-->
+<scene title="Video-study effects proof" width="640" height="360" exportWidth="640" exportHeight="360" precompose="dynamicResolution" bgcolor="#ff000000" totalTime="4000" fps="24" am="omniframe/export-1.0">
+  <text id="text:EXP" startTime="0" endTime="4000" fillType="color" mediaFillMode="fill" size="52" font="imported?name=Inter.ttf" align="center">
+    <transform>
+      <location value="160,90,0.000000" />
+    </transform>
+    <effect id="com.alightcreative.effects.exposure" locallyApplied="true" />
+    <effect id="omniframe.fx" locallyApplied="true">
+      <property name="exposure" type="float" value="0.9" />
+      <property name="gamma" type="float" value="1.25" />
+    </effect>
+    <fillColor value="#ffffd76a" />
+    <content>EXP</content>
+  </text>
+  <text id="text:3D" startTime="0" endTime="4000" fillType="color" mediaFillMode="fill" size="58" font="imported?name=Inter.ttf" align="center">
+    <transform>
+      <location value="480,90,0.000000" />
+    </transform>
+    <effect id="omniframe.fx" locallyApplied="true">
+      <property name="extrude" type="float" value="12" />
+      <property name="extrudeAngle" type="float" value="135" />
+      <property name="extrudeColor" type="string" value="#3a1220" />
+    </effect>
+    <fillColor value="#ffeaf9ff" />
+    <content>3D</content>
+  </text>
+  <text id="text:SWRL" startTime="0" endTime="4000" fillType="color" mediaFillMode="fill" size="40" font="imported?name=Inter.ttf" align="center">
+    <transform>
+      <location value="160,270,0.000000" />
+    </transform>
+    <effect id="omniframe.fx" locallyApplied="true">
+      <property name="radialRepeat" type="float" value="6" />
+    </effect>
+    <fillColor value="#ff25d7fb" />
+    <content>SWRL</content>
+  </text>
+  <text id="text:LONG" startTime="0" endTime="4000" fillType="color" mediaFillMode="fill" size="40" font="imported?name=Inter.ttf" align="center">
+    <transform>
+      <location value="480,270,0.000000" />
+    </transform>
+    <effect id="com.alightcreative.effects.longshadow2" locallyApplied="true" />
+    <effect id="omniframe.fx" locallyApplied="true">
+      <property name="longShadow" type="float" value="26" />
+      <property name="longShadowAngle" type="float" value="45" />
+      <property name="longShadowColor" type="string" value="#ff375f" />
+    </effect>
+    <fillColor value="#ffffffff" />
+    <content>LONG</content>
+  </text>
+</scene>
