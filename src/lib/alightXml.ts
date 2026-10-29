@@ -99,6 +99,20 @@ export function parseAlightXml(xml: string): AlightProject {
     if (rot) shape.transform.rotation = Number(rot) || 0
     const op = body.match(/<opacity\s+value="([^"]+)"/)?.[1]
     if (op) shape.transform.opacity = Number(op)
+    for (const chan of ['location', 'scale', 'rotation', 'opacity'] as const) {
+      const blk = body.match(new RegExp(`<${chan}[^>/]*>([\\s\\S]*?)</${chan}>`))?.[1] || ''
+      for (const km of blk.matchAll(/<kf\s+([^/>]*)/g)) {
+        const t = Number(attr(km[1], 't') ?? NaN)
+        const v = attr(km[1], 'v')
+        if (Number.isNaN(t) || v === undefined) continue
+        const ease = attr(km[1], 'e')
+        const kf: AlightKf = { t, v, ease }
+        const bz = ease?.match(/cubicBezier\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)/)
+        if (bz) kf.points = [[Number(bz[1]), Number(bz[2])], [Number(bz[3]), Number(bz[4])]]
+        shape.transformKeys[chan].push(kf)
+      }
+      shape.transformKeys[chan].sort((a, b) => a.t - b.t)
+    }
     const sizeV = body.match(/<property\s+name="size"\s+type="vec2"\s+value="([^"]+)"/)?.[1]
     if (sizeV) { const p = sizeV.split(',').map(Number); shape.size = [p[0] || 0, p[1] || 0] }
     const gain = body.match(/<gain\s+value="([^"]+)"/)?.[1]
@@ -106,10 +120,10 @@ export function parseAlightXml(xml: string): AlightProject {
     shape.fillColor = body.match(/<fillColor\s+value="([^"]+)"/)?.[1]
     const content = body.match(/<content[^>]*>([\s\S]*?)<\/content>/)?.[1]
     if (content) shape.text = unesc(content)
-    const effRe = /<effect\b([^>]*)>([\s\S]*?)<\/effect>/g
+    const effRe = /<effect\b([^>]*?)(?:\/>|>([\s\S]*?)<\/effect>)/g
     let em: RegExpExecArray | null
     while ((em = effRe.exec(body))) {
-      const ehead = `<effect ${em[1]}>`, ebody = em[2]
+      const ehead = `<effect ${em[1]}>`, ebody = em[2] || ''
       const amId = attr(ehead, 'id') || ''
       const eff: AlightEffect = { amId, short: amId.replace(/^com\.[\w.]*?effects?\./, '').replace(/^com\.alightcreative\./, ''), props: {} }
       const propRe = /<property\s+([^>]*?)(\/>|>([\s\S]*?)<\/property>)/g
@@ -229,6 +243,10 @@ export const AM_EFFECT_MAP: Record<string, AmMap> = {
   colorize: { name: 'AM Colorize', cat: 'color', patch: { dirColorize: 0.5 } },
   'com.alightcreative.replacecolor': { name: 'AM Replace Colour', cat: 'color', patch: { dirColorize: 0.4 } },
   'spill-cleanup': { name: 'AM Spill Cleanup', cat: 'key', patch: { chromaKey: 0.3, chromaColor: '#00ff00' } },
+  shake: { name: 'AM Shake (v1)', cat: 'motion', patch: { autoShake: 4, autoShakeFreq: 8 } },
+  oscillate2: { name: 'AM Oscillate 2', cat: 'motion', patch: { oscillate: 10, oscillateFreq: 4 } },
+  stretch2: { name: 'AM Stretch', cat: 'distort', patch: { pixelStretch: 0.3 } },
+  lensd: { name: 'AM Lens Distortion', cat: 'distort', patch: { chromatic: 6, waveWarp: 4 } },
   smartMotionBlurShake: { name: 'AM Smart Motion-Blur Shake', cat: 'motion', patch: { motionBlur: 0.5, autoShake: 8 } },
   flicker2: { name: 'AM Flicker', cat: 'light', patch: { flicker: 0.4 } },
   denoise: { name: 'AM Denoise', cat: 'blur', patch: { blur: 1 } },
@@ -278,6 +296,10 @@ export interface ImportedAlightClip {
   text?: string
   mediaRef?: string // content:// uri — external media, needs re-link in OmniFrame
   effects: Record<string, number | string> // merged ClipEffect patch
+  /** omniframe.lut round-trip: the clip's own LUT stack */
+  adjustment?: { luts: Array<{ builtin?: string; id?: string; intensity?: number }> }
+  /** omniframe.fxinst round-trip: fx instances incl. per-param keys */
+  fxInstances?: Array<{ catalogId: string; inP: number; duration: number; params: Record<string, number | string>; keys?: Record<string, Array<{ t: number; v: number }>> }>
   amEffects: Array<{ amId: string; short: string; props: Record<string, AlightProp> }> // FULL data dump
   volume: number
   /** clip-LOCAL seconds; cubicBezier easing carried as custom curve points */
@@ -302,9 +324,52 @@ export function alightToImport(proj: AlightProject): AlightImport {
     const effects: Record<string, number | string> = {}
     const mappedFx: string[] = []
     const unmappedFx: string[] = []
+    let adjustment: { luts: Array<{ builtin?: string; id?: string; intensity?: number }> } | undefined
+    const fxInstances: Array<{ catalogId: string; inP: number; duration: number; params: Record<string, number | string>; keys?: Record<string, Array<{ t: number; v: number }>> }> = []
     for (const eff of sh.effects) {
       effectsTotal++
       for (const p of Object.values(eff.props)) if (p.kfs.length > 1) keyframed++
+      const propVal = (p: AlightProp): number | string => {
+        if (p.kfs.length) return Number(p.kfs[0].v.split(',')[0]) || 0
+        if (p.type === 'float' || p.type === 'int') return Number(p.value) || 0
+        return p.value ?? ''
+      }
+      if (eff.short === 'omniframe.fx') {
+        // exact engine values from an OmniFrame export — applied LAST-wins via
+        // ordering (emitter puts omniframe.fx after the AM-default blocks)
+        for (const [pname, p] of Object.entries(eff.props)) effects[pname] = propVal(p)
+        mapped++
+        continue
+      }
+      if (eff.short === 'omniframe.lut') {
+        const luts: Array<{ builtin?: string; id?: string; intensity?: number }> = []
+        for (const [pname, p] of Object.entries(eff.props)) {
+          const i = Number(pname.replace(/\D+/g, '')) || 0
+          luts[i] = luts[i] || {}
+          if (pname.startsWith('builtin')) { const v = String(propVal(p)); luts[i].builtin = v; luts[i].id = v }
+          if (pname.startsWith('intensity')) luts[i].intensity = Number(propVal(p))
+        }
+        adjustment = { luts: luts.filter(Boolean) }
+        mapped++
+        continue
+      }
+      if (eff.short.startsWith('omniframe.fxinst.')) {
+        const catalogId = eff.short.slice('omniframe.fxinst.'.length)
+        const params: Record<string, number | string> = {}
+        const keys: Record<string, Array<{ t: number; v: number }>> = {}
+        let inP = 0, fdur = dur
+        for (const [pname, p] of Object.entries(eff.props)) {
+          if (pname === '_inP') { inP = Number(propVal(p)) || 0; continue }
+          if (pname === '_duration') { fdur = Number(propVal(p)) || dur; continue }
+          if (p.kfs.length > 1) {
+            keys[pname] = p.kfs.map(k => ({ t: Math.max(0, k.t * dur - inP), v: Number(k.v.split(',')[0]) || 0 }))
+            params[pname] = Number(p.kfs[0].v.split(',')[0]) || 0
+          } else params[pname] = propVal(p)
+        }
+        fxInstances.push({ catalogId, inP, duration: Math.min(fdur, dur - inP), params, keys: Object.keys(keys).length ? keys : undefined })
+        mapped++
+        continue
+      }
       const m = AM_EFFECT_MAP[eff.amId] ?? AM_EFFECT_MAP[eff.short]
       if (m) { Object.assign(effects, m.patch); mappedFx.push(amFxId(eff.amId)); mapped++ }
       else { unmappedFx.push(eff.short); unmapped++ }
@@ -333,6 +398,8 @@ export function alightToImport(proj: AlightProject): AlightImport {
       text: sh.text,
       mediaRef: sh.fillVideo,
       effects,
+      adjustment,
+      fxInstances: fxInstances.length ? fxInstances : undefined,
       amEffects: sh.effects,
       volume: sh.gain !== undefined ? Math.max(0, Math.min(1, Math.pow(10, sh.gain / 20))) : 1,
       keys: (() => {
@@ -367,4 +434,256 @@ export function amColor(hex: string): string {
   const h = hex.replace('#', '')
   if (h.length === 8) return '#' + h.slice(2)
   return '#' + h
+}
+
+/* ------------------------------------------------------------------ EXPORT */
+
+export interface AlightExportKey { time: number; value: number; points?: Array<{ x: number; y: number } | [number, number]> }
+export interface AlightExportClip {
+  name: string
+  kind: 'video' | 'text' | 'image' | 'solid'
+  start: number; duration: number; inPoint?: number; speed?: number
+  x: number; y: number                    // centre-relative px
+  scale: number; rotation: number; opacity: number
+  volume?: number
+  text?: string; fontFamily?: string; fontSize?: number; color?: string
+  fillColor?: string
+  mediaRef?: string
+  effects?: Record<string, number | string>          // ClipEffect engine keys
+  luts?: Array<{ builtin?: string; id?: string; intensity?: number }>
+  fxInstances?: Array<{ catalogId: string; amId?: string; inP: number; duration: number; params: Record<string, number | string>; keys?: Record<string, Array<{ t: number; v: number }>> }>
+  curves?: Record<string, AlightExportKey[]>          // position_x/y, scale_x, rotation_z, opacity — clip-local seconds
+  amEffects?: AlightEffect[]                          // imported-from-AM clips re-emit these VERBATIM
+}
+export interface AlightExportMeta { title: string; w: number; h: number; fps: number; duration: number; bg?: string }
+
+const xmlEsc = (s: string) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+const ms = (sec: number) => Math.round(sec * 1000)
+const n6 = (v: number) => (Math.round(v * 1e6) / 1e6).toString()
+
+/** engine ClipEffect key → the AM effect id whose mapped patch contains it (for
+ *  emitting an AM-recognisable block alongside the exact omniframe.fx values) */
+const ENGINE_KEY_TO_AM: Record<string, string> = (() => {
+  const out: Record<string, string> = {}
+  for (const [amId, m] of Object.entries(AM_EFFECT_MAP)) {
+    if (!m) continue
+    for (const k of Object.keys(m.patch)) if (!out[k] && !amId.startsWith('com.')) out[k] = amId
+  }
+  return out
+})()
+
+function bezierAttr(k: AlightExportKey): string {
+  if (!k.points || k.points.length < 2) return ''
+  const p = k.points.map((pt) => (Array.isArray(pt) ? pt : [pt.x, pt.y]))
+  // full custom curve [[0,0],[x1,y1],[x2,y2],[1,1]] → cubicBezier x1 y1 x2 y2
+  const inner = p.filter((_, i) => i > 0 && i < p.length - 1)
+  if (inner.length === 2) return ` e="cubicBezier ${inner[0][0]} ${inner[0][1]} ${inner[1][0]} ${inner[1][1]}"`
+  return ''
+}
+function sampleCurve(keys: AlightExportKey[] | undefined, t: number, fallback: number): number {
+  if (!keys || keys.length === 0) return fallback
+  if (t <= keys[0].time) return keys[0].value
+  for (let i = 1; i < keys.length; i++) {
+    if (t <= keys[i].time) {
+      const a = keys[i - 1], b = keys[i]
+      const u = b.time === a.time ? 1 : (t - a.time) / (b.time - a.time)
+      return a.value + (b.value - a.value) * u
+    }
+  }
+  return keys[keys.length - 1].value
+}
+
+/** Serialise clips to the Alight Motion v5 XML dialect. Round-trip guarantee:
+ *  parseAlightXml(alightToImport(exportAlightXml(m, clips))) reproduces the
+ *  clip timings, transforms, engine effect VALUES (omniframe.fx namespace),
+ *  LUT stack (omniframe.lut), fx instances incl. keys (omniframe.fxinst) and
+ *  keyframed transforms (normalised kf + cubicBezier). AM itself reads the
+ *  scene/shape/text/transform/effect skeleton; omniframe.* blocks are
+ *  comments-free extension effects it ignores. */
+export function exportAlightXml(meta: AlightExportMeta, clips: AlightExportClip[]): string {
+  const bg = meta.bg && /^#[0-9a-fA-F]{6}$/.test(meta.bg) ? '#ff' + meta.bg.slice(1) : '#ff000000'
+  const out: string[] = []
+  out.push(`<?xml version='1.0' encoding='UTF-8' ?><!--`)
+  out.push(`Created by OmniFrame — Alight Motion v5 XML dialect (export)`)
+  out.push(`Round-trip: OmniFrame reads this back losslessly (omniframe.* effect blocks carry exact engine values).`)
+  out.push(`-->\r`)
+  out.push(`<scene title="${xmlEsc(meta.title)}" width="${meta.w}" height="${meta.h}" exportWidth="${meta.w}" exportHeight="${meta.h}" precompose="dynamicResolution" bgcolor="${bg}" totalTime="${ms(meta.duration)}" fps="${meta.fps}" am="omniframe/export-1.0">`)
+  for (const c of clips) {
+    const dur = Math.max(0.04, c.duration)
+    const loc = `${n6(c.x + meta.w / 2)},${n6(c.y + meta.h / 2)},0.000000`
+    const transformKfs = (): string => {
+      const t: string[] = ['    <transform>']
+      const px = c.curves?.position_x, py = c.curves?.position_y
+      if ((px && px.length > 1) || (py && py.length > 1)) {
+        const times = [...new Set([...(px || []), ...(py || [])].map((k) => k.time))].sort((a, b) => a - b)
+        t.push('      <location>')
+        for (const time of times) {
+          const x = sampleCurve(px, time, c.x), y = sampleCurve(py, time, c.y)
+          const ref = (px || py)!.find((k) => k.time === time)!
+          t.push(`        <kf t="${n6(time / dur)}" v="${n6(x + meta.w / 2)},${n6(y + meta.h / 2)},0.000000"${bezierAttr({ time, value: 0, points: ref.points })} />`)
+        }
+        t.push('      </location>')
+      } else {
+        t.push(`      <location value="${loc}" />`)
+      }
+      const sx = c.curves?.scale_x
+      if (sx && sx.length > 1) {
+        t.push('      <scale>')
+        for (const k of sx) t.push(`        <kf t="${n6(k.time / dur)}" v="${n6(k.value)},${n6(k.value)}"${bezierAttr(k)} />`)
+        t.push('      </scale>')
+      } else if (c.scale !== 1) {
+        t.push(`      <scale value="${n6(c.scale)},${n6(c.scale)}" />`)
+      }
+      const rz = c.curves?.rotation_z
+      if (rz && rz.length > 1) {
+        t.push('      <rotation>')
+        for (const k of rz) t.push(`        <kf t="${n6(k.time / dur)}" v="${n6(k.value)}"${bezierAttr(k)} />`)
+        t.push('      </rotation>')
+      } else if (c.rotation) {
+        t.push(`      <rotation value="${n6(c.rotation)}" />`)
+      }
+      const op = c.curves?.opacity
+      if (op && op.length > 1) {
+        t.push('      <opacity>')
+        for (const k of op) t.push(`        <kf t="${n6(k.time / dur)}" v="${n6(k.value)}"${bezierAttr(k)} />`)
+        t.push('      </opacity>')
+      } else if (c.opacity !== 1) {
+        t.push(`      <opacity value="${n6(c.opacity)}" />`)
+      }
+      t.push('    </transform>')
+      return t.join('\n')
+    }
+    const effectBlocks = (): string => {
+      const t: string[] = []
+      // 1. re-emit original AM effects verbatim when this clip came FROM AM
+      for (const eff of c.amEffects || []) {
+        t.push(`    <effect id="${xmlEsc(eff.amId)}" locallyApplied="true">`)
+        for (const p of Object.values(eff.props)) {
+          if (p.kfs.length > 1) {
+            t.push(`      <property name="${xmlEsc(p.name)}" type="${xmlEsc(p.type)}">`)
+            for (const k of p.kfs) {
+              const bz = k.points ? ` e="cubicBezier ${k.points[0][0]} ${k.points[0][1]} ${k.points[1][0]} ${k.points[1][1]}"` : ''
+              t.push(`        <kf t="${n6(k.t)}" v="${xmlEsc(k.v)}"${bz} />`)
+            }
+            t.push('      </property>')
+          } else if (p.value !== undefined) {
+            t.push(`      <property name="${xmlEsc(p.name)}" type="${xmlEsc(p.type)}" value="${xmlEsc(p.value)}" />`)
+          }
+        }
+        t.push('    </effect>')
+      }
+      // 2. AM-recognisable blocks for engine effects (defaults) …
+      const emitted = new Set<string>()
+      for (const k of Object.keys(c.effects || {})) {
+        const am = ENGINE_KEY_TO_AM[k]
+        if (am && !emitted.has(am)) { emitted.add(am); t.push(`    <effect id="com.alightcreative.effects.${xmlEsc(am)}" locallyApplied="true" />`) }
+      }
+      // 3. … then the EXACT engine values (imported last → wins on round-trip)
+      const effKeys = Object.entries(c.effects || {}).filter(([, v]) => v !== undefined && v !== 0)
+      if (effKeys.length) {
+        t.push('    <effect id="omniframe.fx" locallyApplied="true">')
+        for (const [k, v] of effKeys) t.push(`      <property name="${xmlEsc(k)}" type="${typeof v === 'number' ? 'float' : 'string'}" value="${xmlEsc(String(v))}" />`)
+        t.push('    </effect>')
+      }
+      // 4. LUT stack
+      if (c.luts && c.luts.length) {
+        t.push('    <effect id="omniframe.lut" locallyApplied="true">')
+        c.luts.forEach((l, i) => {
+          t.push(`      <property name="builtin${i}" type="string" value="${xmlEsc(l.builtin || l.id || '')}" />`)
+          t.push(`      <property name="intensity${i}" type="float" value="${n6(l.intensity ?? 1)}" />`)
+        })
+        t.push('    </effect>')
+      }
+      // 5. fx instances (catalog entries incl. AM_FX_CATALOG) with their keys
+      for (const fi of c.fxInstances || []) {
+        t.push(`    <effect id="omniframe.fxinst.${xmlEsc(fi.catalogId)}" locallyApplied="true">`)
+        t.push(`      <property name="_inP" type="float" value="${n6(fi.inP)}" />`)
+        t.push(`      <property name="_duration" type="float" value="${n6(fi.duration)}" />`)
+        for (const [k, v] of Object.entries(fi.params || {})) t.push(`      <property name="${xmlEsc(k)}" type="${typeof v === 'number' ? 'float' : 'string'}" value="${xmlEsc(String(v))}" />`)
+        for (const [k, keys] of Object.entries(fi.keys || {})) {
+          t.push(`      <property name="${xmlEsc(k)}" type="float">`)
+          for (const raw of keys as Array<{ t: number; v: number } | [number, number]>) {
+            const key = Array.isArray(raw) ? { t: raw[0], v: raw[1] } : raw
+            if (!Number.isFinite(key.t) || !Number.isFinite(key.v)) continue
+            t.push(`        <kf t="${n6(Math.min(1, Math.max(0, (fi.inP + key.t) / dur)))}" v="${n6(key.v)}" />`)
+          }
+          t.push('      </property>')
+        }
+        t.push('    </effect>')
+      }
+      return t.join('\n')
+    }
+    const common = `${transformKfs()}\n${effectBlocks()}`
+    const gain = c.volume !== undefined && c.volume !== 1 ? `\n    <gain value="${n6(20 * Math.log10(Math.max(1e-4, c.volume)))}" />` : ''
+    if (c.kind === 'text') {
+      const size = c.fontSize || 48
+      const font = c.fontFamily ? ` font="imported?name=${encodeURIComponent(c.fontFamily.split(',')[0].trim())}.ttf"` : ''
+      out.push(`  <text id="${xmlEsc(c.name)}" startTime="${ms(c.start)}" endTime="${ms(c.start + dur)}" fillType="color" mediaFillMode="fill" size="${n6(size)}"${font} align="center">`)
+      out.push(common)
+      if (c.color) out.push(`    <fillColor value="#ff${c.color.replace('#', '').slice(0, 6).padEnd(6, 'f')}" />`)
+      out.push(`    <content>${xmlEsc(c.text || c.name)}</content>`)
+      out.push(`  </text>`)
+    } else {
+      const fillType = c.kind === 'video' ? 'media' : 'color'
+      const fillVideo = c.kind === 'video' ? ` fillVideo="${xmlEsc(c.mediaRef || `omniframe:${c.name}`)}"` : ''
+      out.push(`  <shape id="${xmlEsc(c.name)}" label="${xmlEsc(c.name)}" startTime="${ms(c.start)}" endTime="${ms(c.start + dur)}" fillType="${fillType}"${fillVideo} mediaFillMode="fill" speed="${n6(c.speed || 1)}" s=".rect">`)
+      out.push(common)
+      if (c.fillColor) out.push(`    <fillColor value="#ff${c.fillColor.replace('#', '').slice(0, 6).padEnd(6, 'f')}" />`)
+      out.push(`    <property name="size" type="vec2" value="${n6(meta.w)},${n6(meta.h)}" />`)
+      out.push(gain ? gain.trimStart() : '')
+      out.push(`  </shape>`)
+    }
+  }
+  out.push('</scene>')
+  return out.filter((l) => l !== '').join('\n') + '\n'
+}
+
+/* ------------------------------------------------------- TEMPLATE ↔ XML */
+
+const TMPL_MARK = 'omniframe-template'
+
+/** Template export = AM-dialect scene skeleton + the FULL template JSON in a
+ *  marked comment (lossless; AM ignores comments). */
+export function exportTemplateXml(t: ClipTemplateLike, meta?: { w?: number; h?: number; fps?: number }): string {
+  const w = meta?.w || 1920, h = meta?.h || 1080, fps = meta?.fps || 30
+  const json = JSON.stringify(t, null, 1).replace(/-->/g, '-\\u003e')
+  const fx = (t.fields.effects || {}) as Record<string, number | string>
+  const effBlocks = Object.entries(fx).filter(([, v]) => v !== undefined && v !== 0).map(([k, v]) =>
+    `      <property name="${xmlEsc(k)}" type="${typeof v === 'number' ? 'float' : 'string'}" value="${xmlEsc(String(v))}" />`).join('\n')
+  return `<?xml version='1.0' encoding='UTF-8' ?><!--
+Created by OmniFrame — TEMPLATE export (Alight Motion v5 XML dialect)
+Re-import in OmniFrame (Import Alight XML / template_import): registers the
+template with its FULL processing chain; the skeleton below is the AM-readable
+summary of that chain.
+-->
+<!--${TMPL_MARK}
+${json}
+${TMPL_MARK}-->
+<scene title="${xmlEsc(t.name)}" width="${w}" height="${h}" exportWidth="${w}" exportHeight="${h}" precompose="dynamicResolution" bgcolor="#ff000000" totalTime="${ms(t.duration)}" fps="${fps}" am="omniframe/template-1.0">
+  <shape id="template-carrier" label="${xmlEsc(t.name)}" startTime="0" endTime="${ms(t.duration)}" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="${w / 2},${h / 2},0.000000" />
+    </transform>
+    <fillColor value="#ff334455" />
+${effBlocks ? `    <effect id="omniframe.fx" locallyApplied="true">\n${effBlocks}\n    </effect>` : ''}
+  </shape>
+</scene>
+`
+}
+
+export interface ClipTemplateLike {
+  id: string; name: string; capturedAt: string; sourceClipId: string; sourceName: string
+  sourceKind: string; inPointRatio: number; duration: number
+  fields: Record<string, unknown>; fieldCount: number
+}
+
+/** Detect + parse an OmniFrame template XML export. Returns null for plain AM
+ *  project XML (callers then use parseAlightXml). */
+export function importTemplateXml(xml: string): ClipTemplateLike | null {
+  const m = xml.match(new RegExp(`<!--${TMPL_MARK}\\n([\\s\\S]*?)\\n${TMPL_MARK}-->`))
+  if (!m) return null
+  try {
+    const t = JSON.parse(m[1].replace(/-\\u003e/g, '-->')) as ClipTemplateLike
+    return t && t.id && t.fields ? t : null
+  } catch { return null }
 }

@@ -33,6 +33,8 @@ only what is verified shipped.
       original video processed → template_capture → NEW video → template_apply
       → replace_video carry/no-carry → `test_ans_result/replace-template-demo.mp4`)
 - [ ] `node qa/tymm-lut-parity.mjs` → PASS (lossless 64³ TYMM LUTs)
+- [ ] `node qa/alight-roundtrip.mjs` → PASS (XML export/import round-trip:
+      project + template + shake pack; proof test_ans_result/xml-roundtrip.mp4)
 - [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=100)
 - [ ] update STATE.md + FEATURES.md, commit, push to the session branch
 
@@ -64,6 +66,14 @@ only what is verified shipped.
   `data_motiondesijg/alight/`), MediaPanel "Import Alight XML" button +
   `store.importAlightXml`. All 12 corpus XMLs import (see
   `docs/alight-motion-study.md`). Proof: `test_ans_result/alight-warps-import.mp4`.
+- **XML EXPORT/IMPORT (user mandate):** MediaPanel exports the project and the
+  latest template as Alight-Motion-dialect XML (lossless round-trip through
+  omniframe.* namespaces); Import button reads AM projects AND template XMLs.
+  MCP: alight_export / template_export / template_import. AM project files are
+  NOT bundled in the app — users import/export XML.
+- **Built-in SHAKE PACK:** all 8 Shakes.xml presets with original keyframe
+  values (EffectsPanel section, store.applyShakePreset, MCP shake_apply,
+  list_presets catalog=shake).
 - **CC/TYMM Drive scan:** `new_doc_toll_research/CC-SCAN.md` (Overlays 38,
   Back Grounds 42, Sfx 41 in 5 subfolders, Shakes.xml imported, text-preset
   data incl. Quicksand_Bold stem match with the font pack; mega.nz recorded

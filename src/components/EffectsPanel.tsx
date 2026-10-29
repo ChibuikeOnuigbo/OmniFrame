@@ -8,6 +8,7 @@ import type { Clip, ClipEffect } from '../types'
 import { activeEffectKeys, placedEffectLabels } from '../lib/adjustment'
 import { applyLutStackToImageData, loadCubeLut, parseCubeLUT } from '../lib/lutEngine'
 import { PanelSection } from './PanelSection'
+import { SHAKE_PRESETS } from '../lib/shakePresets'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
 import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
 import { FX_CATS, getFxCatalog, paramsForPatch, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
@@ -1116,6 +1117,37 @@ function FxCatalogBrowser() {
   )
 }
 
+function ShakePackBrowser() {
+  const selectedClipId = useEditor((s) => s.selectedClipId)
+  const applyShakePreset = useEditor((s) => s.applyShakePreset)
+  const [msg, setMsg] = useState<string | null>(null)
+  return (
+    <div className="px-1 py-1" data-testid="shake-pack">
+      <div className="flex flex-wrap gap-1">
+        {SHAKE_PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            data-testid={`shake-preset-${p.id}`}
+            disabled={!selectedClipId}
+            title={`${p.source} — ${p.instances.length} fx instance(s), ${p.duration}s, original keyframe values`}
+            onClick={() => {
+              if (!selectedClipId) return
+              const n = applyShakePreset(selectedClipId, p.id)
+              setMsg(n ? `${p.name}: ${n} fx instance(s) + keys applied` : `${p.name}: needs a video/image clip selected`)
+            }}
+            className="rounded border border-ink-700 bg-ink-800 px-1.5 py-0.5 text-[10px] text-ink-200 hover:border-brand/60 hover:text-white disabled:opacity-40"
+          >
+            {p.name}
+          </button>
+        ))}
+      </div>
+      {msg && <p className="mt-1 text-[10px] text-brand-200" data-testid="shake-pack-msg">{msg}</p>}
+      <p className="mt-1 text-[10px] leading-snug text-ink-400">Built-in pack converted from the corpus Shakes.xml (MOLOB, ZNEPTUNE, FLOW, NANIMALO, RANDOM, JELLY, CU9ID + Warp): keyed fx-instance stacks with the ORIGINAL timings/values, scaled into engine ranges.</p>
+    </div>
+  )
+}
+
 export function EffectsPanel() {
   const clips = useEditor((s) => s.clips)
   const selectedClipId = useEditor((s) => s.selectedClipId)
@@ -1123,6 +1155,7 @@ export function EffectsPanel() {
   const selectedClip = clips.find((clip) => clip.id === selectedClipId)
   const layerCount = clips.filter((clip) => clip.kind === 'adjustment').length
   const customCount = useEditor((s) => s.customEffects.length)
+  const lutCount = useEditor((s) => s.lutLibrary.luts.length)
 
   return (
     <div data-testid="effects-panel" className="text-xs text-ink-200 select-none">
@@ -1137,8 +1170,12 @@ export function EffectsPanel() {
         <FxCatalogBrowser />
       </PanelSection>
 
-      <PanelSection title="LUT looks" hint="25" testId="adjustment-looks">
+      <PanelSection title="LUT looks" hint={lutCount ? String(lutCount) : '30'} testId="adjustment-looks">
         <LutGallery />
+      </PanelSection>
+
+      <PanelSection title="Shake pack (AM corpus)" hint={String(SHAKE_PRESETS.length)} testId="shake-pack-section">
+        <ShakePackBrowser />
       </PanelSection>
 
       <PanelSection title="My effects" hint={customCount ? String(customCount) : undefined} testId="custom-effects-section">

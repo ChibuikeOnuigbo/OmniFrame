@@ -677,7 +677,7 @@ class Help extends MCPTool {
   }
 }
 class ListPresets extends MCPTool {
-  constructor() { super('list_presets', 'Log of existing presets BEFORE choosing; optional data:img swatches for vision models.', { catalog: 'text|pillar|transition|ratios|speed', limit: 'n', dataImg: 'bool' }) }
+  constructor() { super('list_presets', 'Log of existing presets BEFORE choosing; optional data:img swatches for vision models.', { catalog: 'text|pillar|transition|ratios|speed|shake', limit: 'n', dataImg: 'bool' }) }
   async run({ catalog = 'text', limit = 8, dataImg = false }) {
     let entries = []
     const scan = (rel) => {
@@ -692,6 +692,7 @@ class ListPresets extends MCPTool {
     else if (catalog === 'pillar') entries = scan('src/lib/pillarPresets.ts')
     else if (catalog === 'transition') entries = scan('src/lib/transitionPresets.ts')
     else if (catalog === 'ratios') entries = scan('src/lib/aspectRatios.ts')
+    else if (catalog === 'shake') entries = (await loadAppTs('src/lib/shakePresets.ts')).SHAKE_PRESETS.map(p => ({ id: p.id, name: p.name }))
     else entries = (await import('./curves.mjs')).SPEED_CURVES.map(c => ({ id: c.id, name: c.name }))
     entries = entries.slice(0, limit)
     if (dataImg) for (const e of entries) e['data:img'] = swatch(catalog, e.id)
@@ -1053,7 +1054,9 @@ class FxAdd extends MCPTool {
     if (!c) throw new Error('no target clip')
     const range = FXI.clampFxToClip(Number(inP) || 0, Number(duration) || c.duration, c.duration)
     const fxId = `fx-${(c.fxInstances || []).length + 1}`
-    const inst = { id: fxId, catalogId, name: entry.name, inP: range.inP, duration: range.duration, params: { ...entry.patch, ...(params || {}) }, keys: keys || {}, enabled: true }
+    const normKeys = {}
+    for (const [kp, arr] of Object.entries(keys || {})) normKeys[kp] = (arr || []).map(k => Array.isArray(k) ? { t: Number(k[0]) || 0, v: Number(k[1]) || 0 } : k)
+    const inst = { id: fxId, catalogId, name: entry.name, inP: range.inP, duration: range.duration, params: { ...entry.patch, ...(params || {}) }, keys: normKeys, enabled: true }
     if (keyParam) inst.keys[keyParam] = [{ t: 0, v: Number(keyFrom) || 0 }, { t: inst.duration, v: Number(keyTo) || 0 }]
     c.fxInstances = [...(c.fxInstances || []), inst]
     return SESSION.note('fx_add', { clipId: c.id, catalogId }, { fxId, inP: +range.inP.toFixed(3), duration: +range.duration.toFixed(3), params: inst.params })
@@ -1273,4 +1276,103 @@ class AlightImport extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove, ReplaceVideo, TemplateCapture, TemplateApply, ListTemplates, ListFonts, AlightImport]) registry.register(new T())
+
+/* ---------- XML EXPORT (project + templates) + SHAKE PACK (MCP endpoints) ---------- */
+
+class AlightExport extends MCPTool {
+  constructor() { super('alight_export', 'Major tool: EXPORT the current composition as Alight Motion v5 dialect XML (inverse of alight_import). Round-trip lossless for OmniFrame: engine effect values travel in omniframe.fx blocks, the LUT stack in omniframe.lut, fx instances incl. per-param keys in omniframe.fxinst.<catalogId>, keyframed transforms as normalised <kf> with cubicBezier easing; clips imported FROM AM re-emit their original effect blocks verbatim. AM itself reads the scene/shape/text/transform skeleton.', { path: 'output .xml (default data_motiondesijg/alight/<title>-export.xml)', title: '' }) }
+  async run({ path: rel, title }) {
+    const AX = await loadAppTs('src/lib/alightXml.ts')
+    const s = seq()
+    const curveIds = ['position_x', 'position_y', 'scale_x', 'rotation_z', 'opacity']
+    const clips = s.clips.filter(c => c.kind !== 'audio' && c.kind !== 'adjustment').map(c => {
+      const curves = {}
+      if (c.animation) for (const id of curveIds) {
+        const cv = c.animation.curves[id]
+        if (cv && cv.keyframes && cv.keyframes.length > 1) curves[id] = cv.keyframes.map(k => ({ time: k.time, value: k.value, points: k.points }))
+      }
+      const isText = !!c.textStyle
+      const isVideo = !isText && /(\.mp4|\.mov|\.webm|^content:|^alight:)/i.test(String(c.asset || ''))
+      return {
+        name: c.name || c.id, kind: isText ? 'text' : isVideo ? 'video' : 'image',
+        start: c.start || 0, duration: c.duration, inPoint: c.inPoint || 0,
+        x: c.transform?.x || 0, y: c.transform?.y || 0, scale: c.transform?.scale ?? 1,
+        rotation: c.transform?.rotation || 0, opacity: c.transform?.opacity ?? 1, volume: c.volume,
+        text: isText ? String(c.name || '').replace(/^text:/, '') : undefined,
+        fontFamily: c.textStyle?.fontFamily, fontSize: c.textStyle?.fontSize, color: c.textStyle?.color,
+        mediaRef: c.asset, effects: c.effects,
+        luts: c.adjustment?.luts?.map(l => ({ builtin: l.builtin, id: l.id, intensity: l.intensity ?? 1 })),
+        fxInstances: c.fxInstances?.map(f => ({ catalogId: f.catalogId, inP: f.inP ?? 0, duration: f.duration ?? c.duration, params: f.params || {}, keys: f.keys })),
+        curves, amEffects: c.amEffects,
+      }
+    })
+    const xml = AX.exportAlightXml({ title: title || `OmniFrame ${s.clips.length}-clip composition`, w: s.w, h: s.h, fps: s.fps || 30, duration: s.duration }, clips)
+    const out = rel ? (rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)) : pathModule.join(ROOT, 'data_motiondesijg', 'alight', `${(title || 'composition').replace(/[^\w-]+/g, '-').slice(0, 48)}-export.xml`)
+    fs.mkdirSync(pathModule.dirname(out), { recursive: true })
+    fs.writeFileSync(out, xml)
+    return SESSION.note('alight_export', { path: pathModule.relative(ROOT, out), title }, { file: pathModule.relative(ROOT, out), bytes: xml.length, clips: clips.length })
+  }
+}
+
+class TemplateExport extends MCPTool {
+  constructor() { super('template_export', 'Major tool: export a captured template (template_capture) as XML — the FULL processing chain rides inside a marked comment (lossless re-import via template_import / the browser Import Alight XML button) with an AM-readable skeleton summarising the chain. format json writes the raw dump only.', { templateId: 'id or name', path: 'output .xml (default data_motiondesijg/templates/<id>.xml)', format: 'xml|json (default xml)' }) }
+  async run({ templateId, path: rel, format = 'xml' }) {
+    const AX = await loadAppTs('src/lib/alightXml.ts')
+    const t = Object.values(SESSION.templates).find(x => x.id === templateId || x.name === templateId)
+    if (!t) throw new Error('template not found: ' + templateId)
+    const dir = pathModule.join(ROOT, 'data_motiondesijg', 'templates')
+    fs.mkdirSync(dir, { recursive: true })
+    const out = rel ? (rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)) : pathModule.join(dir, `${t.id}.${format === 'json' ? 'json' : 'xml'}`)
+    const body = format === 'json' ? JSON.stringify(t, null, 2) : AX.exportTemplateXml(t)
+    fs.writeFileSync(out, body)
+    return SESSION.note('template_export', { templateId: t.id, format }, { file: pathModule.relative(ROOT, out), bytes: body.length, fields: Object.keys(t.fields) })
+  }
+}
+
+class TemplateImport extends MCPTool {
+  constructor() { super('template_import', 'Major tool: import a template XML (template_export) back into the session — registers the full processing chain so template_apply can replay it. Plain AM project XML is rejected here (use alight_import).', { path: '.xml file' }) }
+  async run({ path: rel }) {
+    const AX = await loadAppTs('src/lib/alightXml.ts')
+    const abs = rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)
+    const t = AX.importTemplateXml(fs.readFileSync(abs, 'utf8'))
+    if (!t) throw new Error('not an OmniFrame template XML (no omniframe-template marker): use alight_import for AM projects')
+    SESSION.templates[t.id] = t
+    const dir = pathModule.join(ROOT, 'data_motiondesijg', 'templates')
+    fs.mkdirSync(dir, { recursive: true })
+    fs.writeFileSync(pathModule.join(dir, `${t.id}.json`), JSON.stringify(t, null, 2))
+    return SESSION.note('template_import', { path: rel }, { templateId: t.id, name: t.name, fields: Object.keys(t.fields), fieldCount: t.fieldCount })
+  }
+}
+
+class ShakeApply extends MCPTool {
+  constructor() { super('shake_apply', 'Major tool: apply a built-in SHAKE PACK preset (corpus Shakes.xml — MOLOB, ZNEPTUNE, FLOW, NANIMALO, RANDOM, JELLY, CU9ID, WARP; log via list_presets catalog=shake). Each preset = the original keyed fx-instance stack (shake/oscillate/turbulent/exposure/zoomblur/squeeze/stretch params with the ORIGINAL keyframe values and timings) + transform keys where the AM rig used them (CU9ID scale/rotation).', { clipId: '(default selected)', preset: 'shake preset id or name' }) }
+  async run({ clipId, preset }) {
+    const SP = await loadAppTs('src/lib/shakePresets.ts')
+    const s = seq()
+    const c = clipId ? s.clips.find(x => x.id === clipId) : sel()
+    if (!c) throw new Error('clip not found')
+    const p = SP.SHAKE_PRESETS.find(x => x.id === preset || x.name.toLowerCase() === String(preset).toLowerCase())
+    if (!p) throw new Error(`unknown shake preset: ${preset} (ids: ${SP.SHAKE_PRESETS.map(x => x.id).join(', ')})`)
+    const applied = []
+    for (const inst of p.instances) {
+      const keys = {}
+      for (const [param, arr] of Object.entries(inst.keys || {})) keys[param] = arr.map(k => [Math.min(k.t, p.duration), k.v])
+      const r = await registry.call('fx_add', { clipId: c.id, catalogId: inst.catalogId, inP: 0, duration: Math.min(p.duration, c.duration), params: inst.params, keys: Object.keys(keys).length ? keys : undefined })
+      if (r.ok) applied.push(inst.catalogId)
+    }
+    await registry.call('select', { clipId: c.id })
+    let tkeys = 0
+    for (const [prop, arr] of Object.entries(p.transformKeys || {})) {
+      for (const k of arr || []) {
+        const property = prop === 'scale' ? 'scale' : 'rotation'
+        const channel = prop === 'scale' ? 'X' : 'Z'
+        const r = await registry.call('keyframe_set', { property, channel, time: Math.min(k.t, c.duration), value: k.v, interpolation: 'linear' })
+        if (r.ok) tkeys++
+        if (prop === 'scale') { const r2 = await registry.call('keyframe_set', { property: 'scale', channel: 'Y', time: Math.min(k.t, c.duration), value: k.v, interpolation: 'linear' }); if (r2.ok) tkeys++ }
+      }
+    }
+    return SESSION.note('shake_apply', { clipId: c.id, preset: p.id }, { clipId: c.id, preset: p.name, fxInstances: applied, transformKeys: tkeys, duration: p.duration })
+  }
+}
+
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove, ReplaceVideo, TemplateCapture, TemplateApply, ListTemplates, ListFonts, AlightImport, AlightExport, TemplateExport, TemplateImport, ShakeApply]) registry.register(new T())

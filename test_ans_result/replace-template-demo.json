@@ -87,7 +87,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "position_x",
-     "keyframeId": "kf_4xg14b8"
+     "keyframeId": "kf_4cl4lr0"
     }
    },
    {
@@ -102,7 +102,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "position_x",
-     "keyframeId": "kf_zd43210"
+     "keyframeId": "kf_zpua77r"
     }
    },
    {
@@ -117,7 +117,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "scale_x",
-     "keyframeId": "kf_bu2yixu"
+     "keyframeId": "kf_k4cnaev"
     }
    },
    {
@@ -132,7 +132,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "scale_x",
-     "keyframeId": "kf_8jkf3f4"
+     "keyframeId": "kf_a457bl3"
     }
    },
    {
@@ -142,8 +142,8 @@
      "name": "TYMM graded push-in"
     },
     "out": {
-     "templateId": "tmpl-mvtaxepc-32t",
-     "file": "data_motiondesijg/templates/tmpl-mvtaxepc-32t.json",
+     "templateId": "tmpl-mvtsda54-5yz",
+     "file": "data_motiondesijg/templates/tmpl-mvtsda54-5yz.json",
      "fields": [
       "transform",
       "animation",
@@ -170,7 +170,7 @@
    {
     "tool": "template_apply",
     "params": {
-     "templateId": "tmpl-mvtaxepc-32t",
+     "templateId": "tmpl-mvtsda54-5yz",
      "clipId": "clip-2"
     },
     "out": {
@@ -250,7 +250,7 @@
     "out": {
      "templates": [
       {
-       "id": "tmpl-mvtaxepc-32t",
+       "id": "tmpl-mvtsda54-5yz",
        "name": "TYMM graded push-in",
        "source": "-9UkBHVV9OA.mp4",
        "fields": [
@@ -260,7 +260,7 @@
         "adjustment",
         "blendMode"
        ],
-       "file": "data_motiondesijg/templates/tmpl-mvtaxepc-32t.json"
+       "file": "data_motiondesijg/templates/tmpl-mvtsda54-5yz.json"
       }
      ],
      "dir": "/home/user/OmniFrame/data_motiondesijg/templates"
@@ -498,13 +498,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_4xg14b8",
+        "id": "kf_4cl4lr0",
         "time": 0,
         "value": -60,
         "interpolation": "easeInOut"
        },
        {
-        "id": "kf_zd43210",
+        "id": "kf_zpua77r",
         "time": 2.5,
         "value": 60,
         "interpolation": "easeInOut"
@@ -517,13 +517,13 @@
       "rotation_z": [],
       "scale_x": [
        {
-        "id": "kf_bu2yixu",
+        "id": "kf_k4cnaev",
         "time": 0,
         "value": 0.92,
         "interpolation": "easeOut"
        },
        {
-        "id": "kf_8jkf3f4",
+        "id": "kf_a457bl3",
         "time": 2.5,
         "value": 1.08,
         "interpolation": "easeOut"
@@ -564,13 +564,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_4xg14b8",
+        "id": "kf_4cl4lr0",
         "time": 0,
         "value": -60,
         "interpolation": "easeInOut"
        },
        {
-        "id": "kf_zd43210",
+        "id": "kf_zpua77r",
         "time": 2.5,
         "value": 60,
         "interpolation": "easeInOut"
@@ -583,13 +583,13 @@
       "rotation_z": [],
       "scale_x": [
        {
-        "id": "kf_bu2yixu",
+        "id": "kf_k4cnaev",
         "time": 0,
         "value": 0.92,
         "interpolation": "easeOut"
        },
        {
-        "id": "kf_8jkf3f4",
+        "id": "kf_a457bl3",
         "time": 2.5,
         "value": 1.08,
         "interpolation": "easeOut"

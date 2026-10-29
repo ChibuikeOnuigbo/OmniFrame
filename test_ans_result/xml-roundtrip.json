@@ -1,0 +1,198 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/xml-roundtrip.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/xml-roundtrip.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 5167,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "alight_import",
+    "params": {
+     "path": "data_motiondesijg/alight/roundtrip-export.xml",
+     "includeNulls": false
+    },
+    "out": {
+     "project": {
+      "title": "RT project",
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 3,
+      "bg": "#000000"
+     },
+     "clips": 2,
+     "layersParsed": 2,
+     "stats": {
+      "shapes": 2,
+      "effectsTotal": 6,
+      "mapped": 6,
+      "unmapped": 0,
+      "keyframed": 2,
+      "mediaRefs": []
+     },
+     "bookmarks": 0,
+     "dump": "data_motiondesijg/alight/RT-project.json",
+     "hint": "media layers are placeholders — swap footage with replace_video (carryEffects keeps the AM chain)"
+    }
+   },
+   {
+    "tool": "template_import",
+    "params": {
+     "path": "data_motiondesijg/templates/tmpl-mvtscr6p-4zl.xml"
+    },
+    "out": {
+     "templateId": "tmpl-mvtscr6p-4zl",
+     "name": "RT chain",
+     "fields": [
+      "transform",
+      "animation",
+      "effects",
+      "fxInstances",
+      "adjustment",
+      "blendMode"
+     ],
+     "fieldCount": 6
+    }
+   },
+   {
+    "tool": "template_apply",
+    "params": {
+     "templateId": "tmpl-mvtscr6p-4zl",
+     "clipId": "clip-1"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "template": "RT chain",
+     "applied": [
+      "transform",
+      "animation",
+      "effects",
+      "fxInstances",
+      "adjustment",
+      "blendMode",
+      "inPoint",
+      "duration"
+     ],
+     "inPoint": 0
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/xml-roundtrip.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 3,
+    "bg": "#000000"
+   },
+   "selection": "clip-1",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "preview-Lut 0.jpg",
+     "start": 0,
+     "duration": 3,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "brightness": 1.08,
+      "contrast": 1.2,
+      "glow": 0.4
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [
+       {
+        "id": "kf_dd12nuf",
+        "time": 0,
+        "value": -50,
+        "interpolation": "custom"
+       },
+       {
+        "id": "kf_oz6zsbj",
+        "time": 2,
+        "value": 50,
+        "interpolation": "custom"
+       }
+      ],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "AM text text:RT",
+     "start": 0,
+     "duration": 3,
+     "transform": {
+      "x": 320,
+      "y": 60,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

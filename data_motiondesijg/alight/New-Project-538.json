@@ -154,6 +154,474 @@
     ]
    },
    {
+    "amId": "10187193",
+    "name": "AM text 10187193",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0,
+    "duration": 2.166,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 257.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "KERI UDAN FOR ME",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
+    ]
+   },
+   {
+    "amId": "10187194",
+    "name": "AM text 10187194",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0.967,
+    "duration": 1.1989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 322.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "IF YOU PLEASE. ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
+    ]
+   },
+   {
     "amId": "10187207",
     "name": "Shape 1",
     "kind": "solid",
@@ -364,6 +832,485 @@
     "mappedFx": [],
     "unmappedFx": [
      "drawing.progress"
+    ]
+   },
+   {
+    "amId": "10187209",
+    "name": "AM text 10187209",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0,
+    "duration": 2.232,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 243.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "Man... ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.963309,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1.031429,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
+    ]
+   },
+   {
+    "amId": "10187210",
+    "name": "AM text 10187210",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0.7,
+    "duration": 1.5320000000000003,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 316,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "That Doesn't Sound Bad Either. ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.963309,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1.031429,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
     ]
    },
    {
@@ -760,6 +1707,240 @@
     ]
    },
    {
+    "amId": "10187219",
+    "name": "AM text 10187219",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0,
+    "duration": 0.799,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 310.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NO... ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
+    ]
+   },
+   {
     "amId": "10187220",
     "name": "Shape 1",
     "kind": "solid",
@@ -966,6 +2147,240 @@
     "mappedFx": [],
     "unmappedFx": [
      "drawing.progress"
+    ]
+   },
+   {
+    "amId": "10187226",
+    "name": "AM text 10187226",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0,
+    "duration": 1.099,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 280.980225,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "WHOO, THERE. ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
     ]
    },
    {
@@ -1178,6 +2593,240 @@
     ]
    },
    {
+    "amId": "10187233",
+    "name": "AM text 10187233",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0,
+    "duration": 1.332,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -313.5,
+    "y": 297.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "Are You Okay? ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
+    ]
+   },
+   {
     "amId": "10187234",
     "name": "Shape 1",
     "kind": "solid",
@@ -1369,6 +3018,240 @@
     "mappedFx": [],
     "unmappedFx": [
      "drawing.progress"
+    ]
+   },
+   {
+    "amId": "10187239",
+    "name": "AM text 10187239",
+    "kind": "text",
+    "fontFamily": "LOVELY",
+    "fontSize": 24,
+    "align": "center",
+    "start": 0,
+    "duration": 1.132,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": 295.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "CAN YOU STAND UP? ",
+    "effects": {
+     "gradientMap": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-gradientoverlay2"
+    ],
+    "unmappedFx": [
+     "texttransform",
+     "textspacing"
     ]
    },
    {
@@ -1729,6 +3612,96 @@
     ]
    },
    {
+    "amId": "10187509",
+    "name": "AM text 10187509",
+    "kind": "text",
+    "fontFamily": "Okay Jelly",
+    "fontSize": 48,
+    "align": "center",
+    "start": 0,
+    "duration": 1.165,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": -193.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "I",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
+    "amId": "10187510",
+    "name": "AM text 10187510",
+    "kind": "text",
+    "fontFamily": "Okay Jelly",
+    "fontSize": 48,
+    "align": "center",
+    "start": 0.3,
+    "duration": 0.865,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 15.071044999999913,
+    "y": -64,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "HOPE",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
+    "amId": "10187511",
+    "name": "AM text 10187511",
+    "kind": "text",
+    "fontFamily": "Okay Jelly",
+    "fontSize": 48,
+    "align": "center",
+    "start": 0.666,
+    "duration": 0.499,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 52,
+    "y": 77.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "You'll LIKE IT",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "10187500",
     "name": "Shape 1",
     "kind": "solid",
@@ -2073,8 +4046,46 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 1280.5
+      },
+      {
+       "time": 0.19899999999999984,
+       "value": 1280,
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 2171.5
+      },
+      {
+       "time": 0.19899999999999984,
+       "value": 720,
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -2587,7 +4598,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.01700006,
+       "value": 3
+      },
+      {
+       "time": 0.516999728,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23666666,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2613,7 +4643,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.28300006,
+       "value": 1
+      },
+      {
+       "time": 0.516999728,
+       "value": 3,
+       "points": [
+        [
+         0.8466667,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2929,7 +4978,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.21333331,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2955,7 +5023,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2170001400000005,
+       "value": 1
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 5,
+       "points": [
+        [
+         0.82,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3271,7 +5358,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 1
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 1.3,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3613,7 +5719,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.016999967999999987,
+       "value": 3
+      },
+      {
+       "time": 0.3499999439999997,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3640,7 +5765,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.18299999999999983,
+       "value": 1
+      },
+      {
+       "time": 0.3499999439999997,
+       "value": 1.4,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3666,7 +5810,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.24999995999999977,
+       "value": 1
+      },
+      {
+       "time": 0.3499999439999997,
+       "value": 0.08,
+       "points": [
+        [
+         0.76,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3982,7 +6145,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.01600004999999992,
+       "value": 5
+      },
+      {
+       "time": 0.16499999999999915,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -4006,9 +6188,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.08299994999999957,
+       "value": 1280
+      },
+      {
+       "time": 0.1500000149999992,
+       "value": 1280,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.08299994999999957,
+       "value": 720
+      },
+      {
+       "time": 0.1500000149999992,
+       "value": 2618.040771,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.08299994999999957,
+       "value": 1
+      },
+      {
+       "time": 0.1500000149999992,
+       "value": 4.32,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -4322,9 +6561,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.5660000000000007,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0.35921198
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.5660000000000007,
+       "value": 259.5,
+       "points": [
+        [
+         0,
+         0.35921198
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.5660000000000007,
+       "value": 1.4,
+       "points": [
+        [
+         0,
+         0.44331396
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -4348,9 +6644,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.28400012200000035,
+       "value": 1280
+      },
+      {
+       "time": 0.5499997460000007,
+       "value": 1286.050415,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.28400012200000035,
+       "value": 720
+      },
+      {
+       "time": 0.5499997460000007,
+       "value": 558.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.28400012200000035,
+       "value": 1
+      },
+      {
+       "time": 0.5499997460000007,
+       "value": 0.6,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -4665,7 +7018,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 1.2,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -4980,7 +7352,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.01699997300000014,
+       "value": 3
+      },
+      {
+       "time": 0.1830000020000015,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -5296,7 +7687,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.017000059999999945,
+       "value": 0.7
+      },
+      {
+       "time": 0.33199999999999896,
+       "value": 1.2,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -5322,7 +7732,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.14999992399999953,
+       "value": 1
+      },
+      {
+       "time": 0.33199999999999896,
+       "value": 0.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -5638,7 +8067,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.01699980999999997,
+       "value": 5
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -5662,9 +8110,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.3829997479999993,
+       "value": 1280
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 391.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.3829997479999993,
+       "value": 720
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 725.685425,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.3829997479999993,
+       "value": 1
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -5980,7 +8485,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.33200000000000074,
+       "value": 1.2,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -6006,7 +8530,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.18300006000000038,
+       "value": 1
+      },
+      {
+       "time": 0.33200000000000074,
+       "value": 0.52,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -6322,7 +8865,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.01700003199999995,
+       "value": 5
+      },
+      {
+       "time": 0.21700003999999937,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -6346,9 +8908,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.11699991999999966,
+       "value": 1280
+      },
+      {
+       "time": 0.23199999999999932,
+       "value": -2167.139404,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.3382353
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.11699991999999966,
+       "value": 720
+      },
+      {
+       "time": 0.23199999999999932,
+       "value": 718.039551,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.3382353
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.11699991999999966,
+       "value": 1
+      },
+      {
+       "time": 0.23199999999999932,
+       "value": 8.76,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.22794119
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -6662,9 +9281,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 559.999268
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": -7.5
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 1.1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -6690,7 +9366,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2170001400000005,
+       "value": 1
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -7005,7 +9700,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.016000001999999614,
+       "value": 5
+      },
+      {
+       "time": 0.1339999999999968,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -7320,7 +10034,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.01699997300000014,
+       "value": 5
+      },
+      {
+       "time": 0.19900000000000162,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -7600,8 +10333,18 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0.3839998799999996,
+       "value": 0
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.3839998799999996,
+       "value": 0
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -7636,7 +10379,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.3499999599999985,
+       "value": 1.1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -7660,9 +10422,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.2500001799999989,
+       "value": 1279
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": -686.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.2500001799999989,
+       "value": 720
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 713.21167,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.2500001799999989,
+       "value": 1
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -7946,8 +10765,18 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0.017999981999999914,
+       "value": 0
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.017999981999999914,
+       "value": 0
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -7982,7 +10811,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         0.7632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -8009,7 +10857,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.11699988299999944,
+       "value": 1
+      },
+      {
+       "time": 0.3170000159999985,
+       "value": 0.9,
+       "points": [
+        [
+         0,
+         0.87794113
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -8033,9 +10900,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.1840001489999991,
+       "value": 1279
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 167.506744,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.1840001489999991,
+       "value": 720
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 1391.506714,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.1840001489999991,
+       "value": 1
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 4,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -8355,7 +11279,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 1.3,
+       "points": [
+        [
+         0.07999998,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -8381,7 +11324,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.18300004999999922,
+       "value": 1
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 0.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -8697,7 +11659,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.01700006,
+       "value": 3
+      },
+      {
+       "time": 0.516999728,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23666666,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -8723,7 +11704,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.28300006,
+       "value": 1
+      },
+      {
+       "time": 0.516999728,
+       "value": 3,
+       "points": [
+        [
+         0.8466667,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9039,7 +12039,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.21333331,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9065,7 +12084,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2170001400000005,
+       "value": 1
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 5,
+       "points": [
+        [
+         0.82,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9381,7 +12419,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 1
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 1.3,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9723,7 +12780,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.016999967999999987,
+       "value": 3
+      },
+      {
+       "time": 0.3499999439999997,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9750,7 +12826,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.18299999999999983,
+       "value": 1
+      },
+      {
+       "time": 0.3499999439999997,
+       "value": 1.4,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9776,7 +12871,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.24999995999999977,
+       "value": 1
+      },
+      {
+       "time": 0.3499999439999997,
+       "value": 0.08,
+       "points": [
+        [
+         0.76,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10092,7 +13206,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.01600004999999992,
+       "value": 5
+      },
+      {
+       "time": 0.16499999999999915,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10116,9 +13249,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.08299994999999957,
+       "value": 1280
+      },
+      {
+       "time": 0.1500000149999992,
+       "value": 1280,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.08299994999999957,
+       "value": 720
+      },
+      {
+       "time": 0.1500000149999992,
+       "value": 2618.040771,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.08299994999999957,
+       "value": 1
+      },
+      {
+       "time": 0.1500000149999992,
+       "value": 4.32,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10432,9 +13622,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.565999999999999,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0.35921198
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.565999999999999,
+       "value": 259.5,
+       "points": [
+        [
+         0,
+         0.35921198
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.565999999999999,
+       "value": 1.4,
+       "points": [
+        [
+         0,
+         0.44331396
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10458,9 +13705,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.28400012199999947,
+       "value": 1280
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 1286.050415,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.28400012199999947,
+       "value": 720
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 558.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.28400012199999947,
+       "value": 1
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 0.6,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10775,7 +14079,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 1.2,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -11090,7 +14413,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.01699997300000014,
+       "value": 3
+      },
+      {
+       "time": 0.1830000020000015,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -11406,7 +14748,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.017000059999999855,
+       "value": 0.7
+      },
+      {
+       "time": 0.3319999999999972,
+       "value": 1.2,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -11432,7 +14793,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.14999992399999873,
+       "value": 1
+      },
+      {
+       "time": 0.3319999999999972,
+       "value": 0.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -11748,7 +15128,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.01699980999999997,
+       "value": 5
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -11772,9 +15171,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.3829997479999993,
+       "value": 1280
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 391.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.3829997479999993,
+       "value": 720
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 725.685425,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.3829997479999993,
+       "value": 1
+      },
+      {
+       "time": 0.549999745999999,
+       "value": 3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -12090,7 +15546,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.33200000000000074,
+       "value": 1.2,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -12116,7 +15591,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.18300006000000038,
+       "value": 1
+      },
+      {
+       "time": 0.33200000000000074,
+       "value": 0.52,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -12432,7 +15926,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.01700003200000021,
+       "value": 5
+      },
+      {
+       "time": 0.21700004000000267,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -12456,9 +15969,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.11699992000000145,
+       "value": 1280
+      },
+      {
+       "time": 0.23200000000000287,
+       "value": -2167.139404,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.3382353
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.11699992000000145,
+       "value": 720
+      },
+      {
+       "time": 0.23200000000000287,
+       "value": 718.039551,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.3382353
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.11699992000000145,
+       "value": 1
+      },
+      {
+       "time": 0.23200000000000287,
+       "value": 8.76,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.22794119
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -12772,9 +16342,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 559.999268
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": -7.5
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.38399999400000084,
+       "value": 1.1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -12800,7 +16427,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2170001400000005,
+       "value": 1
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -13115,7 +16761,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.01600000200000004,
+       "value": 5
+      },
+      {
+       "time": 0.13400000000000034,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -13430,7 +17095,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": -0.016999972999999835,
+       "value": 5
+      },
+      {
+       "time": 0.19899999999999807,
+       "value": 1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -13710,8 +17394,18 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0.3839998799999996,
+       "value": 0
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.3839998799999996,
+       "value": 0
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -13746,7 +17440,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.3499999599999985,
+       "value": 1.1,
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -13770,9 +17483,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.2500001799999989,
+       "value": 1279
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": -686.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.2500001799999989,
+       "value": 720
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 713.21167,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.2500001799999989,
+       "value": 1
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -14056,8 +17826,18 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0.017999981999999914,
+       "value": 0
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.017999981999999914,
+       "value": 0
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -14092,7 +17872,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         0.7632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -14119,7 +17918,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.11699988299999944,
+       "value": 1
+      },
+      {
+       "time": 0.3170000159999985,
+       "value": 0.9,
+       "points": [
+        [
+         0,
+         0.87794113
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -14143,9 +17961,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.1840001489999991,
+       "value": 1279
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 167.506744,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.1840001489999991,
+       "value": 720
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 1391.506714,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.1840001489999991,
+       "value": 1
+      },
+      {
+       "time": 0.3329999999999984,
+       "value": 4,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -14465,7 +18340,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 1.3,
+       "points": [
+        [
+         0.07999998,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -14491,7 +18385,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.18300004999999922,
+       "value": 1
+      },
+      {
+       "time": 0.36499999999999844,
+       "value": 0.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -14697,6 +18610,66 @@
     ]
    },
    {
+    "amId": "10187520",
+    "name": "AM text 10187520",
+    "kind": "text",
+    "fontFamily": "Okay Jelly",
+    "fontSize": 48,
+    "align": "center",
+    "start": 0,
+    "duration": 2.099,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": -62.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "PLEASE ",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
+    "amId": "10187521",
+    "name": "AM text 10187521",
+    "kind": "text",
+    "fontFamily": "Okay Jelly",
+    "fontSize": 48,
+    "align": "center",
+    "start": 0.567,
+    "duration": 1.5320000000000003,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 71,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "SUBSCRIBE ",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "10187533",
     "name": "Shape 1",
     "kind": "solid",
@@ -14890,7 +18863,26 @@
      "positionY": [],
      "scale": [],
      "rotation": [],
-     "opacity": []
+     "opacity": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 1.032,
+       "value": 1,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ]
     },
     "mappedFx": [],
     "unmappedFx": []
@@ -15039,8 +19031,46 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 1280.5
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 1280,
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 2171.5
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 720,
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -18936,8 +22966,46 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 1280.5
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 1280,
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 2171.5
+      },
+      {
+       "time": 0.16600000000000037,
+       "value": 720,
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -22605,11 +26673,11 @@
   ],
   "bookmarks": [],
   "stats": {
-   "shapes": 189,
-   "effectsTotal": 435,
-   "mapped": 413,
-   "unmapped": 22,
-   "keyframed": 176,
+   "shapes": 202,
+   "effectsTotal": 459,
+   "mapped": 421,
+   "unmapped": 38,
+   "keyframed": 192,
    "mediaRefs": [
     "content://media/external/video/media/1000033407",
     "content://media/external/video/media/1000033451",
@@ -22806,6 +26874,460 @@
      }
     ],
     "fillColor": "#ff8d3765"
+   },
+   {
+    "id": "10187193",
+    "label": "",
+    "startTime": 0,
+    "endTime": 2.166,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 1340,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 977.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "KERI UDAN FOR ME"
+   },
+   {
+    "id": "10187194",
+    "label": "",
+    "startTime": 0.967,
+    "endTime": 2.166,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 1340,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 1042.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "IF YOU PLEASE. "
    },
    {
     "id": "10187207",
@@ -23016,6 +27538,471 @@
      }
     ],
     "fillColor": "#ff7147e0"
+   },
+   {
+    "id": "10187209",
+    "label": "",
+    "startTime": 0,
+    "endTime": 2.232,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 963.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.963309,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1.031429,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "Man... "
+   },
+   {
+    "id": "10187210",
+    "label": "",
+    "startTime": 0.7,
+    "endTime": 2.232,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 1606,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 1036,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.963309,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1.031429,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "That Doesn't Sound Bad Either. "
    },
    {
     "id": "10187211",
@@ -23402,6 +28389,233 @@
     "fillColor": "#ff4f543e"
    },
    {
+    "id": "10187219",
+    "label": "",
+    "startTime": 0,
+    "endTime": 0.799,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 1030.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NO... "
+   },
+   {
     "id": "10187220",
     "label": "Shape 1",
     "startTime": 0,
@@ -23606,6 +28820,233 @@
      }
     ],
     "fillColor": "#ffb4c97a"
+   },
+   {
+    "id": "10187226",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.099,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 1000.980225,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "WHOO, THERE. "
    },
    {
     "id": "10187227",
@@ -23814,6 +29255,233 @@
     "fillColor": "#ff91a276"
    },
    {
+    "id": "10187233",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.332,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 966.5,
+     "y": 1017.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "Are You Okay? "
+   },
+   {
     "id": "10187234",
     "label": "Shape 1",
     "startTime": 0,
@@ -24003,6 +29671,233 @@
      }
     ],
     "fillColor": "#ffd4bbce"
+   },
+   {
+    "id": "10187239",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.132,
+    "fillType": "text",
+    "font": "imported?name=LOVELY.otf",
+    "fontSize": 24,
+    "align": "center",
+    "wrapWidth": 1555,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 1015.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.933956,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "-11.000000,160.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "-0.930000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "9.730000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.textspacing",
+      "short": "textspacing",
+      "props": {
+       "letterspacing": {
+        "name": "letterspacing",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       },
+       "linespacing": {
+        "name": "linespacing",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.gradientoverlay2",
+      "short": "gradientoverlay2",
+      "props": {
+       "color1": {
+        "name": "color1",
+        "type": "color",
+        "value": "#ffe4933b",
+        "kfs": []
+       },
+       "color2": {
+        "name": "color2",
+        "type": "color",
+        "value": "#ffffffff",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "50.000000"
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "0.750000",
+        "kfs": []
+       },
+       "gradType": {
+        "name": "gradType",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "CAN YOU STAND UP? "
    },
    {
     "id": "10187240",
@@ -24352,6 +30247,96 @@
     "fillColor": "#ff4b42e5"
    },
    {
+    "id": "10187509",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.165,
+    "fillType": "text",
+    "font": "imported?name=Okay Jelly.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 1784,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 526.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "I"
+   },
+   {
+    "id": "10187510",
+    "label": "",
+    "startTime": 0.3,
+    "endTime": 1.165,
+    "fillType": "text",
+    "font": "imported?name=Okay Jelly.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 1784,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1295.071045,
+     "y": 656,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "HOPE"
+   },
+   {
+    "id": "10187511",
+    "label": "",
+    "startTime": 0.666,
+    "endTime": 1.165,
+    "fillType": "text",
+    "font": "imported?name=Okay Jelly.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 1784,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1332,
+     "y": 797.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "You'll LIKE IT"
+   },
+   {
     "id": "10187500",
     "label": "Shape 1",
     "startTime": 0,
@@ -24561,7 +30546,27 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "1280.500000,2171.500000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "1280.000000,720.000000,0.000000",
+       "ease": "cubicBezier 0.8566667 0.0 1.0 1.0",
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -25172,7 +31177,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.031955,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 0.971804,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.23666666 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23666666,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25197,7 +31222,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.531955,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.971804,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 0.8466667 0.0 1.0 0.0",
+       "points": [
+        [
+         0.8466667,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25501,7 +31546,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 0.962406,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.21333331 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.21333331,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25526,7 +31591,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.54386,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.962406,
+       "v": "5.000000,5.000000",
+       "ease": "cubicBezier 0.82 0.0 1.0 0.0",
+       "points": [
+        [
+         0.82,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25830,7 +31915,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.300000,1.300000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26159,7 +32264,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.046448,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 0.956284,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26185,7 +32310,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.5,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.956284,
+       "v": "1.400000,1.400000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26210,7 +32355,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.68306,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.956284,
+       "v": "0.080000,0.080000",
+       "ease": "cubicBezier 0.76 0.0 1.0 0.0",
+       "points": [
+        [
+         0.76,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26514,7 +32679,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.09697,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26538,8 +32723,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.50303,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 0.909091,
+       "v": "1280.000000,2618.040771,0.000000",
+       "ease": "cubicBezier 0.42 0.0 1.0 0.0",
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.50303,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.909091,
+       "v": "4.320000,4.320000",
+       "ease": "cubicBezier 0.42 0.0 1.0 0.0",
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26842,8 +33067,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "0.000000,0.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000,259.500000,0.000000",
+       "ease": "cubicBezier 0.0 0.35921198 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.35921198
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 1,
+       "v": "1.400000,1.400000",
+       "ease": "cubicBezier 0.0 0.44331396 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.44331396
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26867,8 +33132,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.501767,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "1286.050415,558.500000,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.501767,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "0.600000,0.600000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -27171,7 +33476,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -27474,7 +33799,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.085427,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 0.919598,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -27778,7 +34123,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.051205,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -27803,7 +34168,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.451807,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.500000,0.500000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28107,7 +34492,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.030035,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28131,8 +34536,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.676678,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "391.500000,725.685425,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.676678,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28436,7 +34881,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28461,7 +34926,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.551205,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.520000,0.520000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28765,7 +35250,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.073276,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 0.935345,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28789,8 +35294,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.50431,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "-2167.139404,718.039551,0.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.3382353",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.3382353
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.50431,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "8.760000,8.760000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.22794119",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.22794119
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29093,8 +35638,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "559.999268,-7.500000,0.000000"
+      },
+      {
+       "t": 0.962406,
+       "v": "0.000000,0.000000,0.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 0.962406,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29119,7 +35704,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.54386,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.500000,0.500000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29422,7 +36027,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.119403,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29725,7 +36350,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.085427,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29751,7 +36396,12 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 1.04918,
+       "v": "0.000000,0.000000,0.000000"
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -30029,7 +36679,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 0.958904,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -30053,8 +36723,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.684932,
+       "v": "1279.000000,720.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "-686.500000,713.211670,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.684932,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -30080,7 +36790,12 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0.054054,
+       "v": "0.000000,0.000000,0.000000"
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -30362,7 +37077,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 0.7632353 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.7632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -30388,7 +37123,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.351351,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.951952,
+       "v": "0.900000,0.900000",
+       "ease": "cubicBezier 0.0 0.87794113 0.58 1.0",
+       "points": [
+        [
+         0,
+         0.87794113
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -30412,8 +37167,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.552553,
+       "v": "1279.000000,720.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "167.506744,1391.506714,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.552553,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "4.000000,4.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -30721,7 +37516,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 1,
+       "v": "1.300000,1.300000",
+       "ease": "cubicBezier 0.07999998 0.75 0.0 1.0",
+       "points": [
+        [
+         0.07999998,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -30746,7 +37561,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.50137,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.500000,0.500000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -31050,7 +37885,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.031955,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 0.971804,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.23666666 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23666666,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -31075,7 +37930,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.531955,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.971804,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 0.8466667 0.0 1.0 0.0",
+       "points": [
+        [
+         0.8466667,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -31379,7 +38254,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 0.962406,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.21333331 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.21333331,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -31404,7 +38299,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.54386,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.962406,
+       "v": "5.000000,5.000000",
+       "ease": "cubicBezier 0.82 0.0 1.0 0.0",
+       "points": [
+        [
+         0.82,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -31708,7 +38623,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.300000,1.300000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32037,7 +38972,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.046448,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 0.956284,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32063,7 +39018,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.5,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.956284,
+       "v": "1.400000,1.400000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32088,7 +39063,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.68306,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.956284,
+       "v": "0.080000,0.080000",
+       "ease": "cubicBezier 0.76 0.0 1.0 0.0",
+       "points": [
+        [
+         0.76,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32392,7 +39387,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.09697,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32416,8 +39431,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.50303,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 0.909091,
+       "v": "1280.000000,2618.040771,0.000000",
+       "ease": "cubicBezier 0.42 0.0 1.0 0.0",
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.50303,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.909091,
+       "v": "4.320000,4.320000",
+       "ease": "cubicBezier 0.42 0.0 1.0 0.0",
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32720,8 +39775,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "0.000000,0.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000,259.500000,0.000000",
+       "ease": "cubicBezier 0.0 0.35921198 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.35921198
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 1,
+       "v": "1.400000,1.400000",
+       "ease": "cubicBezier 0.0 0.44331396 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.44331396
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -32745,8 +39840,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.501767,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "1286.050415,558.500000,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.501767,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "0.600000,0.600000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -33049,7 +40184,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -33352,7 +40507,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.085427,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 0.919598,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -33656,7 +40831,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.051205,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -33681,7 +40876,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.451807,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.500000,0.500000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -33985,7 +41200,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.030035,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34009,8 +41244,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.676678,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "391.500000,725.685425,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.676678,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.971731,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34314,7 +41589,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34339,7 +41634,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.551205,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.520000,0.520000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34643,7 +41958,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.073276,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 0.935345,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34667,8 +42002,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.50431,
+       "v": "1280.000000,720.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "-2167.139404,718.039551,0.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.3382353",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.3382353
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.50431,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "8.760000,8.760000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.22794119",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.22794119
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34971,8 +42346,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "559.999268,-7.500000,0.000000"
+      },
+      {
+       "t": 0.962406,
+       "v": "0.000000,0.000000,0.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 0.962406,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34997,7 +42412,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.54386,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.500000,0.500000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35300,7 +42735,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.119403,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35603,7 +43058,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": -0.085427,
+       "v": "5.000000,5.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35629,7 +43104,12 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 1.04918,
+       "v": "0.000000,0.000000,0.000000"
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -35907,7 +43387,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 0.958904,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.08 0.75 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35931,8 +43431,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.684932,
+       "v": "1279.000000,720.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "-686.500000,713.211670,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.684932,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35958,7 +43498,12 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0.054054,
+       "v": "0.000000,0.000000,0.000000"
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -36240,7 +43785,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 0.7632353 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.7632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -36266,7 +43831,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.351351,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 0.951952,
+       "v": "0.900000,0.900000",
+       "ease": "cubicBezier 0.0 0.87794113 0.58 1.0",
+       "points": [
+        [
+         0,
+         0.87794113
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -36290,8 +43875,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.552553,
+       "v": "1279.000000,720.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "167.506744,1391.506714,0.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.552553,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "4.000000,4.000000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -36599,7 +44224,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 1,
+       "v": "1.300000,1.300000",
+       "ease": "cubicBezier 0.07999998 0.75 0.0 1.0",
+       "points": [
+        [
+         0.07999998,
+         0.75
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -36624,7 +44269,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.50137,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.500000,0.500000",
+       "ease": "cubicBezier 1.0 0.0 0.92 0.25",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         0.92,
+         0.25
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -36826,6 +44491,66 @@
     "fillColor": "#ff6fe5a6"
    },
    {
+    "id": "10187520",
+    "label": "",
+    "startTime": 0,
+    "endTime": 2.099,
+    "fillType": "text",
+    "font": "imported?name=Okay Jelly.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 1571,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 657.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "PLEASE "
+   },
+   {
+    "id": "10187521",
+    "label": "",
+    "startTime": 0.567,
+    "endTime": 2.099,
+    "fillType": "text",
+    "font": "imported?name=Okay Jelly.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 1571,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 791,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "SUBSCRIBE "
+   },
+   {
     "id": "10187533",
     "label": "Shape 1",
     "startTime": 0,
@@ -37012,7 +44737,27 @@
      "location": [],
      "scale": [],
      "rotation": [],
-     "opacity": []
+     "opacity": [
+      {
+       "t": 0,
+       "v": "0.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000",
+       "ease": "cubicBezier 0.42 0.0 1.0 1.0",
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ]
     },
     "effects": [],
     "size": [
@@ -37039,7 +44784,27 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "1280.500000,2171.500000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "1280.000000,720.000000,0.000000",
+       "ease": "cubicBezier 0.8566667 0.0 1.0 1.0",
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -40763,7 +48528,27 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "1280.500000,2171.500000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "1280.000000,720.000000,0.000000",
+       "ease": "cubicBezier 0.8566667 0.0 1.0 1.0",
+       "points": [
+        [
+         0.8566667,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []

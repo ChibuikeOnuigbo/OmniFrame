@@ -1995,7 +1995,16 @@
      "positionY": [],
      "scale": [],
      "rotation": [],
-     "opacity": []
+     "opacity": [
+      {
+       "time": -0.016000306000000002,
+       "value": 0
+      },
+      {
+       "time": 0.084000707,
+       "value": 1
+      }
+     ]
     },
     "mappedFx": [
      "am-tile",
@@ -2022,7 +2031,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 2
+      },
+      {
+       "time": 1.799,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2134,7 +2162,26 @@
      "positionY": [],
      "scale": [],
      "rotation": [],
-     "opacity": []
+     "opacity": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.15000062000000003,
+       "value": 1,
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ]
     },
     "mappedFx": [
      "am-tile",
@@ -2161,7 +2208,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 2
+      },
+      {
+       "time": 1.7990000000000004,
+       "value": 1,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2301,7 +2367,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 2
+      },
+      {
+       "time": 1.7829990150000006,
+       "value": 1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.78,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2326,9 +2411,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 1.7160008250000005,
+       "value": 0.075928
+      },
+      {
+       "time": 2.4990000000000006,
+       "value": -160.424072,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 1.7160008250000005,
+       "value": 0
+      },
+      {
+       "time": 2.4990000000000006,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 1.7160008250000005,
+       "value": 1
+      },
+      {
+       "time": 2.4990000000000006,
+       "value": 1.1,
+       "points": [
+        [
+         0.08333333,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2352,9 +2494,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 2.2160007450000005,
+       "value": 2703.92334
+      },
+      {
+       "time": 2.4990000000000006,
+       "value": 908.091064,
+       "points": [
+        [
+         0.75666666,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 2.2160007450000005,
+       "value": 1630.49939
+      },
+      {
+       "time": 2.4990000000000006,
+       "value": 1630.49939,
+       "points": [
+        [
+         0.75666666,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 2.2160007450000005,
+       "value": 1
+      },
+      {
+       "time": 2.4990000000000006,
+       "value": 0.6,
+       "points": [
+        [
+         0.75,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2436,6 +2635,1350 @@
      "am-colorhot"
     ],
     "unmappedFx": []
+   },
+   {
+    "amId": "1000018928",
+    "name": "AM text 1000018928",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 48,
+    "align": "left",
+    "start": 0,
+    "duration": 1.933,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 299.5,
+    "y": -107.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "Bowa...",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.602000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform",
+     "solid_color_wipe"
+    ]
+   },
+   {
+    "amId": "1000018929",
+    "name": "AM text 1000018929",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 36,
+    "align": "left",
+    "start": 0.434,
+    "duration": 1.499,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 481,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "lost to this guy? ",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.714000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform",
+     "solid_color_wipe"
+    ]
+   },
+   {
+    "amId": "1000018928",
+    "name": "AM text 1000018928",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 48,
+    "align": "left",
+    "start": 0,
+    "duration": 1.933,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 299.5,
+    "y": -107.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "Bowa...",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.602000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform",
+     "solid_color_wipe"
+    ]
+   },
+   {
+    "amId": "1000018929",
+    "name": "AM text 1000018929",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 36,
+    "align": "left",
+    "start": 0.434,
+    "duration": 1.499,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 481,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "lost to this guy? ",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.714000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform",
+     "solid_color_wipe"
+    ]
+   },
+   {
+    "amId": "1000018928",
+    "name": "AM text 1000018928",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 48,
+    "align": "left",
+    "start": 0,
+    "duration": 1.933,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 299.5,
+    "y": -107.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "Bowa...",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.602000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform",
+     "solid_color_wipe"
+    ]
+   },
+   {
+    "amId": "1000018929",
+    "name": "AM text 1000018929",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 36,
+    "align": "left",
+    "start": 0.434,
+    "duration": 1.499,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 481,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "lost to this guy? ",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.714000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform",
+     "solid_color_wipe"
+    ]
    },
    {
     "amId": "1000019135",
@@ -2567,9 +4110,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 6325.92334
+      },
+      {
+       "time": 2.532000000000001,
+       "value": 2703.92334,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23333332,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 1619.99939
+      },
+      {
+       "time": 2.532000000000001,
+       "value": 1630.49939,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23333332,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 3
+      },
+      {
+       "time": 2.532000000000001,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24333334,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -2902,7 +4502,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 2
+      },
+      {
+       "time": 1.6989999999999998,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3042,7 +4661,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.7
+      },
+      {
+       "time": 1.5839997810000002,
+       "value": 1.2,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.61333334,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3068,7 +4706,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 1.2840001980000002,
+       "value": 1
+      },
+      {
+       "time": 1.5990000000000002,
+       "value": 0.3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -3298,6 +4955,838 @@
     "unmappedFx": []
    },
    {
+    "amId": "1000019050",
+    "name": "AM text 1000019050",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 0,
+    "duration": 0.832,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -0.5,
+    "y": 335.50006099999996,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NUMBER",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "time": 0.416,
+       "value": 1
+      },
+      {
+       "time": 0.832,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019051",
+    "name": "AM text 1000019051",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 0.4,
+    "duration": 0.832,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NUMBER",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "time": 0.416,
+       "value": 1
+      },
+      {
+       "time": 0.832,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019052",
+    "name": "AM text 1000019052",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 0.8,
+    "duration": 0.5740000000000001,
+    "inPoint": 0,
+    "speed": 1.45,
+    "x": 0,
+    "y": 338.00006099999996,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NUM...",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620209,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "time": 0.28700000000000003,
+       "value": 1
+      },
+      {
+       "time": 0.5740000000000001,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019053",
+    "name": "AM text 1000019053",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 1.066,
+    "duration": 0.16700000000000004,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "..MBER",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 3.08982,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019054",
+    "name": "AM text 1000019054",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 1.233,
+    "duration": 0.3989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "X",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": -0.418546,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.874687,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
     "amId": "1000019011",
     "name": " Copy",
     "kind": "solid",
@@ -3340,6 +5829,838 @@
      "am-gaussianblur"
     ],
     "unmappedFx": []
+   },
+   {
+    "amId": "1000019045",
+    "name": "AM text 1000019045",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 0,
+    "duration": 0.832,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -0.5,
+    "y": 335.50006099999996,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NUMBER",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "time": 0.416,
+       "value": 1
+      },
+      {
+       "time": 0.832,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019046",
+    "name": "AM text 1000019046",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 0.4,
+    "duration": 0.832,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NUMBER",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "time": 0.416,
+       "value": 1
+      },
+      {
+       "time": 0.832,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019047",
+    "name": "AM text 1000019047",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 0.8,
+    "duration": 0.5740000000000001,
+    "inPoint": 0,
+    "speed": 1.45,
+    "x": 0,
+    "y": 338.00006099999996,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NUM...",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620209,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "time": 0.28700000000000003,
+       "value": 1
+      },
+      {
+       "time": 0.5740000000000001,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019048",
+    "name": "AM text 1000019048",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 1.066,
+    "duration": 0.16700000000000004,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "..MBER",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 3.08982,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
+   },
+   {
+    "amId": "1000019049",
+    "name": "AM text 1000019049",
+    "kind": "text",
+    "fontFamily": "Teko-Bold",
+    "fontSize": 80,
+    "align": "center",
+    "start": 1.233,
+    "duration": 0.3989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "X",
+    "effects": {},
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": -0.418546,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.874687,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": [
+     "texttransform"
+    ]
    },
    {
     "amId": "1000019011",
@@ -3699,8 +7020,178 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": -0.01699953000000001,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 0.3830005540000002,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 0.7830006380000004,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.0830007010000007,
+       "value": 0,
+       "points": [
+        [
+         0.123333335,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.2160003860000006,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0.4632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.633000000000001,
+       "value": 0,
+       "points": [
+        [
+         0.093333334,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": -0.01699953000000001,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 0.3830005540000002,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 0.7830006380000004,
+       "value": 0,
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.0830007010000007,
+       "value": 0,
+       "points": [
+        [
+         0.123333335,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.2160003860000006,
+       "value": 0,
+       "points": [
+        [
+         0,
+         0.4632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.633000000000001,
+       "value": 0,
+       "points": [
+        [
+         0.093333334,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -3725,8 +7216,46 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 1.4830007850000009,
+       "value": 2703.92334
+      },
+      {
+       "time": 1.633000000000001,
+       "value": 2703.92334,
+       "points": [
+        [
+         0.75333333,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 1.4830007850000009,
+       "value": 1630.49939
+      },
+      {
+       "time": 1.633000000000001,
+       "value": 1630.49939,
+       "points": [
+        [
+         0.75333333,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -7060,8 +10589,130 @@
     ],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 1751.5
+      },
+      {
+       "time": 0.349999247,
+       "value": 1751.5,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 0.7500001289999999,
+       "value": 1751.5,
+       "points": [
+        [
+         0.099999994,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.017000118,
+       "value": 1751.5,
+       "points": [
+        [
+         0.123333335,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.5839997519999998,
+       "value": 1751.5,
+       "points": [
+        [
+         0.056666672,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 923.006958
+      },
+      {
+       "time": 0.349999247,
+       "value": 193.006989,
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 0.7500001289999999,
+       "value": 923.006958,
+       "points": [
+        [
+         0.099999994,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.017000118,
+       "value": 501.992981,
+       "points": [
+        [
+         0.123333335,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "time": 1.5839997519999998,
+       "value": 893.676025,
+       "points": [
+        [
+         0.056666672,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -7810,7 +11461,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 3
+      },
+      {
+       "time": 0.39899999999999913,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -7836,7 +11506,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.24999983399999945,
+       "value": 1
+      },
+      {
+       "time": 0.39899999999999913,
+       "value": 3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9331,7 +13020,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.62
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.19999999,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -9357,7 +13065,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.24999983400000056,
+       "value": 1
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0.4,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.22941177
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10810,7 +14537,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 4.3
+      },
+      {
+       "time": 0.40000000000000036,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -10836,7 +14582,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2500000000000002,
+       "value": 1
+      },
+      {
+       "time": 0.40000000000000036,
+       "value": 1.2,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -13302,7 +17067,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.8
+      },
+      {
+       "time": 0.2500001279999992,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -13328,7 +17112,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2500001279999992,
+       "value": 1
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 0.9,
+       "points": [
+        [
+         0,
+         0.7441176
+        ],
+        [
+         0.40333334,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -15292,7 +19095,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.6
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         0.9625
+        ],
+        [
+         0.22333333,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -15318,7 +19140,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.24999983400000056,
+       "value": 1
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0.2,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -16673,7 +20514,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 3
+      },
+      {
+       "time": 0.7989999999999995,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.20333333,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -16697,9 +20557,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.5170001409999997,
+       "value": 960
+      },
+      {
+       "time": 0.7989999999999995,
+       "value": 952.5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.5170001409999997,
+       "value": 540
+      },
+      {
+       "time": 0.7989999999999995,
+       "value": -494.477936,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.5170001409999997,
+       "value": 1
+      },
+      {
+       "time": 0.7989999999999995,
+       "value": 3,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -18152,7 +22069,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.4
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -18176,9 +22112,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.2830001759999991,
+       "value": 960
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 960,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.2830001759999991,
+       "value": 540
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 245.0625,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.2830001759999991,
+       "value": 1
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 0.4,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -19531,9 +23524,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 0,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 749
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 0,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 3
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -19557,9 +23607,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.2839999369999999,
+       "value": 960
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 956.121948,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.2839999369999999,
+       "value": 540
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 242.398041,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.2839999369999999,
+       "value": 1
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 7,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -20914,7 +25021,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 3
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -20938,9 +25064,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0.24999983400000056,
+       "value": 960
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": -153.500031,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0.24999983400000056,
+       "value": 540
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 532.593628,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0.24999983400000056,
+       "value": 1
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0.2,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -22293,9 +26476,66 @@
     "amEffects": [],
     "volume": 1,
     "keys": {
-     "positionX": [],
-     "positionY": [],
-     "scale": [],
+     "positionX": [
+      {
+       "time": 0,
+       "value": 3793.5
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 0
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 0,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "time": 0,
+       "value": 3
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -22321,7 +26561,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2159998470000005,
+       "value": 1
+      },
+      {
+       "time": 0.3990000000000009,
+       "value": 5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -23011,7 +27270,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.6
+      },
+      {
+       "time": 0.365000000000002,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24000001,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -23037,7 +27315,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.21600006500000118,
+       "value": 1
+      },
+      {
+       "time": 0.365000000000002,
+       "value": 5,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -24392,7 +28689,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.6
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24333335,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -24418,7 +28734,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2839999369999999,
+       "value": 1
+      },
+      {
+       "time": 0.43299999999999983,
+       "value": 7,
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25163,7 +29498,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.5
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25909,7 +30263,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0,
+       "value": 0.6
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 1.1,
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.20666666,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -25935,7 +30308,26 @@
     "keys": {
      "positionX": [],
      "positionY": [],
-     "scale": [],
+     "scale": [
+      {
+       "time": 0.2830001759999991,
+       "value": 1
+      },
+      {
+       "time": 0.4319999999999986,
+       "value": 0.4,
+       "points": [
+        [
+         0.81000006,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -26663,11 +31055,11 @@
    0.016
   ],
   "stats": {
-   "shapes": 118,
-   "effectsTotal": 387,
+   "shapes": 134,
+   "effectsTotal": 409,
    "mapped": 378,
-   "unmapped": 9,
-   "keyframed": 369,
+   "unmapped": 31,
+   "keyframed": 385,
    "mediaRefs": [
     "content://media/external/video/media/1000591846",
     "content://media/external/video/media/1000591848",
@@ -28598,7 +32990,16 @@
      "location": [],
      "scale": [],
      "rotation": [],
-     "opacity": []
+     "opacity": [
+      {
+       "t": -0.008894,
+       "v": "0.000000"
+      },
+      {
+       "t": 0.046693,
+       "v": "1.000000"
+      }
+     ]
     },
     "effects": [
      {
@@ -28705,7 +33106,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "2.000000,2.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28734,7 +33155,27 @@
      "location": [],
      "scale": [],
      "rotation": [],
-     "opacity": []
+     "opacity": [
+      {
+       "t": 0,
+       "v": "0.000000"
+      },
+      {
+       "t": 0.08338,
+       "v": "1.000000",
+       "ease": "cubicBezier 0.42 0.0 1.0 1.0",
+       "points": [
+        [
+         0.42,
+         0
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      }
+     ]
     },
     "effects": [
      {
@@ -28841,7 +33282,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "2.000000,2.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -28978,7 +33439,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "2.000000,2.000000"
+      },
+      {
+       "t": 0.713485,
+       "v": "1.000000,1.000000",
+       "ease": "cubicBezier 0.0 1.0 0.78 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.78,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29003,8 +33484,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.686675,
+       "v": "0.075928,0.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "-160.424072,0.000000,0.000000",
+       "ease": "cubicBezier 0.08 0.0 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.686675,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.08333333 0.0 0.0 1.0",
+       "points": [
+        [
+         0.08333333,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29028,8 +33549,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.886755,
+       "v": "2703.923340,1630.499390,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "908.091064,1630.499390,0.000000",
+       "ease": "cubicBezier 0.75666666 0.0 1.0 0.0",
+       "points": [
+        [
+         0.75666666,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.886755,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.600000,0.600000",
+       "ease": "cubicBezier 0.75 0.0 1.0 0.0",
+       "points": [
+        [
+         0.75,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29111,6 +33672,1332 @@
      810,
      540
     ]
+   },
+   {
+    "id": "1000018928",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.933,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 48,
+    "align": "left",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1259.5,
+     "y": 432.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.602000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "Bowa..."
+   },
+   {
+    "id": "1000018929",
+    "label": "",
+    "startTime": 0.434,
+    "endTime": 1.933,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 36,
+    "align": "left",
+    "wrapWidth": 871,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1441,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.714000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "lost to this guy? "
+   },
+   {
+    "id": "1000018928",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.933,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 48,
+    "align": "left",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1259.5,
+     "y": 432.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.602000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "Bowa..."
+   },
+   {
+    "id": "1000018929",
+    "label": "",
+    "startTime": 0.434,
+    "endTime": 1.933,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 36,
+    "align": "left",
+    "wrapWidth": 871,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1441,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.714000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "lost to this guy? "
+   },
+   {
+    "id": "1000018928",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.933,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 48,
+    "align": "left",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1259.5,
+     "y": 432.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.602000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "Bowa..."
+   },
+   {
+    "id": "1000018929",
+    "label": "",
+    "startTime": 0.434,
+    "endTime": 1.933,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 36,
+    "align": "left",
+    "wrapWidth": 871,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1441,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.721815,
+          "v": "-0.864000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 1.0 0.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffd8bf00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.solid_color_wipe",
+      "short": "solid_color_wipe",
+      "props": {
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ffffe200",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "blendMode": {
+        "name": "blendMode",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.714000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "feather": {
+        "name": "feather",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "lost to this guy? "
    },
    {
     "id": "1000019135",
@@ -29241,8 +35128,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "6325.923340,1619.999390,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "2703.923340,1630.499390,0.000000",
+       "ease": "cubicBezier 0.0 1.0 0.23333332 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.23333332,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24333334 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24333334,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29564,7 +35491,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "2.000000,2.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29701,7 +35648,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.700000,0.700000"
+      },
+      {
+       "t": 0.990619,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 0.0 1.0 0.61333334 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.61333334,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29726,7 +35693,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.803002,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.300000,0.300000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -29954,6 +35941,831 @@
     ]
    },
    {
+    "id": "1000019050",
+    "label": "",
+    "startTime": 0,
+    "endTime": 0.832,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 959.5,
+     "y": 875.500061,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "t": 0.5,
+       "v": "1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NUMBER"
+   },
+   {
+    "id": "1000019051",
+    "label": "",
+    "startTime": 0.4,
+    "endTime": 1.232,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "t": 0.5,
+       "v": "1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NUMBER"
+   },
+   {
+    "id": "1000019052",
+    "label": "",
+    "startTime": 0.8,
+    "endTime": 1.374,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1.45,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 878.000061,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "t": 0.5,
+       "v": "1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620209,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NUM..."
+   },
+   {
+    "id": "1000019053",
+    "label": "",
+    "startTime": 1.066,
+    "endTime": 1.233,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 3.08982,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "..MBER"
+   },
+   {
+    "id": "1000019054",
+    "label": "",
+    "startTime": 1.233,
+    "endTime": 1.632,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": -0.418546,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.874687,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "X"
+   },
+   {
     "id": "1000019011",
     "label": " Copy",
     "startTime": 0,
@@ -29995,6 +36807,831 @@
      204
     ],
     "fillColor": "#ffcda694"
+   },
+   {
+    "id": "1000019045",
+    "label": "",
+    "startTime": 0,
+    "endTime": 0.832,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 959.5,
+     "y": 875.500061,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "t": 0.5,
+       "v": "1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NUMBER"
+   },
+   {
+    "id": "1000019046",
+    "label": "",
+    "startTime": 0.4,
+    "endTime": 1.232,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "t": 0.5,
+       "v": "1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620192,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NUMBER"
+   },
+   {
+    "id": "1000019047",
+    "label": "",
+    "startTime": 0.8,
+    "endTime": 1.374,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1.45,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 878.000061,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": [
+      {
+       "t": 0.5,
+       "v": "1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.620209,
+          "v": "-1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "NUM..."
+   },
+   {
+    "id": "1000019048",
+    "label": "",
+    "startTime": 1.066,
+    "endTime": 1.233,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 3.08982,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "..MBER"
+   },
+   {
+    "id": "1000019049",
+    "label": "",
+    "startTime": 1.233,
+    "endTime": 1.632,
+    "fillType": "text",
+    "font": "imported?name=Teko-Bold.ttf",
+    "fontSize": 80,
+    "align": "center",
+    "wrapWidth": 1851,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 404.178406,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.texttransform",
+      "short": "texttransform",
+      "props": {
+       "start": {
+        "name": "start",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "end": {
+        "name": "end",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "kfs": [
+         {
+          "t": -0.418546,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.874687,
+          "v": "1.000000"
+         }
+        ]
+       },
+       "component": {
+        "name": "component",
+        "type": "int",
+        "value": "1",
+        "kfs": []
+       },
+       "anchor": {
+        "name": "anchor",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "vec2",
+        "value": "0.000000,-50.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "-1.000000",
+        "kfs": []
+       },
+       "useFillColor": {
+        "name": "useFillColor",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "fillColor": {
+        "name": "fillColor",
+        "type": "color",
+        "value": "#ff00ff00",
+        "kfs": []
+       },
+       "easeIn": {
+        "name": "easeIn",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "easeOut": {
+        "name": "easeOut",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "overlap": {
+        "name": "overlap",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "shape": {
+        "name": "shape",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "randomOrder": {
+        "name": "randomOrder",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "text": "X"
    },
    {
     "id": "1000019011",
@@ -30350,7 +37987,98 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": -0.01041,
+       "v": "0.000000,0.000000,-1000.000000",
+       "ease": "cubicBezier 0.08 0.0 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.234538,
+       "v": "0.000000,0.000000,500.000000",
+       "ease": "cubicBezier 0.08 0.0 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.479486,
+       "v": "0.000000,0.000000,0.000000",
+       "ease": "cubicBezier 0.08 0.0 0.0 1.0",
+       "points": [
+        [
+         0.08,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.663197,
+       "v": "0.000000,0.000000,500.000000",
+       "ease": "cubicBezier 0.123333335 0.0 0.0 1.0",
+       "points": [
+        [
+         0.123333335,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.744642,
+       "v": "0.000000,0.000000,0.000000",
+       "ease": "cubicBezier 0.0 0.4632353 0.0 1.0",
+       "points": [
+        [
+         0,
+         0.4632353
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 1,
+       "v": "0.000000,0.000000,-500.000000",
+       "ease": "cubicBezier 0.093333334 0.0 0.0 1.0",
+       "points": [
+        [
+         0.093333334,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -30375,7 +38103,27 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0.908145,
+       "v": "2703.923340,1630.499390,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "2703.923340,1630.499390,1500.000000",
+       "ease": "cubicBezier 0.75333333 0.0 1.0 0.0",
+       "points": [
+        [
+         0.75333333,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -33583,7 +41331,72 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "1751.500000,923.006958,0.000000"
+      },
+      {
+       "t": 0.172159,
+       "v": "1751.500000,193.006989,0.000000",
+       "ease": "cubicBezier 0.0 0.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.368913,
+       "v": "1751.500000,923.006958,0.000000",
+       "ease": "cubicBezier 0.099999994 0.0 0.0 1.0",
+       "points": [
+        [
+         0.099999994,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.500246,
+       "v": "1751.500000,501.992981,0.000000",
+       "ease": "cubicBezier 0.123333335 0.0 0.0 1.0",
+       "points": [
+        [
+         0.123333335,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "t": 0.779144,
+       "v": "1751.500000,893.676025,0.000000",
+       "ease": "cubicBezier 0.056666672 0.0 0.0 1.0",
+       "points": [
+        [
+         0.056666672,
+         0
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "scale": [],
      "rotation": [],
      "opacity": []
@@ -34358,7 +42171,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -34383,7 +42216,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.626566,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35839,7 +43692,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.620000,0.620000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.19999999 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.19999999,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -35864,7 +43737,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.626566,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.400000,0.400000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.22941177",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0.22941177
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -37289,7 +45182,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "4.300000,4.300000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -37314,7 +45227,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.625,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.200000,1.200000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -39718,7 +47651,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.800000,0.800000"
+      },
+      {
+       "t": 0.578704,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.58,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -39743,7 +47696,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.578704,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.900000,0.900000",
+       "ease": "cubicBezier 0.0 0.7441176 0.40333334 1.0",
+       "points": [
+        [
+         0,
+         0.7441176
+        ],
+        [
+         0.40333334,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -41661,7 +49634,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.600000,0.600000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 0.9625 0.22333333 1.0",
+       "points": [
+        [
+         0,
+         0.9625
+        ],
+        [
+         0.22333333,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -41686,7 +49679,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.626566,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.200000,0.200000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -43008,7 +51021,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.20333333 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.20333333,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -43032,8 +51065,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.647059,
+       "v": "960.000000,540.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "952.500000,-494.477936,0.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.647059,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "3.000000,3.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -44458,7 +52531,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.400000,0.400000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -44482,8 +52575,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.655093,
+       "v": "960.000000,540.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "960.000000,245.062500,0.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.655093,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.400000,0.400000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -45804,8 +53937,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "0.000000,749.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000,0.000000,0.000000",
+       "ease": "cubicBezier 0.0 1.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -45829,8 +54002,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.655889,
+       "v": "960.000000,540.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "956.121948,242.398041,0.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.655889,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "7.000000,7.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -47152,7 +55365,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -47176,8 +55409,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0.626566,
+       "v": "960.000000,540.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "-153.500031,532.593628,0.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0.626566,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.200000,0.200000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -48498,8 +56771,48 @@
      "opacity": 1
     },
     "transformKeys": {
-     "location": [],
-     "scale": [],
+     "location": [
+      {
+       "t": 0,
+       "v": "3793.500000,0.000000,0.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.000000,0.000000,0.000000",
+       "ease": "cubicBezier 0.0 1.0 0.0 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         1
+        ]
+       ]
+      }
+     ],
+     "scale": [
+      {
+       "t": 0,
+       "v": "3.000000,3.000000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -48524,7 +56837,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.541353,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "5.000000,5.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -49207,7 +57540,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.600000,0.600000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24000001 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24000001,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -49232,7 +57585,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.591781,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "5.000000,5.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -50554,7 +58927,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.600000,0.600000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24333335 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24333335,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -50579,7 +58972,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.655889,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "7.000000,7.000000",
+       "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+       "points": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -51304,7 +59717,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.500000,0.500000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.24 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.24,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -52030,7 +60463,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0,
+       "v": "0.600000,0.600000"
+      },
+      {
+       "t": 1,
+       "v": "1.100000,1.100000",
+       "ease": "cubicBezier 0.0 1.0 0.20666666 1.0",
+       "points": [
+        [
+         0,
+         1
+        ],
+        [
+         0.20666666,
+         1
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },
@@ -52055,7 +60508,27 @@
     },
     "transformKeys": {
      "location": [],
-     "scale": [],
+     "scale": [
+      {
+       "t": 0.655093,
+       "v": "1.000000,1.000000"
+      },
+      {
+       "t": 1,
+       "v": "0.400000,0.400000",
+       "ease": "cubicBezier 0.81000006 0.0 1.0 0.0",
+       "points": [
+        [
+         0.81000006,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ],
      "rotation": [],
      "opacity": []
     },

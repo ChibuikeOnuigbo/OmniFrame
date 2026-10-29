@@ -668,6 +668,36 @@
     "unmappedFx": []
    },
    {
+    "amId": "102407652",
+    "name": "AM text 102407652",
+    "kind": "text",
+    "fontFamily": "Heavitas",
+    "fontSize": 48,
+    "align": "center",
+    "start": 0,
+    "duration": 1.032,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "1",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "102407638",
     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
     "kind": "video",
@@ -1408,6 +1438,36 @@
     "unmappedFx": []
    },
    {
+    "amId": "102407653",
+    "name": "AM text 102407653",
+    "kind": "text",
+    "fontFamily": "Heavitas",
+    "fontSize": 48,
+    "align": "center",
+    "start": 1.033,
+    "duration": 1.032,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "2",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "102407640",
     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
     "kind": "video",
@@ -1969,6 +2029,36 @@
     "unmappedFx": []
    },
    {
+    "amId": "102407654",
+    "name": "AM text 102407654",
+    "kind": "text",
+    "fontFamily": "Heavitas",
+    "fontSize": 48,
+    "align": "center",
+    "start": 2.066,
+    "duration": 1.032,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "3",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "102407642",
     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
     "kind": "video",
@@ -2527,6 +2617,36 @@
      "am-exposure",
      "am-gaussianblur"
     ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "102407655",
+    "name": "AM text 102407655",
+    "kind": "text",
+    "fontFamily": "Heavitas",
+    "fontSize": 48,
+    "align": "center",
+    "start": 3.1,
+    "duration": 1.0319999999999996,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.966797,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "4",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
     "unmappedFx": []
    },
    {
@@ -3151,6 +3271,36 @@
      "am-gaussianblur"
     ],
     "unmappedFx": []
+   },
+   {
+    "amId": "102407656",
+    "name": "AM text 102407656",
+    "kind": "text",
+    "fontFamily": "Heavitas",
+    "fontSize": 48,
+    "align": "center",
+    "start": 4.133,
+    "duration": 1.032,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "5",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
    }
   ],
   "bookmarks": [
@@ -3162,7 +3312,7 @@
    5.15
   ],
   "stats": {
-   "shapes": 15,
+   "shapes": 20,
    "effectsTotal": 59,
    "mapped": 49,
    "unmapped": 10,
@@ -3828,6 +3978,36 @@
      100
     ],
     "fillColor": "#ffb074d8"
+   },
+   {
+    "id": "102407652",
+    "label": "",
+    "startTime": 0,
+    "endTime": 1.032,
+    "fillType": "text",
+    "font": "imported?name=Heavitas.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "1"
    },
    {
     "id": "102407638",
@@ -4548,6 +4728,36 @@
     "fillColor": "#ffb074d8"
    },
    {
+    "id": "102407653",
+    "label": "",
+    "startTime": 1.033,
+    "endTime": 2.065,
+    "fillType": "text",
+    "font": "imported?name=Heavitas.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "2"
+   },
+   {
     "id": "102407640",
     "label": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
     "startTime": 2.066,
@@ -5089,6 +5299,36 @@
     "fillColor": "#ffb074d8"
    },
    {
+    "id": "102407654",
+    "label": "",
+    "startTime": 2.066,
+    "endTime": 3.098,
+    "fillType": "text",
+    "font": "imported?name=Heavitas.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "3"
+   },
+   {
     "id": "102407642",
     "label": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
     "startTime": 3.1,
@@ -5628,6 +5868,36 @@
      100
     ],
     "fillColor": "#ffb074d8"
+   },
+   {
+    "id": "102407655",
+    "label": "",
+    "startTime": 3.1,
+    "endTime": 4.132,
+    "fillType": "text",
+    "font": "imported?name=Heavitas.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": -137.5,
+     "sx": 0.966797,
+     "sy": 0.966797,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "4"
    },
    {
     "id": "102407644",
@@ -6229,6 +6499,36 @@
      100
     ],
     "fillColor": "#ffb074d8"
+   },
+   {
+    "id": "102407656",
+    "label": "",
+    "startTime": 4.133,
+    "endTime": 5.165,
+    "fillType": "text",
+    "font": "imported?name=Heavitas.ttf",
+    "fontSize": 48,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 960,
+     "y": 540,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "5"
    }
   ]
  }

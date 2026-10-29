@@ -63,7 +63,8 @@ import type {
   ImportedPalette,
 } from './types'
 import { captureClipTemplate, replaceVideoPatch, templatePatch, type ClipTemplate } from './lib/replaceVideo'
-import { parseAlightXml, alightToImport } from './lib/alightXml'
+import { parseAlightXml, alightToImport, exportAlightXml as buildAlightXml, exportTemplateXml as buildTemplateXml, importTemplateXml, type AlightExportClip, type AlightExportKey } from './lib/alightXml'
+import { shakePresetById } from './lib/shakePresets'
 import { DEFAULT_CLIP_MASK } from './types'
 import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, dataUrlByteSize, registerCustomFont, registerAllCustomFonts, unregisterCustomFont } from './lib/fonts'
 import { parseSubtitles, parsePalette } from './lib/importUtils'
@@ -552,8 +553,16 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   commitReplaceVideo: (windowStart: number, carryEffects: boolean) => void
   captureTemplate: (clipId: string, name?: string) => string | null
   applyTemplate: (templateId: string, clipId: string) => boolean
-  /** Alight Motion v5 XML import (src/lib/alightXml.ts study). */
-  importAlightXml: (xmlText: string) => { title: string; layers: number; mapped: number; unmapped: number; keyframed: number }
+  /** Alight Motion v5 XML import (src/lib/alightXml.ts study). Also accepts
+   *  OmniFrame TEMPLATE xml exports (registers the template instead). */
+  importAlightXml: (xmlText: string) => { title: string; layers: number; mapped: number; unmapped: number; keyframed: number; templateId?: string }
+  /** Export the whole project as Alight Motion v5 dialect XML (round-trips losslessly). */
+  exportAlightXml: () => string
+  /** Export a captured template as XML (full chain JSON in marked comment + AM skeleton). */
+  exportTemplateXml: (templateId: string) => string | null
+  /** Built-in shake pack (Shakes.xml corpus): applies the preset's fx-instance
+   *  stack + keys (and transform keys) to a clip. Returns instances added. */
+  applyShakePreset: (clipId: string, presetId: string) => number
   /** User-uploaded .cube LUTs (persisted to localStorage when they fit). */
   userLuts: Array<{ id: string; name: string; cubeText: string }>
   loadLutLibrary: () => Promise<void>
@@ -1964,6 +1973,11 @@ export const useEditor = create<EditorState>((set, get) => {
       return true
     },
     importAlightXml: (xmlText) => {
+      const tmpl = importTemplateXml(xmlText)
+      if (tmpl) {
+        set((st) => ({ templates: st.templates.some((x) => x.id === tmpl.id) ? st.templates : [...st.templates, tmpl as ClipTemplate] }))
+        return { title: tmpl.name, layers: 0, mapped: 0, unmapped: 0, keyframed: 0, templateId: tmpl.id }
+      }
       const imp = alightToImport(parseAlightXml(xmlText))
       get().setProjectName(imp.project.title)
       get().setCustomSequenceDimensions(imp.project.w, imp.project.h)
@@ -2031,6 +2045,66 @@ export const useEditor = create<EditorState>((set, get) => {
         if (touched) get().setClipProp(clipId, { animation: anim })
       }
       return { title: imp.project.title, layers, mapped: imp.stats.mapped, unmapped: imp.stats.unmapped, keyframed: imp.stats.keyframed }
+    },
+    exportAlightXml: () => {
+      const st = get()
+      const w = st.sequenceSettings.width
+      const h = st.sequenceSettings.height
+      const clips: AlightExportClip[] = st.clips
+        .filter((c) => c.kind !== 'audio' && c.kind !== 'adjustment')
+        .map((c) => {
+          const asset = st.assets.find((a) => a.id === c.assetId)
+          const curves: Record<string, AlightExportKey[]> = {}
+          if (c.animation) {
+            for (const id of ['position_x', 'position_y', 'scale_x', 'rotation_z', 'opacity'] as const) {
+              const cv = c.animation.curves[id]
+              if (cv && cv.keyframes.length > 1) {
+                curves[id] = cv.keyframes.map((k) => ({ time: k.time, value: k.value, points: k.points ? k.points.map((p) => ({ x: p.x, y: p.y })) : undefined }))
+              }
+            }
+          }
+          const kind: AlightExportClip['kind'] = c.kind === 'text' || c.textStyle?.text ? 'text' : c.kind === 'video' || asset?.kind === 'video' ? 'video' : asset?.kind === 'image' ? 'image' : 'solid'
+          return {
+            name: c.name, kind, start: c.start, duration: c.duration, inPoint: c.inPoint,
+            x: c.transform.x, y: c.transform.y, scale: c.transform.scale, rotation: c.transform.rotation,
+            opacity: c.transform.opacity, volume: c.volume,
+            text: c.textStyle?.text, fontFamily: c.textStyle?.fontFamily, fontSize: c.textStyle?.fontSize, color: c.textStyle?.color,
+            fillColor: kind === 'solid' ? '#334455' : undefined,
+            mediaRef: asset?.url || asset?.name,
+            effects: c.effects as Record<string, number | string> | undefined,
+            luts: c.adjustment?.luts?.map((l) => ({ builtin: l.builtin, id: l.id, intensity: l.intensity })),
+            fxInstances: c.fxInstances?.map((f) => ({ catalogId: f.catalogId, inP: f.inP, duration: f.duration, params: f.params, keys: f.keys })),
+            curves,
+          }
+        })
+      return buildAlightXml({ title: st.projectName, w, h, fps: st.sequenceSettings.fps, duration: Math.max(st.duration, 1) }, clips)
+    },
+    exportTemplateXml: (templateId) => {
+      const t = get().templates.find((x) => x.id === templateId || x.name === templateId)
+      if (!t) return null
+      const ss = get().sequenceSettings
+      return buildTemplateXml(t, { w: ss.width, h: ss.height, fps: ss.fps })
+    },
+    applyShakePreset: (clipId, presetId) => {
+      const p = shakePresetById(presetId)
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!p || !clip) return 0
+      let added = 0
+      for (const inst of p.instances) {
+        const fxId = get().addFxInstance(clipId, inst.catalogId, { inP: 0, duration: Math.min(p.duration, clip.duration) })
+        if (!fxId) continue
+        added++
+        if (Object.keys(inst.params).length) get().updateFxParams(clipId, fxId, inst.params)
+        for (const [param, keys] of Object.entries(inst.keys || {})) {
+          for (const k of keys) get().setFxKey(clipId, fxId, param, Math.min(k.t, p.duration), k.v)
+        }
+      }
+      for (const [prop, keys] of Object.entries(p.transformKeys || {})) {
+        const curveId = prop === 'scale' ? 'scale_x' : 'rotation_z'
+        for (const k of keys || []) get().setClipKeyframe(clipId, curveId, Math.min(k.t, clip.duration), k.v, 'linear')
+        if (prop === 'scale') for (const k of keys || []) get().setClipKeyframe(clipId, 'scale_y', Math.min(k.t, clip.duration), k.v, 'linear')
+      }
+      return added
     },
     loadLutLibrary: async () => {
       if (get().lutLibrary.loaded) return

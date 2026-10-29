@@ -408,6 +408,36 @@
     "unmappedFx": []
    },
    {
+    "amId": "12361745",
+    "name": "AM text 12361745",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 1,
+    "duration": 0.6990000000000001,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -994.5,
+    "y": 605.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "MOLOB",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "12361739",
     "name": "AM media 12361739",
     "kind": "video",
@@ -424,8 +454,11 @@
     "effects": {
      "tiles": 2,
      "motionBlur": 0.45,
-     "oscillate": 20,
-     "oscillateAngle": 45
+     "autoShake": 4,
+     "autoShakeFreq": 8,
+     "oscillate": 10,
+     "oscillateAngle": 45,
+     "oscillateFreq": 4
     },
     "amEffects": [
      {
@@ -715,12 +748,41 @@
     "mappedFx": [
      "am-tile",
      "am-motionblur3",
-     "am-swing2"
+     "am-shake",
+     "am-swing2",
+     "am-oscillate2"
     ],
-    "unmappedFx": [
-     "shake",
-     "oscillate2"
-    ]
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361746",
+    "name": "AM text 12361746",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 1.7,
+    "duration": 0.6990000000000001,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -1004.5,
+    "y": 640.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "ZNEPTUNE",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
    },
    {
     "amId": "12361740",
@@ -858,6 +920,36 @@
      "am-tile",
      "am-shake2"
     ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361747",
+    "name": "AM text 12361747",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 2.4,
+    "duration": 0.6990000000000003,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -994.5,
+    "y": 605.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "FLOW",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
     "unmappedFx": []
    },
    {
@@ -1496,6 +1588,36 @@
     ]
    },
    {
+    "amId": "12361749",
+    "name": "AM text 12361749",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 3.1,
+    "duration": 0.6989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -940.5,
+    "y": 628.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "NANIMALO ",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   },
+   {
     "amId": "12361754",
     "name": "Warp",
     "kind": "solid",
@@ -1723,7 +1845,9 @@
      "autoShake": 14,
      "autoShakeFreq": 12,
      "motionBlur": 0.6,
-     "brightness": 1.15
+     "brightness": 1.15,
+     "chromatic": 6,
+     "waveWarp": 4
     },
     "amEffects": [
      {
@@ -2163,11 +2287,40 @@
      "am-shake2",
      "am-shake2",
      "am-motionblur4",
-     "am-exposure"
+     "am-exposure",
+     "am-lensd"
     ],
-    "unmappedFx": [
-     "lensd"
-    ]
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361748",
+    "name": "AM text 12361748",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 3.8,
+    "duration": 0.6989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -994.5,
+    "y": 605.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "RANDOM",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
    },
    {
     "amId": "12361743",
@@ -2185,6 +2338,7 @@
     "mediaRef": "content://media/external/video/media/1000131804",
     "effects": {
      "tiles": 2,
+     "pixelStretch": 0.3,
      "oscillate": 12,
      "oscillateFreq": 2,
      "motionBlur": 0.6
@@ -2390,12 +2544,41 @@
     },
     "mappedFx": [
      "am-tile",
+     "am-stretch2",
      "am-oscillate3",
      "am-motionblur4"
     ],
-    "unmappedFx": [
-     "stretch2"
-    ]
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361750",
+    "name": "AM text 12361750",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 4.5,
+    "duration": 0.6989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -940.5,
+    "y": 628.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "JELLY",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
    },
    {
     "amId": "12361753",
@@ -2968,6 +3151,36 @@
      "transform2",
      "transform2"
     ]
+   },
+   {
+    "amId": "12361751",
+    "name": "AM text 12361751",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 36,
+    "align": "center",
+    "start": 5.2,
+    "duration": 0.6989999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -940.5,
+    "y": 628.5,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "text": "CU9ID ",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
    }
   ],
   "bookmarks": [
@@ -2980,10 +3193,10 @@
    5.216
   ],
   "stats": {
-   "shapes": 10,
+   "shapes": 17,
    "effectsTotal": 43,
-   "mapped": 34,
-   "unmapped": 9,
+   "mapped": 38,
+   "unmapped": 5,
    "keyframed": 47,
    "mediaRefs": [
     "content://media/external/video/media/1000131804",
@@ -3402,6 +3615,36 @@
     "fillColor": "#ffb17a4b"
    },
    {
+    "id": "12361745",
+    "label": "",
+    "startTime": 1,
+    "endTime": 1.699,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 285.5,
+     "y": 1325.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "MOLOB"
+   },
+   {
     "id": "12361739",
     "label": "",
     "startTime": 1.7,
@@ -3708,6 +3951,36 @@
     ]
    },
    {
+    "id": "12361746",
+    "label": "",
+    "startTime": 1.7,
+    "endTime": 2.399,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 939,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 275.5,
+     "y": 1360.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "ZNEPTUNE"
+   },
+   {
     "id": "12361740",
     "label": "",
     "startTime": 2.4,
@@ -3840,6 +4113,36 @@
      1280,
      720
     ]
+   },
+   {
+    "id": "12361747",
+    "label": "",
+    "startTime": 2.4,
+    "endTime": 3.099,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 285.5,
+     "y": 1325.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "FLOW"
    },
    {
     "id": "12361741",
@@ -4456,6 +4759,36 @@
      1280,
      720
     ]
+   },
+   {
+    "id": "12361749",
+    "label": "",
+    "startTime": 3.1,
+    "endTime": 3.799,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 903,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 339.5,
+     "y": 1348.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "NANIMALO "
    },
    {
     "id": "12361754",
@@ -5117,6 +5450,36 @@
     ]
    },
    {
+    "id": "12361748",
+    "label": "",
+    "startTime": 3.8,
+    "endTime": 4.499,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 512,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 285.5,
+     "y": 1325.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "RANDOM"
+   },
+   {
     "id": "12361743",
     "label": "",
     "startTime": 4.5,
@@ -5335,6 +5698,36 @@
      1280,
      720
     ]
+   },
+   {
+    "id": "12361750",
+    "label": "",
+    "startTime": 4.5,
+    "endTime": 5.199,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 903,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 339.5,
+     "y": 1348.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "JELLY"
    },
    {
     "id": "12361753",
@@ -5889,6 +6282,36 @@
      1280,
      720
     ]
+   },
+   {
+    "id": "12361751",
+    "label": "",
+    "startTime": 5.2,
+    "endTime": 5.899,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.otf",
+    "fontSize": 36,
+    "align": "center",
+    "wrapWidth": 903,
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 339.5,
+     "y": 1348.5,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "text": "CU9ID "
    }
   ]
  }

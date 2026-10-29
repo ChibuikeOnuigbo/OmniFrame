@@ -132,7 +132,7 @@ export function MediaPanel() {
               if (!f) return
               try {
                 const r = useEditor.getState().importAlightXml(await f.text())
-                useEditor.setState({ mediaImportNotice: `Alight Motion “${r.title}”: ${r.layers} layers, ${r.mapped} AM effects mapped (${r.keyframed} keyframed props)` })
+                useEditor.setState({ mediaImportNotice: r.templateId ? `Template imported from XML: “${r.title}” (${r.templateId}) — apply it via applyTemplate / template_apply` : `Alight Motion “${r.title}”: ${r.layers} layers, ${r.mapped} AM effects mapped (${r.keyframed} keyframed props)` })
               } catch (err) {
                 useEditor.setState({ mediaImportNotice: `Could not import Alight XML: ${(err as Error).message}` })
               }
@@ -146,6 +146,51 @@ export function MediaPanel() {
             onClick={() => document.getElementById('alight-xml-file')?.click()}
           >
             Import Alight XML
+          </button>
+          <button
+            type="button"
+            data-testid="alight-xml-export"
+            title="Export the whole project as Alight Motion v5 dialect XML (OmniFrame re-imports it losslessly; AM reads the scene/layer skeleton)"
+            className="flex-1 rounded-md border border-ink-700 bg-ink-800 px-2 py-1 text-[10px] font-medium text-ink-200 hover:border-brand/60 hover:text-white"
+            onClick={() => {
+              try {
+                const st = useEditor.getState()
+                const xml = st.exportAlightXml()
+                const blob = new Blob([xml], { type: 'text/xml' })
+                const a = document.createElement('a')
+                a.href = URL.createObjectURL(blob)
+                a.download = `${(st.projectName || 'omniframe-project').replace(/[^\w.-]+/g, '_')}.xml`
+                a.click()
+                URL.revokeObjectURL(a.href)
+                useEditor.setState({ mediaImportNotice: `Exported Alight XML: ${a.download}` })
+              } catch (err) {
+                useEditor.setState({ mediaImportNotice: `Could not export Alight XML: ${(err as Error).message}` })
+              }
+            }}
+          >
+            Export Alight XML
+          </button>
+          <button
+            type="button"
+            data-testid="template-xml-export"
+            title="Export the most recently captured template (TEMPLATE MODE) as XML — full processing chain inside, re-importable via Import Alight XML"
+            className="flex-1 rounded-md border border-ink-700 bg-ink-800 px-2 py-1 text-[10px] font-medium text-ink-200 hover:border-brand/60 hover:text-white"
+            onClick={() => {
+              const st = useEditor.getState()
+              const t = st.templates[st.templates.length - 1]
+              if (!t) { useEditor.setState({ mediaImportNotice: 'No captured template yet — use captureTemplate (or template_capture via MCP) first.' }); return }
+              const xml = st.exportTemplateXml(t.id)
+              if (!xml) return
+              const blob = new Blob([xml], { type: 'text/xml' })
+              const a = document.createElement('a')
+              a.href = URL.createObjectURL(blob)
+              a.download = `${t.name.replace(/[^\w.-]+/g, '_')}-template.xml`
+              a.click()
+              URL.revokeObjectURL(a.href)
+              useEditor.setState({ mediaImportNotice: `Exported template XML: ${a.download} (${t.fieldCount} fields)` })
+            }}
+          >
+            Export Template XML
           </button>
         </div>
         <div className="flex items-center gap-1.5">

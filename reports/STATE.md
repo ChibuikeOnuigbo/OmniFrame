@@ -1,10 +1,29 @@
-# OmniFrame STATE — Mega-turn: TYMM assets + Replace/Template + Alight Motion (2026-10-29)
+# OmniFrame STATE — Mega-turn cont.: XML export/import + Shake pack (2026-10-29)
 
 Branch `arena/212bca02-omniframe`. Previous: Board T cont.3 (QA PASS 63/59).
 This increment: user Drive asset acquisition (fonts/LUTs/Alight XMLs/CC scan),
 Replace-Video-With-Video, TEMPLATE MODE, Alight Motion import, continue.md.
 
-## Completed (verified this increment)
+## Completed (cont. — verified this increment)
+
+- **XML EXPORT/IMPORT (user directive):** project + templates export as
+  Alight-Motion-dialect XML; the Import button/`alight_import` read AM project
+  XML AND OmniFrame template XML. Round-trip is LOSSLESS for OmniFrame data
+  (omniframe.fx exact values / omniframe.lut / omniframe.fxinst incl. keys /
+  normalised transform kf with cubicBezier). AM corpus PROJECT files stay
+  OUT of the app bundle — research dir only; users import/export.
+  `qa/alight-roundtrip.mjs` PASS; proof `test_ans_result/xml-roundtrip.mp4`.
+  Parser fixes raised corpus import fidelity (hero 80→96 clips; transform-kf
+  parsing actually wired: hero 369→385 keyed props).
+- **Built-in SHAKE PACK** (the repeated corpus material ships IN the app):
+  all 8 Shakes.xml presets with ORIGINAL keyframe values/timings →
+  EffectsPanel section, store.applyShakePreset, MCP shake_apply,
+  list_presets catalog=shake. fx_add normalises [[t,v]] keys.
+- Universal tools QA now **69 tools** PASS; replace-template + LUT parity +
+  tsc + vite build all green. Rollback #6 at turn start recovered
+  (reset --hard origin + npm ci + pip imageio-ffmpeg).
+
+## Completed (previous increment)
 
 - **Assets acquired + extracted** (Drive → `new_doc_toll_research/`, staging in
   gitignored `google_drive/`): 49 fonts (nested zips unpacked), 8 LUT jpegs
