@@ -246,9 +246,28 @@ try {
   console.log('T6 ok (exposure/gamma/extrude/radialRepeat/longShadow render):',
     JSON.stringify({ base: +base.lum.toFixed(1), exposed: +exposed.lum.toFixed(1), extruded: +extruded.darkFrac.toFixed(3), repeated: +repeated.lum.toFixed(1), shadowed: +shadowed.darkFrac.toFixed(3) }))
 
+  // ---------- T7: work-area cluster (AM In / Out / Full / Go In / Go Out) ----------
+  await page.waitForSelector('[data-testid="work-area-cluster"]')
+  const t7 = await ev(() => {
+    const G = () => window.__omniframe_store.getState()
+    const click = (tid) => document.querySelector(`[data-testid="${tid}"]`).click()
+    G().setPlayhead(1.25); click('work-area-in')
+    const inV = G().exportRange?.in
+    G().setPlayhead(3.75); click('work-area-out')
+    const outV = G().exportRange?.out
+    click('work-area-go-in'); const atIn = Math.abs(G().playhead - inV) < 1e-6
+    click('work-area-go-out'); const atOut = Math.abs(G().playhead - outV) < 1e-6
+    click('work-area-full'); const cleared = G().exportRange === null
+    return { inV, outV, atIn, atOut, cleared }
+  })
+  assert.ok(t7.inV === 1.25 && t7.outV === 3.75, `T7 In/Out mark the work area (${t7.inV}–${t7.outV})`)
+  assert.ok(t7.atIn && t7.atOut, 'T7 Go In / Go Out jump the playhead to the range edges')
+  assert.ok(t7.cleared, 'T7 Full clears the work area')
+  console.log('T7 ok (work-area cluster):', JSON.stringify(t7))
+
   const realErrors = runtimeErrors.filter((e) => !/favicon|Download the React|net::ERR|WebGL/i.test(e))
   assert.equal(realErrors.length, 0, 'no runtime errors: ' + realErrors.slice(0, 3).join(' | '))
-  console.log('VIDEO-STUDY ACCEPTANCE E2E: PASS (T1 bulk 250+, T2 stagger, T3 Noise→Threshold, T4 markers, T5 null easing, T6 new engine keys)')
+  console.log('VIDEO-STUDY ACCEPTANCE E2E: PASS (T1 bulk 250+, T2 stagger, T3 Noise→Threshold, T4 markers, T5 null easing, T6 new engine keys, T7 work-area cluster)')
 } catch (err) {
   console.error('VIDEO-STUDY ACCEPTANCE E2E: FAIL', err.message)
   console.error('runtime errors seen:', runtimeErrors.slice(0, 5))

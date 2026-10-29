@@ -2246,6 +2246,26 @@ export function Timeline() {
         >
           <Magnet size={15} />
         </button>
+        <div data-testid="work-area-cluster" className="flex items-center border border-ink-700 rounded-none" title="Work area / pre-export range (AM: In, Out, Full, Go In, Go Out)">
+          {([
+            ['In', 'work-area-in', () => useEditor.getState().setExportIn(), 'Mark export In at the playhead (I)'],
+            ['Out', 'work-area-out', () => useEditor.getState().setExportOut(), 'Mark export Out at the playhead (O)'],
+            ['Full', 'work-area-full', () => useEditor.getState().clearExportRange(), 'Clear the range — export the full timeline'],
+            ['Go In', 'work-area-go-in', () => { const r = useEditor.getState().exportRange; if (r) useEditor.getState().setPlayhead(r.in) }, 'Go In — jump the playhead to the range start'],
+            ['Go Out', 'work-area-go-out', () => { const r = useEditor.getState().exportRange; if (r) useEditor.getState().setPlayhead(r.out) }, 'Go Out — jump the playhead to the range end'],
+          ] as [string, string, () => void, string][]).map(([label, tid, fn, title]) => (
+            <button
+              key={tid}
+              type="button"
+              data-testid={tid}
+              title={title}
+              onClick={fn}
+              className="h-8 px-1.5 text-[9px] font-semibold text-ink-300 hover:bg-ink-700 hover:text-white border-l border-ink-700 first:border-l-0"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           data-testid="toggle-graph-editor-btn"
