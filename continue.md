@@ -8,8 +8,8 @@ only what is verified shipped.
 
 1. **5000-recipe mandate:** keep producing glitch/effect recipes until 5,000
    are rendered + validated IN-APP (combined MP4 + manifest per batch;
-   checkpoint in `qa/newglitch-batch.mjs` state — **next = 100**; 53 kept /
-   35 dups so far in slice 1). Bounded honest sets + md indexes for mass
+   checkpoint `new_glitch/batch/checkpoint.json` — **next = 188**; 85 kept /
+   91 dups / 0 failed so far (slices 13–100 and 100–188)). Bounded honest sets + md indexes for mass
    renders; user rates keep/delete/improve. **After every special task, go
    BACK to the 5000 recipes and keep adding.**
 2. **Universal-tools / MCP-only law:** boards solved by universal tools only
@@ -71,7 +71,7 @@ only what is verified shipped.
 
 ## Open items (resume here)
 
-- 5000 recipes: continue from checkpoint **next=100**.
+- 5000 recipes: continue from checkpoint **next=188** (batch_reel.mp4 = 4:00 combined review of all 85 kept; user keep/delete/improve rating pending).
 - mega.nz overlay folder when network allows (or user drops files into
   `new_doc_toll_research/`).
 - Overlays/Sfx/Back Grounds media: download + wire as an in-app pack browser

@@ -63,8 +63,11 @@ Replace-Video-With-Video, TEMPLATE MODE, Alight Motion import, continue.md.
 
 ## Partial
 
-- Batch queue: checkpoint next=100 of 5000 (slice 1: 53 kept/35 dups/0 fail);
-  resumes after this increment per continue.md.
+- Batch queue: checkpoint **next=188** of 5000 — slice 2 (100–188) ran this
+  turn: cumulative 85 kept / 91 honest dups / 0 failed; combined review reel
+  new_glitch/batch_reel.mp4 (4:00) + batch-manifest.md regenerated. Recipes
+  13–188 are digital-slice family variants (high dup rate is the dedupe
+  working); later families start at higher indices.
 - AM import: group nesting, masks and gradient fills are data-only (not
   re-rendered); unmapped AM ids preserved raw on clips + dumps.
 - CC Overlays/Sfx/Back Grounds bytes: catalogued, not downloaded (~120 MB —

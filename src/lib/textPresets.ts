@@ -1157,6 +1157,55 @@ export const TEXT_PRESETS: TextPresetDef[] = [
       return pushClips([c])
     },
   },
+  // ---- Alight Corpus (TYMM CC scan → real presets; see new_doc_toll_research/CC-SCAN.md) ----
+  {
+    id: 'am-cc-subtitle', name: 'CC Subtitle (TYMM)', category: 'Alight Corpus', source: 'Alight corpus scan — cc-5plus1.xml text layers (CircularStd-Black 28px, centred lower-third)', ideal: [1, 20], demo: 'CC 1',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Quicksand_Bold, sans-serif', bold: true, fontSize: 40, color: '#ffffff', letterSpacing: 2 }, o)
+      c.transform = { ...c.transform, y: 380 }
+      withKeys(c, 'opacity', [[0, 0, 'ease-out'], [0.18, 1], [o.duration - 0.15, 1], [o.duration, 0]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'am-hero-title', name: 'Hero Title (hardtrekk)', category: 'Alight Corpus', source: 'Alight corpus scan — hardtrekk-hero.xml NUMBER/X titles (Teko-Bold 80px + texttransform + solid_color_wipe)', ideal: [2, 10], demo: 'NUMBER',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'CONTADOR, Impact, sans-serif', bold: true, fontSize: 96, color: '#ffffff', letterSpacing: 4 }, o)
+      c.effects = { ...(c.effects || {}), gradientMap: 0.55 }
+      withKeys(c, 'scale_x', [[0, 0.86, 'ease-out'], [Math.min(0.5, o.duration * 0.2), 1], [o.duration, 1]])
+      withKeys(c, 'scale_y', [[0, 0.86, 'ease-out'], [Math.min(0.5, o.duration * 0.2), 1], [o.duration, 1]])
+      withKeys(c, 'opacity', [[0, 0], [0.08, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'am-shake-title', name: 'Shake Title (MOLOB)', category: 'Alight Corpus', source: 'Alight corpus scan — Shakes.xml (Quicksand_Bold 36px titles on keyframed shake rigs; shake reproduced with the engine autoShake)', ideal: [2, 10], demo: 'MOLOB',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Quicksand_Bold, sans-serif', bold: true, fontSize: 56, color: '#ffffff' }, o)
+      c.effects = { ...(c.effects || {}), autoShake: 7, autoShakeFreq: 14 }
+      withKeys(c, 'opacity', [[0, 0, 'step'], [0.06, 1], [o.duration, 1]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'am-subtitle-lovely', name: 'Subtitle · LOVELY chain', category: 'Alight Corpus', source: 'Alight corpus scan — Onyankopon.xml/Evergreen.xml subtitle chain texttransform+textspacing+gradientoverlay2 (LOVELY/AGENCYB/Kenyan Coffee 24px)', ideal: [2, 20], demo: 'KERI UDAN FOR ME',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Looks Sketchy, Quicksand_Book, serif', bold: false, fontSize: 36, color: '#fdf6e3', letterSpacing: 3 }, o)
+      c.transform = { ...c.transform, y: 400 }
+      c.effects = { ...(c.effects || {}), gradientMap: 0.4 }
+      withKeys(c, 'opacity', [[0, 0, 'ease-in'], [0.3, 1], [o.duration - 0.2, 1], [o.duration, 0]])
+      return pushClips([c])
+    },
+  },
+  {
+    id: 'am-warps-counter', name: 'Warps Counter (Heavitas)', category: 'Alight Corpus', source: 'Alight corpus scan — warps.xml counter texts 1-5 (Heavitas 48px, centre)', ideal: [1, 8], demo: '3',
+    build: (text, o) => {
+      const c = word(text, { fontFamily: 'Minecrafter.Reg, Impact, sans-serif', bold: true, fontSize: 120, color: '#ffffff' }, o)
+      c.effects = { ...(c.effects || {}), flicker: 0.12, glow: 0.25 }
+      withKeys(c, 'opacity', [[0, 0, 'step'], [0.05, 1], [o.duration - 0.05, 1], [o.duration, 0, 'step']])
+      return pushClips([c])
+    },
+  },
 ]
 
 export function buildTextPreset(id: string, text: string, opts?: Partial<PresetBuildOpts>): string[] {
