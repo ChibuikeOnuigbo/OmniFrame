@@ -64,9 +64,15 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   timecode: 0, timecodeSize: 18,
   prism: 0,
   glitch: 0, glitchStyle: 'slice', glitchScan: 0.18, glitchStatic: 0.25, glitchSeed: 1, glitchSpeed: 12,
+  exposure: 0, gamma: 1,
+  extrude: 0, extrudeAngle: 45, extrudeColor: '#22223a',
+  radialRepeat: 0, radialRepeatRadius: 0,
+  longShadow: 0, longShadowAngle: 45, longShadowColor: '#000000',
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
+  exposure: [-2, 2], gamma: [0.2, 3], extrude: [0, 40], extrudeAngle: [0, 360],
+  radialRepeat: [0, 24], radialRepeatRadius: [0, 400], longShadow: [0, 64], longShadowAngle: [0, 360],
   glitch: [0, 1], glitchScan: [0, 1], glitchStatic: [0, 1], glitchSeed: [1, 999], glitchSpeed: [1, 30],
   kaleidoSegments: [0, 12], kaleidoRotate: [0, 360], flare: [0, 1], flareX: [0, 100], flareY: [0, 100],
   flareStreak: [0, 1], flareGhosts: [0, 8], colorTemp: [1500, 15000],

@@ -217,6 +217,20 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     }
     ctx.putImageData(d, 0, 0)
   }
+  if ((e.exposure && Math.abs(e.exposure) > 0.001) || (e.gamma && Math.abs(e.gamma - 1) > 0.001)) {
+    // AM Exposure/Gamma parity: exposure in stops (×2^e), gamma as display curve.
+    const d = ctx.getImageData(0, 0, w, h)
+    const mul = Math.pow(2, e.exposure ?? 0)
+    const g = e.gamma && e.gamma > 0.01 ? 1 / e.gamma : 1
+    for (let i = 0; i < d.data.length; i += 4) {
+      for (let c = 0; c < 3; c++) {
+        let v = (d.data[i + c] / 255) * mul
+        if (g !== 1) v = Math.pow(v, g)
+        d.data[i + c] = v * 255
+      }
+    }
+    ctx.putImageData(d, 0, 0)
+  }
   if (e.threshold && e.threshold > 0) {
     const d = ctx.getImageData(0, 0, w, h)
     const cut = e.threshold * 255
@@ -257,6 +271,51 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     }
     ctx.putImageData(d, 0, 0)
   }
+  // ---- y6richo video-study gaps: Raster Extrude / Long Shadow (silhouette stack) ----
+  const exD = e.extrude ?? 0
+  const lsD = e.longShadow ?? 0
+  if (exD > 0 || lsD > 0) {
+    const depth = Math.max(exD, lsD)
+    const ang = (((exD > 0 ? e.extrudeAngle ?? 45 : e.longShadowAngle ?? 45) * Math.PI) / 180)
+    const color = exD > 0 ? e.extrudeColor ?? '#22223a' : e.longShadowColor ?? '#000000'
+    const steps = Math.max(2, Math.min(64, Math.round(depth)))
+    const srcC = document.createElement('canvas'); srcC.width = w; srcC.height = h
+    srcC.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
+    const sil = document.createElement('canvas'); sil.width = w; sil.height = h
+    const lctx = sil.getContext('2d')!
+    lctx.drawImage(srcC, 0, 0)
+    lctx.globalCompositeOperation = 'source-in'
+    lctx.fillStyle = color
+    lctx.fillRect(0, 0, w, h)
+    ctx.clearRect(0, 0, w, h)
+    for (let k = steps; k >= 1; k--) {
+      const dx = Math.cos(ang) * depth * (k / steps)
+      const dy = Math.sin(ang) * depth * (k / steps)
+      ctx.globalAlpha = exD > 0 ? 1 : 0.55 * (1 - (k - 1) / steps) + 0.08
+      ctx.drawImage(sil, dx, dy)
+    }
+    ctx.globalAlpha = 1
+    ctx.drawImage(srcC, 0, 0)
+  }
+  // ---- Radial Repeat (3D Swirl Text tutorial): copies arranged around the center ----
+  const rr = e.radialRepeat ?? 0
+  if (rr >= 2) {
+    const count = Math.min(24, Math.round(rr))
+    const radius = e.radialRepeatRadius || Math.min(w, h) * 0.22
+    const srcC = document.createElement('canvas'); srcC.width = w; srcC.height = h
+    srcC.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
+    ctx.clearRect(0, 0, w, h)
+    for (let i = 0; i < count; i++) {
+      const a = (i / count) * Math.PI * 2
+      ctx.save()
+      ctx.translate(w / 2 + Math.cos(a) * radius, h / 2 + Math.sin(a) * radius)
+      ctx.rotate(a)
+      ctx.globalAlpha = i === 0 ? 1 : 0.85
+      ctx.drawImage(srcC, -w / 2, -h / 2)
+      ctx.restore()
+    }
+    ctx.globalAlpha = 1
+  }
   if (e.flicker === 0 && e.grain && e.grain > 0) void 0
 }
 
@@ -289,6 +348,11 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.swirl && Math.abs(effect.swirl) > 1) ||
     (effect.gradientMap && effect.gradientMap > 0) ||
     (effect.threshold && effect.threshold > 0) ||
+    (effect.exposure !== undefined && Math.abs(effect.exposure) > 0.001) ||
+    (effect.gamma !== undefined && Math.abs(effect.gamma - 1) > 0.001) ||
+    (effect.extrude !== undefined && effect.extrude > 0) ||
+    (effect.longShadow !== undefined && effect.longShadow > 0) ||
+    (effect.radialRepeat !== undefined && effect.radialRepeat >= 2) ||
     (effect.sharpen && effect.sharpen > 0) ||
     (effect.findEdges && effect.findEdges > 0) ||
     (effect.minimax && effect.minimax > 0) ||

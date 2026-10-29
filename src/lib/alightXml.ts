@@ -172,7 +172,7 @@ export const AM_EFFECT_MAP: Record<string, AmMap> = {
   turbulentdisplace3: { name: 'AM Turbulent Displace', cat: 'distort', patch: { turbulent: 0.5 } },
   turbulentdisplace2: { name: 'AM Turbulent Displace 2', cat: 'distort', patch: { turbulent: 0.35 } },
   turbulence2: { name: 'AM Turbulence', cat: 'distort', patch: { turbulent: 0.4 } },
-  exposure: { name: 'AM Exposure', cat: 'color', patch: { brightness: 1.15 } },
+  exposure: { name: 'AM Exposure', cat: 'color', patch: { exposure: 0.6, gamma: 1 } }, // real exposure key (video-study turn); was brightness approx
   squeeze: { name: 'AM Squeeze', cat: 'distort', patch: { pinchBulge: -0.35 } },
   jitter: { name: 'AM Jitter', cat: 'motion', patch: { autoShake: 6, autoShakeFreq: 24 } },
   satvib: { name: 'AM Sat/Vib', cat: 'color', patch: { saturation: 1.2, vibrance: 1.15 } },
@@ -200,7 +200,7 @@ export const AM_EFFECT_MAP: Record<string, AmMap> = {
   ripplelight: { name: 'AM Ripple Light', cat: 'light', patch: { glow: 0.4, oscillate: 6 } },
   glowscan: { name: 'AM Glow Scan', cat: 'light', patch: { glow: 0.4, flicker: 0.15 } },
   edgeglow: { name: 'AM Edge Glow', cat: 'light', patch: { edgeGlow: 0.5 } },
-  longshadow2: { name: 'AM Long Shadow', cat: 'light', patch: { edgeGlow: 0.25, edgeGlowColor: '#000000' } },
+  longshadow2: { name: 'AM Long Shadow', cat: 'light', patch: { longShadow: 24, longShadowAngle: 45, longShadowColor: '#000000' } }, // real longShadow key (video-study turn); was edgeGlow approx
   sharpen: { name: 'AM Sharpen', cat: 'color', patch: { sharpen: 0.5 } },
   unsharpmask: { name: 'AM Unsharp Mask', cat: 'color', patch: { sharpen: 0.35 } },
   newsharpen: { name: 'AM New Sharpen', cat: 'color', patch: { sharpen: 0.6 } },

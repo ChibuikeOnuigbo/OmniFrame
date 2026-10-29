@@ -652,6 +652,21 @@ export interface ClipEffect {
   flareY?: number // light position, % of frame height
   flareStreak?: number // anamorphic streak length 0..1
   flareGhosts?: number // ghost rings along the optical axis 0..8
+  /** y6richo video-study corpus gaps (2026-10-29): real engine keys for observed AM effects */
+  /** Exposure in stops (AM Exposure/Gamma panel: Exposure 0.42, Gamma 1.000 observed) */
+  exposure?: number
+  gamma?: number
+  /** Raster Extrude — 3D-LOOKING text/shape via offset tinted silhouette stack (NOT true 3D geometry) */
+  extrude?: number
+  extrudeAngle?: number
+  extrudeColor?: string
+  /** Radial Repeat — copies arranged around the center (3D Swirl Text tutorial) */
+  radialRepeat?: number
+  radialRepeatRadius?: number
+  /** Long Shadow (Color & Light browser name) */
+  longShadow?: number
+  longShadowAngle?: number
+  longShadowColor?: string
   flareColor?: string
   /** Board L: white-balance Kelvin (1500-15000, 6500 = neutral). */
   colorTemp?: number

@@ -141,6 +141,16 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   timecode: { label: 'Timecode Overlay', kind: 'number', min: 0, max: 1, step: 0.01 },
   timecodeSize: { label: 'Timecode Size (px)', kind: 'number', min: 8, max: 64, step: 1 },
   prism: { label: 'Prism Sweep', kind: 'number', min: 0, max: 1, step: 0.01 },
+  exposure: { label: 'Exposure (stops)', kind: 'number', min: -2, max: 2, step: 0.01 },
+  gamma: { label: 'Gamma', kind: 'number', min: 0.2, max: 3, step: 0.01 },
+  extrude: { label: 'Raster Extrude (px)', kind: 'number', min: 0, max: 40, step: 1 },
+  extrudeAngle: { label: 'Extrude Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  extrudeColor: { label: 'Extrude Color', kind: 'color' },
+  radialRepeat: { label: 'Radial Repeat (copies)', kind: 'number', min: 0, max: 24, step: 1 },
+  radialRepeatRadius: { label: 'Radial Radius (px)', kind: 'number', min: 0, max: 400, step: 1 },
+  longShadow: { label: 'Long Shadow (px)', kind: 'number', min: 0, max: 64, step: 1 },
+  longShadowAngle: { label: 'Shadow Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  longShadowColor: { label: 'Shadow Color', kind: 'color' },
 }
 
 /** Editable/keyframeable property schema for any catalog patch. */
@@ -371,6 +381,29 @@ function buildCatalog(): FxCatalogEntry[] {
       }
     }
   }
+  // ---- y6richo video-study corpus (Drive 1KlxUlem-Qjyd61dLkqs9nk3Ob4bou1Kp, scanned 2026-10-29):
+  //      effect NAMES observed in sampled frames of 40 timeline/tutorial videos; recipes NOT claimed. ----
+  {
+    const VS = 'y6richo video-study corpus (40 timeline/tutorial videos, sampled frames) — observed effect names; new real engine keys'
+    add('vs-exposure-gamma', 'Exposure / Gamma', 'color', VS, { exposure: 0.42, gamma: 1 })
+    add('vs-exposure-gamma-neg', 'Exposure / Gamma −0.6', 'color', VS, { exposure: -0.6, gamma: 1.2 })
+    add('vs-noise-threshold', 'Noise + Threshold', 'key', VS, { grain: 0.35, threshold: 0.55 })
+    add('vs-raster-extrude', 'Raster Extrude (3D text look)', 'light', VS, { extrude: 10, extrudeAngle: 45, extrudeColor: '#22223a' })
+    add('vs-raster-extrude-deep', 'Raster Extrude Deep 135°', 'light', VS, { extrude: 22, extrudeAngle: 135, extrudeColor: '#3a1220' })
+    for (const n of [4, 6, 8, 12]) {
+      add(`vs-radial-repeat-${n}`, `Radial Repeat ×${n} (3D swirl)`, 'distort', VS, { radialRepeat: n })
+    }
+    for (const a of [30, 45, 90]) {
+      add(`vs-long-shadow-${a}`, `Long Shadow ${a}°`, 'light', VS, { longShadow: 28, longShadowAngle: a, longShadowColor: '#000000' })
+    }
+    add('vs-linear-streaks', 'Linear Streaks', 'blur', VS, { directionalBlur: 6, directionalBlurAngle: 90, flare: 0.5, flareStreak: 4 })
+    add('vs-scanlines', 'Scanlines', 'retro', VS, { vhs: 0.5, glitchScan: 0.4 })
+    add('vs-gradient-noise', 'Gradient Noise Texture', 'color', VS, { gradientMap: 0.8, gradientMapFrom: '#0a2a2a', gradientMapTo: '#9fe8d8', grain: 0.5 })
+    add('vs-flicker-text', 'Flicker Text (Time Quantization)', 'retro', VS, { flicker: 0.5, timeQuantization: 8 })
+    add('vs-vhs-tracking', 'VHS Tracking Preset', 'retro', VS, { vhs: 0.8, turbulent: 0.3, chromatic: 8 })
+    add('vs-rainbow-edges', 'Rainbow Find Edges', 'key', VS, { findEdges: 1, gradientMap: 0.7, gradientMapFrom: '#ff375f', gradientMapTo: '#25d7fb' })
+  }
+
     // ---- Alight Motion study corpus: every mapped AM effect joins the site catalog ----
   for (const am of AM_FX_CATALOG) {
     out.push({ id: am.id, name: am.name, cat: am.cat as FxCat, trace: AM_TRACE, patch: am.patch })
