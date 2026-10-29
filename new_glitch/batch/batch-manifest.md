@@ -1,0 +1,59 @@
+# New Glitch batch manifest (rendered + validated in-app)
+
+Checkpoint: recipe 100 of 5000 queued next · kept 53 · dup-skipped 35 · failed 0
+
+| # | recipe | family | palette | seed | file | sha256:16 |
+|---|---|---|---|---|---|---|
+| 13 | ng-0013 | digital-slice | #a568ff/#15e4f3 | 103184 | [b0013_digital-slice.mp4](new_glitch/batch/b0013_digital-slice.mp4) | 18abc01040fc2efc |
+| 14 | ng-0014 | digital-slice | #a568ff/#15e4f3 | 111103 | [b0014_digital-slice.mp4](new_glitch/batch/b0014_digital-slice.mp4) | 775cf3dc61fe3f6d |
+| 15 | ng-0015 | digital-slice | #a568ff/#15e4f3 | 119022 | [b0015_digital-slice.mp4](new_glitch/batch/b0015_digital-slice.mp4) | 3378e67d712dcd05 |
+| 16 | ng-0016 | digital-slice | #a568ff/#15e4f3 | 126941 | [b0016_digital-slice.mp4](new_glitch/batch/b0016_digital-slice.mp4) | d8be760da1a7a398 |
+| 17 | ng-0017 | digital-slice | #a568ff/#15e4f3 | 134860 | [b0017_digital-slice.mp4](new_glitch/batch/b0017_digital-slice.mp4) | 57dcc13a95e1f174 |
+| 18 | ng-0018 | digital-slice | #a568ff/#15e4f3 | 142779 | [b0018_digital-slice.mp4](new_glitch/batch/b0018_digital-slice.mp4) | f9fec43ef1d8fdd2 |
+| 21 | ng-0021 | digital-slice | #a568ff/#15e4f3 | 166536 | [b0021_digital-slice.mp4](new_glitch/batch/b0021_digital-slice.mp4) | 1ccabc023ce7fad7 |
+| 23 | ng-0023 | digital-slice | #a568ff/#15e4f3 | 182374 | [b0023_digital-slice.mp4](new_glitch/batch/b0023_digital-slice.mp4) | a402b31577973570 |
+| 26 | ng-0026 | digital-slice | #a568ff/#15e4f3 | 206131 | [b0026_digital-slice.mp4](new_glitch/batch/b0026_digital-slice.mp4) | 40a2e3ce343337b8 |
+| 28 | ng-0028 | digital-slice | #a568ff/#15e4f3 | 221969 | [b0028_digital-slice.mp4](new_glitch/batch/b0028_digital-slice.mp4) | 173b142303fd4588 |
+| 31 | ng-0031 | digital-slice | #a568ff/#15e4f3 | 245726 | [b0031_digital-slice.mp4](new_glitch/batch/b0031_digital-slice.mp4) | 10e01fe75e671d0c |
+| 33 | ng-0033 | digital-slice | #a568ff/#15e4f3 | 261564 | [b0033_digital-slice.mp4](new_glitch/batch/b0033_digital-slice.mp4) | 446314a314f8229e |
+| 34 | ng-0034 | digital-slice | #a568ff/#15e4f3 | 269483 | [b0034_digital-slice.mp4](new_glitch/batch/b0034_digital-slice.mp4) | e686498b651bde93 |
+| 36 | ng-0036 | digital-slice | #a568ff/#15e4f3 | 285321 | [b0036_digital-slice.mp4](new_glitch/batch/b0036_digital-slice.mp4) | 14f7c62a63bffeb0 |
+| 38 | ng-0038 | digital-slice | #a568ff/#15e4f3 | 301159 | [b0038_digital-slice.mp4](new_glitch/batch/b0038_digital-slice.mp4) | c3e1d0308135aa08 |
+| 39 | ng-0039 | digital-slice | #a568ff/#15e4f3 | 309078 | [b0039_digital-slice.mp4](new_glitch/batch/b0039_digital-slice.mp4) | 82e9f1f827b44bb3 |
+| 41 | ng-0041 | digital-slice | #a568ff/#15e4f3 | 324916 | [b0041_digital-slice.mp4](new_glitch/batch/b0041_digital-slice.mp4) | a56d7952c81fe58d |
+| 43 | ng-0043 | digital-slice | #a568ff/#15e4f3 | 340754 | [b0043_digital-slice.mp4](new_glitch/batch/b0043_digital-slice.mp4) | 69ca3b07350c91b7 |
+| 44 | ng-0044 | digital-slice | #a568ff/#15e4f3 | 348673 | [b0044_digital-slice.mp4](new_glitch/batch/b0044_digital-slice.mp4) | 63b7ff9ec8ade1ec |
+| 45 | ng-0045 | digital-slice | #a568ff/#15e4f3 | 356592 | [b0045_digital-slice.mp4](new_glitch/batch/b0045_digital-slice.mp4) | cc71a93f13c39939 |
+| 46 | ng-0046 | digital-slice | #a568ff/#15e4f3 | 364511 | [b0046_digital-slice.mp4](new_glitch/batch/b0046_digital-slice.mp4) | 1d9b8442253216b4 |
+| 48 | ng-0048 | digital-slice | #a568ff/#15e4f3 | 380349 | [b0048_digital-slice.mp4](new_glitch/batch/b0048_digital-slice.mp4) | 3be27198d2a3b175 |
+| 49 | ng-0049 | digital-slice | #a568ff/#15e4f3 | 388268 | [b0049_digital-slice.mp4](new_glitch/batch/b0049_digital-slice.mp4) | 538dbb7e6c98ac9c |
+| 51 | ng-0051 | digital-slice | #a568ff/#15e4f3 | 404106 | [b0051_digital-slice.mp4](new_glitch/batch/b0051_digital-slice.mp4) | e80541a13d9413d5 |
+| 53 | ng-0053 | digital-slice | #a568ff/#15e4f3 | 419944 | [b0053_digital-slice.mp4](new_glitch/batch/b0053_digital-slice.mp4) | 0e4e70884108bd8b |
+| 55 | ng-0055 | digital-slice | #a568ff/#15e4f3 | 435782 | [b0055_digital-slice.mp4](new_glitch/batch/b0055_digital-slice.mp4) | 9a87aeb2c2af4691 |
+| 56 | ng-0056 | digital-slice | #a568ff/#15e4f3 | 443701 | [b0056_digital-slice.mp4](new_glitch/batch/b0056_digital-slice.mp4) | 61835bb6ab06cdac |
+| 58 | ng-0058 | digital-slice | #a568ff/#15e4f3 | 459539 | [b0058_digital-slice.mp4](new_glitch/batch/b0058_digital-slice.mp4) | a9157e6a9509077f |
+| 59 | ng-0059 | digital-slice | #a568ff/#15e4f3 | 467458 | [b0059_digital-slice.mp4](new_glitch/batch/b0059_digital-slice.mp4) | 8f3faea226dcd655 |
+| 61 | ng-0061 | digital-slice | #a568ff/#15e4f3 | 483296 | [b0061_digital-slice.mp4](new_glitch/batch/b0061_digital-slice.mp4) | fb655b9085f63824 |
+| 63 | ng-0063 | digital-slice | #a568ff/#15e4f3 | 499134 | [b0063_digital-slice.mp4](new_glitch/batch/b0063_digital-slice.mp4) | 2d406c2729ab90d8 |
+| 64 | ng-0064 | digital-slice | #a568ff/#15e4f3 | 507053 | [b0064_digital-slice.mp4](new_glitch/batch/b0064_digital-slice.mp4) | fd3a1e827751b503 |
+| 66 | ng-0066 | digital-slice | #a568ff/#15e4f3 | 522891 | [b0066_digital-slice.mp4](new_glitch/batch/b0066_digital-slice.mp4) | 92246e2d78f4b9a9 |
+| 68 | ng-0068 | digital-slice | #a568ff/#15e4f3 | 538729 | [b0068_digital-slice.mp4](new_glitch/batch/b0068_digital-slice.mp4) | c08b54fe8b2e93eb |
+| 69 | ng-0069 | digital-slice | #a568ff/#15e4f3 | 546648 | [b0069_digital-slice.mp4](new_glitch/batch/b0069_digital-slice.mp4) | a7127bdcf1e6f9fb |
+| 71 | ng-0071 | digital-slice | #a568ff/#15e4f3 | 562486 | [b0071_digital-slice.mp4](new_glitch/batch/b0071_digital-slice.mp4) | 391f8ad046cadc5a |
+| 73 | ng-0073 | digital-slice | #a568ff/#15e4f3 | 578324 | [b0073_digital-slice.mp4](new_glitch/batch/b0073_digital-slice.mp4) | 09829695e11b4254 |
+| 76 | ng-0076 | digital-slice | #a568ff/#15e4f3 | 602081 | [b0076_digital-slice.mp4](new_glitch/batch/b0076_digital-slice.mp4) | fc595b785b80df64 |
+| 78 | ng-0078 | digital-slice | #a568ff/#15e4f3 | 617919 | [b0078_digital-slice.mp4](new_glitch/batch/b0078_digital-slice.mp4) | aaa9db393f238b38 |
+| 79 | ng-0079 | digital-slice | #a568ff/#15e4f3 | 625838 | [b0079_digital-slice.mp4](new_glitch/batch/b0079_digital-slice.mp4) | 66ac8ab3f46e63f5 |
+| 81 | ng-0081 | digital-slice | #a568ff/#15e4f3 | 641676 | [b0081_digital-slice.mp4](new_glitch/batch/b0081_digital-slice.mp4) | ce288abe739f626c |
+| 83 | ng-0083 | digital-slice | #a568ff/#15e4f3 | 657514 | [b0083_digital-slice.mp4](new_glitch/batch/b0083_digital-slice.mp4) | 5d3765eafeda79c0 |
+| 84 | ng-0084 | digital-slice | #a568ff/#15e4f3 | 665433 | [b0084_digital-slice.mp4](new_glitch/batch/b0084_digital-slice.mp4) | 2fdfb616804e776c |
+| 86 | ng-0086 | digital-slice | #a568ff/#15e4f3 | 681271 | [b0086_digital-slice.mp4](new_glitch/batch/b0086_digital-slice.mp4) | f1b45f033eb9b698 |
+| 88 | ng-0088 | digital-slice | #a568ff/#15e4f3 | 697109 | [b0088_digital-slice.mp4](new_glitch/batch/b0088_digital-slice.mp4) | b3487eee472f5787 |
+| 89 | ng-0089 | digital-slice | #a568ff/#15e4f3 | 705028 | [b0089_digital-slice.mp4](new_glitch/batch/b0089_digital-slice.mp4) | fc1b5a55e07f1fd3 |
+| 91 | ng-0091 | digital-slice | #a568ff/#15e4f3 | 720866 | [b0091_digital-slice.mp4](new_glitch/batch/b0091_digital-slice.mp4) | 37cd4d9a56d5ea3c |
+| 93 | ng-0093 | digital-slice | #a568ff/#15e4f3 | 736704 | [b0093_digital-slice.mp4](new_glitch/batch/b0093_digital-slice.mp4) | 3a1eef05e4819f00 |
+| 94 | ng-0094 | digital-slice | #a568ff/#15e4f3 | 744623 | [b0094_digital-slice.mp4](new_glitch/batch/b0094_digital-slice.mp4) | c0aa5fe93e09524a |
+| 95 | ng-0095 | digital-slice | #a568ff/#15e4f3 | 752542 | [b0095_digital-slice.mp4](new_glitch/batch/b0095_digital-slice.mp4) | cc4593a0eaee7449 |
+| 96 | ng-0096 | digital-slice | #a568ff/#15e4f3 | 760461 | [b0096_digital-slice.mp4](new_glitch/batch/b0096_digital-slice.mp4) | e0cadace66acc94d |
+| 98 | ng-0098 | digital-slice | #a568ff/#15e4f3 | 776299 | [b0098_digital-slice.mp4](new_glitch/batch/b0098_digital-slice.mp4) | bdc69f6360b7e64c |
+| 99 | ng-0099 | digital-slice | #a568ff/#15e4f3 | 784218 | [b0099_digital-slice.mp4](new_glitch/batch/b0099_digital-slice.mp4) | 8a270f8da386de25 |

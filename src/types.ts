@@ -868,6 +868,9 @@ export interface TextTitleStyle {
    *  subrange editing). Ranges may overlap; later ranges win per property. */
   /** In-Video Text presets: animated bed/particles painted INSIDE glyphs. */
   insideBed?: string
+  /** Mask REAL moving footage inside glyphs (asset path registered by import_video). */
+  insideVideo?: string
+  insideBaseAlpha?: number
   insideParticle?: string
   insideTint?: string
   insideDensity?: number

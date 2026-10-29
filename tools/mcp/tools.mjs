@@ -5,7 +5,10 @@
 // ClipEffect maths) via appRender.mjs, so outputs are app-made, not agent-made.
 import fs from 'fs'
 import path from 'path'
-import { MCPTool, MCPRegistry, ToolResult, VideoEncoder, FrameProvider, makeCanvas, loadImage, cover } from './core.mjs'
+import { MCPTool, MCPRegistry, ToolResult, VideoEncoder, FrameProvider, makeCanvas, loadImage, cover, ffmpegExe, CanvasImage } from './core.mjs'
+import { execFileSync } from 'child_process'
+import { createHash } from 'crypto'
+import * as pathModule from 'path'
 import { Sequence, makeClip, renderFrame, CE, applyEffects, cardFlipFactor, loadAppTs, applyShapeMatte , setPaintGetter } from './appRender.mjs'
 import { bedPainterLocal } from './beds.mjs'
 
@@ -51,6 +54,49 @@ class ImportMedia extends MCPTool {
     return SESSION.note('import_media', { path: rel, fit }, { clipId: clip.id, natW: Math.round(clip.natW), natH: Math.round(clip.natH) })
   }
 }
+function videoFrameStore(dir, files) {
+  const cache = new Map()
+  return (i) => {
+    const idx = Math.max(0, Math.min(files.length - 1, Math.floor(i)))
+    let g = cache.get(idx)
+    if (!g) {
+      g = new CanvasImage()
+      g.src = fs.readFileSync(pathModule.join(dir, files[idx]))
+      cache.set(idx, g)
+      if (cache.size > 40) cache.delete(cache.keys().next().value)
+    }
+    return g
+  }
+}
+class ImportVideo extends MCPTool {
+  constructor() { super('import_video', 'Major tool: import an mp4/mov/webm as a MOVING clip in headless renders (ffmpeg frame extraction cached under .cache/video-frames). Registers frames so text can mask the real footage inside glyphs (textStyle.insideVideo).', { path: 'repo-relative or absolute', fps: 'extract fps (default 12)', fit: 'contain|cover', scale: '' }) }
+  async run({ path: rel, fps = 12, fit = 'cover', scale }) {
+    const abs = rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)
+    const hash = createHash('md5').update(`${abs}:${fps}`).digest('hex').slice(0, 10)
+    const dir = pathModule.join(ROOT, '.cache', 'video-frames', hash)
+    if (!fs.existsSync(pathModule.join(dir, '0000.png'))) {
+      fs.mkdirSync(dir, { recursive: true })
+      execFileSync(ffmpegExe(), ['-y', '-i', abs, '-vf', `fps=${fps},scale=480:-2`, pathModule.join(dir, '%04d.png')], { stdio: 'pipe' })
+    }
+    const files = fs.readdirSync(dir).sort().filter(f => f.endsWith('.png'))
+    const get = videoFrameStore(dir, files) // LRU: only ~40 decoded frames in RAM
+    const s = seq()
+    const im = get(0)
+    const f2 = fit === 'cover' ? Math.max(s.w / im.width, s.h / im.height) : Math.min(s.w / im.width, s.h / im.height)
+    const k = (scale || 1) * f2
+    const dur = files.length / Number(fps)
+    const draw = (sx, w, h, t) => {
+      const g = get(Math.max(0, t) * Number(fps))
+      sx.drawImage(g, 0, 0, g.width, g.height, 0, 0, w, h)
+    }
+    const clip = makeClip({ id: `clip-${s.clips.length + 1}`, name: pathModule.basename(rel), asset: rel, natW: im.width * k, natH: im.height * k, duration: dur, draw })
+    s.addClip(clip)
+    SESSION.selection = clip
+    SESSION.videoFrames = SESSION.videoFrames || {}
+    SESSION.videoFrames[rel] = { get, files, fps: Number(fps) }
+    return SESSION.note('import_video', { path: rel, fps }, { clipId: clip.id, frames: files.length, duration: +dur.toFixed(2) })
+  }
+}
 class NewBackground extends MCPTool {
   constructor() { super('new_background', 'Major tool: add a replace-bg bed clip (app replaceBg family).', { kind: 'synthwave|aurora|grid|bokeh|sunset|studio|wedge' }) }
   async run({ kind }) {
@@ -86,8 +132,23 @@ class MaskClear extends MCPTool {
 }
 class KeyframeSet extends MCPTool {
   constructor() { super('keyframe_set', 'Major tool: set a position/scale/rotation/opacity keyframe on the selected clip (app CurveEngine). interpolation custom + points = your own dragged curve.', { property: 'position|scale|rotation|opacity|pivot', channel: 'X|Y|Z|Scalar', time: 's', value: '', interpolation: 'app InterpolationType', points: '[[x,y]..] for custom' }) }
-  async run({ property, channel = 'Scalar', time, value, interpolation = 'linear', points }) {
+  async run({ property, channel = 'Scalar', time, value, interpolation = 'linear', points, params }) {
     const c = sel()
+    if (property === 'charStyle') {
+      const [ri, prop] = String(channel).split('.')
+      const idx = Number(ri)
+      const ts = (c.textStyle ||= {})
+      const ranges = (ts.charRanges ||= [])
+      const text = String(c.name || '').replace(/^text:/, '')
+      if (!ranges[idx]) ranges[idx] = { start: 0, end: [...text].length }
+      const r = ranges[idx]
+      r.keys = r.keys || {}
+      const lt = (Number(time) || 0) - c.start
+      const ks = (r.keys[prop] = (r.keys[prop] || []).filter(k => Math.abs(k.t - lt) > 1e-6))
+      ks.push({ t: lt, v: value, interp: interpolation, params })
+      ks.sort((a, b) => a.t - b.t)
+      return SESSION.note('keyframe_set', { property, channel, time, value, interpolation }, { clipId: c.id, range: idx, prop, keys: ks.length })
+    }
     const SCALAR = new Set(['opacity', 'playback_speed', 'wheel_rotation'])
     const key = SCALAR.has(property) ? property : `${property}_${channel.toLowerCase()}`
     const curve = c.animation.curves[key]
@@ -406,8 +467,9 @@ class RenderExport extends MCPTool {
     const dest = path.join(ROOT, out)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     const enc = new VideoEncoder({ w: s.w, h: s.h, fps: f, out: dest })
-    for (let i = 0; i < N; i++) enc.addCanvas(renderFrame(s, i / f))
-    const info = enc.finish()
+    const outCv = makeCanvas(s.w, s.h)
+    for (let i = 0; i < N; i++) enc.addCanvas(renderFrame(s, i / f, outCv))
+    const info = await enc.finish()
     SESSION.note('render_export', { out }, { frames: info.frames })
     const r = new ToolResult('render_export', true, {
       video: path.relative(ROOT, dest), ...info, mode: SESSION.mode,
@@ -483,7 +545,7 @@ class PaintTimelapse extends MCPTool {
       if (grade === 'dreamcore') PG.applyPixelGrade(canvas, DREAM, i)
       enc.addCanvas(canvas)
     }
-    const info = enc.finish()
+    const info = await enc.finish()
     const finalPng = dest.replace(/\.mp4$/, '-final.png')
     fs.writeFileSync(finalPng, canvas.toBuffer('image/png'))
     SESSION.note('paint_timelapse', { out, grade }, { frames: info.frames, strokes: st.strokes.length })
@@ -647,38 +709,47 @@ class CreateText extends MCPTool {
   async run({ text, preset, x = 0, y = 0, scale = 1 }) {
     const m = await loadAppTs('src/lib/textPresets.ts')
     const def = m.TEXT_PRESETS.find(p => p.id === preset) || m.TEXT_PRESETS[0]
+    const TRM = await loadAppTs('src/lib/textRuns.ts')
+    const PFX = await loadAppTs('src/lib/particleFx.ts')
     const s = seq()
-    const clip = makeClip({ id: `text-${s.clips.length + 1}`, name: `text:${text}`, asset: `text:${preset}`, natW: s.w * 0.6 * scale, natH: s.h * 0.2 * scale, duration: s.duration, draw: (sx, w, h) => {
-        // Live-read clip.textStyle so headless edit_element textStyle edits
-        // (fontSize/family/color/weight/italic/tracking) actually repaint —
-        // the old baked closure ignored them (found 2026-10-28, Board S cont.6).
+    const clip = makeClip({ id: `text-${s.clips.length + 1}`, name: `text:${text}`, asset: `text:${preset}`, natW: s.w * scale, natH: s.h * 0.2 * scale, duration: s.duration, draw: (sx, w, h, tt) => {
+        // Board T: shared per-char runner (ranges + own keys + in-video beds +
+        // real footage masked inside glyphs via insideVideo).
         const ts = clip.textStyle || {}
-        const ds = def.style || {}
         const k = h / (s.h * 0.2 * scale)
-        const size = ts.fontSize ? ts.fontSize * k : h * 0.5
-        const fam = ts.fontFamily || ds.fontFamily || 'sans-serif'
-        const weight = (ts.bold ?? ds.bold ?? true) ? 'bold ' : ''
-        const ital = (ts.italic ?? ds.italic) ? 'italic ' : ''
-        sx.fillStyle = ts.color || ds.color || '#ffffff'
-        sx.font = `${ital}${weight}${Math.round(size)}px ${fam}`
-        const ls = (ts.letterSpacing || 0) * k
-        if (ls > 0.5) {
-          const chars = [...text]
-          const widths = chars.map(ch => sx.measureText(ch).width)
-          const total = widths.reduce((a, b) => a + b, 0) + ls * (chars.length - 1)
-          let cx = w / 2 - total / 2
-          sx.textAlign = 'left'
-          chars.forEach((ch, ci) => { sx.fillText(ch, cx, h * 0.65); cx += widths[ci] + ls })
-        } else {
-          sx.textAlign = 'center'
-          sx.fillText(text, w / 2, h * 0.65)
-        }
-        sx.textAlign = 'left'
+        TRM.paintTextRuns(sx, w, h, {
+          text, t: tt, pxScale: k,
+          base: { fontSize: ts.fontSize ? ts.fontSize * k : undefined, fontFamily: ts.fontFamily, color: ts.color, bold: ts.bold, italic: ts.italic, letterSpacing: ts.letterSpacing, glowColor: ts.glowColor, glowBlur: ts.glowBlur, opacity: ts.opacity },
+          ranges: ts.charRanges,
+          insideBaseAlpha: ts.insideBaseAlpha,
+          inside: ts.insideVideo && SESSION.videoFrames?.[ts.insideVideo] ? (c2, w2, h2, t2) => {
+            const vf = SESSION.videoFrames[ts.insideVideo]
+            const g = vf.get(Math.max(0, t2) * vf.fps)
+            const kk = Math.max(w2 / g.width, h2 / g.height)
+            c2.drawImage(g, 0, 0, g.width, g.height, (w2 - g.width * kk) / 2, (h2 - g.height * kk) / 2, g.width * kk, g.height * kk)
+          } : ts.insideBed ? (c2, w2, h2, t2) => {
+            PFX.drawReplaceBg(c2, w2, h2, t2, ts.insideBed)
+            if (ts.insideParticle && ts.insideParticle !== 'none') PFX.drawParticleFx(c2, w2, h2, t2, ts.insideParticle, ts.insideDensity ?? 0.6, ts.insideTint || '#ffffff')
+          } : undefined,
+          makeCanvas: (mw, mh) => makeCanvas(mw, mh),
+        })
       } })
     clip.transform.x = x; clip.transform.y = y; clip.textPreset = def.id
+    if (def.id === 'plain') {
+      clip.textStyle = { ...clip.textStyle, fontFamily: 'Inter, sans-serif', bold: false, fontSize: 48, color: '#ffffff' }
+    } else if (def.id.startsWith('inv-')) {
+      const [, bed, part] = def.id.split('-')
+      const TINTS = { embers: '#ff9a4d', rain: '#9fd8ff', snow: '#e8f6ff', sparkles: '#22d3ee', bokeh: '#ffd166', dust: '#c9b8ff', petals: '#ffb3c8', clean: '#ffffff' }
+      const tint = TINTS[part || 'clean'] || '#ffffff'
+      clip.textStyle = { ...clip.textStyle, fontFamily: 'Inter, sans-serif', bold: true, fontSize: 64, color: '#ffffff', glowColor: tint, glowBlur: 12, insideBed: bed, insideParticle: part === 'clean' ? 'none' : (part || 'none'), insideTint: tint, insideDensity: 0.7 }
+    }
     s.addClip(clip)
     SESSION.selection = clip
-    return SESSION.note('create_text', { text, preset, x, y }, { clipId: clip.id, presetApplied: def.id })
+    const mc = makeCanvas(Math.max(2, Math.round(clip.natW)), Math.max(2, Math.round(clip.natH)))
+    const mtx = mc.getContext('2d')
+    const ts0 = clip.textStyle || {}
+    const metrics = mtx ? TRM.paintTextRuns(mtx, mc.width, mc.height, { text, t: 0, base: { fontSize: ts0.fontSize, fontFamily: ts0.fontFamily, color: ts0.color, bold: ts0.bold, italic: ts0.italic, letterSpacing: ts0.letterSpacing }, ranges: ts0.charRanges, makeCanvas: (mw, mh) => makeCanvas(mw, mh) }).map(mm => ({ pos: mm.pos, ch: mm.ch, x: +mm.x.toFixed(1), y: +mm.y.toFixed(1), w: +mm.w.toFixed(1), h: +mm.h.toFixed(1) })) : []
+    return SESSION.note('create_text', { text, preset, x, y }, { clipId: clip.id, presetApplied: def.id, charMetrics: metrics, project: { w: s.w, h: s.h } })
   }
 }
 class EditElement extends MCPTool {
@@ -1018,4 +1089,4 @@ class FxRemove extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())

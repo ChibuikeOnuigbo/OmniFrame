@@ -122,6 +122,10 @@ export interface PaintRunsOpts {
 }
 
 /** Lay out + paint per-character runs; returns per-char metrics in draw px. */
+// Grow-only scratch pair: an animated clip changes its rounded layer size
+// every frame, and each fresh napi-rs canvas leaks native memory forever.
+let SCRATCH: { w: number; h: number; mask: HTMLCanvasElement; bed: HTMLCanvasElement } | null = null
+
 export function paintTextRuns(ctx: CanvasRenderingContext2D, w: number, h: number, o: PaintRunsOpts): CharMetric[] {
   const chars = [...o.text]
   const k = 1 // draw-space units are already project-scaled by callers
@@ -180,21 +184,35 @@ export function paintTextRuns(ctx: CanvasRenderingContext2D, w: number, h: numbe
     })
   }
   if (o.inside) {
-    // mask pass: glyphs -> bed inside them, faint base pass under for legibility
-    const mask = o.makeCanvas(Math.max(2, w), Math.max(2, h))
+    // mask pass: glyphs -> bed inside them, faint base pass under for legibility.
+    // Scratch canvases are REUSED: napi-rs native surfaces are not GC-tracked,
+    // so allocating per frame leaks ~15 MB/frame on long renders.
+    // power-of-two sizing: an animated clip changes its rounded layer size
+    // every frame; re-allocating native canvases mid-render leaks forever.
+    const W = Math.max(64, 2 ** Math.ceil(Math.log2(Math.max(2, w)))), H = Math.max(64, 2 ** Math.ceil(Math.log2(Math.max(2, h))))
+    if (!SCRATCH || SCRATCH.w < W || SCRATCH.h < H) {
+      const sw = Math.max(W, SCRATCH?.w ?? 0), sh = Math.max(H, SCRATCH?.h ?? 0)
+      SCRATCH = { w: sw, h: sh, mask: o.makeCanvas(sw, sh), bed: o.makeCanvas(sw, sh) }
+    }
+    const mask = SCRATCH.mask
+    const bed = SCRATCH.bed
     const mx = mask.getContext('2d')!
+    mx.clearRect(0, 0, W, H)
     paintPass(mx)
-    const bed = o.makeCanvas(Math.max(2, w), Math.max(2, h))
     const bx2 = bed.getContext('2d')!
+    bx2.globalCompositeOperation = 'source-over'
+    bx2.clearRect(0, 0, W, H)
     o.inside(bx2, w, h, o.t)
     bx2.globalCompositeOperation = 'destination-in'
-    bx2.drawImage(mask, 0, 0)
+    bx2.drawImage(mask, 0, 0, W, H, 0, 0, W, H)
     ctx.save()
-    ctx.globalAlpha = o.insideBaseAlpha ?? 0.28
-    paintPass(ctx)
+    ctx.drawImage(bed, 0, 0, W, H, 0, 0, W, H)
     ctx.restore()
+    // tinted base ON TOP of the footage keeps the text legible while the
+    // moving video reads through the colour (user: "text still visible").
     ctx.save()
-    ctx.drawImage(bed, 0, 0)
+    ctx.globalAlpha = o.insideBaseAlpha ?? 0.55
+    paintPass(ctx)
     ctx.restore()
   } else {
     paintPass(ctx)

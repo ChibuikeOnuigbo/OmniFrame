@@ -9,6 +9,10 @@
  *     CUT-OUT, not on the video
  *  Runs recipe E through the registry and asserts all of it from the trace. */
 import { registry, SESSION } from '../tools/mcp/tools.mjs'
+if (process.env.QATRACE) {
+  const _oc = registry.call.bind(registry)
+  registry.call = async (...a) => { const r = await _oc(...a); console.error('T', a[0], (process.memoryUsage().rss / 1048576) | 0); return r }
+}
 import fs from 'fs'
 import crypto from 'crypto'
 let fail = 0
@@ -486,4 +490,4 @@ if (!h.ok || h.data.tools.length < 25) { console.error('FAIL help catalog', h.da
 const dd = await registry.call('data_dump', { withImages: true, times: [1.9] })
 if (!dd.ok || !dd.data.previews || !dd.data.previews[0]['data:img'].startsWith('data:image/png')) { console.error('FAIL data_dump images'); fail++ }
 console.log(fail ? `UNIVERSAL TOOLS QA: FAIL (${fail})` : `UNIVERSAL TOOLS QA: PASS (${trace.length} universal steps, ${h.data.tools.length} tools, omniframe law ok, data:img dumps ok)`)
-process.exit(fail ? 1 : 0)
+process.exitCode = fail ? 1 : 0

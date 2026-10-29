@@ -2,8 +2,8 @@
 // Every tool returns a ToolResult; ToolResult.chunkManifest() splits the whole
 // payload (meta + data) into fixed-size JSON chunks so callers can stream or
 // verify it piece by piece. FrameProvider pulls any frame of any produced mp4.
-import { createCanvas, loadImage } from '@napi-rs/canvas'
-import { execFileSync } from 'child_process'
+import { createCanvas, loadImage, Image } from '@napi-rs/canvas'
+import { execFileSync, spawn } from 'child_process'
 import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
@@ -84,28 +84,32 @@ export class MCPRegistry {
 export class VideoEncoder {
   constructor({ w = 640, h = 360, fps = 24, out }) {
     this.w = w; this.h = h; this.fps = fps; this.out = out
-    // stream raw frames to disk: holding 500+ RGB buffers in RAM OOMs the box
-    this.raw = path.join(os.tmpdir(), `omni-raw-${Date.now()}.rgb`)
-    this.fd = fs.openSync(this.raw, 'w')
+    // Pipe PNG frames straight into ffmpeg over stdin. getImageData() leaks
+    // ~4 MB of NATIVE (non-GC-tracked) memory per call in @napi-rs/canvas, so
+    // the old raw-RGB path OOMed long 720p exports; toBuffer('image/png') is
+    // clean and skips the JS-side RGBA→RGB loop too.
+    this.proc = spawn(ffmpegExe(), ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-vcodec', 'png', '-framerate', String(fps), '-i', '-', '-an', '-vf', 'format=yuv420p', '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', out], { stdio: ['pipe', 'pipe', 'pipe'] })
+    this.err = ''
+    this.proc.stderr.on('data', (d) => { this.err += d.toString() })
+    this.exitP = new Promise((res, rej) => { this.proc.on('exit', (c) => (c === 0 ? res(c) : rej(new Error(`ffmpeg exit ${c}: ${this.err.slice(-400)}`)))) })
     this.n = 0
+    this.writeP = Promise.resolve()
   }
   addCanvas(canvas) {
-    const d = canvas.getContext('2d').getImageData(0, 0, this.w, this.h).data
-    const rgb = Buffer.alloc(this.w * this.h * 3)
-    for (let i = 0, j = 0; i < d.length; i += 4, j += 3) { rgb[j] = d[i]; rgb[j + 1] = d[i + 1]; rgb[j + 2] = d[i + 2] }
-    fs.writeSync(this.fd, rgb)
+    const buf = canvas.toBuffer('image/png')
+    this.writeP = this.writeP.then(() => new Promise((res) => {
+      if (this.proc.stdin.write(buf)) res()
+      else this.proc.stdin.once('drain', res)
+    }))
     this.n++
     return this
   }
   get frames() { return this.n }
-  finish() {
+  async finish() {
     if (!this.n) throw new Error('no frames')
-    fs.closeSync(this.fd)
-    execFileSync(ffmpegExe(), ['-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
-      '-s', `${this.w}x${this.h}`, '-r', String(this.fps), '-i', this.raw, '-an',
-      '-vf', 'format=yuv420p', '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', this.out],
-      { maxBuffer: 1 << 30 })
-    fs.unlinkSync(this.raw)
+    await this.writeP
+    this.proc.stdin.end()
+    await this.exitP
     return { out: this.out, frames: this.n, fps: this.fps, size: fs.statSync(this.out).size }
   }
 }
@@ -131,7 +135,7 @@ if (typeof globalThis.document === 'undefined') {
   globalThis.document = { createElement: () => createCanvas(1, 1) }
 }
 export function makeCanvas(w, h) { return createCanvas(w, h) }
-export { loadImage }
+export { Image as CanvasImage,  loadImage }
 export function cover(ctx, img, w, h, ox = 0, oy = 0) {
   const s = Math.max(w / img.width, h / img.height)
   const dw = img.width * s, dh = img.height * s

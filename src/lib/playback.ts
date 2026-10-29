@@ -1805,7 +1805,7 @@ export class PreviewEngine {
       // In-Video Text: faint base pass for legibility, then the animated bed
       // (fire/rain/cloud/…) confined INSIDE the glyph silhouettes.
       ctx.save()
-      ctx.globalAlpha *= 0.28
+      ctx.globalAlpha *= (t as unknown as { insideBaseAlpha?: number }).insideBaseAlpha ?? 0.28
       lines.forEach((line, i) => drawLine(ctx, line, startY + i * lineHeight, lineStarts[i]))
       ctx.restore()
       const bw = Math.max(2, Math.ceil(boxW)), bh = Math.max(2, Math.ceil(boxH))

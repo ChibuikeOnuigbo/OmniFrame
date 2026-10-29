@@ -10,7 +10,8 @@ import { mkdtempSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { transform } from 'sucrase'
-import { makeCanvas } from './core.mjs'
+import { makeCanvas, CanvasImage } from './core.mjs'
+import { PNG } from 'pngjs'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const _mods = new Map()
@@ -84,8 +85,12 @@ export function applyClipLutsK(sx, w, h, luts) {
     if (!rec) continue
     const { n, data } = rec
     const m = n - 1
-    const img = sx.getImageData(0, 0, w, h)
-    const d = img.data
+    // napi-rs getImageData/createImageData leak native memory with NO finalizer
+    // (measured: ~4 MB/frame unreclaimable even under global.gc), so the
+    // headless LUT grade round-trips through PNG instead: toBuffer('image/png')
+    // and pngjs decode/encode are both fully GC-managed.
+    const dec = PNG.sync.read(sx.canvas.toBuffer('image/png'))
+    const d = dec.data
     for (let i = 0; i < d.length; i += 4) {
       const r = (d[i] / 255) * m, g = (d[i + 1] / 255) * m, b = (d[i + 2] / 255) * m
       const r0 = Math.min(m, r | 0), g0 = Math.min(m, g | 0), b0 = Math.min(m, b | 0)
@@ -102,7 +107,13 @@ export function applyClipLutsK(sx, w, h, luts) {
         d[i + ch] += (cl - d[i + ch]) * inten
       }
     }
-    sx.putImageData(img, 0, 0)
+    const enc = PNG.sync.write(Object.assign(dec, { width: w, height: h }))
+    const back = new CanvasImage()
+    back.src = enc
+    sx.save()
+    sx.globalCompositeOperation = 'copy'
+    sx.drawImage(back, 0, 0)
+    sx.restore()
   }
 }
 
@@ -258,13 +269,40 @@ function sampleAt(canvas, x, y) {
   return `rgb(${d[0]},${d[1]},${d[2]})`
 }
 
-export function renderFrame(seq, t) {
-  const c = makeCanvas(seq.w, seq.h), x = c.getContext('2d')
+// Per-frame clip layers MUST be reused: napi-rs native surfaces are not
+// GC-tracked, so any fresh makeCanvas per frame leaks forever (~4-30 MB).
+// One fixed over-sized surface per seq per recursion depth covers animated
+// scale/zoom without ever re-allocating mid-render.
+const LAYER_POOL = []
+function scratchLayer(w, h, depth, seq) {
+  let e = LAYER_POOL[depth]
+  // 2× covers keyframed scale/zoom heads (measured max ~1.22); 3× wasted 4×
+  // the memory and re-allocating per project piled native garbage.
+  const pw = Math.max(64, w, (seq ? seq.w : w) * 2), ph = Math.max(64, h, (seq ? seq.h : h) * 2)
+  if (!e || e.c.width < pw || e.c.height < ph) {
+    e = LAYER_POOL[depth] = { c: makeCanvas(pw, ph) }
+  }
+  const cx = e.c.getContext('2d')
+  cx.setTransform(1, 0, 0, 1, 0, 0)
+  cx.globalAlpha = 1
+  cx.globalCompositeOperation = 'source-over'
+  cx.filter = 'none'
+  cx.clearRect(0, 0, w, h)
+  return e.c
+}
+export function renderFrame(seq, t, target) {
+  // `target` lets long exports reuse ONE output surface (native canvases are
+  // not GC-tracked; a fresh one per frame leaks ~4 MB/frame).
+  const c = target || makeCanvas(seq.w, seq.h), x = c.getContext('2d')
+  x.setTransform(1, 0, 0, 1, 0, 0)
+  x.globalAlpha = 1
+  x.globalCompositeOperation = 'source-over'
+  x.filter = 'none'
   x.fillStyle = seq.bg; x.fillRect(0, 0, seq.w, seq.h)
   drawSeq(x, seq, t)
   return c
 }
-function drawSeq(x, seq, t) {
+function drawSeq(x, seq, t, depth = 0) {
   const paint = paintGetter ? paintGetter() : null
   if (paint && paint.strokes && paint.strokes.length) {
     // paint underlay first? no — playback paints OVER clips; keep same order:
@@ -311,10 +349,10 @@ function drawSeq(x, seq, t) {
       // Padded (3x frame) child render: children bigger than the view must NOT
       // be bitmap-clipped to the view — mirrors the playback.ts pad fix.
       const innerT = Math.max(0, t - clip.start) + (clip.inPoint || 0)
-      const pad = makeCanvas(seq.w * 3, seq.h * 3)
+      const pad = scratchLayer(seq.w * 3, seq.h * 3, depth + 40, seq)
       const pxc = pad.getContext('2d')
       pxc.translate(seq.w, seq.h)
-      drawSeq(pxc, clip.childSeq, innerT)
+      drawSeq(pxc, clip.childSeq, innerT, depth + 1)
       x.save()
       x.translate(r.x + r.w / 2, r.y + r.h / 2)
       x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
@@ -325,21 +363,47 @@ function drawSeq(x, seq, t) {
       x.restore()
       continue
     }
-    const s = makeCanvas(Math.max(2, Math.round(r.w)), Math.max(2, Math.round(r.h)))
+    // FAST PATH: clips without mask/fx/chroma/ghosts/flip/luts draw straight
+    // into the frame. Routing them through the over-sized layer scratch forces
+    // a downscale blit every frame, and Skia rebuilds a ~8 MB mipmap per call
+    // (measured) — the real cause of OOM-killed long renders.
+    const flipF = cardFlipFactor(clip, t)
+    const ghostsF = [...PFX.pfxEchoTimes(eff, t), ...PFX.pfxMotionBlurSamples(eff, t, seq.fps)]
+    const tsPF = clip.textStyle
+    const needLayer = !!(clip.mask && clip.mask.enabled) || Object.keys(eff).length > 0 || (tsPF && (tsPF.chroma || 0) > 0) || ghostsF.length > 0 || flipF.sx !== 1 || flipF.shade > 0 || !!(clip.adjustment && clip.adjustment.luts && clip.adjustment.luts.length)
+    if (!needLayer) {
+      const lw0 = Math.max(2, Math.round(r.w)), lh0 = Math.max(2, Math.round(r.h))
+      x.save()
+      x.translate(r.x + r.w / 2, r.y + r.h / 2)
+      x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
+      x.scale((ev.scaleX || 1) * flipF.sx, ev.scaleY || 1)
+      x.translate(-lw0 / 2, -lh0 / 2)
+      x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
+      x.globalCompositeOperation = clip.blendMode || 'source-over'
+      clip.draw(x, lw0, lh0, Math.max(0, tt - clip.start))
+      x.restore()
+      continue
+    }
+    const lw = Math.max(2, Math.round(r.w)), lh = Math.max(2, Math.round(r.h))
+    // Exact-size layer: position-dependent effects (timecode burn-in, vignette)
+    // address canvas.height directly, so a pooled over-sized surface would crop
+    // them. 1:1 blit means no Skia mipmap rebuild; the canvas itself is
+    // ordinary reclaimable garbage (measured flat).
+    const s = makeCanvas(lw, lh)
     const sx = s.getContext('2d')
     const flip = cardFlipFactor(clip, t)
     sx.save()
-    sx.translate(s.width / 2, s.height / 2); sx.scale(flip.sx, 1); sx.translate(-s.width / 2, -s.height / 2)
+    sx.translate(lw / 2, lh / 2); sx.scale(flip.sx, 1); sx.translate(-lw / 2, -lh / 2)
     const tsP = clip.textStyle
-    const pxScale = s.width / 640
+    const pxScale = lw / 640
     if (tsP && (tsP.chroma || 0) > 0) {
       const off = tsP.chroma * pxScale
       for (const [dx, col] of [[-off, '#00ffff'], [off, '#ff005a']]) {
-        const tc = makeCanvas(s.width, s.height), tx = tc.getContext('2d')
-        clip.draw(tx, s.width, s.height, Math.max(0, tt - clip.start))
+        const tc = makeCanvas(lw, lh), tx = tc.getContext('2d')
+        clip.draw(tx, lw, lh, Math.max(0, tt - clip.start))
         tx.globalCompositeOperation = 'source-in'
         tx.fillStyle = col
-        tx.fillRect(0, 0, s.width, s.height)
+        tx.fillRect(0, 0, lw, lh)
         sx.save(); sx.globalAlpha = 0.8; sx.translate(dx, 0); sx.drawImage(tc, 0, 0); sx.restore()
       }
     }
@@ -348,35 +412,39 @@ function drawSeq(x, seq, t) {
       sx.translate((tsP.shadowOffsetX || 0) * pxScale, (tsP.shadowOffsetY || 0) * pxScale)
       sx.shadowColor = tsP.shadowColor || 'rgba(0,0,0,0.85)'
       sx.shadowBlur = (tsP.shadowBlur || 6) * pxScale
-      clip.draw(sx, s.width, s.height, Math.max(0, tt - clip.start))
+      clip.draw(sx, lw, lh, Math.max(0, tt - clip.start))
       sx.restore()
     }
     if (tsP && tsP.glowBlur && tsP.glowMode !== 'inward') {
       sx.shadowColor = tsP.glowColor || '#ffffff'
       sx.shadowBlur = tsP.glowBlur * pxScale
     }
-    clip.draw(sx, s.width, s.height, Math.max(0, tt - clip.start))
+    clip.draw(sx, lw, lh, Math.max(0, tt - clip.start))
     sx.shadowBlur = 0
     sx.restore()
-    if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, s.width, s.height) }
-    applyEffects(sx, clip, s.width, s.height, t)
-    if (clip.adjustment?.luts?.length) applyClipLutsK(sx, s.width, s.height, clip.adjustment.luts)
+    if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, lw, lh) }
+    applyEffects(sx, clip, lw, lh, t)
+    if (clip.adjustment?.luts?.length) applyClipLutsK(sx, lw, lh, clip.adjustment.luts)
     if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) {
       const m = clip.mask
-      const mc = makeCanvas(m.mw, m.mh)
-      const md = mc.getContext('2d').createImageData(m.mw, m.mh)
-      for (let i = 0, j = 0; i < m.alpha.length; i++, j += 4) { md.data[j] = 255; md.data[j + 1] = 255; md.data[j + 2] = 255; md.data[j + 3] = m.alpha[i] }
-      mc.getContext('2d').putImageData(md, 0, 0)
+      let mc = clip._matteCanvas
+      if (!mc || mc._forMask !== m || mc.width !== m.mw || mc.height !== m.mh) {
+        mc = clip._matteCanvas = makeCanvas(m.mw, m.mh)
+        mc._forMask = m
+        const md = mc.getContext('2d').createImageData(m.mw, m.mh)
+        for (let i = 0, j = 0; i < m.alpha.length; i++, j += 4) { md.data[j] = 255; md.data[j + 1] = 255; md.data[j + 2] = 255; md.data[j + 3] = m.alpha[i] }
+        mc.getContext('2d').putImageData(md, 0, 0)
+      }
       sx.save()
-      sx.filter = m.feather > 0 ? `blur(${m.feather * s.width}px)` : 'none'
+      sx.filter = m.feather > 0 ? `blur(${m.feather * lw}px)` : 'none'
       sx.globalCompositeOperation = 'destination-in'
-      sx.drawImage(mc, 0, 0, s.width, s.height)
+      sx.drawImage(mc, 0, 0, lw, lh)
       sx.restore(); sx.filter = 'none'
     } else if (clip.mask?.enabled) {
       // mask is CLIP-LOCAL (moves with the layer): map sequence-space mask onto
       // the clip's base rect (transform without keyframe offsets)
-      const lm = { ...clip.mask, feather: (clip.mask.feather || 0) * s.width }
-      applyShapeMatte(sx, lm, s.width, s.height)
+      const lm = { ...clip.mask, feather: (clip.mask.feather || 0) * lw }
+      applyShapeMatte(sx, lm, lw, lh)
     }
     if (clip.patch) applySmartPatchMatte(sx, clip.patch, r, seq)
     x.save()
@@ -384,7 +452,7 @@ function drawSeq(x, seq, t) {
     x.globalCompositeOperation = clip.blendMode || 'source-over'
     x.translate(r.x + r.w / 2, r.y + r.h / 2)
     x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
-    x.drawImage(s, -r.w / 2, -r.h / 2, r.w, r.h)
+    x.drawImage(s, 0, 0, lw, lh, -r.w / 2, -r.h / 2, r.w, r.h)
     x.restore()
     const ghosts = [...PFX.pfxEchoTimes(eff, t), ...PFX.pfxMotionBlurSamples(eff, t, seq.fps)]
     for (const g of ghosts) {
