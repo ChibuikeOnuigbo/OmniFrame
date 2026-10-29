@@ -8,7 +8,7 @@ only what is verified shipped.
 
 1. **5000-recipe mandate:** keep producing glitch/effect recipes until 5,000
    are rendered + validated IN-APP (combined MP4 + manifest per batch;
-   checkpoint `new_glitch/batch/checkpoint.json` — **next = 188**; 85 kept /
+   checkpoint `new_glitch/batch/checkpoint.json` — **next = 276**; 145 kept /
    91 dups / 0 failed so far (slices 13–100 and 100–188)). Bounded honest sets + md indexes for mass
    renders; user rates keep/delete/improve. **After every special task, go
    BACK to the 5000 recipes and keep adding.**
@@ -35,7 +35,7 @@ only what is verified shipped.
 - [ ] `node qa/tymm-lut-parity.mjs` → PASS (lossless 64³ TYMM LUTs)
 - [ ] `node qa/alight-roundtrip.mjs` → PASS (XML export/import round-trip:
       project + template + shake pack; proof test_ans_result/xml-roundtrip.mp4)
-- [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=100)
+- [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=276)
 - [ ] update STATE.md + FEATURES.md, commit, push to the session branch
 
 ## Shipped this line of work (verified)
@@ -81,7 +81,7 @@ only what is verified shipped.
 
 ## Open items (resume here)
 
-- 5000 recipes: continue from checkpoint **next=188** (batch_reel.mp4 = 4:00 combined review of all 85 kept; user keep/delete/improve rating pending).
+- 5000 recipes: continue from checkpoint **next=276** (batch_reel.mp4 = 9:40 combined review of all 145 kept, 0 failed; user keep/delete/improve rating pending).
 - mega.nz overlay folder when network allows (or user drops files into
   `new_doc_toll_research/`).
 - Overlays/Sfx/Back Grounds media: download + wire as an in-app pack browser
@@ -90,3 +90,5 @@ only what is verified shipped.
   replace_video), group nesting + masks data-only, gradient fills raster flat.
 - Browser insideVideo parity, headless .omni export, roto feather calibration,
   UI workspaces, Tauri (blocked) — from ARENA_MASTER_PROMPT P0 list.
+
+- `URL=http://localhost:5173/#studio node qa/replace-template-ui-e2e.mjs` → REPLACE+TEMPLATE UI E2E: PASS (real Chromium: replace window math/drag clamp/carry, template capture→XML→re-import→chain replay, project XML round-trip in browser, TYMM LUT first batch, shake pack UI + NANIMALO apply).
