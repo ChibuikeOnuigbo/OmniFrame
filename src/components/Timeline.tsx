@@ -3155,6 +3155,50 @@ export function Timeline() {
                   <kbd className="ml-auto text-[10px] text-ink-500">B</kbd>
                 </button>
                 <div className="my-1 border-t border-ink-700" />
+                <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Template mode</div>
+                <button
+                  type="button"
+                  data-testid="ctx-template-capture"
+                  onClick={() => {
+                    const id = useEditor.getState().captureTemplate(contextMenu.clip!.id)
+                    setContextMenu(null)
+                    if (id) useEditor.setState({ mediaImportNotice: `Template captured from “${contextMenu.clip!.name}” (${id}) — export it as XML in the Media panel or apply it from any clip's context menu.` })
+                  }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
+                  title="Snapshot EVERY processing stage of this clip (transform+keys, effects, fx, LUT grade, masks, blend, speed, text style, in-point ratio)"
+                >
+                  <Sliders size={14} />
+                  <span>Capture template</span>
+                </button>
+                <details className="w-full">
+                  <summary data-testid="ctx-template-apply" className="flex cursor-pointer items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left list-none">
+                    <Sliders size={14} />
+                    <span>Apply template…</span>
+                    <span className="ml-auto text-[10px] text-ink-500">{useEditor.getState().templates.length || 'none'}</span>
+                  </summary>
+                  <div className="ml-4 border-l border-ink-700 pl-1">
+                    {useEditor.getState().templates.length === 0 && (
+                      <div className="px-2 py-1 text-[10px] text-ink-500">No templates yet — capture one, or import a template XML (Media panel).</div>
+                    )}
+                    {useEditor.getState().templates.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        data-testid={`ctx-template-apply-${t.id}`}
+                        onClick={() => {
+                          useEditor.getState().applyTemplate(t.id, contextMenu.clip!.id)
+                          setContextMenu(null)
+                        }}
+                        className="flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-cyan-500/15"
+                        title={`${t.fieldCount} stages from ${t.sourceName} — ${Object.keys(t.fields).join(', ')}`}
+                      >
+                        <span className="h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-brand to-cyan-400" />
+                        <span className="truncate">{t.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </details>
+                <div className="my-1 border-t border-ink-700" />
                 <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Add effect</div>
                 {FX_QUICK_IDS.map((qid) => {
                   const qe = fxCatalogById(qid)
