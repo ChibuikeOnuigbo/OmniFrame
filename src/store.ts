@@ -62,6 +62,8 @@ import type {
   CustomFont,
   ImportedPalette,
 } from './types'
+import { captureClipTemplate, replaceVideoPatch, templatePatch, type ClipTemplate } from './lib/replaceVideo'
+import { parseAlightXml, alightToImport } from './lib/alightXml'
 import { DEFAULT_CLIP_MASK } from './types'
 import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, dataUrlByteSize, registerCustomFont, registerAllCustomFonts, unregisterCustomFont } from './lib/fonts'
 import { parseSubtitles, parsePalette } from './lib/importUtils'
@@ -542,6 +544,16 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   // ---- adjustment layers & LUTs ----
   /** Built-in LUT library (public/luts/manifest.json). */
   lutLibrary: { loaded: boolean; luts: Array<{ id: string; name: string; file: string; description: string; category: string; swatch: string; tags?: string[] }> }
+  /** TEMPLATE MODE: captured full processing chains (replace-video replays them). */
+  templates: ClipTemplate[]
+  replaceDialog: { clipId: string; assetId: string } | null
+  openReplaceDialog: (clipId: string, assetId: string) => void
+  closeReplaceDialog: () => void
+  commitReplaceVideo: (windowStart: number, carryEffects: boolean) => void
+  captureTemplate: (clipId: string, name?: string) => string | null
+  applyTemplate: (templateId: string, clipId: string) => boolean
+  /** Alight Motion v5 XML import (src/lib/alightXml.ts study). */
+  importAlightXml: (xmlText: string) => { title: string; layers: number; mapped: number; unmapped: number; keyframed: number }
   /** User-uploaded .cube LUTs (persisted to localStorage when they fit). */
   userLuts: Array<{ id: string; name: string; cubeText: string }>
   loadLutLibrary: () => Promise<void>
@@ -1163,6 +1175,8 @@ export const useEditor = create<EditorState>((set, get) => {
     clips: [],
     transitions: [],
     lutLibrary: { loaded: false, luts: [] },
+    templates: [],
+    replaceDialog: null,
     customEffects: (() => {
       try {
         const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('omniframe.customEffects') : null
@@ -1921,6 +1935,103 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     // ---- adjustment layers & LUTs ------------------------------------
+    openReplaceDialog: (clipId, assetId) => set({ replaceDialog: { clipId, assetId } }),
+    closeReplaceDialog: () => set({ replaceDialog: null }),
+    commitReplaceVideo: (windowStart, carryEffects) => {
+      const dlg = get().replaceDialog
+      if (!dlg) return
+      const clip = get().clips.find((c) => c.id === dlg.clipId)
+      const asset = get().assets.find((a) => a.id === dlg.assetId)
+      if (!clip || !asset) { set({ replaceDialog: null }); return }
+      const patch = replaceVideoPatch(clip, asset.id, asset.duration || clip.duration, windowStart, carryEffects)
+      const partial: Partial<Clip> = { assetId: patch.assetId, inPoint: patch.inPoint, duration: patch.duration, name: asset.name }
+      for (const k of patch.cleared) (partial as Record<string, unknown>)[k] = undefined
+      get().setClipProp(clip.id, partial)
+      set({ replaceDialog: null })
+    },
+    captureTemplate: (clipId, name) => {
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!clip) return null
+      const t = captureClipTemplate(clip, name || `Template ${clip.name}`)
+      set((st) => ({ templates: [...st.templates, t] }))
+      return t.id
+    },
+    applyTemplate: (templateId, clipId) => {
+      const t = get().templates.find((x) => x.id === templateId || x.name === templateId)
+      const clip = get().clips.find((c) => c.id === clipId)
+      if (!t || !clip) return false
+      get().setClipProp(clip.id, templatePatch(t, clip.duration) as Partial<Clip>)
+      return true
+    },
+    importAlightXml: (xmlText) => {
+      const imp = alightToImport(parseAlightXml(xmlText))
+      get().setProjectName(imp.project.title)
+      get().setCustomSequenceDimensions(imp.project.w, imp.project.h)
+      get().setProjectFps(imp.project.fps)
+      const trackId = get().ensureTrack('video')
+      let layers = 0
+      for (const c of imp.clips) {
+        if (c.kind === 'null') continue
+        // rasterise the AM layer to an image asset (solid/text/media placeholder);
+        // AM media refs are content:// device uris — re-link by replacing the
+        // clip footage afterwards (replace_video carries the whole AM chain).
+        const cv = document.createElement('canvas')
+        cv.width = Math.max(2, Math.round(imp.project.w))
+        cv.height = Math.max(2, Math.round(imp.project.h))
+        const x = cv.getContext('2d')
+        if (!x) continue
+        if (c.kind === 'text') {
+          x.fillStyle = c.fillColor || '#ffffff'
+          x.font = `700 ${Math.round(cv.height * 0.12)}px sans-serif`
+          x.textAlign = 'center'; x.textBaseline = 'middle'
+          x.fillText(c.text || c.name, cv.width / 2, cv.height / 2, cv.width * 0.9)
+        } else if (c.kind === 'solid') {
+          x.fillStyle = c.fillColor || '#333344'
+          x.fillRect(0, 0, cv.width, cv.height)
+        } else {
+          x.fillStyle = '#1b1b26'; x.fillRect(0, 0, cv.width, cv.height)
+          x.strokeStyle = '#4a4a63'; x.strokeRect(4, 4, cv.width - 8, cv.height - 8)
+          x.fillStyle = '#9999bb'; x.font = `${Math.round(cv.height * 0.05)}px sans-serif`; x.textAlign = 'center'
+          x.fillText('AM media (re-link)', cv.width / 2, cv.height / 2 - 10)
+          x.font = `${Math.round(cv.height * 0.035)}px sans-serif`
+          x.fillText(c.name.slice(0, 60), cv.width / 2, cv.height / 2 + 14, cv.width * 0.9)
+        }
+        const url = cv.toDataURL('image/png')
+        const asset: MediaAsset = { id: uid('am'), name: c.name, kind: 'image', url, duration: c.duration, width: cv.width, height: cv.height, size: url.length }
+        get().addAsset(asset)
+        get().addClipToTrack(trackId, asset.id, c.start)
+        const clipId = get().selectedClipId
+        if (!clipId) continue
+        layers++
+        const patch: Partial<Clip> = {
+          start: c.start, duration: c.duration, name: c.name, volume: c.volume,
+          transform: { x: c.x, y: c.y, scale: c.scale || 1, rotation: c.rotation, opacity: c.opacity },
+        }
+        if (Object.keys(c.effects).length) patch.effects = c.effects as Clip['effects']
+        get().setClipProp(clipId, patch)
+        // keyframed transform channels → app CurveEngine (cubicBezier → custom points)
+        const chans: Array<[string, Array<{ time: number; value: number; points?: Array<[number, number]> }>]> = [
+          ['position_x', c.keys.positionX], ['position_y', c.keys.positionY],
+          ['scale_x', c.keys.scale], ['scale_y', c.keys.scale],
+          ['rotation_z', c.keys.rotation], ['opacity', c.keys.opacity],
+        ]
+        const clip = get().clips.find((cc) => cc.id === clipId)
+        const anim = clip?.animation ? JSON.parse(JSON.stringify(clip.animation)) as ClipAnimation : createDefaultClipAnimation({ x: c.x, y: c.y, z: 0, scale: c.scale || 1, rotation: c.rotation, opacity: c.opacity, pivotX: 0.5, pivotY: 0.5 }, c.duration)
+        let touched = false
+        for (const [curveId, keys] of chans) {
+          if (!keys || keys.length < 2 || !anim.curves[curveId]) continue
+          let curve = anim.curves[curveId]
+          for (const k of keys) {
+            const r = addOrUpdateKeyframe(curve, +k.time.toFixed(3), k.value, k.points ? 'custom' : 'linear')
+            if (k.points) r.keyframe.points = [[0, 0], ...k.points, [1, 1]].map(([px, py]) => ({ x: px, y: py }))
+            curve = r.curve; touched = true
+          }
+          anim.curves[curveId] = curve
+        }
+        if (touched) get().setClipProp(clipId, { animation: anim })
+      }
+      return { title: imp.project.title, layers, mapped: imp.stats.mapped, unmapped: imp.stats.unmapped, keyframed: imp.stats.keyframed }
+    },
     loadLutLibrary: async () => {
       if (get().lutLibrary.loaded) return
       try {

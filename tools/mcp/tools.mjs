@@ -1089,4 +1089,188 @@ class FxRemove extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove]) registry.register(new T())
+
+/* ---------- Replace-Video-With-Video + TEMPLATE MODE (MCP endpoints) ---------- */
+const RVE = await loadAppTs('src/lib/replaceVideo.ts')
+SESSION.templates = SESSION.templates || {}
+
+/** shared: extract video frames (cache under .cache/video-frames) -> frame getter */
+async function extractVideoFrames(rel, fps) {
+  const abs = rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)
+  const hash = createHash('md5').update(`${abs}:${fps}`).digest('hex').slice(0, 10)
+  const dir = pathModule.join(ROOT, '.cache', 'video-frames', hash)
+  if (!fs.existsSync(pathModule.join(dir, '0000.png'))) {
+    fs.mkdirSync(dir, { recursive: true })
+    execFileSync(ffmpegExe(), ['-y', '-i', abs, '-vf', `fps=${fps},scale=480:-2`, pathModule.join(dir, '%04d.png')], { stdio: 'pipe' })
+  }
+  const files = fs.readdirSync(dir).sort().filter(f => f.endsWith('.png'))
+  return { get: videoFrameStore(dir, files), files, fps: Number(fps), abs }
+}
+
+class ReplaceVideo extends MCPTool {
+  constructor() { super('replace_video', 'Major tool: REPLACE the footage of an existing clip with another video (CapCut Replace popup, headless parity). The view window is exactly the target clip\'s duration; windowStart slides the source in-point (0-5 vs 3-8). carryEffects=true keeps every processing stage of the original clip (fx, keys, grade, mask...) on the new footage; false clears effects/fxInstances/adjustment.', { clipId: 'target clip', path: 'replacement video (repo-relative or absolute)', windowStart: 'source in-point seconds (default 0)', carryEffects: 'true|false (default true)', fps: 'extract fps (default 12)' }) }
+  async run({ clipId, path: rel, windowStart = 0, carryEffects = true, fps = 12 }) {
+    const s = seq()
+    const c = clipId ? s.clips.find(x => x.id === clipId) : sel()
+    if (!c) throw new Error('clip not found')
+    const v = await extractVideoFrames(rel, fps)
+    const dur = v.files.length / v.fps
+    const win = RVE.clampReplaceWindow(dur, c.duration, Number(windowStart))
+    const patch = RVE.replaceVideoPatch({ duration: c.duration }, rel, dur, win.start, carryEffects === true || carryEffects === 'true')
+    c.draw = (sx, w, h, t) => {
+      const g = v.get(Math.max(0, t) * v.fps)
+      sx.drawImage(g, 0, 0, g.width, g.height, 0, 0, w, h)
+    }
+    c.asset = patch.assetId
+    c.inPoint = patch.inPoint
+    c.duration = patch.duration
+    c.name = pathModule.basename(rel)
+    for (const k of patch.cleared) { c[k] = undefined }
+    SESSION.videoFrames = SESSION.videoFrames || {}
+    SESSION.videoFrames[rel] = { get: v.get, files: v.files, fps: v.fps }
+    SESSION.selection = c
+    return SESSION.note('replace_video', { clipId: c.id, path: rel, windowStart: +win.start.toFixed(3), carryEffects }, { clipId: c.id, sourceDuration: +dur.toFixed(2), window: { start: +win.start.toFixed(2), end: +win.end.toFixed(2), length: +win.clipDuration.toFixed(2) }, carried: patch.cleared.length === 0, cleared: patch.cleared })
+  }
+}
+
+class TemplateCapture extends MCPTool {
+  constructor() { super('template_capture', 'Major tool: TEMPLATE MODE — snapshot EVERY processing stage a clip passed through (transform+keys, effects, fx instances, LUT grade, masks, blend, opacity, speed, text style, in-point ratio) into a reusable JSON data-dump under data_motiondesijg/templates/. Apply with template_apply to re-cut a new video through the identical chain.', { clipId: 'source clip (default: selection)', name: 'template name' }) }
+  async run({ clipId, name }) {
+    const c = clipId ? seq().clips.find(x => x.id === clipId) : sel()
+    if (!c) throw new Error('clip not found')
+    const jsonClip = { ...c, draw: undefined, transform: c.transform, animation: c.animation }
+    const t = RVE.captureClipTemplate(jsonClip, name || `Template ${c.name}`)
+    SESSION.templates[t.id] = t
+    const dir = pathModule.join(ROOT, 'data_motiondesijg', 'templates')
+    fs.mkdirSync(dir, { recursive: true })
+    const file = pathModule.join(dir, `${t.id}.json`)
+    fs.writeFileSync(file, JSON.stringify(t, null, 2))
+    return SESSION.note('template_capture', { clipId: c.id, name: t.name }, { templateId: t.id, file: pathModule.relative(ROOT, file), fields: Object.keys(t.fields), fieldCount: t.fieldCount, inPointRatio: +t.inPointRatio.toFixed(3) })
+  }
+}
+
+class TemplateApply extends MCPTool {
+  constructor() { super('template_apply', 'Major tool: re-play a captured processing chain (see template_capture) onto another clip — usually a freshly imported replacement video — so the new theme passes through EVERY stage the original did.', { templateId: 'id or name', clipId: 'target clip (default: selection)' }) }
+  async run({ templateId, clipId }) {
+    const s = seq()
+    const t = Object.values(SESSION.templates).find(x => x.id === templateId || x.name === templateId)
+    if (!t) throw new Error('template not found: ' + templateId)
+    const c = clipId ? s.clips.find(x => x.id === clipId) : sel()
+    if (!c) throw new Error('clip not found')
+    const patch = RVE.templatePatch(t, c.duration)
+    const applied = []
+    for (const [k, v] of Object.entries(patch)) {
+      if (k === 'inPoint' || k === 'duration') { c[k] = v; applied.push(k); continue }
+      if (v === undefined) continue
+      if (k === 'transform' && c.transform) { Object.assign(c.transform, v); applied.push('transform'); continue }
+      if (k === 'effects' && c.effects) { Object.assign(c.effects, v); applied.push('effects'); continue }
+      if (k === 'textStyle') { c.textStyle = Object.assign({}, c.textStyle || {}, v); applied.push('textStyle'); continue }
+      if (k === 'animation' && v) { c.animation = JSON.parse(JSON.stringify(v)); applied.push('animation'); continue }
+      c[k] = v; applied.push(k)
+    }
+    SESSION.selection = c
+    return SESSION.note('template_apply', { templateId: t.id, clipId: c.id }, { clipId: c.id, template: t.name, applied, inPoint: +c.inPoint.toFixed(2) })
+  }
+}
+
+class ListTemplates extends MCPTool {
+  constructor() { super('list_templates', 'List captured processing-chain templates (template_capture) with their fields and data-dump files.', {}) }
+  async run() {
+    const dir = pathModule.join(ROOT, 'data_motiondesijg', 'templates')
+    return SESSION.note('list_templates', {}, { templates: Object.values(SESSION.templates).map(t => ({ id: t.id, name: t.name, source: t.sourceName, fields: Object.keys(t.fields), file: `data_motiondesijg/templates/${t.id}.json` })), dir })
+  }
+}
+
+class ListFonts extends MCPTool {
+  constructor() { super('list_fonts', 'List every font registered for create_text/text runs: the TYMM pack (each named by its FILE STEM, e.g. "blood-crow italic", "Quicksand_Bold") plus browser generics.', {}) }
+  async run() {
+    const core = await import('./core.mjs')
+    return SESSION.note('list_fonts', {}, { count: (core.FONT_PACK_FILES || []).length, fonts: core.FONT_PACK_FILES || [], generics: ['sans-serif', 'serif', 'monospace'] })
+  }
+}
+
+
+class AlightImport extends MCPTool {
+  constructor() { super('alight_import', 'Major tool: open + read an ALIGHT MOTION v5 project XML (parser: src/lib/alightXml.ts, studied on 11 corpus projects). Rebuilds the composition: layers→clips (solid/text/media-placeholder), AM effects→site fx patches (AM_FX_CATALOG), keyframed transforms+effect props→app CurveEngine keys with the original cubicBezier easing carried as custom curve points, gain→volume. Full data dump (every AM effect incl. unmapped, nullobj rigs, bookmarks, media refs) lands in data_motiondesijg/alight/.', { path: 'repo-relative .xml', includeNulls: 'true = also materialise rig nulls as clips' }) }
+  async run({ path: rel, includeNulls = false }) {
+    const AX = await loadAppTs('src/lib/alightXml.ts')
+    const abs = rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)
+    const proj = AX.parseAlightXml(fs.readFileSync(abs, 'utf8'))
+    const imp = AX.alightToImport(proj)
+    SESSION.reset()
+    SESSION.seq = new Sequence({ w: imp.project.w, h: imp.project.h, fps: imp.project.fps, duration: imp.project.duration, bg: imp.project.bg })
+    const s = seq()
+    let n = 0, keyed = 0
+    const setKeys = (clip, k) => {
+      const add = (curveId, keys) => {
+        let curve = clip.animation.curves[curveId]
+        if (!curve || keys.length < 2) return
+        for (const kf of keys) {
+          const r = CE.addOrUpdateKeyframe(curve, +kf.time.toFixed(3), kf.value, kf.points ? 'custom' : 'linear')
+          if (kf.points) r.keyframe.points = [[0, 0], ...kf.points, [1, 1]].map(([x, y]) => ({ x, y }))
+          curve = r.curve; keyed++
+        }
+        clip.animation.curves[curveId] = curve
+      }
+      add('position_x', k.positionX); add('position_y', k.positionY)
+      add('scale_x', k.scale); add('scale_y', k.scale)
+      add('rotation_z', k.rotation); add('opacity', k.opacity)
+    }
+    for (const c of imp.clips) {
+      if (c.kind === 'null' && !includeNulls) continue
+      n++
+      const w = imp.project.w, h = imp.project.h
+      const sizeW = Math.max(24, c.kind === 'solid' ? w * 0.5 : w), sizeH = Math.max(24, c.kind === 'solid' ? h * 0.5 : h)
+      let draw
+      if (c.kind === 'text') {
+        const txt = c.text || c.name
+        draw = (sx, dw, dh) => {
+          sx.fillStyle = c.fillColor || '#ffffff'
+          sx.font = `700 ${Math.max(12, Math.round(dh * 0.5))}px sans-serif`
+          sx.textAlign = 'center'; sx.textBaseline = 'middle'
+          sx.fillText(txt, dw / 2, dh / 2, dw)
+        }
+      } else if (c.kind === 'solid') {
+        draw = (sx, dw, dh) => { sx.fillStyle = c.fillColor || '#333344'; sx.fillRect(0, 0, dw, dh) }
+      } else if (c.kind === 'null') {
+        draw = () => {}
+      } else {
+        // media layer: AM points at content:// device media — placeholder card,
+        // re-link by replacing with replace_video (template chain carries over).
+        draw = (sx, dw, dh) => {
+          sx.fillStyle = '#1b1b26'; sx.fillRect(0, 0, dw, dh)
+          sx.strokeStyle = '#4a4a63'; sx.strokeRect(2, 2, dw - 4, dh - 4)
+          sx.fillStyle = '#8888a8'; sx.font = '12px sans-serif'; sx.textAlign = 'center'
+          sx.fillText('AM media (re-link)', dw / 2, dh / 2 - 8, dw - 12)
+          sx.font = '9px sans-serif'; sx.fillText(c.name.slice(0, 60), dw / 2, dh / 2 + 8, dw - 12)
+        }
+      }
+      const clip = makeClip({ id: `clip-${n}`, name: c.name, asset: c.mediaRef || `alight:${c.amId}`, natW: sizeW * (c.scale || 1), natH: sizeH * (c.scale || 1), start: c.start, duration: c.duration, draw })
+      clip.inPoint = c.inPoint
+      clip.transform.x = c.x; clip.transform.y = c.y
+      clip.transform.rotation = c.rotation
+      clip.transform.scale = c.scale || 1
+      clip.transform.opacity = c.opacity
+      clip.volume = c.volume
+      if (Object.keys(c.effects).length) clip.effects = { ...c.effects }
+      if (c.mappedFx.length) clip.fxInstances = c.mappedFx.map((fid, i) => ({ id: `amfx-${n}-${i}`, catalogId: fid, inP: 0, duration: c.duration }))
+      clip.amEffects = c.amEffects // full AM data on the clip
+      setKeys(clip, c.keys)
+      s.addClip(clip)
+    }
+    const dumpDir = pathModule.join(ROOT, 'data_motiondesijg', 'alight')
+    fs.mkdirSync(dumpDir, { recursive: true })
+    const slug = proj.title.replace(/[^\w-]+/g, '-').slice(0, 48)
+    const dumpFile = pathModule.join(dumpDir, `${slug}.json`)
+    fs.writeFileSync(dumpFile, JSON.stringify({ source: pathModule.relative(ROOT, abs), imported: imp, raw: proj }, null, 1))
+    SESSION.selection = s.clips[0] || null
+    return SESSION.note('alight_import', { path: rel, includeNulls }, {
+      project: imp.project, clips: s.clips.length, layersParsed: imp.clips.length,
+      stats: imp.stats, bookmarks: imp.bookmarks.length,
+      dump: pathModule.relative(ROOT, dumpFile),
+      hint: 'media layers are placeholders — swap footage with replace_video (carryEffects keeps the AM chain)',
+    })
+  }
+}
+
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove, ReplaceVideo, TemplateCapture, TemplateApply, ListTemplates, ListFonts, AlightImport]) registry.register(new T())

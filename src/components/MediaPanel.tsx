@@ -119,6 +119,35 @@ export function MediaPanel() {
             </button>
           </div>
         )}
+        <div className="mt-1.5 flex items-center gap-1.5">
+          <input
+            id="alight-xml-file"
+            type="file"
+            accept=".xml,text/xml"
+            hidden
+            data-testid="alight-xml-input"
+            onChange={async (e) => {
+              const f = e.target.files?.[0]
+              e.target.value = ''
+              if (!f) return
+              try {
+                const r = useEditor.getState().importAlightXml(await f.text())
+                useEditor.setState({ mediaImportNotice: `Alight Motion “${r.title}”: ${r.layers} layers, ${r.mapped} AM effects mapped (${r.keyframed} keyframed props)` })
+              } catch (err) {
+                useEditor.setState({ mediaImportNotice: `Could not import Alight XML: ${(err as Error).message}` })
+              }
+            }}
+          />
+          <button
+            type="button"
+            data-testid="alight-xml-import"
+            title="Open + read an Alight Motion v5 project XML: layers, effects and keyframes are imported (media layers become re-link placeholders)"
+            className="flex-1 rounded-md border border-ink-700 bg-ink-800 px-2 py-1 text-[10px] font-medium text-ink-200 hover:border-brand/60 hover:text-white"
+            onClick={() => document.getElementById('alight-xml-file')?.click()}
+          >
+            Import Alight XML
+          </button>
+        </div>
         <div className="flex items-center gap-1.5">
           <label className="relative flex-1 min-w-0">
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-500 pointer-events-none" />

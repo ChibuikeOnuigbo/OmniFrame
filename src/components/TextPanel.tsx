@@ -7,12 +7,62 @@ import type { TextStyle } from '../types'
 import { previewTextClip } from '../lib/visualPreviewActions'
 import { registerAllCustomFonts } from '../lib/fonts'
 
+import { FONT_PACK } from '../lib/fontPack'
 const BUILTIN_FONTS: Array<{ value: string; label: string }> = [
   { value: 'sans-serif', label: 'Clean Sans (system)' },
   { value: 'Georgia, serif', label: 'Serif (Georgia)' },
   { value: '"Courier New", monospace', label: 'Mono (Courier)' },
   { value: 'Impact, sans-serif', label: 'Display (Impact)' },
-]
+
+  { value: 'Alphacorsa Personal Use Italic', label: 'Alphacorsa Personal Use Italic' },
+  { value: 'Alphacorsa Personal Use', label: 'Alphacorsa Personal Use' },
+  { value: 'CONTADOR', label: 'CONTADOR' },
+  { value: 'CONTADOR', label: 'CONTADOR' },
+  { value: 'CONTADOR', label: 'CONTADOR' },
+  { value: 'FredokaOne-Regular', label: 'FredokaOne-Regular' },
+  { value: 'Hunters K-Pop', label: 'Hunters K-Pop' },
+  { value: 'Looks Sketchy', label: 'Looks Sketchy' },
+  { value: 'Minecrafter.Alt', label: 'Minecrafter.Alt' },
+  { value: 'Minecrafter.Reg', label: 'Minecrafter.Reg' },
+  { value: 'Pixel Robot', label: 'Pixel Robot' },
+  { value: 'Quicksand_Bold', label: 'Quicksand_Bold' },
+  { value: 'Quicksand_Bold_Oblique', label: 'Quicksand_Bold_Oblique' },
+  { value: 'Quicksand_Book', label: 'Quicksand_Book' },
+  { value: 'Quicksand_Book_Oblique', label: 'Quicksand_Book_Oblique' },
+  { value: 'Quicksand_Dash', label: 'Quicksand_Dash' },
+  { value: 'Quicksand_Light', label: 'Quicksand_Light' },
+  { value: 'Quicksand_Light_Oblique', label: 'Quicksand_Light_Oblique' },
+  { value: 'blood-crow-Condensed-italic', label: 'blood-crow-Condensed-italic' },
+  { value: 'blood-crow-Condensed', label: 'blood-crow-Condensed' },
+  { value: 'blood-crow-Expanded-italic', label: 'blood-crow-Expanded-italic' },
+  { value: 'blood-crow-Expanded', label: 'blood-crow-Expanded' },
+  { value: 'blood-crow-Leftalic', label: 'blood-crow-Leftalic' },
+  { value: 'blood-crow-Shadow-Condensed-italic', label: 'blood-crow-Shadow-Condensed-italic' },
+  { value: 'blood-crow-Shadow-Condensed', label: 'blood-crow-Shadow-Condensed' },
+  { value: 'blood-crow-Shadow-italic', label: 'blood-crow-Shadow-italic' },
+  { value: 'blood-crow-Shadow', label: 'blood-crow-Shadow' },
+  { value: 'blood-crow-italic', label: 'blood-crow-italic' },
+  { value: 'blood-crow', label: 'blood-crow' },
+  { value: 'raidercrusader', label: 'raidercrusader' },
+  { value: 'raidercrusader3d', label: 'raidercrusader3d' },
+  { value: 'raidercrusaderbevel', label: 'raidercrusaderbevel' },
+  { value: 'raidercrusaderchrome', label: 'raidercrusaderchrome' },
+  { value: 'raidercrusadercond', label: 'raidercrusadercond' },
+  { value: 'raidercrusaderengrave', label: 'raidercrusaderengrave' },
+  { value: 'raidercrusaderexpand', label: 'raidercrusaderexpand' },
+  { value: 'raidercrusadergrad', label: 'raidercrusadergrad' },
+  { value: 'raidercrusaderhalf', label: 'raidercrusaderhalf' },
+  { value: 'raidercrusaderital', label: 'raidercrusaderital' },
+  { value: 'raidercrusaderlaser', label: 'raidercrusaderlaser' },
+  { value: 'raidercrusaderleft', label: 'raidercrusaderleft' },
+  { value: 'raidercrusaderout', label: 'raidercrusaderout' },
+  { value: 'raidercrusaderpunch', label: 'raidercrusaderpunch' },
+  { value: 'raidercrusaderrotal', label: 'raidercrusaderrotal' },
+  { value: 'raidercrusadersemistraight', label: 'raidercrusadersemistraight' },
+  { value: 'raidercrusadershiftdown', label: 'raidercrusadershiftdown' },
+  { value: 'raidercrusadershiftup', label: 'raidercrusadershiftup' },
+  { value: 'raidercrusaderstraight', label: 'raidercrusaderstraight' },
+  { value: 'raidercrusadertitle', label: 'raidercrusadertitle' },]
 
 export function TextPanel() {
   const clips = useEditor((s) => s.clips)

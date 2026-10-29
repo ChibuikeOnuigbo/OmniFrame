@@ -1,0 +1,5895 @@
+{
+ "source": "new_doc_toll_research/alight/shakes.xml",
+ "imported": {
+  "project": {
+   "title": "Shakes",
+   "w": 2560,
+   "h": 1440,
+   "fps": 30,
+   "duration": 5.899,
+   "bg": "#000000"
+  },
+  "clips": [
+   {
+    "amId": "12361738",
+    "name": "AM media 12361738",
+    "kind": "video",
+    "start": 1,
+    "duration": 0.6930000000000001,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "autoShake": 14,
+     "autoShakeFreq": 12
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.015000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.02289,
+          "v": "1000.000000"
+         },
+         {
+          "t": 0.3435,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.72606945 0.0 1.0",
+          "points": [
+           [
+            0,
+            0.72606945
+           ],
+           [
+            0,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "10.000000",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.080000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "speed": {
+        "name": "speed",
+        "type": "float",
+        "value": "200.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.moblurplus",
+      "short": "moblurplus",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "0.300000",
+        "kfs": []
+       },
+       "PANGLE": {
+        "name": "PANGLE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "PSCALE": {
+        "name": "PSCALE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-shake2"
+    ],
+    "unmappedFx": [
+     "moblurplus"
+    ]
+   },
+   {
+    "amId": "12361752",
+    "name": "Warp",
+    "kind": "solid",
+    "start": 1,
+    "duration": 0.30600000000000005,
+    "inPoint": 0,
+    "speed": 3.05,
+    "x": 0,
+    "y": 0,
+    "scale": 0.4999999609375,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#b17a4b",
+    "effects": {
+     "brightness": 1.08,
+     "contrast": 1.05,
+     "turbulent": 0.5
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {
+       "fill": {
+        "name": "fill",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.turbulentdisplace3",
+      "short": "turbulentdisplace3",
+      "props": {
+       "parr": {
+        "name": "parr",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "44.000000,-33.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000,0.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.046000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.340000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000"
+         }
+        ]
+       },
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "2",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.900000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.600000,0.600000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000,1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "singleAxis": {
+        "name": "singleAxis",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offs": {
+        "name": "offs",
+        "type": "float",
+        "value": "0.100000",
+        "kfs": []
+       },
+       "FIXTURB": {
+        "name": "FIXTURB",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-lift",
+     "am-turbulentdisplace3"
+    ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361739",
+    "name": "AM media 12361739",
+    "kind": "video",
+    "start": 1.7,
+    "duration": 0.6929999999999998,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "motionBlur": 0.45,
+     "oscillate": 20,
+     "oscillateAngle": 45
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur3",
+      "short": "motionblur3",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "0.300000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake",
+      "short": "shake",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "50.000000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.40357846 0.71343374",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.40357846,
+            0.71343374
+           ]
+          ]
+         }
+        ]
+       },
+       "speed": {
+        "name": "speed",
+        "type": "float",
+        "value": "18.119999",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "8.740000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "42.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.swing2",
+      "short": "swing2",
+      "props": {
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.200000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.100000",
+          "ease": "cubicBezier 0.0 1.0 0.2421359 0.8545127",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.2421359,
+            0.8545127
+           ]
+          ]
+         }
+        ]
+       },
+       "a1": {
+        "name": "a1",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "-7.000000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.2030513 0.61280984 0.58 1.0",
+          "points": [
+           [
+            0.2030513,
+            0.61280984
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "a2": {
+        "name": "a2",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "7.000000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.2 0.61 0.58 1.0",
+          "points": [
+           [
+            0.2,
+            0.61
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate2",
+      "short": "oscillate2",
+      "props": {
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "7.900000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "239.000000"
+         },
+         {
+          "t": 0.242478,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 0.87292325 0.58 1.0",
+          "points": [
+           [
+            0,
+            0.87292325
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-motionblur3",
+     "am-swing2"
+    ],
+    "unmappedFx": [
+     "shake",
+     "oscillate2"
+    ]
+   },
+   {
+    "amId": "12361740",
+    "name": "AM media 12361740",
+    "kind": "video",
+    "start": 2.4,
+    "duration": 0.6930000000000001,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "autoShake": 14,
+     "autoShakeFreq": 12
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.010000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.023088,
+          "v": "550.000000"
+         },
+         {
+          "t": 0.98557,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.83235294 0.0 1.0",
+          "points": [
+           [
+            0,
+            0.83235294
+           ],
+           [
+            0,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "16.000000",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "45.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-shake2"
+    ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361741",
+    "name": "AM media 12361741",
+    "kind": "video",
+    "start": 3.1,
+    "duration": 0.6930000000000001,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "autoShake": 14,
+     "autoShakeFreq": 12,
+     "turbulent": 0.7,
+     "oscillate": 12,
+     "oscillateFreq": 2,
+     "glitch": 0.3,
+     "glitchStyle": "block",
+     "waveWarp": 8,
+     "brightness": 1.15
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.010000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.028319,
+          "v": "300.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.9879355 0.16387606 1.0",
+          "points": [
+           [
+            0,
+            0.9879355
+           ],
+           [
+            0.16387606,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "16.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.55575776 0.41031453 1.0",
+          "points": [
+           [
+            0,
+            0.55575776
+           ],
+           [
+            0.41031453,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.turbulentdisplace3",
+      "short": "turbulentdisplace3",
+      "props": {
+       "FIXTURB": {
+        "name": "FIXTURB",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.023088,
+          "v": "0.100000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.46 0.53 1.0",
+          "points": [
+           [
+            0,
+            0.46
+           ],
+           [
+            0.53,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "2",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.650000"
+         },
+         {
+          "t": 1,
+          "v": "2.270000",
+          "ease": "cubicBezier 0.0 0.4587388 0.5302035 1.0",
+          "points": [
+           [
+            0,
+            0.4587388
+           ],
+           [
+            0.5302035,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "vec2",
+        "value": "1.000000,1.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "singleAxis": {
+        "name": "singleAxis",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offs": {
+        "name": "offs",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate3",
+      "short": "oscillate3",
+      "props": {
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "4.000000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "150.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.42141533 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.42141533,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.randomdisplace",
+      "short": "randomdisplace",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.028319,
+          "v": "100.000000"
+         },
+         {
+          "t": 0.500885,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.6527771 0.40587422 1.0",
+          "points": [
+           [
+            0,
+            0.6527771
+           ],
+           [
+            0.40587422,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.028319,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.500885,
+          "v": "3.160000",
+          "ease": "cubicBezier 0.0 0.65 0.41 1.0",
+          "points": [
+           [
+            0,
+            0.65
+           ],
+           [
+            0.41,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scatter": {
+        "name": "scatter",
+        "type": "float",
+        "value": "0.500000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.fractalwarp4",
+      "short": "fractalwarp4",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.115000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.7677415 0.5990287 1.0",
+          "points": [
+           [
+            0,
+            0.7677415
+           ],
+           [
+            0.5990287,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "4.000000",
+        "kfs": []
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "value": "0.500000",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate3",
+      "short": "oscillate3",
+      "props": {
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "-43.799999"
+         },
+         {
+          "t": 1,
+          "v": "41.900002"
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "1.830000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "50.000000"
+         },
+         {
+          "t": 1,
+          "v": "5.000000",
+          "ease": "cubicBezier 0.0 0.62337756 0.40809435 1.0",
+          "points": [
+           [
+            0,
+            0.62337756
+           ],
+           [
+            0.40809435,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.moblurplus",
+      "short": "moblurplus",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "0.700000",
+        "kfs": []
+       },
+       "PANGLE": {
+        "name": "PANGLE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "PSCALE": {
+        "name": "PSCALE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.exposure",
+      "short": "exposure",
+      "props": {
+       "exposure": {
+        "name": "exposure",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.000000"
+         },
+         {
+          "t": 0.559292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.46167853 0.4458372 1.0",
+          "points": [
+           [
+            0,
+            0.46167853
+           ],
+           [
+            0.4458372,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.55 0.0 1.0 0.53999996",
+          "points": [
+           [
+            0.55,
+            0
+           ],
+           [
+            1,
+            0.53999996
+           ]
+          ]
+         }
+        ]
+       },
+       "gamma": {
+        "name": "gamma",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-shake2",
+     "am-turbulentdisplace3",
+     "am-oscillate3",
+     "am-randomdisplace",
+     "am-fractalwarp4",
+     "am-oscillate3",
+     "am-exposure"
+    ],
+    "unmappedFx": [
+     "moblurplus"
+    ]
+   },
+   {
+    "amId": "12361754",
+    "name": "Warp",
+    "kind": "solid",
+    "start": 3.1,
+    "duration": 0.30600000000000005,
+    "inPoint": 0,
+    "speed": 3.05,
+    "x": 0,
+    "y": 0,
+    "scale": 0.4999999609375,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#b17a4b",
+    "effects": {
+     "brightness": 1.08,
+     "contrast": 1.05,
+     "turbulent": 0.5
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {
+       "fill": {
+        "name": "fill",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.turbulentdisplace3",
+      "short": "turbulentdisplace3",
+      "props": {
+       "parr": {
+        "name": "parr",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "44.000000,-33.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000,0.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.046000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.340000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000"
+         }
+        ]
+       },
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "2",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.900000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.600000,0.600000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000,1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "singleAxis": {
+        "name": "singleAxis",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offs": {
+        "name": "offs",
+        "type": "float",
+        "value": "0.100000",
+        "kfs": []
+       },
+       "FIXTURB": {
+        "name": "FIXTURB",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-lift",
+     "am-turbulentdisplace3"
+    ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361742",
+    "name": "AM media 12361742",
+    "kind": "video",
+    "start": 3.8,
+    "duration": 0.6930000000000005,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "autoShake": 14,
+     "autoShakeFreq": 12,
+     "motionBlur": 0.6,
+     "brightness": 1.15
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "963.000000"
+         },
+         {
+          "t": 0.112403,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.54588234 0.37959966 1.0",
+          "points": [
+           [
+            0,
+            0.54588234
+           ],
+           [
+            0.37959966,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "11.490000"
+         },
+         {
+          "t": 0.112403,
+          "v": "2.000000",
+          "ease": "cubicBezier 0.0 0.5035294 0.45146134 1.0",
+          "points": [
+           [
+            0,
+            0.5035294
+           ],
+           [
+            0.45146134,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.070000"
+         },
+         {
+          "t": 0.080426,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.6070588 0.42942724 1.0",
+          "points": [
+           [
+            0,
+            0.6070588
+           ],
+           [
+            0.42942724,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.404624,
+          "v": "45.000000",
+          "ease": "cubicBezier 0.0 1.0 0.4990436 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.4990436,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "963.000000"
+         },
+         {
+          "t": 0.112403,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.54588234 0.37959966 1.0",
+          "points": [
+           [
+            0,
+            0.54588234
+           ],
+           [
+            0.37959966,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "11.490000"
+         },
+         {
+          "t": 0.112403,
+          "v": "2.000000",
+          "ease": "cubicBezier 0.0 0.5035294 0.45146134 1.0",
+          "points": [
+           [
+            0,
+            0.5035294
+           ],
+           [
+            0.45146134,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.070000"
+         },
+         {
+          "t": 0.04845,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.6070588 0.42942724 1.0",
+          "points": [
+           [
+            0,
+            0.6070588
+           ],
+           [
+            0.42942724,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur4",
+      "short": "motionblur4",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.exposure",
+      "short": "exposure",
+      "props": {
+       "exposure": {
+        "name": "exposure",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.600000"
+         },
+         {
+          "t": 0.596532,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.44534045 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.44534045,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "gamma": {
+        "name": "gamma",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.lensd",
+      "short": "lensd",
+      "props": {
+       "offs": {
+        "name": "offs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "amp": {
+        "name": "amp",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "-1.540000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.39952236 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.39952236,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "value": "100.000000",
+        "kfs": []
+       },
+       "blurMax": {
+        "name": "blurMax",
+        "type": "float",
+        "value": "0.200000",
+        "kfs": []
+       },
+       "aberrationMax": {
+        "name": "aberrationMax",
+        "type": "float",
+        "value": "1.200000",
+        "kfs": []
+       },
+       "numIters": {
+        "name": "numIters",
+        "type": "float",
+        "value": "50.000000",
+        "kfs": []
+       },
+       "bright": {
+        "name": "bright",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "new": {
+        "name": "new",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "iter": {
+        "name": "iter",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-shake2",
+     "am-shake2",
+     "am-motionblur4",
+     "am-exposure"
+    ],
+    "unmappedFx": [
+     "lensd"
+    ]
+   },
+   {
+    "amId": "12361743",
+    "name": "AM media 12361743",
+    "kind": "video",
+    "start": 4.5,
+    "duration": 0.6929999999999996,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "oscillate": 12,
+     "oscillateFreq": 2,
+     "motionBlur": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.stretch2",
+      "short": "stretch2",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.700000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 0.8201681 0.38485405 1.0",
+          "points": [
+           [
+            0,
+            0.8201681
+           ],
+           [
+            0.38485405,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "160.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.82016814 0.3976665 1.0",
+          "points": [
+           [
+            0,
+            0.82016814
+           ],
+           [
+            0.3976665,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "contentOnly": {
+        "name": "contentOnly",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate3",
+      "short": "oscillate3",
+      "props": {
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "2.000000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "666.000000"
+         },
+         {
+          "t": 0.204672,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.2871327 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.2871327,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur4",
+      "short": "motionblur4",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "1.800000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-oscillate3",
+     "am-motionblur4"
+    ],
+    "unmappedFx": [
+     "stretch2"
+    ]
+   },
+   {
+    "amId": "12361753",
+    "name": "Rectangle 1",
+    "kind": "solid",
+    "start": 4.5,
+    "duration": 0.2320000000000002,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.4999999609375,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#51a940",
+    "effects": {
+     "brightness": 1.08,
+     "contrast": 1.05,
+     "directionalBlur": 0.5
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {
+       "fill": {
+        "name": "fill",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.dblur",
+      "short": "dblur",
+      "props": {
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.120000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.3013037 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.3013037,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-lift",
+     "am-dblur"
+    ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "12361744",
+    "name": "AM media 12361744",
+    "kind": "video",
+    "start": 5.2,
+    "duration": 0.6929999999999996,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 0,
+    "y": 0,
+    "scale": 0.5,
+    "rotation": 0,
+    "opacity": 1,
+    "mediaRef": "content://media/external/video/media/1000131804",
+    "effects": {
+     "tiles": 2,
+     "pinchBulge": -0.35,
+     "autoShake": 14,
+     "autoShakeFreq": 12,
+     "zoomBlur": 0.5,
+     "motionBlur": 0.6
+    },
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.010000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.transform2",
+      "short": "transform2",
+      "props": {
+       "posz": {
+        "name": "posz",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "3.000000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 1.0 0.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "posx": {
+        "name": "posx",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "posy": {
+        "name": "posy",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "zinv": {
+        "name": "zinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "xinv": {
+        "name": "xinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "yinv": {
+        "name": "yinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "ainv": {
+        "name": "ainv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.transform2",
+      "short": "transform2",
+      "props": {
+       "posz": {
+        "name": "posz",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.501002,
+          "v": "1.000000"
+         },
+         {
+          "t": 1,
+          "v": "3.000000",
+          "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+          "points": [
+           [
+            1,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "posx": {
+        "name": "posx",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "posy": {
+        "name": "posy",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "zinv": {
+        "name": "zinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "xinv": {
+        "name": "xinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "yinv": {
+        "name": "yinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "ainv": {
+        "name": "ainv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.transform2",
+      "short": "transform2",
+      "props": {
+       "posz": {
+        "name": "posz",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "posx": {
+        "name": "posx",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "posy": {
+        "name": "posy",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "30.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "zinv": {
+        "name": "zinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "xinv": {
+        "name": "xinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "yinv": {
+        "name": "yinv",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "ainv": {
+        "name": "ainv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.squeeze",
+      "short": "squeeze",
+      "props": {
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "kfs": [
+         {
+          "t": -0.034068,
+          "v": "2.000000"
+         },
+         {
+          "t": 0.833667,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.80588233 0.18666664 1.0",
+          "points": [
+           [
+            0,
+            0.80588233
+           ],
+           [
+            0.18666664,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "-0.500000",
+          "ease": "cubicBezier 0.7133333 0.0 1.0 0.35588235",
+          "points": [
+           [
+            0.7133333,
+            0
+           ],
+           [
+            1,
+            0.35588235
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1000.000000"
+         },
+         {
+          "t": 0.432866,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.12 0.79970586 0.03666666 0.9514706",
+          "points": [
+           [
+            0.12,
+            0.79970586
+           ],
+           [
+            0.03666666,
+            0.9514706
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "2.000000",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.zoomblur3",
+      "short": "zoomblur3",
+      "props": {
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.300000"
+         },
+         {
+          "t": 0.166333,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.833667,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.300000",
+          "ease": "cubicBezier 0.42 0.0 1.0 1.0",
+          "points": [
+           [
+            0.42,
+            0
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "adaptive": {
+        "name": "adaptive",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur4",
+      "short": "motionblur4",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-tile",
+     "am-squeeze",
+     "am-shake2",
+     "am-zoomblur3",
+     "am-motionblur4"
+    ],
+    "unmappedFx": [
+     "transform2",
+     "transform2",
+     "transform2"
+    ]
+   }
+  ],
+  "bookmarks": [
+   1.016,
+   1.716,
+   2.416,
+   3.116,
+   3.816,
+   4.516,
+   5.216
+  ],
+  "stats": {
+   "shapes": 10,
+   "effectsTotal": 43,
+   "mapped": 34,
+   "unmapped": 9,
+   "keyframed": 47,
+   "mediaRefs": [
+    "content://media/external/video/media/1000131804",
+    "content://media/external/video/media/1000131804",
+    "content://media/external/video/media/1000131804",
+    "content://media/external/video/media/1000131804",
+    "content://media/external/video/media/1000131804",
+    "content://media/external/video/media/1000131804",
+    "content://media/external/video/media/1000131804"
+   ]
+  }
+ },
+ "raw": {
+  "title": "Shakes",
+  "width": 2560,
+  "height": 1440,
+  "fps": 30,
+  "totalTime": 5.899,
+  "bgcolor": "#ff000000",
+  "amVersion": "com.alightcreative.motion/5.0.270.1002578",
+  "bookmarks": [
+   1.016,
+   1.716,
+   2.416,
+   3.116,
+   3.816,
+   4.516,
+   5.216
+  ],
+  "shapes": [
+   {
+    "id": "12361738",
+    "label": "",
+    "startTime": 1,
+    "endTime": 1.693,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.015000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.02289,
+          "v": "1000.000000"
+         },
+         {
+          "t": 0.3435,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.72606945 0.0 1.0",
+          "points": [
+           [
+            0,
+            0.72606945
+           ],
+           [
+            0,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "10.000000",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.080000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "speed": {
+        "name": "speed",
+        "type": "float",
+        "value": "200.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.moblurplus",
+      "short": "moblurplus",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "0.300000",
+        "kfs": []
+       },
+       "PANGLE": {
+        "name": "PANGLE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "PSCALE": {
+        "name": "PSCALE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   },
+   {
+    "id": "12361752",
+    "label": "Warp",
+    "startTime": 1,
+    "endTime": 1.306,
+    "fillType": "color",
+    "speed": 3.05,
+    "mediaFillMode": "stretch",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 12.799999,
+     "sy": 12.799999,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {
+       "fill": {
+        "name": "fill",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.turbulentdisplace3",
+      "short": "turbulentdisplace3",
+      "props": {
+       "parr": {
+        "name": "parr",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "44.000000,-33.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000,0.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.046000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.340000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000"
+         }
+        ]
+       },
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "2",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.900000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.600000,0.600000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000,1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "singleAxis": {
+        "name": "singleAxis",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offs": {
+        "name": "offs",
+        "type": "float",
+        "value": "0.100000",
+        "kfs": []
+       },
+       "FIXTURB": {
+        "name": "FIXTURB",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     100,
+     100
+    ],
+    "fillColor": "#ffb17a4b"
+   },
+   {
+    "id": "12361739",
+    "label": "",
+    "startTime": 1.7,
+    "endTime": 2.393,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur3",
+      "short": "motionblur3",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "0.300000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake",
+      "short": "shake",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "50.000000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.40357846 0.71343374",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.40357846,
+            0.71343374
+           ]
+          ]
+         }
+        ]
+       },
+       "speed": {
+        "name": "speed",
+        "type": "float",
+        "value": "18.119999",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "8.740000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "42.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.020000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.swing2",
+      "short": "swing2",
+      "props": {
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.200000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.100000",
+          "ease": "cubicBezier 0.0 1.0 0.2421359 0.8545127",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.2421359,
+            0.8545127
+           ]
+          ]
+         }
+        ]
+       },
+       "a1": {
+        "name": "a1",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "-7.000000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.2030513 0.61280984 0.58 1.0",
+          "points": [
+           [
+            0.2030513,
+            0.61280984
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "a2": {
+        "name": "a2",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "7.000000"
+         },
+         {
+          "t": 0.759292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.2 0.61 0.58 1.0",
+          "points": [
+           [
+            0.2,
+            0.61
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate2",
+      "short": "oscillate2",
+      "props": {
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "7.900000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "239.000000"
+         },
+         {
+          "t": 0.242478,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 0.87292325 0.58 1.0",
+          "points": [
+           [
+            0,
+            0.87292325
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   },
+   {
+    "id": "12361740",
+    "label": "",
+    "startTime": 2.4,
+    "endTime": 3.093,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.010000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.023088,
+          "v": "550.000000"
+         },
+         {
+          "t": 0.98557,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.83235294 0.0 1.0",
+          "points": [
+           [
+            0,
+            0.83235294
+           ],
+           [
+            0,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "16.000000",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "45.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   },
+   {
+    "id": "12361741",
+    "label": "",
+    "startTime": 3.1,
+    "endTime": 3.793,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.010000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.028319,
+          "v": "300.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.9879355 0.16387606 1.0",
+          "points": [
+           [
+            0,
+            0.9879355
+           ],
+           [
+            0.16387606,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "16.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.55575776 0.41031453 1.0",
+          "points": [
+           [
+            0,
+            0.55575776
+           ],
+           [
+            0.41031453,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.turbulentdisplace3",
+      "short": "turbulentdisplace3",
+      "props": {
+       "FIXTURB": {
+        "name": "FIXTURB",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.023088,
+          "v": "0.100000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.46 0.53 1.0",
+          "points": [
+           [
+            0,
+            0.46
+           ],
+           [
+            0.53,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "2",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.650000"
+         },
+         {
+          "t": 1,
+          "v": "2.270000",
+          "ease": "cubicBezier 0.0 0.4587388 0.5302035 1.0",
+          "points": [
+           [
+            0,
+            0.4587388
+           ],
+           [
+            0.5302035,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "vec2",
+        "value": "1.000000,1.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "singleAxis": {
+        "name": "singleAxis",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offs": {
+        "name": "offs",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate3",
+      "short": "oscillate3",
+      "props": {
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "4.000000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "150.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.42141533 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.42141533,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.randomdisplace",
+      "short": "randomdisplace",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.028319,
+          "v": "100.000000"
+         },
+         {
+          "t": 0.500885,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.6527771 0.40587422 1.0",
+          "points": [
+           [
+            0,
+            0.6527771
+           ],
+           [
+            0.40587422,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.028319,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.500885,
+          "v": "3.160000",
+          "ease": "cubicBezier 0.0 0.65 0.41 1.0",
+          "points": [
+           [
+            0,
+            0.65
+           ],
+           [
+            0.41,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "scatter": {
+        "name": "scatter",
+        "type": "float",
+        "value": "0.500000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.fractalwarp4",
+      "short": "fractalwarp4",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.115000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.7677415 0.5990287 1.0",
+          "points": [
+           [
+            0,
+            0.7677415
+           ],
+           [
+            0.5990287,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "4.000000",
+        "kfs": []
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "value": "0.500000",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate3",
+      "short": "oscillate3",
+      "props": {
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "-43.799999"
+         },
+         {
+          "t": 1,
+          "v": "41.900002"
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "1.830000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "50.000000"
+         },
+         {
+          "t": 1,
+          "v": "5.000000",
+          "ease": "cubicBezier 0.0 0.62337756 0.40809435 1.0",
+          "points": [
+           [
+            0,
+            0.62337756
+           ],
+           [
+            0.40809435,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.moblurplus",
+      "short": "moblurplus",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "0.700000",
+        "kfs": []
+       },
+       "PANGLE": {
+        "name": "PANGLE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "PSCALE": {
+        "name": "PSCALE",
+        "type": "vec2",
+        "value": "0.500000,0.500000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.exposure",
+      "short": "exposure",
+      "props": {
+       "exposure": {
+        "name": "exposure",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.000000"
+         },
+         {
+          "t": 0.559292,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.46167853 0.4458372 1.0",
+          "points": [
+           [
+            0,
+            0.46167853
+           ],
+           [
+            0.4458372,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.55 0.0 1.0 0.53999996",
+          "points": [
+           [
+            0.55,
+            0
+           ],
+           [
+            1,
+            0.53999996
+           ]
+          ]
+         }
+        ]
+       },
+       "gamma": {
+        "name": "gamma",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   },
+   {
+    "id": "12361754",
+    "label": "Warp",
+    "startTime": 3.1,
+    "endTime": 3.406,
+    "fillType": "color",
+    "speed": 3.05,
+    "mediaFillMode": "stretch",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 12.799999,
+     "sy": 12.799999,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {
+       "fill": {
+        "name": "fill",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.turbulentdisplace3",
+      "short": "turbulentdisplace3",
+      "props": {
+       "parr": {
+        "name": "parr",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "44.000000,-33.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000,0.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "intensity": {
+        "name": "intensity",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.046000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.340000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000"
+         }
+        ]
+       },
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "2",
+        "kfs": []
+       },
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.900000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "stretch": {
+        "name": "stretch",
+        "type": "vec2",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.600000,0.600000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000,1.000000",
+          "ease": "cubicBezier 0.0 1.0 1.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "singleAxis": {
+        "name": "singleAxis",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "screenSpace": {
+        "name": "screenSpace",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "octaves": {
+        "name": "octaves",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offs": {
+        "name": "offs",
+        "type": "float",
+        "value": "0.100000",
+        "kfs": []
+       },
+       "FIXTURB": {
+        "name": "FIXTURB",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     100,
+     100
+    ],
+    "fillColor": "#ffb17a4b"
+   },
+   {
+    "id": "12361742",
+    "label": "",
+    "startTime": 3.8,
+    "endTime": 4.493,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "963.000000"
+         },
+         {
+          "t": 0.112403,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.54588234 0.37959966 1.0",
+          "points": [
+           [
+            0,
+            0.54588234
+           ],
+           [
+            0.37959966,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "11.490000"
+         },
+         {
+          "t": 0.112403,
+          "v": "2.000000",
+          "ease": "cubicBezier 0.0 0.5035294 0.45146134 1.0",
+          "points": [
+           [
+            0,
+            0.5035294
+           ],
+           [
+            0.45146134,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.070000"
+         },
+         {
+          "t": 0.080426,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.6070588 0.42942724 1.0",
+          "points": [
+           [
+            0,
+            0.6070588
+           ],
+           [
+            0.42942724,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.404624,
+          "v": "45.000000",
+          "ease": "cubicBezier 0.0 1.0 0.4990436 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.4990436,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "963.000000"
+         },
+         {
+          "t": 0.112403,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.54588234 0.37959966 1.0",
+          "points": [
+           [
+            0,
+            0.54588234
+           ],
+           [
+            0.37959966,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "11.490000"
+         },
+         {
+          "t": 0.112403,
+          "v": "2.000000",
+          "ease": "cubicBezier 0.0 0.5035294 0.45146134 1.0",
+          "points": [
+           [
+            0,
+            0.5035294
+           ],
+           [
+            0.45146134,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.070000"
+         },
+         {
+          "t": 0.04845,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.6070588 0.42942724 1.0",
+          "points": [
+           [
+            0,
+            0.6070588
+           ],
+           [
+            0.42942724,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur4",
+      "short": "motionblur4",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.exposure",
+      "short": "exposure",
+      "props": {
+       "exposure": {
+        "name": "exposure",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.600000"
+         },
+         {
+          "t": 0.596532,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.44534045 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.44534045,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "gamma": {
+        "name": "gamma",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "offset": {
+        "name": "offset",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.lensd",
+      "short": "lensd",
+      "props": {
+       "offs": {
+        "name": "offs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "amp": {
+        "name": "amp",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "-1.540000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.0 0.39952236 1.0",
+          "points": [
+           [
+            0,
+            0
+           ],
+           [
+            0.39952236,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "value": "100.000000",
+        "kfs": []
+       },
+       "blurMax": {
+        "name": "blurMax",
+        "type": "float",
+        "value": "0.200000",
+        "kfs": []
+       },
+       "aberrationMax": {
+        "name": "aberrationMax",
+        "type": "float",
+        "value": "1.200000",
+        "kfs": []
+       },
+       "numIters": {
+        "name": "numIters",
+        "type": "float",
+        "value": "50.000000",
+        "kfs": []
+       },
+       "bright": {
+        "name": "bright",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "alpha": {
+        "name": "alpha",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "new": {
+        "name": "new",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "iter": {
+        "name": "iter",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   },
+   {
+    "id": "12361743",
+    "label": "",
+    "startTime": 4.5,
+    "endTime": 5.193,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.stretch2",
+      "short": "stretch2",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1.700000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 0.8201681 0.38485405 1.0",
+          "points": [
+           [
+            0,
+            0.8201681
+           ],
+           [
+            0.38485405,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "160.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.82016814 0.3976665 1.0",
+          "points": [
+           [
+            0,
+            0.82016814
+           ],
+           [
+            0.3976665,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "contentOnly": {
+        "name": "contentOnly",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.oscillate3",
+      "short": "oscillate3",
+      "props": {
+       "direction": {
+        "name": "direction",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "2.000000",
+        "kfs": []
+       },
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "666.000000"
+         },
+         {
+          "t": 0.204672,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.2871327 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.2871327,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "type": {
+        "name": "type",
+        "type": "int",
+        "value": "0",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur4",
+      "short": "motionblur4",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "1.800000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   },
+   {
+    "id": "12361753",
+    "label": "Rectangle 1",
+    "startTime": 4.5,
+    "endTime": 4.732,
+    "fillType": "color",
+    "speed": 1,
+    "mediaFillMode": "stretch",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 12.799999,
+     "sy": 12.799999,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {
+       "fill": {
+        "name": "fill",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.dblur",
+      "short": "dblur",
+      "props": {
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.120000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.3013037 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.3013037,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     100,
+     100
+    ],
+    "fillColor": "#ff51a940"
+   },
+   {
+    "id": "12361744",
+    "label": "",
+    "startTime": 5.2,
+    "endTime": 5.893,
+    "fillType": "media",
+    "fillVideo": "content://media/external/video/media/1000131804",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 1280,
+     "y": 720,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.tile",
+      "short": "tile",
+      "props": {
+       "scale": {
+        "name": "scale",
+        "type": "float",
+        "value": "1.010000",
+        "kfs": []
+       },
+       "phase": {
+        "name": "phase",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "mirror": {
+        "name": "mirror",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "vertoffs": {
+        "name": "vertoffs",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.transform2",
+      "short": "transform2",
+      "props": {
+       "posz": {
+        "name": "posz",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "3.000000"
+         },
+         {
+          "t": 1,
+          "v": "1.000000",
+          "ease": "cubicBezier 0.0 1.0 0.0 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "posx": {
+        "name": "posx",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "posy": {
+        "name": "posy",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "zinv": {
+        "name": "zinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "xinv": {
+        "name": "xinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "yinv": {
+        "name": "yinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "ainv": {
+        "name": "ainv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.transform2",
+      "short": "transform2",
+      "props": {
+       "posz": {
+        "name": "posz",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.501002,
+          "v": "1.000000"
+         },
+         {
+          "t": 1,
+          "v": "3.000000",
+          "ease": "cubicBezier 1.0 0.0 1.0 0.0",
+          "points": [
+           [
+            1,
+            0
+           ],
+           [
+            1,
+            0
+           ]
+          ]
+         }
+        ]
+       },
+       "posx": {
+        "name": "posx",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "posy": {
+        "name": "posy",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "zinv": {
+        "name": "zinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "xinv": {
+        "name": "xinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "yinv": {
+        "name": "yinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "ainv": {
+        "name": "ainv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.transform2",
+      "short": "transform2",
+      "props": {
+       "posz": {
+        "name": "posz",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "posx": {
+        "name": "posx",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "posy": {
+        "name": "posy",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "30.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 1.0 0.58 1.0",
+          "points": [
+           [
+            0,
+            1
+           ],
+           [
+            0.58,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "zinv": {
+        "name": "zinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "xinv": {
+        "name": "xinv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "yinv": {
+        "name": "yinv",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "ainv": {
+        "name": "ainv",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.squeeze",
+      "short": "squeeze",
+      "props": {
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "kfs": [
+         {
+          "t": -0.034068,
+          "v": "2.000000"
+         },
+         {
+          "t": 0.833667,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.0 0.80588233 0.18666664 1.0",
+          "points": [
+           [
+            0,
+            0.80588233
+           ],
+           [
+            0.18666664,
+            1
+           ]
+          ]
+         },
+         {
+          "t": 1,
+          "v": "-0.500000",
+          "ease": "cubicBezier 0.7133333 0.0 1.0 0.35588235",
+          "points": [
+           [
+            0.7133333,
+            0
+           ],
+           [
+            1,
+            0.35588235
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.shake2",
+      "short": "shake2",
+      "props": {
+       "mag": {
+        "name": "mag",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "1000.000000"
+         },
+         {
+          "t": 0.432866,
+          "v": "0.000000",
+          "ease": "cubicBezier 0.12 0.79970586 0.03666666 0.9514706",
+          "points": [
+           [
+            0.12,
+            0.79970586
+           ],
+           [
+            0.03666666,
+            0.9514706
+           ]
+          ]
+         }
+        ]
+       },
+       "freq": {
+        "name": "freq",
+        "type": "float",
+        "value": "2.000000",
+        "kfs": []
+       },
+       "evolution": {
+        "name": "evolution",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "seed": {
+        "name": "seed",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       },
+       "angle": {
+        "name": "angle",
+        "type": "float",
+        "value": "90.000000",
+        "kfs": []
+       },
+       "slack": {
+        "name": "slack",
+        "type": "float",
+        "value": "0.250000",
+        "kfs": []
+       },
+       "zshake": {
+        "name": "zshake",
+        "type": "float",
+        "value": "0.000000",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.zoomblur3",
+      "short": "zoomblur3",
+      "props": {
+       "strength": {
+        "name": "strength",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.300000"
+         },
+         {
+          "t": 0.166333,
+          "v": "0.000000"
+         },
+         {
+          "t": 0.833667,
+          "v": "0.000000"
+         },
+         {
+          "t": 1,
+          "v": "0.300000",
+          "ease": "cubicBezier 0.42 0.0 1.0 1.0",
+          "points": [
+           [
+            0.42,
+            0
+           ],
+           [
+            1,
+            1
+           ]
+          ]
+         }
+        ]
+       },
+       "adaptive": {
+        "name": "adaptive",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "com.alightcreative.effects.motionblur4",
+      "short": "motionblur4",
+      "props": {
+       "tune": {
+        "name": "tune",
+        "type": "float",
+        "value": "1.000000",
+        "kfs": []
+       },
+       "usePos": {
+        "name": "usePos",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       },
+       "useScale": {
+        "name": "useScale",
+        "type": "bool",
+        "value": "false",
+        "kfs": []
+       },
+       "useAngle": {
+        "name": "useAngle",
+        "type": "bool",
+        "value": "true",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     1280,
+     720
+    ]
+   }
+  ]
+ }
+}

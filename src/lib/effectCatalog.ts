@@ -371,8 +371,14 @@ function buildCatalog(): FxCatalogEntry[] {
       }
     }
   }
-  return out
+    // ---- Alight Motion study corpus: every mapped AM effect joins the site catalog ----
+  for (const am of AM_FX_CATALOG) {
+    out.push({ id: am.id, name: am.name, cat: am.cat as FxCat, trace: AM_TRACE, patch: am.patch })
+  }
+return out
 }
+
+import { AM_FX_CATALOG, AM_TRACE } from './alightXml'
 
 let _catalog: FxCatalogEntry[] | null = null
 export function getFxCatalog(): FxCatalogEntry[] {

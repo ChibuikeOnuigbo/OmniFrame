@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Landing } from './components/Landing'
 import Studio from './Studio'
+import ReplaceDialog from './components/ReplaceDialog'
 import { CustomCursor } from './components/CustomCursor'
 import { useEditor } from './store'
 
@@ -56,6 +57,7 @@ export default function App() {
         </div>
       )}
       <CustomCursor />
-    </div>
+    <ReplaceDialog />
+</div>
   )
 }

@@ -1,69 +1,88 @@
-# OmniFrame STATE — Board T cont.3 (2026-10-29)
+# OmniFrame STATE — Mega-turn: TYMM assets + Replace/Template + Alight Motion (2026-10-29)
 
-Baseline audited: f6d0128 (pack baseline match). Packs unpacked earlier at
-new_doc_toll_research/packs/ (glitch-audit + repair-pack); that dir is
-gitignored and was wiped by a sandbox rollback — re-download ids are logged in
-session memory; all pack-derived CODE is committed in-repo (glitchNG,
-CurveEngine, curves.py port). Videos kept OUT of git.
+Branch `arena/212bca02-omniframe`. Previous: Board T cont.3 (QA PASS 63/59).
+This increment: user Drive asset acquisition (fonts/LUTs/Alight XMLs/CC scan),
+Replace-Video-With-Video, TEMPLATE MODE, Alight Motion import, continue.md.
 
-## Completed
-- Curve engine (repair-pack canonical math) — unchanged, still PASS 35 families
-  (qa/curve-sim.mjs re-run green this increment).
-- Glitch NG engine + catalog + 12 logo-layer renders + sampler — unchanged,
-  battery re-run green on the new render pipeline (new_glitch/renders/).
-- WONDERFUL acceptance proof (master prompt P0, correctly spelled): ONE text
-  clip, 10 s, 720×1280@24 + 360×640@30 exports; 9 per-char color ranges with
-  SUCCESSIVE color changes on mixed curve families (bounce-param, rebound-out,
-  physical, ease-in-out, bounce, rebound-in, elastic, bounce-uniform, back-out)
-  + per-char fontSize pulses + opacity shimmer + whole-word tracking widen
-  (rebound-in) + clip drift/scale/rotation springs; REAL moving Drive footage
-  (roses pelats.mp4) masked inside the glyphs (insideVideo + insideBaseAlpha
-  0.6, tinted base on top for legibility) over the anime scene plate with slow
-  zoom. Evidence: test_ans_result/board_T_WONDERFUL_720p24.mp4 /
-  _360p30.mp4, evidence/T-WONDERFUL-sheet.png (1 s steps), T-WONDERFUL-f132/
-  f192.png full-res frames, T-timeline-WONDERFUL.png timeline screenshot,
-  wonderful.project.json schema dump. Frame-aligned, not a static image.
-- Headless per-char text stack re-landed (was lost in rollback #4, now
-  committed incl. tools/): paintTextRuns in CreateText draw, charStyle
-  keyframe channels, charMetrics response, ImportVideo tool + insideVideo.
-- Memory-stable headless render pipeline (measured, then fixed): getImageData/
-  createImageData leak ~4 MB/frame of NATIVE memory in @napi-rs/canvas 1.0.13
-  (unreclaimable even with --expose-gc global.gc); over-sized layer scratch
-  downscale blit rebuilt ~8 MB Skia mipmap/frame. Fixes: VideoEncoder pipes PNG
-  frames into ffmpeg stdin; direct-draw fast path for fx-free clips; exact-size
-  fx layers (timecode burn-in visibility regression caught + fixed by QA);
-  pooled compound pad; grow-only textRuns scratch. 720p×240-frame exports now
-  flat ~200-400 MB (was OOM-kill at ~24 frames).
-- New Glitch batch queue slice 1: qa/newglitch-batch.mjs (resumable via
-  new_glitch/batch/checkpoint.json) rendered recipes 13-100 through the real
-  Glitch NG effect graph at recipe duration (envelope fractions × duration —
-  measured: kernel takes seconds); perceptual dedupe 96×30 centre-crop 3-frame
-  grayscale MAD < 0.6/255 (calibrated: same-video 0.0, cross-family 1.5-3.1):
-  53 kept mp4 + batch-manifest.md (links + sha256:16) + combined review reel
-  new_glitch/batch_reel.mp4; 35 honest dup-skips, 0 failed.
-- Roto/mask accuracy MEASURED (master prompt P0: benchmark before rewrite):
-  reports/roto-benchmark.{md,json} — roto polygon 64 pts mean edge err 0.63 px
-  (max 1.5), IoU 0.9924 vs analytic circle; mask_draw ellipse 0.59 px / 0.9923;
-  shape_detect class=circle centre/radius err 0 px, fill−π/4 = −0.001.
-  Verdict: no rewrite warranted. Flagged for calibration: feather control
-  coarse/non-linear (any small feather ⇒ ~60-70 px 10→90% band).
-- QA: UNIVERSAL TOOLS QA PASS (63 universal steps, 59 tools, omniframe law ok,
-  data:img dumps ok); tsc --noEmit clean.
+## Completed (verified this increment)
+
+- **Assets acquired + extracted** (Drive → `new_doc_toll_research/`, staging in
+  gitignored `google_drive/`): 49 fonts (nested zips unpacked), 8 LUT jpegs
+  (5 real 512² Hald CLUTs + 3 preview photos), 12 Alight Motion v5 XMLs
+  (hero/warps/cc-5plus1/cc-tymm/Onyankopon/Evergreen/Shakes + 5 PF projects),
+  2 CapCut Replace-popup screenshots. Rollback #5 at turn start recovered via
+  `git fetch origin && git reset --hard origin/arena/212bca02-omniframe` + npm ci.
+- **TYMM LUTs = FIRST BATCH** (`public/luts/manifest.json` tymm-3…7 lead the
+  30 entries): LOSSLESS Hald→cube conversion — layout empirically detected
+  (rowmajor 8×8 tiles of 64px via cross-tile smoothness), 64³ cubes store
+  every source node verbatim. `qa/tymm-lut-parity.mjs` PASS: node error
+  0.000/255 for all 5; browser picker + headless `builtin` path consume them
+  unchanged. Sources preserved in `public/luts/source-tymm/`.
+- **49 fonts registered by FILE STEM** (user mandate, not zip name):
+  `public/fonts/` + `src/lib/fontPack.ts` (@font-face css injected main.tsx +
+  index.css) + headless `GlobalFonts.registerFromPath` (FONT_PACK_FILES = 49
+  verified) + TextPanel dropdown + MCP `list_fonts`.
+- **Replace-Video-With-Video** (CapCut parity): video-asset drop ON a video
+  clip → ReplaceDialog (filmstrip, draggable window = target clip duration,
+  timecode, “Use the original video effect” checkbox); pure engine
+  `src/lib/replaceVideo.ts`; MCP `replace_video` with windowStart clamping +
+  carryEffects clear-list. QA PASS incl. no-carry clearing 3 stages.
+- **TEMPLATE MODE**: `template_capture` dumps EVERY processing stage (incl.
+  animation curves w/ bezier points, LUT grade, masks, speed, textStyle,
+  in-point ratio) to `data_motiondesijg/templates/*.json`; `template_apply`
+  replays the chain on new footage; `list_templates`; browser store actions.
+  `qa/replace-template-demo.mjs` PASS (20 steps) →
+  `test_ans_result/replace-template-demo.mp4` (3 s, 640×360, h264 — process
+  original → capture → new theme → apply → swap both carry modes → render).
+- **Alight Motion study + import**: `src/lib/alightXml.ts` (regex parser runs
+  browser+headless identically: shape/text/nullobj layers, ms timings,
+  normalised kf + cubicBezier→CurveEngine custom points, gain→volume);
+  ~100 AM effect ids scanned, ~75 mapped to real engine patches as
+  `AM_FX_CATALOG` MERGED INTO the site Effects catalog; MCP `alight_import`
+  (+ dumps to `data_motiondesijg/alight/`); MediaPanel “Import Alight XML” +
+  `store.importAlightXml`. **All 12 corpus XMLs import** (hero 80 clips/378
+  mapped fx/369 keyframed props; Onyankopon 121/413; Mi Mi Mi 97/417; Shakes
+  10 presets/34 fx/47 kf). Proof render
+  `test_ans_result/alight-warps-import.mp4` (app-made frames, 6.3% non-black —
+  media layers are honest placeholders: `content://` refs unresolvable off
+  device; re-link via replace_video which carries the AM chain).
+  `docs/alight-motion-study.md` records the full anatomy + limits.
+- **CC/TYMM scan**: `new_doc_toll_research/CC-SCAN.md` — exact Drive-API
+  listings (Overlays 38, Back Grounds 42, Sfx 41 across 5 subfolders, Shakes,
+  Cc, Free), overlay usage recipes (screen/lighten/chromaKey/lumaKey), 55 AM
+  text layers extracted as pack data (subtitle chain
+  texttransform+textspacing+gradientoverlay2; Quicksand_Bold font stem matches
+  the TYMM pack). mega.nz folder: recorded unreachable (allowlist) — NOT done.
+- **continue.md created** (user mandate): every-run checklist + standing laws
+  incl. the 5000-recipe-until-complete mandate (batch checkpoint next=100),
+  shipped list, honest resume points.
+- QA: UNIVERSAL TOOLS QA PASS (63 steps, **65 tools** — +replace_video,
+  template_capture/apply, list_templates, list_fonts, alight_import);
+  replace-template demo PASS; LUT parity PASS; tsc --noEmit clean;
+  `vite build` succeeds.
 
 ## Partial
-- Batch queue: 100/5000 recipes queued next (checkpoint ready); user
-  keep/delete/improve rating pending on batch_reel.mp4.
+
+- Batch queue: checkpoint next=100 of 5000 (slice 1: 53 kept/35 dups/0 fail);
+  resumes after this increment per continue.md.
+- AM import: group nesting, masks and gradient fills are data-only (not
+  re-rendered); unmapped AM ids preserved raw on clips + dumps.
+- CC Overlays/Sfx/Back Grounds bytes: catalogued, not downloaded (~120 MB —
+  on request).
 - insideVideo in BROWSER playback: guarded/partial (headless complete).
-- Headless has no project_save tool: .omni package export = honest
-  wonderful.project.json schema dump, not a store-produced file.
-- Glitch Effect Graph node UI (material inspector) still pending.
+- Headless .omni export = schema dump, not a store-produced file.
 
 ## Failed / blocked
-- Desktop Tauri installer evidence: BLOCKED (no Rust toolchain in sandbox).
-- ≥80% visual similarity to HGH reference: NOT MEASURED (no declared metric;
-  original copyright-safe logo used).
-- UI workspace rebuild (BrandBird/CapCut refs): not started this increment.
+
+- mega.nz overlay folder: unreachable from sandbox allowlist (recorded in
+  CC-SCAN.md; nothing claimed).
+- Desktop Tauri installer: BLOCKED (no Rust toolchain).
+- ≥80% similarity claims: NOT MEASURED anywhere (no declared metric).
+- UI workspace rebuild (BrandBird/CapCut refs): not started.
 
 ## Preservation
-- No source/user media deleted; .cache/, google_drive/ downloads and packs
-  stay OUT of git (gitignored); batch sidecar traces kept beside kept mp4s only.
+
+- No user media deleted (fonts_stage intermediate removed after extraction;
+  originals remain in Drive + `new_doc_toll_research/tymm/fonts/`).
+- `google_drive/` staging stays gitignored; study MP4s and data-dumps live in
+  git per vow.md §2.

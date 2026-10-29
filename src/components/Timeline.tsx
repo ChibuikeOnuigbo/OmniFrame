@@ -984,6 +984,11 @@ function ClipView({
           e.stopPropagation()
           e.dataTransfer.dropEffect = 'copy'
         }
+        if (clip.kind === 'video' && e.dataTransfer.types.includes('application/x-omniframe-asset')) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.dataTransfer.dropEffect = 'copy'
+        }
       }}
       onDrop={(e) => {
         const catalogId = e.dataTransfer.getData(FX_MIME)
@@ -991,6 +996,19 @@ function ClipView({
           e.preventDefault()
           e.stopPropagation()
           addFxInstance(clip.id, catalogId) // full clip length, tagged + auto-opens settings
+          return
+        }
+        // REPLACE VIDEO WITH VIDEO: dropping a video asset onto a video clip
+        // opens the CapCut-style trim popup instead of stacking a new clip.
+        const droppedAssetId = e.dataTransfer.getData('application/x-omniframe-asset')
+        if (droppedAssetId && clip.kind === 'video') {
+          const dropped = useEditor.getState().assets.find((a) => a.id === droppedAssetId)
+          if (dropped && dropped.kind === 'video') {
+            e.preventDefault()
+            e.stopPropagation()
+            useEditor.getState().openReplaceDialog(clip.id, droppedAssetId)
+            return
+          }
         }
       }}
       onContextMenu={(e) => onContextMenu(e, clip)}

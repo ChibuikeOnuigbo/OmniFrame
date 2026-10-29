@@ -1,7 +1,77 @@
 {
   "version": 1,
-  "count": 25,
+  "count": 30,
   "luts": [
+    {
+      "id": "tymm-3",
+      "name": "TYMM Lut 3",
+      "file": "luts/tymm-3.cube",
+      "description": "TYMM pack Hald CLUT #3 (512\u00b2 jpeg, rowmajor 8\u00d78 tiles) \u2014 LOSSLESS 64\u00b3 cube: every source node stored verbatim (qa/tymm-lut-parity.mjs: node error 0.000/255).",
+      "category": "TYMM",
+      "swatch": "rgb(161, 165, 166)",
+      "tags": [
+        "tymm",
+        "pack",
+        "hald-clut",
+        "lossless"
+      ]
+    },
+    {
+      "id": "tymm-4",
+      "name": "TYMM Lut 4",
+      "file": "luts/tymm-4.cube",
+      "description": "TYMM pack Hald CLUT #4 (512\u00b2 jpeg, rowmajor 8\u00d78 tiles) \u2014 LOSSLESS 64\u00b3 cube: every source node stored verbatim (qa/tymm-lut-parity.mjs: node error 0.000/255).",
+      "category": "TYMM",
+      "swatch": "rgb(92, 115, 121)",
+      "tags": [
+        "tymm",
+        "pack",
+        "hald-clut",
+        "lossless"
+      ]
+    },
+    {
+      "id": "tymm-5",
+      "name": "TYMM Lut 5",
+      "file": "luts/tymm-5.cube",
+      "description": "TYMM pack Hald CLUT #5 (512\u00b2 jpeg, rowmajor 8\u00d78 tiles) \u2014 LOSSLESS 64\u00b3 cube: every source node stored verbatim (qa/tymm-lut-parity.mjs: node error 0.000/255).",
+      "category": "TYMM",
+      "swatch": "rgb(170, 165, 161)",
+      "tags": [
+        "tymm",
+        "pack",
+        "hald-clut",
+        "lossless"
+      ]
+    },
+    {
+      "id": "tymm-6",
+      "name": "TYMM Lut 6",
+      "file": "luts/tymm-6.cube",
+      "description": "TYMM pack Hald CLUT #6 (512\u00b2 jpeg, rowmajor 8\u00d78 tiles) \u2014 LOSSLESS 64\u00b3 cube: every source node stored verbatim (qa/tymm-lut-parity.mjs: node error 0.000/255).",
+      "category": "TYMM",
+      "swatch": "rgb(121, 132, 128)",
+      "tags": [
+        "tymm",
+        "pack",
+        "hald-clut",
+        "lossless"
+      ]
+    },
+    {
+      "id": "tymm-7",
+      "name": "TYMM Lut 7",
+      "file": "luts/tymm-7.cube",
+      "description": "TYMM pack Hald CLUT #7 (512\u00b2 jpeg, rowmajor 8\u00d78 tiles) \u2014 LOSSLESS 64\u00b3 cube: every source node stored verbatim (qa/tymm-lut-parity.mjs: node error 0.000/255).",
+      "category": "TYMM",
+      "swatch": "rgb(102, 134, 131)",
+      "tags": [
+        "tymm",
+        "pack",
+        "hald-clut",
+        "lossless"
+      ]
+    },
     {
       "id": "clean-neutral",
       "name": "Clean Neutral",

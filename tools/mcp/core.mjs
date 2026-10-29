@@ -2,7 +2,7 @@
 // Every tool returns a ToolResult; ToolResult.chunkManifest() splits the whole
 // payload (meta + data) into fixed-size JSON chunks so callers can stream or
 // verify it piece by piece. FrameProvider pulls any frame of any produced mp4.
-import { createCanvas, loadImage, Image } from '@napi-rs/canvas'
+import { createCanvas, loadImage, Image, GlobalFonts } from '@napi-rs/canvas'
 import { execFileSync, spawn } from 'child_process'
 import crypto from 'crypto'
 import fs from 'fs'
@@ -143,3 +143,18 @@ export function cover(ctx, img, w, h, ox = 0, oy = 0) {
 }
 export function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t }
 export function lerp(a, b, t) { return a + (b - a) * t }
+
+// TYMM font pack registration (headless parity with the browser @font-face css):
+// family name = file stem, exactly as the user named them.
+export const FONT_PACK_FILES = []
+try {
+  const fdir = path.join(import.meta.dirname, '..', '..', 'public', 'fonts')
+  if (fs.existsSync(fdir)) {
+    for (const f of fs.readdirSync(fdir).sort()) {
+      if (!/\.(ttf|otf|woff|woff2|ttc)$/i.test(f)) continue
+      const stem = f.replace(/\.[^.]+$/, '')
+      FONT_PACK_FILES.push(stem)
+      try { GlobalFonts.registerFromPath(path.join(fdir, f), stem) } catch { /* dup */ }
+    }
+  }
+} catch { /* headless-only */ }
