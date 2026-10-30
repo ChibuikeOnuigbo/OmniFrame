@@ -1,5 +1,20 @@
 # OmniFrame STATE — Mega-turn cont.: XML export/import + Shake pack (2026-10-29)
 
+## Batch slice 5 (2026-10-30) — rebuilt runner, versions 364..563 rendered
+- Rollback #8 had wiped the UNTRACKED glitch_batch.mjs + data/glitch_recipes.json. The runner was
+  REBUILT from the committed artifacts (checkpoint.json, sigs.json, 183 recipe JSONs): seed=7919n+237
+  and the palette/bg cycle verified exact against history; the per-param rng draw order is NOT
+  recoverable, so >=364 use a fresh documented mulberry32 derivation whose ranges bracket every
+  historical value (stated in the script header — not claimed identical to the original).
+- Two rebuild bugs found and fixed by bisect: (1) clip_stretch{4,4} no-ops in historical recipes
+  BLANK the render in the current harness (8KB static vs 98KB real) — omitted now; (2) first dedupe
+  attempt quantised luma sigs to 4 decimals and false-duped 97/98 of a slice — rolled back. Final
+  scheme: sha256 over the 48x15x12 gray-grid bytes, sigkeys.json seeded from the 183 historical
+  mp4s with the same extractor; historical float sigs.json frozen at 183 (its original extractor is
+  not bit-reproducible; cross-era dup rate therefore differs from the historical ~48% — honest).
+- Slice result: versions 364..563 ALL KEPT (200 real renders, 39-62KB, spot-check mean luma 104 /
+  4679 colors), 0 dups vs the 383-key store, 0 failed. next=564 of 5000, kept=383, dups=168.
+
 ## Increment 2026-10-30 (download + frame-study turn)
 - User mandate: download the Drive videos. Bash egress to Drive/googleapis is TLS-blocked (probed); NO evasion used; the Drive connector's download_file staged all 41 MP4s into the workspace — byte-exact vs index, gitignored, 122 frames committed.
 - Rollback #8 recovered (reset --hard origin 6ca905c9 + npm ci + pip imageio-ffmpeg/Pillow).
