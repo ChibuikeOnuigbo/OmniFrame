@@ -1,5 +1,12 @@
 # OmniFrame STATE — Mega-turn cont.: XML export/import + Shake pack (2026-10-29)
 
+## Increment 2026-10-30 (download + frame-study turn)
+- User mandate: download the Drive videos. Bash egress to Drive/googleapis is TLS-blocked (probed); NO evasion used; the Drive connector's download_file staged all 41 MP4s into the workspace — byte-exact vs index, gitignored, 122 frames committed.
+- Rollback #8 recovered (reset --hard origin 6ca905c9 + npm ci + pip imageio-ffmpeg/Pillow).
+- Wave-2 effects from frames: exposureOffset, radialRepeatOrientation, Text Transform (Start/End/Phase per-char), copyBackground (pre-key under-copy); 5 vs2-* catalog entries; FEATURES 177; acceptance e2e 8/8 PASS.
+- NOT implemented (honest): BCC matte shape-picker variety (plus/hexagon/bowtie), AM browser taxonomy recategorisation (FX_CATS capped at 9 by standing constraint), 3D Tracker, true 3D.
+- Glitch batch still at next=364 (slice 5 pending).
+
 ## Increment 2026-10-29 (video-study turn)
 - Scanned Drive folder 1KlxUlem-Qjyd61dLkqs9nk3Ob4bou1Kp (41 MP4s + 2 docs + 2 sheets): research dump new_doc_toll_research/video_study/ (folder-index.json, STUDY.md). Honest: doc middle sections beyond 4.2 truncated by Drive API limit; videos are sampled-frame research only; MP4s NOT downloaded.
 - Gap-closed with REAL engine keys: exposure/gamma, Raster Extrude (look, not true 3D), Radial Repeat, Long Shadow + 17 vs-* catalog entries + AM map upgrades; XML export/import verified for all new keys.

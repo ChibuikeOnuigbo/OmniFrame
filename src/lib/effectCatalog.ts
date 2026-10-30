@@ -151,6 +151,12 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   longShadow: { label: 'Long Shadow (px)', kind: 'number', min: 0, max: 64, step: 1 },
   longShadowAngle: { label: 'Shadow Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
   longShadowColor: { label: 'Shadow Color', kind: 'color' },
+  exposureOffset: { label: 'Exposure Offset', kind: 'number', min: -1, max: 1, step: 0.01 },
+  radialRepeatOrientation: { label: 'Repeat Orientation (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  textTransformStart: { label: 'Text Transform Start (%)', kind: 'number', min: 0, max: 100, step: 1 },
+  textTransformEnd: { label: 'Text Transform End (%)', kind: 'number', min: 0, max: 100, step: 1 },
+  textTransformPhase: { label: 'Text Transform Phase (%)', kind: 'number', min: 0, max: 100, step: 1 },
+  copyBackground: { label: 'Copy Background', kind: 'number', min: 0, max: 1, step: 0.01 },
 }
 
 /** Editable/keyframeable property schema for any catalog patch. */
@@ -402,6 +408,13 @@ function buildCatalog(): FxCatalogEntry[] {
     add('vs-flicker-text', 'Flicker Text (Time Quantization)', 'retro', VS, { flicker: 0.5, timeQuantization: 8 })
     add('vs-vhs-tracking', 'VHS Tracking Preset', 'retro', VS, { vhs: 0.8, turbulent: 0.3, chromatic: 8 })
     add('vs-rainbow-edges', 'Rainbow Find Edges', 'key', VS, { findEdges: 1, gradientMap: 0.7, gradientMapFrom: '#ff375f', gradientMapTo: '#25d7fb' })
+    // ---- wave 2: parameters read directly off downloaded-video frames (2026-10-30) ----
+    const VS2 = 'y6richo downloaded-video frames (new_doc_toll_research/video_study/frames/) — panel parameters read off the pixels'
+    add('vs2-exposure-offset', 'Exposure / Gamma + Offset', 'color', VS2 + ' 01_t019.5 (Exposure 0.26 / Gamma 1.000 / Offset 0.00)', { exposure: 0.26, gamma: 1, exposureOffset: 0 })
+    add('vs2-radial-orient', 'Radial Repeat oriented ×8 22°', 'distort', VS2 + ' 27_t060 (Count 21 / Radius 0 / Orientation 0°)', { radialRepeat: 8, radialRepeatOrientation: 22 })
+    add('vs2-text-transform', 'Text Transform sweep', 'motion', VS2 + ' 30_t075 (Start 0% / End 100% / Phase 0%)', { textTransformStart: 0, textTransformEnd: 100, textTransformPhase: 100 })
+    add('vs2-copy-background', 'Copy Background', 'key', VS2 + ' 28_t055 (stack: Luma Key + Copy Background)', { copyBackground: 0.8 })
+    add('vs2-rgb-vignette', 'RGB Vignette (Luma Key + Copy Bg)', 'key', VS2 + ' 28_t040-59 (chromatic aberration tutorial stack)', { lumaKey: 0.6, copyBackground: 0.9, chromatic: 6 })
   }
 
     // ---- Alight Motion study corpus: every mapped AM effect joins the site catalog ----

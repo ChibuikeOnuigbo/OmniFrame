@@ -226,6 +226,7 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
       for (let c = 0; c < 3; c++) {
         let v = (d.data[i + c] / 255) * mul
         if (g !== 1) v = Math.pow(v, g)
+        if (e.exposureOffset) v += e.exposureOffset
         d.data[i + c] = v * 255
       }
     }
@@ -306,7 +307,7 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     srcC.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
     ctx.clearRect(0, 0, w, h)
     for (let i = 0; i < count; i++) {
-      const a = (i / count) * Math.PI * 2
+      const a = (i / count) * Math.PI * 2 + (((e.radialRepeatOrientation ?? 0) * Math.PI) / 180)
       ctx.save()
       ctx.translate(w / 2 + Math.cos(a) * radius, h / 2 + Math.sin(a) * radius)
       ctx.rotate(a)
@@ -353,6 +354,8 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.extrude !== undefined && effect.extrude > 0) ||
     (effect.longShadow !== undefined && effect.longShadow > 0) ||
     (effect.radialRepeat !== undefined && effect.radialRepeat >= 2) ||
+    (effect.exposureOffset !== undefined && Math.abs(effect.exposureOffset) > 0.001) ||
+    (effect.copyBackground !== undefined && effect.copyBackground > 0) ||
     (effect.sharpen && effect.sharpen > 0) ||
     (effect.findEdges && effect.findEdges > 0) ||
     (effect.minimax && effect.minimax > 0) ||
@@ -744,6 +747,15 @@ function applyBoardL(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h:
 }
 
 export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, seed = 0): void {
+  // Copy Background (AM stack 28_t055): snapshot the PRE-key source; the soft
+  // enlarged copy is composited UNDER the keyed result at the end of the pipe.
+  let cbPre: HTMLCanvasElement | null = null
+  const cbAmt = effect.copyBackground ?? 0
+  if (cbAmt > 0) {
+    cbPre = document.createElement('canvas')
+    cbPre.width = canvas.width; cbPre.height = canvas.height
+    cbPre.getContext('2d')!.drawImage(canvas, 0, 0)
+  }
   const ctx = canvas.getContext('2d')
   if (!ctx || !canvas.width || !canvas.height) return
   const pixelate = Math.min(24, Math.max(0, Math.floor(effect.pixelate || 0)))
@@ -895,4 +907,23 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
   applyOneFramer(ctx, effect, canvas.width, canvas.height, seed)
   applyGlitchGrade(ctx, effect, canvas.width, canvas.height, seed)
   applyBoardL(ctx, effect, canvas.width, canvas.height, seed)
+  if (cbPre && cbAmt > 0) {
+    const out = document.createElement('canvas')
+    out.width = canvas.width; out.height = canvas.height
+    const octx = out.getContext('2d')!
+    octx.globalAlpha = Math.min(1, cbAmt)
+    octx.filter = `blur(${Math.max(2, Math.round(Math.min(canvas.width, canvas.height) / 60))}px)`
+    octx.translate(canvas.width / 2, canvas.height / 2)
+    octx.scale(1.06, 1.06)
+    octx.drawImage(cbPre, -canvas.width / 2, -canvas.height / 2)
+    octx.setTransform(1, 0, 0, 1, 0, 0)
+    octx.filter = 'none'
+    octx.globalAlpha = 1
+    octx.drawImage(canvas, 0, 0)
+    ctx.save()
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(out, 0, 0)
+    ctx.restore()
+  }
 }

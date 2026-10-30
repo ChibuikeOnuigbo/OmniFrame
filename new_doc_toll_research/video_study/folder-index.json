@@ -1,54 +1,366 @@
 {
-  "scanned": "2026-10-29",
-  "drive_folder": "1KlxUlem-Qjyd61dLkqs9nk3Ob4bou1Kp",
-  "items": [
-    { "id": "1YiOIiXYNTvK2jCFt-gHck-unl6hW_dXccwlADtA_HAA", "name": "new_study_vdieos", "kind": "document", "note": "Y6richo editor research: executive findings, Earrings timeline, effect/tool inventory, implementation requirements, channel catalog (788 uploads). MIDDLE of doc (sections after 4.2 Color & Light) truncated by Drive API result-size limit — recorded honestly; sections 1-4.2 and the tail were read." },
-    { "id": "1r9bhwYGjJ_fijMuw36DYwKVaaXp_G-yV8D2xm9btiMU", "name": "Timeline and tutorial video study - 40 downloads", "kind": "document", "note": "Read in full. Per-video observations + recommended editor acceptance tests." },
-    { "id": "1aR3Qs4WP2lB3d5wrU1RjrSNL4nnJYdmY110aGgECOmc", "name": "40_downloaded_video_index", "kind": "spreadsheet", "note": "Read in full (CSV saved alongside)." },
-    { "id": "16IsiqSRsPveXB17mFRvRN0Z8mTPX3gIo2KoVUutCbBo", "name": "y6richo_channel_video_index", "kind": "spreadsheet", "note": "Partial read (first ~345 of 788 rows) — same API limit; catalog metadata only." },
-    { "id": "1jEWWvp4qc_Bpy0cIV__7nGXsctOPgRP7", "name": "Downloaded videos - tutorials and timelines", "kind": "folder", "note": "41 MP4s listed with id/size/duration/resolution below. NOT downloaded (research reference only; user directive: AM project media stays out of the app bundle)." }
-  ],
-  "videos": [
-    { "n": 0, "id": "1ZGRW4p3rR7omGUinQ5V0N6QV5ChTaiL9", "file": "00_Earrings_Behind_The_Project_8hjWrzum_vQ.mp4", "dur_s": 27.6, "res": "1080x1920", "bytes": 11065415 },
-    { "n": 1, "id": "1ZVKhYa7iXCOAcJGiAja5UwovKdthmaKa", "file": "01_camera_shutter_under_30_seconds_HnKKzQY8PI8.mp4", "dur_s": 33.3, "res": "720x1280", "bytes": 6730037 },
-    { "n": 2, "id": "190Hs0bIFH56LEW0JcPzFuXYNdCjsf7i8", "file": "02_client_work_on_Alight_Motion_Zy7eZ1lG3gU.mp4", "dur_s": 15.2, "res": "1080x1906", "bytes": 3761757 },
-    { "n": 3, "id": "1VJA-cruxVjgv_Svhhfr4XaI11StebFCn", "file": "03_how_I_make_100_racks_edit_-t3oNxpmzPk.mp4", "dur_s": 14.1, "res": "1080x1906", "bytes": 3410064 },
-    { "n": 4, "id": "1olHchu6ehOnNNdZPkZigwbv4bo7CwGU7", "file": "04_how_I_make_ts_01QuQ-TZ3mw.mp4", "dur_s": 10.4, "res": "1080x1920", "bytes": 1609119 },
-    { "n": 5, "id": "1IwlVQLylunWTNvaSxV7eZyI6SnnBxSmu", "file": "05_simple_edit_alight_motion_preview_rb_4riHPupc.mp4", "dur_s": 16.3, "res": "1080x1906", "bytes": 7165995 },
-    { "n": 6, "id": "1wN8KZZiS4FDfm4FFLg_C7RGeLPD74bmm", "file": "06_oh_wow_is_this_alright_motion_Jhc9QGM_D_U.mp4", "dur_s": 20.6, "res": "1080x1920", "bytes": 4524530 },
-    { "n": 7, "id": "1DRX4Db_w6bODFoVNWdkkJlsCaOFELQL7", "file": "07_Vector_Art_Motion_Graphics_KujfgT9ajXc.mp4", "dur_s": 14.5, "res": "1080x1920", "bytes": 5231819 },
-    { "n": 8, "id": "1fn-MqHfikaoRe8HQ5PtNwadg1y_suNAq", "file": "08_Magnetic_Alight_Motion_Behind_The_Project_57cDWsVFEIk.mp4", "dur_s": 12.5, "res": "1080x1920", "bytes": 2007912 },
-    { "n": 9, "id": "1Whk9kOaDvu5HxOGHRYntF-zfy0HgHeaZ", "file": "09_Behind_The_Project_h0lOjfY7iOM.mp4", "dur_s": 14.5, "res": "1080x1920", "bytes": 5723245 },
-    { "n": 10, "id": "1EtrK5RpU_UXiKS_q-29IDoT2g2U0TkwF", "file": "10_hop_in_he_whip_SqihW-CjAuY.mp4", "dur_s": 10.0, "res": "1080x1920", "bytes": 1693269 },
-    { "n": 11, "id": "1j5DJ-7SJLopc3y01KNO083_xxwZFHb-Q", "file": "11_Behind_the_Scene_lazy_edit_drip_Xf-GMA9cR04.mp4", "dur_s": 13.9, "res": "1080x1920", "bytes": 5078153 },
-    { "n": 12, "id": "15IGJ08fs3o8wUrmT8mj4vQadl3bddtOa", "file": "12_Behind_The_Scenes_a_lot_of_parking_lots_2sPtcWbm7-Q.mp4", "dur_s": 14.0, "res": "1080x1920", "bytes": 1845207 },
-    { "n": 13, "id": "1KvDGF8cwBBIxSSnfy6qdxSri-Clbxf3C", "file": "13_Behind_The_Scenes_Akaneee_8sSHn4hj-DQ.mp4", "dur_s": 21.7, "res": "1080x1920", "bytes": 6602496 },
-    { "n": 14, "id": "1SSNY2dl59dFaeYIep9iZHzlprae4FlYQ", "file": "14_Behind_The_Scene_bouncin_twO6NNqKJWo.mp4", "dur_s": 13.4, "res": "1080x1920", "bytes": 7172887 },
-    { "n": 15, "id": "1ydNqKogbU1JtPYssAmh-45Iw7D_5vCTt", "file": "15_Behind_the_Project_of_Close2Me_Sl6D2FXt7Ns.mp4", "dur_s": 18.6, "res": "1080x1920", "bytes": 4638943 },
-    { "n": 16, "id": "1cOctkjjBJfdajiVxlR4NAoPS0iYZ9qse", "file": "16_Cupid_Typography_Behind_The_Scene_u22NwWtoJMw.mp4", "dur_s": 27.7, "res": "720x1280", "bytes": 4299311 },
-    { "n": 17, "id": "1iIP0tK0FT1Ln5dG7MlLR2tQpOBQSZGmx", "file": "17_Behind_The_Scene_Just_My_Type_Hu_Tao_jXcfKeyDLG8.mp4", "dur_s": 27.1, "res": "608x1080", "bytes": 6213640 },
-    { "n": 18, "id": "1xMmSJ_MeJFwwc61AwHIadT3Jd-7eDKNC", "file": "18_vector_drawing_is_just_FJuhQVHY8gs.mp4", "dur_s": 9.1, "res": "1080x1920", "bytes": 3403904 },
-    { "n": 19, "id": "1SOhQ9mhPMSHEWlio4PY4b2xTM75o4AYV", "file": "19_Behind_The_Project_Living_a_lie_RHg3I3PFvog.mp4", "dur_s": 34.7, "res": "714x1280", "bytes": 4565245 },
-    { "n": 20, "id": "1mz56Qlhas_15Q29oJrwf8HgJt9lNYJko", "file": "20_shelter_XxuAIDXPYvE.mp4", "dur_s": 21.7, "res": "1072x1920", "bytes": 5979707 },
-    { "n": 21, "id": "1yW7FQlGJsl6AAAdPTYxPn272djSdR5Xf", "file": "21_Behind_The_Project_TvOFF_jS7OsbvzYJ8.mp4", "dur_s": 13.3, "res": "1080x1906", "bytes": 3728325 },
-    { "n": 22, "id": "1rTZC5t-HwCOFIV61XE9vvfOsvCnGypGx", "file": "22_a_breakdown_for_commission_edit_XeosHgG5AZI.mp4", "dur_s": 14.5, "res": "1080x1920", "bytes": 2836532 },
-    { "n": 23, "id": "1nLC6PZfVnJMNWskfsj1NOdfOn5RnkPkk", "file": "23_Better_Star_In_Alight_Motion_Tutorial_AB-HFF3905c.mp4", "dur_s": 78.2, "res": "1280x720", "bytes": 15040511 },
-    { "n": 24, "id": "1ZmwSePUJzCRbN5AEdn0hY4ggBxaz5RJc", "file": "24_Create_an_Easy_Abstract_Shapes_X5FoXc02oBQ.mp4", "dur_s": 97.1, "res": "1920x1080", "bytes": 17668797 },
-    { "n": 25, "id": "1fwpbojMelzs66T-5Qed9cEUqkwQrvmMQ", "file": "25_How_to_Mark_Beats_QVJiVIKUp-I.mp4", "dur_s": 58.3, "res": "1920x1080", "bytes": 8242795 },
-    { "n": 26, "id": "1-TlKl_dXlQ3UgAjzNJOk2mB3tdL9dQm2", "file": "26_Gradient_Noise_Texture_Tutorial_wVhH-Y3Nh0g.mp4", "dur_s": 119.2, "res": "640x360", "bytes": 4838358 },
-    { "n": 27, "id": "1Qq3x9TdKNSyOnNy9h6OvaIz8OGthm4EM", "file": "27_3D_Swirl_Text_in_Alight_Motion_Tutorial_PWzVk0-Txn0.mp4", "dur_s": 139.9, "res": "640x360", "bytes": 5372286 },
-    { "n": 28, "id": "1FaQ-oeLYgc3J7R52PiDjyBjezqlv_p37", "file": "28_Chromatic_Aberration_RGB_Vignette_Tutorial_x-uU6VHtNuk.mp4", "dur_s": 119.0, "res": "854x480", "bytes": 8408525 },
-    { "n": 29, "id": "11CyT55XMaTYgyaqpaUjPUio0NfKUtUOT", "file": "29_Rainbow_Find_Edges_Tutorial_kD37D1JwQGQ.mp4", "dur_s": 117.3, "res": "640x360", "bytes": 3685106 },
-    { "n": 30, "id": "1K2lfhWtUD3EsUDNqbs59AKqp5L-u3DXu", "file": "30_Flicker_Text_Animation_AE_inspired_3qQUDRCyU2w.mp4", "dur_s": 142.2, "res": "640x360", "bytes": 4508247 },
-    { "n": 31, "id": "1BdbiTaiEfQ-O57hPJANBV48dCI6v4xM6", "file": "31_VHS_Tracking_Preset_Kk5PtwclR1g.mp4", "dur_s": 95.5, "res": "1280x720", "bytes": 6663443 },
-    { "n": 32, "id": "1b3lAmCNa2IX0X4vgW9wk0QvnDYWJpTn5", "file": "32_Smooth_Shake_On_Alight_Motion_cH3OuqHF6vA.mp4", "dur_s": 95.2, "res": "1280x720", "bytes": 6193952 },
-    { "n": 33, "id": "1l88qkV-bLIsNxL049h11V0kwx3jXCuYX", "file": "33_TWITCH_TUTORIAL_ON_ALIGHT_MOTION_vpysWtw78DE.mp4", "dur_s": 81.2, "res": "1280x720", "bytes": 5908708 },
-    { "n": 34, "id": "1iZoaV7ErvqMmtI4H-q8eTTIel2uT84UC", "file": "34_BASIC_SHAKE_ON_ALIGHT_MOTION_9cLIrJVxv_o.mp4", "dur_s": 63.7, "res": "1280x720", "bytes": 4874250 },
-    { "n": 35, "id": "17aVDG1DGNQIFNK6o9k2htiqM0fQr0ucU", "file": "35_AMV_TUTORIAL_My_secret_Shake_g789LoYAxI4.mp4", "dur_s": 85.7, "res": "1280x720", "bytes": 4758393 },
-    { "n": 36, "id": "1hI6IVaHe5RP4polRDoWpuZjaviunMr8g", "file": "36_BCC_Lens_Blur_on_Phone_Tutorial_6-GBTgfjQXE.mp4", "dur_s": 127.4, "res": "640x360", "bytes": 5455585 },
-    { "n": 37, "id": "18sp9eL33WT4AhZBEEbvmV2kbLXBgbuNq", "file": "37_Scale_Zoom_Bounce_Shake_Tutorial_lOsjddvSBTU.mp4", "dur_s": 134.1, "res": "854x480", "bytes": 6454189 },
-    { "n": 38, "id": "1s9100AJ4w6BLEP6b4MTW9VJ-Lfb7Zos0", "file": "38_Instagram_UI_UX_Motion_Graphcis_Tutorial_2onl0Wf-wKI.mp4", "dur_s": 144.0, "res": "640x360", "bytes": 7418892 },
-    { "n": 39, "id": "1quq9gNjZygvClgfN-sTbuSSYRn1eJb67", "file": "39_Easy_3D_TEXT_in_Alight_Motion_Tutorial_ErkWFeZISKs.mp4", "dur_s": 184.3, "res": "640x360", "bytes": 8939857 },
-    { "n": 40, "id": "1uG4kn2Kvs5C-f-49hHRH2bfgFhkIq5rZ", "file": "40_Easy_Null_Shakes_Tutorial_Alight_Motion_4_0_NI8BvHiMeOk.mp4", "dur_s": 182.3, "res": "640x360", "bytes": 8170548 }
-  ]
+ "scanned": "2026-10-29",
+ "drive_folder": "1KlxUlem-Qjyd61dLkqs9nk3Ob4bou1Kp",
+ "items": [
+  {
+   "id": "1YiOIiXYNTvK2jCFt-gHck-unl6hW_dXccwlADtA_HAA",
+   "name": "new_study_vdieos",
+   "kind": "document",
+   "note": "Y6richo editor research: executive findings, Earrings timeline, effect/tool inventory, implementation requirements, channel catalog (788 uploads). MIDDLE of doc (sections after 4.2 Color & Light) truncated by Drive API result-size limit \u2014 recorded honestly; sections 1-4.2 and the tail were read."
+  },
+  {
+   "id": "1r9bhwYGjJ_fijMuw36DYwKVaaXp_G-yV8D2xm9btiMU",
+   "name": "Timeline and tutorial video study - 40 downloads",
+   "kind": "document",
+   "note": "Read in full. Per-video observations + recommended editor acceptance tests."
+  },
+  {
+   "id": "1aR3Qs4WP2lB3d5wrU1RjrSNL4nnJYdmY110aGgECOmc",
+   "name": "40_downloaded_video_index",
+   "kind": "spreadsheet",
+   "note": "Read in full (CSV saved alongside)."
+  },
+  {
+   "id": "16IsiqSRsPveXB17mFRvRN0Z8mTPX3gIo2KoVUutCbBo",
+   "name": "y6richo_channel_video_index",
+   "kind": "spreadsheet",
+   "note": "Partial read (first ~345 of 788 rows) \u2014 same API limit; catalog metadata only."
+  },
+  {
+   "id": "1jEWWvp4qc_Bpy0cIV__7nGXsctOPgRP7",
+   "name": "Downloaded videos - tutorials and timelines",
+   "kind": "folder",
+   "note": "41 MP4s listed with id/size/duration/resolution below. NOT downloaded (research reference only; user directive: AM project media stays out of the app bundle)."
+  }
+ ],
+ "videos": [
+  {
+   "n": 0,
+   "id": "1ZGRW4p3rR7omGUinQ5V0N6QV5ChTaiL9",
+   "file": "00_Earrings_Behind_The_Project_8hjWrzum_vQ.mp4",
+   "dur_s": 27.6,
+   "res": "1080x1920",
+   "bytes": 11065415
+  },
+  {
+   "n": 1,
+   "id": "1ZVKhYa7iXCOAcJGiAja5UwovKdthmaKa",
+   "file": "01_camera_shutter_under_30_seconds_HnKKzQY8PI8.mp4",
+   "dur_s": 33.3,
+   "res": "720x1280",
+   "bytes": 6730037
+  },
+  {
+   "n": 2,
+   "id": "190Hs0bIFH56LEW0JcPzFuXYNdCjsf7i8",
+   "file": "02_client_work_on_Alight_Motion_Zy7eZ1lG3gU.mp4",
+   "dur_s": 15.2,
+   "res": "1080x1906",
+   "bytes": 3761757
+  },
+  {
+   "n": 3,
+   "id": "1VJA-cruxVjgv_Svhhfr4XaI11StebFCn",
+   "file": "03_how_I_make_100_racks_edit_on_Alight_Motion_-t3oNxpmzPk.mp4",
+   "dur_s": 14.1,
+   "res": "1080x1906",
+   "bytes": 3410064
+  },
+  {
+   "n": 4,
+   "id": "1olHchu6ehOnNNdZPkZigwbv4bo7CwGU7",
+   "file": "04_how_I_make_ts_01QuQ-TZ3mw.mp4",
+   "dur_s": 10.4,
+   "res": "1080x1920",
+   "bytes": 1609119
+  },
+  {
+   "n": 5,
+   "id": "1IwlVQLylunWTNvaSxV7eZyI6SnnBxSmu",
+   "file": "05_simple_edit_alight_motion_preview_rb_4riHPupc.mp4",
+   "dur_s": 16.3,
+   "res": "1080x1906",
+   "bytes": 7165995
+  },
+  {
+   "n": 6,
+   "id": "1wN8KZZiS4FDfm4FFLg_C7RGeLPD74bmm",
+   "file": "06_oh_wow_is_this_alright_motion_Jhc9QGM_D_U.mp4",
+   "dur_s": 20.6,
+   "res": "1080x1920",
+   "bytes": 4524530
+  },
+  {
+   "n": 7,
+   "id": "1DRX4Db_w6bODFoVNWdkkJlsCaOFELQL7",
+   "file": "07_Vector_Art_Motion_Graphics_KujfgT9ajXc.mp4",
+   "dur_s": 14.5,
+   "res": "1080x1920",
+   "bytes": 5231819
+  },
+  {
+   "n": 8,
+   "id": "1fn-MqHfikaoRe8HQ5PtNwadg1y_suNAq",
+   "file": "08_Magnetic_Alight_Motion_Behind_The_Project_57cDWsVFEIk.mp4",
+   "dur_s": 12.5,
+   "res": "1080x1920",
+   "bytes": 2007912
+  },
+  {
+   "n": 9,
+   "id": "1Whk9kOaDvu5HxOGHRYntF-zfy0HgHeaZ",
+   "file": "09_Behind_The_Project_h0lOjfY7iOM.mp4",
+   "dur_s": 14.5,
+   "res": "1080x1920",
+   "bytes": 5723245
+  },
+  {
+   "n": 10,
+   "id": "1EtrK5RpU_UXiKS_q-29IDoT2g2U0TkwF",
+   "file": "10_hop_in_he_whip_SqihW-CjAuY.mp4",
+   "dur_s": 10.0,
+   "res": "1080x1920",
+   "bytes": 1693269
+  },
+  {
+   "n": 11,
+   "id": "1j5DJ-7SJLopc3y01KNO083_xxwZFHb-Q",
+   "file": "11_Behind_the_Scene_lazy_edit_drip_Alight_Motion_Xf-GMA9cR04.mp4",
+   "dur_s": 13.9,
+   "res": "1080x1920",
+   "bytes": 5078153
+  },
+  {
+   "n": 12,
+   "id": "15IGJ08fs3o8wUrmT8mj4vQadl3bddtOa",
+   "file": "12_Behind_The_Scenes_a_lot_of_parking_lots_Alight__2sPtcWbm7-Q.mp4",
+   "dur_s": 14.0,
+   "res": "1080x1920",
+   "bytes": 1845207
+  },
+  {
+   "n": 13,
+   "id": "1KvDGF8cwBBIxSSnfy6qdxSri-Clbxf3C",
+   "file": "13_Behind_The_Scenes_Akaneee_Alight_Motion_8sSHn4hj-DQ.mp4",
+   "dur_s": 21.7,
+   "res": "1080x1920",
+   "bytes": 6602496
+  },
+  {
+   "n": 14,
+   "id": "1SSNY2dl59dFaeYIep9iZHzlprae4FlYQ",
+   "file": "14_Behind_The_Scene_bouncin_Alight_Motion_twO6NNqKJWo.mp4",
+   "dur_s": 13.4,
+   "res": "1080x1920",
+   "bytes": 7172887
+  },
+  {
+   "n": 15,
+   "id": "1ydNqKogbU1JtPYssAmh-45Iw7D_5vCTt",
+   "file": "15_Behind_the_Project_of_Close2Me_Alight_Motion_Sl6D2FXt7Ns.mp4",
+   "dur_s": 18.6,
+   "res": "1080x1920",
+   "bytes": 4638943
+  },
+  {
+   "n": 16,
+   "id": "1cOctkjjBJfdajiVxlR4NAoPS0iYZ9qse",
+   "file": "16_Cupid_Typography_Behind_The_Scene_Alight_Motion_u22NwWtoJMw.mp4",
+   "dur_s": 27.7,
+   "res": "720x1280",
+   "bytes": 4299311
+  },
+  {
+   "n": 17,
+   "id": "1iIP0tK0FT1Ln5dG7MlLR2tQpOBQSZGmx",
+   "file": "17_Behind_The_Scene_Just_My_Type_Hu_Tao_Alight_Mot_jXcfKeyDLG8.mp4",
+   "dur_s": 27.1,
+   "res": "608x1080",
+   "bytes": 6213640
+  },
+  {
+   "n": 18,
+   "id": "1xMmSJ_MeJFwwc61AwHIadT3Jd-7eDKNC",
+   "file": "18_vector_drawing_is_just_FJuhQVHY8gs.mp4",
+   "dur_s": 9.1,
+   "res": "1080x1920",
+   "bytes": 3403904
+  },
+  {
+   "n": 19,
+   "id": "1SOhQ9mhPMSHEWlio4PY4b2xTM75o4AYV",
+   "file": "19_Behind_The_Project_Living_a_lie_RHg3I3PFvog.mp4",
+   "dur_s": 34.7,
+   "res": "714x1280",
+   "bytes": 4565245
+  },
+  {
+   "n": 20,
+   "id": "1mz56Qlhas_15Q29oJrwf8HgJt9lNYJko",
+   "file": "20_shelter_XxuAIDXPYvE.mp4",
+   "dur_s": 21.7,
+   "res": "1072x1920",
+   "bytes": 5979707
+  },
+  {
+   "n": 21,
+   "id": "1yW7FQlGJsl6AAAdPTYxPn272djSdR5Xf",
+   "file": "21_Behind_The_Project_TvOFF_jS7OsbvzYJ8.mp4",
+   "dur_s": 13.3,
+   "res": "1080x1906",
+   "bytes": 3728325
+  },
+  {
+   "n": 22,
+   "id": "1rTZC5t-HwCOFIV61XE9vvfOsvCnGypGx",
+   "file": "22_a_breakdown_for_commission_edit_XeosHgG5AZI.mp4",
+   "dur_s": 14.5,
+   "res": "1080x1920",
+   "bytes": 2836532
+  },
+  {
+   "n": 23,
+   "id": "1nLC6PZfVnJMNWskfsj1NOdfOn5RnkPkk",
+   "file": "23_Better_Star_In_Alight_Motion_Tutorial_AB-HFF3905c.mp4",
+   "dur_s": 78.2,
+   "res": "1280x720",
+   "bytes": 15040511
+  },
+  {
+   "n": 24,
+   "id": "1ZmwSePUJzCRbN5AEdn0hY4ggBxaz5RJc",
+   "file": "24_Create_an_Easy_Abstract_Shapes_in_Alight_Motion_X5FoXc02oBQ.mp4",
+   "dur_s": 97.1,
+   "res": "1920x1080",
+   "bytes": 17668797
+  },
+  {
+   "n": 25,
+   "id": "1fwpbojMelzs66T-5Qed9cEUqkwQrvmMQ",
+   "file": "25_How_to_Mark_Beats_With_no_Lags_Alight_Motion_Be_QVJiVIKUp-I.mp4",
+   "dur_s": 58.3,
+   "res": "1920x1080",
+   "bytes": 8242795
+  },
+  {
+   "n": 26,
+   "id": "1-TlKl_dXlQ3UgAjzNJOk2mB3tdL9dQm2",
+   "file": "26_Gradient_Noise_Texture_Tutorial_on_Alight_Motio_wVhH-Y3Nh0g.mp4",
+   "dur_s": 119.2,
+   "res": "640x360",
+   "bytes": 4838358
+  },
+  {
+   "n": 27,
+   "id": "1Qq3x9TdKNSyOnNy9h6OvaIz8OGthm4EM",
+   "file": "27_3D_Swirl_Text_in_Alight_Motion_Tutorial_PWzVk0-Txn0.mp4",
+   "dur_s": 139.9,
+   "res": "640x360",
+   "bytes": 5372286
+  },
+  {
+   "n": 28,
+   "id": "1FaQ-oeLYgc3J7R52PiDjyBjezqlv_p37",
+   "file": "28_Chromatic_Aberration_RGB_Vignette_Tutorial_Alig_x-uU6VHtNuk.mp4",
+   "dur_s": 119.0,
+   "res": "854x480",
+   "bytes": 8408525
+  },
+  {
+   "n": 29,
+   "id": "11CyT55XMaTYgyaqpaUjPUio0NfKUtUOT",
+   "file": "29_Rainbow_Find_Edges_Tutorial_Alight_Motion_Quick_kD37D1JwQGQ.mp4",
+   "dur_s": 117.3,
+   "res": "640x360",
+   "bytes": 3685106
+  },
+  {
+   "n": 30,
+   "id": "1K2lfhWtUD3EsUDNqbs59AKqp5L-u3DXu",
+   "file": "30_Flicker_Text_Animation_AE_inspired_Alight_Motio_3qQUDRCyU2w.mp4",
+   "dur_s": 142.2,
+   "res": "640x360",
+   "bytes": 4508247
+  },
+  {
+   "n": 31,
+   "id": "1BdbiTaiEfQ-O57hPJANBV48dCI6v4xM6",
+   "file": "31_VHS_Tracking_Preset_for_Alight_Motion_Sad_Edit__Kk5PtwclR1g.mp4",
+   "dur_s": 95.5,
+   "res": "1280x720",
+   "bytes": 6663443
+  },
+  {
+   "n": 32,
+   "id": "1b3lAmCNa2IX0X4vgW9wk0QvnDYWJpTn5",
+   "file": "32_Smooth_Shake_On_Alight_Motion_Alight_motion_tut_cH3OuqHF6vA.mp4",
+   "dur_s": 95.2,
+   "res": "1280x720",
+   "bytes": 6193952
+  },
+  {
+   "n": 33,
+   "id": "1l88qkV-bLIsNxL049h11V0kwx3jXCuYX",
+   "file": "33_TWITCH_TUTORIAL_ON_ALIGHT_MOTION_AMV_TUTORIAL_E_vpysWtw78DE.mp4",
+   "dur_s": 81.2,
+   "res": "1280x720",
+   "bytes": 5908708
+  },
+  {
+   "n": 34,
+   "id": "1iZoaV7ErvqMmtI4H-q8eTTIel2uT84UC",
+   "file": "34_BASIC_SHAKE_ON_ALIGHT_MOTION_AMV_TUTORIAL_ENGLI_9cLIrJVxv_o.mp4",
+   "dur_s": 63.7,
+   "res": "1280x720",
+   "bytes": 4874250
+  },
+  {
+   "n": 35,
+   "id": "17aVDG1DGNQIFNK6o9k2htiqM0fQr0ucU",
+   "file": "35_AMV_TUTORIAL_My_secret_Shake_On_Alight_Motion_B_g789LoYAxI4.mp4",
+   "dur_s": 85.7,
+   "res": "1280x720",
+   "bytes": 4758393
+  },
+  {
+   "n": 36,
+   "id": "1hI6IVaHe5RP4polRDoWpuZjaviunMr8g",
+   "file": "36_BCC_Lens_Blur_on_Phone_Tutorial_Alight_Motion_T_6-GBTgfjQXE.mp4",
+   "dur_s": 127.4,
+   "res": "640x360",
+   "bytes": 5455585
+  },
+  {
+   "n": 37,
+   "id": "18sp9eL33WT4AhZBEEbvmV2kbLXBgbuNq",
+   "file": "37_Scale_Zoom_Bounce_Shake_Tutorial_Alight_Motion_lOsjddvSBTU.mp4",
+   "dur_s": 134.1,
+   "res": "854x480",
+   "bytes": 6454189
+  },
+  {
+   "n": 38,
+   "id": "1s9100AJ4w6BLEP6b4MTW9VJ-Lfb7Zos0",
+   "file": "38_Instagram_UI_UX_Motion_Graphcis_Tutorial_Alight_2onl0Wf-wKI.mp4",
+   "dur_s": 144.0,
+   "res": "640x360",
+   "bytes": 7418892
+  },
+  {
+   "n": 39,
+   "id": "1quq9gNjZygvClgfN-sTbuSSYRn1eJb67",
+   "file": "39_Easy_3D_TEXT_in_Alight_Motion_Tutorial_ErkWFeZISKs.mp4",
+   "dur_s": 184.3,
+   "res": "640x360",
+   "bytes": 8939857
+  },
+  {
+   "n": 40,
+   "id": "1uG4kn2Kvs5C-f-49hHRH2bfgFhkIq5rZ",
+   "file": "40_Easy_Null_Shakes_Tutorial_Alight_Motion_4_0_NI8BvHiMeOk.mp4",
+   "dur_s": 182.3,
+   "res": "640x360",
+   "bytes": 8170548
+  }
+ ]
 }

@@ -667,6 +667,16 @@ export interface ClipEffect {
   longShadow?: number
   longShadowAngle?: number
   longShadowColor?: string
+  /** Exposure/Gamma panel third parameter (observed Offset 0.00 in frame 01_t019.5) */
+  exposureOffset?: number
+  /** Radial Repeat panel Orientation ° (frame 27_t060: Count/Radius/Orientation) */
+  radialRepeatOrientation?: number
+  /** Text Transform panel (frame 30_t075: Start % / End % / Phase %) — per-char reveal sweep */
+  textTransformStart?: number
+  textTransformEnd?: number
+  textTransformPhase?: number
+  /** Copy Background (frame 28_t055 stack: Luma Key + Copy Background) — soft enlarged copy under the layer */
+  copyBackground?: number
   flareColor?: string
   /** Board L: white-balance Kelvin (1500-15000, 6500 = neutral). */
   colorTemp?: number

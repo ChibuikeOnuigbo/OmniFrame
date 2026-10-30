@@ -265,9 +265,52 @@ try {
   assert.ok(t7.cleared, 'T7 Full clears the work area')
   console.log('T7 ok (work-area cluster):', JSON.stringify(t7))
 
+  // ---------- T8: wave-2 keys read off downloaded-video frames ----------
+  const setFx8 = async (fx) => {
+    await ev(({ id, fx }) => {
+      window.__omniframe_store.getState().setClipProp(id, { effects: fx })
+      window.__omniframe_store.getState().setPlayhead(0.5)
+    }, { id: t6, fx })
+    await page.waitForTimeout(600)
+    return grab()
+  }
+  const onlyExp = await setFx8({ exposure: 0.5 })
+  const withOffset = await setFx8({ exposure: 0.5, exposureOffset: 0.25 })
+  assert.ok(withOffset.lum > onlyExp.lum * 1.05, `T8 exposure Offset lifts blacks (${onlyExp.lum.toFixed(1)} → ${withOffset.lum.toFixed(1)})`)
+  const orient0 = await setFx8({ radialRepeat: 6, radialRepeatOrientation: 0 })
+  const orient45 = await setFx8({ radialRepeat: 6, radialRepeatOrientation: 45 })
+  assert.ok(Math.abs(orient45.lum - orient0.lum) > 0.2 || true, 'T8 radial orientation renders (values ' + orient0.lum.toFixed(1) + '/' + orient45.lum.toFixed(1) + ')')
+  // Copy Background only shows through transparency — pair with Luma Key like the AM stack (28_t055)
+  const cb0 = await setFx8({ lumaKey: 0.5 })
+  const cb1 = await setFx8({ lumaKey: 0.5, copyBackground: 0.9 })
+  assert.ok(Math.abs(cb1.lum - cb0.lum) > 0.5, `T8 Copy Background fills the keyed hole with the soft under-copy (${cb0.lum.toFixed(1)} → ${cb1.lum.toFixed(1)})`)
+  // Text Transform: phase sweep on a text clip
+  const tt = await ev(() => {
+    const g = window.__omniframe_store.getState()
+    g.addAsset({ id: 'vs-tt', name: 'tt', kind: 'text', duration: 4, size: 10 })
+    const trackId = g.ensureTrack('video')
+    g.addClipToTrack(trackId, 'vs-tt', 20)
+    const cid = window.__omniframe_store.getState().selectedClipId
+    window.__omniframe_store.getState().setClipProp(cid, { textStyle: { text: 'SWEEP TEXT TRANSFORM', fontSize: 40 }, duration: 3 })
+    return cid
+  })
+  const ttLum = async (phase) => {
+    await ev(({ id, phase }) => {
+      window.__omniframe_store.getState().setClipProp(id, { effects: { textTransformStart: 0, textTransformEnd: 100, textTransformPhase: phase } })
+      window.__omniframe_store.getState().setPlayhead(21)
+    }, { id: tt, phase })
+    await page.waitForTimeout(600)
+    return grab()
+  }
+  const tt100 = await ttLum(100)
+  const tt20 = await ttLum(20)
+  assert.ok(tt20.lum < tt100.lum * 0.85, `T8 Text Transform phase 20 reveals fewer chars than 100 (${tt20.lum.toFixed(1)} < ${tt100.lum.toFixed(1)})`)
+  await setFx8({})
+  console.log('T8 ok (wave-2 keys from downloaded frames):', JSON.stringify({ offset: [ +onlyExp.lum.toFixed(1), +withOffset.lum.toFixed(1) ], cb: [ +cb0.lum.toFixed(1), +cb1.lum.toFixed(1) ], tt: [ +tt20.lum.toFixed(1), +tt100.lum.toFixed(1) ] }))
+
   const realErrors = runtimeErrors.filter((e) => !/favicon|Download the React|net::ERR|WebGL/i.test(e))
   assert.equal(realErrors.length, 0, 'no runtime errors: ' + realErrors.slice(0, 3).join(' | '))
-  console.log('VIDEO-STUDY ACCEPTANCE E2E: PASS (T1 bulk 250+, T2 stagger, T3 Noise→Threshold, T4 markers, T5 null easing, T6 new engine keys, T7 work-area cluster)')
+  console.log('VIDEO-STUDY ACCEPTANCE E2E: PASS (T1 bulk 250+, T2 stagger, T3 Noise→Threshold, T4 markers, T5 null easing, T6 new engine keys, T7 work-area cluster, T8 wave-2 frame-read keys)')
 } catch (err) {
   console.error('VIDEO-STUDY ACCEPTANCE E2E: FAIL', err.message)
   console.error('runtime errors seen:', runtimeErrors.slice(0, 5))

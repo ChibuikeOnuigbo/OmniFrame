@@ -1610,7 +1610,8 @@ export class PreviewEngine {
     }
     ctx.save()
     this.applyParentWorld(ctx, clip, time)
-    applyClipFilter(ctx, this.effectsForRender(clip, time))
+    const effNow = this.effectsForRender(clip, time)
+    applyClipFilter(ctx, effNow)
     const evalT = evalClipPfx(clip, time)
     ctx.globalAlpha *= Math.max(0, Math.min(1, evalT.opacity ?? clip.transform.opacity))
 
@@ -1751,10 +1752,24 @@ export class PreviewEngine {
     }
     // Draw text lines (per-glyph when tracking/stroke needs it)
     ctx.fillStyle = t.color || '#ffffff'
+    // Text Transform (AM panel: Start % / End % / Phase %) — per-char reveal sweep.
+    // Phase 100 = fully revealed (default); keyframe/patch phase 0→100 sweeps chars.
+    const ttPhase = effNow?.textTransformPhase
+    const ttActive = ttPhase !== undefined && ttPhase < 99.999
+    const totalChars = Math.max(1, [...(t.text ?? '')].length)
+    const ttQ = (gi: number): number => {
+      if (!ttActive || ttPhase === undefined) return 1
+      const g = totalChars <= 1 ? 0 : Math.min(1, gi / (totalChars - 1))
+      const s0 = (effNow!.textTransformStart ?? 0) / 100
+      const s1 = Math.max(s0 + 0.02, (effNow!.textTransformEnd ?? 100) / 100)
+      const a0 = s0 + g * (s1 - s0)
+      const p = ttPhase / 100
+      return Math.max(0, Math.min(1, (p * 1.12 - a0) / 0.12))
+    }
     const startY = -(lines.length - 1) * (lineHeight / 2)
     const drawLine = (c2: CanvasRenderingContext2D, line: string, y: number, gstart = 0) => {
       const csArr = ranges && ranges.length ? [...line].map((_, ci) => charAt(gstart + ci)) : null
-      if (!tracking && !t.strokeWidth && !csArr) { c2.fillText(line, 0, y); return }
+      if (!tracking && !t.strokeWidth && !csArr && !ttActive) { c2.fillText(line, 0, y); return }
       const chars = [...line]
       const widths = chars.map((ch) => c2.measureText(ch).width)
       const extra = csArr ? csArr.map((cs) => (cs && cs.spacing ? cs.spacing * scaleFactor : 0)) : chars.map(() => 0)
@@ -1762,6 +1777,7 @@ export class PreviewEngine {
       let x = -total / 2
       ;chars.forEach((ch, ci) => {
         const cs = csArr ? csArr[ci] : null
+        const tq = ttQ(gstart + ci)
         if (!t.strokeOnly) {
           if (cs && (cs.color || cs.fontSize || cs.opacity)) {
             c2.save()
@@ -1769,6 +1785,11 @@ export class PreviewEngine {
             if (cs.color) c2.fillStyle = cs.color
             if (cs.fontSize) c2.font = `${t.bold ? 'bold ' : ''}${t.italic ? 'italic ' : ''}${Math.round(cs.fontSize * scaleFactor)}px ${fam}`
             c2.fillText(ch, x + widths[ci] / 2, y)
+            c2.restore()
+          } else if (tq < 1) {
+            c2.save()
+            c2.globalAlpha *= tq
+            c2.fillText(ch, x + widths[ci] / 2, y + (1 - tq) * fontSize * 0.35)
             c2.restore()
           } else c2.fillText(ch, x + widths[ci] / 2, y)
         }

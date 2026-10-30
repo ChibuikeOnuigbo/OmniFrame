@@ -76,3 +76,28 @@ auto beat detection (manual markers exist; peaks≠beats).
 4. Audio markers: add/move/delete + snap; distinct from auto beat detection (not claimed).
 5. Easing graph + keyframes on null/transform/effect: scrub, frame-step, undo, export agreement.
 6. Layer-type/visibility/selection states at zoom (UI-level, covered by existing timeline e2e).
+
+## Download method (2026-10-30, user mandate: download the videos)
+- Sandbox bash egress CANNOT reach Drive/googleapis (TLS blocked by the egress allowlist) — probed and recorded.
+- NO proxy trickery used. The legitimate path: the Arena **google_drive connector's download_file**
+  stages each MP4 into the workspace (`google_drive/` at repo root); all 41 moved to
+  `videos/` and verified **byte-exact** against the Drive index (folder-index.json).
+  Videos are gitignored (re-downloadable via the connector); extracted study frames
+  (`frames/`, 122 jpgs at the documented look-around timestamps) ARE committed as evidence.
+
+## Wave-2 findings read directly off the downloaded-video frames (frames/NN_tTT.T.jpg)
+- 01_t019.5: Exposure / Gamma panel = **Exposure 0.26 / Gamma 1.000 / Offset 0.00** → third
+  param `exposureOffset` implemented; left rail = keyframe diamond + curve-graph icons.
+- 04_t003.5: checkerboard transparency + black hand cutout + staircase staggered strips (confirms T2 test shape).
+- 27_t060: Radial Repeat panel = **Count 21 / Radius 0 / Orientation 0°** → `radialRepeatOrientation` implemented.
+- 28_t055: effect stack list = **Luma Key (on) + Copy Background + "+ Add Effect"** → `copyBackground`
+  implemented as pre-key snapshot composited (blurred, 1.06×) UNDER the keyed result; catalog stack
+  'vs2-rgb-vignette' = lumaKey + copyBackground + chromatic per the chromatic-aberration tutorial.
+- 30_t075: Text Transform panel = **Start 0.0% / End 100.0% / Phase 0.0%** → per-char reveal sweep
+  (textTransformStart/End/Phase) implemented in the per-glyph text path.
+- 36_t070: BCC lens-blur shape/matte picker grid (circle, square, plus, C, triangle, hexagon,
+  4-star, 6-star, slash, bowtie) — shape variety noted, NOT yet implemented (honest).
+- 39_t090: AM effect browser taxonomy: Color & Light, Drawing & Edge, Distortion/Warp, Procedural,
+  3D, Move/Transform, Repeat, Matte/Mask/Key, Opacity/Visibility, Text, Other (our FX_CATS capped at 9
+  by standing constraint, so new entries slot into existing cats).
+- 32_t030: Move & Transform rotation dial (0° knob) — rotation control parity already present.
