@@ -71,12 +71,18 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   exposureOffset: 0, radialRepeatOrientation: 0,
   textTransformStart: 0, textTransformEnd: 100, textTransformPhase: 100,
   copyBackground: 0,
+  bumpMap: 0, colorBalanceR: 0, colorBalanceG: 0, colorBalanceB: 0,
+  shadows: 0, highlights: 0, hotColor: 0, radialShadow: 0,
+  fourColorGradient: 0, fcgColorA: '#ff375f', fcgColorB: '#25d7fb', fcgColorC: '#a0ff3c', fcgColorD: '#fffa8b', fcgPhase: 0,
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   exposure: [-2, 2], gamma: [0.2, 3], extrude: [0, 40], extrudeAngle: [0, 360],
   radialRepeat: [0, 24], radialRepeatRadius: [0, 400], longShadow: [0, 64], longShadowAngle: [0, 360],
   exposureOffset: [-1, 1], radialRepeatOrientation: [0, 360], textTransformStart: [0, 100], textTransformEnd: [0, 100], textTransformPhase: [0, 100], copyBackground: [0, 1],
+  bumpMap: [0, 1], colorBalanceR: [-1, 1], colorBalanceG: [-1, 1], colorBalanceB: [-1, 1],
+  shadows: [0, 1], highlights: [0, 1], hotColor: [0, 1], radialShadow: [0, 1],
+  fourColorGradient: [0, 1], fcgPhase: [0, 360],
   glitch: [0, 1], glitchScan: [0, 1], glitchStatic: [0, 1], glitchSeed: [1, 999], glitchSpeed: [1, 30],
   kaleidoSegments: [0, 12], kaleidoRotate: [0, 360], flare: [0, 1], flareX: [0, 100], flareY: [0, 100],
   flareStreak: [0, 1], flareGhosts: [0, 8], colorTemp: [1500, 15000],
@@ -127,6 +133,10 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   if (typeof raw.overlayFx === 'string' && (OVERLAY_KINDS as readonly string[]).includes(raw.overlayFx)) out.overlayFx = raw.overlayFx as ClipEffect['overlayFx']
   if (typeof raw.replaceBg === 'string' && (REPLACE_BG_KINDS as readonly string[]).includes(raw.replaceBg)) out.replaceBg = raw.replaceBg as ClipEffect['replaceBg']
   if (typeof raw.particleTint === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.particleTint)) out.particleTint = raw.particleTint
+  for (const k of ['fcgColorA', 'fcgColorB', 'fcgColorC', 'fcgColorD'] as const) {
+    const v = raw[k]
+    if (typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)) out[k] = v
+  }
   return out
 }
 

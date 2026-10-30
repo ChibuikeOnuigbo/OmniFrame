@@ -101,3 +101,11 @@ auto beat detection (manual markers exist; peaks≠beats).
   3D, Move/Transform, Repeat, Matte/Mask/Key, Opacity/Visibility, Text, Other (our FX_CATS capped at 9
   by standing constraint, so new entries slot into existing cats).
 - 32_t030: Move & Transform rotation dial (0° knob) — rotation control parity already present.
+
+## Wave-3 close-out (2026-10-30, later same day)
+- The Color & Light browser gaps listed above are now ALL faked in-app: Bump Map, Color Balance,
+  Four-color Gradient, Highlights and Shadows, Hot Color, Radial Shadow (+ bokeh shape beds from
+  frame 36_t070: square/plus/triangle/hexagon/star/bowtie/slash kinds). Acceptance e2e T9 pixel-verifies them.
+- HONESTY note: rollback #9 wiped the gitignored videos/ cache (231MB) between turns; the study is
+  complete (122 frames + findings committed), and every MP4 remains re-downloadable by id from
+  folder-index.json via the Drive connector. The frames/ stills were NOT affected.

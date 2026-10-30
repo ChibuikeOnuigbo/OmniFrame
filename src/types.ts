@@ -677,6 +677,22 @@ export interface ClipEffect {
   textTransformPhase?: number
   /** Copy Background (frame 28_t055 stack: Luma Key + Copy Background) — soft enlarged copy under the layer */
   copyBackground?: number
+  /** Wave 3 — AM Color & Light browser gaps observed in the downloaded corpus (STUDY.md inventory):
+   *  Bump Map, Color Balance, Four-color Gradient, Highlights and Shadows, Hot Color, Radial Shadow */
+  bumpMap?: number
+  colorBalanceR?: number
+  colorBalanceG?: number
+  colorBalanceB?: number
+  shadows?: number
+  highlights?: number
+  hotColor?: number
+  radialShadow?: number
+  fourColorGradient?: number
+  fcgColorA?: string
+  fcgColorB?: string
+  fcgColorC?: string
+  fcgColorD?: string
+  fcgPhase?: number
   flareColor?: string
   /** Board L: white-balance Kelvin (1500-15000, 6500 = neutral). */
   colorTemp?: number
@@ -734,7 +750,7 @@ export interface ClipEffect {
   // tutorial corpus (Study_edits_videos/deep-study-*.md): feather & ember
   // beds, dust/bokeh/sparkle overlays, scanline & halftone looks, spotlight
   // stages and "cool background" composite beds under keyed footage.
-  particleFx?: 'none' | 'feathers' | 'embers' | 'dust' | 'bokeh' | 'sparkles' | 'snow' | 'rain' | 'petals'
+  particleFx?: 'none' | 'feathers' | 'embers' | 'dust' | 'bokeh' | 'sparkles' | 'snow' | 'rain' | 'petals' | 'bokeh-square' | 'bokeh-plus' | 'bokeh-triangle' | 'bokeh-hexagon' | 'bokeh-star' | 'bokeh-bowtie' | 'bokeh-slash'
   particleDensity?: number // 0..1 (default 0.5)
   particleTint?: string // css hex colour for tintable kinds (feathers/snow)
   overlayFx?: 'none' | 'scanlines' | 'halftone' | 'spotlight' | 'vignette' | 'lightleak' | 'frameglow'

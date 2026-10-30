@@ -1,3 +1,17 @@
+
+## Increment 2026-10-30b (wave-3 turn)
+- Rollback #9 recovered (fetch + reset --hard origin 96b3b1fd + npm ci + pip; vite restarted). The
+  gitignored videos/ cache was wiped by the rollback — study artifacts (frames, findings) unaffected;
+  re-downloadable via connector ids (noted in STUDY.md, no silent gap).
+- Wave-3: remaining Color & Light browser gaps implemented as real engine passes (bumpMap emboss,
+  colorBalanceR/G/B, shadows/highlights quadratic curves, hotColor bright-mix, radialShadow
+  short-side falloff, fourColorGradient bilinear A-D blend with fcgPhase) + 7 bokeh shape-bed
+  particle kinds from frame 36_t070. 7 vs3-* catalog entries. sanitizer passes fcg colours.
+- Debug trail: radialShadow first measured invisible in-app (falloff normalised to canvas
+  half-diagonal — clip is pad-centred, dd never left the flat zone); direct-import probe proved the
+  engine correct; re-normalised to short-side half → T9 passes (61.4 → 57.1).
+- Acceptance e2e 9/9; regressions green (universal-tools 69, video-study-render, alight-roundtrip,
+  tymm-lut-parity, replace-template). FEATURES = 179.
 # OmniFrame STATE — Mega-turn cont.: XML export/import + Shake pack (2026-10-29)
 
 ## Batch slice 5 (2026-10-30) — rebuilt runner, versions 364..563 rendered

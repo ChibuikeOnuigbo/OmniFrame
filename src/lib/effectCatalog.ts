@@ -68,6 +68,20 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   chromaColor: { label: 'Key Colour', kind: 'color' },
   fractalBlur: { label: 'Fractal Blur (px)', kind: 'number', min: 0, max: 20, step: 1 },
   lumaKey: { label: 'Luma Key', kind: 'number', min: 0, max: 1, step: 0.01 },
+  bumpMap: { label: 'Bump Map', kind: 'number', min: 0, max: 1, step: 0.01 },
+  colorBalanceR: { label: 'Color Balance R', kind: 'number', min: -1, max: 1, step: 0.01 },
+  colorBalanceG: { label: 'Color Balance G', kind: 'number', min: -1, max: 1, step: 0.01 },
+  colorBalanceB: { label: 'Color Balance B', kind: 'number', min: -1, max: 1, step: 0.01 },
+  shadows: { label: 'Shadows Lift', kind: 'number', min: 0, max: 1, step: 0.01 },
+  highlights: { label: 'Highlights Recover', kind: 'number', min: 0, max: 1, step: 0.01 },
+  hotColor: { label: 'Hot Color', kind: 'number', min: 0, max: 1, step: 0.01 },
+  radialShadow: { label: 'Radial Shadow', kind: 'number', min: 0, max: 1, step: 0.01 },
+  fourColorGradient: { label: 'Four-color Gradient', kind: 'number', min: 0, max: 1, step: 0.01 },
+  fcgColorA: { label: 'Gradient Colour A', kind: 'color' },
+  fcgColorB: { label: 'Gradient Colour B', kind: 'color' },
+  fcgColorC: { label: 'Gradient Colour C', kind: 'color' },
+  fcgColorD: { label: 'Gradient Colour D', kind: 'color' },
+  fcgPhase: { label: 'Gradient Phase (°)', kind: 'number', min: 0, max: 360, step: 1 },
   cardFlip: { label: 'Card Flip (half-turns)', kind: 'number', min: 0, max: 2, step: 0.05 },
   zoomBlur: { label: 'Zoom Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
   directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -415,6 +429,15 @@ function buildCatalog(): FxCatalogEntry[] {
     add('vs2-text-transform', 'Text Transform sweep', 'motion', VS2 + ' 30_t075 (Start 0% / End 100% / Phase 0%)', { textTransformStart: 0, textTransformEnd: 100, textTransformPhase: 100 })
     add('vs2-copy-background', 'Copy Background', 'key', VS2 + ' 28_t055 (stack: Luma Key + Copy Background)', { copyBackground: 0.8 })
     add('vs2-rgb-vignette', 'RGB Vignette (Luma Key + Copy Bg)', 'key', VS2 + ' 28_t040-59 (chromatic aberration tutorial stack)', { lumaKey: 0.6, copyBackground: 0.9, chromatic: 6 })
+    // ---- wave 3: remaining Color & Light browser gaps from the corpus inventory (STUDY.md) ----
+    const VS3 = 'y6richo downloaded-corpus study (new_doc_toll_research/video_study/STUDY.md inventory) — AM Color & Light browser names not yet faked'
+    add('vs3-bump-map', 'Bump Map', 'light', VS3 + ' (Color & Light browser gap; luma-gradient emboss, light top-left)', { bumpMap: 0.6 })
+    add('vs3-color-balance', 'Color Balance', 'color', VS3 + ' (Color & Light browser gap; per-channel R/G/B balance gain)', { colorBalanceR: 0.15, colorBalanceG: -0.1, colorBalanceB: 0.2 })
+    add('vs3-highlights-shadows', 'Highlights and Shadows', 'color', VS3 + ' (Color & Light browser gap; lift darks + recover brights)', { shadows: 0.5, highlights: 0.4 })
+    add('vs3-hot-color', 'Hot Color', 'color', VS3 + ' (Color & Light browser gap; brights pushed to hot magenta-red)', { hotColor: 0.7 })
+    add('vs3-radial-shadow', 'Radial Shadow', 'light', VS3 + ' (Color & Light browser gap; centre-out radial darkening)', { radialShadow: 0.65 })
+    add('vs3-four-color-gradient', 'Four-color Gradient', 'color', VS3 + ' (Color & Light browser gap; bilinear A/B/C/D blend, rotatable phase)', { fourColorGradient: 0.8 })
+    add('vs3-bokeh-hexagon', 'Bokeh Bed hexagon (shape picker)', 'light', VS3 + ' 36_t070 (BCC lens-blur shape/matte picker: circle/square/plus/triangle/hexagon/star/slash/bowtie)', { particleFx: 'bokeh-hexagon', particleDensity: 0.6 })
   }
 
     // ---- Alight Motion study corpus: every mapped AM effect joins the site catalog ----

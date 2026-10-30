@@ -308,9 +308,56 @@ try {
   await setFx8({})
   console.log('T8 ok (wave-2 keys from downloaded frames):', JSON.stringify({ offset: [ +onlyExp.lum.toFixed(1), +withOffset.lum.toFixed(1) ], cb: [ +cb0.lum.toFixed(1), +cb1.lum.toFixed(1) ], tt: [ +tt20.lum.toFixed(1), +tt100.lum.toFixed(1) ] }))
 
+  // ---------- T9: wave-3 Color & Light gaps + bokeh shape beds ----------
+  const grab9 = async () => ev(() => {
+    const c = document.querySelector('#of-canvas')
+    const x = c.getContext('2d')
+    const d = x.getImageData(0, 0, c.width, c.height).data
+    let sum = 0, rS = 0, bS = 0, n = 0
+    for (let i = 0; i < d.length; i += 16) { sum += (d[i] + d[i + 1] + d[i + 2]) / 3; rS += d[i]; bS += d[i + 2]; n++ }
+    return { lum: sum / n, rAvg: rS / n, bAvg: bS / n }
+  })
+  const setFx9 = async (fx) => {
+    await ev(({ id, fx }) => {
+      window.__omniframe_store.getState().setClipProp(id, { effects: fx })
+      window.__omniframe_store.getState().setPlayhead(0.5)
+    }, { id: t6, fx })
+    await page.waitForTimeout(600)
+    return grab9()
+  }
+  const base9 = await setFx9({})
+  const sh9 = await setFx9({ shadows: 0.9 })
+  assert.ok(sh9.lum > base9.lum + 0.5, `T9 Highlights and Shadows lifts the dark card (${base9.lum.toFixed(1)} → ${sh9.lum.toFixed(1)})`)
+  const hi9 = await setFx9({ highlights: 0.9 })
+  assert.ok(hi9.lum < base9.lum - 0.3, `T9 highlights recovery pulls brights down (${base9.lum.toFixed(1)} → ${hi9.lum.toFixed(1)})`)
+  const rs9 = await setFx9({ radialShadow: 0.9 })
+  assert.ok(rs9.lum < base9.lum - 0.3, `T9 Radial Shadow darkens outward from centre (${base9.lum.toFixed(1)} → ${rs9.lum.toFixed(1)})`)
+  const cbal9 = await setFx9({ colorBalanceR: 0.6 })
+  assert.ok(cbal9.rAvg > base9.rAvg + 1, `T9 Color Balance R pushes the red channel (${base9.rAvg.toFixed(1)} → ${cbal9.rAvg.toFixed(1)})`)
+  const hot9 = await setFx9({ hotColor: 0.9 })
+  assert.ok(Math.abs(hot9.lum - base9.lum) > 0.2 || hot9.rAvg > base9.rAvg, `T9 Hot Color heats the brights (${base9.lum.toFixed(1)} → ${hot9.lum.toFixed(1)})`)
+  // Bump Map is an emboss: mean luma barely moves, but edge pixels must change
+  await setFx9({})
+  const baseBytes = await ev(() => { const c = document.querySelector('#of-canvas'); return Array.from(c.getContext('2d').getImageData(0, 0, c.width, c.height).data) })
+  await setFx9({ bumpMap: 1 })
+  const bumpDiff = await ev(({ baseBytes }) => {
+    const c = document.querySelector('#of-canvas')
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    let diff = 0
+    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - baseBytes[i]) > 4 || Math.abs(d[i + 1] - baseBytes[i + 1]) > 4) diff++
+    return diff
+  }, { baseBytes })
+  assert.ok(bumpDiff > 500, `T9 Bump Map emboss reshapes edge pixels (${bumpDiff} changed)`)
+  const fcg9 = await setFx9({ fourColorGradient: 0.9 })
+  assert.ok(Math.abs(fcg9.lum - base9.lum) > 3, `T9 Four-color Gradient overlays the A/B/C/D blend (${base9.lum.toFixed(1)} → ${fcg9.lum.toFixed(1)})`)
+  const bokeh9 = await setFx9({ particleFx: 'bokeh-hexagon', particleDensity: 0.8 })
+  assert.ok(bokeh9.lum > base9.lum + 0.2, `T9 bokeh-hexagon shape bed renders bright hexagons (${base9.lum.toFixed(1)} → ${bokeh9.lum.toFixed(1)})`)
+  await setFx9({})
+  console.log('T9 ok (wave-3 Color & Light gaps + shape beds):', JSON.stringify({ base: +base9.lum.toFixed(1), shadows: +sh9.lum.toFixed(1), highlights: +hi9.lum.toFixed(1), radialShadow: +rs9.lum.toFixed(1), fcg: +fcg9.lum.toFixed(1), bokehHex: +bokeh9.lum.toFixed(1) }))
+
   const realErrors = runtimeErrors.filter((e) => !/favicon|Download the React|net::ERR|WebGL/i.test(e))
   assert.equal(realErrors.length, 0, 'no runtime errors: ' + realErrors.slice(0, 3).join(' | '))
-  console.log('VIDEO-STUDY ACCEPTANCE E2E: PASS (T1 bulk 250+, T2 stagger, T3 Noise→Threshold, T4 markers, T5 null easing, T6 new engine keys, T7 work-area cluster, T8 wave-2 frame-read keys)')
+  console.log('VIDEO-STUDY ACCEPTANCE E2E: PASS (T1 bulk 250+, T2 stagger, T3 Noise→Threshold, T4 markers, T5 null easing, T6 new engine keys, T7 work-area cluster, T8 wave-2 frame-read keys, T9 wave-3 Color & Light gaps + bokeh shape beds)')
 } catch (err) {
   console.error('VIDEO-STUDY ACCEPTANCE E2E: FAIL', err.message)
   console.error('runtime errors seen:', runtimeErrors.slice(0, 5))

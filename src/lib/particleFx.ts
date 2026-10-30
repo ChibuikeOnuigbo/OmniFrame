@@ -11,13 +11,47 @@
  */
 import type { ClipEffect } from '../types'
 
-export const PARTICLE_KINDS = ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals'] as const
+export const PARTICLE_KINDS = ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals',
+  // lens-blur matte/bokeh shape picker variety observed in downloaded frame 36_t070
+  'bokeh-square', 'bokeh-plus', 'bokeh-triangle', 'bokeh-hexagon', 'bokeh-star', 'bokeh-bowtie', 'bokeh-slash'] as const
 export const OVERLAY_KINDS = ['none', 'scanlines', 'halftone', 'spotlight', 'vignette', 'lightleak', 'frameglow'] as const
 export const REPLACE_BG_KINDS = ['none', 'synthwave', 'aurora', 'grid', 'bokeh', 'sunset', 'studio'] as const
 
 export type ParticleKind = (typeof PARTICLE_KINDS)[number]
 export type OverlayKind = (typeof OVERLAY_KINDS)[number]
 export type ReplaceBgKind = (typeof REPLACE_BG_KINDS)[number]
+
+/** Shape-path helper for the bokeh beds: circle + the 36_t070 picker variety. */
+function bokehShapePath(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, shape: string) {
+  ctx.beginPath()
+  if (shape === 'square') { ctx.rect(x - r * 0.8, y - r * 0.8, r * 1.6, r * 1.6); return }
+  if (shape === 'slash') {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.6)
+    ctx.rect(-r * 0.28, -r, r * 0.56, r * 2)
+    ctx.restore(); return
+  }
+  if (shape === 'plus') {
+    const t = r * 0.34
+    ctx.moveTo(x - t, y - r); ctx.lineTo(x + t, y - r); ctx.lineTo(x + t, y - t); ctx.lineTo(x + r, y - t)
+    ctx.lineTo(x + r, y + t); ctx.lineTo(x + t, y + t); ctx.lineTo(x + t, y + r); ctx.lineTo(x - t, y + r)
+    ctx.lineTo(x - t, y + t); ctx.lineTo(x - r, y + t); ctx.lineTo(x - r, y - t); ctx.lineTo(x - t, y - t)
+    ctx.closePath(); return
+  }
+  if (shape === 'bowtie') {
+    ctx.moveTo(x - r, y - r * 0.8); ctx.lineTo(x, y); ctx.lineTo(x - r, y + r * 0.8); ctx.closePath()
+    ctx.moveTo(x + r, y - r * 0.8); ctx.lineTo(x, y); ctx.lineTo(x + r, y + r * 0.8); ctx.closePath(); return
+  }
+  const points = shape === 'triangle' ? 3 : shape === 'hexagon' ? 6 : shape === 'star' ? 10 : 0
+  if (points === 0) { ctx.arc(x, y, r, 0, Math.PI * 2); return }
+  const rot = shape === 'triangle' ? -Math.PI / 2 : 0
+  for (let i = 0; i < points; i++) {
+    const ang = rot + (i * 2 * Math.PI) / points
+    const rr = shape === 'star' && i % 2 === 1 ? r * 0.45 : r
+    const px = x + Math.cos(ang) * rr, py = y + Math.sin(ang) * rr
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+}
 
 function mulberry32(a: number) {
   return function () {
@@ -88,13 +122,17 @@ export function drawParticleFx(
       ctx.moveTo(x - r, y); ctx.lineTo(x + r, y)
       ctx.moveTo(x, y - r); ctx.lineTo(x, y + r)
       ctx.stroke()
-    } else if (kind === 'bokeh') {
+    } else if (kind === 'bokeh' || kind.startsWith('bokeh-')) {
+      // bokeh bed; 'bokeh-<shape>' variants trace the BCC lens-blur shape/matte
+      // picker grid read off downloaded frame 36_t070 (circle/square/plus/
+      // triangle/hexagon/star/slash/bowtie).
       const r = (14 + size * 40)
       const g = ctx.createRadialGradient(x, y, 1, x, y, r)
       g.addColorStop(0, `rgba(255,230,180,${0.16 + size * 0.12})`)
       g.addColorStop(1, 'rgba(255,230,180,0)')
       ctx.fillStyle = g
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
+      bokehShapePath(ctx, x, y, r, kind === 'bokeh' ? 'circle' : kind.slice(6))
+      ctx.fill()
     } else {
       // embers / dust / snow dots
       const r = kind === 'embers' ? 1.6 + size * 2.6 : kind === 'snow' ? 1.4 + size * 2.4 : 0.8 + size * 1.4

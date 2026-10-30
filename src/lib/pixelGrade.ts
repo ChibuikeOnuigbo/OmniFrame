@@ -356,6 +356,15 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.radialRepeat !== undefined && effect.radialRepeat >= 2) ||
     (effect.exposureOffset !== undefined && Math.abs(effect.exposureOffset) > 0.001) ||
     (effect.copyBackground !== undefined && effect.copyBackground > 0) ||
+    (effect.bumpMap !== undefined && effect.bumpMap > 0) ||
+    (effect.colorBalanceR !== undefined && Math.abs(effect.colorBalanceR) > 0.001) ||
+    (effect.colorBalanceG !== undefined && Math.abs(effect.colorBalanceG) > 0.001) ||
+    (effect.colorBalanceB !== undefined && Math.abs(effect.colorBalanceB) > 0.001) ||
+    (effect.shadows !== undefined && effect.shadows > 0) ||
+    (effect.highlights !== undefined && effect.highlights > 0) ||
+    (effect.hotColor !== undefined && effect.hotColor > 0) ||
+    (effect.radialShadow !== undefined && effect.radialShadow > 0) ||
+    (effect.fourColorGradient !== undefined && effect.fourColorGradient > 0) ||
     (effect.sharpen && effect.sharpen > 0) ||
     (effect.findEdges && effect.findEdges > 0) ||
     (effect.minimax && effect.minimax > 0) ||
@@ -907,6 +916,84 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
   applyOneFramer(ctx, effect, canvas.width, canvas.height, seed)
   applyGlitchGrade(ctx, effect, canvas.width, canvas.height, seed)
   applyBoardL(ctx, effect, canvas.width, canvas.height, seed)
+  // ---- Wave 3: AM Color & Light browser gaps (downloaded-corpus STUDY.md inventory):
+  // Bump Map, Color Balance, Highlights and Shadows, Hot Color, Radial Shadow, Four-color Gradient.
+  {
+    const bumpMap = Math.min(1, Math.max(0, effect.bumpMap || 0))
+    const cbR = Math.min(1, Math.max(-1, effect.colorBalanceR || 0))
+    const cbG = Math.min(1, Math.max(-1, effect.colorBalanceG || 0))
+    const cbB = Math.min(1, Math.max(-1, effect.colorBalanceB || 0))
+    const shad = Math.min(1, Math.max(0, effect.shadows || 0))
+    const high = Math.min(1, Math.max(0, effect.highlights || 0))
+    const hot = Math.min(1, Math.max(0, effect.hotColor || 0))
+    const radSh = Math.min(1, Math.max(0, effect.radialShadow || 0))
+    const fcg = Math.min(1, Math.max(0, effect.fourColorGradient || 0))
+    const w3ctx = canvas.getContext('2d')!
+    if (bumpMap > 0 || cbR || cbG || cbB || shad > 0 || high > 0 || hot > 0 || radSh > 0) {
+      const img = w3ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const d = img.data, W = canvas.width, H = canvas.height
+      // Bump Map: luminance-gradient emboss, light from the top-left (AM Bump Map look)
+      let bump: Float32Array | null = null
+      if (bumpMap > 0) {
+        bump = new Float32Array(W * H)
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+          const i = (y * W + x) * 4
+          const l = (x > 0 && y > 0) ? (d[i - 4 * W - 4] * 0.299 + d[i - 4 * W - 3] * 0.587 + d[i - 4 * W - 2] * 0.114) : (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114)
+          const r2 = (x < W - 1 && y < H - 1) ? (d[i + 4 * W + 4] * 0.299 + d[i + 4 * W + 5] * 0.587 + d[i + 4 * W + 6] * 0.114) : (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114)
+          bump[y * W + x] = (l - r2) / 255
+        }
+      }
+      // normalise to the short-side half so the falloff reads on pad-centred
+      // clips (a half-diagonal normalisation made it invisible in-app)
+      const cx = W / 2, cy = H / 2, maxD = Math.min(W, H) / 2
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        const p = y * W + x, i = p * 4
+        let r = d[i], g = d[i + 1], b = d[i + 2]
+        const lum = (r * 0.299 + g * 0.587 + b * 0.114) / 255
+        if (shad > 0) { const k = shad * Math.pow(1 - lum, 2) * 90; r += k; g += k; b += k }          // Highlights and Shadows: lift darks
+        if (high > 0) { const k = high * Math.pow(lum, 2) * 90; r -= k; g -= k; b -= k }               // …and recover brights
+        if (cbR) r *= 1 + cbR * 0.45                                                                    // Color Balance per-channel gain
+        if (cbG) g *= 1 + cbG * 0.45
+        if (cbB) b *= 1 + cbB * 0.45
+        if (hot > 0) {                                                                                  // Hot Color: brights pushed to hot magenta-red
+          const t = Math.min(1, Math.max(0, (lum - 0.55) / 0.45)), m = hot * t
+          r += (255 - r) * m; g += (45 - g) * m; b += (111 - b) * m
+        }
+        if (radSh > 0) {                                                                                // Radial Shadow: centre-out radial darkening
+          const dx = (x - cx) / maxD, dy = (y - cy) / maxD
+          const dd = Math.sqrt(dx * dx + dy * dy)
+          const f = Math.pow(Math.min(1, Math.max(0, (dd - 0.15) / 0.85)), 1.6)
+          r *= 1 - radSh * f; g *= 1 - radSh * f; b *= 1 - radSh * f
+        }
+        if (bump) { const k = bump![p] * bumpMap * 120; r += k; g += k; b += k }                        // Bump Map emboss shade
+        d[i] = r < 0 ? 0 : r > 255 ? 255 : r
+        d[i + 1] = g < 0 ? 0 : g > 255 ? 255 : g
+        d[i + 2] = b < 0 ? 0 : b > 255 ? 255 : b
+      }
+      w3ctx.putImageData(img, 0, 0)
+    }
+    if (fcg > 0) {
+      // Four-color Gradient: bilinear A/B/C/D corner blend, axis rotatable via fcgPhase °
+      const gcv = document.createElement('canvas')
+      gcv.width = canvas.width; gcv.height = canvas.height
+      const gx = gcv.getContext('2d')!
+      const ph = ((effect.fcgPhase || 0) * Math.PI) / 180
+      const w = gcv.width, h = gcv.height, cx2 = w / 2, cy2 = h / 2
+      const dx = Math.cos(ph) * w, dy = Math.sin(ph) * w
+      const g1 = gx.createLinearGradient(cx2 - dx / 2, cy2 - dy / 2, cx2 + dx / 2, cy2 + dy / 2)
+      g1.addColorStop(0, effect.fcgColorA || '#ff375f'); g1.addColorStop(1, effect.fcgColorB || '#25d7fb')
+      gx.fillStyle = g1; gx.fillRect(0, 0, w, h)
+      const g2 = gx.createLinearGradient(cx2 - dy / 2, cy2 + dx / 2, cx2 + dy / 2, cy2 - dx / 2)
+      g2.addColorStop(0, effect.fcgColorC || '#a0ff3c'); g2.addColorStop(1, effect.fcgColorD || '#fffa8b')
+      gx.globalAlpha = 0.5
+      gx.fillStyle = g2; gx.fillRect(0, 0, w, h)
+      gx.globalAlpha = 1
+      w3ctx.save()
+      w3ctx.globalAlpha = fcg
+      w3ctx.drawImage(gcv, 0, 0)
+      w3ctx.restore()
+    }
+  }
   if (cbPre && cbAmt > 0) {
     const out = document.createElement('canvas')
     out.width = canvas.width; out.height = canvas.height
