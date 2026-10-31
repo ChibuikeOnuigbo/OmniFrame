@@ -1,0 +1,1 @@
+Command '['ffmpeg', '-y', '-v', 'info', '-i', 'audit-out/evidence/Q9Aka1vrJVQ/src.webm', '-vf', "select='gt(scene,0.4)',showinfo,scale=640:360:force_original_aspect_ratio=decrease,pad=640:360:(ow-iw)/2:(oh-ih)/2,setsar=1", '-vsync', 'vfr', '-frames:v', '6', '-q:v', '5', '/tmp/omni-scene-aybk1v_i/s%d.jpg']' returned non-zero exit status 234.
