@@ -1,3 +1,21 @@
+# Current verified state — 2026-10-31, Codex implementation
+
+Latest user branch instruction: use merged **main**. Base `ba7103b89600ef4afa2d4ac5a55e1be1a24ac1ea`; branch `codex/omniframe-device-glitch-production`. No protected branch resets or merges.
+
+Read `reports/FEATURES.md` for current code/tests and `docs/CODEX_TASK_RECOVERY.md` for the historical task source map. `continue.md` contains the actionable continuation checkpoint. Older entries below are historical and may conflict with current tooling or evidence; in particular, Blender **4.3.2 is available and was used** to export seven GLBs and render 21 previews.
+
+All 5,000 authored effects are available and machine-diagnosed; full-motion queue remains **next 860, 602 retained, 245 duplicate decisions, zero failed**. Do not substitute diagnostic counts for full-motion acceptance. Live app MCP has 21 tools; the headless universal registry has 69.
+
+A–J recipes replayed through universal tools to `qa-output/recovered-boards/`: 43 recipe variants/runs, 45 MP4s, JSON traces and timeline proofs. This is machine replay acceptance; original-source visual review remains open. Source instruction images were inspected for board A and its offscreen placement corrected. Full original quizzes, S/T missing assets and video study tasks remain explicitly tracked.
+
+Drive folder `1uP9ySa8P2p9yGM4gJsn8fxuosQ1k2XrN` could not be read: proxy rejected CONNECT (403). A network-config draft was saved; it is not applied until reviewed/saved/published. GitHub API access is also blocked. Native Tauri build was not executed because Rust/Cargo/GTK/rsvg prerequisites are missing.
+
+Current proofs, diagnostic limits, QA commands and remaining work are recorded in `reports/IMPLEMENTATION_20261031.md`. Full historical mission completion is **not claimed**.
+
+---
+
+## Historical session notes (superseded where conflicting)
+
 
 ## Increment 2026-10-30b (wave-3 turn)
 

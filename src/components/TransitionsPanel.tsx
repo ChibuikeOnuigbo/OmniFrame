@@ -1,5 +1,6 @@
+import { prepareDeviceModels } from '../lib/device3d'
 import SegmentCarousel from './SegmentCarousel'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AlertCircle, Check, Clock, Play, Sparkles, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip, Transition } from '../types'
@@ -51,6 +52,7 @@ function findNearestTransitionCandidate(duration: number): TransitionCandidate |
 // every property (intensity, style, scanlines, static, seed, rate) is
 // editable and keyframeable. The pillar remains for legacy saved projects.
 const PILLARS: { key: string; label: string; cats: TransitionPresetDef['category'][] }[] = [
+  { key: 'device', label: 'Device 3D', cats: ['Device 3D'] },
   { key: 'blur', label: 'Blur', cats: ['Blur'] },
   { key: 'dissolve', label: 'Dissolve', cats: ['Dissolve'] },
   { key: 'light', label: 'Light', cats: ['Light'] },
@@ -62,6 +64,7 @@ const PILLARS: { key: string; label: string; cats: TransitionPresetDef['category
 ]
 
 export function TransitionsPanel() {
+  useEffect(() => { void prepareDeviceModels().catch(error => console.warn('Device models could not preload; canvas fallback available', error)) }, [])
   const transitions = useEditor((s) => s.transitions || [])
   const removeTransition = useEditor((s) => s.removeTransition)
   const startVisualPreview = useEditor((s) => s.startVisualPreview)

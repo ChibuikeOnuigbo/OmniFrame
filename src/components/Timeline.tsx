@@ -1,3 +1,4 @@
+import { ViewportMenu } from './ViewportMenu'
 import { useRef, useState, useEffect, useMemo} from 'react'
 import {
   ZoomIn,
@@ -670,6 +671,7 @@ function TransitionView({
   const onTrimDown = (mode: 'left' | 'right') => (e: React.PointerEvent) => {
     e.stopPropagation()
     selectTransition(transition.id)
+    useEditor.getState().beginHistory()
     trimRef.current = {
       mode,
       startX: e.clientX,
@@ -694,6 +696,7 @@ function TransitionView({
 
   const onTrimUp = (e: React.PointerEvent) => {
     if (trimRef.current) {
+      useEditor.getState().endHistory()
       trimRef.current = null
       try {
         ;(e.target as HTMLElement).releasePointerCapture(e.pointerId)
@@ -3021,15 +3024,7 @@ export function Timeline() {
       {contextMenu && (
         <>
           <div className="fixed inset-0 z-[95]" onClick={() => setContextMenu(null)} />
-          <div
-            data-testid="timeline-context-menu"
-            role="menu"
-            className="fixed z-[100] w-52 rounded-none border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
-            style={{
-              left: Math.min(contextMenu.x, window.innerWidth - 220),
-              top: Math.min(contextMenu.y, window.innerHeight - 240),
-            }}
-          >
+          <ViewportMenu x={contextMenu.x} y={contextMenu.y} onClose={() => setContextMenu(null)}>
             {contextMenu.type === 'marker' && contextMenu.markerId && (() => {
               const st = useEditor.getState()
               const mk = st.markers.find((m) => m.id === contextMenu.markerId)
@@ -3532,7 +3527,7 @@ export function Timeline() {
                 )}
               </>
             )}
-          </div>
+          </ViewportMenu>
         </>
       )}
     </>

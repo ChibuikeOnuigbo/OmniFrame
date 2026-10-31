@@ -1,0 +1,596 @@
+{
+  "manifest": [
+    {
+      "file": "qa-output/device-transitions/phone-pop-in.mp4",
+      "name": "phone-pop-in",
+      "model": "phone_modern_black",
+      "motion": "pop-in",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/phone-rotate-reveal.mp4",
+      "name": "phone-rotate-reveal",
+      "model": "phone_modern_silver",
+      "motion": "rotate-reveal",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/monitor-swing-in.mp4",
+      "name": "monitor-swing-in",
+      "model": "monitor_gaming_black",
+      "motion": "swing-in",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst.mp4",
+      "name": "monitor-fullscreen-burst",
+      "model": "monitor_clean_office",
+      "motion": "fullscreen-burst",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/tv-static-reveal.mp4",
+      "name": "tv-static-reveal",
+      "model": "tv_flat_black",
+      "motion": "static-reveal",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/laptop-open-reveal.mp4",
+      "name": "laptop-open-reveal",
+      "model": "laptop_open_dark",
+      "motion": "laptop-reveal",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/device-to-fullframe.mp4",
+      "name": "device-to-fullframe",
+      "model": "phone_frameless_dark",
+      "motion": "push",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/fullframe-to-device.mp4",
+      "name": "fullframe-to-device",
+      "model": "monitor_clean_office",
+      "motion": "pullback",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/phone-spin-reveal.mp4",
+      "name": "phone-spin-reveal",
+      "model": "phone_modern_black",
+      "motion": "spin-reveal",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/phone-barrel-roll.mp4",
+      "name": "phone-barrel-roll",
+      "model": "phone_modern_silver",
+      "motion": "barrel-roll",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/monitor-drop-bounce.mp4",
+      "name": "monitor-drop-bounce",
+      "model": "monitor_gaming_black",
+      "motion": "drop-bounce",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    },
+    {
+      "file": "qa-output/device-transitions/multi-device-wall.mp4",
+      "name": "multi-device-wall",
+      "model": "monitor_gaming_black",
+      "motion": "device-wall",
+      "renderer": "actual browser PreviewEngine with loaded GLB and decoded moving video",
+      "resolution": [
+        960,
+        540
+      ],
+      "fps": 30,
+      "frames": 49,
+      "sourceLicense": "original FFmpeg testsrc2 and original title card"
+    }
+  ],
+  "contactFrames": [
+    {
+      "name": "phone-pop-in",
+      "i": 0,
+      "file": "qa-output/device-transitions/phone-pop-in-0.png"
+    },
+    {
+      "name": "phone-pop-in",
+      "i": 7,
+      "file": "qa-output/device-transitions/phone-pop-in-7.png"
+    },
+    {
+      "name": "phone-pop-in",
+      "i": 14,
+      "file": "qa-output/device-transitions/phone-pop-in-14.png"
+    },
+    {
+      "name": "phone-pop-in",
+      "i": 24,
+      "file": "qa-output/device-transitions/phone-pop-in-24.png"
+    },
+    {
+      "name": "phone-pop-in",
+      "i": 34,
+      "file": "qa-output/device-transitions/phone-pop-in-34.png"
+    },
+    {
+      "name": "phone-pop-in",
+      "i": 41,
+      "file": "qa-output/device-transitions/phone-pop-in-41.png"
+    },
+    {
+      "name": "phone-pop-in",
+      "i": 48,
+      "file": "qa-output/device-transitions/phone-pop-in-48.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 0,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-0.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 7,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-7.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 14,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-14.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 24,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-24.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 34,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-34.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 41,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-41.png"
+    },
+    {
+      "name": "phone-rotate-reveal",
+      "i": 48,
+      "file": "qa-output/device-transitions/phone-rotate-reveal-48.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 0,
+      "file": "qa-output/device-transitions/monitor-swing-in-0.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 7,
+      "file": "qa-output/device-transitions/monitor-swing-in-7.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 14,
+      "file": "qa-output/device-transitions/monitor-swing-in-14.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 24,
+      "file": "qa-output/device-transitions/monitor-swing-in-24.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 34,
+      "file": "qa-output/device-transitions/monitor-swing-in-34.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 41,
+      "file": "qa-output/device-transitions/monitor-swing-in-41.png"
+    },
+    {
+      "name": "monitor-swing-in",
+      "i": 48,
+      "file": "qa-output/device-transitions/monitor-swing-in-48.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 0,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-0.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 7,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-7.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 14,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-14.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 24,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-24.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 34,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-34.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 41,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-41.png"
+    },
+    {
+      "name": "monitor-fullscreen-burst",
+      "i": 48,
+      "file": "qa-output/device-transitions/monitor-fullscreen-burst-48.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 0,
+      "file": "qa-output/device-transitions/tv-static-reveal-0.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 7,
+      "file": "qa-output/device-transitions/tv-static-reveal-7.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 14,
+      "file": "qa-output/device-transitions/tv-static-reveal-14.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 24,
+      "file": "qa-output/device-transitions/tv-static-reveal-24.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 34,
+      "file": "qa-output/device-transitions/tv-static-reveal-34.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 41,
+      "file": "qa-output/device-transitions/tv-static-reveal-41.png"
+    },
+    {
+      "name": "tv-static-reveal",
+      "i": 48,
+      "file": "qa-output/device-transitions/tv-static-reveal-48.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 0,
+      "file": "qa-output/device-transitions/laptop-open-reveal-0.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 7,
+      "file": "qa-output/device-transitions/laptop-open-reveal-7.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 14,
+      "file": "qa-output/device-transitions/laptop-open-reveal-14.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 24,
+      "file": "qa-output/device-transitions/laptop-open-reveal-24.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 34,
+      "file": "qa-output/device-transitions/laptop-open-reveal-34.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 41,
+      "file": "qa-output/device-transitions/laptop-open-reveal-41.png"
+    },
+    {
+      "name": "laptop-open-reveal",
+      "i": 48,
+      "file": "qa-output/device-transitions/laptop-open-reveal-48.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 0,
+      "file": "qa-output/device-transitions/device-to-fullframe-0.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 7,
+      "file": "qa-output/device-transitions/device-to-fullframe-7.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 14,
+      "file": "qa-output/device-transitions/device-to-fullframe-14.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 24,
+      "file": "qa-output/device-transitions/device-to-fullframe-24.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 34,
+      "file": "qa-output/device-transitions/device-to-fullframe-34.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 41,
+      "file": "qa-output/device-transitions/device-to-fullframe-41.png"
+    },
+    {
+      "name": "device-to-fullframe",
+      "i": 48,
+      "file": "qa-output/device-transitions/device-to-fullframe-48.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 0,
+      "file": "qa-output/device-transitions/fullframe-to-device-0.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 7,
+      "file": "qa-output/device-transitions/fullframe-to-device-7.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 14,
+      "file": "qa-output/device-transitions/fullframe-to-device-14.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 24,
+      "file": "qa-output/device-transitions/fullframe-to-device-24.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 34,
+      "file": "qa-output/device-transitions/fullframe-to-device-34.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 41,
+      "file": "qa-output/device-transitions/fullframe-to-device-41.png"
+    },
+    {
+      "name": "fullframe-to-device",
+      "i": 48,
+      "file": "qa-output/device-transitions/fullframe-to-device-48.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 0,
+      "file": "qa-output/device-transitions/phone-spin-reveal-0.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 7,
+      "file": "qa-output/device-transitions/phone-spin-reveal-7.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 14,
+      "file": "qa-output/device-transitions/phone-spin-reveal-14.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 24,
+      "file": "qa-output/device-transitions/phone-spin-reveal-24.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 34,
+      "file": "qa-output/device-transitions/phone-spin-reveal-34.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 41,
+      "file": "qa-output/device-transitions/phone-spin-reveal-41.png"
+    },
+    {
+      "name": "phone-spin-reveal",
+      "i": 48,
+      "file": "qa-output/device-transitions/phone-spin-reveal-48.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 0,
+      "file": "qa-output/device-transitions/phone-barrel-roll-0.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 7,
+      "file": "qa-output/device-transitions/phone-barrel-roll-7.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 14,
+      "file": "qa-output/device-transitions/phone-barrel-roll-14.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 24,
+      "file": "qa-output/device-transitions/phone-barrel-roll-24.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 34,
+      "file": "qa-output/device-transitions/phone-barrel-roll-34.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 41,
+      "file": "qa-output/device-transitions/phone-barrel-roll-41.png"
+    },
+    {
+      "name": "phone-barrel-roll",
+      "i": 48,
+      "file": "qa-output/device-transitions/phone-barrel-roll-48.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 0,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-0.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 7,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-7.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 14,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-14.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 24,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-24.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 34,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-34.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 41,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-41.png"
+    },
+    {
+      "name": "monitor-drop-bounce",
+      "i": 48,
+      "file": "qa-output/device-transitions/monitor-drop-bounce-48.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 0,
+      "file": "qa-output/device-transitions/multi-device-wall-0.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 7,
+      "file": "qa-output/device-transitions/multi-device-wall-7.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 14,
+      "file": "qa-output/device-transitions/multi-device-wall-14.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 24,
+      "file": "qa-output/device-transitions/multi-device-wall-24.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 34,
+      "file": "qa-output/device-transitions/multi-device-wall-34.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 41,
+      "file": "qa-output/device-transitions/multi-device-wall-41.png"
+    },
+    {
+      "name": "multi-device-wall",
+      "i": 48,
+      "file": "qa-output/device-transitions/multi-device-wall-48.png"
+    }
+  ],
+  "pageErrors": [],
+  "note": "Offline sequence is rendered at 960x540/30fps by default because this cloud uses software WebGL. Use RENDER_WIDTH=1920 for full-HD regeneration. Pullback puts the outgoing video on the device and reveals the incoming frame behind it."
+}

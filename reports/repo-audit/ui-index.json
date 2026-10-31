@@ -1,0 +1,1520 @@
+[
+  {
+    "file": "src/main.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/Studio.tsx",
+    "test_ids": [
+      "clip-marker-flag",
+      "exit-focus-btn",
+      "focus-mode-banner",
+      "graph-svg-canvas",
+      "media-library",
+      "preview-stage",
+      "three-canvas-wrapper",
+      "timeline-clip",
+      "timeline-marker",
+      "timeline-marker-group",
+      "timeline-splitter",
+      "timeline-transition"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/App.tsx",
+    "test_ids": [
+      "studio-scene",
+      "transition-wave"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/TopBar.tsx",
+    "test_ids": [
+      "ai-connection-card",
+      "ai-connection-status",
+      "composition-settings-button",
+      "cursor-test-playground",
+      "desktop-badge",
+      "dockers-active-mode",
+      "export-omni-option",
+      "export-options-toggle",
+      "export-video-btn",
+      "finetune-base",
+      "finetune-download",
+      "finetune-epochs",
+      "finetune-job",
+      "finetune-poll",
+      "finetune-stats",
+      "finetune-submit",
+      "finetune-suffix",
+      "help-info-button",
+      "import-input",
+      "layout-popup",
+      "model-equivalent-other",
+      "model-equivalents",
+      "model-option",
+      "no-subset-export",
+      "obj-export-loss-warning",
+      "omni-project-input",
+      "omni-project-status",
+      "open-layout-manager-btn",
+      "open-omni-project",
+      "playground-drag-item",
+      "playground-drop-target",
+      "playground-help-btn",
+      "png-export-loss-warning",
+      "reset-context-menu-btn",
+      "reset-cursor-btn",
+      "reset-shortcuts-btn",
+      "save-omni-project",
+      "setting-ai-api-key",
+      "setting-ai-model",
+      "setting-ai-provider",
+      "settings-appearance",
+      "settings-button",
+      "settings-category",
+      "settings-context-menu-section",
+      "settings-cursor-section",
+      "settings-dockers",
+      "settings-popup",
+      "settings-search-results",
+      "settings-shortcuts-section",
+      "subset-export-menu",
+      "subset-export-obj-option",
+      "subset-export-png-option",
+      "subset-export-video-option",
+      "toggle-cursor-badges",
+      "toggle-cursor-burst",
+      "toggle-cursor-drag-pill",
+      "toggle-cursor-drop-reticle",
+      "toggle-custom-cursor",
+      "toggle-hide-overflow-x",
+      "training-center",
+      "video-export-loss-warning",
+      "workspace-layout-btn"
+    ],
+    "labels": [
+      "AI API key",
+      "AI model ID",
+      "AI provider",
+      "Close settings",
+      "Composition settings",
+      "Content-aware export formats",
+      "Custom AI endpoint",
+      "Drop frame timecode",
+      "Help and settings",
+      "Help and specifications",
+      "Hide horizontal overflow",
+      "History actions",
+      "Import media",
+      "Import media files",
+      "Model capability",
+      "More export formats",
+      "OmniFrame project",
+      "Open OmniFrame project",
+      "Open OmniFrame project file",
+      "Preview quality",
+      "Project exports",
+      "Project frame rate",
+      "Reduce motion",
+      "Save .omni \u2014 complete OmniFrame project",
+      "Search settings",
+      "Settings",
+      "Settings categories",
+      "Workspace Layout",
+      "Workspace Layouts",
+      "Workspace layout"
+    ]
+  },
+  {
+    "file": "src/components/ui.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/DesktopPackPanel.tsx",
+    "test_ids": [
+      "desktop-pack-panel",
+      "pack-brief-backdrop",
+      "pack-brief-build",
+      "pack-brief-captions",
+      "pack-brief-duration",
+      "pack-brief-export",
+      "pack-brief-file",
+      "pack-brief-format",
+      "pack-brief-note",
+      "pack-brief-style",
+      "pack-brief-title",
+      "pack-browser-open-btn",
+      "pack-desktop-mac",
+      "pack-desktop-win",
+      "pack-open-3d",
+      "pack-recipe-note",
+      "pack-scene-builder",
+      "pack-search",
+      "pack-search-empty",
+      "pack-section-strip"
+    ],
+    "labels": [
+      "Desktop Pack sections",
+      "Search Desktop Pack"
+    ]
+  },
+  {
+    "file": "src/components/ThreePanel.tsx",
+    "test_ids": [
+      "activate-3d-preset-btn",
+      "camera-paint-toggle",
+      "clear-three-mask-selection",
+      "make-texture-unique-btn",
+      "open-drawing-mask-tools",
+      "texture-shared-badge",
+      "three-mask-mode-off",
+      "three-mask-mode-scene",
+      "three-mask-mode-viewport",
+      "three-mask-selection-status",
+      "three-mask-target-geometry",
+      "three-mask-target-material",
+      "three-mask-to-drawing-selection",
+      "three-panel",
+      "threed-mask-export-note",
+      "threed-mask-subtool",
+      "threed-mask-transfer-note",
+      "threed-materials-section",
+      "threed-paint-section",
+      "threed-submode-mask-btn",
+      "threed-submode-materials-btn",
+      "threed-submode-paint-btn"
+    ],
+    "labels": [
+      "3D mask selection mode",
+      "3D scene controls, scrollable",
+      "Clear 3D mask selection",
+      "Make texture unique",
+      "Scene mask target type"
+    ]
+  },
+  {
+    "file": "src/components/Timeline.tsx",
+    "test_ids": [
+      "add-marker-btn",
+      "auto-beat-close",
+      "auto-beat-place-clip",
+      "auto-beat-place-timeline",
+      "auto-beat-popup",
+      "auto-beat-summary",
+      "breadcrumb-back-button",
+      "clip-effects-badge",
+      "clip-marker-flag",
+      "clip-marker-layer",
+      "clip-waveform",
+      "compound-cut-void-head",
+      "compound-cut-void-tail",
+      "context-menu-auto-beat",
+      "context-menu-create-compound-clip",
+      "context-menu-custom-auto-beat",
+      "context-menu-open-compound-clip",
+      "context-menu-uncompound-clip",
+      "ctx-fx-browse",
+      "ctx-fxmenu-del",
+      "ctx-fxmenu-dup",
+      "ctx-fxmenu-edit",
+      "ctx-fxmenu-toggle",
+      "ctx-group-btn",
+      "ctx-new-null-btn",
+      "ctx-template-apply",
+      "ctx-template-capture",
+      "ctx-track-add-above",
+      "ctx-track-add-below",
+      "ctx-track-delete",
+      "ctx-ungroup-btn",
+      "current-time",
+      "custom-beat-end",
+      "custom-beat-scan",
+      "custom-beat-start",
+      "export-range-clear",
+      "export-range-shade-l",
+      "export-range-shade-r",
+      "gap-select-banner",
+      "gap-select-done",
+      "gap-select-mode-btn",
+      "gap-select-overlay",
+      "group-band",
+      "marker-group-count",
+      "marker-group-popover",
+      "marker-group-row",
+      "marker-menu-delete",
+      "marker-menu-delete-all-here",
+      "marker-menu-edit",
+      "marker-menu-jump",
+      "marker-menu-to-clip",
+      "marker-menu-to-timeline",
+      "null-tile-overlay",
+      "ruler-label",
+      "ruler-tick",
+      "sequence-breadcrumbs-bar",
+      "snapping-toggle",
+      "speed-menu",
+      "speed-menu-button",
+      "timeline-clip",
+      "timeline-context-menu",
+      "timeline-dock-back-btn",
+      "timeline-drag-ghost",
+      "timeline-drop-indicator",
+      "timeline-insertion-line",
+      "timeline-lanes",
+      "timeline-marquee",
+      "timeline-media-mode",
+      "timeline-popout-btn",
+      "timeline-ruler",
+      "timeline-scale",
+      "timeline-split-btn",
+      "timeline-transition",
+      "timeline-transport-group",
+      "toggle-graph-editor-btn",
+      "tool-menu",
+      "tool-menu-button",
+      "track-add-above",
+      "track-add-below",
+      "track-close-gaps",
+      "track-close-gaps-ctx",
+      "track-delete",
+      "track-header",
+      "track-kind-badge-audio",
+      "track-kind-badge-compound",
+      "track-kind-badge-image",
+      "track-kind-badge-text",
+      "track-kind-badge-threed",
+      "track-kind-badge-video",
+      "track-target-all",
+      "track-target-clear",
+      "track-target-menu",
+      "track-target-menu-btn",
+      "transition-trim-left",
+      "transition-trim-right",
+      "trim-left",
+      "trim-right",
+      "work-area-cluster"
+    ],
+    "labels": [
+      "Add marker",
+      "Back to parent timeline",
+      "Close beat dialog",
+      "Current playhead time and sequence duration",
+      "Custom playback speed",
+      "Hidden clip",
+      "Master audio level",
+      "Playback navigation",
+      "Playback transport",
+      "Pop timeline out into a floating window",
+      "Split at playhead",
+      "Timeline edit tools",
+      "Timeline markers",
+      "Timeline tracks, scrollable",
+      "Timeline zoom",
+      "Timeline zoom and snapping",
+      "Toggle snapping",
+      "Track targeting",
+      "Track targeting and gap tools"
+    ]
+  },
+  {
+    "file": "src/components/TemplatePickerModal.tsx",
+    "test_ids": [
+      "apply-template-btn",
+      "close-template-modal-btn",
+      "template-picker-modal",
+      "template-slot-card"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/TextPanel.tsx",
+    "test_ids": [
+      "add-new-title-btn",
+      "add-text-clip-btn",
+      "cursor-custom-image",
+      "cursor-custom-status",
+      "cursor-custom-text",
+      "cursor-forme-window",
+      "font-import-btn",
+      "font-import-input",
+      "fonts-manager",
+      "fonts-status",
+      "preset-caps",
+      "preset-color-input",
+      "preset-cursor-forme-btn",
+      "preset-glow-enabled",
+      "preset-glow-lock-note",
+      "preset-glow-sharp",
+      "preset-graph-select",
+      "preset-guidance",
+      "preset-seed-input",
+      "preset-settings",
+      "preset-shadow-color",
+      "preset-shadow-enabled",
+      "preset-text-input",
+      "preset-tw-cursor-select",
+      "retro-build-btn",
+      "retro-color-input",
+      "retro-method-effects",
+      "retro-method-traditional",
+      "retro-seed-input",
+      "retro-sub-input",
+      "retro-text-input",
+      "retro-text-studio",
+      "subtitle-import-btn",
+      "subtitle-import-input",
+      "text-color-picker",
+      "text-font-select",
+      "text-panel",
+      "text-preset-library",
+      "text-presets-section",
+      "text-styling-section",
+      "text-submode-library-btn",
+      "text-submode-presets-btn",
+      "text-submode-retro-btn",
+      "text-submode-styling-btn",
+      "text-submode-watermark-btn",
+      "text-title-input",
+      "watermark-studio",
+      "wm-build-btn",
+      "wm-char-select",
+      "wm-color-input",
+      "wm-corner-select",
+      "wm-save-btn",
+      "wm-text-input",
+      "wm-voice-select"
+    ],
+    "labels": [
+      "Character or logo image",
+      "Font family",
+      "Font size",
+      "Glow direction",
+      "Preview Title",
+      "Preview new title",
+      "Retro method",
+      "Shadow direction",
+      "Stamp corner",
+      "Text colour",
+      "Text content",
+      "Voice tag audio",
+      "Watermark level"
+    ]
+  },
+  {
+    "file": "src/components/AudioPitchTempoPanel.tsx",
+    "test_ids": [
+      "audio-pitch-tempo-character",
+      "audio-pitch-tempo-clip-select",
+      "audio-pitch-tempo-error",
+      "audio-pitch-tempo-mute-source",
+      "audio-pitch-tempo-panel",
+      "audio-pitch-tempo-pitch",
+      "audio-pitch-tempo-progress",
+      "audio-pitch-tempo-render",
+      "audio-pitch-tempo-reset",
+      "audio-pitch-tempo-status",
+      "audio-pitch-tempo-success",
+      "audio-pitch-tempo-tempo",
+      "audio-pitch-tempo-toggle"
+    ],
+    "labels": [
+      "Pitch shift audio character",
+      "Pitch shift in semitones",
+      "Reset pitch and tempo settings",
+      "Source audio clip for pitch and tempo rendering",
+      "Tempo playback speed percentage"
+    ]
+  },
+  {
+    "file": "src/components/RightPanel.tsx",
+    "test_ids": [
+      "add-adjustment-mask-btn",
+      "add-clip-mask-btn",
+      "adjustment-layer-scope-note",
+      "adjustment-mask-controls",
+      "adjustment-mask-shape",
+      "ae-tool-rack",
+      "apply-audio-isolation-btn",
+      "audio-isolation-controls",
+      "audio-isolation-mode-dropdown",
+      "audio-isolation-model-dropdown",
+      "audio-isolation-naturalpitch-toggle",
+      "audio-isolation-speedfix-toggle",
+      "audio-isolation-strength-row",
+      "audio-isolation-strength-slider",
+      "audio-isolation-vad-toggle",
+      "audio-loudness-apply-btn",
+      "audio-loudness-checkbox",
+      "audio-loudness-controls",
+      "audio-loudness-measured",
+      "audio-loudness-remasure-btn",
+      "audio-loudness-status",
+      "audio-loudness-target-label",
+      "audio-loudness-target-slider",
+      "audio-voice-isolation-checkbox",
+      "clip-blend-select",
+      "clip-mask-controls",
+      "clip-mask-draw-btn",
+      "clip-mask-enabled",
+      "clip-mask-from-selection-btn",
+      "clip-mask-shape",
+      "inspector-dock-btn",
+      "inspector-dock-btn-rail",
+      "inspector-float-btn",
+      "inspector-open-compound-btn",
+      "inspector-panel",
+      "inspector-rail-float-btn",
+      "inspector-uncluster-btn",
+      "inspector-uncompound-btn",
+      "invert-adjustment-mask",
+      "mask-mode-inside-btn",
+      "mask-mode-outside-btn",
+      "mask-view-add-keyframe",
+      "mask-view-clear-points",
+      "mask-view-curved",
+      "mask-view-custom-controls",
+      "mask-view-flip-h",
+      "mask-view-flip-side",
+      "mask-view-flip-v",
+      "mask-view-font",
+      "mask-view-font-upload",
+      "mask-view-keyframes",
+      "mask-view-split-controls",
+      "mask-view-text",
+      "mask-view-text-controls",
+      "masking-roto-section",
+      "mcp-console",
+      "mcp-copy-log",
+      "mcp-help",
+      "mcp-refresh",
+      "mr-guided-matte",
+      "mr-mask-view",
+      "mr-roto",
+      "pivot-controls",
+      "pivot-edit-toggle",
+      "remove-adjustment-mask-btn",
+      "remove-clip-mask-btn",
+      "right-panel-float-header",
+      "right-panel-float-resize",
+      "right-panel-float-window",
+      "right-panel-resize-handle",
+      "right-subtool-masking-body",
+      "right-subtool-rotomask-body",
+      "right-subtool-smart-patch-body",
+      "speed-curve-group"
+    ],
+    "labels": [
+      "Add view keyframe at playhead",
+      "Clip blend mode",
+      "Clip name",
+      "Decompose compound clip",
+      "Dock inspector",
+      "Extract audio",
+      "Flip horizontal",
+      "Flip vertical",
+      "Float inspector into a movable window",
+      "Guided rect matte",
+      "Hide inspector",
+      "Isolation strength",
+      "Mask mode",
+      "Mask view kind",
+      "Open compound clip timeline",
+      "Resize inspector width",
+      "Resize inspector window",
+      "Roto brush mask sub-tool",
+      "Sub-tools",
+      "Target loudness in LUFS",
+      "Toggle selection mask view"
+    ]
+  },
+  {
+    "file": "src/components/AspectRatioSelector.tsx",
+    "test_ids": [
+      "custom-height-input",
+      "custom-ratio-editor",
+      "custom-ratio-error",
+      "custom-width-input",
+      "ratio-icon-9-16-stack",
+      "ratio-platform-tooltip",
+      "ratio-popover",
+      "ratio-selector-btn",
+      "reset-custom-ratio-btn",
+      "toggle-ratio-lock-btn"
+    ],
+    "labels": [
+      "Aspect Ratio Presets",
+      "Custom height",
+      "Custom width"
+    ]
+  },
+  {
+    "file": "src/components/SelectionMaskSubTool.tsx",
+    "test_ids": [
+      "apply-guided-matte-to-drawing-btn",
+      "apply-recolor-btn",
+      "autobrush-toggle",
+      "autobrush-tolerance",
+      "clear-guided-matte-btn",
+      "convert-mask-layer-btn",
+      "convert-to-omniframe-obj-btn",
+      "guided-cutout-preview",
+      "guided-hint-center-btn",
+      "guided-matte-export-scope-note",
+      "guided-matte-preview",
+      "guided-matte-status",
+      "guided-rect-bg-removal-btn",
+      "mask-export-scope-note",
+      "mask-mode-cutout-btn",
+      "mask-mode-matte-btn",
+      "mask-mode-rubylith-btn",
+      "recolor-custom-picker",
+      "selection-mask-subtool",
+      "subtool-clear-btn",
+      "subtool-grow-btn",
+      "subtool-invert-btn",
+      "subtool-shrink-btn",
+      "toggle-show-mask-btn",
+      "wand-tolerance"
+    ],
+    "labels": [
+      "Choose custom recolor",
+      "Clear Selection",
+      "Convert selection to Drawing paint-layer mask",
+      "Detected objects",
+      "Grow Selection",
+      "Invert Selection",
+      "Selection adjustment actions",
+      "Selection tools",
+      "Shrink Selection"
+    ]
+  },
+  {
+    "file": "src/components/SelectionSubToolBar.tsx",
+    "test_ids": [
+      "floating-clear-btn",
+      "floating-convert-omniframe-btn",
+      "floating-invert-btn",
+      "floating-recolor-blue-btn",
+      "floating-recolor-red-btn",
+      "floating-toggle-mask-btn",
+      "selection-floating-toolbar"
+    ],
+    "labels": [
+      "Clear Selection",
+      "Invert Selection",
+      "Recolor Blue",
+      "Recolor Red",
+      "Selection actions",
+      "Selection mode",
+      "Selection shape",
+      "Selection tools",
+      "Show Mask",
+      "To Object: convert selection to a movable OmniFrame object"
+    ]
+  },
+  {
+    "file": "src/components/CompositionSettingsModal.tsx",
+    "test_ids": [
+      "comp-bg",
+      "comp-fps",
+      "comp-height",
+      "comp-width",
+      "composition-settings-modal"
+    ],
+    "labels": [
+      "Close composition settings",
+      "Composition settings"
+    ]
+  },
+  {
+    "file": "src/components/EffectsPanel.tsx",
+    "test_ids": [
+      "clear-uploaded-luts-btn",
+      "clip-effect-summary",
+      "clip-effects-controls",
+      "clip-effects-empty",
+      "clip-fx-layers",
+      "custom-effect-name",
+      "custom-effect-notice",
+      "custom-effects",
+      "custom-effects-empty",
+      "effect-layer-presets",
+      "effects-panel",
+      "fx-catalog-browser",
+      "fx-catalog-count",
+      "fx-catalog-grid",
+      "fx-catalog-more",
+      "fx-catalog-note",
+      "fx-catalog-search",
+      "import-custom-effects-btn",
+      "import-custom-effects-input",
+      "light-color",
+      "light-controls",
+      "lut-category-uploaded",
+      "lut-empty-state",
+      "lut-gallery",
+      "lut-look-description",
+      "lut-look-grid",
+      "lut-looks-section",
+      "lut-search",
+      "lut-search-section",
+      "lut-show-all",
+      "lut-style-section",
+      "lut-upload-error",
+      "new-adjustment-layer-btn",
+      "placed-adjustments",
+      "placed-adjustments-empty",
+      "preview-selected-clip-btn",
+      "reset-effects-btn",
+      "save-custom-effect-btn",
+      "shake-pack",
+      "shake-pack-msg",
+      "upload-lut-btn",
+      "upload-lut-input"
+    ],
+    "labels": [
+      "Available LUT looks",
+      "Clear LUT search",
+      "Effect categories",
+      "Filter LUT looks by style",
+      "Find or import looks",
+      "Search LUT looks"
+    ]
+  },
+  {
+    "file": "src/components/SectionsNav.tsx",
+    "test_ids": [
+      "section-tab-${CSS.escape(id)}",
+      "sections-icon-rail",
+      "sections-tablist"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/ReplaceDialog.tsx",
+    "test_ids": [
+      "replace-carry-fx",
+      "replace-confirm",
+      "replace-dialog",
+      "replace-filmstrip",
+      "replace-preview",
+      "replace-timecode",
+      "replace-window"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/FxStackSection.tsx",
+    "test_ids": [
+      "fxstack-add",
+      "fxstack-empty",
+      "fxstack-list",
+      "fxstack-not-allowed"
+    ],
+    "labels": [
+      "Effect in point (seconds into the clip)",
+      "Effect length (seconds)"
+    ]
+  },
+  {
+    "file": "src/components/OmniFramePanel.tsx",
+    "test_ids": [
+      "omni-extract-btn",
+      "omni-main-element-btn",
+      "omni-patchunder-btn",
+      "omni-transparent-btn",
+      "omniframe-auto-arrange-btn",
+      "omniframe-cut-to-track-btn",
+      "omniframe-delete-infill-btn",
+      "omniframe-delete-permanent-btn",
+      "omniframe-panel",
+      "omniframe-restore-btn",
+      "omniframe-section-nav",
+      "omniframe-submode-recolor-btn",
+      "omniframe-submode-selection-btn",
+      "omniframe-submode-shift-btn",
+      "omniframe-verification-table",
+      "switch-asset-deathnote-btn",
+      "switch-asset-room-btn"
+    ],
+    "labels": [
+      "Character list, scrollable",
+      "Choose an asset to edit by region",
+      "Cut character to track",
+      "Delete and infill character",
+      "OmniFrame quick tools",
+      "OmniFrame workflow steps",
+      "Remove character",
+      "Restore character"
+    ]
+  },
+  {
+    "file": "src/components/AudioMeter.tsx",
+    "test_ids": [
+      "audio-master-mute-btn",
+      "audio-vu-meter",
+      "master-volume-slider",
+      "vu-meter-db-value",
+      "vu-meter-left-bar",
+      "vu-meter-right-bar"
+    ],
+    "labels": [
+      "Master volume"
+    ]
+  },
+  {
+    "file": "src/components/AudioRecorderPanel.tsx",
+    "test_ids": [
+      "audio-recorder-error",
+      "audio-recorder-panel",
+      "audio-recorder-start",
+      "audio-recorder-status",
+      "audio-recorder-stop",
+      "audio-recorder-success",
+      "audio-recorder-timer",
+      "audio-recorder-toggle"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/DrawingPanel.tsx",
+    "test_ids": [
+      "active-attach-frames-label",
+      "add-paint-layer-btn",
+      "apply-to-all-frames-toggle",
+      "attach-directly-to-video-toggle",
+      "attach-frame-count-input",
+      "attach-frame-decrement",
+      "attach-frame-increment",
+      "brush-pressure-opacity-checkbox",
+      "brush-pressure-size-checkbox",
+      "convert-drawing-report",
+      "convert-drawing-to-clips-btn",
+      "current-cel-badge",
+      "drawing-layer-compositing-note",
+      "drawing-merge-source-select",
+      "drawing-mode-toggle",
+      "drawing-panel",
+      "drawing-toolbox",
+      "exit-mask-editing-btn",
+      "imported-palettes",
+      "layer-blend-mode-select",
+      "layer-blur-slider",
+      "layer-opacity-slider",
+      "mask-editing-banner",
+      "mask-swatch-black",
+      "mask-swatch-gray",
+      "mask-swatch-white",
+      "onion-tint-strength-slider",
+      "palette-import-btn",
+      "palette-import-input",
+      "palette-status",
+      "panel-cel-hold-frames",
+      "panel-fill-tolerance-slider",
+      "panel-gradient-color-input",
+      "panel-gradient-transparent-btn",
+      "panel-onion-skin-toggle",
+      "panel-polygon-sides-slider",
+      "panel-preserve-luminance-checkbox",
+      "panel-shape-filled-checkbox",
+      "panel-step-next-cel",
+      "panel-step-prev-cel",
+      "stroke-count",
+      "view-as-layers-toggle"
+    ],
+    "labels": [
+      "Apply to frames",
+      "Convert drawing to clips",
+      "Decrease frames to attach",
+      "Drawing colour",
+      "Drawing layer behaviour",
+      "Drawing paint layer blend mode",
+      "Drawing toolbox",
+      "Frame hold presets",
+      "Frames to attach",
+      "Gradient colour",
+      "Increase frames to attach",
+      "Paint layers, scrollable",
+      "View videos as layers"
+    ]
+  },
+  {
+    "file": "src/components/PackBrowserModal.tsx",
+    "test_ids": [
+      "pack-browser-back",
+      "pack-browser-close",
+      "pack-browser-empty",
+      "pack-browser-folder-all",
+      "pack-browser-folder-bundles",
+      "pack-browser-modal",
+      "pack-browser-search",
+      "pack-browser-tag-all"
+    ],
+    "labels": [
+      "Close pack browser",
+      "Desktop pack browser"
+    ]
+  },
+  {
+    "file": "src/components/VoiceIsolationModal.tsx",
+    "test_ids": [
+      "cancel-voice-isolation-btn",
+      "close-voice-isolation-modal",
+      "execute-voice-isolation-btn",
+      "mode-keep-vocal-btn",
+      "mode-remove-vocal-btn",
+      "preserve-bass-toggle",
+      "speech-focus-toggle",
+      "voice-isolation-clip-select",
+      "voice-isolation-error-alert",
+      "voice-isolation-modal",
+      "voice-isolation-progress-card",
+      "voice-isolation-strength-slider",
+      "voice-isolation-success-alert"
+    ],
+    "labels": [
+      "Isolation strength"
+    ]
+  },
+  {
+    "file": "src/components/FloatingWindow.tsx",
+    "test_ids": [],
+    "labels": [
+      "Hide panel"
+    ]
+  },
+  {
+    "file": "src/components/WorkspaceSchematic.tsx",
+    "test_ids": [
+      "workspace-schematic"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/ModelLoadOverlay.tsx",
+    "test_ids": [
+      "model-load-bar",
+      "model-load-card",
+      "model-load-fill",
+      "model-load-overlay"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/Preview.tsx",
+    "test_ids": [
+      "apply-visual-preview",
+      "asset-play-pause-btn",
+      "asset-rewind-btn",
+      "asset-transport-bar",
+      "clip-mask-outline",
+      "clip-mask-overlay",
+      "clip-mask-split-line",
+      "clip-mask-split-rotate",
+      "close-asset-preview-btn",
+      "omniframe-canvas-overlay",
+      "pivot-anchor-handle",
+      "preview-3d-stage",
+      "preview-asset-detail",
+      "preview-asset-detail-name",
+      "preview-asset-stage",
+      "preview-asset-video",
+      "preview-stage",
+      "preview-viewport",
+      "preview-zoom-slider",
+      "quick-bar-delete",
+      "quick-bar-effects",
+      "quick-bar-split",
+      "quick-bar-text",
+      "selection-quick-bar",
+      "stop-visual-preview",
+      "three-canvas-wrapper",
+      "timeline-sequence-indicator",
+      "toggle-3d-btn",
+      "toggle-drawing-btn",
+      "visual-preview-actions"
+    ],
+    "labels": [
+      "Auto fit preview",
+      "Delete selected clip",
+      "Preview zoom",
+      "Return to timeline sequence",
+      "Rewind asset to start",
+      "Seek source media",
+      "Selected clip quick actions",
+      "Toggle 3D View"
+    ]
+  },
+  {
+    "file": "src/components/MediaPanel.tsx",
+    "test_ids": [
+      "add-to-timeline-btn",
+      "alight-xml-export",
+      "alight-xml-import",
+      "alight-xml-input",
+      "asset-info-btn",
+      "close-media-info-modal",
+      "layered-artwork-details",
+      "media-asset",
+      "media-import-btn",
+      "media-import-notice",
+      "media-info-modal",
+      "media-library",
+      "media-search",
+      "media-type-filter",
+      "panel-all-import-input",
+      "template-xml-export"
+    ],
+    "labels": [
+      "Dismiss import message",
+      "Filter media by type",
+      "Import media files",
+      "Media File Technical Specifications"
+    ]
+  },
+  {
+    "file": "src/components/Rigging.tsx",
+    "test_ids": [
+      "puppet-artwork"
+    ],
+    "labels": [
+      "Rigging tool"
+    ]
+  },
+  {
+    "file": "src/components/StoryboardPanel.tsx",
+    "test_ids": [
+      "storyboard-empty",
+      "storyboard-panel",
+      "storyboard-summary"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/LinkPanel.tsx",
+    "test_ids": [
+      "active-group-card",
+      "active-link-card",
+      "add-null-btn",
+      "arrange-linked-btn",
+      "arrange-success-alert",
+      "create-linkset-btn",
+      "group-selection-btn",
+      "link-panel",
+      "link-target-select",
+      "parent-relationship-card",
+      "remove-parenting-btn",
+      "ungroup-btn",
+      "unlink-set-btn"
+    ],
+    "labels": [
+      "Arrange linked elements",
+      "Link target clip"
+    ]
+  },
+  {
+    "file": "src/components/ViewportMenu.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/DrawingCanvasOverlay.tsx",
+    "test_ids": [
+      "drawing-canvas"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/TrackingPanel.tsx",
+    "test_ids": [
+      "add-mask-btn",
+      "add-track-point-btn",
+      "apply-tracking-transform-btn",
+      "bake-track-to-null-btn",
+      "clear-track-points-btn",
+      "convert-drawing-to-mask-btn",
+      "convert-mask-to-filled-selection-btn",
+      "convert-mask-to-shape-selection-btn",
+      "convert-selection-to-mask-btn",
+      "mask-apply-all-frames-toggle",
+      "mask-expansion-slider",
+      "mask-feather-slider",
+      "mask-invert-toggle",
+      "mask-opacity-slider",
+      "run-track-backward-btn",
+      "run-track-forward-btn",
+      "track-mode-main",
+      "track-mode-mask",
+      "track-point-item",
+      "tracking-confidence-slider",
+      "tracking-forward-backward-toggle",
+      "tracking-panel",
+      "tracking-panel-empty",
+      "tracking-progress-card",
+      "tracking-result-card",
+      "tracking-search-window-slider"
+    ],
+    "labels": [
+      "Clip masks",
+      "Convert drawing to mask",
+      "Convert mask to filled selection",
+      "Convert mask to shape selection",
+      "Convert selection to mask",
+      "Mask and selection conversions",
+      "Mask shapes",
+      "Masking and tracking controls, scrollable",
+      "Selection shape tools",
+      "Track forward or backward",
+      "Tracking mode"
+    ]
+  },
+  {
+    "file": "src/components/SmartPatchSubTool.tsx",
+    "test_ids": [
+      "smart-patch-feather",
+      "smart-patch-omniframe-scope",
+      "smart-patch-radius",
+      "smart-patch-range-end",
+      "smart-patch-range-start",
+      "smart-patch-range-step",
+      "smart-patch-selection-btn",
+      "smart-patch-set-source",
+      "smart-patch-status",
+      "smart-patch-subtool",
+      "smart-patch-target-tool"
+    ],
+    "labels": [
+      "Clear Smart Patch donor",
+      "Smart Patch frame scope"
+    ]
+  },
+  {
+    "file": "src/components/ClipFilmstrip.tsx",
+    "test_ids": [
+      "clip-filmstrip",
+      "clip-filmstrip-tile"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/Tooltip.tsx",
+    "test_ids": [
+      "of-tooltip"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/TransitionsPanel.tsx",
+    "test_ids": [
+      "transition-base-loaded",
+      "transition-duration-slider",
+      "transition-duration-value",
+      "transition-placed-notice",
+      "transition-preview-notice",
+      "transition-requirement",
+      "transition-variant-list",
+      "transitions-panel"
+    ],
+    "labels": [
+      "Transition duration in seconds (0.1 to 5)"
+    ]
+  },
+  {
+    "file": "src/components/BackgroundRemovalModal.tsx",
+    "test_ids": [
+      "apply-bg-removal-btn",
+      "apply-mask-layer-btn",
+      "bg-blur-slider",
+      "bg-choke-slider",
+      "bg-feather-slider",
+      "bg-removal-mask-scope-note",
+      "bg-removal-modal",
+      "bg-solid-color-picker",
+      "bg-temporal-smoothing-toggle",
+      "cancel-bg-removal-btn",
+      "close-bg-removal-btn",
+      "preview-bg-removal-btn"
+    ],
+    "labels": [
+      "Background colour",
+      "Use background-removal bounds as a temporary selection mask"
+    ]
+  },
+  {
+    "file": "src/components/ExpandableToolGroup.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/LeftDock.tsx",
+    "test_ids": [
+      "category-filters",
+      "drawing-flyout",
+      "help-open-btn",
+      "left-panel",
+      "left-panel-backdrop",
+      "left-panel-dock-back-btn",
+      "left-panel-float-placeholder",
+      "left-panel-header",
+      "left-panel-maximize-btn",
+      "left-panel-popout-btn",
+      "left-panel-resize-handle",
+      "left-tab-drawing-chevron",
+      "left-tab-effects-lut-label",
+      "sidebar-section-mode-btn",
+      "submode-back-btn",
+      "submode-focused-title",
+      "tool-finder-backdrop",
+      "tool-finder-dialog",
+      "tool-finder-empty",
+      "tool-finder-open",
+      "tool-finder-results",
+      "tool-finder-search"
+    ],
+    "labels": [
+      "Clear tool search",
+      "Close tool finder",
+      "Collapse panel",
+      "Dismiss sub-mode",
+      "Drawing sub-tools",
+      "Find a tool or panel",
+      "Open help: tutorials and info",
+      "Panel contents, scrollable",
+      "Pop panel out into a floating window",
+      "Resize media panel width",
+      "Tool categories"
+    ]
+  },
+  {
+    "file": "src/components/PanelSection.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/SegmentCarousel.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/ThreeViewer.tsx",
+    "test_ids": [
+      "aim-composite-btn",
+      "aim-object-btn",
+      "aim-video-btn",
+      "blender-mode-animation",
+      "blender-mode-camera",
+      "blender-mode-object",
+      "blender-mode-texturing",
+      "blender-modes-toolbar",
+      "camera-aim-status",
+      "camera-safe-frame",
+      "grid-toggle-btn",
+      "material-color-picker",
+      "reset-camera-btn",
+      "texturing-material-panel",
+      "three-canvas-wrapper",
+      "three-hud-toolbar",
+      "three-mask-selection-outline",
+      "three-play-btn",
+      "three-viewer-container",
+      "three-viewport-mask-draft",
+      "three-viewport-mask-layer",
+      "wireframe-toggle-btn"
+    ],
+    "labels": [
+      "Material diffuse colour"
+    ]
+  },
+  {
+    "file": "src/components/CollapseChip.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/DrawingToolbar.tsx",
+    "test_ids": [
+      "clear-drawing-strokes-btn",
+      "close-drawing-mode-btn",
+      "drawing-color-picker",
+      "drawing-group-row",
+      "drawing-size-slider",
+      "drawing-toolbar"
+    ],
+    "labels": [
+      "Clear drawing strokes",
+      "Close drawing mode",
+      "Custom color picker",
+      "Stroke width"
+    ]
+  },
+  {
+    "file": "src/components/MarkerPopup.tsx",
+    "test_ids": [
+      "marker-add-color-btn",
+      "marker-close-btn",
+      "marker-custom-color-input",
+      "marker-custom-swatch",
+      "marker-delete-btn",
+      "marker-label-input",
+      "marker-notes-input",
+      "marker-popup",
+      "marker-scope-clip",
+      "marker-scope-timeline"
+    ],
+    "labels": [
+      "Close marker editor",
+      "Delete marker",
+      "Marker editor",
+      "Marker purpose",
+      "Next marker",
+      "Previous marker"
+    ]
+  },
+  {
+    "file": "src/components/SlideDock.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/HelpModal.tsx",
+    "test_ids": [
+      "help-close-btn",
+      "help-modal"
+    ],
+    "labels": [
+      "Close help",
+      "Help \u2014 tutorials and info"
+    ]
+  },
+  {
+    "file": "src/components/HScrollStrip.tsx",
+    "test_ids": [],
+    "labels": [
+      "Scroll left",
+      "Scroll right"
+    ]
+  },
+  {
+    "file": "src/components/LayoutManagerModal.tsx",
+    "test_ids": [
+      "close-layout-modal",
+      "custom-workspace-name-input",
+      "layout-manager-modal",
+      "reset-layout-default-btn",
+      "save-custom-workspace-btn",
+      "tab-custom",
+      "tab-focus",
+      "tab-presets"
+    ],
+    "labels": [
+      "Workspace Layout Manager"
+    ]
+  },
+  {
+    "file": "src/components/RotoMaskSubTool.tsx",
+    "test_ids": [
+      "roto-apply-note",
+      "roto-brush-add-btn",
+      "roto-brush-radius",
+      "roto-brush-remove-btn",
+      "roto-catalog-btn",
+      "roto-clear-btn",
+      "roto-click-add-btn",
+      "roto-clicks-summary",
+      "roto-cutout-preview",
+      "roto-donor-direction",
+      "roto-donor-window",
+      "roto-extract-btn",
+      "roto-frames-strip",
+      "roto-import-btn",
+      "roto-import-input",
+      "roto-inpaint-analyze",
+      "roto-inpaint-apply",
+      "roto-inpaint-auto-source",
+      "roto-inpaint-candidates",
+      "roto-inpaint-progress",
+      "roto-inpaint-propagation",
+      "roto-inpaint-status",
+      "roto-load-model-btn",
+      "roto-luma-btn",
+      "roto-mask-grow",
+      "roto-matte-preview",
+      "roto-model-smart",
+      "roto-model-status",
+      "roto-patch-btn",
+      "roto-remove-btn",
+      "roto-scope-end",
+      "roto-scope-start",
+      "roto-scope-step",
+      "roto-to-drawing-btn",
+      "roto-tolerance",
+      "roto-track-btn",
+      "roto-track-progress",
+      "roto-undo-click-btn",
+      "rotomask-scope-note",
+      "rotomask-subtool"
+    ],
+    "labels": [
+      "Brush refine",
+      "Click modes",
+      "Community model catalog",
+      "Donor window in frames, zero means whole clip",
+      "Frame scope",
+      "Mask grow in pixels",
+      "Segmentation engine"
+    ]
+  },
+  {
+    "file": "src/components/VoiceIsolationPanel.tsx",
+    "test_ids": [
+      "isolated-asset-item",
+      "panel-add-vocal-range-btn",
+      "panel-audio-analysis-btn",
+      "panel-audio-analysis-result",
+      "panel-audio-analysis-status",
+      "panel-audio-preview-btn",
+      "panel-batch-isolate-btn",
+      "panel-create-vocal-patch-btn",
+      "panel-demucs-status",
+      "panel-engine-select",
+      "panel-error-alert",
+      "panel-execute-voice-btn",
+      "panel-manual-speed-factor",
+      "panel-manual-speed-override-toggle",
+      "panel-mode-keep-vocal",
+      "panel-mode-remove-vocal",
+      "panel-natural-pitch-toggle",
+      "panel-patch-crossfade",
+      "panel-preserve-bass-toggle",
+      "panel-processing-status",
+      "panel-separate-audio-btn",
+      "panel-source-preview-btn",
+      "panel-speech-focus-toggle",
+      "panel-speedfix-toggle",
+      "panel-stem-separate-btn",
+      "panel-strength-slider",
+      "panel-success-alert",
+      "panel-vad-toggle",
+      "panel-vocal-range-item",
+      "panel-vocal-range-jump",
+      "panel-vocal-range-list",
+      "panel-vocal-range-toggle",
+      "panel-vocal-range-workflow",
+      "panel-voice-clip-select",
+      "panel-voice-settings-btn",
+      "voice-isolation-panel"
+    ],
+    "labels": [
+      "Audio studio tools and results",
+      "Clip to process",
+      "Isolation engine",
+      "Isolation strength",
+      "Manual slowed-track correction factor",
+      "Preserve bass",
+      "Speech focus",
+      "Voice isolation settings"
+    ]
+  },
+  {
+    "file": "src/components/Landing.tsx",
+    "test_ids": [
+      "landing-feature-card",
+      "landing-page"
+    ],
+    "labels": [
+      "OmniFrame editor preview"
+    ]
+  },
+  {
+    "file": "src/components/CustomCursor.tsx",
+    "test_ids": [
+      "add-to-timeline-btn",
+      "asset-info-btn",
+      "cursor-click-burst",
+      "cursor-drag-pill",
+      "cursor-drag-plus",
+      "cursor-drop-target",
+      "cursor-help-pill",
+      "cursor-help-question",
+      "cursor-no-drop",
+      "custom-cursor-container",
+      "custom-cursor-glyph",
+      "media-asset",
+      "preview-stage",
+      "three-canvas-wrapper",
+      "timeline-clip",
+      "timeline-lanes",
+      "timeline-splitter",
+      "top-bar"
+    ],
+    "labels": []
+  },
+  {
+    "file": "src/components/InfoTip.tsx",
+    "test_ids": [],
+    "labels": []
+  },
+  {
+    "file": "src/components/GraphEditor.tsx",
+    "test_ids": [
+      "active-curve-path",
+      "close-graph-editor-btn",
+      "curve-fit-btn",
+      "curve-keyframe-node",
+      "curve-segment-band",
+      "curve-tangent-group",
+      "curve-tangent-in",
+      "curve-tangent-out",
+      "easing-copy-css-btn",
+      "easing-intensity-slider",
+      "extrapolation-mode-select",
+      "graph-curve-selector",
+      "graph-delete-keyframe-btn",
+      "graph-editor-channels",
+      "graph-editor-keyframe-controls",
+      "graph-editor-panel",
+      "graph-editor-toolbar",
+      "graph-keyframe-toggle",
+      "graph-mode-speed",
+      "graph-mode-value",
+      "graph-nav-next",
+      "graph-nav-prev",
+      "graph-playhead-line",
+      "graph-svg-canvas",
+      "preset-more-toggle"
+    ],
+    "labels": [
+      "Animatable channel",
+      "Animatable channels",
+      "Curve extrapolation mode",
+      "Easing presets",
+      "Graph editor toolbar",
+      "Keyframe editing controls",
+      "Tangent handle mode"
+    ]
+  },
+  {
+    "file": "src/components/DeviceTransitionInspector.tsx",
+    "test_ids": [],
+    "labels": [
+      "Device display fit",
+      "Device duration",
+      "Device model",
+      "Device motion"
+    ]
+  },
+  {
+    "file": "src/components/icons/BlenderRotationIcon.tsx",
+    "test_ids": [
+      "blender-rotation-icon"
+    ],
+    "labels": [
+      "Blender 3-axis rotation gizmo"
+    ]
+  }
+]

@@ -6,6 +6,8 @@
  *  → template_export (xml) → template_import → template_apply → render proof. */
 import { registry, SESSION } from '../tools/mcp/tools.mjs'
 import fs from 'fs'
+import { execFileSync } from 'node:child_process'
+import { ffmpegExe } from '../tools/mcp/core.mjs'
 let fail = 0
 const ok = (c, m) => { if (!c) { console.error('FAIL', m); fail++ } }
 const call = async (n, a) => { const r = await registry.call(n, a); ok(r.ok, `${n}: ${JSON.stringify(r.data || r.error).slice(0, 240)}`); return r.data }
@@ -63,7 +65,15 @@ ok(applied.applied.includes('effects'), 'template chain replayed after xml round
 
 const out = 'test_ans_result/xml-roundtrip.mp4'
 await call('render_export', { out, fps: 12, duration: 2 })
-ok(fs.existsSync(out) && fs.statSync(out).size > 5000, 'round-trip render proof: ' + out)
+ok(fs.existsSync(out), 'round-trip render proof: ' + out)
+if (fs.existsSync(out)) {
+  // Byte length varies with encoder versions; verify actual decoded frames
+  // and movement instead of rejecting a valid, more compressed stream.
+  const frameMd5 = execFileSync(ffmpegExe(), ['-v','error','-i',out,'-f','framemd5','-']).toString()
+  const frames = frameMd5.split('\n').filter(line => line && !line.startsWith('#'))
+  ok(frames.length === 24, 'round-trip proof decodes all 24 requested frames')
+  ok(new Set(frames.map(line => line.split(',').pop().trim())).size > 1, 'round-trip proof has changing frames')
+}
 
 console.log(fail === 0 ? 'ALIGHT XML ROUND-TRIP QA: PASS (project + template + shake pack, proof ' + out + ')' : 'ALIGHT XML ROUND-TRIP QA: FAIL ' + fail)
 process.exitCode = fail === 0 ? 0 : 1

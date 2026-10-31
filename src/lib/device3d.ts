@@ -1,40 +1,48 @@
-/**
- * device3d — procedural 3D device rigs for phone / monitor / TV transitions
- * and green-screen device overlays.
- *
- * Pipeline (as briefed, adapted to what this sandbox can honestly run):
- *   1. reference scan  — web image search over green-screen device mockups
- *      (image-search/*.png|jpg): proportions, bezel weights, stand shapes,
- *      glare language were measured off those stills.
- *   2. AI stills       — generate_image produced perfect-angle chroma-green
- *      device plates (public/devices/phone-greenscreen.png,
- *      monitor-greenscreen.png); keyDeviceImage() chroma+white-keys them into
- *      transparent overlays with a cached screen bounding box.
- *   3. NO Blender/3D MCP connector exists on Arena (checked: "unsupported") and
- *      blender.org is outside the egress allowlist — so the model is MOULDED IN
- *      CODE instead: parametric rounded-slab geometry, projected through a real
- *      perspective camera, extruded sides, perspective-correct screen texture
- *      mapping (triangle-grid affine warp), gradient-shaded metal, glare, soft
- *      shadows. Canvas2D gives native anti-aliasing.
- *   4. rig             — rigAt(kind, p) returns keyframed channels (rotY/rotX/
- *      scale/offset/fill) with cubic easing; the 3D→2D handoff expands the
- *      screen quad to the full frame while the body fades, so the transition
- *      ENDS in flat 2D.
- *   5. mp4             — rendered through the app's own render_export / QA
- *      harnesses (qa/device3d-transition.mjs).
+/** Device transitions share rig mathematics across real GLB/WebGL rendering
+ * and the perspective Canvas fallback. The browser preloads seven original
+ * Blender-authored GLBs with a separately UV-mapped ScreenSurface. The live
+ * composited incoming frame is the screen texture, including its alpha.
+ * Legacy green-screen overlays remain separate and backwards compatible.
  */
 
-export const DEVICE_KINDS = ['phone', 'monitor', 'tv'] as const
+export const DEVICE_KINDS = ['phone', 'monitor', 'tv', 'laptop'] as const
 export type DeviceKind = (typeof DEVICE_KINDS)[number]
 
+export interface DeviceRenderOptions {
+  motion?: string
+  model?: string
+  fit?: 'cover' | 'contain' | 'stretch'
+  fov?: number
+  brightness?: number
+  cameraDistance?: number
+  yaw?: number
+  pitch?: number
+  roll?: number
+  keyLight?: number
+  rimLight?: number
+  environmentLight?: number
+}
+let modelDrawer: typeof import('./deviceModelRenderer').drawModelDevice | null = null
+let modelModule: Promise<typeof import('./deviceModelRenderer')> | null = null
+export async function prepareDeviceModels(): Promise<void> {
+  if (typeof window === 'undefined') return
+  if (!modelModule) modelModule = import('./deviceModelRenderer')
+  const module = await modelModule
+  modelDrawer = module.drawModelDevice
+  await Promise.all(module.DEVICE_MODELS.map(id => module.preloadDeviceModel(id)))
+}
+export async function deviceModelsStatus() { return (await modelModule)?.deviceRendererStatus() }
 export interface DeviceRig {
   rotY: number // degrees
+  rotZ?: number // degrees
   rotX: number // degrees
   scale: number
   x: number // fraction of frame width
   y: number // fraction of frame height
   fill: number // 0 = device view, 1 = screen fills frame (2D handoff)
   bodyAlpha: number
+  staticAmount?: number
+  staticSeed?: number
 }
 
 /* ------------------------------- easing -------------------------------- */
@@ -44,8 +52,10 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a))
 
+export const DEVICE_MOTIONS = ['pop-in','rotate-reveal','screen-replace','swing-in','fullscreen-burst','static-reveal','push','pullback','screen-tunnel','device-wall','laptop-reveal','flip','perspective-zoom','orbit','crash-zoom','float-pullback','spin-reveal','barrel-roll','drop-bounce'] as const
+
 /** Keyframed rig channels for the 3D→2D device transition. */
-export function rigAt(kind: DeviceKind, p: number): DeviceRig {
+export function rigAt(kind: DeviceKind, p: number, motion = 'rotate-reveal'): DeviceRig {
   const t = clamp01(p)
   const a = seg(t, 0, 0.45) // fly-in
   const b = seg(t, 0.45, 0.8) // settle
@@ -61,7 +71,29 @@ export function rigAt(kind: DeviceKind, p: number): DeviceRig {
   const y = lerp(0.03, 0, eA)
   const fill = eC
   const bodyAlpha = 1 - easeInOutCubic(seg(t, 0.84, 0.99))
-  return { rotY, rotX, scale, x, y, fill, bodyAlpha }
+  const rig: DeviceRig = { rotY, rotX, scale, x, y, fill, bodyAlpha }
+  const enter = 1-eA, settle = 1-eB
+  switch(motion) {
+    case 'spin-reveal': rig.rotY=-360*enter; rig.rotX=12*enter; rig.scale*=1-.4*enter; break;
+    case 'barrel-roll': rig.rotZ=-120*enter; rig.rotY=-30*enter; rig.x=-.3*enter; break;
+    case 'drop-bounce': rig.y=-.7*enter+.1*Math.sin(a*Math.PI*3)*settle; rig.rotX=25*enter; rig.rotY*=.35; break;
+    case 'pop-in': rig.scale *= 1-.8*enter; rig.y += .22*enter - .04*Math.sin(a*Math.PI)*settle; rig.rotY *= .25; break;
+    case 'screen-replace': rig.rotY=0; rig.rotX=0; rig.x=0; rig.scale*=1-.25*enter; break;
+    case 'swing-in': rig.x=-.65*enter; rig.rotY=-100*enter-8*settle; break;
+    case 'fullscreen-burst': rig.scale*=1-.7*enter; rig.fill=Math.max(fill,easeInOutCubic(seg(t,.6,1))); break;
+    case 'static-reveal': rig.staticAmount=enter*.85; rig.staticSeed=Math.floor(t*30); rig.rotY=0; rig.x=Math.sin(t*170)*.015*enter; rig.scale*=1-.25*enter; break;
+    case 'push': rig.rotY=-25*enter; rig.scale*=.5+.5*eA; rig.fill=Math.max(fill,easeInOutCubic(seg(t,.65,1))); break;
+    case 'pullback': rig.fill=1-easeInOutCubic(seg(t,0,.65)); rig.rotY=25*Math.sin(t*Math.PI)*settle; rig.scale*=1-.3*eA; rig.x=.15*eA; break;
+    case 'screen-tunnel': rig.rotY=40*Math.sin(t*Math.PI*3)*enter; rig.scale*=1-.7*enter; break;
+    case 'device-wall': rig.rotY=35*enter; rig.x=.3*enter; break;
+    case 'laptop-reveal': rig.rotX=-65*enter; rig.rotY=18*enter; rig.y=.15*enter; break;
+    case 'flip': rig.rotY=-180*enter; rig.rotX=0; break;
+    case 'perspective-zoom': rig.rotY=-55*settle*(1-fill); rig.rotX=15*settle*(1-fill); rig.scale*=.7+.3*eA; break;
+    case 'orbit': rig.rotY=-85*enter+20*Math.sin(t*Math.PI)*settle; rig.x=.25*Math.sin(t*Math.PI*2)*enter; rig.y=-.15*Math.sin(t*Math.PI)*enter; break;
+    case 'crash-zoom': rig.scale*=.8+.2*eA; rig.fill=easeOutCubic(seg(t,.9,1)); break;
+    case 'float-pullback': rig.scale*=1.7-.7*eA; rig.y=-.18*Math.sin(t*Math.PI)*settle; rig.rotX=18*enter; break;
+  }
+  return rig
 }
 
 /* --------------------------- device geometry ---------------------------- */
@@ -80,6 +112,7 @@ interface DeviceSpec {
 const SPECS: Record<DeviceKind, DeviceSpec> = {
   phone: { screenW: 1, screenH: 2.12, bezel: 0.045, cornerR: 0.16, depth: 0.07, chin: 0, stand: 'none', bodyTop: '#878d96', bodyBottom: '#4d525b', glare: 0.07 },
   monitor: { screenW: 1.7778, screenH: 1, bezel: 0.032, cornerR: 0.05, depth: 0.05, chin: 0.11, stand: 'pedestal', bodyTop: '#2b2e33', bodyBottom: '#101215', glare: 0.11 },
+  laptop: { screenW: 1.63, screenH: 1, bezel: .035, cornerR: .04, depth: .04, chin: .06, stand: 'pedestal', bodyTop: '#424650', bodyBottom: '#181b24', glare: .08 },
   tv: { screenW: 1.7778, screenH: 1, bezel: 0.018, cornerR: 0.03, depth: 0.04, chin: 0, stand: 'feet', bodyTop: '#26282c', bodyBottom: '#0d0e10', glare: 0.09 },
 }
 
@@ -91,8 +124,8 @@ function bodyOutline(spec: DeviceSpec, n = 72): Array<[number, number]> {
   const r = spec.cornerR * Math.min(bw, bh)
   const pts: Array<[number, number]> = []
   const corners: Array<[number, number, number]> = [
-    [x0 + bw - r, y0 + r, 0], [x0 + bw - r, y0 + bh - r, Math.PI / 2],
-    [x0 + r, y0 + bh - r, Math.PI], [x0 + r, y0 + r, Math.PI * 1.5],
+    [x0 + bw - r, y0 + r, -Math.PI / 2], [x0 + bw - r, y0 + bh - r, 0],
+    [x0 + r, y0 + bh - r, Math.PI / 2], [x0 + r, y0 + r, Math.PI],
   ]
   const per = Math.max(4, Math.round(n / 4))
   for (const [cx, cy, a0] of corners) {
@@ -117,12 +150,18 @@ function project(cam: Cam, x: number, y: number, z: number): [number, number] {
 }
 
 /** Perspective-correct texture map: source canvas onto a projected quad. */
-function drawTexturedQuad(ctx: CanvasRenderingContext2D, src: CanvasImageSource, sw: number, sh: number, q: Array<[number, number]>, grid = 7) {
-  // q = 4 projected corners TL,TR,BR,BL; bilinear subdivide in source space
-  const uv = (u: number, v: number): [number, number] => {
-    const top: [number, number] = [lerp(q[0][0], q[1][0], u), lerp(q[0][1], q[1][1], u)]
-    const bot: [number, number] = [lerp(q[3][0], q[2][0], u), lerp(q[3][1], q[2][1], u)]
-    return [lerp(top[0], bot[0], v), lerp(top[1], bot[1], v)]
+function drawTexturedQuad(ctx: CanvasRenderingContext2D, src: CanvasImageSource, sw: number, sh: number, q: Array<[number, number]>, grid = 7, crop = { x: 0, y: 0, w: sw, h: sh }) {
+  // A homography maps a rectangle to a perspective quad. Bilinear
+  // interpolation warped straight screen edges and stretched the far side.
+  const dx1=q[1][0]-q[2][0], dx2=q[3][0]-q[2][0], dx3=q[0][0]-q[1][0]+q[2][0]-q[3][0]
+  const dy1=q[1][1]-q[2][1], dy2=q[3][1]-q[2][1], dy3=q[0][1]-q[1][1]+q[2][1]-q[3][1]
+  const det=dx1*dy2-dx2*dy1
+  const g=Math.abs(det)<1e-9?0:(dx3*dy2-dx2*dy3)/det, hh=Math.abs(det)<1e-9?0:(dx1*dy3-dx3*dy1)/det
+  const aa=q[1][0]-q[0][0]+g*q[1][0], bb=q[3][0]-q[0][0]+hh*q[3][0]
+  const dd=q[1][1]-q[0][1]+g*q[1][1], ee=q[3][1]-q[0][1]+hh*q[3][1]
+  const uv=(u:number,v:number):[number,number]=>{
+    const z=g*u+hh*v+1
+    return [(aa*u+bb*v+q[0][0])/z,(dd*u+ee*v+q[0][1])/z]
   }
   const tri = (a: [number, number], b: [number, number], c: [number, number], sa: [number, number], sb: [number, number], sc: [number, number]) => {
     ctx.save()
@@ -149,8 +188,8 @@ function drawTexturedQuad(ctx: CanvasRenderingContext2D, src: CanvasImageSource,
     for (let j = 0; j < grid; j++) {
       const u0 = i / grid, u1 = (i + 1) / grid, v0 = j / grid, v1 = (j + 1) / grid
       const p00 = uv(u0, v0), p10 = uv(u1, v0), p11 = uv(u1, v1), p01 = uv(u0, v1)
-      const s00: [number, number] = [u0 * sw, v0 * sh], s10: [number, number] = [u1 * sw, v0 * sh]
-      const s11: [number, number] = [u1 * sw, v1 * sh], s01: [number, number] = [u0 * sw, v1 * sh]
+      const s00: [number, number] = [crop.x + u0 * crop.w, crop.y + v0 * crop.h], s10: [number, number] = [crop.x + u1 * crop.w, crop.y + v0 * crop.h]
+      const s11: [number, number] = [crop.x + u1 * crop.w, crop.y + v1 * crop.h], s01: [number, number] = [crop.x + u0 * crop.w, crop.y + v1 * crop.h]
       tri(p00, p10, p11, s00, s10, s11)
       tri(p00, p11, p01, s00, s11, s01)
     }
@@ -174,7 +213,19 @@ export function drawDeviceScene(
   kind: DeviceKind,
   rig: DeviceRig,
   screen: HTMLCanvasElement,
+  options: DeviceRenderOptions = {},
 ) {
+  const angle=(value: number | undefined) => Number.isFinite(value) ? Math.max(-180,Math.min(180,value!)) : 0
+  rig={...rig,rotY:rig.rotY+angle(options.yaw)*(1-rig.fill),rotX:rig.rotX+angle(options.pitch)*(1-rig.fill),rotZ:(rig.rotZ||0)+angle(options.roll)*(1-rig.fill)}
+  if (modelDrawer && rig.fill < .8 && (options.motion === 'device-wall' || options.motion === 'screen-tunnel')) {
+    const copies = options.motion === 'device-wall' ? [-1, 1] : [-2, -1, 1, 2]
+    for (const n of copies) {
+      ctx.save(); ctx.globalAlpha *= (1-rig.fill) * .7
+      modelDrawer(ctx, w, h, kind, { ...rig, x: rig.x+n*.24*(1-rig.fill), y: rig.y+Math.abs(n)*.05, scale:rig.scale*(.6/Math.abs(n)), rotY:rig.rotY-n*18 }, screen, options)
+      ctx.restore()
+    }
+  }
+  if (modelDrawer?.(ctx, w, h, kind, rig, screen, options)) return
   const spec = SPECS[kind]
   if (rig.fill >= 0.999) { ctx.drawImage(screen, 0, 0, w, h); return }
   // device unit: fit screen (+body) inside the frame at rig.scale
@@ -185,6 +236,7 @@ export function drawDeviceScene(
   const cam: Cam = { cx: w / 2, cy: h / 2, unit: fit, persp: 3.4, rotY: rig.rotY, rotX: rig.rotX, ox: rig.x * w, oy: rig.y * h }
 
   ctx.save()
+  ctx.translate(w/2,h/2);ctx.rotate((rig.rotZ||0)*Math.PI/180);ctx.translate(-w/2,-h/2)
   // soft ground shadow
   const [shx, shy] = project(cam, 0, bodyH / 2 + 0.06, 0)
   ctx.save()
@@ -265,8 +317,15 @@ export function drawDeviceScene(
     project(cam, ex, ey - chinOff * (1 - grow), ez),
     project(cam, -ex, ey - chinOff * (1 - grow), ez),
   ]
+  const targetAspect=lerp(spec.screenW/spec.screenH,w/h,rig.fill), sourceAspect=screen.width/screen.height
+  const mode=options.fit ?? 'cover'
+  const cropW=mode==='cover' && sourceAspect>targetAspect ? screen.height*targetAspect : screen.width
+  const cropH=mode==='cover' && sourceAspect<targetAspect ? screen.width/targetAspect : screen.height
+  ctx.save()
+  if(options.brightness!==undefined)ctx.filter=`brightness(${lerp(options.brightness,1,rig.fill)})`
+  drawTexturedQuad(ctx, screen, screen.width, screen.height, q, portrait ? 8 : 9, {x:(screen.width-cropW)/2,y:(screen.height-cropH)/2,w:cropW,h:cropH})
+  ctx.restore()
   if (rig.bodyAlpha > 0.01) {
-    drawTexturedQuad(ctx, screen, screen.width, screen.height, q, portrait ? 6 : 7)
     // glass glare streak
     ctx.save()
     polyPath(ctx, q); ctx.clip()
@@ -289,8 +348,6 @@ export function drawDeviceScene(
       ctx.beginPath(); ctx.arc(lx, ly, Math.max(1.2, fit * 0.012), 0, Math.PI * 2); ctx.fill()
     }
     ctx.restore()
-  } else {
-    ctx.drawImage(screen, 0, 0, w, h)
   }
   ctx.restore()
 }

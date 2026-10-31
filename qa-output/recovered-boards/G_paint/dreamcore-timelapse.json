@@ -1,0 +1,16 @@
+{
+ "tool": "paint_timelapse",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "qa-output/recovered-boards/G_paint/dreamcore-timelapse.mp4",
+  "final": "qa-output/recovered-boards/G_paint/dreamcore-timelapse-final.png",
+  "grade": "dreamcore",
+  "strokes": 14,
+  "duration": 5.2,
+  "out": "/workspace/OmniFrame/qa-output/recovered-boards/G_paint/dreamcore-timelapse.mp4",
+  "frames": 156,
+  "fps": 30,
+  "size": 1123457
+ }
+}

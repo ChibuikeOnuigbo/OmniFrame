@@ -1,97 +1,52 @@
-# CONTINUE.md — read this EVERY run (stateless safety)
+# OmniFrame continuation — read every run
 
-**Mandate (user):** this file must exist and be checked on EVERY run. If a
-session died mid-work, resume from here. Never claim false completion; report
-only what is verified shipped.
+## Current source and acceptance
 
-## Standing laws (always active)
+The user merged the prior branches into **main** and explicitly asked to use it. Work started from `origin/main` at `ba7103b89600ef4afa2d4ac5a55e1be1a24ac1ea` on `codex/omniframe-device-glitch-production`. Preserve local/user work. Never hard-reset to the old Arena branch, force-push, or merge to main without authorization.
 
-1. **5000-recipe mandate:** keep producing glitch/effect recipes until 5,000
-   are rendered + validated IN-APP (combined MP4 + manifest per batch;
-   checkpoint `new_glitch/batch/checkpoint.json` — **next = 764**; 583 kept /
-   91 dups / 0 failed so far (slices 13–100 and 100–188)). Bounded honest sets + md indexes for mass
-   renders; user rates keep/delete/improve. **After every special task, go
-   BACK to the 5000 recipes and keep adding.**
-2. **Universal-tools / MCP-only law:** boards solved by universal tools only
-   (`qa/universal-tools-unit.mjs` must stay PASS: 63 steps, 59+ tools, no
-   task-shaped tools).
-3. **STATE.md honesty** (`reports/STATE.md`): only verified-shipped claims;
-   similarity NEVER claimed ≥80% without a declared metric.
-4. **FEATURES ledger** (`reports/FEATURES.md`): every shipped feature appended.
-5. Exact spellings: `new_doc_toll_research`, `data_motiondesijg`. Never delete
-   user media. ≤9 primary items per section. emu_im_save.
-6. Preview/export parity: browser + headless share `src/lib/*` engines.
+Read **`docs/CODEX_TASK_RECOVERY.md`** for the recovered quizzes A–T, YouTube/Drive requests, screenshot packs, exact file map and acceptance questions. `reports/repo-audit/historical-questions.json` preserves distinct historical feature/failure topics with all source heading lines. Old generated ledgers and check marks are claims, not verified completions.
 
-## Every-run checklist
+## Verified implementation in this branch
 
-- [ ] `git status` / HEAD matches `origin/arena/212bca02-omniframe` (rollback
-      pattern seen 5×: recover with `git fetch origin && git reset --hard
-      origin/arena/212bca02-omniframe`; then `npm ci` if node_modules is gone)
-- [ ] `npx tsc --noEmit -p .` clean
-- [ ] `node qa/universal-tools-unit.mjs` → PASS
-- [ ] `node qa/replace-template-demo.mjs` → PASS (demo-process-and-swap test:
-      original video processed → template_capture → NEW video → template_apply
-      → replace_video carry/no-carry → `test_ans_result/replace-template-demo.mp4`)
-- [ ] `node qa/tymm-lut-parity.mjs` → PASS (lossless 64³ TYMM LUTs)
-- [ ] `node qa/alight-roundtrip.mjs` → PASS (XML export/import round-trip:
-      project + template + shake pack; proof test_ans_result/xml-roundtrip.mp4)
-- [x] device 3D transitions + green-screen overlays (reference scan → AI plates → procedural 3D rig → mp4 proofs)
-- [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=764)
-- [x] DOWNLOADED all 41 corpus videos via the Drive connector (byte-exact, gitignored) + 122 study frames; wave-2 effects implemented from frame-read panels (Offset, Orientation, Text Transform, Copy Background); acceptance e2e 8/8
-- [x] video-study corpus scan (Drive 1KlxUlem…): 41-video index + gap analysis in new_doc_toll_research/video_study/; acceptance tests green (`node qa/video-study-e2e.mjs` against vite :5173, `node qa/video-study-render.mjs` headless proof)
-- [ ] update STATE.md + FEATURES.md, commit, push to the session branch
+- Seven real Blender-authored device GLBs, metadata and editable `.blend` sources in `public/models/device_transitions/`, with separate UV-mapped `ScreenSurface`. Browser Three renderer uses actual composited video; exact final handoff; perspective Canvas fallback retained.
+- Nineteen device motion paths including spin, barrel roll and bounce; Device3D tab; right inspector for model/motion/fit/FOV/distance/angles/lighting/brightness/duration, reset and preview. Settings persist through `.omni`, undo and redo.
+- All 5,000 authored NG recipes in the lazy UI pack; ordered layers, blend/opacity, keyframes, per-clip clocks, deterministic seeds and meaningful families. Zero-strength/all-blend identity, split-key/phase continuity, bounds and alpha tested.
+- Eight additional geometric tools, shared preview/export drawing, correct closed-shape fill and star geometry; compact grouped toolbar.
+- Denoise strength direction, dry bypass, RNNoise mix, retryable model sessions; sample-rate-aware DC rejection, linked normalization, peak guard; real measured audio meter. Repeated recorder exports retain sound and use range playback clock.
+- Headless project reset clears prior paint/selections/compound stack/video frames; saved templates survive. Patch-only clips now enter the compositor; clone/gradient/four-tap blur affect real pixels using immutable samples and clip-local coordinates. Natural object-removal quality still needs work.
+- Live MCP mask defaults, immutable curve persistence, undoable edits and invalid-input errors fixed. **21 live bridge tools; 69 headless registry tools**, not equivalent surfaces.
+- Measured/scrollable viewport-safe timeline context menus with keyboard navigation; marker popup height bounds and Escape.
+- Restored archived A–J recipe rendering through universal tools; regenerated outputs are in `qa-output/recovered-boards/`, machine results in its `report.json`. Board A offsets corrected after viewing actual output. Visual source-match acceptance remains separate.
 
-## Shipped this line of work (verified)
+## 5,000 recipe mandate — unfinished full-motion acceptance
 
-- **TYMM LUTs = FIRST BATCH** in `public/luts/manifest.json` (tymm-3…tymm-7,
-  lossless Hald→cube 64³, node error 0.000/255; sources kept in
-  `public/luts/source-tymm/`). Browser: EffectsPanel LUT picker; headless:
-  `adjustment.luts [{builtin:'tymm-5'}]` via appRender loadCubeLut.
-- **TYMM fonts (49)** in `public/fonts/`, named by FILE STEM (user mandate):
-  `src/lib/fontPack.ts` (FONT_PACK + FONT_FACE_CSS injected in main.tsx and
-  index.css), headless `GlobalFonts.registerFromPath` in `tools/mcp/core.mjs`
-  (FONT_PACK_FILES), TextPanel dropdown extended, MCP `list_fonts`.
-- **Replace-Video-With-Video** (CapCut parity, screenshots in
-  `new_doc_toll_research/imgs/capcut-replace/`): drop a video ON a video clip
-  → ReplaceDialog (filmstrip + draggable window = target clip duration +
-  "Use the original video effect" checkbox). Pure engine
-  `src/lib/replaceVideo.ts`; store `openReplaceDialog/commitReplaceVideo`;
-  MCP `replace_video {clipId,path,windowStart,carryEffects}`.
-- **TEMPLATE MODE:** `template_capture` dumps EVERY processing stage
-  (transform+keys, effects, fxInstances, LUT grade, masks, blend, speed,
-  textStyle, volume, in-point ratio) to `data_motiondesijg/templates/<id>.json`;
-  `template_apply` replays it onto any clip; `list_templates`; browser store
-  `captureTemplate/applyTemplate/templates`.
-- **Alight Motion study + import:** `src/lib/alightXml.ts` (parser incl.
-  shape/text/nullobj layers, normalised kf + cubicBezier→custom curve points,
-  ~100 AM effect ids → AM_EFFECT_MAP; mapped ones merged into the site fx
-  catalog `src/lib/effectCatalog.ts`), MCP `alight_import` (dumps to
-  `data_motiondesijg/alight/`), MediaPanel "Import Alight XML" button +
-  `store.importAlightXml`. All 12 corpus XMLs import (see
-  `docs/alight-motion-study.md`). Proof: `test_ans_result/alight-warps-import.mp4`.
-- **XML EXPORT/IMPORT (user mandate):** MediaPanel exports the project and the
-  latest template as Alight-Motion-dialect XML (lossless round-trip through
-  omniframe.* namespaces); Import button reads AM projects AND template XMLs.
-  MCP: alight_export / template_export / template_import. AM project files are
-  NOT bundled in the app — users import/export XML.
-- **Built-in SHAKE PACK:** all 8 Shakes.xml presets with original keyframe
-  values (EffectsPanel section, store.applyShakePreset, MCP shake_apply,
-  list_presets catalog=shake).
-- **CC/TYMM Drive scan:** `new_doc_toll_research/CC-SCAN.md` (Overlays 38,
-  Back Grounds 42, Sfx 41 in 5 subfolders, Shakes.xml imported, text-preset
-  data incl. Quicksand_Bold stem match with the font pack; mega.nz recorded
-  as unreachable from sandbox — NOT claimed done).
+Canonical source: `new_glitch/presets.ndjson`. Rebuild UI pack: `node scripts/build-glitch-recipe-pack.mjs`.
 
-## Open items (resume here)
+Canonical full-motion queue: `node qa/newglitch-batch.mjs --count=88`. Legacy `new_glitch/batch/glitch_batch.mjs` delegates to it. Only one writer at a time. The cursor is the next **1-based** recipe number; completed IDs repair old zero/one-based disagreements. Failures remain pending, checkpoints write atomically, interrupts finish the current item. Dedupe uses uniformly rebuilt v2 temporal luma signatures from retained MP4s.
 
-- 5000 recipes: continue from checkpoint **next=764** (583 kept) (batch_reel.mp4 = 38:52 combined review of all 583 kept, 0 failed; user keep/delete/improve rating pending).
-- mega.nz overlay folder when network allows (or user drops files into
-  `new_doc_toll_research/`).
-- Overlays/Sfx/Back Grounds media: download + wire as an in-app pack browser
-  entry when the user wants the bytes locally (names catalogued already).
-- AM import gaps (honest): content:// media = placeholders (re-link via
-  replace_video), group nesting + masks data-only, gradient fills raster flat.
-- Browser insideVideo parity, headless .omni export, roto feather calibration,
-  UI workspaces, Tauri (blocked) — from ARENA_MASTER_PROMPT P0 list.
+Checkpoint at this update: **next 860; 602 retained; 245 historical/new duplicate decisions; zero failed**. Historical duplicate decisions remain historical; do not present them as newly re-reviewed. Continue until all 5,000 candidates have full-motion classification; perceptual/human acceptance is still separate.
 
-- `URL=http://localhost:5173/#studio node qa/replace-template-ui-e2e.mjs` → REPLACE+TEMPLATE UI E2E: PASS (real Chromium: replace window math/drag clamp/carry, template capture→XML→re-import→chain replay, project XML round-trip in browser, TYMM LUT first batch, shake pack UI + NANIMALO apply).
+All 5,000 passed three-frame shared-kernel checks and one active compositor frame each. `qa-output/glitch-v2/all-5000-compositor-diagnostic.mp4` is a single-frame-per-recipe diagnostic, **not 5,000 fully watched/unique videos**. Keep these counts distinct. Return to the queue after special tasks.
+
+## Next unresolved work, oldest requirements first
+
+1. Complete per-board visual review against actual instruction images; A–J replay success alone does not prove roto/inpaint accuracy. Board C explicitly requests **150 edits** and 15 speed curves; ten archived still-based variants are insufficient. Recover its original moving source, and S/T input media where absent. See the recovered task guide.
+2. Reconcile individual YouTube inventory/frame/media records; `scripts/audit-study-evidence.mjs` found 98 sample sets with fewer than three distinct decoded images. Fixes for zero-metadata sampling and portrait stretching are in `scripts/extract-study-evidence.py`, tested with a real portrait fixture; remote worker has not been run. top-level `progress.json` conflicts with its checkpoint and older final report. Do not call metadata-only or sampled sheets continuous watching/audio review.
+3. Latest Drive folder `1uP9ySa8P2p9yGM4gJsn8fxuosQ1k2XrN` was blocked by proxy CONNECT 403 before Google. Draft environment allowlist additions for `drive.google.com` and `api.github.com` need review/save/publish to apply. No current folder contents were read. Then recursively inventory subfolders and compare hashes/provenance with archived manifests; do not bypass access restrictions.
+4. Continue the 5,000 full-motion queue and review duplicates with declared metrics.
+5. Device custom camera animation keys, material/reflection controls, real scene shadows/DOF/motion blur remain open; do not label them implemented. Lighting is real key/rim/hemisphere lighting, not an HDR environment map.
+6. Broaden noise/separation acceptance beyond the current synthetic noisy-speech fixture. Do not call DSP a trained separator. Native Tauri build needs Rust/Cargo, GTK and rsvg dependencies.
+7. Realtime MediaRecorder export has VFR/timing overhead; exact offline frame/audio export remains work.
+
+## Every-run checks and rules
+
+- Inspect Git status and current HEAD; use the latest user branch instructions.
+- `npm ci` if dependencies are absent; retain inherited proxy and CA settings. Blender 4.3.2 is available here. FFmpeg/Chromium use lockfile-pinned packages.
+- `npm run typecheck` and `npm run build`.
+- Shared engines: `qa/{glitch-ng-layers-unit,device-rig-unit,drawing-shapes-unit,audio-output-math-unit,fx-split-continuity-unit,video-encoder-failure-unit}.mjs`.
+- With fresh Vite running: `qa/{device-glitch-production-e2e,audio-strength-e2e,audio-bus-e2e,mcp-live-bridge-e2e,context-menu-viewport-e2e}.mjs`.
+- Preserve existing workflows: `qa/{universal-tools-unit,tymm-lut-parity,alight-roundtrip,replace-template-demo}.mjs`.
+- Visual QA: `qa/render-device-transition-reel.mjs`, `qa/render-glitch-v2-reel.mjs`, `scripts/create-qa-contact-sheets.mjs`; inspect actual outputs.
+- Universal-tools law: no task-shaped tools or agent-authored answer pixels. Preview/export share `src/lib` engines; preserve project persistence and undo. Never delete user media. Keep ≤9 primary items per section. Exact directory spellings: `new_doc_toll_research`, `data_motiondesijg`.
+- Regenerate audit after substantial changes with `python scripts/audit-project-history.py`. Use Git age, not checkout mtimes, for the seven-day window. Inventory is not functional or visual acceptance.
+- Update `reports/STATE.md`, `reports/FEATURES.md` and concrete checkpoint/evidence. Never invent completion, watched counts or ≥80% similarity without a declared metric.

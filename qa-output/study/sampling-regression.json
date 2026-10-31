@@ -1,0 +1,38 @@
+{
+  "scene_frames": [],
+  "source": "portrait.mp4",
+  "duration_seconds": 3.0,
+  "duration_source": "ffprobe acquired media",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 180,
+        "height": 320,
+        "r_frame_rate": "12/1",
+        "duration": "3.000000"
+      }
+    ],
+    "format": {
+      "duration": "3.000000"
+    }
+  },
+  "frames": [
+    {
+      "file": "u00.jpg",
+      "time_seconds": 0.5
+    },
+    {
+      "file": "u01.jpg",
+      "time_seconds": 1.5
+    },
+    {
+      "file": "u02.jpg",
+      "time_seconds": 2.5
+    }
+  ],
+  "fit": "contain with letterbox; never stretch",
+  "visual_review": "pending",
+  "audio_review": "not performed by frame extractor"
+}

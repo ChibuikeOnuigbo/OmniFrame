@@ -1,0 +1,117 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "qa-output/recovered-boards/J_effects/fx-ranged-vhs.mp4",
+  "out": "/workspace/OmniFrame/qa-output/recovered-boards/J_effects/fx-ranged-vhs.mp4",
+  "frames": 72,
+  "fps": 24,
+  "size": 162140,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 3,
+     "bg": "#101014"
+    },
+    "out": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 3
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "qa/shots/01-home.png",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 357,
+     "natH": 223
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-1",
+     "catalogId": "vhs-3"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 1.5,
+     "duration": 1.5,
+     "params": {
+      "vhs": 1
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "qa-output/recovered-boards/J_effects/fx-ranged-vhs.mp4"
+    },
+    "out": {
+     "frames": 72
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 3,
+    "bg": "#101014"
+   },
+   "selection": "clip-1",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "01-home.png",
+     "start": 0,
+     "duration": 3,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

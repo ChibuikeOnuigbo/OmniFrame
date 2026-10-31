@@ -1,3 +1,4 @@
+import { DeviceTransitionInspector } from './DeviceTransitionInspector'
 import React, { useEffect, useRef, useState } from 'react'
 import ExpandableToolGroup from './ExpandableToolGroup'
 import { SPEED_CURVES, type SpeedCurveId } from '../lib/speedCurves'
@@ -1470,6 +1471,7 @@ function AeToolRackSection({ clip }: { clip: Clip }) {
 }
 
 export function RightPanel() {
+  const selectedTransition = useEditor(s => s.transitions.find(t => t.id === s.selectedTransitionId))
   const rightOpen = useEditor((s) => s.rightOpen)
   const rightFocus = useEditor((s) => s.rightFocus)
   const setRightOpen = useEditor((s) => s.setRightOpen)
@@ -1533,7 +1535,7 @@ export function RightPanel() {
     }
   }
 
-  const inspectorTitle = selectedClipId ? 'Clip Inspector' : 'Project Inspector'
+  const inspectorTitle = selectedTransition ? 'Transition Inspector' : selectedClipId ? 'Clip Inspector' : 'Project Inspector'
   const dockerPrefs = useEditor((s) => s.dockerPrefs)
   const [activeSubtool, setActiveSubtool] = useState<'masking' | 'smart-patch' | 'rotomask' | null>(null)
   const subtoolDefs = [
@@ -1544,9 +1546,10 @@ export function RightPanel() {
 
   const inspectorBody = (
     <SectionsNavigator
+      key={selectedTransition?.type.startsWith('device_') ? selectedTransition.id : 'clip-inspector'}
       mode={sidebarSectionMode}
       label="Inspector sections"
-      focusRequest={rightFocus}
+      focusRequest={selectedTransition?.type.startsWith('device_') ? { id: 'device-transition-inspector', nonce: rightFocus?.nonce ?? 0 } : rightFocus}
       rail={[
         { id: 'clip', label: 'General', icon: Settings2 },
         { id: 'transform', label: 'Transform', icon: Scaling },
@@ -1609,7 +1612,7 @@ export function RightPanel() {
         tabIndex={0}
         className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
       >
-        {clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+        {selectedTransition?.type.startsWith('device_') ? <DeviceTransitionInspector transition={selectedTransition} /> : clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
       </div>
     </SectionsNavigator>
   )

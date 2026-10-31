@@ -1,0 +1,240 @@
+{
+  "board": "D",
+  "note": "fill box by CUTTING the object (extract+patch under) then pasting the cut piece; computed grid",
+  "steps": [
+    {
+      "tool": "project_new",
+      "params": {
+        "w": 640,
+        "h": 360,
+        "fps": 24,
+        "duration": 2.4,
+        "bg": "#f2f4f8"
+      }
+    },
+    {
+      "tool": "omniframe_mode",
+      "params": {
+        "on": true
+      }
+    },
+    {
+      "tool": "import_media",
+      "params": {
+        "path": "test_ans_result/sources/src_tank.png",
+        "fit": "contain"
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/D_tank_fill/snap-00.png"
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-1"
+      }
+    },
+    {
+      "tool": "roto_mask",
+      "params": {
+        "mode": "click",
+        "add": [
+          [
+            50,
+            214
+          ],
+          [
+            40,
+            190
+          ],
+          [
+            60,
+            240
+          ]
+        ],
+        "sub": [
+          [
+            300,
+            60
+          ],
+          [
+            500,
+            300
+          ]
+        ],
+        "tol": 30,
+        "feather": 2,
+        "exportMatte": "qa-output/recovered-boards/evidence/D-luma.png"
+      }
+    },
+    {
+      "tool": "track_new",
+      "params": {
+        "name": "pastes"
+      }
+    },
+    {
+      "tool": "omniframe_extract",
+      "params": {
+        "trackId": 1
+      }
+    },
+    {
+      "tool": "patch_under",
+      "params": {
+        "on": true,
+        "feather": 2
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 339.3,
+        "dy": -119.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 439,
+        "dy": -119.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 538.7,
+        "dy": -119.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 339.3,
+        "dy": -34.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 439,
+        "dy": -34.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 538.7,
+        "dy": -34.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 339.3,
+        "dy": 50.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 439,
+        "dy": 50.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "duplicate_paste",
+      "params": {
+        "dx": 538.7,
+        "dy": 50.5,
+        "copy": true
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 2.3,
+        "out": "qa-output/recovered-boards/D_tank_fill/snap-end.png"
+      }
+    },
+    {
+      "tool": "render_export",
+      "params": {
+        "out": "qa-output/recovered-boards/D_tank_fill/solution.mp4"
+      }
+    },
+    {
+      "tool": "timeline_screenshot",
+      "params": {
+        "out": "qa-output/recovered-boards/evidence/timeline-D.png",
+        "playhead": 2.3
+      }
+    }
+  ]
+}

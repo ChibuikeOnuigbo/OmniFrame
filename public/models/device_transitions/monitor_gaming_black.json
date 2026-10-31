@@ -1,0 +1,32 @@
+{
+  "id": "monitor_gaming_black",
+  "kind": "monitor",
+  "format": "glb",
+  "path": "monitor_gaming_black.glb",
+  "screenObject": "ScreenSurface",
+  "rigRoot": "DeviceRig_ROOT",
+  "screenWidthMeters": 0.53,
+  "screenHeightMeters": 0.298,
+  "screenAspect": 1.778523,
+  "screenUV": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "renderMode": "dynamic-glTF-screen-texture",
+  "unit": "meter",
+  "authoredBy": "OmniFrame procedural Blender source"
+}

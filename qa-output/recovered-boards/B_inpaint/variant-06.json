@@ -1,0 +1,195 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "qa-output/recovered-boards/B_inpaint/variant-06.mp4",
+  "out": "/workspace/OmniFrame/qa-output/recovered-boards/B_inpaint/variant-06.mp4",
+  "frames": 42,
+  "fps": 24,
+  "size": 16326,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 360,
+     "h": 640,
+     "fps": 24,
+     "duration": 1.75,
+     "bg": "#05070a"
+    },
+    "out": {
+     "w": 360,
+     "h": 640,
+     "fps": 24,
+     "duration": 1.75
+    }
+   },
+   {
+    "tool": "omniframe_mode",
+    "params": {
+     "on": true
+    },
+    "out": {
+     "mode": "omniframe"
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "test_ans_result/sources/src_car.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 360,
+     "natH": 640
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0
+    },
+    "out": {
+     "png": "qa-output/recovered-boards/B_inpaint/snap-06.png"
+    }
+   },
+   {
+    "tool": "click",
+    "params": {
+     "x": 155,
+     "y": 320,
+     "t": 0
+    },
+    "out": {
+     "clipId": "clip-1",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 360,
+      "h": 640
+     }
+    }
+   },
+   {
+    "tool": "roto_mask",
+    "params": {
+     "mode": "click",
+     "add": 3,
+     "sub": 0,
+     "tol": 22,
+     "exportMatte": "qa-output/recovered-boards/evidence/B-luma-06.png",
+     "setMask": false
+    },
+    "out": {
+     "clipId": "clip-1",
+     "engine": "click-segment+matting",
+     "pixels": 218225,
+     "bbox": [
+      0,
+      24,
+      359,
+      639
+     ]
+    }
+   },
+   {
+    "tool": "smart_patch",
+    "params": {
+     "x0": 58,
+     "y0": 246,
+     "x1": 252,
+     "y1": 394,
+     "strategy": "gradient",
+     "donor": [
+      60,
+      120
+     ],
+     "feather": 6,
+     "brushRadius": 52
+    },
+    "out": {
+     "clipId": "clip-1",
+     "patchRegion": [
+      58,
+      246,
+      252,
+      394
+     ],
+     "feather": 6,
+     "brushRadius": 52
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.6
+    },
+    "out": {
+     "png": "qa-output/recovered-boards/B_inpaint/snap-end-06.png"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "qa-output/recovered-boards/B_inpaint/variant-06.mp4"
+    },
+    "out": {
+     "frames": 42
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 360,
+    "h": 640,
+    "fps": 24,
+    "duration": 1.75,
+    "bg": "#05070a"
+   },
+   "selection": "clip-1",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "src_car.png",
+     "start": 0,
+     "duration": 1.75,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": "[same-object-ref]",
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

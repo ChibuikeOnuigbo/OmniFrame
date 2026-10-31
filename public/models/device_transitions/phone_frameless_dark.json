@@ -1,0 +1,32 @@
+{
+  "id": "phone_frameless_dark",
+  "kind": "phone",
+  "format": "glb",
+  "path": "phone_frameless_dark.glb",
+  "screenObject": "ScreenSurface",
+  "rigRoot": "DeviceRig_ROOT",
+  "screenWidthMeters": 0.074,
+  "screenHeightMeters": 0.159,
+  "screenAspect": 0.465409,
+  "screenUV": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "renderMode": "dynamic-glTF-screen-texture",
+  "unit": "meter",
+  "authoredBy": "OmniFrame procedural Blender source"
+}

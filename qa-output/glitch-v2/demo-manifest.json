@@ -1,0 +1,66 @@
+{
+  "manifest": [
+    {
+      "name": "rgb-split",
+      "file": "qa-output/glitch-v2/rgb-split.mp4",
+      "family": "rgb-shock",
+      "fps": 30,
+      "frames": 60,
+      "resolution": [
+        960,
+        540
+      ],
+      "renderer": "universal render_export / shared app compositor"
+    },
+    {
+      "name": "digital-tear",
+      "file": "qa-output/glitch-v2/digital-tear.mp4",
+      "family": "digital-slice",
+      "fps": 30,
+      "frames": 60,
+      "resolution": [
+        960,
+        540
+      ],
+      "renderer": "universal render_export / shared app compositor"
+    },
+    {
+      "name": "vhs-tracking",
+      "file": "qa-output/glitch-v2/vhs-tracking.mp4",
+      "family": "vhs-tear",
+      "fps": 30,
+      "frames": 60,
+      "resolution": [
+        960,
+        540
+      ],
+      "renderer": "universal render_export / shared app compositor"
+    },
+    {
+      "name": "block-corruption",
+      "file": "qa-output/glitch-v2/block-corruption.mp4",
+      "family": "pixel-collapse",
+      "fps": 30,
+      "frames": 60,
+      "resolution": [
+        960,
+        540
+      ],
+      "renderer": "universal render_export / shared app compositor"
+    },
+    {
+      "name": "temporal-echo",
+      "file": "qa-output/glitch-v2/temporal-echo.mp4",
+      "family": "phantom-echo",
+      "fps": 30,
+      "frames": 60,
+      "resolution": [
+        960,
+        540
+      ],
+      "renderer": "universal render_export / shared app compositor",
+      "temporalEcho": "Existing pfxEchoTimes evaluates prior animated clip poses; additional Glitch NG spatial ghosts are also applied"
+    }
+  ],
+  "note": "960x540 QA delivery; effects use the same renderer at sequence output resolution. Diagnostics are distinct from full-motion visual acceptance of all 5000 recipes."
+}

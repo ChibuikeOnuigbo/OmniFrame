@@ -17,6 +17,7 @@ export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'retro'
 export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
   { id: 'all', label: 'All' },
   { id: 'glitch', label: 'Glitch' },
+  { id: 'Glitch NG', label: 'Glitch NG' },
   { id: 'motion', label: 'Motion' },
   { id: 'color', label: 'Color' },
   { id: 'blur', label: 'Blur' },
@@ -48,6 +49,31 @@ export interface FxCatalogEntry {
 
 /** Schema for every catalogued property: all editable, all numerics keyframeable. */
 const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
+  ngBlend: { label: 'Blend mode', kind: 'select', options: ['normal', 'screen', 'multiply', 'add'] },
+  ngPattern: { label: 'Event pattern', kind: 'select', options: ['microburst', 'slow-build', 'hard-intro', 'dual-attack', 'subtle-break', 'pulse-to-clean', 'reverse-shatter', 'freeze-then-snap', 'rhythmic', 'long-tail'] },
+  ngGhost: { label: 'Ghost opacity', kind: 'number', min: 0, max: 1, step: .01 },
+  ngGhostDelay: { label: 'Ghost spacing', kind: 'number', min: 0, max: 16, step: 1 },
+  ngRoll: { label: 'Vertical roll (px)', kind: 'number', min: 0, max: 100, step: 1 },
+  ngFrequency: { label: 'Frequency (Hz)', kind: 'number', min: 0, max: 30, step: .1 },
+  ngFamily: { label: 'Glitch family', kind: 'select', options: ['digital-slice', 'rgb-shock', 'vhs-tear', 'datamosh-inspired', 'scan-burst', 'phantom-echo', 'neon-corrupt', 'pixel-collapse', 'vector-edge', 'spectral-logo'] },
+  ngOpacity: { label: 'Layer opacity', kind: 'number', min: 0, max: 1, step: .01 },
+  ngIntensity: { label: 'Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
+  ngSeed: { label: 'Seed', kind: 'number', min: 0, max: 100000000, step: 1 },
+  ngPrimary: { label: 'Primary color', kind: 'color' },
+  ngSecondary: { label: 'Secondary color', kind: 'color' },
+  ngLead: { label: 'Lead (s)', kind: 'number', min: 0, max: 10, step: 0.01 },
+  ngAttack: { label: 'Attack (s)', kind: 'number', min: 0, max: 10, step: 0.01 },
+  ngHold: { label: 'Hold (s)', kind: 'number', min: 0, max: 60, step: 0.01 },
+  ngDecay: { label: 'Decay (s)', kind: 'number', min: 0, max: 10, step: 0.01 },
+  ngSliceAmp: { label: 'Slice shift (px)', kind: 'number', min: 0, max: 160, step: 1 },
+  ngSliceDensity: { label: 'Slice density', kind: 'number', min: 1, max: 80, step: 1 },
+  ngChroma: { label: 'RGB split (px)', kind: 'number', min: 0, max: 64, step: 1 },
+  ngScanOpacity: { label: 'Scanline opacity', kind: 'number', min: 0, max: 1, step: 0.01 },
+  ngScanSpacing: { label: 'Scanline spacing', kind: 'number', min: 1, max: 32, step: 1 },
+  ngNoise: { label: 'Static', kind: 'number', min: 0, max: 0.4, step: 0.01 },
+  ngBlock: { label: 'Block size (px)', kind: 'number', min: 1, max: 128, step: 1 },
+  ngBlockRate: { label: 'Block rate', kind: 'number', min: 0, max: 1, step: 0.01 },
+
   brightness: { label: 'Brightness', kind: 'number', min: 0, max: 2, step: 0.01 },
   contrast: { label: 'Contrast', kind: 'number', min: 0, max: 2, step: 0.01 },
   saturation: { label: 'Saturation', kind: 'number', min: 0, max: 2, step: 0.01 },
@@ -337,7 +363,7 @@ function buildCatalog(): FxCatalogEntry[] {
     add(`part-${i}`, `${String(fx)[0].toUpperCase()}${String(fx).slice(1)} Bed`, 'light', 'AE particle beds (deep-study corpus)', { particleFx: fx as string, particleDensity: d as number }))
   ;(['digital-slice', 'rgb-shock', 'vhs-tear', 'datamosh-inspired', 'scan-burst', 'phantom-echo', 'neon-corrupt', 'pixel-collapse', 'vector-edge', 'spectral-logo'] as const).forEach((fam) =>
     add(`ng-${fam}`, `NG ${fam}`, 'Glitch NG', 'OmniFrame_Glitch_Audit pack family (deterministic RGBA kernel glitchNG.ts)', {
-      ngFamily: fam, ngSeed: 8156, ngPrimary: '#a568ff', ngSecondary: '#15e4f3',
+      ngFamily: fam, ngIntensity: 1, ngOpacity: 1, ngBlend: 'normal', ngSeed: 8156, ngPrimary: '#a568ff', ngSecondary: '#15e4f3',
       ngLead: 0.0, ngAttack: 0.15, ngHold: 1.2, ngDecay: 0.3,
       ngSliceAmp: 12, ngSliceDensity: 10, ngChroma: 4, ngScanOpacity: 0.18, ngScanSpacing: 3,
       ngNoise: 0.09, ngBlock: 18, ngBlockRate: 0.09,
@@ -476,4 +502,18 @@ export const FX_QUICK_IDS = [
 /** Build the ClipEffect patch an instance starts with (defaults for the entry). */
 export function patchForEntry(entry: FxCatalogEntry): ClipEffect {
   return { ...(entry.patch as unknown as ClipEffect) }
+}
+
+let recipePackPromise: Promise<number> | null = null
+/** Load the large authored pack only when the effect browser is opened. */
+export function loadGlitchRecipeCatalog(): Promise<number> {
+  if (!recipePackPromise) recipePackPromise = fetch('/effects/glitch-recipes.json').then(async response => {
+    if (!response.ok) throw new Error(`Recipe pack: HTTP ${response.status}`)
+    const entries: FxCatalogEntry[] = await response.json()
+    if (!Array.isArray(entries) || entries.length !== 5000 || entries.some(e => !/^ng-\d{4}$/.test(e.id) || e.cat !== 'Glitch NG' || !e.patch?.ngFamily)) throw new Error('Invalid glitch recipe pack')
+    const existing = new Set(getFxCatalog().map(e => e.id))
+    _catalog = [...getFxCatalog(), ...entries.filter(e => !existing.has(e.id))]
+    return entries.length
+  }).catch(error => { recipePackPromise = null; throw error })
+  return recipePackPromise
 }

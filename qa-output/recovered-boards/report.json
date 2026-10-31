@@ -1,0 +1,796 @@
+[
+  {
+    "source": "tools/mcp/recipes/board_A_roto.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_A_roto.json",
+      "runs": [
+        {
+          "variant": "v01",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-01.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-01.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-01.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v02",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-02.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-02.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-02.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v03",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-03.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-03.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-03.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v04",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-04.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-04.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-04.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v05",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-05.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-05.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-05.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v06",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-06.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-06.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-06.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v07",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-07.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-07.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-07.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v08",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-08.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-08.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-08.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v09",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-09.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-09.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-09.png.json",
+              "bytes": 21126
+            }
+          }
+        },
+        {
+          "variant": "v10",
+          "steps": 22,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-A-10.png",
+              "playhead": 1.2
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-A-10.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-A-10.png.json",
+              "bytes": 21126
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 62278,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_C_key.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_C_key.json",
+      "runs": [
+        {
+          "variant": "v01",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-01.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-01.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-01.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v02",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-02.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-02.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-02.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v03",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-03.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-03.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-03.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v04",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-04.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-04.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-04.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v05",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-05.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-05.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-05.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v06",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-06.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-06.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-06.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v07",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-07.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-07.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-07.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v08",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-08.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-08.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-08.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v09",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-09.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-09.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-09.png.json",
+              "bytes": 22695
+            }
+          }
+        },
+        {
+          "variant": "v10",
+          "steps": 17,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-C-10.png",
+              "playhead": 1.7
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-C-10.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-C-10.png.json",
+              "bytes": 22695
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 46458,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_D_tank.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_D_tank.json",
+      "runs": [
+        {
+          "variant": null,
+          "steps": 30,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-D.png",
+              "playhead": 2.3
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-D.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-D.png.json",
+              "bytes": 21036
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 1266,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_E_move.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_E_move.json",
+      "runs": [
+        {
+          "variant": null,
+          "steps": 63,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-E.png",
+              "playhead": 23.9
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-E.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-E.png.json",
+              "bytes": 18669
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 10915,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_F_amfx.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_F_amfx.json",
+      "runs": [
+        {
+          "variant": null,
+          "steps": 55,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-F.png",
+              "playhead": 1.5
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-F.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-F.png.json",
+              "bytes": 16026
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 21201,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_G_sunset.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_G_sunset.json",
+      "runs": [
+        {
+          "variant": null,
+          "steps": 18,
+          "last": {
+            "tool": "paint_timelapse",
+            "params": {
+              "out": "qa-output/recovered-boards/G_paint/dreamcore-timelapse.mp4",
+              "grade": "dreamcore"
+            },
+            "out": {
+              "frames": 156,
+              "strokes": 14
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 26143,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_H_oneframer.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_H_oneframer.json",
+      "runs": [
+        {
+          "variant": "all",
+          "steps": 6,
+          "last": {
+            "tool": "render_export",
+            "params": {
+              "out": "qa-output/recovered-boards/H_oneframer/oneframer-all.mp4"
+            },
+            "out": {
+              "frames": 48
+            }
+          }
+        },
+        {
+          "variant": "vhs",
+          "steps": 6,
+          "last": {
+            "tool": "render_export",
+            "params": {
+              "out": "qa-output/recovered-boards/H_oneframer/oneframer-vhs.mp4"
+            },
+            "out": {
+              "frames": 48
+            }
+          }
+        },
+        {
+          "variant": "minicolor",
+          "steps": 6,
+          "last": {
+            "tool": "render_export",
+            "params": {
+              "out": "qa-output/recovered-boards/H_oneframer/oneframer-minimax-colorize.mp4"
+            },
+            "out": {
+              "frames": 48
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 11928,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_I_gaps.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_I_gaps.json",
+      "runs": [
+        {
+          "variant": "all",
+          "steps": 8,
+          "last": {
+            "tool": "lasso_select",
+            "params": {
+              "clipId": "clip-1",
+              "points": 4
+            },
+            "out": {
+              "method": "lasso",
+              "pixels": 38400,
+              "bbox": [
+                160,
+                61,
+                479,
+                299
+              ]
+            }
+          }
+        },
+        {
+          "variant": "osc",
+          "steps": 8,
+          "last": {
+            "tool": "lasso_select",
+            "params": {
+              "clipId": "clip-1",
+              "points": 4
+            },
+            "out": {
+              "method": "lasso",
+              "pixels": 38400,
+              "bbox": [
+                160,
+                61,
+                479,
+                299
+              ]
+            }
+          }
+        },
+        {
+          "variant": "turb",
+          "steps": 8,
+          "last": {
+            "tool": "lasso_select",
+            "params": {
+              "clipId": "clip-1",
+              "points": 4
+            },
+            "out": {
+              "method": "lasso",
+              "pixels": 38400,
+              "bbox": [
+                160,
+                61,
+                479,
+                299
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 3291,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_J_effects.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_J_effects.json",
+      "runs": [
+        {
+          "variant": "glitch-keys",
+          "steps": 5,
+          "last": {
+            "tool": "render_export",
+            "params": {
+              "out": "qa-output/recovered-boards/J_effects/fx-glitch-keyframed.mp4"
+            },
+            "out": {
+              "frames": 72
+            }
+          }
+        },
+        {
+          "variant": "ranged-vhs",
+          "steps": 5,
+          "last": {
+            "tool": "render_export",
+            "params": {
+              "out": "qa-output/recovered-boards/J_effects/fx-ranged-vhs.mp4"
+            },
+            "out": {
+              "frames": 72
+            }
+          }
+        },
+        {
+          "variant": "layer-noir",
+          "steps": 5,
+          "last": {
+            "tool": "render_export",
+            "params": {
+              "out": "qa-output/recovered-boards/J_effects/fx-layer-noir.mp4"
+            },
+            "out": {
+              "frames": 72
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 5268,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  },
+  {
+    "source": "tools/mcp/recipes/board_B_inpaint.json",
+    "ok": true,
+    "result": {
+      "recipe": "qa-output/recovered-boards/board_B_inpaint.json",
+      "runs": [
+        {
+          "variant": "v01",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-01.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-01.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-01.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v02",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-02.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-02.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-02.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v03",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-03.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-03.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-03.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v04",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-04.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-04.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-04.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v05",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-05.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-05.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-05.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v06",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-06.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-06.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-06.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v07",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-07.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-07.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-07.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v08",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-08.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-08.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-08.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v09",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-09.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-09.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-09.png.json",
+              "bytes": 15570
+            }
+          }
+        },
+        {
+          "variant": "v10",
+          "steps": 10,
+          "last": {
+            "tool": "timeline_screenshot",
+            "params": {
+              "out": "qa-output/recovered-boards/evidence/timeline-B-10.png",
+              "playhead": 1.6
+            },
+            "out": {
+              "png": "qa-output/recovered-boards/evidence/timeline-B-10.png",
+              "sidecar": "qa-output/recovered-boards/evidence/timeline-B-10.png.json",
+              "bytes": 15570
+            }
+          }
+        }
+      ]
+    },
+    "elapsedMs": 32234,
+    "acceptance": "Machine replay only; visual match to original reference remains a separate review."
+  }
+]

@@ -1,3 +1,4 @@
+import { denoiseExponent, enforceAudioPeak, normalizeIsolationPCM } from './audioOutputMath'
 /**
  * OmniFrame Voice Isolation & Vocal Removal Subsystem
  *
@@ -390,7 +391,7 @@ export function isolateVoiceFromAudioBuffer(
   const inL = inputBuffer.getChannelData(0)
   const inR = inputBuffer.numberOfChannels > 1 ? inputBuffer.getChannelData(1) : inputBuffer.getChannelData(0)
 
-  const strength = options.strength !== undefined ? Math.max(0, Math.min(1, options.strength)) : 0.92
+  const strength = denoiseExponent(options.strength ?? .92)
   const preserveBass = options.preserveBass !== false
   const vocalLow = options.vocalBandLow || 140
   const vocalHigh = options.vocalBandHigh || 7500
@@ -553,52 +554,18 @@ const FINALIZE_TARGET_RMS = Math.pow(10, -18 / 20) // -18 dBFS
 const FINALIZE_PEAK_CEIL = 0.98
 const FINALIZE_SILENCE_RMS = Math.pow(10, -50 / 20) // below this: leave untouched
 
-function jsIsolationNormalize(a: Float32Array, b: Float32Array): number {
-  const n = a.length
-  if (n <= 0) return 1
-  const POLE = 1 - 2 * Math.PI * 15 / 44100
-  // 1) DC block (double state, float32 store — same rounding points as omni_dsp.cpp)
-  {
-    let x1a = 0, y1a = 0, x1b = 0, y1b = 0
-    for (let i = 0; i < n; i++) {
-      const xa = a[i], xb = b[i]
-      const ya = xa - x1a + POLE * y1a
-      const yb = xb - x1b + POLE * y1b
-      x1a = xa; y1a = ya; x1b = xb; y1b = yb
-      a[i] = ya; b[i] = yb
-    }
-  }
-  // 2) loudness normalize (skip near-silence)
-  let sa = 0, sb = 0
-  for (let i = 0; i < n; i++) { sa += a[i] * a[i]; sb += b[i] * b[i] }
-  const rms = Math.sqrt((sa + sb) / (2 * n))
-  if (rms < FINALIZE_SILENCE_RMS) return 1
-  let g = FINALIZE_TARGET_RMS / rms
-  g = Math.min(g, 3.9810717055349722) // +12 dB cap
-  g = Math.max(g, 0.5011872336272722) // -6 dB floor
-  if (!(g > 0.98 && g < 1.02)) {
-    // peak safety: never exceed the ceiling
-    let peak = 0
-    for (const ch of [a, b]) for (let i = 0; i < n; i++) { const v = Math.abs(ch[i] * g); if (v > peak) peak = v }
-    if (peak > FINALIZE_PEAK_CEIL) g *= FINALIZE_PEAK_CEIL / peak
-    if (!(g > 0.98 && g < 1.02)) {
-      for (const ch of [a, b]) for (let i = 0; i < n; i++) ch[i] *= g
-      return g
-    }
-  }
-  return 1
-}
-
 export function finalizeIsolationOutput(buffer: AudioBuffer): AudioBuffer {
   if (buffer.length === 0) return buffer
-  const a = buffer.getChannelData(0) as Float32Array<ArrayBuffer>
-  // mono: run a copy through the 2-channel core (bit-identical to the stereo
-  // path — the copy keeps the fallback's per-channel loops alias-free)
-  const b = buffer.numberOfChannels > 1
-    ? buffer.getChannelData(1) as Float32Array<ArrayBuffer>
-    : new Float32Array(a)
-  const g = nativeNormalize(a, b, FINALIZE_TARGET_RMS, FINALIZE_PEAK_CEIL, FINALIZE_SILENCE_RMS)
-  if (g === null) jsIsolationNormalize(a, b)
+  const channels = Array.from({ length: buffer.numberOfChannels }, (_, i) => buffer.getChannelData(i) as Float32Array<ArrayBuffer>)
+  // The current WASM ABI has a fixed 44.1 kHz DC pole and two channels.
+  // Other rates/channel layouts must use the sample-rate-aware PCM path.
+  const a = channels[0], b = channels[1] ?? new Float32Array(a)
+  const finite = channels.every(ch => ch.every(Number.isFinite))
+  const nativeGain = finite && buffer.sampleRate === 44100 && channels.length <= 2
+    ? nativeNormalize(a, b, FINALIZE_TARGET_RMS, FINALIZE_PEAK_CEIL, FINALIZE_SILENCE_RMS) : null
+  if (nativeGain === null) normalizeIsolationPCM(channels, buffer.sampleRate)
+  // Native normalization historically skipped peak checks around unity gain.
+  enforceAudioPeak(channels)
   return buffer
 }
 
@@ -648,7 +615,9 @@ export async function processVoiceIsolation(
     const modelTag = options.model || 'omni-voicetarget'
 
     let processedBuffer: AudioBuffer
-    if (modelTag === 'htdemucs-v4') {
+    if (options.strength === 0) {
+      processedBuffer = inputBuffer
+    } else if (modelTag === 'htdemucs-v4') {
       // REAL neural separation: Meta Demucs v4 Hybrid Transformer (htdemucs)
       // via ONNX Runtime Web. Vocals stem for keep_vocal; drums+bass+other
       // (instrumental) for remove_vocal. Downloads /models/htdemucs.onnx once
@@ -712,7 +681,7 @@ export async function processVoiceIsolation(
       // everything else (hiss, hum, SFX, songs — even heavily padded song
       // stacks that turn to noise) as interference to suppress.
       onProgress?.(50, `AI Denoise: loading omni-denoise-v1 (${isDesktopMode() ? 'native desktop runtime' : 'WASM'})…`)
-      const alpha = 1.08 - 0.55 * (options.strength ?? 0.92) // strength 1 -> 0.53 gentle, 0 -> full
+      const alpha = denoiseExponent(options.strength ?? 0.92) // mask^0 = dry; mask^1 = full suppression
       if (isDesktopMode()) {
         const wavBytes = await encodeAudioBufferToWavArrayBuffer(inputBuffer)
         const result = await denoiseViaDesktop(wavBytes, alpha)
@@ -744,8 +713,12 @@ export async function processVoiceIsolation(
       const res = await rnnoiseDenoiseBuffer(inputBuffer, (f, note) => {
         onProgress?.(50 + Math.round(f * 35), note ?? 'RNNoise denoising…')
       })
-      processedBuffer = audioCtx.createBuffer(1, res.samples.length, inputBuffer.sampleRate)
-      processedBuffer.copyToChannel(res.samples as Float32Array<ArrayBuffer>, 0)
+      const wet = denoiseExponent(options.strength ?? .92)
+      processedBuffer = audioCtx.createBuffer(inputBuffer.numberOfChannels, inputBuffer.length, inputBuffer.sampleRate)
+      for (let channel=0;channel<inputBuffer.numberOfChannels;channel++) {
+        const dry=inputBuffer.getChannelData(channel), output=processedBuffer.getChannelData(channel)
+        for (let i=0;i<output.length;i++) output[i]=(1-wet)*dry[i]+wet*(res.samples[i] ?? 0)
+      }
       onProgress?.(85, `RNNoise complete (mean VAD ${(res.meanVad * 100).toFixed(0)}%)`)
     } else {
       onProgress?.(55, options.mode === 'keep_vocal'
@@ -756,7 +729,7 @@ export async function processVoiceIsolation(
     // Shared finalization — every engine lands the same output contract:
     // DC-blocked, -18 dBFS RMS (0.98 peak ceiling, +12/-6 dB gain window),
     // near-silence left untouched.
-    processedBuffer = finalizeIsolationOutput(processedBuffer)
+    if (options.strength !== 0) processedBuffer = finalizeIsolationOutput(processedBuffer)
     onProgress?.(80, 'Encoding to WAV format…')
 
     const blob = encodeAudioBufferToWav(processedBuffer)

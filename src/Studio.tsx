@@ -1,3 +1,4 @@
+import { ViewportMenu } from './components/ViewportMenu'
 import { useEffect, useRef, useState } from 'react'
 import {
   Clipboard,
@@ -664,18 +665,7 @@ export default function Studio() {
             : element.closest('[data-testid="media-library"]')
               ? { type: 'MEDIA_PANEL' }
               : { type: 'EMPTY_EDITOR' }
-        const width = 224
-        const height = target.type === 'TRANSITION'
-          ? 280
-          : 'clip' in target
-          ? (target.type === 'COMPOUND_CLIP' ? 240 : target.type === 'VIDEO_CLIP' ? 320 : 260)
-          : target.type === 'TRACK_LANE'
-          ? 180
-          : 144
-        const margin = 8, offset = 4
-        const x = event.clientX + width + offset <= window.innerWidth - margin ? event.clientX + offset : event.clientX - width - offset
-        const y = event.clientY + height + offset <= window.innerHeight - margin ? event.clientY + offset : event.clientY - height - offset
-        setContextMenu({ ...target, x: Math.max(margin, x), y: Math.max(margin, y), anchorX: event.clientX, anchorY: event.clientY })
+        setContextMenu({ ...target, x: event.clientX+4, y: event.clientY+4, anchorX: event.clientX, anchorY: event.clientY })
       }}
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => {
@@ -723,22 +713,7 @@ export default function Studio() {
       <ModelLoadOverlay />
       </div>
       {contextMenu && (
-        <div
-          ref={menuRef}
-          data-testid="studio-context-menu"
-          data-context-target={contextMenu.type}
-          data-anchor-x={contextMenu.anchorX}
-          data-anchor-y={contextMenu.anchorY}
-          role="menu"
-          aria-label={`${contextMenu.type.toLowerCase().replace(/_/g, ' ')} actions`}
-          className="fixed z-[70] w-56 max-h-[min(420px,calc(100vh-16px))] overflow-y-auto rounded-xl border border-ink-600 bg-ink-900/[0.98] p-2 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.42)] backdrop-blur-xl"
-          style={{
-            left: typeof window !== 'undefined' ? Math.min(contextMenu.x, window.innerWidth - 232) : contextMenu.x,
-            top: typeof window !== 'undefined' ? Math.min(contextMenu.y, window.innerHeight - 250) : contextMenu.y,
-          }}
-          onContextMenu={(event) => event.preventDefault()}
-          onPointerDown={(event) => event.stopPropagation()}
-        >
+        <ViewportMenu x={contextMenu.x} y={contextMenu.y} onClose={() => setContextMenu(null)} menuRef={menuRef} testId="studio-context-menu" label={`${contextMenu.type.toLowerCase().replace(/_/g, ' ')} actions`} attributes={{'data-context-target':contextMenu.type,'data-anchor-x':contextMenu.anchorX,'data-anchor-y':contextMenu.anchorY}}>
           <div className="px-2.5 pb-1.5 pt-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-500 truncate" title={contextMenu.type.replace(/_/g, ' ')}>
             {contextMenu.type.replace(/_/g, ' ')}
           </div>
@@ -750,7 +725,6 @@ export default function Studio() {
 
             if (hasSubmenu) {
               const isSubmenuOpen = activeSubmenuId === command.id
-              const openSubmenuLeft = typeof window !== 'undefined' && contextMenu.x + 460 > window.innerWidth
               return (
                 <div
                   key={command.id}
@@ -766,6 +740,7 @@ export default function Studio() {
                     aria-haspopup="true"
                     aria-expanded={isSubmenuOpen}
                     onClick={() => setActiveSubmenuId(isSubmenuOpen ? null : command.id)}
+                    onKeyDown={event=>{if(event.key==='ArrowRight'){event.preventDefault();event.stopPropagation();setActiveSubmenuId(command.id)}else if(event.key==='ArrowLeft'){event.preventDefault();event.stopPropagation();setActiveSubmenuId(null)}}}
                     className={`flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-left font-medium outline-none transition-colors ${
                       isSubmenuOpen ? 'bg-ink-700 text-white' : 'hover:bg-ink-700 text-ink-200'
                     }`}
@@ -779,7 +754,8 @@ export default function Studio() {
                   {isSubmenuOpen && (
                     <div
                       data-testid={`ctx-submenu-${command.id}`}
-                      className={`absolute ${openSubmenuLeft ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-0 w-56 rounded-xl border border-ink-600 bg-ink-900/[0.98] p-1.5 text-xs text-ink-200 shadow-[0_18px_48px_rgba(0,0,0,.5)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95 duration-100`}
+                      role="group" aria-label={command.label}
+                      className="ml-3 mt-1 space-y-0.5 border-l border-ink-600 pl-1"
                     >
                       {command.submenu?.map((subItem) => {
                         const SubIcon = subItem.icon
@@ -815,7 +791,6 @@ export default function Studio() {
                 role="menuitem"
                
                 aria-label={command.label}
-                autoFocus={index === 0}
                 onClick={() => {
                   command.run?.()
                   setContextMenu(null)
@@ -839,7 +814,7 @@ export default function Studio() {
               </button>
             )
           })}
-        </div>
+        </ViewportMenu>
       )}
 
       <VoiceIsolationModal

@@ -48,12 +48,12 @@
   "settingsModalResponsiveVerified": true,
   "timelineTransportResponsiveVerified": true,
   "screenshots": {
-    "desktop_1920x1080": "/home/user/OmniFrame/evidence/screenshots/responsiveness-desktop_1920x1080.png",
-    "desktop_1440x900": "/home/user/OmniFrame/evidence/screenshots/responsiveness-desktop_1440x900.png",
-    "tablet_1024x768": "/home/user/OmniFrame/evidence/screenshots/responsiveness-tablet_1024x768.png",
-    "tablet_768x1024": "/home/user/OmniFrame/evidence/screenshots/responsiveness-tablet_768x1024.png",
-    "mobile_390x844": "/home/user/OmniFrame/evidence/screenshots/responsiveness-mobile_390x844.png",
-    "mobile_360x800": "/home/user/OmniFrame/evidence/screenshots/responsiveness-mobile_360x800.png",
-    "mobile_320x640": "/home/user/OmniFrame/evidence/screenshots/responsiveness-mobile_320x640.png"
+    "desktop_1920x1080": "/workspace/OmniFrame/evidence/screenshots/responsiveness-desktop_1920x1080.png",
+    "desktop_1440x900": "/workspace/OmniFrame/evidence/screenshots/responsiveness-desktop_1440x900.png",
+    "tablet_1024x768": "/workspace/OmniFrame/evidence/screenshots/responsiveness-tablet_1024x768.png",
+    "tablet_768x1024": "/workspace/OmniFrame/evidence/screenshots/responsiveness-tablet_768x1024.png",
+    "mobile_390x844": "/workspace/OmniFrame/evidence/screenshots/responsiveness-mobile_390x844.png",
+    "mobile_360x800": "/workspace/OmniFrame/evidence/screenshots/responsiveness-mobile_360x800.png",
+    "mobile_320x640": "/workspace/OmniFrame/evidence/screenshots/responsiveness-mobile_320x640.png"
   }
 }

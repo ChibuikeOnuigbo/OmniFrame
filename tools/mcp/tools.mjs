@@ -19,7 +19,12 @@ const TAR = path.join(ROOT, 'test_ans_result')
 export const SESSION = {
   seq: null, selection: null, trace: [], mode: 'omniframe', omniSelection: null,
   paint: { strokes: [], layers: [{ id: 'paint-1', name: 'paint', visible: true, locked: false, opacity: 1 }], clock: 0 },
-  reset() { this.seq = null; this.selection = null; this.trace = []; },
+  reset() {
+    this.seq = null; this.selection = null; this.trace = []; this.mode = 'omniframe'; this.omniSelection = null
+    this.compounds = []; this.seqStack = []; this.videoFrames = {}
+    this.paint = { strokes: [], layers: [{ id: 'paint-1', name: 'paint', visible: true, locked: false, opacity: 1 }], clock: 0 }
+    // Saved templates are a reusable library; only project-owned state resets.
+  },
   note(tool, params, out) { this.trace.push({ tool, params, out }); return out },
 }
 const seq = () => { if (!SESSION.seq) throw new Error('no composition: call project_new first'); return SESSION.seq }
@@ -443,6 +448,9 @@ class SmartPatch extends MCPTool {
   constructor() { super('smart_patch', 'Major tool: smart-patch/inpainter — donor-sample clone with brush radius + feather (app SmartPatchSlice params).', { x0: '', y0: '', x1: '', y1: '', donor: '[x,y]', brushRadius: '', feather: '', strategy: 'clone|blur|gradient' }) }
   async run(p) {
     const c = sel()
+    if (!['x0','y0','x1','y1'].every(key=>Number.isFinite(p[key])) || p.x0===p.x1 || p.y0===p.y1) throw new Error('smart_patch requires a finite, nonempty target rectangle')
+    if (p.strategy && !['smart','clone','donor','blur','gradient'].includes(p.strategy)) throw new Error('unknown smart_patch strategy')
+    if (p.donor && (!Array.isArray(p.donor) || p.donor.length!==2 || !p.donor.every(Number.isFinite))) throw new Error('donor must contain two finite coordinates')
     c.patch = p
     return SESSION.note('smart_patch', p, { clipId: c.id, patchRegion: [p.x0, p.y0, p.x1, p.y1], feather: p.feather ?? 5, brushRadius: p.brushRadius ?? 52 })
   }
@@ -489,7 +497,7 @@ class RenderExport extends MCPTool {
 /* ---------- paint canvas: ibisPaint X workflow harvested from the NothingxArt
    sunset short (2yAZqtdc_qk): time-lapse recording, radial ruler, smudge ---------- */
 class DrawStroke extends MCPTool {
-  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/circle/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24 (Krita Multibrush symmetry)', mirrorX: 'bool — Krita Multibrush mirror across vertical axis', mirrorY: 'bool — mirror across horizontal axis', gradientShape: 'linear|radial (Krita Gradient tool shapes)', smoothing: '0..1 Krita Freehand Brush stabilizer', translateCopies: '2..12 Krita Multibrush Translate ring copies', translateRadius: 'px ring radius for translate copies', gradientRepeat: 'none|forward|alternating (Krita Gradient repeat modes)', filled: 'bool', appearAt: 's' }) }
+  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/rounded-rectangle/circle/triangle/diamond/pentagon/hexagon/octagon/heart/chevron/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24 (Krita Multibrush symmetry)', mirrorX: 'bool — Krita Multibrush mirror across vertical axis', mirrorY: 'bool — mirror across horizontal axis', gradientShape: 'linear|radial (Krita Gradient tool shapes)', smoothing: '0..1 Krita Freehand Brush stabilizer', translateCopies: '2..12 Krita Multibrush Translate ring copies', translateRadius: 'px ring radius for translate copies', gradientRepeat: 'none|forward|alternating (Krita Gradient repeat modes)', filled: 'bool', appearAt: 's' }) }
   async run(p) {
     const st = SESSION.paint
     const w = SESSION.seq?.w || 640, h = SESSION.seq?.h || 360
@@ -657,6 +665,7 @@ class RunRecipe extends MCPTool {
 /* ---------- professional-MCP layer: help / preset logs / create / edit /
    context menu / data dumps / bg-removal / roto ---------- */
 const APP_FUNCTION_CATALOG = {
+  drawingShapes: ['rectangle', 'rounded-rectangle', 'circle', 'triangle', 'diamond', 'pentagon', 'hexagon', 'octagon', 'heart', 'chevron', 'star', 'polygon (3–12 sides)'],
   create: ['text (TEXT_PRESETS)', 'null object', 'shape mask', 'background bed (replaceBg family)', 'compound clip', 'import media'],
   edit: ['transform (pos/size/rot)', 'mask draw/clear', 'roto points mask', 'effects inside', 'blend+opacity', 'speed curve', 'convert to compound'],
   select: ['click preview coords', 'select by id', 'expand to group'],

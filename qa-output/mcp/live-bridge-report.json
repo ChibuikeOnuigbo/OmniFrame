@@ -1,0 +1,86 @@
+{
+  "catalog": [
+    "help",
+    "select",
+    "click",
+    "mask_draw",
+    "mask_clear",
+    "keyframe_set",
+    "curve_set",
+    "effect_set",
+    "remove_background",
+    "fill_composition_area",
+    "snapshot",
+    "dump",
+    "timeline_screenshot",
+    "track_assign",
+    "log",
+    "clip_stretch",
+    "transparent_select",
+    "select_main_element",
+    "omniframe_extract",
+    "patch_under",
+    "omniframe_move"
+  ],
+  "dump": {
+    "sequence": {
+      "aspectRatio": "16:9",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "label": "16:9 Landscape (1920×1080)",
+      "isCustom": false
+    },
+    "fps": 30,
+    "selection": [
+      "clip_t0h9xq6zlmw"
+    ],
+    "clips": [
+      {
+        "id": "clip_t0h9xq6zlmw",
+        "name": "MCP plate",
+        "start": 0,
+        "duration": 5,
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1
+        },
+        "mask": {
+          "shape": "rectangle",
+          "centerX": 0.0546875,
+          "centerY": 0.06481481481481481,
+          "width": 0.09895833333333333,
+          "height": 0.09259259259259259,
+          "rotation": 0,
+          "feather": 0,
+          "expansion": 0,
+          "opacity": 1,
+          "inverted": false,
+          "enabled": true,
+          "kind": "shape"
+        },
+        "effects": null,
+        "speedCurve": null
+      }
+    ]
+  },
+  "mask": {
+    "shape": "rectangle",
+    "centerX": 0.0546875,
+    "centerY": 0.06481481481481481,
+    "width": 0.09895833333333333,
+    "height": 0.09259259259259259,
+    "rotation": 0,
+    "feather": 0,
+    "expansion": 0,
+    "opacity": 1,
+    "inverted": false,
+    "enabled": true,
+    "kind": "shape"
+  },
+  "invalidInputsRejected": true,
+  "undo": true
+}

@@ -20,6 +20,12 @@ import {
   Stamp,
   Sparkles,
   Pentagon,
+  Triangle,
+  Diamond,
+  Heart,
+  ChevronRight,
+  Octagon,
+  RectangleHorizontal,
   Spline,
   Blend,
   Scissors,
@@ -58,6 +64,14 @@ const TOOL_DEFS: Record<DrawingToolType, { label: string; icon: LucideIcon }> = 
   circle: { label: 'Circle', icon: Circle },
   arrow: { label: 'Arrow', icon: MoveRight },
   star: { label: 'Star', icon: Star },
+  triangle: { label: 'Triangle', icon: Triangle },
+  diamond: { label: 'Diamond', icon: Diamond },
+  pentagon: { label: 'Pentagon', icon: Pentagon },
+  hexagon: { label: 'Hexagon', icon: Hexagon },
+  octagon: { label: 'Octagon', icon: Octagon },
+  heart: { label: 'Heart', icon: Heart },
+  chevron: { label: 'Chevron', icon: ChevronRight },
+  'rounded-rectangle': { label: 'Rounded rectangle', icon: RectangleHorizontal },
   polygon: { label: 'Polygon', icon: Pentagon },
   polyline: { label: 'Polyline', icon: Scissors },
   bezier: { label: 'Bezier Path', icon: Spline },
@@ -75,11 +89,12 @@ const TOOL_DEFS: Record<DrawingToolType, { label: string; icon: LucideIcon }> = 
 
 const GROUPS: { id: string; label: string; icon: LucideIcon; tools: DrawingToolType[] }[] = [
   { id: 'brushes', label: 'Brushes', icon: Paintbrush, tools: ['brush', 'pencil', 'marker', 'calligraphy', 'smudge'] },
-  { id: 'shapes', label: 'Shapes', icon: Square, tools: ['rectangle', 'circle', 'star', 'polygon', 'arrow'] },
+  { id: 'shapes', label: 'Shapes', icon: Square, tools: ['rectangle', 'rounded-rectangle', 'circle', 'triangle', 'diamond', 'pentagon', 'hexagon', 'octagon', 'polygon'] },
   { id: 'paths', label: 'Paths', icon: Spline, tools: ['line', 'polyline', 'bezier'] },
   { id: 'fills', label: 'Fills', icon: PaintBucket, tools: ['fill', 'gradient', 'eyedropper'] },
   { id: 'repair', label: 'Repair', icon: Sparkles, tools: ['clone', 'smart-patch'] },
   { id: 'erase', label: 'Erase', icon: Eraser, tools: ['eraser'] },
+  { id: 'symbols', label: 'Symbols', icon: Star, tools: ['star', 'heart', 'chevron', 'arrow'] },
   { id: 'select', label: 'Select', icon: SquareDashed, tools: ['select-rect', 'select-ellipse', 'select-lasso', 'select-polygon', 'select-brush', 'select-magic-wand', 'select-character'] },
 ]
 
@@ -127,7 +142,7 @@ export function DrawingToolbar() {
             const Icon = g.icon
             const active = g.id === openGroup
             return (
-              <Tooltip label={g.label}><button
+              <Tooltip key={g.id} label={g.label}><button
                 key={g.id}
                 type="button"
                 data-testid={`drawing-group-${g.id}`}
@@ -148,7 +163,7 @@ export function DrawingToolbar() {
 
         <div className="flex items-center gap-1 border-r border-ink-800 pr-1 shrink-0">
           {QUICK_COLORS.map((hex) => (
-            <Tooltip label={`Color ${hex}`}><button
+            <Tooltip key={hex} label={`Color ${hex}`}><button
               key={hex}
               type="button"
               data-testid={`color-swatch-${hex.replace('#', '')}`}
@@ -221,7 +236,7 @@ export function DrawingToolbar() {
           const Icon = def.icon
           const active = drawingTool === id
           return (
-            <Tooltip label={def.label}><button
+            <Tooltip key={id} label={def.label}><button
               key={id}
               type="button"
               data-testid={`drawing-tool-${id}`}

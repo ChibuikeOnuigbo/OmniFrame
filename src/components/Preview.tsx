@@ -1,3 +1,4 @@
+import { prepareDeviceModels } from '../lib/device3d'
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Maximize2,
@@ -46,6 +47,8 @@ export function Preview() {
   const dragRef = useRef<{ pointerId: number; origin: Point; pan: Point } | null>(null)
   const assetVideoRef = useRef<HTMLVideoElement>(null)
 
+  const hasDeviceTransitions = useEditor(s => s.transitions.some(t => t.type.startsWith('device_')))
+  useEffect(() => { if (hasDeviceTransitions) void prepareDeviceModels().catch(error => console.warn('Device model preload failed', error)) }, [hasDeviceTransitions])
   const clipCount = useEditor((s) => s.clips.length)
   const playing = useEditor((s) => s.playing)
   const previewQuality = useEditor((s) => s.previewQuality)

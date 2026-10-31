@@ -1,0 +1,14 @@
+[
+  {
+    "file": "qa-output/device-transitions/editor-export-1.mp4",
+    "duration": 1.72,
+    "requestedDuration": 1.6,
+    "audioRms": 0.11898252738872515
+  },
+  {
+    "file": "qa-output/device-transitions/editor-export-2.mp4",
+    "duration": 1.56,
+    "requestedDuration": 1.6,
+    "audioRms": 0.11766734714359185
+  }
+]

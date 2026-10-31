@@ -1,3 +1,4 @@
+import type { NgEffect } from './lib/glitchNG'
 import type { RecolorBlend } from './lib/recolor'
 // OmniFrame — core data model.
 // The editor document is a small, serializable graph:
@@ -432,6 +433,7 @@ export type TransitionType =
   | 'device_phone'
   | 'device_monitor'
   | 'device_tv'
+  | 'device_laptop'
 
 export interface Transition {
   id: string
@@ -574,7 +576,7 @@ export interface ClipTransform {
   scaleZ?: number
 }
 
-export interface ClipEffect {
+export interface ClipEffect extends NgEffect {
   brightness?: number // 0..2 (default 1)
   contrast?: number // 0..2 (default 1)
   saturation?: number // 0..2 (default 1)
@@ -779,6 +781,8 @@ export interface FxKey {
 }
 
 export interface FxInstance {
+  /** Elapsed source effect time retained when its parent is split. */
+  sourceOffset?: number
   id: string
   /** effectCatalog entry this instance was created from */
   catalogId: string
@@ -1068,6 +1072,14 @@ export type DrawingToolType =
   | 'circle'
   | 'arrow'
   | 'star'
+  | 'triangle'
+  | 'diamond'
+  | 'pentagon'
+  | 'hexagon'
+  | 'octagon'
+  | 'heart'
+  | 'chevron'
+  | 'rounded-rectangle'
   | 'polygon'
   | 'polyline'
   | 'bezier'

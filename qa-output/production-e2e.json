@@ -1,0 +1,84 @@
+{
+  "modelChecks": [
+    {
+      "id": "phone_modern_black",
+      "changedPixels": 12547,
+      "size": [
+        0.07500000298023224,
+        0.15500002201771582,
+        2.082562291540191e-8
+      ],
+      "uvCount": 36
+    },
+    {
+      "id": "phone_modern_silver",
+      "changedPixels": 12785,
+      "size": [
+        0.07500000298023224,
+        0.15500002201771582,
+        2.082562291540191e-8
+      ],
+      "uvCount": 36
+    },
+    {
+      "id": "phone_frameless_dark",
+      "changedPixels": 12034,
+      "size": [
+        0.07400000095367432,
+        0.15900001576022083,
+        2.136305742852715e-8
+      ],
+      "uvCount": 36
+    },
+    {
+      "id": "monitor_gaming_black",
+      "changedPixels": 58503,
+      "size": [
+        0.5299999713897705,
+        0.2980000479067534,
+        4.003894028999089e-8
+      ],
+      "uvCount": 36
+    },
+    {
+      "id": "monitor_clean_office",
+      "changedPixels": 57816,
+      "size": [
+        0.5299999713897705,
+        0.2980000479067534,
+        4.003894028999089e-8
+      ],
+      "uvCount": 36
+    },
+    {
+      "id": "tv_flat_black",
+      "changedPixels": 54502,
+      "size": [
+        0.9599999785423279,
+        0.5400000940114575,
+        7.25537853841357e-8
+      ],
+      "uvCount": 36
+    },
+    {
+      "id": "laptop_open_dark",
+      "changedPixels": 81257,
+      "size": [
+        0.3100000023841858,
+        0.1900000231439966,
+        2.55281824117215e-8
+      ],
+      "uvCount": 36
+    }
+  ],
+  "checks": {
+    "recipes": 5000,
+    "layers": 2,
+    "keyframes": true,
+    "undoRedo": true,
+    "projectRoundTrip": true,
+    "transitionUndo": true,
+    "rgbaBytes": 9216
+  },
+  "pageErrors": []
+}

@@ -25,5 +25,15 @@ for (const blendMode of ['normal','screen','multiply','add']) {
  assert.equal(image.length,src.length)
 }
 const silent=renderGlitchRGBA(src,w,h,0.5,{...recipe,layers:[{id:'silent',family:'digital-slice',parameters:{noiseOpacity:0,blockDropRate:0,scanOpacity:0,chromaticAberrationPx:0,sliceAmplitudePx:0}}]})
-assert.equal(silent.length,src.length)
-console.log('PASS glitch-ng layer unit: 9 groups (determinism, dynamics, disable, opacity, time, alpha, 4 blends, zero controls)')
+assert.deepEqual(silent, src, 'zero primitive controls must be an exact bypass')
+assert.deepEqual(render(0.5, {family:'digital-slice', timeline, parameters:{intensity:0}}), src, 'zero global intensity is bypass')
+assert.notDeepEqual(render(.5, {...recipe, seed:0, layers:undefined}),render(.5, {...recipe, seed:1, layers:undefined}), 'seed zero is distinct from one')
+assert.throws(() => renderGlitchRGBA(src, 0, h, 0, recipe))
+assert.throws(() => renderGlitchRGBA(src, w, h, NaN, recipe))
+assert.equal(render(.5, {...recipe,layers:undefined,parameters:{blockScalePx:0}}).length,src.length)
+for(const blendMode of ['normal','screen','multiply','add']) {
+ assert.deepEqual(render(.5,{family:'digital-slice',timeline,opacity:0,blendMode}),src,'root opacity zero bypass')
+ assert.deepEqual(render(.5,{family:'digital-slice',timeline,blendMode,parameters:{intensity:0}}),src,'zero intensity bypasses every blend')
+ assert.deepEqual(render(10,{...recipe,layers:[{...recipe.layers[0],blendMode}]}),src,'expired envelope bypasses every blend')
+}
+console.log('PASS glitch NG determinism, dynamics, timing, alpha, zero controls, root opacity and all blend-mode bypasses')

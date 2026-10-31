@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-10-31T10:36:20.319752+00:00",
+  "window_start_utc": "2026-10-24T10:36:20.319752+00:00",
+  "age_source": "last tracked content change from Git; checkout mtimes are not evidence dates; untracked current-work files have unknown historical age",
+  "files": 16174,
+  "tracked_files": 15447,
+  "kinds": {
+    "code": 440,
+    "document": 2023,
+    "media": 13653,
+    "other": 58
+  },
+  "media_files": 13653,
+  "png_screenshots": 1905,
+  "older_than_7_days": 11754,
+  "recent_7_days": 3693,
+  "unknown_age": 727,
+  "missing_reference_occurrences": 5345,
+  "unique_missing_references": 236,
+  "indexed_source_urls": 1251,
+  "generated_search_url_occurrences_by_file": {
+    "transition_tut.md": 100000,
+    "transition_pillars/tv.md": 25000,
+    "transition_pillars/flicker.md": 25000,
+    "transition_pillars/blur.md": 25000,
+    "transition_pillars/light.md": 25000,
+    "transition_pillars/dissolve.md": 25000,
+    "transition_pillars/glitch.md": 25000,
+    "transition_pillars/overlay.md": 25000
+  },
+  "ui_modules": 62,
+  "excluded_generated_or_dependency_trees": [
+    ".git",
+    "ort-runtime",
+    "node_modules",
+    "dist",
+    "public/ort",
+    "reports/repo-audit"
+  ],
+  "limitations": [
+    "Inventory is not functional or visual acceptance.",
+    "Existing completion claims are not promoted to verified status.",
+    "Git dates can differ from capture dates; per-report dates require separate review.",
+    "No credential files were read."
+  ]
+}
