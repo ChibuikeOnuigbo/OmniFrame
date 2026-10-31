@@ -1,18 +1,18 @@
-eo: wrapped_avframe, yuv420p(tv, bt709, progressive), 240x426 [SAR 1:1 DAR 40:71], q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
+sh
+    MINOR_VERSION   : 0
+    encoder         : Lavf62.3.100
+  Stream #0:0: Video: wrapped_avframe, yuv420p(tv, bt709, progressive), 240x426 [SAR 1:1 DAR 40:71], q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
     Metadata:
+      encoder         : Lavc62.11.100 wrapped_avframe
       HANDLER_NAME    : ISO Media file produced by Google Inc.
       VENDOR_ID       : [0][0][0][0]
       DURATION        : 00:00:18.633000000
-      encoder         : Lavc60.31.102 wrapped_avframe
   Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
     Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:18.668000000
-      encoder         : Lavc60.31.102 pcm_s16le
-frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=  49x    
-frame=  449 fps=0.0 q=-0.0 size=N/A time=00:00:14.93 bitrate=N/A speed=26.6x    
-[out#0/null @ 0x55a5f3623c80] video:262kB audio:13984kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-frame=  559 fps=0.0 q=-0.0 Lsize=N/A time=00:00:18.60 bitrate=N/A speed=24.9x    
-[Parsed_loudnorm_0 @ 0x55a5f367e1c0] 
+[opus @ 0x5a12cc911a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x798ab8002080] 
 {
 	"input_i" : "-6.34",
 	"input_tp" : "2.32",
@@ -25,3 +25,5 @@ frame=  559 fps=0.0 q=-0.0 Lsize=N/A time=00:00:18.60 bitrate=N/A speed=24.9x
 	"normalization_type" : "dynamic",
 	"target_offset" : "-0.57"
 }
+[out#0/null @ 0x5a12cc957240] video:227KiB audio:13984KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=  559 fps=0.0 q=-0.0 Lsize=N/A time=00:00:18.63 bitrate=N/A speed=38.4x elapsed=0:00:00.48    

@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=Qu9MxR8I5dM
 [youtube] Qu9MxR8I5dM: Downloading webpage
 [youtube] Qu9MxR8I5dM: Downloading web embedded client config
-[youtube] Qu9MxR8I5dM: Downloading player 55de7e60-main
+[youtube] Qu9MxR8I5dM: Downloading player 11a45ffb-main
 [youtube] Qu9MxR8I5dM: Downloading web embedded player API JSON
 [youtube] Qu9MxR8I5dM: Downloading tv samsung player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
@@ -48,15 +48,15 @@ sb0     mhtml 48x27        8    |                  mhtml | images               
 [debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=Qu9MxR8I5dM']
 [debug] User config "/home/runner/.config/yt-dlp/config": ['--remote-components', 'ejs:github']
 [debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
-[debug] yt-dlp version stable@2026.10.21 from yt-dlp/yt-dlp [8cdf4fea4]
+[debug] yt-dlp version stable@2026.10.26 from yt-dlp/yt-dlp [c91f8de0b]
 [debug] Lazy loading extractors is disabled
-[debug] Python 3.12.3 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.39 (OpenSSL 3.0.13 30 Jan 2024, glibc 2.39)
-[debug] exe versions: ffmpeg 6.1.1 (setts), ffprobe 6.1.1
-[debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.0, certifi-2026.10.19, mutagen-1.48.1, requests-2.34.2, sqlite3-3.45.1, urllib3-2.8.0, websockets-17.3, yt_dlp_ejs-0.8.0
+[debug] Python 3.14.4 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.43 (OpenSSL 3.5.5 27 Jan 2026, glibc 2.43)
+[debug] exe versions: ffmpeg 8.0.1 (setts), ffprobe 8.0.1
+[debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.1, certifi-2026.10.23, mutagen-1.48.1, requests-2.34.2, sqlite3-3.46.1, urllib3-2.8.0, websockets-17.4, yt_dlp_ejs-0.8.0
 [debug] JS runtimes: deno-2.5.4
 [debug] Proxy map: {}
 [debug] Request Handlers: urllib, requests, websockets
-[debug] Plugin directories: /home/runner/.local/lib/python3.12/site-packages/yt_dlp_plugins
+[debug] Plugin directories: /home/runner/.local/lib/python3.14/site-packages/yt_dlp_plugins
 [debug] Loaded 1747 extractors
 [debug] [youtube] Found YouTube account cookies
 [debug] [youtube] [pot:bgutil:script-node] No server_home or script_path passed, defaulting to /home/runner/bgutil-ytdlp-pot-provider/server
@@ -67,13 +67,13 @@ sb0     mhtml 48x27        8    |                  mhtml | images               
 [debug] [youtube] [pot] PO Token Cache Providers: memory
 [debug] [youtube] [pot] PO Token Cache Spec Providers: webpo
 [debug] [youtube] [jsc] JS Challenge Providers: bun (unavailable), deno, node (unavailable), quickjs (unavailable)
-[debug] [youtube] Forcing "main" player JS variant for player 55de7e60
-        original url = /s/player/55de7e60/player_es6.vflset/en_US/base.js
+[debug] [youtube] Forcing "main" player JS variant for player 11a45ffb
+        original url = /s/player/11a45ffb/player_es6.vflset/en_US/base.js
 [debug] [youtube] Qu9MxR8I5dM: Detected experiment to bind GVS PO Token to video ID for web_embedded client
 [debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -
-[debug] Saving youtube-sigfuncs.55de7e60-main-105 to cache
-[debug] Saving youtube-sigfuncs.55de7e60-main-109 to cache
+[debug] Saving youtube-sigfuncs.11a45ffb-main-107 to cache
+[debug] Saving youtube-sigfuncs.11a45ffb-main-111 to cache
 [debug] Sort order given by extractor: quality, res, fps, hdr:12, source, vcodec, channels, acodec, lang, proto
 [debug] Formats sorted by: hasvid, ie_pref, quality, res, fps, hdr:12(7), source, vcodec, channels, acodec, lang, proto, size, br, asr, vext, aext, hasaud, id

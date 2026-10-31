@@ -1,17 +1,14 @@
-b/s (default)
+21.819000000
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
     Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:01:21.868000000
-      encoder         : Lavc60.31.102 pcm_s16le
-frame=   75 fps=0.0 q=-0.0 size=N/A time=00:00:02.89 bitrate=N/A speed=48.5x    
-frame=  371 fps=0.0 q=-0.0 size=N/A time=00:00:14.53 bitrate=N/A speed=25.9x    
-frame=  688 fps=649 q=-0.0 size=N/A time=00:00:26.90 bitrate=N/A speed=25.4x    
-frame= 1004 fps=643 q=-0.0 size=N/A time=00:00:39.28 bitrate=N/A speed=25.2x    
-frame= 1316 fps=638 q=-0.0 size=N/A time=00:00:51.54 bitrate=N/A speed=  25x    
-frame= 1640 fps=640 q=-0.0 size=N/A time=00:01:04.23 bitrate=N/A speed=25.1x    
-frame= 1957 fps=639 q=-0.0 size=N/A time=00:01:16.60 bitrate=N/A speed=  25x    
-[out#0/null @ 0x555ea98cfc80] video:979kB audio:61379kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-frame= 2089 fps=628 q=-0.0 Lsize=N/A time=00:01:21.77 bitrate=N/A speed=24.6x    
-[Parsed_loudnorm_0 @ 0x555ea992b0c0] 
+frame=  544 fps=0.0 q=-0.0 size=N/A time=00:00:18.00 bitrate=N/A speed=  36x elapsed=0:00:00.50    
+frame= 1060 fps=1060 q=-0.0 size=N/A time=00:00:38.20 bitrate=N/A speed=38.2x elapsed=0:00:01.00    
+frame= 1575 fps=1050 q=-0.0 size=N/A time=00:00:58.40 bitrate=N/A speed=38.9x elapsed=0:00:01.50    
+frame= 2083 fps=1041 q=-0.0 size=N/A time=00:01:18.30 bitrate=N/A speed=39.1x elapsed=0:00:02.00    
+[opus @ 0x61c4dd7d0a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x7fea20002080] 
 {
 	"input_i" : "-11.02",
 	"input_tp" : "0.98",
@@ -24,3 +21,5 @@ frame= 2089 fps=628 q=-0.0 Lsize=N/A time=00:01:21.77 bitrate=N/A speed=24.6x
 	"normalization_type" : "dynamic",
 	"target_offset" : "0.29"
 }
+[out#0/null @ 0x61c4dd816240] video:849KiB audio:61379KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 2089 fps=1015 q=-0.0 Lsize=N/A time=00:01:21.81 bitrate=N/A speed=39.8x elapsed=0:00:02.05    
