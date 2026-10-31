@@ -15,6 +15,7 @@ import { bedPainterLocal } from './beds.mjs'
 import { hasAudio, audioMixPlan, muxAudio } from './audioExport.mjs'
 
 const DEFORMATION=await loadAppTs('src/lib/deformation.ts')
+const SPEED=await loadAppTs('src/lib/speedCurves.ts')
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const TAR = path.join(ROOT, 'test_ans_result')
 
@@ -104,7 +105,7 @@ class ImportVideo extends MCPTool {
     SESSION.selection = clip
     SESSION.videoFrames = SESSION.videoFrames || {}
     SESSION.videoFrames[rel] = { get, files, fps: Number(fps) }
-    return SESSION.note('import_video', { path: rel, fps }, { clipId: clip.id, frames: files.length, duration: +dur.toFixed(2), hasAudio: clip.sourceVideo.hasAudio })
+    return SESSION.note('import_video', { path: rel, fps, fit, scale }, { clipId: clip.id, frames: files.length, duration: +dur.toFixed(2), hasAudio: clip.sourceVideo.hasAudio })
   }
 }
 class NewBackground extends MCPTool {
@@ -244,6 +245,10 @@ class CompoundClipCreate extends MCPTool {
     s.clips = s.clips.filter(c => !ids.includes(c.id))
     const start = Math.min(...members.map(m => m.start))
     const end = Math.max(...members.map(m => m.start + m.duration))
+    // A nested sequence starts at zero. Keeping absolute parent starts here
+    // made compounds created later on the timeline render blank at the front.
+    for (const member of members) member.start -= start
+    child.duration = end - start
     const comp = makeClip({ id: cid, name: name || `Compound ${SESSION.compounds.length + 1}`, natW: s.w, natH: s.h, duration: end - start, draw: () => {} })
     comp.kind = 'compound'
     comp.sourceSequenceId = child.id
@@ -252,7 +257,7 @@ class CompoundClipCreate extends MCPTool {
     comp.start = start
     s.addClip(comp)
     SESSION.compounds.push({ id: cid, kind: 'compound', name: comp.name, memberIds: ids, nestedTrackCount: 1, createdFrom: ids })
-    return SESSION.note('compound_clip_create', { ids, name: comp.name }, { id: cid, memberIds: ids, name: comp.name })
+    return SESSION.note('compound_clip_create', { ids, name: comp.name, nest:true }, { id: cid, memberIds: ids, name: comp.name })
   }
 }
 class ClipMoveTime extends MCPTool {
@@ -434,7 +439,9 @@ class UncompoundClip extends MCPTool {
     const i = s.clips.findIndex((k) => k.id === id && k.kind === 'compound')
     if (i < 0) throw new Error(`no compound ${id} in active sequence`)
     const c = s.clips[i]
+    if (c.inPoint || (c.speedCurve && c.speedCurve !== 'linear')) throw new Error('Clear the compound source trim and speed curve before uncompounding; baking retimed child clips is not supported')
     const kids = c.childSeq ? c.childSeq.clips : []
+    for (const kid of kids) kid.start += c.start
     s.clips.splice(i, 1, ...kids)
     SESSION.compounds = (SESSION.compounds || []).filter((k) => k.id !== id)
     return SESSION.note('uncompound_clip', { id }, { ok: true, restored: kids.map(k => k.id) })
@@ -596,7 +603,7 @@ function inspectPayload() {
     mode: SESSION.mode,
     sequence: s ? { w: s.w, h: s.h, fps: s.fps, duration: s.duration, bg: s.bg } : null,
     selection: SESSION.selection ? SESSION.selection.id : null,
-    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
+    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, speedCurve: c.speedCurve, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
     trace: SESSION.trace,
   }
 }
@@ -715,7 +722,7 @@ class ListPresets extends MCPTool {
     else if (catalog === 'transition') entries = scan('src/lib/transitionPresets.ts')
     else if (catalog === 'ratios') entries = scan('src/lib/aspectRatios.ts')
     else if (catalog === 'shake') entries = (await loadAppTs('src/lib/shakePresets.ts')).SHAKE_PRESETS.map(p => ({ id: p.id, name: p.name }))
-    else entries = (await import('./curves.mjs')).SPEED_CURVES.map(c => ({ id: c.id, name: c.name }))
+    else entries = SPEED.SPEED_CURVES.map(c => ({ id: c.id, name: c.name }))
     entries = entries.slice(0, limit)
     if (dataImg) for (const e of entries) e['data:img'] = swatch(catalog, e.id)
     return SESSION.note('list_presets', { catalog, limit, dataImg }, { catalog, count: entries.length, entries })
@@ -776,7 +783,7 @@ class CreateText extends MCPTool {
   }
 }
 class EditElement extends MCPTool {
-  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), source inPoint, volume, mask, effects, blend, or compound clip.', { clipId: '', patch: '{transform?,deformation?,inPoint?,volume?,mask?,effects?,opacity?,blendMode?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
+  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), source inPoint, volume, mask, effects, blend, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,effects?,opacity?,blendMode?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
   async run({ clipId, patch = {}, convert }) {
     const s = seq()
     const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
@@ -784,10 +791,14 @@ class EditElement extends MCPTool {
     for (const key of ['inPoint', 'volume']) if (patch[key] !== undefined) {
       if (!Number.isFinite(patch[key]) || patch[key] < 0 || (key === 'volume' && patch[key] > 1)) throw new Error(`${key} is outside its valid range`)
     }
+    if (patch.speedCurve !== undefined && patch.speedCurve !== null && !SPEED.SPEED_CURVE_IDS.includes(patch.speedCurve)) throw new Error('Unknown speed curve')
+    const deformation = patch.deformation !== undefined ? DEFORMATION.validateDeformation(patch.deformation) : undefined
     if (patch.inPoint !== undefined) c.inPoint = patch.inPoint
     if (patch.volume !== undefined) c.volume = patch.volume
     if (patch.transform) Object.assign(c.transform, patch.transform)
-    if (patch.deformation !== undefined) c.deformation = DEFORMATION.validateDeformation(patch.deformation)
+    if (patch.deformation !== undefined) c.deformation = deformation
+    if (patch.speedCurve === null) delete c.speedCurve
+    else if (patch.speedCurve !== undefined) c.speedCurve = patch.speedCurve
     if (patch.mask !== undefined) c.mask = patch.mask
     if (patch.effects) c.effects = { ...c.effects, ...patch.effects }
     if (patch.opacity !== undefined) c.opacity = patch.opacity

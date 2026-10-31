@@ -1,0 +1,857 @@
+[
+  {
+    "id": "linear",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.73,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.73,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.1099999999999999,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.1099999999999999,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.6,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.6,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.2,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.2,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 49,
+    "file": "evidence_video/speed-curves/linear.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "ease-in-quad",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.52645,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.52645,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.68605,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.68605,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.105,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.105,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 1.9449999999999998,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 1.9449999999999998,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 47,
+    "file": "evidence_video/speed-curves/ease-in-quad.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "ease-out-quad",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.9335499999999999,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.9335499999999999,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.53395,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.53395,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.095,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.095,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.455,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.455,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 46,
+    "file": "evidence_video/speed-curves/ease-out-quad.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "ease-in-out-cubic",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.512167,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.512167,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.726981,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.726981,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.7710000000000004,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.7710000000000004,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.473,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.473,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 45,
+    "file": "evidence_video/speed-curves/ease-in-out-cubic.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "ease-out-back",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 1.420217348965,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 1.420217348965,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 2.329957714495,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 2.329957714495,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.696776945,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.696776945,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.558335435,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.558335435,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 47,
+    "file": "evidence_video/speed-curves/ease-out-back.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "ease-in-out-back",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.40646893829999997,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.40646893829999997,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.3504117069,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.3504117069,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.9811869000000004,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.9811869000000004,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.6364787,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.6364787,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 49,
+    "file": "evidence_video/speed-curves/ease-in-out-back.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "elastic-out",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 3.1697596177483462,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 3.1697596177483462,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 2.2598387928381474,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 2.2598387928381474,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.47790291308792,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.47790291308792,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.49723786413599,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.49723786413599,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 48,
+    "file": "evidence_video/speed-curves/elastic-out.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "bounce-out",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.700028125,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.700028125,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.907003125,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.907003125,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.0003124999999997,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.0003124999999997,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.3903125,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.3903125,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 49,
+    "file": "evidence_video/speed-curves/bounce-out.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "expo-in",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.504334255750265,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.504334255750265,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.5161760144350215,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.5161760144350215,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 0.5883883476483185,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 0.5883883476483185,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 1.2071067811865475,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 1.2071067811865475,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 38,
+    "file": "evidence_video/speed-curves/expo-in.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "expo-out",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 1.5987495373891698,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 1.5987495373891698,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 2.2585159177687886,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 2.2585159177687886,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.455805826175841,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 2.455805826175841,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.49447572827198,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.49447572827198,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 38,
+    "file": "evidence_video/speed-curves/expo-out.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "circ-in-out",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.5268093711918512,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.5268093711918512,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.7075985865736988,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.7075985865736988,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.9358898943540677,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.9358898943540677,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.4539392014169454,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.4539392014169454,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 42,
+    "file": "evidence_video/speed-curves/circ-in-out.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "sine-in-out",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.5645559691701327,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.5645559691701327,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.9249947479567214,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.9249947479567214,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.656434465040231,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.656434465040231,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.391006524188368,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.391006524188368,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 45,
+    "file": "evidence_video/speed-curves/sine-in-out.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "hold-then-go",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.5,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.5,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.5,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 0.5,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 40,
+    "file": "evidence_video/speed-curves/hold-then-go.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "ramp-hold-ramp",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.8285714285714286,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.8285714285714286,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.3714285714285714,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.3714285714285714,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.5,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.5,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.071428571428571,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.071428571428571,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 49,
+    "file": "evidence_video/speed-curves/ramp-hold-ramp.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  },
+  {
+    "id": "velocity-spike",
+    "comparisons": [
+      {
+        "local": 0.23,
+        "expectedSource": 0.8328531276452447,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.23,
+        "expectedSource": 0.8328531276452447,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.4487037875102369,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 0.61,
+        "expectedSource": 1.4487037875102369,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.465706507748449,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.1,
+        "expectedSource": 1.465706507748449,
+        "layered": true,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.03839414698741,
+        "layered": false,
+        "exactPixels": true
+      },
+      {
+        "local": 1.7,
+        "expectedSource": 2.03839414698741,
+        "layered": true,
+        "exactPixels": true
+      }
+    ],
+    "frames": 54,
+    "distinctFrameHashes": 49,
+    "file": "evidence_video/speed-curves/velocity-spike.mp4",
+    "audio": "silent diagnostic; nonlinear audio time remapping remains unsupported"
+  }
+]

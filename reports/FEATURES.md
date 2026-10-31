@@ -1,5 +1,7 @@
 # Verified implementation changes — 2026-10-31
 
+Latest resumed increment: `docs/RESUMED_EDITOR_WORK_20261031.md`. Saved commit `807e8f1b` is pushed to `codex/omniframe-editor-improvements`; latest main was merged into that working branch. All 15 speed curves now control actual headless source sampling via shared app maths, with 120 exact pixel comparisons / 15 moving exports. Live MCP clock/trim/volume editing supports undo and project persistence. Nonzero-start compound creation and ordinary moved ungroup preserve time. A second original kinetic typography MP4 is delivered. Actual Drive source downloads and BrandBird responsive interactions are now evidenced; YouTube direct requests still return 403. Older local-only/access statements below are historical.
+
 This ledger describes code and executed checks in `codex/omniframe-device-glitch-production`, based on merged main `ba7103b8`. It supersedes conflicting historical counts, without certifying every old feature claim. See `docs/CODEX_TASK_RECOVERY.md` and `continue.md` for remaining work.
 
 | Change | Code | Verification / artifact |

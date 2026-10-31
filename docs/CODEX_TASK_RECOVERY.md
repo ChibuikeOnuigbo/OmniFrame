@@ -1,5 +1,7 @@
 # OmniFrame: recovered user requests and Codex questions
 
+Latest continuation: the user requested a new pushed branch and will create the PR. Saved commit `807e8f1b` is remotely verified on `codex/omniframe-editor-improvements`; main `d9214115` was merged into that working branch. `docs/RESUMED_EDITOR_WORK_20261031.md` records the 15 moving speed-curve proofs / 120 pixel comparisons, live source-clock controls, compound timing fixes, actual Drive source acquisition and fresh BrandBird interactions. Historical rows below remain acceptance leads, not a replacement for current evidence. Full quiz C, creator coverage, independent RDT recreation and all-5,000 full-motion acceptance remain open.
+
 2026-10-31. Start here, then read `continue.md`, `vow.md`, `reports/STATE.md` and `AGENTS.md`. Preserve the **OmniFrame** name. The latest user instruction is to work from merged **main**; this implementation branch starts at `ba7103b89600ef4afa2d4ac5a55e1be1a24ac1ea`. Do not follow old hard-reset instructions.
 
 This document turns the historical requests into questions Codex must answer with code, tests and viewable outputs. It does not certify every old completion claim. Keep working through unresolved items; never replace missing footage with a claim that it was watched.

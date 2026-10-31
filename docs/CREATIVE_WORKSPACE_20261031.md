@@ -1,5 +1,7 @@
 # Creative workspace improvements — 2026-10-31
 
+Historical increment at `807e8f1b`. The latest user subsequently authorized a GitHub push, and Drive source access improved. See `docs/RESUMED_EDITOR_WORK_20261031.md` for the current branch, shared source-clock fixes, actual full downloads and fresh studies; earlier local-only/access statements in this report describe the earlier increment.
+
 This increment continues the existing implementation branch from `4dca4c77`, preserving prior local test/media changes. The environment's published configuration was read and used; no configuration draft was modified and nothing was published or pushed.
 
 ## Implemented and checked

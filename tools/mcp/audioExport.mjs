@@ -25,7 +25,7 @@ export function audioMixPlan(sequence, duration) {
     if (!clip.sourceVideo?.hasAudio) continue
     const volume = clip.volume ?? 1
     if (!Number.isFinite(volume) || volume < 0 || volume > 1) throw new Error('Audio volume must be between 0 and 1')
-    if (clip.speedCurve) throw new Error('Headless audio speed curves are not supported yet')
+    if (clip.speedCurve && clip.speedCurve !== 'linear') throw new Error('Headless audio speed curves are not supported yet')
     const timeKeys = ['reverse', 'freezeHold', 'timeQuantization']
     const timeEffect = timeKeys.some(key => clip.effects?.[key]) || (clip.fxInstances || []).some(fx => fx.enabled !== false && timeKeys.some(key => fx.params?.[key] || fx.keys?.[key]?.length))
     if (timeEffect) throw new Error('Headless audio time effects are not supported yet; use audio:false explicitly for a silent export')

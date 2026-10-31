@@ -1,5 +1,9 @@
 # New creative-workspace evidence
 
+- [15 moving speed-curve diagnostics](speed-curves/README.md) and [120 pixel-comparison results](speed-curves/manifest.json).
+- [Original kinetic word-stack motion design](<reala/motion design/kinetic-word-stack.mp4>) and [preview](<reala/motion design/kinetic-word-stack.png>).
+- [Resumed implementation, source access and limits](../docs/RESUMED_EDITOR_WORK_20261031.md).
+
 - [UI proof samples](workbench-ui.mp4) — actual tested responsive/palette/transform screenshot states; **not a continuous interaction recording**.
 - [Perspective on moving footage](transforms/perspective.mp4).
 - Liquify: [push](transforms/liquify-push.mp4), [bulge](transforms/liquify-bulge.mp4), [pinch](transforms/liquify-pinch.mp4), [twirl](transforms/liquify-twirl.mp4).

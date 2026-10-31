@@ -25,6 +25,8 @@ jobs:
           node qa/drawing-shapes-unit.mjs
           node qa/video-encoder-failure-unit.mjs
           node qa/headless-video-audio-e2e.mjs
+          node qa/speed-curves-render-e2e.mjs
+          node qa/compound-source-clock-unit.mjs
           node qa/mcp-project-reset-unit.mjs
           node qa/smart-patch-compositor-unit.mjs
           node qa/universal-tools-unit.mjs
@@ -50,6 +52,7 @@ jobs:
           node qa/render-device-transition-reel.mjs
           node qa/render-transform-proofs.mjs
           node qa/render-creative-motion-proof.mjs
+          node qa/render-kinetic-word-study.mjs
           node qa/render-workbench-ui-proof.mjs
       - name: Upload reviewable evidence
         if: always()

@@ -131,6 +131,7 @@ export const FXI = await loadAppTs('src/lib/fxInstances.ts')
 export const PRT = await loadAppTs('src/lib/particleFx.ts')
 
 const DF = await loadAppTs('src/lib/deformation.ts')
+const SC = await loadAppTs('src/lib/speedCurves.ts')
 export class Sequence {
   constructor({ w = 640, h = 360, fps = 24, duration = 2, bg = '#0d0f13' } = {}) {
     this.w = w; this.h = h; this.fps = fps; this.duration = duration; this.bg = bg
@@ -331,6 +332,10 @@ function drawSeq(x, seq, t, depth = 0) {
     }
     const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}
     const tt = PFX.pfxLocalTime(eff, t, clip.start, clip.duration)
+    // Same source clock as browser video playback. Animation/effect clocks
+    // stay on the timeline; only media sampling and nested sequence time warp.
+    const sourceTimeAt = time => Math.max(0, (clip.inPoint || 0) + SC.remapClipLocal(clip, Math.max(0, time - clip.start)))
+    const mediaTime = sourceTimeAt(tt)
     const sh = PFX.pfxShake(eff, t)
   const osc = PFX.pfxOscillate(eff, t)
   sh.dx += osc.dx; sh.dy += osc.dy
@@ -349,7 +354,7 @@ function drawSeq(x, seq, t, depth = 0) {
     if (clip.kind === 'compound' && clip.childSeq) {
       // Padded (3x frame) child render: children bigger than the view must NOT
       // be bitmap-clipped to the view — mirrors the playback.ts pad fix.
-      const innerT = Math.max(0, t - clip.start) + (clip.inPoint || 0)
+      const innerT = sourceTimeAt(t)
       const pad = scratchLayer(seq.w * 3, seq.h * 3, depth + 40, seq)
       const pxc = pad.getContext('2d')
       pxc.translate(seq.w, seq.h)
@@ -381,7 +386,7 @@ function drawSeq(x, seq, t, depth = 0) {
       x.translate(-lw0 / 2, -lh0 / 2)
       x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
       x.globalCompositeOperation = clip.blendMode || 'source-over'
-      clip.draw(x, lw0, lh0, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
+      clip.draw(x, lw0, lh0, mediaTime)
       x.restore()
       continue
     }
@@ -401,7 +406,7 @@ function drawSeq(x, seq, t, depth = 0) {
       const off = tsP.chroma * pxScale
       for (const [dx, col] of [[-off, '#00ffff'], [off, '#ff005a']]) {
         const tc = makeCanvas(lw, lh), tx = tc.getContext('2d')
-        clip.draw(tx, lw, lh, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
+        clip.draw(tx, lw, lh, mediaTime)
         tx.globalCompositeOperation = 'source-in'
         tx.fillStyle = col
         tx.fillRect(0, 0, lw, lh)
@@ -413,14 +418,14 @@ function drawSeq(x, seq, t, depth = 0) {
       sx.translate((tsP.shadowOffsetX || 0) * pxScale, (tsP.shadowOffsetY || 0) * pxScale)
       sx.shadowColor = tsP.shadowColor || 'rgba(0,0,0,0.85)'
       sx.shadowBlur = (tsP.shadowBlur || 6) * pxScale
-      clip.draw(sx, lw, lh, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
+      clip.draw(sx, lw, lh, mediaTime)
       sx.restore()
     }
     if (tsP && tsP.glowBlur && tsP.glowMode !== 'inward') {
       sx.shadowColor = tsP.glowColor || '#ffffff'
       sx.shadowBlur = tsP.glowBlur * pxScale
     }
-    clip.draw(sx, lw, lh, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
+    clip.draw(sx, lw, lh, mediaTime)
     sx.shadowBlur = 0
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, lw, lh) }
@@ -465,7 +470,7 @@ function drawSeq(x, seq, t, depth = 0) {
       const gsx = gs.getContext('2d')
       gsx.save()
       gsx.translate(gs.width / 2, gs.height / 2); gsx.scale(1, 1); gsx.translate(-gs.width / 2, -gs.height / 2)
-      clip.draw(gsx, gs.width, gs.height, Math.max(0, PFX.pfxLocalTime(eff, g.time, clip.start, clip.duration) - clip.start) + (clip.inPoint || 0))
+      clip.draw(gsx, gs.width, gs.height, sourceTimeAt(PFX.pfxLocalTime(eff, g.time, clip.start, clip.duration)))
       gsx.restore()
       if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) { /* matte applied below via shared path */ }
       x.save()

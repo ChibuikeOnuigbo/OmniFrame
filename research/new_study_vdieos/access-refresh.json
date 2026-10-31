@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-31",
+  "sources": [
+    {
+      "filename": "00-manifest-report.zip",
+      "driveId": "1Ju6R6fpnyB5UQSpOZP_knp-R3flwGgsu",
+      "kind": "metadata archive",
+      "bytes": 100904,
+      "sha256": "339dd409477d8b627e894935238868f6bd9bab271217c58de4322e7adf00ae18",
+      "downloaded": true,
+      "bundledInProduct": false
+    },
+    {
+      "filename": "8hjWrzum_vQ.mp4",
+      "driveId": "1ZGRW4p3rR7omGUinQ5V0N6QV5ChTaiL9",
+      "kind": "timeline video",
+      "bytes": 11065415,
+      "sha256": "b58e560fc516bacd819ab512e7c2d366c75ee29ed51184b5b8000529354f20eb",
+      "downloaded": true,
+      "bundledInProduct": false,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "avg_frame_rate": "60000/1001"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "27.631746",
+          "size": "11065415"
+        }
+      },
+      "reviewedFramesSeconds": [
+        3,
+        18,
+        24
+      ],
+      "audioListeningReview": false
+    },
+    {
+      "filename": "brandbird-reference.rar",
+      "driveId": "15PnvqnUPOJwkB34q-6mmgkyy25jb7ic0",
+      "kind": "reference app mirror",
+      "bytes": 3323095,
+      "sha256": "9fe706734b27ac42916ed891182db6f23841be9011378d273839520efc349dd0",
+      "downloaded": true,
+      "bundledInProduct": false
+    }
+  ],
+  "network": {
+    "publishedPolicy": "unrestricted, enforced",
+    "drive": "full file download succeeded",
+    "youtube": "yt-dlp public requests still returned proxy CONNECT 403"
+  },
+  "branch": "codex/omniframe-editor-improvements",
+  "initialPushedCommit": "807e8f1bbf36c86a75fe925041f6c0cb672fb20a",
+  "scope": "Metadata claims in the collection index are not new video viewing. Original mirrors/cache files remain outside the product repository."
+}

@@ -1,4 +1,5 @@
 import { validateDeformation } from './deformation'
+import { SPEED_CURVE_IDS } from './speedCurves'
 /**
  * In-app MCP bridge: the SAME universal tool names as tools/mcp operate the
  * REAL store from inside the booted app (window.omniMCP.call(...)). Every call
@@ -43,7 +44,7 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
     const seq = st().sequenceSettings || { width: 1920, height: 1080 }
     switch (tool) {
       case 'help':
-        out = { catalog: OMNI_MCP_CATALOG, editElementFields:['transform','deformation'], note: 'universal tools operate the real store; every call is logged in the MCP Console' }
+        out = { catalog: OMNI_MCP_CATALOG, editElementFields:['transform','deformation','speedCurve','inPoint','volume'], note: 'universal tools operate the real store; every call is logged in the MCP Console' }
         break
       case 'select':
         if (params.clipId != null && !clips().some(c => c.id === params.clipId)) throw new Error('clip not found')
@@ -103,10 +104,12 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
       }
       case 'edit_element': {
         const c=params.clipId?clips().find(c=>c.id===params.clipId):requireClip();if(!c)throw new Error('clip not found')
-        const patch=params.patch||{};for(const key of Object.keys(patch))if(!['transform','deformation'].includes(key))throw new Error('Live edit_element supports transform and deformation')
+        const patch=params.patch||{};for(const key of Object.keys(patch))if(!['transform','deformation','speedCurve','inPoint','volume'].includes(key))throw new Error('Unsupported live edit_element field '+key)
         const next:any={}
         if(patch.transform){for(const [key,value]of Object.entries(patch.transform)){if(!['x','y','z','scale','scaleX','scaleY','scaleZ','rotation','rotationX','rotationY','opacity','pivotX','pivotY'].includes(key))throw new Error('Unknown transform field');finite(key,value)}next.transform={...c.transform,...patch.transform}}
         if('deformation'in patch)next.deformation=validateDeformation(patch.deformation)
+        if('speedCurve'in patch){if(patch.speedCurve!==null&&!SPEED_CURVE_IDS.includes(patch.speedCurve))throw new Error('Unknown speed curve');next.speedCurve=patch.speedCurve??undefined}
+        for(const key of ['inPoint','volume'])if(key in patch){const value=finite(key,patch[key]);if(value<0||(key==='volume'&&value>1))throw new Error(key+' is outside its valid range');next[key]=value}
         edit(c,next);out={clipId:c.id,...next};break
       }
       case 'effect_set':

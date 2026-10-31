@@ -1,5 +1,15 @@
 # new_study_vdieos — creative editor study, 2026-10-31
 
+## Latest source-access and implementation checkpoint
+
+The full Drive copies of the requested timeline short, collection manifest and correct BrandBird RAR are now downloaded and hashed. Actual video probe: 27.632 seconds, 1080×1920, 59.94 fps, H.264/AAC, 11,065,415 bytes. Native frames at 3/18/24 s were reviewed; audio listening and full-catalog viewing were not performed. `access-refresh.json`, `timeline-source/` and `drive-collection-index.json` preserve provenance. The latter is **259 manifest records / 60 archive plans**, with original claims explicitly labeled `manifestClaim`.
+
+New native observations: at 3 s the timeline shows HEY / you / lost / ur / earrings word rows, a yellow camera row, red nulls and diamond keys; the composition uses large stacked white words and colored points on dark ground. At 18 s a central orange typography scene and waveform-like graphic appear, with a yellow Camera 10 row and many short staggered blue strips. At 24 s the words drift / further / apart are tilted/stacked over an orange panel, with a partially truncated adjustment label, Camera 11, nulls, Solid Color 2 and dense markers. Visible labels establish UI/structure, not the exact project recipe or parenting.
+
+An original five-word kinetic study and all 15 actual moving source-clock proofs are in `evidence_video/`. Headless rendering had ignored the app's speed-curve property; it now uses the shared source functions, with direct/masked pixel comparisons and nested-clock coverage. No claim that these diagnostics fulfill all 150 character edits is made.
+
+The BrandBird RAR was extracted, served and resized at 390/768/1440 px. Original image loading and the Background panel were exercised; the phone uses a bottom scrolling tool strip. Its mirror still has missing external assets/service-worker errors and small-screen overflow, recorded in `brandbird-responsive/report.json`. Direct yt-dlp requests to YouTube still return 403 under the published unrestricted setting. The older restricted-access notes below are historical; current details and limits are in `docs/RESUMED_EDITOR_WORK_20261031.md`.
+
 ## Sources and what was actually reviewed
 
 The current English Krita manual source was indexed at `KDE/documentation-docs-krita-org`, **master `8f58c40c49b7d0022e1553f487f4928762132f0c`**, dated 2026-10-26. Its default branch was a stale 2020 feature branch; the study explicitly switched to master. All **328 English RST pages** were read by the indexer. Transform and selection chapters were read closely. `documentation-index.json` preserves every indexed path, content SHA-256, heading and topic match. This is full-text indexing plus selected close reading, not a claim that every workflow has been implemented or manually mastered.
@@ -36,7 +46,7 @@ yt-dlp **2026.10.26** was installed in `/tmp/omniframe-research-tools` and invok
 
 The supplied pack listing yielded 50 recognized image entries; the BrandBird listing yielded `refernce.zip`; the clips listing yielded an engine-repair ZIP and a screen-recording MP4. These are observed HTML listings, not complete paginated inventories or downloaded assets. Normalized records are in `research/20261031-sources/{drive-index,pack,brandbird,glitch-clips}.json`. No private academic subfolder contents were studied. Raw HTML and third-party source caches are not included as product assets.
 
-The BrandBird documentation in `brandbird_study/README.md` distinguishes a broken original ZIP from a later working RAR mirror. That extracted offline app is absent in this environment, so it was not newly booted or resized. Existing capture reports/screenshots and its grouping patterns were consulted. The supplied ZIP is not assumed to be a complete runnable app.
+The BrandBird documentation in `brandbird_study/README.md` distinguishes a broken original ZIP from a later working RAR mirror. The correct RAR has now been recovered and its actual responsive UI inspected; see the latest checkpoint above and `brandbird-responsive/`. The older ZIP is not assumed to be a complete runnable app, and the recovered mirror's remaining missing assets are not hidden.
 
 ## Acceptance questions that remain open
 

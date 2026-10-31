@@ -8,6 +8,7 @@ const dir='.cache/audio-export-qa';fs.mkdirSync(dir,{recursive:true})
 const ff=(args)=>execFileSync(ffmpegExe(),['-v','error',...args],{maxBuffer:20*1024*1024})
 const call=async(name,p={})=>{const r=await registry.call(name,p);assert(r.ok,JSON.stringify(r.data));return r.data}
 const audible={sourceVideo:{path:'fixture.mp4',hasAudio:true},start:0,duration:1,volume:1}
+assert.equal(audioMixPlan({clips:[{...audible,speedCurve:'linear'}]},1).length,1)
 assert.throws(()=>audioMixPlan({clips:[{...audible,speedCurve:'ramp'}]},1),/speed curves/)
 assert.throws(()=>audioMixPlan({clips:[{...audible,effects:{freezeHold:.5}}]},1),/audio time effects/)
 assert.throws(()=>audioMixPlan({clips:[{childSeq:{clips:[audible],duration:1}}]},1),/compound audio/)

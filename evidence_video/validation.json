@@ -11,7 +11,13 @@
   "uploadedReference": "RDT: 752 frames, 750 distinct decoded hashes, 0.99736 audio correlation; reference-derived recomposition",
   "headlessAudioVideo": "trim/delay, independent duplicate/replacement offsets, volume, overlap gain, silence, no-audio mute stream passed",
   "contextMenus": "fresh browser bounds, scroll and keyboard checks passed",
+  "speedCurveSourceClocks": "15 moving MP4s, 120 exact media-pixel comparisons; shared app math",
+  "compoundSourceClock": "nonzero-start grouping, nested hold, moved ungroup and retime rejection passed",
+  "liveSourceClock": "curve, trim and volume: validation, atomic failure, undo/redo and .omni round trip passed",
+  "kineticWordStack": "108 decoded frames, 108 distinct hashes; original silent motion study",
   "uiVideo": "diagnostic samples from actual screenshot states, not continuous recording",
-  "published": false,
+  "gitBranch": "codex/omniframe-editor-improvements",
+  "initialPushedCommit": "807e8f1b",
+  "applicationDeployed": false,
   "environmentConfigurationChanged": false
 }
