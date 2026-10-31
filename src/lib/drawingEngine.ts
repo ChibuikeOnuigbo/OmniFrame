@@ -198,6 +198,32 @@ export function isStrokeVisibleAtTime(stroke: DrawingStroke, time: number, fps: 
 }
 
 /**
+ * Krita-style ghost tinting: blends a stroke's original color toward the
+ * onion-skin tint by `strength` (1 = full silhouette tint, 0 = original color).
+ * Unparseable colors fall back to the tint when strength > 0.5.
+ */
+export function blendGhostColor(color: string, tint: string, strength: number): string {
+  const s = Math.min(1, Math.max(0, strength))
+  if (s >= 1) return tint
+  const parse = (c: string): [number, number, number] | null => {
+    const hex = c.trim()
+    const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex)
+    if (m) {
+      const h = m[1].length === 3 ? m[1].split('').map((ch) => ch + ch).join('') : m[1]
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+    }
+    const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i.exec(hex)
+    if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
+    return null
+  }
+  const from = parse(color)
+  const to = parse(tint)
+  if (!from || !to) return s > 0.5 ? tint : color
+  const mix = from.map((v, i) => Math.round(v + (to[i] - v) * s))
+  return `rgb(${mix[0]}, ${mix[1]}, ${mix[2]})`
+}
+
+/**
  * Renders onion skin ghost cels of previous and next animation frames.
  */
 export function renderOnionSkin(
@@ -231,7 +257,7 @@ export function renderOnionSkin(
     for (const stroke of priorStrokes) {
       const ghostStroke: DrawingStroke = {
         ...stroke,
-        color: settings.tintBefore || '#ef4444',
+        color: blendGhostColor(stroke.color, settings.tintBefore || '#ef4444', settings.tintStrength ?? 1),
       }
       renderStroke(ctx, ghostStroke, width, height)
     }
@@ -257,7 +283,7 @@ export function renderOnionSkin(
     for (const stroke of futureStrokes) {
       const ghostStroke: DrawingStroke = {
         ...stroke,
-        color: settings.tintAfter || '#10b981',
+        color: blendGhostColor(stroke.color, settings.tintAfter || '#10b981', settings.tintStrength ?? 1),
       }
       renderStroke(ctx, ghostStroke, width, height)
     }
@@ -274,9 +300,120 @@ export function renderStroke(
   width: number,
   height: number,
 ) {
+  // Radial / symmetry ruler (ibisPaint X): the same stroke repeated rotated
+  // around a centre — sun rays, mandalas, kaleidoscopic skies.
+  // Krita Multibrush mirror modes: reflect the stroke across centre axes
+  // (X, Y, or both) — mirror-drawing sub-tool parity.
+  const mx = !!stroke.mirrorX
+  const my = !!stroke.mirrorY
+  if (mx || my) {
+    const variants: [number, number][] = [[1, 1]]
+    if (mx) variants.push([-1, 1])
+    if (my) variants.push([1, -1])
+    if (mx && my) variants.push([-1, -1])
+    for (const [sx, sy] of variants) {
+      ctx.save()
+      ctx.translate(width / 2, height / 2)
+      ctx.scale(sx, sy)
+      ctx.translate(-width / 2, -height / 2)
+      renderStrokeCore(ctx, stroke, width, height)
+      ctx.restore()
+    }
+    return
+  }
+  // Krita Multibrush Translate mode: constant ring offsets around the path —
+  // every copy traces the same stroke shifted by (R·cosθ, R·sinθ).
+  const trn = Math.floor(stroke.translateCopies || 0)
+  if (trn >= 2) {
+    const R = Math.max(2, stroke.translateRadius ?? 24)
+    for (let i = 0; i < trn; i++) {
+      const ang = (i * Math.PI * 2) / trn
+      ctx.save()
+      ctx.translate(Math.cos(ang) * R, Math.sin(ang) * R)
+      renderStrokeCore(ctx, stroke, width, height)
+      ctx.restore()
+    }
+    return
+  }
+  const n = Math.max(1, Math.floor(stroke.radialCopies || 1))
+  if (n > 1) {
+    const [cx, cy] = [
+      (stroke.radialCenter?.[0] ?? 0.5) * width,
+      (stroke.radialCenter?.[1] ?? 0.5) * height,
+    ]
+    for (let i = 0; i < n; i++) {
+      ctx.save()
+      ctx.translate(cx, cy)
+      ctx.rotate((i * Math.PI * 2) / n)
+      ctx.translate(-cx, -cy)
+      renderStrokeCore(ctx, stroke, width, height)
+      ctx.restore()
+    }
+    return
+  }
+  renderStrokeCore(ctx, stroke, width, height)
+}
+
+const FREEHAND_TOOLS = new Set(['brush', 'pencil', 'marker', 'calligraphy', 'eraser', 'smudge'])
+
+/** Krita Freehand Brush smoothing/stabilizer: weighted moving-average pass over
+ *  the sampled points (shake correction). 0 = raw tablet input. */
+function smoothedPoints(stroke: DrawingStroke): DrawingStroke['points'] | null {
+  const s = Math.min(1, Math.max(0, stroke.smoothing ?? 0))
+  if (s <= 0.01 || !FREEHAND_TOOLS.has(stroke.tool) || stroke.points.length < 3) return null
+  let pts = stroke.points.map((p) => ({ ...p }))
+  const passes = 2
+  const k = 0.5 * s
+  for (let pass = 0; pass < passes; pass++) {
+    const src = pts
+    pts = src.map((p, i) => {
+      if (i === 0 || i === src.length - 1) return p
+      const a = src[i - 1], b = src[i + 1]
+      return { ...p, x: p.x * (1 - k) + ((a.x + b.x) / 2) * k, y: p.y * (1 - k) + ((a.y + b.y) / 2) * k }
+    })
+  }
+  return pts
+}
+
+function renderStrokeCore(
+  ctx: CanvasRenderingContext2D,
+  stroke: DrawingStroke,
+  width: number,
+  height: number,
+) {
+  const sm = smoothedPoints(stroke)
+  if (sm) stroke = { ...stroke, points: sm }
   ctx.save()
   ctx.globalAlpha = stroke.opacity ?? 1.0
 
+  if (stroke.tool === 'smudge') {
+    // ibisPaint smudge/blur brush: drag what is already on the canvas along
+    // the stroke path (blurred re-stamp of the pixels under the previous point)
+    const r = Math.max(2, stroke.size / 2)
+    const pts = stroke.points
+    for (let i = 1; i < pts.length; i++) {
+      const p0 = pts[i - 1], p1 = pts[i]
+      const sx = p0.x * width
+      const sy = p0.y * height
+      const dx = p1.x * width
+      const dy = p1.y * height
+      const snap = ctx.getImageData(Math.max(0, Math.round(sx - r)), Math.max(0, Math.round(sy - r)), Math.ceil(r * 2), Math.ceil(r * 2))
+      const tmp = document.createElement('canvas')
+      tmp.width = snap.width; tmp.height = snap.height
+      tmp.getContext('2d')!.putImageData(snap, 0, 0)
+      ctx.save()
+      ctx.globalAlpha = (stroke.opacity ?? 1) * 0.55
+      ctx.filter = `blur(${Math.max(1, r * 0.35)}px)`
+      ctx.beginPath()
+      ctx.arc(dx, dy, r, 0, Math.PI * 2)
+      ctx.clip()
+      ctx.drawImage(tmp, dx - r, dy - r)
+      ctx.restore()
+      ctx.filter = 'none'
+    }
+    ctx.restore()
+    return
+  }
   if (stroke.tool === 'fill' && stroke.maskDataUrl) {
     let img = imageCache.get(stroke.maskDataUrl)
     if (!img) {
@@ -418,6 +555,10 @@ export function renderStroke(
     const w = Math.abs(end.x - start.x) * width
     const h = Math.abs(end.y - start.y) * height
     ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    if (stroke.filled) {
+      ctx.fillStyle = stroke.color
+      ctx.fillRect(x, y, w, h)
+    }
     ctx.strokeRect(x, y, w, h)
   } else if (stroke.tool === 'circle') {
     const start = pts[0]
@@ -429,6 +570,7 @@ export function renderStroke(
     ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
     ctx.beginPath()
     ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2)
+    if (stroke.filled) ctx.fill()
     ctx.stroke()
   } else if (stroke.tool === 'arrow') {
     const start = pts[0]
@@ -528,18 +670,39 @@ export function renderStroke(
     // secondary colour across the drag vector.
     const gStart = pts[0]
     const gEnd = pts[pts.length - 1]
-    const grad = ctx.createLinearGradient(
-      gStart.x * width, gStart.y * height,
-      gEnd.x * width, gEnd.y * height,
-    )
-    grad.addColorStop(0, stroke.color)
-    grad.addColorStop(1, stroke.gradientColor || 'rgba(0,0,0,0)')
+    const grad = stroke.gradientShape === 'radial'
+      ? ctx.createRadialGradient(
+          gStart.x * width, gStart.y * height, 0,
+          gStart.x * width, gStart.y * height,
+          Math.max(4, Math.hypot((gEnd.x - gStart.x) * width, (gEnd.y - gStart.y) * height)),
+        )
+      : ctx.createLinearGradient(
+          gStart.x * width, gStart.y * height,
+          gEnd.x * width, gEnd.y * height,
+        )
+    const gc = stroke.gradientColor || 'rgba(0,0,0,0)'
+    const rep = stroke.gradientRepeat ?? 'none'
+    if (rep === 'none') {
+      grad.addColorStop(0, stroke.color)
+      grad.addColorStop(1, gc)
+    } else {
+      // Krita Gradient repeat: Forward = saw (hard jump each cycle),
+      // Alternating = triangle (mirrored cycle).
+      const cycles = 3
+      for (let ci = 0; ci < cycles; ci++) {
+        const a0 = ci / cycles
+        const a1 = (ci + 1) / cycles
+        const fwd = rep === 'forward' ? true : ci % 2 === 0
+        grad.addColorStop(a0, fwd ? stroke.color : gc)
+        grad.addColorStop(Math.min(1, Math.max(0, a1 - 0.0001)), fwd ? gc : stroke.color)
+      }
+    }
     ctx.save()
     ctx.globalAlpha = stroke.opacity
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, width, height)
     ctx.restore()
-  } else if (stroke.tool === 'clone') {
+  } else if (stroke.tool === 'clone' || stroke.tool === 'smart-patch') {
     if (stroke.cloneSource?.sampleDataUrl) {
       let img = imageCache.get(stroke.cloneSource.sampleDataUrl)
       if (!img) {
@@ -739,6 +902,28 @@ export function renderSelectionMarchingAnts(
   ctx.restore()
 }
 
+/** Resolve a Smart Patch's frame-addressed raster and composite it at the requested time. */
+function renderStrokeAtTime(
+  ctx: CanvasRenderingContext2D,
+  stroke: DrawingStroke,
+  width: number,
+  height: number,
+  time: number,
+  fps: number,
+) {
+  if (!isStrokeVisibleAtTime(stroke, time, fps)) return
+  if (stroke.tool === 'smart-patch') {
+    const frame = (stroke.smartPatchFrames || []).reduce<{ time: number; dataUrl: string } | null>(
+      (current, candidate) => (candidate.time <= time + 0.5 / fps ? candidate : current),
+      null,
+    )
+    if (!frame) return
+    renderStroke(ctx, { ...stroke, tool: 'fill', maskDataUrl: frame.dataUrl }, width, height)
+    return
+  }
+  renderStroke(ctx, stroke, width, height)
+}
+
 /**
  * Composites all active paint layers and their visible strokes onto a canvas context.
  */
@@ -792,7 +977,7 @@ export function renderAllPaintLayers(
           // 1. Render layer base strokes
           for (const stroke of baseStrokes) {
             if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
-            renderStroke(layerCtx, stroke, width, height)
+            renderStrokeAtTime(layerCtx, stroke, width, height, time, fps)
           }
 
           // 2. Render mask canvas: Default filled with solid white (100% opaque / visible in Krita)
@@ -804,9 +989,9 @@ export function renderAllPaintLayers(
             // In Krita, using the eraser on a transparency mask restores opacity by painting white
             if (stroke.tool === 'eraser') {
               const whiteStroke = { ...stroke, tool: 'brush' as const, color: '#ffffff' }
-              renderStroke(maskCtx, whiteStroke, width, height)
+              renderStrokeAtTime(maskCtx, whiteStroke, width, height, time, fps)
             } else {
-              renderStroke(maskCtx, stroke, width, height)
+              renderStrokeAtTime(maskCtx, stroke, width, height, time, fps)
             }
           }
 
@@ -867,7 +1052,7 @@ export function renderAllPaintLayers(
       if (offCanvas && offCtx) {
         for (const stroke of baseStrokes) {
           if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
-          renderStroke(offCtx, stroke, width, height)
+          renderStrokeAtTime(offCtx, stroke, width, height, time, fps)
         }
 
         let maskImg = imageCache.get(layer.maskDataUrl)
@@ -913,7 +1098,7 @@ export function renderAllPaintLayers(
 
     for (const stroke of baseStrokes) {
       if (!isStrokeVisibleAtTime(stroke, time, fps)) continue
-      renderStroke(ctx, stroke, width, height)
+      renderStrokeAtTime(ctx, stroke, width, height, time, fps)
     }
 
     ctx.restore()

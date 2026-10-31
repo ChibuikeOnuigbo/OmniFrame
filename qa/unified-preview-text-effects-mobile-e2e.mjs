@@ -110,12 +110,23 @@ try {
   await textPresetBtn.click()
   await page.waitForTimeout(300)
 
-  // Assert text clip exists in store
+  // A title preset first auditions as a virtual clip; Apply creates it.
+  const titleAudition = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    return { clip: s.clips.find((c) => Boolean(c.textStyle)), preview: s.visualPreview }
+  })
+  assert(!titleAudition.clip, 'Text preset does not create a timeline clip during audition')
+  assert(titleAudition.preview?.kind === 'text-clip', 'Text preset starts a temporary title audition')
+  assert(titleAudition.preview?.clip?.textStyle?.text === 'EPISODE ONE', 'Text audition carries EPISODE ONE')
+  await page.getByTestId('apply-visual-preview').click()
+  await page.waitForTimeout(100)
+
+  // Assert text clip exists in store after Apply
   const textClip = await page.evaluate(() => {
     const s = window.__omniframe_store.getState()
     return s.clips.find((c) => Boolean(c.textStyle))
   })
-  assert(Boolean(textClip), 'Text Title clip created on timeline')
+  assert(Boolean(textClip), 'Text Title clip created on timeline after Apply')
   assert(textClip.textStyle.text === 'EPISODE ONE', 'Text clip content initialized to EPISODE ONE')
 
   // Edit text content
@@ -134,11 +145,23 @@ try {
   const effectsTab = page.locator('[data-testid="left-tab-effects"]')
   await effectsTab.click()
   await page.waitForTimeout(200)
+  await page.locator('[data-testid="section-tab-adjustment-controls"]').click()
+  await page.waitForTimeout(100)
 
   const cyberpunkBtn = page.locator('[data-testid="effect-preset-cyberpunk"]')
   await cyberpunkBtn.click()
   await page.waitForTimeout(200)
 
+  const auditionEffects = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    const active = s.clips.find((c) => c.id === s.selectedClipId) || s.clips[0]
+    return { committed: active?.effects, preview: s.visualPreview }
+  })
+  assert(auditionEffects.preview?.kind === 'clip-effect', 'Cyberpunk starts a temporary clip-effect audition')
+  assert(auditionEffects.preview?.effect?.hueRotate === 280, 'Cyberpunk audition carries hueRotate 280deg')
+  assert(auditionEffects.committed?.hueRotate !== 280, 'Cyberpunk is not committed before Apply')
+  await page.getByTestId('apply-visual-preview').click()
+  await page.waitForTimeout(100)
   const appliedEffects = await page.evaluate(() => {
     const s = window.__omniframe_store.getState()
     const active = s.clips.find((c) => c.id === s.selectedClipId) || s.clips[0]
@@ -149,6 +172,18 @@ try {
 
   // 4. Test Transitions Panel
   console.log('--- Step 5: Testing Video Transitions ---')
+  await page.evaluate(() => {
+    const state = window.__omniframe_store.getState()
+    const image = state.assets.find((asset) => asset.id === 'asset-death-note-img')
+    if (!image) throw new Error('Bundled image fixture is missing')
+    const trackId = state.createTrack('video')
+    state.addClipToTrack(trackId, image.id, 20)
+    state.addClipToTrack(trackId, image.id, 25)
+    const pair = window.__omniframe_store.getState().clips.filter((clip) => clip.trackId === trackId).sort((a, b) => a.start - b.start)
+    if (pair.length !== 2) throw new Error('Could not seed adjacent transition pair')
+    state.selectClip(pair[1].id)
+    state.setPlayhead(25)
+  })
   const transTab = page.locator('[data-testid="left-tab-transitions"]')
   await transTab.click()
   await page.waitForTimeout(200)
@@ -157,8 +192,16 @@ try {
   await applyCrossBtn.click()
   await page.waitForTimeout(300)
 
+  const transitionAudition = await page.evaluate(() => {
+    const state = window.__omniframe_store.getState()
+    return { count: state.transitions?.length || 0, preview: state.visualPreview }
+  })
+  assert(transitionAudition.count === 0, 'Cross Dissolve audition does not add a timeline transition')
+  assert(transitionAudition.preview?.kind === 'transition', 'Cross Dissolve starts a temporary transition audition')
+  await page.getByTestId('apply-visual-preview').click()
+  await page.waitForTimeout(100)
   const transCount = await page.evaluate(() => window.__omniframe_store.getState().transitions?.length || 0)
-  assert(transCount >= 1, 'Cross Dissolve transition registered on timeline')
+  assert(transCount >= 1, 'Cross Dissolve transition registered on timeline after Apply')
 
   // 5. Test Voice Isolation Context Menu Submenu
   console.log('--- Step 6: Testing Context Menu Voice Isolation Submenu ---')

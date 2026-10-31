@@ -1,0 +1,30 @@
+ Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=19.3x    
+frame=  296 fps=0.0 q=-0.0 size=N/A time=00:00:12.33 bitrate=N/A speed=18.9x    
+frame=  565 fps=490 q=-0.0 size=N/A time=00:00:23.50 bitrate=N/A speed=20.4x    
+frame=  830 fps=502 q=-0.0 size=N/A time=00:00:34.54 bitrate=N/A speed=20.9x    
+frame= 1064 fps=494 q=-0.0 size=N/A time=00:00:44.33 bitrate=N/A speed=20.6x    
+frame= 1340 fps=504 q=-0.0 size=N/A time=00:00:55.83 bitrate=N/A speed=  21x    
+frame= 1563 fps=495 q=-0.0 size=N/A time=00:01:05.12 bitrate=N/A speed=20.6x    
+frame= 1839 fps=503 q=-0.0 size=N/A time=00:01:16.62 bitrate=N/A speed=20.9x    
+frame= 2058 fps=495 q=-0.0 size=N/A time=00:01:25.70 bitrate=N/A speed=20.6x    
+frame= 2291 fps=491 q=-0.0 size=N/A time=00:01:35.41 bitrate=N/A speed=20.5x    
+[out#0/null @ 0x55a61bdce940] video:1155kB audio:77020kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 2464 fps=489 q=-0.0 Lsize=N/A time=00:01:42.62 bitrate=N/A speed=20.4x    
+[Parsed_loudnorm_0 @ 0x55a61be64cc0] 
+{
+	"input_i" : "-23.56",
+	"input_tp" : "-6.88",
+	"input_lra" : "9.90",
+	"input_thresh" : "-33.61",
+	"output_i" : "-23.71",
+	"output_tp" : "-6.25",
+	"output_lra" : "5.40",
+	"output_thresh" : "-33.73",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.29"
+}

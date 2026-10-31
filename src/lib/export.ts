@@ -115,13 +115,27 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
 
   const targetW = st.sequenceSettings?.width || 1920
   const targetH = st.sequenceSettings?.height || 1080
-  if (canvas.width !== targetW || canvas.height !== targetH) {
-    canvas.width = targetW
-    canvas.height = targetH
+  // Record from a scaler canvas, NOT by resizing the live preview canvas:
+  // the PreviewEngine caches its render size, so mutating the live canvas
+  // behind its back used to bake the (smaller, quality-scaled) preview into
+  // the top-left of the export with black bars right/bottom. The scaler
+  // draws the live canvas stretched to the exact sequence size each frame.
+  const scaler = document.createElement('canvas')
+  scaler.width = targetW
+  scaler.height = targetH
+  const scalerCtx = scaler.getContext('2d')
+  let scalerRunning = true
+  const pumpScaler = () => {
+    if (!scalerRunning) return
+    try {
+      scalerCtx?.drawImage(canvas, 0, 0, targetW, targetH)
+    } catch { /* live canvas momentarily unavailable */ }
+    requestAnimationFrame(pumpScaler)
   }
+  pumpScaler()
 
   opts.onStatus?.('Preparing recorder…')
-  const stream = canvas.captureStream(30)
+  const stream = scaler.captureStream(30)
   const audio = mixAudio()
   if (audio) {
     audio.getAudioTracks().forEach((t) => stream.addTrack(t))
@@ -141,27 +155,34 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   })
 
   const previousSpeed = st.speed
+  // In/Out range export: record only the marked slice (CapCut behaviour).
+  const range = st.exportRange && st.exportRange.out > st.exportRange.in ? st.exportRange : null
+  const recordFrom = range ? range.in : 0
+  const recordTo = range ? range.out : st.duration
   st.setSpeed(1)
-  st.setPlayhead(0)
+  st.setPlayhead(recordFrom)
   recorder.start(100)
   st.play()
-  opts.onStatus?.('Recording timeline…')
+  opts.onStatus?.(range ? 'Recording selected range…' : 'Recording timeline…')
 
   // Wait for playback to finish (engine pauses itself at duration).
   const start = performance.now()
   while (true) {
     const s = useEditor.getState()
-    const frac = s.duration > 0 ? s.playhead / s.duration : 1
+    const frac = recordTo > recordFrom ? (s.playhead - recordFrom) / (recordTo - recordFrom) : 1
     opts.onProgress?.(Math.min(1, Math.max(0, frac)))
-    if (!s.playing || s.playhead >= s.duration - 0.02) break
+    if (!s.playing || s.playhead >= recordTo - 0.02) break
     if (performance.now() - start > 5 * 60 * 1000) break // safety timeout
     await new Promise((r) => setTimeout(r, 100))
   }
 
-  // Let the recorder flush the final frames.
-  await new Promise((r) => setTimeout(r, 400))
+  // Stop promptly: the engine renders an empty (black) frame once the
+  // playhead passes the last clip, so lingering here bakes a black tail
+  // into every export. MediaRecorder flushes pending data on stop().
+  await new Promise((r) => setTimeout(r, 50))
   if (recorder.state !== 'inactive') recorder.stop()
   await stopped
+  scalerRunning = false
 
   const ext = mime.includes('mp4') ? 'mp4' : 'webm'
   const parts = recorderInitChunk ? [recorderInitChunk, ...chunks] : chunks

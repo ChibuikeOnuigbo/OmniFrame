@@ -36,7 +36,22 @@
       "detail": ""
     },
     {
-      "name": "Text Title clip created on timeline",
+      "name": "Text preset does not create a timeline clip during audition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Text preset starts a temporary title audition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Text audition carries EPISODE ONE",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Text Title clip created on timeline after Apply",
       "status": "PASS",
       "detail": ""
     },
@@ -51,6 +66,21 @@
       "detail": ""
     },
     {
+      "name": "Cyberpunk starts a temporary clip-effect audition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cyberpunk audition carries hueRotate 280deg",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cyberpunk is not committed before Apply",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
       "name": "Cyberpunk effect applied with hueRotate 280deg",
       "status": "PASS",
       "detail": ""
@@ -61,7 +91,17 @@
       "detail": ""
     },
     {
-      "name": "Cross Dissolve transition registered on timeline",
+      "name": "Cross Dissolve audition does not add a timeline transition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cross Dissolve starts a temporary transition audition",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Cross Dissolve transition registered on timeline after Apply",
       "status": "PASS",
       "detail": ""
     },

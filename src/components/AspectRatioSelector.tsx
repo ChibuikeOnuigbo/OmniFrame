@@ -112,8 +112,8 @@ export function InstagramIcon({ size = 15, className = '' }: { size?: number; cl
 export function CinemascopeIcon({ size = 15, className = '' }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
-      <rect x="1" y="6" width="22" height="12" rx="2" fill="#1e1e2d" stroke="#8b5cf6" strokeWidth="1.2" />
-      <path d="M4 6v12M20 6v12M8 6v12M16 6v12" stroke="#8b5cf6" strokeWidth="0.8" strokeDasharray="1.5 1.5" opacity="0.6" />
+      <rect x="1" y="6" width="22" height="12" rx="2" fill="#1e1e2d" stroke="#ff8c61" strokeWidth="1.2" />
+      <path d="M4 6v12M20 6v12M8 6v12M16 6v12" stroke="#ff8c61" strokeWidth="0.8" strokeDasharray="1.5 1.5" opacity="0.6" />
       <polygon points="10,9 15,12 10,15" fill="#a78bfa" />
     </svg>
   )
@@ -449,7 +449,7 @@ export function AspectRatioSelector() {
                         </span>
                       </div>
                       <div className="text-[9px] text-ink-500 truncate leading-tight">
-                        {preset.platforms.slice(0, 3).join(' · ')}
+                        {preset.platforms.slice(0, 3).join(', ')}
                       </div>
                     </div>
                   </div>

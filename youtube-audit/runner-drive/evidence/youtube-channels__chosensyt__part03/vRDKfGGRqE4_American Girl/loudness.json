@@ -1,0 +1,36 @@
+us (native) -> pcm_s16le (native))
+Press [q] to stop, [?] for help
+Output #0, null, to 'pipe:':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2mp41
+    encoder         : Lavf60.16.100
+  Stream #0:0(eng): Video: wrapped_avframe, yuv420p(tv, bt709, progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 200 kb/s, 20 fps, 20 tbn (default)
+    Metadata:
+      handler_name    : VideoHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   57 fps=0.0 q=-0.0 size=N/A time=00:00:02.80 bitrate=N/A speed=34.1x    
+frame=  234 fps=0.0 q=-0.0 size=N/A time=00:00:11.65 bitrate=N/A speed=19.9x    
+frame=  401 fps=369 q=-0.0 size=N/A time=00:00:20.00 bitrate=N/A speed=18.4x    
+[out#0/null @ 0x5583070638c0] video:190kB audio:15205kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  405 fps=371 q=-0.0 Lsize=N/A time=00:00:20.20 bitrate=N/A speed=18.5x    
+[Parsed_loudnorm_0 @ 0x5583070cbdc0] 
+{
+	"input_i" : "-8.35",
+	"input_tp" : "0.70",
+	"input_lra" : "13.40",
+	"input_thresh" : "-19.20",
+	"output_i" : "-23.48",
+	"output_tp" : "-14.10",
+	"output_lra" : "1.20",
+	"output_thresh" : "-33.96",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.52"
+}

@@ -270,6 +270,17 @@ export function TrackingPanel() {
 
   return (
     <div data-testid="tracking-panel" tabIndex={0} aria-label="Masking and tracking controls, scrollable" className="p-3 text-xs text-ink-200 select-none space-y-3.5 overflow-y-auto h-full">
+      <div className="flex justify-end px-3 pt-2">
+        <button
+          type="button"
+          data-testid="bake-track-to-null-btn"
+          title="AE workflow: send tracking data to a null, then parent the art to it"
+          onClick={() => useEditor.getState().bakeTrackingToNull()}
+          className="text-[10px] text-brand-400 hover:text-brand-300"
+        >
+          Track → Null
+        </button>
+      </div>
       {/* Compact hint (full description on hover) */}
       <div className="flex items-center justify-between gap-2 text-[10px] text-ink-400" title="Spatial mask generation connected directly to LumaCut optical flow tracking and deformation.">
         <span className="truncate">Spatial masks + LumaCut optical-flow tracking</span>
@@ -719,7 +730,7 @@ export function TrackingPanel() {
       {/* Progress Card */}
       {isTracking && (
         <div data-testid="tracking-progress-card" className="p-2.5 rounded-lg border border-brand/40 bg-brand/10 space-y-1.5">
-          <div className="flex items-center justify-between text-violet-200 text-[11px] font-medium">
+          <div className="flex items-center justify-between text-brand-200 text-[11px] font-medium">
             <span className="flex items-center gap-1.5">
               <RefreshCw size={12} className="animate-spin text-brand-400" />
               <span>{mode === 'mask' ? 'Tracking & deforming mask contour...' : 'Matching Sobel gradients...'}</span>

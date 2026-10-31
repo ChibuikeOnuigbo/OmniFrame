@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OmniFrame Study Exports — run verdict</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #0b0d10; color: #e8e8e8; font: 14px/1.45 system-ui, sans-serif; }
+  header { position: sticky; top: 0; background: #0b0d10ee; backdrop-filter: blur(8px); padding: 14px 18px; border-bottom: 1px solid #23272c; }
+  h1 { margin: 0 0 4px; font-size: 17px; }
+  p.sub { margin: 0; color: #9aa3ab; font-size: 12px; }
+  #master { margin: 14px 18px; padding: 12px; border: 1px solid #2c3238; border-radius: 12px; background: #10141a; }
+  #master video { width: 100%; max-height: 46vh; border-radius: 8px; background: #000; }
+  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; padding: 6px 18px 40px; }
+  .card { border: 1px solid #23272c; border-radius: 10px; overflow: hidden; background: #10141a; }
+  .card video { width: 100%; aspect-ratio: 16/9; background: #000; display: block; }
+  .card .meta { padding: 7px 9px; font-size: 11px; color: #b7c0c8; }
+  .card .meta b { color: #ffd76a; font-family: ui-monospace, monospace; font-weight: 600; }
+  .card .meta .t { display: block; color: #8ad7ff; margin-top: 2px; }
+  input { width: 100%; margin-top: 10px; padding: 7px 9px; border-radius: 8px; border: 1px solid #2c3238; background: #0d1116; color: #e8e8e8; }
+</style>
+</head>
+<body>
+<header>
+  <h1>OmniFrame study exports — run verdict here</h1>
+  <p class="sub">One recreation MP4 per watched tutorial (renderer = real OmniFrame code), captions carry id + technique + fx = the steps. Combined master first.</p>
+  <input id="q" placeholder="filter by id, technique, style…" />
+</header>
+<section id="master">
+  <div class="meta"><b>ALL_STEPS_COMBINED.mp4</b><span class="t">every clip concatenated — the full reel</span></div>
+  <video controls preload="metadata" src="ALL_STEPS_COMBINED.mp4"></video>
+</section>
+<main id="grid"></main>
+<script>
+fetch('manifest.json').then(r => r.json()).then(m => {
+  const grid = document.getElementById('grid');
+  const cards = m.clips.map((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `<video controls preload="metadata" src="${c.id}.mp4"></video>
+      <div class="meta"><b>${i + 1}/${m.clips.length} · ${c.id}</b>
+      <span class="t">${(c.technique || '').replace(/[<>&]/g, '')} · ${c.style || c.family}${c.particleFx !== 'none' ? ' · ' + c.particleFx : ''}${c.overlayFx !== 'none' ? ' · ' + c.overlayFx : ''}${c.replaceBg !== 'none' ? ' · bg:' + c.replaceBg : ''}</span></div>`;
+    el.dataset.hay = `${c.id} ${c.technique || ''} ${c.style || ''} ${c.title || ''}`.toLowerCase();
+    grid.appendChild(el);
+    return el;
+  });
+  document.getElementById('q').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    cards.forEach(el => { el.style.display = !q || el.dataset.hay.includes(q) ? '' : 'none'; });
+  });
+});
+</script>
+</body>
+</html>

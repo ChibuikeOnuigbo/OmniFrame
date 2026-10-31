@@ -1,0 +1,112 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "curve_texts/c13_bounce-param_3-0p6-0p25.mp4",
+  "out": "/home/user/OmniFrame/curve_texts/c13_bounce-param_3-0p6-0p25.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 3591,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 360,
+     "h": 480,
+     "fps": 30,
+     "duration": 2,
+     "bg": "#101418"
+    },
+    "out": {
+     "w": 360,
+     "h": 480,
+     "fps": 30,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "CURVE",
+     "preset": "plain",
+     "x": 0,
+     "y": 0
+    },
+    "out": {
+     "clipId": "text-1",
+     "presetApplied": "plain"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "text-1"
+    },
+    "out": {
+     "selected": "text-1"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "curve_texts/c13_bounce-param_3-0p6-0p25.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 360,
+    "h": 480,
+    "fps": 30,
+    "duration": 2,
+    "bg": "#101418"
+   },
+   "selection": "text-1",
+   "clips": [
+    {
+     "id": "text-1",
+     "name": "text:CURVE",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

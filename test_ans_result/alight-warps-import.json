@@ -1,0 +1,685 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/alight-warps-import.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/alight-warps-import.mp4",
+  "frames": 36,
+  "fps": 12,
+  "size": 7789,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "alight_import",
+    "params": {
+     "path": "new_doc_toll_research/alight/warps.xml",
+     "includeNulls": false
+    },
+    "out": {
+     "project": {
+      "title": "Warps",
+      "w": 1920,
+      "h": 1080,
+      "fps": 30,
+      "duration": 5.165,
+      "bg": "#000000"
+     },
+     "clips": 15,
+     "layersParsed": 15,
+     "stats": {
+      "shapes": 15,
+      "effectsTotal": 59,
+      "mapped": 49,
+      "unmapped": 10,
+      "keyframed": 42,
+      "mediaRefs": [
+       "content://media/external/video/media/235064",
+       "content://media/external/video/media/235064",
+       "content://media/external/video/media/235064",
+       "content://media/external/video/media/235064",
+       "content://media/external/video/media/235064"
+      ]
+     },
+     "bookmarks": 6,
+     "dump": "data_motiondesijg/alight/Warps.json",
+     "hint": "media layers are placeholders — swap footage with replace_video (carryEffects keeps the AM chain)"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/alight-warps-import.mp4"
+    },
+    "out": {
+     "frames": 36
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 1920,
+    "h": 1080,
+    "fps": 30,
+    "duration": 5.165,
+    "bg": "#000000"
+   },
+   "selection": "clip-1",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
+     "start": 0,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "motionBlur": 0.6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "Rectangle 1",
+     "start": 0,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.08,
+      "contrast": 1.05,
+      "turbulent": 0.5,
+      "waveWarp": 8
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-3",
+     "name": "Rectangle 1 Copy",
+     "start": 0,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.15,
+      "contrast": 1.05,
+      "blur": 6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-4",
+     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
+     "start": 1.033,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "motionBlur": 0.6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-5",
+     "name": "Rectangle 1",
+     "start": 1.033,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.08,
+      "contrast": 1.05,
+      "turbulent": 0.5,
+      "waveWarp": 18
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-6",
+     "name": "Rectangle 1 Copy",
+     "start": 1.033,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.15,
+      "contrast": 1.05,
+      "blur": 6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-7",
+     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
+     "start": 2.066,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "motionBlur": 0.6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-8",
+     "name": "Rectangle 1",
+     "start": 2.066,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.08,
+      "contrast": 1.05,
+      "turbulent": 0.7,
+      "waveWarp": 8
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-9",
+     "name": "Rectangle 1 Copy",
+     "start": 2.066,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.15,
+      "contrast": 1.05,
+      "blur": 6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-10",
+     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
+     "start": 3.1,
+     "duration": 1.0319999999999996,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "motionBlur": 0.6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-11",
+     "name": "Rectangle 1",
+     "start": 3.1,
+     "duration": 1.0319999999999996,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.08,
+      "contrast": 1.05,
+      "turbulent": 0.7,
+      "waveWarp": 8
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-12",
+     "name": "Rectangle 1 Copy",
+     "start": 3.1,
+     "duration": 1.0319999999999996,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.15,
+      "contrast": 1.05,
+      "blur": 6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-13",
+     "name": "Free Satoru Gojo Twixtor 4k No CC (Jujutsu Kaisen)(720P_HD).mp4",
+     "start": 4.133,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "motionBlur": 0.6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-14",
+     "name": "Rectangle 1",
+     "start": 4.133,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.08,
+      "contrast": 1.05,
+      "oscillate": 14,
+      "waveWarp": 8,
+      "turbulent": 0.7
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-15",
+     "name": "Rectangle 1 Copy",
+     "start": 4.133,
+     "duration": 1.032,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 0.5164063020833333,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "tiles": 2,
+      "brightness": 1.15,
+      "contrast": 1.05,
+      "blur": 6
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

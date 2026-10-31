@@ -108,8 +108,13 @@ try {
   await wireframeBtn.click()
   await page.waitForTimeout(200)
   await wireframeBtn.click() // toggle back
+  const persistedPrimitive = await page.evaluate(() => {
+    const object = window.__omniframe_store.getState().scene3DObjects[0]
+    return { type: object?.type, wireframe: object?.wireframe }
+  })
+  assert.deepStrictEqual(persistedPrimitive, { type: 'diamond', wireframe: false }, 'The active primitive and wireframe state are stored for .omni/OBJ')
 
-  console.log('[PASS] 3D Primitives and controls verified')
+  console.log('[PASS] 3D Primitives and project-state sync verified')
 
   console.log('--- Step 5: Testing Live Video Playback Continuation in 3D ---')
   const playBtn = page.locator('[data-testid="three-play-btn"]')

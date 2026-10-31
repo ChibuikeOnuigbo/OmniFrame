@@ -1,0 +1,134 @@
+[
+ {
+  "zip": "google-drive-assets__media__part01",
+  "status": "EXTRACTED_7Z"
+ },
+ {
+  "zip": "google-drive-assets__media__part01",
+  "file": "JJK_S2E3_720p.mp4",
+  "status": "FOOTAGE_ACQUIRED",
+  "probe": {
+   "programs": [],
+   "streams": [
+    {
+     "codec_type": "video",
+     "width": 1280,
+     "height": 720,
+     "r_frame_rate": "24000/1001"
+    },
+    {
+     "codec_type": "audio",
+     "r_frame_rate": "0/0"
+    }
+   ],
+   "format": {
+    "duration": "1442.148625"
+   }
+  },
+  "duration": 1442.148625,
+  "frames": [
+   "s1.jpg",
+   "s2.jpg",
+   "s3.jpg",
+   "s4.jpg",
+   "s5.jpg",
+   "s6.jpg",
+   "u00.jpg",
+   "u01.jpg",
+   "u02.jpg",
+   "u03.jpg",
+   "u04.jpg",
+   "u05.jpg",
+   "u06.jpg",
+   "u07.jpg",
+   "u08.jpg",
+   "u09.jpg",
+   "u10.jpg",
+   "u11.jpg"
+  ]
+ },
+ {
+  "zip": "google-drive-assets__media__part02",
+  "file": "Gojo Ep 8 Raw Clips-1.mp4",
+  "status": "FOOTAGE_ACQUIRED",
+  "probe": {
+   "programs": [],
+   "streams": [
+    {
+     "codec_type": "video",
+     "width": 1920,
+     "height": 1080,
+     "r_frame_rate": "24000/1001"
+    },
+    {
+     "codec_type": "audio",
+     "r_frame_rate": "0/0"
+    }
+   ],
+   "format": {
+    "duration": "233.962000"
+   }
+  },
+  "duration": 233.962,
+  "frames": [
+   "s1.jpg",
+   "s2.jpg",
+   "s3.jpg",
+   "s4.jpg",
+   "s5.jpg",
+   "s6.jpg",
+   "u00.jpg",
+   "u01.jpg",
+   "u02.jpg",
+   "u03.jpg",
+   "u04.jpg",
+   "u05.jpg",
+   "u06.jpg",
+   "u07.jpg",
+   "u08.jpg",
+   "u09.jpg",
+   "u10.jpg",
+   "u11.jpg"
+  ]
+ },
+ {
+  "zip": "google-drive-assets__media__part03",
+  "file": "Gojo Satoru Twixtor 4K.mp4",
+  "status": "FOOTAGE_ACQUIRED",
+  "probe": {
+   "programs": [],
+   "streams": [
+    {
+     "codec_type": "video",
+     "width": 1920,
+     "height": 1080,
+     "r_frame_rate": "60/1"
+    }
+   ],
+   "format": {
+    "duration": "120.050000"
+   }
+  },
+  "duration": 120.05,
+  "frames": [
+   "s1.jpg",
+   "s2.jpg",
+   "s3.jpg",
+   "s4.jpg",
+   "s5.jpg",
+   "s6.jpg",
+   "u00.jpg",
+   "u01.jpg",
+   "u02.jpg",
+   "u03.jpg",
+   "u04.jpg",
+   "u05.jpg",
+   "u06.jpg",
+   "u07.jpg",
+   "u08.jpg",
+   "u09.jpg",
+   "u10.jpg",
+   "u11.jpg"
+  ]
+ }
+]

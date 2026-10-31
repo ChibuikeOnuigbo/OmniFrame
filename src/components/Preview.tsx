@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Maximize2,
   Scan,
@@ -14,8 +14,11 @@ import {
   Box,
   Film,
   Sparkles,
+  Check,
 } from 'lucide-react'
 import { PreviewEngine } from '../lib/playback'
+import { PW, PH } from '../lib/playback'
+import { evaluateClipAnimation } from '../lib/animation/CurveEngine'
 import { useEditor } from '../store'
 import { IconButton } from './ui'
 import { DrawingToolbar } from './DrawingToolbar'
@@ -25,7 +28,11 @@ import { SlideDock } from './SlideDock'
 import { CollapseChip } from './CollapseChip'
 import { Tooltip } from './Tooltip'
 import { AspectRatioSelector } from './AspectRatioSelector'
-import { ThreeViewer } from './ThreeViewer'
+// three.js (~600 KB) loads only when 3D mode is first opened — it must not
+// ride in the initial bundle (see qa/bundle-budget-e2e.mjs).
+const ThreeViewer = lazy(() =>
+  import('./ThreeViewer').then((m) => ({ default: m.ThreeViewer })),
+)
 import { formatTimecode } from '../lib/time'
 
 const VIEW_PADDING = 16
@@ -52,12 +59,41 @@ export function Preview() {
   const setSourcePreviewAsset = useEditor((s) => s.setSourcePreviewAsset)
   const projectFps = useEditor((s) => s.projectFps)
   const leftTab = useEditor((s) => s.leftTab)
+  const pivotEditEnabled = useEditor((s) => s.pivotEditEnabled)
+  const selectedClipId = useEditor((s) => s.selectedClipId)
+  const allClips = useEditor((s) => s.clips)
+  const allTracks = useEditor((s) => s.tracks)
+  const playheadPos = useEditor((s) => s.playhead)
+  const pivotDragRef = useRef<{ pointerId: number; clipId: string } | null>(null)
   const leftOpen = useEditor((s) => s.leftOpen)
   const playhead = useEditor((s) => s.playhead)
+  const visualPreview = useEditor((s) => s.visualPreview)
+  const applyVisualPreview = useEditor((s) => s.applyVisualPreview)
+  const stopVisualPreview = useEditor((s) => s.stopVisualPreview)
   const omniframeCharacters = useEditor((s) => s.omniframeCharacters)
   const selectedCharacterId = useEditor((s) => s.selectedCharacterId)
   const setSelectedCharacterId = useEditor((s) => s.setSelectedCharacterId)
   const evaluateCharacterTransformAtTime = useEditor((s) => s.evaluateCharacterTransformAtTime)
+  const maskEditClipId = useEditor((s) => s.maskEditClipId)
+  const setMaskEditClip = useEditor((s) => s.setMaskEditClip)
+  const updateClipMask = useEditor((s) => s.updateClipMask)
+  const maskClip = useEditor((s) => s.clips.find((c) => c.id === s.maskEditClipId) || null)
+  const maskDragRef = useRef<{
+    mode: 'draw' | 'move' | 'nw' | 'ne' | 'sw' | 'se' | 'split-move' | 'split-rotate' | 'point'
+    anchor: Point
+    orig: { centerX: number; centerY: number; width: number; height: number }
+    pointIndex?: number
+    origSplit?: { pos: number; angle: number }
+  } | null>(null)
+
+  useEffect(() => {
+    if (!maskEditClipId) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMaskEditClip(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [maskEditClipId, setMaskEditClip])
 
   // Active uploaded media asset if selected from media library in source monitor mode
   const previewAsset = assets.find((a) => a.id === sourcePreview.assetId)
@@ -280,7 +316,7 @@ export function Preview() {
         <Tooltip label="Drawing & Paint">
         <IconButton
           data-testid="toggle-drawing-btn"
-          title="Toggle drawing and paint tools"
+
           active={drawingEnabled}
           onClick={() => toggleDrawingEnabled()}
         >
@@ -299,6 +335,67 @@ export function Preview() {
       <DrawingToolbar />
       <SelectionSubToolBar />
 
+      {visualPreview && !isPreviewingAsset && (
+        <div
+          data-testid="visual-preview-actions"
+          className="pointer-events-auto absolute left-1/2 top-12 z-50 flex max-w-[min(92%,560px)] -translate-x-1/2 items-center gap-2 rounded-lg border border-amber-400/40 bg-ink-950/95 px-2.5 py-2 text-[10px] text-ink-200 shadow-2xl backdrop-blur-sm"
+          role="status"
+        >
+          <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-amber-400/15 text-amber-300">
+            <Sparkles size={11} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate font-semibold text-amber-200" title={visualPreview.label}>{visualPreview.label}</span>
+            <span className="block text-[9px] text-ink-500">Temporary audition, not in the project until applied</span>
+          </span>
+          {visualPreview.kind !== 'clip-playback' && visualPreview.kind !== 'range-playback' && (
+            <button
+              type="button"
+              data-testid="apply-visual-preview"
+              onClick={applyVisualPreview}
+              className="flex h-7 shrink-0 items-center gap-1 rounded-md bg-emerald-500/20 px-2 font-semibold text-emerald-200 hover:bg-emerald-500/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+              title="Commit this audition to the timeline"
+            >
+              <Check size={12} /> Apply
+            </button>
+          )}
+          <button
+            type="button"
+            data-testid="stop-visual-preview"
+            onClick={stopVisualPreview}
+            className="h-7 shrink-0 rounded-md border border-ink-700 px-2 text-ink-300 hover:border-red-400/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
+            title="Cancel this audition and restore the previous playhead"
+          >
+            Stop
+          </button>
+        </div>
+      )}
+
+      {/* Floating selection quick-bar (BrandBird study): contextual
+          actions float over the monitor for the selected clip. */}
+      {!visualPreview && !isPreviewingAsset && (() => {
+        const clip = allClips.find((c) => c.id === selectedClipId)
+        if (!clip) return null
+        const isTitle = clip.kind === 'text' || !!clip.textStyle
+        return (
+          <div
+            data-testid="selection-quick-bar"
+            className="pointer-events-auto absolute left-1/2 top-12 z-40 flex max-w-[min(94%,520px)] -translate-x-1/2 items-center gap-1 rounded-full border border-ink-600/80 bg-ink-950/90 py-1 pl-3 pr-1 text-[10px] text-ink-200 shadow-2xl backdrop-blur-sm"
+            role="toolbar"
+            aria-label="Selected clip quick actions"
+          >
+            <span className="max-w-44 truncate font-medium text-ink-100" title={clip.name}>{clip.name}</span>
+            <span className="h-4 w-px bg-ink-700" aria-hidden="true" />
+            <button type="button" data-testid="quick-bar-effects" onClick={() => useEditor.getState().setLeftTab('effects')} className="h-6 rounded-full px-2 hover:bg-ink-800 hover:text-white" title="Open Effects for this clip">Effects</button>
+            {isTitle && (
+              <button type="button" data-testid="quick-bar-text" onClick={() => useEditor.getState().setLeftTab('text')} className="h-6 rounded-full px-2 hover:bg-ink-800 hover:text-white" title="Style this title">Text</button>
+            )}
+            <button type="button" data-testid="quick-bar-split" onClick={() => useEditor.getState().splitAt(useEditor.getState().playhead)} className="h-6 rounded-full px-2 hover:bg-ink-800 hover:text-white" title="Split at playhead (Ctrl+B)">Split</button>
+            <button type="button" data-testid="quick-bar-delete" onClick={() => useEditor.getState().removeClip(clip.id)} className="grid h-6 w-6 place-items-center rounded-full text-ink-400 hover:bg-red-500/20 hover:text-red-200" title="Delete clip" aria-label="Delete selected clip">✕</button>
+          </div>
+        )
+      })()}
+
       {/* Bottom Left: Very small & short Sequence Ping Icon down close to timeline */}
       {!isPreviewingAsset && (
         <div
@@ -314,12 +411,20 @@ export function Preview() {
       {/* 3D Mode Canvas Stage: Full Orbit / Drag / Rotate around View */}
       {is3DMode && (
         <div data-testid="preview-3d-stage" className="absolute inset-0 z-20 flex flex-col pt-12">
-          <ThreeViewer
-            width={viewport.width || canvasW}
-            height={viewport.height || canvasH}
-            videoElement={assetVideoRef.current}
-            sourceCanvas={canvasRef.current}
-          />
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center text-[11px] text-ink-400">
+                Loading 3D stage…
+              </div>
+            }
+          >
+            <ThreeViewer
+              width={viewport.width || canvasW}
+              height={viewport.height || canvasH}
+              videoElement={assetVideoRef.current}
+              sourceCanvas={canvasRef.current}
+            />
+          </Suspense>
         </div>
       )}
 
@@ -362,7 +467,7 @@ export function Preview() {
                 <Volume2 size={32} className="text-brand-400" />
               </div>
               <h3 className="text-sm font-semibold text-ink-100 max-w-[280px] truncate" title={previewAsset.name}>{previewAsset.name}</h3>
-              <p className="text-xs text-ink-400 mt-1">Audio Track · {formatTimecode(assetDuration, projectFps)}</p>
+              <p className="text-xs text-ink-400 mt-1">Audio Track, {formatTimecode(assetDuration, projectFps)}</p>
             </div>
           )}
         </div>
@@ -386,6 +491,73 @@ export function Preview() {
             }}
           />
           <DrawingCanvasOverlay width={canvasW} height={canvasH} />
+
+          {/* Pivot (anchor) handle — Krita armature technique: drag the hinge
+              onto a joint; rotation/scale turn about it. Canvas coords map
+              1:1 inside the stage. */}
+          {pivotEditEnabled && (() => {
+            const clip = allClips.find((c) => c.id === selectedClipId)
+            if (!clip || clip.kind === 'audio' || clip.kind === 'adjustment') return null
+            if (!allTracks.some((t) => t.id === clip.trackId)) return null
+            if (playheadPos < clip.start || playheadPos >= clip.start + clip.duration) return null
+            const asset = assets.find((a) => a.id === clip.assetId)
+            let dw = canvasW
+            let dh = canvasH
+            if (clip.kind !== 'compound' && asset) {
+              const vw = asset.width || PW
+              const vh = asset.height || PH
+              const cover = Math.max(canvasW / vw, canvasH / vh)
+              dw = vw * cover
+              dh = vh * cover
+            } else if (clip.kind !== 'compound' && !asset) {
+              return null
+            }
+            const evalT = evaluateClipAnimation(clip, playheadPos)
+            const cxC = canvasW / 2 + evalT.x * (canvasW / PW)
+            const cyC = canvasH / 2 + evalT.y * (canvasH / PH)
+            const hx = cxC + (evalT.pivotX - 0.5) * dw
+            const hy = cyC + (evalT.pivotY - 0.5) * dh
+            const toCanvas = (e: React.PointerEvent) => {
+              const rect = (e.currentTarget as HTMLElement).parentElement!.getBoundingClientRect()
+              return {
+                x: (e.clientX - rect.left) * (canvasW / rect.width),
+                y: (e.clientY - rect.top) * (canvasH / rect.height),
+              }
+            }
+            return (
+              <div
+                data-testid="pivot-anchor-handle"
+                role="slider"
+                aria-label={`Pivot anchor for ${clip.name}: drag to move the rotation hinge`}
+                aria-valuetext={`pivot ${(evalT.pivotX * 100).toFixed(0)} percent, ${(evalT.pivotY * 100).toFixed(0)} percent`}
+                title="Pivot anchor — drag onto a joint; rotation hinges here"
+                className="absolute z-30 grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none place-items-center rounded-full border-2 border-pink-400 bg-pink-500/25 shadow-[0_0_0_3px_rgba(0,0,0,0.45)] active:cursor-grabbing"
+                style={{ left: hx, top: hy }}
+                onPointerDown={(e) => {
+                  e.stopPropagation()
+                  pivotDragRef.current = { pointerId: e.pointerId, clipId: clip.id }
+                  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                }}
+                onPointerMove={(e) => {
+                  const drag = pivotDragRef.current
+                  if (!drag || drag.pointerId !== e.pointerId || drag.clipId !== clip.id) return
+                  const pt = toCanvas(e)
+                  useEditor.getState().setClipTransform(clip.id, {
+                    pivotX: Math.max(-1, Math.min(2, 0.5 + (pt.x - cxC) / dw)),
+                    pivotY: Math.max(-1, Math.min(2, 0.5 + (pt.y - cyC) / dh)),
+                  })
+                }}
+                onPointerUp={(e) => {
+                  if (pivotDragRef.current?.pointerId === e.pointerId) pivotDragRef.current = null
+                  try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId) } catch { /* already released */ }
+                }}
+                onPointerCancel={() => { pivotDragRef.current = null }}
+              >
+                <span aria-hidden="true" className="pointer-events-none block h-1.5 w-1.5 rounded-full bg-pink-300" />
+                <span aria-hidden="true" className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 rounded bg-black/70 px-1 text-[8px] font-semibold tracking-wider text-pink-200">PIVOT</span>
+              </div>
+            )
+          })()}
 
           {/* OmniFrame Mode Character Overlays on Preview */}
           {leftTab === 'omniframe' && leftOpen && (
@@ -441,6 +613,209 @@ export function Preview() {
               })}
             </div>
           )}
+          {/* Clip Mask draw/edit overlay: drag to draw, inside to move, corners to resize */}
+          {maskClip?.mask && !isPreviewingAsset && (() => {
+            const m = maskClip.mask
+            const toPoint = (e: React.PointerEvent) => {
+              const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+              return {
+                x: Math.max(0, Math.min(1, (e.clientX - rect.left) / Math.max(1, rect.width))),
+                y: Math.max(0, Math.min(1, (e.clientY - rect.top) / Math.max(1, rect.height))),
+              }
+            }
+            const bounds = {
+              left: m.centerX - m.width / 2,
+              top: m.centerY - m.height / 2,
+              right: m.centerX + m.width / 2,
+              bottom: m.centerY + m.height / 2,
+            }
+            const applyBounds = (left: number, top: number, right: number, bottom: number) => {
+              const w = Math.max(0.02, Math.abs(right - left))
+              const h = Math.max(0.02, Math.abs(bottom - top))
+              updateClipMask(maskClip.id, {
+                centerX: Math.max(0, Math.min(1, (left + right) / 2)),
+                centerY: Math.max(0, Math.min(1, (top + bottom) / 2)),
+                width: Math.min(1, w),
+                height: Math.min(1, h),
+              })
+            }
+            return (
+              <div
+                data-testid="clip-mask-overlay"
+                className="absolute inset-0 z-30 select-none"
+                style={{ touchAction: 'none' }}
+                onPointerDown={(e) => {
+                  const p = toPoint(e)
+                  const kind = m.kind || 'shape'
+                  if (kind === 'custom') {
+                    const pointIdx = (e.target as HTMLElement).dataset.maskPoint
+                    if (pointIdx !== undefined) {
+                      maskDragRef.current = { mode: 'point', anchor: p, orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height }, pointIndex: Number(pointIdx) }
+                    } else {
+                      updateClipMask(maskClip.id, { points: [...(m.points || []), p] })
+                      maskDragRef.current = { mode: 'point', anchor: p, orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height }, pointIndex: (m.points || []).length }
+                    }
+                    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                    return
+                  }
+                  if (kind === 'split') {
+                    const rotate = (e.target as HTMLElement).dataset.maskSplitRotate
+                    maskDragRef.current = {
+                      mode: rotate ? 'split-rotate' : 'split-move',
+                      anchor: p,
+                      orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height },
+                      origSplit: { pos: m.splitPos ?? 0.5, angle: m.splitAngle ?? 0 },
+                    }
+                    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                    return
+                  }
+                  const handle = (e.target as HTMLElement).dataset.maskHandle
+                  const inside = p.x >= bounds.left && p.x <= bounds.right && p.y >= bounds.top && p.y <= bounds.bottom
+                  const mode = (handle as 'nw' | 'ne' | 'sw' | 'se' | undefined) || (inside ? 'move' : 'draw')
+                  maskDragRef.current = { mode, anchor: p, orig: { centerX: m.centerX, centerY: m.centerY, width: m.width, height: m.height } }
+                  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+                  if (mode === 'draw') applyBounds(p.x, p.y, p.x, p.y)
+                }}
+                onPointerMove={(e) => {
+                  const drag = maskDragRef.current
+                  if (!drag) return
+                  const p = toPoint(e)
+                  if (drag.mode === 'point' && drag.pointIndex !== undefined) {
+                    const pts = (m.points || []).map((pt, i) => (i === drag.pointIndex ? p : pt))
+                    updateClipMask(maskClip.id, { points: pts })
+                    return
+                  }
+                  if (drag.mode === 'split-move' && drag.origSplit) {
+                    const a = ((drag.origSplit.angle * Math.PI) / 180)
+                    const nx = Math.cos(a)
+                    const ny = Math.sin(a)
+                    const proj = (p.x - 0.5) * nx + (p.y - 0.5) * ny
+                    updateClipMask(maskClip.id, { splitPos: Math.max(0, Math.min(1, 0.5 + proj)) })
+                    return
+                  }
+                  if (drag.mode === 'split-rotate' && drag.origSplit) {
+                    const a = ((drag.origSplit.angle * Math.PI) / 180)
+                    const px = 0.5 + Math.cos(a) * ((drag.origSplit.pos - 0.5) * 1.4)
+                    const py = 0.5 + Math.sin(a) * ((drag.origSplit.pos - 0.5) * 1.4)
+                    const deg = (Math.atan2(p.y - py, p.x - px) * 180) / Math.PI - 90
+                    updateClipMask(maskClip.id, { splitAngle: Math.max(-180, Math.min(180, deg)) })
+                    return
+                  }
+                  const o = drag.orig
+                  const ob = { left: o.centerX - o.width / 2, top: o.centerY - o.height / 2, right: o.centerX + o.width / 2, bottom: o.centerY + o.height / 2 }
+                  if (drag.mode === 'draw') {
+                    applyBounds(drag.anchor.x, drag.anchor.y, p.x, p.y)
+                  } else if (drag.mode === 'move') {
+                    const dx = p.x - drag.anchor.x
+                    const dy = p.y - drag.anchor.y
+                    updateClipMask(maskClip.id, {
+                      centerX: Math.max(0, Math.min(1, o.centerX + dx)),
+                      centerY: Math.max(0, Math.min(1, o.centerY + dy)),
+                    })
+                  } else {
+                    const left = drag.mode.includes('w') ? p.x : ob.left
+                    const right = drag.mode.includes('e') ? p.x : ob.right
+                    const top = drag.mode.includes('n') ? p.y : ob.top
+                    const bottom = drag.mode.includes('s') ? p.y : ob.bottom
+                    // Keep the opposite corner anchored: the untouched edges
+                    // above already hold the original bounds.
+                    applyBounds(
+                      drag.mode.includes('w') ? Math.min(p.x, ob.right - 0.02) : left,
+                      drag.mode.includes('n') ? Math.min(p.y, ob.bottom - 0.02) : top,
+                      drag.mode.includes('e') ? Math.max(p.x, ob.left + 0.02) : right,
+                      drag.mode.includes('s') ? Math.max(p.y, ob.top + 0.02) : bottom,
+                    )
+                  }
+                }}
+                onPointerUp={() => {
+                  maskDragRef.current = null
+                }}
+              >
+                {(m.kind || 'shape') === 'split' && (() => {
+                  const a = (((m.splitAngle ?? 0) * Math.PI) / 180)
+                  const px = 0.5 + Math.cos(a) * (((m.splitPos ?? 0.5) - 0.5) * 1.4)
+                  const py = 0.5 + Math.sin(a) * (((m.splitPos ?? 0.5) - 0.5) * 1.4)
+                  return (
+                    <>
+                      <div
+                        data-testid="clip-mask-split-line"
+                        className={`pointer-events-none absolute h-[220%] w-0 border-l-2 border-dashed ${m.inverted ? 'border-amber-300' : 'border-teal-300'}`}
+                        style={{ left: `${px * 100}%`, top: '-60%', transform: `rotate(${-(m.splitAngle ?? 0)}deg)`, transformOrigin: 'center' }}
+                      />
+                      <span
+                        data-mask-split-rotate="1"
+                        data-testid="clip-mask-split-rotate"
+                        title="Drag to rotate the split line"
+                        className="pointer-events-auto absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border border-black/50 bg-teal-200"
+                        style={{ left: `${px * 100}%`, top: `${py * 100}%` }}
+                      />
+                    </>
+                  )
+                })()}
+                {m.kind === 'custom' && (
+                  <>
+                    <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                      {(m.points || []).length >= 2 && (
+                        <polygon
+                          points={(m.points || []).map((pt) => `${pt.x * 100},${pt.y * 100}`).join(' ')}
+                          fill="rgba(45,212,191,0.10)"
+                          stroke={m.inverted ? '#fcd34d' : '#5eead4'}
+                          strokeWidth="0.5"
+                        />
+                      )}
+                    </svg>
+                    {(m.points || []).map((pt, i) => (
+                      <span
+                        key={i}
+                        data-mask-point={i}
+                        data-testid={`clip-mask-point-${i}`}
+                        title={`Point ${i + 1} — drag to move`}
+                        className="pointer-events-auto absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border border-black/50 bg-teal-200"
+                        style={{ left: `${pt.x * 100}%`, top: `${pt.y * 100}%` }}
+                      />
+                    ))}
+                  </>
+                )}
+                {(m.kind || 'shape') !== 'split' && m.kind !== 'custom' && (
+                <div
+                  data-testid="clip-mask-outline"
+                  className={`pointer-events-none absolute border-2 ${m.inverted ? 'border-amber-300' : 'border-teal-300'} bg-white/5 shadow-[0_0_0_1px_rgba(0,0,0,0.45)]`}
+                  style={{
+                    left: `${bounds.left * 100}%`,
+                    top: `${bounds.top * 100}%`,
+                    width: `${m.width * 100}%`,
+                    height: `${m.height * 100}%`,
+                    transform: `rotate(${m.rotation}deg)`,
+                    borderRadius: m.shape === 'ellipse' ? '50%' : '4px',
+                  }}
+                >
+                  {(['nw', 'ne', 'sw', 'se'] as const).map((h) => (
+                    <span
+                      key={h}
+                      data-mask-handle={h}
+                      data-testid={`clip-mask-handle-${h}`}
+                      className="pointer-events-auto absolute h-3 w-3 rounded-sm border border-black/50 bg-teal-200"
+                      style={{
+                        left: h.includes('w') ? -6 : undefined,
+                        right: h.includes('e') ? -6 : undefined,
+                        top: h.includes('n') ? -6 : undefined,
+                        bottom: h.includes('s') ? -6 : undefined,
+                        cursor: `${h}-resize`,
+                      }}
+                    />
+                  ))}
+                </div>
+                )}
+                <div className="pointer-events-none absolute bottom-1 left-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] text-teal-100">
+                  {m.kind === 'split'
+                    ? `Split view (${m.inverted ? 'Exclude' : 'Include'}): drag to move the line, handle rotates, Esc done`
+                    : m.kind === 'custom'
+                      ? `Custom view (${m.inverted ? 'Exclude' : 'Include'}): click to add points, drag points, Esc done`
+                      : `Mask (${m.inverted ? 'Outside' : 'Inside'}): drag to draw, inside moves, corners resize, Esc done`}
+                </div>
+              </div>
+            )
+          })()}
           {safe && (
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-[5%] border border-dashed border-white/40" />

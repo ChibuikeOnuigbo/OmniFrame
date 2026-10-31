@@ -103,10 +103,10 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
           aria-expanded={isActive}
           aria-controls={isActive ? bodyId : undefined}
           onClick={() => nav.activate(id)}
-          className="group w-full flex min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+          className="group w-full flex flex-wrap min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
         >
           <CollapseGlyph open={isActive} />
-          <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wider text-ink-200">
+          <span className="min-w-[7rem] flex-1 whitespace-normal break-words leading-snug text-[11px] font-semibold uppercase tracking-wider text-ink-200">
             {title}
           </span>
           {hint ? (
@@ -137,10 +137,10 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
         aria-expanded={open}
         aria-controls={open ? bodyId : undefined}
         onClick={() => setStandaloneOpen((v) => !v)}
-        className="group w-full flex min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+        className="group w-full flex flex-wrap min-h-8 items-center gap-2 px-2.5 py-1.5 bg-ink-850 text-left transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
       >
         <CollapseGlyph open={open} />
-        <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wider text-ink-200">
+        <span className="min-w-[7rem] flex-1 whitespace-normal break-words leading-snug text-[11px] font-semibold uppercase tracking-wider text-ink-200">
           {title}
         </span>
         {hint ? (

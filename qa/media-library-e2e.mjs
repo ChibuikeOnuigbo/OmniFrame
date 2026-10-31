@@ -102,7 +102,10 @@ await page.screenshot({ path: join(SHOTS, 'media-library-compact-768x720.png') }
 assert(errors.length === 0, 'zero runtime errors', errors.join(' | '))
 // Chromium reports an in-flight object URL as aborted when responsive panel
 // teardown releases a media consumer; the project-level URL remains valid.
-const unexpectedFailed = failed.filter((entry) => !(entry.startsWith('blob:') && entry.includes('ERR_ABORTED')))
+// The Demucs availability HEAD can be aborted the same way when the Audio
+// panel is left quickly; model availability itself is covered separately by
+// qa/demucs-model-unavailable-e2e.mjs.
+const unexpectedFailed = failed.filter((entry) => !(entry.startsWith('blob:') && entry.includes('ERR_ABORTED')) && !(entry.includes('/models/htdemucs.onnx') && entry.includes('ERR_ABORTED')))
 assert(unexpectedFailed.length === 0, 'zero unexpected failed requests', unexpectedFailed.join(' | '))
 writeFileSync(join(REPORTS, 'media-library-results.json'), JSON.stringify({ results, errors, failed, unexpectedFailed }, null, 2))
 console.log(`RESULT ${results.length} PASS`)

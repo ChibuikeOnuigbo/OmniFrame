@@ -1,0 +1,21 @@
+which has not been implemented.
+[h264 @ 0x5601a8526340] If you want to help, upload a sample of this file to https://streams.videolan.org/upload/ and contact the ffmpeg-devel mailing list. (ffmpeg-devel@ffmpeg.org)
+[h264 @ 0x5601a85718c0] Late SEI is not implemented. Update your FFmpeg version to the newest one from Git. If the problem still occurs, it means that your file has a feature which has not been implemented.
+[h264 @ 0x5601a85718c0] If you want to help, upload a sample of this file to https://streams.videolan.org/upload/ and contact the ffmpeg-devel mailing list. (ffmpeg-devel@ffmpeg.org)
+[h264 @ 0x5601a865a240] Late SEI is not implemented. Update your FFmpeg version to the newest one from Git. If the problem still occurs, it means that your file has a feature which has not been implemented.
+[h264 @ 0x5601a865a240] If you want to help, upload a sample of this file to https://streams.videolan.org/upload/ and contact the ffmpeg-devel mailing list. (ffmpeg-devel@ffmpeg.org)
+[out#0/null @ 0x5601a8512240] video:63kB audio:6715kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  134 fps=0.0 q=-0.0 Lsize=N/A time=00:00:08.86 bitrate=N/A speed=31.8x    
+[Parsed_loudnorm_0 @ 0x5601a8614400] 
+{
+	"input_i" : "-inf",
+	"input_tp" : "-inf",
+	"input_lra" : "0.00",
+	"input_thresh" : "-70.00",
+	"output_i" : "-inf",
+	"output_tp" : "-inf",
+	"output_lra" : "0.00",
+	"output_thresh" : "-70.00",
+	"normalization_type" : "dynamic",
+	"target_offset" : "inf"
+}

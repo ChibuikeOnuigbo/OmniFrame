@@ -1,0 +1,204 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/J_effects/fx-layer-noir.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/J_effects/fx-layer-noir.mp4",
+  "frames": 72,
+  "fps": 24,
+  "size": 5848,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 3,
+     "bg": "#101014"
+    },
+    "out": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 3
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "qa/shots/01-home.png",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 357,
+     "natH": 223
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "catalogId": "look-noir",
+     "asLayer": true
+    },
+    "out": {
+     "clipId": "fxlayer-2",
+     "kind": "adjustment",
+     "affects": "all tracks below"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/J_effects/fx-layer-noir.mp4"
+    },
+    "out": {
+     "frames": 72
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 3,
+    "bg": "#101014"
+   },
+   "selection": "fxlayer-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "01-home.png",
+     "start": 0,
+     "duration": 3,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "fxlayer-2",
+     "name": "FX: Noir",
+     "start": 0,
+     "duration": 3,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "grayscale": 1,
+      "contrast": 1.45,
+      "brightness": 0.95
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "project_new",
+     "params": {
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 3,
+      "bg": "#101014"
+     },
+     "out": {
+      "w": 640,
+      "h": 360,
+      "fps": 24,
+      "duration": 3
+     }
+    },
+    {
+     "tool": "import_media",
+     "params": {
+      "path": "qa/shots/01-home.png",
+      "fit": "contain"
+     },
+     "out": {
+      "clipId": "clip-1",
+      "natW": 357,
+      "natH": 223
+     }
+    },
+    {
+     "tool": "fx_add",
+     "params": {
+      "catalogId": "look-noir",
+      "asLayer": true
+     },
+     "out": {
+      "clipId": "fxlayer-2",
+      "kind": "adjustment",
+      "affects": "all tracks below"
+     }
+    },
+    {
+     "tool": "render_export",
+     "params": {
+      "out": "test_ans_result/J_effects/fx-layer-noir.mp4"
+     },
+     "out": {
+      "frames": 72
+     }
+    }
+   ]
+  }
+ }
+}

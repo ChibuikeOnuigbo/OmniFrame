@@ -47,6 +47,9 @@ import {
   Image as ImageIcon,
   ChevronRight,
   Film,
+  Group,
+  Ungroup,
+  SquareDashed,
 } from 'lucide-react'
 import { useEditor, gapsOnTrack } from '../store'
 import { CollapseChip } from './CollapseChip'
@@ -55,6 +58,15 @@ import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
 import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
 import { placedEffectLabels } from '../lib/adjustment'
+import { FX_QUICK_IDS, fxCatalogById } from '../lib/effectCatalog'
+import { FX_MIN_DUR } from '../lib/fxInstances'
+import type { FxInstance } from '../types'
+
+/** Drag-and-drop payload for effects dragged out of the Effects tab. */
+const FX_MIME = 'application/x-omniframe-fx'
+import { MARKER_KINDS, groupMarkers, markerColorHex, markerGroupBackground, resolveMarkerTime } from '../lib/markers'
+import type { MarkerKind } from '../types'
+import { detectBeatGrid, detectCustomBeat } from '../lib/beatDetect'
 import { IconButton } from './ui'
 import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { GraphEditor } from './GraphEditor'
@@ -304,7 +316,7 @@ function TrackTargetMenu() {
         aria-label="Track targeting"
         onClick={() => setOpen((o) => !o)}
         className={
-          'flex h-8 max-w-[132px] items-center justify-center gap-1 rounded-md border px-1.5 text-xs transition-colors ' +
+          'flex h-8 max-w-[132px] items-center justify-center gap-1 rounded-none border px-1.5 text-xs transition-colors ' +
           (allInScope
             ? 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white'
             : 'border-brand bg-brand/20 text-white hover:bg-brand/30')
@@ -323,7 +335,7 @@ function TrackTargetMenu() {
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div
             data-testid="track-target-menu"
-            className="fixed z-50 w-52 rounded-md border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
+            className="fixed z-50 w-52 rounded-none border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
             style={{
               left: btnRef.current ? btnRef.current.getBoundingClientRect().left : 0,
               top: btnRef.current ? btnRef.current.getBoundingClientRect().bottom + 4 : 0,
@@ -339,7 +351,7 @@ function TrackTargetMenu() {
                 setTrackTargets([])
                 setOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Check size={12} className={allInScope ? 'opacity-100' : 'opacity-0'} />
               <span>All tracks (default)</span>
@@ -353,7 +365,7 @@ function TrackTargetMenu() {
                   type="button"
                   data-testid={`track-target-item-${t.id}`}
                   onClick={() => toggleTrackTarget(t.id)}
-                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <span
                     className={
@@ -377,7 +389,7 @@ function TrackTargetMenu() {
                     setTrackTargets([])
                     setOpen(false)
                   }}
-                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <X size={12} />
                   <span>Clear targeting</span>
@@ -542,7 +554,7 @@ function TrackHeader({
         <>
           <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
           <div
-            className="fixed z-50 w-44 rounded-md border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
+            className="fixed z-50 w-44 rounded-none border border-ink-700 bg-ink-850 p-1 shadow-2xl text-[11px] text-ink-200"
             style={{
               left: btnRef.current ? btnRef.current.getBoundingClientRect().right + 4 : 172,
               top: btnRef.current ? btnRef.current.getBoundingClientRect().top : 100,
@@ -555,7 +567,7 @@ function TrackHeader({
                 useEditor.getState().closeTrackGaps(track.id)
                 setMenuOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Minimize2 size={13} />
               <span>Close Gaps</span>
@@ -568,7 +580,7 @@ function TrackHeader({
                 createTrack(track.type, 'above', track.id)
                 setMenuOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Plus size={13} />
               <span>Add Track Above</span>
@@ -580,7 +592,7 @@ function TrackHeader({
                 createTrack(track.type, 'below', track.id)
                 setMenuOpen(false)
               }}
-              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+              className="flex items-center gap-1.5 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
             >
               <Plus size={13} />
               <span>Add Track Below</span>
@@ -750,6 +762,7 @@ function ClipView({
   selected,
   onStartDrag,
   onContextMenu,
+  onFxContextMenu,
 }: {
   clip: Clip
   asset?: MediaAsset
@@ -758,12 +771,21 @@ function ClipView({
   selected: boolean
   onStartDrag: (clip: Clip, e: React.PointerEvent) => void
   onContextMenu: (e: React.MouseEvent, clip: Clip) => void
+  onFxContextMenu?: (e: React.MouseEvent, clip: Clip, fxId: string) => void
 }) {
   const trimClip = useEditor((s) => s.trimClip)
   const selectClip = useEditor((s) => s.selectClip)
+  const groupOf = useEditor((s) => s.groups.find((g) => g.memberIds.includes(clip.id)))
   const splitAt = useEditor((s) => s.splitAt)
   const beginHistory = useEditor((s) => s.beginHistory)
   const endHistory = useEditor((s) => s.endHistory)
+  // ---- CapCut-style effect instances dropped onto this clip ----
+  const activeFx = useEditor((s) => s.activeFx)
+  const setActiveFx = useEditor((s) => s.setActiveFx)
+  const addFxInstance = useEditor((s) => s.addFxInstance)
+  const setFxRange = useEditor((s) => s.setFxRange)
+  const requestRightSection = useEditor((s) => s.requestRightSection)
+  const fxDrag = useRef<{ fxId: string; mode: 'move' | 'left' | 'right'; startX: number; origIn: number; origDur: number } | null>(null)
   const trimRef = useRef<{ mode: 'left' | 'right'; startX: number; origStart: number; origDur: number } | null>(null)
 
   const onDown = (mode: 'move' | 'left' | 'right') => (e: React.PointerEvent) => {
@@ -831,6 +853,39 @@ function ClipView({
     }
   }
 
+  const onFxDown = (inst: FxInstance, mode: 'move' | 'left' | 'right') => (e: React.PointerEvent) => {
+    if (e.button === 2) return // right button belongs to the fx context menu
+    if (e.button !== 0) return
+    e.stopPropagation()
+    e.preventDefault()
+    selectClip(clip.id)
+    setActiveFx({ clipId: clip.id, fxId: inst.id })
+    requestRightSection('fxstack')
+    beginHistory()
+    fxDrag.current = { fxId: inst.id, mode, startX: e.clientX, origIn: inst.inP, origDur: inst.duration }
+    ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onFxMove = (e: React.PointerEvent) => {
+    const d = fxDrag.current
+    if (!d) return
+    const dx = (e.clientX - d.startX) / px
+    // The container is closed: setFxRange re-clamps against the parent's
+    // CURRENT length every step, so the white bars can never leak outside.
+    if (d.mode === 'move') setFxRange(clip.id, d.fxId, d.origIn + dx, d.origDur)
+    else if (d.mode === 'left') setFxRange(clip.id, d.fxId, d.origIn + dx, d.origDur - dx)
+    else setFxRange(clip.id, d.fxId, d.origIn, d.origDur + dx)
+  }
+  const onFxUp = (e: React.PointerEvent) => {
+    if (!fxDrag.current) return
+    fxDrag.current = null
+    endHistory()
+    try {
+      ;(e.target as HTMLElement).releasePointerCapture(e.pointerId)
+    } catch {
+      /* noop */
+    }
+  }
+
   const left = clip.start * px
   const width = Math.max(6, clip.duration * px)
   const isCompound = clip.kind === 'compound'
@@ -840,6 +895,9 @@ function ClipView({
   const isImage = clip.kind === 'image' || asset?.kind === 'image'
   const isAdjustment = clip.kind === 'adjustment'
   const isVideo = clip.kind === 'video' || (!isCompound && !isAudio && !isText && !is3D && !isImage && !isAdjustment)
+  // Only image / video / compound clips host dropped effects (closed container).
+  const canHostFx = (isCompound || isImage || isVideo) && !isAdjustment && !isAudio && !isText && !is3D
+  const fxInsts = clip.fxInstances || []
 
   // Effects/LUTs placed on this clip (own filters + LUT stack + nested
   // adjustment layers for compounds) drive the badge + selection affordance.
@@ -849,22 +907,22 @@ function ClipView({
 
   const clipBorderClass = selected
     ? isAdjustment
-      ? 'border-2 border-cyan-300 ring-2 ring-cyan-300/90 shadow-[0_0_18px_rgba(103,232,249,0.65)] z-10'
+      ? 'border-2 border-violet-300 ring-2 ring-violet-300/90 z-10'
       : hasEffects
-      ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 shadow-[0_0_16px_rgba(147,197,253,0.6)] z-10'
+      ? 'border-2 border-blue-300 ring-2 ring-blue-300/80 z-10'
       : isCompound
-      ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 shadow-[0_0_16px_rgba(129,140,248,0.6)] z-10'
+      ? 'border-2 border-indigo-400 ring-2 ring-indigo-400/90 z-10'
       : isText
-      ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.5)] z-10'
+      ? 'border-2 border-amber-400 ring-2 ring-amber-400/80 z-10'
       : isAudio
-      ? 'border-2 border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_14px_rgba(52,211,153,0.5)] z-10'
+      ? 'border-2 border-emerald-400 ring-2 ring-emerald-400/80 z-10'
       : isImage
-      ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 shadow-[0_0_14px_rgba(192,132,252,0.5)] z-10'
+      ? 'border-2 border-purple-400 ring-2 ring-purple-400/80 z-10'
       : is3D
       ? 'border-2 border-fuchsia-400 ring-2 ring-fuchsia-400/80 shadow-[0_0_14px_rgba(232,121,249,0.5)] z-10'
       : 'border-2 border-sky-400 ring-2 ring-sky-400/80 shadow-[0_0_14px_rgba(56,189,248,0.5)] z-10'
     : isAdjustment
-    ? 'border border-cyan-600/70 hover:border-cyan-300 hover:shadow-md'
+    ? 'border border-violet-500/70 hover:border-violet-300 hover:shadow-md'
     : isCompound
     ? 'border border-indigo-500/80 hover:border-indigo-300 hover:shadow-md'
     : isText
@@ -878,7 +936,7 @@ function ClipView({
     : 'border border-sky-600/70 hover:border-sky-300 hover:shadow-md'
 
   const clipBgClass = isAdjustment
-    ? 'bg-gradient-to-r from-cyan-950/85 via-blue-950/80 to-cyan-950/85 text-cyan-100'
+    ? 'bg-gradient-to-r from-violet-800/85 via-purple-700/70 to-violet-800/85 text-violet-50'
     : isCompound
     ? 'bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 text-indigo-100'
     : isText
@@ -912,6 +970,7 @@ function ClipView({
       data-in-point={clip.inPoint.toFixed(4)}
       data-volume={clip.volume.toFixed(3)}
       data-hidden={clip.hidden ? 'true' : 'false'}
+      data-fx-count={fxInsts.length}
       onPointerDown={onDown('move')}
       onDoubleClick={(e) => {
         e.stopPropagation()
@@ -919,9 +978,44 @@ function ClipView({
           useEditor.getState().openSequence(clip.sourceSequenceId)
         }
       }}
+      onDragOver={(e) => {
+        if (canHostFx && e.dataTransfer.types.includes(FX_MIME)) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.dataTransfer.dropEffect = 'copy'
+        }
+        if (clip.kind === 'video' && e.dataTransfer.types.includes('application/x-omniframe-asset')) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.dataTransfer.dropEffect = 'copy'
+        }
+      }}
+      onDrop={(e) => {
+        const catalogId = e.dataTransfer.getData(FX_MIME)
+        if (catalogId && canHostFx) {
+          e.preventDefault()
+          e.stopPropagation()
+          addFxInstance(clip.id, catalogId) // full clip length, tagged + auto-opens settings
+          return
+        }
+        // REPLACE VIDEO WITH VIDEO: dropping a video asset onto a video clip
+        // opens the CapCut-style trim popup instead of stacking a new clip.
+        const droppedAssetId = e.dataTransfer.getData('application/x-omniframe-asset')
+        if (droppedAssetId && clip.kind === 'video') {
+          const dropped = useEditor.getState().assets.find((a) => a.id === droppedAssetId)
+          if (dropped && dropped.kind === 'video') {
+            e.preventDefault()
+            e.stopPropagation()
+            useEditor.getState().openReplaceDialog(clip.id, droppedAssetId)
+            return
+          }
+        }
+      }}
       onContextMenu={(e) => onContextMenu(e, clip)}
       className={[
-        'absolute top-1 bottom-1 pointer-events-auto rounded-md overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
+        // CapCut model: an effect is a thin purple clip (text-clip height),
+        // centred in its track — it grades whatever is underneath it.
+        isAdjustment ? 'absolute top-[23%] bottom-[23%] pointer-events-auto rounded-none overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]' : 'absolute top-1 bottom-1 pointer-events-auto rounded-none overflow-hidden text-[11px] select-none transition-[border-color,box-shadow]',
         tool === 'select' ? 'cursor-grab active:cursor-grabbing' : 'cursor-inherit',
         clipBorderClass,
         clip.hidden
@@ -932,6 +1026,21 @@ function ClipView({
       style={{ left, width }}
       title={clip.name}
     >
+      {clip.kind === 'null' && (
+        <div
+          data-testid="null-tile-overlay"
+          className="pointer-events-none absolute inset-0 grid place-items-center rounded-none border border-dashed border-slate-300/70 bg-slate-400/10"
+        >
+          <span className="font-mono text-[9px] tracking-widest text-slate-200">NULL</span>
+        </div>
+      )}
+      {groupOf && (
+        <div
+          data-testid="group-band"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[3px]"
+          style={{ background: `hsl(${[...groupOf.id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % 360} 70% 55%)` }}
+        />
+      )}
       {/* Frame-accurate filmstrip: each section of the clip shows the frame
           the project will show there — decoded source frames for video
           clips, the rendered nested composite for compound clips. Falls
@@ -1007,7 +1116,7 @@ function ClipView({
           <Video size={10} className="text-sky-400 shrink-0" />
         )}
         <span className="truncate">{clip.name}</span>
-        {hasEffects && (
+        {hasEffects && selected && (
           <span
             data-testid="clip-effects-badge"
             data-effect-count={effectLabels.length}
@@ -1025,6 +1134,84 @@ function ClipView({
         )}
       </div>
       {!isCompound && !isAudio && !isText && <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />}
+
+      {/* Effect instances dropped on this clip: inner bars inside a CLOSED
+          container — drag the body to move, the white end bars to trim; the
+          app clamps every step against the clip's current length. */}
+      {canHostFx && fxInsts.length > 0 && (
+        <div
+          data-testid={`clip-fx-strip-${clip.id}`}
+          className="absolute inset-x-0 bottom-0 z-[22] h-[13px] border-t border-black/60 bg-black/35"
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          {fxInsts.map((inst) => {
+            const fxActive = activeFx?.clipId === clip.id && activeFx.fxId === inst.id
+            return (
+              <div
+                key={inst.id}
+                data-testid={`clip-fx-bar-${inst.id}`}
+                data-fx-id={inst.id}
+                data-in={inst.inP.toFixed(4)}
+                data-duration={inst.duration.toFixed(4)}
+                data-enabled={inst.enabled ? 'true' : 'false'}
+                title={`${inst.name} — ${inst.inP.toFixed(2)}s → ${(inst.inP + inst.duration).toFixed(2)}s, drag body to move, white bars to trim`}
+                onPointerDown={onFxDown(inst, 'move')}
+                onPointerMove={onFxMove}
+                onPointerUp={onFxUp}
+                onContextMenu={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  selectClip(clip.id)
+                  setActiveFx({ clipId: clip.id, fxId: inst.id })
+                  onFxContextMenu?.(e, clip, inst.id)
+                }}
+                className={`absolute top-[2px] bottom-[1px] overflow-hidden rounded-[3px] cursor-grab active:cursor-grabbing ${
+                  inst.enabled
+                    ? 'bg-gradient-to-r from-cyan-400/95 via-sky-500/95 to-blue-500/95'
+                    : 'bg-slate-500/50'
+                } ${fxActive ? 'z-10 ring-1 ring-white shadow-[0_0_8px_rgba(255,255,255,.6)]' : ''}`}
+                style={{ left: inst.inP * px, width: Math.max(6, inst.duration * px) }}
+              >
+                <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-[5px] text-[8px] font-bold tracking-wide text-ink-950 truncate">
+                  {inst.name}
+                </span>
+                {/* keyframe diamonds ride on the bar at their inst-local time */}
+                {Object.entries(inst.keys || {}).flatMap(([pk, ks]) =>
+                  ks.map((k, ki) => (
+                    <span
+                      key={`${pk}-${ki}`}
+                      aria-hidden="true"
+                      data-testid={`fx-key-dot-${inst.id}-${pk}-${ki}`}
+                      className="pointer-events-none absolute top-1/2 h-[5px] w-[5px] -translate-y-1/2 rotate-45 bg-white shadow-[0_0_2px_rgba(0,0,0,.8)]"
+                      style={{ left: `calc(${((k.t / Math.max(0.0001, inst.duration)) * 100).toFixed(2)}% - 2px)` }}
+                    />
+                  )),
+                )}
+                <div
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-label={`Trim start of effect ${inst.name}`}
+                  data-testid={`fx-trim-left-${inst.id}`}
+                  onPointerDown={onFxDown(inst, 'left')}
+                  onPointerMove={onFxMove}
+                  onPointerUp={onFxUp}
+                  className="absolute left-0 top-0 bottom-0 z-30 w-[4px] cursor-ew-resize bg-white/95 hover:bg-white"
+                />
+                <div
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-label={`Trim end of effect ${inst.name}`}
+                  data-testid={`fx-trim-right-${inst.id}`}
+                  onPointerDown={onFxDown(inst, 'right')}
+                  onPointerMove={onFxMove}
+                  onPointerUp={onFxUp}
+                  className="absolute right-0 top-0 bottom-0 z-30 w-[4px] cursor-ew-resize bg-white/95 hover:bg-white"
+                />
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       {/* trim handles */}
       <div
@@ -1061,6 +1248,7 @@ export function Timeline() {
   const FPS = useEditor((s) => s.projectFps)
   const dropFrameTimecode = useEditor((s) => s.dropFrameTimecode)
   const duration = useEditor((s) => s.duration)
+  const setLeftTab = useEditor((s) => s.setLeftTab)
   const timelineHeight = useEditor((s) => s.timelineHeight)
   const timelineCollapsed = useEditor((s) => s.timelineCollapsed)
   const setTimelineCollapsed = useEditor((s) => s.setTimelineCollapsed)
@@ -1148,18 +1336,132 @@ export function Timeline() {
   const graphEditorOpen = useEditor((s) => s.graphEditorOpen)
   const setGraphEditorOpen = useEditor((s) => s.setGraphEditorOpen)
   const breadcrumbs = useEditor((s) => s.breadcrumbs || [{ id: 'main', name: 'Main Timeline' }])
+  const compoundWindow = useEditor((s) => s.compoundWindow)
   const navigateBreadcrumb = useEditor((s) => s.navigateBreadcrumb)
 
+  /** Build onset peaks for a clip's audible window (asset waveform if the
+   * importer stored one, else decode the audio and bucket it). */
+  const clipBeatPeaks = async (clip: Clip): Promise<Float32Array | null> => {
+    const asset = assets.find((a) => a.id === clip.assetId)
+    if (!asset || (asset.kind !== 'audio' && asset.kind !== 'video')) return null
+    const srcDur = asset.duration || clip.inPoint + clip.duration
+    if (asset.waveform && asset.waveform.length > 8) {
+      const from = Math.max(0, Math.floor((clip.inPoint / srcDur) * asset.waveform.length))
+      const to = Math.min(asset.waveform.length, Math.max(from + 1, Math.ceil(((clip.inPoint + clip.duration) / srcDur) * asset.waveform.length)))
+      return Float32Array.from(asset.waveform.slice(from, to))
+    }
+    try {
+      const res = await fetch(asset.url)
+      const raw = await res.arrayBuffer()
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const ctx = new AC()
+      const buffer = await ctx.decodeAudioData(raw)
+      void ctx.close().catch(() => undefined)
+      const sr = buffer.sampleRate
+      const startSample = Math.max(0, Math.floor((clip.inPoint || 0) * sr))
+      const frameCount = Math.min(buffer.length - startSample, Math.max(1, Math.floor(clip.duration * sr)))
+      const buckets = Math.max(16, Math.min(8192, Math.round(clip.duration * 100)))
+      const peaks = new Float32Array(buckets)
+      const per = frameCount / buckets
+      for (let b = 0; b < buckets; b++) {
+        let peak = 0
+        const s0 = startSample + Math.floor(b * per)
+        const s1 = Math.min(buffer.length, startSample + Math.floor((b + 1) * per))
+        for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+          const data = buffer.getChannelData(ch)
+          for (let i = s0; i < s1; i += 7) peak = Math.max(peak, Math.abs(data[i]))
+        }
+        peaks[b] = peak
+      }
+      return peaks
+    } catch {
+      return null
+    }
+  }
+
+  // Studio's clip context menu (capture-phase owner) asks for Auto Beat via
+  // a bridge event; the dialog + placement live here with the timeline.
+  useEffect(() => {
+    const onAutoBeatRequest = (e: Event) => {
+      const detail = (e as CustomEvent<{ clipId: string; mode: 'auto' | 'custom' }>).detail
+      const clip = useEditor.getState().clips.find((c) => c.id === detail?.clipId)
+      if (!clip) return
+      if (detail.mode === 'custom') {
+        setBeatDlg({ clipId: clip.id, mode: 'custom', times: [], periodSec: null, customStart: 0.5, customEnd: Math.min(1.5, Math.max(1, clip.duration / 2)), scanned: false })
+      } else {
+        void runAutoBeat(clip)
+      }
+    }
+    window.addEventListener('omniframe:auto-beat', onAutoBeatRequest)
+    return () => window.removeEventListener('omniframe:auto-beat', onAutoBeatRequest)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assets])
+
+  const runAutoBeat = async (clip: Clip) => {
+    setBeatBusy(true)
+    try {
+      const peaks = await clipBeatPeaks(clip)
+      if (!peaks) { setBeatDlg(null); return }
+      const grid = detectBeatGrid(peaks, clip.duration)
+      setBeatDlg({
+        clipId: clip.id,
+        mode: 'auto',
+        times: grid ? grid.times.filter((t) => t <= clip.duration) : [],
+        periodSec: grid ? grid.period : null,
+        customStart: 0.5,
+        customEnd: 1.5,
+        scanned: true,
+      })
+    } finally {
+      setBeatBusy(false)
+    }
+  }
+
+  const runCustomBeatScan = async () => {
+    if (!beatDlg) return
+    const clip = clips.find((c) => c.id === beatDlg.clipId)
+    if (!clip) return
+    setBeatBusy(true)
+    try {
+      const peaks = await clipBeatPeaks(clip)
+      if (!peaks) return
+      const len = Math.min(2, Math.max(0.5, beatDlg.customEnd - beatDlg.customStart))
+      const found = detectCustomBeat(peaks, clip.duration, beatDlg.customStart, len)
+      setBeatDlg({ ...beatDlg, times: found.times.filter((t) => t <= clip.duration), periodSec: found.period, scanned: true })
+    } finally {
+      setBeatBusy(false)
+    }
+  }
+
+  const placeBeatMarkers = (scope: 'timeline' | 'clip') => {
+    if (!beatDlg) return
+    const clip = clips.find((c) => c.id === beatDlg.clipId)
+    if (!clip) return
+    const st = useEditor.getState()
+    const def = MARKER_KINDS.find((d) => d.id === 'beat')!
+    st.addMarkersBulk(beatDlg.times.map((t, i) => ({
+      time: clip.start + t,
+      label: `${clip.name.slice(0, 14)} beat ${i + 1}`,
+      color: def.color,
+      kind: 'beat' as MarkerKind,
+      ...(scope === 'clip' ? { clipId: clip.id, clipOffset: t } : {}),
+    })))
+    setBeatDlg(null)
+  }
+
   const handleAddMarker = () => {
-    const playheadTime = useEditor.getState().playhead
-    const existing = markers.find((m) => Math.abs(m.time - playheadTime) < 0.1)
+    const st = useEditor.getState()
+    const playheadTime = st.playhead
+    const existing = markers.find((m) => Math.abs(m.time - playheadTime) < 0.1 && !m.clipId)
     if (existing) {
       setActiveMarkerModalId(existing.id)
     } else {
+      const def = MARKER_KINDS.find((d) => d.id === st.lastMarkerKind) || MARKER_KINDS[0]
       const id = addMarker({
         time: playheadTime,
-        label: `Marker ${markers.length + 1}`,
-        color: 'blue',
+        label: `${def.label} ${markers.length + 1}`,
+        color: def.color,
+        kind: def.id as MarkerKind,
       })
       setActiveMarkerModalId(id)
     }
@@ -1287,6 +1589,20 @@ export function Timeline() {
 
   // Delete / Backspace removes the whole gripped selection, not just the anchor.
   useEffect(() => {
+    // CapCut desktop shortcuts: Ctrl+G group selection, Ctrl+Shift+G ungroup.
+    const onGroupKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'g') return
+      const t = e.target as HTMLElement | null
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      e.preventDefault()
+      if (e.shiftKey) useEditor.getState().ungroupSelection()
+      else useEditor.getState().groupSelection()
+    }
+    window.addEventListener('keydown', onGroupKey)
+    return () => window.removeEventListener('keydown', onGroupKey)
+  }, [])
+
+  useEffect(() => {
     const onDeleteKey = (ev: KeyboardEvent) => {
       const target = ev.target as HTMLElement | null
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
@@ -1301,6 +1617,27 @@ export function Timeline() {
     window.addEventListener('keydown', onDeleteKey)
     return () => window.removeEventListener('keydown', onDeleteKey)
   }, [])
+
+  // CapCut In/Out: I and O mark the export range at the playhead.
+  useEffect(() => {
+    const onInOut = (ev: KeyboardEvent) => {
+      const target = ev.target as HTMLElement | null
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return
+      const st = useEditor.getState()
+      // If the user rebound another action onto I/O, that action wins.
+      const rebound = Object.values(st.customShortcuts || {}).some(
+        (key) => typeof key === 'string' && !key.includes('+') && key.toLowerCase() === ev.key.toLowerCase(),
+      )
+      if (rebound) return
+      if (ev.key === 'i' || ev.key === 'I') st.setExportIn()
+      else if (ev.key === 'o' || ev.key === 'O') st.setExportOut()
+    }
+    window.addEventListener('keydown', onInOut)
+    return () => window.removeEventListener('keydown', onInOut)
+  }, [])
+  const exportRange = useEditor((s) => s.exportRange)
+  const clearExportRange = useEditor((s) => s.clearExportRange)
   const [scrollLeft, setScrollLeft] = useState(0)
   const [viewW, setViewW] = useState(900)
   const seeking = useRef(false)
@@ -1316,13 +1653,28 @@ export function Timeline() {
 
   // Context Menu State
   const [contextMenu, setContextMenu] = useState<{
-    type: 'clip' | 'transition' | 'empty-track'
+    type: 'clip' | 'transition' | 'empty-track' | 'marker' | 'fx'
     x: number
     y: number
     clip?: Clip
     transition?: Transition
     trackId?: string
+    markerId?: string
+    groupIds?: string[]
+    fxId?: string
   } | null>(null)
+  const [markerPopover, setMarkerPopover] = useState<{ x: number; y: number; ids: string[] } | null>(null)
+  const [beatDlg, setBeatDlg] = useState<{
+    clipId: string
+    mode: 'auto' | 'custom'
+    times: number[]
+    periodSec: number | null
+    customStart: number
+    customEnd: number
+    scanned: boolean
+  } | null>(null)
+  const [beatBusy, setBeatBusy] = useState(false)
+  const beatCycleRef = useRef<{ key: string; idx: number }>({ key: '', idx: 0 })
 
   useEffect(() => {
     if (!toolMenuOpen && !speedMenuOpen && !contextMenu) return
@@ -1652,7 +2004,7 @@ export function Timeline() {
         onPointerMove={onTlHeaderDragMove}
         onPointerUp={onTlHeaderDragUp}
         onPointerCancel={onTlHeaderDragUp}
-        title="Drag to pop the timeline out into a window · − folds it to a strip"
+        title="Drag to pop the timeline out into a window, − folds it to a strip"
         className="shrink-0 flex items-center justify-between px-3 py-1 bg-ink-950 border-b border-ink-800 text-xs select-none touch-none"
       >
         <div className="flex items-center gap-1.5 flex-wrap">
@@ -1754,7 +2106,7 @@ export function Timeline() {
               setToolMenuOpen(false)
               setSpeedMenuOpen((open) => !open)
             }}
-            className="flex h-8 min-w-[62px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
+            className="flex h-8 min-w-[62px] items-center justify-center gap-1 rounded-none border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 hover:bg-ink-700"
           >
             <Gauge size={15} />
             <span className="tabular-nums">{Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×</span>
@@ -1772,7 +2124,7 @@ export function Timeline() {
           title="Split at playhead (Ctrl+B / B)"
           aria-label="Split at playhead"
           onClick={() => splitAt(useEditor.getState().playhead)}
-          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-none border border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white transition-colors"
         >
           <Scissors size={15} />
         </button>
@@ -1786,7 +2138,7 @@ export function Timeline() {
             setSpeedMenuOpen(false)
             setToolMenuOpen((open) => !open)
           }}
-          className="flex h-8 min-w-[36px] items-center justify-center gap-1 rounded-md border border-ink-700 bg-ink-800 px-1.5 text-ink-200 hover:bg-ink-700"
+          className="flex h-8 min-w-[36px] items-center justify-center gap-1 rounded-none border border-ink-700 bg-ink-800 px-1.5 text-ink-200 hover:bg-ink-700"
         >
           {tool === 'select' ? <MousePointer2 size={15} /> : <Slash size={15} />}
           <ChevronDown size={12} />
@@ -1810,7 +2162,7 @@ export function Timeline() {
           aria-pressed={gapSelectMode}
           onClick={() => setGapSelectMode(!gapSelectMode)}
           className={
-            'flex h-8 items-center justify-center gap-1.5 rounded-md border px-2 text-xs transition-colors ' +
+            'flex h-8 items-center justify-center gap-1.5 rounded-none border px-2 text-xs transition-colors ' +
             (gapSelectMode
               ? 'border-amber-400 bg-amber-400/20 text-amber-200 hover:bg-amber-400/30'
               : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700 hover:text-white')
@@ -1829,7 +2181,7 @@ export function Timeline() {
           title="Add Marker at playhead (M)"
           aria-label="Add marker"
           onClick={handleAddMarker}
-          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-none border border-ink-700 bg-ink-800 text-blue-400 hover:bg-ink-700 hover:text-blue-300 transition-colors"
         >
           <Bookmark size={15} />
         </button>
@@ -1845,7 +2197,7 @@ export function Timeline() {
         {/* View and snapping controls */}
         <div role="group" aria-label="Timeline zoom and snapping" className="flex shrink-0 items-center gap-1 rounded-lg border border-ink-800 bg-ink-950/50 p-1">
         {/* zoom group */}
-        <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-md border border-ink-700 bg-ink-800">
+        <div className="flex h-8 shrink-0 items-center overflow-hidden rounded-none border border-ink-700 bg-ink-800">
           <IconButton title="Zoom out" onClick={() => zoomBy(0.8)} className="rounded-none border-r border-ink-700">
             <ZoomOut size={15} />
           </IconButton>
@@ -1886,7 +2238,7 @@ export function Timeline() {
           aria-label="Toggle snapping"
           aria-pressed={snapping}
           onClick={toggleSnapping}
-          className={`grid place-items-center h-8 w-8 rounded-md border transition-colors ${
+          className={`grid place-items-center h-8 w-8 rounded-none border transition-colors ${
             snapping
               ? 'border-brand/60 bg-brand/15 text-violet-200'
               : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
@@ -1894,13 +2246,33 @@ export function Timeline() {
         >
           <Magnet size={15} />
         </button>
+        <div data-testid="work-area-cluster" className="flex items-center border border-ink-700 rounded-none" title="Work area / pre-export range (AM: In, Out, Full, Go In, Go Out)">
+          {([
+            ['In', 'work-area-in', () => useEditor.getState().setExportIn(), 'Mark export In at the playhead (I)'],
+            ['Out', 'work-area-out', () => useEditor.getState().setExportOut(), 'Mark export Out at the playhead (O)'],
+            ['Full', 'work-area-full', () => useEditor.getState().clearExportRange(), 'Clear the range — export the full timeline'],
+            ['Go In', 'work-area-go-in', () => { const r = useEditor.getState().exportRange; if (r) useEditor.getState().setPlayhead(r.in) }, 'Go In — jump the playhead to the range start'],
+            ['Go Out', 'work-area-go-out', () => { const r = useEditor.getState().exportRange; if (r) useEditor.getState().setPlayhead(r.out) }, 'Go Out — jump the playhead to the range end'],
+          ] as [string, string, () => void, string][]).map(([label, tid, fn, title]) => (
+            <button
+              key={tid}
+              type="button"
+              data-testid={tid}
+              title={title}
+              onClick={fn}
+              className="h-8 px-1.5 text-[9px] font-semibold text-ink-300 hover:bg-ink-700 hover:text-white border-l border-ink-700 first:border-l-0"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           data-testid="toggle-graph-editor-btn"
           title={`Graph Editor / Curves (${graphEditorOpen ? 'Active' : 'Hidden'})`}
           aria-pressed={graphEditorOpen}
           onClick={() => setGraphEditorOpen(!graphEditorOpen)}
-          className={`flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs transition-colors ${
+          className={`flex h-8 items-center gap-1.5 rounded-none border px-2.5 text-xs transition-colors ${
             graphEditorOpen
               ? 'border-brand/60 bg-brand/20 text-white font-medium shadow-xs'
               : 'border-ink-700 bg-ink-800 text-ink-400 hover:bg-ink-700 hover:text-white'
@@ -1910,7 +2282,7 @@ export function Timeline() {
           <span className="hidden xl:inline">Curves</span>
         </button>
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
-          {px.toFixed(0)} px/s{frameMode ? ' · frame' : ''}
+          {px.toFixed(0)} px/s{frameMode ? ', frame' : ''}
         </span>
         </div>
       </div>
@@ -1937,7 +2309,7 @@ export function Timeline() {
                 setTool(item.id)
                 setToolMenuOpen(false)
               }}
-              className={`flex h-9 w-full items-center gap-2 rounded-md px-2.5 text-xs ${
+              className={`flex h-9 w-full items-center gap-2 rounded-none px-2.5 text-xs ${
                 tool === item.id ? 'bg-brand/15 text-violet-200' : 'text-ink-300 hover:bg-ink-700'
               }`}
             >
@@ -1966,7 +2338,7 @@ export function Timeline() {
                   setSpeed(value)
                   setCustomSpeed(value)
                 }}
-                className={`h-8 rounded-md text-xs ${
+                className={`h-8 rounded-none text-xs ${
                   Math.abs(speed) === value ? 'bg-brand text-white' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'
                 }`}
               >
@@ -2068,76 +2440,65 @@ export function Timeline() {
                 </div>
               ))}
 
-              {/* Sequence Timeline Markers */}
-              {markers.map((marker) => {
-                const markerLeft = marker.time * px
-                const markerWidth = marker.duration ? Math.max(4, marker.duration * px) : 0
-                const colorHex =
-                  marker.color === 'green'
-                    ? '#10b981'
-                    : marker.color === 'red'
-                    ? '#ef4444'
-                    : marker.color === 'yellow'
-                    ? '#f59e0b'
-                    : marker.color === 'purple'
-                    ? '#a855f7'
-                    : marker.color === 'orange'
-                    ? '#f97316'
-                    : '#3b82f6'
-
+              {/* Sequence Timeline Markers — coincident markers combine
+                  into ONE flag (CapCut-style): hard colour slices for a
+                  few, a gradient + count past that. Click seeks (groups
+                  open a list), double-click edits, right-click menus. */}
+              {groupMarkers(markers, clips).map((g) => {
+                const left = g.time * px
+                const isGroup = g.markers.length > 1
+                const bg = markerGroupBackground(g.colors)
+                const primary = g.markers[0]
                 return (
                   <div
-                    key={marker.id}
-                    data-testid="timeline-marker"
-                    data-marker-id={marker.id}
-                    data-marker-color={marker.color}
-                    data-marker-time={marker.time.toFixed(3)}
-                    title={`${marker.label} (${formatTimecode(marker.time, FPS, dropFrameTimecode)})${marker.notes ? `\n${marker.notes}` : ''}`}
+                    key={`${g.time.toFixed(3)}:${primary.id}`}
+                    data-testid={isGroup ? 'timeline-marker-group' : 'timeline-marker'}
+                    data-marker-id={primary.id}
+                    data-marker-ids={g.markers.map((m) => m.id).join(',')}
+                    data-marker-count={g.markers.length}
+                    data-marker-time={g.time.toFixed(3)}
+                    title={isGroup ? `${g.markers.length} markers here — click to list` : `${primary.label} (${formatTimecode(g.time, FPS, dropFrameTimecode)})${primary.notes ? `\n${primary.notes}` : ''}`}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => {
                       e.stopPropagation()
-                      setPlayhead(marker.time)
+                      if (isGroup) {
+                        setMarkerPopover({ x: e.clientX, y: e.clientY, ids: g.markers.map((m) => m.id) })
+                      } else {
+                        setPlayhead(g.time)
+                      }
                     }}
                     onDoubleClick={(e) => {
                       e.stopPropagation()
-                      setActiveMarkerModalId(marker.id)
+                      setActiveMarkerModalId(primary.id)
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setContextMenu({ type: 'marker', x: e.clientX, y: e.clientY, markerId: primary.id, groupIds: g.markers.map((m) => m.id) })
                     }}
                     className="absolute top-0 z-20 cursor-pointer group"
-                    style={{ left: markerLeft }}
+                    style={{ left }}
                   >
-                    {/* Duration span ribbon */}
-                    {markerWidth > 0 && (
-                      <div
-                        className="absolute top-0 h-[28px] opacity-25 pointer-events-none"
-                        style={{
-                          width: markerWidth,
-                          backgroundColor: colorHex,
-                        }}
-                      />
-                    )}
-
-                    {/* Flag pin */}
                     <div
-                      className="relative w-3.5 h-4 flex items-center justify-center -ml-1.5 transition-transform group-hover:scale-125"
-                      style={{ color: colorHex }}
-                    >
-                      <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
-                        <path d="M0 0 H12 L7 6 L12 12 H0 Z" />
-                      </svg>
-                    </div>
-
-                    {/* Marker label pill */}
-                    <span
-                      title={marker.label}
-                      className="absolute top-4 left-1 text-[10px] font-semibold px-1 py-0.2 rounded shadow-sm pointer-events-none whitespace-nowrap opacity-90 group-hover:opacity-100 truncate max-w-[80px]"
-                      style={{ backgroundColor: colorHex, color: readableTextColor(colorHex) }}
-                    >
-                      {marker.label}
-                    </span>
+                      className="relative h-4 w-3.5 -ml-1.5 transition-transform group-hover:scale-125"
+                      style={{ background: bg, clipPath: 'polygon(0 0, 100% 0, 62% 46%, 100% 100%, 0 100%)' }}
+                    />
+                    {isGroup && (
+                      <span className="absolute -right-2 top-0 grid h-3 min-w-3 place-items-center rounded-full bg-white px-0.5 text-[8px] font-bold text-black shadow" data-testid="marker-group-count">
+                        {g.markers.length}
+                      </span>
+                    )}
+                    {!isGroup && (
+                      <span
+                        className="absolute left-1 top-4 max-w-[80px] truncate whitespace-nowrap rounded px-1 py-px text-[10px] font-semibold opacity-90 shadow-sm group-hover:opacity-100 pointer-events-none"
+                        style={{ backgroundColor: markerColorHex(primary.color, primary.kind), color: readableTextColor(markerColorHex(primary.color, primary.kind)) }}
+                      >
+                        {primary.label}
+                      </span>
+                    )}
                   </div>
                 )
               })}
-
               {/* Imperative marker */}
               <PlayheadMarker px={px} handle />
             </div>
@@ -2188,12 +2549,35 @@ export function Timeline() {
                 }
               }}
               onDragOver={(e) => {
-                if (e.dataTransfer.types.includes('application/x-omniframe-asset')) {
+                if (e.dataTransfer.types.includes('application/x-omniframe-asset') || e.dataTransfer.types.includes(FX_MIME)) {
                   e.preventDefault()
                   e.dataTransfer.dropEffect = 'copy'
                 }
               }}
               onDrop={(e) => {
+                const fxCatalogId = e.dataTransfer.getData(FX_MIME)
+                if (fxCatalogId) {
+                  // Dropped on the track area (not on a clip): becomes a
+                  // standalone effect clip that grades every track BELOW it.
+                  e.preventDefault()
+                  const lanesEl = lanesRef.current
+                  if (!lanesEl) return
+                  const laneRect = lanesEl.getBoundingClientRect()
+                  const startAt = Math.max(0, (e.clientX - laneRect.left) / px)
+                  const fxTarget = evaluateDragTarget(e.clientY, lanesEl, tracks, 'video')
+                  let fxTrackId: string
+                  if (fxTarget.mode === 'above' && fxTarget.referenceTrackId) {
+                    fxTrackId = useEditor.getState().createTrack('video', 'above', fxTarget.referenceTrackId)
+                  } else if (fxTarget.mode === 'below' && fxTarget.referenceTrackId) {
+                    fxTrackId = useEditor.getState().createTrack('video', 'below', fxTarget.referenceTrackId)
+                  } else if (fxTarget.mode === 'dock' && fxTarget.trackId) {
+                    fxTrackId = fxTarget.trackId
+                  } else {
+                    fxTrackId = useEditor.getState().ensureTrack('video')
+                  }
+                  useEditor.getState().addFxAdjustment(fxCatalogId, { trackId: fxTrackId, start: startAt, duration: 2 })
+                  return
+                }
                 const assetId = e.dataTransfer.getData('application/x-omniframe-asset')
                 const asset = assets.find((a) => a.id === assetId)
                 const lanes = lanesRef.current
@@ -2215,6 +2599,49 @@ export function Timeline() {
                 addClipToTrack(trackId, assetId, Math.max(0, (e.clientX - rect.left) / px))
               }}
             >
+              {exportRange && (
+                <>
+                  <div data-testid="export-range-shade-l" aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-10 bg-black/55" style={{ width: exportRange.in * px }} />
+                  <div data-testid="export-range-shade-r" aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 bg-black/55" style={{ left: exportRange.out * px, right: 0 }} />
+                  <button
+                    type="button"
+                    data-testid="export-range-clear"
+                    onClick={clearExportRange}
+                    className="absolute top-1 z-20 rounded border border-brand/50 bg-ink-900/90 px-1.5 py-0.5 text-[9px] font-medium text-brand-200 hover:bg-ink-800"
+                    style={{ left: exportRange.in * px + 4 }}
+                    title="Clear the In/Out export range (exports will use the full timeline again)"
+                  >
+                    Range {exportRange.in.toFixed(1)}–{exportRange.out.toFixed(1)}s, Cancel
+                  </button>
+                </>
+              )}
+              {compoundWindow && (compoundWindow.in > 0.001 || compoundWindow.out < compoundWindow.total - 0.001) && (
+                <>
+                  {compoundWindow.in > 0.001 && (
+                    <div
+                      data-testid="compound-cut-void-head"
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 left-0 z-10 border-r border-dashed border-amber-200/40"
+                      style={{
+                        width: compoundWindow.in * px,
+                        backgroundImage: 'repeating-linear-gradient(45deg, rgba(251,191,36,0.10) 0 8px, rgba(0,0,0,0.25) 8px 16px)',
+                      }}
+                    />
+                  )}
+                  {compoundWindow.out < compoundWindow.total - 0.001 && (
+                    <div
+                      data-testid="compound-cut-void-tail"
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 z-10 border-l border-dashed border-amber-200/40"
+                      style={{
+                        left: compoundWindow.out * px,
+                        right: 0,
+                        backgroundImage: 'repeating-linear-gradient(45deg, rgba(251,191,36,0.10) 0 8px, rgba(0,0,0,0.25) 8px 16px)',
+                      }}
+                    />
+                  )}
+                </>
+              )}
               {tracks.map((tr) => {
                 const laneHeight = new TrackModel(tr).getEffectiveHeight(clips)
                 return (
@@ -2224,7 +2651,12 @@ export function Timeline() {
                     className="relative border-b border-ink-800 bg-ink-900/40"
                     style={{ height: laneHeight }}
                     onPointerDown={(e) => {
-                      if (e.target === e.currentTarget) seekFromClientX(e.clientX)
+                      if (e.target === e.currentTarget) {
+                        // Clicking empty timeline space clears the active clip/layer
+                        // highlight and reveals the project inspector again.
+                        selectClip(null)
+                        seekFromClientX(e.clientX)
+                      }
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault()
@@ -2259,6 +2691,9 @@ export function Timeline() {
                         tool={tool}
                         selected={c.id === selectedClipId || selectedClipIds.includes(c.id)}
                         onStartDrag={startClipDrag}
+                        onFxContextMenu={(e, clp, fxId) => {
+                          setContextMenu({ type: 'fx', x: e.clientX, y: e.clientY, clip: clp, fxId })
+                        }}
                         onContextMenu={(e, clp) => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -2272,6 +2707,53 @@ export function Timeline() {
                       />
                     </div>
                   )
+                })}
+              </div>
+
+              {/* Clip top-edge markers: markers placed ON a clip ride its
+                  top edge and move with it. Coincident ones combine. */}
+              <div className="absolute inset-0 z-30 pointer-events-none" data-testid="clip-marker-layer">
+                {clips.map((c) => {
+                  const owned = markers.filter((m) => m.clipId === c.id)
+                  if (!owned.length) return null
+                  const tr = tracks.find((t) => t.id === c.trackId)
+                  if (!tr) return null
+                  const top = tracks.slice(0, tracks.indexOf(tr)).reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
+                  const groups = groupMarkers(owned, clips)
+                  return groups.map((g) => {
+                    const first = g.markers[0]
+                    return (
+                      <button
+                        key={`${c.id}:${g.time.toFixed(3)}:${first.id}`}
+                        type="button"
+                        data-testid="clip-marker-flag"
+                        data-marker-id={first.id}
+                        data-marker-ids={g.markers.map((m) => m.id).join(',')}
+                        data-marker-count={g.markers.length}
+                        data-clip-id={c.id}
+                        title={g.markers.length > 1 ? `${g.markers.length} markers on this clip` : `${first.label}${first.notes ? ` — ${first.notes}` : ''}`}
+                        className="absolute h-3 w-3 pointer-events-auto cursor-pointer transition-transform hover:scale-125"
+                        style={{
+                          left: g.time * px - 5,
+                          top: top + 2,
+                          background: markerGroupBackground(g.colors),
+                          clipPath: 'polygon(0 0, 100% 0, 62% 46%, 100% 100%, 0 100%)',
+                        }}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (g.markers.length > 1) setMarkerPopover({ x: e.clientX, y: e.clientY, ids: g.markers.map((m) => m.id) })
+                          else setPlayhead(c.start + g.time)
+                        }}
+                        onDoubleClick={(e) => { e.stopPropagation(); setActiveMarkerModalId(first.id) }}
+                        onContextMenu={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          setContextMenu({ type: 'marker', x: e.clientX, y: e.clientY, markerId: first.id, groupIds: g.markers.map((m) => m.id) })
+                        }}
+                      />
+                    )
+                  })
                 })}
               </div>
 
@@ -2424,7 +2906,7 @@ export function Timeline() {
               {dragState && (
                 <div
                   data-testid="timeline-drag-ghost"
-                  className="absolute rounded-md border-2 border-dashed border-amber-400 bg-amber-500/35 pointer-events-none z-30 flex items-center justify-between px-2 text-amber-100 font-mono text-[10px] shadow-[0_0_16px_rgba(251,191,36,0.6)]"
+                  className="absolute rounded-none border-2 border-dashed border-amber-400 bg-amber-500/35 pointer-events-none z-30 flex items-center justify-between px-2 text-amber-100 font-mono text-[10px] shadow-[0_0_16px_rgba(251,191,36,0.6)]"
                   style={{
                     left: dragState.curTime * px,
                     width: Math.max(10, dragState.origDuration * px),
@@ -2446,18 +2928,206 @@ export function Timeline() {
       )}
 
       {/* Centralized Target-Aware Context Menu */}
+      {/* Combined-marker list: everything sitting at one point */}
+      {markerPopover && (
+        <>
+          <div className="fixed inset-0 z-[96]" onClick={() => setMarkerPopover(null)} />
+          <div
+            data-testid="marker-group-popover"
+            className="fixed z-[101] w-60 rounded-none border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
+            style={{ left: Math.min(markerPopover.x, window.innerWidth - 250), top: Math.min(markerPopover.y, window.innerHeight - 260) }}
+          >
+            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-400">{markerPopover.ids.length} markers at this point</div>
+            {markerPopover.ids.map((id) => {
+              const mk = markers.find((m) => m.id === id)
+              if (!mk) return null
+              const t = resolveMarkerTime(mk, clips)
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  data-testid="marker-group-row"
+                  data-marker-id={id}
+                  onClick={() => setPlayhead(t)}
+                  onDoubleClick={() => { setActiveMarkerModalId(id); setMarkerPopover(null) }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700"
+                  title="Click to jump, double-click to edit"
+                >
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: markerColorHex(mk.color, mk.kind) }} />
+                  <span className="min-w-0 flex-1 truncate">{mk.label}</span>
+                  <span className="font-mono text-[10px] text-ink-500">{formatTimecode(t)}</span>
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )}
+
+      {/* Auto Beat placement popup: choose where the beat markers land */}
+      {beatDlg && (() => {
+        const clip = clips.find((c) => c.id === beatDlg.clipId)
+        if (!clip) return null
+        const segLen = Math.min(2, Math.max(0.5, beatDlg.customEnd - beatDlg.customStart))
+        return (
+          <div data-testid="auto-beat-popup" className="fixed bottom-44 right-4 z-[97] w-80 rounded-xl border border-ink-600 bg-ink-900/97 p-3 shadow-2xl backdrop-blur select-none">
+            <div className="mb-1 flex items-center gap-2">
+              <Music size={14} className="text-amber-400" />
+              <span className="text-xs font-semibold text-white">{beatDlg.mode === 'auto' ? 'Auto Beat' : 'Custom Auto Beat'}</span>
+              <span className="min-w-0 flex-1 truncate text-[10px] text-ink-500">on “{clip.name}”</span>
+              <button type="button" data-testid="auto-beat-close" onClick={() => setBeatDlg(null)} className="grid h-6 w-6 place-items-center rounded text-ink-400 hover:bg-ink-800 hover:text-white" aria-label="Close beat dialog"><X size={13} /></button>
+            </div>
+            {beatDlg.mode === 'custom' && (
+              <div className="mb-2 space-y-1.5">
+                <p className="text-[10px] leading-snug text-ink-400">Trim ONE beat (0.5–2 s). The engine learns its shape, then finds every match in this clip.</p>
+                <div className="flex items-center gap-1.5 text-[11px] text-ink-300">
+                  <label className="flex items-center gap-1">Start
+                    <input type="number" step="0.05" min={0} max={Math.max(0, clip.duration - 0.5)} data-testid="custom-beat-start" value={beatDlg.customStart}
+                      onChange={(e) => setBeatDlg({ ...beatDlg, customStart: Math.max(0, Number(e.target.value) || 0), scanned: false })}
+                      className="h-6 w-16 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[11px] text-white outline-none focus:border-brand" />
+                  </label>
+                  <label className="flex items-center gap-1">End
+                    <input type="number" step="0.05" min={0.5} max={clip.duration} data-testid="custom-beat-end" value={beatDlg.customEnd}
+                      onChange={(e) => setBeatDlg({ ...beatDlg, customEnd: Math.min(clip.duration, Number(e.target.value) || 0.5), scanned: false })}
+                      className="h-6 w-16 rounded border border-ink-700 bg-ink-950 px-1 font-mono text-[11px] text-white outline-none focus:border-brand" />
+                  </label>
+                  <span className="text-ink-500">{segLen.toFixed(2)}s</span>
+                  <button type="button" data-testid="custom-beat-scan" disabled={beatBusy} onClick={() => void runCustomBeatScan()} className="ml-auto h-6 rounded bg-brand px-2 text-[11px] font-semibold text-white hover:bg-brand/85 disabled:opacity-50">
+                    {beatBusy ? 'Scanning…' : 'Scan for this beat'}
+                  </button>
+                </div>
+              </div>
+            )}
+            <p className="mb-2 text-[11px] text-ink-300" data-testid="auto-beat-summary">
+              {beatBusy && beatDlg.mode === 'auto'
+                ? 'Listening for the beat…'
+                : beatDlg.scanned
+                  ? beatDlg.times.length
+                    ? `Found ${beatDlg.times.length} beats${beatDlg.periodSec ? `, one every ${beatDlg.periodSec.toFixed(2)}s (${(60 / beatDlg.periodSec).toFixed(0)} BPM)` : ''}. Where should the markers go?`
+                    : 'No clear beat found in this clip — try Custom Auto Beat with a clean single hit.'
+                  : 'Set your beat segment, then scan.'}
+            </p>
+            <div className="flex gap-1.5">
+              <button type="button" data-testid="auto-beat-place-timeline" disabled={!beatDlg.times.length || beatBusy} onClick={() => placeBeatMarkers('timeline')} className="h-7 flex-1 rounded bg-ink-800 px-2 text-[11px] font-semibold text-white ring-1 ring-ink-600 hover:bg-ink-700 disabled:opacity-40">
+                On main timeline
+              </button>
+              <button type="button" data-testid="auto-beat-place-clip" disabled={!beatDlg.times.length || beatBusy} onClick={() => placeBeatMarkers('clip')} className="h-7 flex-1 rounded bg-amber-500 px-2 text-[11px] font-semibold text-black hover:bg-amber-400 disabled:opacity-40">
+                On this clip's edge
+              </button>
+            </div>
+          </div>
+        )
+      })()}
+
       {contextMenu && (
         <>
           <div className="fixed inset-0 z-[95]" onClick={() => setContextMenu(null)} />
           <div
             data-testid="timeline-context-menu"
             role="menu"
-            className="fixed z-[100] w-52 rounded-md border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
+            className="fixed z-[100] w-52 rounded-none border border-ink-700 bg-ink-850 p-1.5 shadow-2xl text-xs text-ink-200"
             style={{
               left: Math.min(contextMenu.x, window.innerWidth - 220),
               top: Math.min(contextMenu.y, window.innerHeight - 240),
             }}
           >
+            {contextMenu.type === 'marker' && contextMenu.markerId && (() => {
+              const st = useEditor.getState()
+              const mk = st.markers.find((m) => m.id === contextMenu.markerId)
+              if (!mk) return null
+              const resolved = resolveMarkerTime(mk, st.clips)
+              const host = mk.clipId ? st.clips.find((c) => c.id === mk.clipId) : undefined
+              const spanning = !mk.clipId ? st.clips.find((c) => resolved >= c.start && resolved <= c.start + c.duration && c.kind !== 'adjustment') : undefined
+              const groupIds = contextMenu.groupIds && contextMenu.groupIds.length ? contextMenu.groupIds : [mk.id]
+              return (
+                <>
+                  <div className="mb-1 flex items-center gap-2 border-b border-ink-750 px-2 py-1 font-semibold text-ink-100">
+                    <span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: markerColorHex(mk.color, mk.kind) }} />
+                    <span className="truncate">{mk.label}</span>
+                    {groupIds.length > 1 && <span className="text-[10px] font-normal text-ink-400">+{groupIds.length - 1} here</span>}
+                  </div>
+                  <button type="button" data-testid="marker-menu-jump" onClick={() => { st.jumpToMarker(mk.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">Jump to marker</button>
+                  <button type="button" data-testid="marker-menu-edit" onClick={() => { st.setActiveMarkerModalId(mk.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">Edit marker…</button>
+                  <div className="my-1 border-t border-ink-700" />
+                  <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Purpose</div>
+                  {MARKER_KINDS.map((def) => (
+                    <button
+                      key={def.id}
+                      type="button"
+                      data-testid={`marker-menu-kind-${def.id}`}
+                      onClick={() => { st.updateMarker(mk.id, { kind: def.id, color: def.color }); st.setLastMarkerKind(def.id); setContextMenu(null) }}
+                      className="flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-ink-700"
+                    >
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: def.color }} />
+                      {def.label}
+                      {mk.kind === def.id && <span className="ml-auto text-[10px] text-ink-400">current</span>}
+                    </button>
+                  ))}
+                  <div className="my-1 border-t border-ink-700" />
+                  {mk.clipId ? (
+                    <button type="button" data-testid="marker-menu-to-timeline" onClick={() => { st.moveMarkersToTimeline(mk.clipId!); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">
+                      Move this clip's markers to main timeline
+                    </button>
+                  ) : spanning ? (
+                    <button type="button" data-testid="marker-menu-to-clip" onClick={() => { st.moveMarkersToClip(spanning.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700">
+                      Move markers in “{spanning.name.slice(0, 16)}” onto the clip
+                    </button>
+                  ) : null}
+                  <button type="button" data-testid="marker-menu-delete" onClick={() => { st.removeMarker(mk.id); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-red-400 hover:bg-red-500/20">Delete marker</button>
+                  {groupIds.length > 1 && (
+                    <button type="button" data-testid="marker-menu-delete-all-here" onClick={() => { groupIds.forEach((id) => st.removeMarker(id)); setContextMenu(null) }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-red-400 hover:bg-red-500/20">Delete all {groupIds.length} here</button>
+                  )}
+                </>
+              )
+            })()}
+
+            {contextMenu.type === 'fx' && contextMenu.clip && contextMenu.fxId && (() => {
+              const stf = useEditor.getState()
+              const instF = stf.clips.find((c) => c.id === contextMenu.clip!.id)?.fxInstances?.find((f) => f.id === contextMenu.fxId)
+              if (!instF) return null
+              const closeF = () => setContextMenu(null)
+              return (
+                <>
+                  <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={instF.name}>
+                    <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 align-middle" />
+                    {instF.name}
+                  </div>
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-edit"
+                    onClick={() => { stf.setActiveFx({ clipId: contextMenu.clip!.id, fxId: instF.id }); stf.requestRightSection('fxstack'); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
+                  >
+                    <Sliders size={14} /> Edit properties…
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-dup"
+                    onClick={() => { stf.duplicateFxInstance(contextMenu.clip!.id, instF.id); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
+                  >
+                    Duplicate (inside container)
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-toggle"
+                    onClick={() => { stf.toggleFxEnabled(contextMenu.clip!.id, instF.id); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
+                  >
+                    {instF.enabled ? 'Disable' : 'Enable'}
+                  </button>
+                  <div className="my-1 border-t border-ink-700" />
+                  <button
+                    type="button"
+                    data-testid="ctx-fxmenu-del"
+                    onClick={() => { stf.removeFxInstance(contextMenu.clip!.id, instF.id); closeF() }}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-red-400 hover:bg-red-500/20"
+                  >
+                    Delete effect <kbd className="ml-auto text-[10px] text-ink-500">Del</kbd>
+                  </button>
+                </>
+              )
+            })()}
+
             {contextMenu.type === 'clip' && contextMenu.clip && (
               <>
                 <div className="px-2 py-1 font-semibold text-ink-100 border-b border-ink-750 mb-1 truncate" title={contextMenu.clip.name}>
@@ -2465,15 +3135,120 @@ export function Timeline() {
                 </div>
                 <button
                   type="button"
+                  data-testid="ctx-group-btn"
+                  onClick={() => { useEditor.getState().groupSelection(); setContextMenu(null) }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
+                >
+                  <Group size={14} />
+                  <span>Group</span>
+                  <kbd className="ml-auto text-[10px] text-ink-500">Ctrl+G</kbd>
+                </button>
+                <button
+                  type="button"
+                  data-testid="ctx-ungroup-btn"
+                  onClick={() => { useEditor.getState().ungroupSelection(); setContextMenu(null) }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
+                >
+                  <Ungroup size={14} />
+                  <span>Ungroup</span>
+                  <kbd className="ml-auto text-[10px] text-ink-500">Ctrl+Shift+G</kbd>
+                </button>
+                <button
+                  type="button"
+                  data-testid="ctx-new-null-btn"
+                  onClick={() => { useEditor.getState().addNullObject(); setContextMenu(null) }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
+                >
+                  <SquareDashed size={14} />
+                  <span>New Null Object</span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
                     splitAt(useEditor.getState().playhead)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Scissors size={14} />
                   <span>Split at Playhead</span>
                   <kbd className="ml-auto text-[10px] text-ink-500">B</kbd>
+                </button>
+                <div className="my-1 border-t border-ink-700" />
+                <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Template mode</div>
+                <button
+                  type="button"
+                  data-testid="ctx-template-capture"
+                  onClick={() => {
+                    const id = useEditor.getState().captureTemplate(contextMenu.clip!.id)
+                    setContextMenu(null)
+                    if (id) useEditor.setState({ mediaImportNotice: `Template captured from “${contextMenu.clip!.name}” (${id}) — export it as XML in the Media panel or apply it from any clip's context menu.` })
+                  }}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
+                  title="Snapshot EVERY processing stage of this clip (transform+keys, effects, fx, LUT grade, masks, blend, speed, text style, in-point ratio)"
+                >
+                  <Sliders size={14} />
+                  <span>Capture template</span>
+                </button>
+                <details className="w-full">
+                  <summary data-testid="ctx-template-apply" className="flex cursor-pointer items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left list-none">
+                    <Sliders size={14} />
+                    <span>Apply template…</span>
+                    <span className="ml-auto text-[10px] text-ink-500">{useEditor.getState().templates.length || 'none'}</span>
+                  </summary>
+                  <div className="ml-4 border-l border-ink-700 pl-1">
+                    {useEditor.getState().templates.length === 0 && (
+                      <div className="px-2 py-1 text-[10px] text-ink-500">No templates yet — capture one, or import a template XML (Media panel).</div>
+                    )}
+                    {useEditor.getState().templates.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        data-testid={`ctx-template-apply-${t.id}`}
+                        onClick={() => {
+                          useEditor.getState().applyTemplate(t.id, contextMenu.clip!.id)
+                          setContextMenu(null)
+                        }}
+                        className="flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-cyan-500/15"
+                        title={`${t.fieldCount} stages from ${t.sourceName} — ${Object.keys(t.fields).join(', ')}`}
+                      >
+                        <span className="h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-brand to-cyan-400" />
+                        <span className="truncate">{t.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </details>
+                <div className="my-1 border-t border-ink-700" />
+                <div className="px-2 pb-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Add effect</div>
+                {FX_QUICK_IDS.map((qid) => {
+                  const qe = fxCatalogById(qid)
+                  if (!qe) return null
+                  return (
+                    <button
+                      key={qid}
+                      type="button"
+                      data-testid={`ctx-fx-${qid}`}
+                      onClick={() => {
+                        const stq = useEditor.getState()
+                        const added = stq.addFxInstance(contextMenu.clip!.id, qid)
+                        if (!added) stq.addFxAdjustment(qid) // clip can't host → grades tracks below
+                        setContextMenu(null)
+                      }}
+                      className="flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-cyan-500/15"
+                    >
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500" />
+                      <span className="truncate">{qe.name}</span>
+                    </button>
+                  )
+                })}
+                <button
+                  type="button"
+                  data-testid="ctx-fx-browse"
+                  onClick={() => { setLeftTab('effects'); setContextMenu(null) }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-brand/20 hover:text-brand-200"
+                >
+                  <Sliders size={14} />
+                  <span>Browse all effects…</span>
                 </button>
                 <button
                   type="button"
@@ -2512,7 +3287,7 @@ export function Timeline() {
                     }
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Sparkles size={14} />
                   <span>Add Transition</span>
@@ -2523,7 +3298,7 @@ export function Timeline() {
                     toggleClipHidden(contextMenu.clip!.id)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   {contextMenu.clip.hidden ? <Eye size={14} /> : <EyeOff size={14} />}
                   <span>{contextMenu.clip.hidden ? 'Show Clip' : 'Hide Clip'}</span>
@@ -2534,7 +3309,7 @@ export function Timeline() {
                     insertClipCopy(contextMenu.clip!, contextMenu.clip!.start + contextMenu.clip!.duration)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Copy size={14} />
                   <span>Duplicate</span>
@@ -2592,6 +3367,36 @@ export function Timeline() {
                 )}
 
                 <div className="my-1 border-t border-ink-700" />
+                <div className="px-2 pb-0.5 pt-1 text-[9px] font-semibold uppercase tracking-wider text-ink-500">Auto Beat</div>
+                <button
+                  type="button"
+                  data-testid="context-menu-auto-beat"
+                  disabled={beatBusy}
+                  onClick={() => {
+                    const clip = contextMenu.clip!
+                    setContextMenu(null)
+                    void runAutoBeat(clip)
+                  }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700 disabled:opacity-50"
+                >
+                  <Music size={14} className="text-amber-400" />
+                  <span>Auto Beat — find the beat</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid="context-menu-custom-auto-beat"
+                  onClick={() => {
+                    const clip = contextMenu.clip!
+                    setContextMenu(null)
+                    setBeatDlg({ clipId: clip.id, mode: 'custom', times: [], periodSec: null, customStart: 0.5, customEnd: Math.min(1.5, Math.max(1, clip.duration / 2)), scanned: false })
+                  }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-ink-700"
+                >
+                  <Activity size={14} className="text-amber-400" />
+                  <span>Custom Auto Beat… — teach it one beat</span>
+                </button>
+
+                <div className="my-1 border-t border-ink-700" />
                 <button
                   type="button"
                   onClick={() => {
@@ -2613,7 +3418,7 @@ export function Timeline() {
                   Transition: {contextMenu.transition.type.replace(/_/g, ' ')}
                 </div>
                 <div className="px-2 py-1 text-[10px] text-ink-500 uppercase font-semibold">Change Type</div>
-                {(['cross_dissolve', 'dip_to_black', 'dip_to_white', 'wipe_left', 'slide_left', 'zoom'] as TransitionType[]).map((tType) => (
+                {(['cross_dissolve', 'dip_to_black', 'dip_to_white', 'wipe_left', 'slide_left', 'zoom', 'device_phone', 'device_monitor', 'device_tv'] as TransitionType[]).map((tType) => (
                   <button
                     key={tType}
                     type="button"
@@ -2678,7 +3483,7 @@ export function Timeline() {
                     useEditor.getState().closeTrackGaps(contextMenu.trackId!)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Minimize2 size={14} />
                   <span>Close Gaps on Track</span>
@@ -2691,7 +3496,7 @@ export function Timeline() {
                     createTrack(tracks.find((t) => t.id === contextMenu.trackId)?.type || 'video', 'above', contextMenu.trackId)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Plus size={14} />
                   <span>Add Track Above</span>
@@ -2703,7 +3508,7 @@ export function Timeline() {
                     createTrack(tracks.find((t) => t.id === contextMenu.trackId)?.type || 'video', 'below', contextMenu.trackId)
                     setContextMenu(null)
                   }}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-violet-200 text-left"
+                  className="flex items-center gap-2 w-full px-2 py-1.5 rounded hover:bg-brand/20 hover:text-brand-200 text-left"
                 >
                   <Plus size={14} />
                   <span>Add Track Below</span>
@@ -2754,7 +3559,7 @@ export function Timeline() {
               type="button"
               data-testid="timeline-dock-back-btn"
               onClick={() => setTimelineFloating(false)}
-              className="rounded-md border border-ink-700 bg-ink-800 px-2 py-0.5 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              className="rounded-none border border-ink-700 bg-ink-800 px-2 py-0.5 text-[10px] text-ink-300 transition-colors hover:border-ink-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               Dock back
             </button>

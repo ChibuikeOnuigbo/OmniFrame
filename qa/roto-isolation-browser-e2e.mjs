@@ -411,7 +411,9 @@ writeFileSync(join(REPORTS, 'roto-isolation-browser.json'), JSON.stringify({
   results,
 }, null, 2))
 
-console.log(`\n${results.filter((r) => r.status === 'PASS').length}/${results.length} PASS`)
+const passCount = results.filter((r) => r.status === 'PASS').length
+const skipCount = results.filter((r) => r.status === 'SKIPPED').length
+console.log(`\n${passCount} PASS / ${skipCount} SKIP / ${failures.length} FAIL (${results.length} checks)`)
 if (failures.length) {
   console.log('FAILURES:')
   for (const f of failures) console.log(' -', f)

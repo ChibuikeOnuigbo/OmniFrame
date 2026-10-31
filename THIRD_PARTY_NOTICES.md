@@ -4,6 +4,35 @@ This file contains the licenses and notices for open source software used in Omn
 
 ---
 
+### `@audio/shift-transient`, `@audio/shift-formant`, and `@audio/stretch-transient`
+- **Copyright**: Dmitry Iv. and audiojs contributors.
+- **License**: MIT
+- **Use**: Local transient-aware music pitch shifting, formant-aware solo-voice pitch shifting, and transient-aware pitch-preserving tempo rendering. Processing runs in an isolated Web Worker. Package sources: [shift-transient](https://github.com/audiojs/shift/tree/main/packages/shift-transient), [shift-formant](https://github.com/audiojs/shift/tree/main/packages/shift-formant), [stretch-transient](https://github.com/audiojs/stretch/tree/main/packages/stretch-transient).
+
+---
+
+### ag-psd
+- **Copyright**: ag-psd contributors.
+- **License**: MIT
+- **Use**: Browser-side reading of layered Photoshop `.psd` documents. It does not provide Photoshop-compatible round-trip rendering for every text, vector, smart-object, effect, or color-mode feature.
+
+### fflate
+- **Copyright**: Arjun Barrett and fflate contributors.
+- **License**: MIT
+- **Use**: Bounded ZIP entry extraction for OpenRaster `.ora` documents and the flattened composite stored inside Krita `.kra` archives.
+
+### pako
+- **Copyright**: Vitaly Puzrin and contributors.
+- **License**: MIT AND Zlib
+- **Use**: Compression used by ag-psd.
+
+### base64-js
+- **Copyright**: Feross Aboukhadijeh.
+- **License**: MIT
+- **Use**: Base64 helper used by ag-psd.
+
+---
+
 ### React & React DOM
 - **Copyright**: (c) Meta Platforms, Inc. and affiliates.
 - **License**: MIT

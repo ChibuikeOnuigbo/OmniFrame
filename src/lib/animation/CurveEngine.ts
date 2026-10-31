@@ -18,6 +18,18 @@ export type InterpolationType =
   | 'back'
   | 'bounce'
   | 'elastic'
+  | 'bounce-param'
+  | 'bounce-uniform'
+  | 'rebound-in'
+  | 'rebound-out'
+  | 'physical'
+  | 'sine-in' | 'sine-out' | 'sine-in-out' | 'quad-in' | 'quad-out' | 'quad-in-out'
+  | 'cubic-in-out' | 'quart-in' | 'quart-out' | 'quart-in-out' | 'quint-in' | 'quint-out' | 'quint-in-out'
+  | 'expo-in' | 'expo-out' | 'expo-in-out' | 'circ-in' | 'circ-out' | 'circ-in-out'
+  | 'back-in' | 'back-out' | 'back-in-out' | 'elastic-in' | 'elastic-out' | 'elastic-in-out'
+  | 'bounce-in' | 'bounce-out' | 'bounce-in-out' | 'smoothstep' | 'smootherstep' | 'hold'
+  | 'spring-soft' | 'spring-wild' | 'anticipate-settle'
+  | 'custom'
 
 export type ExtrapolationMode = 'constant' | 'linear' | 'cycle' | 'ping-pong'
 
@@ -32,11 +44,19 @@ export interface KeyframeNode {
   id: string
   time: number // in seconds
   value: number
+  /** user-dragged custom curve: normalized [0..1]x[0..1] points, monotone in x */
+  points?: { x: number; y: number }[]
   interpolation: InterpolationType
   handleMode?: TangentHandleMode
   inHandle?: TangentHandle
   outHandle?: TangentHandle
   easingPreset?: string
+  /** Jitter-style easing intensity: 1 = preset as-is, 0 = linear, up to 1.5 = exaggerated (default 1) */
+  easingIntensity?: number
+  /** Params for the parametric families (Board T): bounce-param / bounce-uniform
+   *  (steps, bounciness, firstBounce — uploaded Easing-Curve popup ref),
+   *  rebound-in/out (overshoot), physical (freq, damping). */
+  easeParams?: { steps?: number; bounciness?: number; firstBounce?: number; overshoot?: number; freq?: number; damping?: number }
 }
 
 export interface PropertyCurve {
@@ -70,6 +90,8 @@ export interface EvaluatedClipTransform {
   scaleZ: number
   opacity: number
   speed: number
+  pivotX: number
+  pivotY: number
   width?: number
   height?: number
 }
@@ -161,62 +183,124 @@ function evalBezierValue(p0y: number, p1y: number, p2y: number, p3y: number, s: 
 }
 
 /**
+ * Progress through a user-dragged custom curve: piecewise-linear through the
+ * normalized points (x monotone). This is exactly what dragging handles in the
+ * curve editor produces — no preset easing involved.
+ */
+export function customProgress(points: { x: number; y: number }[], u: number): number {
+  const pts = [...points].sort((a, b) => a.x - b.x)
+  const cu = Math.max(0, Math.min(1, u))
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1]
+    if (cu >= a.x && cu <= b.x) {
+      const span = b.x - a.x
+      const t = span <= 1e-6 ? 0 : (cu - a.x) / span
+      return a.y + t * (b.y - a.y)
+    }
+  }
+  return cu <= pts[0].x ? pts[0].y : pts[pts.length - 1].y
+}
+
+/**
  * Standard Easing Formulas
  */
-export function evaluateEasingProgress(u: number, interpolation: InterpolationType): number {
-  const clampedU = Math.max(0, Math.min(1, u))
-
+/** Canonical value-curves ported from the Engine Repair Pack tools/curves.py
+ * (deterministic, endpoints pinned): full Penner family + normalized
+ * underdamped-spring rebounds + equal-contact decaying bounce + springs.
+ * bounce-param maps the uploaded Easing-Curve popup params
+ * (steps->cycles, bounciness->decay, firstBounce->amplitude). */
+function springRaw(u: number, damping = 6, frequency = 11): number {
+  return 1 - Math.exp(-damping * u) * (Math.cos(frequency * u) + (damping / frequency) * Math.sin(frequency * u))
+}
+function normSpring(u: number, damping = 6, frequency = 11): number {
+  const d = springRaw(1, damping, frequency)
+  return d === 0 ? u : springRaw(u, damping, frequency) / d
+}
+function bounceOutEqual(t: number, contact = 0.52, cycles = 3, amplitude = 0.24, decay = 0.5): number {
+  if (t <= contact) return 1 - (1 - t / contact) ** 2
+  const interval = (1 - contact) / cycles
+  const i = Math.min(cycles - 1, Math.floor((t - contact) / interval))
+  const u = (t - contact - i * interval) / interval
+  return 1 - amplitude * decay ** i * Math.sin(Math.PI * u) ** 2
+}
+function elasticOut(t: number): number {
+  if (t === 0 || t === 1) return t
+  return 2 ** (-10 * t) * Math.sin((10 * t - 0.75) * ((2 * Math.PI) / 3)) + 1
+}
+function backIn(t: number): number {
+  const c = 1.70158
+  return (c + 1) * t * t * t - c * t * t
+}
+export function evaluateEasingProgress(u: number, interpolation: InterpolationType, ep?: KeyframeNode['easeParams']): number {
+  const t = Math.max(0, Math.min(1, u))
+  if (t === 0) return 0
+  if (t === 1) return 1
+  const cycles = Math.max(1, Math.round(ep?.steps ?? 3))
+  const decay = Math.max(0.05, Math.min(0.98, ep?.bounciness ?? 0.5))
+  const amp = Math.max(0.02, Math.min(0.9, ep?.firstBounce ?? 0.24))
+  const ov = Math.max(0.01, Math.min(0.9, ep?.overshoot ?? 0.15))
+  const damp = ep?.damping ?? 5.5
+  const freq = ep?.freq ?? 11
+  const bo = (x: number) => bounceOutEqual(x, 0.52, cycles, amp, decay)
   switch (interpolation) {
-    case 'constant':
-      return 0
-    case 'linear':
-      return clampedU
-    case 'cubic-in':
-      return clampedU * clampedU * clampedU
-    case 'cubic-out': {
-      const inv = 1 - clampedU
-      return 1 - inv * inv * inv
+    case 'constant': return 0
+    case 'linear': return t
+    case 'smoothstep': return t * t * (3 - 2 * t)
+    case 'smootherstep': return t * t * t * (t * (t * 6 - 15) + 10)
+    case 'hold': return 0
+    case 'sine-in': return 1 - Math.cos((t * Math.PI) / 2)
+    case 'sine-out': return Math.sin((t * Math.PI) / 2)
+    case 'sine-in-out': return (1 - Math.cos(Math.PI * t)) / 2
+    case 'ease-in': case 'quad-in': return t * t
+    case 'ease-out': case 'quad-out': return 1 - (1 - t) ** 2
+    case 'ease-in-out': case 'quad-in-out': return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2
+    case 'cubic-in': return t ** 3
+    case 'cubic-out': return 1 - (1 - t) ** 3
+    case 'cubic-in-out': return t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2
+    case 'quart-in': return t ** 4
+    case 'quart-out': return 1 - (1 - t) ** 4
+    case 'quart-in-out': return t < 0.5 ? 8 * t ** 4 : 1 - (-2 * t + 2) ** 4 / 2
+    case 'quint-in': return t ** 5
+    case 'quint-out': return 1 - (1 - t) ** 5
+    case 'quint-in-out': return t < 0.5 ? 16 * t ** 5 : 1 - (-2 * t + 2) ** 5 / 2
+    case 'expo-in': return 2 ** (10 * (t - 1))
+    case 'expo-out': return 1 - 2 ** (-10 * t)
+    case 'expo-in-out': return t < 0.5 ? 2 ** (20 * t - 10) / 2 : (2 - 2 ** (-20 * t + 10)) / 2
+    case 'circ-in': return 1 - Math.sqrt(1 - t * t)
+    case 'circ-out': return Math.sqrt(1 - (t - 1) ** 2)
+    case 'circ-in-out': return t < 0.5 ? (1 - Math.sqrt(1 - (2 * t) ** 2)) / 2 : (Math.sqrt(1 - (-2 * t + 2) ** 2) + 1) / 2
+    case 'back': case 'back-in': return backIn(t)
+    case 'back-out': return 1 - backIn(1 - t)
+    case 'back-in-out': {
+      const c = 1.70158 * 1.525
+      return t < 0.5
+        ? ((2 * t) ** 2 * ((c + 1) * 2 * t - c)) / 2
+        : ((2 * t - 2) ** 2 * ((c + 1) * (2 * t - 2) + c) + 2) / 2
     }
-    case 'ease-in':
-      return clampedU * clampedU
-    case 'ease-out': {
-      const inv = 1 - clampedU
-      return 1 - inv * inv
+    case 'elastic': case 'elastic-out': return elasticOut(t)
+    case 'elastic-in': return 1 - elasticOut(1 - t)
+    case 'elastic-in-out': return t < 0.5 ? (1 - elasticOut(1 - 2 * t)) / 2 : (1 + elasticOut(2 * t - 1)) / 2
+    case 'bounce': case 'bounce-out': case 'bounce-param': return bo(t)
+    case 'bounce-in': return 1 - bo(1 - t)
+    case 'bounce-in-out': return t < 0.5 ? (1 - bo(1 - 2 * t)) / 2 : (1 + bo(2 * t - 1)) / 2
+    case 'bounce-uniform': return bounceOutEqual(t, 0.52, cycles, amp, decay)
+    case 'rebound-out': return normSpring(t, damp, freq)
+    case 'rebound-in': {
+      // Anticipation dip BELOW 0, then steep launch that overshoots past 1
+      // and regresses with damped up-down corrections (uploaded refs: both
+      // rebounds move more than intended, then correct themselves).
+      if (t < 0.38) { const x = t / 0.38; return -ov * (x * x * (3 - 2 * x)) }
+      return -ov + (1 + ov) * normSpring((t - 0.38) / 0.62, damp, freq)
     }
-    case 'ease-in-out':
-      return clampedU < 0.5
-        ? 2 * clampedU * clampedU
-        : 1 - Math.pow(-2 * clampedU + 2, 2) / 2
-    case 'back': {
-      const c1 = 1.70158
-      const c3 = c1 + 1
-      return c3 * clampedU * clampedU * clampedU - c1 * clampedU * clampedU
-    }
-    case 'bounce': {
-      let n1 = 7.5625
-      let d1 = 2.75
-      let x = clampedU
-      if (x < 1 / d1) {
-        return n1 * x * x
-      } else if (x < 2 / d1) {
-        return n1 * (x -= 1.5 / d1) * x + 0.75
-      } else if (x < 2.5 / d1) {
-        return n1 * (x -= 2.25 / d1) * x + 0.9375
-      } else {
-        return n1 * (x -= 2.625 / d1) * x + 0.984375
-      }
-    }
-    case 'elastic': {
-      if (clampedU === 0) return 0
-      if (clampedU === 1) return 1
-      return (
-        -Math.pow(2, 10 * clampedU - 10) *
-        Math.sin((clampedU * 10 - 10.75) * ((2 * Math.PI) / 3))
-      )
+    case 'physical': case 'spring-soft': return normSpring(t, ep?.damping ?? 9, ep?.freq ?? 10)
+    case 'spring-wild': return normSpring(t, 3.5, 16)
+    case 'anticipate-settle': {
+      if (t < 0.38) { const x = t / 0.38; return -0.15 * (x * x * (3 - 2 * x)) }
+      return -0.15 + 1.15 * normSpring((t - 0.38) / 0.62, 6, 10)
     }
     case 'bezier':
     default:
-      return clampedU
+      return t
   }
 }
 
@@ -333,6 +417,11 @@ export function evaluateCurve(curve: PropertyCurve, time: number): number {
     return k0.value + u * (k1.value - k0.value)
   }
 
+  // Custom curve: points the user dragged in the curve editor (polyline progress)
+  if (k0.interpolation === 'custom' && k0.points && k0.points.length >= 2) {
+    return k0.value + customProgress(k0.points, u) * (k1.value - k0.value)
+  }
+
   // Custom 1D cubic Bezier with explicit tangent handles
   if (k0.interpolation === 'bezier') {
     const p0x = k0.time
@@ -354,7 +443,10 @@ export function evaluateCurve(curve: PropertyCurve, time: number): number {
   }
 
   // Standard easing presets (cubic-in, cubic-out, ease-in, ease-out, back, bounce, etc.)
-  const progress = evaluateEasingProgress(u, k0.interpolation)
+  // Easing intensity (Jitter-style): blend the eased progress toward/away from linear.
+  const rawProgress = evaluateEasingProgress(u, k0.interpolation)
+  const intensity = Math.min(1.5, Math.max(0, k0.easingIntensity ?? 1))
+  const progress = u + (rawProgress - u) * intensity
   return k0.value + progress * (k1.value - k0.value)
 }
 
@@ -484,6 +576,8 @@ export function createDefaultClipAnimation(
       scale_y: makeCurve('scale_y', 'scale', 'Y', 'Scale Y', '#a855f7', initial.scale, '%', 0.01, 10),
       scale_z: makeCurve('scale_z', 'scale', 'Z', 'Scale Z', '#ec4899', 1.0, '%', 0.01, 10),
       opacity: makeCurve('opacity', 'opacity', 'Scalar', 'Opacity', '#14b8a6', initial.opacity, '%', 0, 1),
+      pivot_x: makeCurve('pivot_x', 'pivot', 'X', 'Pivot X', '#f472b6', initial.pivotX ?? 0.5, '', -1, 2),
+      pivot_y: makeCurve('pivot_y', 'pivot', 'Y', 'Pivot Y', '#fb923c', initial.pivotY ?? 0.5, '', -1, 2),
       playback_speed: makeCurve('playback_speed', 'speed', 'Scalar', 'Playback Speed', '#eab308', 1.0, 'x', 0.1, 10),
       wheel_rotation: makeCurve('wheel_rotation', 'wheel', 'Z', '3D Wheel Rotation', '#8b5cf6', 0, '°', -3600, 3600),
     },
@@ -493,6 +587,81 @@ export function createDefaultClipAnimation(
 /**
  * Evaluate all clip animation channels at a given timeline time
  */
+/**
+ * Orthographic 3-axis rotation matrix for canvas 2D (Gold Motion / Alight-style
+ * Rotation X/Y flip): returns the affine {a,b,c,d} for ctx.transform(a,b,c,d,0,0).
+ * rotationY foreshortens horizontally (cos), rotationX foreshortens vertically,
+ * and combined angles add the correct diagonal shear (Rx·Ry orthographic
+ * projection). 90° = edge-on, 180° = mirrored flip. Canvas 2D has no true
+ * perspective, so this is the standard orthographic model, not a fake 3D claim.
+ */
+export function rotationXYMatrix(
+  rotationXDeg: number,
+  rotationYDeg: number,
+): { a: number; b: number; c: number; d: number } {
+  const rx = ((rotationXDeg || 0) * Math.PI) / 180
+  const ry = ((rotationYDeg || 0) * Math.PI) / 180
+  const sx = Math.sin(rx)
+  const cx = Math.cos(rx)
+  const sy = Math.sin(ry)
+  const cy = Math.cos(ry)
+  return { a: cy, b: sx * sy, c: 0, d: cx }
+}
+
+/** Format evaluated progress samples (0..1 time) as a CSS linear() timing function. */
+function progressToCssLinear(samples: number[]): string {
+  const stops = samples.map((p, i) => {
+    const pct = Math.round((i / (samples.length - 1)) * 1000) / 10
+    const val = Math.round(p * 1000) / 10
+    return `${val}% ${pct}%`
+  })
+  return `linear(${stops.join(', ')})`
+}
+
+/**
+ * CSS timing-function for an easing preset (Jitter-style "Copy as CSS").
+ * Standard presets are sampled from the exact evaluated curve (including
+ * intensity), so back/bounce/elastic overshoot survives as linear() stops;
+ * only the trivially exact cases use keyword forms.
+ */
+export function easingToCss(interpolation: InterpolationType, intensity = 1): string {
+  if (interpolation === 'constant') return 'steps(1, end)'
+  const inten = Math.min(1.5, Math.max(0, intensity))
+  if (interpolation === 'linear' && inten === 1) return 'linear'
+  const N = 20
+  const samples: number[] = []
+  for (let i = 0; i <= N; i++) {
+    const u = i / N
+    const raw = evaluateEasingProgress(u, interpolation)
+    samples.push(u + (raw - u) * inten)
+  }
+  return progressToCssLinear(samples)
+}
+
+/**
+ * CSS timing-function for one concrete keyframe segment, sampled from the
+ * real evaluated curve — bezier handles and easing intensity included.
+ * Returns null when the keyframe has no following segment to describe.
+ */
+export function keyframeSegmentToCss(curve: PropertyCurve, keyframeId: string): string | null {
+  const keys = [...curve.keyframes].sort((a, b) => a.time - b.time)
+  const idx = keys.findIndex((k) => k.id === keyframeId)
+  if (idx < 0 || idx >= keys.length - 1) return null
+  const k0 = keys[idx]
+  const k1 = keys[idx + 1]
+  if (k0.interpolation === 'constant') return 'steps(1, end)'
+  const dt = k1.time - k0.time
+  const dv = k1.value - k0.value
+  if (dt <= 1e-6 || Math.abs(dv) <= 1e-9) return null
+  const N = 20
+  const samples: number[] = []
+  for (let i = 0; i <= N; i++) {
+    const t = k0.time + (i / N) * dt
+    samples.push((evaluateCurve(curve, t) - k0.value) / dv)
+  }
+  return progressToCssLinear(samples)
+}
+
 export function evaluateClipAnimation(clip: Clip, timelineTime: number): EvaluatedClipTransform {
   const base = clip.transform
   const anim = clip.animation
@@ -502,14 +671,16 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
       x: base.x,
       y: base.y,
       z: 0,
-      rotationX: 0,
-      rotationY: 0,
+      rotationX: base.rotationX ?? 0,
+      rotationY: base.rotationY ?? 0,
       rotationZ: base.rotation,
       scaleX: base.scale,
       scaleY: base.scale,
       scaleZ: 1,
       opacity: base.opacity,
       speed: 1.0,
+      pivotX: base.pivotX ?? 0.5,
+      pivotY: base.pivotY ?? 0.5,
     }
   }
 
@@ -526,13 +697,15 @@ export function evaluateClipAnimation(clip: Clip, timelineTime: number): Evaluat
     x: getVal('position_x', base.x),
     y: getVal('position_y', base.y),
     z: getVal('position_z', 0),
-    rotationX: getVal('rotation_x', 0),
-    rotationY: getVal('rotation_y', 0),
+    rotationX: getVal('rotation_x', base.rotationX ?? 0),
+    rotationY: getVal('rotation_y', base.rotationY ?? 0),
     rotationZ: getVal('rotation_z', base.rotation),
     scaleX: getVal('scale_x', base.scale),
     scaleY: getVal('scale_y', base.scale),
     scaleZ: getVal('scale_z', 1.0),
     opacity: getVal('opacity', base.opacity),
     speed: getVal('playback_speed', 1.0),
+    pivotX: getVal('pivot_x', base.pivotX ?? 0.5),
+    pivotY: getVal('pivot_y', base.pivotY ?? 0.5),
   }
 }

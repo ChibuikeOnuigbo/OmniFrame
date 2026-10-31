@@ -11,7 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useEditor } from '../store'
-import { executeVoiceIsolationForClip, type VoiceIsolationOptions } from '../lib/voiceIsolation'
+import { executeVoiceIsolationForClip, type VoiceIsolationModel, type VoiceIsolationOptions } from '../lib/voiceIsolation'
 
 interface VoiceIsolationModalProps {
   isOpen: boolean
@@ -21,7 +21,17 @@ interface VoiceIsolationModalProps {
 
 export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIsolationModalProps) {
   const clips = useEditor((s) => s.clips)
+  const isolationModel = useEditor((s) => s.audioIsolationModel)
   const audioVideoClips = clips.filter((c) => c.kind === 'audio' || c.kind === 'video')
+  const modelLabels: Record<VoiceIsolationModel, string> = {
+    'omni-voicetarget': 'Omni VoiceTarget DSP',
+    'htdemucs-v4': 'Demucs v4 separator',
+    'bs-roformer-lite': 'BS-Roformer',
+    'dsp-crossover-fast': 'Fast crossover DSP',
+    'omni-denoise-onnx': 'Omni speech denoiser',
+    'rnnoise-xiph': 'RNNoise denoiser',
+    'omni-unified': 'Omni Unified model',
+  }
 
   const [selectedClipId, setSelectedClipId] = useState<string>(initialClipId || '')
   const [mode, setMode] = useState<'keep_vocal' | 'remove_vocal'>('keep_vocal')
@@ -111,7 +121,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
                 Isolate Voice & Vocal Removal
               </h2>
               <p className="text-[11px] text-ink-400">
-                Stereo DSP vocal isolation and removal
+                {modelLabels[isolationModel]}, synchronized local processing
               </p>
             </div>
           </div>
@@ -146,7 +156,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
               >
                 {audioVideoClips.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} ({c.kind} · {c.duration.toFixed(1)}s)
+                    {c.name} ({c.kind}, {c.duration.toFixed(1)}s)
                   </option>
                 ))}
               </select>
@@ -260,7 +270,7 @@ export function VoiceIsolationModal({ isOpen, onClose, initialClipId }: VoiceIso
           {/* Processing Status & Progress */}
           {processing && (
             <div data-testid="voice-isolation-progress-card" className="space-y-2 p-3.5 rounded-xl border border-brand/40 bg-brand/10 text-xs">
-              <div className="flex items-center justify-between text-violet-200 font-medium">
+              <div className="flex items-center justify-between text-brand-200 font-medium">
                 <span className="flex items-center gap-2">
                   <Loader2 size={14} className="animate-spin text-brand-400" />
                   <span>{status}</span>

@@ -21,7 +21,7 @@ function phaseLine(e: ModelLoadEntry): { title: string; detail: string } {
   if (e.phase === 'compile') return { title: 'Compiling neural network…', detail: 'Optimising for this device' }
   if (e.fromDisk) return { title: 'Loading from disk…', detail: e.totalBytes ? `${fmtMb(e.receivedBytes)} / ${fmtMb(e.totalBytes)}` : fmtMb(e.receivedBytes) }
   const pctKnown = e.totalBytes != null && e.totalBytes > 0
-  const speed = e.speedBps > 0 ? ` · ${fmtMb(e.speedBps)}/s` : ''
+  const speed = e.speedBps > 0 ? `, ${fmtMb(e.speedBps)}/s` : ''
   if (pctKnown) return { title: 'Downloading model…', detail: `${fmtMb(e.receivedBytes)} / ${fmtMb(e.totalBytes!)}${speed}` }
   return { title: 'Downloading model…', detail: `${fmtMb(e.receivedBytes)}${e.approxMb ? ` of ~${e.approxMb} MB` : ''}${speed}` }
 }

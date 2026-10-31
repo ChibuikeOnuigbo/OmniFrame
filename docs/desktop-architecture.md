@@ -20,9 +20,9 @@ Web and desktop should invoke the same project command IDs and canonical state t
 
 ## Persistence direction
 
-The current repository does not yet contain a complete project save/load subsystem. A production implementation should use a versioned project manifest plus copied/linked media references. Web storage and native filesystem persistence need separate adapters over the same serialized document schema. Object URLs must never be persisted as durable media paths.
+The shared editor now has a versioned `.omni` browser project bundle (schema v1): a ZIP manifest stores serializable editor state and embeds session media/object-URL bytes as SHA-256-checked resources. Opening it rehydrates those resources into fresh object URLs before applying state. The save/load contract is shared by the web and Tauri-hosted frontend; the native shell does not yet provide a separate transactional filesystem/project-directory adapter.
 
-This document intentionally does not pretend that metadata-only JSON is a complete project save format.
+Undo/redo history and transient runtime jobs are intentionally excluded. Installed app-relative resources are not recopied into each project. `.omni` is OmniFrame's editable project format, not a Photoshop/Krita native writer or an external-format round trip. See [the detailed schema, limits, capability matrix, and checklist](OMNI-PROJECT-AND-EXPORTS.md).
 
 ## Current build blocker
 

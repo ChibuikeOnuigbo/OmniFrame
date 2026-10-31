@@ -1,0 +1,1609 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/board_S_montagem2.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/board_S_montagem2.mp4",
+  "frames": 119,
+  "fps": 12,
+  "size": 302215,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 360,
+     "h": 640,
+     "fps": 30,
+     "duration": 10,
+     "bg": "#000000"
+    },
+    "out": {
+     "w": 360,
+     "h": 640,
+     "fps": 30,
+     "duration": 10
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "public/uploads/17908683167065917032696543501299.jpg",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 981,
+     "natH": 736
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-1",
+     "from": 10,
+     "to": 1.5
+    },
+    "out": {
+     "clipId": "clip-1",
+     "duration": 1.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-1",
+     "start": 0
+    },
+    "out": {
+     "clipId": "clip-1",
+     "from": 0,
+     "to": 0
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-1"
+    },
+    "out": {
+     "selected": "clip-1"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "adjustment": {
+       "luts": [
+        {
+         "id": "c1",
+         "builtin": "golden-hour",
+         "name": "golden-hour",
+         "intensity": 1,
+         "enabled": true
+        }
+       ]
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null,
+     "adjustment": {
+      "luts": "[same-object-ref]"
+     }
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "X",
+     "time": 0,
+     "value": 1,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "scale_x",
+     "keyframeId": "kf_bstjah2"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "X",
+     "time": 1.4,
+     "value": 1.14,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "scale_x",
+     "keyframeId": "kf_8rbgbnp"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "Y",
+     "time": 0,
+     "value": 1,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "scale_y",
+     "keyframeId": "kf_ktr2j1c"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "Y",
+     "time": 1.4,
+     "value": 1.14,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "scale_y",
+     "keyframeId": "kf_w177itv"
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "/tmp/mont-black.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "natW": 640,
+     "natH": 640
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-2",
+     "from": 10,
+     "to": 0.12
+    },
+    "out": {
+     "clipId": "clip-2",
+     "duration": 0.12
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-2",
+     "start": 1.5
+    },
+    "out": {
+     "clipId": "clip-2",
+     "from": 0,
+     "to": 1.5
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "aurora"
+    },
+    "out": {
+     "clipId": "clip-3"
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-3",
+     "from": 10,
+     "to": 1.5
+    },
+    "out": {
+     "clipId": "clip-3",
+     "duration": 1.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-3",
+     "start": 1.62
+    },
+    "out": {
+     "clipId": "clip-3",
+     "from": 0,
+     "to": 1.62
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-3",
+     "catalogId": "part-1"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 1.5,
+     "params": {
+      "particleFx": "embers",
+      "particleDensity": 0.5,
+      "particleTint": "#ff9a4d"
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "public/uploads/17908683167065917032696543501299.jpg",
+     "fit": "contain"
+    },
+    "out": {
+     "clipId": "clip-4",
+     "natW": 180,
+     "natH": 135
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-4",
+     "from": 10,
+     "to": 1.5
+    },
+    "out": {
+     "clipId": "clip-4",
+     "duration": 1.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-4",
+     "start": 1.62
+    },
+    "out": {
+     "clipId": "clip-4",
+     "from": 0,
+     "to": 1.62
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-4"
+    },
+    "out": {
+     "selected": "clip-4"
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-4",
+     "catalogId": "edgeglow-crimson"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 1.5,
+     "params": {
+      "edgeGlow": 0.9,
+      "edgeGlowColor": "#d51f3f"
+     }
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "X",
+     "time": 1.62,
+     "value": 0.42,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-4",
+     "curve": "scale_x",
+     "keyframeId": "kf_koo22xm"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "X",
+     "time": 3.02,
+     "value": 0.78,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-4",
+     "curve": "scale_x",
+     "keyframeId": "kf_h6o9cat"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "Y",
+     "time": 1.62,
+     "value": 0.42,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-4",
+     "curve": "scale_y",
+     "keyframeId": "kf_c8dqo22"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "Y",
+     "time": 3.02,
+     "value": 0.78,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "clip-4",
+     "curve": "scale_y",
+     "keyframeId": "kf_lu5boes"
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "sunset"
+    },
+    "out": {
+     "clipId": "clip-5"
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-5",
+     "from": 10,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "clip-5",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-5",
+     "start": 3.12
+    },
+    "out": {
+     "clipId": "clip-5",
+     "from": 0,
+     "to": 3.12
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-5",
+     "catalogId": "part-5"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 1.6,
+     "params": {
+      "particleFx": "snow",
+      "particleDensity": 0.85,
+      "particleTint": "#ff2d55"
+     }
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "ADEUS",
+     "preset": "minimal-fade",
+     "x": 0,
+     "y": -10
+    },
+    "out": {
+     "clipId": "text-6",
+     "presetApplied": "minimal-fade"
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "text-6",
+     "start": 3.12
+    },
+    "out": {
+     "clipId": "text-6",
+     "from": 0,
+     "to": 3.12
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-6",
+     "from": 10,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "text-6",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-6",
+     "patch": {
+      "textStyle": {
+       "fontSize": 46,
+       "bold": true,
+       "letterSpacing": 6,
+       "color": "#ffffff",
+       "glowColor": "#ff2d55",
+       "glowBlur": 14,
+       "chroma": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-6",
+     "compounded": null,
+     "textStyle": {
+      "fontSize": 46,
+      "bold": true,
+      "letterSpacing": 6,
+      "color": "#ffffff",
+      "glowColor": "#ff2d55",
+      "glowBlur": 14,
+      "chroma": 2
+     }
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "MONTAGEM · STUDY REMAKE",
+     "preset": "minimal-fade",
+     "x": 0,
+     "y": 34
+    },
+    "out": {
+     "clipId": "text-7",
+     "presetApplied": "minimal-fade"
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "text-7",
+     "start": 3.12
+    },
+    "out": {
+     "clipId": "text-7",
+     "from": 0,
+     "to": 3.12
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-7",
+     "from": 10,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "text-7",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-7",
+     "patch": {
+      "textStyle": {
+       "fontSize": 12,
+       "letterSpacing": 5,
+       "color": "#ffd7de"
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-7",
+     "compounded": null,
+     "textStyle": {
+      "fontSize": 12,
+      "letterSpacing": 5,
+      "color": "#ffd7de"
+     }
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "grid"
+    },
+    "out": {
+     "clipId": "clip-8"
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-8",
+     "from": 10,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "clip-8",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-8",
+     "start": 4.720000000000001
+    },
+    "out": {
+     "clipId": "clip-8",
+     "from": 0,
+     "to": 4.720000000000001
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-8",
+     "catalogId": "part-5"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 1.6,
+     "params": {
+      "particleFx": "snow",
+      "particleDensity": 0.85,
+      "particleTint": "#22d3ee"
+     }
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "ADEUS",
+     "preset": "minimal-fade",
+     "x": 0,
+     "y": -10
+    },
+    "out": {
+     "clipId": "text-9",
+     "presetApplied": "minimal-fade"
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "text-9",
+     "start": 4.720000000000001
+    },
+    "out": {
+     "clipId": "text-9",
+     "from": 0,
+     "to": 4.720000000000001
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-9",
+     "from": 10,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "text-9",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-9",
+     "patch": {
+      "textStyle": {
+       "fontSize": 46,
+       "bold": true,
+       "letterSpacing": 6,
+       "color": "#ffffff",
+       "glowColor": "#22d3ee",
+       "glowBlur": 14,
+       "chroma": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-9",
+     "compounded": null,
+     "textStyle": {
+      "fontSize": 46,
+      "bold": true,
+      "letterSpacing": 6,
+      "color": "#ffffff",
+      "glowColor": "#22d3ee",
+      "glowBlur": 14,
+      "chroma": 2
+     }
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "MONTAGEM · STUDY REMAKE",
+     "preset": "minimal-fade",
+     "x": 0,
+     "y": 34
+    },
+    "out": {
+     "clipId": "text-10",
+     "presetApplied": "minimal-fade"
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "text-10",
+     "start": 4.720000000000001
+    },
+    "out": {
+     "clipId": "text-10",
+     "from": 0,
+     "to": 4.720000000000001
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-10",
+     "from": 10,
+     "to": 1.6
+    },
+    "out": {
+     "clipId": "text-10",
+     "duration": 1.6
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-10",
+     "patch": {
+      "textStyle": {
+       "fontSize": 12,
+       "letterSpacing": 5,
+       "color": "#d7f6ff"
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-10",
+     "compounded": null,
+     "textStyle": {
+      "fontSize": 12,
+      "letterSpacing": 5,
+      "color": "#d7f6ff"
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "/tmp/mont-black.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-11",
+     "natW": 640,
+     "natH": 640
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-11",
+     "from": 10,
+     "to": 0.12
+    },
+    "out": {
+     "clipId": "clip-11",
+     "duration": 0.12
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-11",
+     "start": 6.32
+    },
+    "out": {
+     "clipId": "clip-11",
+     "from": 0,
+     "to": 6.32
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "public/uploads/17908683167065917032696543501299.jpg",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-12",
+     "natW": 981,
+     "natH": 736
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-12",
+     "from": 10,
+     "to": 1.5
+    },
+    "out": {
+     "clipId": "clip-12",
+     "duration": 1.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-12",
+     "start": 6.44
+    },
+    "out": {
+     "clipId": "clip-12",
+     "from": 0,
+     "to": 6.44
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-12"
+    },
+    "out": {
+     "selected": "clip-12"
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-12",
+     "catalogId": "glow-0"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 1.5,
+     "params": {
+      "glow": 0.4,
+      "edgeGlow": 0.7,
+      "edgeGlowColor": "#38bdf8"
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-12",
+     "patch": {
+      "adjustment": {
+       "luts": [
+        {
+         "id": "c5",
+         "builtin": "midnight-noir",
+         "name": "midnight-noir",
+         "intensity": 1,
+         "enabled": true
+        }
+       ]
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-12",
+     "compounded": null,
+     "adjustment": {
+      "luts": "[same-object-ref]"
+     }
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "clip-12",
+     "catalogId": "osc-0-sine-6"
+    },
+    "out": {
+     "fxId": "fx-2",
+     "inP": 0,
+     "duration": 1.5,
+     "params": {
+      "oscillate": 6,
+      "oscillateFreq": 2,
+      "oscillateAngle": 0,
+      "oscillateWave": "sine",
+      "oscillatePhase": 0
+     }
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "studio"
+    },
+    "out": {
+     "clipId": "clip-13"
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-13",
+     "from": 10,
+     "to": 1.5
+    },
+    "out": {
+     "clipId": "clip-13",
+     "duration": 1.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-13",
+     "start": 7.94
+    },
+    "out": {
+     "clipId": "clip-13",
+     "from": 0,
+     "to": 7.94
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "omniframe edit",
+     "preset": "minimal-fade",
+     "x": 92,
+     "y": 150
+    },
+    "out": {
+     "clipId": "text-14",
+     "presetApplied": "minimal-fade"
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "text-14",
+     "start": 7.94
+    },
+    "out": {
+     "clipId": "text-14",
+     "from": 0,
+     "to": 7.94
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-14",
+     "from": 10,
+     "to": 1.5
+    },
+    "out": {
+     "clipId": "text-14",
+     "duration": 1.5
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-14",
+     "patch": {
+      "textStyle": {
+       "fontSize": 12,
+       "fontFamily": "Georgia, serif",
+       "italic": true,
+       "color": "#e8e8e8"
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-14",
+     "compounded": null,
+     "textStyle": {
+      "fontSize": 12,
+      "fontFamily": "Georgia, serif",
+      "italic": true,
+      "color": "#e8e8e8"
+     }
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "/tmp/mont-black.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-15",
+     "natW": 640,
+     "natH": 640
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-15",
+     "from": 10,
+     "to": 0.5
+    },
+    "out": {
+     "clipId": "clip-15",
+     "duration": 0.5
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-15",
+     "start": 9.440000000000001
+    },
+    "out": {
+     "clipId": "clip-15",
+     "from": 0,
+     "to": 9.440000000000001
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/board_S_montagem2.mp4"
+    },
+    "out": {
+     "frames": 119
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 360,
+    "h": 640,
+    "fps": 30,
+    "duration": 10,
+    "bg": "#000000"
+   },
+   "selection": "clip-15",
+   "clips": [
+    {
+     "id": "clip-13",
+     "name": "bg:studio",
+     "start": 7.94,
+     "duration": 1.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-8",
+     "name": "bg:grid",
+     "start": 4.720000000000001,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-5",
+     "name": "bg:sunset",
+     "start": 3.12,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-3",
+     "name": "bg:aurora",
+     "start": 1.62,
+     "duration": 1.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-1",
+     "name": "17908683167065917032696543501299.jpg",
+     "start": 0,
+     "duration": 1.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [
+       {
+        "id": "kf_bstjah2",
+        "time": 0,
+        "value": 1,
+        "interpolation": "linear"
+       },
+       {
+        "id": "kf_8rbgbnp",
+        "time": 1.4,
+        "value": 1.14,
+        "interpolation": "linear"
+       }
+      ],
+      "scale_y": [
+       {
+        "id": "kf_ktr2j1c",
+        "time": 0,
+        "value": 1,
+        "interpolation": "linear"
+       },
+       {
+        "id": "kf_w177itv",
+        "time": 1.4,
+        "value": 1.14,
+        "interpolation": "linear"
+       }
+      ],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "mont-black.png",
+     "start": 1.5,
+     "duration": 0.12,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-4",
+     "name": "17908683167065917032696543501299.jpg",
+     "start": 1.62,
+     "duration": 1.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [
+       {
+        "id": "kf_koo22xm",
+        "time": 1.62,
+        "value": 0.42,
+        "interpolation": "linear"
+       },
+       {
+        "id": "kf_h6o9cat",
+        "time": 3.02,
+        "value": 0.78,
+        "interpolation": "linear"
+       }
+      ],
+      "scale_y": [
+       {
+        "id": "kf_c8dqo22",
+        "time": 1.62,
+        "value": 0.42,
+        "interpolation": "linear"
+       },
+       {
+        "id": "kf_lu5boes",
+        "time": 3.02,
+        "value": 0.78,
+        "interpolation": "linear"
+       }
+      ],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-6",
+     "name": "text:ADEUS",
+     "start": 3.12,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": -10,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-7",
+     "name": "text:MONTAGEM · STUDY REMAKE",
+     "start": 3.12,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 34,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-9",
+     "name": "text:ADEUS",
+     "start": 4.720000000000001,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": -10,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-10",
+     "name": "text:MONTAGEM · STUDY REMAKE",
+     "start": 4.720000000000001,
+     "duration": 1.6,
+     "transform": {
+      "x": 0,
+      "y": 34,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-11",
+     "name": "mont-black.png",
+     "start": 6.32,
+     "duration": 0.12,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-12",
+     "name": "17908683167065917032696543501299.jpg",
+     "start": 6.44,
+     "duration": 1.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-14",
+     "name": "text:omniframe edit",
+     "start": 7.94,
+     "duration": 1.5,
+     "transform": {
+      "x": 92,
+      "y": 150,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-15",
+     "name": "mont-black.png",
+     "start": 9.440000000000001,
+     "duration": 0.5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

@@ -1,0 +1,98 @@
+[
+ {
+  "file": "renders/ng01_digital-slice_a568ff.mp4",
+  "family": "digital-slice",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8156,
+  "frames": 24,
+  "sha256_16": "df72ef1c6f199cc2"
+ },
+ {
+  "file": "renders/ng02_rgb-shock_a568ff.mp4",
+  "family": "rgb-shock",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8157,
+  "frames": 24,
+  "sha256_16": "c1c0ee76e6e08f5b"
+ },
+ {
+  "file": "renders/ng03_vhs-tear_a568ff.mp4",
+  "family": "vhs-tear",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8158,
+  "frames": 24,
+  "sha256_16": "229a41cc9bf9865b"
+ },
+ {
+  "file": "renders/ng04_datamosh-inspired_a568ff.mp4",
+  "family": "datamosh-inspired",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8159,
+  "frames": 24,
+  "sha256_16": "2e214139de2448ba"
+ },
+ {
+  "file": "renders/ng05_scan-burst_a568ff.mp4",
+  "family": "scan-burst",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8160,
+  "frames": 24,
+  "sha256_16": "a457da21450403a0"
+ },
+ {
+  "file": "renders/ng06_phantom-echo_a568ff.mp4",
+  "family": "phantom-echo",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8161,
+  "frames": 24,
+  "sha256_16": "807aa2efd3bc919e"
+ },
+ {
+  "file": "renders/ng07_neon-corrupt_a568ff.mp4",
+  "family": "neon-corrupt",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8162,
+  "frames": 24,
+  "sha256_16": "245697d56c69480f"
+ },
+ {
+  "file": "renders/ng08_pixel-collapse_a568ff.mp4",
+  "family": "pixel-collapse",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8163,
+  "frames": 24,
+  "sha256_16": "9b64b3db4eeae06d"
+ },
+ {
+  "file": "renders/ng09_vector-edge_a568ff.mp4",
+  "family": "vector-edge",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8164,
+  "frames": 24,
+  "sha256_16": "c532d5701c252bf8"
+ },
+ {
+  "file": "renders/ng10_spectral-logo_a568ff.mp4",
+  "family": "spectral-logo",
+  "palette": "#a568ff/#15e4f3",
+  "seed": 8165,
+  "frames": 24,
+  "sha256_16": "2c4e976777110cf4"
+ },
+ {
+  "file": "renders/ng11_digital-slice_ff4d5e.mp4",
+  "family": "digital-slice",
+  "palette": "#ff4d5e/#ffffff",
+  "seed": 8166,
+  "frames": 24,
+  "sha256_16": "4d36f4676964edfd"
+ },
+ {
+  "file": "renders/ng12_spectral-logo_7fd4ff.mp4",
+  "family": "spectral-logo",
+  "palette": "#7fd4ff/#3a6cff",
+  "seed": 8167,
+  "frames": 24,
+  "sha256_16": "8c050c498a51448d"
+ }
+]

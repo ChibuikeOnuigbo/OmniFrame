@@ -1,0 +1,201 @@
+{
+ "scanned": "2026-10-23",
+ "method": "r.jina.ai proxy of YouTube search tabs (sp filters) + image_search refs",
+ "tabs": {
+  "channels": "sp=EgIQAg==",
+  "videos": "sp=EgIQAQ==",
+  "playlists": "sp=EgIQAw==",
+  "shorts": "sp=EgQQZABN"
+ },
+ "channels": [
+  [
+   "@AlightMotion",
+   "2.68M",
+   "official"
+  ],
+  [
+   " @kaziaidahhaque",
+   "307K",
+   "tutorials"
+  ],
+  [
+   " @Yosmellado",
+   "160K",
+   "tutorials ES"
+  ],
+  [
+   "@haninalightpresets",
+   "40.6K",
+   "presets"
+  ],
+  [
+   "@TysonTutorials",
+   "35.4K",
+   "tutorials"
+  ],
+  [
+   "@AlightMotiontamil",
+   "24.1K",
+   "edits Tamil"
+  ],
+  [
+   "@alightmotionpresets9301",
+   "1.12K",
+   "presets"
+  ],
+  [
+   "@Pinkiue_am",
+   "723",
+   "tutorials"
+  ],
+  [
+   "@alightmotiontutorials9338",
+   "131",
+   "beginner"
+  ],
+  [
+   "@alighttutorial3782",
+   "127",
+   "tutorials"
+  ],
+  [
+   "@alightmotiontuts5891",
+   "281",
+   "tuts"
+  ],
+  [
+   "@alightmotionthevideoeditor8360",
+   "2.27K",
+   "edits"
+  ]
+ ],
+ "creators_via_video_tab": [
+  "@zack_indo",
+  "@Exal.Visuals",
+  "@deepfriedsalte",
+  "@megstarr34",
+  "@chewyffon",
+  "@InfiniteDesigns.",
+  "@WizzyTutorials",
+  "@VaultTubeofficial",
+  "@iv_expertize"
+ ],
+ "videos": [
+  [
+   "4WvtPWbjm5k",
+   "Zack_",
+   "1.3M",
+   "tweening"
+  ],
+  [
+   "eZQyYNqJZ1Q",
+   "Exal.Visuals",
+   "1.4M",
+   "beginner tour"
+  ],
+  [
+   "UiA12JfqFAA",
+   "viriri",
+   "410K",
+   "sprite rigging: pivots, oscillation, lighting"
+  ],
+  [
+   "fIWVKHygO24",
+   "megstarr34",
+   "201K",
+   "tiktok style"
+  ],
+  [
+   "n7WLsJym90U",
+   "chewy",
+   "351K",
+   "character animation"
+  ],
+  [
+   "1CGjdnA-WoI",
+   "Exal.Visuals",
+   "176K",
+   "CapCut vs AM"
+  ],
+  [
+   "oIBmneJKuAI",
+   "Tyson Tutorials",
+   "3.1K",
+   "Gold Motion competitor review"
+  ]
+ ],
+ "playlists": [
+  [
+   "Learn alight motion from zero to infinity",
+   "Infinite Designs",
+   20
+  ],
+  [
+   "Alight motion beginners tutorial (Noob to pro)",
+   "Wizzy Tutorials",
+   23
+  ],
+  [
+   "alight motion tutorial",
+   "megstarr34",
+   52
+  ],
+  [
+   "Alight Motion Premium Course",
+   "Vault Tube",
+   5
+  ],
+  [
+   "Alight Motion Video Editing Full Course",
+   "Expertize Yt",
+   31
+  ],
+  [
+   "Motion Graphics Full Course Alight Motion",
+   "Expertize Yt",
+   27
+  ]
+ ],
+ "top_shorts": [
+  [
+   "X0pGhqSfVcU",
+   "5.9M"
+  ],
+  [
+   "AZ3yV1b_gH8",
+   "4.6M"
+  ],
+  [
+   "BnCk15Y-5FY",
+   "1.6M"
+  ],
+  [
+   "46LfMGZKTcI",
+   "533K"
+  ],
+  [
+   "RBqpd9etFiI",
+   "157K"
+  ]
+ ],
+ "tool_gaps": [
+  "turbulent displace (Turbs)",
+  "oscillate",
+  "lasso selection",
+  "per-layer pivot/anchor UI"
+ ],
+ "images": [
+  "am_research/images/01-timeline-layer-controls.jpg",
+  "am_research/images/02-canvas-add-element.webp",
+  "am_research/images/03-preview-playback-timeline.webp",
+  "am_research/images/04-keyframe-graph-adjust.jpg",
+  "am_research/images/05-keyframe-graph-editor.jpg",
+  "am_research/images/06-keyframe-editor-parts.png",
+  "am_research/images/07-effect-browser.jpg",
+  "am_research/images/08-effect-browser-master.jpg",
+  "am_research/images/09-effects-panel.png",
+  "am_research/images/10-replace-image-parenting.jpg",
+  "am_research/images/11-layer-parenting-null.jpg",
+  "am_research/images/12-camera-object.webp"
+ ]
+}

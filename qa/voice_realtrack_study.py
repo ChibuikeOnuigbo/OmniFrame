@@ -13,8 +13,9 @@ passed. The failure is not visible in SI-SDR (no ground truth exists for
 commercial music), so this tool measures it directly from signal physics:
 
   * WHERE the vocal-like energy actually went (which stem captured it),
-  * WHETHER the track is out-of-distribution for the model (tempo/pitch
-    analysis detects "slowed" edits and recommends a speed correction),
+  * WHETHER a slowed production is plausible (onset tempo often has
+    half/double-time ambiguity; the app's Silero scan compares voice
+    detectability at candidate playback rates),
   * HOW a candidate fix compares to the previous attempt (vet mode).
 
 SUBCOMMANDS
@@ -24,9 +25,9 @@ SUBCOMMANDS
           most vocal-dense timeline windows, artifact checks.
 
   speed   <input.wav>
-          Tempo analysis + slowed-edit detection; prints recommended
-          speed-up factors that bring the track back into the model's
-          training distribution (115–165 BPM).
+          Onset-tempo candidates with explicit half/double-time ambiguity.
+          Tempo alone cannot diagnose a slowed edit; use the app's
+          voice-detectability scan and listen to the corrected output.
 
   vet     <old.wav> <new.wav> [--json out.json]
           Before/after comparison of two acapellas (or two instrumentals):
@@ -556,6 +557,26 @@ def tempo_candidates(mag: np.ndarray) -> list[tuple[float, float]]:
     return merged[:6]
 
 
+def strongest_octave_alias(candidates: list[tuple[float, float]],
+                           min_relative_score: float = 0.8,
+                           ratio_tolerance: float = 0.04) -> tuple[tuple[float, float], tuple[float, float]] | None:
+    """Return a strong 2:1 tempo pair that makes the onset estimate ambiguous.
+
+    Beat/onset autocorrelation often gives a high score to both the beat and
+    half-time pulse. Neither score identifies the original tempo of a slowed
+    remix, so the CLI must not label the faster peak "normal" when a similarly
+    strong half-time candidate exists.
+    """
+    if not candidates:
+        return None
+    primary = candidates[0]
+    for candidate in candidates[1:]:
+        ratio = max(primary[0], candidate[0]) / min(primary[0], candidate[0])
+        if abs(ratio / 2.0 - 1.0) <= ratio_tolerance and candidate[1] >= primary[1] * min_relative_score:
+            return primary, candidate
+    return None
+
+
 def cmd_speed(args: argparse.Namespace) -> None:
     data, _ = read_audio(args.input)
     f = frame_signal(data)
@@ -565,34 +586,41 @@ def cmd_speed(args: argparse.Namespace) -> None:
         print("  no clear tempo; cannot estimate a speed correction")
         return
     bpm, score = cands[0]
-    print(f"  dominant tempo: {bpm:.1f} BPM (autocorr {score:.2f})")
-    others = ", ".join(f"{b:.0f} ({s:.2f})" for b, s in cands[1:])
-    print(f"  other peaks:    {others}")
-    # slowed edits: producers typically slow to 0.6–0.9x of the source, which
-    # lands electronic/hip-hop material in the 60–105 BPM window. Demucs was
-    # trained on normal-pitched music; recommend factors that restore an
-    # in-distribution tempo (115–165 BPM).
+    print(f"  dominant tempo candidate: {bpm:.1f} BPM (autocorr {score:.2f})")
+    others = ", ".join(f"{b:.1f} ({s:.2f})" for b, s in cands[1:])
+    print(f"  other peaks:               {others}")
+    alias = strongest_octave_alias(cands)
+    if alias:
+        (fast_bpm, fast_score), (slow_bpm, slow_score) = alias
+        if fast_bpm < slow_bpm:
+            fast_bpm, slow_bpm = slow_bpm, fast_bpm
+            fast_score, slow_score = slow_score, fast_score
+        print(f"  ambiguous 2:1 pulse: {fast_bpm:.1f} BPM ({fast_score:.2f}) vs {slow_bpm:.1f} BPM ({slow_score:.2f})")
+        print("  onset autocorrelation cannot tell which pulse is the source tempo or whether the track was slowed.")
+        print("  Do not infer 'normal speed' or apply a BPM-only correction; use vocal-detectability evidence (the app's Silero scan) and audition both timing modes.")
+        return
+    # A low BPM can be an intentional half-time arrangement rather than a
+    # slowed-and-pitch-shifted edit. Treat it as a candidate, not a diagnosis.
     if bpm < 105:
-        print(f"  → track looks SLOWED ({bpm:.0f} BPM). The separator's training")
-        print(f"    distribution assumes normal pitch/tempo — vocals pitched this")
-        print(f"    far down often fall out of the model's 'vocals' concept.")
+        print(f"  low-tempo candidate ({bpm:.0f} BPM); this may be an intentional arrangement or a slowed edit, not a diagnosis.")
         recs = []
         for target in (120.0, 128.0, 140.0, 150.0, 160.0):
             fac = target / bpm
             if 1.05 <= fac <= 1.8:
                 recs.append((fac, target))
-        # dedupe close factors
         final: list[tuple[float, float]] = []
         for fac, tgt in sorted(recs):
             if not any(abs(fac / ff - 1) < 0.05 for ff, _ in final):
                 final.append((fac, tgt))
-        print("  recommended speed-up factors (factor → resulting BPM):")
-        for fac, tgt in final:
-            print(f"    x{fac:.3f}  → {tgt:.0f} BPM")
-        print("  apply: ffmpeg -i in.wav -af asetrate=44100*<factor>,aresample=44100 sped.wav")
-        print("         separate sped.wav, then slow stems back with the inverse factor.")
+        if final:
+            print("  candidate speed-up factors only (verify by listening and voice detectability):")
+            for fac, tgt in final:
+                print(f"    x{fac:.3f}  → {tgt:.0f} BPM")
+        else:
+            print("  no conservative speed-up factor (×1.05–×1.8) fits the target BPM range.")
     else:
-        print("  tempo is in the normal range — speed correction unlikely to help.")
+        print("  dominant candidate is in a common tempo range; onset BPM alone cannot rule out a pitch-shifted/slowed edit.")
+        print("  no speed correction is recommended from this estimate alone; use the app's voice-detectability scan and audition the result.")
 
 
 # ----------------------------------------------------------------------------
@@ -646,7 +674,11 @@ def cmd_refine(args: argparse.Namespace) -> None:
     # per-frame mask from the posterior (soft, squared to be conservative)
     mask = (post ** 2)[:, None]
     win = np.hanning(WIN).astype(np.float32)
-    out = np.zeros_like(voc)
+    # Preserve the existing acapella and add only the recoverable vocal-like
+    # residual from the accompaniment stem. Starting at zero here would replace
+    # the original vocal stem with the masked residual, contrary to `refine`'s
+    # purpose and to the added-content energy check below.
+    out = voc.copy()
     # overlap-add the masked other-stem frames back into time domain
     n_frames = len(f.times)
     for c in range(voc.shape[0]):
@@ -665,10 +697,10 @@ def cmd_refine(args: argparse.Namespace) -> None:
             acc[off: off + WIN] += rec * win
             wsum[off: off + WIN] += win * win
         valid = wsum > 1e-8
-        out[c, valid] = (acc[valid] / wsum[valid]).astype(np.float32)
+        out[c, valid] += (acc[valid] / wsum[valid]).astype(np.float32)
     added = out - voc
     added_energy = float(np.mean(added ** 2))
-    print(f"  refined acapella: +{10*np.log10(added_energy + 1e-12):.1f} dBFS of vocal-like content recovered from 'other'")
+    print(f"  refined acapella: {10*np.log10(added_energy + 1e-12):+.1f} dBFS of vocal-like content recovered from 'other'")
     write_wav(args.out, out)
     print(f"  → {args.out}")
 

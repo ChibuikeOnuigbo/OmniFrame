@@ -320,17 +320,21 @@ export function istft(z, nFft, hopLength, window, normalized = true, length = nu
     if (2 * freqs - 2 !== nFft) {
         throw new Error(`Expected freqs = nFft/2 + 1, got freqs=${freqs}, nFft=${nFft}`);
     }
-    // Calculate output length
+    // Calculate output length. An explicit length is the FINAL sample
+    // count (torch istft semantics: center padding is trimmed internally
+    // to reach it). Subtracting nFft here as well made ispec's crop read
+    // past the array end — NaN tails of exactly that many samples at the
+    // end of every processed chunk.
     let outputLength;
     if (length !== null) {
         outputLength = length;
     }
     else {
         outputLength = nFft + (numFrames - 1) * hopLength;
-    }
-    // Account for center padding
-    if (center) {
-        outputLength -= nFft;
+        // Account for center padding
+        if (center) {
+            outputLength -= nFft;
+        }
     }
     // Initialize output
     const output = new Float32Array(batch * outputLength);

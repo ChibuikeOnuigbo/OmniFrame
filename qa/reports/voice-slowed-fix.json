@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-10T00:09:26.374Z",
+  "date": "2026-10-12T17:09:34.553Z",
   "results": [
     {
       "name": "A: real slowed track detected",
@@ -14,37 +14,37 @@
     {
       "name": "B: speed-corrected separation beats direct (SI-SDR)",
       "ok": true,
-      "detail": "fixed 19.48 dB vs direct 18.46 dB (1.01 dB gain)"
+      "detail": "fixed 20.75 dB vs direct 19.96 dB (0.79 dB gain)"
     },
     {
       "name": "B: output restored to exact input length",
       "ok": true,
-      "detail": "fixed 264600 samples vs input 264600 (direct 264600, native mix 198450)"
+      "detail": "fixed 220500 samples vs input 220500 (direct 220500, native mix 165375)"
     },
     {
       "name": "D: auto-detection fired in the action",
       "ok": true,
-      "detail": "factor x1.45, action log: \"40: Checking for slowed production…\"; old path log had 0 speed messages"
+      "detail": "factor x1.45, action log: \"42: Slowed production correction ×1.45 — separating at corrected speed\"; old path log had 0 speed messages"
     },
     {
       "name": "D: fixed acapella keeps the input timing",
       "ok": true,
-      "detail": "fixed 264600 samples vs input 264600"
+      "detail": "fixed 176400 samples vs input 176400"
     },
     {
       "name": "D: auto fix never degrades the output",
       "ok": true,
-      "detail": "voice-like energy 0.982 → 0.981, recovery 0.101 → 0.106 on this prominent-vocal window (both approaches already work here — the fix's big win is on buried vocals, see E and the full-track evidence)"
+      "detail": "voice-like energy 0.983 → 0.991, recovery 0.100 → 0.108 on this prominent-vocal window (both approaches already work here — the fix's big win is on buried vocals, see E and the full-track evidence)"
     },
     {
       "name": "E: speed-corrected separation recovers buried vocals",
       "ok": true,
-      "detail": "Silero at natural pitch — direct mean 0.454 / voice-like energy 52.9% vs fixed mean 0.681 / voice-like energy 78.7% (recovery 88% → 183%)"
+      "detail": "Silero at natural pitch — direct mean 0.608 / voice-like energy 50.1% vs fixed mean 0.709 / voice-like energy 68.7% (recovery 81% → 170%)"
     },
     {
       "name": "E: fixed acapella keeps the input timing",
       "ok": true,
-      "detail": "fixed 264600 samples vs input 264600"
+      "detail": "fixed 176400 samples vs input 176400"
     },
     {
       "name": "R: polyphase sinc round-trip fidelity",
@@ -54,22 +54,22 @@
     {
       "name": "G: natural-pitch acapella comes back at the corrected speed",
       "ok": true,
-      "detail": "duration 4.138s vs expected 4.138s (input 6.0s / factor), asset \"[Vocal Isolated · htdemucs-v4] rw-nat · natural pitch.wav\""
+      "detail": "duration 2.759s vs expected 2.759s (input 4.0s / factor), asset \"[Vocal Isolated · htdemucs-v4] rw-nat · natural pitch.wav\""
     },
     {
       "name": "G: real voice directly audible at natural pitch",
       "ok": true,
-      "detail": "Silero on the raw output: mean 0.929, voiced 95%, peak 1.00; peak |sample| 0.664, non-finite 0"
+      "detail": "Silero on the raw output: mean 0.967, voiced 99%, peak 1.00; peak |sample| 0.710, non-finite 0"
     },
     {
       "name": "F: instrumental track not flagged",
       "ok": true,
-      "detail": "factor 1 after scanning 4 factors (x1=0.025 x1.15=0.048 x1.3=0.046 x1.45=0.021 x1.6=0.039) — the harmonic pad scores 0.02-0.05 on Silero at every speed but never decisively, so the gate declines; action log shows the routine check and no detection"
+      "detail": "factor 1 after scanning 4 factors (x1=0.029 x1.15=0.053 x1.3=0.053 x1.45=0.024 x1.6=0.046) — the harmonic pad scores 0.02-0.05 on Silero at every speed but never decisively, so the gate declines; action log shows the routine check and no detection"
     },
     {
       "name": "F: instrumental keep_vocal output stays near-silent",
       "ok": true,
-      "detail": "output -75.6 dBFS vs mix -11.6 dBFS (64.0 dB below, bar 20), length 264600 === 264600"
+      "detail": "output -74.8 dBFS vs mix -11.6 dBFS (63.2 dB below, bar 20), length 220500 === 220500"
     },
     {
       "name": "N: native DSP core active in-browser",
@@ -84,7 +84,7 @@
     {
       "name": "M: model load shows smooth real progress and auto-dismisses",
       "ok": true,
-      "detail": "phases download -> compile -> ready, 3 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
+      "detail": "phases download -> compile -> ready, 4 byte updates, monotonic true, final 100%, card rendered true, auto-dismissed true, session usable true"
     },
     {
       "name": "zero runtime page errors",
@@ -126,118 +126,118 @@
       ]
     },
     "synthetic": {
-      "siSdrDirect": 18.46,
-      "siSdrFixed": 19.48
+      "siSdrDirect": 19.96,
+      "siSdrFixed": 20.75
     },
     "realSegment": {
       "detection": {
         "factor": 1.45,
-        "baselineMean": 0.01227138020138052,
-        "bestMean": 0.8430841643680898,
+        "baselineMean": 0.01498103928565979,
+        "bestMean": 0.8107176187426545,
         "scanned": [
           {
             "factor": 1,
-            "mean": 0.01227138020138052,
+            "mean": 0.01498103928565979,
             "frames": 0
           },
           {
             "factor": 1.15,
-            "mean": 0.4929961428686154,
-            "frames": 0.49079754601226994
+            "mean": 0.39700833597668894,
+            "frames": 0.37962962962962965
           },
           {
             "factor": 1.3,
-            "mean": 0.7860538599391779,
-            "frames": 0.8541666666666666
+            "mean": 0.7357127548505863,
+            "frames": 0.8125
           },
           {
             "factor": 1.45,
-            "mean": 0.8430841643680898,
-            "frames": 0.9069767441860465
+            "mean": 0.8107176187426545,
+            "frames": 0.8604651162790697
           },
           {
             "factor": 1.6,
-            "mean": 0.8277223754642357,
-            "frames": 0.8803418803418803
+            "mean": 0.7779014160235723,
+            "frames": 0.8333333333333334
           }
         ]
       },
       "actionLog": [
         "40: Checking for slowed production…",
-        "42: Slowed production detected (×1.45) — separating at corrected speed",
+        "42: Slowed production correction ×1.45 — separating at corrected speed",
         "6: Demucs v4: speed-normalizing ×1.45 (slowed production)…"
       ],
       "richVet": {
         "direct": {
-          "voiceLikeFrac": 0.982476261311023,
-          "voiceEnergy": 5131.480039476745,
-          "spedMean": 0.9061736808728802,
-          "spedFrames": 0.9224806201550387,
-          "rms": 0.16926864649908513
+          "voiceLikeFrac": 0.9825397876042091,
+          "voiceEnergy": 3369.715908603099,
+          "spedMean": 0.9158260988634687,
+          "spedFrames": 0.9302325581395349,
+          "rms": 0.16800317867833076
         },
         "fixed": {
-          "voiceLikeFrac": 0.9809586489213283,
-          "voiceEnergy": 5339.358843289041,
-          "spedMean": 0.9210167305414066,
-          "spedFrames": 0.9534883720930233,
-          "rms": 0.1727841391486706
+          "voiceLikeFrac": 0.9908522923870677,
+          "voiceEnergy": 3644.0937024493373,
+          "spedMean": 0.9674587398767471,
+          "spedFrames": 0.9883720930232558,
+          "rms": 0.17398863227232622
         },
-        "directRecovery": 0.10144558301877675,
-        "fixedRecovery": 0.10555519394734905
+        "directRecovery": 0.09983368818443882,
+        "fixedRecovery": 0.10796260701870783
       }
     },
     "buriedWindow": {
       "direct": {
-        "voiceLikeFrac": 0.529369842850043,
-        "voiceEnergy": 2591.6719679113157,
-        "spedMean": 0.45408242132312565,
-        "spedFrames": 0.46511627906976744,
-        "rms": 0.16380399175741828
+        "voiceLikeFrac": 0.5012243433152,
+        "voiceEnergy": 1811.9771704564937,
+        "spedMean": 0.6084368014058401,
+        "spedFrames": 0.6976744186046512,
+        "rms": 0.17240051921151964
       },
       "fixed": {
-        "voiceLikeFrac": 0.7865423966079182,
-        "voiceEnergy": 5392.623036610183,
-        "spedMean": 0.6810086240140043,
-        "spedFrames": 0.7286821705426356,
-        "rms": 0.19386660493051433
+        "voiceLikeFrac": 0.6871266422246737,
+        "voiceEnergy": 3812.6072124785946,
+        "spedMean": 0.7089711881654207,
+        "spedFrames": 0.7906976744186046,
+        "rms": 0.21371473202953345
       },
-      "directRecovery": 0.8777028938047192,
-      "fixedRecovery": 1.8262808345476198
+      "directRecovery": 0.8099058134917106,
+      "fixedRecovery": 1.704134464988272
     },
     "instrumentalNoOp": {
       "detection": {
         "factor": 1,
-        "baselineMean": 0.024711543225987072,
+        "baselineMean": 0.028617172096020136,
         "scanned": [
           {
             "factor": 1,
-            "mean": 0.024711543225987072,
+            "mean": 0.028617172096020136,
             "frames": 0
           },
           {
             "factor": 1.15,
-            "mean": 0.04767600268674043,
+            "mean": 0.05299659901195102,
             "frames": 0
           },
           {
             "factor": 1.3,
-            "mean": 0.04592745937407017,
+            "mean": 0.05255595246950785,
             "frames": 0
           },
           {
             "factor": 1.45,
-            "mean": 0.021315974782603657,
+            "mean": 0.0238055319429558,
             "frames": 0
           },
           {
             "factor": 1.6,
-            "mean": 0.038776507744422324,
+            "mean": 0.04556027945783949,
             "frames": 0
           }
         ]
       },
-      "mixLvl": -11.590919605724348,
-      "outLvl": -75.59214622885113
+      "mixLvl": -11.60707056459791,
+      "outLvl": -74.84412500062106
     },
     "resamplerFidelity": {
       "x145": 67.23794815297738,
@@ -263,7 +263,7 @@
       "maxPct": 100,
       "finalPct": 100,
       "monodrome": true,
-      "byteUpdates": 3,
+      "byteUpdates": 4,
       "sessionOk": true,
       "cardInDom": true,
       "dismissed": true,
@@ -271,16 +271,16 @@
     },
     "naturalPitch": {
       "name": "[Vocal Isolated · htdemucs-v4] rw-nat · natural pitch.wav",
-      "duration": 4.137936507936508,
-      "expectedDuration": 4.137931034482759,
+      "duration": 2.758639455782313,
+      "expectedDuration": 2.7586206896551726,
       "silero": {
-        "mean": 0.9290762668432191,
-        "frames": 0.9534883720930233,
-        "peak": 0.9999606609344482
+        "mean": 0.9670362188372501,
+        "frames": 0.9883720930232558,
+        "peak": 0.9999608993530273
       },
       "actionLog": [
         "40: Checking for slowed production…",
-        "42: Slowed production detected (×1.45) — separating at corrected speed",
+        "42: Slowed production correction ×1.45 — separating at corrected speed",
         "44: Keeping the vocals at natural pitch (×1.45 speed, not slowed back)",
         "6: Demucs v4: speed-normalizing ×1.45 (slowed production)…"
       ]

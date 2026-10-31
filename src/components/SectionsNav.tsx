@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { HScrollStrip } from './HScrollStrip'
 
 /**
  * Sections navigation: one system, two presentations.
@@ -61,14 +62,34 @@ export function useIsNestedSection(): boolean {
 
 const slug = (title: string) => title.toLowerCase().replace(/\s+/g, '-')
 
+export interface SectionRailItem {
+  id: string
+  label: string
+  icon: React.ComponentType<{ size?: number | string; className?: string }>
+}
+
 export function SectionsNavigator({
   mode,
   children,
   label = 'Panel sections',
+  rail,
+  focusRequest,
 }: {
   mode: SidebarSectionMode
   children: React.ReactNode
   label?: string
+  /**
+   * Programmatic focus: when the app adds/selects an effect it auto-opens
+   * the connected section here (store.rightFocus → {id, nonce}).
+   */
+  focusRequest?: { id: string; nonce: number } | null
+  /**
+   * "General" sections lifted out of the horizontal tab train into a
+   * vertical icon rail pinned to the panel's right edge (inspector pattern:
+   * General / Transform / Mask / Audio as icons; everything else keeps the
+   * scrolling train on top). Rail buttons keep the section-tab testids.
+   */
+  rail?: SectionRailItem[]
 }) {
   const [sections, setSections] = useState<SectionMeta[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -110,6 +131,17 @@ export function SectionsNavigator({
     setActiveId((cur) => cur ?? sections[0]?.id ?? null)
   }, [sections])
 
+  // Auto-open the connected section when the store requests focus (e.g. an
+  // effect was dropped on a clip → show its settings immediately).
+  const focusNonce = focusRequest?.nonce
+  useEffect(() => {
+    if (focusRequest && focusRequest.id) {
+      touched.current = true
+      setActiveId(focusRequest.id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusNonce])
+
   // Keyboard arrow navigation across the tab list.
   const onTablistKeyDown = (e: React.KeyboardEvent) => {
     if (sections.length < 2) return
@@ -132,44 +164,95 @@ export function SectionsNavigator({
     [mode, sections, activeId, activate, register, unregister],
   )
 
-  const showStrip = mode === 'tabs' && sections.length > 1
+  const railIds = useMemo(() => new Set((rail ?? []).map((r) => r.id)), [rail])
+  const railSections = useMemo(
+    () =>
+      (rail ?? [])
+        .map((r) => ({ def: r, meta: sections.find((s) => s.id === r.id) }))
+        .filter((x): x is { def: SectionRailItem; meta: SectionMeta } => Boolean(x.meta)),
+    [rail, sections],
+  )
+  const stripSections = useMemo(() => sections.filter((s) => !railIds.has(s.id)), [sections, railIds])
+  const showStrip = mode === 'tabs' && (railSections.length > 0 ? stripSections.length > 0 : sections.length > 1)
+  const showRail = mode === 'tabs' && railSections.length > 0
+
+  const strip = showStrip ? (
+    <HScrollStrip
+      role="tablist"
+      aria-label={label}
+      data-testid="sections-tablist"
+      arrowTestIdPrefix="sections"
+      onKeyDown={onTablistKeyDown}
+      className="shrink-0 border-b border-ink-800 bg-ink-900/70 px-1.5 py-1"
+      innerClassName=""
+    >
+      {stripSections.map((s) => {
+        const selected = s.id === activeId
+        return (
+          <button
+            key={s.id}
+            type="button"
+            role="tab"
+            aria-selected={selected}
+            data-testid={`section-tab-${s.id}`}
+            tabIndex={selected ? 0 : -1}
+            onClick={() => activate(s.id)}
+            className={`min-h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+              selected
+                ? 'border-brand bg-brand/25 text-white shadow-xs'
+                : 'border-ink-700 bg-ink-850 text-ink-300 hover:bg-ink-800 hover:text-ink-100'
+            }`}
+          >
+            {s.title}
+            {s.hint ? <span className="ml-1.5 font-mono text-[9px] text-ink-400">{s.hint}</span> : null}
+          </button>
+        )
+      })}
+    </HScrollStrip>
+  ) : null
 
   return (
     <SectionsNavContext.Provider value={value}>
-      <div className="flex min-h-0 flex-1 flex-col">
-        {showStrip && (
+      <div className="flex min-h-0 flex-1 flex-row">
+        <div className="flex min-w-0 min-h-0 flex-1 flex-col">
+          {strip}
+          {children}
+        </div>
+        {showRail && (
           <div
             role="tablist"
-            aria-label={label}
-            data-testid="sections-tablist"
+            aria-orientation="vertical"
+            aria-label={`${label} — general`}
+            data-testid="sections-icon-rail"
             onKeyDown={onTablistKeyDown}
-            className="flex flex-wrap items-center gap-1 border-b border-ink-800 bg-ink-900/70 px-2 py-1.5 shrink-0"
+            className="flex w-10 shrink-0 flex-col items-center gap-1 border-l border-ink-800 bg-ink-900/70 py-1.5"
           >
-            {sections.map((s) => {
-              const selected = s.id === activeId
+            {railSections.map(({ def }) => {
+              const selected = def.id === activeId
+              const Icon = def.icon
               return (
                 <button
-                  key={s.id}
+                  key={def.id}
                   type="button"
                   role="tab"
                   aria-selected={selected}
-                  data-testid={`section-tab-${s.id}`}
+                  aria-label={`${def.label} section`}
+                  title={`${def.label} section`}
+                  data-testid={`section-tab-${def.id}`}
                   tabIndex={selected ? 0 : -1}
-                  onClick={() => activate(s.id)}
-                  className={`min-h-7 max-w-full truncate rounded-full border px-2.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  onClick={() => activate(def.id)}
+                  className={`grid h-8 w-8 place-items-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                     selected
                       ? 'border-brand bg-brand/25 text-white shadow-xs'
-                      : 'border-ink-700 bg-ink-850 text-ink-300 hover:bg-ink-800 hover:text-ink-100'
+                      : 'border-transparent text-ink-400 hover:bg-ink-800 hover:text-ink-100'
                   }`}
                 >
-                  {s.title}
-                  {s.hint ? <span className="ml-1.5 font-mono text-[9px] text-ink-400">{s.hint}</span> : null}
+                  <Icon size={15} />
                 </button>
               )
             })}
           </div>
         )}
-        {children}
       </div>
     </SectionsNavContext.Provider>
   )

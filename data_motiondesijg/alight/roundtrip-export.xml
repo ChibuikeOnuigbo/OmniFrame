@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?><!--
+Created by OmniFrame — Alight Motion v5 XML dialect (export)
+Round-trip: OmniFrame reads this back losslessly (omniframe.* effect blocks carry exact engine values).
+-->
+<scene title="RT project" width="640" height="360" exportWidth="640" exportHeight="360" precompose="dynamicResolution" bgcolor="#ff000000" totalTime="3000" fps="24" am="omniframe/export-1.0">
+  <shape id="preview-Lut 0.jpg" label="preview-Lut 0.jpg" startTime="0" endTime="3000" fillType="color" mediaFillMode="fill" speed="1" s=".rect">
+    <transform>
+      <location>
+        <kf t="0" v="270,180,0.000000" e="cubicBezier 0.3 0.1 0.7 0.9" />
+        <kf t="0.666667" v="370,180,0.000000" e="cubicBezier 0.3 0.1 0.7 0.9" />
+      </location>
+    </transform>
+    <effect id="com.alightcreative.effects.lift" locallyApplied="true" />
+    <effect id="com.alightcreative.effects.deepglow2" locallyApplied="true" />
+    <effect id="omniframe.fx" locallyApplied="true">
+      <property name="contrast" type="float" value="1.2" />
+      <property name="glow" type="float" value="0.4" />
+    </effect>
+    <effect id="omniframe.lut" locallyApplied="true">
+      <property name="builtin0" type="string" value="tymm-5" />
+      <property name="intensity0" type="float" value="0.8" />
+    </effect>
+    <effect id="omniframe.fxinst.am-turbulentdisplace3" locallyApplied="true">
+      <property name="_inP" type="float" value="0" />
+      <property name="_duration" type="float" value="3" />
+      <property name="turbulent" type="float" value="0.6" />
+      <property name="turbulent" type="float">
+        <kf t="0" v="0.6" />
+        <kf t="0.5" v="0" />
+      </property>
+    </effect>
+    <effect id="omniframe.fxinst.am-shake2" locallyApplied="true">
+      <property name="_inP" type="float" value="0" />
+      <property name="_duration" type="float" value="0.693" />
+      <property name="autoShake" type="float" value="14" />
+      <property name="autoShakeFreq" type="float" value="10" />
+      <property name="oscillateAngle" type="float" value="90" />
+      <property name="autoShake" type="float">
+        <kf t="0.005333" v="60" />
+        <kf t="0.079333" v="0" />
+      </property>
+    </effect>
+    <property name="size" type="vec2" value="640,360" />
+  </shape>
+  <text id="text:RT" startTime="0" endTime="3000" fillType="color" mediaFillMode="fill" size="40" font="imported?name=Quicksand_Bold.ttf" align="center">
+    <transform>
+      <location value="640,240,0.000000" />
+    </transform>
+
+    <fillColor value="#ffffd76a" />
+    <content>RT</content>
+  </text>
+</scene>

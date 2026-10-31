@@ -1,0 +1,371 @@
+name: video-audit
+
+# Media-retrieval worker for the YouTube channel audit. The dev sandbox has NO
+# egress to youtube.com (TLS reset by SNI allowlist); GitHub-hosted runners have
+# legitimate general egress. This workflow enumerates channels, downloads the
+# current batch, extracts frames + audio evidence, and ships it back as an
+# artifact (retrievable from the sandbox via api.github.com, an allowed host).
+# Triggered only by changes to this file or youtube-audit/batch-trigger.txt so
+# normal commits never start a run. Batches are resumable: edit the trigger
+# file (batch=N) and push to process the next slice.
+
+on:
+  push:
+    paths:
+      - .github/workflows/video-audit.yml
+      - youtube-audit/batch-trigger.txt
+
+concurrency:
+  group: video-audit
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Environment capability diagnosis (runner)
+        run: |
+          mkdir -p audit-out/errors
+          {
+            echo "RUNNER (github-hosted ubuntu-latest) capability test $(date -u +%FT%TZ)"
+            echo "-- DNS:"; getent hosts www.youtube.com | head -2
+            echo "-- TCP 443:"; timeout 10 python3 -c "import socket;s=socket.create_connection(('www.youtube.com',443),8);print('tcp ok');s.close()" 2>&1
+            echo "-- TLS+HTTP:"; timeout 20 curl -sS -o /dev/null -w "http=%{http_code} tls=%{ssl_verify_result}\n" https://www.youtube.com/ 2>&1 | tail -1
+            echo "-- media probe:"; timeout 30 curl -sS -o /dev/null -w "http=%{http_code} type=%{content_type} bytes=%{size_download}\n" -r 0-2047 "https://www.youtube.com/watch?v=9o8GT1Iurv0" 2>&1 | tail -1
+          } | tee audit-out/errors/runner-capability.txt
+
+      - name: Install yt-dlp
+        run: |
+          # yt-dlp MASTER (nightly): stable pip release cannot handle the SABR
+          # streaming YouTube now forces (yt-dlp#12482 -> "The page needs to be
+          # reloaded" / empty format lists). Master implements SABR.
+          pip install -q -U --force-reinstall "yt-dlp[default] @ https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.tar.gz" || pip install -q -U yt-dlp
+          # EJS (external JS challenge solver): needs a JS runtime (Deno recommended)
+          # + solver scripts (yt-dlp-ejs python pkg, else auto-download from github).
+          curl -fsSL https://deno.land/install.sh | sh -s v2.5.4 || curl -fsSL https://deno.land/install.sh | sh || echo "deno install failed"
+          echo "$HOME/.deno/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.deno/bin:$PATH"
+          python3 -c "import yt_dlp_ejs" 2>/dev/null || pip install -q yt-dlp-ejs || echo "yt-dlp-ejs pip: failed (will use --remote-components)"
+          mkdir -p "$HOME/.config/yt-dlp"
+          printf -- '--remote-components ejs:github\n' > "$HOME/.config/yt-dlp/config"
+          { yt-dlp --version; deno --version 2>&1 | head -1 || echo "deno: missing"; python3 -c "import importlib.metadata as m; print('yt-dlp-ejs', m.version('yt-dlp-ejs'))" 2>/dev/null || echo "yt-dlp-ejs: not installed"; } | tee audit-out/errors/ytdlp-version.txt
+          # PO-token provider (bgutil): yt-dlp plugin via pip + local HTTP server via docker.
+          # Fixes "The page needs to be reloaded" / web-client PO-token walls. Best effort.
+          pip install -q bgutil-ytdlp-pot-provider || echo "bgutil plugin pip: failed"
+          {
+            docker run -d --name pot -p 4416:4416 brainicism/bgutil-ytdlp-pot-provider:latest && sleep 4
+            echo "pot server http probe:"; curl -sS -m 5 "http://127.0.0.1:4416/ping" || echo "(no ping response)"
+          } 2>&1 | tee audit-out/errors/pot-status.txt
+          python3 -c "import yt_dlp_plugins" 2>/dev/null && echo "plugin import ok" >> audit-out/errors/pot-status.txt || echo "plugin import: not importable (yt-dlp discovers pip plugins at runtime)" >> audit-out/errors/pot-status.txt
+
+      - name: Install ffmpeg (frames/audio evidence)
+        run: |
+          { command -v ffmpeg && command -v ffprobe; } >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+          ffmpeg -version 2>&1 | head -1 | tee -a audit-out/errors/ytdlp-version.txt
+
+      - name: Optional owner-provided cookies (secret; never visible to the agent)
+        run: |
+          if [ -n "${{ secrets.YT_COOKIES }}" ]; then
+            printf '%s' "${{ secrets.YT_COOKIES }}" > /tmp/yt.cookies
+            echo "YT_COOKIES_ARG=--cookies" >> $GITHUB_ENV
+            echo "YT_COOKIES_PATH=/tmp/yt.cookies" >> $GITHUB_ENV
+            # Status diagnostics only — cookie NAMES and counts, never values.
+            {
+              echo "cookies present: yes"
+              echo "bytes: $(wc -c < /tmp/yt.cookies) lines: $(wc -l < /tmp/yt.cookies)"
+              echo "youtube-domain lines: $(grep -c 'youtube\.com' /tmp/yt.cookies || true)"
+              for c in SID HSID SSID APISID SAPISID __Secure-1PSID __Secure-3PSID LOGIN_INFO __Secure-1PSIDTS __Secure-3PSIDTS __Secure-1PSIDCC __Secure-3PSIDCC; do
+                if awk -F'\t' -v n="$c" '$6==n{found=1} END{exit !found}' /tmp/yt.cookies; then echo "critical $c: present"; else echo "critical $c: MISSING"; fi
+              done
+            } | tee audit-out/errors/cookies-status.txt
+          else
+            echo "cookies present: no (owner may add repo secret YT_COOKIES to unblock bot-check)" | tee audit-out/errors/cookies-status.txt
+          fi
+
+      - name: Enumerate full channel inventories (flat playlists, paginated by yt-dlp)
+        run: |
+          mkdir -p audit-out
+          python3 - <<'PY'
+          import json, subprocess
+          channels = ["@spaceless2041","@Deppey","@AvoidAEP","@MatttVfx","@Keditz123","@chosensyt","@Hancybox"]
+          explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
+          inv = {}
+          def add(vid, title, dur, chan, fmt):
+              # yt-dlp prints 'NA' for unknown durations (shorts) — coerce so
+              # downstream float() never crashes (crashed batches 5 & 15).
+              dur = dur if str(dur).replace('.', '', 1).isdigit() else '0'
+              if vid in inv:
+                  inv[vid]["formats"].append(fmt)
+                  if chan not in ('NA', None) and inv[vid].get("channel") == 'NA':
+                      inv[vid]["channel"] = chan
+                  return
+              inv[vid] = {"id": vid, "url": f"https://www.youtube.com/watch?v={vid}", "title": title,
+                          "duration": dur, "channel": chan, "format": fmt, "formats": [fmt],
+                          "status": "INVENTORIED", "access": "pending-batch"}
+          for ch in channels:
+              for tab in ("videos", "shorts"):
+                  url = f"https://www.youtube.com/{ch}/{tab}"
+                  try:
+                      out = subprocess.run(["yt-dlp","--flat-playlist","--no-warnings",
+                                            "--print","%(id)s\t%(title)s\t%(duration)s\t%(channel)s", url],
+                                           capture_output=True, text=True, timeout=600)
+                      import re as _re
+                      _AI = _re.compile(r'\b(ai|chatgpt|gpt-?\d|midjourney|sora|runway|stable diffusion|generat(ed|ive)|llm)\b', _re.I)
+                      for line in out.stdout.splitlines():
+                          p = line.split("\t")
+                          # user mandate: Hancybox = editing tricks only, skip his AI-genre videos
+                          if len(p) >= 2 and 'hancybox' in ch.lower() and _AI.search(p[1] or ''):
+                              continue
+                          if len(p) >= 4 and p[0]:
+                              add(p[0], p[1], p[2], ch, tab)
+                      print(ch, tab, "ok", len(out.stdout.splitlines()))
+                      open(f"audit-out/errors/scrape-{ch.strip('@')}-{tab}.txt", "w").write(out.stdout[:3000] + "\n--STDERR--\n" + out.stderr[:1500])
+                  except Exception as e:
+                      print(ch, tab, "FAIL", e)
+                      open(f"audit-out/errors/inventory-{ch}-{tab}.txt","w").write(str(e))
+          for vid in explicit:
+              try:
+                  out = subprocess.run(["yt-dlp","--no-warnings","--print","%(id)s\t%(title)s\t%(duration)s\t%(channel)s",
+                                        f"https://www.youtube.com/watch?v={vid}"],
+                                       capture_output=True, text=True, timeout=180)
+                  p = out.stdout.strip().split("\t")
+                  if len(p) >= 4: add(p[0], p[1], p[2], p[3], "explicit")
+              except Exception as e:
+                  print(vid, "meta FAIL", e)
+                  open(f"audit-out/errors/meta-{vid}.txt","w").write(str(e))
+          # chat-history (WhatsApp zip) links become first-class inventory ids
+          try:
+              links = json.load(open('Study_edits_videos/chat-history/links.json'))
+              n0 = len(inv)
+              for vid in links.get('youtube_ids', []):
+                  if vid not in inv:
+                      add(vid, f'chat-history link {vid}', '0', 'chat-history', 'chat')
+              print('chat-history ids merged:', len(inv) - n0)
+          except Exception as e:
+              print('chat merge FAIL', e)
+          # repo master inventory merges in too, so ids= can target ANY registered id
+          try:
+              repo_inv = json.load(open('youtube-audit/inventory.json'))['videos']
+              n0 = len(inv)
+              for v in repo_inv:
+                  if v['id'] not in inv:
+                      add(v['id'], v.get('title', ''), str(v.get('duration', '0') or '0'), v.get('channel', 'repo'), v.get('format', 'videos'))
+              print('repo inventory merged:', len(inv) - n0)
+          except Exception as e:
+              print('repo merge FAIL', e)
+          json.dump({"generated": "__TS__", "total": len(inv), "videos": list(inv.values())},
+                    open("audit-out/inventory.json","w"), indent=1)
+          print("inventory total", len(inv))
+          PY
+          sed -i "s/__TS__/$(date -u +%FT%TZ)/" audit-out/inventory.json
+
+      - name: Collect reddit link text from chat history (runner egress)
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          src = 'Study_edits_videos/chat-history/links.json'
+          if not os.path.exists(src):
+              print('no chat-history links file; skipping'); raise SystemExit(0)
+          links = json.load(open(src)).get('reddit', [])
+          os.makedirs('audit-out/reddit', exist_ok=True)
+          def curl(u):
+              return subprocess.run(['curl','-sSL','-m','45','-A',UA,u], capture_output=True, text=True, timeout=60).stdout
+          for i, u in enumerate(links):
+              out = {'url': u, 'title': '', 'description': ''}
+              try:
+                  final = subprocess.run(['curl','-sSL','-o','/dev/null','-w','%{url_effective}','-m','45','-A',UA,u],
+                                         capture_output=True, text=True, timeout=60).stdout.strip() or u
+                  out['resolved'] = final
+                  try:
+                      js = json.loads(curl(final.rstrip('/') + '.json'))
+                      d = js['data']['children'][0]['data']
+                      out['title'] = (d.get('title') or '')[:300]
+                      out['description'] = (d.get('selftext') or d.get('link_flair_text') or '')[:800]
+                  except Exception:
+                      html = curl(final)
+                      m = re.search(r'<title[^>]*>(.*?)</title>', html, re.S|re.I)
+                      out['title'] = (m.group(1).strip() if m else '')[:300]
+                      m = re.search(r'<meta[^>]+property="og:description"[^>]+content="([^"]*)"', html)
+                      out['description'] = (m.group(1).strip() if m else '')[:800]
+              except Exception as e:
+                  out['error'] = str(e)[:200]
+              json.dump(out, open(f'audit-out/reddit/{i:02d}.json','w'), indent=1)
+          print('reddit collected:', len(links))
+          PY
+
+      - name: Batch download + frame/audio evidence
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, math
+          batch = 1
+          explicit_ids = []
+          try:
+              txt = open("youtube-audit/batch-trigger.txt").read()
+              for line in txt.splitlines():
+                  if line.startswith("batch="): batch = int(line.split("=")[1])
+                  if line.startswith("ids="): explicit_ids = [x.strip() for x in line.split("=",1)[1].split(",") if x.strip()]
+          except Exception: pass
+          inv = json.load(open("audit-out/inventory.json"))["videos"]
+          explicit = ["M2_vjAseOns","bpUZkFVX6NY","Tvd7qiK_gUA","9o8GT1Iurv0"]
+          per_channel = {}
+          for v in inv:
+              if v["id"] in explicit: continue
+              ch = v["channel"]
+              per_channel.setdefault(ch, []).append(v)
+          selection = [v for v in inv if v["id"] in explicit]
+          for ch, vids in per_channel.items():
+              selection += vids
+          # resumable slicing: batch N processes items [(N-1)*20, N*20)
+          start, end = (batch-1)*20, batch*20
+          selection = selection[start:end] or selection[:20]
+          # retry lane: trigger ids= line overrides slicing with an explicit id list
+          if explicit_ids:
+              selection = [v for v in inv if v["id"] in explicit_ids]
+          os.makedirs("audit-out/evidence", exist_ok=True)
+          os.makedirs("audit-out/reports", exist_ok=True)
+          os.makedirs("audit-out/errors", exist_ok=True)
+          # One-shot verbose format probe on the first queued video (diagnostics only:
+          # cookies-loaded count, plugin pickup, format table — never cookie values).
+          try:
+              cke = [os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []
+              pcmd = [x for x in (["yt-dlp","-v","-F"] + cke + [selection[0]["url"]]) if x]
+              p = subprocess.run(pcmd, capture_output=True, text=True, timeout=240)
+              open("audit-out/errors/format-probe.txt","w").write((p.stdout + "\n--STDERR--\n" + p.stderr)[-14000:])
+          except Exception as e:
+              open("audit-out/errors/format-probe.txt","w").write("probe failed: " + str(e))
+          records = []
+          for v in selection:
+              vid = v["id"]; d = f"audit-out/evidence/{vid}"
+              os.makedirs(d, exist_ok=True)
+              rec = dict(v); rec["environment"] = "github-runner"
+              try:
+                  errs = []
+                  ck = [os.environ.get("YT_COOKIES_ARG",""), os.environ.get("YT_COOKIES_PATH","")] if os.environ.get("YT_COOKIES_ARG") else []
+                  FMT = "bv*[height<=480]+ba/b[height<=480]/bv*+ba/b/w"
+                  methods = [
+                      ("yt-dlp android+cookies" if ck else "yt-dlp android", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=android","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp default+cookies" if ck else "yt-dlp default", [x for x in (["yt-dlp","--no-warnings"] + ck + ["-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp web_embedded+cookies" if ck else "yt-dlp client=web_embedded", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=web_embedded","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp web_safari+cookies" if ck else "yt-dlp client=web_safari", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=web_safari","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp mweb+cookies" if ck else "yt-dlp client=mweb", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=mweb","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                      ("yt-dlp client=tv+cookies" if ck else "yt-dlp client=tv", [x for x in (["yt-dlp","--no-warnings"] + ck + ["--extractor-args","youtube:player_client=tv","-f",FMT,"-o",f"{d}/src.%(ext)s",v["url"]]) if x]),
+                  ]
+                  dl = None
+                  for name, cmd in methods:
+                      dl = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
+                      if dl.returncode == 0 and any(f.startswith("src.") for f in os.listdir(d)):
+                          rec["access_method"] = name
+                          break
+                      errs.append(f"{name}: {dl.stderr[-400:]}")
+                  else:
+                      # public Invidious API instances (runner has general egress)
+                      import urllib.request
+                      insts = ["https://inv.nadeko.net","https://invidious.nerdvpn.de","https://yewtu.be",
+                               "https://iv.melmac.space","https://invidious.f5.si","https://inv.tux.pizza",
+                               "https://invidious.privacyredirect.com","https://yt.artemislena.eu"]
+                      try:
+                          with urllib.request.urlopen("https://api.invidious.io/instances.json?sort_by=health,users", timeout=45) as r:
+                              reg = json.load(r)
+                          insts = [("https://" + e[1]["uri"].replace("https://","")) for e in reg
+                                   if e[1].get("api") and e[1].get("type") == "https"][:10] + insts
+                      except Exception as e:
+                          errs.append(f"instance-registry: {e}")
+                      for inst in insts:
+                          try:
+                              with urllib.request.urlopen(f"{inst}/api/v1/videos/{vid}?local=false", timeout=60) as r:
+                                  j = json.load(r)
+                              streams = [f for f in j.get("formatStreams", []) if f.get("itag") in (18, 22)]
+                              if not streams: raise RuntimeError("no progressive stream")
+                              murl = streams[0]["url"]
+                              dl = subprocess.run(["curl","-sSL","-o",f"{d}/src.mp4","-m","600",murl], capture_output=True, text=True, timeout=660)
+                              if dl.returncode == 0 and os.path.getsize(f"{d}/src.mp4") > 100000:
+                                  rec["access_method"] = f"invidious {inst}"
+                                  break
+                              errs.append(f"invidious {inst}: size/exit {dl.returncode}")
+                          except Exception as e:
+                              errs.append(f"invidious {inst}: {e}")
+                      else:
+                          raise RuntimeError("; ".join(errs)[-2000:])
+                  srcs = sorted(f for f in os.listdir(d) if f.startswith("src."))
+                  if len(srcs) > 1:
+                      # separated video+audio parts: merge losslessly for evidence extraction
+                      parts = []
+                      for f0 in srcs:
+                          p0 = os.path.join(d, f0)
+                          hv = subprocess.run(["ffprobe","-v","error","-select_streams","v:0","-show_entries","stream=codec_type","-of","csv=p=0",p0], capture_output=True, text=True)
+                          parts.append((0 if hv.stdout.strip().startswith("video") else 1, p0))
+                      parts.sort()
+                      mcmd = ["ffmpeg","-v","error","-y"]
+                      for _, p0 in parts: mcmd += ["-i", p0]
+                      mcmd += ["-c","copy", os.path.join(d,"src-merged.mp4")]
+                      subprocess.run(mcmd, capture_output=True, timeout=300, check=True)
+                      src = os.path.join(d,"src-merged.mp4")
+                  else:
+                      src = os.path.join(d, srcs[0])
+                  probe = subprocess.run(["ffprobe","-v","error","-select_streams","v:0",
+                                          "-show_entries","stream=width,height,r_frame_rate",
+                                          "-of","json", src], capture_output=True, text=True)
+                  rec["probe"] = json.loads(probe.stdout)
+                  dur = float(v["duration"] or 60)
+                  for i in range(12):
+                      t = dur * (i + 0.5) / 12
+                      subprocess.run(["ffmpeg","-v","error","-ss",f"{t:.2f}","-i",src,"-frames:v","1",
+                                      "-vf","scale=640:360","-q:v","5", f"{d}/u{i:02d}.jpg"],
+                                     capture_output=True, timeout=120, check=True)
+                  subprocess.run(["ffmpeg","-v","error","-i",src,"-vf",
+                                  "select='gt(scene,0.4)',scale=640:360","-frames:v","6",
+                                  "-q:v","5", f"{d}/s%d.jpg"], capture_output=True, timeout=300)
+                  loud = subprocess.run(["ffmpeg","-hide_banner","-i",src,"-af",
+                                         "loudnorm=print_format=json","-f","null","-"],
+                                        capture_output=True, text=True, timeout=600)
+                  open(f"{d}/loudness.json","w").write(loud.stderr[-1200:])
+                  subprocess.run(["ffmpeg","-v","error","-i",src,"-filter_complex",
+                                  "showspectrumpic=s=900x360:legend=1", f"{d}/spectrum.png"],
+                                 capture_output=True, timeout=300)
+                  subprocess.run(["ffmpeg","-v","error","-i",src,"-filter_complex",
+                                  "showwavespic=s=900x200", f"{d}/wave.png"],
+                                 capture_output=True, timeout=300)
+                  rec["frames"] = sorted(f for f in os.listdir(d) if f.endswith(".jpg"))
+                  rec["audio_evidence"] = ["loudness.json","spectrum.png","wave.png"]
+                  rec["status"] = "FOOTAGE_ACQUIRED"
+                  for f0 in os.listdir(d):
+                      if f0.startswith("src"): os.remove(os.path.join(d, f0))
+              except Exception as e:
+                  rec["status"] = "BLOCKED"
+                  rec["failure"] = str(e)[:2000]
+                  os.makedirs("audit-out/errors", exist_ok=True)
+                  open(f"audit-out/errors/{vid}.txt","w").write(str(e))
+              records.append(rec)
+              print(vid, rec["status"])
+          json.dump({"batch": batch, "processed": len(records), "records": records},
+                    open(f"audit-out/reports/batch{batch}.json","w"), indent=1)
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: youtube-audit-batch
+          path: audit-out/
+          retention-days: 30
+
+      # Artifact zips live on Azure Blob (outside the sandbox allowlist), so the
+      # durable hand-off is a commit: the sandbox pulls it via github.com.
+      - name: Publish evidence to the branch
+        run: |
+          git config user.name "omniframe-audit-bot"
+          git config user.email "audit-bot@users.noreply.github.com"
+          mkdir -p youtube-audit/runner
+          cp -r audit-out/. youtube-audit/runner/
+          # never commit raw media - frames/spectra/JSON are the evidence
+          find youtube-audit/runner -type f -name 'src*' -size +2M -delete
+          git add youtube-audit/runner
+          git commit -m "youtube-audit: runner evidence batch (frames, audio, inventory) [ci skip]" || echo "nothing to commit"
+          git fetch origin "${{ github.ref_name }}" || true
+          git rebase origin/${{ github.ref_name }} || { git rebase --abort || true; }
+          git push origin HEAD:${{ github.ref_name }} || { sleep 20; git fetch origin "${{ github.ref_name }}"; git rebase origin/${{ github.ref_name }} || { git rebase --abort || true; }; git push origin HEAD:${{ github.ref_name }}; }

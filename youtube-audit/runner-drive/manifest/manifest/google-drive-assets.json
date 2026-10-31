@@ -1,0 +1,54 @@
+[
+ {
+  "drive_id": "1HdBsYdWNMhyN-Ph4UEsh-0vhQcAhvQQ5",
+  "title": "Gojo Ep 8 Raw Clips-1.mp4",
+  "type": "video",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/Gojo Ep 8 Raw Clips-1.mp4",
+  "web_view_link": "https://drive.google.com/file/d/1HdBsYdWNMhyN-Ph4UEsh-0vhQcAhvQQ5/view"
+ },
+ {
+  "drive_id": "1m8TTt6kx6-NFJvSbwi0CmdepwtjkS3ru",
+  "title": "Gojo Satoru Twixtor 4K.mp4",
+  "type": "video",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/Gojo Satoru Twixtor 4K.mp4",
+  "web_view_link": "https://drive.google.com/file/d/1m8TTt6kx6-NFJvSbwi0CmdepwtjkS3ru/view"
+ },
+ {
+  "drive_id": "1N8rpklnnaHYYTPtFDteB_piadCOIpFn1",
+  "title": "JJK_S2E3_720p.mp4 (transcoded from 'Watch Jujutsu Kaisen 2nd Season Episode 3 Online in HD - Anikoto.mp4')",
+  "type": "video",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/JJK_S2E3_720p.mp4",
+  "web_view_link": "https://drive.google.com/file/d/1N8rpklnnaHYYTPtFDteB_piadCOIpFn1/view",
+  "note": "Original upload is 368 MB / 1080p. Transcoded to 720p H.264 (153 MB) so it fits the 100 MB per-file Drive upload limit; original retained in the source Drive folder."
+ },
+ {
+  "drive_id": "19CJAXbjtm0m7z1AwSHcwv2jpyZ_Qb0dw",
+  "title": "silver_seraph_-_CRUSH_TEKK_(mp3.pm).mp3",
+  "type": "audio",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/silver_seraph_-_CRUSH_TEKK_(mp3.pm).mp3",
+  "web_view_link": "https://drive.google.com/file/d/19CJAXbjtm0m7z1AwSHcwv2jpyZ_Qb0dw/view"
+ },
+ {
+  "drive_id": "1dmhm1d4mmgEVQCO7KbAZjMHgrEx6ACj3",
+  "title": "SpotiDownloader.com - CRUSH TEKK - (Super Slowed) - silver seraph.mp3",
+  "type": "audio",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/SpotiDownloader.com - CRUSH TEKK - (Super Slowed) - silver seraph.mp3",
+  "web_view_link": "https://drive.google.com/file/d/1dmhm1d4mmgEVQCO7KbAZjMHgrEx6ACj3/view"
+ },
+ {
+  "drive_id": "1lsp7EwETtHZhRbbFhKRpQXLhwtFMLgG0",
+  "title": "refernce.zip",
+  "type": "archive",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/refernce.zip",
+  "web_view_link": "https://drive.google.com/file/d/1lsp7EwETtHZhRbbFhKRpQXLhwtFMLgG0/view",
+  "note": "Extracted into google-drive-assets/refernce_extracted/"
+ },
+ {
+  "drive_id": "15PnvqnUPOJwkB34q-6mmgkyy25jb7ic0",
+  "title": "BrandBird ... .rar",
+  "type": "archive",
+  "local_path": "/home/user/editing-research-collection/google-drive-assets/reflect_reference_BrandBird.rar",
+  "web_view_link": "https://drive.google.com/file/d/15PnvqnUPOJwkB34q-6mmgkyy25jb7ic0/view",
+  "note": "RAR (reference/mockup app asset). Not extracted: unrar unavailable."
+ }
+]

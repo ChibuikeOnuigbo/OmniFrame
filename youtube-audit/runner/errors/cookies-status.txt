@@ -1,0 +1,15 @@
+cookies present: yes
+bytes: 3051 lines: 25
+youtube-domain lines: 23
+critical SID: present
+critical HSID: present
+critical SSID: present
+critical APISID: present
+critical SAPISID: present
+critical __Secure-1PSID: present
+critical __Secure-3PSID: present
+critical LOGIN_INFO: present
+critical __Secure-1PSIDTS: present
+critical __Secure-3PSIDTS: present
+critical __Secure-1PSIDCC: present
+critical __Secure-3PSIDCC: present

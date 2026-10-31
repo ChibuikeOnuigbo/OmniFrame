@@ -76,7 +76,7 @@ export function ThreePanel() {
               <button
                 type="button"
                 data-testid="threed-submode-materials-btn"
-                onClick={() => openSubMode('threed', 'threed-materials', '3D Materials & Textures', 'Sphere')}
+                onClick={() => openSubMode('threed', 'threed-materials', '3D Materials & Textures', 'Shapes')}
                 className="flex items-center justify-between p-2 rounded-lg bg-ink-900 border border-ink-800 hover:border-brand/60 hover:bg-ink-800 text-left transition-all"
               >
                 <div>
@@ -316,7 +316,7 @@ export function ThreePanel() {
                 </div>
                 <div className="truncate text-ink-300">{threeMaskSelection.targetName}</div>
                 <div className="text-ink-500">
-                  Bounds {Math.round(threeMaskSelection.bounds.x * 100)}%, {Math.round(threeMaskSelection.bounds.y * 100)}% · {Math.round(threeMaskSelection.bounds.width * 100)}% × {Math.round(threeMaskSelection.bounds.height * 100)}%
+                  Bounds {Math.round(threeMaskSelection.bounds.x * 100)}%, {Math.round(threeMaskSelection.bounds.y * 100)}%, {Math.round(threeMaskSelection.bounds.width * 100)}% × {Math.round(threeMaskSelection.bounds.height * 100)}%
                 </div>
               </div>
               <button

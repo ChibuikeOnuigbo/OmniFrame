@@ -1,0 +1,20 @@
+{
+ "tool": "image_to_video",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/E_analysis.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/E_analysis.mp4",
+  "frames": 48,
+  "fps": 24,
+  "size": 12834,
+  "image": "E",
+  "captions": [
+   "BRIEF E: move square",
+   "start -> destination",
+   "eased path + arrow guide",
+   "keypoints in JSON sidecar",
+   "ANSWER: E_move/solution.mp4"
+  ]
+ }
+}

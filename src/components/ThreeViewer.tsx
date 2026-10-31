@@ -66,16 +66,19 @@ export function ThreeViewer({
   const threeMaskSelection = useEditor((s) => s.threeMaskSelection)
   const setThreeMaskSelection = useEditor((s) => s.setThreeMaskSelection)
   const clearThreeMaskSelection = useEditor((s) => s.clearThreeMaskSelection)
+  const sceneObject = useEditor((s) => s.scene3DObjects[0])
+  const updateScene3DObject = useEditor((s) => s.updateScene3DObject)
   const threeMaskToolActive = leftTab === 'threed' && activeSubMode === 'threed-mask' && threeMaskMode !== 'off'
 
-  // Component UI state
-  const [primitive, setPrimitive] = useState<Primitive3D>('wheel')
-  const [wireframe, setWireframe] = useState(false)
+  // Component UI state mirrors the persisted scene object so an .omni load
+  // and geometry-subset export refer to the same editable primitive.
+  const [primitive, setPrimitive] = useState<Primitive3D>(sceneObject?.type ?? 'wheel')
+  const [wireframe, setWireframe] = useState(!!sceneObject?.wireframe)
   const [showGrid, setShowGrid] = useState(true)
   const [aimTarget, setAimTarget] = useState<CameraAimTarget>('composite')
-  const [materialRoughness, setMaterialRoughness] = useState(0.25)
-  const [materialMetalness, setMaterialMetalness] = useState(0.8)
-  const [materialColor, setMaterialColor] = useState('#8b5cf6')
+  const [materialRoughness, setMaterialRoughness] = useState(sceneObject?.roughness ?? 0.25)
+  const [materialMetalness, setMaterialMetalness] = useState(sceneObject?.metalness ?? 0.8)
+  const [materialColor, setMaterialColor] = useState(sceneObject?.color ?? '#8b5cf6')
 
   // Project sequence aspect ratio for 2.5D plane and camera FOV
   const planeAspect = sequenceSettings.width / Math.max(1, sequenceSettings.height)
@@ -83,7 +86,36 @@ export function ThreeViewer({
   const planeW = planeH * planeAspect
 
   // Coordinates
-  const objectPosition = useRef(new THREE.Vector3(planeW * 0.45 + 0.8, 0.15, 0.6))
+  const objectPosition = useRef(new THREE.Vector3(
+    sceneObject?.position.x ?? planeW * 0.45 + 0.8,
+    sceneObject?.position.y ?? 0.15,
+    sceneObject?.position.z ?? 0.6,
+  ))
+
+  useEffect(() => {
+    if (!sceneObject) return
+    setPrimitive(sceneObject.type)
+    setWireframe(!!sceneObject.wireframe)
+    setMaterialColor(sceneObject.color)
+    setMaterialRoughness(sceneObject.roughness ?? 0.25)
+    setMaterialMetalness(sceneObject.metalness ?? 0.8)
+    objectPosition.current.set(sceneObject.position.x, sceneObject.position.y, sceneObject.position.z)
+    if (objectMeshRef.current) {
+      objectMeshRef.current.position.copy(objectPosition.current)
+      objectMeshRef.current.rotation.set(sceneObject.rotation.x, sceneObject.rotation.y, sceneObject.rotation.z)
+      objectMeshRef.current.scale.set(sceneObject.scale.x, sceneObject.scale.y, sceneObject.scale.z)
+    }
+  }, [
+    sceneObject?.id,
+    sceneObject?.type,
+    sceneObject?.wireframe,
+    sceneObject?.color,
+    sceneObject?.roughness,
+    sceneObject?.metalness,
+    sceneObject?.position.x,
+    sceneObject?.position.y,
+    sceneObject?.position.z,
+  ])
 
   // Camera spherical coordinates for smooth orbit/pan/dolly
   const sphericalRef = useRef({ radius: 5.4, theta: 0.38, phi: 1.35 })
@@ -496,6 +528,11 @@ export function ThreeViewer({
       roughness: materialRoughness,
       wireframe,
     })
+    const applyTransform = (object: THREE.Object3D) => {
+      object.position.copy(objectPosition.current)
+      object.rotation.set(sceneObject?.rotation.x ?? 0, sceneObject?.rotation.y ?? 0, sceneObject?.rotation.z ?? 0)
+      object.scale.set(sceneObject?.scale.x ?? 1, sceneObject?.scale.y ?? 1, sceneObject?.scale.z ?? 1)
+    }
 
     if (primitive === 'wheel') {
       // High-detail 3D Wheel: Rim + Spokes + Outer Tire + Center Hub
@@ -548,7 +585,7 @@ export function ThreeViewer({
       hubMesh.name = 'wheel-hub'
       wheelGroup.add(hubMesh)
 
-      wheelGroup.position.copy(objectPosition.current)
+      applyTransform(wheelGroup)
       objectMeshRef.current = wheelGroup
       scene.add(wheelGroup)
     } else {
@@ -569,11 +606,23 @@ export function ThreeViewer({
 
       const mesh = new THREE.Mesh(geom, mat)
       mesh.name = `${primitive}-object`
-      mesh.position.copy(objectPosition.current)
+      applyTransform(mesh)
       objectMeshRef.current = mesh
       scene.add(mesh)
     }
-  }, [primitive, wireframe, materialRoughness, materialMetalness, materialColor])
+  }, [
+    primitive,
+    wireframe,
+    materialRoughness,
+    materialMetalness,
+    materialColor,
+    sceneObject?.rotation.x,
+    sceneObject?.rotation.y,
+    sceneObject?.rotation.z,
+    sceneObject?.scale.x,
+    sceneObject?.scale.y,
+    sceneObject?.scale.z,
+  ])
 
   // Toggle Grid Visibility
   useEffect(() => {
@@ -862,7 +911,7 @@ export function ThreeViewer({
           }}
           className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
             activeBlenderMode === 'animation'
-              ? 'bg-violet-600 text-white font-semibold shadow-xs'
+              ? 'bg-brand-600 text-white font-semibold shadow-xs'
               : 'text-ink-400 hover:text-white hover:bg-ink-800'
           }`}
         >
@@ -890,7 +939,11 @@ export function ThreeViewer({
                 aria-label="Material diffuse colour"
                 data-testid="material-color-picker"
                 value={materialColor}
-                onChange={(e) => setMaterialColor(e.target.value)}
+                onChange={(e) => {
+                  const color = e.target.value
+                  setMaterialColor(color)
+                  if (sceneObject) updateScene3DObject(sceneObject.id, { color })
+                }}
                 className="w-7 h-7 rounded border border-ink-700 bg-transparent cursor-pointer"
               />
               <span className="text-[11px] font-mono text-ink-300">{materialColor}</span>
@@ -908,7 +961,11 @@ export function ThreeViewer({
               max="1"
               step="0.02"
               value={materialRoughness}
-              onChange={(e) => setMaterialRoughness(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const roughness = parseFloat(e.target.value)
+                setMaterialRoughness(roughness)
+                if (sceneObject) updateScene3DObject(sceneObject.id, { roughness })
+              }}
               className="w-full accent-brand"
             />
           </div>
@@ -924,7 +981,11 @@ export function ThreeViewer({
               max="1"
               step="0.02"
               value={materialMetalness}
-              onChange={(e) => setMaterialMetalness(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const metalness = parseFloat(e.target.value)
+                setMaterialMetalness(metalness)
+                if (sceneObject) updateScene3DObject(sceneObject.id, { metalness })
+              }}
               className="w-full accent-brand"
             />
           </div>
@@ -1010,7 +1071,10 @@ export function ThreeViewer({
               type="button"
               data-testid={`three-primitive-${prim}`}
               title={`Change 3D Object to ${prim}`}
-              onClick={() => setPrimitive(prim)}
+              onClick={() => {
+                setPrimitive(prim)
+                if (sceneObject) updateScene3DObject(sceneObject.id, { type: prim })
+              }}
               className={`px-1.5 py-0.5 rounded text-[10px] capitalize font-medium transition-colors ${
                 primitive === prim
                   ? 'bg-brand/20 text-brand-400 border border-brand/40 font-semibold'
@@ -1040,7 +1104,11 @@ export function ThreeViewer({
           type="button"
           data-testid="wireframe-toggle-btn"
           title={`Wireframe: ${wireframe ? 'ON' : 'OFF'}`}
-          onClick={() => setWireframe(!wireframe)}
+          onClick={() => {
+            const next = !wireframe
+            setWireframe(next)
+            if (sceneObject) updateScene3DObject(sceneObject.id, { wireframe: next })
+          }}
           className={`p-1 rounded transition-colors shrink-0 ${
             wireframe ? 'bg-brand/20 text-brand-400' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
           }`}

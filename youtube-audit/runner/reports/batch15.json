@@ -1,0 +1,32 @@
+{
+ "batch": 15,
+ "processed": 1,
+ "records": [
+  {
+   "id": "V9ApHueQbN0",
+   "url": "https://www.youtube.com/watch?v=V9ApHueQbN0",
+   "title": "Gradient stroke - Alight motion. #Alightmotion #alightmotiontutorial #hancybox #editing",
+   "duration": "NA",
+   "channel": "NA",
+   "format": "shorts",
+   "formats": [
+    "shorts"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "failure": "could not convert string to float: 'NA'"
+  }
+ ]
+}

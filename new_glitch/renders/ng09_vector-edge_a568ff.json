@@ -1,0 +1,886 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "new_glitch/renders/ng09_vector-edge_a568ff.mp4",
+  "out": "/home/user/OmniFrame/new_glitch/renders/ng09_vector-edge_a568ff.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 43814,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 480,
+     "h": 270,
+     "fps": 30,
+     "duration": 2,
+     "bg": "#0b0912"
+    },
+    "out": {
+     "w": 480,
+     "h": 270,
+     "fps": 30,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "studio"
+    },
+    "out": {
+     "clipId": "clip-1"
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-1",
+     "from": 2,
+     "to": 2
+    },
+    "out": {
+     "clipId": "clip-1",
+     "duration": 2
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "effects": {
+       "temp": -0.3,
+       "sat": 0.5
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "◬",
+     "preset": "plain",
+     "x": 0,
+     "y": -46
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "◬",
+       "x": 221.5,
+       "y": 0.5,
+       "w": 36.9,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 480,
+      "h": 270
+     }
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-2",
+     "from": 2,
+     "to": 2
+    },
+    "out": {
+     "clipId": "text-2",
+     "duration": 2
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 54,
+       "color": "#a568ff",
+       "glowColor": "#15e4f3",
+       "glowBlur": 14
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": false,
+      "fontSize": 54,
+      "color": "#a568ff",
+      "glowColor": "#15e4f3",
+      "glowBlur": 14
+     }
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "OMNIFRAME",
+     "preset": "plain",
+     "x": 0,
+     "y": 14
+    },
+    "out": {
+     "clipId": "text-3",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "O",
+       "x": 92.6,
+       "y": 0.5,
+       "w": 37.8,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "M",
+       "x": 130.4,
+       "y": 0.5,
+       "w": 41.4,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "N",
+       "x": 171.8,
+       "y": 0.5,
+       "w": 35.9,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "I",
+       "x": 207.7,
+       "y": 0.5,
+       "w": 14.2,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "F",
+       "x": 221.9,
+       "y": 0.5,
+       "w": 27.6,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "R",
+       "x": 249.5,
+       "y": 0.5,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "A",
+       "x": 282.8,
+       "y": 0.5,
+       "w": 32.8,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "M",
+       "x": 315.7,
+       "y": 0.5,
+       "w": 41.4,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": "E",
+       "x": 357.1,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 480,
+      "h": 270
+     }
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-3",
+     "from": 2,
+     "to": 2
+    },
+    "out": {
+     "clipId": "text-3",
+     "duration": 2
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-3",
+     "patch": {
+      "textStyle": {
+       "fontSize": 34,
+       "bold": true,
+       "color": "#f4f6ff",
+       "letterSpacing": 2,
+       "glowColor": "#15e4f3",
+       "glowBlur": 8
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-3",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 34,
+      "color": "#f4f6ff",
+      "letterSpacing": 2,
+      "glowColor": "#15e4f3",
+      "glowBlur": 8
+     }
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "PROCEDURAL EFFECT LAB · ORIGINAL REFERENCE",
+     "preset": "plain",
+     "x": 0,
+     "y": 44
+    },
+    "out": {
+     "clipId": "text-4",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "P",
+       "x": -364.4,
+       "y": 0.5,
+       "w": 28.9,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "R",
+       "x": -335.5,
+       "y": 0.5,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "O",
+       "x": -302.1,
+       "y": 0.5,
+       "w": 37.8,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "C",
+       "x": -264.4,
+       "y": 0.5,
+       "w": 33.5,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "E",
+       "x": -230.8,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "D",
+       "x": -200.5,
+       "y": 0.5,
+       "w": 37,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "U",
+       "x": -163.6,
+       "y": 0.5,
+       "w": 35.1,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "R",
+       "x": -128.4,
+       "y": 0.5,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": "A",
+       "x": -95.1,
+       "y": 0.5,
+       "w": 32.8,
+       "h": 48
+      },
+      {
+       "pos": 9,
+       "ch": "L",
+       "x": -62.2,
+       "y": 0.5,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 10,
+       "ch": " ",
+       "x": -35.5,
+       "y": 0.5,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 11,
+       "ch": "E",
+       "x": -20.2,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 12,
+       "ch": "F",
+       "x": 10.1,
+       "y": 0.5,
+       "w": 27.6,
+       "h": 48
+      },
+      {
+       "pos": 13,
+       "ch": "F",
+       "x": 37.7,
+       "y": 0.5,
+       "w": 27.6,
+       "h": 48
+      },
+      {
+       "pos": 14,
+       "ch": "E",
+       "x": 65.3,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 15,
+       "ch": "C",
+       "x": 95.6,
+       "y": 0.5,
+       "w": 33.5,
+       "h": 48
+      },
+      {
+       "pos": 16,
+       "ch": "T",
+       "x": 129.2,
+       "y": 0.5,
+       "w": 29.3,
+       "h": 48
+      },
+      {
+       "pos": 17,
+       "ch": " ",
+       "x": 158.5,
+       "y": 0.5,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 18,
+       "ch": "L",
+       "x": 173.7,
+       "y": 0.5,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 19,
+       "ch": "A",
+       "x": 200.5,
+       "y": 0.5,
+       "w": 32.8,
+       "h": 48
+      },
+      {
+       "pos": 20,
+       "ch": "B",
+       "x": 233.3,
+       "y": 0.5,
+       "w": 32.9,
+       "h": 48
+      },
+      {
+       "pos": 21,
+       "ch": " ",
+       "x": 266.2,
+       "y": 0.5,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 22,
+       "ch": "·",
+       "x": 281.5,
+       "y": 0.5,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 23,
+       "ch": " ",
+       "x": 296.8,
+       "y": 0.5,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 24,
+       "ch": "O",
+       "x": 312,
+       "y": 0.5,
+       "w": 37.8,
+       "h": 48
+      },
+      {
+       "pos": 25,
+       "ch": "R",
+       "x": 349.8,
+       "y": 0.5,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 26,
+       "ch": "I",
+       "x": 383.1,
+       "y": 0.5,
+       "w": 14.2,
+       "h": 48
+      },
+      {
+       "pos": 27,
+       "ch": "G",
+       "x": 397.3,
+       "y": 0.5,
+       "w": 37.2,
+       "h": 48
+      },
+      {
+       "pos": 28,
+       "ch": "I",
+       "x": 434.5,
+       "y": 0.5,
+       "w": 14.2,
+       "h": 48
+      },
+      {
+       "pos": 29,
+       "ch": "N",
+       "x": 448.7,
+       "y": 0.5,
+       "w": 35.9,
+       "h": 48
+      },
+      {
+       "pos": 30,
+       "ch": "A",
+       "x": 484.6,
+       "y": 0.5,
+       "w": 32.8,
+       "h": 48
+      },
+      {
+       "pos": 31,
+       "ch": "L",
+       "x": 517.4,
+       "y": 0.5,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 32,
+       "ch": " ",
+       "x": 544.1,
+       "y": 0.5,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 33,
+       "ch": "R",
+       "x": 559.4,
+       "y": 0.5,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 34,
+       "ch": "E",
+       "x": 592.7,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 35,
+       "ch": "F",
+       "x": 623.1,
+       "y": 0.5,
+       "w": 27.6,
+       "h": 48
+      },
+      {
+       "pos": 36,
+       "ch": "E",
+       "x": 650.7,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 37,
+       "ch": "R",
+       "x": 681,
+       "y": 0.5,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 38,
+       "ch": "E",
+       "x": 714.4,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 39,
+       "ch": "N",
+       "x": 744.7,
+       "y": 0.5,
+       "w": 35.9,
+       "h": 48
+      },
+      {
+       "pos": 40,
+       "ch": "C",
+       "x": 780.6,
+       "y": 0.5,
+       "w": 33.5,
+       "h": 48
+      },
+      {
+       "pos": 41,
+       "ch": "E",
+       "x": 814.1,
+       "y": 0.5,
+       "w": 30.3,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 480,
+      "h": 270
+     }
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "text-4",
+     "from": 2,
+     "to": 2
+    },
+    "out": {
+     "clipId": "text-4",
+     "duration": 2
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-4",
+     "patch": {
+      "textStyle": {
+       "fontSize": 9,
+       "letterSpacing": 2,
+       "color": "#15e4f3"
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-4",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": false,
+      "fontSize": 9,
+      "color": "#15e4f3",
+      "letterSpacing": 2
+     }
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "text-3",
+     "catalogId": "ng-vector-edge"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 2,
+     "params": {
+      "ngFamily": "vector-edge",
+      "ngSeed": 8164,
+      "ngPrimary": "#a568ff",
+      "ngSecondary": "#15e4f3",
+      "ngLead": 0,
+      "ngAttack": 0.15,
+      "ngHold": 1.2,
+      "ngDecay": 0.3,
+      "ngSliceAmp": 12,
+      "ngSliceDensity": 10,
+      "ngChroma": 4,
+      "ngScanOpacity": 0.18,
+      "ngScanSpacing": 3,
+      "ngNoise": 0.09,
+      "ngBlock": 18,
+      "ngBlockRate": 0.09
+     }
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "text-2",
+     "catalogId": "ng-vector-edge"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 2,
+     "params": {
+      "ngFamily": "vector-edge",
+      "ngSeed": 8164,
+      "ngPrimary": "#a568ff",
+      "ngSecondary": "#15e4f3",
+      "ngLead": 0,
+      "ngAttack": 0.15,
+      "ngHold": 1.2,
+      "ngDecay": 0.3,
+      "ngSliceAmp": 12,
+      "ngSliceDensity": 10,
+      "ngChroma": 4,
+      "ngScanOpacity": 0.18,
+      "ngScanSpacing": 3,
+      "ngNoise": 0.09,
+      "ngBlock": 18,
+      "ngBlockRate": 0.09
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "new_glitch/renders/ng09_vector-edge_a568ff.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 480,
+    "h": 270,
+    "fps": 30,
+    "duration": 2,
+    "bg": "#0b0912"
+   },
+   "selection": "text-4",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "bg:studio",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "temp": -0.3,
+      "sat": 0.5
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:◬",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": -46,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-3",
+     "name": "text:OMNIFRAME",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 14,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-4",
+     "name": "text:PROCEDURAL EFFECT LAB · ORIGINAL REFERENCE",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 44,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "cases": {
+  "rotoPolygon64": {
+   "meanAbsErrPx": 0.63,
+   "maxErrPx": 1.5,
+   "iouVsAnalyticCircle": 0.9924,
+   "exportMatte": "qa/assets/roto-poly-matte.png"
+  },
+  "maskDrawEllipse": {
+   "meanAbsErrPx": 0.59,
+   "maxErrPx": 1.5,
+   "iouVsAnalyticCircle": 0.9923
+  },
+  "rotoFeather8": {
+   "bandWidthPx_10_90": 69.5,
+   "note": "requested feather 8 px ⇒ expected band ≈ 2×feather (soft matting both sides)"
+  },
+  "rotoFeather8pxEquivalent": {
+   "bandWidthPx_10_90": 59.75,
+   "note": "feather passed as 8/W fraction"
+  },
+  "shapeDetectCircle": {
+   "classified": "circle",
+   "centreErrPx": 0,
+   "radiusErrPx": 0,
+   "fillVsPiOver4": -0.001,
+   "raw": {
+    "matte": "data_motiondesijg/scans/shape-matte-0.50.png",
+    "shapes": [
+     {
+      "class": "circle",
+      "px": 45171,
+      "bbox": [
+       120,
+       120,
+       240,
+       240
+      ],
+      "fill": 0.784,
+      "aspect": 1
+     }
+    ]
+   }
+  }
+ }
+}

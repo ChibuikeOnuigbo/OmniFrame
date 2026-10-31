@@ -220,7 +220,7 @@ export function Tooltip({
             data-draggable="true"
             className={[
               'fixed z-[9999] max-w-[240px] select-none rounded-md border border-ink-700',
-              'bg-ink-950/95 px-2 py-1 text-[11px] leading-snug text-ink-100 shadow-lg backdrop-blur-xs',
+              'bg-ink-950 px-2.5 py-1.5 text-[11px] leading-snug text-ink-100 shadow-[0_3px_10px_rgba(0,0,0,.55)]',
               moved ? 'cursor-grabbing' : 'cursor-grab',
             ].join(' ')}
             style={{ left: pos.x, top: pos.y, touchAction: 'none' }}
@@ -236,7 +236,7 @@ export function Tooltip({
             <span className="flex items-center gap-1.5">
               <span>{label}</span>
               {hint && (
-                <kbd className="rounded border border-ink-700 bg-ink-900 px-1 font-mono text-[10px] text-ink-400">
+                <kbd className="rounded-sm border border-ink-700 bg-ink-900 px-1 font-mono text-[10px] text-ink-400">
                   {hint}
                 </kbd>
               )}
@@ -253,7 +253,7 @@ export function Tooltip({
               )}
             </span>
             <span className="mt-0.5 block text-[9px] text-ink-500">
-              {moved ? 'Drag to move · R to reset' : 'Drag to move'}
+              {moved ? 'Drag to move, R to reset' : 'Drag to move'}
             </span>
           </div>,
           document.body,

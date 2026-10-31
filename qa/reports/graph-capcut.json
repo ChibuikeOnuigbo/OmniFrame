@@ -1,6 +1,6 @@
 {
   "suite": "graph-capcut",
-  "pass": 22,
+  "pass": 37,
   "fail": 0,
   "results": [
     {
@@ -51,7 +51,7 @@
     {
       "name": "readout shows the keyframe-pair destination",
       "status": "PASS",
-      "detail": "Key 0.00s · 0.0px → 2.00s · 0.0px FREE ALIGNED MIRRORED AUTO Extrapolation: Hold (Constant"
+      "detail": "Key 0.00s · 0.0px → 2.00s · 0.0px FREE ALIGNED MIRRORED AUTO CSS Extrapolation: Hold (Cons"
     },
     {
       "name": "primary preset linear visible as thumbnail",
@@ -94,6 +94,76 @@
       "detail": "aria-pressed=true"
     },
     {
+      "name": "easing intensity slider shows for preset keys",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "intensity writes onto the keyframe node",
+      "status": "PASS",
+      "detail": "stored=0.3"
+    },
+    {
+      "name": "intensity blends easing toward linear",
+      "status": "PASS",
+      "detail": "{\"full\":75,\"low\":57.49999999999999,\"zero\":50}"
+    },
+    {
+      "name": "rotationY 60 foreshortens to cos(60)",
+      "status": "PASS",
+      "detail": "{\"a\":0.5000000000000001,\"b\":0,\"c\":0,\"d\":1}"
+    },
+    {
+      "name": "rotationY 180 is a mirror flip",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "rotationX 90 is edge-on (zero height)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "evaluator honours static Rotation X/Y from the inspector",
+      "status": "PASS",
+      "detail": "rx=25 ry=40"
+    },
+    {
+      "name": "constant easing copies as steps()",
+      "status": "PASS",
+      "detail": "steps(1, end)"
+    },
+    {
+      "name": "linear easing copies as linear",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "spring segment copies as a densely sampled linear()",
+      "status": "PASS",
+      "detail": "linear(0% 0%, -0.4% 5%, -1.4% 10%, -2.9% 15%, -4.6% 20%, -6.4% 25%, -8% 30%, -9.3% 35%, -9"
+    },
+    {
+      "name": "last keyframe has no segment to copy",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "copy-as-CSS button present in keyframe controls",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "copy button confirms the copy",
+      "status": "PASS",
+      "detail": "Copied"
+    },
+    {
+      "name": "clipboard holds a CSS timing function",
+      "status": "PASS",
+      "detail": "linear(0% 0%, 0.5% 5%, 2% 10%, 4.5% 15%, 8% 20%, 12.5% 25%, "
+    },
+    {
       "name": "double-click adds a custom point on the curve",
       "status": "PASS",
       "detail": "3 nodes"
@@ -107,6 +177,11 @@
       "name": "dragging a diamond updates the keyframe time",
       "status": "PASS",
       "detail": "0.00s → 0.96s"
+    },
+    {
+      "name": "Rotation Y visibly foreshortens the clip in preview",
+      "status": "PASS",
+      "detail": "span 385 -> 131"
     },
     {
       "name": "zero runtime page errors",

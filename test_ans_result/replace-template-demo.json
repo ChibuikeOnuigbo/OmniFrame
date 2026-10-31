@@ -1,0 +1,682 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "test_ans_result/replace-template-demo.mp4",
+  "out": "/home/user/OmniFrame/test_ans_result/replace-template-demo.mp4",
+  "frames": 72,
+  "fps": 24,
+  "size": 11571,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 3,
+     "bg": "#0a0a12"
+    },
+    "out": {
+     "w": 640,
+     "h": 360,
+     "fps": 24,
+     "duration": 3
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "Study_edits_videos/exports/-9UkBHVV9OA.mp4",
+     "fps": 12
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 24,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-1"
+    },
+    "out": {
+     "selected": "clip-1"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "adjustment": {
+       "luts": [
+        {
+         "builtin": "tymm-5",
+         "intensity": 1
+        }
+       ]
+      },
+      "effects": {
+       "contrast": 1.15,
+       "saturation": 1.25,
+       "vignette": 0.3
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null,
+     "adjustment": {
+      "luts": "[same-object-ref]"
+     }
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "time": 0,
+     "value": -60,
+     "interpolation": "easeInOut"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "position_x",
+     "keyframeId": "kf_op7vkya"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "time": 2.5,
+     "value": 60,
+     "interpolation": "easeInOut"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "position_x",
+     "keyframeId": "kf_b47wjbd"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "X",
+     "time": 0,
+     "value": 0.92,
+     "interpolation": "easeOut"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "scale_x",
+     "keyframeId": "kf_49du06u"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "scale",
+     "channel": "X",
+     "time": 2.5,
+     "value": 1.08,
+     "interpolation": "easeOut"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "curve": "scale_x",
+     "keyframeId": "kf_d3uqxk9"
+    }
+   },
+   {
+    "tool": "template_capture",
+    "params": {
+     "clipId": "clip-1",
+     "name": "TYMM graded push-in"
+    },
+    "out": {
+     "templateId": "tmpl-mvvu29lj-7d5",
+     "file": "data_motiondesijg/templates/tmpl-mvvu29lj-7d5.json",
+     "fields": [
+      "transform",
+      "animation",
+      "effects",
+      "adjustment",
+      "blendMode"
+     ],
+     "fieldCount": 5,
+     "inPointRatio": 0
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "public/death_note_video.mp4",
+     "fps": 12
+    },
+    "out": {
+     "clipId": "clip-2",
+     "frames": 96,
+     "duration": 8
+    }
+   },
+   {
+    "tool": "template_apply",
+    "params": {
+     "templateId": "tmpl-mvvu29lj-7d5",
+     "clipId": "clip-2"
+    },
+    "out": {
+     "clipId": "clip-2",
+     "template": "TYMM graded push-in",
+     "applied": [
+      "transform",
+      "animation",
+      "effects",
+      "adjustment",
+      "blendMode",
+      "inPoint",
+      "duration"
+     ],
+     "inPoint": 0
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "new_glitch/batch/b0013_digital-slice.mp4",
+     "fps": 12
+    },
+    "out": {
+     "clipId": "clip-3",
+     "frames": 48,
+     "duration": 4
+    }
+   },
+   {
+    "tool": "replace_video",
+    "params": {
+     "clipId": "clip-2",
+     "path": "Study_edits_videos/exports/-JLpm8uJBOo.mp4",
+     "windowStart": 0,
+     "carryEffects": true
+    },
+    "out": {
+     "clipId": "clip-2",
+     "sourceDuration": 2,
+     "window": {
+      "start": 0,
+      "end": 2,
+      "length": 2
+     },
+     "carried": true,
+     "cleared": []
+    }
+   },
+   {
+    "tool": "replace_video",
+    "params": {
+     "clipId": "clip-3",
+     "path": "Study_edits_videos/exports/-JLpm8uJBOo.mp4",
+     "windowStart": 0,
+     "carryEffects": false
+    },
+    "out": {
+     "clipId": "clip-3",
+     "sourceDuration": 2,
+     "window": {
+      "start": 0,
+      "end": 2,
+      "length": 2
+     },
+     "carried": false,
+     "cleared": [
+      "effects",
+      "fxInstances",
+      "adjustment"
+     ]
+    }
+   },
+   {
+    "tool": "list_templates",
+    "params": {},
+    "out": {
+     "templates": [
+      {
+       "id": "tmpl-mvvu29lj-7d5",
+       "name": "TYMM graded push-in",
+       "source": "-9UkBHVV9OA.mp4",
+       "fields": [
+        "transform",
+        "animation",
+        "effects",
+        "adjustment",
+        "blendMode"
+       ],
+       "file": "data_motiondesijg/templates/tmpl-mvvu29lj-7d5.json"
+      }
+     ],
+     "dir": "/home/user/OmniFrame/data_motiondesijg/templates"
+    }
+   },
+   {
+    "tool": "list_fonts",
+    "params": {},
+    "out": {
+     "count": 49,
+     "fonts": [
+      "Alphacorsa Personal Use Italic",
+      "Alphacorsa Personal Use",
+      "CONTADOR",
+      "CONTADOR",
+      "CONTADOR",
+      "FredokaOne-Regular",
+      "Hunters K-Pop",
+      "Looks Sketchy",
+      "Minecrafter.Alt",
+      "Minecrafter.Reg",
+      "Pixel Robot",
+      "Quicksand_Bold",
+      "Quicksand_Bold_Oblique",
+      "Quicksand_Book",
+      "Quicksand_Book_Oblique",
+      "Quicksand_Dash",
+      "Quicksand_Light",
+      "Quicksand_Light_Oblique",
+      "blood-crow-Condensed-italic",
+      "blood-crow-Condensed",
+      "blood-crow-Expanded-italic",
+      "blood-crow-Expanded",
+      "blood-crow-Leftalic",
+      "blood-crow-Shadow-Condensed-italic",
+      "blood-crow-Shadow-Condensed",
+      "blood-crow-Shadow-italic",
+      "blood-crow-Shadow",
+      "blood-crow-italic",
+      "blood-crow",
+      "raidercrusader",
+      "raidercrusader3d",
+      "raidercrusaderbevel",
+      "raidercrusaderchrome",
+      "raidercrusadercond",
+      "raidercrusaderengrave",
+      "raidercrusaderexpand",
+      "raidercrusadergrad",
+      "raidercrusaderhalf",
+      "raidercrusaderital",
+      "raidercrusaderlaser",
+      "raidercrusaderleft",
+      "raidercrusaderout",
+      "raidercrusaderpunch",
+      "raidercrusaderrotal",
+      "raidercrusadersemistraight",
+      "raidercrusadershiftdown",
+      "raidercrusadershiftup",
+      "raidercrusaderstraight",
+      "raidercrusadertitle"
+     ],
+     "generics": [
+      "sans-serif",
+      "serif",
+      "monospace"
+     ]
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "TYMM SWAP",
+     "x": 320,
+     "y": 60
+    },
+    "out": {
+     "clipId": "text-4",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "T",
+       "x": 171.8,
+       "y": 12.2,
+       "w": 29.3,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "Y",
+       "x": 201.1,
+       "y": 12.2,
+       "w": 29.3,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "M",
+       "x": 230.4,
+       "y": 12.2,
+       "w": 41.4,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "M",
+       "x": 271.8,
+       "y": 12.2,
+       "w": 41.4,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": " ",
+       "x": 313.3,
+       "y": 12.2,
+       "w": 15.3,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "S",
+       "x": 328.5,
+       "y": 12.2,
+       "w": 30.5,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "W",
+       "x": 359,
+       "y": 12.2,
+       "w": 47.5,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "A",
+       "x": 406.4,
+       "y": 12.2,
+       "w": 32.8,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": "P",
+       "x": 439.3,
+       "y": 12.2,
+       "w": 28.9,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 640,
+      "h": 360
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-4",
+     "patch": {
+      "textStyle": {
+       "fontFamily": "Minecrafter.Reg",
+       "fontSize": 44,
+       "color": "#ffd76a"
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-4",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Minecrafter.Reg",
+      "bold": false,
+      "fontSize": 44,
+      "color": "#ffd76a"
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "test_ans_result/replace-template-demo.mp4"
+    },
+    "out": {
+     "frames": 72
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 3,
+    "bg": "#0a0a12"
+   },
+   "selection": "text-4",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "-9UkBHVV9OA.mp4",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "contrast": 1.15,
+      "saturation": 1.25,
+      "vignette": 0.3
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [
+       {
+        "id": "kf_op7vkya",
+        "time": 0,
+        "value": -60,
+        "interpolation": "easeInOut"
+       },
+       {
+        "id": "kf_b47wjbd",
+        "time": 2.5,
+        "value": 60,
+        "interpolation": "easeInOut"
+       }
+      ],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [
+       {
+        "id": "kf_49du06u",
+        "time": 0,
+        "value": 0.92,
+        "interpolation": "easeOut"
+       },
+       {
+        "id": "kf_d3uqxk9",
+        "time": 2.5,
+        "value": 1.08,
+        "interpolation": "easeOut"
+       }
+      ],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "-JLpm8uJBOo.mp4",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "contrast": 1.15,
+      "saturation": 1.25,
+      "vignette": 0.3
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [
+       {
+        "id": "kf_op7vkya",
+        "time": 0,
+        "value": -60,
+        "interpolation": "easeInOut"
+       },
+       {
+        "id": "kf_b47wjbd",
+        "time": 2.5,
+        "value": 60,
+        "interpolation": "easeInOut"
+       }
+      ],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [
+       {
+        "id": "kf_49du06u",
+        "time": 0,
+        "value": 0.92,
+        "interpolation": "easeOut"
+       },
+       {
+        "id": "kf_d3uqxk9",
+        "time": 2.5,
+        "value": 1.08,
+        "interpolation": "easeOut"
+       }
+      ],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-3",
+     "name": "-JLpm8uJBOo.mp4",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-4",
+     "name": "text:TYMM SWAP",
+     "start": 0,
+     "duration": 3,
+     "transform": {
+      "x": 320,
+      "y": 60,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

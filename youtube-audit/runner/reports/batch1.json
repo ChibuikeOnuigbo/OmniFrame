@@ -1,0 +1,256 @@
+{
+ "batch": 1,
+ "processed": 5,
+ "records": [
+  {
+   "id": "bpUZkFVX6NY",
+   "url": "https://www.youtube.com/watch?v=bpUZkFVX6NY",
+   "title": "AMV COMPOSITING tutorial | After Effects (Step-by-Step + Free Overlays)",
+   "duration": "649",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30000/1001"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "Tvd7qiK_gUA",
+   "url": "https://www.youtube.com/watch?v=Tvd7qiK_gUA",
+   "title": "How to do Manga Animations Like me | After Effects",
+   "duration": "978",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "fGm0SBFTj3o",
+   "url": "https://www.youtube.com/watch?v=fGm0SBFTj3o",
+   "title": "Playboi Carti - JUMPIN \ud83e\udd64 \u300c Kuiro MEP \u300d AMV / Flow Edit (4K)",
+   "duration": "49",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "20/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "L7RueAR-5Zc",
+   "url": "https://www.youtube.com/watch?v=L7RueAR-5Zc",
+   "title": "Y Not? \u26d4 - JJK Shibuya Incident Arc \u300c Flow / Edit \u300d4K",
+   "duration": "19",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "20/1"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  },
+  {
+   "id": "xeXhlkoOyrw",
+   "url": "https://www.youtube.com/watch?v=xeXhlkoOyrw",
+   "title": "\u300cScenario \ud83c\udfad\ud83d\udda4\u300d JJK\u300cAMV/EDIT\u300d(FREE PF)",
+   "duration": "13",
+   "channel": "NA",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30000/1001"
+     }
+    ]
+   },
+   "frames": [
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg",
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ]
+  }
+ ]
+}

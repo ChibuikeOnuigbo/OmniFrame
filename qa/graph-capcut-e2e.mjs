@@ -189,6 +189,110 @@ await page.waitForTimeout(400)
   await page.waitForTimeout(200)
 }
 
+// ---------- 4b. easing intensity (Jitter-style intensity control) ----------
+{
+  const slider = page.locator('[data-testid="easing-intensity-slider"]')
+  assert('easing intensity slider shows for preset keys', (await slider.count()) === 1)
+  await slider.fill('30')
+  await page.waitForTimeout(250)
+  const stored = await page.evaluate(() => {
+    const s = window.__omniframe_store.getState()
+    const clip = s.clips.find((c) => c.animation)
+    const curve = clip?.animation?.curves?.position_x
+    return curve?.keyframes?.[0]?.easingIntensity
+  })
+  assert('intensity writes onto the keyframe node', Math.abs((stored ?? 1) - 0.3) < 0.02, `stored=${stored}`)
+  await slider.fill('100')
+  await page.waitForTimeout(200)
+  try {
+    const vals = await page.evaluate(async () => {
+      const { evaluateCurve } = await import('/src/lib/animation/CurveEngine.ts')
+      const mk = (easingIntensity) => ({
+        id: 'position_x', property: 'position_x', channel: 'X', unit: 'px',
+        min: -5000, max: 5000, defaultValue: 0, color: '#ffffff',
+        keyframes: [
+          { id: 'a', time: 0, value: 0, interpolation: 'ease-out', easingIntensity },
+          { id: 'b', time: 2, value: 100, interpolation: 'linear' },
+        ],
+      })
+      return { full: evaluateCurve(mk(1), 1), low: evaluateCurve(mk(0.3), 1), zero: evaluateCurve(mk(0), 1) }
+    })
+    assert('intensity blends easing toward linear', vals.full > vals.low + 5 && vals.low > 51 && Math.abs(vals.zero - 50) < 0.6, JSON.stringify(vals))
+  } catch (err) {
+    console.log('SKIP easing engine module check:', err.message)
+  }
+}
+
+// ---------- 4c. 3-axis Rotation X/Y rendering (Gold Motion study) ----------
+{
+  try {
+    const rot = await page.evaluate(async () => {
+      const { rotationXYMatrix, evaluateClipAnimation } = await import('/src/lib/animation/CurveEngine.ts')
+      const fake = { start: 0, transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, rotationX: 25, rotationY: 40 } }
+      const ev = evaluateClipAnimation(fake, 0)
+      return {
+        pan60: rotationXYMatrix(0, 60),
+        flip: rotationXYMatrix(0, 180),
+        tilt90: rotationXYMatrix(90, 0),
+        baseRx: ev.rotationX,
+        baseRy: ev.rotationY,
+      }
+    })
+    assert('rotationY 60 foreshortens to cos(60)', Math.abs(rot.pan60.a - 0.5) < 0.01, JSON.stringify(rot.pan60))
+    assert('rotationY 180 is a mirror flip', Math.abs(rot.flip.a + 1) < 0.01)
+    assert('rotationX 90 is edge-on (zero height)', Math.abs(rot.tilt90.d) < 0.01)
+    assert('evaluator honours static Rotation X/Y from the inspector', rot.baseRx === 25 && rot.baseRy === 40, `rx=${rot.baseRx} ry=${rot.baseRy}`)
+  } catch (err) {
+    console.log('SKIP rotation engine module check:', err.message)
+  }
+}
+
+// ---------- 4d. copy easing as CSS (Jitter-style developer handoff) ----------
+{
+  try {
+    const css = await page.evaluate(async () => {
+      const { easingToCss, keyframeSegmentToCss } = await import('/src/lib/animation/CurveEngine.ts')
+      const curve = {
+        id: 'position_x', property: 'position_x', channel: 'X', unit: 'px',
+        min: -5000, max: 5000, defaultValue: 0, color: '#ffffff',
+        keyframes: [
+          { id: 'a', time: 0, value: 0, interpolation: 'back', easingIntensity: 1 },
+          { id: 'b', time: 2, value: 100, interpolation: 'linear' },
+        ],
+      }
+      return {
+        constant: easingToCss('constant'),
+        linear: easingToCss('linear'),
+        backSeg: keyframeSegmentToCss(curve, 'a'),
+        tail: keyframeSegmentToCss(curve, 'b'),
+      }
+    })
+    assert('constant easing copies as steps()', css.constant === 'steps(1, end)', css.constant)
+    assert('linear easing copies as linear', css.linear === 'linear')
+    assert(
+      'spring segment copies as a densely sampled linear()',
+      typeof css.backSeg === 'string' && css.backSeg.startsWith('linear(') && css.backSeg.split(',').length >= 20,
+      String(css.backSeg).slice(0, 90),
+    )
+    assert('last keyframe has no segment to copy', css.tail === null)
+  } catch (err) {
+    console.log('SKIP css easing module check:', err.message)
+  }
+  const btn = page.locator('[data-testid="easing-copy-css-btn"]')
+  assert('copy-as-CSS button present in keyframe controls', (await btn.count()) === 1)
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {})
+  await btn.click()
+  await page.waitForTimeout(300)
+  const label = await btn.innerText()
+  assert('copy button confirms the copy', /copied/i.test(label), label)
+  try {
+    const clipText = await page.evaluate(() => navigator.clipboard.readText())
+    assert('clipboard holds a CSS timing function', /^(linear\(|steps\(|cubic-bezier\()/.test(clipText.trim()), clipText.slice(0, 60))
+  } catch (err) {
+    console.log('SKIP clipboard readback:', err.message)
+  }
+}
+
 // ---------- 5. tangent handles are squares (bezier keys) ----------
 {
   // Preset keys have preset interpolations; bezier handles come from keys
@@ -232,6 +336,95 @@ await page.waitForTimeout(400)
   const after = await page.locator('[data-testid="curve-keyframe-node"]').first().getAttribute('data-key-time')
   assert('dragging a diamond updates the keyframe time', before !== after, `${before}s → ${after}s`)
   await page.screenshot({ path: join(EVIDENCE, 'graph-editor-capcut-style.png') })
+}
+
+// ---------- 7. Rotation Y foreshortens a real clip in the preview (final, self-contained) ----------
+{
+  // NOTE: direct getImageData on the engine canvas reads back blank in this
+  // headless SwiftShader setup, so measure pixels from a real screenshot.
+  const spanOf = async () => {
+    const shot = await page
+      .locator('[data-testid="preview-viewport"] canvas:not([data-testid="drawing-canvas"])')
+      .first()
+      .screenshot()
+      .catch(() => null)
+    if (!shot) return -1
+    return page.evaluate(async (b64) => {
+      const img = new Image()
+      img.src = `data:image/png;base64,${b64}`
+      await img.decode()
+      const c = document.createElement('canvas')
+      c.width = img.naturalWidth
+      c.height = img.naturalHeight
+      const ctx = c.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      const data = ctx.getImageData(0, 0, c.width, c.height).data
+      const bg = [data[0], data[1], data[2]]
+      let minX = Infinity
+      let maxX = -1
+      for (let y = 0; y < c.height; y += 2) {
+        for (let x = 0; x < c.width; x++) {
+          const i = (y * c.width + x) * 4
+          if (Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]) > 24) {
+            if (x < minX) minX = x
+            if (x > maxX) maxX = x
+          }
+        }
+      }
+      return maxX < 0 ? 0 : maxX - minX
+    }, shot.toString('base64'))
+  }
+  const rotTest = await page.evaluate(() => {
+    const store = window.__omniframe_store
+    const s = store.getState()
+    const c = document.createElement('canvas')
+    c.width = 200
+    c.height = 120
+    const g = c.getContext('2d')
+    g.fillStyle = '#e11d48'
+    g.fillRect(0, 0, 200, 120)
+    g.fillStyle = '#facc15'
+    g.fillRect(20, 20, 160, 80)
+    s.addAsset({ id: 'asset-rot-test', name: 'rot-test.png', kind: 'image', url: c.toDataURL('image/png'), width: 200, height: 120 })
+    const trkId = store.getState().tracks.find((t) => t.type === 'video')?.id || s.ensureTrack('video')
+    s.addClipToTrack(trkId, 'asset-rot-test', 20)
+    const clip = store.getState().clips.find((cl) => cl.assetId === 'asset-rot-test')
+    if (clip) {
+      store.getState().setClipTransform(clip.id, { scale: 0.5 })
+      return clip.id
+    }
+    return null
+  })
+  if (rotTest) {
+    // Poll until the image decodes and the compositor draws it (force redraws).
+    let before = 0
+    for (let i = 0; i < 10 && before <= 40; i++) {
+      await page.evaluate(
+        ({ id, nudge }) => {
+          const s = window.__omniframe_store.getState()
+          const clip = s.clips.find((c) => c.id === id)
+          if (clip) {
+            s.setPlayhead(clip.start + 0.1)
+            s.setClipTransform(id, { scale: nudge })
+          }
+        },
+        { id: rotTest, nudge: i % 2 ? 0.52 : 0.5 },
+      )
+      await page.waitForTimeout(400)
+      before = await spanOf()
+    }
+    if (before > 40) {
+      await page.evaluate((id) => window.__omniframe_store.getState().setClipTransform(id, { scale: 0.5, rotationY: 70 }), rotTest)
+      await page.waitForTimeout(600)
+      const after = await spanOf()
+      assert('Rotation Y visibly foreshortens the clip in preview', after >= 0 && after < before * 0.75, `span ${before} -> ${after}`)
+    } else {
+      console.log(`SKIP preview foreshorten pixel check (before=${before})`)
+    }
+    await page.evaluate((id) => window.__omniframe_store.getState().removeClip(id), rotTest)
+  } else {
+    console.log('SKIP preview foreshorten pixel check (no test clip)')
+  }
 }
 
 assert('zero runtime page errors', pageErrors.length === 0, pageErrors.join(' | ').slice(0, 200))

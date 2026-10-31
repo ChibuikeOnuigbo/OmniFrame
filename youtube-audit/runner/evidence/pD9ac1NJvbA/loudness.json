@@ -1,0 +1,27 @@
+O Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:01:28.250000000
+      encoder         : Lavc60.31.102 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      DURATION        : 00:01:28.288000000
+      encoder         : Lavc60.31.102 pcm_s16le
+frame=   71 fps=0.0 q=-0.0 size=N/A time=00:00:02.91 bitrate=N/A speed=66.9x    
+frame=  603 fps=0.0 q=-0.0 size=N/A time=00:00:25.08 bitrate=N/A speed=46.1x    
+frame= 1175 fps=1125 q=-0.0 size=N/A time=00:00:48.91 bitrate=N/A speed=46.8x    
+frame= 1743 fps=1128 q=-0.0 size=N/A time=00:01:12.62 bitrate=N/A speed=  47x    
+[out#0/null @ 0x555bfa7f2c80] video:993kB audio:66192kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 2118 fps=1113 q=-0.0 Lsize=N/A time=00:01:28.20 bitrate=N/A speed=46.3x    
+[Parsed_loudnorm_0 @ 0x555bfa84d880] 
+{
+	"input_i" : "-24.22",
+	"input_tp" : "-4.37",
+	"input_lra" : "4.20",
+	"input_thresh" : "-34.22",
+	"output_i" : "-23.51",
+	"output_tp" : "-4.45",
+	"output_lra" : "3.40",
+	"output_thresh" : "-33.52",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.49"
+}

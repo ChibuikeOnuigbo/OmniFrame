@@ -14,7 +14,7 @@ body {
   margin: 0;
   background: #08090d;
   color: #e6e8ee;
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Avenir Next', 'Segoe UI Variable Display', 'Trebuchet MS', 'DejaVu Sans', sans-serif;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -22,9 +22,21 @@ body {
 * { box-sizing: border-box; }
 ::-webkit-scrollbar { width: 9px; height: 9px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #3c475d; }
+
+/* Hide-overflow-x mode (default on): no visible horizontal scrollbars in the
+   studio; horizontal strips (.of-hstrip) scroll via hover arrows, mouse
+   wheel, or drag instead. Turning the setting off restores native bars. */
+[data-overflow-x="hidden"] ::-webkit-scrollbar:horizontal { height: 0 !important; display: none; }
+[data-overflow-x="hidden"] .of-hstrip { scrollbar-width: none; }
+.of-hstrip { scrollbar-width: thin; }
+.of-hstrip::-webkit-scrollbar:horizontal { height: 6px; }
+[data-overflow-x="hidden"] .of-hstrip::-webkit-scrollbar:horizontal { height: 0 !important; display: none; }
+
 .no-select { user-select: none; -webkit-user-select: none; }
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
 
 .of-range {
   -webkit-appearance: none;
@@ -52,7 +64,7 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #6d5efc;
+  background: #ff6b35;
   border: 2px solid #0c0e13;
   cursor: pointer;
   transition: transform 0.08s ease;
@@ -69,11 +81,15 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #6d5efc;
+  background: #ff6b35;
   border: 2px solid #0c0e13;
   cursor: pointer;
 }
 
+@keyframes of-nudge-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(2.5px); }
+}
 @keyframes of-fade {
   from { opacity: 0; transform: translateY(2px); }
   to { opacity: 1; transform: translateY(0); }
@@ -157,3 +173,196 @@ html.of-custom-cursor-active svg {
   cursor: none !important;
 }
 
+
+/* ── UI styles (Settings → Appearance; study in data.md) ─────────────────
+   Five structural looks driven by html[data-ui-style], three accent
+   palettes via html[data-ui-palette]. Styles regroup corner language,
+   density and panel depth; palettes only move the accent. The default
+   (omniframe/flame) ships the de-slopped default rules at the bottom of this file. */
+
+/* Palettes */
+html[data-ui-palette='amber'] .bg-brand, html[data-ui-palette='amber'] .bg-brand-500 { background-color: #d97706; }
+html[data-ui-palette='amber'] .bg-brand-600 { background-color: #b45309; }
+html[data-ui-palette='amber'] .text-brand-400 { color: #fbbf24; }
+html[data-ui-palette='amber'] .text-brand { color: #f59e0b; }
+html[data-ui-palette='amber'] .border-brand { border-color: #d97706; }
+html[data-ui-palette='teal'] .bg-brand, html[data-ui-palette='teal'] .bg-brand-500 { background-color: #0d9488; }
+html[data-ui-palette='teal'] .bg-brand-600 { background-color: #0f766e; }
+html[data-ui-palette='teal'] .text-brand-400 { color: #2dd4bf; }
+html[data-ui-palette='teal'] .text-brand { color: #14b8a6; }
+html[data-ui-palette='teal'] .border-brand { border-color: #0d9488; }
+
+/* Clean Cut (CapCut study): lifted charcoal, big radii, pill-ish buttons */
+html[data-ui-style='capcut'] .bg-ink-950 { background-color: #0e0f12; }
+html[data-ui-style='capcut'] .bg-ink-900 { background-color: #141519; }
+html[data-ui-style='capcut'] .bg-ink-850 { background-color: #1a1b20; }
+html[data-ui-style='capcut'] .bg-ink-800 { background-color: #212228; }
+html[data-ui-style='capcut'] .bg-ink-750 { background-color: #26272e; }
+html[data-ui-style='capcut'] .bg-ink-700 { background-color: #2f3038; }
+html[data-ui-style='capcut'] .bg-ink-600 { background-color: #3d3e46; }
+html[data-ui-style='capcut'] .border-ink-800 { border-color: #26272e; }
+html[data-ui-style='capcut'] .border-ink-750 { border-color: #2c2d34; }
+html[data-ui-style='capcut'] .border-ink-700 { border-color: #33343c; }
+html[data-ui-style='capcut'] .border-ink-600 { border-color: #45464f; }
+html[data-ui-style='capcut'] .rounded-md { border-radius: 10px; }
+html[data-ui-style='capcut'] .rounded-lg { border-radius: 14px; }
+html[data-ui-style='capcut'] .rounded-xl { border-radius: 18px; }
+html[data-ui-style='capcut'] button:not(.rounded-full) { border-radius: 10px; }
+
+/* Workshop (Krita study): warm neutral grays, square corners, dense */
+html[data-ui-style='krita'] { font-size: 15px; }
+html[data-ui-style='krita'] .bg-ink-950 { background-color: #232324; }
+html[data-ui-style='krita'] .bg-ink-900 { background-color: #2b2b2d; }
+html[data-ui-style='krita'] .bg-ink-850 { background-color: #323234; }
+html[data-ui-style='krita'] .bg-ink-800 { background-color: #3a3a3c; }
+html[data-ui-style='krita'] .bg-ink-750 { background-color: #424244; }
+html[data-ui-style='krita'] .bg-ink-700 { background-color: #4c4c4f; }
+html[data-ui-style='krita'] .bg-ink-600 { background-color: #5d5d60; }
+html[data-ui-style='krita'] .border-ink-800 { border-color: #3f3f41; }
+html[data-ui-style='krita'] .border-ink-750 { border-color: #48484a; }
+html[data-ui-style='krita'] .border-ink-700 { border-color: #525255; }
+html[data-ui-style='krita'] .border-ink-600 { border-color: #66666a; }
+html[data-ui-style='krita'] .rounded, html[data-ui-style='krita'] .rounded-md,
+html[data-ui-style='krita'] .rounded-lg, html[data-ui-style='krita'] .rounded-xl,
+html[data-ui-style='krita'] .rounded-2xl, html[data-ui-style='krita'] button:not(.rounded-full) { border-radius: 3px; }
+
+/* Pro Blue (NLE study): blue-gray stack, crisp 4px corners */
+html[data-ui-style='premiere'] .bg-ink-950 { background-color: #141518; }
+html[data-ui-style='premiere'] .bg-ink-900 { background-color: #1d1e22; }
+html[data-ui-style='premiere'] .bg-ink-850 { background-color: #232428; }
+html[data-ui-style='premiere'] .bg-ink-800 { background-color: #2a2b30; }
+html[data-ui-style='premiere'] .bg-ink-750 { background-color: #313237; }
+html[data-ui-style='premiere'] .bg-ink-700 { background-color: #3b3c42; }
+html[data-ui-style='premiere'] .bg-ink-600 { background-color: #4a4b53; }
+html[data-ui-style='premiere'] .border-ink-800 { border-color: #2e2f34; }
+html[data-ui-style='premiere'] .border-ink-750 { border-color: #36373d; }
+html[data-ui-style='premiere'] .border-ink-700 { border-color: #414249; }
+html[data-ui-style='premiere'] .border-ink-600 { border-color: #55565f; }
+html[data-ui-style='premiere'] .rounded-md, html[data-ui-style='premiere'] .rounded-lg,
+html[data-ui-style='premiere'] .rounded-xl, html[data-ui-style='premiere'] button:not(.rounded-full) { border-radius: 4px; }
+
+/* Daylight (the light theme): paper surfaces, dark text, soft borders */
+html[data-ui-style='daylight'] { color-scheme: light; }
+html[data-ui-style='daylight'] .bg-ink-950 { background-color: #e8eaef; }
+html[data-ui-style='daylight'] .bg-ink-900 { background-color: #f2f3f7; }
+html[data-ui-style='daylight'] .bg-ink-850 { background-color: #ffffff; }
+html[data-ui-style='daylight'] .bg-ink-800 { background-color: #eef0f4; }
+html[data-ui-style='daylight'] .bg-ink-750 { background-color: #e6e9ef; }
+html[data-ui-style='daylight'] .bg-ink-700 { background-color: #dde1e9; }
+html[data-ui-style='daylight'] .bg-ink-600 { background-color: #ccd2dd; }
+html[data-ui-style='daylight'] .border-ink-800 { border-color: #e0e3ea; }
+html[data-ui-style='daylight'] .border-ink-750 { border-color: #d8dce4; }
+html[data-ui-style='daylight'] .border-ink-700 { border-color: #d2d7e0; }
+html[data-ui-style='daylight'] .border-ink-600 { border-color: #c2c9d4; }
+html[data-ui-style='daylight'] .text-ink-50 { color: #101216; }
+html[data-ui-style='daylight'] .text-ink-100 { color: #17191f; }
+html[data-ui-style='daylight'] .text-ink-200 { color: #2a2d34; }
+html[data-ui-style='daylight'] .text-ink-300 { color: #3f434d; }
+html[data-ui-style='daylight'] .text-ink-400 { color: #565c68; }
+html[data-ui-style='daylight'] .text-ink-500 { color: #6e7480; }
+html[data-ui-style='daylight'] .text-white { color: #14161a; }
+html[data-ui-style='daylight'] .bg-brand.text-white,
+html[data-ui-style='daylight'] .bg-brand .text-white,
+html[data-ui-style='daylight'] .bg-brand-500.text-white,
+html[data-ui-style='daylight'] .bg-brand-600.text-white,
+html[data-ui-style='daylight'] .bg-red-500 .text-white,
+html[data-ui-style='daylight'] .bg-red-600 .text-white { color: #ffffff; }
+html[data-ui-style='daylight'] ::-webkit-scrollbar-thumb { background: #b9bfc9; }
+html[data-ui-style='daylight'] .rounded-md { border-radius: 8px; }
+html[data-ui-style='daylight'] .rounded-lg { border-radius: 10px; }
+html[data-ui-style='daylight'] .rounded-xl { border-radius: 12px; }
+html[data-ui-style='daylight'] body { color: #17191f; }
+html[data-ui-style='daylight'] input, html[data-ui-style='daylight'] select, html[data-ui-style='daylight'] textarea { color: #17191f; }
+
+/* Floating panels use bg-ink-900/<alpha> (a distinct generated class);
+   restyle those too so popups/menus follow the active style. */
+html[data-ui-style='capcut'] [class*="bg-ink-900/"] { background-color: rgb(20 21 25 / 0.97); }
+html[data-ui-style='krita'] [class*="bg-ink-900/"] { background-color: rgb(43 43 45 / 0.97); }
+html[data-ui-style='premiere'] [class*="bg-ink-900/"] { background-color: rgb(29 30 34 / 0.97); }
+html[data-ui-style='daylight'] [class*="bg-ink-900/"] { background-color: rgb(242 243 247 / 0.98); }
+html[data-ui-style='daylight'] .text-violet-200 { color: #4c3fd6; }
+html[data-ui-style='daylight'] .text-violet-300 { color: #5a4be0; }
+
+/* ---- Board R: de-slopped default (omniframe) look --------------------------
+   Reddit-mined "AI slop tells" audit → new_doc_toll_research/DESIGN-STUDY-ai-slop-custom-ui.md.
+   Identity: flame orange (#ff6b35) brand instead of vibecode violet; font stack
+   with personality instead of Inter. Corners: NO uniform radius on everything —
+   ~81% of UI is sharp; the kept ~19% varies on purpose (randomizer, not one
+   value everywhere): .rounded-md controls 3px, .rounded-sm chips 2px,
+   .rounded-full pills 999px, scrollbar thumb 2px. Glass: backdrop-blur is off
+   in the default style (other UI-style themes keep their own looks). */
+html:not([data-ui-style]) .rounded,
+html[data-ui-style='omniframe'] .rounded,
+html:not([data-ui-style]) .rounded-lg,
+html[data-ui-style='omniframe'] .rounded-lg,
+html:not([data-ui-style]) .rounded-xl,
+html[data-ui-style='omniframe'] .rounded-xl,
+html:not([data-ui-style]) .rounded-2xl,
+html[data-ui-style='omniframe'] .rounded-2xl { border-radius: 0; }
+html:not([data-ui-style]) .rounded-md,
+html[data-ui-style='omniframe'] .rounded-md { border-radius: 3px; }
+html:not([data-ui-style]) .rounded-sm,
+html[data-ui-style='omniframe'] .rounded-sm { border-radius: 2px; }
+html:not([data-ui-style]) [class*='backdrop-blur'],
+html[data-ui-style='omniframe'] [class*='backdrop-blur'] { backdrop-filter: none; -webkit-backdrop-filter: none; }
+/* Heavy diffuse shadows are a slop tell ("shadows on everything"): in the
+   default style the two biggest Tailwind shadows are tempered to tight,
+   functional elevation only. */
+html:not([data-ui-style]) .shadow-2xl,
+html[data-ui-style='omniframe'] .shadow-2xl { box-shadow: 0 6px 18px rgba(0,0,0,.4); }
+html:not([data-ui-style]) .shadow-xl,
+html[data-ui-style='omniframe'] .shadow-xl { box-shadow: 0 4px 12px rgba(0,0,0,.38); }
+/* daylight theme: flame text must darken for the light surface */
+html[data-ui-style='daylight'] .text-brand-200 { color: #a63c00; }
+html[data-ui-style='daylight'] .text-brand-300 { color: #c24e10; }
+
+/* TYMM font pack — family name = file stem (name before .ttf/.otf/...), per user */
+@font-face { font-family: 'Alphacorsa Personal Use Italic'; src: url('/fonts/Alphacorsa Personal Use Italic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Alphacorsa Personal Use'; src: url('/fonts/Alphacorsa Personal Use.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'CONTADOR'; src: url('/fonts/CONTADOR.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'CONTADOR'; src: url('/fonts/CONTADOR.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'CONTADOR'; src: url('/fonts/CONTADOR.woff') format('woff'); font-display: swap; }
+@font-face { font-family: 'FredokaOne-Regular'; src: url('/fonts/FredokaOne-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Hunters K-Pop'; src: url('/fonts/Hunters K-Pop.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Looks Sketchy'; src: url('/fonts/Looks Sketchy.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Minecrafter.Alt'; src: url('/fonts/Minecrafter.Alt.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Minecrafter.Reg'; src: url('/fonts/Minecrafter.Reg.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Pixel Robot'; src: url('/fonts/Pixel Robot.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Bold'; src: url('/fonts/Quicksand_Bold.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Bold_Oblique'; src: url('/fonts/Quicksand_Bold_Oblique.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Book'; src: url('/fonts/Quicksand_Book.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Book_Oblique'; src: url('/fonts/Quicksand_Book_Oblique.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Dash'; src: url('/fonts/Quicksand_Dash.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Light'; src: url('/fonts/Quicksand_Light.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Quicksand_Light_Oblique'; src: url('/fonts/Quicksand_Light_Oblique.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Condensed-italic'; src: url('/fonts/blood-crow-Condensed-italic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Condensed'; src: url('/fonts/blood-crow-Condensed.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Expanded-italic'; src: url('/fonts/blood-crow-Expanded-italic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Expanded'; src: url('/fonts/blood-crow-Expanded.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Leftalic'; src: url('/fonts/blood-crow-Leftalic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Shadow-Condensed-italic'; src: url('/fonts/blood-crow-Shadow-Condensed-italic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Shadow-Condensed'; src: url('/fonts/blood-crow-Shadow-Condensed.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Shadow-italic'; src: url('/fonts/blood-crow-Shadow-italic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-Shadow'; src: url('/fonts/blood-crow-Shadow.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow-italic'; src: url('/fonts/blood-crow-italic.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'blood-crow'; src: url('/fonts/blood-crow.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusader'; src: url('/fonts/raidercrusader.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusader3d'; src: url('/fonts/raidercrusader3d.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderbevel'; src: url('/fonts/raidercrusaderbevel.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderchrome'; src: url('/fonts/raidercrusaderchrome.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusadercond'; src: url('/fonts/raidercrusadercond.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderengrave'; src: url('/fonts/raidercrusaderengrave.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderexpand'; src: url('/fonts/raidercrusaderexpand.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusadergrad'; src: url('/fonts/raidercrusadergrad.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderhalf'; src: url('/fonts/raidercrusaderhalf.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderital'; src: url('/fonts/raidercrusaderital.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderlaser'; src: url('/fonts/raidercrusaderlaser.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderleft'; src: url('/fonts/raidercrusaderleft.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderout'; src: url('/fonts/raidercrusaderout.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderpunch'; src: url('/fonts/raidercrusaderpunch.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderrotal'; src: url('/fonts/raidercrusaderrotal.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusadersemistraight'; src: url('/fonts/raidercrusadersemistraight.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusadershiftdown'; src: url('/fonts/raidercrusadershiftdown.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusadershiftup'; src: url('/fonts/raidercrusadershiftup.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusaderstraight'; src: url('/fonts/raidercrusaderstraight.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'raidercrusadertitle'; src: url('/fonts/raidercrusadertitle.ttf') format('truetype'); font-display: swap; }

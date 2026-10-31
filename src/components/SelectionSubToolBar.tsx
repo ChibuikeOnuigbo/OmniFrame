@@ -91,7 +91,7 @@ export function SelectionSubToolBar() {
 <button
           type="button"
           data-testid="floating-invert-btn"
-          title="Invert Selection Boundary"
+
           aria-label="Invert Selection"
           onClick={invertSelection}
           className="min-h-8 min-w-8 rounded-lg p-1.5 text-ink-300 transition-colors hover:bg-ink-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
@@ -144,7 +144,7 @@ export function SelectionSubToolBar() {
 <button
           type="button"
           data-testid="floating-convert-omniframe-btn"
-          title="Convert selection to movable OmniFrame Object with clean inpainting"
+
           aria-label="To Object: convert selection to a movable OmniFrame object"
           onClick={() => convertSelectionToOmniframeObject()}
           className="flex min-h-8 min-w-8 items-center gap-1 rounded-lg border border-brand/40 bg-brand/20 px-2 py-1 text-[11px] font-medium text-brand-400 transition-colors hover:bg-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"

@@ -1,0 +1,547 @@
+{
+ "source": "data_motiondesijg/alight/roundtrip-export.xml",
+ "imported": {
+  "project": {
+   "title": "RT project",
+   "w": 640,
+   "h": 360,
+   "fps": 24,
+   "duration": 3,
+   "bg": "#000000"
+  },
+  "clips": [
+   {
+    "amId": "preview-Lut 0.jpg",
+    "name": "preview-Lut 0.jpg",
+    "kind": "solid",
+    "start": 0,
+    "duration": 3,
+    "inPoint": 0,
+    "speed": 1,
+    "x": -320,
+    "y": -180,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "effects": {
+     "brightness": 1.08,
+     "contrast": 1.2,
+     "glow": 0.4
+    },
+    "adjustment": {
+     "luts": [
+      {
+       "builtin": "tymm-5",
+       "id": "tymm-5",
+       "intensity": 0.8
+      }
+     ]
+    },
+    "fxInstances": [
+     {
+      "catalogId": "am-turbulentdisplace3",
+      "inP": 0,
+      "duration": 3,
+      "params": {
+       "turbulent": 0.6
+      },
+      "keys": {
+       "turbulent": [
+        {
+         "t": 0,
+         "v": 0.6
+        },
+        {
+         "t": 1.5,
+         "v": 0
+        }
+       ]
+      }
+     },
+     {
+      "catalogId": "am-shake2",
+      "inP": 0,
+      "duration": 0.693,
+      "params": {
+       "autoShake": 60,
+       "autoShakeFreq": 10,
+       "oscillateAngle": 90
+      },
+      "keys": {
+       "autoShake": [
+        {
+         "t": 0.015999,
+         "v": 60
+        },
+        {
+         "t": 0.23799900000000002,
+         "v": 0
+        }
+       ]
+      }
+     }
+    ],
+    "amEffects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {}
+     },
+     {
+      "amId": "com.alightcreative.effects.deepglow2",
+      "short": "deepglow2",
+      "props": {}
+     },
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "contrast": {
+        "name": "contrast",
+        "type": "float",
+        "value": "1.2",
+        "kfs": []
+       },
+       "glow": {
+        "name": "glow",
+        "type": "float",
+        "value": "0.4",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "omniframe.lut",
+      "short": "omniframe.lut",
+      "props": {
+       "builtin0": {
+        "name": "builtin0",
+        "type": "string",
+        "value": "tymm-5",
+        "kfs": []
+       },
+       "intensity0": {
+        "name": "intensity0",
+        "type": "float",
+        "value": "0.8",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "omniframe.fxinst.am-turbulentdisplace3",
+      "short": "omniframe.fxinst.am-turbulentdisplace3",
+      "props": {
+       "_inP": {
+        "name": "_inP",
+        "type": "float",
+        "value": "0",
+        "kfs": []
+       },
+       "_duration": {
+        "name": "_duration",
+        "type": "float",
+        "value": "3",
+        "kfs": []
+       },
+       "turbulent": {
+        "name": "turbulent",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.6"
+         },
+         {
+          "t": 0.5,
+          "v": "0"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "amId": "omniframe.fxinst.am-shake2",
+      "short": "omniframe.fxinst.am-shake2",
+      "props": {
+       "_inP": {
+        "name": "_inP",
+        "type": "float",
+        "value": "0",
+        "kfs": []
+       },
+       "_duration": {
+        "name": "_duration",
+        "type": "float",
+        "value": "0.693",
+        "kfs": []
+       },
+       "autoShake": {
+        "name": "autoShake",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.005333,
+          "v": "60"
+         },
+         {
+          "t": 0.079333,
+          "v": "0"
+         }
+        ]
+       },
+       "autoShakeFreq": {
+        "name": "autoShakeFreq",
+        "type": "float",
+        "value": "10",
+        "kfs": []
+       },
+       "oscillateAngle": {
+        "name": "oscillateAngle",
+        "type": "float",
+        "value": "90",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "volume": 1,
+    "keys": {
+     "positionX": [
+      {
+       "time": 0,
+       "value": 270,
+       "points": [
+        [
+         0.3,
+         0.1
+        ],
+        [
+         0.7,
+         0.9
+        ]
+       ]
+      },
+      {
+       "time": 2.000001,
+       "value": 370,
+       "points": [
+        [
+         0.3,
+         0.1
+        ],
+        [
+         0.7,
+         0.9
+        ]
+       ]
+      }
+     ],
+     "positionY": [
+      {
+       "time": 0,
+       "value": 180,
+       "points": [
+        [
+         0.3,
+         0.1
+        ],
+        [
+         0.7,
+         0.9
+        ]
+       ]
+      },
+      {
+       "time": 2.000001,
+       "value": 180,
+       "points": [
+        [
+         0.3,
+         0.1
+        ],
+        [
+         0.7,
+         0.9
+        ]
+       ]
+      }
+     ],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [
+     "am-lift",
+     "am-deepglow2"
+    ],
+    "unmappedFx": []
+   },
+   {
+    "amId": "text:RT",
+    "name": "AM text text:RT",
+    "kind": "text",
+    "fontFamily": "Quicksand_Bold",
+    "fontSize": 40,
+    "align": "center",
+    "start": 0,
+    "duration": 3,
+    "inPoint": 0,
+    "speed": 1,
+    "x": 320,
+    "y": 60,
+    "scale": 1,
+    "rotation": 0,
+    "opacity": 1,
+    "fillColor": "#ffd76a",
+    "text": "RT",
+    "effects": {},
+    "amEffects": [],
+    "volume": 1,
+    "keys": {
+     "positionX": [],
+     "positionY": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "mappedFx": [],
+    "unmappedFx": []
+   }
+  ],
+  "bookmarks": [],
+  "stats": {
+   "shapes": 2,
+   "effectsTotal": 6,
+   "mapped": 6,
+   "unmapped": 0,
+   "keyframed": 2,
+   "mediaRefs": []
+  }
+ },
+ "raw": {
+  "title": "RT project",
+  "width": 640,
+  "height": 360,
+  "fps": 24,
+  "totalTime": 3,
+  "bgcolor": "#ff000000",
+  "amVersion": "omniframe/export-1.0",
+  "bookmarks": [],
+  "shapes": [
+   {
+    "id": "preview-Lut 0.jpg",
+    "label": "preview-Lut 0.jpg",
+    "startTime": 0,
+    "endTime": 3,
+    "fillType": "color",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 0,
+     "y": 0,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [
+      {
+       "t": 0,
+       "v": "270,180,0.000000",
+       "ease": "cubicBezier 0.3 0.1 0.7 0.9",
+       "points": [
+        [
+         0.3,
+         0.1
+        ],
+        [
+         0.7,
+         0.9
+        ]
+       ]
+      },
+      {
+       "t": 0.666667,
+       "v": "370,180,0.000000",
+       "ease": "cubicBezier 0.3 0.1 0.7 0.9",
+       "points": [
+        [
+         0.3,
+         0.1
+        ],
+        [
+         0.7,
+         0.9
+        ]
+       ]
+      }
+     ],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [
+     {
+      "amId": "com.alightcreative.effects.lift",
+      "short": "lift",
+      "props": {}
+     },
+     {
+      "amId": "com.alightcreative.effects.deepglow2",
+      "short": "deepglow2",
+      "props": {}
+     },
+     {
+      "amId": "omniframe.fx",
+      "short": "omniframe.fx",
+      "props": {
+       "contrast": {
+        "name": "contrast",
+        "type": "float",
+        "value": "1.2",
+        "kfs": []
+       },
+       "glow": {
+        "name": "glow",
+        "type": "float",
+        "value": "0.4",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "omniframe.lut",
+      "short": "omniframe.lut",
+      "props": {
+       "builtin0": {
+        "name": "builtin0",
+        "type": "string",
+        "value": "tymm-5",
+        "kfs": []
+       },
+       "intensity0": {
+        "name": "intensity0",
+        "type": "float",
+        "value": "0.8",
+        "kfs": []
+       }
+      }
+     },
+     {
+      "amId": "omniframe.fxinst.am-turbulentdisplace3",
+      "short": "omniframe.fxinst.am-turbulentdisplace3",
+      "props": {
+       "_inP": {
+        "name": "_inP",
+        "type": "float",
+        "value": "0",
+        "kfs": []
+       },
+       "_duration": {
+        "name": "_duration",
+        "type": "float",
+        "value": "3",
+        "kfs": []
+       },
+       "turbulent": {
+        "name": "turbulent",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0,
+          "v": "0.6"
+         },
+         {
+          "t": 0.5,
+          "v": "0"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "amId": "omniframe.fxinst.am-shake2",
+      "short": "omniframe.fxinst.am-shake2",
+      "props": {
+       "_inP": {
+        "name": "_inP",
+        "type": "float",
+        "value": "0",
+        "kfs": []
+       },
+       "_duration": {
+        "name": "_duration",
+        "type": "float",
+        "value": "0.693",
+        "kfs": []
+       },
+       "autoShake": {
+        "name": "autoShake",
+        "type": "float",
+        "kfs": [
+         {
+          "t": 0.005333,
+          "v": "60"
+         },
+         {
+          "t": 0.079333,
+          "v": "0"
+         }
+        ]
+       },
+       "autoShakeFreq": {
+        "name": "autoShakeFreq",
+        "type": "float",
+        "value": "10",
+        "kfs": []
+       },
+       "oscillateAngle": {
+        "name": "oscillateAngle",
+        "type": "float",
+        "value": "90",
+        "kfs": []
+       }
+      }
+     }
+    ],
+    "size": [
+     640,
+     360
+    ]
+   },
+   {
+    "id": "text:RT",
+    "label": "",
+    "startTime": 0,
+    "endTime": 3,
+    "fillType": "text",
+    "font": "imported?name=Quicksand_Bold.ttf",
+    "fontSize": 40,
+    "align": "center",
+    "speed": 1,
+    "mediaFillMode": "fill",
+    "transform": {
+     "x": 640,
+     "y": 240,
+     "z": 0,
+     "sx": 1,
+     "sy": 1,
+     "rotation": 0,
+     "opacity": 1
+    },
+    "transformKeys": {
+     "location": [],
+     "scale": [],
+     "rotation": [],
+     "opacity": []
+    },
+    "effects": [],
+    "fillColor": "#ffffd76a",
+    "text": "RT"
+   }
+  ]
+ }
+}

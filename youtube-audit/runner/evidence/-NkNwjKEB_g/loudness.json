@@ -1,0 +1,24 @@
+:45.70 bitrate=N/A speed=29.4x    
+frame= 1460 fps=710 q=-0.0 size=N/A time=00:01:00.83 bitrate=N/A speed=29.6x    
+frame= 1822 fps=712 q=-0.0 size=N/A time=00:01:15.87 bitrate=N/A speed=29.7x    
+frame= 2178 fps=712 q=-0.0 size=N/A time=00:01:30.70 bitrate=N/A speed=29.7x    
+frame= 2531 fps=711 q=-0.0 size=N/A time=00:01:45.41 bitrate=N/A speed=29.6x    
+frame= 2888 fps=711 q=-0.0 size=N/A time=00:02:00.29 bitrate=N/A speed=29.6x    
+frame= 3236 fps=709 q=-0.0 size=N/A time=00:02:14.83 bitrate=N/A speed=29.5x    
+frame= 3599 fps=711 q=-0.0 size=N/A time=00:02:29.91 bitrate=N/A speed=29.6x    
+frame= 3959 fps=711 q=-0.0 size=N/A time=00:02:44.91 bitrate=N/A speed=29.6x    
+[out#0/null @ 0x55a211b6fc80] video:1865kB audio:124320kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 3978 fps=706 q=-0.0 Lsize=N/A time=00:02:45.70 bitrate=N/A speed=29.4x    
+[Parsed_loudnorm_0 @ 0x55a211bca940] 
+{
+	"input_i" : "-23.97",
+	"input_tp" : "-6.49",
+	"input_lra" : "5.80",
+	"input_thresh" : "-33.97",
+	"output_i" : "-23.42",
+	"output_tp" : "-5.97",
+	"output_lra" : "4.20",
+	"output_thresh" : "-33.42",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.58"
+}

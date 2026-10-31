@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
+import { FONT_FACE_CSS } from './lib/fontPack'
 import { initNativeDsp } from './lib/native/dspNative.js'
 
 // Warm the compiled DSP core (public/wasm/omni-dsp.wasm, ~11 KB) so the
@@ -10,6 +11,11 @@ import { initNativeDsp } from './lib/native/dspNative.js'
 // bit-identical pure-JS implementation if this fails.
 void initNativeDsp()
 
+{
+  const st = document.createElement('style')
+  st.textContent = FONT_FACE_CSS
+  document.head.appendChild(st)
+}
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

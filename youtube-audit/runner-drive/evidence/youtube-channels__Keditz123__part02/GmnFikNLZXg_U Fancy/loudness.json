@@ -1,0 +1,22 @@
+  encoder         : Lavc60.31.102 pcm_s16le
+frame=   57 fps=0.0 q=-0.0 size=N/A time=00:00:02.80 bitrate=N/A speed=47.8x    
+[h264 @ 0x558af5139300] Late SEI is not implemented. Update your FFmpeg version to the newest one from Git. If the problem still occurs, it means that your file has a feature which has not been implemented.
+[h264 @ 0x558af5139300] If you want to help, upload a sample of this file to https://streams.videolan.org/upload/ and contact the ffmpeg-devel mailing list. (ffmpeg-devel@ffmpeg.org)
+[h264 @ 0x558af5118900] Late SEI is not implemented. Update your FFmpeg version to the newest one from Git. If the problem still occurs, it means that your file has a feature which has not been implemented.
+[h264 @ 0x558af5118900] If you want to help, upload a sample of this file to https://streams.videolan.org/upload/ and contact the ffmpeg-devel mailing list. (ffmpeg-devel@ffmpeg.org)
+frame=  328 fps=0.0 q=-0.0 size=N/A time=00:00:16.40 bitrate=N/A speed=29.4x    
+[out#0/null @ 0x558af50b4dc0] video:180kB audio:14380kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=  383 fps=0.0 q=-0.0 Lsize=N/A time=00:00:19.10 bitrate=N/A speed=27.8x    
+[Parsed_loudnorm_0 @ 0x558af50b1b40] 
+{
+	"input_i" : "-9.73",
+	"input_tp" : "2.06",
+	"input_lra" : "4.10",
+	"input_thresh" : "-20.99",
+	"output_i" : "-23.29",
+	"output_tp" : "-11.98",
+	"output_lra" : "3.30",
+	"output_thresh" : "-33.96",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.71"
+}

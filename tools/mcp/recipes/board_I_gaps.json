@@ -1,0 +1,107 @@
+{
+ "name": "board_I_gaps",
+ "description": "GAP queue from am_research sweep: AM Oscillate (position wobble) + turbulent/fractal-style warp + lasso polygon selection as universal tools; variants isolate looks; lasso matte proven in trace.",
+ "steps": [
+  {
+   "tool": "project_new",
+   "params": {
+    "w": 640,
+    "h": 360,
+    "fps": 24,
+    "duration": 2,
+    "bg": "#101014"
+   }
+  },
+  {
+   "tool": "new_background",
+   "params": {
+    "kind": "sunset"
+   }
+  },
+  {
+   "tool": "import_media",
+   "params": {
+    "path": "qa/shots/01-home.png",
+    "fit": "contain",
+    "scale": 0.5
+   }
+  },
+  {
+   "tool": "select",
+   "params": {
+    "clipId": "clip-2"
+   }
+  },
+  {
+   "tool": "effect_set",
+   "params": {
+    "patch": {
+     "oscillate": "{{osc}}",
+     "oscillateFreq": 3,
+     "turbulent": "{{turb}}"
+    }
+   }
+  },
+  {
+   "tool": "render_export",
+   "params": {
+    "out": "{{out}}",
+    "fps": 24
+   }
+  },
+  {
+   "tool": "lasso_select",
+   "params": {
+    "clipId": "clip-1",
+    "points": [
+     [
+      320,
+      60
+     ],
+     [
+      480,
+      180
+     ],
+     [
+      320,
+      300
+     ],
+     [
+      160,
+      180
+     ]
+    ]
+   }
+  },
+  {
+   "tool": "inspect",
+   "params": {}
+  }
+ ],
+ "variants": [
+  {
+   "name": "all",
+   "overrides": {
+    "osc": 8,
+    "turb": 0.5,
+    "out": "test_ans_result/I_gaps/gaps-all.mp4"
+   }
+  },
+  {
+   "name": "osc",
+   "overrides": {
+    "osc": 12,
+    "turb": 0,
+    "out": "test_ans_result/I_gaps/gaps-oscillate.mp4"
+   }
+  },
+  {
+   "name": "turb",
+   "overrides": {
+    "osc": 0,
+    "turb": 0.7,
+    "out": "test_ans_result/I_gaps/gaps-turbulent.mp4"
+   }
+  }
+ ]
+}

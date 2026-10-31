@@ -1,0 +1,305 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "tmp/prof720.mp4",
+  "out": "/home/user/OmniFrame/tmp/prof720.mp4",
+  "frames": 240,
+  "fps": 24,
+  "size": 77121,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 720,
+     "h": 1280,
+     "fps": 24,
+     "duration": 10,
+     "bg": "#0b0912"
+    },
+    "out": {
+     "w": 720,
+     "h": 1280,
+     "fps": 24,
+     "duration": 10
+    }
+   },
+   {
+    "tool": "import_media",
+    "params": {
+     "path": "new_doc_toll_research/imgs/montagem-full-frames/f04.png",
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "natW": 2549,
+     "natH": 1434
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "google_drive/roses pelats.mp4",
+     "fps": 12
+    },
+    "out": {
+     "clipId": "clip-2",
+     "frames": 937,
+     "duration": 78.08
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "WONDERFUL",
+     "preset": "plain",
+     "x": 0,
+     "y": 0
+    },
+    "out": {
+     "clipId": "text-3",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "W",
+       "x": 60.4,
+       "y": 131.8,
+       "w": 47.5,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "O",
+       "x": 107.8,
+       "y": 131.8,
+       "w": 37.8,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "N",
+       "x": 145.6,
+       "y": 131.8,
+       "w": 35.9,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "D",
+       "x": 181.5,
+       "y": 131.8,
+       "w": 37,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "E",
+       "x": 218.5,
+       "y": 131.8,
+       "w": 30.3,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "R",
+       "x": 248.8,
+       "y": 131.8,
+       "w": 33.4,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "F",
+       "x": 282.2,
+       "y": 131.8,
+       "w": 27.6,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "U",
+       "x": 309.8,
+       "y": 131.8,
+       "w": 35.1,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": "L",
+       "x": 344.9,
+       "y": 131.8,
+       "w": 26.7,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 720,
+      "h": 1280
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-3",
+     "patch": {
+      "textStyle": {
+       "fontSize": 96,
+       "bold": true,
+       "insideVideo": "google_drive/roses pelats.mp4",
+       "insideBaseAlpha": 0.6,
+       "glowBlur": 10
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-3",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 96,
+      "color": "#ffffff",
+      "insideVideo": "google_drive/roses pelats.mp4",
+      "insideBaseAlpha": 0.6,
+      "glowBlur": 10
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "/tmp/prof720.mp4"
+    },
+    "out": {
+     "frames": 240
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 720,
+    "h": 1280,
+    "fps": 24,
+    "duration": 10,
+    "bg": "#0b0912"
+   },
+   "selection": "text-3",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "f04.png",
+     "start": 0,
+     "duration": 10,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "roses pelats.mp4",
+     "start": 0,
+     "duration": 78.08333333333333,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-3",
+     "name": "text:WONDERFUL",
+     "start": 0,
+     "duration": 10,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

@@ -78,13 +78,13 @@ try {
 
     // 3. Verify Selection & Masking Sub-tool and All 6 Selection Types
     console.log('Verifying Selection & Masking Sub-tool...')
-    // The panel is sectioned; the masking sub-tool lives under "Mask".
+    // The panel is sectioned; the selection sub-tool lives under "Select".
     await page.click('[data-testid="omniframe-section-select"]')
     await page.waitForTimeout(300)
     const subtool = await page.waitForSelector('[data-testid="selection-mask-subtool"]', { timeout: 3000 })
     if (!subtool) throw new Error('SelectionMaskSubTool not found!')
     const maskScopeNote = await page.textContent('[data-testid="mask-export-scope-note"]')
-    if (!/OmniFrame masks are selection and segmentation data/i.test(maskScopeNote || '') || !/Drawing mask/i.test(maskScopeNote || '')) {
+    if (!/OmniFrame selections are region data/i.test(maskScopeNote || '') || !/Mask section in the clip inspector/i.test(maskScopeNote || '') || !/Drawing mask/i.test(maskScopeNote || '')) {
       throw new Error(`OmniFrame mask export scope is unclear: ${maskScopeNote}`)
     }
     console.log('✓ OmniFrame mask scope explains selection-only behavior and Drawing-mask conversion.')

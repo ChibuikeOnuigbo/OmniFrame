@@ -1,0 +1,18 @@
+ 3013 fps=496 q=-0.0 size=N/A time=00:00:50.20 bitrate=N/A speed=8.27x    
+frame= 3260 fps=496 q=-0.0 size=N/A time=00:00:54.33 bitrate=N/A speed=8.26x    
+frame= 3531 fps=499 q=-0.0 size=N/A time=00:00:58.85 bitrate=N/A speed=8.31x    
+frame= 3832 fps=505 q=-0.0 size=N/A time=00:01:03.86 bitrate=N/A speed=8.42x    
+frame= 4132 fps=511 q=-0.0 size=N/A time=00:01:08.88 bitrate=N/A speed=8.52x    
+frame= 4404 fps=513 q=-0.0 size=N/A time=00:01:13.40 bitrate=N/A speed=8.55x    
+frame= 4680 fps=515 q=-0.0 size=N/A time=00:01:18.00 bitrate=N/A speed=8.58x    
+frame= 4929 fps=514 q=-0.0 size=N/A time=00:01:22.15 bitrate=N/A speed=8.57x    
+frame= 5265 fps=522 q=-0.0 size=N/A time=00:01:27.75 bitrate=N/A speed=8.69x    
+frame= 5534 fps=522 q=-0.0 size=N/A time=00:01:32.23 bitrate=N/A speed= 8.7x    
+frame= 5800 fps=523 q=-0.0 size=N/A time=00:01:36.66 bitrate=N/A speed=8.71x    
+frame= 6031 fps=520 q=-0.0 size=N/A time=00:01:40.50 bitrate=N/A speed=8.67x    
+frame= 6235 fps=515 q=-0.0 size=N/A time=00:01:43.90 bitrate=N/A speed=8.59x    
+frame= 6420 fps=510 q=-0.0 size=N/A time=00:01:47.00 bitrate=N/A speed=8.49x    
+frame= 6662 fps=509 q=-0.0 size=N/A time=00:01:51.03 bitrate=N/A speed=8.48x    
+frame= 6950 fps=511 q=-0.0 size=N/A time=00:01:55.81 bitrate=N/A speed=8.52x    
+[out#0/null @ 0x560d5c3fee40] video:3376kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame= 7203 fps=513 q=-0.0 Lsize=N/A time=00:02:00.03 bitrate=N/A speed=8.55x    

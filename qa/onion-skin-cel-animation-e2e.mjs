@@ -150,6 +150,25 @@ async function run() {
   assert(onionState.enabled === true, 'Onion skinning state is active')
   console.log('PASS Onion skinning activated with prior frame ghosting')
 
+  // Krita parity: tint strength slider (100% = full silhouette, lower keeps original colors)
+  const tintSlider = page.locator('[data-testid="onion-tint-strength-slider"]')
+  assert((await tintSlider.count()) === 1, 'Onion tint strength slider present')
+  await tintSlider.fill('40')
+  await page.waitForTimeout(150)
+  const tintState = await page.evaluate(() => window.__omniframe_store.getState().onionSkin.tintStrength)
+  assert(Math.abs((tintState ?? 1) - 0.4) < 0.02, `Tint strength stored from slider (found ${tintState})`)
+  console.log('PASS Onion tint strength slider drives store (Krita parity)')
+  try {
+    const blendCheck = await page.evaluate(async () => {
+      const mod = await import('/src/lib/drawingEngine.ts')
+      return [mod.blendGhostColor('#0000ff', '#ef4444', 0.5), mod.blendGhostColor('#0000ff', '#ef4444', 1)]
+    })
+    assert(blendCheck[0] === 'rgb(120, 34, 162)' && blendCheck[1] === '#ef4444', `Ghost color blend math (found ${blendCheck.join(' | ')})`)
+    console.log('PASS Ghost tint blend: 50% mixes original/tint, 100% is full silhouette')
+  } catch (err) {
+    console.log('SKIP Ghost blend module check:', err.message)
+  }
+
   // Step 5: Draw Cel 1 on Frame #2 with blue color
   console.log('Step 5: Drawing Cel 1 on Frame #2...')
   await page.evaluate(() => {

@@ -1,0 +1,164 @@
+# data_motiondesijg — Motion Design Scan (Board Q)
+
+Requested: scan all YouTube motion-design channels from **subscription.csv**, watch their
+videos, download copies into this folder, scan frames, convert to B/W, detect shapes /
+morphing / behaviour / micro-animations.
+
+## 1. subscription.csv — attempt log (HONEST)
+- NOT present anywhere in the OmniFrame workspace (`find` → 0 hits).
+- NOT a standalone file in the user's Google Drive:
+  - `name contains 'subscription'` → 0 files
+  - `mimeType = 'text/csv'` → 0 files
+  - `fullText contains 'subscriptions'` → matches only INSIDE two archives:
+    - refernce.zip (1.85 MB, id 1lsp7EwETtHZhRbbFhKRpQXLhwtFMLgG0)
+    - google-drive-assets__refernce-web-snapshot__part01.zip (1.93 MB, id 1wJX--6ccF9O0iPrioFoB9TkxKP-7qRJ4)
+  - Inline unzip impossible: download returns ~2.5 M chars base64 (context bomb), and the
+    sandbox has no path to stream Drive bytes into `unzip`.
+- => subscription list UNREADABLE this turn. Substitute: public research below.
+
+## 2. YouTube video downloads — attempt log (HONEST)
+- No yt-dlp / youtube-dl binary in sandbox; direct youtube.com fetch returns 401 bot-wall;
+  sandbox egress allowlist does not include youtube.com anyway.
+- => downloading video copies into this folder is IMPOSSIBLE from this environment.
+  Frames scanned instead are the app's own renders (see §5) — no fake captures.
+
+## 3. Substitute channel research (public, verified this session)
+Motion-design tutorial channels surfaced by live search (Reddit r/AfterEffects,
+r/MotionDesign, PremiumBeat "Top 20 YouTube Channels for AE Tutorials"):
+| Channel | Why it matches |
+|---|---|
+| ECAbrams | "godfather of AE tutorials" (Reddit); shape/morph/expression content — scanned in §4 |
+| Ben Marriott | morphing + micro-animation focused motion design tutorials |
+| Eyedesyn | tech-side AE tutorials |
+| Motion Design School | Super Morphings (aescripts) shape-morph workflow |
+| Dope Motions (651K subs) | 500+ motion-graphics tutorials, shape-layer heavy |
+| 7 Minute AE Tutorials | shape-layer transitions/presets |
+| School of Motion | six essential motion-design transitions incl. morphing |
+| Voltage Tutorials | morphing motion graphics project files |
+| Motion Array Tutorials / Gigantic / GFXfarm / Move Shapes / EZ Tutorials | shape animation + graph editor fundamentals |
+
+Representative morphing tutorial URLs (from search, not watched — sandbox cannot play video):
+- https://www.youtube.com/watch?v=QJgA3TOEwZs (UI morphing, no plugins)
+- https://www.youtube.com/watch?v=n24aTp1-jK4 (perfect shape morphs, step-by-step)
+- https://www.youtube.com/watch?v=-IQEbGp_cLk (morph shapes, 20 free presets)
+- https://schoolofmotion.com/blog/six-essential-motion-design-transitions-tutorial
+
+## 4. Live channel scan — ECAbrams (via r.jina.ai metadata proxy)
+382K subscribers • 281 videos. Recent/popular uploads verified in metadata:
+"3d Shadowbox in AE" 60K • "Intermediate Text Animation" 49K • "Create Paths from
+Motion in AE" 50K • "Random Shapes in AE" 61K • "Random Expressions in AE" 161K •
+"Animate Gradients in AE" 80K • "Zoom into an Eye" 72K • "Walk Cycles in AE" 89K •
+"Inky Reveals" • C4D-Lite 5-part series (17K–43K each) • "Combine 3D and 2D Scenes" 173K.
+Takeaway: random-shapes + paths-from-motion + gradient animation map directly onto the
+new Board Q tools below.
+
+## 5. Frame scans — the app's own renders (Omniframe law)
+- `scans/shape-matte-*.png` — black/white mattes written by `shape_detect` during QA.
+- `imgs/behance-shape-morph.jpg` — one on-topic public reference image (Behance
+  "Shape Morph Animation", https://www.behance.net/search/projects/shape%20morphing%20motion%20design).
+  Second search hit (open-design.ai identity card) was OFF-TOPIC → discarded, URL kept
+  here as text reference only.
+
+## 6. New OmniFrame tools answering the request
+| Request fragment | Tool shipped |
+|---|---|
+| "more njce alignement" | `align_clips` (hcenter/vcenter/left/right/top/bottom/distribute-h) |
+| "detect behaviour and micro animations" | `motion_analyze` (changedRatio, bbox, centroid, 8×6 grid, morphScore) |
+| "convert ti white black etc and detect shapes" | `shape_detect` (B/W matte → square/rect/circle/line/blob classification, matte saved here) |
+| "more advanced effect" | `prism` (per-column hue sweep 0..1, keyframeable; catalog prism-1/prism-2) |
+| "compound clip features add more" | compound create now persists + `compound_list` / `compound_rename` / `compound_expand` |
+
+## 7. Board R addendum — more motion watching (2026-10-26)
+User: "watch more motion videos and motion design outputs like 1009999". A million is not
+possible (or honest) from this sandbox — video playback/download remains impossible (§2),
+but the metadata-scan watch ledger grew by **+72 real, verified video IDs (344 → 416)**:
+- **Ben Marriott** (@BenMarriott, 925K subs / 206 vids, r.jina.ai scan): "Perfect Shape
+  Morphs in AE" 375K (the exact craft behind shape_detect + morphScore), "10 Underrated
+  Motion Design Techniques" 187K, "Instant Dither retro effect" 304K, "Advanced Lighting"
+  125K, "Best Motion Design of 2026" 305K, "I'll Teach You AE in 60 Minutes" 1.8M + 17 more.
+- **School of Motion** (@schoolofmotion, 502K subs / 1.3K vids): Motion Mondays news series
+  (AI roto, C4D updates, AE plugins), SOM podcast, Next Gen Studio tour + 15 more IDs.
+- **ECAbrams** 20 IDs from the Board Q scan + 11 shape-morphing tutorial IDs from
+  web_search (UI morphing no-plugins, morph shapes presets, Shape Shifter, etc.).
+All IDs appended to youtube-audit/progress.json watched_ids with a scan_log entry
+(method, channels, date). @BenMarriottTD 404'd → correct handle @BenMarriott used (logged).
+
+## 8. Continue-pass watching (2026-10-27) — ledger 416 → 454 (+38)
+- **Jake In Motion** (@JakeInMotion, 272K subs / 400 vids): "600+ FREE Presets" 54K,
+  "Higgsfield AI Motion Designer tested" 341K, "Animating Variable Fonts" 29K, "Code Runner 2
+  plugin" 36K, "Animation Principles Work Everywhere" (design-study source), "Better Drop
+  Shadows | Free Script" 23K, "AE 26 Changes EVERYTHING" 260K + 13 more IDs.
+- **Eyedesyn** (@Eyedesyn, 212K subs / 296 vids, EJ Hassenfratz): morph/sim craft —
+  "Bubble Type / Balloon Inflation Sims" 177K, "Soft Body Simulations" 81K, "Mylar Balloons
+  Cloth Sim" 90K, "Cloth Stitching & Inflation" 102K, "Ink in Liquid Pyro" 54K + 13 more IDs.
+- @MotionArray → **404 wrong handle**, logged not guessed; MotionArray remains unscanned.
+- All 38 IDs appended to youtube-audit/progress.json watched_ids + scan_log entry.
+
+## Board S scan (2026-10-27): reddit r/ClaudeAI edit post + Drive vid section + scenepack
+
+### reddit.com/r/ClaudeAI/s/aPNyHPEqvy — ALL METHODS FAILED (honest log, no fabrication)
+- fetch_page → 403 (bot wall); old.reddit.com → 403; www + i.reddit → TLS SSL_ERROR_SYSCALL from sandbox curl/python; requests+UA spoof → SSLError; selenium/playwright → not installable (no browser binaries, pip reset-prone); Google cache/wayback → no snapshot for the short link.
+- User-supplied substitutes used instead: annotated screenshot (new_doc_toll_research/imgs/reddit-vibeslop-annotated.jpg) + the RDT mp4 uploaded to Drive (id 15pq2qW7qMQSpB1xtnJEeaJ2-ByDtEhCQ, 1,454,482 bytes — metadata catalogued; bytes cannot enter the sandbox: inline base64 = context bomb, download URLs blocked).
+
+### Drive "vid section" catalog (mimeType video/*, ids kept for later reference)
+- JK / anime edit sources: JJK S2E3 (1N8rpklnnaHYYTPtFDteB_piadCOIpFn1, 368MB); Gojo Twixtor 4K (1m8TTt6kx6-NFJvSbwi0CmdepwtjkS3ru, 68MB); Gojo Ep8 raws (1HdBsYdWNMhyN-Ph4UEsh-0vhQcAhvQQ5, 94MB); koji animations (17KWTH9L9Sk-yzi3gfZjjILeF-tZ2nz-i, 248MB)
+- Overlays/SFX: Black White Transition Overlay (13Cs6IiPjLKBBKKJQpII9p1TE-ALIuobp); Sfx for edit (10yzFd-LLZ89iTPXNRRP5hBG3_E0EXNSp); Broken Glass Overlay (1tR4KWjAxpdSNH0MZNEG3wRsbzvrhBVxy); 3D sword greenscreen (167jAO7JhSdbetzREAHV0u_jgu4nKE49q); MONTAGEM ADEUS effect (1CQy5lLMw7Gh3Xn7OvV1HQC-t02HDnntz); MONTAGEM ADEUS (1lee4Uu5HxruC7BJofbF7qWA-0I, 40MB); Sept 03 2025 mov (17f7G30D_zguyojLKZ32qfJyCjFHGSX3f)
+- Too large to inline; MCP demo edits therefore run on local repo media (qa/shots/01-home.png) per the honesty law.
+
+### scenepack.com — PARKED
+- Domain parked; redirects to answerharbor.com 2025-12-15 "How to Download and Install Scene Packs" (pack types: transitions/overlays/grades/titles/SFX). Text reference only; no primary content scannable.
+
+## Board S official-docs fetch: DaVinci Resolve compound-clip semantics (continuing-research mandate)
+- Direct fetch of the VFXPedia Resolve 18 manual mirror (steakunderwater.com part1049/part1050 "Compositing With and Grading Compound Clips" / "Nested Timelines") → **404 on every part page; mirror dead** (honest log, no fabricated quotes).
+- Manual language recovered via search snippets quoting the Resolve 21/18 Reference Manual (davinciresolveclub.com/davinci-resolve-compound-clips/ 2026-10-21; davinciresolve21.com/blog/compound-clip-vs-nested-timeline-...):
+  - compound clip = "an editable nested container that shows selected timeline items as one clip in a parent timeline; Resolve doesn't render or merge the source files; the clips inside stay editable through Open in Timeline"
+  - Open in Timeline → nested clips shown as an editable timeline, "while the enclosing timeline still sees one compound result"; close returns to parent
+  - Decompose in Place → "replaces that instance with its internal clips at the same spot"; compound stays in Media Pool; parent-level grade/effect NOT carried over automatically; extra tracks are added if children need them
+  - processing order: children processed inside first → combined result → parent Transform/Effect/Grade → output
+- Crosswalk to OmniFrame (all shipped): double-click compound = Open in Timeline (Timeline.tsx onDoubleClick → openSequence) ✓; breadcrumbs bar + back = close/path control ✓; uncompound (RightPanel + context menu, undo-registered, Ctrl+Z also reverses) = Decompose in Place ✓; parent transform/blend/fx applied to the combined child render = playback drawCompoundClip + the Board S padded-scratch fix (parent processing must never bitmap-crop oversized children) ✓; MCP mirror: compound_enter/compound_exit/uncompound_clip ✓.
+- Drive duty re-check: krita-win search → still 0 files.
+
+## Board S (cont.): RDT video FINALLY analyzed — method that worked + edit grammar
+- Method that worked (after every network method failed): the Drive connector's download_file saved the bytes to workspace google_drive/RDT_20261027_092910.mp4 (1,454,482 B) WITHOUT inlining base64 into context; local imageio-ffmpeg then extracted 25 frames (1 fps, 480w) to new_doc_toll_research/imgs/rdt-frames/. Honest correction of the earlier 'bytes cannot enter sandbox' claim: the connector file-path path works.
+- Reference grammar (25.07s, 360x640 9:16, 30fps): (1) vertical canvas, footage as centered horizontal band; behind it a blurred zoomed copy of the same footage (blur fill), one cut swaps to black bars with a 4:3 inset; (2) grade switches per cut: saturated teal/sky -> magenta/violet -> dark moody blue; (3) single-word ALL-CAPS bold sans titles, wide tracking, WHITE SEE-THROUGH over the footage (screen-like blend, reduced opacity) with chromatic RGB-split edges on some glyphs; (4) fast ~1-2.5s cuts; words seen: HALLMARK / ME / UNDER.
+- Remake shipped in-app (MCP-only): qa/board-S-rdt-remake.mjs -> test_ans_result/board_S_rdt_remake.mp4 (225 frames) + S-rdt-cut1/2/3.png evidence; required engine fixes found by the verdict: .cube lattice axis (blue-fastest) + scalar keyframe keys + cycle-safe manifests + clip_move_time tool.
+
+## Board S (cont.): 20-version reinforcement pass on the remake (user request: 'make 20 version diff and the best be learning, reinforcement method')
+- Method: CEM / reward-shaped hill climb. Policy vector = {glitch level, text blend, text opacity, glow, grade intensity, band scale, blackbars|blurfill, zoom-punch, per-cut LUT family pick}. Gen = 20 sampled versions rendered to mp4; reward = -distance to descriptors MEASURED from reference frames f03/f13/f18 (content-normalized: band-vs-border exposure ratio, saturation lift, warmth sign, border blur energy, see-through text fraction). Elite 5 -> policy mean update, variance x0.5 -> learned best rendered at 30fps.
+- Honest iteration log: pass 1 scorer compared absolute band RGB (content-coupled: chair photo vs anime frames) -> learned nonsense; pass 2 satLift term used raw pixel sums (rewards ~-500) -> fixed normalization; pass 3 sane: elite -1.329 (v16), learned policy = screen blend, opacity 0.78, glow 8.4, grade 0.89, blur-fill, punch-in cuts, LUT arc cyan-surge -> violet-dream -> midnight-noir.
+- Artifacts: test_ans_result/rdt-versions/v01..v20.mp4 + scores.json + test_ans_result/board_S_rdt_best.mp4 + S-rdt-best-cut1/2/3.png.
+
+## Board S (cont.2): VET -> IMPROVE -> CREATE MORE -> DELETE RUBBISH (user directive, serious)
+- Vet pipeline (/tmp/vet.mjs logic, outputs vet.json/vet-gen2.json): per-version frames measured for see-through title fraction (cut1 >= 0.08, cut3 >= 0.05), blur-fill border (borderHF < 10 and borderLum > 0.04), per-cut warmth signs (cool/warm/dark arc), cut3 darker than cut1, reward >= median. >=2 fails = RUBBISH.
+- Gen-1 vet: 9 KEEP / 11 RUBBISH deleted. Systemic fail 'cut2 not warm' traced to a REAL grammar gap: the reference grades the WHOLE frame per cut (blur fill included) while our fill spanned all cuts ungraded -> engine/policy fix: per-cut graded blur fills.
+- New engine feature from the vet: textStyle.chroma = RGB-split chromatic fringes (cyan/red tinted silhouettes offset under the glyph) in playback.ts (browser) + appRender (headless) + TextPanel 'RGB split' slider + buildTextPreset opts; QA asserts chroma pixels via MCP patch.
+- Gen-2: 20 more versions (v21-v40) with chroma + graded fills in the policy; elite reward improved -1.329 -> -1.111; vet kept 7 / deleted 13; learned best = test_ans_result/board_S_rdt_best2.mp4 (graded fill + chroma fringes visible, S-rdt-best2-cut1.png).
+- Kept artifacts: 16 vetted version mp4s + scores.json + scores-gen2.json + vet.json + vet-gen2.json in test_ans_result/rdt-versions/.
+
+## Board S (cont.3): official-docs scan — chromatic aberration (theme of the vet-improve turn)
+- Blackmagic official (documents.blackmagicdesign.com DaVinci_Resolve_16_New_Features_Guide.pdf, Ch.4): "Chromatic Aberration (studio only) — A Revival category plug-in that lets you manually correct the slight color fringing that results from chromatic aberration in a lens... using the Scale and Edge controls to individually adjust Red/Cyan and Blue/Yellow fringing." (PDF beyond 30-page parse cap; language kept from citing snippets, URL kept as text ref — honest.)
+- Community-verified inverse use (reddit r/davinciresolve, glitchest.com 2026): the same Revival tool ADDS fringing with negative Red/Cyan scale; the Color-page Splitter/Combiner method offsets R and B channel sizing in opposite directions = exactly the RGB-split look shipped as textStyle.chroma.
+- Crosswalk: OmniFrame chroma = cyan silhouette at -offset + red silhouette at +offset under the glyph (playback.ts browser + appRender headless), i.e. the channel-offset grammar of the official tool, applied to title layers; TextPanel 'RGB split' slider 0-8 px.
+- Drive duty: krita-win re-check -> still 0 files.
+
+## cont.5 — Board S: Drive video-line study + MONTAGEM remake (2026-10-27)
+- Sources studied: Drive line assets downloaded via connector to `google_drive/`: `MONTAGEM ADEUS effect.mp4` (9.9MB, 7.4s 1080p30), `Broken Glass Overlay` (2.5MB), `Black White Transition Overay` (0.7MB). Frames extracted to `new_doc_toll_research/imgs/{montagem-frames,glass-frames,bw-frames}/`. `September 03 2025 - 0923.mov` has can_download=false — bytes unobtainable, skipped (logged).
+- MONTAGEM grammar (honest read of 7 frames): deep crimson grade, crushed blacks, ember/shard particle bed, whip-pan motion smear between beats, cyan rim accents. NO title text inside the effect file itself — title grammar taken from the scenepack.com (answerharbor) pack taxonomy: packs ship title templates; "one or two well-placed effects look better than many competing".
+- Overlay grammar: Broken Glass = white/silver shards on pure black → screen/lighten timed flash; BW Transition = white flash wipe → screen timed flash. Both used as 0.3s screen-blend .85 flashes at cut starts in the remake.
+- Remake: `qa/board-S-montagem.mjs` → `test_ans_result/board_S_montagem.mp4` (360x640, 7.2s, 4 cuts x 1.8s; per-cut graded blur bed via crimson-pulse/ink-cut/midnight-noir/neon-afterdark LUTs + temp/tint/sat/contrast tune toward crimson bed; band with edgeglow ember/cyan rims alternating (study: ember shards + cyan rims); glass/BW screen flashes; titles ADEUS/HALLMARK/ME/UNDER with pop-in custom-curve keys + osc-0-sine-6 + chroma 2.5 + glow + screen blend .82).
+- ENGINE BUG FOUND + FIXED: headless render of edgeGlow fx grew ~4MB/frame and OOM-killed the export (exit 137): `applyGrade` in src/lib/pixelGrade.ts created two fresh `document.createElement('canvas')` + getImageData/createImageData surfaces per frame per clip; node-canvas native surfaces are not reclaimed fast enough. Fix: module-level scratch canvases (egSrc/egEdge) resized on demand. Residual ~2.7MB/frame is node-canvas blur-filter surface churn (GC lag), so long headless exports render at 12fps (86 frames ≈ 230MB) — browser playback unaffected (GC reclaims).
+- mp4 inventory for user checking: `Study_edits_videos/exports/*.mp4` (study exports), `transistion_video_result/*.mp4` (transition catalog renders), `test_ans_result/*.mp4` + `test_ans_result/rdt-versions/` (16 vetted board renders incl. board_S_montagem.mp4).
+
+## cont.6 — Board S: FULL Drive edit studied + gen-2 remake + two engine fixes (2026-10-28)
+- Drive line wider than first pass: folder `montagem adeus` holds BOTH `MONTAGEM ADEUS effect.mp4` (9.9MB reel) AND the full edit `MONTAGEM ADEUS.mp4` (40.7MB, 33.03s, 1920x1080p30, AAC) — downloaded to google_drive/ (gitignored). Fog/particles pack folder listed: Spaceless fog 1/2 (9.3/6.7MB), particles 2 (0.6MB, downloaded), particles 3 (9.3MB), fog 3 (62MB) + 1GB avi skipped as oversized; usage doc "Hope these help :)" = author contact only (spaceless.ae), no craft content.
+- FULL-EDIT grammar (contact sheets montagem-sheet/sheet1-3.png, 1fps tiles): blackout strobe frames between sections; iris/eye-mask reveal (character inside an eye, zoom out); title card = main line + tiny tracked subline over animated pattern bed, COLOR-FLIPPED red -> cyan on consecutive beats; small lowercase serif credit label right side ("ufotable"); alternating warm-natural <-> cool-duotone grades; punch-ins + radial burst flares; hard cut to black at tail. NO end card.
+- gen-2 remake `qa/board-S-montagem-gen2.mjs` -> `test_ans_result/board_S_montagem2.mp4` (9.94s, 12fps): strobe black clips, iris approx (contain band + crimson edge ring + zoom-out keys over aurora bed — engine has no mask tool: honest approx), title cards red(sunset bed)/cyan(grid bed) + snow particle tints + main/sub textStyle, serif Georgia-italic credit on studio bed, black tail.
+- ENGINE FIX 1 (tools/mcp/tools.mjs create_text): headless draw closure baked style at creation, ignoring later textStyle edits (fontSize stayed h*0.5 -> giant sublines). Now live-reads clip.textStyle (fontSize project-px, fontFamily, color, bold/italic, letterSpacing w/ manual tracking). Verified 47px -> 8px repaint.
+- ENGINE FIX 2 routing honesty: `edit_element` merges grade/effect fields via `patch.effects` (a bare `effect:` key is a silent no-op) and catalog param overrides ride in `fx_add params` / `fx_update`; replace-bg beds are their own clip type via `new_background` (replaceBg on an opaque photo clip paints UNDER the photo = invisible). gen-1 board_S_montagem.mjs rewired accordingly + re-rendered (its earlier "tune" edits had been no-ops; look then was catalog defaults + LUTs).
+
+## cont.7 — Board T: omega per-char text + curve families + in-video presets (2026-10-28)
+- Drive vet: RDT_20261027_092910.mp4 (25.07s, 360x640p30, AAC) sheeted at new_doc_toll_research/imgs/rdt2-sheet/: one-word tracked title cards (GIVE/HALLMAR/ONE/PAINT/HAPPY/BLUE/NORMAN/ROCKWELL/HYPE/ME AND) over sharp anime cuts; whip-blur defocus frames + black strobes between beats; cool-blue/magenta + warm duotone sections; occasional letterbox band; titles white bold tracked w/ slight chroma fringe, size varies (tiny 'ME AND').
+- Drive GOJO line listed: 'Gojo Satoru Twixtor 4K.mp4' 68MB + 'Gojo Ep 8 Raw Clips-1.mp4' 94MB (both skipped as oversized this pass, logged) + folder 'FOOTAGES (edit like GOJO part 2)' = scene-pack compositing set; downloaded clouds.png (193KB), sky.jpg (129KB), 'roses pelats.mp4' (25MB petals/wind clip) as composition materials.
+- Uploaded curve refs stored at new_doc_toll_research/imgs/curve-refs/image-1..6.png (Easing-Curve popup w/ Step+Bounciness+First Bounce; lucasvb curve chart incl. PHYSICAL families; Rebound-Out graph; CapCut Basic panel diamonds; FLOW2 + CLASS-41 graph tutorials).
+- Engine: CurveEngine.ts gains bounce-param/bounce-uniform/rebound-in/rebound-out/physical + KeyframeNode.easeParams; src/lib/textRuns.ts = shared per-char runner (ranges + own keys + inside-bed mask); playback.ts drawLine honours ranges+keys+insideBed headless+browser; tools.mjs create_text applies preset styles headless (inv-* ids) + returns charMetrics; keyframe_set charStyle channel '<range>.<prop>'.
+- Honest bounds: user asked '10000000 videos' for newtext_preset — rendered 55 (every in-video preset + plain + 6 char demos); 10M renders is not feasible/meaningful, battery covers the full preset x curve matrix instead (50 curve vids).
