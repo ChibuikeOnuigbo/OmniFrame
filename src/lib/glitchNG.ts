@@ -6,7 +6,20 @@
  * keyframeable via fx params (ng* fields), preview/export parity by design
  * (same RGBA math in browser playback.ts and headless appRender.mjs).
  */
+export interface NgLayer {
+  id: string
+  enabled?: boolean
+  family: string
+  seed?: number
+  opacity?: number
+  blendMode?: 'normal' | 'screen' | 'multiply' | 'add'
+  start?: number
+  end?: number
+  parameters?: Record<string, number>
+}
 export interface NgRecipe {
+  /** Ordered, independent and reversible effect layers; legacy recipes remain valid. */
+  layers?: NgLayer[]
   family?: string
   seed?: number
   palette?: { primary?: string; secondary?: string; bg?: string; name?: string }
@@ -78,20 +91,52 @@ export function intensityEnvelope(t: number, recipe: NgRecipe){
 function copyPixel(src: Uint8ClampedArray,si: number,dst: Uint8ClampedArray,di: number,alpha: number){dst[di]=src[si];dst[di+1]=src[si+1];dst[di+2]=src[si+2];dst[di+3]=alpha}
 export function renderGlitchRGBA(src: Uint8ClampedArray, width: number, height: number, time: number, recipe: NgRecipe, { fps = 30 }: { fps?: number } = {}){
   if(!(src instanceof Uint8ClampedArray)||src.length!==width*height*4)throw new Error('Expected width*height*4 RGBA');
+  // Composable glitch v2. Every layer has independent timing, blend and seed.
+  // A disabled/out-of-window layer never mutates the previous frame.
+  if (recipe.layers?.length) {
+    let composite = new Uint8ClampedArray(src);
+    for (const layer of recipe.layers) {
+      if (layer.enabled === false || time < (layer.start ?? -Infinity) || time > (layer.end ?? Infinity)) continue;
+      const opacity = clamp(layer.opacity ?? 1, 0, 1);
+      if (opacity === 0) continue;
+      const individual: NgRecipe = {
+        family: layer.family, seed: layer.seed ?? recipe.seed,
+        palette: recipe.palette,
+        timeline: recipe.timeline,
+        parameters: { ...recipe.parameters, ...layer.parameters },
+      };
+      const rendered = renderGlitchRGBA(composite, width, height, time, individual, { fps });
+      for (let i = 0; i < composite.length; i += 4) {
+        // Alpha is always the original coverage, including premultiplied-looking masks.
+        const coverage = composite[i + 3] / 255;
+        for (let c = 0; c < 3; c++) {
+          const base = composite[i + c], top = rendered[i + c];
+          let mixed = top;
+          switch (layer.blendMode ?? 'normal') {
+            case 'screen': mixed = 255 - (255 - base) * (255 - top) / 255; break;
+            case 'multiply': mixed = base * top / 255; break;
+            case 'add': mixed = Math.min(255, base + top); break;
+          }
+          composite[i + c] = coverage === 0 ? 0 : Math.round(base + (mixed - base) * opacity);
+        }
+      }
+    }
+    return composite;
+  }
   const p=recipe.parameters||{},family=recipe.family||'digital-slice';
   const k=Math.floor(Math.max(0,time)*fps),rand=rng((recipe.seed||1)^Math.imul(k+1,2654435761));
   let intensity=intensityEnvelope(time,recipe);
   if(family==='rgb-shock'||family==='scan-burst') intensity*=.85+.15*Math.sin(time*32)**2;
   const out=new Uint8ClampedArray(src.length);
   if(intensity<=0){out.set(src);return out}
-  let amp=Math.round((p.sliceAmplitudePx||12)*intensity),chroma=Math.round((p.chromaticAberrationPx||4)*intensity);
+  let amp=Math.round((p.sliceAmplitudePx??12)*intensity),chroma=Math.round((p.chromaticAberrationPx??4)*intensity);
   const primary=hexRgb(recipe.palette?.primary),secondary=hexRgb(recipe.palette?.secondary);
-  const density=p.sliceDensity||10;const rowShift=new Int16Array(height);
+  const density=p.sliceDensity??10;const rowShift=new Int16Array(height);
   const shiftBand=Math.max(2,Math.round(height/Math.max(2,density)));
   for(let y=0;y<height;y++){
     if(y%shiftBand===0){let next=(rand()-.5)*2*amp;if(['vhs-tear','digital-slice','spectral-logo','datamosh-inspired'].includes(family)&&rand()>.55) next*=1.9;rowShift.fill(Math.round(next),y,Math.min(height,y+shiftBand))}
   }
-  const block=p.blockScalePx||20;const blockProb=(p.blockDropRate||.1)*intensity;
+  const block=p.blockScalePx??20;const blockProb=(p.blockDropRate??.1)*intensity;
   for(let y=0;y<height;y++) for(let x=0;x<width;x++){
     const idx=(y*width+x)*4;let sh=rowShift[y];
     if(family==='rgb-shock')sh=Math.round(sh*.3);
@@ -103,7 +148,7 @@ export function renderGlitchRGBA(src: Uint8ClampedArray, width: number, height: 
       out[idx]=src[(y*width+clamp(sx+chroma,0,width-1))*4];
       out[idx+2]=src[(y*width+clamp(sx-chroma,0,width-1))*4+2];
     }
-    if((y%Math.max(2,p.scanSpacingPx||3))===0){let shade=1-(p.scanOpacity||.2)*intensity;out[idx]*=shade;out[idx+1]*=shade;out[idx+2]*=shade}
+    if((y%Math.max(2,p.scanSpacingPx??3))===0){let shade=1-(p.scanOpacity??.2)*intensity;out[idx]*=shade;out[idx+1]*=shade;out[idx+2]*=shade}
     if(family==='vector-edge'&&x>0&&y>0){let left=(y*width+x-1)*4;let diff=Math.abs(src[idx]-src[left])+Math.abs(src[idx+1]-src[left+1])+Math.abs(src[idx+2]-src[left+2]);if(diff>50){out[idx]=secondary[0];out[idx+1]=secondary[1];out[idx+2]=secondary[2]}}
     if(family==='neon-corrupt'&&out[idx]+out[idx+1]+out[idx+2]>350){out[idx]=clamp(out[idx]+primary[0]*.25*intensity,0,255);out[idx+2]=clamp(out[idx+2]+secondary[2]*.25*intensity,0,255)}
   }
@@ -118,7 +163,7 @@ export function renderGlitchRGBA(src: Uint8ClampedArray, width: number, height: 
       else{out[target]=primary[0]*.35+out[target]*.65;out[target+1]=secondary[1]*.3+out[target+1]*.7;out[target+2]=primary[2]*.35+out[target+2]*.65;}
     }
   }
-  const noise=Math.max(0,Math.min(.4,p.noiseOpacity||.1))*intensity;
+  const noise=Math.max(0,Math.min(.4,p.noiseOpacity??.1))*intensity;
   const rNoise=rng((recipe.seed||1)^Math.imul(k+321,2246822519));
   for(let i=0;i<src.length;i+=4){let n=(rNoise()-.5)*noise*255;out[i]=clamp(out[i]+n,0,255);out[i+1]=clamp(out[i+1]+n,0,255);out[i+2]=clamp(out[i+2]+n,0,255);out[i+3]=src[i+3]}
   return out;
