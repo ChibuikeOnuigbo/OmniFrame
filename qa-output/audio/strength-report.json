@@ -1,0 +1,11 @@
+{
+  "source": "repo tts-f1-technical.mp3 + deterministic 0dB white noise; fixture coverage, not a general speech-quality benchmark",
+  "sampleRate": 48000,
+  "inputSnr": 0.045858347706089354,
+  "outputSnr": 0.9722097439729331,
+  "improvementDb": 0.9263513962668438,
+  "gentleEnergy": 1470.3505083968555,
+  "strongEnergy": 507.9072670327274,
+  "peak": 0.6617183089256287,
+  "dryError": 0.00003051944077014923
+}

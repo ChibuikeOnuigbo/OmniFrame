@@ -13,6 +13,7 @@ Read **`docs/CODEX_TASK_RECOVERY.md`** for the recovered quizzes A–T, YouTube/
 - All 5,000 authored NG recipes in the lazy UI pack; ordered layers, blend/opacity, keyframes, per-clip clocks, deterministic seeds and meaningful families. Zero-strength/all-blend identity, split-key/phase continuity, bounds and alpha tested.
 - Eight additional geometric tools, shared preview/export drawing, correct closed-shape fill and star geometry; compact grouped toolbar.
 - Denoise strength direction, dry bypass, RNNoise mix, retryable model sessions; sample-rate-aware DC rejection, linked normalization, peak guard; real measured audio meter. Repeated recorder exports retain sound and use range playback clock.
+- Headless project reset clears prior paint/selections/compound stack/video frames; saved templates survive. Patch-only clips now enter the compositor; clone/gradient/four-tap blur affect real pixels using immutable samples and clip-local coordinates. Natural object-removal quality still needs work.
 - Live MCP mask defaults, immutable curve persistence, undoable edits and invalid-input errors fixed. **21 live bridge tools; 69 headless registry tools**, not equivalent surfaces.
 - Measured/scrollable viewport-safe timeline context menus with keyboard navigation; marker popup height bounds and Escape.
 - Restored archived A–J recipe rendering through universal tools; regenerated outputs are in `qa-output/recovered-boards/`, machine results in its `report.json`. Board A offsets corrected after viewing actual output. Visual source-match acceptance remains separate.

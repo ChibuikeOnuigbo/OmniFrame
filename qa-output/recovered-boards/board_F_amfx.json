@@ -1,0 +1,442 @@
+{
+  "board": "F",
+  "note": "Alight-Motion-named effect family showcase (rewatch 2026-10): pixel family frame proofs + procedural echo/shake/strobe/motionblur + reverse/freeze exports",
+  "steps": [
+    {
+      "tool": "project_new",
+      "params": {
+        "w": 640,
+        "h": 360,
+        "fps": 24,
+        "duration": 7,
+        "bg": "#101216"
+      }
+    },
+    {
+      "tool": "omniframe_mode",
+      "params": {
+        "on": true
+      }
+    },
+    {
+      "tool": "import_media",
+      "params": {
+        "path": "test_ans_result/sources/src_charC.png",
+        "fit": "contain"
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-base.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "zoomBlur": 0.8
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-zoomBlur.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "zoomBlur": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "directionalBlur": 0.7,
+          "directionalBlurAngle": 35
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-directionalBlur.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "directionalBlur": 0,
+          "directionalBlurAngle": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "glow": 0.9
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-glow.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "glow": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "edgeGlow": 0.9
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-edgeGlow.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "edgeGlow": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "tiltShift": 0.9
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-tiltShift.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "tiltShift": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "vignette": 0.8
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-vignette.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "vignette": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "flicker": 0.6
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-flicker.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "flicker": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "tiles": 3
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-tiles.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "tiles": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "pinchBulge": 0.6
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-pinchBulge.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "pinchBulge": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "swirl": 90
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-swirl.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "swirl": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "gradientMap": 1
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-gradientMap.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "gradientMap": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "threshold": 0.5
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-threshold.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "threshold": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "sharpen": 0.8
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-sharpen.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "sharpen": 0
+        }
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "findEdges": 1
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 0,
+        "out": "qa-output/recovered-boards/evidence/F-findEdges.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "findEdges": 0
+        }
+      }
+    },
+    {
+      "tool": "keyframe_set",
+      "params": {
+        "property": "position",
+        "channel": "X",
+        "time": 0,
+        "value": -250,
+        "interpolation": "ease-in-out"
+      }
+    },
+    {
+      "tool": "keyframe_set",
+      "params": {
+        "property": "position",
+        "channel": "X",
+        "time": 3,
+        "value": 250,
+        "interpolation": "ease-in-out"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "echo": 4,
+          "echoSpacing": 0.1,
+          "echoDecay": 0.55,
+          "autoShake": 5,
+          "timeQuantization": 0.15,
+          "motionBlur": 0.6
+        }
+      }
+    },
+    {
+      "tool": "render_export",
+      "params": {
+        "out": "qa-output/recovered-boards/F_amfx/procedural.mp4"
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 1.5,
+        "out": "qa-output/recovered-boards/evidence/F-procedural-mid.png"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "echo": 0,
+          "autoShake": 0,
+          "timeQuantization": 0,
+          "motionBlur": 0,
+          "reverse": 1,
+          "freezeHold": 0.8,
+          "freezeAt": 1.2
+        }
+      }
+    },
+    {
+      "tool": "render_export",
+      "params": {
+        "out": "qa-output/recovered-boards/F_amfx/timefx.mp4"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "reverse": 0,
+          "freezeHold": 0
+        }
+      }
+    },
+    {
+      "tool": "timeline_screenshot",
+      "params": {
+        "out": "qa-output/recovered-boards/evidence/timeline-F.png",
+        "playhead": 1.5
+      }
+    }
+  ]
+}

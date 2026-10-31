@@ -1,0 +1,327 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "qa-output/glitch-v2/digital-tear.mp4",
+  "out": "/workspace/OmniFrame/qa-output/glitch-v2/digital-tear.mp4",
+  "frames": 60,
+  "fps": 30,
+  "size": 298794,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 960,
+     "h": 540,
+     "fps": 30,
+     "duration": 2,
+     "bg": "#0a1222"
+    },
+    "out": {
+     "w": 960,
+     "h": 540,
+     "fps": 30,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "new_background",
+    "params": {
+     "kind": "studio"
+    },
+    "out": {
+     "clipId": "clip-1"
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "OMNIFRAME",
+     "preset": "plain",
+     "x": 0,
+     "y": 0
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "O",
+       "x": 333.3,
+       "y": 35.6,
+       "w": 37.3,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "M",
+       "x": 370.7,
+       "y": 35.6,
+       "w": 40,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "N",
+       "x": 410.7,
+       "y": 35.6,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "I",
+       "x": 445.3,
+       "y": 35.6,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "F",
+       "x": 458.7,
+       "y": 35.6,
+       "w": 29.3,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "R",
+       "x": 488,
+       "y": 35.6,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "A",
+       "x": 522.6,
+       "y": 35.6,
+       "w": 32,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "M",
+       "x": 554.7,
+       "y": 35.6,
+       "w": 40,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": "E",
+       "x": 594.6,
+       "y": 35.6,
+       "w": 32,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 960,
+      "h": 540
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 72,
+       "bold": true,
+       "color": "#edf6ff",
+       "glowBlur": 0
+      },
+      "effects": {}
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 72,
+      "color": "#edf6ff",
+      "glowBlur": 0
+     }
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "time": 0,
+     "value": -160,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "text-2",
+     "curve": "position_x",
+     "keyframeId": "kf_u6zk5rd"
+    }
+   },
+   {
+    "tool": "keyframe_set",
+    "params": {
+     "property": "position",
+     "channel": "X",
+     "time": 2,
+     "value": 160,
+     "interpolation": "linear"
+    },
+    "out": {
+     "clipId": "text-2",
+     "curve": "position_x",
+     "keyframeId": "kf_l25fl15"
+    }
+   },
+   {
+    "tool": "fx_add",
+    "params": {
+     "clipId": "text-2",
+     "catalogId": "ng-digital-slice"
+    },
+    "out": {
+     "fxId": "fx-1",
+     "inP": 0,
+     "duration": 2,
+     "params": {
+      "ngFamily": "digital-slice",
+      "ngIntensity": 1,
+      "ngBlend": "normal",
+      "ngSeed": 8156,
+      "ngPrimary": "#9256ff",
+      "ngSecondary": "#35e2ef",
+      "ngLead": 0,
+      "ngAttack": 0.05,
+      "ngHold": 1.8,
+      "ngDecay": 0.15,
+      "ngSliceAmp": 44,
+      "ngSliceDensity": 24,
+      "ngChroma": 5,
+      "ngScanOpacity": 0.2,
+      "ngScanSpacing": 3,
+      "ngNoise": 0.04,
+      "ngBlock": 18,
+      "ngBlockRate": 0.09
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "qa-output/glitch-v2/digital-tear.mp4"
+    },
+    "out": {
+     "frames": 60
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 960,
+    "h": 540,
+    "fps": 30,
+    "duration": 2,
+    "bg": "#0a1222"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "bg:studio",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:OMNIFRAME",
+     "start": 0,
+     "duration": 2,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [
+       {
+        "id": "kf_u6zk5rd",
+        "time": 0,
+        "value": -160,
+        "interpolation": "linear"
+       },
+       {
+        "id": "kf_l25fl15",
+        "time": 2,
+        "value": 160,
+        "interpolation": "linear"
+       }
+      ],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

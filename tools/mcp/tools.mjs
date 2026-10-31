@@ -19,7 +19,12 @@ const TAR = path.join(ROOT, 'test_ans_result')
 export const SESSION = {
   seq: null, selection: null, trace: [], mode: 'omniframe', omniSelection: null,
   paint: { strokes: [], layers: [{ id: 'paint-1', name: 'paint', visible: true, locked: false, opacity: 1 }], clock: 0 },
-  reset() { this.seq = null; this.selection = null; this.trace = []; },
+  reset() {
+    this.seq = null; this.selection = null; this.trace = []; this.mode = 'omniframe'; this.omniSelection = null
+    this.compounds = []; this.seqStack = []; this.videoFrames = {}
+    this.paint = { strokes: [], layers: [{ id: 'paint-1', name: 'paint', visible: true, locked: false, opacity: 1 }], clock: 0 }
+    // Saved templates are a reusable library; only project-owned state resets.
+  },
   note(tool, params, out) { this.trace.push({ tool, params, out }); return out },
 }
 const seq = () => { if (!SESSION.seq) throw new Error('no composition: call project_new first'); return SESSION.seq }
@@ -443,6 +448,9 @@ class SmartPatch extends MCPTool {
   constructor() { super('smart_patch', 'Major tool: smart-patch/inpainter — donor-sample clone with brush radius + feather (app SmartPatchSlice params).', { x0: '', y0: '', x1: '', y1: '', donor: '[x,y]', brushRadius: '', feather: '', strategy: 'clone|blur|gradient' }) }
   async run(p) {
     const c = sel()
+    if (!['x0','y0','x1','y1'].every(key=>Number.isFinite(p[key])) || p.x0===p.x1 || p.y0===p.y1) throw new Error('smart_patch requires a finite, nonempty target rectangle')
+    if (p.strategy && !['smart','clone','donor','blur','gradient'].includes(p.strategy)) throw new Error('unknown smart_patch strategy')
+    if (p.donor && (!Array.isArray(p.donor) || p.donor.length!==2 || !p.donor.every(Number.isFinite))) throw new Error('donor must contain two finite coordinates')
     c.patch = p
     return SESSION.note('smart_patch', p, { clipId: c.id, patchRegion: [p.x0, p.y0, p.x1, p.y1], feather: p.feather ?? 5, brushRadius: p.brushRadius ?? 52 })
   }

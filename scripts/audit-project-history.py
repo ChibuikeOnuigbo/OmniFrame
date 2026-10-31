@@ -69,7 +69,7 @@ summary={'generated_at':now.isoformat(),'window_start_utc':cutoff.isoformat(),'a
 for name,data in [('summary.json',summary),('file-inventory.json',files),('document-index.json',docs),('missing-references.json',claims),('link-index.json',[{'url':url,'references':refs} for url,refs in links.items()]),('ui-index.json',ui)]:
  (OUT/name).write_text(json.dumps(data,indent=2,ensure_ascii=True)+'\n')
 with (OUT/'file-inventory.csv').open('w',newline='',errors='backslashreplace') as f:
- fields=['path','kind','extension','bytes','tracked','modified_in_current_work','git_last_change','age_days','older_than_7_days','width','height','regenerable_cache'];writer=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore');writer.writeheader();writer.writerows(files)
+ fields=['path','kind','extension','bytes','tracked','modified_in_current_work','git_last_change','age_days','older_than_7_days','width','height','regenerable_cache'];writer=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore',lineterminator='\n');writer.writeheader();writer.writerows(files)
 print(json.dumps(summary,indent=2))
 print('Most repeated missing test references:',collections.Counter(r for c in claims for r in c['missing_references'] if r.startswith('qa/')).most_common(12))
 

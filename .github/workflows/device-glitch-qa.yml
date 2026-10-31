@@ -23,6 +23,9 @@ jobs:
           node qa/audio-output-math-unit.mjs
           node qa/drawing-shapes-unit.mjs
           node qa/video-encoder-failure-unit.mjs
+          node qa/mcp-project-reset-unit.mjs
+          node qa/smart-patch-compositor-unit.mjs
+          node qa/universal-tools-unit.mjs
           node qa/glitch-pack-coverage.mjs
           node qa/glitch-pack-compositor.mjs
           node qa/render-glitch-v2-reel.mjs

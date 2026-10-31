@@ -1,0 +1,41 @@
+[
+  {
+    "viewport": {
+      "width": 390,
+      "height": 640
+    },
+    "box": {
+      "x": 158,
+      "y": 90,
+      "width": 224,
+      "height": 542
+    },
+    "keyboard": true
+  },
+  {
+    "viewport": {
+      "width": 1024,
+      "height": 500
+    },
+    "box": {
+      "x": 301,
+      "y": 8,
+      "width": 224,
+      "height": 484
+    },
+    "keyboard": true
+  },
+  {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "box": {
+      "x": 301,
+      "y": 350,
+      "width": 224,
+      "height": 542
+    },
+    "keyboard": true
+  }
+]

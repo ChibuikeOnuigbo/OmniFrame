@@ -370,7 +370,7 @@ function drawSeq(x, seq, t, depth = 0) {
     const flipF = cardFlipFactor(clip, t)
     const ghostsF = [...PFX.pfxEchoTimes(eff, t), ...PFX.pfxMotionBlurSamples(eff, t, seq.fps)]
     const tsPF = clip.textStyle
-    const needLayer = !!(clip.mask && clip.mask.enabled) || Object.keys(eff).length > 0 || (tsPF && (tsPF.chroma || 0) > 0) || ghostsF.length > 0 || flipF.sx !== 1 || flipF.shade > 0 || !!(clip.adjustment && clip.adjustment.luts && clip.adjustment.luts.length)
+    const needLayer = !!clip.patch || !!(clip.mask && clip.mask.enabled) || Object.keys(eff).length > 0 || (tsPF && (tsPF.chroma || 0) > 0) || ghostsF.length > 0 || flipF.sx !== 1 || flipF.shade > 0 || !!(clip.adjustment && clip.adjustment.luts && clip.adjustment.luts.length)
     if (!needLayer) {
       const lw0 = Math.max(2, Math.round(r.w)), lh0 = Math.max(2, Math.round(r.h))
       x.save()

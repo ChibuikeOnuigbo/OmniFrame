@@ -24,3 +24,5 @@ For models: Blender 4.3.2 was validated. Run `blender --background --python scri
 Record concrete verified changes in `reports/FEATURES.md` and remaining work in `continue.md`. Keep claims scoped to actual executed checks and artifacts.
 
 For interaction changes, run `qa/context-menu-viewport-e2e.mjs` and `qa/mcp-live-bridge-e2e.mjs` against fresh Vite. Audit old requests with `scripts/audit-project-history.py`; do not equate repeated ledger headings or search URLs with delivered features or watched tutorials.
+
+Headless new-project calls must clear project paint/selections/compound stacks/video frame ownership. Run `qa/mcp-project-reset-unit.mjs` and `qa/smart-patch-compositor-unit.mjs` after tool/render changes; inspect actual board contact sheets to catch covered/no-op outputs. Natural object removal requires visual review beyond a successful tool result.

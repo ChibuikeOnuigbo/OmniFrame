@@ -1,0 +1,265 @@
+{
+  "board": "C",
+  "note": "bg replace + luma key (bg removal) + keyed entrance + lighting/cc effects",
+  "steps": [
+    {
+      "tool": "project_new",
+      "params": {
+        "w": 640,
+        "h": 360,
+        "fps": 24,
+        "duration": 1.8,
+        "bg": "#000000"
+      }
+    },
+    {
+      "tool": "omniframe_mode",
+      "params": {
+        "on": true
+      }
+    },
+    {
+      "tool": "new_background",
+      "params": {
+        "kind": "{{bg}}"
+      }
+    },
+    {
+      "tool": "import_media",
+      "params": {
+        "path": "test_ans_result/sources/src_charC.png",
+        "fit": "contain"
+      }
+    },
+    {
+      "tool": "select",
+      "params": {
+        "clipId": "clip-2"
+      }
+    },
+    {
+      "tool": "track_new",
+      "params": {
+        "name": "keyed char"
+      }
+    },
+    {
+      "tool": "transparent_select",
+      "params": {
+        "ignore": "#000000",
+        "ignoreTol": 40,
+        "target": "light"
+      }
+    },
+    {
+      "tool": "omniframe_extract",
+      "params": {
+        "trackId": 1
+      }
+    },
+    {
+      "tool": "patch_under",
+      "params": {
+        "on": true,
+        "feather": 2
+      }
+    },
+    {
+      "tool": "transform_set",
+      "params": {
+        "scale": "{{sc}}"
+      }
+    },
+    {
+      "tool": "keyframe_set",
+      "params": {
+        "property": "position",
+        "channel": "X",
+        "time": 0,
+        "value": "{{startX}}",
+        "interpolation": "{{interp}}"
+      }
+    },
+    {
+      "tool": "keyframe_set",
+      "params": {
+        "property": "position",
+        "channel": "X",
+        "time": 0.9,
+        "value": "{{endX}}",
+        "interpolation": "{{interp}}"
+      }
+    },
+    {
+      "tool": "curve_set",
+      "params": {
+        "property": "position",
+        "channel": "X",
+        "interpolation": "{{interp}}"
+      }
+    },
+    {
+      "tool": "effect_set",
+      "params": {
+        "patch": {
+          "chromatic": "{{cc}}",
+          "lightType": "point",
+          "lightIntensity": "{{li}}",
+          "lightColor": "#ffd9a0"
+        }
+      }
+    },
+    {
+      "tool": "snapshot",
+      "params": {
+        "time": 1.7,
+        "out": "qa-output/recovered-boards/C_composition/snap-{{vi}}.png"
+      }
+    },
+    {
+      "tool": "render_export",
+      "params": {
+        "out": "qa-output/recovered-boards/C_composition/variant-{{vi}}.mp4"
+      }
+    },
+    {
+      "tool": "timeline_screenshot",
+      "params": {
+        "out": "qa-output/recovered-boards/evidence/timeline-C-{{vi}}.png",
+        "playhead": 1.7
+      }
+    }
+  ],
+  "variants": [
+    {
+      "name": "v01",
+      "overrides": {
+        "vi": "01",
+        "bg": "synthwave",
+        "sc": 1,
+        "startX": -300,
+        "endX": 0,
+        "interp": "ease-out",
+        "cc": 3,
+        "li": 1.2
+      }
+    },
+    {
+      "name": "v02",
+      "overrides": {
+        "vi": "02",
+        "bg": "aurora",
+        "sc": 1,
+        "startX": 300,
+        "endX": 0,
+        "interp": "back",
+        "cc": 2,
+        "li": 1.1
+      }
+    },
+    {
+      "name": "v03",
+      "overrides": {
+        "vi": "03",
+        "bg": "grid",
+        "sc": 1.1,
+        "startX": 0,
+        "endX": 0,
+        "interp": "cubic-out",
+        "cc": 4,
+        "li": 1.3
+      }
+    },
+    {
+      "name": "v04",
+      "overrides": {
+        "vi": "04",
+        "bg": "bokeh",
+        "sc": 1,
+        "startX": -260,
+        "endX": -60,
+        "interp": "ease-in-out",
+        "cc": 2,
+        "li": 1
+      }
+    },
+    {
+      "name": "v05",
+      "overrides": {
+        "vi": "05",
+        "bg": "sunset",
+        "sc": 1,
+        "startX": 260,
+        "endX": 60,
+        "interp": "bounce",
+        "cc": 3,
+        "li": 1.2
+      }
+    },
+    {
+      "name": "v06",
+      "overrides": {
+        "vi": "06",
+        "bg": "studio",
+        "sc": 1.15,
+        "startX": 0,
+        "endX": -40,
+        "interp": "elastic",
+        "cc": 2,
+        "li": 1.1
+      }
+    },
+    {
+      "name": "v07",
+      "overrides": {
+        "vi": "07",
+        "bg": "wedge",
+        "sc": 1,
+        "startX": -300,
+        "endX": 40,
+        "interp": "cubic-in",
+        "cc": 5,
+        "li": 1.25
+      }
+    },
+    {
+      "name": "v08",
+      "overrides": {
+        "vi": "08",
+        "bg": "synthwave",
+        "sc": 1.2,
+        "startX": 300,
+        "endX": -40,
+        "interp": "ease-out",
+        "cc": 2,
+        "li": 1.15
+      }
+    },
+    {
+      "name": "v09",
+      "overrides": {
+        "vi": "09",
+        "bg": "aurora",
+        "sc": 0.95,
+        "startX": -240,
+        "endX": 60,
+        "interp": "ease-in-out",
+        "cc": 4,
+        "li": 1.05
+      }
+    },
+    {
+      "name": "v10",
+      "overrides": {
+        "vi": "10",
+        "bg": "grid",
+        "sc": 1.05,
+        "startX": 240,
+        "endX": 0,
+        "interp": "back",
+        "cc": 3,
+        "li": 1.2
+      }
+    }
+  ]
+}

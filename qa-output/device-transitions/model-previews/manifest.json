@@ -1,0 +1,233 @@
+[
+  {
+    "model": "laptop_open_dark.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/laptop_open_dark-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "laptop_open_dark.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/laptop_open_dark-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "laptop_open_dark.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/laptop_open_dark-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "monitor_clean_office.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/monitor_clean_office-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "monitor_clean_office.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/monitor_clean_office-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "monitor_clean_office.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/monitor_clean_office-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "monitor_gaming_black.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/monitor_gaming_black-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "monitor_gaming_black.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/monitor_gaming_black-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "monitor_gaming_black.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/monitor_gaming_black-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_frameless_dark.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/phone_frameless_dark-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_frameless_dark.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/phone_frameless_dark-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_frameless_dark.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/phone_frameless_dark-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_modern_black.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/phone_modern_black-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_modern_black.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/phone_modern_black-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_modern_black.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/phone_modern_black-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_modern_silver.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/phone_modern_silver-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_modern_silver.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/phone_modern_silver-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "phone_modern_silver.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/phone_modern_silver-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "tv_flat_black.glb",
+    "view": "front",
+    "file": "qa-output/device-transitions/model-previews/tv_flat_black-front.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "tv_flat_black.glb",
+    "view": "three-quarter",
+    "file": "qa-output/device-transitions/model-previews/tv_flat_black-three-quarter.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "model": "tv_flat_black.glb",
+    "view": "side",
+    "file": "qa-output/device-transitions/model-previews/tv_flat_black-side.png",
+    "renderer": "Blender Cycles 4.3.2 CPU",
+    "samples": 12,
+    "size": [
+      512,
+      512
+    ]
+  }
+]
