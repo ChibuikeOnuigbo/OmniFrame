@@ -11,8 +11,8 @@ ash
     Metadata:
       encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:11.528000000
-[opus @ 0x5a0764a5da00] Error parsing Opus packet header.
-[Parsed_loudnorm_0 @ 0x7fc3e8002080] 
+[opus @ 0x5b208fec5a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x783ee4002080] 
 {
 	"input_i" : "-7.93",
 	"input_tp" : "1.78",
@@ -25,5 +25,5 @@ ash
 	"normalization_type" : "dynamic",
 	"target_offset" : "-0.36"
 }
-[out#0/null @ 0x5a0764aa3240] video:140KiB audio:8629KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame=  345 fps=0.0 q=-0.0 Lsize=N/A time=00:00:11.50 bitrate=N/A speed=37.6x elapsed=0:00:00.30    
+[out#0/null @ 0x5b208ff0b240] video:140KiB audio:8629KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=  345 fps=0.0 q=-0.0 Lsize=N/A time=00:00:11.50 bitrate=N/A speed=56.8x elapsed=0:00:00.20    

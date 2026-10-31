@@ -1,0 +1,101 @@
+{
+  "scene_frames": [
+    {
+      "file": "s1.jpg",
+      "time_seconds": 5.6
+    },
+    {
+      "file": "s2.jpg",
+      "time_seconds": 8.767
+    },
+    {
+      "file": "s3.jpg",
+      "time_seconds": 9.6
+    },
+    {
+      "file": "s4.jpg",
+      "time_seconds": 11.567
+    },
+    {
+      "file": "s5.jpg",
+      "time_seconds": 17.5
+    },
+    {
+      "file": "s6.jpg",
+      "time_seconds": 25.267
+    }
+  ],
+  "source": "src.webm",
+  "duration_seconds": 44.628,
+  "duration_source": "ffprobe acquired media",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 240,
+        "height": 426,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "44.628000"
+    }
+  },
+  "frames": [
+    {
+      "file": "u00.jpg",
+      "time_seconds": 1.8595
+    },
+    {
+      "file": "u01.jpg",
+      "time_seconds": 5.5785
+    },
+    {
+      "file": "u02.jpg",
+      "time_seconds": 9.2975
+    },
+    {
+      "file": "u03.jpg",
+      "time_seconds": 13.0165
+    },
+    {
+      "file": "u04.jpg",
+      "time_seconds": 16.7355
+    },
+    {
+      "file": "u05.jpg",
+      "time_seconds": 20.4545
+    },
+    {
+      "file": "u06.jpg",
+      "time_seconds": 24.1735
+    },
+    {
+      "file": "u07.jpg",
+      "time_seconds": 27.8925
+    },
+    {
+      "file": "u08.jpg",
+      "time_seconds": 31.6115
+    },
+    {
+      "file": "u09.jpg",
+      "time_seconds": 35.3305
+    },
+    {
+      "file": "u10.jpg",
+      "time_seconds": 39.0495
+    },
+    {
+      "file": "u11.jpg",
+      "time_seconds": 42.7685
+    }
+  ],
+  "fit": "contain with letterbox; never stretch",
+  "visual_review": "pending",
+  "audio_review": "not performed by frame extractor"
+}

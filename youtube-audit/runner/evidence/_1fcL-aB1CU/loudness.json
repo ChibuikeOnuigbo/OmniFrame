@@ -8,10 +8,10 @@ ult)
     Metadata:
       encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:58.568000000
-frame=  639 fps=0.0 q=-0.0 size=N/A time=00:00:18.00 bitrate=N/A speed=  36x elapsed=0:00:00.50    
-frame= 1233 fps=1233 q=-0.0 size=N/A time=00:00:37.90 bitrate=N/A speed=37.9x elapsed=0:00:01.00    
-[opus @ 0x6007a9e5ba00] Error parsing Opus packet header.
-[Parsed_loudnorm_0 @ 0x706218002080] 
+frame=  903 fps=0.0 q=-0.0 size=N/A time=00:00:26.80 bitrate=N/A speed=53.6x elapsed=0:00:00.50    
+[opus @ 0x59ab7169fa00] Error parsing Opus packet header.
+frame= 1756 fps=1756 q=-0.0 size=N/A time=00:00:55.60 bitrate=N/A speed=55.6x elapsed=0:00:01.00    
+[Parsed_loudnorm_0 @ 0x7daea4002080] 
 {
 	"input_i" : "-6.65",
 	"input_tp" : "3.32",
@@ -24,5 +24,5 @@ frame= 1233 fps=1233 q=-0.0 size=N/A time=00:00:37.90 bitrate=N/A speed=37.9x el
 	"normalization_type" : "dynamic",
 	"target_offset" : "0.64"
 }
-[out#0/null @ 0x6007a9ea1240] video:713KiB audio:43903KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 1756 fps=1176 q=-0.0 Lsize=N/A time=00:00:58.53 bitrate=N/A speed=39.2x elapsed=0:00:01.49    
+[out#0/null @ 0x59ab716e5240] video:713KiB audio:43903KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 1756 fps=1727 q=-0.0 Lsize=N/A time=00:00:58.53 bitrate=N/A speed=57.6x elapsed=0:00:01.01    
