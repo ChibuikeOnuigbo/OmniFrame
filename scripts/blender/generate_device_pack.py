@@ -38,7 +38,7 @@ def box(name, loc, dims, material, bevel=0):
     if bevel:
         mod = o.modifiers.new("Machined edge bevel", "BEVEL")
         mod.width = bevel; mod.segments = 5
-        mod.affect = "EDGES" if hasattr(mod, "affect") else None
+        if hasattr(mod, "affect"): mod.affect = "EDGES"
         mod2 = o.modifiers.new("Weighted normals", "WEIGHTED_NORMAL")
     return o
 
