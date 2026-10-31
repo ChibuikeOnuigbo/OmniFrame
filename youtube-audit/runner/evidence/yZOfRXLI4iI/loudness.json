@@ -1,17 +1,15 @@
-   DURATION        : 00:00:59.166000000
-      encoder         : Lavc60.31.102 wrapped_avframe
+edia file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:59.166000000
   Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
     Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:59.208000000
-      encoder         : Lavc60.31.102 pcm_s16le
-frame=   89 fps=0.0 q=-0.0 size=N/A time=00:00:02.93 bitrate=N/A speed=47.8x    
-frame=  434 fps=0.0 q=-0.0 size=N/A time=00:00:14.43 bitrate=N/A speed=25.6x    
-frame=  803 fps=754 q=-0.0 size=N/A time=00:00:26.73 bitrate=N/A speed=25.1x    
-frame= 1172 fps=748 q=-0.0 size=N/A time=00:00:39.03 bitrate=N/A speed=24.9x    
-frame= 1537 fps=744 q=-0.0 size=N/A time=00:00:51.23 bitrate=N/A speed=24.8x    
-[out#0/null @ 0x55a2df351c80] video:832kB audio:44391kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-frame= 1775 fps=725 q=-0.0 Lsize=N/A time=00:00:59.13 bitrate=N/A speed=24.2x    
-[Parsed_loudnorm_0 @ 0x55a2df3a1c80] 
+frame=  639 fps=0.0 q=-0.0 size=N/A time=00:00:18.00 bitrate=N/A speed=  36x elapsed=0:00:00.50    
+frame= 1236 fps=1236 q=-0.0 size=N/A time=00:00:37.90 bitrate=N/A speed=37.9x elapsed=0:00:01.00    
+[opus @ 0x593fba1eaa00] Error parsing Opus packet header.
+frame= 1775 fps=1183 q=-0.0 size=N/A time=00:00:56.20 bitrate=N/A speed=37.5x elapsed=0:00:01.50    
+[Parsed_loudnorm_0 @ 0x7e07f4002080] 
 {
 	"input_i" : "-3.42",
 	"input_tp" : "3.44",
@@ -24,3 +22,5 @@ frame= 1775 fps=725 q=-0.0 Lsize=N/A time=00:00:59.13 bitrate=N/A speed=24.2x
 	"normalization_type" : "dynamic",
 	"target_offset" : "-0.60"
 }
+[out#0/null @ 0x593fba230240] video:721KiB audio:44391KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 1775 fps=1177 q=-0.0 Lsize=N/A time=00:00:59.16 bitrate=N/A speed=39.2x elapsed=0:00:01.50    

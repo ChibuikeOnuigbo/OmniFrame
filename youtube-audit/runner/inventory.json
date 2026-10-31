@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-22T12:30:23Z",
- "total": 443,
+ "generated": "2026-10-31T04:45:37Z",
+ "total": 445,
  "videos": [
   {
    "id": "fGm0SBFTj3o",
@@ -242,6 +242,19 @@
    "title": "EGOTISTICAL | 4K",
    "duration": "22",
    "channel": "@Deppey",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "96mpVQc6aJQ",
+   "url": "https://www.youtube.com/watch?v=96mpVQc6aJQ",
+   "title": "How To Make WARP Shakes in After Effects (Quick Tutorial)",
+   "duration": "107",
+   "channel": "@AvoidAEP",
    "format": "videos",
    "formats": [
     "videos"
@@ -2767,6 +2780,19 @@
    "format": "shorts",
    "formats": [
     "shorts"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "Ha7bc7O3AEU",
+   "url": "https://www.youtube.com/watch?v=Ha7bc7O3AEU",
+   "title": "GET AWAY (RESYNC)",
+   "duration": "22",
+   "channel": "@Keditz123",
+   "format": "videos",
+   "formats": [
+    "videos"
    ],
    "status": "INVENTORIED",
    "access": "pending-batch"
