@@ -94,7 +94,7 @@ import {
 } from './lib/animation/CurveEngine'
 
 export type Tool = 'select' | 'blade'
-export type PreviewQuality = 'low' | 'medium' | 'high'
+export type PreviewQuality = 'low' | 'medium' | 'high' | 'full'
 export type LeftTab =
   | 'media'
   | 'omniframe'
@@ -841,6 +841,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   removeFxKey: (clipId: string, fxId: string, param: string, t?: number) => void
   toggleFxEnabled: (clipId: string, fxId: string) => void
   duplicateFxInstance: (clipId: string, fxId: string) => string | null
+  moveFxInstance: (clipId: string, fxId: string, direction: -1 | 1) => void
   removeFxInstance: (clipId: string, fxId: string) => void
   removeActiveFx: () => void
 
@@ -1220,7 +1221,7 @@ export const useEditor = create<EditorState>((set, get) => {
     projectFps: 30,
     sequenceBackground: '#000000',
     dropFrameTimecode: false,
-    previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
+    previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high', 'full'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
     uiStyle: typeof localStorage === 'undefined' ? 'omniframe' : (localStorage.getItem('omniframe.uiStyle') || 'omniframe'),
     uiPalette: typeof localStorage === 'undefined' ? 'violet' : (localStorage.getItem('omniframe.uiPalette') || 'violet'),
@@ -2669,12 +2670,15 @@ export const useEditor = create<EditorState>((set, get) => {
       const newTrans: Transition = { ...params, id }
       set((s) => ({
         transitions: [...(s.transitions || []), newTrans],
-        selectedTransitionId: id,
+        selectedTransitionId: id, selectedClipId: null, selectedClipIds: [],
+        ...(params.type.startsWith('device_') ? { rightOpen: true } : {}),
       }))
       return id
     },
 
     updateTransition: (id, patch) => {
+      if (!get().transitions.some(t => t.id === id)) return
+      if (!get().inInteraction) pushSnapshot()
       set((s) => ({
         transitions: (s.transitions || []).map((tr) => (tr.id === id ? { ...tr, ...patch } : tr)),
       }))
@@ -2689,7 +2693,7 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     selectTransition: (id) => {
-      set({ selectedTransitionId: id, selectedClipId: id ? null : get().selectedClipId })
+      set({ selectedTransitionId: id, selectedClipId: id ? null : get().selectedClipId, ...(id ? {rightOpen:true} : {}) })
     },
 
     addClipToTrack: (trackId, assetId, atTime) => {
@@ -3123,17 +3127,17 @@ export const useEditor = create<EditorState>((set, get) => {
     selectClip: (id) => {
       // CapCut/Shotcut rule: clicking any group member selects the whole group.
       const ids = id ? expandGroupSelection(get().groups, [id]) : []
-      set({ selectedClipId: id, selectedClipIds: ids })
+      set({ selectedClipId: id, selectedClipIds: ids, selectedTransitionId: null })
     },
     selectClips: (ids) => {
       const exp = expandGroupSelection(get().groups, ids)
-      set({ selectedClipIds: exp, selectedClipId: exp[0] || null })
+      set({ selectedClipIds: exp, selectedClipId: exp[0] || null, selectedTransitionId: null })
     },
     toggleClipSelection: (id, multi = false) => {
       const s = get()
       if (!multi) {
         const ids = id ? expandGroupSelection(get().groups, [id]) : []
-        set({ selectedClipId: id, selectedClipIds: ids })
+        set({ selectedClipId: id, selectedClipIds: ids, selectedTransitionId: null })
         return
       }
       const exists = s.selectedClipIds.includes(id)
@@ -4607,7 +4611,7 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     // ---- CapCut-style effect instances on clips (board J) ----
-    setActiveFx: (sel) => set({ activeFx: sel }),
+    setActiveFx: (sel) => set({ activeFx: sel, ...(sel ? { selectedClipId: sel.clipId, selectedTransitionId: null } : {}) }),
 
     requestRightSection: (id) => set({ rightFocus: { id, nonce: Date.now() }, rightOpen: true }),
 
@@ -4644,6 +4648,7 @@ export const useEditor = create<EditorState>((set, get) => {
       set((st) => ({
         clips: st.clips.map((c) => (c.id === clipId ? { ...c, fxInstances: [...(c.fxInstances || []), inst] } : c)),
         selectedClipId: clipId,
+        selectedTransitionId: null,
         activeFx: { clipId, fxId },
       }))
       // Auto-open the connected right-panel section for the settings.
@@ -4765,6 +4770,16 @@ export const useEditor = create<EditorState>((set, get) => {
       }))
       get().requestRightSection('fxstack')
       return newId
+    },
+
+    moveFxInstance: (clipId, fxId, direction) => {
+      const clip = get().clips.find(c => c.id === clipId)
+      const list = [...(clip?.fxInstances || [])]
+      const from = list.findIndex(f => f.id === fxId), to = from + direction
+      if (from < 0 || to < 0 || to >= list.length) return
+      pushSnapshot()
+      ;[list[from], list[to]] = [list[to], list[from]]
+      set(st => ({ clips: st.clips.map(c => c.id === clipId ? { ...c, fxInstances: list } : c) }))
     },
 
     removeFxInstance: (clipId, fxId) => {

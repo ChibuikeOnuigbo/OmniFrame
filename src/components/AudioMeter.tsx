@@ -1,3 +1,5 @@
+import { allMediaElements } from '../lib/playback'
+import { attachAudioElements, readAudioLevels } from '../lib/audioBus'
 import React, { useEffect, useState, useRef } from 'react'
 import { Volume2, VolumeX } from 'lucide-react'
 import { useEditor } from '../store'
@@ -25,30 +27,11 @@ export function AudioMeter() {
       if (!active) return
 
       if (playing && !masterMuted) {
-        // Calculate audio presence from active audio/video clips at playhead
-        const activeAudios = clips.filter(
-          (c) => (c.kind === 'audio' || c.kind === 'video') && !c.hidden && playhead >= c.start && playhead <= c.start + c.duration,
-        )
-
-        if (activeAudios.length > 0) {
-          // Compute nominal dynamic level modulated by volume
-          const baseGain = masterVolume * (activeAudios[0].volume ?? 1)
-          const timeMod = Math.sin(performance.now() / 150) * 4
-          const randomJitter = (Math.random() - 0.5) * 6
-          const currentDbL = Math.max(-60, Math.min(2, -18 + baseGain * 12 + timeMod + randomJitter))
-          const currentDbR = Math.max(-60, Math.min(2, -19 + baseGain * 12 - timeMod + randomJitter))
-
-          setLeftDb((prev) => prev * 0.4 + currentDbL * 0.6)
-          setRightDb((prev) => prev * 0.4 + currentDbR * 0.6)
-
-          setPeakLeftDb((prev) => Math.max(currentDbL, prev - 0.5))
-          setPeakRightDb((prev) => Math.max(currentDbR, prev - 0.5))
-        } else {
-          setLeftDb((prev) => Math.max(-60, prev - 2.5))
-          setRightDb((prev) => Math.max(-60, prev - 2.5))
-          setPeakLeftDb((prev) => Math.max(-60, prev - 1.0))
-          setPeakRightDb((prev) => Math.max(-60, prev - 1.0))
-        }
+        attachAudioElements(allMediaElements())
+        const level = readAudioLevels()
+        setLeftDb(Math.max(-60, level.leftDb)); setRightDb(Math.max(-60, level.rightDb))
+        setPeakLeftDb(previous => Math.max(level.leftPeakDb, previous - .5))
+        setPeakRightDb(previous => Math.max(level.rightPeakDb, previous - .5))
       } else {
         setLeftDb(-60)
         setRightDb(-60)

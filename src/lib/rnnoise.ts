@@ -56,7 +56,7 @@ export function getRnnoise(): Promise<WebAssembly.Instance> {
         },
       )
       return instance
-    })()
+    })().catch(error => { instancePromise = null; throw error })
   }
   return instancePromise
 }

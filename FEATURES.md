@@ -196,3 +196,8 @@ Count is auditable: `grep -c '^[0-9]' FEATURES.md`.
 181 GREEN-SCREEN DEVICE OVERLAYS (deviceOverlay phone/monitor): AI-generated perfect-angle chroma plates (public/devices/*-greenscreen.png, produced from the reference scan) chroma+white-keyed in-app with soft alpha and despill, cached screen bbox, gentle bob/tilt rig; the clip's own pixels show through the keyed screen hole; frame-space compositing on both the isolated and fast clip paths; 2 vs4-* catalog entries; overlay proof test_ans_result/device3d-overlay-phone.mp4
 **Total: 181 shipped features** (audit: `grep -c '^[0-9]' FEATURES.md` = 172) (27 scenes + 20 FX kinds + 10 null/group + 10 UI + 6 pipeline).
 Watched videos at this commit: **454** (see youtube-audit/progress.json watched_ids).
+
+
+## 2026-10-31 — device, glitch, audio and agent repairs
+
+See `reports/FEATURES.md` for the current verified implementation ledger and `docs/CODEX_TASK_RECOVERY.md` for recovered user tasks, source files and remaining acceptance. Historical feature totals are not used as implementation proof.

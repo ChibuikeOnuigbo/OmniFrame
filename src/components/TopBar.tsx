@@ -882,8 +882,8 @@ export function TopBar() {
               {!settingsSearch && settingsCategory === 'playback' && (
                 <div>
                   <div className="mb-2 text-xs text-ink-300">Preview quality</div>
-                  <div role="radiogroup" aria-label="Preview quality" className="grid grid-cols-3 gap-2">
-                    {(['low', 'medium', 'high'] as const).map((quality) => (
+                  <div role="radiogroup" aria-label="Preview quality" className="grid grid-cols-2 gap-2">
+                    {(['low', 'medium', 'high', 'full'] as const).map((quality) => (
                       <button
                         key={quality}
                         type="button"

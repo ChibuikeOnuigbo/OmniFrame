@@ -32,6 +32,7 @@ export interface TransitionPresetDef {
 export const TRANSITION_PRESETS: TransitionPresetDef[] = [
   { id: 'device_phone', name: 'Phone 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'A procedurally modelled phone spins in with the incoming clip on its green screen, then the screen expands flat to full frame (3D→2D).' },
   { id: 'device_monitor', name: 'Monitor 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'An iMac-style monitor with pedestal stand swings in carrying the incoming clip, then flattens to 2D.' },
+  { id: 'device_laptop', name: 'Laptop Open Reveal', category: 'Device 3D', baseDuration: 1.8, description: 'Open laptop carries the live incoming clip, then pushes through its display to full frame.' },
   { id: 'device_tv', name: 'TV 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'A thin-bezel TV on feet rotates in with the incoming clip on screen, then hands off to flat 2D.' },
   { id: 'cross_dissolve', name: 'Cross Dissolve', category: 'Dissolve', baseDuration: 1.2, description: 'Smooth opacity blend from outgoing to incoming frame.' },
   { id: 'film_dissolve', name: 'Film Dissolve', category: 'Dissolve', baseDuration: 1.4, description: 'Film-style blend with a gamma-weighted crossfade.' },

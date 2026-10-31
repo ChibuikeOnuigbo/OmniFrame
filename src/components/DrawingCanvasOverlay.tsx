@@ -368,11 +368,11 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
         opacity: drawingOpacity,
         points: currentPointsRef.current,
         temporalScope: drawingScope,
+        filled: useEditor.getState().drawingShapeFilled,
         cloneSource: useEditor.getState().cloneSourcePoint || undefined,
         ...(drawingTool === 'polygon'
           ? {
               polygonSides: useEditor.getState().drawingPolygonSides,
-              filled: useEditor.getState().drawingShapeFilled,
             }
           : {}),
         ...(drawingTool === 'gradient'
@@ -577,11 +577,11 @@ export function DrawingCanvasOverlay({ width, height }: DrawingCanvasOverlayProp
         opacity: drawingOpacity,
         points: [...currentPointsRef.current],
         temporalScope: { ...drawingScope },
+        filled: useEditor.getState().drawingShapeFilled,
         cloneSource: useEditor.getState().cloneSourcePoint || undefined,
         ...(drawingTool === 'polygon'
           ? {
               polygonSides: useEditor.getState().drawingPolygonSides,
-              filled: useEditor.getState().drawingShapeFilled,
             }
           : {}),
         ...(drawingTool === 'gradient'

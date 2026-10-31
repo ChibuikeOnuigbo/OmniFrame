@@ -1,0 +1,52 @@
+name: Device and glitch proof
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck && npm run build
+      - name: Shared engine and recipe checks
+        run: |
+          node qa/glitch-ng-layers-unit.mjs
+          node qa/device-rig-unit.mjs
+          node qa/fx-split-continuity-unit.mjs
+          node qa/audio-output-math-unit.mjs
+          node qa/drawing-shapes-unit.mjs
+          node qa/video-encoder-failure-unit.mjs
+          node qa/glitch-pack-coverage.mjs
+          node qa/glitch-pack-compositor.mjs
+          node qa/render-glitch-v2-reel.mjs
+      - name: Browser and live-video proofs
+        run: |
+          npm run dev -- --strictPort > "$RUNNER_TEMP/omniframe-vite.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://localhost:5173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://localhost:5173/ > /dev/null
+          node qa/device-glitch-production-e2e.mjs
+          node qa/audio-strength-e2e.mjs
+          node qa/audio-bus-e2e.mjs
+          node qa/mcp-live-bridge-e2e.mjs
+          node qa/context-menu-viewport-e2e.mjs
+          node qa/render-device-transition-reel.mjs
+      - name: Upload reviewable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omniframe-device-glitch-proof
+          path: qa-output/
+          retention-days: 14
+          if-no-files-found: error

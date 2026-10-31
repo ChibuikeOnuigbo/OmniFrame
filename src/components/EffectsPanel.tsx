@@ -11,7 +11,7 @@ import { PanelSection } from './PanelSection'
 import { SHAKE_PRESETS } from '../lib/shakePresets'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
 import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
-import { FX_CATS, getFxCatalog, paramsForPatch, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
+import { FX_CATS, getFxCatalog, loadGlitchRecipeCatalog, paramsForPatch, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
 import type { CustomEffect } from '../types'
 
 type LutItem = {
@@ -1000,6 +1000,10 @@ const FX_MIME = 'application/x-omniframe-fx'
  */
 function FxCatalogBrowser() {
   const [cat, setCat] = useState<FxCat | 'all'>('all')
+  const [, refreshCatalog] = useState(0)
+  const [packError, setPackError] = useState('')
+  const loadPack = () => { setPackError(''); void loadGlitchRecipeCatalog().then(() => refreshCatalog(n => n + 1)).catch(error => setPackError(String(error.message))) }
+  useEffect(loadPack, [])
   const [q, setQ] = useState('')
   const [limit, setLimit] = useState(60)
   const clips = useEditor((s) => s.clips)
@@ -1035,6 +1039,8 @@ function FxCatalogBrowser() {
 
   return (
     <div data-testid="fx-catalog-browser" className="space-y-1.5">
+      {packError && <button type="button" onClick={loadPack} className="text-[10px] text-amber-300">{packError} · Retry recipe library</button>}
+      <p className="text-[9px] text-ink-500">Choose and search on the left. Edit, keyframe and reorder applied layers in the right inspector. Recipe count does not imply visual uniqueness.</p>
       <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Effect categories">
         {FX_CATS.map((c) => (
           <button

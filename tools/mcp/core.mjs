@@ -8,11 +8,15 @@ import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
 
 let _ff
 export function ffmpegExe() {
   if (_ff) return _ff
-  _ff = execFileSync('python3', ['-c', 'import imageio_ffmpeg,sys;sys.stdout.write(imageio_ffmpeg.get_ffmpeg_exe())']).toString()
+  // Reuse the lockfile-pinned executable used by browser QA. No undeclared
+  // Python package or workstation-specific path is required.
+  _ff = require('@ffmpeg-installer/ffmpeg').path
   return _ff
 }
 
@@ -91,25 +95,42 @@ export class VideoEncoder {
     this.proc = spawn(ffmpegExe(), ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-vcodec', 'png', '-framerate', String(fps), '-i', '-', '-an', '-vf', 'format=yuv420p', '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', out], { stdio: ['pipe', 'pipe', 'pipe'] })
     this.err = ''
     this.proc.stderr.on('data', (d) => { this.err += d.toString() })
-    this.exitP = new Promise((res, rej) => { this.proc.on('exit', (c) => (c === 0 ? res(c) : rej(new Error(`ffmpeg exit ${c}: ${this.err.slice(-400)}`)))) })
+    this.failure = null
+    this.proc.on('error', error => { this.failure = error })
+    this.proc.stdin.on('error', error => { this.failure = error })
+    // Store failures until finish(): an encoder can fail while callers are
+    // still queueing frames. Rejecting here caused unhandled rejections.
+    this.exitP = new Promise(resolve => this.proc.on('close', code => {
+      if (code !== 0 && !this.failure) this.failure = new Error(`ffmpeg exit ${code}: ${this.err.slice(-400)}`)
+      resolve(code)
+    }))
     this.n = 0
     this.writeP = Promise.resolve()
   }
   addCanvas(canvas) {
     const buf = canvas.toBuffer('image/png')
-    this.writeP = this.writeP.then(() => new Promise((res) => {
-      if (this.proc.stdin.write(buf)) res()
-      else this.proc.stdin.once('drain', res)
-    }))
+    this.writeP = this.writeP.then(() => new Promise((resolve, reject) => {
+      if (this.failure) { reject(this.failure); return }
+      const stream = this.proc.stdin
+      const cleanup = () => { stream.off('drain', onDrain); stream.off('error', onError); stream.off('close', onClose) }
+      const onDrain = () => { cleanup(); resolve() }
+      const onError = error => { cleanup(); reject(error) }
+      const onClose = () => onError(new Error('Encoder input closed before all frames were written'))
+      stream.once('error', onError); stream.once('close', onClose)
+      if (stream.write(buf)) { cleanup(); resolve() }
+      else stream.once('drain', onDrain)
+    })).catch(error => { this.failure = error })
     this.n++
     return this
   }
   get frames() { return this.n }
   async finish() {
-    if (!this.n) throw new Error('no frames')
+    if (!this.n) { this.proc.kill(); await this.exitP; throw new Error('no frames') }
     await this.writeP
-    this.proc.stdin.end()
+    if (this.failure) this.proc.kill()
+    else this.proc.stdin.end()
     await this.exitP
+    if (this.failure) throw this.failure
     return { out: this.out, frames: this.n, fps: this.fps, size: fs.statSync(this.out).size }
   }
 }

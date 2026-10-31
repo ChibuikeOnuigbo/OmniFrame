@@ -1,0 +1,32 @@
+{
+  "id": "tv_flat_black",
+  "kind": "tv",
+  "format": "glb",
+  "path": "tv_flat_black.glb",
+  "screenObject": "ScreenSurface",
+  "rigRoot": "DeviceRig_ROOT",
+  "screenWidthMeters": 0.96,
+  "screenHeightMeters": 0.54,
+  "screenAspect": 1.777778,
+  "screenUV": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "renderMode": "dynamic-glTF-screen-texture",
+  "unit": "meter",
+  "authoredBy": "OmniFrame procedural Blender source"
+}

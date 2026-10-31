@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ChevronDown, ChevronRight, Copy, Eye, EyeOff, Plus, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowUp, ArrowDown, ChevronDown, ChevronRight, Copy, Eye, EyeOff, Plus, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
 import { PanelSection } from './PanelSection'
@@ -29,6 +29,7 @@ export function FxStackSection({ clip }: { clip: Clip }) {
   const setLeftTab = useEditor((s) => s.setLeftTab)
   const [openId, setOpenId] = useState<string | null>(activeFx?.clipId === clip.id ? activeFx.fxId : null)
 
+  useEffect(() => { if (activeFx?.clipId === clip.id) setOpenId(activeFx.fxId) }, [activeFx?.clipId, activeFx?.fxId, clip.id])
   const insts = clip.fxInstances || []
   const allowed = clip.kind === 'compound' || clip.kind === 'image' || clip.kind === 'video'
   const localT = playhead - clip.start
@@ -51,7 +52,7 @@ export function FxStackSection({ clip }: { clip: Clip }) {
             No effects dropped on this clip yet. Drag one from the Effects tab, right-click the clip → Add effect, or press ＋ below.
           </p>
         )}
-        {insts.map((inst) => {
+        {insts.map((inst, index) => {
           const open = openId === inst.id
           const isActive = activeFx?.fxId === inst.id && activeFx?.clipId === clip.id
           const inside = localT >= inst.inP && localT < inst.inP + inst.duration
@@ -76,6 +77,14 @@ export function FxStackSection({ clip }: { clip: Clip }) {
                 >
                   {open ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                 </button>
+                {([-1, 1] as const).map(direction => (
+                  <button key={direction} type="button" aria-label={`Move ${inst.name} ${direction < 0 ? 'up' : 'down'}`}
+                    disabled={direction < 0 ? index === 0 : index === insts.length - 1}
+                    onClick={() => useEditor.getState().moveFxInstance(clip.id, inst.id, direction)}
+                    className="grid h-5 w-5 shrink-0 place-items-center rounded text-ink-300 hover:bg-ink-800 disabled:opacity-25">
+                    {direction < 0 ? <ArrowUp size={11} /> : <ArrowDown size={11} />}
+                  </button>
+                ))}
                 <span className="h-2.5 w-2.5 shrink-0 rounded-sm bg-gradient-to-br from-cyan-400 to-blue-500" aria-hidden="true" />
                 <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-ink-100" title={inst.name}>
                   {inst.name}

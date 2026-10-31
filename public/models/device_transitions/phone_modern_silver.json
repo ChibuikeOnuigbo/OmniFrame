@@ -1,0 +1,32 @@
+{
+  "id": "phone_modern_silver",
+  "kind": "phone",
+  "format": "glb",
+  "path": "phone_modern_silver.glb",
+  "screenObject": "ScreenSurface",
+  "rigRoot": "DeviceRig_ROOT",
+  "screenWidthMeters": 0.075,
+  "screenHeightMeters": 0.155,
+  "screenAspect": 0.483871,
+  "screenUV": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "renderMode": "dynamic-glTF-screen-texture",
+  "unit": "meter",
+  "authoredBy": "OmniFrame procedural Blender source"
+}

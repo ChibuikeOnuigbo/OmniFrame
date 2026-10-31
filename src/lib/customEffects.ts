@@ -1,3 +1,4 @@
+import { GLITCH_FAMILIES, type NgEffect } from './glitchNG'
 import type { ClipEffect, ClipLut, CustomEffect } from '../types'
 import { OVERLAY_KINDS, PARTICLE_KINDS, REPLACE_BG_KINDS } from './particleFx'
 
@@ -15,7 +16,7 @@ export const CUSTOM_EFFECT_VERSION = 1
 export const MAX_CUSTOM_LUT_BYTES = 2 * 1024 * 1024
 
 /** Defaults mirror the Effects panel so "unset" values serialize away. */
-export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
+export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect>> & Partial<NgEffect> = {
   brightness: 1,
   contrast: 1,
   saturation: 1,
@@ -78,6 +79,9 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
+  ngOpacity:[0,1],ngIntensity:[0,1],ngSeed:[0,4294967295],ngLead:[0,60],ngAttack:[0,60],ngHold:[0,60],ngDecay:[0,60],
+  ngSliceAmp:[0,160],ngSliceDensity:[1,80],ngChroma:[0,64],ngScanOpacity:[0,1],ngScanSpacing:[1,32],
+  ngNoise:[0,.4],ngBlock:[1,128],ngBlockRate:[0,1],ngGhost:[0,1],ngGhostDelay:[0,16],ngRoll:[0,100],ngFrequency:[0,30],
   exposure: [-2, 2], gamma: [0.2, 3], extrude: [0, 40], extrudeAngle: [0, 360],
   radialRepeat: [0, 24], radialRepeatRadius: [0, 400], longShadow: [0, 64], longShadowAngle: [0, 360],
   exposureOffset: [-1, 1], radialRepeatOrientation: [0, 360], textTransformStart: [0, 100], textTransformEnd: [0, 100], textTransformPhase: [0, 100], copyBackground: [0, 1],
@@ -128,6 +132,10 @@ export function sanitizeEffect(input: unknown): ClipEffect {
       ;(out as Record<string, number>)[key as string] = clamp(v, range)
     }
   }
+  if (typeof raw.ngFamily === 'string' && GLITCH_FAMILIES.includes(raw.ngFamily)) out.ngFamily = raw.ngFamily
+  if (typeof raw.ngBlend === 'string' && ['normal','screen','multiply','add'].includes(raw.ngBlend)) out.ngBlend = raw.ngBlend as NgEffect['ngBlend']
+  if (typeof raw.ngPattern === 'string' && ['microburst','slow-build','hard-intro','dual-attack','subtle-break','pulse-to-clean','reverse-shatter','freeze-then-snap','rhythmic','long-tail'].includes(raw.ngPattern)) out.ngPattern=raw.ngPattern
+  for (const k of ['ngPrimary','ngSecondary'] as const) if (typeof raw[k] === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw[k])) out[k]=raw[k] as string
   if (raw.lightType === 'point' || raw.lightType === 'spot') out.lightType = raw.lightType
   if (typeof raw.lightColor === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.lightColor)) out.lightColor = raw.lightColor
   if (typeof raw.particleFx === 'string' && (PARTICLE_KINDS as readonly string[]).includes(raw.particleFx)) out.particleFx = raw.particleFx as ClipEffect['particleFx']
@@ -176,6 +184,7 @@ export function compactEffect(effect: ClipEffect): ClipEffect {
 }
 
 const LABELS: Partial<Record<keyof ClipEffect, string>> = {
+  ngIntensity: 'Glitch NG',
   brightness: 'Brightness',
   contrast: 'Contrast',
   saturation: 'Saturation',
@@ -200,6 +209,7 @@ export function customEffectSummary(fx: Pick<CustomEffect, 'effect' | 'luts'>): 
   }
   if ((effect.lightIntensity ?? 0) > 0) { /* already counted via LABELS */ }
   for (const lut of fx.luts ?? []) parts.push(`LUT: ${lut.name}`)
+  if (fx.effect.ngFamily) parts.push(fx.effect.ngFamily)
   return parts.length ? parts.join(' · ') : 'Neutral grade'
 }
 

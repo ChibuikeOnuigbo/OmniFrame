@@ -489,7 +489,7 @@ class RenderExport extends MCPTool {
 /* ---------- paint canvas: ibisPaint X workflow harvested from the NothingxArt
    sunset short (2yAZqtdc_qk): time-lapse recording, radial ruler, smudge ---------- */
 class DrawStroke extends MCPTool {
-  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/circle/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24 (Krita Multibrush symmetry)', mirrorX: 'bool — Krita Multibrush mirror across vertical axis', mirrorY: 'bool — mirror across horizontal axis', gradientShape: 'linear|radial (Krita Gradient tool shapes)', smoothing: '0..1 Krita Freehand Brush stabilizer', translateCopies: '2..12 Krita Multibrush Translate ring copies', translateRadius: 'px ring radius for translate copies', gradientRepeat: 'none|forward|alternating (Krita Gradient repeat modes)', filled: 'bool', appearAt: 's' }) }
+  constructor() { super('draw_stroke', 'Major tool: paint a stroke on the universal paint canvas (ibisPaint X engine). Tools: brush/pencil/marker/calligraphy/eraser/line/rectangle/rounded-rectangle/circle/triangle/diamond/pentagon/hexagon/octagon/heart/chevron/star/polygon/polyline/bezier/gradient/fill/smudge. radialCopies = symmetry/radial ruler (stroke repeated rotated around centre — sun rays, mandalas). Points are sequence pixels. Strokes appear sequentially in time so the canvas doubles as a process time-lapse.', { tool: 'text', points: '[[x,y],...] seq px', color: 'css', size: 'px', opacity: '0..1', gradientColor: 'css', radialCopies: '2..24 (Krita Multibrush symmetry)', mirrorX: 'bool — Krita Multibrush mirror across vertical axis', mirrorY: 'bool — mirror across horizontal axis', gradientShape: 'linear|radial (Krita Gradient tool shapes)', smoothing: '0..1 Krita Freehand Brush stabilizer', translateCopies: '2..12 Krita Multibrush Translate ring copies', translateRadius: 'px ring radius for translate copies', gradientRepeat: 'none|forward|alternating (Krita Gradient repeat modes)', filled: 'bool', appearAt: 's' }) }
   async run(p) {
     const st = SESSION.paint
     const w = SESSION.seq?.w || 640, h = SESSION.seq?.h || 360
@@ -657,6 +657,7 @@ class RunRecipe extends MCPTool {
 /* ---------- professional-MCP layer: help / preset logs / create / edit /
    context menu / data dumps / bg-removal / roto ---------- */
 const APP_FUNCTION_CATALOG = {
+  drawingShapes: ['rectangle', 'rounded-rectangle', 'circle', 'triangle', 'diamond', 'pentagon', 'hexagon', 'octagon', 'heart', 'chevron', 'star', 'polygon (3–12 sides)'],
   create: ['text (TEXT_PRESETS)', 'null object', 'shape mask', 'background bed (replaceBg family)', 'compound clip', 'import media'],
   edit: ['transform (pos/size/rot)', 'mask draw/clear', 'roto points mask', 'effects inside', 'blend+opacity', 'speed curve', 'convert to compound'],
   select: ['click preview coords', 'select by id', 'expand to group'],

@@ -5,7 +5,7 @@
  * agent's snapshot) can verify the app — not the agent — did the work.
  */
 import { useEditor } from '../store'
-import { addOrUpdateKeyframe, applyEasingPreset } from './animation/CurveEngine'
+import { addOrUpdateKeyframe, applyEasingPreset, createDefaultClipAnimation } from './animation/CurveEngine'
 import { drawTimelineSnapshot, timelineSnapshotSize, type TimelineSnapPayload } from './timelineSnapshot'
 
 export interface McpLogEntry { tool: string; params: Record<string, unknown>; ok: boolean; out?: unknown; error?: string; at: number }
@@ -28,6 +28,15 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
   const st = () => useEditor.getState() as any
   const clips = () => (st().clips || []) as any[]
   const selClip = () => clips().find(c => c.id === st().selectedClipId) || clips().find(c => (st().selectedClipIds || []).includes(c.id))
+  const requireClip = () => { const c = selClip(); if (!c) throw new Error('nothing selected: select a valid clip first'); return c }
+  const edit = (c: any, patch: any) => {
+    st().beginHistory()
+    try { st().setClipProp(c.id, patch) } finally { st().endHistory() }
+  }
+  const finite = (name: string, value: unknown): number => {
+    if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error(`${name} must be a finite number`)
+    return value
+  }
   try {
     let out: any = null
     const seq = st().sequenceSettings || { width: 1920, height: 1080 }
@@ -36,6 +45,7 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         out = { catalog: OMNI_MCP_CATALOG, note: 'universal tools operate the real store; every call is logged in the MCP Console' }
         break
       case 'select':
+        if (params.clipId != null && !clips().some(c => c.id === params.clipId)) throw new Error('clip not found')
         st().selectClip(params.clipId ?? null); out = { selected: params.clipId ?? null }
         break
       case 'click': {
@@ -48,43 +58,48 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
       }
       case 'mask_draw': {
         const c = selClip(); if (!c) throw new Error('nothing selected: select or click first')
-        c.mask = {
+        const x0=finite('x0',params.x0),x1=finite('x1',params.x1),y0=finite('y0',params.y0),y1=finite('y1',params.y1)
+        if (!['rectangle','ellipse'].includes(params.shape || 'rectangle')) throw new Error('mask shape must be rectangle or ellipse')
+        st().updateClipMask(c.id, {
           shape: params.shape || 'rectangle', kind: 'shape',
-          centerX: ((params.x0 + params.x1) / 2) / seq.width, centerY: ((params.y0 + params.y1) / 2) / seq.height,
-          width: Math.abs(params.x1 - params.x0) / seq.width, height: Math.abs(params.y1 - params.y0) / seq.height,
-          feather: params.feather ?? 0, inverted: !!params.inverted, enabled: true,
-        }
-        useEditor.setState({ clips: [...clips()] }); out = { clipId: c.id, mask: c.mask }
+          centerX: (x0+x1)/2/seq.width, centerY: (y0+y1)/2/seq.height,
+          width: Math.abs(x1-x0)/seq.width, height: Math.abs(y1-y0)/seq.height,
+          feather: Math.max(0,finite('feather',params.feather ?? 0)), inverted: !!params.inverted, enabled: true,
+        })
+        out = { clipId: c.id, mask: clips().find(v=>v.id===c.id).mask }
         break
       }
       case 'mask_clear': {
-        const c = selClip(); if (c) { c.mask = undefined; useEditor.setState({ clips: [...clips()] }) }
+        const c = requireClip(); st().removeClipMask(c.id)
         out = { clipId: c ? c.id : null }
         break
       }
       case 'keyframe_set': {
         const c = selClip(); if (!c) throw new Error('nothing selected')
-        c.animation = c.animation || { curves: {} }
+        const animation = structuredClone(c.animation || createDefaultClipAnimation(c.transform,c.duration))
         const key = `${params.property}_${String(params.channel || 'Scalar').toLowerCase()}`
-        if (!c.animation.curves[key]) throw new Error(`no curve ${key}`)
-        const r = addOrUpdateKeyframe(c.animation.curves[key], params.time, params.value, params.interpolation || 'linear')
-        c.animation.curves[key] = r.curve
-        useEditor.setState({ clips: [...clips()] }); out = { clipId: c.id, curve: key, keyframeId: r.keyframe.id }
+        if (!animation.curves[key]) throw new Error(`no curve ${key}`)
+        const r = addOrUpdateKeyframe(animation.curves[key], finite('time',params.time), finite('value',params.value), params.interpolation || 'linear')
+        animation.curves[key] = r.curve
+        edit(c,{animation}); out = { clipId: c.id, curve: key, keyframeId: r.keyframe.id }
         break
       }
       case 'curve_set': {
         const c = selClip(); if (!c) throw new Error('nothing selected')
         const key = `${params.property}_${String(params.channel || 'Scalar').toLowerCase()}`
-        let curve = c.animation && c.animation.curves[key]
-        if (curve) for (const k of curve.keyframes) curve = applyEasingPreset(curve, k.id, params.interpolation)
-        useEditor.setState({ clips: [...clips()] }); out = { curve: key }
+        const animation=structuredClone(c.animation || createDefaultClipAnimation(c.transform,c.duration))
+        let curve = animation.curves[key]
+        if (!curve) throw new Error(`no curve ${key}`)
+        for (const k of curve.keyframes) curve = applyEasingPreset(curve, k.id, params.interpolation)
+        animation.curves[key]=curve
+        edit(c,{animation}); out = { curve: key }
         break
       }
       case 'effect_set':
-        st().setClipEffect(selClip() ? selClip().id : undefined, params.patch || {}); out = { clipId: selClip() ? selClip().id : null }
+        st().setClipEffect(requireClip().id, params.patch || {}); out = { clipId: requireClip().id }
         break
       case 'remove_background':
-        st().setClipEffect(selClip() ? selClip().id : undefined, { [params.method === 'chroma' ? 'chromaKey' : 'lumaKey']: params.strength ?? 0.85 })
+        st().setClipEffect(requireClip().id, { [params.method === 'chroma' ? 'chromaKey' : 'lumaKey']: params.strength ?? 0.85 })
         out = { clipId: selClip() ? selClip().id : null }
         break
       case 'fill_composition_area': {
@@ -92,8 +107,7 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         const asset = (st().assets || []).find((a: any) => a.id === c.assetId)
         const aw = (asset && asset.width) || seq.width, ah = (asset && asset.height) || seq.height
         const k = Math.max(seq.width / aw, seq.height / ah)
-        c.transform = { ...c.transform, scale: k }
-        useEditor.setState({ clips: [...clips()] }); out = { scale: k }
+        edit(c,{ transform: { ...c.transform, scale: k } }); out = { scale: k }
         break
       }
       case 'snapshot': {
@@ -105,9 +119,8 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
       case 'track_assign': {
         const c = selClip(); if (!c) throw new Error('nothing selected')
         const tracks = (st().tracks || []) as any[]
-        if (!tracks.some(t => t.id === params.track)) tracks.push({ id: params.track, name: `track ${params.track + 1}`, type: 'video' })
-        c.trackId = params.track
-        useEditor.setState({ clips: [...clips()], tracks: [...tracks] })
+        if (!tracks.some(t => t.id === params.track)) throw new Error('track not found: use an existing track ID')
+        edit(c,{trackId:params.track})
         out = { clipId: c.id, track: params.track }
         break
       }
@@ -116,8 +129,8 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         break
       case 'clip_stretch': {
         const c = selClip(); if (!c) throw new Error('nothing selected')
-        c.duration = Math.max(0.1, params.duration ?? c.duration)
-        useEditor.setState({ clips: [...clips()] }); out = { clipId: c.id, duration: c.duration }
+        const duration=Math.max(0.1,finite('duration',params.duration ?? c.duration))
+        edit(c,{duration}); out = { clipId: c.id, duration }
         break
       }
       case 'transparent_select':
@@ -134,10 +147,11 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         break
       case 'omniframe_move': {
         const c = selClip(); if (!c) throw new Error('nothing selected')
-        const t = params.t ?? 0
-        c.animation.curves.position_x = addOrUpdateKeyframe(c.animation.curves.position_x, t, params.x ?? 0, 'constant').curve
-        c.animation.curves.position_y = addOrUpdateKeyframe(c.animation.curves.position_y, t, params.y ?? 0, 'constant').curve
-        useEditor.setState({ clips: [...clips()] }); out = { clipId: c.id, interpolation: 'constant', slide: false }
+        const t = finite('t',params.t ?? 0)
+        const animation=structuredClone(c.animation || createDefaultClipAnimation(c.transform,c.duration))
+        animation.curves.position_x = addOrUpdateKeyframe(animation.curves.position_x, t, finite('x',params.x ?? 0), 'constant').curve
+        animation.curves.position_y = addOrUpdateKeyframe(animation.curves.position_y, t, finite('y',params.y ?? 0), 'constant').curve
+        edit(c,{animation}); out = { clipId: c.id, interpolation: 'constant', slide: false }
         break
       }
       case 'timeline_screenshot': {

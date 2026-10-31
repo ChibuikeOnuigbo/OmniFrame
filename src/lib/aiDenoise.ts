@@ -55,7 +55,7 @@ export async function getDenoiseSession(): Promise<Ort.InferenceSession> {
         { id: 'omni-denoise', label: 'AI Denoise (OmniFrame v1)' },
         (bytes) => ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] }),
       )
-    })()
+    })().catch(error => { sessionPromise = null; throw error })
   }
   return sessionPromise
 }

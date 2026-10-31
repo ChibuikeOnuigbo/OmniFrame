@@ -1,15 +1,10 @@
+import { attachAudioElements, createRecordingAudioStream } from './audioBus'
 // Real export: record the live preview canvas (driven by PreviewEngine) with
 // MediaRecorder, mixing in audio from active media elements where possible.
 // Footage never leaves the browser.
 
 import { useEditor } from '../store'
 import { allMediaElements } from './playback'
-
-let recorderCache: MediaRecorder | null = null
-let recorderStream: MediaStream | null = null
-let recorderCanvas: HTMLCanvasElement | null = null
-let recorderRaf = 0
-let recorderInitChunk: Blob | null = null
 
 export interface ExportOptions {
   onProgress?: (fraction: number) => void
@@ -29,36 +24,6 @@ function pickMime(forceWebm = false): string {
   return ''
 }
 
-function mixAudio(): MediaStream | null {
-  try {
-    const elements = allMediaElements().filter((el) => {
-      if (el instanceof HTMLAudioElement) return true
-      if (el instanceof HTMLVideoElement && !el.muted && el.volume > 0) return true
-      return false
-    })
-    if (elements.length === 0) return null
-
-    const Ctx =
-      (window as any).AudioContext || (window as any).webkitAudioContext
-    const ctx: AudioContext = new Ctx()
-    const dest = ctx.createMediaStreamDestination()
-    const seen = new Set<HTMLMediaElement>()
-    for (const el of elements) {
-      if (seen.has(el)) continue
-      seen.add(el)
-      try {
-        const src = ctx.createMediaElementSource(el)
-        src.connect(dest)
-      } catch {
-        // element already routed elsewhere — skip
-      }
-    }
-    const tracks = dest.stream.getAudioTracks()
-    return tracks.length > 0 ? dest.stream : null
-  } catch {
-    return null
-  }
-}
 
 function download(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob)
@@ -83,6 +48,13 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
     st.setMonitorMode('program')
   }
 
+  const previousQuality = st.previewQuality
+  const previousSpeed = st.speed
+  let cleanup = () => {}
+  st.setPreviewQuality('full')
+  try {
+  // Let React resize the engine itself; never resize its canvas behind it.
+  await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
   const mime = pickMime()
   if (!mime) throw new Error('MediaRecorder is not supported in this browser.')
 
@@ -128,6 +100,7 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   const pumpScaler = () => {
     if (!scalerRunning) return
     try {
+      attachAudioElements(allMediaElements())
       scalerCtx?.drawImage(canvas, 0, 0, targetW, targetH)
     } catch { /* live canvas momentarily unavailable */ }
     requestAnimationFrame(pumpScaler)
@@ -136,15 +109,15 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
 
   opts.onStatus?.('Preparing recorder…')
   const stream = scaler.captureStream(30)
-  const audio = mixAudio()
-  if (audio) {
-    audio.getAudioTracks().forEach((t) => stream.addTrack(t))
-  }
+  const audio = createRecordingAudioStream()
+  audio.stream.getAudioTracks().forEach(track => stream.addTrack(track))
 
+  cleanup = () => { scalerRunning = false; stream.getTracks().forEach(track => track.stop()); audio.dispose() }
   const recorder = new MediaRecorder(stream, {
     mimeType: mime,
     videoBitsPerSecond: 8_000_000,
   })
+  cleanup = () => { scalerRunning = false; if (recorder.state !== 'inactive') recorder.stop(); stream.getTracks().forEach(track => track.stop()); audio.dispose() }
   const chunks: BlobPart[] = []
   recorder.ondataavailable = (e) => {
     if (e.data && e.data.size > 0) chunks.push(e.data)
@@ -154,15 +127,14 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
     recorder.onstop = () => resolve()
   })
 
-  const previousSpeed = st.speed
   // In/Out range export: record only the marked slice (CapCut behaviour).
   const range = st.exportRange && st.exportRange.out > st.exportRange.in ? st.exportRange : null
   const recordFrom = range ? range.in : 0
   const recordTo = range ? range.out : st.duration
+  st.pause()
   st.setSpeed(1)
-  st.setPlayhead(recordFrom)
   recorder.start(100)
-  st.play()
+  st.startVisualPreview({kind:'range-playback',label:'Export range',startTime:recordFrom,endTime:recordTo})
   opts.onStatus?.(range ? 'Recording selected range…' : 'Recording timeline…')
 
   // Wait for playback to finish (engine pauses itself at duration).
@@ -185,11 +157,18 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   scalerRunning = false
 
   const ext = mime.includes('mp4') ? 'mp4' : 'webm'
-  const parts = recorderInitChunk ? [recorderInitChunk, ...chunks] : chunks
-  const blob = new Blob(parts, { type: mime })
-  if (!recorderInitChunk && chunks[0] instanceof Blob) recorderInitChunk = chunks[0]
+  // Each recording owns its initialization segment. Prepending a chunk from
+  // an earlier export corrupts independent MP4/WebM streams.
+  const blob = new Blob(chunks, { type: mime })
   st.setSpeed(previousSpeed)
   download(blob, `omniframe-export.${ext}`)
   opts.onStatus?.('Export complete')
   opts.onProgress?.(1)
+  } finally {
+    cleanup()
+    st.stopVisualPreview()
+    st.pause()
+    st.setSpeed(previousSpeed)
+    st.setPreviewQuality(previousQuality)
+  }
 }

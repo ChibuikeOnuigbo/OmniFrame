@@ -1,0 +1,32 @@
+{
+  "id": "laptop_open_dark",
+  "kind": "laptop",
+  "format": "glb",
+  "path": "laptop_open_dark.glb",
+  "screenObject": "ScreenSurface",
+  "rigRoot": "DeviceRig_ROOT",
+  "screenWidthMeters": 0.31,
+  "screenHeightMeters": 0.19,
+  "screenAspect": 1.631579,
+  "screenUV": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "renderMode": "dynamic-glTF-screen-texture",
+  "unit": "meter",
+  "authoredBy": "OmniFrame procedural Blender source"
+}

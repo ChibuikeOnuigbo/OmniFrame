@@ -252,7 +252,7 @@
    "name": "v01",
    "overrides": {
     "vi": "01",
-    "charx": -140,
+    "charx": 0,
     "hop": 0.5,
     "sblend": "screen",
     "sop": 0.45
@@ -262,7 +262,7 @@
    "name": "v02",
    "overrides": {
     "vi": "02",
-    "charx": 0,
+    "charx": 140,
     "hop": 0.4,
     "sblend": "screen",
     "sop": 0.35
@@ -272,7 +272,7 @@
    "name": "v03",
    "overrides": {
     "vi": "03",
-    "charx": 140,
+    "charx": 280,
     "hop": 0.35,
     "sblend": "screen",
     "sop": 0.5
@@ -282,7 +282,7 @@
    "name": "v04",
    "overrides": {
     "vi": "04",
-    "charx": -140,
+    "charx": 0,
     "hop": 0.45,
     "sblend": "screen",
     "sop": 0.4
@@ -292,7 +292,7 @@
    "name": "v05",
    "overrides": {
     "vi": "05",
-    "charx": 0,
+    "charx": 140,
     "hop": 0.5,
     "sblend": "screen",
     "sop": 0.3
@@ -302,7 +302,7 @@
    "name": "v06",
    "overrides": {
     "vi": "06",
-    "charx": 140,
+    "charx": 280,
     "hop": 0.4,
     "sblend": "screen",
     "sop": 0.45
@@ -312,7 +312,7 @@
    "name": "v07",
    "overrides": {
     "vi": "07",
-    "charx": -140,
+    "charx": 0,
     "hop": 0.35,
     "sblend": "screen",
     "sop": 0.35
@@ -322,7 +322,7 @@
    "name": "v08",
    "overrides": {
     "vi": "08",
-    "charx": 0,
+    "charx": 140,
     "hop": 0.45,
     "sblend": "screen",
     "sop": 0.5
@@ -332,7 +332,7 @@
    "name": "v09",
    "overrides": {
     "vi": "09",
-    "charx": 140,
+    "charx": 280,
     "hop": 0.5,
     "sblend": "screen",
     "sop": 0.4
@@ -342,7 +342,7 @@
    "name": "v10",
    "overrides": {
     "vi": "10",
-    "charx": -140,
+    "charx": 0,
     "hop": 0.4,
     "sblend": "screen",
     "sop": 0.45

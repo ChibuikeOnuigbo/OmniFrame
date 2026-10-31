@@ -511,12 +511,39 @@ function renderStrokeCore(
       ctx.ellipse(cx, cy, baseWidth, baseWidth * 0.25, angleRad, 0, Math.PI * 2)
       ctx.fill()
     }
+  } else if (['triangle', 'diamond', 'pentagon', 'hexagon', 'octagon', 'heart', 'chevron', 'rounded-rectangle'].includes(stroke.tool)) {
+    ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
+    const a = pts[0], b = pts[pts.length - 1]
+    const x = Math.min(a.x, b.x) * width, y = Math.min(a.y, b.y) * height
+    const w = Math.abs(b.x - a.x) * width, h = Math.abs(b.y - a.y) * height
+    ctx.beginPath()
+    if (stroke.tool === 'heart') {
+      ctx.moveTo(x + w / 2, y + h)
+      ctx.bezierCurveTo(x - w * .35, y + h * .45, x + w * .1, y - h * .3, x + w / 2, y + h * .22)
+      ctx.bezierCurveTo(x + w * .9, y - h * .3, x + w * 1.35, y + h * .45, x + w / 2, y + h)
+    } else if (stroke.tool === 'rounded-rectangle') {
+      ctx.roundRect(x, y, w, h, Math.min(w, h) * .18)
+    } else if (stroke.tool === 'chevron') {
+      const points = [[0, 0], [.55, 0], [1, .5], [.55, 1], [0, 1], [.45, .5]]
+      points.forEach(([px, py], i) => i ? ctx.lineTo(x + px * w, y + py * h) : ctx.moveTo(x + px * w, y + py * h))
+    } else {
+      const sides = ({ triangle: 3, diamond: 4, pentagon: 5, hexagon: 6, octagon: 8 } as Record<string, number>)[stroke.tool]
+      for (let i = 0; i < sides; i++) {
+        const angle = -Math.PI / 2 + i * Math.PI * 2 / sides
+        const px = x + w / 2 + Math.cos(angle) * w / 2, py = y + h / 2 + Math.sin(angle) * h / 2
+        if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py)
+      }
+    }
+    ctx.closePath()
+    if (stroke.filled) ctx.fill()
+    ctx.stroke()
   } else if (stroke.tool === 'star') {
     const start = pts[0]
     const end = pts[pts.length - 1]
     const cx = ((start.x + end.x) / 2) * width
     const cy = ((start.y + end.y) / 2) * height
     const rOuter = (Math.abs(end.x - start.x) / 2) * width
+    const ry = (Math.abs(end.y - start.y) / 2) * height
     const rInner = rOuter * 0.45
     const spikes = 5
     let rot = (Math.PI / 2) * 3
@@ -524,20 +551,21 @@ function renderStrokeCore(
 
     ctx.lineWidth = Math.max(1, stroke.size * (width / 1280))
     ctx.beginPath()
-    ctx.moveTo(cx, cy - rOuter)
+    ctx.moveTo(cx, cy - ry)
     for (let i = 0; i < spikes; i++) {
       let x = cx + Math.cos(rot) * rOuter
-      let y = cy + Math.sin(rot) * rOuter
+      let y = cy + Math.sin(rot) * ry
       ctx.lineTo(x, y)
       rot += step
 
       x = cx + Math.cos(rot) * rInner
-      y = cy + Math.sin(rot) * rInner
+      y = cy + Math.sin(rot) * ry * 0.45
       ctx.lineTo(x, y)
       rot += step
     }
-    ctx.lineTo(cx, cy - rOuter)
+    ctx.lineTo(cx, cy - ry)
     ctx.closePath()
+    if (stroke.filled) ctx.fill()
     ctx.stroke()
   } else if (stroke.tool === 'line') {
     const start = pts[0]

@@ -159,6 +159,10 @@ export function DrawingPanel() {
       ],
     },
     {
+      group: 'Geometry & Symbols',
+      items: ['triangle', 'diamond', 'pentagon', 'hexagon', 'octagon', 'heart', 'chevron', 'rounded-rectangle'].map(id => ({ id: id as DrawingToolType, label: id.replace(/-/g, ' '), icon: Square })),
+    },
+    {
       group: 'Retouch',
       items: [
         { id: 'clone' as DrawingToolType, label: 'Stamp', icon: Stamp },
@@ -187,7 +191,7 @@ export function DrawingPanel() {
   const activateToolOptions = (tool: DrawingToolType) => {
     if (!sectionsNav) return
     if (tool === 'smart-patch') sectionsNav.activate('smart-patch')
-    else if (['line', 'rectangle', 'circle', 'arrow', 'star', 'polygon', 'polyline', 'bezier', 'gradient'].includes(tool)) sectionsNav.activate('tool-params')
+    else if (['triangle', 'diamond', 'pentagon', 'hexagon', 'octagon', 'heart', 'chevron', 'rounded-rectangle', 'line', 'rectangle', 'circle', 'arrow', 'star', 'polygon', 'polyline', 'bezier', 'gradient'].includes(tool)) sectionsNav.activate('tool-params')
     else sectionsNav.activate('brush')
   }
 
@@ -621,10 +625,11 @@ export function DrawingPanel() {
         </PanelSection>
       <PanelSection title="Tool Parameters" defaultOpen={true} testId="tool-params">
       {/* Tool Parameters */}
-      {(drawingTool === 'polygon' || drawingTool === 'gradient') ? (
+      {(['rectangle','rounded-rectangle','circle','triangle','diamond','pentagon','hexagon','octagon','heart','chevron','star','polygon','gradient'].includes(drawingTool)) ? (
         <div className="p-2.5 rounded-lg bg-ink-900/80 border border-ink-800 flex flex-col gap-2">
-          {drawingTool === 'polygon' ? (
+          {drawingTool !== 'gradient' ? (
             <>
+              {drawingTool === 'polygon' && <>
               <div className="flex justify-between items-center text-[11px] font-medium text-ink-400">
                 <span>Polygon Sides</span>
                 <span className="font-mono text-ink-200">{drawingPolygonSides}</span>
@@ -638,6 +643,7 @@ export function DrawingPanel() {
                 onChange={(e) => setDrawingPolygonSides(Number(e.target.value))}
                 className="of-range w-full"
               />
+              </>}
               <label className="flex items-center gap-2 cursor-pointer pt-1 text-[11px] text-ink-300 hover:text-white select-none">
                 <input
                   type="checkbox"

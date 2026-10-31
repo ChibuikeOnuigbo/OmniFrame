@@ -40,6 +40,13 @@ export function MarkerPopup() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marker?.id])
 
+  useEffect(() => {
+    if (!marker) return
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setActiveMarkerModalId(null) }
+    window.addEventListener('keydown', escape)
+    return () => window.removeEventListener('keydown', escape)
+  }, [marker?.id, setActiveMarkerModalId])
+
   if (!marker) return null
   const hex = markerColorHex(marker.color, marker.kind)
   const kindDef = markerKindDef(marker.kind)
@@ -61,7 +68,7 @@ export function MarkerPopup() {
       role="dialog"
       aria-label="Marker editor"
       data-testid="marker-popup"
-      className="fixed right-4 top-20 z-[95] w-72 rounded-xl border border-ink-600 bg-ink-900/97 shadow-2xl backdrop-blur select-none"
+      className="fixed right-4 top-20 z-[95] w-72 max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain rounded-xl border border-ink-600 bg-ink-900/97 shadow-2xl backdrop-blur select-none"
     >
       <div className="flex items-center gap-2 border-b border-ink-800 px-3 py-2">
         <span className="h-3.5 w-3.5 shrink-0 rounded-sm" style={{ backgroundColor: hex }} />

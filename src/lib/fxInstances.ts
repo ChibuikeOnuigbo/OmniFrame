@@ -1,3 +1,4 @@
+import { recipeFromEffect, type NgLayer, type NgEffect } from './glitchNG'
 import type { Clip, ClipEffect, FxInstance, FxKey } from '../types'
 
 /**
@@ -63,13 +64,22 @@ export function fxParamsAt(inst: FxInstance, localT: number): Record<string, num
  */
 export function mergeFxInstances(clip: Clip, localT: number): ClipEffect | undefined {
   const insts = clip.fxInstances
-  if (!insts || insts.length === 0) return clip.effects
+  if ((!insts || insts.length === 0) && !clip.effects?.ngFamily) return clip.effects
   let merged: ClipEffect | undefined = clip.effects ? { ...clip.effects } : undefined
-  for (const inst of insts) {
+  const layers: NgLayer[] = []
+  const addNg = (e: NgEffect | undefined, id: string, offset: number) => {
+    if (!e?.ngFamily) return
+    const r = recipeFromEffect(e)
+    layers.push({ id, family: e.ngFamily, seed: r.seed, palette: r.palette, timeline: r.timeline, parameters: r.parameters, timeOffset: offset, opacity: e.ngOpacity, blendMode: e.ngBlend })
+  }
+  addNg(clip.effects as NgEffect | undefined, 'clip', clip.start)
+  for (const inst of insts || []) {
     if (!fxActiveAt(inst, localT)) continue
     const params = fxParamsAt(inst, localT) as unknown as ClipEffect
+    addNg(params as NgEffect, inst.id, clip.start + inst.inP - (inst.sourceOffset ?? 0))
     merged = { ...(merged || {}), ...params }
   }
+  if (merged && layers.length) (merged as ClipEffect & NgEffect).ngLayersJSON = JSON.stringify(layers)
   return merged
 }
 
@@ -101,14 +111,15 @@ export function splitFxInstances(insts: FxInstance[] | undefined, offset: number
     if (inst.inP < offset && offset < end) {
       const lDur = offset - inst.inP
       const rDur = end - offset
-      if (lDur >= FX_MIN_DUR) left.push({ ...inst, duration: lDur })
+      if (lDur >= FX_MIN_DUR) left.push({ ...inst, duration: lDur, keys: inst.keys ? splitFxKeys(inst.keys,lDur).left : undefined })
       if (rDur >= FX_MIN_DUR) {
         right.push({
           ...inst,
           id: `${inst.id}r${Math.random().toString(36).slice(2, 7)}`,
           inP: 0,
           duration: rDur,
-          keys: inst.keys ? shiftFxKeys(inst.keys, -lDur) : undefined,
+          sourceOffset: (inst.sourceOffset ?? 0) + lDur,
+          keys: inst.keys ? splitFxKeys(inst.keys, lDur).right : undefined,
         })
       }
     } else if (end <= offset) {
@@ -131,4 +142,15 @@ function shiftFxKeys(keys: Record<string, FxKey[]>, dt: number): Record<string, 
   const out: Record<string, FxKey[]> = {}
   for (const [p, ks] of Object.entries(keys)) out[p] = ks.map((k) => ({ ...k, t: Math.max(0, k.t - dt) }))
   return out
+}
+
+function splitFxKeys(keys: Record<string, FxKey[]>, cut: number) {
+  const left: Record<string,FxKey[]>={}, right: Record<string,FxKey[]>={}
+  for(const [name,values] of Object.entries(keys)) {
+    if(!values.length) { left[name]=[]; right[name]=[]; continue }
+    const sorted=[...values].sort((a,b)=>a.t-b.t), boundary=evalFxKeys(sorted,cut,sorted[0].v)
+    left[name]=[...sorted.filter(k=>k.t<cut).map(k=>({...k})),{t:cut,v:boundary}]
+    right[name]=[{t:0,v:boundary},...sorted.filter(k=>k.t>cut).map(k=>({...k,t:k.t-cut}))]
+  }
+  return {left,right}
 }

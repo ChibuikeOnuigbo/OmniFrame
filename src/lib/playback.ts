@@ -743,6 +743,7 @@ export class PreviewEngine {
     // Pause decoded media synchronously with state. Waiting for the next rAF
     // made Space/click pause feel delayed under main-thread load.
     this.unsubscribe = useEditor.subscribe((state, previous) => {
+      if (state.playing && !previous.playing) this.last = performance.now()
       if (!state.playing && previous.playing) {
         videoCache.forEach((video) => video.pause())
         audioCache.forEach((audio) => audio.pause())
@@ -752,7 +753,8 @@ export class PreviewEngine {
   }
 
   private loop = (ts: number) => {
-    const dt = Math.min(0.05, (ts - this.last) / 1000)
+    // Timeline/audio clocks follow elapsed time even when rendering drops frames.
+    const dt = Math.max(0, (ts - this.last) / 1000)
     this.last = ts
     let frameState = useEditor.getState()
     let time = frameState.playhead
@@ -1429,19 +1431,28 @@ export class PreviewEngine {
       }
       case 'device_phone':
       case 'device_monitor':
+      case 'device_laptop':
       case 'device_tv': {
         // 3D device flies in with the incoming clip live on its screen, then
         // the screen expands to the full frame: a true 3D→2D handoff.
-        const kind: DeviceKind = trans.type === 'device_phone' ? 'phone' : trans.type === 'device_monitor' ? 'monitor' : 'tv'
-        if (hasFrom) drawFrom(ctx)
-        if (hasTo) {
-          const scr = this.takeScratch()
-          const sctx = scr.getContext('2d')!
-          sctx.setTransform(1, 0, 0, 1, 0, 0)
-          sctx.clearRect(0, 0, scr.width, scr.height)
-          drawTo(sctx)
-          drawDeviceScene(ctx, this.width, this.height, kind, rigAt(kind, progress), scr)
-          this.releaseScratch(scr)
+        const kind: DeviceKind = trans.type === 'device_phone' ? 'phone' : trans.type === 'device_monitor' ? 'monitor' : trans.type === 'device_laptop' ? 'laptop' : 'tv'
+        const inverse = trans.parameters?.motion === 'pullback'
+        const deviceRig = rigAt(kind, progress, trans.parameters?.motion)
+        if (inverse) {
+          if (hasTo) { ctx.save(); ctx.globalAlpha *= 1-deviceRig.fill; drawTo(ctx); ctx.restore() }
+        } else if (hasFrom) {
+          // A transparent incoming clip must reveal the tracks beneath, not
+          // leave the outgoing frame stranded behind its transparent pixels.
+          ctx.save(); ctx.globalAlpha *= 1-deviceRig.fill; drawFrom(ctx); ctx.restore()
+        }
+        if ((inverse && hasFrom) || (!inverse && hasTo)) {
+          const scr = this.takeScratch(), sctx = scr.getContext('2d')!
+          sctx.setTransform(1, 0, 0, 1, 0, 0); sctx.clearRect(0, 0, scr.width, scr.height)
+          if(inverse)drawFrom(sctx);else drawTo(sctx)
+          ctx.save()
+          if(inverse)ctx.globalAlpha *= Math.min(1, Math.max(0, (1-progress)/.18))
+          drawDeviceScene(ctx, this.width, this.height, kind, deviceRig, scr, trans.parameters || {})
+          ctx.restore(); this.releaseScratch(scr)
         }
         break
       }
