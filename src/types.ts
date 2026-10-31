@@ -434,6 +434,12 @@ export type TransitionType =
   | 'device_monitor'
   | 'device_tv'
   | 'device_laptop'
+  | 'device_tv_crt_knobs'
+  | 'device_tv_crt_silver'
+  | 'object_arrow_sweep'
+  | 'object_shell_whip'
+  | 'object_payphone_orbit'
+  | 'object_concrete_shatter'
 
 export interface Transition {
   id: string
@@ -1255,6 +1261,8 @@ export interface CustomWorkspace {
 }
 
 export interface Clip {
+  /** Non-destructive clip-local corner pin and liquify; persisted with project. */
+  deformation?: import('./lib/deformation').DeformationSpec
   /** omniframe: sequence-space hole left by an extracted cut-out */
   omniHole?: { x0: number; y0: number; x1: number; y1: number }
   /** omniframe: patch-under fill applied beneath the hole every frame */

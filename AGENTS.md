@@ -6,6 +6,8 @@ Use the existing checkout. Do not create worktrees unless requested. Do not merg
 
 Keep preview and export on the shared `src/lib` engines. Browser video export uses `PreviewEngine`; universal headless tools use `tools/mcp/appRender.mjs`. A helper passing alone is not end-to-end proof. Preserve masks, animation, project persistence and undo history.
 
+External 3D pack: read `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md` and the model credits before modifying it. Five downloaded CC0 models and one original fracture rig have local embedded maps and packed `.blend` sources. Preserve original author/source/modification records. Normalize imports from actual transformed vertices, not stale Blender bounding boxes. Run `qa/object-transition-rig-unit.mjs` and `qa/render-external-asset-transitions.mjs` for object/model changes. Keep the latter's native VFR export evidence distinct from its fixed-rate frame-sequence MP4s. Respect download authentication; do not extract models from protected viewer caches.
+
 Useful checks:
 
 - `npm run typecheck` and `npm run build`.
@@ -26,3 +28,5 @@ Record concrete verified changes in `reports/FEATURES.md` and remaining work in 
 For interaction changes, run `qa/context-menu-viewport-e2e.mjs` and `qa/mcp-live-bridge-e2e.mjs` against fresh Vite. Audit old requests with `scripts/audit-project-history.py`; do not equate repeated ledger headings or search URLs with delivered features or watched tutorials.
 
 Headless new-project calls must clear project paint/selections/compound stacks/video frame ownership. Run `qa/mcp-project-reset-unit.mjs` and `qa/smart-patch-compositor-unit.mjs` after tool/render changes; inspect actual board contact sheets to catch covered/no-op outputs. Natural object removal requires visual review beyond a successful tool result.
+
+The latest user explicitly authorized pushing saved editor changes to a new branch and wants to open the PR themselves. Current branch: `codex/omniframe-editor-improvements`; initial push `807e8f1b` was remotely verified, then latest main `d9214115` was merged into this working branch. Do not create/merge a PR or publish environment configuration. Earlier local-only statements are historical. Read `docs/CREATIVE_WORKSPACE_20261031.md`, `docs/RESUMED_EDITOR_WORK_20261031.md` and `research/new_study_vdieos/new_study_vdieos.md`. Run `qa/deformation-unit.mjs` and `qa/workbench-responsive-e2e.mjs` for geometry/drawer changes; speed/source clock changes require `qa/speed-curves-render-e2e.mjs`, `qa/compound-source-clock-unit.mjs` and the live MCP test. Keep transform dabs non-destructive; do not silently discard old brush work at capacity. Source listings, documentation indexing and sampled footage review are distinct evidence levels.

@@ -1,3 +1,4 @@
+import { DeformationOverlay } from './TransformWorkbench'
 import { prepareDeviceModels } from '../lib/device3d'
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -494,6 +495,7 @@ export function Preview() {
             }}
           />
           <DrawingCanvasOverlay width={canvasW} height={canvasH} />
+          <DeformationOverlay width={canvasW} height={canvasH} />
 
           {/* Pivot (anchor) handle — Krita armature technique: drag the hinge
               onto a joint; rotation/scale turn about it. Canvas coords map

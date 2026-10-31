@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "id": "tv_crt_knobs_ph",
+      "packedImages": 3,
+      "meshObjects": 2
+    },
+    {
+      "id": "tv_crt_silver_ph",
+      "packedImages": 3,
+      "meshObjects": 2
+    },
+    {
+      "id": "arrow_oga",
+      "packedImages": 0,
+      "meshObjects": 1
+    },
+    {
+      "id": "bullet_shell_oga",
+      "packedImages": 0,
+      "meshObjects": 1
+    },
+    {
+      "id": "payphone_ph",
+      "packedImages": 3,
+      "meshObjects": 1
+    },
+    {
+      "id": "concrete_shards_ph",
+      "packedImages": 3,
+      "meshObjects": 70
+    }
+  ]
+}

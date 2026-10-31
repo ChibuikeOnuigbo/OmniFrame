@@ -1,6 +1,6 @@
 /** Device transitions share rig mathematics across real GLB/WebGL rendering
- * and the perspective Canvas fallback. The browser preloads seven original
- * Blender-authored GLBs with a separately UV-mapped ScreenSurface. The live
+ * and the perspective Canvas fallback. The browser preloads the bundled
+ * authored/converted GLBs with a separately UV-mapped ScreenSurface. The live
  * composited incoming frame is the screen texture, including its alpha.
  * Legacy green-screen overlays remain separate and backwards compatible.
  */

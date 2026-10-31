@@ -1,0 +1,13 @@
+{
+  "source": "OmniFrame Voronoi geometry + Poly Haven / Dimitrios Savva material",
+  "sourceLicense": "CC0-1.0 (material)",
+  "sourceAsset": "cracked_concrete",
+  "fragmentCount": 35,
+  "videoFaces": "VideoShard_* with full-image UVs",
+  "modifications": "Original deterministic 35-piece prism rig with mapped CC0 concrete backs/edges and separate live-video fronts; no physics simulation claimed.",
+  "id": "concrete_shards_ph",
+  "path": "concrete_shards_ph.glb",
+  "editableSource": "assets-source/transition-pack/concrete_shards_ph.blend",
+  "coordinateSystem": "+Y up, +Z front",
+  "textures": "embedded; no external runtime URLs"
+}

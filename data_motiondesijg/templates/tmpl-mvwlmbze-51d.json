@@ -1,0 +1,292 @@
+{
+  "id": "tmpl-mvwlmbze-51d",
+  "name": "TYMM graded push-in",
+  "capturedAt": "2026-10-31T16:11:34.058Z",
+  "sourceClipId": "clip-1",
+  "sourceName": "-9UkBHVV9OA.mp4",
+  "inPointRatio": 0,
+  "duration": 2,
+  "fields": {
+    "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    "animation": {
+      "curves": {
+        "position_x": {
+          "id": "position_x",
+          "property": "position",
+          "channel": "X",
+          "label": "Position X",
+          "color": "#ef4444",
+          "defaultValue": 0,
+          "unit": "px",
+          "keyframes": [
+            {
+              "id": "kf_1pcvzwd",
+              "time": 0,
+              "value": -60,
+              "interpolation": "easeInOut",
+              "handleMode": "aligned",
+              "inHandle": {
+                "dt": -0.2,
+                "dv": 0
+              },
+              "outHandle": {
+                "dt": 0.2,
+                "dv": 0
+              }
+            },
+            {
+              "id": "kf_jak0j3y",
+              "time": 2.5,
+              "value": 60,
+              "interpolation": "easeInOut",
+              "handleMode": "aligned",
+              "inHandle": {
+                "dt": -0.2,
+                "dv": 0
+              },
+              "outHandle": {
+                "dt": 0.2,
+                "dv": 0
+              }
+            }
+          ],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "position_y": {
+          "id": "position_y",
+          "property": "position",
+          "channel": "Y",
+          "label": "Position Y",
+          "color": "#22c55e",
+          "defaultValue": 0,
+          "unit": "px",
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "position_z": {
+          "id": "position_z",
+          "property": "position",
+          "channel": "Z",
+          "label": "Position Z",
+          "color": "#3b82f6",
+          "defaultValue": 0,
+          "unit": "px",
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "rotation_x": {
+          "id": "rotation_x",
+          "property": "rotation",
+          "channel": "X",
+          "label": "Rotation X",
+          "color": "#f87171",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -180,
+          "max": 180,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "rotation_y": {
+          "id": "rotation_y",
+          "property": "rotation",
+          "channel": "Y",
+          "label": "Rotation Y",
+          "color": "#4ade80",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -180,
+          "max": 180,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "rotation_z": {
+          "id": "rotation_z",
+          "property": "rotation",
+          "channel": "Z",
+          "label": "Rotation Z",
+          "color": "#06b6d4",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -180,
+          "max": 180,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "scale_x": {
+          "id": "scale_x",
+          "property": "scale",
+          "channel": "X",
+          "label": "Scale X",
+          "color": "#f59e0b",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0.01,
+          "max": 10,
+          "keyframes": [
+            {
+              "id": "kf_dkvdz6q",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "easeOut",
+              "handleMode": "aligned",
+              "inHandle": {
+                "dt": -0.2,
+                "dv": 0
+              },
+              "outHandle": {
+                "dt": 0.2,
+                "dv": 0
+              }
+            },
+            {
+              "id": "kf_oq2dou6",
+              "time": 2.5,
+              "value": 1.08,
+              "interpolation": "easeOut",
+              "handleMode": "aligned",
+              "inHandle": {
+                "dt": -0.2,
+                "dv": 0
+              },
+              "outHandle": {
+                "dt": 0.2,
+                "dv": 0
+              }
+            }
+          ],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "scale_y": {
+          "id": "scale_y",
+          "property": "scale",
+          "channel": "Y",
+          "label": "Scale Y",
+          "color": "#a855f7",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0.01,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "scale_z": {
+          "id": "scale_z",
+          "property": "scale",
+          "channel": "Z",
+          "label": "Scale Z",
+          "color": "#ec4899",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0.01,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "opacity": {
+          "id": "opacity",
+          "property": "opacity",
+          "channel": "Scalar",
+          "label": "Opacity",
+          "color": "#14b8a6",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0,
+          "max": 1,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "pivot_x": {
+          "id": "pivot_x",
+          "property": "pivot",
+          "channel": "X",
+          "label": "Pivot X",
+          "color": "#f472b6",
+          "defaultValue": 0.5,
+          "unit": "",
+          "min": -1,
+          "max": 2,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "pivot_y": {
+          "id": "pivot_y",
+          "property": "pivot",
+          "channel": "Y",
+          "label": "Pivot Y",
+          "color": "#fb923c",
+          "defaultValue": 0.5,
+          "unit": "",
+          "min": -1,
+          "max": 2,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "playback_speed": {
+          "id": "playback_speed",
+          "property": "speed",
+          "channel": "Scalar",
+          "label": "Playback Speed",
+          "color": "#eab308",
+          "defaultValue": 1,
+          "unit": "x",
+          "min": 0.1,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "wheel_rotation": {
+          "id": "wheel_rotation",
+          "property": "wheel",
+          "channel": "Z",
+          "label": "3D Wheel Rotation",
+          "color": "#8b5cf6",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -3600,
+          "max": 3600,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        }
+      }
+    },
+    "effects": {
+      "contrast": 1.15,
+      "saturation": 1.25,
+      "vignette": 0.3
+    },
+    "adjustment": {
+      "luts": [
+        {
+          "builtin": "tymm-5",
+          "intensity": 1
+        }
+      ]
+    },
+    "blendMode": "source-over",
+    "volume": 1
+  },
+  "fieldCount": 6
+}

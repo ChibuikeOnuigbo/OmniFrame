@@ -1,0 +1,70 @@
+{
+  "layouts": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "box": {
+        "x": 48,
+        "y": 48,
+        "width": 264,
+        "height": 592
+      },
+      "occlusions": [],
+      "innerWidth": 263,
+      "pageOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "box": {
+        "x": 48,
+        "y": 48,
+        "width": 272,
+        "height": 796
+      },
+      "occlusions": [],
+      "innerWidth": 271,
+      "pageOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "box": {
+        "x": 48,
+        "y": 48,
+        "width": 272,
+        "height": 976
+      },
+      "occlusions": [],
+      "innerWidth": 271,
+      "pageOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "box": {
+        "x": 48,
+        "y": 48,
+        "width": 272,
+        "height": 852
+      },
+      "occlusions": [],
+      "innerWidth": 271,
+      "pageOverflow": false
+    }
+  ],
+  "violet": "rgb(109, 94, 252)",
+  "dabs": 8,
+  "persistence": true,
+  "nativeCanvasChanged": true,
+  "capacityPreservesWork": true,
+  "errors": []
+}

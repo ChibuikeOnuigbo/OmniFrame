@@ -1,3 +1,23 @@
+# Current resumed editor state — pushed PR branch
+
+Latest asset task: `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md`. Two textured Poly Haven CRTs with fitted live-video screens, plus Object 3D arrow, bullet-shell, payphone and original concrete-fragment presets are implemented. Six GLBs/packed editable sources, credit/license/source-hash records, rendered thumbnails, six moving MP4s and a combined reel are available. Actual native export includes sound; realtime software-GPU capture is VFR rather than a fixed-rate performance certification. Exact details and remaining platform limits are in the report. No environment configuration publication was performed.
+
+Current branch: `codex/omniframe-editor-improvements`. User-authorized initial push `807e8f1b` was independently verified on GitHub; latest main `d9214115` was merged into this working branch. The user will open the PR. No environment configuration publication or main push was performed. Latest implementation/evidence: `docs/RESUMED_EDITOR_WORK_20261031.md`.
+
+Speed curves now affect actual headless media/compound source clocks using the shared app functions. All 15 presets passed 120 exact source-pixel comparisons and produced real moving MP4s. Live curve/trim/volume edits pass validation, atomic failure, undo/redo and project round-trip checks. Nonzero-start compound creation and ordinary moved ungroup preserve timing. New kinetic typography study: 108 decoded changing frames.
+
+Actual Drive downloads now include the full supplied timeline short, collection manifest and correct BrandBird mirror; source hashes and measurements are in `research/new_study_vdieos/access-refresh.json`. The 259-record collection index remains metadata, not newly watched videos. BrandBird image loading/background interactions were exercised at three sizes, with offline errors/overflow recorded. Direct YouTube still returns 403. All-5,000 full-motion acceptance and independent RDT raw-scene recreation remain open.
+
+---
+
+# Earlier creative-workspace checkpoint — superseded where conflicting
+
+Latest upload supersedes earlier RDT access blockers: `evidence_video/reala/source/RDT_20261027_092910.mp4` is available. The universal-tool render `evidence_video/reala/normal edit/RDT_recopy.mp4` is a **reference-derived recomposition**, with baked-in source typography/effects, not a recreation from raw anime footage. Verified: 752 video frames at 30 fps, 750 distinct decoded hashes, audio correlation 0.99736. Generic headless audio export now preserves top-level video source trims, start times and volume. Local commits are requested; push/publication remain unauthorized. Read its manifest and study before treating historical Board S still-image outputs as recreation evidence.
+
+`docs/CREATIVE_WORKSPACE_20261031.md` and `evidence_video/` record the new verified geometry, drawer, palette, menu, history and MCP/video-decoding work. Live bridge: 23 tools; headless: 69. Glitch checkpoint: next 868 / 602 retained / 253 duplicate decisions / zero failed. Published environment allows Drive folder listings, while normal media redirects and YouTube remain blocked. No environment configuration was changed and no new work was pushed or published. Read `research/new_study_vdieos/new_study_vdieos.md` for actual source coverage and unresolved requests.
+
+---
+
 # Current verified state — 2026-10-31, Codex implementation
 
 Latest user branch instruction: use merged **main**. Base `ba7103b89600ef4afa2d4ac5a55e1be1a24ac1ea`; branch `codex/omniframe-device-glitch-production`. No protected branch resets or merges.

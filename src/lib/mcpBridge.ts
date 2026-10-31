@@ -1,3 +1,5 @@
+import { validateDeformation } from './deformation'
+import { SPEED_CURVE_IDS } from './speedCurves'
 /**
  * In-app MCP bridge: the SAME universal tool names as tools/mcp operate the
  * REAL store from inside the booted app (window.omniMCP.call(...)). Every call
@@ -19,7 +21,7 @@ function push(e: McpLogEntry) {
 
 export const OMNI_MCP_CATALOG = [
   'help', 'select', 'click', 'mask_draw', 'mask_clear', 'keyframe_set', 'curve_set',
-  'effect_set', 'remove_background', 'fill_composition_area', 'snapshot', 'dump',
+  'transform_set', 'edit_element', 'effect_set', 'remove_background', 'fill_composition_area', 'snapshot', 'dump',
   'timeline_screenshot', 'track_assign', 'log', 'clip_stretch', 'transparent_select',
   'select_main_element', 'omniframe_extract', 'patch_under', 'omniframe_move',
 ]
@@ -42,7 +44,7 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
     const seq = st().sequenceSettings || { width: 1920, height: 1080 }
     switch (tool) {
       case 'help':
-        out = { catalog: OMNI_MCP_CATALOG, note: 'universal tools operate the real store; every call is logged in the MCP Console' }
+        out = { catalog: OMNI_MCP_CATALOG, editElementFields:['transform','deformation','speedCurve','inPoint','volume'], note: 'universal tools operate the real store; every call is logged in the MCP Console' }
         break
       case 'select':
         if (params.clipId != null && !clips().some(c => c.id === params.clipId)) throw new Error('clip not found')
@@ -94,6 +96,21 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         animation.curves[key]=curve
         edit(c,{animation}); out = { curve: key }
         break
+      }
+      case 'transform_set': {
+        const c=requireClip(),allowed=['x','y','z','scale','scaleX','scaleY','scaleZ','rotation','rotationX','rotationY','opacity','pivotX','pivotY']
+        for(const key of Object.keys(params)){if(!allowed.includes(key))throw new Error('Unsupported transform field '+key);finite(key,params[key])}
+        edit(c,{transform:{...c.transform,...params}});out={clipId:c.id,transform:clips().find(v=>v.id===c.id).transform};break
+      }
+      case 'edit_element': {
+        const c=params.clipId?clips().find(c=>c.id===params.clipId):requireClip();if(!c)throw new Error('clip not found')
+        const patch=params.patch||{};for(const key of Object.keys(patch))if(!['transform','deformation','speedCurve','inPoint','volume'].includes(key))throw new Error('Unsupported live edit_element field '+key)
+        const next:any={}
+        if(patch.transform){for(const [key,value]of Object.entries(patch.transform)){if(!['x','y','z','scale','scaleX','scaleY','scaleZ','rotation','rotationX','rotationY','opacity','pivotX','pivotY'].includes(key))throw new Error('Unknown transform field');finite(key,value)}next.transform={...c.transform,...patch.transform}}
+        if('deformation'in patch)next.deformation=validateDeformation(patch.deformation)
+        if('speedCurve'in patch){if(patch.speedCurve!==null&&!SPEED_CURVE_IDS.includes(patch.speedCurve))throw new Error('Unknown speed curve');next.speedCurve=patch.speedCurve??undefined}
+        for(const key of ['inPoint','volume'])if(key in patch){const value=finite(key,patch[key]);if(value<0||(key==='volume'&&value>1))throw new Error(key+' is outside its valid range');next[key]=value}
+        edit(c,next);out={clipId:c.id,...next};break
       }
       case 'effect_set':
         st().setClipEffect(requireClip().id, params.patch || {}); out = { clipId: requireClip().id }

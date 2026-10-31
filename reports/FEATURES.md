@@ -1,5 +1,9 @@
 # Verified implementation changes — 2026-10-31
 
+Textured external asset increment: six new transition presets, five downloaded CC0 models plus one original fracture rig using a CC0 material. Device 3D now includes two Poly Haven CRTs with live video screens; Object 3D includes arrow/shell/payphone/fracture motions with parameter controls, thumbnails, source credits, undo and bundle persistence. Actual moving WebGL renders, native MP4/audio export, packed-source reopening and existing browser regressions passed. See `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md` and `evidence_video/asset-transitions/` for source links, measured output and scope. Sketchfab download authentication remained unavailable.
+
+Latest resumed increment: `docs/RESUMED_EDITOR_WORK_20261031.md`. Saved commit `807e8f1b` is pushed to `codex/omniframe-editor-improvements`; latest main was merged into that working branch. All 15 speed curves now control actual headless source sampling via shared app maths, with 120 exact pixel comparisons / 15 moving exports. Live MCP clock/trim/volume editing supports undo and project persistence. Nonzero-start compound creation and ordinary moved ungroup preserve time. A second original kinetic typography MP4 is delivered. Actual Drive source downloads and BrandBird responsive interactions are now evidenced; YouTube direct requests still return 403. Older local-only/access statements below are historical.
+
 This ledger describes code and executed checks in `codex/omniframe-device-glitch-production`, based on merged main `ba7103b8`. It supersedes conflicting historical counts, without certifying every old feature claim. See `docs/CODEX_TASK_RECOVERY.md` and `continue.md` for remaining work.
 
 | Change | Code | Verification / artifact |
@@ -21,3 +25,10 @@ This ledger describes code and executed checks in `codex/omniframe-device-glitch
 | Reproducible encoder and error cleanup | `tools/mcp/core.mjs` | Lockfile-pinned FFmpeg; encoder failure regression; valid decoded XML round-trip frames |
 
 Machine checks and viewable proofs do not imply every recreation visually matches its original reference. Native desktop build, all historical tasks, complete 5,000 full-motion acceptance, camera keys, DOF/motion blur and all Drive studies remain outside verified completion.
+
+
+## Creative-workspace increment
+
+The latest direct RDT upload is now preserved and used in `evidence_video/reala/normal edit/RDT_recopy.mp4`: 752 frames / 30 fps, 750 distinct decoded hashes, one source audio track and 0.99736 audio correlation. It is explicitly a reference-derived recomposition, preserving burned-in scene cuts, typography and effects. Source SHA/probe/cut-score candidates and sampled study notes accompany it. Independent raw-footage recreation remains open. Generic universal-tool exports now preserve imported top-level video audio, source trims, clip delay and volume; a moving/audio end-to-end test checks correlation, summed overlap gain, silence, mute and source-offset pixels. Native video frame canvases and ImageData are reused within the 40-frame bound. No new publish/push was performed.
+
+See `docs/CREATIVE_WORKSPACE_20261031.md` for verified drawer/palette/grouped-menu fixes, shared perspective/liquify engines, existing marquee/roto integration, retained history selection, 23-tool live bridge, real moving-video decoding and source indexing. Evidence: `evidence_video/`. No commercial-tool parity, new trained model, full creator watch or RDT source match is claimed. Checkpoint advanced to next 868 / 602 retained / 253 duplicate decisions / zero failed. This increment remains local under the user’s no-publish instruction.

@@ -1,3 +1,4 @@
+import { applyCanvasDeformation, hasDeformation } from './deformation'
 // OmniFrame preview engine.
 //
 // This is the real renderer. It runs its own requestAnimationFrame loop and
@@ -48,6 +49,8 @@ import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
 import { applyClipFxLayers, hasClipFxLayers, drawReplaceBg, drawParticleFx } from './particleFx'
 import { drawDeviceScene, rigAt, hasDeviceOverlay, ensureKeyedDevice, drawDeviceOverlay, type DeviceKind } from './device3d'
+import {drawObjectTransition} from './object3d'
+import {defaultDeviceModel} from './transitionAssetCatalog'
 import { evalNumKeys, evalColorKeys, type CharRange } from './textRuns'
 import { applyGlitchNG, hasNg, type NgEffect } from './glitchNG'
 import { inheritedWorld } from './parentChain'
@@ -257,6 +260,7 @@ export class PreviewEngine {
   private usedThisFrame = new Set<HTMLMediaElement>()
   private requestedTime = new WeakMap<HTMLMediaElement, number>()
   private sampling = false
+  private deformedSources = new Map<string, HTMLCanvasElement>()
   private samplePool = new Map<string, HTMLVideoElement | HTMLAudioElement>()
 
   constructor(canvas: HTMLCanvasElement, width = PW, height = PH, opts: { sampling?: boolean } = {}) {
@@ -1429,10 +1433,25 @@ export class PreviewEngine {
         }
         break
       }
+      case 'object_arrow_sweep':
+      case 'object_shell_whip':
+      case 'object_payphone_orbit':
+      case 'object_concrete_shatter': {
+        const from=this.takeScratch(),to=this.takeScratch()
+        try {
+          for(const canvas of [from,to]){const x=canvas.getContext('2d')!;x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,canvas.width,canvas.height)}
+          if(hasFrom)drawFrom(from.getContext('2d')!)
+          if(hasTo)drawTo(to.getContext('2d')!)
+          drawObjectTransition(ctx,this.width,this.height,trans.type,progress,from,to,trans.parameters||{})
+        } finally {this.releaseScratch(from);this.releaseScratch(to)}
+        break
+      }
       case 'device_phone':
       case 'device_monitor':
       case 'device_laptop':
-      case 'device_tv': {
+      case 'device_tv':
+      case 'device_tv_crt_knobs':
+      case 'device_tv_crt_silver': {
         // 3D device flies in with the incoming clip live on its screen, then
         // the screen expands to the full frame: a true 3D→2D handoff.
         const kind: DeviceKind = trans.type === 'device_phone' ? 'phone' : trans.type === 'device_monitor' ? 'monitor' : trans.type === 'device_laptop' ? 'laptop' : 'tv'
@@ -1451,7 +1470,7 @@ export class PreviewEngine {
           if(inverse)drawFrom(sctx);else drawTo(sctx)
           ctx.save()
           if(inverse)ctx.globalAlpha *= Math.min(1, Math.max(0, (1-progress)/.18))
-          drawDeviceScene(ctx, this.width, this.height, kind, deviceRig, scr, trans.parameters || {})
+          drawDeviceScene(ctx, this.width, this.height, kind, deviceRig, scr, {...trans.parameters,model:trans.parameters?.model||defaultDeviceModel(trans.type)})
           ctx.restore(); this.releaseScratch(scr)
         }
         break
@@ -2025,7 +2044,22 @@ export class PreviewEngine {
     asset: MediaAsset,
     time: number = 0,
     skipLutIsolation = false,
+    skipDeformation = false,
   ) {
+    if (!skipDeformation && hasDeformation(clip.deformation)) {
+      const sourceWidth=(el as HTMLVideoElement).videoWidth||(el as HTMLImageElement).naturalWidth||asset.width||this.width
+      const sourceHeight=(el as HTMLVideoElement).videoHeight||(el as HTMLImageElement).naturalHeight||asset.height||this.height
+      // Full-resolution sources for export; preview follows the active canvas budget.
+      const ratio=Math.min(1,Math.max(this.width,this.height)/Math.max(sourceWidth,sourceHeight))
+      let warped=this.deformedSources.get(clip.id)
+      if(!warped){if(this.deformedSources.size>=16)this.deformedSources.delete(this.deformedSources.keys().next().value!);warped=document.createElement('canvas');this.deformedSources.set(clip.id,warped)}
+      const width=Math.max(1,Math.round(sourceWidth*ratio)),height=Math.max(1,Math.round(sourceHeight*ratio))
+      if(warped.width!==width||warped.height!==height){warped.width=width;warped.height=height}
+      const wx=warped.getContext('2d')!;wx.clearRect(0,0,width,height);wx.drawImage(el,0,0,width,height)
+      applyCanvasDeformation(warped,clip.deformation!)
+      this.drawClip(ctx,warped,clip,asset,time,skipLutIsolation,true)
+      return
+    }
     // Per-clip LUT grade ("effect placed inside the clip"): render the clip
     // into an isolated scratch canvas, grade it there, composite back so
     // sibling content on the target canvas is untouched. A clip Mask uses the
@@ -2035,7 +2069,7 @@ export class PreviewEngine {
       const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
       octx.translate(this.width, this.height) // frame origin at pad centre
-      this.drawClip(octx, el, clip, asset, time, true)
+      this.drawClip(octx, el, clip, asset, time, true, skipDeformation)
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
       if (hasPixelGrade(fxEff)) applyPixelGrade(scratch, fxEff!, Math.round(time * 24))
@@ -2409,6 +2443,7 @@ export class PreviewEngine {
     this.unsubscribe = null
     if (activePreviewEngine === this) activePreviewEngine = null
     this.puppetCanvas = null
+    this.deformedSources.clear()
     if (this.sampling) {
       this.samplePool.forEach((el) => {
         el.pause()

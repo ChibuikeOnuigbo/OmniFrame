@@ -1,4 +1,7 @@
+import { TransformModes } from './TransformWorkbench'
 import { DeviceTransitionInspector } from './DeviceTransitionInspector'
+import {ObjectTransitionInspector} from './ObjectTransitionInspector'
+import {isObjectTransition} from '../lib/transitionAssetCatalog'
 import React, { useEffect, useRef, useState } from 'react'
 import ExpandableToolGroup from './ExpandableToolGroup'
 import { SPEED_CURVES, type SpeedCurveId } from '../lib/speedCurves'
@@ -826,6 +829,8 @@ function ClipInspector({ clip }: { clip: Clip }) {
       <McpConsoleSection />
 
       <Section title="Transform">
+        <TransformModes clip={clip}/>
+        <div>
         <Field label="Position X">
           <Slider label="Position X" min={-960} max={960} value={t.x} onChange={(v) => setClipTransform(clip.id, { x: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.x)}</span>
@@ -913,6 +918,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
             {renderKeyframeControl('rotation_y', t.rotationY ?? 0)}
           </Field>
         </AccordionGroup>
+        </div>
       </Section>
 
       <Section title="Appearance">
@@ -1612,7 +1618,7 @@ export function RightPanel() {
         tabIndex={0}
         className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
       >
-        {selectedTransition?.type.startsWith('device_') ? <DeviceTransitionInspector transition={selectedTransition} /> : clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+        {selectedTransition?.type.startsWith('device_') ? <DeviceTransitionInspector transition={selectedTransition} /> : selectedTransition&&isObjectTransition(selectedTransition.type) ? <ObjectTransitionInspector transition={selectedTransition} /> : clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
       </div>
     </SectionsNavigator>
   )
@@ -1718,9 +1724,9 @@ export function RightPanel() {
 
   // ---- Docked mode (collapsible + width-draggable) ----
   return (
-    <div className="shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
+    <div data-testid="right-dock-root" className="relative z-50 shrink-0 flex h-full bg-ink-900 border-l border-ink-700">
       {rightOpen && (
-        <div style={{ width: `${rightPanelWidth}px` }} className="relative shrink-0 bg-ink-850 flex flex-col h-full">
+        <div style={{ width: `${rightPanelWidth}px` }} className="relative shrink-0 bg-ink-850 flex flex-col h-full max-sm:absolute max-sm:right-9 max-sm:top-0 max-sm:max-w-[calc(100vw-5.5rem)] max-sm:shadow-xl">
           {/* Width drag handle: slide the inspector edge to resize */}
           <div
             data-testid="right-panel-resize-handle"

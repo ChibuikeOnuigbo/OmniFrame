@@ -1,0 +1,1011 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "evidence_video/speed-curves/linear.mp4",
+  "out": "/workspace/OmniFrame/evidence_video/speed-curves/linear.mp4",
+  "frames": 54,
+  "fps": 24,
+  "size": 42977,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 24,
+     "duration": 2.25
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 24,
+     "duration": 2.25
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": ".cache/speed-clock-qa/moving-source.mp4",
+     "fps": 24
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 96,
+     "duration": 4,
+     "hasAudio": false
+    }
+   },
+   {
+    "tool": "duplicate_paste",
+    "params": {
+     "dx": 0,
+     "dy": 0,
+     "copy": true
+    },
+    "out": {
+     "clipId": "clip-2"
+    }
+   },
+   {
+    "tool": "clip_move_time",
+    "params": {
+     "clipId": "clip-2",
+     "start": 0.25
+    },
+    "out": {
+     "clipId": "clip-2",
+     "from": 0,
+     "to": 0.25
+    }
+   },
+   {
+    "tool": "clip_stretch",
+    "params": {
+     "clipId": "clip-2",
+     "from": 4,
+     "to": 2
+    },
+    "out": {
+     "clipId": "clip-2",
+     "duration": 2
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "inPoint": 0.5,
+      "speedCurve": "linear"
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_clear",
+    "params": {},
+    "out": {
+     "clipId": "clip-2"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.48
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.73
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_draw",
+    "params": {
+     "shape": "rectangle",
+     "x0": 0,
+     "y0": 0,
+     "x1": 320,
+     "y1": 180,
+     "feather": 0
+    },
+    "out": {
+     "clipId": "clip-2",
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.5,
+      "centerY": 0.5,
+      "width": 1,
+      "height": 1,
+      "feather": 0,
+      "inverted": false,
+      "enabled": true
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.48
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.73
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_clear",
+    "params": {},
+    "out": {
+     "clipId": "clip-2"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.86
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.1099999999999999
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_draw",
+    "params": {
+     "shape": "rectangle",
+     "x0": 0,
+     "y0": 0,
+     "x1": 320,
+     "y1": 180,
+     "feather": 0
+    },
+    "out": {
+     "clipId": "clip-2",
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.5,
+      "centerY": 0.5,
+      "width": 1,
+      "height": 1,
+      "feather": 0,
+      "inverted": false,
+      "enabled": true
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.86
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.1099999999999999
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_clear",
+    "params": {},
+    "out": {
+     "clipId": "clip-2"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.35
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.6
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_draw",
+    "params": {
+     "shape": "rectangle",
+     "x0": 0,
+     "y0": 0,
+     "x1": 320,
+     "y1": 180,
+     "feather": 0
+    },
+    "out": {
+     "clipId": "clip-2",
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.5,
+      "centerY": 0.5,
+      "width": 1,
+      "height": 1,
+      "feather": 0,
+      "inverted": false,
+      "enabled": true
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.35
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.6
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_clear",
+    "params": {},
+    "out": {
+     "clipId": "clip-2"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.95
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 2.2
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_draw",
+    "params": {
+     "shape": "rectangle",
+     "x0": 0,
+     "y0": 0,
+     "x1": 320,
+     "y1": 180,
+     "feather": 0
+    },
+    "out": {
+     "clipId": "clip-2",
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.5,
+      "centerY": 0.5,
+      "width": 1,
+      "height": 1,
+      "feather": 0,
+      "inverted": false,
+      "enabled": true
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 1.95
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/actual.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 2.2
+    },
+    "out": {
+     "png": ".cache/speed-clock-qa/expected.png"
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "opacity": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "opacity": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "select",
+    "params": {
+     "clipId": "clip-2"
+    },
+    "out": {
+     "selected": "clip-2"
+    }
+   },
+   {
+    "tool": "mask_clear",
+    "params": {},
+    "out": {
+     "clipId": "clip-2"
+    }
+   },
+   {
+    "tool": "timeline_screenshot",
+    "params": {
+     "out": "evidence_video/speed-curves/linear-timeline.png",
+     "playhead": 1
+    },
+    "out": {
+     "png": "evidence_video/speed-curves/linear-timeline.png",
+     "sidecar": "evidence_video/speed-curves/linear-timeline.png.json",
+     "bytes": 18414
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "evidence_video/speed-curves/linear.mp4"
+    },
+    "out": {
+     "frames": 54
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 24,
+    "duration": 2.25,
+    "bg": "#0d0f13"
+   },
+   "selection": "clip-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "moving-source.mp4",
+     "start": 0,
+     "duration": 4,
+     "inPoint": 0,
+     "volume": 1,
+     "asset": ".cache/speed-clock-qa/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 0,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "moving-source.mp4",
+     "start": 0.25,
+     "duration": 2,
+     "inPoint": 0.5,
+     "speedCurve": "linear",
+     "volume": 1,
+     "asset": ".cache/speed-clock-qa/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

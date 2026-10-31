@@ -1,0 +1,52 @@
+{
+  "source": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+  "sha256": "985ce469f3e972beeaedd4096bb2edd189d95a06ff62dfc52faeca19108643d4",
+  "bytes": 1454482,
+  "width": 360,
+  "height": 640,
+  "fps": 30,
+  "frames": 752,
+  "duration": 25.066666666666666,
+  "audio": {
+    "codec": "AAC",
+    "channels": 2,
+    "sampleRate": 48000
+  },
+  "analysis": {
+    "sceneChangeThreshold": 0.22,
+    "candidateTimes": [
+      0.333333,
+      0.4,
+      0.533333,
+      2.73333,
+      2.86667,
+      3,
+      3.13333,
+      3.36667,
+      4.9,
+      6.4,
+      9.43333,
+      10.9667,
+      12.5,
+      14.8,
+      15.5333,
+      16.3,
+      16.7,
+      17.8,
+      18.5333,
+      19.3,
+      20.8333
+    ],
+    "warning": "Scene-change scores also respond to flashes/glitches and are not verified shot boundaries. Contact sheets sample frames at 2 fps; audio measurements are not a listening review."
+  },
+  "measuredLayout": {
+    "sharpBand": {
+      "x": 0,
+      "y": 219,
+      "width": 360,
+      "height": 202
+    },
+    "outerBackground": "blurred moving duplicate"
+  },
+  "provenance": "User-uploaded finished edit; titles, grades, transitions and scene cuts are burned in."
+}

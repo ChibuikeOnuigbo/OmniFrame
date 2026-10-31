@@ -1,0 +1,31 @@
+{
+  "output": "evidence_video/reala/normal edit/RDT_recopy.mp4",
+  "source": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+  "classification": "reference-derived two-layer recomposition; not an independent recreation",
+  "authoredLayers": [
+    "full reference: slight enlargement, blur and dimmed background; original audio",
+    "full reference: sharp center-band matte; volume zero to avoid doubled audio"
+  ],
+  "bakedIn": [
+    "all existing anime scene cuts",
+    "lyric typography",
+    "original glitch/flash/zoom effects",
+    "original grading and fades"
+  ],
+  "missingForIndependentRecreation": [
+    "separate original anime footage",
+    "clean typography/effect-free scene plates",
+    "original font/music/project or independently authored replacement choices"
+  ],
+  "validation": {
+    "frames": 752,
+    "distinctFrameHashes": 750,
+    "audioCorrelation": 0.9973607702620202,
+    "audioTracks": 1,
+    "width": 360,
+    "height": 640,
+    "fps": 30,
+    "duration": 25.066666666666666
+  },
+  "workflow": "Universal project_new, import_video, edit_element, mask_draw, snapshot, timeline_screenshot, render_export; no external final-pixel edit"
+}

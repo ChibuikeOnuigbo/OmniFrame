@@ -1,0 +1,245 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "evidence_video/reala/normal edit/RDT_recopy.mp4",
+  "out": "/workspace/OmniFrame/evidence_video/reala/normal edit/RDT_recopy.mp4",
+  "frames": 752,
+  "fps": 30,
+  "size": 1413243,
+  "audio": {
+   "tracks": 1,
+   "sampleRate": 48000,
+   "channels": 2
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 360,
+     "h": 640,
+     "fps": 30,
+     "duration": 25.066666666666666,
+     "bg": "#05060c"
+    },
+    "out": {
+     "w": 360,
+     "h": 640,
+     "fps": 30,
+     "duration": 25.066666666666666
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+     "fps": 30
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 752,
+     "duration": 25.07,
+     "hasAudio": true
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "transform": {
+       "scale": 1.06
+      },
+      "effects": {
+       "blur": 10,
+       "brightness": 0.9
+      },
+      "volume": 1
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+     "fps": 30
+    },
+    "out": {
+     "clipId": "clip-2",
+     "frames": 752,
+     "duration": 25.07,
+     "hasAudio": true
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-2",
+     "patch": {
+      "volume": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-2",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "mask_draw",
+    "params": {
+     "shape": "rectangle",
+     "x0": 0,
+     "y0": 219,
+     "x1": 360,
+     "y1": 421,
+     "feather": 0
+    },
+    "out": {
+     "clipId": "clip-2",
+     "mask": {
+      "shape": "rectangle",
+      "kind": "shape",
+      "centerX": 0.5,
+      "centerY": 0.5,
+      "width": 1.00078125,
+      "height": 0.315625,
+      "feather": 0,
+      "inverted": false,
+      "enabled": true
+     }
+    }
+   },
+   {
+    "tool": "timeline_screenshot",
+    "params": {
+     "out": "evidence_video/reala/normal edit/RDT-timeline.png",
+     "playhead": 8
+    },
+    "out": {
+     "png": "evidence_video/reala/normal edit/RDT-timeline.png",
+     "sidecar": "evidence_video/reala/normal edit/RDT-timeline.png.json",
+     "bytes": 17472
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 8
+    },
+    "out": {
+     "png": "evidence_video/reala/normal edit/RDT-preview.png"
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "evidence_video/reala/normal edit/RDT_recopy.mp4"
+    },
+    "out": {
+     "frames": 752
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 360,
+    "h": 640,
+    "fps": 30,
+    "duration": 25.066666666666666,
+    "bg": "#05060c"
+   },
+   "selection": "clip-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "RDT_20261027_092910.mp4",
+     "start": 0,
+     "duration": 25.066666666666666,
+     "inPoint": 0,
+     "volume": 1,
+     "asset": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1.06,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "blur": 10,
+      "brightness": 0.9
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "clip-2",
+     "name": "RDT_20261027_092910.mp4",
+     "start": 0,
+     "duration": 25.066666666666666,
+     "inPoint": 0,
+     "volume": 0,
+     "asset": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": "[same-object-ref]",
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

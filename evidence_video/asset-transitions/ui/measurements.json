@@ -1,0 +1,224 @@
+[
+  {
+    "width": 320,
+    "pageWidth": 320,
+    "pillars": [
+      {
+        "text": "Device 3D\n6",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Object 3D\n4",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Blur\n50",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Dissolve\n57",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Light\n50",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Flicker\n50",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "TV\n50",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Overlay\n50",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Scene\n27",
+        "width": 77,
+        "scrollWidth": 77
+      },
+      {
+        "text": "Classic\n26",
+        "width": 77,
+        "scrollWidth": 77
+      }
+    ],
+    "cards": [
+      {
+        "loaded": true,
+        "width": 209
+      },
+      {
+        "loaded": true,
+        "width": 209
+      },
+      {
+        "loaded": true,
+        "width": 209
+      },
+      {
+        "loaded": true,
+        "width": 209
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "pageWidth": 390,
+    "pillars": [
+      {
+        "text": "Device 3D\n6",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Object 3D\n4",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Blur\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Dissolve\n57",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Light\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Flicker\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "TV\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Overlay\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Scene\n27",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Classic\n26",
+        "width": 80,
+        "scrollWidth": 80
+      }
+    ],
+    "cards": [
+      {
+        "loaded": true,
+        "width": 217
+      },
+      {
+        "loaded": true,
+        "width": 217
+      },
+      {
+        "loaded": true,
+        "width": 217
+      },
+      {
+        "loaded": true,
+        "width": 217
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1440,
+    "pillars": [
+      {
+        "text": "Device 3D\n6",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Object 3D\n4",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Blur\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Dissolve\n57",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Light\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Flicker\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "TV\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Overlay\n50",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Scene\n27",
+        "width": 80,
+        "scrollWidth": 80
+      },
+      {
+        "text": "Classic\n26",
+        "width": 80,
+        "scrollWidth": 80
+      }
+    ],
+    "cards": [
+      {
+        "loaded": true,
+        "width": 217
+      },
+      {
+        "loaded": true,
+        "width": 217
+      },
+      {
+        "loaded": true,
+        "width": 217
+      },
+      {
+        "loaded": true,
+        "width": 217
+      }
+    ]
+  }
+]

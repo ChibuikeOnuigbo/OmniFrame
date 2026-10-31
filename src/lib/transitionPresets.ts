@@ -22,7 +22,7 @@ export const TRANSITION_MAX_DURATION = 5
 export interface TransitionPresetDef {
   id: TransitionType
   name: string
-  category: 'Dissolve' | 'Wipe' | 'Slide' | 'Shapes' | 'Zoom & Motion' | 'Special' | 'Blur' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay' | 'Scene' | 'Device 3D'
+  category: 'Dissolve' | 'Wipe' | 'Slide' | 'Shapes' | 'Zoom & Motion' | 'Special' | 'Blur' | 'Light' | 'Flicker' | 'Glitch' | 'TV' | 'Overlay' | 'Scene' | 'Device 3D' | 'Object 3D'
   /** Out-of-the-box duration in seconds. Users can lower/raise it, but the
    *  applied duration is always capped to TRANSITION_MIN/MAX_DURATION. */
   baseDuration: number
@@ -30,10 +30,16 @@ export interface TransitionPresetDef {
 }
 
 export const TRANSITION_PRESETS: TransitionPresetDef[] = [
-  { id: 'device_phone', name: 'Phone 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'A procedurally modelled phone spins in with the incoming clip on its green screen, then the screen expands flat to full frame (3D→2D).' },
+  { id: 'device_phone', name: 'Phone 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'A phone spins in carrying the live incoming clip, then its screen expands to full frame.' },
   { id: 'device_monitor', name: 'Monitor 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'An iMac-style monitor with pedestal stand swings in carrying the incoming clip, then flattens to 2D.' },
   { id: 'device_laptop', name: 'Laptop Open Reveal', category: 'Device 3D', baseDuration: 1.8, description: 'Open laptop carries the live incoming clip, then pushes through its display to full frame.' },
   { id: 'device_tv', name: 'TV 3D Fly-in', category: 'Device 3D', baseDuration: 1.6, description: 'A thin-bezel TV on feet rotates in with the incoming clip on screen, then hands off to flat 2D.' },
+  { id:'device_tv_crt_knobs',name:'Knob CRT TV',category:'Device 3D',baseDuration:1.8,description:'Textured Poly Haven CRT with side controls, carrying your incoming video into a full-frame reveal.' },
+  { id:'device_tv_crt_silver',name:'Silver CRT TV',category:'Device 3D',baseDuration:1.8,description:'A scanned silver CRT rotates in with its original PBR body and a live video screen.' },
+  { id:'object_arrow_sweep',name:'Arrow Sweep',category:'Object 3D',baseDuration:1.2,description:'Gold 3D chevrons sweep across a directional reveal.' },
+  { id:'object_shell_whip',name:'Bullet Shell Whip',category:'Object 3D',baseDuration:1.1,description:'A spinning brass-colored shell crosses a quick wipe into the next clip.' },
+  { id:'object_payphone_orbit',name:'Payphone Orbit',category:'Object 3D',baseDuration:1.6,description:'A textured payphone turns in front of an expanding circular reveal.' },
+  { id:'object_concrete_shatter',name:'Concrete Shatter',category:'Object 3D',baseDuration:1.6,description:'Your outgoing image breaks into 35 rotating 3D fragments with textured concrete backs.' },
   { id: 'cross_dissolve', name: 'Cross Dissolve', category: 'Dissolve', baseDuration: 1.2, description: 'Smooth opacity blend from outgoing to incoming frame.' },
   { id: 'film_dissolve', name: 'Film Dissolve', category: 'Dissolve', baseDuration: 1.4, description: 'Film-style blend with a gamma-weighted crossfade.' },
   { id: 'additive_dissolve', name: 'Additive Dissolve', category: 'Dissolve', baseDuration: 1.2, description: 'Incoming frame adds its light over the outgoing frame.' },

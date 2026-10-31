@@ -33,10 +33,23 @@ try{
   await checked('curve_set',{property:'position',channel:'X',interpolation:'ease-in-out'})
   clip=store.getState().clips[0]
   if(clip.animation.curves.position_x.keyframes.some(k=>k.interpolation!=='ease-in-out'))throw Error('curve update discarded')
+  await checked('edit_element',{clipId:id,patch:{speedCurve:'hold-then-go',inPoint:1,volume:.35}})
+  clip=store.getState().clips[0]
+  if(clip.speedCurve!=='hold-then-go'||clip.inPoint!==1||clip.volume!==.35)throw Error('source clock/volume edit discarded')
+  store.getState().undo();clip=store.getState().clips[0]
+  if(clip.speedCurve||clip.inPoint!==0||clip.volume!==1)throw Error('source clock edit undo failed')
+  store.getState().redo()
+  const before=JSON.stringify(store.getState().clips[0]),badClock=await call('edit_element',{clipId:id,patch:{speedCurve:'unknown',inPoint:4}}),badVolume=await call('edit_element',{clipId:id,patch:{volume:-1}})
+  if(badClock.ok||badVolume.ok||before!==JSON.stringify(store.getState().clips[0]))throw Error('bad source edit partially mutated clip')
+  const {buildOmniProjectBundle,parseOmniProjectBundle}=await import('/src/lib/omniProject.ts')
+  const state=store.getState(),bundle=await buildOmniProjectBundle({assets:state.assets,tracks:state.tracks,clips:state.clips,transitions:[]},'MCP clock test'),loaded=await parseOmniProjectBundle(new File([bundle],'clock.omni'))
+  if(loaded.state.clips[0].speedCurve!=='hold-then-go'||loaded.state.clips[0].inPoint!==1||loaded.state.clips[0].volume!==.35)throw Error('source clock project round trip failed')
+  await checked('edit_element',{clipId:id,patch:{speedCurve:null}})
+  if(store.getState().clips[0].speedCurve!==undefined)throw Error('source clock clear failed')
   const missing=await call('select',{clipId:'missing'}),bad=await call('clip_stretch',{duration:NaN}),invalidTrack=await call('track_assign',{track:'missing'})
   if(missing.ok||bad.ok||invalidTrack.ok)throw Error('invalid inputs reported success')
   const dump=await checked('dump',{}),timeline=await checked('timeline_screenshot',{})
-  return {catalog:(await checked('help',{})).catalog,dump,timeline,mask,invalidInputsRejected:true,undo:true}
+  return {catalog:(await checked('help',{})).catalog,dump,timeline,mask,invalidInputsRejected:true,undo:true,sourceClockVolumePersistence:true}
  })
  fs.mkdirSync(path.join(root,'qa-output/mcp'),{recursive:true})
  fs.writeFileSync(path.join(root,'qa-output/mcp/live-timeline.png'),Buffer.from(result.timeline['data:img'].split(',')[1],'base64'));delete result.timeline

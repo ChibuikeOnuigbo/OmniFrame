@@ -1,4 +1,5 @@
 node_modules
+assets-source/transition-pack/*.blend1
 dist
 dist-ssr
 *.local

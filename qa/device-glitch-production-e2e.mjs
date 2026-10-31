@@ -48,7 +48,7 @@ try {
    return results
  })
  for(const result of modelChecks){fs.mkdirSync(path.join(out,'device-transitions',result.id),{recursive:true});for(const f of result.frames)fs.writeFileSync(path.join(out,'device-transitions',result.id,`${f.p}.png`),Buffer.from(f.png.split(',')[1],'base64'));delete result.frames}
- console.log('PASS seven GLBs, geometry, UVs, screen orientation, 49 renders, exact handoff')
+ console.log(`PASS ${modelChecks.length} GLBs, geometry, UVs, screen orientation, ${modelChecks.length*7} sampled renders, exact handoff`)
  const checks=await page.evaluate(async()=>{
    const lib=await import('/src/lib/effectCatalog.ts');await lib.loadGlitchRecipeCatalog()
    const entries=lib.getFxCatalog().filter(e=>/^ng-\d{4}$/.test(e.id));if(entries.length!==5000)throw Error('Missing authored recipes')

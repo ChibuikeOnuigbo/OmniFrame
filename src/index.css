@@ -64,7 +64,7 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #ff6b35;
+  background: rgb(var(--brand-500, 255 107 53));
   border: 2px solid #0c0e13;
   cursor: pointer;
   transition: transform 0.08s ease;
@@ -81,7 +81,7 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #ff6b35;
+  background: rgb(var(--brand-500, 255 107 53));
   border: 2px solid #0c0e13;
   cursor: pointer;
 }
@@ -180,17 +180,10 @@ html.of-custom-cursor-active svg {
    density and panel depth; palettes only move the accent. The default
    (omniframe/flame) ships the de-slopped default rules at the bottom of this file. */
 
-/* Palettes */
-html[data-ui-palette='amber'] .bg-brand, html[data-ui-palette='amber'] .bg-brand-500 { background-color: #d97706; }
-html[data-ui-palette='amber'] .bg-brand-600 { background-color: #b45309; }
-html[data-ui-palette='amber'] .text-brand-400 { color: #fbbf24; }
-html[data-ui-palette='amber'] .text-brand { color: #f59e0b; }
-html[data-ui-palette='amber'] .border-brand { border-color: #d97706; }
-html[data-ui-palette='teal'] .bg-brand, html[data-ui-palette='teal'] .bg-brand-500 { background-color: #0d9488; }
-html[data-ui-palette='teal'] .bg-brand-600 { background-color: #0f766e; }
-html[data-ui-palette='teal'] .text-brand-400 { color: #2dd4bf; }
-html[data-ui-palette='teal'] .text-brand { color: #14b8a6; }
-html[data-ui-palette='teal'] .border-brand { border-color: #0d9488; }
+/* Accent tokens drive buttons, translucent fills, rings and gradients together. */
+html[data-ui-palette='violet'] { --brand-200: 221 216 255; --brand-300: 190 180 255; --brand-400: 151 133 255; --brand-500: 109 94 252; --brand-600: 86 65 224; }
+html[data-ui-palette='amber'] { --brand-200: 253 230 138; --brand-300: 252 211 77; --brand-400: 251 191 36; --brand-500: 217 119 6; --brand-600: 180 83 9; }
+html[data-ui-palette='teal'] { --brand-200: 153 246 228; --brand-300: 94 234 212; --brand-400: 45 212 191; --brand-500: 13 148 136; --brand-600: 15 118 110; }
 
 /* Clean Cut (CapCut study): lifted charcoal, big radii, pill-ish buttons */
 html[data-ui-style='capcut'] .bg-ink-950 { background-color: #0e0f12; }
@@ -313,8 +306,8 @@ html[data-ui-style='omniframe'] .shadow-2xl { box-shadow: 0 6px 18px rgba(0,0,0,
 html:not([data-ui-style]) .shadow-xl,
 html[data-ui-style='omniframe'] .shadow-xl { box-shadow: 0 4px 12px rgba(0,0,0,.38); }
 /* daylight theme: flame text must darken for the light surface */
-html[data-ui-style='daylight'] .text-brand-200 { color: #a63c00; }
-html[data-ui-style='daylight'] .text-brand-300 { color: #c24e10; }
+html[data-ui-style='daylight'] .text-brand-200 { color: rgb(var(--brand-600, 166 60 0)); }
+html[data-ui-style='daylight'] .text-brand-300 { color: rgb(var(--brand-600, 194 78 16)); }
 
 /* TYMM font pack — family name = file stem (name before .ttf/.otf/...), per user */
 @font-face { font-family: 'Alphacorsa Personal Use Italic'; src: url('/fonts/Alphacorsa Personal Use Italic.ttf') format('truetype'); font-display: swap; }

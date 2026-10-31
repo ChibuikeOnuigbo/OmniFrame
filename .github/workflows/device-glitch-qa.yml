@@ -19,10 +19,15 @@ jobs:
         run: |
           node qa/glitch-ng-layers-unit.mjs
           node qa/device-rig-unit.mjs
+          node qa/object-transition-rig-unit.mjs
+          node qa/deformation-unit.mjs
           node qa/fx-split-continuity-unit.mjs
           node qa/audio-output-math-unit.mjs
           node qa/drawing-shapes-unit.mjs
           node qa/video-encoder-failure-unit.mjs
+          node qa/headless-video-audio-e2e.mjs
+          node qa/speed-curves-render-e2e.mjs
+          node qa/compound-source-clock-unit.mjs
           node qa/mcp-project-reset-unit.mjs
           node qa/smart-patch-compositor-unit.mjs
           node qa/universal-tools-unit.mjs
@@ -44,12 +49,20 @@ jobs:
           node qa/audio-bus-e2e.mjs
           node qa/mcp-live-bridge-e2e.mjs
           node qa/context-menu-viewport-e2e.mjs
+          node qa/workbench-responsive-e2e.mjs
           node qa/render-device-transition-reel.mjs
+          node qa/render-external-asset-transitions.mjs
+          node qa/render-transform-proofs.mjs
+          node qa/render-creative-motion-proof.mjs
+          node qa/render-kinetic-word-study.mjs
+          node qa/render-workbench-ui-proof.mjs
       - name: Upload reviewable evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: omniframe-device-glitch-proof
-          path: qa-output/
+          path: |
+            qa-output/
+            evidence_video/
           retention-days: 14
           if-no-files-found: error

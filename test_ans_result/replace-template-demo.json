@@ -4,10 +4,13 @@
  "meta": {},
  "data": {
   "video": "test_ans_result/replace-template-demo.mp4",
-  "out": "/home/user/OmniFrame/test_ans_result/replace-template-demo.mp4",
+  "out": "/workspace/OmniFrame/test_ans_result/replace-template-demo.mp4",
   "frames": 72,
   "fps": 24,
-  "size": 11571,
+  "size": 45937,
+  "audio": {
+   "tracks": 0
+  },
   "mode": "omniframe",
   "recipe": [
    {
@@ -35,7 +38,8 @@
     "out": {
      "clipId": "clip-1",
      "frames": 24,
-     "duration": 2
+     "duration": 2,
+     "hasAudio": false
     }
    },
    {
@@ -87,7 +91,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "position_x",
-     "keyframeId": "kf_op7vkya"
+     "keyframeId": "kf_1pcvzwd"
     }
    },
    {
@@ -102,7 +106,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "position_x",
-     "keyframeId": "kf_b47wjbd"
+     "keyframeId": "kf_jak0j3y"
     }
    },
    {
@@ -117,7 +121,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "scale_x",
-     "keyframeId": "kf_49du06u"
+     "keyframeId": "kf_dkvdz6q"
     }
    },
    {
@@ -132,7 +136,7 @@
     "out": {
      "clipId": "clip-1",
      "curve": "scale_x",
-     "keyframeId": "kf_d3uqxk9"
+     "keyframeId": "kf_oq2dou6"
     }
    },
    {
@@ -142,16 +146,17 @@
      "name": "TYMM graded push-in"
     },
     "out": {
-     "templateId": "tmpl-mvvu29lj-7d5",
-     "file": "data_motiondesijg/templates/tmpl-mvvu29lj-7d5.json",
+     "templateId": "tmpl-mvwlmbze-51d",
+     "file": "data_motiondesijg/templates/tmpl-mvwlmbze-51d.json",
      "fields": [
       "transform",
       "animation",
       "effects",
       "adjustment",
-      "blendMode"
+      "blendMode",
+      "volume"
      ],
-     "fieldCount": 5,
+     "fieldCount": 6,
      "inPointRatio": 0
     }
    },
@@ -164,13 +169,14 @@
     "out": {
      "clipId": "clip-2",
      "frames": 96,
-     "duration": 8
+     "duration": 8,
+     "hasAudio": false
     }
    },
    {
     "tool": "template_apply",
     "params": {
-     "templateId": "tmpl-mvvu29lj-7d5",
+     "templateId": "tmpl-mvwlmbze-51d",
      "clipId": "clip-2"
     },
     "out": {
@@ -182,6 +188,7 @@
       "effects",
       "adjustment",
       "blendMode",
+      "volume",
       "inPoint",
       "duration"
      ],
@@ -197,7 +204,8 @@
     "out": {
      "clipId": "clip-3",
      "frames": 48,
-     "duration": 4
+     "duration": 4,
+     "hasAudio": false
     }
    },
    {
@@ -250,7 +258,7 @@
     "out": {
      "templates": [
       {
-       "id": "tmpl-mvvu29lj-7d5",
+       "id": "tmpl-mvwlmbze-51d",
        "name": "TYMM graded push-in",
        "source": "-9UkBHVV9OA.mp4",
        "fields": [
@@ -258,12 +266,13 @@
         "animation",
         "effects",
         "adjustment",
-        "blendMode"
+        "blendMode",
+        "volume"
        ],
-       "file": "data_motiondesijg/templates/tmpl-mvvu29lj-7d5.json"
+       "file": "data_motiondesijg/templates/tmpl-mvwlmbze-51d.json"
       }
      ],
-     "dir": "/home/user/OmniFrame/data_motiondesijg/templates"
+     "dir": "/workspace/OmniFrame/data_motiondesijg/templates"
     }
    },
    {
@@ -352,7 +361,7 @@
       {
        "pos": 0,
        "ch": "T",
-       "x": 171.8,
+       "x": 172,
        "y": 12.2,
        "w": 29.3,
        "h": 48
@@ -360,25 +369,25 @@
       {
        "pos": 1,
        "ch": "Y",
-       "x": 201.1,
+       "x": 201.3,
        "y": 12.2,
-       "w": 29.3,
+       "w": 32,
        "h": 48
       },
       {
        "pos": 2,
        "ch": "M",
-       "x": 230.4,
+       "x": 233.3,
        "y": 12.2,
-       "w": 41.4,
+       "w": 40,
        "h": 48
       },
       {
        "pos": 3,
        "ch": "M",
-       "x": 271.8,
+       "x": 273.3,
        "y": 12.2,
-       "w": 41.4,
+       "w": 40,
        "h": 48
       },
       {
@@ -386,39 +395,39 @@
        "ch": " ",
        "x": 313.3,
        "y": 12.2,
-       "w": 15.3,
+       "w": 13.3,
        "h": 48
       },
       {
        "pos": 5,
        "ch": "S",
-       "x": 328.5,
+       "x": 326.6,
        "y": 12.2,
-       "w": 30.5,
+       "w": 32,
        "h": 48
       },
       {
        "pos": 6,
        "ch": "W",
-       "x": 359,
+       "x": 358.7,
        "y": 12.2,
-       "w": 47.5,
+       "w": 45.3,
        "h": 48
       },
       {
        "pos": 7,
        "ch": "A",
-       "x": 406.4,
+       "x": 404,
        "y": 12.2,
-       "w": 32.8,
+       "w": 32,
        "h": 48
       },
       {
        "pos": 8,
        "ch": "P",
-       "x": 439.3,
+       "x": 436,
        "y": 12.2,
-       "w": 28.9,
+       "w": 32,
        "h": 48
       }
      ],
@@ -477,6 +486,9 @@
      "name": "-9UkBHVV9OA.mp4",
      "start": 0,
      "duration": 2,
+     "inPoint": 0,
+     "volume": 1,
+     "asset": "Study_edits_videos/exports/-9UkBHVV9OA.mp4",
      "transform": {
       "x": 0,
       "y": 0,
@@ -498,13 +510,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_op7vkya",
+        "id": "kf_1pcvzwd",
         "time": 0,
         "value": -60,
         "interpolation": "easeInOut"
        },
        {
-        "id": "kf_b47wjbd",
+        "id": "kf_jak0j3y",
         "time": 2.5,
         "value": 60,
         "interpolation": "easeInOut"
@@ -517,13 +529,13 @@
       "rotation_z": [],
       "scale_x": [
        {
-        "id": "kf_49du06u",
+        "id": "kf_dkvdz6q",
         "time": 0,
         "value": 0.92,
         "interpolation": "easeOut"
        },
        {
-        "id": "kf_d3uqxk9",
+        "id": "kf_oq2dou6",
         "time": 2.5,
         "value": 1.08,
         "interpolation": "easeOut"
@@ -543,6 +555,9 @@
      "name": "-JLpm8uJBOo.mp4",
      "start": 0,
      "duration": 2,
+     "inPoint": 0,
+     "volume": 1,
+     "asset": "Study_edits_videos/exports/-JLpm8uJBOo.mp4",
      "transform": {
       "x": 0,
       "y": 0,
@@ -564,13 +579,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_op7vkya",
+        "id": "kf_1pcvzwd",
         "time": 0,
         "value": -60,
         "interpolation": "easeInOut"
        },
        {
-        "id": "kf_b47wjbd",
+        "id": "kf_jak0j3y",
         "time": 2.5,
         "value": 60,
         "interpolation": "easeInOut"
@@ -583,13 +598,13 @@
       "rotation_z": [],
       "scale_x": [
        {
-        "id": "kf_49du06u",
+        "id": "kf_dkvdz6q",
         "time": 0,
         "value": 0.92,
         "interpolation": "easeOut"
        },
        {
-        "id": "kf_d3uqxk9",
+        "id": "kf_oq2dou6",
         "time": 2.5,
         "value": 1.08,
         "interpolation": "easeOut"
@@ -609,6 +624,9 @@
      "name": "-JLpm8uJBOo.mp4",
      "start": 0,
      "duration": 2,
+     "inPoint": 0,
+     "volume": 1,
+     "asset": "Study_edits_videos/exports/-JLpm8uJBOo.mp4",
      "transform": {
       "x": 0,
       "y": 0,
@@ -644,6 +662,8 @@
      "name": "text:TYMM SWAP",
      "start": 0,
      "duration": 3,
+     "inPoint": 0,
+     "asset": "text:undefined",
      "transform": {
       "x": 320,
       "y": 60,

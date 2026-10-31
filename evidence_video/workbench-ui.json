@@ -1,0 +1,11 @@
+{
+  "type": "UI diagnostic samples, not continuous interaction recording",
+  "sourceScreenshots": [
+    "evidence_video/workbench/drawer-320.png",
+    "evidence_video/workbench/drawer-390.png",
+    "evidence_video/workbench/drawer-768.png",
+    "evidence_video/workbench/drawer-1440.png",
+    "evidence_video/workbench/purple-settings.png",
+    "evidence_video/workbench/liquify-preview.png"
+  ]
+}

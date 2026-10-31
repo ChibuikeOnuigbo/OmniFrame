@@ -1,0 +1,345 @@
+{
+  "id": "tmpl-mvvy69ot-1r8",
+  "name": "RT chain",
+  "capturedAt": "2026-10-31T05:15:13.421Z",
+  "sourceClipId": "clip-1",
+  "sourceName": "preview-Lut 0.jpg",
+  "inPointRatio": 0,
+  "duration": 3,
+  "fields": {
+    "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    "animation": {
+      "curves": {
+        "position_x": {
+          "id": "position_x",
+          "property": "position",
+          "channel": "X",
+          "label": "Position X",
+          "color": "#ef4444",
+          "defaultValue": 0,
+          "unit": "px",
+          "keyframes": [
+            {
+              "id": "kf_s3m3p70",
+              "time": 0,
+              "value": -50,
+              "interpolation": "custom",
+              "handleMode": "aligned",
+              "inHandle": {
+                "dt": -0.2,
+                "dv": 0
+              },
+              "outHandle": {
+                "dt": 0.2,
+                "dv": 0
+              },
+              "points": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0.3,
+                  "y": 0.1
+                },
+                {
+                  "x": 0.7,
+                  "y": 0.9
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                }
+              ]
+            },
+            {
+              "id": "kf_srlmm8o",
+              "time": 2,
+              "value": 50,
+              "interpolation": "custom",
+              "handleMode": "aligned",
+              "inHandle": {
+                "dt": -0.2,
+                "dv": 0
+              },
+              "outHandle": {
+                "dt": 0.2,
+                "dv": 0
+              },
+              "points": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0.3,
+                  "y": 0.1
+                },
+                {
+                  "x": 0.7,
+                  "y": 0.9
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                }
+              ]
+            }
+          ],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "position_y": {
+          "id": "position_y",
+          "property": "position",
+          "channel": "Y",
+          "label": "Position Y",
+          "color": "#22c55e",
+          "defaultValue": 0,
+          "unit": "px",
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "position_z": {
+          "id": "position_z",
+          "property": "position",
+          "channel": "Z",
+          "label": "Position Z",
+          "color": "#3b82f6",
+          "defaultValue": 0,
+          "unit": "px",
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "rotation_x": {
+          "id": "rotation_x",
+          "property": "rotation",
+          "channel": "X",
+          "label": "Rotation X",
+          "color": "#f87171",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -180,
+          "max": 180,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "rotation_y": {
+          "id": "rotation_y",
+          "property": "rotation",
+          "channel": "Y",
+          "label": "Rotation Y",
+          "color": "#4ade80",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -180,
+          "max": 180,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "rotation_z": {
+          "id": "rotation_z",
+          "property": "rotation",
+          "channel": "Z",
+          "label": "Rotation Z",
+          "color": "#06b6d4",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -180,
+          "max": 180,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "scale_x": {
+          "id": "scale_x",
+          "property": "scale",
+          "channel": "X",
+          "label": "Scale X",
+          "color": "#f59e0b",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0.01,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "scale_y": {
+          "id": "scale_y",
+          "property": "scale",
+          "channel": "Y",
+          "label": "Scale Y",
+          "color": "#a855f7",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0.01,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "scale_z": {
+          "id": "scale_z",
+          "property": "scale",
+          "channel": "Z",
+          "label": "Scale Z",
+          "color": "#ec4899",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0.01,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "opacity": {
+          "id": "opacity",
+          "property": "opacity",
+          "channel": "Scalar",
+          "label": "Opacity",
+          "color": "#14b8a6",
+          "defaultValue": 1,
+          "unit": "%",
+          "min": 0,
+          "max": 1,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "pivot_x": {
+          "id": "pivot_x",
+          "property": "pivot",
+          "channel": "X",
+          "label": "Pivot X",
+          "color": "#f472b6",
+          "defaultValue": 0.5,
+          "unit": "",
+          "min": -1,
+          "max": 2,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "pivot_y": {
+          "id": "pivot_y",
+          "property": "pivot",
+          "channel": "Y",
+          "label": "Pivot Y",
+          "color": "#fb923c",
+          "defaultValue": 0.5,
+          "unit": "",
+          "min": -1,
+          "max": 2,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "playback_speed": {
+          "id": "playback_speed",
+          "property": "speed",
+          "channel": "Scalar",
+          "label": "Playback Speed",
+          "color": "#eab308",
+          "defaultValue": 1,
+          "unit": "x",
+          "min": 0.1,
+          "max": 10,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        },
+        "wheel_rotation": {
+          "id": "wheel_rotation",
+          "property": "wheel",
+          "channel": "Z",
+          "label": "3D Wheel Rotation",
+          "color": "#8b5cf6",
+          "defaultValue": 0,
+          "unit": "°",
+          "min": -3600,
+          "max": 3600,
+          "keyframes": [],
+          "extrapolationBefore": "constant",
+          "extrapolationAfter": "constant"
+        }
+      }
+    },
+    "effects": {
+      "contrast": 1.2,
+      "glow": 0.4
+    },
+    "fxInstances": [
+      {
+        "id": "fx-1",
+        "catalogId": "am-turbulentdisplace3",
+        "name": "AM Turbulent Displace",
+        "inP": 0,
+        "duration": 3,
+        "params": {
+          "turbulent": 0.6
+        },
+        "keys": {
+          "turbulent": [
+            {
+              "t": 0,
+              "v": 0.6
+            },
+            {
+              "t": 1.5,
+              "v": 0
+            }
+          ]
+        },
+        "enabled": true
+      },
+      {
+        "id": "fx-2",
+        "catalogId": "am-shake2",
+        "name": "AM Shake",
+        "inP": 0,
+        "duration": 0.693,
+        "params": {
+          "autoShake": 14,
+          "autoShakeFreq": 10,
+          "oscillateAngle": 90
+        },
+        "keys": {
+          "autoShake": [
+            {
+              "t": 0.016,
+              "v": 60
+            },
+            {
+              "t": 0.238,
+              "v": 0
+            }
+          ]
+        },
+        "enabled": true
+      }
+    ],
+    "adjustment": {
+      "luts": [
+        {
+          "builtin": "tymm-5",
+          "intensity": 0.8
+        }
+      ]
+    },
+    "blendMode": "source-over"
+  },
+  "fieldCount": 6
+}

@@ -1,0 +1,148 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "evidence_video/transforms/liquify-pinch.mp4",
+  "out": "/workspace/OmniFrame/evidence_video/transforms/liquify-pinch.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 54005,
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 640,
+     "h": 360,
+     "fps": 12,
+     "duration": 2,
+     "bg": "#151c2c"
+    },
+    "out": {
+     "w": 640,
+     "h": 360,
+     "fps": 12,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "qa-output/original-demo-source.webm",
+     "fps": 12
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 60,
+     "duration": 5
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "deformation": {
+       "dabs": [
+        {
+         "x": 0.52,
+         "y": 0.48,
+         "dx": 0.14,
+         "dy": 0.06,
+         "radius": 0.36,
+         "strength": 0.85,
+         "mode": "pinch"
+        }
+       ]
+      }
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "snapshot",
+    "params": {
+     "time": 0.7
+    },
+    "out": {
+     "png": "evidence_video/transforms/liquify-pinch.png"
+    }
+   },
+   {
+    "tool": "timeline_screenshot",
+    "params": {
+     "out": "evidence_video/transforms/liquify-pinch-timeline.png",
+     "playhead": 0
+    },
+    "out": {
+     "png": "evidence_video/transforms/liquify-pinch-timeline.png",
+     "sidecar": "evidence_video/transforms/liquify-pinch-timeline.png.json",
+     "bytes": 12681
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "evidence_video/transforms/liquify-pinch.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 640,
+    "h": 360,
+    "fps": 12,
+    "duration": 2,
+    "bg": "#151c2c"
+   },
+   "selection": "clip-1",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "original-demo-source.webm",
+     "start": 0,
+     "duration": 5,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "tv_crt_knobs_ph",
+    "file": "public/models/device_transitions/tv_crt_knobs_ph.glb",
+    "bytes": 541656,
+    "sha256": "715b729a1069f8ee55c19e848c3dec1d553515a1c9f797199133d176442492e9",
+    "meshes": 2,
+    "embeddedImages": 3,
+    "blendFile": "assets-source/transition-pack/tv_crt_knobs_ph.blend",
+    "blendSha256": "65064c642dea9e12e957ce8e508b627e5dcfb5df7928037a4d1c8844d80cec26"
+  },
+  {
+    "id": "tv_crt_silver_ph",
+    "file": "public/models/device_transitions/tv_crt_silver_ph.glb",
+    "bytes": 1241300,
+    "sha256": "44eee51412af209a090032079420497725022ec8a2b251ee3e12b807b246e3e8",
+    "meshes": 2,
+    "embeddedImages": 3,
+    "blendFile": "assets-source/transition-pack/tv_crt_silver_ph.blend",
+    "blendSha256": "a0a7b577b99eba5d54ce6e05290525c53336ff940ed61c1d3ea51d781652e271"
+  },
+  {
+    "id": "arrow_oga",
+    "file": "public/models/transition_assets/arrow_oga.glb",
+    "bytes": 2344,
+    "sha256": "b2bc02a26dfc78bd0adf69cb56f55500fc8d9dac112bcb67865a5e15a2ae3f9b",
+    "meshes": 1,
+    "embeddedImages": 0,
+    "blendFile": "assets-source/transition-pack/arrow_oga.blend",
+    "blendSha256": "91726661bd3d413640338dea06d151974f10e94346bc007667c716cfa89c7d0d"
+  },
+  {
+    "id": "bullet_shell_oga",
+    "file": "public/models/transition_assets/bullet_shell_oga.glb",
+    "bytes": 57332,
+    "sha256": "f43516bb666bf9d0605279eb85dbc4957cb896eded360d524968f9a95f3a4e4e",
+    "meshes": 1,
+    "embeddedImages": 0,
+    "blendFile": "assets-source/transition-pack/bullet_shell_oga.blend",
+    "blendSha256": "12a0e329aa74706b861eacef675580346acb6535649c9684892636908d7e15c7"
+  },
+  {
+    "id": "payphone_ph",
+    "file": "public/models/transition_assets/payphone_ph.glb",
+    "bytes": 1293552,
+    "sha256": "bb6fb49f2c1d317f4f408a8c252c2bd826ac228507ac21c4960af28c02d6460b",
+    "meshes": 1,
+    "embeddedImages": 3,
+    "blendFile": "assets-source/transition-pack/payphone_ph.blend",
+    "blendSha256": "215472a43d4074378b8a13f7f43d19752127ee6fc72a21a0c1751830ddb6bbcd"
+  },
+  {
+    "id": "concrete_shards_ph",
+    "file": "public/models/transition_assets/concrete_shards_ph.glb",
+    "bytes": 2452568,
+    "sha256": "55aed0b6c56ee2d482c4dd2a41cb630ea55d2a050b1fd61bffe3669f93755ae1",
+    "meshes": 70,
+    "embeddedImages": 3,
+    "blendFile": "assets-source/transition-pack/concrete_shards_ph.blend",
+    "blendSha256": "ace1078bcb97d1c0faa83992f166984f74c4abb0883156a95f24c5b66d5915aa"
+  }
+]

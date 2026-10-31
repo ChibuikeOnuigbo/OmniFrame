@@ -378,6 +378,10 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   previewQuality: PreviewQuality
   /** Hide horizontal overflow app-wide (default on): strips use hover arrows / wheel / drag instead of visible scrollbars. */
   hideOverflowX: boolean
+  transformToolMode: 'free' | 'perspective' | 'liquify' | 'marquee' | 'roto'
+  liquifyTool: import('./lib/deformation').LiquifyMode
+  liquifyRadius: number
+  liquifyStrength: number
   uiStyle: string
   uiPalette: string
   setUiStyle: (v: string) => void
@@ -1223,8 +1227,9 @@ export const useEditor = create<EditorState>((set, get) => {
     dropFrameTimecode: false,
     previewQuality: typeof localStorage !== 'undefined' && ['low', 'medium', 'high', 'full'].includes(localStorage.getItem('omniframe.previewQuality') ?? '') ? localStorage.getItem('omniframe.previewQuality') as PreviewQuality : 'high',
     hideOverflowX: typeof localStorage === 'undefined' ? true : localStorage.getItem('omniframe.hideOverflowX') !== 'no',
+    transformToolMode: 'free', liquifyTool: 'push', liquifyRadius: .15, liquifyStrength: .65,
     uiStyle: typeof localStorage === 'undefined' ? 'omniframe' : (localStorage.getItem('omniframe.uiStyle') || 'omniframe'),
-    uiPalette: typeof localStorage === 'undefined' ? 'violet' : (localStorage.getItem('omniframe.uiPalette') || 'violet'),
+    uiPalette: typeof localStorage === 'undefined' ? 'flame' : (localStorage.getItem('omniframe.uiPalette') || 'flame'),
     aiProvider: typeof localStorage === 'undefined' ? 'openrouter' : (localStorage.getItem('omniframe.aiProvider') || 'openrouter'),
     aiModel: typeof localStorage === 'undefined' ? 'openai/gpt-4o-mini' : (localStorage.getItem('omniframe.aiModel') || 'openai/gpt-4o-mini'),
     aiEndpoint: typeof localStorage === 'undefined' ? '' : (localStorage.getItem('omniframe.aiEndpoint') || ''),
@@ -3600,9 +3605,9 @@ export const useEditor = create<EditorState>((set, get) => {
     setScrubbing: (scrubbing) => set({ scrubbing }),
 
     setTool: (t) => set({ tool: t }),
-    setLeftTab: (t) => set({ leftTab: t, leftOpen: true, activeSubMode: null }),
-    setLeftOpen: (v) => set({ leftOpen: v }),
-    setRightOpen: (v) => set({ rightOpen: v }),
+    setLeftTab: (t) => set({ leftTab: t, leftOpen: true, activeSubMode: null, ...(typeof window!=='undefined'&&window.innerWidth<640?{rightOpen:false}:{}) }),
+    setLeftOpen: (v) => set({ leftOpen: v, ...(v&&typeof window!=='undefined'&&window.innerWidth<640?{rightOpen:false}:{}) }),
+    setRightOpen: (v) => set({ rightOpen: v, ...(v&&typeof window!=='undefined'&&window.innerWidth<640?{leftOpen:false}:{}) }),
     setActiveCategory: (cat) => set({ activeCategory: cat }),
     voiceModal: { open: false, clipId: undefined },
     openVoiceModal: (clipId) => set({ voiceModal: { open: true, clipId } }),
@@ -4829,9 +4834,9 @@ export const useEditor = create<EditorState>((set, get) => {
         past: past.slice(0, -1),
         future: [...future.slice(-49), current],
         duration: recompute(prev.clips),
-        selectedClipId: null,
-        selectedClipIds: [],
-        selectedTransitionId: null,
+        selectedClipId: prev.clips.some(c=>c.id===get().selectedClipId)?get().selectedClipId:null,
+        selectedClipIds: get().selectedClipIds.filter(id=>prev.clips.some(c=>c.id===id)),
+        selectedTransitionId: prev.transitions?.some(t=>t.id===get().selectedTransitionId)?get().selectedTransitionId:null,
       })
     },
     redo: () => {
@@ -4855,9 +4860,9 @@ export const useEditor = create<EditorState>((set, get) => {
         future: future.slice(0, -1),
         past: [...past.slice(-49), current],
         duration: recompute(next.clips),
-        selectedClipId: null,
-        selectedClipIds: [],
-        selectedTransitionId: null,
+        selectedClipId: next.clips.some(c=>c.id===get().selectedClipId)?get().selectedClipId:null,
+        selectedClipIds: get().selectedClipIds.filter(id=>next.clips.some(c=>c.id===id)),
+        selectedTransitionId: next.transitions?.some(t=>t.id===get().selectedTransitionId)?get().selectedTransitionId:null,
       })
     },
 
