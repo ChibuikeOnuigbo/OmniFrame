@@ -262,7 +262,7 @@ export function LeftDock() {
   // floating window centered on the pointer — CapCut-style tear-off.
   const headerDrag = React.useRef<{ startX: number; startY: number } | null>(null)
   const onHeaderDragDown = (e: React.PointerEvent) => {
-    if ((e.target as HTMLElement).closest('button')) return
+    if ((e.target as HTMLElement).closest('button, summary, input, select')) return
     headerDrag.current = { startX: e.clientX, startY: e.clientY }
     // Capture so the 34px-tall header keeps receiving moves once the pointer
     // leaves its bounds — without this the tear-off dies on the first step.
@@ -354,7 +354,8 @@ export function LeftDock() {
   const currentSubMode = contextualSubModes.find((m) => m.id === activeSubMode)
 
   return (
-    <div className="flex shrink-0 h-full select-none">
+    <div data-testid="left-dock-root" className="relative z-[60] flex shrink-0 h-full select-none">
+      {leftOpen&&!panelMaximized&&<div data-testid="mobile-panel-dismiss" className="fixed bottom-0 left-12 right-0 top-12 -z-10 bg-black/20 sm:hidden" onPointerDown={()=>setLeftOpen(false)} aria-hidden="true"/>}
       {/* Icon Rail */}
       <div className="w-12 shrink-0 bg-ink-900 border-r border-ink-700/80 flex flex-col items-center py-1.5 gap-1 overflow-y-auto scrollbar-none">
         <button
@@ -587,11 +588,11 @@ export function LeftDock() {
         }}
         className={panelMaximized && leftOpen
           ? 'fixed left-1/2 top-1/2 z-[80] h-[95vh] w-[95vw] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-ink-600 bg-ink-850 shadow-[0_32px_120px_rgba(0,0,0,.7)] overflow-hidden'
-          : `shrink-0 bg-ink-850 border-r border-ink-700/80 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:shadow-2xl ${dockResizing ? 'transition-none' : ''}`}
+          : `shrink-0 bg-ink-850 border-r border-ink-700/80 overflow-hidden transition-[width] duration-150 max-sm:absolute max-sm:left-12 max-sm:top-0 max-sm:bottom-0 max-sm:z-40 max-sm:max-w-[calc(100vw-3.5rem)] max-sm:shadow-2xl ${dockResizing ? 'transition-none' : ''}`}
       >
         <div
           style={{
-            width: panelMaximized && leftOpen ? '100%' : `${Math.min(leftDockWidth - 48 + (leftTab === 'effects' ? 96 : 0), typeof window !== 'undefined' && window.innerWidth < 640 ? window.innerWidth - 56 : leftDockWidth - 48 + (leftTab === 'effects' ? 96 : 0))}px`,
+            width: '100%',
           }}
           className="h-full flex flex-col relative"
         >
@@ -618,7 +619,7 @@ export function LeftDock() {
             onPointerUp={onHeaderDragUp}
             onPointerCancel={onHeaderDragUp}
             data-testid="left-panel-header"
-            className="min-h-8.5 shrink-0 flex items-center justify-between px-2.5 py-0.5 border-b border-ink-700/80 bg-ink-900/60 touch-none select-none"
+            className="min-h-10 shrink-0 flex items-center justify-between px-2.5 py-0.5 border-b border-ink-700/80 bg-ink-900/60 touch-none select-none"
           >
             {activeSubMode && currentSubMode ? (
               <div className="flex items-center gap-1 min-w-0 pr-2">
@@ -644,13 +645,13 @@ export function LeftDock() {
             ) : (
               <div className="flex items-center gap-1.5 min-w-0 pr-2">
                 <span
-                  className="text-xs font-semibold uppercase tracking-wider text-ink-200 whitespace-normal break-words leading-tight"
+                  className="min-w-0 truncate text-xs font-semibold uppercase tracking-wider text-ink-200"
                   title={activeTabDef?.label}
                 >
                   {activeTabDef?.label}
                 </span>
                 {leftTab !== 'effects' && (
-                  <span className="text-[9px] px-1 py-0.2 rounded font-mono uppercase bg-ink-800 text-ink-400 shrink-0">
+                  <span className="hidden lg:inline text-[9px] px-1 py-0.2 rounded font-mono uppercase bg-ink-800 text-ink-400 shrink-0">
                     {activeTabDef?.category === 'video' ? 'Video NLE' : activeTabDef?.category === '2d' ? '2D Paint' : '3D'}
                   </span>
                 )}
@@ -658,6 +659,18 @@ export function LeftDock() {
             )}
 
             <div className="flex items-center gap-0.5 shrink-0">
+              <details className="relative sm:hidden" data-testid="mobile-panel-options" onKeyDown={event=>{if(event.key==='Escape')event.currentTarget.open=false}}>
+                <summary aria-label="Panel options" className="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-md border border-ink-700 text-ink-300"><ChevronDown size={17}/></summary>
+                <div className="absolute right-0 top-10 z-50 w-56 rounded-md border border-ink-600 bg-ink-900 p-1 shadow-xl">
+                  {[
+                    {label:sidebarSectionMode==='tabs'?'Use accordion sections':'Use tabbed sections',run:()=>setSidebarSectionMode(sidebarSectionMode==='tabs'?'accordion':'tabs')},
+                    {label:panelMaximized?'Restore panel size':'Expand panel',run:()=>setPanelMaximized(!panelMaximized)},
+                    {label:'Float panel',run:()=>setLeftPanelFloating(true)},
+                    {label:'Panel help',run:()=>setHelpOpen(true)},
+                  ].map(item=><button key={item.label} type="button" className="min-h-10 w-full rounded px-3 text-left text-xs text-ink-200 hover:bg-ink-700" onClick={event=>{event.currentTarget.closest('details')?.removeAttribute('open');item.run()}}>{item.label}</button>)}
+                </div>
+              </details>
+
               <button
                 type="button"
                 data-testid="sidebar-section-mode-btn"
@@ -673,7 +686,7 @@ export function LeftDock() {
                 }
                 aria-pressed={sidebarSectionMode === 'tabs'}
                 onClick={() => setSidebarSectionMode(sidebarSectionMode === 'tabs' ? 'accordion' : 'tabs')}
-                className={`grid place-items-center h-6.5 w-6.5 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                className={`hidden sm:grid place-items-center h-6.5 w-6.5 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                   sidebarSectionMode === 'tabs' ? 'text-brand-400 hover:text-white hover:bg-ink-750' : 'text-ink-400 hover:text-white hover:bg-ink-750'
                 }`}
               >
@@ -686,7 +699,7 @@ export function LeftDock() {
                 aria-label={panelMaximized ? 'Restore panel size' : 'Open panel as a full window'}
                 aria-pressed={panelMaximized}
                 onClick={() => setPanelMaximized(!panelMaximized)}
-                className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="hidden sm:grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 {panelMaximized ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
               </button>
@@ -696,7 +709,7 @@ export function LeftDock() {
                 title="Help — tutorials & info"
                 aria-label="Open help: tutorials and info"
                 onClick={() => setHelpOpen(true)}
-                className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="hidden sm:grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 <CircleHelp size={14} />
               </button>
@@ -707,7 +720,7 @@ export function LeftDock() {
                   title="Pop out into floating window (or drag the panel header)"
                   aria-label="Pop panel out into a floating window"
                   onClick={() => setLeftPanelFloating(true)}
-                  className="grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                  className="hidden sm:grid place-items-center h-6.5 w-6.5 rounded text-ink-400 hover:text-white hover:bg-ink-750 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                 >
                   <PictureInPicture2 size={13} />
                 </button>

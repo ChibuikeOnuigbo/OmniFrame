@@ -4,10 +4,10 @@
  "meta": {},
  "data": {
   "video": "test_ans_result/xml-roundtrip.mp4",
-  "out": "/home/user/OmniFrame/test_ans_result/xml-roundtrip.mp4",
+  "out": "/workspace/OmniFrame/test_ans_result/xml-roundtrip.mp4",
   "frames": 24,
   "fps": 12,
-  "size": 5167,
+  "size": 4946,
   "mode": "omniframe",
   "recipe": [
    {
@@ -43,10 +43,10 @@
    {
     "tool": "template_import",
     "params": {
-     "path": "data_motiondesijg/templates/tmpl-mvvu28hc-4v7.xml"
+     "path": "data_motiondesijg/templates/tmpl-mvvydtqg-4dp.xml"
     },
     "out": {
-     "templateId": "tmpl-mvvu28hc-4v7",
+     "templateId": "tmpl-mvvydtqg-4dp",
      "name": "RT chain",
      "fields": [
       "transform",
@@ -62,7 +62,7 @@
    {
     "tool": "template_apply",
     "params": {
-     "templateId": "tmpl-mvvu28hc-4v7",
+     "templateId": "tmpl-mvvydtqg-4dp",
      "clipId": "clip-1"
     },
     "out": {
@@ -128,13 +128,13 @@
      "curves": {
       "position_x": [
        {
-        "id": "kf_85w1m12",
+        "id": "kf_llhel7k",
         "time": 0,
         "value": -50,
         "interpolation": "custom"
        },
        {
-        "id": "kf_3es033c",
+        "id": "kf_4mhmubf",
         "time": 2,
         "value": 50,
         "interpolation": "custom"

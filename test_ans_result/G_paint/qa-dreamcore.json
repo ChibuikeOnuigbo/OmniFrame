@@ -8,9 +8,9 @@
   "grade": "dreamcore",
   "strokes": 4,
   "duration": 1,
-  "out": "/home/user/OmniFrame/test_ans_result/G_paint/qa-dreamcore.mp4",
+  "out": "/workspace/OmniFrame/test_ans_result/G_paint/qa-dreamcore.mp4",
   "frames": 12,
   "fps": 12,
-  "size": 237592
+  "size": 237565
  }
 }

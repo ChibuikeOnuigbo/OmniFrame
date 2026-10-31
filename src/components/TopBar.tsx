@@ -1,3 +1,4 @@
+import { ViewportMenu } from './ViewportMenu'
 import { useEffect, useRef, useState } from 'react'
 import {
   Upload,
@@ -9,6 +10,7 @@ import {
   Redo2,
   Settings,
   Settings2,
+  MoreHorizontal,
   LayoutGrid,
   Check,
   Maximize,
@@ -106,6 +108,7 @@ export function TopBar() {
   const [exporting, setExporting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
+  const [mobileToolsOpen,setMobileToolsOpen]=useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [layoutOpen, setLayoutOpen] = useState(false)
   const [layoutModalOpen, setLayoutModalOpen] = useState(false)
@@ -478,7 +481,7 @@ export function TopBar() {
           aria-controls={layoutOpen ? 'layout-popup' : undefined}
           onPointerDown={(event) => event.stopPropagation()}
           onClick={() => setLayoutOpen((open) => !open)}
-          className={`grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+          className={`hidden sm:grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             layoutOpen ? 'bg-ink-700 text-white' : 'text-ink-400'
           }`}
         >
@@ -583,6 +586,15 @@ export function TopBar() {
         )}
       </div>
 
+      <div className="sm:hidden">
+        <button type="button" aria-label="Workspace tools" aria-haspopup="menu" aria-expanded={mobileToolsOpen} data-testid="mobile-workspace-tools" className="grid h-10 w-10 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-300" onClick={()=>setMobileToolsOpen(!mobileToolsOpen)}><MoreHorizontal size={20}/></button>
+        {mobileToolsOpen&&<><div className="fixed inset-0 z-[75]" onPointerDown={()=>setMobileToolsOpen(false)}/><ViewportMenu x={window.innerWidth-240} y={52} testId="mobile-workspace-menu" label="Workspace tools" onClose={()=>setMobileToolsOpen(false)}>{[
+          {name:'Workspace layout',run:()=>setLayoutOpen(true)},
+          {name:'Composition settings',run:()=>setCompOpen(true)},
+          {name:'Appearance & palette',run:()=>{setSettingsCategory('appearance');setSettingsOpen(true)}},
+          {name:'Help & shortcuts',run:()=>useEditor.getState().setHelpOpen(true)},
+        ].map(item=><button key={item.name} type="button" className="flex min-h-10 w-full items-center rounded px-3 text-left text-xs hover:bg-ink-700 focus-visible:ring-2 focus-visible:ring-brand" onClick={()=>{setMobileToolsOpen(false);item.run()}}>{item.name}</button>)}</ViewportMenu></>}
+      </div>
       <div role="group" aria-label="Help and settings" className="flex items-center gap-1">
         <button
           type="button"
@@ -625,7 +637,7 @@ export function TopBar() {
           aria-haspopup="dialog"
           aria-expanded={compOpen}
           onClick={() => setCompOpen((open) => !open)}
-          className="grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          className="hidden sm:grid h-8 w-8 place-items-center rounded-none border border-ink-700 bg-ink-800 text-ink-400 transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <Settings2 size={15} />
         </button>
@@ -1312,7 +1324,7 @@ export function TopBar() {
               {!settingsSearch && settingsCategory === 'appearance' && (
                 <div className="space-y-3" data-testid="settings-appearance">
                   <div>
-                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">UI style — structure, not just colour</p>
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Interface style</p>
                     <div className="grid grid-cols-1 gap-1.5">
                       {UI_STYLES.map((style) => (
                         <button
@@ -1339,7 +1351,7 @@ export function TopBar() {
                   </div>
                   <div>
                     <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-500">Accent palette</p>
-                    <div className="flex gap-1.5">
+                    <div role="group" aria-label="Accent palette" className="grid grid-cols-2 gap-2">
                       {UI_PALETTES.map((palette) => (
                         <button
                           key={palette.id}
@@ -1347,14 +1359,14 @@ export function TopBar() {
                           data-testid={`ui-palette-${palette.id}`}
                           aria-pressed={uiPalette === palette.id}
                           onClick={() => setUiPalette(palette.id)}
-                          className={`flex h-8 flex-1 items-center justify-center gap-1.5 rounded-none border text-[11px] ${uiPalette === palette.id ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500'}`}
+                          className={`flex min-h-12 min-w-0 items-center gap-2 rounded-md border px-2.5 text-left text-[11px] ${uiPalette === palette.id ? 'border-brand bg-brand/15 text-white' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500'}`}
                         >
                           <span className="h-3 w-3 rounded-full" style={{ backgroundColor: palette.accent }} />
-                          {palette.name}
+                          <span className="min-w-0"><span className="block font-medium">{palette.name}</span><span className="block text-[9px] text-ink-400">{palette.note}</span></span>
                         </button>
                       ))}
                     </div>
-                    <p className="mt-1 text-[10px] text-ink-500">Styles change corners, density and panel depth. Palettes only move the accent. Daylight is the light theme.</p>
+                    <p className="mt-1 text-[10px] text-ink-500">Choose panel spacing and surfaces, then an accent for controls. Daylight uses a light background.</p>
                   </div>
                 </div>
               )}

@@ -1,3 +1,11 @@
+# Current creative-workspace increment — local only
+
+Latest upload supersedes earlier RDT access blockers: `evidence_video/reala/source/RDT_20261027_092910.mp4` is available. The universal-tool render `evidence_video/reala/normal edit/RDT_recopy.mp4` is a **reference-derived recomposition**, with baked-in source typography/effects, not a recreation from raw anime footage. Verified: 752 video frames at 30 fps, 750 distinct decoded hashes, audio correlation 0.99736. Generic headless audio export now preserves top-level video source trims, start times and volume. Local commits are requested; push/publication remain unauthorized. Read its manifest and study before treating historical Board S still-image outputs as recreation evidence.
+
+`docs/CREATIVE_WORKSPACE_20261031.md` and `evidence_video/` record the new verified geometry, drawer, palette, menu, history and MCP/video-decoding work. Live bridge: 23 tools; headless: 69. Glitch checkpoint: next 868 / 602 retained / 253 duplicate decisions / zero failed. Published environment allows Drive folder listings, while normal media redirects and YouTube remain blocked. No environment configuration was changed and no new work was pushed or published. Read `research/new_study_vdieos/new_study_vdieos.md` for actual source coverage and unresolved requests.
+
+---
+
 # Current verified state — 2026-10-31, Codex implementation
 
 Latest user branch instruction: use merged **main**. Base `ba7103b89600ef4afa2d4ac5a55e1be1a24ac1ea`; branch `codex/omniframe-device-glitch-production`. No protected branch resets or merges.

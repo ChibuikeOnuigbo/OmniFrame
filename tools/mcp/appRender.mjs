@@ -130,6 +130,7 @@ export const PFX = await loadAppTs('src/lib/proceduralFx.ts')
 export const FXI = await loadAppTs('src/lib/fxInstances.ts')
 export const PRT = await loadAppTs('src/lib/particleFx.ts')
 
+const DF = await loadAppTs('src/lib/deformation.ts')
 export class Sequence {
   constructor({ w = 640, h = 360, fps = 24, duration = 2, bg = '#0d0f13' } = {}) {
     this.w = w; this.h = h; this.fps = fps; this.duration = duration; this.bg = bg
@@ -370,7 +371,7 @@ function drawSeq(x, seq, t, depth = 0) {
     const flipF = cardFlipFactor(clip, t)
     const ghostsF = [...PFX.pfxEchoTimes(eff, t), ...PFX.pfxMotionBlurSamples(eff, t, seq.fps)]
     const tsPF = clip.textStyle
-    const needLayer = !!clip.patch || !!(clip.mask && clip.mask.enabled) || Object.keys(eff).length > 0 || (tsPF && (tsPF.chroma || 0) > 0) || ghostsF.length > 0 || flipF.sx !== 1 || flipF.shade > 0 || !!(clip.adjustment && clip.adjustment.luts && clip.adjustment.luts.length)
+    const needLayer = DF.hasDeformation(clip.deformation) || !!clip.patch || !!(clip.mask && clip.mask.enabled) || Object.keys(eff).length > 0 || (tsPF && (tsPF.chroma || 0) > 0) || ghostsF.length > 0 || flipF.sx !== 1 || flipF.shade > 0 || !!(clip.adjustment && clip.adjustment.luts && clip.adjustment.luts.length)
     if (!needLayer) {
       const lw0 = Math.max(2, Math.round(r.w)), lh0 = Math.max(2, Math.round(r.h))
       x.save()
@@ -380,7 +381,7 @@ function drawSeq(x, seq, t, depth = 0) {
       x.translate(-lw0 / 2, -lh0 / 2)
       x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
       x.globalCompositeOperation = clip.blendMode || 'source-over'
-      clip.draw(x, lw0, lh0, Math.max(0, tt - clip.start))
+      clip.draw(x, lw0, lh0, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
       x.restore()
       continue
     }
@@ -400,7 +401,7 @@ function drawSeq(x, seq, t, depth = 0) {
       const off = tsP.chroma * pxScale
       for (const [dx, col] of [[-off, '#00ffff'], [off, '#ff005a']]) {
         const tc = makeCanvas(lw, lh), tx = tc.getContext('2d')
-        clip.draw(tx, lw, lh, Math.max(0, tt - clip.start))
+        clip.draw(tx, lw, lh, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
         tx.globalCompositeOperation = 'source-in'
         tx.fillStyle = col
         tx.fillRect(0, 0, lw, lh)
@@ -412,17 +413,18 @@ function drawSeq(x, seq, t, depth = 0) {
       sx.translate((tsP.shadowOffsetX || 0) * pxScale, (tsP.shadowOffsetY || 0) * pxScale)
       sx.shadowColor = tsP.shadowColor || 'rgba(0,0,0,0.85)'
       sx.shadowBlur = (tsP.shadowBlur || 6) * pxScale
-      clip.draw(sx, lw, lh, Math.max(0, tt - clip.start))
+      clip.draw(sx, lw, lh, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
       sx.restore()
     }
     if (tsP && tsP.glowBlur && tsP.glowMode !== 'inward') {
       sx.shadowColor = tsP.glowColor || '#ffffff'
       sx.shadowBlur = tsP.glowBlur * pxScale
     }
-    clip.draw(sx, lw, lh, Math.max(0, tt - clip.start))
+    clip.draw(sx, lw, lh, Math.max(0, tt - clip.start) + (clip.inPoint || 0))
     sx.shadowBlur = 0
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, lw, lh) }
+    if (DF.hasDeformation(clip.deformation)) DF.applyCanvasDeformation(s,clip.deformation)
     applyEffects(sx, clip, lw, lh, t)
     if (clip.adjustment?.luts?.length) applyClipLutsK(sx, lw, lh, clip.adjustment.luts)
     if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) {
@@ -463,7 +465,7 @@ function drawSeq(x, seq, t, depth = 0) {
       const gsx = gs.getContext('2d')
       gsx.save()
       gsx.translate(gs.width / 2, gs.height / 2); gsx.scale(1, 1); gsx.translate(-gs.width / 2, -gs.height / 2)
-      clip.draw(gsx, gs.width, gs.height, Math.max(0, PFX.pfxLocalTime(eff, g.time, clip.start, clip.duration) - clip.start))
+      clip.draw(gsx, gs.width, gs.height, Math.max(0, PFX.pfxLocalTime(eff, g.time, clip.start, clip.duration) - clip.start) + (clip.inPoint || 0))
       gsx.restore()
       if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) { /* matte applied below via shared path */ }
       x.save()

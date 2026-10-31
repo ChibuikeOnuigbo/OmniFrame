@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-31",
+  "url": "https://www.youtube.com/shorts/8hjWrzum_vQ",
+  "tool": "yt-dlp 2026.10.26",
+  "operation": "no-playlist metadata request, skip-download, retries=0, socket-timeout=15",
+  "result": "failed: proxy CONNECT 403 Forbidden",
+  "downloaded": false,
+  "watched": false,
+  "environmentConfigurationChanged": false,
+  "fallback": "Existing repository frame samples plus the directly user-uploaded RDT video"
+}

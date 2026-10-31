@@ -1,3 +1,4 @@
+import { PNG } from 'pngjs'
 // OmniFrame MCP layer v2 — UNIVERSAL tools only (vow.md universal-tools law).
 // No task-shaped tools: puzzles are solved by recipes (JSON lists of these
 // calls). The agent's eyes = snapshot; its hands = these calls. Rendering uses
@@ -11,7 +12,9 @@ import { createHash } from 'crypto'
 import * as pathModule from 'path'
 import { Sequence, makeClip, renderFrame, CE, applyEffects, cardFlipFactor, loadAppTs, applyShapeMatte , setPaintGetter } from './appRender.mjs'
 import { bedPainterLocal } from './beds.mjs'
+import { hasAudio, audioMixPlan, muxAudio } from './audioExport.mjs'
 
+const DEFORMATION=await loadAppTs('src/lib/deformation.ts')
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const TAR = path.join(ROOT, 'test_ans_result')
 
@@ -63,28 +66,28 @@ function videoFrameStore(dir, files) {
   const cache = new Map()
   return (i) => {
     const idx = Math.max(0, Math.min(files.length - 1, Math.floor(i)))
-    let g = cache.get(idx)
-    if (!g) {
-      g = new CanvasImage()
-      g.src = fs.readFileSync(pathModule.join(dir, files[idx]))
-      cache.set(idx, g)
-      if (cache.size > 40) cache.delete(cache.keys().next().value)
+    let entry = cache.get(idx)
+    if (!entry) {
+      const png=PNG.sync.read(fs.readFileSync(pathModule.join(dir, files[idx])))
+      // Reuse the native canvas AND ImageData allocations after eviction.
+      // Allocating a new native ImageData for every decoded frame grows RSS
+      // throughout long moving exports despite the JS map's bounded size.
+      if(cache.size>=40){const oldest=cache.keys().next().value;entry=cache.get(oldest);cache.delete(oldest)}
+      if(!entry||entry.canvas.width!==png.width||entry.canvas.height!==png.height){
+        const canvas=makeCanvas(png.width,png.height)
+        entry={canvas,pixels:canvas.getContext('2d').createImageData(png.width,png.height)}
+      }
+      entry.pixels.data.set(png.data);entry.canvas.getContext('2d').putImageData(entry.pixels,0,0)
+      cache.set(idx, entry)
     }
-    return g
+    return entry.canvas
   }
 }
 class ImportVideo extends MCPTool {
   constructor() { super('import_video', 'Major tool: import an mp4/mov/webm as a MOVING clip in headless renders (ffmpeg frame extraction cached under .cache/video-frames). Registers frames so text can mask the real footage inside glyphs (textStyle.insideVideo).', { path: 'repo-relative or absolute', fps: 'extract fps (default 12)', fit: 'contain|cover', scale: '' }) }
   async run({ path: rel, fps = 12, fit = 'cover', scale }) {
-    const abs = rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)
-    const hash = createHash('md5').update(`${abs}:${fps}`).digest('hex').slice(0, 10)
-    const dir = pathModule.join(ROOT, '.cache', 'video-frames', hash)
-    if (!fs.existsSync(pathModule.join(dir, '0000.png'))) {
-      fs.mkdirSync(dir, { recursive: true })
-      execFileSync(ffmpegExe(), ['-y', '-i', abs, '-vf', `fps=${fps},scale=480:-2`, pathModule.join(dir, '%04d.png')], { stdio: 'pipe' })
-    }
-    const files = fs.readdirSync(dir).sort().filter(f => f.endsWith('.png'))
-    const get = videoFrameStore(dir, files) // LRU: only ~40 decoded frames in RAM
+    const video = await extractVideoFrames(rel, fps)
+    const {abs, files, get} = video; fps = video.fps
     const s = seq()
     const im = get(0)
     const f2 = fit === 'cover' ? Math.max(s.w / im.width, s.h / im.height) : Math.min(s.w / im.width, s.h / im.height)
@@ -95,11 +98,13 @@ class ImportVideo extends MCPTool {
       sx.drawImage(g, 0, 0, g.width, g.height, 0, 0, w, h)
     }
     const clip = makeClip({ id: `clip-${s.clips.length + 1}`, name: pathModule.basename(rel), asset: rel, natW: im.width * k, natH: im.height * k, duration: dur, draw })
+    clip.sourceVideo = { path: abs, hasAudio: hasAudio(abs), fps: Number(fps) }
+    clip.volume = 1
     s.addClip(clip)
     SESSION.selection = clip
     SESSION.videoFrames = SESSION.videoFrames || {}
     SESSION.videoFrames[rel] = { get, files, fps: Number(fps) }
-    return SESSION.note('import_video', { path: rel, fps }, { clipId: clip.id, frames: files.length, duration: +dur.toFixed(2) })
+    return SESSION.note('import_video', { path: rel, fps }, { clipId: clip.id, frames: files.length, duration: +dur.toFixed(2), hasAudio: clip.sourceVideo.hasAudio })
   }
 }
 class NewBackground extends MCPTool {
@@ -467,17 +472,25 @@ class Snapshot extends MCPTool {
   }
 }
 class RenderExport extends MCPTool {
-  constructor() { super('render_export', 'Major tool: export the current composition to mp4 (the app produces the output).', { out: 'repo-relative mp4', fps: '', duration: '' }) }
-  async run({ out, fps, duration }) {
+  constructor() { super('render_export', 'Major tool: export the current composition to mp4 with imported video audio, source trims and volume (the app produces the output).', { out: 'repo-relative mp4', fps: '', duration: '', audio: 'bool (default true); top-level video clips only' }) }
+  async run({ out, fps, duration, audio = true }) {
     const s = seq()
     const f = fps || s.fps, dur = duration || s.duration
     const N = Math.round(f * dur)
+    if (!Number.isFinite(f) || f <= 0 || !Number.isFinite(dur) || dur <= 0 || !N) throw new Error('Export fps and duration must be positive finite numbers')
+    const mix = audio ? audioMixPlan(s, N / f) : []
     const dest = path.join(ROOT, out)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
-    const enc = new VideoEncoder({ w: s.w, h: s.h, fps: f, out: dest })
+    const staging = mix.length ? dest + `.${process.pid}.video.mp4` : dest
+    const enc = new VideoEncoder({ w: s.w, h: s.h, fps: f, out: staging })
     const outCv = makeCanvas(s.w, s.h)
     for (let i = 0; i < N; i++) enc.addCanvas(renderFrame(s, i / f, outCv))
     const info = await enc.finish()
+    if (mix.length) {
+      try { info.audio = muxAudio(staging, dest, mix, N / f) }
+      finally { fs.unlinkSync(staging) }
+      info.out = dest; info.size = fs.statSync(dest).size
+    } else info.audio = { tracks: 0 }
     SESSION.note('render_export', { out }, { frames: info.frames })
     const r = new ToolResult('render_export', true, {
       video: path.relative(ROOT, dest), ...info, mode: SESSION.mode,
@@ -583,7 +596,7 @@ function inspectPayload() {
     mode: SESSION.mode,
     sequence: s ? { w: s.w, h: s.h, fps: s.fps, duration: s.duration, bg: s.bg } : null,
     selection: SESSION.selection ? SESSION.selection.id : null,
-    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
+    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
     trace: SESSION.trace,
   }
 }
@@ -763,12 +776,18 @@ class CreateText extends MCPTool {
   }
 }
 class EditElement extends MCPTool {
-  constructor() { super('edit_element', 'Edit an existing element: pos/size/rot, mask, effects inside, blend, or convert to compound clip.', { clipId: '', patch: '{transform?,mask?,effects?,opacity?,blendMode?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
+  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), source inPoint, volume, mask, effects, blend, or compound clip.', { clipId: '', patch: '{transform?,deformation?,inPoint?,volume?,mask?,effects?,opacity?,blendMode?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
   async run({ clipId, patch = {}, convert }) {
     const s = seq()
     const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
     if (!c) throw new Error('clip not found')
+    for (const key of ['inPoint', 'volume']) if (patch[key] !== undefined) {
+      if (!Number.isFinite(patch[key]) || patch[key] < 0 || (key === 'volume' && patch[key] > 1)) throw new Error(`${key} is outside its valid range`)
+    }
+    if (patch.inPoint !== undefined) c.inPoint = patch.inPoint
+    if (patch.volume !== undefined) c.volume = patch.volume
     if (patch.transform) Object.assign(c.transform, patch.transform)
+    if (patch.deformation !== undefined) c.deformation = DEFORMATION.validateDeformation(patch.deformation)
     if (patch.mask !== undefined) c.mask = patch.mask
     if (patch.effects) c.effects = { ...c.effects, ...patch.effects }
     if (patch.opacity !== undefined) c.opacity = patch.opacity
@@ -811,7 +830,7 @@ class DataDump extends MCPTool {
         const r = SESSION.seq.clipRect(c, 0)
         const w = Math.max(8, Math.min(160, Math.round(r.w))), h = Math.max(8, Math.min(160, Math.round(r.h)))
         const cc = makeCanvas(w, h), cx = cc.getContext('2d')
-        c.draw(cx, w, h, 0)
+        c.draw(cx, w, h, c.inPoint || 0)
         if (c.mask?.enabled) { const m = c.mask; applyShapeMatteLocal(cx, m, r, SESSION.seq) }
         return { clipId: c.id, rect: r, 'data:img': `data:image/png;base64,${cc.toBuffer('image/png').toString('base64')}` }
       })
@@ -878,7 +897,7 @@ function baseRect(s, c) {
 function mediaPixels(c) {
   const mw = Math.max(2, Math.round(c.natW)), mh = Math.max(2, Math.round(c.natH))
   const mc = makeCanvas(mw, mh)
-  c.draw(mc.getContext('2d'), mw, mh, 0)
+  c.draw(mc.getContext('2d'), mw, mh, c.inPoint || 0)
   return { mw, mh, data: mc.getContext('2d').getImageData(0, 0, mw, mh).data, canvas: mc }
 }
 function seqToLocal(s, c, r) {
@@ -1108,14 +1127,18 @@ SESSION.templates = SESSION.templates || {}
 
 /** shared: extract video frames (cache under .cache/video-frames) -> frame getter */
 async function extractVideoFrames(rel, fps) {
+  fps = Number(fps)
+  if (!Number.isFinite(fps) || fps <= 0 || fps > 120) throw new Error('Import fps must be between 0 and 120')
   const abs = rel.startsWith('/') ? rel : pathModule.join(ROOT, rel)
-  const hash = createHash('md5').update(`${abs}:${fps}`).digest('hex').slice(0, 10)
+  const stat=fs.statSync(abs)
+  const hash = createHash('md5').update(`${abs}:${fps}:${stat.size}:${stat.mtimeMs}`).digest('hex').slice(0, 10)
   const dir = pathModule.join(ROOT, '.cache', 'video-frames', hash)
-  if (!fs.existsSync(pathModule.join(dir, '0000.png'))) {
+  if (!fs.existsSync(pathModule.join(dir, '0001.png'))) {
     fs.mkdirSync(dir, { recursive: true })
     execFileSync(ffmpegExe(), ['-y', '-i', abs, '-vf', `fps=${fps},scale=480:-2`, pathModule.join(dir, '%04d.png')], { stdio: 'pipe' })
   }
   const files = fs.readdirSync(dir).sort().filter(f => f.endsWith('.png'))
+  if(!files.length)throw new Error('Video decoding produced no frames')
   return { get: videoFrameStore(dir, files), files, fps: Number(fps), abs }
 }
 
@@ -1134,6 +1157,7 @@ class ReplaceVideo extends MCPTool {
       sx.drawImage(g, 0, 0, g.width, g.height, 0, 0, w, h)
     }
     c.asset = patch.assetId
+    c.sourceVideo = { path: v.abs, hasAudio: hasAudio(v.abs), fps: v.fps }
     c.inPoint = patch.inPoint
     c.duration = patch.duration
     c.name = pathModule.basename(rel)

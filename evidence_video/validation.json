@@ -1,0 +1,17 @@
+{
+  "typecheck": "passed",
+  "productionBuild": "passed",
+  "deformationUnit": "passed",
+  "workbenchBrowser": "passed",
+  "universalTools": "63 steps / 69 tools passed",
+  "liveMcp": "23 tools regression passed",
+  "existingDeviceGlitchBrowser": "passed",
+  "movingDeformationVideos": "5 videos, 24 changing decoded frames each",
+  "originalMotionStudy": "rendered through universal tools",
+  "uploadedReference": "RDT: 752 frames, 750 distinct decoded hashes, 0.99736 audio correlation; reference-derived recomposition",
+  "headlessAudioVideo": "trim/delay, independent duplicate/replacement offsets, volume, overlap gain, silence, no-audio mute stream passed",
+  "contextMenus": "fresh browser bounds, scroll and keyboard checks passed",
+  "uiVideo": "diagnostic samples from actual screenshot states, not continuous recording",
+  "published": false,
+  "environmentConfigurationChanged": false
+}

@@ -1,7 +1,7 @@
 /**
  * UI style system (Settings → Appearance). Five interface styles that change
  * the STRUCTURE/feel of the studio — corner language, density, panel depth,
- * grouping — not just a colour swap, plus three accent palettes and the
+ * grouping — not just a colour swap, plus four accent palettes and the
  * light/dark theme carried by the Daylight style. Derived from the UI study
  * in data.md (Krita / CapCut / the 85-screenshot corpus statistics).
  * Styles are applied as html[data-ui-style] / html[data-ui-palette]
@@ -18,7 +18,7 @@ export const UI_STYLES: UiStyleDef[] = [
   {
     id: 'omniframe',
     name: 'OmniFrame',
-    concept: 'The house look — deep ink panels, violet brand, balanced radius and density.',
+    concept: 'Deep ink panels, compact controls and balanced spacing.',
     swatch: ['#0c0e13', '#232a39', '#6d5efc'],
   },
   {
@@ -55,7 +55,8 @@ export interface UiPaletteDef {
 }
 
 export const UI_PALETTES: UiPaletteDef[] = [
-  { id: 'violet', name: 'Violet', accent: '#6d5efc', note: 'OmniFrame brand' },
+  { id: 'flame', name: 'Flame', accent: '#ff6b35', note: 'Current OmniFrame orange' },
+  { id: 'violet', name: 'Original purple', accent: '#6d5efc', note: 'The original OmniFrame palette' },
   { id: 'amber', name: 'Amber', accent: '#d97706', note: 'Warm broadcast' },
   { id: 'teal', name: 'Teal', accent: '#0d9488', note: 'Clean Cut energy' },
 ]

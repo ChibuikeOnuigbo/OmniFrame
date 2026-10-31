@@ -1,6 +1,6 @@
 # New Glitch batch manifest (rendered through the shared headless app engine)
 
-Checkpoint: recipe 860 of 5000 queued next · kept 602 · dup-skipped 245 · failed 0
+Checkpoint: recipe 868 of 5000 queued next · kept 602 · dup-skipped 253 · failed 0
 
 | # | recipe | family | palette | seed | file | sha256:16 |
 |---|---|---|---|---|---|---|

@@ -1255,6 +1255,8 @@ export interface CustomWorkspace {
 }
 
 export interface Clip {
+  /** Non-destructive clip-local corner pin and liquify; persisted with project. */
+  deformation?: import('./lib/deformation').DeformationSpec
   /** omniframe: sequence-space hole left by an extracted cut-out */
   omniHole?: { x0: number; y0: number; x1: number; y1: number }
   /** omniframe: patch-under fill applied beneath the hole every frame */

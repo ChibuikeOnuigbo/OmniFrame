@@ -26,3 +26,5 @@ Record concrete verified changes in `reports/FEATURES.md` and remaining work in 
 For interaction changes, run `qa/context-menu-viewport-e2e.mjs` and `qa/mcp-live-bridge-e2e.mjs` against fresh Vite. Audit old requests with `scripts/audit-project-history.py`; do not equate repeated ledger headings or search URLs with delivered features or watched tutorials.
 
 Headless new-project calls must clear project paint/selections/compound stacks/video frame ownership. Run `qa/mcp-project-reset-unit.mjs` and `qa/smart-patch-compositor-unit.mjs` after tool/render changes; inspect actual board contact sheets to catch covered/no-op outputs. Natural object removal requires visual review beyond a successful tool result.
+
+Creative workspace changes are local under the user’s no-publish instruction. Read `docs/CREATIVE_WORKSPACE_20261031.md` and `research/new_study_vdieos/new_study_vdieos.md`. Run `qa/deformation-unit.mjs` and `qa/workbench-responsive-e2e.mjs` for geometry and drawer changes. Keep transform dabs non-destructive; do not silently discard old brush work at capacity. Source listings, documentation indexing and sampled footage review are distinct evidence levels.
