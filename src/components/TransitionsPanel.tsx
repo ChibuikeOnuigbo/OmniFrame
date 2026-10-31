@@ -1,4 +1,6 @@
 import { prepareDeviceModels } from '../lib/device3d'
+import {prepareObjectAssets} from '../lib/object3d'
+import {transitionThumbnail} from '../lib/transitionAssetCatalog'
 import SegmentCarousel from './SegmentCarousel'
 import { useEffect, useState } from 'react'
 import { AlertCircle, Check, Clock, Play, Sparkles, Trash2 } from 'lucide-react'
@@ -53,6 +55,7 @@ function findNearestTransitionCandidate(duration: number): TransitionCandidate |
 // editable and keyframeable. The pillar remains for legacy saved projects.
 const PILLARS: { key: string; label: string; cats: TransitionPresetDef['category'][] }[] = [
   { key: 'device', label: 'Device 3D', cats: ['Device 3D'] },
+  { key:'object',label:'Object 3D',cats:['Object 3D'] },
   { key: 'blur', label: 'Blur', cats: ['Blur'] },
   { key: 'dissolve', label: 'Dissolve', cats: ['Dissolve'] },
   { key: 'light', label: 'Light', cats: ['Light'] },
@@ -71,6 +74,7 @@ export function TransitionsPanel() {
   const [duration, setDuration] = useState(1.0)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [pillar, setPillar] = useState('blur')
+  useEffect(()=>{if(pillar==='object')void prepareObjectAssets().catch(error=>console.warn('3D object assets could not load',error))},[pillar])
   const [notice, setNotice] = useState<string | null>(null)
   const [placedMsg, setPlacedMsg] = useState<string | null>(null)
 
@@ -198,7 +202,7 @@ export function TransitionsPanel() {
 
       <div>
         <div className="text-[10px] uppercase font-semibold text-ink-500 tracking-wider mb-1.5">Pillars</div>
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(74px,1fr))] gap-1">
           {PILLARS.map((pl) => {
             const count = TRANSITION_PRESETS.filter((p) => pl.cats.includes(p.category)).length
             return (
@@ -207,11 +211,11 @@ export function TransitionsPanel() {
                 type="button"
                 data-testid={`transition-pillar-${pl.key}`}
                 onClick={() => setPillar(pl.key)}
-                className={`min-h-[26px] px-1 py-1 rounded text-[10px] font-medium whitespace-nowrap leading-none transition-colors ${
+                className={`min-h-[30px] min-w-0 flex items-center justify-between gap-1 px-2 py-1 rounded text-[10px] font-medium leading-tight transition-colors ${
                   pillar === pl.key ? 'bg-brand text-white font-semibold' : 'bg-ink-800 text-ink-400 hover:text-white'
                 }`}
               >
-                {pl.label} <span className="opacity-70 font-mono">{count}</span>
+                <span className="truncate">{pl.label}</span><span className="shrink-0 opacity-70 font-mono">{count}</span>
               </button>
             )
           })}
@@ -234,15 +238,16 @@ export function TransitionsPanel() {
               key={preset.id}
               data-testid={`transition-card-${preset.id}`}
               onClick={() => selectPreset(preset)}
-              className={`group cursor-pointer p-2 rounded-lg bg-ink-900 border hover:border-brand/60 transition-all flex items-center justify-between ${selectedId === preset.id ? 'border-brand ring-1 ring-brand/50' : 'border-ink-800'}`}
+              className={`group cursor-pointer p-2 rounded-lg bg-ink-900 border hover:border-brand/60 transition-all ${transitionThumbnail(preset.id)?'block space-y-2':'flex items-center justify-between'} ${selectedId === preset.id ? 'border-brand ring-1 ring-brand/50' : 'border-ink-800'}`}
             >
               <div className="min-w-0 flex-1 pr-2">
+                {transitionThumbnail(preset.id)&&<img src={transitionThumbnail(preset.id)} alt={`${preset.name} rendered preview`} loading="lazy" className="mb-2 h-28 w-full rounded-md object-cover"/>}
                 <div className="font-medium text-ink-100 flex items-center gap-1.5">
                   <Sparkles size={12} className="text-amber-400 shrink-0" />
                   <span className="truncate">{preset.name}</span>
                   <span data-testid={`transition-base-${preset.id}`} className="text-[9px] font-mono px-1 py-px rounded bg-ink-800 text-ink-400 whitespace-nowrap">base {preset.baseDuration}s</span>
                 </div>
-                <div className="text-[10px] text-ink-400 mt-0.5 leading-tight truncate">{preset.description}</div>
+                <div className={`text-[10px] text-ink-400 mt-0.5 leading-tight ${transitionThumbnail(preset.id)?'':'truncate'}`}>{preset.description}</div>
               </div>
               <div className="shrink-0 flex items-center gap-1">
                 <button

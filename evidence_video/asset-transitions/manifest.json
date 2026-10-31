@@ -1,0 +1,364 @@
+{
+  "checks": {
+    "results": [
+      {
+        "type": "object_arrow_sweep",
+        "changed": 254692
+      },
+      {
+        "type": "object_shell_whip",
+        "changed": 220359
+      },
+      {
+        "type": "object_payphone_orbit",
+        "changed": 289336
+      },
+      {
+        "type": "object_concrete_shatter",
+        "changed": 136812
+      },
+      {
+        "type": "tv_crt_knobs_ph",
+        "brightGreen": 9178
+      },
+      {
+        "type": "tv_crt_silver_ph",
+        "brightGreen": 8327
+      }
+    ],
+    "status": {
+      "loadedModels": 4,
+      "webgl": true,
+      "error": null
+    }
+  },
+  "manifest": [
+    {
+      "type": "device_tv_crt_knobs",
+      "file": "evidence_video/asset-transitions/device_tv_crt_knobs.mp4",
+      "frames": 49,
+      "distinctHashes": 49,
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 30,
+      "videoTimes": [
+        {
+          "i": 0,
+          "times": [
+            10.7,
+            7.2
+          ]
+        },
+        {
+          "i": 12,
+          "times": [
+            10.7,
+            7.6
+          ]
+        },
+        {
+          "i": 24,
+          "times": [
+            10.7,
+            8
+          ]
+        },
+        {
+          "i": 36,
+          "times": [
+            10.7,
+            8.4
+          ]
+        },
+        {
+          "i": 48,
+          "times": [
+            10.7,
+            8.8
+          ]
+        }
+      ],
+      "source": "Original title + user-provided finished RDT edit; source cuts/effects remain baked in",
+      "renderer": "Actual PreviewEngine with loaded GLBs and live decoded video",
+      "audio": "Silent offline frame-sequence proof"
+    },
+    {
+      "type": "device_tv_crt_silver",
+      "file": "evidence_video/asset-transitions/device_tv_crt_silver.mp4",
+      "frames": 49,
+      "distinctHashes": 49,
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 30,
+      "videoTimes": [
+        {
+          "i": 0,
+          "times": [
+            10.7,
+            7.2
+          ]
+        },
+        {
+          "i": 12,
+          "times": [
+            10.7,
+            7.6
+          ]
+        },
+        {
+          "i": 24,
+          "times": [
+            10.7,
+            8
+          ]
+        },
+        {
+          "i": 36,
+          "times": [
+            10.7,
+            8.4
+          ]
+        },
+        {
+          "i": 48,
+          "times": [
+            10.7,
+            8.8
+          ]
+        }
+      ],
+      "source": "Original title + user-provided finished RDT edit; source cuts/effects remain baked in",
+      "renderer": "Actual PreviewEngine with loaded GLBs and live decoded video",
+      "audio": "Silent offline frame-sequence proof"
+    },
+    {
+      "type": "object_arrow_sweep",
+      "file": "evidence_video/asset-transitions/object_arrow_sweep.mp4",
+      "frames": 49,
+      "distinctHashes": 49,
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 30,
+      "videoTimes": [
+        {
+          "i": 0,
+          "times": [
+            10.7,
+            7.2
+          ]
+        },
+        {
+          "i": 12,
+          "times": [
+            10.7,
+            7.6
+          ]
+        },
+        {
+          "i": 24,
+          "times": [
+            10.7,
+            8
+          ]
+        },
+        {
+          "i": 36,
+          "times": [
+            10.7,
+            8.4
+          ]
+        },
+        {
+          "i": 48,
+          "times": [
+            10.7,
+            8.8
+          ]
+        }
+      ],
+      "source": "Original title + user-provided finished RDT edit; source cuts/effects remain baked in",
+      "renderer": "Actual PreviewEngine with loaded GLBs and live decoded video",
+      "audio": "Silent offline frame-sequence proof"
+    },
+    {
+      "type": "object_shell_whip",
+      "file": "evidence_video/asset-transitions/object_shell_whip.mp4",
+      "frames": 49,
+      "distinctHashes": 49,
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 30,
+      "videoTimes": [
+        {
+          "i": 0,
+          "times": [
+            10.7,
+            7.2
+          ]
+        },
+        {
+          "i": 12,
+          "times": [
+            10.7,
+            7.6
+          ]
+        },
+        {
+          "i": 24,
+          "times": [
+            10.7,
+            8
+          ]
+        },
+        {
+          "i": 36,
+          "times": [
+            10.7,
+            8.4
+          ]
+        },
+        {
+          "i": 48,
+          "times": [
+            10.7,
+            8.8
+          ]
+        }
+      ],
+      "source": "Original title + user-provided finished RDT edit; source cuts/effects remain baked in",
+      "renderer": "Actual PreviewEngine with loaded GLBs and live decoded video",
+      "audio": "Silent offline frame-sequence proof"
+    },
+    {
+      "type": "object_payphone_orbit",
+      "file": "evidence_video/asset-transitions/object_payphone_orbit.mp4",
+      "frames": 49,
+      "distinctHashes": 49,
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 30,
+      "videoTimes": [
+        {
+          "i": 0,
+          "times": [
+            10.7,
+            7.2
+          ]
+        },
+        {
+          "i": 12,
+          "times": [
+            10.7,
+            7.6
+          ]
+        },
+        {
+          "i": 24,
+          "times": [
+            10.7,
+            8
+          ]
+        },
+        {
+          "i": 36,
+          "times": [
+            10.7,
+            8.4
+          ]
+        },
+        {
+          "i": 48,
+          "times": [
+            10.7,
+            8.8
+          ]
+        }
+      ],
+      "source": "Original title + user-provided finished RDT edit; source cuts/effects remain baked in",
+      "renderer": "Actual PreviewEngine with loaded GLBs and live decoded video",
+      "audio": "Silent offline frame-sequence proof"
+    },
+    {
+      "type": "object_concrete_shatter",
+      "file": "evidence_video/asset-transitions/object_concrete_shatter.mp4",
+      "frames": 49,
+      "distinctHashes": 49,
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 30,
+      "videoTimes": [
+        {
+          "i": 0,
+          "times": [
+            10.7,
+            7.2
+          ]
+        },
+        {
+          "i": 12,
+          "times": [
+            10.7,
+            7.6
+          ]
+        },
+        {
+          "i": 24,
+          "times": [
+            10.7,
+            8
+          ]
+        },
+        {
+          "i": 36,
+          "times": [
+            10.7,
+            8.4
+          ]
+        },
+        {
+          "i": 48,
+          "times": [
+            10.7,
+            8.8
+          ]
+        }
+      ],
+      "source": "Original title + user-provided finished RDT edit; source cuts/effects remain baked in",
+      "renderer": "Actual PreviewEngine with loaded GLBs and live decoded video",
+      "audio": "Silent offline frame-sequence proof"
+    }
+  ],
+  "persistence": {
+    "projectRoundTrip": true,
+    "undo": true,
+    "newPresets": 6
+  },
+  "agentApi": {
+    "listed": true,
+    "apply": true,
+    "type": "object_arrow_sweep"
+  },
+  "nativeExport": {
+    "file": "evidence_video/asset-transitions/editor-export.mp4",
+    "audioRms": 0.06314096233794406,
+    "frames": 19,
+    "distinctFrames": 19,
+    "note": "Realtime MediaRecorder output; software GPU capture does not establish fixed frame rate",
+    "duration": 1.63075
+  },
+  "pageErrors": [],
+  "scope": "Browser/WebGL source-texture and transition proofs; not native desktop, physical fracture simulation or a faithful RDT recreation",
+  "combinedReel": "evidence_video/asset-transitions/six-asset-reel.mp4"
+}

@@ -1,13 +1,11 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import type { DeviceKind, DeviceRig, DeviceRenderOptions } from './device3d'
+import {DEVICE_MODEL_OPTIONS} from './transitionAssetCatalog'
 
-export const DEVICE_MODELS = [
-  'phone_modern_black', 'phone_modern_silver', 'phone_frameless_dark',
-  'monitor_gaming_black', 'monitor_clean_office', 'tv_flat_black', 'laptop_open_dark',
-] as const
+export const DEVICE_MODELS = DEVICE_MODEL_OPTIONS.map(model=>model.id)
 const defaults: Record<DeviceKind, string> = { phone: DEVICE_MODELS[0], monitor: DEVICE_MODELS[3], tv: DEVICE_MODELS[5], laptop: DEVICE_MODELS[6] }
-type Model = { root: THREE.Group; screen: THREE.Mesh; screenSize: THREE.Vector3; scale: number }
+type Model = { root: THREE.Group; screen: THREE.Mesh; screenSize: THREE.Vector3; bodySize: THREE.Vector3; scale: number }
 const models = new Map<string, Model>(), pending = new Map<string, Promise<void>>()
 let renderer: THREE.WebGLRenderer | null = null, failed = false
 const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(40, 1, .01, 100)
@@ -42,7 +40,7 @@ export function preloadDeviceModel(id: string): Promise<void> {
     if (!(size.x > 0 && size.y > 0)) throw new Error(`${id}: invalid screen orientation`)
     const scale = (id.startsWith('phone') ? 2.12 : 1) / size.y
     screen.material = display
-    models.set(id, { root, screen, screenSize: size, scale })
+    models.set(id, { root, screen, screenSize: size, bodySize:new THREE.Box3().setFromObject(root).getSize(new THREE.Vector3()), scale })
   }).catch(error => { pending.delete(id); throw error }))
   return pending.get(id)!
 }
@@ -64,7 +62,7 @@ export function drawModelDevice(ctx: CanvasRenderingContext2D, w: number, h: num
     camera.fov = bounded(options.fov,40,25,70); camera.aspect = w / h; camera.updateProjectionMatrix()
     const visibleH = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z, visibleW = visibleH * w / h
     const normalizedW = model.screenSize.x * model.scale, normalizedH = model.screenSize.y * model.scale
-    const fit = Math.min(visibleW / (normalizedW * 1.12), visibleH / (normalizedH * 1.25)) * .8 * rig.scale
+    const fit = Math.min(visibleW / Math.max(normalizedW*1.12,model.bodySize.x*model.scale*1.06), visibleH / Math.max(normalizedH*1.25,model.bodySize.y*model.scale*1.06)) * .8 * rig.scale
     model.root.scale.setScalar(model.scale * fit)
     model.root.rotation.set(THREE.MathUtils.degToRad(-rig.rotX), THREE.MathUtils.degToRad(rig.rotY), THREE.MathUtils.degToRad(-(rig.rotZ||0)))
     model.root.position.set(rig.x * visibleW, -rig.y * visibleH, 0)

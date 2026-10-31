@@ -1,0 +1,128 @@
+{
+  "sites": [
+    {
+      "site": "Poly Haven",
+      "search": "https://api.polyhaven.com/assets?t=models",
+      "result": "200; two TV and one payphone models plus cracked concrete material acquired with verified hashes",
+      "license": "CC0-1.0"
+    },
+    {
+      "site": "OpenGameArt",
+      "result": "200; CC0 arrows.zip and Pistol3D.zip acquired; only arrow1.obj and bulletShell.fbx used"
+    },
+    {
+      "site": "Sketchfab",
+      "search": "https://api.sketchfab.com/v3/search?type=models&q=television&downloadable=true&count=12",
+      "searchStatus": 200,
+      "downloadStatus": 401,
+      "downloaded": false
+    },
+    {
+      "site": "Kenney",
+      "pages": [
+        "https://kenney.nl/assets/blaster-kit",
+        "https://kenney.nl/assets/shape-kit"
+      ],
+      "status": 403,
+      "downloaded": false
+    }
+  ],
+  "sketchfabCandidates": [
+    {
+      "id": "780fac0ec94e450eb5cb54348fc2933e",
+      "name": "Vintage Television - Panasonic TR-555",
+      "author": "SilkevdSmissen",
+      "licenseLabel": "CC Attribution-NonCommercial-NoDerivs",
+      "page": "https://sketchfab.com/3d-models/none-780fac0ec94e450eb5cb54348fc2933e",
+      "decision": "Not selected (NC/ND)"
+    },
+    {
+      "id": "e938241a182a4229ad48a1fc589e676e",
+      "name": "Retro Television",
+      "author": "Tom Seddon",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-e938241a182a4229ad48a1fc589e676e",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "bbf7a1c3ae0c4f0db45b923388d9f315",
+      "name": "Television",
+      "author": "DailyArt",
+      "licenseLabel": "CC Attribution-NonCommercial",
+      "page": "https://sketchfab.com/3d-models/none-bbf7a1c3ae0c4f0db45b923388d9f315",
+      "decision": "Not selected (NC/ND)"
+    },
+    {
+      "id": "86c2567eddd0460cb3127be05cc66450",
+      "name": "Old Television",
+      "author": "Nathan Sioui",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-86c2567eddd0460cb3127be05cc66450",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "ed8b9b28338242c38c10652ba6f4e02c",
+      "name": "Old Television",
+      "author": "Qu3st10n",
+      "licenseLabel": "CC Attribution-NonCommercial-NoDerivs",
+      "page": "https://sketchfab.com/3d-models/none-ed8b9b28338242c38c10652ba6f4e02c",
+      "decision": "Not selected (NC/ND)"
+    },
+    {
+      "id": "a2d62b491e8948a59d6447bf828b4580",
+      "name": "Television 11",
+      "author": "Console Art Cybernetic",
+      "licenseLabel": "Free Standard",
+      "page": "https://sketchfab.com/3d-models/none-a2d62b491e8948a59d6447bf828b4580",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "d28fe58483c14f90b17599489a4de01e",
+      "name": "Fallout: Television Set",
+      "author": "somni",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-d28fe58483c14f90b17599489a4de01e",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "6d07c762e854492da6447505fae456f8",
+      "name": "Wall Television",
+      "author": "Francesco Coldesina",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-6d07c762e854492da6447505fae456f8",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "6a9de08e17204d7692b3d9f6927c7b6d",
+      "name": "Retro Television - Mitsubishi",
+      "author": "Alfking49",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-6a9de08e17204d7692b3d9f6927c7b6d",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "05321a3b4f0b4612a14be3346c710a6a",
+      "name": "Old Retro Television",
+      "author": "Prabhath077",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-05321a3b4f0b4612a14be3346c710a6a",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "e5f4c7a1acdf426bb970e3428b760adf",
+      "name": "Ordinary Behavior 2 - Television",
+      "author": "gozdemrl",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-e5f4c7a1acdf426bb970e3428b760adf",
+      "decision": "Not acquired; download API authentication required"
+    },
+    {
+      "id": "99291913acaf419d8067183b5a7296ad",
+      "name": "Television 01 4k",
+      "author": "mohamedhussien",
+      "licenseLabel": "CC Attribution",
+      "page": "https://sketchfab.com/3d-models/none-99291913acaf419d8067183b5a7296ad",
+      "decision": "Not acquired; download API authentication required"
+    }
+  ]
+}

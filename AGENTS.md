@@ -6,6 +6,8 @@ Use the existing checkout. Do not create worktrees unless requested. Do not merg
 
 Keep preview and export on the shared `src/lib` engines. Browser video export uses `PreviewEngine`; universal headless tools use `tools/mcp/appRender.mjs`. A helper passing alone is not end-to-end proof. Preserve masks, animation, project persistence and undo history.
 
+External 3D pack: read `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md` and the model credits before modifying it. Five downloaded CC0 models and one original fracture rig have local embedded maps and packed `.blend` sources. Preserve original author/source/modification records. Normalize imports from actual transformed vertices, not stale Blender bounding boxes. Run `qa/object-transition-rig-unit.mjs` and `qa/render-external-asset-transitions.mjs` for object/model changes. Keep the latter's native VFR export evidence distinct from its fixed-rate frame-sequence MP4s. Respect download authentication; do not extract models from protected viewer caches.
+
 Useful checks:
 
 - `npm run typecheck` and `npm run build`.

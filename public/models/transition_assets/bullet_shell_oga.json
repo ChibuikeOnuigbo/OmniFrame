@@ -1,0 +1,11 @@
+{
+  "source": "OpenGameArt / AlexanderZotov",
+  "sourceLicense": "CC0-1.0",
+  "sourceAsset": "bulletShell.fbx",
+  "modifications": "Only the shell geometry is included, not the pistol. Reoriented/normalized; original material colors retained with metallic response.",
+  "id": "bullet_shell_oga",
+  "path": "bullet_shell_oga.glb",
+  "editableSource": "assets-source/transition-pack/bullet_shell_oga.blend",
+  "coordinateSystem": "+Y up, +Z front",
+  "textures": "embedded; no external runtime URLs"
+}

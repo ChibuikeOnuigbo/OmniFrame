@@ -434,6 +434,12 @@ export type TransitionType =
   | 'device_monitor'
   | 'device_tv'
   | 'device_laptop'
+  | 'device_tv_crt_knobs'
+  | 'device_tv_crt_silver'
+  | 'object_arrow_sweep'
+  | 'object_shell_whip'
+  | 'object_payphone_orbit'
+  | 'object_concrete_shatter'
 
 export interface Transition {
   id: string

@@ -1,0 +1,17 @@
+{
+  "kind": "tv",
+  "format": "glb",
+  "screenObject": "ScreenSurface",
+  "screenWidthMeters": 0.326,
+  "screenHeightMeters": 0.236,
+  "screenAspect": 1.38135593220339,
+  "sourceAsset": "television_02",
+  "source": "Poly Haven",
+  "sourceLicense": "CC0-1.0",
+  "modifications": "Normalized front/origin and fitted a separate live-video surface; original body PBR maps preserved.",
+  "id": "tv_crt_silver_ph",
+  "path": "tv_crt_silver_ph.glb",
+  "editableSource": "assets-source/transition-pack/tv_crt_silver_ph.blend",
+  "coordinateSystem": "+Y up, +Z front",
+  "textures": "embedded; no external runtime URLs"
+}

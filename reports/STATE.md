@@ -1,5 +1,7 @@
 # Current resumed editor state — pushed PR branch
 
+Latest asset task: `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md`. Two textured Poly Haven CRTs with fitted live-video screens, plus Object 3D arrow, bullet-shell, payphone and original concrete-fragment presets are implemented. Six GLBs/packed editable sources, credit/license/source-hash records, rendered thumbnails, six moving MP4s and a combined reel are available. Actual native export includes sound; realtime software-GPU capture is VFR rather than a fixed-rate performance certification. Exact details and remaining platform limits are in the report. No environment configuration publication was performed.
+
 Current branch: `codex/omniframe-editor-improvements`. User-authorized initial push `807e8f1b` was independently verified on GitHub; latest main `d9214115` was merged into this working branch. The user will open the PR. No environment configuration publication or main push was performed. Latest implementation/evidence: `docs/RESUMED_EDITOR_WORK_20261031.md`.
 
 Speed curves now affect actual headless media/compound source clocks using the shared app functions. All 15 presets passed 120 exact source-pixel comparisons and produced real moving MP4s. Live curve/trim/volume edits pass validation, atomic failure, undo/redo and project round-trip checks. Nonzero-start compound creation and ordinary moved ungroup preserve timing. New kinetic typography study: 108 decoded changing frames.

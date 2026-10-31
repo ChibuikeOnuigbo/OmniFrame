@@ -1,5 +1,7 @@
 # New creative-workspace evidence
 
+- [Textured external 3D transition reel](asset-transitions/six-asset-reel.mp4), [six individual demos](asset-transitions/README.md) and [native export with sound](asset-transitions/editor-export.mp4).
+
 - [15 moving speed-curve diagnostics](speed-curves/README.md) and [120 pixel-comparison results](speed-curves/manifest.json).
 - [Original kinetic word-stack motion design](<reala/motion design/kinetic-word-stack.mp4>) and [preview](<reala/motion design/kinetic-word-stack.png>).
 - [Resumed implementation, source access and limits](../docs/RESUMED_EDITOR_WORK_20261031.md).

@@ -1,0 +1,11 @@
+{
+  "source": "Poly Haven / UM JOORIN",
+  "sourceLicense": "CC0-1.0",
+  "sourceAsset": "korean_public_payphone_01",
+  "modifications": "Normalized and decimated to 18% of source faces; original base-color, normal and metallic/roughness maps retained.",
+  "id": "payphone_ph",
+  "path": "payphone_ph.glb",
+  "editableSource": "assets-source/transition-pack/payphone_ph.blend",
+  "coordinateSystem": "+Y up, +Z front",
+  "textures": "embedded; no external runtime URLs"
+}

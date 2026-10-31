@@ -1,0 +1,209 @@
+{
+  "assets": [
+    {
+      "id": "Television_01",
+      "source": "Poly Haven",
+      "sourcePage": "https://polyhaven.com/a/Television_01",
+      "license": "CC0-1.0",
+      "licenseURL": "https://polyhaven.com/license",
+      "authors": {
+        "Gabriel Radić": "All"
+      },
+      "kind": "3D model",
+      "resolution": "1k",
+      "files": [
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/Television_01/Television_01_1k.gltf",
+          "bytes": 2933,
+          "sha256": "ef4376366ea956519c1a1d06146a8e8cc2bb0fcbd5c6b9f919a54ce31d05d530",
+          "file": "Television_01/Television_01.gltf"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/Television_01/Television_01.bin",
+          "bytes": 90548,
+          "sha256": "fc32dd3e6722cfa093910d8b5b4e6173b0c92a13d58b55b8e9c6007a9218b0a0",
+          "file": "Television_01/Television_01.bin"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/Television_01/Television_01_arm_1k.jpg",
+          "bytes": 190774,
+          "sha256": "b55594884fec13e47e22d1fdc3c89a528728454f65a7c26b482d9f3ec9200015",
+          "file": "Television_01/textures/Television_01_arm_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/Television_01/Television_01_diff_1k.jpg",
+          "bytes": 102231,
+          "sha256": "38e45263d115ab2832a4a2e99f93f03ff5f49c0aa0d5256528677a77c3ca4568",
+          "file": "Television_01/textures/Television_01_diff_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/Television_01/Television_01_nor_gl_1k.jpg",
+          "bytes": 144808,
+          "sha256": "289519da9f2fa5aeca0246bbb6d42ea1b03e5f54865d8881d3b1e0b3116d300f",
+          "file": "Television_01/textures/Television_01_nor_gl_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "television_02",
+      "source": "Poly Haven",
+      "sourcePage": "https://polyhaven.com/a/television_02",
+      "license": "CC0-1.0",
+      "licenseURL": "https://polyhaven.com/license",
+      "authors": {
+        "Benny Weimer": "All"
+      },
+      "kind": "3D model",
+      "resolution": "1k",
+      "files": [
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/television_02/television_02_1k.gltf",
+          "bytes": 2767,
+          "sha256": "8e7d7cb6bbdb5713b7d4ed21ece7c0f9c41912359c2c0f5065b7e77f5bf4cdcf",
+          "file": "television_02/television_02.gltf"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_nor_gl_1k.jpg",
+          "bytes": 292847,
+          "sha256": "d241001bb67ffe262612ff46930d62f751c425b6e9be8704e762c2dc5b48e536",
+          "file": "television_02/textures/television_02_nor_gl_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+          "bytes": 391490,
+          "sha256": "216bc64108a79f3728e4f0fa2927da2491a3c3f5c619c8d48418c2aad84afb5e",
+          "file": "television_02/textures/television_02_diff_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_arm_1k.jpg",
+          "bytes": 471183,
+          "sha256": "7fa42cc4ce2b2a09e2889aaf7897265a79223cad2f3267e035884c96ab37d48b",
+          "file": "television_02/textures/television_02_arm_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02.bin",
+          "bytes": 81668,
+          "sha256": "73f1d3519f7bdacca24c892e2614ff756d5d27f5c33fb518cb8aac9154fa710b",
+          "file": "television_02/television_02.bin"
+        }
+      ]
+    },
+    {
+      "id": "korean_public_payphone_01",
+      "source": "Poly Haven",
+      "sourcePage": "https://polyhaven.com/a/korean_public_payphone_01",
+      "license": "CC0-1.0",
+      "licenseURL": "https://polyhaven.com/license",
+      "authors": {
+        "UM JOORIN": "All"
+      },
+      "kind": "3D model",
+      "resolution": "1k",
+      "files": [
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/korean_public_payphone_01/korean_public_payphone_01_1k.gltf",
+          "bytes": 2929,
+          "sha256": "8b64fe9a7be8850c9ad1436ed2d8a7efeaa58fc9854e9b6e6ed6f0bfb41c8fc5",
+          "file": "korean_public_payphone_01/korean_public_payphone_01.gltf"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/korean_public_payphone_01/korean_public_payphone_01_nor_gl_1k.jpg",
+          "bytes": 69473,
+          "sha256": "1fd643f4ab8d5b477603089a9e8ab8b3db42bfb4b85224c28ed870299dc37ed0",
+          "file": "korean_public_payphone_01/textures/korean_public_payphone_01_nor_gl_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/korean_public_payphone_01/korean_public_payphone_01_diff_1k.jpg",
+          "bytes": 172169,
+          "sha256": "6975ea3ede9f7a8edc7d369529cc8ff0c1bb73b3c236d72e3728c5d268436ae1",
+          "file": "korean_public_payphone_01/textures/korean_public_payphone_01_diff_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/korean_public_payphone_01/korean_public_payphone_01.bin",
+          "bytes": 5152208,
+          "sha256": "7927d721ebea112b9c03f85b5521fc0baf3d0161bee73708feff4336638942f2",
+          "file": "korean_public_payphone_01/korean_public_payphone_01.bin"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/korean_public_payphone_01/korean_public_payphone_01_arm_1k.jpg",
+          "bytes": 179791,
+          "sha256": "d91d6e502af197f7950f6ee09437f38795a84697be573f44c3007d51fcbb3537",
+          "file": "korean_public_payphone_01/textures/korean_public_payphone_01_arm_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "cracked_concrete",
+      "source": "Poly Haven",
+      "sourcePage": "https://polyhaven.com/a/cracked_concrete",
+      "license": "CC0-1.0",
+      "licenseURL": "https://polyhaven.com/license",
+      "authors": {
+        "Dimitrios Savva": "All"
+      },
+      "kind": "PBR material",
+      "resolution": "1k",
+      "files": [
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cracked_concrete/cracked_concrete_nor_gl_1k.jpg",
+          "bytes": 828538,
+          "sha256": "f6d4891b61e73a465add2fa6e4e95f711f4173b0a2deeb3778cc0275f28587ed",
+          "file": "cracked_concrete/textures/cracked_concrete_nor_gl_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cracked_concrete/cracked_concrete_arm_1k.jpg",
+          "bytes": 666003,
+          "sha256": "4d6361ea3136cb9f11c6376a9e30cf780272349c1a732133ca9f1d6ff0828d76",
+          "file": "cracked_concrete/textures/cracked_concrete_arm_1k.jpg"
+        },
+        {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cracked_concrete/cracked_concrete_diff_1k.jpg",
+          "bytes": 849369,
+          "sha256": "26b268b23dc71accc627cc25d889bdb56287518a5abb27565bb71bda26cec5c5",
+          "file": "cracked_concrete/textures/cracked_concrete_diff_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "arrows",
+      "source": "OpenGameArt",
+      "sourcePage": "https://opengameart.org/content/arrow-symbols",
+      "license": "CC0-1.0",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "authors": "Savino",
+      "kind": "3D model archive",
+      "selectedFiles": [
+        "arrow1.obj"
+      ],
+      "files": [
+        {
+          "url": "https://opengameart.org/sites/default/files/arrows.zip",
+          "bytes": 2280,
+          "sha256": "99b00c92788998eadd15ca06fe514af79e94e1c51abec184eed1970ba025576d",
+          "file": "arrows.zip"
+        }
+      ]
+    },
+    {
+      "id": "Pistol3D",
+      "source": "OpenGameArt",
+      "sourcePage": "https://opengameart.org/content/3d-low-poly-pistol-with-bullet-shell",
+      "license": "CC0-1.0",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "authors": "AlexanderZotov",
+      "kind": "3D model archive",
+      "selectedFiles": [
+        "bulletShell.fbx"
+      ],
+      "files": [
+        {
+          "url": "https://opengameart.org/sites/default/files/Pistol3D.zip",
+          "bytes": 278506,
+          "sha256": "d872dd29c57c75b0f6bb78864119dd122da505ba88b83d12ffba7fb235d9f7c3",
+          "file": "Pistol3D.zip"
+        }
+      ]
+    }
+  ],
+  "scope": "Original source cache is separate from optimized runtime GLBs. Geometry/material modifications are recorded by the Blender build. Sketchfab downloads require authentication and are not claimed as acquired."
+}

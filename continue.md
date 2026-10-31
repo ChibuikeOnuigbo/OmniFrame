@@ -2,6 +2,10 @@
 
 ## Current source and acceptance
 
+Latest asset-pack increment: `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md`. Five licensed external models (two CRT TVs, payphone, arrow geometry, bullet-shell geometry) and a CC0 cracked-concrete material are acquired and verified. Six new presets are in Device 3D / Object 3D. Runtime GLBs embed their maps; six packed editable Blender sources are in `assets-source/transition-pack/`. Do not confuse the original 35-piece fracture rig with a downloaded simulation. Sketchfab search worked but downloading needs authentication; no protected model was taken from a viewer.
+
+View `evidence_video/asset-transitions/six-asset-reel.mp4` and its manifest. Six actual PreviewEngine/GLB demos each have 49 distinct 30-fps frames and advancing source video; native MP4 export retains sound (RMS 0.06314), with 19 VFR frames in 1.63075 s on software WebGL. Exact endpoints, controls/undo, bundle round-trip and the generic transition API passed. Existing device/glitch/drawing, context-menu and live MCP checks passed; current device catalog is nine models. Current phone/desktop UI screenshots and no-overflow measurements are under the evidence folder's `ui/`.
+
 Latest user instruction authorizes pushing the saved editor changes to a **new branch**, leaving PR creation to the user. Current branch is `codex/omniframe-editor-improvements`. Initial saved commit `807e8f1b` was pushed and verified on GitHub; latest main `d9214115` was merged into this working branch. Do not push/merge main, create the PR, force-push, or publish environment configuration. Earlier local-only statements are superseded. Read `docs/RESUMED_EDITOR_WORK_20261031.md` for current code, actual access tests and remaining work.
 
 The resumed increment fixes shared headless speed-curve source clocks (15 MP4s, 120 exact source-pixel comparisons), live MCP curve/trim/volume validation plus undo/project persistence, and nonzero-start compound timing. A second original word-stack motion study is in `evidence_video/reala/motion design/`. These are diagnostics/studies, not the full 150-edit quiz or faithful recreations.

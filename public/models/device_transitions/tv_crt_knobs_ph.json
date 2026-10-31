@@ -1,0 +1,17 @@
+{
+  "kind": "tv",
+  "format": "glb",
+  "screenObject": "ScreenSurface",
+  "screenWidthMeters": 0.388,
+  "screenHeightMeters": 0.268,
+  "screenAspect": 1.4477611940298507,
+  "sourceAsset": "Television_01",
+  "source": "Poly Haven",
+  "sourceLicense": "CC0-1.0",
+  "modifications": "Normalized front/origin and fitted a separate live-video surface; original body PBR maps preserved.",
+  "id": "tv_crt_knobs_ph",
+  "path": "tv_crt_knobs_ph.glb",
+  "editableSource": "assets-source/transition-pack/tv_crt_knobs_ph.blend",
+  "coordinateSystem": "+Y up, +Z front",
+  "textures": "embedded; no external runtime URLs"
+}

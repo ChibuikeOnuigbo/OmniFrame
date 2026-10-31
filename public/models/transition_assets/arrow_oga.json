@@ -1,0 +1,11 @@
+{
+  "source": "OpenGameArt / Savino",
+  "sourceLicense": "CC0-1.0",
+  "sourceAsset": "arrow1.obj",
+  "modifications": "Reoriented, normalized and assigned original gold PBR material. Original arrow source has no textures.",
+  "id": "arrow_oga",
+  "path": "arrow_oga.glb",
+  "editableSource": "assets-source/transition-pack/arrow_oga.blend",
+  "coordinateSystem": "+Y up, +Z front",
+  "textures": "embedded; no external runtime URLs"
+}

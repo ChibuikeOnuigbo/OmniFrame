@@ -19,6 +19,7 @@ jobs:
         run: |
           node qa/glitch-ng-layers-unit.mjs
           node qa/device-rig-unit.mjs
+          node qa/object-transition-rig-unit.mjs
           node qa/deformation-unit.mjs
           node qa/fx-split-continuity-unit.mjs
           node qa/audio-output-math-unit.mjs
@@ -50,6 +51,7 @@ jobs:
           node qa/context-menu-viewport-e2e.mjs
           node qa/workbench-responsive-e2e.mjs
           node qa/render-device-transition-reel.mjs
+          node qa/render-external-asset-transitions.mjs
           node qa/render-transform-proofs.mjs
           node qa/render-creative-motion-proof.mjs
           node qa/render-kinetic-word-study.mjs

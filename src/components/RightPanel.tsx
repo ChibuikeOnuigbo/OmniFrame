@@ -1,5 +1,7 @@
 import { TransformModes } from './TransformWorkbench'
 import { DeviceTransitionInspector } from './DeviceTransitionInspector'
+import {ObjectTransitionInspector} from './ObjectTransitionInspector'
+import {isObjectTransition} from '../lib/transitionAssetCatalog'
 import React, { useEffect, useRef, useState } from 'react'
 import ExpandableToolGroup from './ExpandableToolGroup'
 import { SPEED_CURVES, type SpeedCurveId } from '../lib/speedCurves'
@@ -1616,7 +1618,7 @@ export function RightPanel() {
         tabIndex={0}
         className={`flex-1 min-h-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand ${unclusterInspector ? 'space-y-0.5' : ''}`}
       >
-        {selectedTransition?.type.startsWith('device_') ? <DeviceTransitionInspector transition={selectedTransition} /> : clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
+        {selectedTransition?.type.startsWith('device_') ? <DeviceTransitionInspector transition={selectedTransition} /> : selectedTransition&&isObjectTransition(selectedTransition.type) ? <ObjectTransitionInspector transition={selectedTransition} /> : clip ? <ClipInspector clip={clip} /> : <ProjectInspector />}
       </div>
     </SectionsNavigator>
   )

@@ -49,6 +49,8 @@ import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
 import { applyClipFxLayers, hasClipFxLayers, drawReplaceBg, drawParticleFx } from './particleFx'
 import { drawDeviceScene, rigAt, hasDeviceOverlay, ensureKeyedDevice, drawDeviceOverlay, type DeviceKind } from './device3d'
+import {drawObjectTransition} from './object3d'
+import {defaultDeviceModel} from './transitionAssetCatalog'
 import { evalNumKeys, evalColorKeys, type CharRange } from './textRuns'
 import { applyGlitchNG, hasNg, type NgEffect } from './glitchNG'
 import { inheritedWorld } from './parentChain'
@@ -1431,10 +1433,25 @@ export class PreviewEngine {
         }
         break
       }
+      case 'object_arrow_sweep':
+      case 'object_shell_whip':
+      case 'object_payphone_orbit':
+      case 'object_concrete_shatter': {
+        const from=this.takeScratch(),to=this.takeScratch()
+        try {
+          for(const canvas of [from,to]){const x=canvas.getContext('2d')!;x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,canvas.width,canvas.height)}
+          if(hasFrom)drawFrom(from.getContext('2d')!)
+          if(hasTo)drawTo(to.getContext('2d')!)
+          drawObjectTransition(ctx,this.width,this.height,trans.type,progress,from,to,trans.parameters||{})
+        } finally {this.releaseScratch(from);this.releaseScratch(to)}
+        break
+      }
       case 'device_phone':
       case 'device_monitor':
       case 'device_laptop':
-      case 'device_tv': {
+      case 'device_tv':
+      case 'device_tv_crt_knobs':
+      case 'device_tv_crt_silver': {
         // 3D device flies in with the incoming clip live on its screen, then
         // the screen expands to the full frame: a true 3D→2D handoff.
         const kind: DeviceKind = trans.type === 'device_phone' ? 'phone' : trans.type === 'device_monitor' ? 'monitor' : trans.type === 'device_laptop' ? 'laptop' : 'tv'
@@ -1453,7 +1470,7 @@ export class PreviewEngine {
           if(inverse)drawFrom(sctx);else drawTo(sctx)
           ctx.save()
           if(inverse)ctx.globalAlpha *= Math.min(1, Math.max(0, (1-progress)/.18))
-          drawDeviceScene(ctx, this.width, this.height, kind, deviceRig, scr, trans.parameters || {})
+          drawDeviceScene(ctx, this.width, this.height, kind, deviceRig, scr, {...trans.parameters,model:trans.parameters?.model||defaultDeviceModel(trans.type)})
           ctx.restore(); this.releaseScratch(scr)
         }
         break
