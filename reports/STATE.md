@@ -1,5 +1,21 @@
 
 ## Increment 2026-10-30b (wave-3 turn)
+
+## Increment 2026-10-31 (device-3D turn)
+- Brief: redo phone/monitor transitions; scan references online; AI perfect-angle green-screen
+  plates; scan for a Blender-style 3D MCP; mould/texture/rig the model in code; render 3D→2D to mp4.
+- HONEST: Arena has NO Blender/3D MCP connector (list_connector_tools('blender') = unsupported) and
+  blender.org is outside the egress allowlist — the model is therefore MOULDED PROCEDURALLY IN CODE
+  (device3d.ts): parametric geometry + perspective projection + normal-culled extrusion +
+  triangle-grid perspective texture mapping. Reference scan = 8 web green-screen mockups
+  (image-search/); AI plates = generate_image (public/devices/).
+- Shipped: 3 device transitions with keyframed rigs and exact 3D→2D handoff (diff 0.00), green-screen
+  device overlays keyed in-app, presets/UI/MCP docs, qa/device3d-transition.mjs with mp4 proofs.
+- Debug trail: overlay first invisible because the isolation path's pad origin offset put the draw
+  off-frame (moved to frame-space post-composite); perspective depth was inverted (back ring larger
+  than front) and side walls needed normal culling — all fixed and re-verified.
+- Rollback #10 recovered mid-turn (reset --hard origin b1c87edb + npm ci + pip + ffmpeg relink).
+- FEATURES = 181. Acceptance e2e 9/9; universal-tools/alight/tymm/replace/video-study-render green.
 - Rollback #9 recovered (fetch + reset --hard origin 96b3b1fd + npm ci + pip; vite restarted). The
   gitignored videos/ cache was wiped by the rollback — study artifacts (frames, findings) unaffected;
   re-downloadable via connector ids (noted in STUDY.md, no silent gap).

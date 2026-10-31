@@ -35,6 +35,7 @@ only what is verified shipped.
 - [ ] `node qa/tymm-lut-parity.mjs` → PASS (lossless 64³ TYMM LUTs)
 - [ ] `node qa/alight-roundtrip.mjs` → PASS (XML export/import round-trip:
       project + template + shake pack; proof test_ans_result/xml-roundtrip.mp4)
+- [x] device 3D transitions + green-screen overlays (reference scan → AI plates → procedural 3D rig → mp4 proofs)
 - [ ] continue the batch queue (`qa/newglitch-batch.mjs`, checkpoint next=764)
 - [x] DOWNLOADED all 41 corpus videos via the Drive connector (byte-exact, gitignored) + 122 study frames; wave-2 effects implemented from frame-read panels (Offset, Orientation, Text Transform, Copy Background); acceptance e2e 8/8
 - [x] video-study corpus scan (Drive 1KlxUlem…): 41-video index + gap analysis in new_doc_toll_research/video_study/; acceptance tests green (`node qa/video-study-e2e.mjs` against vite :5173, `node qa/video-study-render.mjs` headless proof)

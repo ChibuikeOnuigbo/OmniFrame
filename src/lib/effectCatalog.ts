@@ -82,6 +82,7 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   fcgColorC: { label: 'Gradient Colour C', kind: 'color' },
   fcgColorD: { label: 'Gradient Colour D', kind: 'color' },
   fcgPhase: { label: 'Gradient Phase (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  deviceOverlay: { label: 'Device Overlay (green-screen plate)', kind: 'select', options: ['none', 'phone', 'monitor'] },
   cardFlip: { label: 'Card Flip (half-turns)', kind: 'number', min: 0, max: 2, step: 0.05 },
   zoomBlur: { label: 'Zoom Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
   directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -437,6 +438,8 @@ function buildCatalog(): FxCatalogEntry[] {
     add('vs3-hot-color', 'Hot Color', 'color', VS3 + ' (Color & Light browser gap; brights pushed to hot magenta-red)', { hotColor: 0.7 })
     add('vs3-radial-shadow', 'Radial Shadow', 'light', VS3 + ' (Color & Light browser gap; centre-out radial darkening)', { radialShadow: 0.65 })
     add('vs3-four-color-gradient', 'Four-color Gradient', 'color', VS3 + ' (Color & Light browser gap; bilinear A/B/C/D blend, rotatable phase)', { fourColorGradient: 0.8 })
+    add('vs4-device-phone', 'Phone Green-screen Overlay', 'light', VS3 + ' — AI perfect-angle chroma plate (public/devices/phone-greenscreen.png) keyed in-app; clip shows through the screen hole', { deviceOverlay: 'phone' })
+    add('vs4-device-monitor', 'Monitor Green-screen Overlay', 'light', VS3 + ' — AI perfect-angle chroma plate (public/devices/monitor-greenscreen.png) keyed in-app; clip shows through the screen hole', { deviceOverlay: 'monitor' })
     add('vs3-bokeh-hexagon', 'Bokeh Bed hexagon (shape picker)', 'light', VS3 + ' 36_t070 (BCC lens-blur shape/matte picker: circle/square/plus/triangle/hexagon/star/slash/bowtie)', { particleFx: 'bokeh-hexagon', particleDensity: 0.6 })
   }
 

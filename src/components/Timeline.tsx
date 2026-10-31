@@ -3418,7 +3418,7 @@ export function Timeline() {
                   Transition: {contextMenu.transition.type.replace(/_/g, ' ')}
                 </div>
                 <div className="px-2 py-1 text-[10px] text-ink-500 uppercase font-semibold">Change Type</div>
-                {(['cross_dissolve', 'dip_to_black', 'dip_to_white', 'wipe_left', 'slide_left', 'zoom'] as TransitionType[]).map((tType) => (
+                {(['cross_dissolve', 'dip_to_black', 'dip_to_white', 'wipe_left', 'slide_left', 'zoom', 'device_phone', 'device_monitor', 'device_tv'] as TransitionType[]).map((tType) => (
                   <button
                     key={tType}
                     type="button"

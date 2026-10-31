@@ -109,3 +109,12 @@ auto beat detection (manual markers exist; peaks≠beats).
 - HONESTY note: rollback #9 wiped the gitignored videos/ cache (231MB) between turns; the study is
   complete (122 frames + findings committed), and every MP4 remains re-downloadable by id from
   folder-index.json via the Drive connector. The frames/ stills were NOT affected.
+
+## Device-3D reference scan (2026-10-31)
+- 8 green-screen device mockups scanned via web image search (image-search/): phone = titanium
+  rounded slab ~12% corner radius, thin bezel, notch/punch-hole; monitor/TV = thin black bezel +
+  aluminium chin + tapered pedestal or feet, diagonal glass glare. Those measurements set the
+  procedural SPECS in src/lib/device3d.ts; AI plates (public/devices/) regenerate the look at a
+  perfect straight-on angle for chroma keying.
+- Blender/3D MCP: NOT available on Arena (connector unsupported; blender.org outside egress) —
+  documented, model moulded in code instead.

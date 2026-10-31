@@ -11,6 +11,7 @@
  */
 import type { ClipEffect } from '../types'
 
+
 export const PARTICLE_KINDS = ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals',
   // lens-blur matte/bokeh shape picker variety observed in downloaded frame 36_t070
   'bokeh-square', 'bokeh-plus', 'bokeh-triangle', 'bokeh-hexagon', 'bokeh-star', 'bokeh-bowtie', 'bokeh-slash'] as const

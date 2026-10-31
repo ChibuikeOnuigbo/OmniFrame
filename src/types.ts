@@ -429,6 +429,9 @@ export type TransitionType =
   | 'scene_gold_card'
   | 'scene_wire_glow'
   | 'scene_dual_typo'
+  | 'device_phone'
+  | 'device_monitor'
+  | 'device_tv'
 
 export interface Transition {
   id: string
@@ -693,6 +696,8 @@ export interface ClipEffect {
   fcgColorC?: string
   fcgColorD?: string
   fcgPhase?: number
+  /** Green-screen device overlay (AI plates public/devices/*-greenscreen.png, chroma-keyed) */
+  deviceOverlay?: 'none' | 'phone' | 'monitor'
   flareColor?: string
   /** Board L: white-balance Kelvin (1500-15000, 6500 = neutral). */
   colorTemp?: number

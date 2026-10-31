@@ -47,6 +47,7 @@ function applyRotationXY(ctx: CanvasRenderingContext2D, rotationX?: number, rota
 import { applyLutStackToCanvas, resolveLutRef, whenLutsLoaded, type LutStackItem } from './lutEngine'
 import { applyPixelGrade, hasPixelGrade } from './pixelGrade'
 import { applyClipFxLayers, hasClipFxLayers, drawReplaceBg, drawParticleFx } from './particleFx'
+import { drawDeviceScene, rigAt, hasDeviceOverlay, ensureKeyedDevice, drawDeviceOverlay, type DeviceKind } from './device3d'
 import { evalNumKeys, evalColorKeys, type CharRange } from './textRuns'
 import { applyGlitchNG, hasNg, type NgEffect } from './glitchNG'
 import { inheritedWorld } from './parentChain'
@@ -1426,6 +1427,24 @@ export class PreviewEngine {
         }
         break
       }
+      case 'device_phone':
+      case 'device_monitor':
+      case 'device_tv': {
+        // 3D device flies in with the incoming clip live on its screen, then
+        // the screen expands to the full frame: a true 3D→2D handoff.
+        const kind: DeviceKind = trans.type === 'device_phone' ? 'phone' : trans.type === 'device_monitor' ? 'monitor' : 'tv'
+        if (hasFrom) drawFrom(ctx)
+        if (hasTo) {
+          const scr = this.takeScratch()
+          const sctx = scr.getContext('2d')!
+          sctx.setTransform(1, 0, 0, 1, 0, 0)
+          sctx.clearRect(0, 0, scr.width, scr.height)
+          drawTo(sctx)
+          drawDeviceScene(ctx, this.width, this.height, kind, rigAt(kind, progress), scr)
+          this.releaseScratch(scr)
+        }
+        break
+      }
       default: {
         if (hasFrom) drawFrom(ctx)
         break
@@ -2001,7 +2020,7 @@ export class PreviewEngine {
     // sibling content on the target canvas is untouched. A clip Mask uses the
     // same isolation: it mattes the clip's own graded pixels (only).
     const fxEff = this.effectsForRender(clip, time)
-    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(fxEff) || hasClipFxLayers(fxEff) || !!(clip as unknown as { patch?: unknown }).patch)) {
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(fxEff) || hasClipFxLayers(fxEff) || hasDeviceOverlay(fxEff) || !!(clip as unknown as { patch?: unknown }).patch)) {
       const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
       octx.translate(this.width, this.height) // frame origin at pad centre
@@ -2010,7 +2029,7 @@ export class PreviewEngine {
       if (stack.length) applyLutStackToCanvas(scratch, stack)
       if (hasPixelGrade(fxEff)) applyPixelGrade(scratch, fxEff!, Math.round(time * 24))
       if (hasNg(fxEff as NgEffect)) applyGlitchNG(scratch, fxEff as NgEffect, time)
-      if (hasClipFxLayers(fxEff)) applyClipFxLayers(scratch, fxEff!, time)
+      if (hasClipFxLayers(fxEff) || hasDeviceOverlay(fxEff)) applyClipFxLayers(scratch, fxEff!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of
       // an enclosing compound must keep applying to this clip's pixels).
@@ -2033,6 +2052,18 @@ export class PreviewEngine {
         ctx.globalAlpha = (ctx.globalAlpha || 1) * g.alpha
         ctx.drawImage(scratch, gx + this.width, gy + this.height, vw, vh)
         ctx.restore()
+      }
+      // device overlay lives in FRAME space, so it composites after the pad
+      if (hasDeviceOverlay(fxEff)) {
+        const kdOv2 = ensureKeyedDevice(fxEff)
+        if (kdOv2) {
+          ctx.save()
+          ctx.setTransform(1, 0, 0, 1, 0, 0)
+          ctx.filter = 'none'
+          ctx.globalAlpha = 1
+          drawDeviceOverlay(ctx, this.width, this.height, kdOv2, time)
+          ctx.restore()
+        }
       }
       this.releasePadScratch(scratch)
       return
@@ -2150,6 +2181,21 @@ export class PreviewEngine {
       this.drawTextClip(ctx, clip, time)
     }
 
+    // Green-screen device overlay (AI chroma plates, public/devices/): the
+    // keyed plate floats over the composited clip; clip pixels show through
+    // the chroma hole. Drawn in project space, above everything of this clip.
+    if (hasDeviceOverlay(fxEff)) {
+      const kdOv = ensureKeyedDevice(fxEff)
+      if (kdOv) {
+        ctx.save()
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.filter = 'none'
+        ctx.globalAlpha = 1
+        drawDeviceOverlay(ctx, this.width, this.height, kdOv, time)
+        ctx.restore()
+      }
+    }
+
     ctx.restore()
   }
 
@@ -2247,14 +2293,14 @@ export class PreviewEngine {
     const hasNestedAdjustment = childClips.some((c) => c.kind === 'adjustment')
     const { stack: ownLuts } = this.buildLutStack(clip, time)
     const cFxEff = this.effectsForRender(clip, time)
-    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled || hasPixelGrade(cFxEff) || hasClipFxLayers(cFxEff))) {
+    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled || hasPixelGrade(cFxEff) || hasClipFxLayers(cFxEff) || hasDeviceOverlay(cFxEff))) {
       const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
       octx.translate(this.width, this.height) // frame origin at pad centre
       this.drawCompoundContents(octx, clip, time, st, trackMuted, childClips, childTracks)
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
       if (hasPixelGrade(cFxEff)) applyPixelGrade(scratch, cFxEff!, Math.round(time * 24))
-      if (hasClipFxLayers(cFxEff)) applyClipFxLayers(scratch, cFxEff!, time)
+      if (hasClipFxLayers(cFxEff) || hasDeviceOverlay(cFxEff)) applyClipFxLayers(scratch, cFxEff!, time)
       if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state intact (outer opacity /
       // filter / transform keep applying, exactly like non-isolated draws).

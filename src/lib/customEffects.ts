@@ -74,6 +74,7 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, never>> = {
   bumpMap: 0, colorBalanceR: 0, colorBalanceG: 0, colorBalanceB: 0,
   shadows: 0, highlights: 0, hotColor: 0, radialShadow: 0,
   fourColorGradient: 0, fcgColorA: '#ff375f', fcgColorB: '#25d7fb', fcgColorC: '#a0ff3c', fcgColorD: '#fffa8b', fcgPhase: 0,
+  deviceOverlay: 'none',
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
@@ -133,6 +134,7 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   if (typeof raw.overlayFx === 'string' && (OVERLAY_KINDS as readonly string[]).includes(raw.overlayFx)) out.overlayFx = raw.overlayFx as ClipEffect['overlayFx']
   if (typeof raw.replaceBg === 'string' && (REPLACE_BG_KINDS as readonly string[]).includes(raw.replaceBg)) out.replaceBg = raw.replaceBg as ClipEffect['replaceBg']
   if (typeof raw.particleTint === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.particleTint)) out.particleTint = raw.particleTint
+  if (raw.deviceOverlay === 'none' || raw.deviceOverlay === 'phone' || raw.deviceOverlay === 'monitor') out.deviceOverlay = raw.deviceOverlay
   for (const k of ['fcgColorA', 'fcgColorB', 'fcgColorC', 'fcgColorD'] as const) {
     const v = raw[k]
     if (typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)) out[k] = v
