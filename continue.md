@@ -29,8 +29,8 @@ All 5,000 passed three-frame shared-kernel checks and one active compositor fram
 
 ## Next unresolved work, oldest requirements first
 
-1. Complete per-board visual review against actual instruction images; A–J replay success alone does not prove roto/inpaint accuracy. Recover S/T input media where absent. See the recovered task guide.
-2. Reconcile individual YouTube inventory/frame/media records; top-level `progress.json` conflicts with its checkpoint and older final report. Do not call metadata-only or sampled sheets continuous watching/audio review.
+1. Complete per-board visual review against actual instruction images; A–J replay success alone does not prove roto/inpaint accuracy. Board C explicitly requests **150 edits** and 15 speed curves; ten archived still-based variants are insufficient. Recover its original moving source, and S/T input media where absent. See the recovered task guide.
+2. Reconcile individual YouTube inventory/frame/media records; `scripts/audit-study-evidence.mjs` found 98 sample sets with fewer than three distinct decoded images. Fixes for zero-metadata sampling and portrait stretching are in `scripts/extract-study-evidence.py`, tested with a real portrait fixture; remote worker has not been run. top-level `progress.json` conflicts with its checkpoint and older final report. Do not call metadata-only or sampled sheets continuous watching/audio review.
 3. Latest Drive folder `1uP9ySa8P2p9yGM4gJsn8fxuosQ1k2XrN` was blocked by proxy CONNECT 403 before Google. Draft environment allowlist additions for `drive.google.com` and `api.github.com` need review/save/publish to apply. No current folder contents were read. Then recursively inventory subfolders and compare hashes/provenance with archived manifests; do not bypass access restrictions.
 4. Continue the 5,000 full-motion queue and review duplicates with declared metrics.
 5. Device custom camera animation keys, material/reflection controls, real scene shadows/DOF/motion blur remain open; do not label them implemented. Lighting is real key/rim/hemisphere lighting, not an HDR environment map.
