@@ -47,6 +47,14 @@ try{
   store.getState().undo();clip=store.getState().clips[0]
   if(clip.speedCurve||clip.inPoint!==0||clip.volume!==1)throw Error('source clock edit undo failed')
   store.getState().redo()
+  const effectMask={enabled:true,inverted:false,shape:'ellipse',centerX:.5,centerY:.5,width:.2,height:.2,feather:12,regions:[
+   {id:'bulb-1',shape:'circle',centerX:.25,centerY:.4,width:.14,height:.14,feather:8,opacity:1},
+   {id:'title-mask',shape:'text',centerX:.65,centerY:.6,width:.3,height:.18,feather:4,opacity:1,text:'FX'},
+   {id:'drawn-region',shape:'custom',centerX:.5,centerY:.5,width:.3,height:.3,feather:2,opacity:1,points:[{x:.4,y:.2},{x:.7,y:.3},{x:.6,y:.7}]},
+  ]}
+  await checked('edit_element',{clipId:id,patch:{effects:{blur:6,glow:1.2},adjustmentMask:effectMask}})
+  clip=store.getState().clips[0]
+  if(clip.adjustmentMask?.regions?.length!==3||clip.effects.blur!==6)throw Error('live multi-region effect mask edit failed')
   store.getState().setClipBlend(id,'multiply',0)
   store.getState().setClipBlend(id,'screen',1)
   clip=store.getState().clips[0]
@@ -57,13 +65,13 @@ try{
   if(badClock.ok||badVolume.ok||before!==JSON.stringify(store.getState().clips[0]))throw Error('bad source edit partially mutated clip')
   const {buildOmniProjectBundle,parseOmniProjectBundle}=await import('/src/lib/omniProject.ts')
   const state=store.getState(),bundle=await buildOmniProjectBundle({assets:state.assets,tracks:state.tracks,clips:state.clips,transitions:[]},'MCP clock test'),loaded=await parseOmniProjectBundle(new File([bundle],'clock.omni'))
-  if(loaded.state.clips[0].speedCurve!=='hold-then-go'||loaded.state.clips[0].inPoint!==1||loaded.state.clips[0].volume!==.35||loaded.state.clips[0].blendKeys?.length!==2)throw Error('source clock/blend project round trip failed')
+  if(loaded.state.clips[0].speedCurve!=='hold-then-go'||loaded.state.clips[0].inPoint!==1||loaded.state.clips[0].volume!==.35||loaded.state.clips[0].blendKeys?.length!==2||loaded.state.clips[0].adjustmentMask?.regions?.length!==3||loaded.state.clips[0].effects?.blur!==6)throw Error('source clock/blend/effect-mask project round trip failed')
   await checked('edit_element',{clipId:id,patch:{speedCurve:null}})
   if(store.getState().clips[0].speedCurve!==undefined)throw Error('source clock clear failed')
   const missing=await call('select',{clipId:'missing'}),bad=await call('clip_stretch',{duration:NaN}),invalidTrack=await call('track_assign',{track:'missing'})
   if(missing.ok||bad.ok||invalidTrack.ok)throw Error('invalid inputs reported success')
   const dump=await checked('dump',{}),timeline=await checked('timeline_screenshot',{})
-  return {catalog:(await checked('help',{})).catalog,dump,timeline,mask,invalidInputsRejected:true,undo:true,sourceClockVolumePersistence:true,blendKeyPersistence:true,presetPreview:true}
+  return {catalog:(await checked('help',{})).catalog,dump,timeline,mask,effectMaskRegions:clip.adjustmentMask.regions.length,invalidInputsRejected:true,undo:true,sourceClockVolumePersistence:true,blendKeyPersistence:true,effectMaskPersistence:true,presetPreview:true}
  })
  fs.mkdirSync(path.join(root,'qa-output/mcp'),{recursive:true})
  fs.writeFileSync(path.join(root,'qa-output/mcp/live-timeline.png'),Buffer.from(result.timeline['data:img'].split(',')[1],'base64'));delete result.timeline
