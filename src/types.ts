@@ -926,6 +926,12 @@ export interface TextTitleStyle {
   insideBed?: string
   /** Mask REAL moving footage inside glyphs (asset path registered by import_video). */
   insideVideo?: string
+  /** Optional processing applied only to the footage inside the glyph matte. */
+  insideInvert?: boolean
+  insideBrightness?: number
+  insideContrast?: number
+  insideSaturation?: number
+  insideSourceOffset?: number
   insideBaseAlpha?: number
   insideParticle?: string
   insideTint?: string
@@ -1219,6 +1225,7 @@ export interface PaintLayer {
   visible: boolean
   locked: boolean
   opacity: number
+  blendKeys?: import('./lib/blendModes').BlendKey[]
   blendMode?: GlobalCompositeOperation
   blur?: number // Gaussian blur radius in px
   maskDataUrl?: string // raster restriction / legacy mask
@@ -1291,6 +1298,7 @@ export interface Clip {
   /** Optional CapCut/AE-style visibility mask that hides part of the clip. */
   mask?: ClipVisualMask
   /** Canvas composite op for this clip (watermark lighten/splice etc.). */
+  blendKeys?: import('./lib/blendModes').BlendKey[]
   blendMode?: GlobalCompositeOperation
   /** Speed-curve time remap (15 presets, src/lib/speedCurves.ts). */
   speedCurve?: import('./lib/speedCurves').SpeedCurveId

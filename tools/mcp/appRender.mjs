@@ -1,3 +1,4 @@
+import { blendAt } from '../../src/lib/blendModes.ts'
 // Headless renderer that speaks the APP's semantics, not the agent's style:
 // transforms come from CurveEngine.evaluateClipAnimation (the app's own key
 // evaluation), masks are ClipVisualMask shape mattes (centerX/Y, width/height,
@@ -364,7 +365,7 @@ function drawSeq(x, seq, t, depth = 0) {
       x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
       x.scale(ev.scaleX || 1, ev.scaleY || 1)
       x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
-      x.globalCompositeOperation = clip.blendMode || 'source-over'
+      x.globalCompositeOperation = blendAt(clip, t)
       x.drawImage(pad, -1.5 * seq.w, -1.5 * seq.h)
       x.restore()
       continue
@@ -385,7 +386,7 @@ function drawSeq(x, seq, t, depth = 0) {
       x.scale((ev.scaleX || 1) * flipF.sx, ev.scaleY || 1)
       x.translate(-lw0 / 2, -lh0 / 2)
       x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
-      x.globalCompositeOperation = clip.blendMode || 'source-over'
+      x.globalCompositeOperation = blendAt(clip, t)
       clip.draw(x, lw0, lh0, mediaTime)
       x.restore()
       continue
@@ -456,7 +457,7 @@ function drawSeq(x, seq, t, depth = 0) {
     if (clip.patch) applySmartPatchMatte(sx, clip.patch, r, seq)
     x.save()
     x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
-    x.globalCompositeOperation = clip.blendMode || 'source-over'
+    x.globalCompositeOperation = blendAt(clip, t)
     x.translate(r.x + r.w / 2, r.y + r.h / 2)
     x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
     x.drawImage(s, 0, 0, lw, lh, -r.w / 2, -r.h / 2, r.w, r.h)

@@ -1,3 +1,7 @@
+import { blendAt } from './blendModes'
+import { proxySource } from './mediaProxies'
+import { shouldRenderPreview } from './previewPerformance'
+import { previewMetrics, usePerformanceSettings } from './performanceSettings'
 import { applyCanvasDeformation, hasDeformation } from './deformation'
 // OmniFrame preview engine.
 //
@@ -82,10 +86,11 @@ function mediaHost(): HTMLElement {
 }
 
 function getVideo(asset: MediaAsset): HTMLVideoElement {
+  const source = proxySource(asset, useEditor.getState().previewQuality === 'full')
   let v = videoCache.get(asset.id)
   if (!v) {
     v = document.createElement('video')
-    v.src = asset.url
+    v.src = source
     v.preload = 'auto'
     v.muted = false
     v.playsInline = true
@@ -93,6 +98,7 @@ function getVideo(asset: MediaAsset): HTMLVideoElement {
     videoCache.set(asset.id, v)
     mediaHost().appendChild(v)
   }
+  if (v.getAttribute('src') !== source) { v.pause(); v.src = source }
   return v
 }
 
@@ -253,6 +259,8 @@ export class PreviewEngine {
   private backCtx: CanvasRenderingContext2D
   private raf = 0
   private last = 0
+  private lastRender = -Infinity
+  private lastRenderedState: ReturnType<typeof useEditor.getState> | null = null
   private running = false
   private width: number
   private height: number
@@ -290,6 +298,7 @@ export class PreviewEngine {
     this.canvas.height = height
     this.backCanvas.width = width
     this.backCanvas.height = height
+    this.lastRenderedState = null
   }
 
   // ---- adjustment layers & LUT rendering -------------------------------
@@ -784,7 +793,16 @@ export class PreviewEngine {
       }
       frameState = useEditor.getState()
     }
-    this.renderFrame(time, frameState)
+    const fps = frameState.previewQuality === 'full' ? Math.max(60, frameState.projectFps) : usePerformanceSettings.getState().previewFps
+    // Playhead updates are expected during playback and must not bypass the cap.
+    const changed = !frameState.playing && frameState !== this.lastRenderedState
+    if (this.sampling || shouldRenderPreview(ts - this.lastRender, frameState.playing, changed, fps)) {
+      const begin = performance.now()
+      this.renderFrame(time, frameState)
+      this.lastRender = ts
+      this.lastRenderedState = frameState
+      if (!this.sampling) Object.assign(previewMetrics, { frames: previewMetrics.frames + 1, renderMs: performance.now() - begin, width: this.width, height: this.height })
+    }
     this.raf = requestAnimationFrame(this.loop)
   }
 
@@ -849,7 +867,7 @@ export class PreviewEngine {
       if (clip.kind === 'null') return false
       // Per-clip blend (watermarks: lighten/splice…). Restored by the
       // caller's save/restore around renderTrackContents.
-      if (clip.blendMode && clip.blendMode !== 'source-over') ctx.globalCompositeOperation = clip.blendMode
+      ctx.globalCompositeOperation = blendAt(clip, time)
 
       // Adjustment layer: grades everything already drawn (all tracks below)
       if (clip.kind === 'adjustment' && track.type === 'video') {
@@ -1608,7 +1626,9 @@ export class PreviewEngine {
     const srcDur = asset.duration || (el as HTMLVideoElement).duration || 0
     if (!allowClamping && (rawTarget < -0.05 || rawTarget > srcDur + 0.05)) return null
     const target = clamp(rawTarget, 0, Math.max(0, srcDur))
-    el.muted = trackMuted
+    const usingProxy = asset.kind === 'video' && !this.sampling && proxySource(asset, useEditor.getState().previewQuality === 'full') !== asset.url
+    if (usingProxy) this.syncElement({ ...asset, kind: 'audio' }, time, clip, playing, trackMuted, speed, allowClamping)
+    el.muted = trackMuted || usingProxy
     el.volume = clip.volume
     // HTMLMediaElement does not support negative playbackRate reliably.
     // Reverse transport is driven by the canvas clock and seeks decoded media.
@@ -1870,12 +1890,28 @@ export class PreviewEngine {
         ctx.restore()
       }
     }
-    const insideBed = (t as unknown as { insideBed?: string }).insideBed
-    if (insideBed && insideBed !== 'none') {
-      // In-Video Text: faint base pass for legibility, then the animated bed
-      // (fire/rain/cloud/…) confined INSIDE the glyph silhouettes.
+    const insideBed = t.insideBed
+    const insideVideoRef = t.insideVideo
+    let insideVideoEl: HTMLVideoElement | HTMLImageElement | null = null
+    if (insideVideoRef) {
+      const state = useEditor.getState()
+      const asset = state.assets.find((item) => item.id === insideVideoRef || item.url === insideVideoRef || item.name === insideVideoRef)
+      if (asset && asset.kind !== 'audio') {
+        const carrier = { ...clip, assetId: asset.id, inPoint: t.insideSourceOffset ?? 0, volume: 0 }
+        // A matte is a duplicated source layer. Give it an independent media
+        // element: sharing the main clip's per-asset decoder makes the two
+        // layers fight over currentTime whenever their starts/in-points differ.
+        const fillAsset = asset.kind === 'video' ? { ...asset, id: `${asset.id}:text-fill:${clip.id}` } : asset
+        const element = this.syncElement(fillAsset, time, carrier, state.playing, true, state.speed, true)
+        if (element instanceof HTMLImageElement || (element instanceof HTMLVideoElement && element.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)) insideVideoEl = element
+      }
+    }
+    if ((insideBed && insideBed !== 'none') || insideVideoEl) {
+      // Text crop: faint base glyphs for legibility, then an animated bed or
+      // real imported video confined inside the glyph alpha. The inside-only
+      // filter reproduces the duplicate → negative → text-matte workflow.
       ctx.save()
-      ctx.globalAlpha *= (t as unknown as { insideBaseAlpha?: number }).insideBaseAlpha ?? 0.28
+      ctx.globalAlpha *= t.insideBaseAlpha ?? 0.28
       lines.forEach((line, i) => drawLine(ctx, line, startY + i * lineHeight, lineStarts[i]))
       ctx.restore()
       const bw = Math.max(2, Math.ceil(boxW)), bh = Math.max(2, Math.ceil(boxH))
@@ -1887,8 +1923,18 @@ export class PreviewEngine {
       lines.forEach((line, i) => drawLine(bctx, line, startY + i * lineHeight, lineStarts[i]))
       bctx.setTransform(1, 0, 0, 1, 0, 0)
       bctx.globalCompositeOperation = 'source-atop'
-      drawReplaceBg(bctx, bw, bh, localT, insideBed as never)
-      const ip = (t as unknown as { insideParticle?: string }).insideParticle
+      if (insideVideoEl) {
+        const sw = insideVideoEl instanceof HTMLVideoElement ? insideVideoEl.videoWidth : insideVideoEl.naturalWidth
+        const sh = insideVideoEl instanceof HTMLVideoElement ? insideVideoEl.videoHeight : insideVideoEl.naturalHeight
+        if (sw > 0 && sh > 0) {
+          const coverScale = Math.max(bw / sw, bh / sh)
+          bctx.save()
+          bctx.filter = `${t.insideInvert ? 'invert(1) ' : ''}brightness(${t.insideBrightness ?? 1}) contrast(${t.insideContrast ?? 1}) saturate(${t.insideSaturation ?? 1})`
+          bctx.drawImage(insideVideoEl, (bw - sw * coverScale) / 2, (bh - sh * coverScale) / 2, sw * coverScale, sh * coverScale)
+          bctx.restore()
+        }
+      } else if (insideBed) drawReplaceBg(bctx, bw, bh, localT, insideBed as never)
+      const ip = t.insideParticle
       if (ip && ip !== 'none') drawParticleFx(bctx, bw, bh, localT, ip as never, (t as unknown as { insideDensity?: number }).insideDensity ?? 0.6, (t as unknown as { insideTint?: string }).insideTint || '#ffffff')
       ctx.drawImage(boff, -bw / 2, -bh / 2)
     } else if (!needsInner) {

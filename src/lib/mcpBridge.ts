@@ -9,6 +9,11 @@ import { SPEED_CURVE_IDS } from './speedCurves'
 import { useEditor } from '../store'
 import { addOrUpdateKeyframe, applyEasingPreset, createDefaultClipAnimation } from './animation/CurveEngine'
 import { drawTimelineSnapshot, timelineSnapshotSize, type TimelineSnapPayload } from './timelineSnapshot'
+import { fxCatalogById } from './effectCatalog'
+import { buildTextPreset, TEXT_PRESETS } from './textPresets'
+import { findTransitionPair, TRANSITION_PRESETS } from './transitionPresets'
+import { previewClipEffect, previewEffectLayer, previewLut } from './visualPreviewActions'
+import { BLEND_MODES } from './blendModes'
 
 export interface McpLogEntry { tool: string; params: Record<string, unknown>; ok: boolean; out?: unknown; error?: string; at: number }
 export const mcpLog: McpLogEntry[] = []
@@ -22,6 +27,7 @@ function push(e: McpLogEntry) {
 export const OMNI_MCP_CATALOG = [
   'help', 'select', 'click', 'mask_draw', 'mask_clear', 'keyframe_set', 'curve_set',
   'transform_set', 'edit_element', 'effect_set', 'remove_background', 'fill_composition_area', 'snapshot', 'dump',
+  'preset_preview', 'text_crop_video',
   'timeline_screenshot', 'track_assign', 'log', 'clip_stretch', 'transparent_select',
   'select_main_element', 'omniframe_extract', 'patch_under', 'omniframe_move',
 ]
@@ -131,6 +137,94 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
         const el = document.querySelector('[data-testid="preview-stage"] canvas') as HTMLCanvasElement | null
         if (!el) throw new Error('preview canvas not mounted')
         out = { 'data:img': el.toDataURL('image/png') }
+        break
+      }
+      case 'preset_preview': {
+        const catalog = String(params.catalog || '')
+        const id = String(params.id || '')
+        const original = useEditor.getState()
+        let label = id
+        let previewAt = original.playhead
+        try {
+          if (catalog === 'effect') {
+            const preset = fxCatalogById(id)
+            if (!preset) throw new Error(`unknown effect preset: ${id}`)
+            label = preset.name
+            const selected = selClip()
+            const started = selected
+              ? previewClipEffect(selected.id, preset.name, preset.patch)
+              : previewEffectLayer(preset.name, preset.patch)
+            if (!started) throw new Error('effect preview needs a visible clip at the playhead')
+            previewAt = useEditor.getState().visualPreview?.startTime ?? original.playhead
+          } else if (catalog === 'lut') {
+            await original.loadLutLibrary()
+            const lut = useEditor.getState().lutLibrary.luts.find((item) => item.id === id)
+            if (!lut) throw new Error(`unknown LUT preset: ${id}`)
+            label = lut.name
+            if (!previewLut({ name: lut.name, builtin: lut.id })) throw new Error('LUT preview needs a visible clip at the playhead')
+            previewAt = useEditor.getState().visualPreview?.startTime ?? original.playhead
+          } else if (catalog === 'transition') {
+            const preset = TRANSITION_PRESETS.find((item) => item.id === id)
+            if (!preset) throw new Error(`unknown transition preset: ${id}`)
+            const pair = findTransitionPair(preset.baseDuration)
+            if (!pair) throw new Error('transition preview needs two adjacent clips on one video track')
+            label = preset.name
+            const startTime = Math.max(pair.fromClip.start, pair.cut - preset.baseDuration / 2)
+            original.startVisualPreview({
+              kind: 'transition',
+              transition: {
+                id: 'mcp-preset-preview', type: preset.id, fromClipId: pair.fromClip.id,
+                toClipId: pair.toClip.id, trackId: pair.fromClip.trackId,
+                startTime, duration: preset.baseDuration, alignment: 'centered', enabled: true,
+              },
+              label: preset.name,
+              startTime,
+              endTime: startTime + preset.baseDuration,
+            })
+            previewAt = startTime + preset.baseDuration / 2
+          } else if (catalog === 'text') {
+            const preset = TEXT_PRESETS.find((item) => item.id === id)
+            if (!preset) throw new Error(`unknown text preset: ${id}`)
+            label = preset.name
+            const ids = buildTextPreset(id, String(params.text || preset.demo), { duration: 3, seed: 7 })
+            if (!ids.length) throw new Error('text preset did not create a preview')
+            previewAt = original.playhead + 1.5
+          } else {
+            throw new Error('catalog must be effect, transition, lut, or text')
+          }
+          useEditor.setState({ playhead: previewAt, playing: false })
+          await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+          const canvas = document.querySelector('[data-testid="preview-stage"] canvas') as HTMLCanvasElement | null
+          if (!canvas) throw new Error('preview canvas not mounted')
+          out = { catalog, id, label, previewAt, 'data:img': canvas.toDataURL('image/png') }
+        } finally {
+          useEditor.setState(original, true)
+        }
+        break
+      }
+      case 'text_crop_video': {
+        const c = params.clipId ? clips().find((item) => item.id === params.clipId) : requireClip()
+        if (!c?.textStyle) throw new Error('text_crop_video requires a text clip')
+        const asset = st().assets.find((item: any) => item.id === params.assetId && item.kind === 'video')
+        if (!asset) throw new Error('assetId must identify an imported video')
+        const mode = String(params.blendMode || 'screen')
+        if (!BLEND_MODES.has(mode)) throw new Error('Unsupported blend mode')
+        const value = (name: string, fallback: number) => params[name] === undefined ? fallback : finite(name, params[name])
+        const baseAlpha = value('baseAlpha', 0.08)
+        if (baseAlpha < 0 || baseAlpha > 1) throw new Error('baseAlpha must be between 0 and 1')
+        edit(c, {
+          textStyle: {
+            ...c.textStyle,
+            insideVideo: asset.id,
+            insideInvert: params.invert !== false,
+            insideBrightness: value('brightness', 1),
+            insideContrast: value('contrast', 1),
+            insideSaturation: value('saturation', 1),
+            insideBaseAlpha: baseAlpha,
+          },
+          blendMode: mode,
+        })
+        out = { clipId: c.id, assetId: asset.id, blendMode: mode, cropped: true }
         break
       }
       case 'track_assign': {

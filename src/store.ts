@@ -1,3 +1,4 @@
+import { BLEND_MODES, putBlendKey } from './lib/blendModes'
 import { regroupFor, expandGroupSelection } from './lib/parentChain'
 import { recolorImage } from './lib/recolor'
 import { planDrawingToClips } from './lib/drawingToClips'
@@ -668,7 +669,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   selectClip: (id: string | null) => void
   setClipProp: (id: string, partial: Partial<Clip>) => void
   setClipTransform: (id: string, partial: Partial<ClipTransform>) => void
-  setClipBlend: (id: string, mode: string) => void
+  setClipBlend: (id: string, mode: string, time?: number) => void
   toggleTrackMute: (id: string) => void
   toggleTrackHidden: (id: string) => void
   toggleTrackLock: (id: string) => void
@@ -3192,11 +3193,12 @@ export const useEditor = create<EditorState>((set, get) => {
         ),
       }))
     },
-    setClipBlend: (id, mode) => {
-      const c = get().clips.find((k) => k.id === id)
-      if (!c) return
-      c.blendMode = mode as Clip['blendMode']
-      set((s) => ({ clips: [...s.clips] }))
+    setClipBlend: (id, mode, time) => {
+      const clip = get().clips.find(c => c.id === id)
+      if (!clip || !BLEND_MODES.has(mode)) return
+      const keys = time === undefined ? undefined : putBlendKey(clip.blendKeys || [], time, mode)
+      pushSnapshot()
+      set(s => ({ clips: s.clips.map(c => c.id !== id ? c : keys ? {...c, blendKeys: keys} : {...c, blendMode: mode as Clip['blendMode']}) }))
     },
 
     toggleTrackMute: (id) =>

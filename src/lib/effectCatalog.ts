@@ -1,3 +1,4 @@
+import { buildStudioLooks } from './studioLooks'
 import type { ClipEffect } from '../types'
 
 /**
@@ -317,6 +318,12 @@ function buildCatalog(): FxCatalogEntry[] {
   for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
     add(`dblur-${a}`, `Directional Blur ${a}°`, 'blur', 'AM Directional Blur (official guide)', { directionalBlur: 0.7, directionalBlurAngle: a })
   }
+  add('blur-horizontal', 'Horizontal Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 0 })
+  add('blur-oblique', 'Oblique Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 35 })
+  add('blur-vertical', 'Vertical Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 90 })
+  add('blur-radial', 'Radial Blur', 'blur', 'Shared zoom/radial sampling kernel', { zoomBlur: 0.68 })
+  add('blur-cinematic', 'Cinematic Blur', 'blur', 'Soft focus with restrained highlight bloom', { blur: 7, glow: 0.18, vignette: 0.16 })
+  add('blur-motion', 'Motion Blur', 'motion', 'Shared temporal motion sample kernel', { motionBlur: 0.7 })
   add('tilt-1', 'Tilt Shift Mini', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.55 })
   add('tilt-2', 'Tilt Shift Strong', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.95 })
   ;[4, 8, 14].forEach((f, i) => add(`fblur-${i}`, `Fractal Blur ${f}px`, 'blur', 'AE Fractal Blur family (effects reference)', { fractalBlur: f }))
@@ -473,7 +480,7 @@ function buildCatalog(): FxCatalogEntry[] {
   for (const am of AM_FX_CATALOG) {
     out.push({ id: am.id, name: am.name, cat: am.cat as FxCat, trace: AM_TRACE, patch: am.patch })
   }
-return out
+return [...out, ...buildStudioLooks()]
 }
 
 import { AM_FX_CATALOG, AM_TRACE } from './alightXml'

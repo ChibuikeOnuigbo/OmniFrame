@@ -1,3 +1,17 @@
+## 2026-11-01 — 1,152 Studio Looks and effect-library controls
+
+Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.
+
+## 2026-11-01 continuation
+
+Supplied Gold Motion and Toji Motion APKs downloaded and statically identified; resource catalogues and package metadata saved under `research/editor-upgrade-20261031/`. Open-source licensing and Nova identity remain unverified. The preview render budget now covers 3D WebGL draws as well as 2D composition. See `docs/EDITOR_PERFORMANCE_20261031.md`.
+
+## 2026-10-31 — Playback performance, media proxies and stable 3D viewport
+
+Current user request is a broad editor quality/performance upgrade against the uploaded full ledger. Implemented and measured: preview frame budgets, idle render suppression, no preview upscaling, visible render metrics, temporary video proxy preparation with original audio/export preservation, cancellation and memory bounds, stable 3D context across scrubbing/resizing, geometry/material cleanup, and unobstructed 3D tools. Desktop CI now preserves installers and typechecks. General E2E selectors and export-success requirement repaired.
+
+Read `docs/EDITOR_PERFORMANCE_20261031.md` for exact checks, current research and remaining scope. Evidence: `qa-output/performance-20261031/`; fresh Drive listings, uploaded-ledger index, repository searches and sampled reference review: `research/editor-upgrade-20261031/`. Proxies are tab-local realtime WebM, not frame-exact persistent/native proxies. No comparative speed benchmark, new model training, sculpting implementation or native platform certification is claimed. No environment configuration or publication, remote push or PR performed. Continue the open work listed in that report; preserve user media and historical evidence.
+
 # Current resumed editor state — pushed PR branch
 
 Latest asset task: `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md`. Two textured Poly Haven CRTs with fitted live-video screens, plus Object 3D arrow, bullet-shell, payphone and original concrete-fragment presets are implemented. Six GLBs/packed editable sources, credit/license/source-hash records, rendered thumbnails, six moving MP4s and a combined reel are available. Actual native export includes sound; realtime software-GPU capture is VFR rather than a fixed-rate performance certification. Exact details and remaining platform limits are in the report. No environment configuration publication was performed.
@@ -212,3 +226,8 @@ Replace-Video-With-Video, TEMPLATE MODE, Alight Motion import, continue.md.
   originals remain in Drive + `new_doc_toll_research/tymm/fonts/`).
 - `google_drive/` staging stays gitignored; study MP4s and data-dumps live in
   git per vow.md §2.
+## 2026-11-01 current local state
+
+The full 1,152-look moving render batch and combined reel are complete under `effect_vid/`. The independent `new_work_qa/RDT_recopy1.mp4` render and manifest are complete. Blend-mode keyframes, rendered live/headless preset previews, exact requested blur aliases, and GIPHY search/import are implemented and tested. Web production build and primary browser tests pass. Native Tauri launch is not claimed: this runner lacks Rust/Cargo, WebKitGTK 4.1 development files, and rsvg2; desktop frontend IPC contracts pass in a controlled shell harness and installer builds remain in the CI matrix.
+
+The corrected `new_work_qa/RDT_recopy2.mp4` uses real duplicated negative scene video as the title glyph fill, seven varied looks and speed curves, and keyed Screen/Color Burn modes. It validates at 601/601 distinct frames with AAC audio. Screen best fits the bright reference title cores; Linear Burn is not claimed. Live text fills have an independent video decoder and editable Negative/brightness/contrast/saturation/core/source-time controls; `text_crop_video` provides the same operation over live and headless MCP. GIPHY and Klipy keys now live in Settings → AI & APIs, and the shared GIF Library has tested search, provider switching, attribution, loading/error/download states and editable MP4 import. GitHub push is authorized by the latest user request.

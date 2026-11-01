@@ -1,3 +1,4 @@
+import { previewDimensions } from '../lib/previewPerformance'
 import { DeformationOverlay } from './TransformWorkbench'
 import { prepareDeviceModels } from '../lib/device3d'
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
@@ -116,15 +117,7 @@ export function Preview() {
   const [assetDuration, setAssetDuration] = useState(0)
   const [assetMuted, setAssetMuted] = useState(false)
 
-  const isPortrait = sequenceSettings.width < sequenceSettings.height
-  const canvasW = previewQuality === 'low'
-    ? (isPortrait ? Math.round(426 * (sequenceSettings.width / sequenceSettings.height)) : 426)
-    : previewQuality === 'medium'
-      ? (isPortrait ? Math.round(854 * (sequenceSettings.width / sequenceSettings.height)) : 854)
-      : previewQuality === 'high'
-        ? (isPortrait ? Math.round(1440 * (sequenceSettings.width / sequenceSettings.height)) : 1440)
-        : sequenceSettings.width
-  const canvasH = Math.round(canvasW / (sequenceSettings.width / sequenceSettings.height))
+  const { width: canvasW, height: canvasH } = previewDimensions(sequenceSettings.width, sequenceSettings.height, previewQuality)
 
   const [display, setDisplay] = useState<'fit' | number>('fit')
   // − / + collapse for the view/zoom cluster (chip lives top-left; cluster top-right).
@@ -377,7 +370,7 @@ export function Preview() {
 
       {/* Floating selection quick-bar (BrandBird study): contextual
           actions float over the monitor for the selected clip. */}
-      {!visualPreview && !isPreviewingAsset && (() => {
+      {!visualPreview && !isPreviewingAsset && !is3DMode && (() => {
         const clip = allClips.find((c) => c.id === selectedClipId)
         if (!clip) return null
         const isTitle = clip.kind === 'text' || !!clip.textStyle

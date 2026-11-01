@@ -1,3 +1,4 @@
+import { BLEND_GROUPS, blendAt } from '../lib/blendModes'
 import { TransformModes } from './TransformWorkbench'
 import { DeviceTransitionInspector } from './DeviceTransitionInspector'
 import {ObjectTransitionInspector} from './ObjectTransitionInspector'
@@ -315,7 +316,7 @@ function ClipMaskSection({ clip }: { clip: Clip }) {
             <Slider label="Mask expansion" min={-120} max={120} step={2} value={mask.expansion} onChange={(value) => updateClipMask(clip.id, { expansion: value })} />
             <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.expansion)}px</span>
           </Field>
-          <Field label="Opacity">
+        <Field label="Opacity">
             <Slider label="Mask opacity" min={0} max={1} step={0.01} value={mask.opacity} onChange={(value) => updateClipMask(clip.id, { opacity: value })} />
             <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.opacity * 100)}%</span>
           </Field>
@@ -927,14 +928,28 @@ function ClipInspector({ clip }: { clip: Clip }) {
             data-testid="clip-blend-select"
             aria-label="Clip blend mode"
             className="h-7 w-full rounded-none border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-            value={clip.blendMode || 'source-over'}
-            onChange={(e) => useEditor.getState().setClipBlend(clip.id, e.target.value)}
+            value={blendAt(clip, useEditor.getState().playhead)}
+            onChange={(e) => useEditor.getState().setClipBlend(clip.id, e.target.value, clip.blendKeys?.length ? Math.max(0, useEditor.getState().playhead - clip.start) : undefined)}
           >
-            {['source-over','multiply','screen','overlay','darken','lighten','color-burn','color-dodge','hard-light','soft-light','difference','exclusion','luminosity'].map((m) => (
-              <option key={m} value={m}>{m === 'source-over' ? 'normal' : m}</option>
-            ))}
+            {BLEND_GROUPS.map(group => <optgroup key={group.name} label={group.name}>{group.modes.map(mode=><option key={mode} value={mode}>{mode === 'source-over' ? 'Normal' : mode === 'lighter' ? 'Add (+)' : mode}</option>)}</optgroup>)}
           </select>
         </Field>
+        <button
+          type="button"
+          data-testid="blend-keyframe-add"
+          onClick={() => {
+            const state = useEditor.getState()
+            state.setClipBlend(clip.id, blendAt(clip, state.playhead), Math.max(0, state.playhead - clip.start))
+          }}
+          className="w-full rounded border border-ink-700 px-2 py-1 text-xs hover:border-brand/60"
+        >
+          ◇ Add blend keyframe
+        </button>
+        {Boolean(clip.blendKeys?.length) && (
+          <p className="text-[10px] text-ink-400">
+            Blend animation: {clip.blendKeys!.length} hold keys. Move the playhead, then choose a mode to add or replace a key.
+          </p>
+        )}
         <Field label="Opacity">
           <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
@@ -1215,6 +1230,53 @@ function ClipInspector({ clip }: { clip: Clip }) {
             />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.textStyle.fontSize ?? 32)}px</span>
           </Field>
+          <Field label="Video Fill">
+            <select
+              data-testid="text-video-fill"
+              aria-label="Crop video inside text"
+              value={clip.textStyle.insideVideo ?? ''}
+              onChange={(event) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideVideo: event.target.value || undefined } })}
+              className="h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100"
+            >
+              <option value="">Solid text color</option>
+              {assets.filter((asset) => asset.kind === 'video').map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}
+            </select>
+          </Field>
+          {clip.textStyle.insideVideo && (
+            <div className="space-y-1.5 rounded border border-cyan-500/20 bg-cyan-500/5 p-2" data-testid="text-video-fill-controls">
+              <label className="flex items-center justify-between gap-2 text-[11px] text-ink-300">
+                <span>Negative inside text</span>
+                <input
+                  type="checkbox"
+                  data-testid="text-video-fill-negative"
+                  checked={clip.textStyle.insideInvert ?? false}
+                  onChange={(event) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideInvert: event.target.checked } })}
+                  className="accent-cyan-400"
+                />
+              </label>
+              <Field label="Solid core">
+                <Slider label="Text solid core opacity" min={0} max={1} step={0.01} value={clip.textStyle.insideBaseAlpha ?? 0.08} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideBaseAlpha: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round((clip.textStyle.insideBaseAlpha ?? 0.08) * 100)}%</span>
+              </Field>
+              <Field label="Brightness">
+                <Slider label="Video fill brightness" min={0.1} max={2} step={0.05} value={clip.textStyle.insideBrightness ?? 1} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideBrightness: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideBrightness ?? 1).toFixed(2)}</span>
+              </Field>
+              <Field label="Contrast">
+                <Slider label="Video fill contrast" min={0.1} max={2.5} step={0.05} value={clip.textStyle.insideContrast ?? 1} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideContrast: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideContrast ?? 1).toFixed(2)}</span>
+              </Field>
+              <Field label="Saturation">
+                <Slider label="Video fill saturation" min={0} max={3} step={0.05} value={clip.textStyle.insideSaturation ?? 1} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideSaturation: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideSaturation ?? 1).toFixed(2)}</span>
+              </Field>
+              <Field label="Source time">
+                <Slider label="Video fill source offset" min={0} max={Math.max(0.1, assets.find((asset) => asset.id === clip.textStyle?.insideVideo)?.duration ?? clip.duration)} step={0.05} value={clip.textStyle.insideSourceOffset ?? 0} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideSourceOffset: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideSourceOffset ?? 0).toFixed(1)}s</span>
+              </Field>
+              <p className="text-[9px] leading-snug text-ink-400">The selected video is copied into the glyph alpha. Negative processing affects only that moving fill; use Appearance → Blend for Screen or Color Burn.</p>
+            </div>
+          )}
         </Section>
       )}
 

@@ -112,7 +112,9 @@ await page.screenshot({ path: `${OUT}/03-playing.png` })
 log('played ~1.6s', beforeTime, '->', afterTime)
 
 // Zoom to frame level
-await page.getByRole('button', { name: 'Frames' }).click().catch(() => log('Frames btn not found'))
+await page.getByRole('slider', { name: 'Timeline zoom', exact: true }).focus()
+await page.keyboard.press('End')
+if (Number(await page.getByRole('slider', { name: 'Timeline zoom', exact: true }).inputValue()) < 1000) throw new Error('Frame-level zoom was not applied')
 await page.waitForTimeout(400)
 await page.screenshot({ path: `${OUT}/04-frames-zoom.png` })
 log('zoomed to frame level')
@@ -131,7 +133,7 @@ log('transport paused before edits')
 
 // Split at playhead — prove one clip became two.
 const clipsBefore = await page.getByTestId('timeline-clip').count()
-await page.getByTitle(/Split at playhead/).click()
+await page.getByTestId('timeline-split-btn').click()
 await page.waitForTimeout(400)
 const clipsAfter = await page.getByTestId('timeline-clip').count()
 if (clipsAfter !== clipsBefore + 1) throw new Error(`Split failed: clip count ${clipsBefore} -> ${clipsAfter}`)
@@ -143,7 +145,7 @@ let exportOk = false
 try {
   const [download] = await Promise.all([
     page.waitForEvent('download', { timeout: 30000 }),
-    page.getByRole('button', { name: /Export/ }).click(),
+    page.getByTestId('export-video-btn').click(),
   ])
   const dest = `${OUT}/export-${download.suggestedFilename()}`
   await download.saveAs(dest)
@@ -167,4 +169,4 @@ console.log('\n=== RESULT ===')
 console.log('screenshots in', OUT)
 console.log('export produced file:', exportOk)
 console.log('console/page errors:', errors.length ? errors : 'none')
-if (errors.length) process.exit(2)
+if (errors.length || !exportOk) process.exit(2)

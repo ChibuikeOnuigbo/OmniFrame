@@ -1,3 +1,4 @@
+import { usePerformanceSettings } from '../lib/performanceSettings'
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import * as THREE from 'three'
 import {
@@ -22,6 +23,18 @@ import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
 import type { BlenderMode, Primitive3D, ThreeMaskSelection } from '../types'
 import { evaluateCurve } from '../lib/animation/CurveEngine'
+
+function disposeObject(root: THREE.Object3D) {
+  const geometries = new Set<THREE.BufferGeometry>()
+  const materials = new Set<THREE.Material>()
+  root.traverse(child => {
+    const mesh = child as THREE.Mesh
+    if (mesh.geometry) geometries.add(mesh.geometry)
+    if (mesh.material) for (const mat of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) materials.add(mat)
+  })
+  geometries.forEach(geometry => geometry.dispose())
+  materials.forEach(material => material.dispose())
+}
 
 export type CameraAimTarget = 'video' | 'object' | 'composite' | 'camera_view' | 'free'
 
@@ -49,6 +62,7 @@ export function ThreeViewer({
   const videoTextureRef = useRef<THREE.Texture | null>(null)
 
   // Zustand state
+  const previewQuality = useEditor((s) => s.previewQuality)
   const playing = useEditor((s) => s.playing)
   const togglePlay = useEditor((s) => s.togglePlay)
   const playhead = useEditor((s) => s.playhead)
@@ -273,6 +287,10 @@ export function ThreeViewer({
     }
   }, [])
 
+  const animationState = useRef({ playing, activeClip, clipPlayheadTime })
+  animationState.current = { playing, activeClip, clipPlayheadTime }
+
+  // Initialize once: timeline ticks must not destroy the WebGL context and scene.
   // Initialize Three.js Scene
   useEffect(() => {
     const container = containerRef.current
@@ -329,6 +347,7 @@ export function ThreeViewer({
     // Render & Animation Loop
     let animId: number
     let lastTime = performance.now()
+    let lastRenderTime = -Infinity
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
@@ -376,6 +395,7 @@ export function ThreeViewer({
         setAimTarget('free')
       }
 
+      const { playing, activeClip, clipPlayheadTime } = animationState.current
       // 3D Object Rotation (Keyframed or Auto-spin)
       if (objectMeshRef.current) {
         const wheelCurve = activeClip?.animation?.curves?.['wheel_rotation'] || activeClip?.animation?.curves?.['rotation_z']
@@ -385,10 +405,15 @@ export function ThreeViewer({
           objectMeshRef.current.rotation.z = (evalDeg * Math.PI) / 180
         } else if (playing) {
           // Continuous rotation when playing without static keyframes
-          objectMeshRef.current.rotation.z += 0.04
-          objectMeshRef.current.rotation.y += 0.01
+          objectMeshRef.current.rotation.z += 2.4 * Math.min(dt, 0.1)
+          objectMeshRef.current.rotation.y += 0.6 * Math.min(dt, 0.1)
         }
       }
+
+      const live = useEditor.getState()
+      const renderFps = live.previewQuality === 'full' ? Math.max(60, live.projectFps) : usePerformanceSettings.getState().previewFps
+      if (now - lastRenderTime < 1000 / renderFps) return
+      lastRenderTime = now
 
       // Update live video / canvas texture
       if (videoTextureRef.current) {
@@ -396,15 +421,26 @@ export function ThreeViewer({
       }
 
       renderer.render(scene, camera)
+      renderer.domElement.dataset.renderedFrames = String(Number(renderer.domElement.dataset.renderedFrames || 0) + 1)
     }
     animate()
 
     return () => {
       cancelAnimationFrame(animId)
+      disposeObject(scene)
+      videoTextureRef.current?.dispose()
       renderer.dispose()
       container.replaceChildren()
     }
-  }, [width, height, sequenceSettings.width, sequenceSettings.height, playing, activeClip, clipPlayheadTime])
+  }, [])
+
+  useEffect(() => {
+    const renderer = rendererRef.current
+    if (!renderer) return
+    // Preview size is already quality-scaled; full export must use exact dimensions.
+    renderer.setPixelRatio(previewQuality === 'full' || previewQuality === 'low' ? 1 : Math.min(window.devicePixelRatio, 1.5))
+    renderer.setSize(width, height)
+  }, [width, height, previewQuality])
 
   // Synchronize Camera Aspect Ratio on sequence settings change
   useEffect(() => {
@@ -420,15 +456,12 @@ export function ThreeViewer({
     const scene = sceneRef.current
     if (!scene) return
 
-    // Clean up previous video plane
+    // The border and backing belong to the same group as the video plane.
+    // Dispose the entire old group on aspect/source changes.
     if (videoPlaneMeshRef.current) {
-      scene.remove(videoPlaneMeshRef.current)
-      videoPlaneMeshRef.current.geometry.dispose()
-      if (Array.isArray(videoPlaneMeshRef.current.material)) {
-        videoPlaneMeshRef.current.material.forEach((m) => m.dispose())
-      } else {
-        videoPlaneMeshRef.current.material.dispose()
-      }
+      const old = videoPlaneMeshRef.current.parent ?? videoPlaneMeshRef.current
+      scene.remove(old)
+      disposeObject(old)
       videoPlaneMeshRef.current = null
     }
 
@@ -519,6 +552,7 @@ export function ThreeViewer({
 
     if (objectMeshRef.current) {
       scene.remove(objectMeshRef.current)
+      disposeObject(objectMeshRef.current)
       objectMeshRef.current = null
     }
 
@@ -535,6 +569,7 @@ export function ThreeViewer({
     }
 
     if (primitive === 'wheel') {
+      mat.dispose() // Wheel parts have their own materials.
       // High-detail 3D Wheel: Rim + Spokes + Outer Tire + Center Hub
       const wheelGroup = new THREE.Group()
       wheelGroup.name = 'wheelGroup'
