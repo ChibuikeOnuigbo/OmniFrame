@@ -1,3 +1,17 @@
+## 2026-11-01 — 1,152 Studio Looks and effect-library controls
+
+Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.
+
+## 2026-11-01 continuation
+
+Supplied Gold Motion and Toji Motion APKs downloaded and statically identified; resource catalogues and package metadata saved under `research/editor-upgrade-20261031/`. Open-source licensing and Nova identity remain unverified. The preview render budget now covers 3D WebGL draws as well as 2D composition. See `docs/EDITOR_PERFORMANCE_20261031.md`.
+
+## 2026-10-31 — Playback performance, media proxies and stable 3D viewport
+
+Current user request is a broad editor quality/performance upgrade against the uploaded full ledger. Implemented and measured: preview frame budgets, idle render suppression, no preview upscaling, visible render metrics, temporary video proxy preparation with original audio/export preservation, cancellation and memory bounds, stable 3D context across scrubbing/resizing, geometry/material cleanup, and unobstructed 3D tools. Desktop CI now preserves installers and typechecks. General E2E selectors and export-success requirement repaired.
+
+Read `docs/EDITOR_PERFORMANCE_20261031.md` for exact checks, current research and remaining scope. Evidence: `qa-output/performance-20261031/`; fresh Drive listings, uploaded-ledger index, repository searches and sampled reference review: `research/editor-upgrade-20261031/`. Proxies are tab-local realtime WebM, not frame-exact persistent/native proxies. No comparative speed benchmark, new model training, sculpting implementation or native platform certification is claimed. No environment configuration or publication, remote push or PR performed. Continue the open work listed in that report; preserve user media and historical evidence.
+
 # OmniFrame continuation — read every run
 
 ## Current source and acceptance
@@ -68,3 +82,10 @@ All 5,000 passed three-frame shared-kernel checks and one active compositor fram
 ## Creative-workspace increment (local, not published)
 
 See `docs/CREATIVE_WORKSPACE_20261031.md`: mobile stacking/hit ownership and drawer sizing repaired; grouped phone actions; fully bound original purple palette; combined transform modes; actual corner-pin and four liquify brushes with shared raster rendering, history and project persistence; headless video decoding fixed. Live MCP now 23 tools; headless registry remains 69. New proofs are under `evidence_video/`. All source requests and remaining limits are recorded in the new study. User instructed not to publish; keep changes local unless subsequently authorized.
+## 2026-11-01 moving-effects, RDT, blend keys, previews, and GIPHY increment
+
+All 1,152 Studio Looks now have individual moving MP4s plus a combined 38:24 reel under `effect_vid/`; the manifest proves 27,648 decoded frames. `new_work_qa/RDT_recopy1.mp4` is an independently authored 25.06-second Gojo edit built through the universal MCP tools, with 601/601 distinct decoded frames and audio. Added grouped blend-mode hold keyframes across browser/headless render paths, rendered MCP previews for effect/transition/LUT/text, paginated preset discovery, exact blur-search aliases, and a GIPHY search/import panel. See `docs/EDITOR_QA_20261101.md`. Native Tauri compilation remains blocked on this runner by missing Rust/Cargo, WebKitGTK 4.1 development files, and rsvg2; the desktop frontend IPC contract passes and the cross-platform installer matrix remains configured in CI.
+
+## 2026-11-01 corrected text-matte and GIF-provider increment
+
+`new_work_qa/RDT_recopy2.mp4` supersedes the first pass for review: 25.041667 s, 360×640 H.264 at 24 fps, AAC audio, 601/601 distinct decoded frames, SHA-256 `febe6a61368bc73def09ae3c2bea5f7bd16dbefa91f059c11fcbfbc831178c87`. It uses seven separate scene looks/speed curves and real duplicated negative video cropped inside every title, with keyed Screen/Color Burn holds. Screen is the evidence-based inference for the reference's bright cores; Linear Burn is not claimed. Browser and headless renderers now share editable video fill fields, and browser fills use an independent decoder so the matte does not fight the underlying clip for seek time. Settings → AI & APIs holds tab-only GIPHY and Klipy keys; the Media GIF Library tests provider switching, search, attribution, loading/download states and editable MP4 import. User has now explicitly authorized a GitHub push.

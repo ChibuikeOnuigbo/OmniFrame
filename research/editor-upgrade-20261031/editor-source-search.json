@@ -1,0 +1,122 @@
+[
+  {
+    "query": "\"Toji Motion\"",
+    "total": 4,
+    "repositories": [
+      {
+        "name": "Youifpg/Toji-motion-",
+        "url": "https://github.com/Youifpg/Toji-motion-",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "uuss11/TOJI-MOTION",
+        "url": "https://github.com/uuss11/TOJI-MOTION",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "JerronMC/Toji-Motion-Community-",
+        "url": "https://github.com/JerronMC/Toji-Motion-Community-",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "KentaYaegnashi1968/May-JuneArthian124-Watermark",
+        "url": "https://github.com/KentaYaegnashi1968/May-JuneArthian124-Watermark",
+        "description": "Hello, My UI Watermark and Toji Motion to Figma to Font: Animal Planet Sans Extrabold.",
+        "license": null
+      }
+    ]
+  },
+  {
+    "query": "\"Gold Motion\"",
+    "total": 5,
+    "repositories": [
+      {
+        "name": "ZICHY887/GoldMotion-AI",
+        "url": "https://github.com/ZICHY887/GoldMotion-AI",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "duplexspy/gold-motion-web",
+        "url": "https://github.com/duplexspy/gold-motion-web",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "srinidhi-kl/golden-motion-showcase",
+        "url": "https://github.com/srinidhi-kl/golden-motion-showcase",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "trinayanborah145/vertias-gold-motion-web-10",
+        "url": "https://github.com/trinayanborah145/vertias-gold-motion-web-10",
+        "description": null,
+        "license": null
+      },
+      {
+        "name": "trinayanborah145/vertias-gold-motion-web-47",
+        "url": "https://github.com/trinayanborah145/vertias-gold-motion-web-47",
+        "description": null,
+        "license": null
+      }
+    ]
+  },
+  {
+    "query": "\"Nova\" video editor",
+    "total": 30,
+    "repositories": [
+      {
+        "name": "Event-Horizon-desktop-environment/Novara-Canvas-Studio",
+        "url": "https://github.com/Event-Horizon-desktop-environment/Novara-Canvas-Studio",
+        "description": "A new Video Editor with a  Pro UX and Demon Speed",
+        "license": "MIT"
+      },
+      {
+        "name": "aniruddhabuilds/novacut",
+        "url": "https://github.com/aniruddhabuilds/novacut",
+        "description": "A privacy-first, browser-native non-linear video and audio editor.",
+        "license": "MIT"
+      },
+      {
+        "name": "JesusMonjeGonzalez/NovaCut",
+        "url": "https://github.com/JesusMonjeGonzalez/NovaCut",
+        "description": "Native macOS video editor with multicam, transcript editing and audio DSP",
+        "license": "MIT"
+      },
+      {
+        "name": "mgiambrone43/NovaEdit-Pro",
+        "url": "https://github.com/mgiambrone43/NovaEdit-Pro",
+        "description": "Professional Video Editor ",
+        "license": null
+      },
+      {
+        "name": "kumkum02-web/novaEditor",
+        "url": "https://github.com/kumkum02-web/novaEditor",
+        "description": "this is a video editor web",
+        "license": null
+      },
+      {
+        "name": "moalikhan8118-oss/Nova-video-editor",
+        "url": "https://github.com/moalikhan8118-oss/Nova-video-editor",
+        "description": "Nova Video Editor is a simple and powerful video editing app for everyone. Easily trim, cut, merge, add music, text, filters, effects, transitions and more. Create stunning videos for YouTube, Instagram, Shorts and social media with ease.",
+        "license": null
+      },
+      {
+        "name": "moalikhan8118-oss/Nova-video-editor-",
+        "url": "https://github.com/moalikhan8118-oss/Nova-video-editor-",
+        "description": "Video editing app ",
+        "license": null
+      },
+      {
+        "name": "chhetrisanjit2-ctrl/Nova-cut",
+        "url": "https://github.com/chhetrisanjit2-ctrl/Nova-cut",
+        "description": "free video editor",
+        "license": null
+      }
+    ]
+  }
+]

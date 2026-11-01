@@ -1,0 +1,25 @@
+{
+  "dimensions": [
+    854,
+    480
+  ],
+  "bytes": 121380,
+  "active": [
+    {
+      "kind": "VIDEO",
+      "src": "blob:http://localhost:5173/c27b4c28-4f3c-4af4-b827-027b7700acb9",
+      "muted": true,
+      "width": 854,
+      "time": 0.851399
+    },
+    {
+      "kind": "AUDIO",
+      "src": "/qa-output/performance-20261031/proxy-source.webm",
+      "muted": false,
+      "time": 0.501399
+    }
+  ],
+  "originalExport": true,
+  "cancellation": true,
+  "errors": []
+}

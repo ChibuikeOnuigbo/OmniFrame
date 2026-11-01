@@ -1,3 +1,4 @@
+import { BLEND_MODES, putBlendKey } from '../../src/lib/blendModes.ts'
 import { PNG } from 'pngjs'
 // OmniFrame MCP layer v2 — UNIVERSAL tools only (vow.md universal-tools law).
 // No task-shaped tools: puzzles are solved by recipes (JSON lists of these
@@ -208,8 +209,15 @@ function structuredCloneSafe(c) {
   return copy
 }
 class BlendSet extends MCPTool {
-  constructor() { super('blend_set', 'Major tool: composite blend + opacity of selected clip.', { mode: 'GlobalCompositeOperation', opacity: '0..1' }) }
-  async run({ mode, opacity }) { const c = sel(); if (mode) c.blendMode = mode; if (opacity !== undefined) c.opacity = opacity; return SESSION.note('blend_set', { mode, opacity }, { clipId: c.id, blendMode: c.blendMode, opacity: c.opacity }) }
+  constructor() { super('blend_set', 'Major tool: composite blend + opacity of selected clip.', { mode: 'blend mode', opacity: '0..1', time: 'optional clip-local seconds; creates a hold keyframe' }) }
+  async run({ mode, opacity, time }) {
+    const c=sel()
+    if(mode&&!BLEND_MODES.has(mode))throw Error('Unsupported blend mode')
+    if(time!==undefined){if(!mode)throw Error('Mode required for keyframe');c.blendKeys=putBlendKey(c.blendKeys||[],time,mode)}
+    else if(mode)c.blendMode=mode
+    if(opacity!==undefined)c.opacity=opacity
+    return SESSION.note('blend_set',{mode,opacity,time},{clipId:c.id,blendMode:c.blendMode,blendKeys:c.blendKeys,opacity:c.opacity})
+  }
 }
 class EffectSet extends MCPTool {
   constructor() { super('effect_set', 'Major tool: set ClipEffect fields on selected clip (pixelate, chromaKey, fractalBlur, lumaKey, cardFlip…).', { patch: 'Partial<ClipEffect>' }) }
@@ -603,7 +611,7 @@ function inspectPayload() {
     mode: SESSION.mode,
     sequence: s ? { w: s.w, h: s.h, fps: s.fps, duration: s.duration, bg: s.bg } : null,
     selection: SESSION.selection ? SESSION.selection.id : null,
-    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, speedCurve: c.speedCurve, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
+    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, speedCurve: c.speedCurve, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, blendKeys: c.blendKeys || [], opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
     trace: SESSION.trace,
   }
 }
@@ -706,8 +714,8 @@ class Help extends MCPTool {
   }
 }
 class ListPresets extends MCPTool {
-  constructor() { super('list_presets', 'Log of existing presets BEFORE choosing; optional data:img swatches for vision models.', { catalog: 'text|pillar|transition|ratios|speed|shake', limit: 'n', dataImg: 'bool' }) }
-  async run({ catalog = 'text', limit = 8, dataImg = false }) {
+  constructor() { super('list_presets', 'Paginated log of existing presets BEFORE choosing. Use preset_preview for rendered pixels.', { catalog: 'effect|text|pillar|transition|lut|ratios|speed|shake', offset: 'n', limit: 'n' }) }
+  async run({ catalog = 'text', offset = 0, limit = 8 }) {
     let entries = []
     const scan = (rel) => {
       const src = fs.readFileSync(path.join(ROOT, rel), 'utf8')
@@ -717,15 +725,22 @@ class ListPresets extends MCPTool {
       while ((m = re.exec(src))) out.push({ id: m[1], name: m[2] })
       return out
     }
-    if (catalog === 'text') entries = scan('src/lib/textPresets.ts')
+    if (catalog === 'effect') entries = FXC.getFxCatalog().map(({ id, name, cat }) => ({ id, name, category: cat }))
+    else if (catalog === 'lut') {
+      const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/luts/manifest.json'), 'utf8'))
+      entries = (manifest.luts || []).map(({ id, name, category, file }) => ({ id, name, category, file }))
+    }
+    else if (catalog === 'text') entries = scan('src/lib/textPresets.ts')
     else if (catalog === 'pillar') entries = scan('src/lib/pillarPresets.ts')
     else if (catalog === 'transition') entries = scan('src/lib/transitionPresets.ts')
     else if (catalog === 'ratios') entries = scan('src/lib/aspectRatios.ts')
     else if (catalog === 'shake') entries = (await loadAppTs('src/lib/shakePresets.ts')).SHAKE_PRESETS.map(p => ({ id: p.id, name: p.name }))
     else entries = SPEED.SPEED_CURVES.map(c => ({ id: c.id, name: c.name }))
-    entries = entries.slice(0, limit)
-    if (dataImg) for (const e of entries) e['data:img'] = swatch(catalog, e.id)
-    return SESSION.note('list_presets', { catalog, limit, dataImg }, { catalog, count: entries.length, entries })
+    const total = entries.length
+    offset = Math.max(0, Number(offset) || 0)
+    limit = Math.max(1, Math.min(200, Number(limit) || 8))
+    entries = entries.slice(offset, offset + limit)
+    return SESSION.note('list_presets', { catalog, offset, limit }, { catalog, total, offset, count: entries.length, nextOffset: offset + entries.length < total ? offset + entries.length : null, entries })
   }
 }
 function swatch(catalog, id) {
@@ -733,6 +748,53 @@ function swatch(catalog, id) {
   if (catalog === 'text') { x.fillStyle = '#14161c'; x.fillRect(0, 0, 96, 54); x.fillStyle = '#fff'; x.font = 'bold 14px sans-serif'; x.fillText(id.slice(0, 10), 6, 32) }
   else { bedPainterLocal(id === 'synthwave' || id === 'aurora' || id === 'grid' || id === 'bokeh' || id === 'sunset' || id === 'studio' || id === 'wedge' ? id : 'studio')(x, 96, 54, 0.5); x.fillStyle = 'rgba(255,255,255,0.85)'; x.font = '9px monospace'; x.fillText(id.slice(0, 12), 4, 50) }
   return `data:image/png;base64,${c.toBuffer('image/png').toString('base64')}`
+}
+class PresetPreview extends MCPTool {
+  constructor() { super('preset_preview', 'Render a real effect, LUT, or text preset through the shared editor engine and return data:img. Transition previews use the live in-app MCP bridge because they require the browser playback transition engine and two adjacent clips.', { catalog: 'effect|lut|text', id: 'preset id', text: 'optional demo text', time: 'seconds', out: 'optional PNG path' }) }
+  async run({ catalog, id, text = 'OMNIFRAME', time = 0.7, out }) {
+    if (catalog === 'transition') throw new Error('Use the live app preset_preview for transitions; it previews the actual cut between two adjacent timeline clips')
+    const saved = {
+      seq: SESSION.seq, selection: SESSION.selection, trace: SESSION.trace, mode: SESSION.mode,
+      omniSelection: SESSION.omniSelection, paint: SESSION.paint, compounds: SESSION.compounds,
+      seqStack: SESSION.seqStack, videoFrames: SESSION.videoFrames,
+    }
+    try {
+      await registry.call('project_new', { w: 320, h: 180, fps: 12, duration: 2, bg: '#101626' })
+      const bg = await registry.call('new_background', { kind: 'studio' })
+      if (!bg.ok) throw new Error(JSON.stringify(bg.data))
+      let label = id
+      if (catalog === 'effect') {
+        const preset = FXC.fxCatalogById(id)
+        if (!preset) throw new Error(`unknown effect preset: ${id}`)
+        label = preset.name
+        const applied = await registry.call('effect_set', { patch: preset.patch })
+        if (!applied.ok) throw new Error(JSON.stringify(applied.data))
+      } else if (catalog === 'lut') {
+        const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/luts/manifest.json'), 'utf8'))
+        const preset = (manifest.luts || []).find(item => item.id === id)
+        if (!preset) throw new Error(`unknown LUT preset: ${id}`)
+        label = preset.name
+        const cubeText = fs.readFileSync(path.join(ROOT, 'public', preset.file), 'utf8')
+        const edited = await registry.call('edit_element', { clipId: bg.data.clipId, patch: { adjustment: { luts: [{ id, name: preset.name, cubeText, intensity: 1, enabled: true }] } } })
+        if (!edited.ok) throw new Error(JSON.stringify(edited.data))
+      } else if (catalog === 'text') {
+        const presets = await loadAppTs('src/lib/textPresets.ts')
+        const preset = presets.TEXT_PRESETS.find(item => item.id === id)
+        if (!preset) throw new Error(`unknown text preset: ${id}`)
+        label = preset.name
+        const made = await registry.call('create_text', { text: text || preset.demo, preset: id, x: 0, y: 0 })
+        if (!made.ok) throw new Error(JSON.stringify(made.data))
+      } else throw new Error('catalog must be effect, lut, or text')
+      const canvas = renderFrame(SESSION.seq, Math.max(0, Math.min(1.99, Number(time) || 0.7)))
+      const buffer = canvas.toBuffer('image/png')
+      if (out) {
+        const destination = path.isAbsolute(out) ? out : path.join(ROOT, out)
+        fs.mkdirSync(path.dirname(destination), { recursive: true })
+        fs.writeFileSync(destination, buffer)
+      }
+      return { catalog, id, label, width: 320, height: 180, 'data:img': `data:image/png;base64,${buffer.toString('base64')}`, out: out || null }
+    } finally { Object.assign(SESSION, saved) }
+  }
 }
 class CreateText extends MCPTool {
   constructor() { super('create_text', 'Create a text clip with a preset from TEXT_PRESETS (log first via list_presets).', { text: '', preset: 'TEXT_PRESETS id', x: '', y: '', scale: '' }) }
@@ -756,7 +818,10 @@ class CreateText extends MCPTool {
             const vf = SESSION.videoFrames[ts.insideVideo]
             const g = vf.get(Math.max(0, t2) * vf.fps)
             const kk = Math.max(w2 / g.width, h2 / g.height)
+            c2.save()
+            c2.filter = `${ts.insideInvert ? 'invert(1) ' : ''}brightness(${ts.insideBrightness ?? 1}) contrast(${ts.insideContrast ?? 1}) saturate(${ts.insideSaturation ?? 1})`
             c2.drawImage(g, 0, 0, g.width, g.height, (w2 - g.width * kk) / 2, (h2 - g.height * kk) / 2, g.width * kk, g.height * kk)
+            c2.restore()
           } : ts.insideBed ? (c2, w2, h2, t2) => {
             PFX.drawReplaceBg(c2, w2, h2, t2, ts.insideBed)
             if (ts.insideParticle && ts.insideParticle !== 'none') PFX.drawParticleFx(c2, w2, h2, t2, ts.insideParticle, ts.insideDensity ?? 0.6, ts.insideTint || '#ffffff')
@@ -783,7 +848,7 @@ class CreateText extends MCPTool {
   }
 }
 class EditElement extends MCPTool {
-  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), source inPoint, volume, mask, effects, blend, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,effects?,opacity?,blendMode?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
+  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), source inPoint, volume, mask, effects, blend/blend keyframes, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,effects?,opacity?,blendMode?,blendKeys?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
   async run({ clipId, patch = {}, convert }) {
     const s = seq()
     const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
@@ -792,6 +857,12 @@ class EditElement extends MCPTool {
       if (!Number.isFinite(patch[key]) || patch[key] < 0 || (key === 'volume' && patch[key] > 1)) throw new Error(`${key} is outside its valid range`)
     }
     if (patch.speedCurve !== undefined && patch.speedCurve !== null && !SPEED.SPEED_CURVE_IDS.includes(patch.speedCurve)) throw new Error('Unknown speed curve')
+    if (patch.blendMode !== undefined && !BLEND_MODES.has(patch.blendMode)) throw new Error('Unsupported blend mode')
+    let blendKeys
+    if (patch.blendKeys !== undefined) {
+      if (!Array.isArray(patch.blendKeys)) throw new Error('blendKeys must be an array')
+      blendKeys = patch.blendKeys.reduce((keys, key) => putBlendKey(keys, key.time, key.mode), [])
+    }
     const deformation = patch.deformation !== undefined ? DEFORMATION.validateDeformation(patch.deformation) : undefined
     if (patch.inPoint !== undefined) c.inPoint = patch.inPoint
     if (patch.volume !== undefined) c.volume = patch.volume
@@ -803,11 +874,25 @@ class EditElement extends MCPTool {
     if (patch.effects) c.effects = { ...c.effects, ...patch.effects }
     if (patch.opacity !== undefined) c.opacity = patch.opacity
     if (patch.blendMode) c.blendMode = patch.blendMode
+    if (blendKeys) c.blendKeys = blendKeys
     if (patch.textStyle) c.textStyle = Object.assign({}, c.textStyle || {}, patch.textStyle)
     if (patch.adjustment) c.adjustment = { ...(c.adjustment || { luts: [] }), ...patch.adjustment }
     let compounded = null
     if (convert === 'compound') compounded = { id: `compound-${c.id}`, memberIds: [c.id], nestedTrackCount: 1 }
     return SESSION.note('edit_element', { clipId: c.id, patch, convert }, { clipId: c.id, compounded, textStyle: c.textStyle, adjustment: c.adjustment })
+  }
+}
+class TextCropVideo extends MCPTool {
+  constructor() { super('text_crop_video', 'Crop registered moving footage inside the selected text glyphs; optional negative processing and text-layer blend mode.', { clipId: 'text clip (default selected)', video: 'path previously registered with import_video', invert: 'bool', brightness: 'number', contrast: 'number', saturation: 'number', baseAlpha: '0..1', blendMode: 'source-over|screen|color-burn|...' }) }
+  async run({ clipId, video, invert = true, brightness = 1, contrast = 1, saturation = 1, baseAlpha = 0.08, blendMode = 'screen' }) {
+    const c = clipId ? seq().clips.find(item => item.id === clipId) : sel()
+    if (!c?.textStyle) throw new Error('text_crop_video requires a text clip')
+    if (!SESSION.videoFrames?.[video]) throw new Error('video must first be registered with import_video')
+    if (!BLEND_MODES.has(blendMode)) throw new Error('Unsupported blend mode')
+    for (const [name, value] of Object.entries({ brightness, contrast, saturation, baseAlpha })) if (!Number.isFinite(value) || value < 0) throw new Error(`${name} must be a non-negative finite number`)
+    c.textStyle = { ...c.textStyle, insideVideo: video, insideInvert: Boolean(invert), insideBrightness: brightness, insideContrast: contrast, insideSaturation: saturation, insideBaseAlpha: Math.min(1, baseAlpha) }
+    c.blendMode = blendMode
+    return SESSION.note('text_crop_video', { clipId: c.id, video, invert, brightness, contrast, saturation, baseAlpha, blendMode }, { clipId: c.id, textStyle: c.textStyle, blendMode: c.blendMode })
   }
 }
 class Select extends MCPTool {
@@ -1419,4 +1504,4 @@ class ShakeApply extends MCPTool {
   }
 }
 
-for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, CreateText, EditElement, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove, ReplaceVideo, TemplateCapture, TemplateApply, ListTemplates, ListFonts, AlightImport, AlightExport, TemplateExport, TemplateImport, ShakeApply]) registry.register(new T())
+for (const T of [ProjectNew, OmniframeMode, ImportMedia, ImportVideo, NewBackground, Click, MaskDraw, MaskClear, KeyframeSet, CurveSet, TransformSet, DuplicatePaste, BlendSet, EffectSet, FillCompositionArea, CompoundClipCreate, AlignClips, ClipMoveTime, MotionAnalyze, ShapeDetect, CompoundList, CompoundRename, CompoundExpand, CompoundEnter, CompoundExit, UncompoundClip, SmartPatch, Snapshot, RenderExport, Inspect, RunRecipe, Help, ListPresets, PresetPreview, CreateText, EditElement, TextCropVideo, Select, ContextMenu, DataDump, RemoveBackground, RotoMask, TrackNew, TrackAssign, TimelineScreenshot, ClipStretch, ClipRemove, TransparentSelect, BrushSelect, SelectMainElement, OmniExtract, PatchUnder, OmniMove, DrawStroke, PaintTimelapse, PaintClear, LassoSelect, FxCatalog, FxAdd, FxUpdate, FxRemove, ReplaceVideo, TemplateCapture, TemplateApply, ListTemplates, ListFonts, AlightImport, AlightExport, TemplateExport, TemplateImport, ShakeApply]) registry.register(new T())

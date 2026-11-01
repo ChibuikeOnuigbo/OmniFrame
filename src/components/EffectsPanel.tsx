@@ -1000,6 +1000,15 @@ const FX_MIME = 'application/x-omniframe-fx'
  */
 function FxCatalogBrowser() {
   const [cat, setCat] = useState<FxCat | 'all'>('all')
+  const [collection, setCollection] = useState('all')
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    try { const saved = JSON.parse(localStorage.getItem('omniframe.fxFavorites') || '[]'); return Array.isArray(saved) ? saved.filter(x => typeof x === 'string') : [] } catch { return [] }
+  })
+  const toggleFavorite = (id: string) => setFavorites(previous => {
+    const next = previous.includes(id) ? previous.filter(x => x !== id) : [...previous, id]
+    try { localStorage.setItem('omniframe.fxFavorites', JSON.stringify(next)) } catch { /* session favorites still work */ }
+    return next
+  })
   const [, refreshCatalog] = useState(0)
   const [packError, setPackError] = useState('')
   const loadPack = () => { setPackError(''); void loadGlitchRecipeCatalog().then(() => refreshCatalog(n => n + 1)).catch(error => setPackError(String(error.message))) }
@@ -1016,11 +1025,13 @@ function FxCatalogBrowser() {
   const all = getFxCatalog()
   const entries = useMemo(() => {
     let list = all
+    if (collection === 'studio') list = list.filter(e => e.id.startsWith('studio-'))
+    if (collection === 'favorites') list = list.filter(e => favorites.includes(e.id))
     if (cat !== 'all') list = list.filter((e) => e.cat === cat)
     const query = q.trim().toLowerCase()
     if (query) list = list.filter((e) => e.name.toLowerCase().includes(query) || e.trace.toLowerCase().includes(query))
     return list
-  }, [all, cat, q])
+  }, [all, cat, q, collection, favorites])
 
   const apply = (entry: FxCatalogEntry, asLayer: boolean) => {
     const clip = clips.find((c) => c.id === selectedClipId)
@@ -1039,6 +1050,11 @@ function FxCatalogBrowser() {
 
   return (
     <div data-testid="fx-catalog-browser" className="space-y-1.5">
+      <label className="flex items-center justify-between gap-2 text-[11px] text-ink-300">Collection
+        <select aria-label="Effect collection" value={collection} onChange={e => { setCollection(e.target.value); setLimit(60) }} className="rounded border border-ink-700 bg-ink-900 p-1">
+          <option value="all">All effects</option><option value="studio">Studio Looks · 1,152 recipes</option><option value="favorites">Favorites · {favorites.length}</option>
+        </select>
+      </label>
       {packError && <button type="button" onClick={loadPack} className="text-[10px] text-amber-300">{packError} · Retry recipe library</button>}
       <p className="text-[9px] text-ink-500">Choose and search on the left. Edit, keyframe and reorder applied layers in the right inspector. Recipe count does not imply visual uniqueness.</p>
       <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Effect categories">
@@ -1075,6 +1091,11 @@ function FxCatalogBrowser() {
       <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
         {entries.slice(0, limit).map((e) => (
           <div key={e.id} className="group relative">
+            <div className="flex justify-between gap-1">
+              <button type="button" aria-label={`${favorites.includes(e.id) ? 'Unfavorite' : 'Favorite'} ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="px-1 text-xs text-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>
+              <button type="button" aria-label={`Preview ${e.name}`} onClick={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }} className="px-1 text-[10px] text-cyan-300">Preview</button>
+              <button type="button" data-testid={`fx-tile-layer-${e.id}`} aria-label={`Place ${e.name} as an adjustment layer`} onClick={() => apply(e, true)} className="px-1 text-[10px] text-cyan-300">Layer</button>
+            </div>
             <button
               type="button"
               draggable
@@ -1090,16 +1111,7 @@ function FxCatalogBrowser() {
               <span className={`h-2 w-2 shrink-0 rounded-full ${CAT_DOT[e.cat]}`} aria-hidden="true" />
               <span className="min-w-0 flex-1 truncate text-[9.5px] font-medium text-ink-100">{e.name}</span>
             </button>
-            <button
-              type="button"
-              data-testid={`fx-tile-layer-${e.id}`}
-              aria-label={`Place ${e.name} as an adjustment layer`}
-              title="Place as adjustment layer (grades every track below)"
-              onClick={() => apply(e, true)}
-              className="absolute right-0.5 top-0.5 hidden h-4 w-4 place-items-center rounded bg-brand/80 text-[9px] font-bold text-white group-hover:grid"
-            >
-              L
-            </button>
+
           </div>
         ))}
       </div>
@@ -1117,7 +1129,7 @@ function FxCatalogBrowser() {
         <p className="py-2 text-center text-[10px] text-ink-500">No effects match — try another sub-tab or clear the search.</p>
       )}
       <p className="text-[9px] leading-snug text-ink-500" data-testid="fx-catalog-note">
-        {paramsForPatch(entries[0]?.patch || {}).length >= 0 ? `${all.length} real presets — every tile renders (engine params, no stubs); properties stay editable + keyframeable after the drop.` : ''}
+        {paramsForPatch(entries[0]?.patch || {}).length >= 0 ? `${all.length} catalog recipes · applied properties remain editable and keyframeable.` : ''}
       </p>
     </div>
   )

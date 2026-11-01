@@ -1,0 +1,2093 @@
+{
+  "output": "new_work_qa/RDT_recopy2.mp4",
+  "classification": "Independent second recreation using separate Gojo scene footage. Text uses duplicated negative scene footage cropped inside glyphs; the finished reference is analysis-only.",
+  "blendInference": "Screen best matches the bright title cores visible in the reference samples. Color Burn is used for two darker titles and as a short keyed entrance for the other titles; Linear Burn is not claimed because Canvas has no native Linear Burn compositor in this build.",
+  "reference": {
+    "path": "evidence_video/reala/source/RDT_20261027_092910.mp4",
+    "sha256": "985ce469f3e972beeaedd4096bb2edd189d95a06ff62dfc52faeca19108643d4"
+  },
+  "source": {
+    "path": "/workspace/omniframe-reference-cache/rdt/gojo.download",
+    "sha256": "bdbdeccbc77cfc8c7281c6d6494b27911c1b2e482c0668fe5392ee636ce5c558"
+  },
+  "authored": [
+    {
+      "index": 1,
+      "sourceStart": 20,
+      "timelineStart": 0,
+      "duration": 3.4,
+      "speedCurve": "ease-out-back",
+      "title": "ALL DARK",
+      "backgroundLook": {
+        "blur": 17,
+        "brightness": 0.55,
+        "contrast": 1.24,
+        "saturation": 0.88,
+        "vignette": 0.62,
+        "grain": 0.09
+      },
+      "foregroundLook": {
+        "contrast": 1.18,
+        "saturation": 1.12,
+        "directionalBlur": 0.06,
+        "directionalBlurAngle": 90,
+        "motionBlur": 0.22
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-1.mp4",
+        "negative": true,
+        "entranceBlend": "color-burn",
+        "settledBlend": "screen"
+      },
+      "clips": {
+        "background": "clip-1",
+        "foreground": "clip-2",
+        "text": "text-3"
+      }
+    },
+    {
+      "index": 2,
+      "sourceStart": 48,
+      "timelineStart": 3.4,
+      "duration": 3.4,
+      "speedCurve": "velocity-spike",
+      "title": "BLUE",
+      "backgroundLook": {
+        "blur": 12,
+        "brightness": 0.64,
+        "contrast": 1.08,
+        "saturation": 1.42,
+        "hueRotate": 12,
+        "vignette": 0.36,
+        "glow": 0.12
+      },
+      "foregroundLook": {
+        "brightness": 1.05,
+        "contrast": 1.12,
+        "saturation": 1.36,
+        "hueRotate": 8,
+        "zoomBlur": 0.08,
+        "motionBlur": 0.14
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-2.mp4",
+        "negative": true,
+        "entranceBlend": "color-burn",
+        "settledBlend": "screen"
+      },
+      "clips": {
+        "background": "clip-4",
+        "foreground": "clip-5",
+        "text": "text-6"
+      }
+    },
+    {
+      "index": 3,
+      "sourceStart": 72,
+      "timelineStart": 6.8,
+      "duration": 3.7,
+      "speedCurve": "hold-then-go",
+      "title": "NO ONE",
+      "backgroundLook": {
+        "blur": 19,
+        "brightness": 0.48,
+        "contrast": 1.35,
+        "saturation": 0.72,
+        "chromatic": 0.08,
+        "scanlines": 0.11
+      },
+      "foregroundLook": {
+        "contrast": 1.32,
+        "saturation": 0.84,
+        "chromatic": 0.11,
+        "grain": 0.12,
+        "motionBlur": 0.28
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-3.mp4",
+        "negative": true,
+        "entranceBlend": "screen",
+        "settledBlend": "color-burn"
+      },
+      "clips": {
+        "background": "clip-7",
+        "foreground": "clip-8",
+        "text": "text-9"
+      }
+    },
+    {
+      "index": 4,
+      "sourceStart": 104,
+      "timelineStart": 10.5,
+      "duration": 3.4,
+      "speedCurve": "ease-in-out-cubic",
+      "title": "ROCKWELL",
+      "backgroundLook": {
+        "blur": 10,
+        "brightness": 0.66,
+        "contrast": 1.18,
+        "saturation": 1.05,
+        "sepia": 0.14,
+        "grain": 0.18
+      },
+      "foregroundLook": {
+        "brightness": 0.96,
+        "contrast": 1.22,
+        "saturation": 1.02,
+        "sepia": 0.08,
+        "directionalBlur": 0.05,
+        "directionalBlurAngle": 32
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-4.mp4",
+        "negative": true,
+        "entranceBlend": "color-burn",
+        "settledBlend": "screen"
+      },
+      "clips": {
+        "background": "clip-10",
+        "foreground": "clip-11",
+        "text": "text-12"
+      }
+    },
+    {
+      "index": 5,
+      "sourceStart": 132,
+      "timelineStart": 13.9,
+      "duration": 3.6,
+      "speedCurve": "ramp-hold-ramp",
+      "title": "MOMENT",
+      "backgroundLook": {
+        "blur": 15,
+        "brightness": 0.58,
+        "contrast": 1.42,
+        "saturation": 1.32,
+        "zoomBlur": 0.11,
+        "vignette": 0.48
+      },
+      "foregroundLook": {
+        "brightness": 1.06,
+        "contrast": 1.38,
+        "saturation": 1.28,
+        "zoomBlur": 0.12,
+        "chromatic": 0.04
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-5.mp4",
+        "negative": true,
+        "entranceBlend": "color-burn",
+        "settledBlend": "screen"
+      },
+      "clips": {
+        "background": "clip-13",
+        "foreground": "clip-14",
+        "text": "text-15"
+      }
+    },
+    {
+      "index": 6,
+      "sourceStart": 165,
+      "timelineStart": 17.5,
+      "duration": 3.5,
+      "speedCurve": "expo-out",
+      "title": "UNDER",
+      "backgroundLook": {
+        "blur": 20,
+        "brightness": 0.52,
+        "contrast": 1.12,
+        "saturation": 0.82,
+        "directionalBlur": 0.09,
+        "directionalBlurAngle": 90,
+        "grain": 0.13
+      },
+      "foregroundLook": {
+        "brightness": 1.03,
+        "contrast": 1.16,
+        "saturation": 0.92,
+        "directionalBlur": 0.12,
+        "directionalBlurAngle": 90,
+        "motionBlur": 0.34
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-6.mp4",
+        "negative": true,
+        "entranceBlend": "screen",
+        "settledBlend": "color-burn"
+      },
+      "clips": {
+        "background": "clip-16",
+        "foreground": "clip-17",
+        "text": "text-18"
+      }
+    },
+    {
+      "index": 7,
+      "sourceStart": 200,
+      "timelineStart": 21,
+      "duration": 4.06,
+      "speedCurve": "sine-in-out",
+      "title": "COVERS",
+      "backgroundLook": {
+        "blur": 13,
+        "brightness": 0.62,
+        "contrast": 1.28,
+        "saturation": 1.18,
+        "hueRotate": -8,
+        "vignette": 0.55,
+        "flare": 0.08
+      },
+      "foregroundLook": {
+        "brightness": 1.02,
+        "contrast": 1.26,
+        "saturation": 1.18,
+        "hueRotate": -5,
+        "grain": 0.07,
+        "motionBlur": 0.18
+      },
+      "textCrop": {
+        "video": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-7.mp4",
+        "negative": true,
+        "entranceBlend": "color-burn",
+        "settledBlend": "screen"
+      },
+      "clips": {
+        "background": "clip-19",
+        "foreground": "clip-20",
+        "text": "text-21"
+      }
+    }
+  ],
+  "workflow": [
+    "project_new",
+    "import_video",
+    "clip_move_time",
+    "clip_stretch",
+    "edit_element",
+    "text_crop_video",
+    "blend_set",
+    "keyframe_set",
+    "snapshot",
+    "timeline_screenshot",
+    "render_export",
+    "data_dump"
+  ],
+  "validation": {
+    "width": 360,
+    "height": 640,
+    "fps": 24,
+    "duration": 25.06,
+    "decodedFrames": 601,
+    "distinctFrameHashes": 601,
+    "outputBytes": 1293798,
+    "audioTracks": 7
+  },
+  "project": {
+    "mode": "omniframe",
+    "sequence": {
+      "w": 360,
+      "h": 640,
+      "fps": 24,
+      "duration": 25.06,
+      "bg": "#05060c"
+    },
+    "selection": "text-21",
+    "clips": [
+      {
+        "id": "clip-1",
+        "name": "gojo-1.mp4",
+        "start": 0,
+        "duration": 3.4,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-1.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 17,
+          "brightness": 0.55,
+          "contrast": 1.24,
+          "saturation": 0.88,
+          "vignette": 0.62,
+          "grain": 0.09
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-2",
+        "name": "gojo-1.mp4",
+        "start": 0,
+        "duration": 3.4,
+        "inPoint": 0,
+        "speedCurve": "ease-out-back",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-1.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "contrast": 1.18,
+          "saturation": 1.12,
+          "directionalBlur": 0.06,
+          "directionalBlurAngle": 90,
+          "motionBlur": 0.22
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_wnocpge",
+              "time": 0,
+              "value": 18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_1cqucrs",
+              "time": 3.4,
+              "value": -12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_24exx6s",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_qqiqjlu",
+              "time": 3.4,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_e32ccvu",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_e1xzwci",
+              "time": 3.4,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-3",
+        "name": "text:ALL DARK",
+        "start": 0,
+        "duration": 3.4,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": 10,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "screen",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "color-burn"
+          },
+          {
+            "time": 0.16,
+            "mode": "screen"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_lkx48sn",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_ccnay2m",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_uajmi17",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_axx9kjc",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_rk8uv3r",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_f8hzqg1",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_adpv082",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_h84cak1",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_a0o0osd",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_d2kh4bl",
+              "time": 3.25,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_7xtttxt",
+              "time": 3.4,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-4",
+        "name": "gojo-2.mp4",
+        "start": 3.4,
+        "duration": 3.4,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-2.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 12,
+          "brightness": 0.64,
+          "contrast": 1.08,
+          "saturation": 1.42,
+          "hueRotate": 12,
+          "vignette": 0.36,
+          "glow": 0.12
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-5",
+        "name": "gojo-2.mp4",
+        "start": 3.4,
+        "duration": 3.4,
+        "inPoint": 0,
+        "speedCurve": "velocity-spike",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-2.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "brightness": 1.05,
+          "contrast": 1.12,
+          "saturation": 1.36,
+          "hueRotate": 8,
+          "zoomBlur": 0.08,
+          "motionBlur": 0.14
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_oibl32k",
+              "time": 0,
+              "value": -18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_e1dx1hy",
+              "time": 3.4,
+              "value": 12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_bst9k3h",
+              "time": 0,
+              "value": 1.08,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_udhq64u",
+              "time": 3.4,
+              "value": 0.96,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_8me31w1",
+              "time": 0,
+              "value": 1.08,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_aaej5ny",
+              "time": 3.4,
+              "value": 0.96,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-6",
+        "name": "text:BLUE",
+        "start": 3.4,
+        "duration": 3.4,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": -4,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "screen",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "color-burn"
+          },
+          {
+            "time": 0.21000000000000002,
+            "mode": "screen"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [
+            {
+              "id": "kf_4b5kf12",
+              "time": 0,
+              "value": -4,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_myn2uat",
+              "time": 0.48,
+              "value": 0,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_x": [
+            {
+              "id": "kf_ffey9x6",
+              "time": 0,
+              "value": 1.28,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_1y9k0n1",
+              "time": 0.22,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_dts80ye",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_uu6kxdk",
+              "time": 0,
+              "value": 1.28,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_5qt1lxk",
+              "time": 0.22,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_5ocd9le",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_099wbev",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_hoy7o8l",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_56mpvfv",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_ju1yiox",
+              "time": 3.25,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_x3s0wpi",
+              "time": 3.4,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-7",
+        "name": "gojo-3.mp4",
+        "start": 6.8,
+        "duration": 3.7,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-3.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 19,
+          "brightness": 0.48,
+          "contrast": 1.35,
+          "saturation": 0.72,
+          "chromatic": 0.08,
+          "scanlines": 0.11
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-8",
+        "name": "gojo-3.mp4",
+        "start": 6.8,
+        "duration": 3.7,
+        "inPoint": 0,
+        "speedCurve": "hold-then-go",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-3.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "contrast": 1.32,
+          "saturation": 0.84,
+          "chromatic": 0.11,
+          "grain": 0.12,
+          "motionBlur": 0.28
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_ihoh4lr",
+              "time": 0,
+              "value": 18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_h6ali60",
+              "time": 3.7,
+              "value": -12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_wnd7j8c",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_0hb6ykc",
+              "time": 3.7,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_puqsrn6",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_chrfm4k",
+              "time": 3.7,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-9",
+        "name": "text:NO ONE",
+        "start": 6.8,
+        "duration": 3.7,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": -4,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "color-burn",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "screen"
+          },
+          {
+            "time": 0.16,
+            "mode": "color-burn"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_fz73kmk",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_cwqm3mq",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_4hlf1sn",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_zeccw5x",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_1iwcfl7",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_gulnlb4",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_dugdxdt",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_9upd5lf",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_30amc3o",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_amyzf4g",
+              "time": 3.5500000000000003,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_t0s1w9u",
+              "time": 3.7,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-10",
+        "name": "gojo-4.mp4",
+        "start": 10.5,
+        "duration": 3.4,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-4.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 10,
+          "brightness": 0.66,
+          "contrast": 1.18,
+          "saturation": 1.05,
+          "sepia": 0.14,
+          "grain": 0.18
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-11",
+        "name": "gojo-4.mp4",
+        "start": 10.5,
+        "duration": 3.4,
+        "inPoint": 0,
+        "speedCurve": "ease-in-out-cubic",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-4.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "brightness": 0.96,
+          "contrast": 1.22,
+          "saturation": 1.02,
+          "sepia": 0.08,
+          "directionalBlur": 0.05,
+          "directionalBlurAngle": 32
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_mn1f1qx",
+              "time": 0,
+              "value": -18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_1pbmitb",
+              "time": 3.4,
+              "value": 12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_pa52jg7",
+              "time": 0,
+              "value": 1.08,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_p4oswha",
+              "time": 3.4,
+              "value": 0.96,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_1cajlj5",
+              "time": 0,
+              "value": 1.08,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_r0kbpz1",
+              "time": 3.4,
+              "value": 0.96,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-12",
+        "name": "text:ROCKWELL",
+        "start": 10.5,
+        "duration": 3.4,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": 10,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "screen",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "color-burn"
+          },
+          {
+            "time": 0.21000000000000002,
+            "mode": "screen"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [
+            {
+              "id": "kf_t44qa04",
+              "time": 0,
+              "value": -4,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_zybcv2x",
+              "time": 0.48,
+              "value": 0,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_x": [
+            {
+              "id": "kf_myvzb00",
+              "time": 0,
+              "value": 1.28,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_yvyd4g7",
+              "time": 0.22,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_li2k8g4",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_fr4bdzi",
+              "time": 0,
+              "value": 1.28,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_nkgb2il",
+              "time": 0.22,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_kbh29t3",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_1fdqu46",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_o2vzhny",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_8o80b1p",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_bsuo67j",
+              "time": 3.25,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_bos6puy",
+              "time": 3.4,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-13",
+        "name": "gojo-5.mp4",
+        "start": 13.9,
+        "duration": 3.6,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-5.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 15,
+          "brightness": 0.58,
+          "contrast": 1.42,
+          "saturation": 1.32,
+          "zoomBlur": 0.11,
+          "vignette": 0.48
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-14",
+        "name": "gojo-5.mp4",
+        "start": 13.9,
+        "duration": 3.6,
+        "inPoint": 0,
+        "speedCurve": "ramp-hold-ramp",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-5.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "brightness": 1.06,
+          "contrast": 1.38,
+          "saturation": 1.28,
+          "zoomBlur": 0.12,
+          "chromatic": 0.04
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_1wxxxd3",
+              "time": 0,
+              "value": 18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_cqct2mm",
+              "time": 3.6,
+              "value": -12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_afhs5z0",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_2ukp9h5",
+              "time": 3.6,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_yb2n2sd",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_8vyg24o",
+              "time": 3.6,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-15",
+        "name": "text:MOMENT",
+        "start": 13.9,
+        "duration": 3.6,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": -4,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "screen",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "color-burn"
+          },
+          {
+            "time": 0.16,
+            "mode": "screen"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_vvgsco3",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_gyzy0tq",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_xxpfabc",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_w50fx8g",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_eky883f",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_hg97je5",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_s92zf9d",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_cxdf07n",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_0f9zn6r",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_nbdoqrr",
+              "time": 3.45,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_2hn66ep",
+              "time": 3.6,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-16",
+        "name": "gojo-6.mp4",
+        "start": 17.5,
+        "duration": 3.5,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-6.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 20,
+          "brightness": 0.52,
+          "contrast": 1.12,
+          "saturation": 0.82,
+          "directionalBlur": 0.09,
+          "directionalBlurAngle": 90,
+          "grain": 0.13
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-17",
+        "name": "gojo-6.mp4",
+        "start": 17.5,
+        "duration": 3.5,
+        "inPoint": 0,
+        "speedCurve": "expo-out",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-6.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "brightness": 1.03,
+          "contrast": 1.16,
+          "saturation": 0.92,
+          "directionalBlur": 0.12,
+          "directionalBlurAngle": 90,
+          "motionBlur": 0.34
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_r4v2qhl",
+              "time": 0,
+              "value": -18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_l634jlm",
+              "time": 3.5,
+              "value": 12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_95v8g42",
+              "time": 0,
+              "value": 1.08,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_u0xs7xe",
+              "time": 3.5,
+              "value": 0.96,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_boubwvq",
+              "time": 0,
+              "value": 1.08,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_oyh7rw4",
+              "time": 3.5,
+              "value": 0.96,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-18",
+        "name": "text:UNDER",
+        "start": 17.5,
+        "duration": 3.5,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": -4,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "color-burn",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "screen"
+          },
+          {
+            "time": 0.21000000000000002,
+            "mode": "color-burn"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [
+            {
+              "id": "kf_26byxqy",
+              "time": 0,
+              "value": -4,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_fv6czvw",
+              "time": 0.48,
+              "value": 0,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_x": [
+            {
+              "id": "kf_vd0qcmg",
+              "time": 0,
+              "value": 1.28,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_7l29mop",
+              "time": 0.22,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_1y0xxu1",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_eqd7ik6",
+              "time": 0,
+              "value": 1.28,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_633miyw",
+              "time": 0.22,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_1j54gkq",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_sbvy4ez",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_1w1wc7h",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_ul94k1d",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_hr8yjhx",
+              "time": 3.35,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_indw7m5",
+              "time": 3.5,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-19",
+        "name": "gojo-7.mp4",
+        "start": 21,
+        "duration": 4.06,
+        "inPoint": 0,
+        "volume": 0.2,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-7.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "blur": 13,
+          "brightness": 0.62,
+          "contrast": 1.28,
+          "saturation": 1.18,
+          "hueRotate": -8,
+          "vignette": 0.55,
+          "flare": 0.08
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [],
+          "scale_y": [],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "clip-20",
+        "name": "gojo-7.mp4",
+        "start": 21,
+        "duration": 4.06,
+        "inPoint": 0,
+        "speedCurve": "sine-in-out",
+        "volume": 0,
+        "asset": "/workspace/OmniFrame/new_work_qa/scene_clips/gojo-7.mp4",
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "source-over",
+        "blendKeys": [],
+        "opacity": 1,
+        "effects": {
+          "brightness": 1.02,
+          "contrast": 1.26,
+          "saturation": 1.18,
+          "hueRotate": -5,
+          "grain": 0.07,
+          "motionBlur": 0.18
+        },
+        "patch": null,
+        "curves": {
+          "position_x": [
+            {
+              "id": "kf_oo4miz7",
+              "time": 0,
+              "value": 18,
+              "interpolation": "ease-out"
+            },
+            {
+              "id": "kf_lsb9pfe",
+              "time": 4.06,
+              "value": -12,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_gzb1dbj",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_5ghsuw3",
+              "time": 4.06,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_9692rh7",
+              "time": 0,
+              "value": 0.92,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_fx3vcfm",
+              "time": 4.06,
+              "value": 1.1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      },
+      {
+        "id": "text-21",
+        "name": "text:COVERS",
+        "start": 21,
+        "duration": 4.06,
+        "inPoint": 0,
+        "asset": "text:plain",
+        "transform": {
+          "x": 0,
+          "y": 10,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        "mask": null,
+        "blendMode": "screen",
+        "blendKeys": [
+          {
+            "time": 0,
+            "mode": "color-burn"
+          },
+          {
+            "time": 0.16,
+            "mode": "screen"
+          }
+        ],
+        "opacity": 1,
+        "effects": {},
+        "patch": null,
+        "curves": {
+          "position_x": [],
+          "position_y": [],
+          "position_z": [],
+          "rotation_x": [],
+          "rotation_y": [],
+          "rotation_z": [],
+          "scale_x": [
+            {
+              "id": "kf_38bn15u",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_4b8zvl4",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_lfew3yf",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_y": [
+            {
+              "id": "kf_ng5kr0p",
+              "time": 0,
+              "value": 0.46,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_unqz5s3",
+              "time": 0.22,
+              "value": 1.13,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_4os9si1",
+              "time": 0.48,
+              "value": 1,
+              "interpolation": "ease-in-out"
+            }
+          ],
+          "scale_z": [],
+          "opacity": [
+            {
+              "id": "kf_dbewuuv",
+              "time": 0,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_3t6spgk",
+              "time": 0.06,
+              "value": 0,
+              "interpolation": "constant"
+            },
+            {
+              "id": "kf_be63z0v",
+              "time": 0.2,
+              "value": 1,
+              "interpolation": "back-out"
+            },
+            {
+              "id": "kf_chfxz7o",
+              "time": 3.9099999999999997,
+              "value": 1,
+              "interpolation": "linear"
+            },
+            {
+              "id": "kf_ouykqet",
+              "time": 4.06,
+              "value": 0,
+              "interpolation": "ease-in"
+            }
+          ],
+          "pivot_x": [],
+          "pivot_y": [],
+          "playback_speed": [],
+          "wheel_rotation": []
+        }
+      }
+    ]
+  }
+}

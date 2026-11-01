@@ -1,3 +1,5 @@
+import { ProxyProgress } from './ProxyProgress'
+import { PerformanceSettings } from './PerformanceSettings'
 import { ViewportMenu } from './ViewportMenu'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -33,6 +35,7 @@ import { UI_STYLES, UI_PALETTES } from '../lib/uiStyles'
 import { AI_PROVIDERS, testAiConnectionFull, submitFineTuneJob, getFineTuneJobStatus, type AiProviderId } from '../lib/aiProviders'
 import { MODEL_CAPABILITIES, equivalentsFor, equivalentAcrossProviders, FINETUNE_BASES, type ModelCapability } from '../lib/modelCatalog'
 import { buildFineTuneDataset, downloadTextFile } from '../lib/fineTune'
+import { getGifProviderKey, setGifProviderKey } from '../lib/giphy'
 import {
   getDesktopInfo,
   toggleDesktopFullscreen,
@@ -141,6 +144,8 @@ export function TopBar() {
   const [ftJob, setFtJob] = useState<{ id: string; status: string; model: string | null } | null>(null)
   const [ftBusy, setFtBusy] = useState(false)
   const [ftMessage, setFtMessage] = useState('')
+  const [giphyApiKey, setGiphyApiKey] = useState(() => getGifProviderKey('giphy') || String(import.meta.env.VITE_GIPHY_API_KEY || ''))
+  const [klipyApiKey, setKlipyApiKey] = useState(() => getGifProviderKey('klipy') || String(import.meta.env.VITE_KLIPY_API_KEY || ''))
 
   const selectAiProvider = (id: AiProviderId) => {
     const provider = AI_PROVIDERS.find((item) => item.id === id)!
@@ -759,6 +764,7 @@ export function TopBar() {
         </div>
       </div>
 
+      <ProxyProgress />
       {settingsOpen && (
         <div
           ref={settingsRef}
@@ -915,6 +921,7 @@ export function TopBar() {
                   <p className="mt-3 text-[10px] leading-relaxed text-ink-500">
                     Adjusts viewport preview resolution. Timeline timing and project FPS remain unchanged.
                   </p>
+                  <PerformanceSettings />
                 </div>
               )}
 
@@ -1429,6 +1436,40 @@ export function TopBar() {
                     <strong>Enter an API key only.</strong> Never paste source code, prompts, passwords, recovery
                     codes, or other private information here. Browser requests expose the key to this tab and the
                     selected provider; use a restricted key with spending limits.
+                  </div>
+                  <div className="space-y-2 rounded-none border border-fuchsia-500/25 bg-fuchsia-500/5 p-2" data-testid="gif-provider-api-settings">
+                    <div>
+                      <p className="font-semibold text-ink-100">GIF and sticker provider keys</p>
+                      <p className="mt-0.5 text-[10px] leading-snug text-ink-500">Used by Media → GIF Library. Keys stay in this browser tab and are never written into projects or exports.</p>
+                    </div>
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider">GIPHY API key</span>
+                      <input
+                        data-testid="setting-giphy-api-key"
+                        aria-label="GIPHY API key"
+                        type="password"
+                        autoComplete="off"
+                        spellCheck={false}
+                        value={giphyApiKey}
+                        onChange={(event) => { setGiphyApiKey(event.target.value); setGifProviderKey('giphy', event.target.value) }}
+                        placeholder="GIPHY developer key"
+                        className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
+                      />
+                    </label>
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider">Klipy API key</span>
+                      <input
+                        data-testid="setting-klipy-api-key"
+                        aria-label="Klipy API key"
+                        type="password"
+                        autoComplete="off"
+                        spellCheck={false}
+                        value={klipyApiKey}
+                        onChange={(event) => { setKlipyApiKey(event.target.value); setGifProviderKey('klipy', event.target.value) }}
+                        placeholder="Klipy developer key"
+                        className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
+                      />
+                    </label>
                   </div>
                   <label className="block text-ink-300">
                     <span className="mb-1 block">Provider</span>

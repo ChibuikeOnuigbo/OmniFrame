@@ -32,7 +32,8 @@
     "tool": "import_video",
     "params": {
      "path": ".cache/speed-clock-qa/moving-source.mp4",
-     "fps": 24
+     "fps": 24,
+     "fit": "contain"
     },
     "out": {
      "clipId": "clip-1",
@@ -944,6 +945,7 @@
      },
      "mask": null,
      "blendMode": "source-over",
+     "blendKeys": [],
      "opacity": 0,
      "effects": {},
      "patch": null,
@@ -984,6 +986,7 @@
      },
      "mask": null,
      "blendMode": "source-over",
+     "blendKeys": [],
      "opacity": 1,
      "effects": {},
      "patch": null,

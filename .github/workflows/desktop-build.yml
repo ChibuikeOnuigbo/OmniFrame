@@ -4,7 +4,7 @@ name: Desktop build (Tauri)
 # the Vite build of src/) into native installers for Windows, Linux and macOS.
 #
 # Why CI: the Rust toolchain + crates.io access is all that the Tauri build
-# needs beyond npm. Running it here produces signed-unsigned-but-ready
+# needs beyond npm. Running it here produces unsigned
 # artifacts for every platform without any local toolchain.
 #
 # Triggers:
@@ -44,7 +44,7 @@ jobs:
       - name: Node toolchain
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Rust toolchain
@@ -66,6 +66,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Typecheck frontend
+        run: npm run typecheck
+
       - name: Build desktop installers
         uses: tauri-apps/tauri-action@v0
         env:
@@ -77,3 +80,13 @@ jobs:
           releaseName: 'OmniFrame Desktop ${{ github.ref_name }}'
           releaseDraft: true
           prerelease: false
+
+      - name: Preserve desktop installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: OmniFrame-${{ matrix.platform }}-${{ strategy.job-index }}
+          path: |
+            src-tauri/target/release/bundle/**
+            src-tauri/target/*/release/bundle/**
+          if-no-files-found: error
+          retention-days: 14
