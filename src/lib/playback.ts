@@ -36,6 +36,7 @@ function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<ty
 }
 import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
 import { mergeFxInstances, fxLocalTime } from './fxInstances'
+import { effectMaskRegions } from './effectMask'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -310,6 +311,8 @@ export class PreviewEngine {
   private scratchInUse = new Set<HTMLCanvasElement>()
   private adjustmentMaskCanvas: HTMLCanvasElement | null = null
   private shapeMatteCanvas: HTMLCanvasElement | null = null
+  private effectMaskMatteCanvas: HTMLCanvasElement | null = null
+  private effectMaskShapeCanvas: HTMLCanvasElement | null = null
   /** One bounded reusable surface avoids a full-canvas allocation per rigged layer. */
   private puppetCanvas: HTMLCanvasElement | null = null
   /** Resolve each PSD rig's hierarchy once per rendered frame. */
@@ -454,9 +457,79 @@ export class PreviewEngine {
     sctx.restore()
   }
 
-  /** Effect-region matte for adjustment clips. */
+  /** Effect-region matte for adjustment clips and ordinary clip effect stacks. */
   private applyAdjustmentMask(scratch: HTMLCanvasElement, mask: ClipAdjustmentMask) {
-    this.applyShapeMatte(scratch, { ...mask, rotation: 0, expansion: 0, opacity: 1 })
+    const regions = effectMaskRegions(mask)
+    if (regions.length === 0) return
+    if (!this.effectMaskMatteCanvas) this.effectMaskMatteCanvas = document.createElement('canvas')
+    if (!this.effectMaskShapeCanvas) this.effectMaskShapeCanvas = document.createElement('canvas')
+    const matte = this.effectMaskMatteCanvas
+    const shape = this.effectMaskShapeCanvas
+    for (const canvas of [matte, shape]) {
+      if (canvas.width !== this.width) canvas.width = this.width
+      if (canvas.height !== this.height) canvas.height = this.height
+    }
+    const mctx = matte.getContext('2d')!
+    mctx.setTransform(1, 0, 0, 1, 0, 0); mctx.clearRect(0, 0, matte.width, matte.height)
+    const ox = Math.max(0, (scratch.width - this.width) / 2)
+    const oy = Math.max(0, (scratch.height - this.height) / 2)
+    const paintRegion = (region: (typeof regions)[number]) => {
+      const sctx = shape.getContext('2d')!
+      sctx.setTransform(1, 0, 0, 1, 0, 0)
+      sctx.filter = 'none'; sctx.globalAlpha = 1; sctx.globalCompositeOperation = 'source-over'
+      sctx.clearRect(0, 0, shape.width, shape.height)
+      const cx = region.centerX * this.width
+      const cy = region.centerY * this.height
+      const w = Math.max(1, (region.shape === 'circle' ? region.width : region.width) * this.width)
+      const h = Math.max(1, (region.shape === 'circle' ? region.width * this.width : region.height * this.height))
+      sctx.save()
+      sctx.translate(cx, cy)
+      sctx.rotate(((region.rotation || 0) * Math.PI) / 180)
+      sctx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
+      sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
+      if (region.shape === 'rectangle') sctx.fillRect(-w / 2, -h / 2, w, h)
+      else if (region.shape === 'text') {
+        sctx.font = `700 ${Math.max(8, h)}px ${region.fontFamily || 'sans-serif'}`
+        sctx.textAlign = 'center'; sctx.textBaseline = 'middle'
+        sctx.fillText(region.text || 'MASK', 0, 0, w)
+      } else if (region.shape === 'custom' && region.points?.length && region.points.length >= 3) {
+        sctx.restore()
+        sctx.save()
+        sctx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
+        sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
+        sctx.beginPath()
+        region.points.forEach((point, index) => {
+          const x = point.x * this.width
+          const y = point.y * this.height
+          if (index === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y)
+        })
+        sctx.closePath(); sctx.fill()
+      } else {
+        sctx.beginPath(); sctx.ellipse(0, 0, w / 2, h / 2, 0, 0, Math.PI * 2); sctx.fill()
+      }
+      sctx.restore()
+      mctx.drawImage(shape, 0, 0)
+    }
+    regions.forEach(paintRegion)
+    const sctx = scratch.getContext('2d')!
+    sctx.save()
+    sctx.setTransform(1, 0, 0, 1, 0, 0)
+    sctx.filter = 'none'
+    if (scratch.width !== this.width || scratch.height !== this.height) {
+      sctx.clearRect(0, 0, scratch.width, oy)
+      sctx.clearRect(0, oy + this.height, scratch.width, scratch.height - oy - this.height)
+      sctx.clearRect(0, oy, ox, this.height)
+      sctx.clearRect(ox + this.width, oy, scratch.width - ox - this.width, this.height)
+    }
+    if (mask.inverted) {
+      mctx.globalCompositeOperation = 'source-out'
+      mctx.fillStyle = '#fff'; mctx.fillRect(0, 0, matte.width, matte.height)
+      mctx.globalCompositeOperation = 'source-over'
+      sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
+    } else {
+      sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
+    }
+    sctx.restore()
   }
 
   /** On-screen view region of a clip (canvas px): its placed frame,
@@ -1657,23 +1730,35 @@ export class PreviewEngine {
   ) {
     if (!clip.textStyle) return
     // Per-clip LUT isolation for text clips (same semantics as drawClip).
-    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled)) {
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || clip.adjustmentMask)) {
       const scratch = this.takeScratch()
       const octx = scratch.getContext('2d')!
       this.drawTextClip(octx, clip, time, true)
       const { stack } = this.buildLutStack(clip, time)
       if (stack.length) applyLutStackToCanvas(scratch, stack)
-      if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
+      let output = scratch
+      let clean: HTMLCanvasElement | null = null
+      if (clip.adjustmentMask) {
+        clean = this.takeScratch()
+        const cleanClip: Clip = { ...clip, effects: undefined, fxInstances: undefined, adjustment: undefined, adjustmentMask: undefined, mask: undefined }
+        this.drawTextClip(clean.getContext('2d')!, cleanClip, time, true)
+        this.applyAdjustmentMask(scratch, clip.adjustmentMask)
+        this.applyAdjustmentMask(clean, { ...clip.adjustmentMask, inverted: !clip.adjustmentMask.inverted })
+        clean.getContext('2d')!.drawImage(scratch, 0, 0)
+        output = clean
+      }
+      if (clip.mask?.enabled) this.applyClipVisualMask(output, clip.mask, Math.max(0, time - clip.start))
       const puSpec = (clip as unknown as { patch?: PatchUnderSpec }).patch
       if (puSpec?.strategy) {
-        applyPatchUnder(scratch.getContext('2d')!, puSpec, { x: 0, y: 0, w: this.width, h: this.height }, this.width, this.height)
+        applyPatchUnder(output.getContext('2d')!, puSpec, { x: 0, y: 0, w: this.width, h: this.height }, this.width, this.height)
       }
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
-        ctx.drawImage(scratch, 0, 0)
+        ctx.drawImage(output, 0, 0)
       } else {
-        ctx.drawImage(scratch, -this.width / 2, -this.height / 2)
+        ctx.drawImage(output, -this.width / 2, -this.height / 2)
       }
+      if (clean) this.releaseScratch(clean)
       this.releaseScratch(scratch)
       return
     }
@@ -2111,7 +2196,7 @@ export class PreviewEngine {
     // sibling content on the target canvas is untouched. A clip Mask uses the
     // same isolation: it mattes the clip's own graded pixels (only).
     const fxEff = this.effectsForRender(clip, time)
-    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || hasPixelGrade(fxEff) || hasClipFxLayers(fxEff) || hasDeviceOverlay(fxEff) || !!(clip as unknown as { patch?: unknown }).patch)) {
+    if (!skipLutIsolation && (clip.adjustment?.luts?.some((l) => l.enabled) || this.hasPreviewLutFor(clip, time) || clip.mask?.enabled || clip.adjustmentMask || hasPixelGrade(fxEff) || hasClipFxLayers(fxEff) || hasDeviceOverlay(fxEff) || !!(clip as unknown as { patch?: unknown }).patch)) {
       const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
       octx.translate(this.width, this.height) // frame origin at pad centre
@@ -2121,14 +2206,28 @@ export class PreviewEngine {
       if (hasPixelGrade(fxEff)) applyPixelGrade(scratch, fxEff!, Math.round(time * 24))
       if (hasNg(fxEff as NgEffect)) applyGlitchNG(scratch, fxEff as NgEffect, time)
       if (hasClipFxLayers(fxEff) || hasDeviceOverlay(fxEff)) applyClipFxLayers(scratch, fxEff!, time)
-      if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
+      let output = scratch
+      let clean: HTMLCanvasElement | null = null
+      if (clip.adjustmentMask) {
+        clean = this.takePadScratch()
+        const cleanClip: Clip = { ...clip, effects: undefined, fxInstances: undefined, adjustment: undefined, adjustmentMask: undefined, mask: undefined }
+        const cleanCtx = clean.getContext('2d')!
+        cleanCtx.translate(this.width, this.height)
+        this.drawClip(cleanCtx, el, cleanClip, asset, time, true, skipDeformation)
+        this.applyAdjustmentMask(scratch, clip.adjustmentMask)
+        this.applyAdjustmentMask(clean, { ...clip.adjustmentMask, inverted: !clip.adjustmentMask.inverted })
+        cleanCtx.setTransform(1, 0, 0, 1, 0, 0)
+        cleanCtx.drawImage(scratch, 0, 0)
+        output = clean
+      }
+      if (clip.mask?.enabled) this.applyClipVisualMask(output, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state (alpha/filter/transform of
       // an enclosing compound must keep applying to this clip's pixels).
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
-        ctx.drawImage(scratch, -this.width, -this.height) // screen-space target
+        ctx.drawImage(output, -this.width, -this.height) // screen-space target
       } else {
-        ctx.drawImage(scratch, -this.width / 2 - this.width, -this.height / 2 - this.height) // compound-local target
+        ctx.drawImage(output, -this.width / 2 - this.width, -this.height / 2 - this.height) // compound-local target
       }
       // AM Echo Keyframes / Motion Blur: ghost the rendered clip at past times
       const ghosts = [...pfxEchoTimes(fxEff, time), ...pfxMotionBlurSamples(fxEff, time, (this as unknown as { projectFps?: number }).projectFps || 24)]
@@ -2141,7 +2240,7 @@ export class PreviewEngine {
         const gy = this.height / 2 + gev.y * (this.height / PH) - vh / 2
         ctx.save()
         ctx.globalAlpha = (ctx.globalAlpha || 1) * g.alpha
-        ctx.drawImage(scratch, gx + this.width, gy + this.height, vw, vh)
+        ctx.drawImage(output, gx + this.width, gy + this.height, vw, vh)
         ctx.restore()
       }
       // device overlay lives in FRAME space, so it composites after the pad
@@ -2156,6 +2255,7 @@ export class PreviewEngine {
           ctx.restore()
         }
       }
+      if (clean) this.releasePadScratch(clean)
       this.releasePadScratch(scratch)
       return
     }
@@ -2384,7 +2484,7 @@ export class PreviewEngine {
     const hasNestedAdjustment = childClips.some((c) => c.kind === 'adjustment')
     const { stack: ownLuts } = this.buildLutStack(clip, time)
     const cFxEff = this.effectsForRender(clip, time)
-    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled || hasPixelGrade(cFxEff) || hasClipFxLayers(cFxEff) || hasDeviceOverlay(cFxEff))) {
+    if (!skipLutIsolation && (hasNestedAdjustment || ownLuts.length > 0 || clip.mask?.enabled || clip.adjustmentMask || hasPixelGrade(cFxEff) || hasClipFxLayers(cFxEff) || hasDeviceOverlay(cFxEff))) {
       const scratch = this.takePadScratch()
       const octx = scratch.getContext('2d')!
       octx.translate(this.width, this.height) // frame origin at pad centre
@@ -2392,15 +2492,30 @@ export class PreviewEngine {
       if (ownLuts.length) applyLutStackToCanvas(scratch, ownLuts)
       if (hasPixelGrade(cFxEff)) applyPixelGrade(scratch, cFxEff!, Math.round(time * 24))
       if (hasClipFxLayers(cFxEff) || hasDeviceOverlay(cFxEff)) applyClipFxLayers(scratch, cFxEff!, time)
-      if (clip.mask?.enabled) this.applyClipVisualMask(scratch, clip.mask, Math.max(0, time - clip.start))
+      let output = scratch
+      let clean: HTMLCanvasElement | null = null
+      if (clip.adjustmentMask) {
+        clean = this.takePadScratch()
+        const cleanCtx = clean.getContext('2d')!
+        cleanCtx.translate(this.width, this.height)
+        const cleanClip: Clip = { ...clip, effects: undefined, fxInstances: undefined, adjustment: undefined, adjustmentMask: undefined, mask: undefined }
+        this.drawCompoundContents(cleanCtx, cleanClip, time, st, trackMuted, childClips, childTracks)
+        this.applyAdjustmentMask(scratch, clip.adjustmentMask)
+        this.applyAdjustmentMask(clean, { ...clip.adjustmentMask, inverted: !clip.adjustmentMask.inverted })
+        cleanCtx.setTransform(1, 0, 0, 1, 0, 0)
+        cleanCtx.drawImage(scratch, 0, 0)
+        output = clean
+      }
+      if (clip.mask?.enabled) this.applyClipVisualMask(output, clip.mask, Math.max(0, time - clip.start))
       // Composite with the caller's current state intact (outer opacity /
       // filter / transform keep applying, exactly like non-isolated draws).
       const t = ctx.getTransform()
       if (t.a === 1 && t.b === 0 && t.c === 0 && t.d === 1 && t.e === 0 && t.f === 0) {
-        ctx.drawImage(scratch, -this.width, -this.height)
+        ctx.drawImage(output, -this.width, -this.height)
       } else {
-        ctx.drawImage(scratch, -this.width / 2 - this.width, -this.height / 2 - this.height)
+        ctx.drawImage(output, -this.width / 2 - this.width, -this.height / 2 - this.height)
       }
+      if (clean) this.releasePadScratch(clean)
       this.releasePadScratch(scratch)
       return
     }

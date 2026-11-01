@@ -848,7 +848,7 @@ class CreateText extends MCPTool {
   }
 }
 class EditElement extends MCPTool {
-  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), source inPoint, volume, mask, effects, blend/blend keyframes, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,effects?,opacity?,blendMode?,blendKeys?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
+  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), visibility mask, multi-region effect mask, effects, blend/blend keyframes, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,adjustmentMask?{enabled,inverted,regions[]},effects?,opacity?,blendMode?,blendKeys?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
   async run({ clipId, patch = {}, convert }) {
     const s = seq()
     const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
@@ -871,6 +871,7 @@ class EditElement extends MCPTool {
     if (patch.speedCurve === null) delete c.speedCurve
     else if (patch.speedCurve !== undefined) c.speedCurve = patch.speedCurve
     if (patch.mask !== undefined) c.mask = patch.mask
+    if (patch.adjustmentMask !== undefined) c.adjustmentMask = patch.adjustmentMask
     if (patch.effects) c.effects = { ...c.effects, ...patch.effects }
     if (patch.opacity !== undefined) c.opacity = patch.opacity
     if (patch.blendMode) c.blendMode = patch.blendMode

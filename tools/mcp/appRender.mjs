@@ -1,4 +1,5 @@
 import { blendAt } from '../../src/lib/blendModes.ts'
+import { effectMaskRegions } from '../../src/lib/effectMask.ts'
 // Headless renderer that speaks the APP's semantics, not the agent's style:
 // transforms come from CurveEngine.evaluateClipAnimation (the app's own key
 // evaluation), masks are ClipVisualMask shape mattes (centerX/Y, width/height,
@@ -250,6 +251,45 @@ export function applyShapeMatte(x, mask, W, H) {
   x.globalCompositeOperation = 'source-over'
 }
 
+/** Keep only the union of effect-mask regions on a processed layer. */
+export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
+  const regions = effectMaskRegions(mask)
+  if (!regions.length) return
+  const matte = makeCanvas(W, H)
+  const mx = matte.getContext('2d')
+  for (const region of regions) {
+    const shape = makeCanvas(W, H)
+    const sx = shape.getContext('2d')
+    const cx = region.centerX * W, cy = region.centerY * H
+    const rw = Math.max(1, region.width * W)
+    const rh = Math.max(1, (region.shape === 'circle' ? region.width * W : region.height * H))
+    sx.save(); sx.translate(cx, cy); sx.rotate((region.rotation || 0) * Math.PI / 180)
+    sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
+    sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
+    if (region.shape === 'rectangle') sx.fillRect(-rw / 2, -rh / 2, rw, rh)
+    else if (region.shape === 'text') {
+      sx.font = `700 ${Math.max(8, rh)}px ${region.fontFamily || 'sans-serif'}`
+      sx.textAlign = 'center'; sx.textBaseline = 'middle'; sx.fillText(region.text || 'MASK', 0, 0, rw)
+    } else if (region.shape === 'custom' && region.points?.length >= 3) {
+      sx.restore(); sx.save(); sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
+      sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
+      sx.beginPath(); region.points.forEach((point, i) => (i ? sx.lineTo(point.x * W, point.y * H) : sx.moveTo(point.x * W, point.y * H))); sx.closePath(); sx.fill()
+    } else { sx.beginPath(); sx.ellipse(0, 0, rw / 2, rh / 2, 0, 0, Math.PI * 2); sx.fill() }
+    sx.restore(); mx.drawImage(shape, 0, 0)
+  }
+  if (mask.inverted) {
+    mx.globalCompositeOperation = 'source-out'; mx.fillStyle = '#fff'; mx.fillRect(0, 0, matte.width, matte.height); mx.globalCompositeOperation = 'source-over'
+  }
+  x.save()
+  if (x.canvas.width !== W || x.canvas.height !== H) {
+    x.clearRect(0, 0, x.canvas.width, oy)
+    x.clearRect(0, oy + H, x.canvas.width, x.canvas.height - oy - H)
+    x.clearRect(0, oy, ox, H)
+    x.clearRect(ox + W, oy, x.canvas.width - ox - W, H)
+  }
+  x.globalCompositeOperation = 'destination-in'; x.drawImage(matte, ox, oy); x.restore()
+}
+
 const PU = await loadAppTs('src/lib/patchUnder.ts')
 export function applySmartPatchMatte(x, patch, r, seq) { PU.applyPatchUnder(x, patch, r, seq.w, seq.h) }
 
@@ -360,13 +400,28 @@ function drawSeq(x, seq, t, depth = 0) {
       const pxc = pad.getContext('2d')
       pxc.translate(seq.w, seq.h)
       drawSeq(pxc, clip.childSeq, innerT, depth + 1)
+      pxc.setTransform(1, 0, 0, 1, 0, 0)
+      let compoundOutput = pad
+      let compoundBase = null
+      if (clip.adjustmentMask) {
+        compoundBase = makeCanvas(pad.width, pad.height)
+        compoundBase.getContext('2d').drawImage(pad, 0, 0)
+      }
+      applyEffects(pxc, clip, pad.width, pad.height, t)
+      if (clip.adjustment?.luts?.length) applyClipLutsK(pxc, pad.width, pad.height, clip.adjustment.luts)
+      if (clip.adjustmentMask && compoundBase) {
+        applyEffectMaskK(pxc, clip.adjustmentMask, seq.w, seq.h, seq.w, seq.h)
+        applyEffectMaskK(compoundBase.getContext('2d'), { ...clip.adjustmentMask, inverted: !clip.adjustmentMask.inverted }, seq.w, seq.h, seq.w, seq.h)
+        compoundBase.getContext('2d').drawImage(pad, 0, 0)
+        compoundOutput = compoundBase
+      }
       x.save()
       x.translate(r.x + r.w / 2, r.y + r.h / 2)
       x.rotate((ev.rotationZ ?? 0) * Math.PI / 180)
       x.scale(ev.scaleX || 1, ev.scaleY || 1)
       x.globalAlpha = (clip.opacity ?? 1) * (ev.opacity ?? 1)
       x.globalCompositeOperation = blendAt(clip, t)
-      x.drawImage(pad, -1.5 * seq.w, -1.5 * seq.h)
+      x.drawImage(compoundOutput, -1.5 * seq.w, -1.5 * seq.h)
       x.restore()
       continue
     }
@@ -396,8 +451,8 @@ function drawSeq(x, seq, t, depth = 0) {
     // address canvas.height directly, so a pooled over-sized surface would crop
     // them. 1:1 blit means no Skia mipmap rebuild; the canvas itself is
     // ordinary reclaimable garbage (measured flat).
-    const s = makeCanvas(lw, lh)
-    const sx = s.getContext('2d')
+    let s = makeCanvas(lw, lh)
+    let sx = s.getContext('2d')
     const flip = cardFlipFactor(clip, t)
     sx.save()
     sx.translate(lw / 2, lh / 2); sx.scale(flip.sx, 1); sx.translate(-lw / 2, -lh / 2)
@@ -431,8 +486,20 @@ function drawSeq(x, seq, t, depth = 0) {
     sx.restore()
     if (flip.shade > 0) { sx.fillStyle = `rgba(0,0,0,${flip.shade})`; sx.fillRect(0, 0, lw, lh) }
     if (DF.hasDeformation(clip.deformation)) DF.applyCanvasDeformation(s,clip.deformation)
+    let effectBase = null
+    if (clip.adjustmentMask) {
+      effectBase = makeCanvas(lw, lh)
+      effectBase.getContext('2d').drawImage(s, 0, 0)
+    }
     applyEffects(sx, clip, lw, lh, t)
     if (clip.adjustment?.luts?.length) applyClipLutsK(sx, lw, lh, clip.adjustment.luts)
+    if (clip.adjustmentMask && effectBase) {
+      applyEffectMaskK(sx, clip.adjustmentMask, lw, lh)
+      applyEffectMaskK(effectBase.getContext('2d'), { ...clip.adjustmentMask, inverted: !clip.adjustmentMask.inverted }, lw, lh)
+      effectBase.getContext('2d').drawImage(s, 0, 0)
+      s = effectBase
+      sx = s.getContext('2d')
+    }
     if (clip.mask?.enabled && clip.mask.kind === 'matte' && clip.mask.alpha) {
       const m = clip.mask
       let mc = clip._matteCanvas

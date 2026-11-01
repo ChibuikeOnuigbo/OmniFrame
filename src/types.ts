@@ -838,15 +838,37 @@ export interface ClipAdjustment {
   luts: ClipLut[]
 }
 
-/** Spatial matte for an adjustment clip, in normalized sequence coordinates. */
+/** One additive region in an effect-only matte, in normalized sequence coordinates. */
+export interface ClipEffectMaskRegion {
+  id: string
+  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom'
+  centerX: number
+  centerY: number
+  width: number
+  height: number
+  rotation?: number
+  feather?: number
+  opacity?: number
+  text?: string
+  fontFamily?: string
+  points?: { x: number; y: number }[]
+}
+
+/**
+ * Spatial matte for a clip's effect stack. The original clip is retained and
+ * the processed result is composited through the union of `regions`. Legacy
+ * single-shape fields remain readable so existing projects round-trip.
+ */
 export interface ClipAdjustmentMask {
-  shape: 'ellipse' | 'rectangle'
+  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom'
   centerX: number // 0..1, left to right
   centerY: number // 0..1, top to bottom
   width: number // 0..1 of sequence width
   height: number // 0..1 of sequence height
   feather: number // blur radius in sequence pixels
   inverted: boolean
+  enabled?: boolean
+  regions?: ClipEffectMaskRegion[]
 }
 
 /**
