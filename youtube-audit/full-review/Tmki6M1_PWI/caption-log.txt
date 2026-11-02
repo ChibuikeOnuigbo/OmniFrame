@@ -1,0 +1,23 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=Tmki6M1_PWI
+[youtube] Tmki6M1_PWI: Downloading webpage
+[youtube] Tmki6M1_PWI: Downloading initial data API JSON
+[youtube] Tmki6M1_PWI: Downloading web embedded client config
+[youtube] Tmki6M1_PWI: Downloading player 11a45ffb-main
+[youtube] Tmki6M1_PWI: Downloading web embedded player API JSON
+[youtube] Tmki6M1_PWI: This video is age-restricted and YouTube is requiring account age-verification; some formats may be missing
+[youtube] Tmki6M1_PWI: Downloading web creator client config
+[youtube] Tmki6M1_PWI: Downloading web creator player API JSON
+[youtube] Tmki6M1_PWI: Downloading tv samsung player API JSON
+[youtube] Tmki6M1_PWI: Downloading web player API JSON
+[youtube] [pot:bgutil:http] Generating a gvs PO Token for web_creator client via bgutil HTTP server
+[youtube] [jsc:deno] Solving JS challenges using deno
+[info] Tmki6M1_PWI: Downloading subtitles: en-orig, en
+[info] Tmki6M1_PWI: Downloading 1 format(s): 399+251-7
+[info] Writing video subtitles to: review-out/Tmki6M1_PWI/source.en-orig.vtt
+
+[info] Writing video subtitles to: review-out/Tmki6M1_PWI/source.en.vtt
+
+
+
+ERROR: Did not get any data blocks
+ERROR: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests

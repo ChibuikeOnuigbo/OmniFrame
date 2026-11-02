@@ -1,0 +1,28 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=M2_vjAseOns
+[youtube] M2_vjAseOns: Downloading webpage
+[youtube] M2_vjAseOns: Downloading web embedded client config
+[youtube] M2_vjAseOns: Downloading player 11a45ffb-main
+[youtube] M2_vjAseOns: Downloading web embedded player API JSON
+[youtube] M2_vjAseOns: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] M2_vjAseOns: Downloading m3u8 information
+[info] M2_vjAseOns: Downloading subtitles: en-orig, en
+[info] M2_vjAseOns: Downloading 1 format(s): 137+251
+[info] Writing video subtitles to: review-out/M2_vjAseOns/source.en-orig.vtt
+[download] Destination: review-out/M2_vjAseOns/source.en-orig.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    7.00KiB at  Unknown B/s (00:00:00)
+[download]   14.91KiB at   11.12MiB/s (00:00:00)
+[download] 100% of   14.91KiB in 00:00:00 at 245.77KiB/s
+[info] Writing video subtitles to: review-out/M2_vjAseOns/source.en.vtt
+[download] Destination: review-out/M2_vjAseOns/source.en.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    7.00KiB at  Unknown B/s (00:00:00)
+[download]   14.91KiB at   13.79MiB/s (00:00:00)
+[download] 100% of   14.91KiB in 00:00:00 at 295.58KiB/s
+[info] Writing video metadata as JSON to: review-out/M2_vjAseOns/source.info.json
+

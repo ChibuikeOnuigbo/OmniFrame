@@ -1,0 +1,22 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=N7-UHBSPs7Y
+[youtube] N7-UHBSPs7Y: Downloading webpage
+[youtube] N7-UHBSPs7Y: Downloading web embedded client config
+[youtube] N7-UHBSPs7Y: Downloading player 11a45ffb-main
+[youtube] N7-UHBSPs7Y: Downloading web embedded player API JSON
+[youtube] N7-UHBSPs7Y: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] N7-UHBSPs7Y: Downloading m3u8 information
+[info] N7-UHBSPs7Y: Downloading subtitles: en-orig, en
+[info] N7-UHBSPs7Y: Downloading 1 format(s): 399+251
+[info] Writing video subtitles to: review-out/N7-UHBSPs7Y/source.en-orig.vtt
+[download] Destination: review-out/N7-UHBSPs7Y/source.en-orig.vtt
+
+[download]    814.00B at  Unknown B/s (00:00:00)
+[download] 100% of    814.00B in 00:00:00 at 2.94KiB/s
+[info] Writing video subtitles to: review-out/N7-UHBSPs7Y/source.en.vtt
+[download] Destination: review-out/N7-UHBSPs7Y/source.en.vtt
+
+[download]    814.00B at  Unknown B/s (00:00:00)
+[download] 100% of    814.00B in 00:00:00 at 11.75KiB/s
+[info] Writing video metadata as JSON to: review-out/N7-UHBSPs7Y/source.info.json
+

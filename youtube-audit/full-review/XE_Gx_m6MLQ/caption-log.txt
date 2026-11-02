@@ -1,0 +1,8 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=XE_Gx_m6MLQ
+[youtube] XE_Gx_m6MLQ: Downloading webpage
+[youtube] XE_Gx_m6MLQ: Downloading web embedded client config
+[youtube] XE_Gx_m6MLQ: Downloading player 11a45ffb-main
+[youtube] XE_Gx_m6MLQ: Downloading web embedded player API JSON
+[youtube] XE_Gx_m6MLQ: Downloading tv samsung player API JSON
+
+ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable

@@ -1,0 +1,41 @@
+{
+  "id": "xLs0M7fFfQA",
+  "url": "https://www.youtube.com/watch?v=xLs0M7fFfQA",
+  "title": "MiniMax Audio - Better than ElevenLabs? For creators\u2026 YES.  \ud83d\ude4c\ud83c\udffb - #minimaxaudio #texttospeech",
+  "channel": "@Hancybox",
+  "shard": 1,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 81.868,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 41,
+  "contact_sheet_count": 2,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg",
+    "sheet-002.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 144,
+        "height": 256,
+        "r_frame_rate": "6383/250"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "81.868000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "5Wy0zVw5wgg",
+  "url": "https://www.youtube.com/watch?v=5Wy0zVw5wgg",
+  "title": "chat-history link 5Wy0zVw5wgg",
+  "channel": "chat-history",
+  "shard": 6,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 5.028,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 3,
+  "contact_sheet_count": 1,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 144,
+        "height": 256,
+        "r_frame_rate": "6/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "5.028000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}
