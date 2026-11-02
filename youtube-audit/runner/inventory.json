@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-02T09:42:48Z",
- "total": 445,
+ "generated": "2026-11-02T12:57:58Z",
+ "total": 446,
  "videos": [
   {
    "id": "fGm0SBFTj3o",
@@ -3859,6 +3859,19 @@
    "format": "videos",
    "formats": [
     "videos"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "hlxInGBIakg",
+   "url": "https://www.youtube.com/watch?v=hlxInGBIakg",
+   "title": "Check Pinned comment for the Link",
+   "duration": "0",
+   "channel": "@Hancybox",
+   "format": "shorts",
+   "formats": [
+    "shorts"
    ],
    "status": "INVENTORIED",
    "access": "pending-batch"
