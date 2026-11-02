@@ -7,12 +7,14 @@ import {
   getStockProviderKey,
   LOCAL_LIBRARY_MODELS,
   resolvePolyHavenModelUrl,
+  resolvePolyHavenImageUrl,
   searchStockImages,
   setStockProviderKey,
   type AssetLibrarySource,
   type LibraryModel,
   type StockImageResult,
   type StockProvider,
+  type PolyHavenKind,
 } from '../lib/assetLibrary'
 
 const SOURCES: Array<{ id: AssetLibrarySource; label: string; note: string; icon: typeof Box }> = [
@@ -65,10 +67,28 @@ async function addStockImageToTimeline(result: StockImageResult): Promise<void> 
   state.addClipToTrack(trackId, assetId, state.playhead)
 }
 
+async function addPolyHavenImageToTimeline(asset: LibraryModel, url: string): Promise<void> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`The Poly Haven ${asset.kind} could not be downloaded (${response.status}).`)
+  const blob = await response.blob()
+  const objectUrl = URL.createObjectURL(blob)
+  const dimensions = await new Promise<{ width: number; height: number }>((resolve) => {
+    const image = new window.Image()
+    image.onload = () => resolve({ width: image.naturalWidth || asset.maxResolution || 4096, height: image.naturalHeight || asset.maxResolution || 4096 })
+    image.onerror = () => resolve({ width: asset.maxResolution || 4096, height: asset.kind === 'hdri' ? Math.round((asset.maxResolution || 4096) / 2) : asset.maxResolution || 4096 })
+    image.src = objectUrl
+  })
+  const state = useEditor.getState()
+  const assetId = `polyhaven-${asset.kind}-${asset.id}-${Date.now().toString(36)}`
+  state.addAsset({ id: assetId, name: asset.name, kind: 'image', url: objectUrl, duration: 5, width: dimensions.width, height: dimensions.height, size: blob.size, thumbnail: asset.thumbnail, sourceUrl: asset.sourceUrl, attribution: `${asset.author} / Poly Haven · CC0` })
+  state.addClipToTrack(state.createTrack('video'), assetId, state.playhead)
+}
+
 export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: boolean; onClose: () => void; onOpenPackBrowser?: () => void }) {
   const [source, setSource] = useState<AssetLibrarySource>('local')
   const [query, setQuery] = useState('')
-  const [polyModels, setPolyModels] = useState<LibraryModel[]>([])
+  const [polyKind, setPolyKind] = useState<PolyHavenKind>('model')
+  const [polyAssets, setPolyAssets] = useState<Partial<Record<PolyHavenKind, LibraryModel[]>>>({})
   const [stockResults, setStockResults] = useState<StockImageResult[]>([])
   const [apiKeys, setApiKeys] = useState<Record<StockProvider, string>>(() => ({
     unsplash: getStockProviderKey('unsplash') || String(import.meta.env.VITE_UNSPLASH_API_KEY || ''),
@@ -80,20 +100,21 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
   const [addedId, setAddedId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!open || source !== 'polyhaven' || polyModels.length) return
+    if (!open || source !== 'polyhaven' || polyAssets[polyKind]?.length) return
     let cancelled = false
     setLoading(true)
-    setStatus('Indexing the complete Poly Haven model catalog…')
-    fetchPolyHavenModels()
+    setStatus(`Indexing the complete Poly Haven ${polyKind === 'model' ? 'model' : polyKind === 'texture' ? 'texture' : 'HDRI'} catalog…`)
+    fetchPolyHavenModels(polyKind)
       .then((models) => {
         if (cancelled) return
-        setPolyModels(models)
-        setStatus(`${models.length.toLocaleString()} CC0 models indexed. Search runs locally.`)
+        setPolyAssets((catalogs) => ({ ...catalogs, [polyKind]: models }))
+        const noun = polyKind === 'hdri' ? (models.length === 1 ? 'HDRI' : 'HDRIs') : `${polyKind}${models.length === 1 ? '' : 's'}`
+        setStatus(`${models.length.toLocaleString()} CC0 ${noun} indexed. Search runs locally.`)
       })
       .catch((error) => { if (!cancelled) setStatus(error instanceof Error ? error.message : 'Poly Haven could not be reached.') })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [open, source, polyModels.length])
+  }, [open, source, polyKind, polyAssets])
 
   useEffect(() => {
     if (!open || (source !== 'unsplash' && source !== 'pexels')) return
@@ -128,7 +149,7 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  const models = source === 'local' ? LOCAL_LIBRARY_MODELS : polyModels
+  const models = source === 'local' ? LOCAL_LIBRARY_MODELS : polyAssets[polyKind] || []
   const visibleModels = useMemo(() => {
     const needle = query.trim().toLowerCase()
     const matched = needle ? models.filter((item) => `${item.name} ${item.description} ${item.categories.join(' ')} ${item.author}`.toLowerCase().includes(needle)) : models
@@ -142,10 +163,15 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
     setBusyId(model.id)
     setStatus(model.modelUrl ? `Adding ${model.name}…` : `Resolving ${model.name} from Poly Haven…`)
     try {
-      const url = model.modelUrl || await resolvePolyHavenModelUrl(model.id)
-      addModelToScene(model, url)
+      if (source === 'polyhaven' && model.kind && model.kind !== 'model') {
+        const url = await resolvePolyHavenImageUrl(model.id, model.kind)
+        await addPolyHavenImageToTimeline(model, url)
+      } else {
+        const url = model.modelUrl || await resolvePolyHavenModelUrl(model.id)
+        addModelToScene(model, url)
+      }
       setAddedId(model.id)
-      setStatus(`${model.name} added to the 3D scene. Select the 3D tab to place and animate it.`)
+      setStatus(model.kind && model.kind !== 'model' ? `${model.name} imported as editable 2.5D timeline media.` : `${model.name} added to the 3D scene. Select the 3D tab to place and animate it.`)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'This model could not be added.')
     } finally {
@@ -208,6 +234,8 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
               {loading && <Loader2 size={17} className="animate-spin text-brand-300" aria-label="Loading" />}
             </div>
 
+            {source === 'polyhaven' && <div className="mb-3 flex w-fit rounded-md border border-ink-700 bg-ink-900 p-0.5" role="tablist" aria-label="Poly Haven asset type">{(['model', 'texture', 'hdri'] as const).map((kind) => <button key={kind} type="button" role="tab" aria-selected={polyKind === kind} data-testid={`asset-library-poly-${kind}`} onClick={() => { setPolyKind(kind); setAddedId(null) }} className={`h-7 rounded px-3 text-[10px] font-semibold ${polyKind === kind ? 'bg-brand text-white' : 'text-ink-400 hover:text-white'}`}>{kind === 'model' ? 'Models' : kind === 'texture' ? 'Textures' : 'HDRIs'}</button>)}</div>}
+
             {!isStock ? (
               <div className="grid grid-cols-[repeat(auto-fill,minmax(175px,1fr))] gap-3" data-testid="asset-library-model-grid">
                 {visibleModels.map((model) => (
@@ -217,7 +245,7 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
                       <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-0.5 text-[8px] font-semibold text-white">{model.license}</span>
                     </div>
                     <div className="p-2.5"><h3 className="truncate text-[11px] font-semibold text-ink-100" title={model.name}>{model.name}</h3><p className="mt-0.5 truncate text-[9px] text-ink-500">{model.author}{model.polycount ? ` · ${model.polycount.toLocaleString()} polygons` : ''}</p>
-                      <div className="mt-2 flex gap-1.5"><button type="button" data-testid={`asset-library-add-${model.id.replace(/[^a-z0-9]+/gi, '-')}`} disabled={!!busyId} onClick={() => void importModel(model)} className="flex h-7 flex-1 items-center justify-center gap-1 rounded bg-brand text-[10px] font-semibold text-white hover:bg-brand/85 disabled:opacity-50">{busyId === model.id ? <Loader2 size={11} className="animate-spin" /> : addedId === model.id ? <Check size={11} /> : <Download size={11} />}{addedId === model.id ? 'Added' : 'Add to scene'}</button><a href={model.sourceUrl} target="_blank" rel="noreferrer" aria-label={`Open source for ${model.name}`} className="grid h-7 w-7 place-items-center rounded border border-ink-700 text-ink-400 hover:text-white"><ExternalLink size={11} /></a></div>
+                      <div className="mt-2 flex gap-1.5"><button type="button" data-testid={`asset-library-add-${model.id.replace(/[^a-z0-9]+/gi, '-')}`} disabled={!!busyId} onClick={() => void importModel(model)} className="flex h-7 flex-1 items-center justify-center gap-1 rounded bg-brand text-[10px] font-semibold text-white hover:bg-brand/85 disabled:opacity-50">{busyId === model.id ? <Loader2 size={11} className="animate-spin" /> : addedId === model.id ? <Check size={11} /> : <Download size={11} />}{addedId === model.id ? 'Added' : model.kind && model.kind !== 'model' ? 'Add as 2.5D' : 'Add to scene'}</button><a href={model.sourceUrl} target="_blank" rel="noreferrer" aria-label={`Open source for ${model.name}`} className="grid h-7 w-7 place-items-center rounded border border-ink-700 text-ink-400 hover:text-white"><ExternalLink size={11} /></a></div>
                     </div>
                   </article>
                 ))}

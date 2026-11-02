@@ -15,7 +15,10 @@ export interface LibraryModel {
   categories: string[]
   polycount?: number
   maxResolution?: number
+  kind?: PolyHavenKind
 }
+
+export type PolyHavenKind = 'model' | 'texture' | 'hdri'
 
 export interface StockImageResult {
   id: string
@@ -83,12 +86,14 @@ type PolyHavenAssetRecord = {
   thumbnail_url?: string
 }
 
-let polyHavenCatalogPromise: Promise<LibraryModel[]> | null = null
+const polyHavenCatalogPromises = new Map<PolyHavenKind, Promise<LibraryModel[]>>()
 
 /** Load Poly Haven's complete model index once, then search locally without API keys. */
-export function fetchPolyHavenModels(): Promise<LibraryModel[]> {
-  if (!polyHavenCatalogPromise) {
-    polyHavenCatalogPromise = fetch('https://api.polyhaven.com/assets?t=models')
+export function fetchPolyHavenModels(kind: PolyHavenKind = 'model'): Promise<LibraryModel[]> {
+  let catalogPromise = polyHavenCatalogPromises.get(kind)
+  if (!catalogPromise) {
+    const endpointKind = kind === 'model' ? 'models' : kind === 'texture' ? 'textures' : 'hdris'
+    catalogPromise = fetch(`https://api.polyhaven.com/assets?t=${endpointKind}`)
       .then(async (response) => {
         if (!response.ok) throw new Error(`Poly Haven catalog failed (${response.status}).`)
         const data = await response.json() as Record<string, PolyHavenAssetRecord>
@@ -103,14 +108,16 @@ export function fetchPolyHavenModels(): Promise<LibraryModel[]> {
           categories: [...(item.categories || []), ...(item.tags || [])],
           polycount: item.polycount,
           maxResolution: item.max_resolution?.[0],
+          kind,
         })).sort((a, b) => a.name.localeCompare(b.name))
       })
       .catch((error) => {
-        polyHavenCatalogPromise = null
+        polyHavenCatalogPromises.delete(kind)
         throw error
       })
+    polyHavenCatalogPromises.set(kind, catalogPromise)
   }
-  return polyHavenCatalogPromise
+  return catalogPromise
 }
 
 type PolyHavenFile = { url?: string; size?: number }
@@ -126,6 +133,20 @@ export async function resolvePolyHavenModelUrl(id: string): Promise<string> {
     if (entry?.gltf?.url) return entry.gltf.url
   }
   throw new Error('This Poly Haven model has no browser-compatible GLTF file.')
+}
+
+/** Resolve a 4K browser image for a Poly Haven texture or a tone-mapped HDRI. */
+export async function resolvePolyHavenImageUrl(id: string, kind: Exclude<PolyHavenKind, 'model'>): Promise<string> {
+  const response = await fetch(`https://api.polyhaven.com/files/${encodeURIComponent(id)}`)
+  if (!response.ok) throw new Error(`Poly Haven file manifest failed (${response.status}).`)
+  const manifest = await response.json() as Record<string, any>
+  if (kind === 'hdri' && manifest.tonemapped?.url) return String(manifest.tonemapped.url)
+  for (const resolution of ['4k', '2k', '1k']) {
+    const diffuse = manifest.Diffuse?.[resolution]
+    if (diffuse?.jpg?.url) return String(diffuse.jpg.url)
+    if (diffuse?.png?.url) return String(diffuse.png.url)
+  }
+  throw new Error(`This Poly Haven ${kind} has no browser-compatible image file.`)
 }
 
 export async function searchStockImages(provider: StockProvider, query: string, apiKey: string): Promise<StockImageResult[]> {

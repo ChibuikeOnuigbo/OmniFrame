@@ -23,6 +23,8 @@ try {
       softbox: { name: 'Softbox Light', categories: ['lighting'], tags: ['studio'], authors: { 'QA Artist': 'All' }, max_resolution: [4096, 4096], polycount: 8200, description: 'A studio softbox.', thumbnail_url: '/models/transition_assets/thumbnails/device_tv_crt_knobs.png' },
     }),
   }))
+  await page.route('https://api.polyhaven.com/assets?t=textures', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ brushed_metal: { name: 'Brushed Metal', categories: ['metal'], tags: ['PBR'], authors: { 'QA Artist': 'All' }, max_resolution: [4096, 4096], description: 'A seamless metal texture.', thumbnail_url: '/models/transition_assets/thumbnails/object_shell_whip.png' } }) }))
+  await page.route('https://api.polyhaven.com/assets?t=hdris', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ studio_evening: { name: 'Studio Evening', categories: ['studio'], tags: ['lighting'], authors: { 'QA Artist': 'All' }, max_resolution: [16384, 8192], description: 'A studio lighting environment.', thumbnail_url: '/models/transition_assets/thumbnails/device_tv_crt_silver.png' } }) }))
   await page.goto(process.env.URL || 'http://127.0.0.1:5173/#studio', { waitUntil: 'networkidle' })
   await page.getByTestId('left-tab-threed').click()
   await page.getByTestId('open-3d-asset-library').click()
@@ -43,6 +45,12 @@ try {
   await page.getByText(/2 CC0 models indexed/i).waitFor()
   assert.equal(await page.getByText('Studio Camera').count(), 1)
   await page.screenshot({ path: path.join(out, 'poly-haven.png'), fullPage: true })
+  await page.getByTestId('asset-library-poly-texture').click()
+  await page.getByText(/1 CC0 texture indexed/i).waitFor()
+  assert.equal(await page.getByText('Brushed Metal').count(), 1)
+  await page.getByTestId('asset-library-poly-hdri').click()
+  await page.getByText(/1 CC0 HDRI indexed/i).waitFor()
+  assert.equal(await page.getByText('Studio Evening').count(), 1)
 
   await page.getByTestId('asset-library-open-pack').click()
   await page.getByTestId('pack-browser-modal').waitFor({ state: 'visible' })
