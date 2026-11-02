@@ -13,6 +13,6 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    2.63KiB at  Unknown B/s (00:00:00)
-[download] 100% of    2.63KiB in 00:00:00 at 15.55KiB/s
+[download] 100% of    2.63KiB in 00:00:00 at 24.77KiB/s
 [info] Writing video metadata as JSON to: review-out/h_D720n75B4/source.info.json
 

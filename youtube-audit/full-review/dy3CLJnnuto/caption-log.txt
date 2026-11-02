@@ -11,7 +11,7 @@
 [info] Writing video subtitles to: review-out/dy3CLJnnuto/source.en.vtt
 [download] Destination: review-out/dy3CLJnnuto/source.en.vtt
 
-[download]    982.00B at  Unknown B/s (00:00:00)
-[download] 100% of    982.00B in 00:00:00 at 5.45KiB/s
+[download]    982.00B at  Unknown B/s (00:00:11)
+[download] 100% of    982.00B in 00:00:11 at 85.23B/s
 [info] Writing video metadata as JSON to: review-out/dy3CLJnnuto/source.info.json
 

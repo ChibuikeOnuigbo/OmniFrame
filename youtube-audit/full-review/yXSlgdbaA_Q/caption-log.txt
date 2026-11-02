@@ -9,5 +9,9 @@
 [info] yXSlgdbaA_Q: Downloading subtitles: en
 [info] yXSlgdbaA_Q: Downloading 1 format(s): 399+251
 [info] Writing video subtitles to: review-out/yXSlgdbaA_Q/source.en.vtt
+[download] Destination: review-out/yXSlgdbaA_Q/source.en.vtt
 
-ERROR: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests
+[download]    749.00B at  Unknown B/s (00:00:00)
+[download] 100% of    749.00B in 00:00:00 at 4.83KiB/s
+[info] Writing video metadata as JSON to: review-out/yXSlgdbaA_Q/source.info.json
+

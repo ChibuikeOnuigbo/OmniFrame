@@ -12,6 +12,6 @@
 [download] Destination: review-out/fx55eFCUw_I/source.en.vtt
 
 [download]    570.00B at  Unknown B/s (00:00:00)
-[download] 100% of    570.00B in 00:00:00 at 2.85KiB/s
+[download] 100% of    570.00B in 00:00:00 at 2.96KiB/s
 [info] Writing video metadata as JSON to: review-out/fx55eFCUw_I/source.info.json
 

@@ -1,11 +1,9 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=L7RueAR-5Zc
 [youtube] L7RueAR-5Zc: Downloading webpage
-[youtube] L7RueAR-5Zc: Downloading initial data API JSON
 [youtube] L7RueAR-5Zc: Downloading web embedded client config
 [youtube] L7RueAR-5Zc: Downloading player 11a45ffb-main
 [youtube] L7RueAR-5Zc: Downloading web embedded player API JSON
 [youtube] L7RueAR-5Zc: Downloading tv samsung player API JSON
-[youtube] L7RueAR-5Zc: Downloading web player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
 [youtube] L7RueAR-5Zc: Downloading m3u8 information
 [info] L7RueAR-5Zc: Downloading subtitles: en-orig, en
@@ -16,13 +14,13 @@
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    3.07KiB at  Unknown B/s (00:00:00)
-[download] 100% of    3.07KiB in 00:00:00 at 17.21KiB/s
+[download] 100% of    3.07KiB in 00:00:00 at 73.26KiB/s
 [info] Writing video subtitles to: review-out/L7RueAR-5Zc/source.en.vtt
 [download] Destination: review-out/L7RueAR-5Zc/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    3.07KiB at  Unknown B/s (00:00:00)
-[download] 100% of    3.07KiB in 00:00:00 at 73.67KiB/s
+[download] 100% of    3.07KiB in 00:00:00 at 31.17KiB/s
 [info] Writing video metadata as JSON to: review-out/L7RueAR-5Zc/source.info.json
 

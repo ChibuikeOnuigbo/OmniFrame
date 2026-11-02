@@ -13,22 +13,22 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    7.00KiB at    6.54MiB/s (00:00:00)
-[download]   15.00KiB at   11.01MiB/s (00:00:00)
-[download]   31.00KiB at   18.59MiB/s (00:00:00)
-[download]   63.00KiB at   30.50MiB/s (00:00:00)
-[download]  112.49KiB at   44.32MiB/s (00:00:00)
-[download] 100% of  112.49KiB in 00:00:00 at 1.31MiB/s
+[download]    7.00KiB at    6.78MiB/s (00:00:00)
+[download]   15.00KiB at   11.23MiB/s (00:00:00)
+[download]   31.00KiB at   18.95MiB/s (00:00:00)
+[download]   63.00KiB at   31.48MiB/s (00:00:00)
+[download]  112.49KiB at   45.18MiB/s (00:00:00)
+[download] 100% of  112.49KiB in 00:00:00 at 781.14KiB/s
 [info] Writing video subtitles to: review-out/Tvd7qiK_gUA/source.en.vtt
 [download] Destination: review-out/Tvd7qiK_gUA/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    7.00KiB at  Unknown B/s (00:00:00)
-[download]   15.00KiB at   12.24MiB/s (00:00:00)
-[download]   31.00KiB at   20.34MiB/s (00:00:00)
-[download]   63.00KiB at   33.31MiB/s (00:00:00)
-[download]  112.49KiB at   47.44MiB/s (00:00:00)
-[download] 100% of  112.49KiB in 00:00:00 at 1.70MiB/s
+[download]   15.00KiB at   11.80MiB/s (00:00:00)
+[download]   31.00KiB at   19.53MiB/s (00:00:00)
+[download]   63.00KiB at   32.18MiB/s (00:00:00)
+[download]  112.49KiB at   46.49MiB/s (00:00:00)
+[download] 100% of  112.49KiB in 00:00:00 at 930.95KiB/s
 [info] Writing video metadata as JSON to: review-out/Tvd7qiK_gUA/source.info.json
 

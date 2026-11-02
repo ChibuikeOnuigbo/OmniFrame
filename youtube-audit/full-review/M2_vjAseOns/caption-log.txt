@@ -14,15 +14,15 @@
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    7.00KiB at  Unknown B/s (00:00:00)
-[download]   14.91KiB at   11.12MiB/s (00:00:00)
-[download] 100% of   14.91KiB in 00:00:00 at 245.77KiB/s
+[download]   14.91KiB at   12.62MiB/s (00:00:00)
+[download] 100% of   14.91KiB in 00:00:00 at 258.82KiB/s
 [info] Writing video subtitles to: review-out/M2_vjAseOns/source.en.vtt
 [download] Destination: review-out/M2_vjAseOns/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    7.00KiB at  Unknown B/s (00:00:00)
-[download]   14.91KiB at   13.79MiB/s (00:00:00)
-[download] 100% of   14.91KiB in 00:00:00 at 295.58KiB/s
+[download]   14.91KiB at   13.46MiB/s (00:00:00)
+[download] 100% of   14.91KiB in 00:00:00 at 443.53KiB/s
 [info] Writing video metadata as JSON to: review-out/M2_vjAseOns/source.info.json
 

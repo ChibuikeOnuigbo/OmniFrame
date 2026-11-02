@@ -12,11 +12,11 @@
 [download] Destination: review-out/exRqiCBW-u8/source.en-orig.vtt
 
 [download]    909.00B at  Unknown B/s (00:00:00)
-[download] 100% of    909.00B in 00:00:00 at 16.94KiB/s
+[download] 100% of    909.00B in 00:00:00 at 7.43KiB/s
 [info] Writing video subtitles to: review-out/exRqiCBW-u8/source.en.vtt
 [download] Destination: review-out/exRqiCBW-u8/source.en.vtt
 
 [download]    909.00B at  Unknown B/s (00:00:00)
-[download] 100% of    909.00B in 00:00:00 at 18.52KiB/s
+[download] 100% of    909.00B in 00:00:00 at 8.84KiB/s
 [info] Writing video metadata as JSON to: review-out/exRqiCBW-u8/source.info.json
 

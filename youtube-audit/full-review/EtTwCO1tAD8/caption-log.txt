@@ -14,13 +14,13 @@
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    5.96KiB at  Unknown B/s (00:00:00)
-[download] 100% of    5.96KiB in 00:00:00 at 143.06KiB/s
+[download] 100% of    5.96KiB in 00:00:00 at 185.40KiB/s
 [info] Writing video subtitles to: review-out/EtTwCO1tAD8/source.en.vtt
 [download] Destination: review-out/EtTwCO1tAD8/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    5.96KiB at  Unknown B/s (00:00:00)
-[download] 100% of    5.96KiB in 00:00:00 at 169.83KiB/s
+[download] 100% of    5.96KiB in 00:00:00 at 107.23KiB/s
 [info] Writing video metadata as JSON to: review-out/EtTwCO1tAD8/source.info.json
 

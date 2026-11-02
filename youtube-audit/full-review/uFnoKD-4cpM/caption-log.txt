@@ -13,14 +13,14 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    6.11KiB at  Unknown B/s (00:00:00)
-[download] 100% of    6.11KiB in 00:00:00 at 133.64KiB/s
+[download]    6.11KiB at    5.42MiB/s (00:00:00)
+[download] 100% of    6.11KiB in 00:00:00 at 93.04KiB/s
 [info] Writing video subtitles to: review-out/uFnoKD-4cpM/source.en.vtt
 [download] Destination: review-out/uFnoKD-4cpM/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    6.11KiB at    5.89MiB/s (00:00:00)
-[download] 100% of    6.11KiB in 00:00:00 at 122.83KiB/s
+[download]    6.11KiB at  Unknown B/s (00:00:00)
+[download] 100% of    6.11KiB in 00:00:00 at 62.56KiB/s
 [info] Writing video metadata as JSON to: review-out/uFnoKD-4cpM/source.info.json
 

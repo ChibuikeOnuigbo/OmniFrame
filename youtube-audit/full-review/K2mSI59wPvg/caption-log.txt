@@ -12,11 +12,11 @@
 [download] Destination: review-out/K2mSI59wPvg/source.en-orig.vtt
 
 [download]    219.00B at  Unknown B/s (00:00:00)
-[download] 100% of    219.00B in 00:00:00 at 3.77KiB/s
+[download] 100% of    219.00B in 00:00:00 at 5.18KiB/s
 [info] Writing video subtitles to: review-out/K2mSI59wPvg/source.en.vtt
 [download] Destination: review-out/K2mSI59wPvg/source.en.vtt
 
 [download]    219.00B at  Unknown B/s (00:00:00)
-[download] 100% of    219.00B in 00:00:00 at 6.46KiB/s
+[download] 100% of    219.00B in 00:00:00 at 4.33KiB/s
 [info] Writing video metadata as JSON to: review-out/K2mSI59wPvg/source.info.json
 

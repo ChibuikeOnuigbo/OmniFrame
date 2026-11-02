@@ -12,11 +12,11 @@
 [download] Destination: review-out/7WHDyTE9Mq8/source.en-orig.vtt
 
 [download]    101.00B at  Unknown B/s (00:00:00)
-[download] 100% of    101.00B in 00:00:00 at 383.47B/s
+[download] 100% of    101.00B in 00:00:00 at 375.36B/s
 [info] Writing video subtitles to: review-out/7WHDyTE9Mq8/source.en.vtt
 [download] Destination: review-out/7WHDyTE9Mq8/source.en.vtt
 
 [download]    101.00B at  Unknown B/s (00:00:00)
-[download] 100% of    101.00B in 00:00:00 at 917.70B/s
+[download] 100% of    101.00B in 00:00:00 at 1.64KiB/s
 [info] Writing video metadata as JSON to: review-out/7WHDyTE9Mq8/source.info.json
 

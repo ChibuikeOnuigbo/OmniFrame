@@ -13,12 +13,12 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    2.32KiB at  Unknown B/s (00:00:00)
-[download] 100% of    2.32KiB in 00:00:00 at 41.96KiB/s
+[download] 100% of    2.32KiB in 00:00:00 at 62.43KiB/s
 [info] Writing video subtitles to: review-out/hTEZOX48TN4/source.en.vtt
 [download] Destination: review-out/hTEZOX48TN4/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    2.32KiB at  Unknown B/s (00:00:00)
-[download] 100% of    2.32KiB in 00:00:00 at 70.18KiB/s
+[download] 100% of    2.32KiB in 00:00:00 at 39.45KiB/s
 [info] Writing video metadata as JSON to: review-out/hTEZOX48TN4/source.info.json
 

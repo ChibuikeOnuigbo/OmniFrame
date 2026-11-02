@@ -1,11 +1,9 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=evsxqvwn65o
 [youtube] evsxqvwn65o: Downloading webpage
-[youtube] evsxqvwn65o: Downloading initial data API JSON
 [youtube] evsxqvwn65o: Downloading web embedded client config
 [youtube] evsxqvwn65o: Downloading player 11a45ffb-main
 [youtube] evsxqvwn65o: Downloading web embedded player API JSON
 [youtube] evsxqvwn65o: Downloading tv samsung player API JSON
-[youtube] evsxqvwn65o: Downloading web player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
 [youtube] evsxqvwn65o: Downloading m3u8 information
 [info] evsxqvwn65o: Downloading subtitles: en

@@ -1,11 +1,9 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=JuxN-ccLRmA
 [youtube] JuxN-ccLRmA: Downloading webpage
-[youtube] JuxN-ccLRmA: Downloading initial data API JSON
 [youtube] JuxN-ccLRmA: Downloading web embedded client config
 [youtube] JuxN-ccLRmA: Downloading player 11a45ffb-main
 [youtube] JuxN-ccLRmA: Downloading web embedded player API JSON
 [youtube] JuxN-ccLRmA: Downloading tv samsung player API JSON
-[youtube] JuxN-ccLRmA: Downloading web player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
 [youtube] JuxN-ccLRmA: Downloading m3u8 information
 [info] JuxN-ccLRmA: Downloading subtitles: en
@@ -14,6 +12,6 @@
 [download] Destination: review-out/JuxN-ccLRmA/source.en.vtt
 
 [download]    955.00B at  Unknown B/s (00:00:00)
-[download] 100% of    955.00B in 00:00:00 at 4.73KiB/s
+[download] 100% of    955.00B in 00:00:00 at 18.06KiB/s
 [info] Writing video metadata as JSON to: review-out/JuxN-ccLRmA/source.info.json
 

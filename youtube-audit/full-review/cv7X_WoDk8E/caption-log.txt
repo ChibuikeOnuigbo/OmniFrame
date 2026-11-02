@@ -9,5 +9,9 @@
 [info] cv7X_WoDk8E: Downloading subtitles: en
 [info] cv7X_WoDk8E: Downloading 1 format(s): 399+251
 [info] Writing video subtitles to: review-out/cv7X_WoDk8E/source.en.vtt
+[download] Destination: review-out/cv7X_WoDk8E/source.en.vtt
 
-ERROR: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests
+[download]    755.00B at  Unknown B/s (00:00:00)
+[download] 100% of    755.00B in 00:00:00 at 14.91KiB/s
+[info] Writing video metadata as JSON to: review-out/cv7X_WoDk8E/source.info.json
+

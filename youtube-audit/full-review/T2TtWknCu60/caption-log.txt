@@ -12,11 +12,11 @@
 [download] Destination: review-out/T2TtWknCu60/source.en-orig.vtt
 
 [download]    602.00B at  Unknown B/s (00:00:00)
-[download] 100% of    602.00B in 00:00:00 at 6.41KiB/s
+[download] 100% of    602.00B in 00:00:00 at 11.18KiB/s
 [info] Writing video subtitles to: review-out/T2TtWknCu60/source.en.vtt
 [download] Destination: review-out/T2TtWknCu60/source.en.vtt
 
 [download]    602.00B at  Unknown B/s (00:00:00)
-[download] 100% of    602.00B in 00:00:00 at 11.27KiB/s
+[download] 100% of    602.00B in 00:00:00 at 14.63KiB/s
 [info] Writing video metadata as JSON to: review-out/T2TtWknCu60/source.info.json
 

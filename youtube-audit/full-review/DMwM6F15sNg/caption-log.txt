@@ -11,14 +11,14 @@
 [info] Writing video subtitles to: review-out/DMwM6F15sNg/source.en-orig.vtt
 [download] Destination: review-out/DMwM6F15sNg/source.en-orig.vtt
 
-[download]    1.00KiB at  Unknown B/s (00:00:00)
-[download]    2.31KiB at  Unknown B/s (00:00:00)
-[download] 100% of    2.31KiB in 00:00:00 at 20.28KiB/s
+[download]    1.00KiB at  Unknown B/s (00:00:01)
+[download]    2.31KiB at  Unknown B/s (00:00:01)
+[download] 100% of    2.31KiB in 00:00:01 at 1.17KiB/s
 [info] Writing video subtitles to: review-out/DMwM6F15sNg/source.en.vtt
 [download] Destination: review-out/DMwM6F15sNg/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    2.31KiB at  Unknown B/s (00:00:00)
-[download] 100% of    2.31KiB in 00:00:00 at 26.26KiB/s
+[download] 100% of    2.31KiB in 00:00:00 at 39.67KiB/s
 [info] Writing video metadata as JSON to: review-out/DMwM6F15sNg/source.info.json
 

@@ -12,11 +12,11 @@
 [download] Destination: review-out/ZrwjaDc__ZM/source.en-orig.vtt
 
 [download]    587.00B at  Unknown B/s (00:00:00)
-[download] 100% of    587.00B in 00:00:00 at 10.99KiB/s
+[download] 100% of    587.00B in 00:00:00 at 13.28KiB/s
 [info] Writing video subtitles to: review-out/ZrwjaDc__ZM/source.en.vtt
 [download] Destination: review-out/ZrwjaDc__ZM/source.en.vtt
 
 [download]    587.00B at  Unknown B/s (00:00:00)
-[download] 100% of    587.00B in 00:00:00 at 16.41KiB/s
+[download] 100% of    587.00B in 00:00:00 at 18.87KiB/s
 [info] Writing video metadata as JSON to: review-out/ZrwjaDc__ZM/source.info.json
 

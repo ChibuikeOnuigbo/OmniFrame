@@ -12,6 +12,6 @@
 [download] Destination: review-out/7nFduBo1Stk/source.en.vtt
 
 [download]    728.00B at  Unknown B/s (00:00:00)
-[download] 100% of    728.00B in 00:00:00 at 5.47KiB/s
+[download] 100% of    728.00B in 00:00:00 at 3.56KiB/s
 [info] Writing video metadata as JSON to: review-out/7nFduBo1Stk/source.info.json
 

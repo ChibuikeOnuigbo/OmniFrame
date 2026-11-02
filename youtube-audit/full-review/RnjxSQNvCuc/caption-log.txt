@@ -13,6 +13,6 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    1.02KiB at  Unknown B/s (00:00:00)
-[download] 100% of    1.02KiB in 00:00:00 at 3.56KiB/s
+[download] 100% of    1.02KiB in 00:00:00 at 3.72KiB/s
 [info] Writing video metadata as JSON to: review-out/RnjxSQNvCuc/source.info.json
 

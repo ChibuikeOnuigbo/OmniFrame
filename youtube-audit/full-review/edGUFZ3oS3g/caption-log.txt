@@ -9,5 +9,9 @@
 [info] edGUFZ3oS3g: Downloading subtitles: en
 [info] edGUFZ3oS3g: Downloading 1 format(s): 399+251
 [info] Writing video subtitles to: review-out/edGUFZ3oS3g/source.en.vtt
+[download] Destination: review-out/edGUFZ3oS3g/source.en.vtt
 
-ERROR: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests
+[download]    653.00B at  Unknown B/s (00:00:00)
+[download] 100% of    653.00B in 00:00:00 at 5.01KiB/s
+[info] Writing video metadata as JSON to: review-out/edGUFZ3oS3g/source.info.json
+

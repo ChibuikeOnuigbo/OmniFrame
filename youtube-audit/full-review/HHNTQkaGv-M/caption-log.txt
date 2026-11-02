@@ -13,14 +13,14 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    3.82KiB at    3.47MiB/s (00:00:00)
-[download] 100% of    3.82KiB in 00:00:00 at 68.06KiB/s
+[download]    3.82KiB at  Unknown B/s (00:00:00)
+[download] 100% of    3.82KiB in 00:00:00 at 66.79KiB/s
 [info] Writing video subtitles to: review-out/HHNTQkaGv-M/source.en.vtt
 [download] Destination: review-out/HHNTQkaGv-M/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    3.82KiB at    3.62MiB/s (00:00:00)
-[download] 100% of    3.82KiB in 00:00:00 at 86.54KiB/s
+[download]    3.82KiB at  Unknown B/s (00:00:00)
+[download] 100% of    3.82KiB in 00:00:00 at 115.69KiB/s
 [info] Writing video metadata as JSON to: review-out/HHNTQkaGv-M/source.info.json
 

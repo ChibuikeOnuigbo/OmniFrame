@@ -1,11 +1,9 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=vtsTN2a4L2U
 [youtube] vtsTN2a4L2U: Downloading webpage
-[youtube] vtsTN2a4L2U: Downloading initial data API JSON
 [youtube] vtsTN2a4L2U: Downloading web embedded client config
 [youtube] vtsTN2a4L2U: Downloading player 11a45ffb-main
 [youtube] vtsTN2a4L2U: Downloading web embedded player API JSON
 [youtube] vtsTN2a4L2U: Downloading tv samsung player API JSON
-[youtube] vtsTN2a4L2U: Downloading web player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
 [youtube] vtsTN2a4L2U: Downloading m3u8 information
 [info] vtsTN2a4L2U: Downloading subtitles: en-orig, en
@@ -15,12 +13,12 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    1.14KiB at  Unknown B/s (00:00:00)
-[download] 100% of    1.14KiB in 00:00:00 at 9.37KiB/s
+[download] 100% of    1.14KiB in 00:00:00 at 25.09KiB/s
 [info] Writing video subtitles to: review-out/vtsTN2a4L2U/source.en.vtt
 [download] Destination: review-out/vtsTN2a4L2U/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    1.14KiB at  Unknown B/s (00:00:00)
-[download] 100% of    1.14KiB in 00:00:00 at 28.65KiB/s
+[download] 100% of    1.14KiB in 00:00:00 at 10.70KiB/s
 [info] Writing video metadata as JSON to: review-out/vtsTN2a4L2U/source.info.json
 

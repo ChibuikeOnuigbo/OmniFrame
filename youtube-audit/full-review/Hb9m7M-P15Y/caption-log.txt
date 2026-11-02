@@ -12,11 +12,11 @@
 [download] Destination: review-out/Hb9m7M-P15Y/source.en-orig.vtt
 
 [download]    182.00B at  Unknown B/s (00:00:00)
-[download] 100% of    182.00B in 00:00:00 at 2.74KiB/s
+[download] 100% of    182.00B in 00:00:00 at 2.43KiB/s
 [info] Writing video subtitles to: review-out/Hb9m7M-P15Y/source.en.vtt
 [download] Destination: review-out/Hb9m7M-P15Y/source.en.vtt
 
 [download]    182.00B at  Unknown B/s (00:00:00)
-[download] 100% of    182.00B in 00:00:00 at 5.06KiB/s
+[download] 100% of    182.00B in 00:00:00 at 1.54KiB/s
 [info] Writing video metadata as JSON to: review-out/Hb9m7M-P15Y/source.info.json
 

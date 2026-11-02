@@ -12,11 +12,11 @@
 [download] Destination: review-out/iB-TehC1kOs/source.en-orig.vtt
 
 [download]    354.00B at  Unknown B/s (00:00:00)
-[download] 100% of    354.00B in 00:00:00 at 3.30KiB/s
+[download] 100% of    354.00B in 00:00:00 at 3.72KiB/s
 [info] Writing video subtitles to: review-out/iB-TehC1kOs/source.en.vtt
 [download] Destination: review-out/iB-TehC1kOs/source.en.vtt
 
 [download]    354.00B at  Unknown B/s (00:00:00)
-[download] 100% of    354.00B in 00:00:00 at 10.66KiB/s
+[download] 100% of    354.00B in 00:00:00 at 4.31KiB/s
 [info] Writing video metadata as JSON to: review-out/iB-TehC1kOs/source.info.json
 

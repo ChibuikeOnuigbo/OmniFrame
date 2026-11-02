@@ -12,11 +12,11 @@
 [download] Destination: review-out/p0cp8uUpc9M/source.en-orig.vtt
 
 [download]    223.00B at  Unknown B/s (00:00:00)
-[download] 100% of    223.00B in 00:00:00 at 4.20KiB/s
+[download] 100% of    223.00B in 00:00:00 at 4.30KiB/s
 [info] Writing video subtitles to: review-out/p0cp8uUpc9M/source.en.vtt
 [download] Destination: review-out/p0cp8uUpc9M/source.en.vtt
 
 [download]    223.00B at  Unknown B/s (00:00:00)
-[download] 100% of    223.00B in 00:00:00 at 4.19KiB/s
+[download] 100% of    223.00B in 00:00:00 at 5.15KiB/s
 [info] Writing video metadata as JSON to: review-out/p0cp8uUpc9M/source.info.json
 
