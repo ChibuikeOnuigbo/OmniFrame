@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AppWindow, Box, ChevronRight, Clapperboard, Folder, FolderOpen, Layers, MousePointer2, Search, Smartphone, Sparkles } from 'lucide-react'
 import { useEditor } from '../store'
 import type { ClipEffect, CursorPack, Primitive3D } from '../types'
 import { PACK_ASSETS, PACK_BUNDLES, PACK_H, PACK_W, packAssetUrl, type PackAssetDef, type PackBundleDef, type PackSection } from '../lib/desktopPack'
 import { PackBrowserModal } from './PackBrowserModal'
+import { AssetLibraryModal } from './AssetLibraryModal'
 import { previewClipEffect, previewEffectLayer } from '../lib/visualPreviewActions'
 import { HScrollStrip } from './HScrollStrip'
 
@@ -556,6 +557,7 @@ export function PackFolder({
 
 export function DesktopPackPanel() {
   const [browserOpen, setBrowserOpen] = useState(false)
+  const [assetLibraryOpen, setAssetLibraryOpen] = useState(false)
   const [section, setSection] = useState<PackSection>('windows')
   const [recipeNote, setRecipeNote] = useState('')
   const [briefNote, setBriefNote] = useState('')
@@ -574,6 +576,12 @@ export function DesktopPackPanel() {
   const sceneCount = useEditor((s) => s.scene3DObjects.length)
   const setIs3DMode = useEditor((s) => s.setIs3DMode)
   const setLeftTab = useEditor((s) => s.setLeftTab)
+
+  useEffect(() => {
+    const openBrowser = () => setBrowserOpen(true)
+    window.addEventListener('omniframe:open-pack-browser', openBrowser)
+    return () => window.removeEventListener('omniframe:open-pack-browser', openBrowser)
+  }, [])
 
   const searching = query.trim().length > 0
   const needle = query.trim().toLowerCase()
@@ -1060,7 +1068,16 @@ export function DesktopPackPanel() {
           </>
         )}
       </div>
-      <PackBrowserModal open={browserOpen} onClose={() => setBrowserOpen(false)} />
+      <PackBrowserModal
+        open={browserOpen}
+        onClose={() => setBrowserOpen(false)}
+        onOpenAssetLibrary={() => { setBrowserOpen(false); setAssetLibraryOpen(true) }}
+      />
+      <AssetLibraryModal
+        open={assetLibraryOpen}
+        onClose={() => setAssetLibraryOpen(false)}
+        onOpenPackBrowser={() => { setAssetLibraryOpen(false); setBrowserOpen(true) }}
+      />
     </div>
   )
 }

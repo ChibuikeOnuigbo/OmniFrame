@@ -14,9 +14,11 @@ import {
   Unlink,
   ChevronRight,
   Sliders,
+  FolderOpen,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
+import { AssetLibraryModal } from './AssetLibraryModal'
 
 export function ThreePanel() {
   const setWorkspacePreset = useEditor((s) => s.setWorkspacePreset)
@@ -42,6 +44,7 @@ export function ThreePanel() {
 
   const [cameraPaintActive, setCameraPaintActive] = useState(false)
   const [targetMatId, setTargetMatId] = useState<string>(materials[0]?.id || '')
+  const [assetLibraryOpen, setAssetLibraryOpen] = useState(false)
 
   const currentMat = materials.find((m) => m.id === targetMatId) || materials[0]
   const currentTex = currentMat ? textures.find((t) => t.id === currentMat.textureId) : null
@@ -121,6 +124,15 @@ export function ThreePanel() {
 
           {/* Preset workspace */}
           <div className="space-y-1">
+            <button
+              type="button"
+              data-testid="open-3d-asset-library"
+              onClick={() => setAssetLibraryOpen(true)}
+              className="mb-1.5 flex w-full items-center justify-between rounded-lg border border-cyan-400/35 bg-cyan-500/10 px-2.5 py-2 text-xs font-semibold text-cyan-100 transition-colors hover:border-cyan-300 hover:bg-cyan-500/15"
+            >
+              <span className="flex items-center gap-1.5"><FolderOpen size={14} /> Browse 3D & Stock Assets</span>
+              <ChevronRight size={14} />
+            </button>
             <button
               type="button"
               data-testid="activate-3d-preset-btn"
@@ -399,6 +411,15 @@ export function ThreePanel() {
           </div>
         </div>
       )}
+      <AssetLibraryModal
+        open={assetLibraryOpen}
+        onClose={() => setAssetLibraryOpen(false)}
+        onOpenPackBrowser={() => {
+          setAssetLibraryOpen(false)
+          setLeftTab('pack')
+          window.setTimeout(() => window.dispatchEvent(new CustomEvent('omniframe:open-pack-browser')), 0)
+        }}
+      />
     </div>
   )
 }

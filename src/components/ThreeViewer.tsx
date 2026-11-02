@@ -1,6 +1,7 @@
 import { usePerformanceSettings } from '../lib/performanceSettings'
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import {
   RotateCcw,
   Maximize2,
@@ -80,7 +81,7 @@ export function ThreeViewer({
   const threeMaskSelection = useEditor((s) => s.threeMaskSelection)
   const setThreeMaskSelection = useEditor((s) => s.setThreeMaskSelection)
   const clearThreeMaskSelection = useEditor((s) => s.clearThreeMaskSelection)
-  const sceneObject = useEditor((s) => s.scene3DObjects[0])
+  const sceneObject = useEditor((s) => s.scene3DObjects.find((object) => object.id === s.selected3DObjectId) || s.scene3DObjects[0])
   const updateScene3DObject = useEditor((s) => s.updateScene3DObject)
   const threeMaskToolActive = leftTab === 'threed' && activeSubMode === 'threed-mask' && threeMaskMode !== 'off'
 
@@ -568,7 +569,33 @@ export function ThreeViewer({
       object.scale.set(sceneObject?.scale.x ?? 1, sceneObject?.scale.y ?? 1, sceneObject?.scale.z ?? 1)
     }
 
-    if (primitive === 'wheel') {
+    let cancelled = false
+    if (sceneObject?.modelUrl) {
+      mat.dispose()
+      new GLTFLoader().loadAsync(sceneObject.modelUrl).then((gltf) => {
+        if (cancelled || !sceneRef.current) {
+          disposeObject(gltf.scene)
+          return
+        }
+        const model = gltf.scene
+        model.name = sceneObject.name
+        // Normalize wildly different source units into an editor-friendly box.
+        const bounds = new THREE.Box3().setFromObject(model)
+        const size = bounds.getSize(new THREE.Vector3())
+        const center = bounds.getCenter(new THREE.Vector3())
+        const largest = Math.max(size.x, size.y, size.z, 0.001)
+        model.position.sub(center)
+        const normalized = new THREE.Group()
+        normalized.name = `${sceneObject.name}-model`
+        normalized.add(model)
+        model.scale.setScalar(1.6 / largest)
+        applyTransform(normalized)
+        objectMeshRef.current = normalized
+        sceneRef.current.add(normalized)
+      }).catch((error) => {
+        console.warn(`Could not load 3D model ${sceneObject.name}`, error)
+      })
+    } else if (primitive === 'wheel') {
       mat.dispose() // Wheel parts have their own materials.
       // High-detail 3D Wheel: Rim + Spokes + Outer Tire + Center Hub
       const wheelGroup = new THREE.Group()
@@ -645,7 +672,10 @@ export function ThreeViewer({
       objectMeshRef.current = mesh
       scene.add(mesh)
     }
+    return () => { cancelled = true }
   }, [
+    sceneObject?.id,
+    sceneObject?.modelUrl,
     primitive,
     wireframe,
     materialRoughness,
@@ -1100,6 +1130,7 @@ export function ThreeViewer({
 
         {/* 3D Floating Primitive Selectors (Wheel, Cube, Sphere, Torus, Diamond, Plane) */}
         <div className="flex items-center gap-1 shrink-0">
+          {sceneObject?.modelUrl && <span data-testid="three-model-badge" title={sceneObject.name} className="max-w-28 truncate rounded border border-cyan-400/40 bg-cyan-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-cyan-200">Model · {sceneObject.name}</span>}
           {(['wheel', 'cube', 'sphere', 'torus', 'diamond', 'plane'] as const).map((prim) => (
             <button
               key={prim}
@@ -1108,10 +1139,10 @@ export function ThreeViewer({
               title={`Change 3D Object to ${prim}`}
               onClick={() => {
                 setPrimitive(prim)
-                if (sceneObject) updateScene3DObject(sceneObject.id, { type: prim })
+                if (sceneObject) updateScene3DObject(sceneObject.id, { type: prim, modelUrl: undefined, sourceUrl: undefined, attribution: undefined, license: undefined })
               }}
               className={`px-1.5 py-0.5 rounded text-[10px] capitalize font-medium transition-colors ${
-                primitive === prim
+                !sceneObject?.modelUrl && primitive === prim
                   ? 'bg-brand/20 text-brand-400 border border-brand/40 font-semibold'
                   : 'text-ink-400 hover:bg-ink-800 hover:text-white'
               }`}
