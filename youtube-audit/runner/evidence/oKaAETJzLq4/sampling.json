@@ -1,0 +1,79 @@
+{
+  "scene_frames": [],
+  "source": "src.webm",
+  "duration_seconds": 16.388,
+  "duration_source": "ffprobe acquired media",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 240,
+        "height": 426,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "16.388000"
+    }
+  },
+  "frames": [
+    {
+      "file": "u00.jpg",
+      "time_seconds": 0.682833
+    },
+    {
+      "file": "u01.jpg",
+      "time_seconds": 2.0485
+    },
+    {
+      "file": "u02.jpg",
+      "time_seconds": 3.414167
+    },
+    {
+      "file": "u03.jpg",
+      "time_seconds": 4.779833
+    },
+    {
+      "file": "u04.jpg",
+      "time_seconds": 6.1455
+    },
+    {
+      "file": "u05.jpg",
+      "time_seconds": 7.511167
+    },
+    {
+      "file": "u06.jpg",
+      "time_seconds": 8.876833
+    },
+    {
+      "file": "u07.jpg",
+      "time_seconds": 10.2425
+    },
+    {
+      "file": "u08.jpg",
+      "time_seconds": 11.608167
+    },
+    {
+      "file": "u09.jpg",
+      "time_seconds": 12.973833
+    },
+    {
+      "file": "u10.jpg",
+      "time_seconds": 14.3395
+    },
+    {
+      "file": "u11.jpg",
+      "time_seconds": 15.705167
+    }
+  ],
+  "fit": "contain with letterbox; never stretch",
+  "warnings": [
+    "Scene-change samples unavailable: Command '['ffmpeg', '-y', '-v', 'info', '-i', 'audit-out/evidence/oKaAETJzLq4/src.webm', '-vf', \"select='gt(scene,0.4)',showinfo,scale=640:360:force_original_aspect_ratio=decrease,pad=640:360:(ow-iw)/2:(oh-ih)/2,setsar=1\", '-vsync', 'vfr', '-frames:v', '6', '-q:v', '5', '/tmp/omni-scene-8bi7f7oh/s%d"
+  ],
+  "visual_review": "pending",
+  "audio_review": "not performed by frame extractor"
+}

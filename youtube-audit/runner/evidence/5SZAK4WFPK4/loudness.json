@@ -1,0 +1,26 @@
+edia file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:57.133000000
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
+      DURATION        : 00:00:57.168000000
+frame=  531 fps=0.0 q=-0.0 size=N/A time=00:00:14.40 bitrate=N/A speed=28.8x elapsed=0:00:00.50    
+frame= 1029 fps=1029 q=-0.0 size=N/A time=00:00:31.00 bitrate=N/A speed=  31x elapsed=0:00:01.00    
+frame= 1521 fps=1014 q=-0.0 size=N/A time=00:00:47.40 bitrate=N/A speed=31.6x elapsed=0:00:01.50    
+[opus @ 0x6311239f5a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x76db50002080] 
+{
+	"input_i" : "-14.13",
+	"input_tp" : "-6.45",
+	"input_lra" : "1.80",
+	"input_thresh" : "-24.19",
+	"output_i" : "-24.04",
+	"output_tp" : "-16.22",
+	"output_lra" : "1.90",
+	"output_thresh" : "-34.11",
+	"normalization_type" : "dynamic",
+	"target_offset" : "0.04"
+}
+[out#0/null @ 0x631123a3b240] video:696KiB audio:42858KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 1714 fps=976 q=-0.0 Lsize=N/A time=00:00:57.13 bitrate=N/A speed=32.5x elapsed=0:00:01.75    

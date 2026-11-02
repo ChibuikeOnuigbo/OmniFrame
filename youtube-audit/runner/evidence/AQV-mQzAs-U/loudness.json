@@ -1,17 +1,15 @@
-lt)
-    Metadata:
-      encoder         : Lavc62.11.100 wrapped_avframe
-      HANDLER_NAME    : ISO Media file produced by Google Inc.
+O Media file produced by Google Inc.
       VENDOR_ID       : [0][0][0][0]
       DURATION        : 00:00:53.666000000
   Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
     Metadata:
       encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:53.708000000
-frame=  606 fps=0.0 q=-0.0 size=N/A time=00:00:16.90 bitrate=N/A speed=33.8x elapsed=0:00:00.50    
-frame= 1206 fps=1206 q=-0.0 size=N/A time=00:00:36.90 bitrate=N/A speed=36.9x elapsed=0:00:01.00    
-[opus @ 0x5c561c006a00] Error parsing Opus packet header.
-[Parsed_loudnorm_0 @ 0x734420002080] 
+frame=  507 fps=0.0 q=-0.0 size=N/A time=00:00:13.60 bitrate=N/A speed=27.2x elapsed=0:00:00.50    
+frame=  966 fps=966 q=-0.0 size=N/A time=00:00:28.90 bitrate=N/A speed=28.9x elapsed=0:00:01.00    
+frame= 1428 fps=952 q=-0.0 size=N/A time=00:00:44.30 bitrate=N/A speed=29.5x elapsed=0:00:01.50    
+[opus @ 0x619f63bc7a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x7775e8002080] 
 {
 	"input_i" : "-4.92",
 	"input_tp" : "2.70",
@@ -24,5 +22,5 @@ frame= 1206 fps=1206 q=-0.0 size=N/A time=00:00:36.90 bitrate=N/A speed=36.9x el
 	"normalization_type" : "dynamic",
 	"target_offset" : "-0.51"
 }
-[out#0/null @ 0x5c561c04c240] video:654KiB audio:40263KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 1610 fps=1157 q=-0.0 Lsize=N/A time=00:00:53.66 bitrate=N/A speed=38.6x elapsed=0:00:01.39    
+[out#0/null @ 0x619f63c0d240] video:654KiB audio:40263KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 1610 fps=907 q=-0.0 Lsize=N/A time=00:00:53.66 bitrate=N/A speed=30.2x elapsed=0:00:01.77    
