@@ -1,0 +1,42 @@
+{
+  "id": "Q9Aka1vrJVQ",
+  "url": "https://www.youtube.com/watch?v=Q9Aka1vrJVQ",
+  "title": "Alight Motion Flip Layer effect\ud83c\udccf#alightmotion #alightmotiontutorial #animation #hancybox",
+  "channel": "@Hancybox",
+  "shard": 5,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 104.133,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 53,
+  "contact_sheet_count": 3,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg",
+    "sheet-002.jpg",
+    "sheet-003.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 144,
+        "height": 256,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "104.133000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}

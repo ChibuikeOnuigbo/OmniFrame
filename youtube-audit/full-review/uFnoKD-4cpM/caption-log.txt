@@ -1,0 +1,26 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=uFnoKD-4cpM
+[youtube] uFnoKD-4cpM: Downloading webpage
+[youtube] uFnoKD-4cpM: Downloading web embedded client config
+[youtube] uFnoKD-4cpM: Downloading player 11a45ffb-main
+[youtube] uFnoKD-4cpM: Downloading web embedded player API JSON
+[youtube] uFnoKD-4cpM: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] uFnoKD-4cpM: Downloading m3u8 information
+[info] uFnoKD-4cpM: Downloading subtitles: en-orig, en
+[info] uFnoKD-4cpM: Downloading 1 format(s): 399+251-12
+[info] Writing video subtitles to: review-out/uFnoKD-4cpM/source.en-orig.vtt
+[download] Destination: review-out/uFnoKD-4cpM/source.en-orig.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    6.11KiB at  Unknown B/s (00:00:00)
+[download] 100% of    6.11KiB in 00:00:00 at 133.64KiB/s
+[info] Writing video subtitles to: review-out/uFnoKD-4cpM/source.en.vtt
+[download] Destination: review-out/uFnoKD-4cpM/source.en.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    6.11KiB at    5.89MiB/s (00:00:00)
+[download] 100% of    6.11KiB in 00:00:00 at 122.83KiB/s
+[info] Writing video metadata as JSON to: review-out/uFnoKD-4cpM/source.info.json
+

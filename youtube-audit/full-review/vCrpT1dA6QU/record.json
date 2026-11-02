@@ -1,0 +1,38 @@
+{
+  "id": "vCrpT1dA6QU",
+  "url": "https://www.youtube.com/watch?v=vCrpT1dA6QU",
+  "title": "Raster extrude - Alight motion #phonk #alightmotiontutorial",
+  "channel": "@Hancybox",
+  "shard": 2,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 59.228,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 30,
+  "contact_sheet_count": 2,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg",
+    "sheet-002.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 144,
+        "height": 256,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "59.228000"
+    }
+  },
+  "caption_files": []
+}

@@ -1,0 +1,40 @@
+{
+  "id": "uFnoKD-4cpM",
+  "url": "https://www.youtube.com/watch?v=uFnoKD-4cpM",
+  "title": "chat-history link uFnoKD-4cpM",
+  "channel": "chat-history",
+  "shard": 2,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 49.408,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 25,
+  "contact_sheet_count": 1,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 144,
+        "height": 256,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "49.408000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}

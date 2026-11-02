@@ -13,11 +13,13 @@ import {
   Info,
   X,
   Box,
+  Sparkles,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { MediaAsset } from '../types'
 import { formatClock } from '../lib/time'
 import { getLayeredArtworkInfo } from '../lib/layeredArtworkMetadata'
+import { GiphyBrowser } from './GiphyBrowser'
 
 type MediaFilter = 'all' | 'video' | 'image' | 'audio' | 'threed'
 
@@ -41,6 +43,7 @@ export function MediaPanel() {
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<MediaFilter>('all')
   const [infoAsset, setInfoAsset] = useState<MediaAsset | null>(null)
+  const [giphyOpen, setGiphyOpen] = useState(false)
   const infoArtwork = infoAsset ? getLayeredArtworkInfo(infoAsset) : undefined
 
   const shown = useMemo(() => {
@@ -224,6 +227,16 @@ export function MediaPanel() {
           </label>
           <button
             type="button"
+            data-testid="giphy-open"
+            title="Search GIPHY for GIFs and memes"
+            aria-label="Open GIPHY"
+            onClick={() => setGiphyOpen((open) => !open)}
+            className={`grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors ${giphyOpen ? 'border-fuchsia-400 bg-fuchsia-500 text-white' : 'border-ink-700 bg-ink-900 text-fuchsia-300 hover:border-fuchsia-400/70'}`}
+          >
+            <Sparkles size={14} />
+          </button>
+          <button
+            type="button"
             data-testid="media-import-btn"
             title="Import media files"
             aria-label="Import media files"
@@ -234,6 +247,8 @@ export function MediaPanel() {
           </button>
         </div>
       </div>
+
+      {giphyOpen && <GiphyBrowser importFiles={importFiles} onClose={() => setGiphyOpen(false)} />}
 
       <div className="flex-1 min-h-0 overflow-y-auto px-3 pb-3">
         {shown.length === 0 ? (

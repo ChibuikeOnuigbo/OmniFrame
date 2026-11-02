@@ -50,6 +50,13 @@ export const EDITABLE_SHORTCUTS: EditableShortcut[] = [
 
 export const SETTINGS_REGISTRY: SettingDefinition[] = [
   {
+    id: 'playback.renderLimit', category: 'playback', label: 'Playback render limit',
+    description: 'Limit preview compositing to 15, 30 or 60 fps and inspect frame render time.',
+    aliases: ['performance', 'speed', 'render', 'fps', 'preprocessing', 'proxy', 'proxies'], controlType: 'select',
+    defaultValue: 60, scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'performance.previewFps', testId: 'performance-settings', sourceRefs: [],
+  },
+  {
     id: 'project.frameRate', category: 'timeline', label: 'Project frame rate',
     description: 'Defines the project timebase used by frame stepping and ruler ticks.', aliases: ['fps', 'timebase', 'frames'],
     controlType: 'select', defaultValue: 30, scope: 'project', persistent: false, requiresReload: false,
@@ -63,11 +70,23 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     capability: 'web-and-desktop', runtimeBinding: 'editor.dropFrameTimecode', testId: 'setting-drop-frame', sourceRefs: [],
   },
   {
+    id: 'timeline.snapping', category: 'timeline', label: 'Timeline snapping',
+    description: 'Snaps clip edges, the playhead and markers while arranging an edit.', aliases: ['snap', 'magnet', 'clip edges', 'markers'],
+    controlType: 'toggle', defaultValue: true, scope: 'project', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.snapping', testId: 'setting-timeline-snapping', sourceRefs: [],
+  },
+  {
     id: 'playback.previewQuality', category: 'playback', label: 'Preview quality',
     description: 'Changes the real compositing canvas resolution to reduce preview workload.', aliases: ['resolution', 'low', 'medium', 'high', 'pixelated', 'performance'],
     controlType: 'radio', defaultValue: 'high', scope: 'user', persistent: true, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'editor.previewQuality', testId: 'setting-preview-quality',
     sourceRefs: [{ editor: 'OpenShot', url: 'https://www.openshot.org/files/user-guide/preferences.html', evidence: 'Optimized preview resolution is an explicit preview preference.' }],
+  },
+  {
+    id: 'playback.performanceProfile', category: 'playback', label: 'Performance profile',
+    description: 'Applies coordinated Fast, Balanced or Full Quality preview settings.', aliases: ['smooth editing', 'fast', 'balanced', 'quality', 'performance preset'],
+    controlType: 'radio', defaultValue: 'balanced', scope: 'user', persistent: true, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'editor.previewQuality+performance.previewFps', testId: 'performance-profile-balanced', sourceRefs: [],
   },
   {
     id: 'ui.hideOverflowX', category: 'accessibility', label: 'Hide horizontal overflow',
@@ -106,6 +125,26 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     id: 'ai.apiKey', category: 'ai', label: 'API key', description: 'Provider credential retained only until this tab closes.', aliases: ['credential', 'token', 'BYOK'],
     controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
     capability: 'web-and-desktop', runtimeBinding: 'ai.session.apiKey', testId: 'setting-ai-api-key', sourceRefs: [],
+  },
+  {
+    id: 'media.giphyApiKey', category: 'ai', label: 'GIPHY API key', description: 'Connects the GIF Library to GIPHY search and trending media for this tab.', aliases: ['gif', 'sticker', 'meme', 'GIPHY', 'media provider'],
+    controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'sessionStorage.omniframe.giphyApiKey', testId: 'setting-giphy-api-key', sourceRefs: [],
+  },
+  {
+    id: 'media.klipyApiKey', category: 'ai', label: 'Klipy API key', description: 'Connects the GIF Library to Klipy search and trending media for this tab.', aliases: ['gif', 'sticker', 'meme', 'Klipy', 'media provider'],
+    controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'sessionStorage.omniframe.klipyApiKey', testId: 'setting-klipy-api-key', sourceRefs: [],
+  },
+  {
+    id: 'media.unsplashApiKey', category: 'ai', label: 'Unsplash API key', description: 'Connects the Asset Library to automatic high-resolution Unsplash search for this tab.', aliases: ['stock', 'photo', '4K', 'Unsplash', 'asset library'],
+    controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'sessionStorage.omniframe.unsplashApiKey', testId: 'setting-unsplash-api-key', sourceRefs: [],
+  },
+  {
+    id: 'media.pexelsApiKey', category: 'ai', label: 'Pexels API key', description: 'Connects the Asset Library to automatic high-resolution Pexels search for this tab.', aliases: ['stock', 'photo', '4K', 'Pexels', 'asset library'],
+    controlType: 'read-only', defaultValue: '', scope: 'session', persistent: false, requiresReload: false,
+    capability: 'web-and-desktop', runtimeBinding: 'sessionStorage.omniframe.pexelsApiKey', testId: 'setting-pexels-api-key', sourceRefs: [],
   },
   ...EDITABLE_SHORTCUTS.map((shortcut): SettingDefinition => ({
     id: `shortcut.${shortcut.id}`, category: 'shortcuts', label: shortcut.label,
@@ -177,7 +216,8 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     sourceRefs: [],
   },
 ]
-export const SETTINGS_CATEGORIES = [...new Set(SETTINGS_REGISTRY.map((item) => item.category))] as SettingsCategory[]
+const CATEGORY_ORDER: SettingsCategory[] = ['timeline', 'playback', 'appearance', 'dockers', 'accessibility', 'shortcuts', 'contextMenu', 'cursor', 'ai']
+export const SETTINGS_CATEGORIES = CATEGORY_ORDER.filter((category) => SETTINGS_REGISTRY.some((item) => item.category === category))
 
 export function searchSettings(query: string): SettingDefinition[] {
   const term = query.trim().toLocaleLowerCase()

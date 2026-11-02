@@ -1,0 +1,32 @@
+{
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 226.908,
+  "sample_interval_seconds": 5.0,
+  "expected_sample_count": 46,
+  "contact_sheet_count": 2,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg",
+    "sheet-002.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 360,
+        "height": 360,
+        "r_frame_rate": "25/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "226.908000"
+    }
+  }
+}

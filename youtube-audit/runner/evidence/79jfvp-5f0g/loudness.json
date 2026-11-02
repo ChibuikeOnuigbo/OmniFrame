@@ -1,0 +1,28 @@
+ult)
+    Metadata:
+      encoder         : Lavc62.11.100 wrapped_avframe
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:35.000000000
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
+      DURATION        : 00:00:35.008000000
+frame=  514 fps=0.0 q=-0.0 size=N/A time=00:00:14.00 bitrate=N/A speed=  28x elapsed=0:00:00.50    
+frame= 1000 fps=1000 q=-0.0 size=N/A time=00:00:30.10 bitrate=N/A speed=30.1x elapsed=0:00:01.00    
+[opus @ 0x5819b02aaa40] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x748164002080] 
+{
+	"input_i" : "-8.81",
+	"input_tp" : "0.79",
+	"input_lra" : "2.50",
+	"input_thresh" : "-18.81",
+	"output_i" : "-23.48",
+	"output_tp" : "-14.06",
+	"output_lra" : "2.00",
+	"output_thresh" : "-33.48",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.52"
+}
+[out#0/null @ 0x5819b02f43c0] video:427KiB audio:26244KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 1050 fps=943 q=-0.0 Lsize=N/A time=00:00:35.00 bitrate=N/A speed=31.4x elapsed=0:00:01.11    

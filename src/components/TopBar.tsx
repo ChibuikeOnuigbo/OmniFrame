@@ -1,3 +1,5 @@
+import { ProxyProgress } from './ProxyProgress'
+import { PerformanceSettings } from './PerformanceSettings'
 import { ViewportMenu } from './ViewportMenu'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -23,6 +25,17 @@ import {
   ChevronDown,
   Image as ImageIcon,
   Box,
+  Accessibility,
+  Bot,
+  Clock3,
+  Gauge,
+  Keyboard,
+  Menu,
+  MousePointer2,
+  Palette,
+  PanelTop,
+  Search,
+  Sparkles,
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { WorkspacePreset, FocusMode } from '../types'
@@ -33,6 +46,8 @@ import { UI_STYLES, UI_PALETTES } from '../lib/uiStyles'
 import { AI_PROVIDERS, testAiConnectionFull, submitFineTuneJob, getFineTuneJobStatus, type AiProviderId } from '../lib/aiProviders'
 import { MODEL_CAPABILITIES, equivalentsFor, equivalentAcrossProviders, FINETUNE_BASES, type ModelCapability } from '../lib/modelCatalog'
 import { buildFineTuneDataset, downloadTextFile } from '../lib/fineTune'
+import { getGifProviderKey, setGifProviderKey } from '../lib/giphy'
+import { getStockProviderKey, setStockProviderKey } from '../lib/assetLibrary'
 import {
   getDesktopInfo,
   toggleDesktopFullscreen,
@@ -42,6 +57,22 @@ import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
 import { LayoutManagerModal } from './LayoutManagerModal'
 import CompositionSettingsModal from './CompositionSettingsModal'
+
+const SETTINGS_CATEGORY_META: Record<SettingsCategory, {
+  label: string
+  description: string
+  icon: typeof Settings
+}> = {
+  timeline: { label: 'Timeline', description: 'Timebase, snapping and project timing', icon: Clock3 },
+  playback: { label: 'Playback & Performance', description: 'Preview quality, render budget and proxies', icon: Gauge },
+  appearance: { label: 'Appearance', description: 'Interface style and accent palette', icon: Palette },
+  dockers: { label: 'Panels & Dockers', description: 'Choose the tools shown in your workspace', icon: PanelTop },
+  accessibility: { label: 'Accessibility', description: 'Motion and scrolling preferences', icon: Accessibility },
+  shortcuts: { label: 'Keyboard Shortcuts', description: 'Review and change editor bindings', icon: Keyboard },
+  contextMenu: { label: 'Context Menu', description: 'Choose right-click actions', icon: Menu },
+  cursor: { label: 'Cursor & Pointer', description: 'Pointer style, feedback and precision', icon: MousePointer2 },
+  ai: { label: 'AI & APIs', description: 'Providers, models and media-service keys', icon: Bot },
+}
 
 export function TopBar() {
   // Native desktop (Tauri) info — null in the plain browser build, so the
@@ -82,6 +113,10 @@ export function TopBar() {
   const setDropFrameTimecode = useEditor((s) => s.setDropFrameTimecode)
   const previewQuality = useEditor((s) => s.previewQuality)
   const setPreviewQuality = useEditor((s) => s.setPreviewQuality)
+  const snapping = useEditor((s) => s.snapping)
+  const toggleSnapping = useEditor((s) => s.toggleSnapping)
+  const sequenceSettings = useEditor((s) => s.sequenceSettings)
+  const projectDuration = useEditor((s) => s.duration)
   const workspacePreset = useEditor((s) => s.workspacePreset)
   const setWorkspacePreset = useEditor((s) => s.setWorkspacePreset)
   const focusMode = useEditor((s) => s.focusMode)
@@ -141,6 +176,10 @@ export function TopBar() {
   const [ftJob, setFtJob] = useState<{ id: string; status: string; model: string | null } | null>(null)
   const [ftBusy, setFtBusy] = useState(false)
   const [ftMessage, setFtMessage] = useState('')
+  const [giphyApiKey, setGiphyApiKey] = useState(() => getGifProviderKey('giphy') || String(import.meta.env.VITE_GIPHY_API_KEY || ''))
+  const [klipyApiKey, setKlipyApiKey] = useState(() => getGifProviderKey('klipy') || String(import.meta.env.VITE_KLIPY_API_KEY || ''))
+  const [unsplashApiKey, setUnsplashApiKey] = useState(() => getStockProviderKey('unsplash') || String(import.meta.env.VITE_UNSPLASH_API_KEY || ''))
+  const [pexelsApiKey, setPexelsApiKey] = useState(() => getStockProviderKey('pexels') || String(import.meta.env.VITE_PEXELS_API_KEY || ''))
 
   const selectAiProvider = (id: AiProviderId) => {
     const provider = AI_PROVIDERS.find((item) => item.id === id)!
@@ -759,6 +798,7 @@ export function TopBar() {
         </div>
       </div>
 
+      <ProxyProgress />
       {settingsOpen && (
         <div
           ref={settingsRef}
@@ -766,11 +806,19 @@ export function TopBar() {
           data-testid="settings-popup"
           role="dialog"
           aria-labelledby="settings-heading"
-          className="fixed inset-x-2 top-14 sm:inset-auto sm:right-3 sm:top-12 z-[80] flex w-auto sm:w-[min(520px,calc(100vw-24px))] max-h-[min(540px,calc(100vh-64px))] flex-col overflow-hidden rounded-xl border border-ink-600 bg-ink-900/[0.98] shadow-[0_20px_60px_rgba(0,0,0,.6)] backdrop-blur-xl"
+          className="fixed inset-2 top-12 z-[80] flex flex-col overflow-hidden rounded-2xl border border-ink-600 bg-ink-900/[0.98] shadow-[0_28px_90px_rgba(0,0,0,.72)] backdrop-blur-xl sm:inset-auto sm:left-1/2 sm:top-1/2 sm:h-[min(680px,calc(100vh-40px))] sm:w-[min(780px,calc(100vw-40px))] sm:-translate-x-1/2 sm:-translate-y-1/2"
         >
-          <header className="border-b border-ink-700 p-3">
-            <div className="mb-2 flex items-center justify-between">
-              <h2 id="settings-heading" className="text-sm font-semibold">Settings</h2>
+          <header className="border-b border-ink-700 bg-gradient-to-r from-brand/10 via-transparent to-transparent p-3 sm:px-4 sm:py-3.5">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-brand/30 bg-brand/15 text-brand-200"><Sparkles size={16} /></span>
+                <span className="min-w-0">
+                  <h2 id="settings-heading" className="truncate text-sm font-semibold text-ink-50">Editor Settings</h2>
+                  <span className="block truncate text-[10px] text-ink-400">Project, performance, workspace and connected services</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="hidden rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-1 text-[9px] font-medium text-emerald-300 sm:inline">Changes apply live</span>
               <button
                 type="button"
                 aria-label="Close settings"
@@ -779,58 +827,59 @@ export function TopBar() {
               >
                 <X size={14} />
               </button>
+              </div>
             </div>
-            <input
-              type="search"
-              aria-label="Search settings"
-              placeholder="Search settings"
-              value={settingsSearch}
-              onChange={(event) => setSettingsSearch(event.target.value)}
-              className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 outline-none placeholder:text-ink-500 focus:border-brand"
-            />
+            <label className="relative block">
+              <Search size={13} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-500" />
+              <input
+                type="search"
+                aria-label="Search settings"
+                placeholder="Search settings, proxies, shortcuts, API keys…"
+                value={settingsSearch}
+                onChange={(event) => setSettingsSearch(event.target.value)}
+                className="h-9 w-full rounded-lg border border-ink-700 bg-ink-950/70 pl-9 pr-3 text-xs text-ink-200 outline-none placeholder:text-ink-500 focus:border-brand focus:ring-1 focus:ring-brand/40"
+              />
+            </label>
           </header>
           <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
             <nav
               aria-label="Settings categories"
-              className="flex flex-row sm:flex-col overflow-x-auto sm:overflow-x-visible sm:w-36 shrink-0 border-b sm:border-b-0 sm:border-r border-ink-700 p-1.5 sm:p-2 gap-1 scrollbar-none"
+              className="flex shrink-0 flex-row gap-1 overflow-x-auto border-b border-ink-700 bg-ink-950/35 p-1.5 scrollbar-none sm:w-56 sm:flex-col sm:overflow-x-visible sm:border-b-0 sm:border-r sm:p-2.5"
             >
-              {SETTINGS_CATEGORIES.map((category) => (
-                <button
-                  key={category}
-                  data-testid="settings-category"
-                  data-category-id={category}
-                  aria-pressed={settingsCategory === category}
-                  title={category === 'contextMenu' ? 'Context Menu' : category === 'cursor' ? 'Cursor & Pointer' : category}
-                  onClick={() => setSettingsCategory(category)}
-                  className={`h-8 sm:h-9 shrink-0 rounded-lg px-2.5 sm:px-3 text-left text-xs capitalize outline-none transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand truncate ${
-                    settingsCategory === category
-                      ? 'bg-brand/20 text-brand-200 font-medium'
-                      : 'text-ink-400 hover:bg-ink-700 hover:text-white'
-                  }`}
-                >
-                  <span className="truncate">
-                    {category === 'contextMenu'
-                      ? 'Context Menu'
-                      : category === 'cursor'
-                      ? 'Cursor & Pointer'
-                      : category}
-                  </span>
-                </button>
-              ))}
+              {SETTINGS_CATEGORIES.map((category) => {
+                const meta = SETTINGS_CATEGORY_META[category]
+                const CategoryIcon = meta.icon
+                return (
+                  <button
+                    key={category}
+                    data-testid="settings-category"
+                    data-category-id={category}
+                    aria-pressed={settingsCategory === category}
+                    title={meta.description}
+                    onClick={() => { setSettingsCategory(category); setSettingsSearch('') }}
+                    className={`group flex h-9 shrink-0 items-center gap-2 rounded-lg px-2.5 text-left text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand sm:h-auto sm:min-h-12 sm:w-full sm:px-3 sm:py-2 ${
+                      settingsCategory === category
+                        ? 'bg-brand/20 text-brand-100 ring-1 ring-inset ring-brand/25'
+                        : 'text-ink-400 hover:bg-ink-800 hover:text-white'
+                    }`}
+                  >
+                    <CategoryIcon size={14} className="shrink-0" />
+                    <span className="min-w-0">
+                      <span className="block whitespace-nowrap font-medium sm:truncate">{meta.label}</span>
+                      <span className="mt-0.5 hidden truncate text-[9px] font-normal text-ink-500 sm:block">{meta.description}</span>
+                    </span>
+                  </button>
+                )
+              })}
             </nav>
-            <section className="min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 text-xs">
-              <h3 className="mb-3 text-sm font-semibold capitalize text-ink-100">
-                {settingsSearch
-                  ? 'Search results'
-                  : settingsCategory === 'contextMenu'
-                  ? 'Context Menu Actions'
-                  : settingsCategory === 'cursor'
-                  ? 'Cursor & Pointer Customizer'
-                  : settingsCategory}
-              </h3>
+            <section className="min-w-0 flex-1 overflow-y-auto p-3 text-xs sm:p-5">
+              <div className="mb-4 border-b border-ink-800 pb-3">
+                <h3 className="text-base font-semibold text-ink-50">{settingsSearch ? 'Search results' : SETTINGS_CATEGORY_META[settingsCategory].label}</h3>
+                <p className="mt-1 text-[10px] leading-relaxed text-ink-500">{settingsSearch ? `${settingsMatches.length} matching setting${settingsMatches.length === 1 ? '' : 's'}` : SETTINGS_CATEGORY_META[settingsCategory].description}</p>
+              </div>
 
               {settingsSearch && (
-                <div data-testid="settings-search-results" className="space-y-1">
+                <div data-testid="settings-search-results" className="space-y-2">
                   {settingsMatches.length === 0 ? (
                     <p className="text-xs text-ink-500">No available settings match.</p>
                   ) : (
@@ -842,12 +891,11 @@ export function TopBar() {
                           setSettingsCategory(item.category)
                           setSettingsSearch('')
                         }}
-                        className="block w-full rounded-none px-2 py-2 text-left hover:bg-ink-700"
+                        className="group block w-full rounded-lg border border-ink-800 bg-ink-950/35 px-3 py-2.5 text-left transition-colors hover:border-brand/40 hover:bg-brand/5"
                       >
-                        <span className="block text-xs text-ink-200">{item.label}</span>
-                        <span className="mt-0.5 block text-[10px] capitalize text-ink-500">
-                          {item.category}, {item.scope}
-                        </span>
+                        <span className="flex items-center justify-between gap-2"><span className="text-xs font-medium text-ink-200 group-hover:text-white">{item.label}</span><span className="rounded-full border border-ink-700 px-1.5 py-0.5 text-[8px] uppercase tracking-wide text-ink-500">{item.scope}</span></span>
+                        <span className="mt-1 block text-[10px] leading-relaxed text-ink-500">{item.description}</span>
+                        <span className="mt-1.5 block text-[9px] font-medium text-brand-300">Open {SETTINGS_CATEGORY_META[item.category].label} →</span>
                       </button>
                     ))
                   )}
@@ -856,23 +904,35 @@ export function TopBar() {
 
               {!settingsSearch && settingsCategory === 'timeline' && (
                 <div className="space-y-4">
-                  <label className="block text-xs text-ink-300">
-                    <span className="mb-2 block">Project frame rate</span>
-                    <select
-                      aria-label="Project frame rate"
-                      value={projectFps}
-                      onChange={(event) => setProjectFps(Number(event.target.value))}
-                      className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200"
-                    >
-                      {[23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120].map((rate) => (
-                        <option key={rate} value={rate}>
-                          {rate} fps
-                        </option>
-                      ))}
-                    </select>
+                  <div className="grid grid-cols-3 gap-2" data-testid="settings-project-summary">
+                    {[
+                      ['Canvas', `${sequenceSettings.width} × ${sequenceSettings.height}`],
+                      ['Timebase', `${projectFps} fps`],
+                      ['Duration', `${projectDuration.toFixed(1)} s`],
+                    ].map(([label, value]) => <div key={label} className="min-w-0 rounded-lg border border-ink-800 bg-ink-950/45 p-2.5"><span className="block text-[9px] uppercase tracking-wide text-ink-500">{label}</span><span className="mt-1 block truncate text-[11px] font-semibold text-ink-100" title={value}>{value}</span></div>)}
+                  </div>
+                  <div className="rounded-xl border border-ink-700 bg-ink-950/30 p-3">
+                    <label className="block text-xs text-ink-300">
+                      <span className="mb-2 block font-medium text-ink-100">Project frame rate</span>
+                      <select
+                        aria-label="Project frame rate"
+                        value={projectFps}
+                        onChange={(event) => setProjectFps(Number(event.target.value))}
+                        className="h-9 w-full rounded-lg border border-ink-700 bg-ink-800 px-2 text-xs text-ink-200 outline-none focus:border-brand"
+                      >
+                        {[23.976, 24, 25, 29.97, 30, 50, 59.94, 60, 120].map((rate) => (
+                          <option key={rate} value={rate}>{rate} fps</option>
+                        ))}
+                      </select>
+                      <span className="mt-2 block text-[10px] leading-relaxed text-ink-500">Controls frame stepping, ruler ticks and exported frame cadence.</span>
+                    </label>
+                  </div>
+                  <label className="flex items-center justify-between gap-4 rounded-xl border border-ink-800 bg-ink-950/30 p-3 text-xs text-ink-300">
+                    <span><span className="block font-medium text-ink-100">Timeline snapping</span><span className="mt-1 block text-[10px] leading-relaxed text-ink-500">Snap clip edges, the playhead and markers while arranging an edit.</span></span>
+                    <input data-testid="setting-timeline-snapping" aria-label="Timeline snapping" type="checkbox" checked={snapping} onChange={() => toggleSnapping()} className="h-4 w-4 shrink-0 accent-brand" />
                   </label>
                   {(projectFps === 29.97 || projectFps === 59.94) && (
-                    <label className="flex items-center justify-between gap-4 text-xs text-ink-300">
+                    <label className="flex items-center justify-between gap-4 rounded-xl border border-ink-800 bg-ink-950/30 p-3 text-xs text-ink-300">
                       <span>
                         <span className="block">Drop frame timecode</span>
                         <span className="mt-1 block text-[10px] text-ink-500">
@@ -888,12 +948,13 @@ export function TopBar() {
                       />
                     </label>
                   )}
+                  <button type="button" onClick={() => setCompOpen(true)} className="flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-ink-700 bg-ink-800 text-[11px] font-medium text-ink-200 hover:border-brand/50 hover:bg-ink-700"><Settings2 size={13} />Open composition settings</button>
                 </div>
               )}
 
               {!settingsSearch && settingsCategory === 'playback' && (
                 <div>
-                  <div className="mb-2 text-xs text-ink-300">Preview quality</div>
+                  <div className="mb-2 flex items-center justify-between"><span className="text-xs font-semibold text-ink-100">Preview resolution</span><span className="text-[9px] text-ink-500">Export stays full quality</span></div>
                   <div role="radiogroup" aria-label="Preview quality" className="grid grid-cols-2 gap-2">
                     {(['low', 'medium', 'high', 'full'] as const).map((quality) => (
                       <button
@@ -902,19 +963,20 @@ export function TopBar() {
                         role="radio"
                         aria-checked={previewQuality === quality}
                         onClick={() => setPreviewQuality(quality)}
-                        className={`h-9 rounded-none border px-3 text-xs capitalize ${
+                        className={`h-11 rounded-lg border px-3 text-left text-xs capitalize transition-colors ${
                           previewQuality === quality
-                            ? 'border-brand bg-brand/15 text-brand-200'
+                            ? 'border-brand bg-brand/15 font-semibold text-brand-100'
                             : 'border-ink-700 bg-ink-800 text-ink-300 hover:bg-ink-700'
                         }`}
                       >
-                        {quality}
+                        <span className="block">{quality}</span><span className="block text-[8px] font-normal normal-case text-ink-500">{quality === 'low' ? 'Fastest editing' : quality === 'medium' ? 'Reduced resolution' : quality === 'high' ? 'Clear default' : 'Original resolution'}</span>
                       </button>
                     ))}
                   </div>
                   <p className="mt-3 text-[10px] leading-relaxed text-ink-500">
                     Adjusts viewport preview resolution. Timeline timing and project FPS remain unchanged.
                   </p>
+                  <PerformanceSettings />
                 </div>
               )}
 
@@ -1430,6 +1492,54 @@ export function TopBar() {
                     codes, or other private information here. Browser requests expose the key to this tab and the
                     selected provider; use a restricted key with spending limits.
                   </div>
+                  <div className="space-y-2 rounded-none border border-fuchsia-500/25 bg-fuchsia-500/5 p-2" data-testid="gif-provider-api-settings">
+                    <div>
+                      <p className="font-semibold text-ink-100">GIF and sticker provider keys</p>
+                      <p className="mt-0.5 text-[10px] leading-snug text-ink-500">Used by Media → GIF Library. Keys stay in this browser tab and are never written into projects or exports.</p>
+                    </div>
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider">GIPHY API key</span>
+                      <input
+                        data-testid="setting-giphy-api-key"
+                        aria-label="GIPHY API key"
+                        type="password"
+                        autoComplete="off"
+                        spellCheck={false}
+                        value={giphyApiKey}
+                        onChange={(event) => { setGiphyApiKey(event.target.value); setGifProviderKey('giphy', event.target.value) }}
+                        placeholder="GIPHY developer key"
+                        className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
+                      />
+                    </label>
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider">Klipy API key</span>
+                      <input
+                        data-testid="setting-klipy-api-key"
+                        aria-label="Klipy API key"
+                        type="password"
+                        autoComplete="off"
+                        spellCheck={false}
+                        value={klipyApiKey}
+                        onChange={(event) => { setKlipyApiKey(event.target.value); setGifProviderKey('klipy', event.target.value) }}
+                        placeholder="Klipy developer key"
+                        className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs"
+                      />
+                    </label>
+                  </div>
+                  <div className="space-y-2 rounded-none border border-cyan-500/25 bg-cyan-500/5 p-2" data-testid="stock-provider-api-settings">
+                    <div>
+                      <p className="font-semibold text-ink-100">Stock photo provider keys</p>
+                      <p className="mt-0.5 text-[10px] leading-snug text-ink-500">Used by 3D → Asset Library for automatic high-resolution image search. Keys stay in this browser tab.</p>
+                    </div>
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider">Unsplash access key</span>
+                      <input data-testid="setting-unsplash-api-key" aria-label="Unsplash API key" type="password" autoComplete="off" spellCheck={false} value={unsplashApiKey} onChange={(event) => { setUnsplashApiKey(event.target.value); setStockProviderKey('unsplash', event.target.value) }} placeholder="Unsplash access key" className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs" />
+                    </label>
+                    <label className="block text-ink-300">
+                      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider">Pexels API key</span>
+                      <input data-testid="setting-pexels-api-key" aria-label="Pexels API key" type="password" autoComplete="off" spellCheck={false} value={pexelsApiKey} onChange={(event) => { setPexelsApiKey(event.target.value); setStockProviderKey('pexels', event.target.value) }} placeholder="Pexels API key" className="h-8 w-full rounded-none border border-ink-700 bg-ink-800 px-2 text-xs" />
+                    </label>
+                  </div>
                   <label className="block text-ink-300">
                     <span className="mb-1 block">Provider</span>
                     <select
@@ -1631,6 +1741,10 @@ export function TopBar() {
               )}
             </section>
           </div>
+          <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-ink-700 bg-ink-950/35 px-3 py-2 text-[9px] text-ink-500 sm:px-4">
+            <span className="truncate">Project settings travel with the .omni file; user preferences stay on this device.</span>
+            <span className="hidden shrink-0 items-center gap-1 text-emerald-400 sm:flex"><Check size={10} />Web + desktop</span>
+          </footer>
         </div>
       )}
 

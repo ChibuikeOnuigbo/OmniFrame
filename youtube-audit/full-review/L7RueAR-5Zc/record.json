@@ -1,0 +1,40 @@
+{
+  "id": "L7RueAR-5Zc",
+  "url": "https://www.youtube.com/watch?v=L7RueAR-5Zc",
+  "title": "Y Not? \u26d4 - JJK Shibuya Incident Arc \u300c Flow / Edit \u300d4K",
+  "channel": "@spaceless2041",
+  "shard": 1,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 18.588,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 10,
+  "contact_sheet_count": 1,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 640,
+        "height": 360,
+        "r_frame_rate": "20/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "18.588000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}

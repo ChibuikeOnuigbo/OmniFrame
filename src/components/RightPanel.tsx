@@ -1,3 +1,4 @@
+import { BLEND_GROUPS, blendAt } from '../lib/blendModes'
 import { TransformModes } from './TransformWorkbench'
 import { DeviceTransitionInspector } from './DeviceTransitionInspector'
 import {ObjectTransitionInspector} from './ObjectTransitionInspector'
@@ -57,7 +58,7 @@ import { RotoMaskSubTool } from './RotoMaskSubTool'
 import { Tooltip } from './Tooltip'
 import { InfoTip } from './InfoTip'
 import { useEditor } from '../store'
-import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask } from '../types'
+import type { Clip, ClipAdjustmentMask, ClipEffect, ClipEffectMaskRegion, ClipVisualMask } from '../types'
 import { Field, Section, Slider, AccordionGroup } from './ui'
 import { formatClock } from '../lib/time'
 import { executeVoiceIsolationForClip, type VoiceIsolationModel } from '../lib/voiceIsolation'
@@ -66,6 +67,7 @@ import { loudnessGain, measureIntegratedLufs } from '../lib/loudness'
 import { SectionsNavigator } from './SectionsNav'
 import { FxStackSection } from './FxStackSection'
 import { placedEffectLabels, activeEffectKeys } from '../lib/adjustment'
+import { DEFAULT_EFFECT_MASK, effectMaskRegions, nextEffectMaskRegion } from '../lib/effectMask'
 
 /**
  * "Placed Effects" inspector section: every LUT / effect placed on the
@@ -315,7 +317,7 @@ function ClipMaskSection({ clip }: { clip: Clip }) {
             <Slider label="Mask expansion" min={-120} max={120} step={2} value={mask.expansion} onChange={(value) => updateClipMask(clip.id, { expansion: value })} />
             <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.expansion)}px</span>
           </Field>
-          <Field label="Opacity">
+        <Field label="Opacity">
             <Slider label="Mask opacity" min={0} max={1} step={0.01} value={mask.opacity} onChange={(value) => updateClipMask(clip.id, { opacity: value })} />
             <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(mask.opacity * 100)}%</span>
           </Field>
@@ -527,6 +529,77 @@ function ClipMaskSection({ clip }: { clip: Clip }) {
   )
 }
 
+function EffectMaskSection({ clip }: { clip: Clip }) {
+  const setClipProp = useEditor((s) => s.setClipProp)
+  const beginHistory = useEditor((s) => s.beginHistory)
+  const endHistory = useEditor((s) => s.endHistory)
+  const mask = clip.adjustmentMask
+  const regions = mask ? effectMaskRegions(mask) : []
+  const [selectedId, setSelectedId] = useState<string | null>(regions[0]?.id || null)
+  const selected = regions.find((region) => region.id === selectedId) || regions[0]
+  const commit = (next: ClipAdjustmentMask | undefined) => {
+    beginHistory()
+    try { setClipProp(clip.id, { adjustmentMask: next }) } finally { endHistory() }
+  }
+  const updateMask = (patch: Partial<ClipAdjustmentMask>) => commit({ ...DEFAULT_EFFECT_MASK, ...mask, ...patch })
+  const updateRegion = (patch: Partial<ClipEffectMaskRegion>) => {
+    if (!mask || !selected) return
+    updateMask({ regions: regions.map((region) => region.id === selected.id ? { ...region, ...patch } : region) })
+  }
+  const addRegion = (shape: ClipEffectMaskRegion['shape']) => {
+    const base = { ...DEFAULT_EFFECT_MASK, ...mask }
+    const region = nextEffectMaskRegion(base, shape)
+    commit({ ...base, regions: [...effectMaskRegions(base), region] })
+    setSelectedId(region.id)
+  }
+  const removeRegion = () => {
+    if (!mask || !selected) return
+    const next = regions.filter((region) => region.id !== selected.id)
+    if (!next.length) { commit(undefined); setSelectedId(null); return }
+    updateMask({ regions: next }); setSelectedId(next[0].id)
+  }
+
+  return (
+    <Section title="Effect Mask">
+      {!mask ? (
+        <div className="space-y-1.5">
+          <button type="button" data-testid="add-effect-mask-btn" onClick={() => commit({ ...DEFAULT_EFFECT_MASK, regions: DEFAULT_EFFECT_MASK.regions?.map((r) => ({ ...r })) })} className="flex h-8 w-full items-center justify-center rounded-md border border-cyan-800 bg-cyan-950/30 text-xs text-cyan-100 transition-colors hover:border-cyan-500">
+            Add effect-only mask
+          </button>
+          <p className="text-[10px] leading-snug text-ink-500">The original clip stays visible. Blur, glow, LUTs, and other effects are composited only through these regions.</p>
+        </div>
+      ) : (
+        <div data-testid="effect-mask-controls" className="space-y-2">
+          <div className="flex gap-1">
+            <label className="flex flex-1 items-center gap-2 text-[11px] text-ink-300"><input type="checkbox" checked={mask.enabled !== false} onChange={(event) => updateMask({ enabled: event.target.checked })} className="accent-cyan-400" />Enabled</label>
+            <label className="flex flex-1 items-center gap-2 text-[11px] text-ink-300"><input type="checkbox" checked={mask.inverted} onChange={(event) => updateMask({ inverted: event.target.checked })} className="accent-cyan-400" />Outside</label>
+          </div>
+          <div className="grid grid-cols-5 gap-1" aria-label="Add effect mask region">
+            {([['rectangle', 'Rect'], ['circle', 'Circle'], ['ellipse', 'Ellipse'], ['text', 'Text'], ['custom', 'Draw']] as const).map(([shape, label]) => (
+              <button key={shape} type="button" data-testid={`add-effect-mask-${shape}`} onClick={() => addRegion(shape)} className="h-7 truncate rounded border border-ink-700 px-1 text-[9px] text-ink-300 hover:border-cyan-600 hover:text-cyan-100">{label}</button>
+            ))}
+          </div>
+          <div className="flex gap-1 overflow-x-auto pb-0.5" data-testid="effect-mask-region-list">
+            {regions.map((region, index) => <button key={region.id} type="button" onClick={() => setSelectedId(region.id)} className={`h-6 shrink-0 rounded border px-2 text-[9px] ${selected?.id === region.id ? 'border-cyan-500 bg-cyan-950/50 text-cyan-100' : 'border-ink-800 text-ink-400'}`}>{index + 1}. {region.shape}</button>)}
+          </div>
+          {selected && <>
+            <Field label="Center X"><Slider label="Effect mask center X" min={0} max={1} step={0.01} value={selected.centerX} onChange={(centerX) => updateRegion({ centerX })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.centerX * 100)}%</span></Field>
+            <Field label="Center Y"><Slider label="Effect mask center Y" min={0} max={1} step={0.01} value={selected.centerY} onChange={(centerY) => updateRegion({ centerY })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.centerY * 100)}%</span></Field>
+            <Field label="Width"><Slider label="Effect mask width" min={0.01} max={1} step={0.01} value={selected.width} onChange={(width) => updateRegion({ width, ...(selected.shape === 'circle' ? { height: width } : {}) })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.width * 100)}%</span></Field>
+            {selected.shape !== 'circle' && <Field label="Height"><Slider label="Effect mask height" min={0.01} max={1} step={0.01} value={selected.height} onChange={(height) => updateRegion({ height })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.height * 100)}%</span></Field>}
+            <Field label="Feather"><Slider label="Effect mask feather" min={0} max={240} step={1} value={selected.feather || 0} onChange={(feather) => updateRegion({ feather })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.feather || 0)}px</span></Field>
+            <Field label="Opacity"><Slider label="Effect mask opacity" min={0} max={1} step={0.01} value={selected.opacity ?? 1} onChange={(opacity) => updateRegion({ opacity })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round((selected.opacity ?? 1) * 100)}%</span></Field>
+            {selected.shape === 'text' && <input aria-label="Effect mask text" value={selected.text || ''} onChange={(event) => updateRegion({ text: event.target.value })} className="h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100" placeholder="Type mask text" />}
+            {selected.shape === 'custom' && <div className="flex gap-1"><button type="button" onClick={() => updateRegion({ points: [...(selected.points || []), { x: selected.centerX, y: selected.centerY }] })} className="h-7 flex-1 rounded border border-ink-700 text-[10px] text-ink-300">Add draw point</button><button type="button" onClick={() => updateRegion({ points: (selected.points || []).slice(0, -1) })} className="h-7 flex-1 rounded border border-ink-700 text-[10px] text-ink-300">Undo point</button></div>}
+            <button type="button" onClick={removeRegion} className="h-7 w-full rounded border border-red-950 text-[10px] text-red-300 hover:border-red-700">Remove selected region</button>
+          </>}
+          <button type="button" data-testid="remove-effect-mask-btn" onClick={() => commit(undefined)} className="h-7 w-full rounded border border-ink-800 text-[10px] text-ink-400 hover:border-red-800 hover:text-red-200">Remove effect mask</button>
+        </div>
+      )}
+    </Section>
+  )
+}
+
 function ClipInspector({ clip }: { clip: Clip }) {
   const assets = useEditor((s) => s.assets)
   const setClipProp = useEditor((s) => s.setClipProp)
@@ -544,21 +617,6 @@ function ClipInspector({ clip }: { clip: Clip }) {
   const setActiveCurveProperty = useEditor((s) => s.setActiveCurveProperty)
   const asset = assets.find((a) => a.id === clip.assetId)
   const t = clip.transform
-  const adjustmentMaskDefaults: ClipAdjustmentMask = {
-    shape: 'ellipse',
-    centerX: 0.5,
-    centerY: 0.5,
-    width: 0.75,
-    height: 0.75,
-    feather: 36,
-    inverted: false,
-  }
-  const updateAdjustmentMask = (patch: Partial<ClipAdjustmentMask>) => {
-    setClipProp(clip.id, {
-      adjustmentMask: { ...adjustmentMaskDefaults, ...clip.adjustmentMask, ...patch },
-    })
-  }
-
   const [isolationEnabled, setIsolationEnabled] = useState(false)
   const [isolationMode, setIsolationMode] = useState<'remove_vocal' | 'keep_vocal'>('remove_vocal')
   const [isolationModel, setIsolationModel] = useState<VoiceIsolationModel>(defaultModel || 'omni-voicetarget')
@@ -753,74 +811,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
         )}
       </Section>
 
-      {clip.kind === 'adjustment' && (
-        <Section title="Effect Mask">
-          {!clip.adjustmentMask ? (
-            <button
-              type="button"
-              data-testid="add-adjustment-mask-btn"
-              onClick={() => updateAdjustmentMask({})}
-              className="flex h-8 w-full items-center justify-center rounded-md border border-cyan-800 bg-cyan-950/30 text-xs text-cyan-100 transition-colors hover:border-cyan-500"
-            >
-              Add ellipse mask
-            </button>
-          ) : (
-            <div data-testid="adjustment-mask-controls" className="space-y-1.5">
-              <div className="flex items-center justify-between gap-2">
-                <label htmlFor="adjustment-mask-shape" className="text-xs text-ink-400">Shape</label>
-                <select
-                  id="adjustment-mask-shape"
-                  data-testid="adjustment-mask-shape"
-                  value={clip.adjustmentMask.shape}
-                  onChange={(event) => updateAdjustmentMask({ shape: event.target.value as ClipAdjustmentMask['shape'] })}
-                  className="h-7 rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100"
-                >
-                  <option value="ellipse">Ellipse</option>
-                  <option value="rectangle">Rectangle</option>
-                </select>
-              </div>
-              <Field label="Center X">
-                <Slider label="Adjustment mask center X" min={0} max={1} step={0.01} value={clip.adjustmentMask.centerX} onChange={(value) => updateAdjustmentMask({ centerX: value })} />
-                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.centerX * 100)}%</span>
-              </Field>
-              <Field label="Center Y">
-                <Slider label="Adjustment mask center Y" min={0} max={1} step={0.01} value={clip.adjustmentMask.centerY} onChange={(value) => updateAdjustmentMask({ centerY: value })} />
-                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.centerY * 100)}%</span>
-              </Field>
-              <Field label="Width">
-                <Slider label="Adjustment mask width" min={0.05} max={1} step={0.01} value={clip.adjustmentMask.width} onChange={(value) => updateAdjustmentMask({ width: value })} />
-                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.width * 100)}%</span>
-              </Field>
-              <Field label="Height">
-                <Slider label="Adjustment mask height" min={0.05} max={1} step={0.01} value={clip.adjustmentMask.height} onChange={(value) => updateAdjustmentMask({ height: value })} />
-                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.height * 100)}%</span>
-              </Field>
-              <Field label="Feather">
-                <Slider label="Adjustment mask feather" min={0} max={240} step={2} value={clip.adjustmentMask.feather} onChange={(value) => updateAdjustmentMask({ feather: value })} />
-                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round(clip.adjustmentMask.feather)}px</span>
-              </Field>
-              <label className="flex items-center gap-2 text-[11px] text-ink-300">
-                <input
-                  type="checkbox"
-                  data-testid="invert-adjustment-mask"
-                  checked={clip.adjustmentMask.inverted}
-                  onChange={(event) => updateAdjustmentMask({ inverted: event.target.checked })}
-                  className="accent-cyan-400"
-                />
-                Invert mask
-              </label>
-              <button
-                type="button"
-                data-testid="remove-adjustment-mask-btn"
-                onClick={() => setClipProp(clip.id, { adjustmentMask: undefined })}
-                className="h-7 w-full rounded border border-ink-800 text-[10px] text-ink-400 transition-colors hover:border-red-800 hover:text-red-200"
-              >
-                Remove mask
-              </button>
-            </div>
-          )}
-        </Section>
-      )}
+      {clip.kind !== 'audio' && clip.kind !== 'null' && <EffectMaskSection clip={clip} />}
 
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <ClipMaskSection clip={clip} />}
       {clip.kind !== 'adjustment' && clip.kind !== 'audio' && <MaskingRotoSection clip={clip} />}
@@ -927,14 +918,28 @@ function ClipInspector({ clip }: { clip: Clip }) {
             data-testid="clip-blend-select"
             aria-label="Clip blend mode"
             className="h-7 w-full rounded-none border border-ink-700 bg-ink-900 px-1.5 text-[11px] text-ink-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-            value={clip.blendMode || 'source-over'}
-            onChange={(e) => useEditor.getState().setClipBlend(clip.id, e.target.value)}
+            value={blendAt(clip, useEditor.getState().playhead)}
+            onChange={(e) => useEditor.getState().setClipBlend(clip.id, e.target.value, clip.blendKeys?.length ? Math.max(0, useEditor.getState().playhead - clip.start) : undefined)}
           >
-            {['source-over','multiply','screen','overlay','darken','lighten','color-burn','color-dodge','hard-light','soft-light','difference','exclusion','luminosity'].map((m) => (
-              <option key={m} value={m}>{m === 'source-over' ? 'normal' : m}</option>
-            ))}
+            {BLEND_GROUPS.map(group => <optgroup key={group.name} label={group.name}>{group.modes.map(mode=><option key={mode} value={mode}>{mode === 'source-over' ? 'Normal' : mode === 'lighter' ? 'Add (+)' : mode}</option>)}</optgroup>)}
           </select>
         </Field>
+        <button
+          type="button"
+          data-testid="blend-keyframe-add"
+          onClick={() => {
+            const state = useEditor.getState()
+            state.setClipBlend(clip.id, blendAt(clip, state.playhead), Math.max(0, state.playhead - clip.start))
+          }}
+          className="w-full rounded border border-ink-700 px-2 py-1 text-xs hover:border-brand/60"
+        >
+          ◇ Add blend keyframe
+        </button>
+        {Boolean(clip.blendKeys?.length) && (
+          <p className="text-[10px] text-ink-400">
+            Blend animation: {clip.blendKeys!.length} hold keys. Move the playhead, then choose a mode to add or replace a key.
+          </p>
+        )}
         <Field label="Opacity">
           <Slider label="Opacity" min={0} max={1} step={0.01} value={t.opacity} onChange={(v) => setClipTransform(clip.id, { opacity: v })} />
           <span className="w-8 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(t.opacity * 100)}</span>
@@ -1215,6 +1220,53 @@ function ClipInspector({ clip }: { clip: Clip }) {
             />
             <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.textStyle.fontSize ?? 32)}px</span>
           </Field>
+          <Field label="Video Fill">
+            <select
+              data-testid="text-video-fill"
+              aria-label="Crop video inside text"
+              value={clip.textStyle.insideVideo ?? ''}
+              onChange={(event) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideVideo: event.target.value || undefined } })}
+              className="h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100"
+            >
+              <option value="">Solid text color</option>
+              {assets.filter((asset) => asset.kind === 'video').map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}
+            </select>
+          </Field>
+          {clip.textStyle.insideVideo && (
+            <div className="space-y-1.5 rounded border border-cyan-500/20 bg-cyan-500/5 p-2" data-testid="text-video-fill-controls">
+              <label className="flex items-center justify-between gap-2 text-[11px] text-ink-300">
+                <span>Negative inside text</span>
+                <input
+                  type="checkbox"
+                  data-testid="text-video-fill-negative"
+                  checked={clip.textStyle.insideInvert ?? false}
+                  onChange={(event) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideInvert: event.target.checked } })}
+                  className="accent-cyan-400"
+                />
+              </label>
+              <Field label="Solid core">
+                <Slider label="Text solid core opacity" min={0} max={1} step={0.01} value={clip.textStyle.insideBaseAlpha ?? 0.08} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideBaseAlpha: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{Math.round((clip.textStyle.insideBaseAlpha ?? 0.08) * 100)}%</span>
+              </Field>
+              <Field label="Brightness">
+                <Slider label="Video fill brightness" min={0.1} max={2} step={0.05} value={clip.textStyle.insideBrightness ?? 1} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideBrightness: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideBrightness ?? 1).toFixed(2)}</span>
+              </Field>
+              <Field label="Contrast">
+                <Slider label="Video fill contrast" min={0.1} max={2.5} step={0.05} value={clip.textStyle.insideContrast ?? 1} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideContrast: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideContrast ?? 1).toFixed(2)}</span>
+              </Field>
+              <Field label="Saturation">
+                <Slider label="Video fill saturation" min={0} max={3} step={0.05} value={clip.textStyle.insideSaturation ?? 1} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideSaturation: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideSaturation ?? 1).toFixed(2)}</span>
+              </Field>
+              <Field label="Source time">
+                <Slider label="Video fill source offset" min={0} max={Math.max(0.1, assets.find((asset) => asset.id === clip.textStyle?.insideVideo)?.duration ?? clip.duration)} step={0.05} value={clip.textStyle.insideSourceOffset ?? 0} onChange={(value) => setClipProp(clip.id, { textStyle: { ...clip.textStyle!, insideSourceOffset: value } })} />
+                <span className="w-9 text-right text-[10px] text-ink-400 tabular-nums">{(clip.textStyle.insideSourceOffset ?? 0).toFixed(1)}s</span>
+              </Field>
+              <p className="text-[9px] leading-snug text-ink-400">The selected video is copied into the glyph alpha. Negative processing affects only that moving fill; use Appearance → Blend for Screen or Color Burn.</p>
+            </div>
+          )}
         </Section>
       )}
 

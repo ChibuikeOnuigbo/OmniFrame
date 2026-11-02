@@ -1,0 +1,25 @@
+1:12.566000000
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
+      DURATION        : 00:01:12.568000000
+frame=  535 fps=0.0 q=-0.0 size=N/A time=00:00:14.60 bitrate=N/A speed=29.2x elapsed=0:00:00.50    
+frame= 1024 fps=1024 q=-0.0 size=N/A time=00:00:30.90 bitrate=N/A speed=30.9x elapsed=0:00:01.00    
+frame= 1510 fps=1006 q=-0.0 size=N/A time=00:00:47.10 bitrate=N/A speed=31.4x elapsed=0:00:01.50    
+frame= 1999 fps=999 q=-0.0 size=N/A time=00:01:03.40 bitrate=N/A speed=31.7x elapsed=0:00:02.00    
+[opus @ 0x5cc327c4fa40] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x74a9cc002080] 
+{
+	"input_i" : "-9.20",
+	"input_tp" : "1.26",
+	"input_lra" : "3.90",
+	"input_thresh" : "-19.77",
+	"output_i" : "-23.67",
+	"output_tp" : "-13.20",
+	"output_lra" : "3.50",
+	"output_thresh" : "-34.21",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.33"
+}
+[out#0/null @ 0x5cc327c993c0] video:884KiB audio:54413KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 2177 fps=971 q=-0.0 Lsize=N/A time=00:01:12.56 bitrate=N/A speed=32.4x elapsed=0:00:02.24    

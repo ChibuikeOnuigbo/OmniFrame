@@ -513,6 +513,9 @@ export interface MediaAsset {
   height: number
   size: number // bytes
   thumbnail?: string // optional dataURL preview
+  /** Original provider page and creator credit for externally sourced media. */
+  sourceUrl?: string
+  attribution?: string
   /** Frame-addressable raster sequence used by temporal patch/inpaint results. */
   imageSequence?: { fps: number; frames: ImageSequenceFrame[] }
   waveform?: number[] // normalized source peaks for real timeline visualization
@@ -838,15 +841,37 @@ export interface ClipAdjustment {
   luts: ClipLut[]
 }
 
-/** Spatial matte for an adjustment clip, in normalized sequence coordinates. */
+/** One additive region in an effect-only matte, in normalized sequence coordinates. */
+export interface ClipEffectMaskRegion {
+  id: string
+  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom'
+  centerX: number
+  centerY: number
+  width: number
+  height: number
+  rotation?: number
+  feather?: number
+  opacity?: number
+  text?: string
+  fontFamily?: string
+  points?: { x: number; y: number }[]
+}
+
+/**
+ * Spatial matte for a clip's effect stack. The original clip is retained and
+ * the processed result is composited through the union of `regions`. Legacy
+ * single-shape fields remain readable so existing projects round-trip.
+ */
 export interface ClipAdjustmentMask {
-  shape: 'ellipse' | 'rectangle'
+  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom'
   centerX: number // 0..1, left to right
   centerY: number // 0..1, top to bottom
   width: number // 0..1 of sequence width
   height: number // 0..1 of sequence height
   feather: number // blur radius in sequence pixels
   inverted: boolean
+  enabled?: boolean
+  regions?: ClipEffectMaskRegion[]
 }
 
 /**
@@ -926,6 +951,12 @@ export interface TextTitleStyle {
   insideBed?: string
   /** Mask REAL moving footage inside glyphs (asset path registered by import_video). */
   insideVideo?: string
+  /** Optional processing applied only to the footage inside the glyph matte. */
+  insideInvert?: boolean
+  insideBrightness?: number
+  insideContrast?: number
+  insideSaturation?: number
+  insideSourceOffset?: number
   insideBaseAlpha?: number
   insideParticle?: string
   insideTint?: string
@@ -1219,6 +1250,7 @@ export interface PaintLayer {
   visible: boolean
   locked: boolean
   opacity: number
+  blendKeys?: import('./lib/blendModes').BlendKey[]
   blendMode?: GlobalCompositeOperation
   blur?: number // Gaussian blur radius in px
   maskDataUrl?: string // raster restriction / legacy mask
@@ -1291,6 +1323,7 @@ export interface Clip {
   /** Optional CapCut/AE-style visibility mask that hides part of the clip. */
   mask?: ClipVisualMask
   /** Canvas composite op for this clip (watermark lighten/splice etc.). */
+  blendKeys?: import('./lib/blendModes').BlendKey[]
   blendMode?: GlobalCompositeOperation
   /** Speed-curve time remap (15 presets, src/lib/speedCurves.ts). */
   speedCurve?: import('./lib/speedCurves').SpeedCurveId
@@ -1325,6 +1358,11 @@ export interface Scene3DObject {
   roughness?: number
   metalness?: number
   materialId?: string
+  /** GLTF/GLB model used instead of the primitive geometry when present. */
+  modelUrl?: string
+  sourceUrl?: string
+  attribution?: string
+  license?: string
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
 }
 

@@ -27,14 +27,20 @@ def extract(source,destination,ffmpeg='ffmpeg',ffprobe='ffprobe',count=12):
         subprocess.run([ffmpeg,'-y','-v','error','-ss',f'{time:.6f}','-i',str(source),'-frames:v','1','-vf',fit,'-q:v','5',str(target)],capture_output=True,check=True,timeout=120)
         if not target.is_file() or target.stat().st_size==0:raise ValueError(f'No frame decoded at {time:.6f}s')
         frames.append({'file':name,'time_seconds':round(time,6)})
-    scene_frames=[]
-    with tempfile.TemporaryDirectory(prefix='omni-scene-') as tmp:
-        scene=subprocess.run([ffmpeg,'-y','-v','info','-i',str(source),'-vf',"select='gt(scene,0.4)',showinfo,"+fit,'-vsync','vfr','-frames:v','6','-q:v','5',str(Path(tmp)/'s%d.jpg')],capture_output=True,text=True,timeout=300,check=True)
-        times=[float(t) for t in re.findall(r'pts_time:([0-9.]+)',scene.stderr)]
-        for index,target in enumerate(sorted(Path(tmp).glob('s*.jpg'))):
-            shutil.copyfile(target,destination/target.name)
-            scene_frames.append({'file':target.name,'time_seconds':times[index] if index<len(times) else None})
-    report={'scene_frames':scene_frames,'source':source.name,'duration_seconds':duration,'duration_source':'ffprobe acquired media','probe':probe,'frames':frames,'fit':'contain with letterbox; never stretch','visual_review':'pending','audio_review':'not performed by frame extractor'}
+    scene_frames=[];warnings=[]
+    # Scene detection is supplemental. Some valid WebM streams decode the
+    # uniform samples but make ffmpeg's scene filter exit non-zero. Preserve
+    # the twelve measured samples instead of discarding the whole acquisition.
+    try:
+        with tempfile.TemporaryDirectory(prefix='omni-scene-') as tmp:
+            scene=subprocess.run([ffmpeg,'-y','-v','info','-i',str(source),'-vf',"select='gt(scene,0.4)',showinfo,"+fit,'-vsync','vfr','-frames:v','6','-q:v','5',str(Path(tmp)/'s%d.jpg')],capture_output=True,text=True,timeout=300,check=True)
+            times=[float(t) for t in re.findall(r'pts_time:([0-9.]+)',scene.stderr)]
+            for index,target in enumerate(sorted(Path(tmp).glob('s*.jpg'))):
+                shutil.copyfile(target,destination/target.name)
+                scene_frames.append({'file':target.name,'time_seconds':times[index] if index<len(times) else None})
+    except (subprocess.SubprocessError, OSError) as error:
+        warnings.append('Scene-change samples unavailable: '+str(error)[:300])
+    report={'scene_frames':scene_frames,'source':source.name,'duration_seconds':duration,'duration_source':'ffprobe acquired media','probe':probe,'frames':frames,'fit':'contain with letterbox; never stretch','warnings':warnings,'visual_review':'pending','audio_review':'not performed by frame extractor'}
     (destination/'sampling.json').write_text(json.dumps(report,indent=2)+'\n')
     return report
 
