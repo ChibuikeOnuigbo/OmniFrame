@@ -1,0 +1,12 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=CyPgA10kl7o
+[youtube] CyPgA10kl7o: Downloading webpage
+[youtube] CyPgA10kl7o: Downloading web embedded client config
+[youtube] CyPgA10kl7o: Downloading player 11a45ffb-main
+[youtube] CyPgA10kl7o: Downloading web embedded player API JSON
+[youtube] CyPgA10kl7o: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] CyPgA10kl7o: Downloading m3u8 information
+[info] CyPgA10kl7o: Downloading 1 format(s): 399+251
+[info] There are no subtitles for the requested languages
+[info] Writing video metadata as JSON to: review-out/CyPgA10kl7o/source.info.json
+

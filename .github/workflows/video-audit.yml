@@ -12,7 +12,9 @@ name: video-audit
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    # Owner-pushed feature branches can run the same secret-backed audit and
+    # receive the bot's evidence commit without forcing unfinished UI work to main.
+    branches: ['**']
     paths:
       - .github/workflows/video-audit.yml
       - youtube-audit/batch-trigger.txt
@@ -336,7 +338,15 @@ jobs:
                   for f0 in os.listdir(d):
                       if f0.startswith("src"): os.remove(os.path.join(d, f0))
               except Exception as e:
-                  rec["status"] = "BLOCKED"
+                  # Keep measurable evidence already decoded before a later
+                  # ffmpeg stage failed. A partial record is not a completed
+                  # viewing review, but it is more truthful than BLOCKED.
+                  existing_frames = sorted(f for f in os.listdir(d) if (f.startswith('u') or f.startswith('s')) and f.lower().endswith(('.jpg','.jpeg','.png')))
+                  rec["status"] = "EVIDENCE_PARTIAL" if existing_frames else "BLOCKED"
+                  if existing_frames:
+                      rec["frames"] = existing_frames
+                      rec["visual_review"] = "pending; partial decoded samples only"
+                      rec["audio_review"] = "not performed"
                   rec["failure"] = str(e)[:2000]
                   os.makedirs("audit-out/errors", exist_ok=True)
                   open(f"audit-out/errors/{vid}.txt","w").write(str(e))

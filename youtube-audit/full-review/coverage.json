@@ -1,0 +1,4852 @@
+{
+  "generated": "2026-11-02T13:01:26.688452+00:00",
+  "expected": 134,
+  "processed": 134,
+  "missing_ids": [],
+  "status_counts": {
+    "BLOCKED": 13,
+    "FULL_DURATION_EVIDENCE": 121
+  },
+  "records": [
+    {
+      "id": "umTDI962BhM",
+      "url": "https://www.youtube.com/watch?v=umTDI962BhM",
+      "title": "chat-history link umTDI962BhM",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] umTDI962BhM: This video is unavailable\n; ERROR: [youtube] umTDI962BhM: This video is unavailable\n; ERROR: [youtube] umTDI962BhM: This video is unavailable\n"
+    },
+    {
+      "id": "iXZhEZPoNZY",
+      "url": "https://www.youtube.com/watch?v=iXZhEZPoNZY",
+      "title": "null-object tutorial iXZhEZPoNZY",
+      "channel": "user-null-links",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 265.028,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 54,
+      "contact_sheet_count": 3,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30000/1001"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "265.028000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "yA_Rc0OzIxw",
+      "url": "https://www.youtube.com/watch?v=yA_Rc0OzIxw",
+      "title": "chat-history link yA_Rc0OzIxw",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 16.048,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "16.048000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "DY-0ntGxoPo",
+      "url": "https://www.youtube.com/watch?v=DY-0ntGxoPo",
+      "title": "chat-history link DY-0ntGxoPo",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 362.508,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 73,
+      "contact_sheet_count": 3,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "25/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "362.508000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "-89cPyk7lQU",
+      "url": "https://www.youtube.com/watch?v=-89cPyk7lQU",
+      "title": "chat-history link -89cPyk7lQU",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 8.908,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 5,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "8.908000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "rY2RTuJEJpw",
+      "url": "https://www.youtube.com/watch?v=rY2RTuJEJpw",
+      "title": "chat-history link rY2RTuJEJpw",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 6.868,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 4,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "6.868000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "V9ApHueQbN0",
+      "url": "https://www.youtube.com/watch?v=V9ApHueQbN0",
+      "title": "Gradient stroke - Alight motion. #Alightmotion #alightmotiontutorial #hancybox #editing",
+      "channel": "@Hancybox",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 55.588,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 28,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "55.588000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "xLs0M7fFfQA",
+      "url": "https://www.youtube.com/watch?v=xLs0M7fFfQA",
+      "title": "MiniMax Audio - Better than ElevenLabs? For creators\u2026 YES.  \ud83d\ude4c\ud83c\udffb - #minimaxaudio #texttospeech",
+      "channel": "@Hancybox",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 81.868,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 41,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "6383/250"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "81.868000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "rUzd5Y30O80",
+      "url": "https://www.youtube.com/watch?v=rUzd5Y30O80",
+      "title": "null-object tutorial rUzd5Y30O80",
+      "channel": "user-null-links",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 244.968,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 49,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "244.968000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "poKeVJZMFV4",
+      "url": "https://www.youtube.com/watch?v=poKeVJZMFV4",
+      "title": "chat-history link poKeVJZMFV4",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 32.888,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 17,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "32.888000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "5cubb_lXKAA",
+      "url": "https://www.youtube.com/watch?v=5cubb_lXKAA",
+      "title": "chat-history link 5cubb_lXKAA",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 22.388,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 12,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "22.388000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "XE_Gx_m6MLQ",
+      "url": "https://www.youtube.com/watch?v=XE_Gx_m6MLQ",
+      "title": "chat-history link XE_Gx_m6MLQ",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n"
+    },
+    {
+      "id": "AzbvhLQZP3k",
+      "url": "https://www.youtube.com/watch?v=AzbvhLQZP3k",
+      "title": "chat-history link AzbvhLQZP3k",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] AzbvhLQZP3k: This video is unavailable\n; ERROR: [youtube] AzbvhLQZP3k: This video is unavailable\n; ERROR: [youtube] AzbvhLQZP3k: This video is unavailable\n"
+    },
+    {
+      "id": "vCrpT1dA6QU",
+      "url": "https://www.youtube.com/watch?v=vCrpT1dA6QU",
+      "title": "Raster extrude - Alight motion #phonk #alightmotiontutorial",
+      "channel": "@Hancybox",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 59.228,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.228000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "dy3CLJnnuto",
+      "url": "https://www.youtube.com/watch?v=dy3CLJnnuto",
+      "title": "chat-history link dy3CLJnnuto",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 44.448,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 23,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "44.448000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "K2mSI59wPvg",
+      "url": "https://www.youtube.com/watch?v=K2mSI59wPvg",
+      "title": "Make Cloud Animation in Alight Motion (Tutorial)",
+      "channel": "@Hancybox",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 34.028,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 18,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "34.028000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "FJ08jHDgRk4",
+      "url": "https://www.youtube.com/watch?v=FJ08jHDgRk4",
+      "title": "chat-history link FJ08jHDgRk4",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 19.048,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "19.048000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "MX3yw9gT0DI",
+      "url": "https://www.youtube.com/watch?v=MX3yw9gT0DI",
+      "title": "chat-history link MX3yw9gT0DI",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 8.008,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 5,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "8.008000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "Nt7yP-e06Oo",
+      "url": "https://www.youtube.com/watch?v=Nt7yP-e06Oo",
+      "title": "chat-history link Nt7yP-e06Oo",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n"
+    },
+    {
+      "id": "EuMrlKcNnLM",
+      "url": "https://www.youtube.com/watch?v=EuMrlKcNnLM",
+      "title": "chat-history link EuMrlKcNnLM",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] EuMrlKcNnLM: This video is unavailable\n; ERROR: [youtube] EuMrlKcNnLM: This video is unavailable\n; ERROR: [youtube] EuMrlKcNnLM: This video is unavailable\n"
+    },
+    {
+      "id": "48ze7aZ8NdE",
+      "url": "https://www.youtube.com/watch?v=48ze7aZ8NdE",
+      "title": "chat-history link 48ze7aZ8NdE",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.108,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.108000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "7nFduBo1Stk",
+      "url": "https://www.youtube.com/watch?v=7nFduBo1Stk",
+      "title": "chat-history link 7nFduBo1Stk",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 18.768,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "18.768000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "JuxN-ccLRmA",
+      "url": "https://www.youtube.com/watch?v=JuxN-ccLRmA",
+      "title": "chat-history link JuxN-ccLRmA",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 9.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 5,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "9.628000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "9o8GT1Iurv0",
+      "url": "https://www.youtube.com/watch?v=9o8GT1Iurv0",
+      "title": "2000 \ud83d\udd25 - Chainsaw Man [AMV/EDIT]",
+      "channel": "PAX",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 32.068,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 17,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "24000/1001"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "32.068000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "fb-Ac9P4QZg",
+      "url": "https://www.youtube.com/watch?v=fb-Ac9P4QZg",
+      "title": "chat-history link fb-Ac9P4QZg",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n"
+    },
+    {
+      "id": "ixEoA7z5jmQ",
+      "url": "https://www.youtube.com/watch?v=ixEoA7z5jmQ",
+      "title": "chat-history link ixEoA7z5jmQ",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.328,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.328000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "hTEZOX48TN4",
+      "url": "https://www.youtube.com/watch?v=hTEZOX48TN4",
+      "title": "chat-history link hTEZOX48TN4",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 33.128,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 17,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "33.128000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "vtsTN2a4L2U",
+      "url": "https://www.youtube.com/watch?v=vtsTN2a4L2U",
+      "title": "chat-history link vtsTN2a4L2U",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 15.168,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 8,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "15.168000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "evsxqvwn65o",
+      "url": "https://www.youtube.com/watch?v=evsxqvwn65o",
+      "title": "chat-history link evsxqvwn65o",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 15.568,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 8,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "15.568000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "6Stj_5zLyiM",
+      "url": "https://www.youtube.com/watch?v=6Stj_5zLyiM",
+      "title": "chat-history link 6Stj_5zLyiM",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 59.508,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.508000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "2ZP_6YGkKQE",
+      "url": "https://www.youtube.com/watch?v=2ZP_6YGkKQE",
+      "title": "chat-history link 2ZP_6YGkKQE",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 7.808,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 4,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "7.808000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "FnPJWMBya6U",
+      "url": "https://www.youtube.com/watch?v=FnPJWMBya6U",
+      "title": "chat-history link FnPJWMBya6U",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.948,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.948000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "F5RcdSwzUVw",
+      "url": "https://www.youtube.com/watch?v=F5RcdSwzUVw",
+      "title": "chat-history link F5RcdSwzUVw",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.768,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.768000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "tQIlQt4dTiM",
+      "url": "https://www.youtube.com/watch?v=tQIlQt4dTiM",
+      "title": "chat-history link tQIlQt4dTiM",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 19.428,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "2997/100"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "19.428000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "mdpb03H-Y30",
+      "url": "https://www.youtube.com/watch?v=mdpb03H-Y30",
+      "title": "chat-history link mdpb03H-Y30",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 6.228,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 4,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "6.228000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "5aFDj54RWQw",
+      "url": "https://www.youtube.com/watch?v=5aFDj54RWQw",
+      "title": "chat-history link 5aFDj54RWQw",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 10.028,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 6,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "24/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "10.028000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "KmqhJjAP3wM",
+      "url": "https://www.youtube.com/watch?v=KmqhJjAP3wM",
+      "title": "chat-history link KmqhJjAP3wM",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 28.748,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 15,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "28.748000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "b7uYVubI7jg",
+      "url": "https://www.youtube.com/watch?v=b7uYVubI7jg",
+      "title": "chat-history link b7uYVubI7jg",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 20.128,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 266,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "20.128000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "vTyefIjQ8_Q",
+      "url": "https://www.youtube.com/watch?v=vTyefIjQ8_Q",
+      "title": "chat-history link vTyefIjQ8_Q",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 131.428,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 66,
+      "contact_sheet_count": 3,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 320,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "131.428000"
+        }
+      },
+      "caption_files": [
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "oNVxf9UZY-0",
+      "url": "https://www.youtube.com/watch?v=oNVxf9UZY-0",
+      "title": "chat-history link oNVxf9UZY-0",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.788,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 266,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.788000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "ZrwjaDc__ZM",
+      "url": "https://www.youtube.com/watch?v=ZrwjaDc__ZM",
+      "title": "chat-history link ZrwjaDc__ZM",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 14.588,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 8,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "14.588000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "RnjxSQNvCuc",
+      "url": "https://www.youtube.com/watch?v=RnjxSQNvCuc",
+      "title": "chat-history link RnjxSQNvCuc",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.248,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.248000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "5Wy0zVw5wgg",
+      "url": "https://www.youtube.com/watch?v=5Wy0zVw5wgg",
+      "title": "chat-history link 5Wy0zVw5wgg",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 5.028,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 3,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "6/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "5.028000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "fx55eFCUw_I",
+      "url": "https://www.youtube.com/watch?v=fx55eFCUw_I",
+      "title": "chat-history link fx55eFCUw_I",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 26.188,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 14,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 320,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "26.188000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "ShCYvdqTQ3s",
+      "url": "https://www.youtube.com/watch?v=ShCYvdqTQ3s",
+      "title": "Insane Reel Editing! \ud83d\udd25 - Alight Motion Tutorial #Shorts #Reels #alightmotion",
+      "channel": "@Hancybox",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.828,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.828000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "99hY2x1CLEU",
+      "url": "https://www.youtube.com/watch?v=99hY2x1CLEU",
+      "title": "chat-history link 99hY2x1CLEU",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n; ERROR: [youtube] 99hY2x1CLEU: This video is unavailable\n"
+    },
+    {
+      "id": "9_uwkoUiERE",
+      "url": "https://www.youtube.com/watch?v=9_uwkoUiERE",
+      "title": "chat-history link 9_uwkoUiERE",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 54.208,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 28,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "54.208000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "p0cp8uUpc9M",
+      "url": "https://www.youtube.com/watch?v=p0cp8uUpc9M",
+      "title": "chat-history link p0cp8uUpc9M",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 20.548,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "20.548000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "fGm0SBFTj3o",
+      "url": "https://www.youtube.com/watch?v=fGm0SBFTj3o",
+      "title": "Playboi Carti - JUMPIN \ud83e\udd64 \u300c Kuiro MEP \u300d AMV / Flow Edit (4K)",
+      "channel": "@spaceless2041",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 48.788,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 25,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "20/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "48.788000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "bpUZkFVX6NY",
+      "url": "https://www.youtube.com/watch?v=bpUZkFVX6NY",
+      "title": "AMV COMPOSITING tutorial | After Effects (Step-by-Step + Free Overlays)",
+      "channel": "@spaceless2041",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 648.588,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 130,
+      "contact_sheet_count": 6,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg",
+        "sheet-004.jpg",
+        "sheet-005.jpg",
+        "sheet-006.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30000/1001"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "648.588000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "KZQGvYI8RuQ",
+      "url": "https://www.youtube.com/watch?v=KZQGvYI8RuQ",
+      "title": "chat-history link KZQGvYI8RuQ",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 6.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 4,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "6.628000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "N7-UHBSPs7Y",
+      "url": "https://www.youtube.com/watch?v=N7-UHBSPs7Y",
+      "title": "Click for Full tutorial \u2b06\ufe0f #nanobanana #veo3 #klingai",
+      "channel": "@Hancybox",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 59.788,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.788000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "cBkNEvSsZwM",
+      "url": "https://www.youtube.com/watch?v=cBkNEvSsZwM",
+      "title": "chat-history link cBkNEvSsZwM",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 159.188,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 80,
+      "contact_sheet_count": 4,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg",
+        "sheet-004.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "159.188000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "L7i8-vJ1b9c",
+      "url": "https://www.youtube.com/watch?v=L7i8-vJ1b9c",
+      "title": "chat-history link L7i8-vJ1b9c",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 5.068,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 3,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "5.068000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "xeXhlkoOyrw",
+      "url": "https://www.youtube.com/watch?v=xeXhlkoOyrw",
+      "title": "\u300cScenario \ud83c\udfad\ud83d\udda4\u300d JJK\u300cAMV/EDIT\u300d(FREE PF)",
+      "channel": "@spaceless2041",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.948,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30000/1001"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.948000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "Hb9m7M-P15Y",
+      "url": "https://www.youtube.com/watch?v=Hb9m7M-P15Y",
+      "title": "chat-history link Hb9m7M-P15Y",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 5.988,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 3,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "5.988000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "RZpyeu25Kis",
+      "url": "https://www.youtube.com/watch?v=RZpyeu25Kis",
+      "title": "chat-history link RZpyeu25Kis",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 18.888,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "18.888000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "v2g0zap6LQc",
+      "url": "https://www.youtube.com/watch?v=v2g0zap6LQc",
+      "title": "chat-history link v2g0zap6LQc",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 10.848,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 6,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "10.848000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "exRqiCBW-u8",
+      "url": "https://www.youtube.com/watch?v=exRqiCBW-u8",
+      "title": "chat-history link exRqiCBW-u8",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.788,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.788000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "Qxf_bMMc_ZE",
+      "url": "https://www.youtube.com/watch?v=Qxf_bMMc_ZE",
+      "title": "chat-history link Qxf_bMMc_ZE",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 23.088,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 12,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "23.088000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "L7RueAR-5Zc",
+      "url": "https://www.youtube.com/watch?v=L7RueAR-5Zc",
+      "title": "Y Not? \u26d4 - JJK Shibuya Incident Arc \u300c Flow / Edit \u300d4K",
+      "channel": "@spaceless2041",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 18.588,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "20/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "18.588000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "SsXi5rqVlvA",
+      "url": "https://www.youtube.com/watch?v=SsXi5rqVlvA",
+      "title": "chat-history link SsXi5rqVlvA",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.808,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.808000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "h_D720n75B4",
+      "url": "https://www.youtube.com/watch?v=h_D720n75B4",
+      "title": "chat-history link h_D720n75B4",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 22.248,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 12,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 266,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "22.248000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "hSTkYAdWJek",
+      "url": "https://www.youtube.com/watch?v=hSTkYAdWJek",
+      "title": "chat-history link hSTkYAdWJek",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.188,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.188000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "JJLJHPUjnlI",
+      "url": "https://www.youtube.com/watch?v=JJLJHPUjnlI",
+      "title": "chat-history link JJLJHPUjnlI",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 11.748,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 6,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "3410/117"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "11.748000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "KqUBgbk5u1k",
+      "url": "https://www.youtube.com/watch?v=KqUBgbk5u1k",
+      "title": "chat-history link KqUBgbk5u1k",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.008,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.008000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "CyPgA10kl7o",
+      "url": "https://www.youtube.com/watch?v=CyPgA10kl7o",
+      "title": "Scale cut effect - Alight motion \ud83d\udcd0 #alightmotiontutorial #hancybox  #motiongraphics",
+      "channel": "@Hancybox",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 59.888,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.888000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "RnDgLkdlTC4",
+      "url": "https://www.youtube.com/watch?v=RnDgLkdlTC4",
+      "title": "chat-history link RnDgLkdlTC4",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 226.908,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 46,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "25/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "226.908000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "0rNqPArnpB0",
+      "url": "https://www.youtube.com/watch?v=0rNqPArnpB0",
+      "title": "chat-history link 0rNqPArnpB0",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.328,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.328000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "rsUw8ijzPow",
+      "url": "https://www.youtube.com/watch?v=rsUw8ijzPow",
+      "title": "Reve : Hyper Anime in 1 prompt \u26a1#reveai #revepartner #reve #hancybox",
+      "channel": "@Hancybox",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 51.288,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 26,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "51.288000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "yOjYKje861U",
+      "url": "https://www.youtube.com/watch?v=yOjYKje861U",
+      "title": "chat-history link yOjYKje861U",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n"
+    },
+    {
+      "id": "5RXGg3T4WlQ",
+      "url": "https://www.youtube.com/watch?v=5RXGg3T4WlQ",
+      "title": "chat-history link 5RXGg3T4WlQ",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 528.328,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 106,
+      "contact_sheet_count": 5,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg",
+        "sheet-004.jpg",
+        "sheet-005.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "528.328000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "oqzbIOKic90",
+      "url": "https://www.youtube.com/watch?v=oqzbIOKic90",
+      "title": "chat-history link oqzbIOKic90",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 26.308,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 14,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "26.308000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "sx7ogrJD5KQ",
+      "url": "https://www.youtube.com/watch?v=sx7ogrJD5KQ",
+      "title": "chat-history link sx7ogrJD5KQ",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 19.608,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "19.608000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "6sB6CO56cq8",
+      "url": "https://www.youtube.com/watch?v=6sB6CO56cq8",
+      "title": "chat-history link 6sB6CO56cq8",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] 6sB6CO56cq8: This video is unavailable\n; ERROR: [youtube] 6sB6CO56cq8: This video is unavailable\n; ERROR: [youtube] 6sB6CO56cq8: This video is unavailable\n"
+    },
+    {
+      "id": "7WHDyTE9Mq8",
+      "url": "https://www.youtube.com/watch?v=7WHDyTE9Mq8",
+      "title": "chat-history link 7WHDyTE9Mq8",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 13.148,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "13.148000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "AQV-mQzAs-U",
+      "url": "https://www.youtube.com/watch?v=AQV-mQzAs-U",
+      "title": "Alight motion Glass Morphic tutorial #alightmotiontutorial #alightmotionedit #shorts #edit",
+      "channel": "@Hancybox",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 53.708,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 27,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "53.708000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "FPSxFSjCxPo",
+      "url": "https://www.youtube.com/watch?v=FPSxFSjCxPo",
+      "title": "chat-history link FPSxFSjCxPo",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] FPSxFSjCxPo: This video is unavailable\n; ERROR: [youtube] FPSxFSjCxPo: This video is unavailable\n; ERROR: [youtube] FPSxFSjCxPo: This video is unavailable\n"
+    },
+    {
+      "id": "i2HrbsXlV04",
+      "url": "https://www.youtube.com/watch?v=i2HrbsXlV04",
+      "title": "chat-history link i2HrbsXlV04",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 14.608,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 8,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 260,
+            "r_frame_rate": "25/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "14.608000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "M2_vjAseOns",
+      "url": "https://www.youtube.com/watch?v=M2_vjAseOns",
+      "title": "How to relight scenes with ae comp lights",
+      "channel": "sebastian",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 165.028,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 83,
+      "contact_sheet_count": 4,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg",
+        "sheet-004.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 316,
+            "r_frame_rate": "19000/1001"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "165.028000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "Q9Aka1vrJVQ",
+      "url": "https://www.youtube.com/watch?v=Q9Aka1vrJVQ",
+      "title": "Alight Motion Flip Layer effect\ud83c\udccf#alightmotion #alightmotiontutorial #animation #hancybox",
+      "channel": "@Hancybox",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 104.133,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 53,
+      "contact_sheet_count": 3,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "104.133000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "dibSGfA3LAk",
+      "url": "https://www.youtube.com/watch?v=dibSGfA3LAk",
+      "title": "chat-history link dibSGfA3LAk",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 95.228,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 48,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "95.228000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "3HC5ml9Wy3o",
+      "url": "https://www.youtube.com/watch?v=3HC5ml9Wy3o",
+      "title": "chat-history link 3HC5ml9Wy3o",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 72.568,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 37,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "72.568000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "1kFJZf_6-7Q",
+      "url": "https://www.youtube.com/watch?v=1kFJZf_6-7Q",
+      "title": "Use it wisely, It\u2019s gonna help a lot. \ud83c\udf1d\ud83e\udef6\ud83c\udffb",
+      "channel": "@Hancybox",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 59.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.628000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "qa1Cprn1QLc",
+      "url": "https://www.youtube.com/watch?v=qa1Cprn1QLc",
+      "title": "chat-history link qa1Cprn1QLc",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "747/25"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.628000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "vh65StXSx7o",
+      "url": "https://www.youtube.com/watch?v=vh65StXSx7o",
+      "title": "chat-history link vh65StXSx7o",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.148,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "25/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.148000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "Xk7JcX4yg5M",
+      "url": "https://www.youtube.com/watch?v=Xk7JcX4yg5M",
+      "title": "Apple style animation In alight motion \ud83d\udd3a #alightmotiontutorial #alaightmotionedit #appleui",
+      "channel": "@Hancybox",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 18.668,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "18.668000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "xflSQX3CS3o",
+      "url": "https://www.youtube.com/watch?v=xflSQX3CS3o",
+      "title": "chat-history link xflSQX3CS3o",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.608,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.608000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "DfnbdXs-JpI",
+      "url": "https://www.youtube.com/watch?v=DfnbdXs-JpI",
+      "title": "chat-history link DfnbdXs-JpI",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 5.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 3,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "5.628000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "oKaAETJzLq4",
+      "url": "https://www.youtube.com/watch?v=oKaAETJzLq4",
+      "title": "Null Control Like Ae In alight motion. | #alightmotiontutorial #breakingbad #editingtutorial",
+      "channel": "@Hancybox",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 16.388,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "16.388000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "EZF9JEpL6L8",
+      "url": "https://www.youtube.com/watch?v=EZF9JEpL6L8",
+      "title": "chat-history link EZF9JEpL6L8",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 8.048,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 5,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "8.048000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "4fK8ITqD0ME",
+      "url": "https://www.youtube.com/watch?v=4fK8ITqD0ME",
+      "title": "chat-history link 4fK8ITqD0ME",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 7.348,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 4,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "7.348000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "5SZAK4WFPK4",
+      "url": "https://www.youtube.com/watch?v=5SZAK4WFPK4",
+      "title": "chat-history link 5SZAK4WFPK4",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 57.168,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 29,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "57.168000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "cv7X_WoDk8E",
+      "url": "https://www.youtube.com/watch?v=cv7X_WoDk8E",
+      "title": "chat-history link cv7X_WoDk8E",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.488,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.488000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "Tmki6M1_PWI",
+      "url": "https://www.youtube.com/watch?v=Tmki6M1_PWI",
+      "title": "chat-history link Tmki6M1_PWI",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 179.288,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 90,
+      "contact_sheet_count": 4,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg",
+        "sheet-004.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "179.288000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "PMvN6KSYQhU",
+      "url": "https://www.youtube.com/watch?v=PMvN6KSYQhU",
+      "title": "chat-history link PMvN6KSYQhU",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 14.228,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 8,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "14.228000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "l1GF8APyVTg",
+      "url": "https://www.youtube.com/watch?v=l1GF8APyVTg",
+      "title": "chat-history link l1GF8APyVTg",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.668,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "24/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.668000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "miloyuZe3Jw",
+      "url": "https://www.youtube.com/watch?v=miloyuZe3Jw",
+      "title": "chat-history link miloyuZe3Jw",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 44.988,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 23,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "44.988000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "79jfvp-5f0g",
+      "url": "https://www.youtube.com/watch?v=79jfvp-5f0g",
+      "title": "chat-history link 79jfvp-5f0g",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 35.008,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 18,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "35.008000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "-9UkBHVV9OA",
+      "url": "https://www.youtube.com/watch?v=-9UkBHVV9OA",
+      "title": "chat-history link -9UkBHVV9OA",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.248,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.248000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "GR8JPrlw1CM",
+      "url": "https://www.youtube.com/watch?v=GR8JPrlw1CM",
+      "title": "chat-history link GR8JPrlw1CM",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 13.028,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 320,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "13.028000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "uFnoKD-4cpM",
+      "url": "https://www.youtube.com/watch?v=uFnoKD-4cpM",
+      "title": "chat-history link uFnoKD-4cpM",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 49.408,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 25,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "49.408000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "8WMyqJKRgzw",
+      "url": "https://www.youtube.com/watch?v=8WMyqJKRgzw",
+      "title": "chat-history link 8WMyqJKRgzw",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] 8WMyqJKRgzw: Video unavailable. This video is private\n; ERROR: [youtube] 8WMyqJKRgzw: Video unavailable. This video is private\n; ERROR: [youtube] 8WMyqJKRgzw: Video unavailable. This video is private\n"
+    },
+    {
+      "id": "L6WUvXUf0es",
+      "url": "https://www.youtube.com/watch?v=L6WUvXUf0es",
+      "title": "chat-history link L6WUvXUf0es",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 20.768,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 320,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "20.768000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "uyHDHO7zP88",
+      "url": "https://www.youtube.com/watch?v=uyHDHO7zP88",
+      "title": "Timelines \u274c Nasa equations \u2713 #shorts #alightmotiontutorial #alightmotion #videoediting",
+      "channel": "@Hancybox",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 14.668,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 8,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "14.668000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "4hqpWf38W5s",
+      "url": "https://www.youtube.com/watch?v=4hqpWf38W5s",
+      "title": "chat-history link 4hqpWf38W5s",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 5.908,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 3,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "5.908000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "yXSlgdbaA_Q",
+      "url": "https://www.youtube.com/watch?v=yXSlgdbaA_Q",
+      "title": "chat-history link yXSlgdbaA_Q",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.768,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.768000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "WJAO6OXE4kM",
+      "url": "https://www.youtube.com/watch?v=WJAO6OXE4kM",
+      "title": "Check pinned comment! @Reve Image #revepartner #reve",
+      "channel": "@Hancybox",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 29.468,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 15,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "29.468000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "T2TtWknCu60",
+      "url": "https://www.youtube.com/watch?v=T2TtWknCu60",
+      "title": "Magnify Background - Alight motion | #shorts #alightmotiontutorial #alightmotion",
+      "channel": "@Hancybox",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 53.928,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 27,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "53.928000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "EtTwCO1tAD8",
+      "url": "https://www.youtube.com/watch?v=EtTwCO1tAD8",
+      "title": "PR/Resolve keeps crashing? Here\u2019s the FIX! \ud83d\udd25 #uniconverter #formatconversion",
+      "channel": "@Hancybox",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 44.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 23,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "44.628000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "fdPMTGq6BdE",
+      "url": "https://www.youtube.com/watch?v=fdPMTGq6BdE",
+      "title": "chat-history link fdPMTGq6BdE",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 10.408,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 6,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "10.408000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "I1JR_9NJlB4",
+      "url": "https://www.youtube.com/watch?v=I1JR_9NJlB4",
+      "title": "chat-history link I1JR_9NJlB4",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 13.908,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "13.908000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "Tvd7qiK_gUA",
+      "url": "https://www.youtube.com/watch?v=Tvd7qiK_gUA",
+      "title": "How to do Manga Animations Like me | After Effects",
+      "channel": "@Keditz123",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 977.088,
+      "sample_interval_seconds": 5.0,
+      "expected_sample_count": 196,
+      "contact_sheet_count": 8,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg",
+        "sheet-003.jpg",
+        "sheet-004.jpg",
+        "sheet-005.jpg",
+        "sheet-006.jpg",
+        "sheet-007.jpg",
+        "sheet-008.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 640,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "977.088000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "Qu9MxR8I5dM",
+      "url": "https://www.youtube.com/watch?v=Qu9MxR8I5dM",
+      "title": "Old repost \ud83c\udf1d",
+      "channel": "@Hancybox",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 11.528,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 6,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "11.528000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "FAHi0jH7FJ4",
+      "url": "https://www.youtube.com/watch?v=FAHi0jH7FJ4",
+      "title": "chat-history link FAHi0jH7FJ4",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 10.848,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 6,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "10.848000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "xhgCzz2qyXs",
+      "url": "https://www.youtube.com/watch?v=xhgCzz2qyXs",
+      "title": "chat-history link xhgCzz2qyXs",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 8.108,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 5,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "8.108000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "lypaZpeWoJg",
+      "url": "https://www.youtube.com/watch?v=lypaZpeWoJg",
+      "title": "chat-history link lypaZpeWoJg",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 22.808,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 12,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "2997/100"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "22.808000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "WmkdYFcXCtg",
+      "url": "https://www.youtube.com/watch?v=WmkdYFcXCtg",
+      "title": "chat-history link WmkdYFcXCtg",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n"
+    },
+    {
+      "id": "pGd7t371kAk",
+      "url": "https://www.youtube.com/watch?v=pGd7t371kAk",
+      "title": "chat-history link pGd7t371kAk",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "BLOCKED",
+      "failure": "ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n"
+    },
+    {
+      "id": "iB-TehC1kOs",
+      "url": "https://www.youtube.com/watch?v=iB-TehC1kOs",
+      "title": "chat-history link iB-TehC1kOs",
+      "channel": "chat-history",
+      "shard": 5,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.108,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.108000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "F8mlolILu7A",
+      "url": "https://www.youtube.com/watch?v=F8mlolILu7A",
+      "title": "chat-history link F8mlolILu7A",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 16.628,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "21/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "16.628000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "yZOfRXLI4iI",
+      "url": "https://www.youtube.com/watch?v=yZOfRXLI4iI",
+      "title": "Hologram effect Alight motion #shorts #alightmotiontutorial #tutorial",
+      "channel": "@Hancybox",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 59.208,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "59.208000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "sdgMG3sZ3nE",
+      "url": "https://www.youtube.com/watch?v=sdgMG3sZ3nE",
+      "title": "chat-history link sdgMG3sZ3nE",
+      "channel": "chat-history",
+      "shard": 0,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 17.348,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 9,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 320,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "17.348000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "b5yB6khnrmc",
+      "url": "https://www.youtube.com/watch?v=b5yB6khnrmc",
+      "title": "chat-history link b5yB6khnrmc",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 48.188,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 25,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 128,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "48.188000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "HHNTQkaGv-M",
+      "url": "https://www.youtube.com/watch?v=HHNTQkaGv-M",
+      "title": "chat-history link HHNTQkaGv-M",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 34.768,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 18,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 320,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "34.768000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "Uew3Znl3Fl8",
+      "url": "https://www.youtube.com/watch?v=Uew3Znl3Fl8",
+      "title": "chat-history link Uew3Znl3Fl8",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.108,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 266,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.108000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "VA_p4aqYaIc",
+      "url": "https://www.youtube.com/watch?v=VA_p4aqYaIc",
+      "title": "chat-history link VA_p4aqYaIc",
+      "channel": "chat-history",
+      "shard": 1,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 7.488,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 4,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "7.488000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "n9JOpkEqtS4",
+      "url": "https://www.youtube.com/watch?v=n9JOpkEqtS4",
+      "title": "chat-history link n9JOpkEqtS4",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 12.108,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 7,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "12.108000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "DMwM6F15sNg",
+      "url": "https://www.youtube.com/watch?v=DMwM6F15sNg",
+      "title": "chat-history link DMwM6F15sNg",
+      "channel": "chat-history",
+      "shard": 6,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 30.468,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 16,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "30.468000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "ylFdwE6sSWU",
+      "url": "https://www.youtube.com/watch?v=ylFdwE6sSWU",
+      "title": "chat-history link ylFdwE6sSWU",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 19.028,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "19.028000"
+        }
+      },
+      "caption_files": []
+    },
+    {
+      "id": "edGUFZ3oS3g",
+      "url": "https://www.youtube.com/watch?v=edGUFZ3oS3g",
+      "title": "chat-history link edGUFZ3oS3g",
+      "channel": "chat-history",
+      "shard": 3,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 18.328,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 10,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "18.328000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    },
+    {
+      "id": "_1fcL-aB1CU",
+      "url": "https://www.youtube.com/watch?v=_1fcL-aB1CU",
+      "title": "Linear repeat Advance  - Alight motion tutorial: [ #hancybox #alightmotiontutorial #motiongraphics",
+      "channel": "@Hancybox",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 58.568,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 30,
+      "contact_sheet_count": 2,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg",
+        "sheet-002.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "58.568000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "UuTKuhcqv2M",
+      "url": "https://www.youtube.com/watch?v=UuTKuhcqv2M",
+      "title": "chat-history link UuTKuhcqv2M",
+      "channel": "chat-history",
+      "shard": 2,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 32.448,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 17,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 360,
+            "height": 360,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "32.448000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt",
+        "source.en-orig.vtt"
+      ]
+    },
+    {
+      "id": "ENRtNTNtV8M",
+      "url": "https://www.youtube.com/watch?v=ENRtNTNtV8M",
+      "title": "chat-history link ENRtNTNtV8M",
+      "channel": "chat-history",
+      "shard": 4,
+      "status": "FULL_DURATION_EVIDENCE",
+      "duration_seconds": 21.548,
+      "sample_interval_seconds": 2.0,
+      "expected_sample_count": 11,
+      "contact_sheet_count": 1,
+      "tiles_per_sheet": 25,
+      "contact_sheets": [
+        "sheet-001.jpg"
+      ],
+      "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 240,
+            "height": 300,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "21.548000"
+        }
+      },
+      "caption_files": [
+        "source.en.vtt"
+      ]
+    }
+  ]
+}

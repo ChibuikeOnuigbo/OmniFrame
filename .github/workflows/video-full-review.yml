@@ -1,0 +1,138 @@
+name: video-full-review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+    paths:
+      - .github/workflows/video-full-review.yml
+      - youtube-audit/full-review-trigger.txt
+      - youtube-audit/review-ledger.json
+      - scripts/extract-full-video-review.py
+
+concurrency:
+  group: video-full-review-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    name: review shard ${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install review tools
+        run: |
+          pip install -q -U --force-reinstall "yt-dlp[default] @ https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.tar.gz" || pip install -q -U yt-dlp
+          curl -fsSL https://deno.land/install.sh | sh -s v2.5.4 || true
+          echo "$HOME/.deno/bin" >> "$GITHUB_PATH"
+          python3 -c "import yt_dlp_ejs" 2>/dev/null || pip install -q yt-dlp-ejs || true
+          mkdir -p "$HOME/.config/yt-dlp"
+          printf -- '--remote-components ejs:github\n' > "$HOME/.config/yt-dlp/config"
+          pip install -q bgutil-ytdlp-pot-provider || true
+          docker run -d --name pot -p 4416:4416 brainicism/bgutil-ytdlp-pot-provider:latest || true
+          command -v ffmpeg >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }
+      - name: Load owner cookies without logging values
+        run: |
+          if [ -n "${{ secrets.YT_COOKIES }}" ]; then
+            printf '%s' "${{ secrets.YT_COOKIES }}" > /tmp/yt.cookies
+            echo "YT_COOKIES_ARG=--cookies" >> "$GITHUB_ENV"
+            echo "YT_COOKIES_PATH=/tmp/yt.cookies" >> "$GITHUB_ENV"
+            echo "cookies present: yes; lines=$(wc -l < /tmp/yt.cookies)"
+          else
+            echo "cookies present: no"
+          fi
+      - name: Download and extract complete temporal evidence
+        env:
+          SHARD: ${{ matrix.shard }}
+          SHARDS: 7
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, subprocess
+          shard, shards = int(os.environ['SHARD']), int(os.environ['SHARDS'])
+          entries = json.load(open('youtube-audit/review-ledger.json'))['videos']
+          entries = [entry for index, entry in enumerate(entries) if index % shards == shard]
+          root = pathlib.Path('review-out'); root.mkdir(exist_ok=True)
+          cookie = [os.environ['YT_COOKIES_ARG'], os.environ['YT_COOKIES_PATH']] if os.environ.get('YT_COOKIES_ARG') else []
+          for entry in entries:
+              vid, url = entry['id'], entry['url']; dest = root / vid; dest.mkdir(exist_ok=True)
+              record = dict(entry); record['shard'] = shard
+              try:
+                  # Caption files plus source metadata make spoken tutorials searchable.
+                  caption_cmd = ['yt-dlp','--no-warnings',*cookie,'--skip-download','--write-info-json','--write-subs','--write-auto-subs','--sub-langs','en.*,en','--sub-format','vtt','-o',str(dest/'source.%(ext)s'),url]
+                  captions = subprocess.run(caption_cmd, capture_output=True, text=True, timeout=300)
+                  (dest/'caption-log.txt').write_text((captions.stdout+'\n'+captions.stderr)[-4000:])
+                  fmt = 'bv*[height<=360]+ba/b[height<=360]/bv*[height<=480]+ba/b[height<=480]/b/w'
+                  methods = [
+                    ['yt-dlp','--no-warnings',*cookie,'--extractor-args','youtube:player_client=android','-f',fmt,'-o',str(dest/'source.%(ext)s'),url],
+                    ['yt-dlp','--no-warnings',*cookie,'-f',fmt,'-o',str(dest/'source.%(ext)s'),url],
+                    ['yt-dlp','--no-warnings',*cookie,'--extractor-args','youtube:player_client=tv','-f',fmt,'-o',str(dest/'source.%(ext)s'),url],
+                  ]
+                  source = None; failures=[]
+                  for command in methods:
+                      result = subprocess.run(command, capture_output=True, text=True, timeout=900)
+                      candidates = sorted(p for p in dest.glob('source.*') if p.suffix not in ('.json','.vtt','.part','.ytdl'))
+                      if result.returncode == 0 and candidates:
+                          source = max(candidates, key=lambda path:path.stat().st_size); break
+                      failures.append(result.stderr[-500:])
+                  if source is None: raise RuntimeError('; '.join(failures)[-1800:])
+                  extracted = subprocess.run(['python3','scripts/extract-full-video-review.py',str(source),str(dest)],capture_output=True,text=True,timeout=1500)
+                  if extracted.returncode: raise RuntimeError(extracted.stderr[-1800:] or extracted.stdout[-1800:])
+                  record.update(json.loads(extracted.stdout)); record['caption_files']=[p.name for p in dest.glob('*.vtt')]
+              except Exception as error:
+                  record['status']='BLOCKED'; record['failure']=str(error)[:2000]
+              finally:
+                  for path in dest.glob('source.*'):
+                      if path.suffix not in ('.json','.vtt'):
+                          path.unlink(missing_ok=True)
+                  (dest/'record.json').write_text(json.dumps(record,indent=2)+'\n')
+                  print(vid,record.get('status'))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: full-review-${{ matrix.shard }}
+          path: review-out/
+          retention-days: 30
+
+  publish:
+    needs: review
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: full-review-*
+          path: merged
+          merge-multiple: true
+      - name: Build coverage report and commit evidence
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, collections, datetime
+          root=pathlib.Path('merged'); records=[]
+          for path in root.glob('*/record.json'):
+              try: records.append(json.load(open(path)))
+              except Exception: pass
+          expected=json.load(open('youtube-audit/review-ledger.json'))['videos']
+          seen={record['id'] for record in records}; counts=collections.Counter(record.get('status','UNKNOWN') for record in records)
+          report={'generated':datetime.datetime.now(datetime.timezone.utc).isoformat(),'expected':len(expected),'processed':len(records),'missing_ids':sorted({item['id'] for item in expected}-seen),'status_counts':dict(counts),'records':records}
+          root.joinpath('coverage.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps({k:report[k] for k in ('expected','processed','missing_ids','status_counts')},indent=2))
+          PY
+          git config user.name "omniframe-audit-bot"
+          git config user.email "audit-bot@users.noreply.github.com"
+          rm -rf youtube-audit/full-review
+          mkdir -p youtube-audit/full-review
+          cp -r merged/. youtube-audit/full-review/
+          git add youtube-audit/full-review
+          git commit -m "youtube-audit: full-duration contact sheets and captions [ci skip]" || true
+          git fetch origin "${{ github.ref_name }}"
+          git rebase origin/${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}

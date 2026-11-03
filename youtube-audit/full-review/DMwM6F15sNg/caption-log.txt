@@ -1,0 +1,24 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=DMwM6F15sNg
+[youtube] DMwM6F15sNg: Downloading webpage
+[youtube] DMwM6F15sNg: Downloading web embedded client config
+[youtube] DMwM6F15sNg: Downloading player 11a45ffb-main
+[youtube] DMwM6F15sNg: Downloading web embedded player API JSON
+[youtube] DMwM6F15sNg: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] DMwM6F15sNg: Downloading m3u8 information
+[info] DMwM6F15sNg: Downloading subtitles: en-orig, en
+[info] DMwM6F15sNg: Downloading 1 format(s): 399+251
+[info] Writing video subtitles to: review-out/DMwM6F15sNg/source.en-orig.vtt
+[download] Destination: review-out/DMwM6F15sNg/source.en-orig.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:01)
+[download]    2.31KiB at  Unknown B/s (00:00:01)
+[download] 100% of    2.31KiB in 00:00:01 at 1.17KiB/s
+[info] Writing video subtitles to: review-out/DMwM6F15sNg/source.en.vtt
+[download] Destination: review-out/DMwM6F15sNg/source.en.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    2.31KiB at  Unknown B/s (00:00:00)
+[download] 100% of    2.31KiB in 00:00:00 at 39.67KiB/s
+[info] Writing video metadata as JSON to: review-out/DMwM6F15sNg/source.info.json
+

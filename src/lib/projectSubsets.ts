@@ -60,7 +60,25 @@ export async function exportPrimitiveSceneObj(objects: Scene3DObject[]): Promise
   ])
   const root = new THREE.Group()
   root.name = 'OmniFrame scene subset'
-  for (const object of objects) root.add(createPrimitive(THREE, object))
+  const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js')
+  for (const object of objects) {
+    if (!object.modelUrl) {
+      root.add(createPrimitive(THREE, object))
+      continue
+    }
+    const loaded = await new GLTFLoader().loadAsync(object.modelUrl)
+    const model = loaded.scene
+    model.name = object.name
+    const bounds = new THREE.Box3().setFromObject(model)
+    const size = bounds.getSize(new THREE.Vector3())
+    const center = bounds.getCenter(new THREE.Vector3())
+    model.position.sub(center)
+    model.scale.multiplyScalar(1.6 / Math.max(size.x, size.y, size.z, 0.001))
+    model.position.add(new THREE.Vector3(object.position.x, object.position.y, object.position.z))
+    model.rotation.set(object.rotation.x, object.rotation.y, object.rotation.z)
+    model.scale.multiply(new THREE.Vector3(object.scale.x, object.scale.y, object.scale.z))
+    root.add(model)
+  }
   root.updateMatrixWorld(true)
   const text = new OBJExporter().parse(root)
   root.traverse((child) => {

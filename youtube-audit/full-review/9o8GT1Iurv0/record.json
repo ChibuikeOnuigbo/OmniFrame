@@ -1,0 +1,40 @@
+{
+  "id": "9o8GT1Iurv0",
+  "url": "https://www.youtube.com/watch?v=9o8GT1Iurv0",
+  "title": "2000 \ud83d\udd25 - Chainsaw Man [AMV/EDIT]",
+  "channel": "PAX",
+  "shard": 6,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 32.068,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 17,
+  "contact_sheet_count": 1,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 640,
+        "height": 360,
+        "r_frame_rate": "24000/1001"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "32.068000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}

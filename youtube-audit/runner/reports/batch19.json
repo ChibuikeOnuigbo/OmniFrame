@@ -1,0 +1,1089 @@
+{
+ "batch": 19,
+ "processed": 15,
+ "records": [
+  {
+   "id": "umTDI962BhM",
+   "url": "https://www.youtube.com/watch?v=umTDI962BhM",
+   "title": "chat-history link umTDI962BhM",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] umTDI962BhM: This video is unavailable\n; yt-dlp default+cookies: ERROR: [youtube] umTDI962BhM: This video is unavailable\n; yt-dlp web_embedded+cookies: ERROR: [youtube] umTDI962BhM: This video is unavailable\n; yt-dlp web_safari+cookies: ERROR: [youtube] umTDI962BhM: This video is unavailable\n; yt-dlp mweb+cookies: ERROR: [youtube] umTDI962BhM: This video is unavailable\n; yt-dlp client=tv+cookies: ERROR: [youtube] umTDI962BhM: This video is unavailable\n; invidious https://yt.chocolatemoo53.com: HTTP Error 404: Not Found; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "Nt7yP-e06Oo",
+   "url": "https://www.youtube.com/watch?v=Nt7yP-e06Oo",
+   "title": "chat-history link Nt7yP-e06Oo",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; yt-dlp default+cookies: ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; yt-dlp web_embedded+cookies: ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; yt-dlp web_safari+cookies: ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; yt-dlp mweb+cookies: ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; yt-dlp client=tv+cookies: ERROR: [youtube] Nt7yP-e06Oo: Video unavailable. This video is private\n; invidious https://yt.chocolatemoo53.com: HTTP Error 500: Internal Server Error; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "yOjYKje861U",
+   "url": "https://www.youtube.com/watch?v=yOjYKje861U",
+   "title": "chat-history link yOjYKje861U",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; yt-dlp default+cookies: ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; yt-dlp web_embedded+cookies: ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; yt-dlp web_safari+cookies: ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; yt-dlp mweb+cookies: ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; yt-dlp client=tv+cookies: ERROR: [youtube] yOjYKje861U: Video unavailable. This video is private\n; invidious https://yt.chocolatemoo53.com: HTTP Error 500: Internal Server Error; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "fb-Ac9P4QZg",
+   "url": "https://www.youtube.com/watch?v=fb-Ac9P4QZg",
+   "title": "chat-history link fb-Ac9P4QZg",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; yt-dlp default+cookies: ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; yt-dlp web_embedded+cookies: ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; yt-dlp web_safari+cookies: ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; yt-dlp mweb+cookies: ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; yt-dlp client=tv+cookies: ERROR: [youtube] fb-Ac9P4QZg: This video is unavailable\n; invidious https://yt.chocolatemoo53.com: HTTP Error 404: Not Found; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "WmkdYFcXCtg",
+   "url": "https://www.youtube.com/watch?v=WmkdYFcXCtg",
+   "title": "chat-history link WmkdYFcXCtg",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp default+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp web_embedded+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp web_safari+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp mweb+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; yt-dlp client=tv+cookies: ERROR: [youtube] WmkdYFcXCtg: This video is unavailable\n; invidious https://yt.chocolatemoo53.com: HTTP Error 404: Not Found; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "XE_Gx_m6MLQ",
+   "url": "https://www.youtube.com/watch?v=XE_Gx_m6MLQ",
+   "title": "chat-history link XE_Gx_m6MLQ",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; yt-dlp default+cookies: ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; yt-dlp web_embedded+cookies: ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; yt-dlp web_safari+cookies: ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; yt-dlp mweb+cookies: ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; yt-dlp client=tv+cookies: ERROR: [youtube] XE_Gx_m6MLQ: This video is unavailable\n; invidious https://yt.chocolatemoo53.com: HTTP Error 404: Not Found; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "pGd7t371kAk",
+   "url": "https://www.youtube.com/watch?v=pGd7t371kAk",
+   "title": "chat-history link pGd7t371kAk",
+   "duration": "0",
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "BLOCKED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "failure": "yt-dlp android+cookies: ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; yt-dlp default+cookies: ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; yt-dlp web_embedded+cookies: ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; yt-dlp web_safari+cookies: ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; yt-dlp mweb+cookies: ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; yt-dlp client=tv+cookies: ERROR: [youtube] pGd7t371kAk: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated.\n; invidious https://yt.chocolatemoo53.com: HTTP Error 500: Internal Server Error; invidious https://inv.nadeko.net: HTTP Error 403: Forbidden; invidious https://invidious.nerdvpn.de: HTTP Error 401: Unauthorized; invidious https://yewtu.be: HTTP Error 403: Forbidden; invidious https://iv.melmac.space: <urlopen error [Errno 101] Network is unreachable>; invidious https://invidious.f5.si: HTTP Error 403: Forbidden; invidious https://inv.tux.pizza: <urlopen error timed out>; invidious https://invidious.privacyredirect.com: Remote end closed connection without response; invidious https://yt.artemislena.eu: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>"
+  },
+  {
+   "id": "vTyefIjQ8_Q",
+   "url": "https://www.youtube.com/watch?v=vTyefIjQ8_Q",
+   "title": "chat-history link vTyefIjQ8_Q",
+   "duration": 131.428,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 360,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "131.428000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 5.476167
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 16.4285
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 27.380833
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 38.333167
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 49.2855
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 60.237833
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 71.190167
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 82.1425
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 93.094833
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 104.047167
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 114.9995
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 125.951833
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 2.533
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 5.167
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 10.633
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 22.1
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 24.533
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 28.6
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "yXSlgdbaA_Q",
+   "url": "https://www.youtube.com/watch?v=yXSlgdbaA_Q",
+   "title": "chat-history link yXSlgdbaA_Q",
+   "duration": 21.768,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "21.768000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 0.907
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 2.721
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 4.535
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 6.349
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 8.163
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 9.977
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 11.791
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 13.605
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 15.419
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 17.233
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 19.047
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 20.861
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 5.8
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 7.1
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 16.833
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "l1GF8APyVTg",
+   "url": "https://www.youtube.com/watch?v=l1GF8APyVTg",
+   "title": "chat-history link l1GF8APyVTg",
+   "duration": 17.668,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "17.668000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 0.736167
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 2.2085
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 3.680833
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 5.153167
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 6.6255
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 8.097833
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 9.570167
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 11.0425
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 12.514833
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 13.987167
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 15.4595
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 16.931833
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 5.542
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 6.208
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 11.042
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 14.542
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 15.625
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "SsXi5rqVlvA",
+   "url": "https://www.youtube.com/watch?v=SsXi5rqVlvA",
+   "title": "chat-history link SsXi5rqVlvA",
+   "duration": 12.808,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "12.808000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 0.533667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 1.601
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 2.668333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 3.735667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 4.803
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 5.870333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 6.937667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 8.005
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 9.072333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 10.139667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 11.207
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 12.274333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.633
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 2.767
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 3.433
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 5.567
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 6.267
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 7.333
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "evsxqvwn65o",
+   "url": "https://www.youtube.com/watch?v=evsxqvwn65o",
+   "title": "chat-history link evsxqvwn65o",
+   "duration": 15.568,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 360,
+      "height": 450,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "15.568000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 0.648667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 1.946
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 3.243333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 4.540667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 5.838
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 7.135333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 8.432667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 9.73
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 11.027333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 12.324667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 13.622
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 14.919333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "scene_times": [],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "exRqiCBW-u8",
+   "url": "https://www.youtube.com/watch?v=exRqiCBW-u8",
+   "title": "chat-history link exRqiCBW-u8",
+   "duration": 12.788,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "12.788000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 0.532833
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 1.5985
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 2.664167
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 3.729833
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 4.7955
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 5.861167
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 6.926833
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 7.9925
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 9.058167
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 10.123833
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 11.1895
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 12.255167
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "scene_times": [],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "tQIlQt4dTiM",
+   "url": "https://www.youtube.com/watch?v=tQIlQt4dTiM",
+   "title": "chat-history link tQIlQt4dTiM",
+   "duration": 19.428,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 480,
+      "height": 480,
+      "r_frame_rate": "2997/100"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "19.428000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 0.8095
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 2.4285
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 4.0475
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 5.6665
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 7.2855
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 8.9045
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 10.5235
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 12.1425
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 13.7615
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 15.3805
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 16.9995
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 18.6185
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 1.668
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 2.503
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 6.707
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 7.307
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 7.875
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 10.31
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "Tmki6M1_PWI",
+   "url": "https://www.youtube.com/watch?v=Tmki6M1_PWI",
+   "title": "chat-history link Tmki6M1_PWI",
+   "duration": 179.288,
+   "channel": "chat-history",
+   "format": "chat",
+   "formats": [
+    "chat"
+   ],
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "179.288000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 7.470333
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 22.411
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 37.351667
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 52.292333
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 67.233
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 82.173667
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 97.114333
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 112.055
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 126.995667
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 141.936333
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 156.877
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 171.817667
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 158.733
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 167.367
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  }
+ ]
+}

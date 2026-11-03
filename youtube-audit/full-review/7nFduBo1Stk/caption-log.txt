@@ -1,0 +1,17 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=7nFduBo1Stk
+[youtube] 7nFduBo1Stk: Downloading webpage
+[youtube] 7nFduBo1Stk: Downloading web embedded client config
+[youtube] 7nFduBo1Stk: Downloading player 11a45ffb-main
+[youtube] 7nFduBo1Stk: Downloading web embedded player API JSON
+[youtube] 7nFduBo1Stk: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] 7nFduBo1Stk: Downloading m3u8 information
+[info] 7nFduBo1Stk: Downloading subtitles: en
+[info] 7nFduBo1Stk: Downloading 1 format(s): 401+251
+[info] Writing video subtitles to: review-out/7nFduBo1Stk/source.en.vtt
+[download] Destination: review-out/7nFduBo1Stk/source.en.vtt
+
+[download]    728.00B at  Unknown B/s (00:00:00)
+[download] 100% of    728.00B in 00:00:00 at 3.56KiB/s
+[info] Writing video metadata as JSON to: review-out/7nFduBo1Stk/source.info.json
+

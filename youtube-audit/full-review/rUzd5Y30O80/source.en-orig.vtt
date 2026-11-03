@@ -1,0 +1,808 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.160 --> 00:00:01.429 align:start position:0%
+ 
+In<00:00:00.400><c> today's</c><00:00:00.640><c> video,</c><00:00:00.960><c> I'm</c><00:00:01.120><c> going</c><00:00:01.199><c> to</c><00:00:01.280><c> be</c>
+
+00:00:01.429 --> 00:00:01.439 align:start position:0%
+In today's video, I'm going to be
+ 
+
+00:00:01.439 --> 00:00:03.190 align:start position:0%
+In today's video, I'm going to be
+showing<00:00:01.600><c> you</c><00:00:01.760><c> how</c><00:00:01.920><c> to</c><00:00:02.000><c> use</c><00:00:02.159><c> null</c><00:00:02.560><c> objects</c><00:00:02.960><c> in</c>
+
+00:00:03.190 --> 00:00:03.200 align:start position:0%
+showing you how to use null objects in
+ 
+
+00:00:03.200 --> 00:00:05.749 align:start position:0%
+showing you how to use null objects in
+After<00:00:03.439><c> Effects.</c><00:00:04.160><c> But</c><00:00:04.400><c> first,</c><00:00:04.880><c> what</c><00:00:05.120><c> is</c><00:00:05.279><c> a</c><00:00:05.440><c> null</c>
+
+00:00:05.749 --> 00:00:05.759 align:start position:0%
+After Effects. But first, what is a null
+ 
+
+00:00:05.759 --> 00:00:07.430 align:start position:0%
+After Effects. But first, what is a null
+object?<00:00:06.400><c> The</c><00:00:06.640><c> way</c><00:00:06.720><c> I</c><00:00:06.879><c> like</c><00:00:07.040><c> to</c><00:00:07.120><c> think</c><00:00:07.279><c> about</c>
+
+00:00:07.430 --> 00:00:07.440 align:start position:0%
+object? The way I like to think about
+ 
+
+00:00:07.440 --> 00:00:09.669 align:start position:0%
+object? The way I like to think about
+the<00:00:07.600><c> null</c><00:00:07.919><c> object</c><00:00:08.400><c> is</c><00:00:08.880><c> it's</c><00:00:09.200><c> essentially</c><00:00:09.519><c> a</c>
+
+00:00:09.669 --> 00:00:09.679 align:start position:0%
+the null object is it's essentially a
+ 
+
+00:00:09.679 --> 00:00:11.509 align:start position:0%
+the null object is it's essentially a
+blank<00:00:10.080><c> layer</c><00:00:10.240><c> that</c><00:00:10.400><c> you</c><00:00:10.559><c> can</c><00:00:10.719><c> link</c><00:00:11.040><c> other</c>
+
+00:00:11.509 --> 00:00:11.519 align:start position:0%
+blank layer that you can link other
+ 
+
+00:00:11.519 --> 00:00:13.509 align:start position:0%
+blank layer that you can link other
+layers<00:00:11.679><c> to</c><00:00:12.080><c> in</c><00:00:12.400><c> order</c><00:00:12.559><c> to</c><00:00:12.800><c> add</c><00:00:13.120><c> another</c>
+
+00:00:13.509 --> 00:00:13.519 align:start position:0%
+layers to in order to add another
+ 
+
+00:00:13.519 --> 00:00:16.070 align:start position:0%
+layers to in order to add another
+dynamic<00:00:14.000><c> to</c><00:00:14.240><c> how</c><00:00:14.400><c> the</c><00:00:14.719><c> layers</c><00:00:15.040><c> move</c><00:00:15.759><c> without</c>
+
+00:00:16.070 --> 00:00:16.080 align:start position:0%
+dynamic to how the layers move without
+ 
+
+00:00:16.080 --> 00:00:19.109 align:start position:0%
+dynamic to how the layers move without
+affecting<00:00:16.560><c> their</c><00:00:16.800><c> primary</c><00:00:17.279><c> key</c><00:00:17.520><c> framing.</c><00:00:18.800><c> So,</c>
+
+00:00:19.109 --> 00:00:19.119 align:start position:0%
+affecting their primary key framing. So,
+ 
+
+00:00:19.119 --> 00:00:20.790 align:start position:0%
+affecting their primary key framing. So,
+for<00:00:19.199><c> example,</c><00:00:19.600><c> I</c><00:00:19.760><c> have</c><00:00:19.920><c> these</c><00:00:20.240><c> three</c><00:00:20.480><c> shapes</c>
+
+00:00:20.790 --> 00:00:20.800 align:start position:0%
+for example, I have these three shapes
+ 
+
+00:00:20.800 --> 00:00:23.189 align:start position:0%
+for example, I have these three shapes
+as<00:00:21.039><c> their</c><00:00:21.279><c> own</c><00:00:21.600><c> layers.</c><00:00:22.320><c> I</c><00:00:22.560><c> can</c><00:00:22.720><c> move</c><00:00:22.960><c> all</c>
+
+00:00:23.189 --> 00:00:23.199 align:start position:0%
+as their own layers. I can move all
+ 
+
+00:00:23.199 --> 00:00:25.349 align:start position:0%
+as their own layers. I can move all
+these<00:00:23.519><c> shapes</c><00:00:24.000><c> individually</c><00:00:24.720><c> as</c><00:00:24.880><c> you</c><00:00:25.039><c> can</c><00:00:25.199><c> see</c>
+
+00:00:25.349 --> 00:00:25.359 align:start position:0%
+these shapes individually as you can see
+ 
+
+00:00:25.359 --> 00:00:27.830 align:start position:0%
+these shapes individually as you can see
+here.<00:00:26.240><c> Let</c><00:00:26.400><c> me</c><00:00:26.560><c> do</c><00:00:26.720><c> an</c><00:00:26.880><c> animation</c><00:00:27.199><c> and</c><00:00:27.439><c> add</c><00:00:27.680><c> key</c>
+
+00:00:27.830 --> 00:00:27.840 align:start position:0%
+here. Let me do an animation and add key
+ 
+
+00:00:27.840 --> 00:00:29.750 align:start position:0%
+here. Let me do an animation and add key
+frames<00:00:28.160><c> to</c><00:00:28.400><c> all</c><00:00:28.560><c> these</c><00:00:28.880><c> layers</c><00:00:29.119><c> real</c><00:00:29.359><c> quick</c><00:00:29.519><c> to</c>
+
+00:00:29.750 --> 00:00:29.760 align:start position:0%
+frames to all these layers real quick to
+ 
+
+00:00:29.760 --> 00:00:31.349 align:start position:0%
+frames to all these layers real quick to
+show<00:00:29.840><c> you</c><00:00:29.920><c> how</c><00:00:30.080><c> the</c><00:00:30.240><c> null</c><00:00:30.480><c> object</c><00:00:30.800><c> can</c><00:00:31.039><c> be</c><00:00:31.119><c> very</c>
+
+00:00:31.349 --> 00:00:31.359 align:start position:0%
+show you how the null object can be very
+ 
+
+00:00:31.359 --> 00:00:33.270 align:start position:0%
+show you how the null object can be very
+helpful<00:00:31.679><c> when</c><00:00:31.920><c> adding</c><00:00:32.239><c> to</c><00:00:32.399><c> the</c><00:00:32.640><c> movement</c><00:00:32.960><c> or</c>
+
+00:00:33.270 --> 00:00:33.280 align:start position:0%
+helpful when adding to the movement or
+ 
+
+00:00:33.280 --> 00:00:36.150 align:start position:0%
+helpful when adding to the movement or
+animation<00:00:33.760><c> of</c><00:00:34.000><c> your</c><00:00:34.239><c> layers.</c>
+
+00:00:36.150 --> 00:00:36.160 align:start position:0%
+animation of your layers.
+ 
+
+00:00:36.160 --> 00:00:59.750 align:start position:0%
+animation of your layers.
+[Music]
+
+00:00:59.750 --> 00:00:59.760 align:start position:0%
+ 
+ 
+
+00:00:59.760 --> 00:01:01.270 align:start position:0%
+ 
+Let's<00:01:00.000><c> say</c><00:01:00.079><c> that</c><00:01:00.239><c> I</c><00:01:00.399><c> want</c><00:01:00.480><c> to</c><00:01:00.640><c> move</c><00:01:00.800><c> all</c><00:01:00.960><c> these</c>
+
+00:01:01.270 --> 00:01:01.280 align:start position:0%
+Let's say that I want to move all these
+ 
+
+00:01:01.280 --> 00:01:02.950 align:start position:0%
+Let's say that I want to move all these
+layers<00:01:01.440><c> to</c><00:01:01.680><c> the</c><00:01:01.760><c> side</c><00:01:01.920><c> a</c><00:01:02.079><c> bit</c><00:01:02.239><c> more.</c><00:01:02.719><c> You</c><00:01:02.879><c> would</c>
+
+00:01:02.950 --> 00:01:02.960 align:start position:0%
+layers to the side a bit more. You would
+ 
+
+00:01:02.960 --> 00:01:04.630 align:start position:0%
+layers to the side a bit more. You would
+think<00:01:03.039><c> that</c><00:01:03.280><c> I'd</c><00:01:03.520><c> have</c><00:01:03.680><c> to</c><00:01:03.840><c> go</c><00:01:04.080><c> into</c><00:01:04.320><c> the</c>
+
+00:01:04.630 --> 00:01:04.640 align:start position:0%
+think that I'd have to go into the
+ 
+
+00:01:04.640 --> 00:01:06.950 align:start position:0%
+think that I'd have to go into the
+layers<00:01:05.040><c> and</c><00:01:05.680><c> essentially</c><00:01:06.080><c> reanimate</c><00:01:06.720><c> them,</c>
+
+00:01:06.950 --> 00:01:06.960 align:start position:0%
+layers and essentially reanimate them,
+ 
+
+00:01:06.960 --> 00:01:07.270 align:start position:0%
+layers and essentially reanimate them,
+right?
+
+00:01:07.270 --> 00:01:07.280 align:start position:0%
+right?
+ 
+
+00:01:07.280 --> 00:01:07.910 align:start position:0%
+right?
+&gt;&gt; Nope.
+
+00:01:07.910 --> 00:01:07.920 align:start position:0%
+&gt;&gt; Nope.
+ 
+
+00:01:07.920 --> 00:01:09.990 align:start position:0%
+&gt;&gt; Nope.
+&gt;&gt; That's<00:01:08.159><c> too</c><00:01:08.400><c> much</c><00:01:08.560><c> work</c><00:01:08.799><c> and</c><00:01:09.119><c> not</c><00:01:09.360><c> needed.</c>
+
+00:01:09.990 --> 00:01:10.000 align:start position:0%
+&gt;&gt; That's too much work and not needed.
+ 
+
+00:01:10.000 --> 00:01:11.990 align:start position:0%
+&gt;&gt; That's too much work and not needed.
+With<00:01:10.240><c> the</c><00:01:10.400><c> null</c><00:01:10.720><c> object,</c><00:01:11.280><c> you</c><00:01:11.439><c> can</c><00:01:11.600><c> link</c><00:01:11.840><c> all</c>
+
+00:01:11.990 --> 00:01:12.000 align:start position:0%
+With the null object, you can link all
+ 
+
+00:01:12.000 --> 00:01:14.149 align:start position:0%
+With the null object, you can link all
+these<00:01:12.320><c> layers</c><00:01:12.479><c> to</c><00:01:12.799><c> the</c><00:01:13.040><c> one</c><00:01:13.439><c> layer</c><00:01:13.680><c> and</c><00:01:14.000><c> move</c>
+
+00:01:14.149 --> 00:01:14.159 align:start position:0%
+these layers to the one layer and move
+ 
+
+00:01:14.159 --> 00:01:16.070 align:start position:0%
+these layers to the one layer and move
+these<00:01:14.479><c> shape</c><00:01:14.880><c> layers</c><00:01:15.119><c> as</c><00:01:15.360><c> a</c><00:01:15.520><c> whole</c><00:01:15.760><c> without</c>
+
+00:01:16.070 --> 00:01:16.080 align:start position:0%
+these shape layers as a whole without
+ 
+
+00:01:16.080 --> 00:01:17.830 align:start position:0%
+these shape layers as a whole without
+affecting<00:01:16.560><c> their</c><00:01:16.880><c> already</c><00:01:17.280><c> key</c><00:01:17.520><c> framed</c>
+
+00:01:17.830 --> 00:01:17.840 align:start position:0%
+affecting their already key framed
+ 
+
+00:01:17.840 --> 00:01:20.550 align:start position:0%
+affecting their already key framed
+animations.
+
+00:01:20.550 --> 00:01:20.560 align:start position:0%
+animations.
+ 
+
+00:01:20.560 --> 00:01:22.630 align:start position:0%
+animations.
+Okay.
+
+00:01:22.630 --> 00:01:22.640 align:start position:0%
+Okay.
+ 
+
+00:01:22.640 --> 00:01:24.469 align:start position:0%
+Okay.
+To<00:01:22.880><c> create</c><00:01:23.119><c> a</c><00:01:23.280><c> null</c><00:01:23.600><c> object,</c><00:01:23.920><c> you</c><00:01:24.080><c> can</c><00:01:24.159><c> go</c><00:01:24.320><c> up</c>
+
+00:01:24.469 --> 00:01:24.479 align:start position:0%
+To create a null object, you can go up
+ 
+
+00:01:24.479 --> 00:01:29.429 align:start position:0%
+To create a null object, you can go up
+here<00:01:25.520><c> to</c><00:01:26.320><c> layer,</c><00:01:27.040><c> new,</c><00:01:28.080><c> null</c><00:01:28.479><c> object.</c><00:01:29.040><c> And</c><00:01:29.280><c> as</c>
+
+00:01:29.429 --> 00:01:29.439 align:start position:0%
+here to layer, new, null object. And as
+ 
+
+00:01:29.439 --> 00:01:31.749 align:start position:0%
+here to layer, new, null object. And as
+you<00:01:29.600><c> can</c><00:01:29.680><c> see</c><00:01:29.920><c> here,</c><00:01:30.640><c> there's</c><00:01:30.880><c> a</c><00:01:31.119><c> shortcut</c><00:01:31.520><c> to</c>
+
+00:01:31.749 --> 00:01:31.759 align:start position:0%
+you can see here, there's a shortcut to
+ 
+
+00:01:31.759 --> 00:01:34.870 align:start position:0%
+you can see here, there's a shortcut to
+creating<00:01:32.159><c> this</c><00:01:32.479><c> layer.</c><00:01:33.360><c> Controll</c><00:01:33.759><c> +</c><00:01:34.240><c> alt</c><00:01:34.560><c> +</c>
+
+00:01:34.870 --> 00:01:34.880 align:start position:0%
+creating this layer. Controll + alt +
+ 
+
+00:01:34.880 --> 00:01:37.190 align:start position:0%
+creating this layer. Controll + alt +
+shift<00:01:35.280><c> +</c><00:01:35.680><c> y.</c>
+
+00:01:37.190 --> 00:01:37.200 align:start position:0%
+shift + y.
+ 
+
+00:01:37.200 --> 00:01:38.870 align:start position:0%
+shift + y.
+Personally,<00:01:37.680><c> I'm</c><00:01:37.840><c> used</c><00:01:38.000><c> to</c><00:01:38.159><c> doing</c><00:01:38.400><c> it</c><00:01:38.640><c> this</c>
+
+00:01:38.870 --> 00:01:38.880 align:start position:0%
+Personally, I'm used to doing it this
+ 
+
+00:01:38.880 --> 00:01:43.990 align:start position:0%
+Personally, I'm used to doing it this
+way.<00:01:39.680><c> Right</c><00:01:40.000><c> mouse</c><00:01:40.240><c> click</c><00:01:40.479><c> into</c><00:01:40.799><c> this</c><00:01:41.040><c> area,</c>
+
+00:01:43.990 --> 00:01:44.000 align:start position:0%
+way. Right mouse click into this area,
+ 
+
+00:01:44.000 --> 00:01:45.910 align:start position:0%
+way. Right mouse click into this area,
+and<00:01:44.640><c> you're</c><00:01:44.960><c> going</c><00:01:45.040><c> to</c><00:01:45.119><c> get</c><00:01:45.360><c> some</c><00:01:45.600><c> options</c>
+
+00:01:45.910 --> 00:01:45.920 align:start position:0%
+and you're going to get some options
+ 
+
+00:01:45.920 --> 00:01:49.109 align:start position:0%
+and you're going to get some options
+that<00:01:46.159><c> will</c><00:01:46.320><c> come</c><00:01:46.560><c> up.</c><00:01:47.360><c> Go</c><00:01:47.600><c> to</c><00:01:47.840><c> new</c><00:01:48.479><c> and</c><00:01:48.720><c> then</c><00:01:48.880><c> to</c>
+
+00:01:49.109 --> 00:01:49.119 align:start position:0%
+that will come up. Go to new and then to
+ 
+
+00:01:49.119 --> 00:01:51.590 align:start position:0%
+that will come up. Go to new and then to
+null<00:01:49.439><c> object.</c><00:01:50.399><c> As</c><00:01:50.640><c> you</c><00:01:50.799><c> can</c><00:01:50.880><c> see,</c><00:01:51.119><c> there</c><00:01:51.280><c> are</c><00:01:51.439><c> a</c>
+
+00:01:51.590 --> 00:01:51.600 align:start position:0%
+null object. As you can see, there are a
+ 
+
+00:01:51.600 --> 00:01:53.030 align:start position:0%
+null object. As you can see, there are a
+number<00:01:51.759><c> of</c><00:01:51.920><c> ways</c><00:01:52.079><c> to</c><00:01:52.320><c> get</c><00:01:52.399><c> to</c><00:01:52.560><c> this</c><00:01:52.720><c> null</c>
+
+00:01:53.030 --> 00:01:53.040 align:start position:0%
+number of ways to get to this null
+ 
+
+00:01:53.040 --> 00:01:55.350 align:start position:0%
+number of ways to get to this null
+object.<00:01:53.680><c> So,</c><00:01:53.920><c> choose</c><00:01:54.159><c> whichever</c><00:01:54.560><c> steps</c><00:01:55.040><c> works</c>
+
+00:01:55.350 --> 00:01:55.360 align:start position:0%
+object. So, choose whichever steps works
+ 
+
+00:01:55.360 --> 00:01:57.109 align:start position:0%
+object. So, choose whichever steps works
+for<00:01:55.520><c> you.</c><00:01:56.000><c> I</c><00:01:56.240><c> just</c><00:01:56.399><c> figured</c><00:01:56.640><c> it</c><00:01:56.799><c> would</c><00:01:56.960><c> be</c>
+
+00:01:57.109 --> 00:01:57.119 align:start position:0%
+for you. I just figured it would be
+ 
+
+00:01:57.119 --> 00:01:58.389 align:start position:0%
+for you. I just figured it would be
+helpful<00:01:57.360><c> to</c><00:01:57.600><c> show</c><00:01:57.759><c> you</c><00:01:57.920><c> the</c><00:01:58.159><c> different</c>
+
+00:01:58.389 --> 00:01:58.399 align:start position:0%
+helpful to show you the different
+ 
+
+00:01:58.399 --> 00:02:01.830 align:start position:0%
+helpful to show you the different
+options.
+
+00:02:01.830 --> 00:02:01.840 align:start position:0%
+ 
+ 
+
+00:02:01.840 --> 00:02:03.350 align:start position:0%
+ 
+Okay,<00:02:02.159><c> now</c><00:02:02.320><c> we</c><00:02:02.479><c> have</c><00:02:02.560><c> the</c><00:02:02.719><c> null</c><00:02:03.040><c> object</c>
+
+00:02:03.350 --> 00:02:03.360 align:start position:0%
+Okay, now we have the null object
+ 
+
+00:02:03.360 --> 00:02:05.510 align:start position:0%
+Okay, now we have the null object
+created<00:02:03.920><c> at</c><00:02:04.159><c> the</c><00:02:04.320><c> top</c><00:02:04.479><c> of</c><00:02:04.560><c> our</c><00:02:04.880><c> layers,</c><00:02:05.119><c> and</c><00:02:05.360><c> I</c>
+
+00:02:05.510 --> 00:02:05.520 align:start position:0%
+created at the top of our layers, and I
+ 
+
+00:02:05.520 --> 00:02:07.670 align:start position:0%
+created at the top of our layers, and I
+want<00:02:05.600><c> to</c><00:02:05.759><c> link</c><00:02:06.000><c> all</c><00:02:06.320><c> the</c><00:02:06.560><c> shape</c><00:02:07.040><c> layers</c><00:02:07.280><c> to</c><00:02:07.520><c> the</c>
+
+00:02:07.670 --> 00:02:07.680 align:start position:0%
+want to link all the shape layers to the
+ 
+
+00:02:07.680 --> 00:02:09.669 align:start position:0%
+want to link all the shape layers to the
+null.<00:02:08.399><c> In</c><00:02:08.640><c> order</c><00:02:08.720><c> to</c><00:02:08.879><c> move</c><00:02:09.119><c> them</c><00:02:09.200><c> to</c><00:02:09.360><c> the</c><00:02:09.520><c> side</c>
+
+00:02:09.669 --> 00:02:09.679 align:start position:0%
+null. In order to move them to the side
+ 
+
+00:02:09.679 --> 00:02:11.990 align:start position:0%
+null. In order to move them to the side
+without<00:02:10.000><c> affecting</c><00:02:10.399><c> their</c><00:02:10.560><c> key</c><00:02:10.800><c> frames,</c><00:02:11.840><c> all</c>
+
+00:02:11.990 --> 00:02:12.000 align:start position:0%
+without affecting their key frames, all
+ 
+
+00:02:12.000 --> 00:02:13.990 align:start position:0%
+without affecting their key frames, all
+you<00:02:12.160><c> got</c><00:02:12.239><c> to</c><00:02:12.319><c> do</c><00:02:12.480><c> is</c><00:02:12.640><c> select</c><00:02:12.959><c> all</c><00:02:13.200><c> the</c><00:02:13.520><c> layers,</c>
+
+00:02:13.990 --> 00:02:14.000 align:start position:0%
+you got to do is select all the layers,
+ 
+
+00:02:14.000 --> 00:02:15.510 align:start position:0%
+you got to do is select all the layers,
+select<00:02:14.319><c> the</c><00:02:14.480><c> first</c><00:02:14.720><c> shape</c><00:02:15.120><c> layer,</c><00:02:15.280><c> and</c>
+
+00:02:15.510 --> 00:02:15.520 align:start position:0%
+select the first shape layer, and
+ 
+
+00:02:15.520 --> 00:02:17.910 align:start position:0%
+select the first shape layer, and
+holding<00:02:15.840><c> on</c><00:02:16.080><c> to</c><00:02:16.239><c> shift,</c><00:02:16.879><c> go</c><00:02:17.120><c> down</c><00:02:17.280><c> to</c><00:02:17.440><c> the</c><00:02:17.599><c> last</c>
+
+00:02:17.910 --> 00:02:17.920 align:start position:0%
+holding on to shift, go down to the last
+ 
+
+00:02:17.920 --> 00:02:20.710 align:start position:0%
+holding on to shift, go down to the last
+layer<00:02:18.080><c> and</c><00:02:18.319><c> click</c><00:02:18.560><c> the</c><00:02:18.800><c> last</c><00:02:19.200><c> layer.</c><00:02:20.319><c> Or</c><00:02:20.480><c> you</c>
+
+00:02:20.710 --> 00:02:20.720 align:start position:0%
+layer and click the last layer. Or you
+ 
+
+00:02:20.720 --> 00:02:22.309 align:start position:0%
+layer and click the last layer. Or you
+can<00:02:20.879><c> control</c><00:02:21.200><c> and</c><00:02:21.440><c> click</c><00:02:21.760><c> each</c><00:02:22.160><c> layer</c>
+
+00:02:22.309 --> 00:02:22.319 align:start position:0%
+can control and click each layer
+ 
+
+00:02:22.319 --> 00:02:24.790 align:start position:0%
+can control and click each layer
+individually.<00:02:23.520><c> Then</c><00:02:23.840><c> go</c><00:02:23.920><c> to</c><00:02:24.080><c> this</c><00:02:24.319><c> swirly</c>
+
+00:02:24.790 --> 00:02:24.800 align:start position:0%
+individually. Then go to this swirly
+ 
+
+00:02:24.800 --> 00:02:26.790 align:start position:0%
+individually. Then go to this swirly
+looking<00:02:25.200><c> icon</c><00:02:25.520><c> which</c><00:02:25.760><c> is</c><00:02:25.920><c> called</c><00:02:26.319><c> the</c><00:02:26.560><c> pick</c>
+
+00:02:26.790 --> 00:02:26.800 align:start position:0%
+looking icon which is called the pick
+ 
+
+00:02:26.800 --> 00:02:28.630 align:start position:0%
+looking icon which is called the pick
+whip.<00:02:27.360><c> Click</c><00:02:27.599><c> on</c><00:02:27.760><c> this</c><00:02:28.000><c> holding</c><00:02:28.239><c> on</c><00:02:28.400><c> to</c><00:02:28.480><c> the</c>
+
+00:02:28.630 --> 00:02:28.640 align:start position:0%
+whip. Click on this holding on to the
+ 
+
+00:02:28.640 --> 00:02:31.270 align:start position:0%
+whip. Click on this holding on to the
+left<00:02:28.800><c> mouse</c><00:02:29.120><c> button.</c><00:02:30.000><c> Drag</c><00:02:30.239><c> onto</c><00:02:30.560><c> the</c><00:02:30.640><c> null.</c>
+
+00:02:31.270 --> 00:02:31.280 align:start position:0%
+left mouse button. Drag onto the null.
+ 
+
+00:02:31.280 --> 00:02:32.869 align:start position:0%
+left mouse button. Drag onto the null.
+This<00:02:31.440><c> will</c><00:02:31.599><c> link</c><00:02:31.840><c> all</c><00:02:32.000><c> the</c><00:02:32.319><c> layers</c><00:02:32.480><c> to</c><00:02:32.720><c> the</c>
+
+00:02:32.869 --> 00:02:32.879 align:start position:0%
+This will link all the layers to the
+ 
+
+00:02:32.879 --> 00:02:35.030 align:start position:0%
+This will link all the layers to the
+null<00:02:33.200><c> object.</c><00:02:33.840><c> Now</c><00:02:34.080><c> in</c><00:02:34.239><c> the</c><00:02:34.400><c> center,</c><00:02:34.640><c> you</c><00:02:34.800><c> will</c>
+
+00:02:35.030 --> 00:02:35.040 align:start position:0%
+null object. Now in the center, you will
+ 
+
+00:02:35.040 --> 00:02:36.869 align:start position:0%
+null object. Now in the center, you will
+see<00:02:35.200><c> this</c><00:02:35.440><c> red</c><00:02:35.760><c> box</c><00:02:36.160><c> with</c><00:02:36.400><c> a</c><00:02:36.640><c> little</c>
+
+00:02:36.869 --> 00:02:36.879 align:start position:0%
+see this red box with a little
+ 
+
+00:02:36.879 --> 00:02:39.430 align:start position:0%
+see this red box with a little
+crosshair.<00:02:37.840><c> This</c><00:02:38.080><c> will</c><00:02:38.239><c> be</c><00:02:38.400><c> our</c><00:02:38.720><c> null</c><00:02:39.040><c> object.</c>
+
+00:02:39.430 --> 00:02:39.440 align:start position:0%
+crosshair. This will be our null object.
+ 
+
+00:02:39.440 --> 00:02:41.270 align:start position:0%
+crosshair. This will be our null object.
+You<00:02:39.680><c> can</c><00:02:39.760><c> select</c><00:02:40.080><c> this</c><00:02:40.319><c> and</c><00:02:40.560><c> move</c><00:02:40.720><c> the</c><00:02:40.959><c> null</c>
+
+00:02:41.270 --> 00:02:41.280 align:start position:0%
+You can select this and move the null
+ 
+
+00:02:41.280 --> 00:02:43.509 align:start position:0%
+You can select this and move the null
+around.<00:02:42.080><c> As</c><00:02:42.319><c> you</c><00:02:42.480><c> can</c><00:02:42.560><c> see,</c><00:02:42.879><c> all</c><00:02:43.040><c> the</c><00:02:43.280><c> layers</c>
+
+00:02:43.509 --> 00:02:43.519 align:start position:0%
+around. As you can see, all the layers
+ 
+
+00:02:43.519 --> 00:02:45.350 align:start position:0%
+around. As you can see, all the layers
+are<00:02:43.680><c> now</c><00:02:43.920><c> moving</c><00:02:44.160><c> with</c><00:02:44.400><c> this</c><00:02:44.560><c> null</c><00:02:44.959><c> object</c>
+
+00:02:45.350 --> 00:02:45.360 align:start position:0%
+are now moving with this null object
+ 
+
+00:02:45.360 --> 00:02:47.509 align:start position:0%
+are now moving with this null object
+without<00:02:45.760><c> affecting</c><00:02:46.239><c> their</c><00:02:46.560><c> key</c><00:02:46.720><c> frames.</c>
+
+00:02:47.509 --> 00:02:47.519 align:start position:0%
+without affecting their key frames.
+ 
+
+00:02:47.519 --> 00:02:49.190 align:start position:0%
+without affecting their key frames.
+Let's<00:02:47.760><c> say</c><00:02:47.920><c> that</c><00:02:48.080><c> I</c><00:02:48.319><c> didn't</c><00:02:48.560><c> add</c><00:02:48.720><c> the</c><00:02:48.879><c> null</c>
+
+00:02:49.190 --> 00:02:49.200 align:start position:0%
+Let's say that I didn't add the null
+ 
+
+00:02:49.200 --> 00:02:51.190 align:start position:0%
+Let's say that I didn't add the null
+object<00:02:49.519><c> and</c><00:02:49.760><c> I</c><00:02:50.000><c> just</c><00:02:50.160><c> decided</c><00:02:50.560><c> to</c><00:02:50.720><c> move</c><00:02:50.959><c> the</c>
+
+00:02:51.190 --> 00:02:51.200 align:start position:0%
+object and I just decided to move the
+ 
+
+00:02:51.200 --> 00:02:52.869 align:start position:0%
+object and I just decided to move the
+shape<00:02:51.599><c> layers</c><00:02:51.840><c> to</c><00:02:52.080><c> the</c><00:02:52.239><c> side</c><00:02:52.400><c> where</c><00:02:52.560><c> I</c><00:02:52.720><c> wanted</c>
+
+00:02:52.869 --> 00:02:52.879 align:start position:0%
+shape layers to the side where I wanted
+ 
+
+00:02:52.879 --> 00:03:02.590 align:start position:0%
+shape layers to the side where I wanted
+to<00:02:53.040><c> move</c><00:02:53.280><c> them.</c>
+
+00:03:02.590 --> 00:03:02.600 align:start position:0%
+ 
+ 
+
+00:03:02.600 --> 00:03:05.750 align:start position:0%
+ 
+[Music]
+
+00:03:05.750 --> 00:03:05.760 align:start position:0%
+ 
+ 
+
+00:03:05.760 --> 00:03:07.350 align:start position:0%
+ 
+You<00:03:06.000><c> see</c><00:03:06.080><c> that</c><00:03:06.319><c> they</c><00:03:06.560><c> move</c><00:03:06.720><c> differently</c><00:03:07.120><c> as</c>
+
+00:03:07.350 --> 00:03:07.360 align:start position:0%
+You see that they move differently as
+ 
+
+00:03:07.360 --> 00:03:08.869 align:start position:0%
+You see that they move differently as
+opposed<00:03:07.599><c> to</c><00:03:07.760><c> when</c><00:03:08.000><c> they</c><00:03:08.159><c> are</c><00:03:08.319><c> linked</c><00:03:08.560><c> to</c><00:03:08.720><c> the</c>
+
+00:03:08.869 --> 00:03:08.879 align:start position:0%
+opposed to when they are linked to the
+ 
+
+00:03:08.879 --> 00:03:10.869 align:start position:0%
+opposed to when they are linked to the
+null<00:03:09.200><c> object.</c><00:03:09.840><c> This</c><00:03:10.000><c> is</c><00:03:10.159><c> because</c><00:03:10.480><c> without</c>
+
+00:03:10.869 --> 00:03:10.879 align:start position:0%
+null object. This is because without
+ 
+
+00:03:10.879 --> 00:03:12.949 align:start position:0%
+null object. This is because without
+linking<00:03:11.200><c> the</c><00:03:11.519><c> layers</c><00:03:11.680><c> to</c><00:03:11.840><c> the</c><00:03:11.920><c> null,</c><00:03:12.560><c> we</c><00:03:12.720><c> are</c>
+
+00:03:12.949 --> 00:03:12.959 align:start position:0%
+linking the layers to the null, we are
+ 
+
+00:03:12.959 --> 00:03:14.550 align:start position:0%
+linking the layers to the null, we are
+essentially<00:03:13.280><c> creating</c><00:03:13.599><c> a</c><00:03:13.840><c> new</c><00:03:14.000><c> key</c><00:03:14.159><c> frame</c><00:03:14.400><c> in</c>
+
+00:03:14.550 --> 00:03:14.560 align:start position:0%
+essentially creating a new key frame in
+ 
+
+00:03:14.560 --> 00:03:16.630 align:start position:0%
+essentially creating a new key frame in
+the<00:03:14.720><c> position</c><00:03:15.120><c> parameters</c><00:03:15.760><c> when</c><00:03:16.080><c> we</c><00:03:16.239><c> move</c><00:03:16.480><c> all</c>
+
+00:03:16.630 --> 00:03:16.640 align:start position:0%
+the position parameters when we move all
+ 
+
+00:03:16.640 --> 00:03:18.869 align:start position:0%
+the position parameters when we move all
+the<00:03:16.959><c> layers</c><00:03:17.120><c> to</c><00:03:17.360><c> the</c><00:03:17.519><c> side.</c><00:03:18.239><c> So</c><00:03:18.400><c> you</c><00:03:18.560><c> can</c><00:03:18.720><c> see</c>
+
+00:03:18.869 --> 00:03:18.879 align:start position:0%
+the layers to the side. So you can see
+ 
+
+00:03:18.879 --> 00:03:20.790 align:start position:0%
+the layers to the side. So you can see
+by<00:03:19.200><c> using</c><00:03:19.440><c> the</c><00:03:19.599><c> null</c><00:03:19.920><c> object,</c><00:03:20.239><c> you</c><00:03:20.480><c> have</c><00:03:20.640><c> more</c>
+
+00:03:20.790 --> 00:03:20.800 align:start position:0%
+by using the null object, you have more
+ 
+
+00:03:20.800 --> 00:03:22.949 align:start position:0%
+by using the null object, you have more
+control<00:03:21.120><c> in</c><00:03:21.360><c> how</c><00:03:21.519><c> you</c><00:03:21.760><c> move</c><00:03:22.000><c> and</c><00:03:22.239><c> animate</c><00:03:22.640><c> your</c>
+
+00:03:22.949 --> 00:03:22.959 align:start position:0%
+control in how you move and animate your
+ 
+
+00:03:22.959 --> 00:03:24.790 align:start position:0%
+control in how you move and animate your
+layers.<00:03:23.599><c> You</c><00:03:23.840><c> can</c><00:03:23.920><c> also</c><00:03:24.159><c> adjust</c><00:03:24.400><c> your</c><00:03:24.640><c> key</c>
+
+00:03:24.790 --> 00:03:24.800 align:start position:0%
+layers. You can also adjust your key
+ 
+
+00:03:24.800 --> 00:03:26.949 align:start position:0%
+layers. You can also adjust your key
+frames<00:03:25.120><c> in</c><00:03:25.360><c> other</c><00:03:25.840><c> layers</c><00:03:26.159><c> if</c><00:03:26.400><c> you</c><00:03:26.560><c> wanted</c><00:03:26.800><c> to</c>
+
+00:03:26.949 --> 00:03:26.959 align:start position:0%
+frames in other layers if you wanted to
+ 
+
+00:03:26.959 --> 00:03:28.790 align:start position:0%
+frames in other layers if you wanted to
+without<00:03:27.360><c> affecting</c><00:03:27.760><c> the</c><00:03:28.000><c> position</c><00:03:28.400><c> of</c><00:03:28.640><c> the</c>
+
+00:03:28.790 --> 00:03:28.800 align:start position:0%
+without affecting the position of the
+ 
+
+00:03:28.800 --> 00:03:31.110 align:start position:0%
+without affecting the position of the
+null.<00:03:29.840><c> But</c><00:03:30.000><c> that's</c><00:03:30.159><c> it</c><00:03:30.319><c> for</c><00:03:30.480><c> today</c><00:03:30.720><c> in</c><00:03:30.879><c> this</c>
+
+00:03:31.110 --> 00:03:31.120 align:start position:0%
+null. But that's it for today in this
+ 
+
+00:03:31.120 --> 00:03:32.710 align:start position:0%
+null. But that's it for today in this
+quick<00:03:31.280><c> introduction</c><00:03:31.840><c> on</c><00:03:32.080><c> how</c><00:03:32.239><c> to</c><00:03:32.400><c> use</c><00:03:32.560><c> the</c>
+
+00:03:32.710 --> 00:03:32.720 align:start position:0%
+quick introduction on how to use the
+ 
+
+00:03:32.720 --> 00:03:34.869 align:start position:0%
+quick introduction on how to use the
+null<00:03:33.040><c> object</c><00:03:33.360><c> when</c><00:03:33.680><c> working</c><00:03:34.000><c> with</c><00:03:34.319><c> multiple</c>
+
+00:03:34.869 --> 00:03:34.879 align:start position:0%
+null object when working with multiple
+ 
+
+00:03:34.879 --> 00:03:37.750 align:start position:0%
+null object when working with multiple
+layers<00:03:35.120><c> in</c><00:03:35.440><c> After</c><00:03:35.680><c> Effects.</c><00:03:36.799><c> Anyways,</c><00:03:37.440><c> if</c><00:03:37.680><c> you</c>
+
+00:03:37.750 --> 00:03:37.760 align:start position:0%
+layers in After Effects. Anyways, if you
+ 
+
+00:03:37.760 --> 00:03:39.750 align:start position:0%
+layers in After Effects. Anyways, if you
+have<00:03:37.920><c> any</c><00:03:38.080><c> questions</c><00:03:38.400><c> or</c><00:03:38.640><c> suggestions</c><00:03:39.360><c> for</c>
+
+00:03:39.750 --> 00:03:39.760 align:start position:0%
+have any questions or suggestions for
+ 
+
+00:03:39.760 --> 00:03:41.270 align:start position:0%
+have any questions or suggestions for
+future<00:03:40.080><c> videos,</c><00:03:40.560><c> please</c><00:03:40.799><c> leave</c><00:03:40.959><c> a</c><00:03:41.120><c> comment</c>
+
+00:03:41.270 --> 00:03:41.280 align:start position:0%
+future videos, please leave a comment
+ 
+
+00:03:41.280 --> 00:03:43.270 align:start position:0%
+future videos, please leave a comment
+down<00:03:41.519><c> below.</c><00:03:41.840><c> And</c><00:03:42.080><c> if</c><00:03:42.239><c> you</c><00:03:42.400><c> found</c><00:03:42.560><c> this</c><00:03:42.799><c> video</c>
+
+00:03:43.270 --> 00:03:43.280 align:start position:0%
+down below. And if you found this video
+ 
+
+00:03:43.280 --> 00:03:45.509 align:start position:0%
+down below. And if you found this video
+helpful<00:03:43.680><c> and</c><00:03:44.080><c> informative,</c><00:03:44.959><c> please</c><00:03:45.200><c> give</c><00:03:45.280><c> the</c>
+
+00:03:45.509 --> 00:03:45.519 align:start position:0%
+helpful and informative, please give the
+ 
+
+00:03:45.519 --> 00:03:47.270 align:start position:0%
+helpful and informative, please give the
+video<00:03:45.680><c> a</c><00:03:45.920><c> like</c><00:03:46.159><c> and</c><00:03:46.560><c> subscribe.</c><00:03:46.959><c> And</c><00:03:47.120><c> with</c>
+
+00:03:47.270 --> 00:03:47.280 align:start position:0%
+video a like and subscribe. And with
+ 
+
+00:03:47.280 --> 00:03:48.630 align:start position:0%
+video a like and subscribe. And with
+that,<00:03:47.680><c> keep</c><00:03:47.920><c> thinking</c><00:03:48.159><c> about</c><00:03:48.319><c> your</c><00:03:48.480><c> next</c>
+
+00:03:48.630 --> 00:03:48.640 align:start position:0%
+that, keep thinking about your next
+ 
+
+00:03:48.640 --> 00:03:50.630 align:start position:0%
+that, keep thinking about your next
+project<00:03:48.959><c> and</c><00:03:49.200><c> just</c><00:03:49.440><c> create</c><00:03:49.680><c> it.</c><00:03:50.159><c> Till</c><00:03:50.400><c> next</c>
+
+00:03:50.630 --> 00:03:50.640 align:start position:0%
+project and just create it. Till next
+ 
+
+00:03:50.640 --> 00:03:53.080 align:start position:0%
+project and just create it. Till next
+time,<00:03:51.280><c> peace.</c>
+
+00:03:53.080 --> 00:03:53.090 align:start position:0%
+time, peace.
+ 
+
+00:03:53.090 --> 00:03:57.589 align:start position:0%
+time, peace.
+[Music]
+
+00:03:57.589 --> 00:03:57.599 align:start position:0%
+[Music]
+ 
+
+00:03:57.599 --> 00:03:59.640 align:start position:0%
+[Music]
+Oh,<00:03:57.840><c> yes.</c>
+
+00:03:59.640 --> 00:03:59.650 align:start position:0%
+Oh, yes.
+ 
+
+00:03:59.650 --> 00:04:02.229 align:start position:0%
+Oh, yes.
+[Music]
+
+00:04:02.229 --> 00:04:02.239 align:start position:0%
+[Music]
+ 
+
+00:04:02.239 --> 00:04:05.879 align:start position:0%
+[Music]
+I<00:04:02.480><c> can't</c><00:04:02.720><c> use</c><00:04:02.879><c> a</c>
+

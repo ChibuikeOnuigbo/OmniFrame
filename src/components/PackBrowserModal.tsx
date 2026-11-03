@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { X, Search, Folder, LayoutGrid, Package, Plus } from 'lucide-react'
+import { X, Search, Folder, LayoutGrid, Package, Plus, Box } from 'lucide-react'
 import { useEditor } from '../store'
 import { PACK_ASSETS, PACK_BUNDLES, PACK_H, PACK_W, packAssetUrl, type PackAssetDef } from '../lib/desktopPack'
 
@@ -48,7 +48,7 @@ function addBundle(bundleId: string): void {
   }
 }
 
-export function PackBrowserModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PackBrowserModal({ open, onClose, onOpenAssetLibrary }: { open: boolean; onClose: () => void; onOpenAssetLibrary?: () => void }) {
   const [query, setQuery] = useState('')
   const [folder, setFolder] = useState<string>('all') // 'all' | 'bundles' | section id
   const [tag, setTag] = useState<string>('all')
@@ -85,6 +85,7 @@ export function PackBrowserModal({ open, onClose }: { open: boolean; onClose: ()
             <input data-testid="pack-browser-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search packs, windows, cursors…" className="h-8 w-full rounded-md border border-ink-700 bg-ink-900 pl-7 pr-2 text-xs text-white outline-none focus:border-brand" />
           </label>
           <span className="text-[10px] text-ink-500">{assets.length} assets, {bundles.length} packs</span>
+          {onOpenAssetLibrary && <button type="button" data-testid="pack-browser-open-assets" onClick={onOpenAssetLibrary} className="hidden h-8 items-center gap-1.5 rounded-md border border-ink-700 px-2.5 text-[11px] text-ink-200 hover:border-brand sm:flex"><Box size={13} /> 3D & Stock</button>}
           <button type="button" data-testid="pack-browser-close" onClick={onClose} className="grid h-7 w-7 place-items-center rounded text-ink-400 hover:bg-ink-800 hover:text-white" aria-label="Close pack browser"><X size={15} /></button>
         </div>
 

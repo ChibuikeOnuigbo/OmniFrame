@@ -1,0 +1,42 @@
+{
+  "id": "iXZhEZPoNZY",
+  "url": "https://www.youtube.com/watch?v=iXZhEZPoNZY",
+  "title": "null-object tutorial iXZhEZPoNZY",
+  "channel": "user-null-links",
+  "shard": 2,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 265.028,
+  "sample_interval_seconds": 5.0,
+  "expected_sample_count": 54,
+  "contact_sheet_count": 3,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg",
+    "sheet-002.jpg",
+    "sheet-003.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 640,
+        "height": 360,
+        "r_frame_rate": "30000/1001"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "265.028000"
+    }
+  },
+  "caption_files": [
+    "source.en.vtt",
+    "source.en-orig.vtt"
+  ]
+}

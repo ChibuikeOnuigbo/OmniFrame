@@ -1,0 +1,9 @@
+{
+  "id": "8WMyqJKRgzw",
+  "url": "https://www.youtube.com/watch?v=8WMyqJKRgzw",
+  "title": "chat-history link 8WMyqJKRgzw",
+  "channel": "chat-history",
+  "shard": 5,
+  "status": "BLOCKED",
+  "failure": "ERROR: [youtube] 8WMyqJKRgzw: Video unavailable. This video is private\n; ERROR: [youtube] 8WMyqJKRgzw: Video unavailable. This video is private\n; ERROR: [youtube] 8WMyqJKRgzw: Video unavailable. This video is private\n"
+}

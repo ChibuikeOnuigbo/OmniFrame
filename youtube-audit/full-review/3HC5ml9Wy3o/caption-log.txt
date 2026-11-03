@@ -1,0 +1,28 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=3HC5ml9Wy3o
+[youtube] 3HC5ml9Wy3o: Downloading webpage
+[youtube] 3HC5ml9Wy3o: Downloading web embedded client config
+[youtube] 3HC5ml9Wy3o: Downloading player 11a45ffb-main
+[youtube] 3HC5ml9Wy3o: Downloading web embedded player API JSON
+[youtube] 3HC5ml9Wy3o: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] 3HC5ml9Wy3o: Downloading m3u8 information
+[info] 3HC5ml9Wy3o: Downloading subtitles: en-orig, en
+[info] 3HC5ml9Wy3o: Downloading 1 format(s): 399+251
+[info] Writing video subtitles to: review-out/3HC5ml9Wy3o/source.en-orig.vtt
+[download] Destination: review-out/3HC5ml9Wy3o/source.en-orig.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    7.00KiB at  Unknown B/s (00:00:00)
+[download]    9.49KiB at    7.53MiB/s (00:00:00)
+[download] 100% of    9.49KiB in 00:00:00 at 188.50KiB/s
+[info] Writing video subtitles to: review-out/3HC5ml9Wy3o/source.en.vtt
+[download] Destination: review-out/3HC5ml9Wy3o/source.en.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    7.00KiB at  Unknown B/s (00:00:00)
+[download]    9.49KiB at    8.12MiB/s (00:00:00)
+[download] 100% of    9.49KiB in 00:00:00 at 234.46KiB/s
+[info] Writing video metadata as JSON to: review-out/3HC5ml9Wy3o/source.info.json
+

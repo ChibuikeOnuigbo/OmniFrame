@@ -1,0 +1,37 @@
+{
+  "id": "79jfvp-5f0g",
+  "url": "https://www.youtube.com/watch?v=79jfvp-5f0g",
+  "title": "chat-history link 79jfvp-5f0g",
+  "channel": "chat-history",
+  "shard": 2,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 35.008,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 18,
+  "contact_sheet_count": 1,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 360,
+        "height": 360,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "35.008000"
+    }
+  },
+  "caption_files": []
+}

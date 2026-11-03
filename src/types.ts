@@ -513,6 +513,9 @@ export interface MediaAsset {
   height: number
   size: number // bytes
   thumbnail?: string // optional dataURL preview
+  /** Original provider page and creator credit for externally sourced media. */
+  sourceUrl?: string
+  attribution?: string
   /** Frame-addressable raster sequence used by temporal patch/inpaint results. */
   imageSequence?: { fps: number; frames: ImageSequenceFrame[] }
   waveform?: number[] // normalized source peaks for real timeline visualization
@@ -1355,6 +1358,11 @@ export interface Scene3DObject {
   roughness?: number
   metalness?: number
   materialId?: string
+  /** GLTF/GLB model used instead of the primitive geometry when present. */
+  modelUrl?: string
+  sourceUrl?: string
+  attribution?: string
+  license?: string
   animation?: import('./lib/animation/CurveEngine').ClipAnimation
 }
 

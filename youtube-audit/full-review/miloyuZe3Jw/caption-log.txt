@@ -1,0 +1,26 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=miloyuZe3Jw
+[youtube] miloyuZe3Jw: Downloading webpage
+[youtube] miloyuZe3Jw: Downloading web embedded client config
+[youtube] miloyuZe3Jw: Downloading player 11a45ffb-main
+[youtube] miloyuZe3Jw: Downloading web embedded player API JSON
+[youtube] miloyuZe3Jw: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] miloyuZe3Jw: Downloading m3u8 information
+[info] miloyuZe3Jw: Downloading subtitles: en-orig, en
+[info] miloyuZe3Jw: Downloading 1 format(s): 401+251-7
+[info] Writing video subtitles to: review-out/miloyuZe3Jw/source.en-orig.vtt
+[download] Destination: review-out/miloyuZe3Jw/source.en-orig.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    4.07KiB at  Unknown B/s (00:00:00)
+[download] 100% of    4.07KiB in 00:00:00 at 56.29KiB/s
+[info] Writing video subtitles to: review-out/miloyuZe3Jw/source.en.vtt
+[download] Destination: review-out/miloyuZe3Jw/source.en.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    4.06KiB at  Unknown B/s (00:00:00)
+[download] 100% of    4.06KiB in 00:00:00 at 20.84KiB/s
+[info] Writing video metadata as JSON to: review-out/miloyuZe3Jw/source.info.json
+

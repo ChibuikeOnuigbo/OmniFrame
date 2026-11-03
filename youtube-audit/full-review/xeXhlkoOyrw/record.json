@@ -1,0 +1,37 @@
+{
+  "id": "xeXhlkoOyrw",
+  "url": "https://www.youtube.com/watch?v=xeXhlkoOyrw",
+  "title": "\u300cScenario \ud83c\udfad\ud83d\udda4\u300d JJK\u300cAMV/EDIT\u300d(FREE PF)",
+  "channel": "@spaceless2041",
+  "shard": 5,
+  "status": "FULL_DURATION_EVIDENCE",
+  "duration_seconds": 12.948,
+  "sample_interval_seconds": 2.0,
+  "expected_sample_count": 7,
+  "contact_sheet_count": 1,
+  "tiles_per_sheet": 25,
+  "contact_sheets": [
+    "sheet-001.jpg"
+  ],
+  "coverage": "Uniform timestamped samples span measured source duration; this is review evidence, not continuous human playback.",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 640,
+        "height": 360,
+        "r_frame_rate": "30000/1001"
+      },
+      {
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "12.948000"
+    }
+  },
+  "caption_files": []
+}

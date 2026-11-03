@@ -1,0 +1,24 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=hTEZOX48TN4
+[youtube] hTEZOX48TN4: Downloading webpage
+[youtube] hTEZOX48TN4: Downloading web embedded client config
+[youtube] hTEZOX48TN4: Downloading player 11a45ffb-main
+[youtube] hTEZOX48TN4: Downloading web embedded player API JSON
+[youtube] hTEZOX48TN4: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] hTEZOX48TN4: Downloading m3u8 information
+[info] hTEZOX48TN4: Downloading subtitles: en-orig, en
+[info] hTEZOX48TN4: Downloading 1 format(s): 399+251
+[info] Writing video subtitles to: review-out/hTEZOX48TN4/source.en-orig.vtt
+[download] Destination: review-out/hTEZOX48TN4/source.en-orig.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    2.32KiB at  Unknown B/s (00:00:00)
+[download] 100% of    2.32KiB in 00:00:00 at 62.43KiB/s
+[info] Writing video subtitles to: review-out/hTEZOX48TN4/source.en.vtt
+[download] Destination: review-out/hTEZOX48TN4/source.en.vtt
+
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    2.32KiB at  Unknown B/s (00:00:00)
+[download] 100% of    2.32KiB in 00:00:00 at 39.45KiB/s
+[info] Writing video metadata as JSON to: review-out/hTEZOX48TN4/source.info.json
+

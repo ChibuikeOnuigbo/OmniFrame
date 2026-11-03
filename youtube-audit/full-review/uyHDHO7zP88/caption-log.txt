@@ -1,0 +1,13 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=uyHDHO7zP88
+[youtube] uyHDHO7zP88: Downloading webpage
+[youtube] uyHDHO7zP88: Downloading web embedded client config
+[youtube] uyHDHO7zP88: Downloading player 11a45ffb-main
+[youtube] uyHDHO7zP88: Downloading web embedded player API JSON
+[youtube] uyHDHO7zP88: Downloading tv samsung player API JSON
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] uyHDHO7zP88: Downloading m3u8 information
+[info] uyHDHO7zP88: Downloading subtitles: en
+[info] uyHDHO7zP88: Downloading 1 format(s): 398+251
+[info] Writing video subtitles to: review-out/uyHDHO7zP88/source.en.vtt
+
+ERROR: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests
