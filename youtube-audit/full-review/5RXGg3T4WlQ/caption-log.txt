@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=5RXGg3T4WlQ
 [youtube] 5RXGg3T4WlQ: Downloading webpage
 [youtube] 5RXGg3T4WlQ: Downloading web embedded client config
-[youtube] 5RXGg3T4WlQ: Downloading player 11a45ffb-main
+[youtube] 5RXGg3T4WlQ: Downloading player 4efb8b2c-main
 [youtube] 5RXGg3T4WlQ: Downloading web embedded player API JSON
 [youtube] 5RXGg3T4WlQ: Downloading tv samsung player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
@@ -14,21 +14,21 @@
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
 [download]    7.00KiB at  Unknown B/s (00:00:00)
-[download]   15.00KiB at   13.59MiB/s (00:00:00)
-[download]   31.00KiB at   23.20MiB/s (00:00:00)
-[download]   63.00KiB at   38.62MiB/s (00:00:00)
-[download]   75.09KiB at   39.35MiB/s (00:00:00)
-[download] 100% of   75.09KiB in 00:00:00 at 1.23MiB/s
+[download]   15.00KiB at  Unknown B/s (00:00:00)
+[download]   31.00KiB at  Unknown B/s (00:00:00)
+[download]   63.00KiB at   55.79MiB/s (00:00:00)
+[download]   75.09KiB at   57.86MiB/s (00:00:00)
+[download] 100% of   75.09KiB in 00:00:00 at 1.06MiB/s
 [info] Writing video subtitles to: review-out/5RXGg3T4WlQ/source.en.vtt
 [download] Destination: review-out/5RXGg3T4WlQ/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    7.00KiB at  Unknown B/s (00:00:00)
-[download]   15.00KiB at   13.93MiB/s (00:00:00)
-[download]   31.00KiB at   23.22MiB/s (00:00:00)
-[download]   63.00KiB at   38.58MiB/s (00:00:00)
-[download]   75.09KiB at   39.90MiB/s (00:00:00)
-[download] 100% of   75.09KiB in 00:00:00 at 816.90KiB/s
+[download]    7.00KiB at    5.85MiB/s (00:00:00)
+[download]   15.00KiB at    9.63MiB/s (00:00:00)
+[download]   31.00KiB at   16.62MiB/s (00:00:00)
+[download]   63.00KiB at   27.30MiB/s (00:00:00)
+[download]   75.09KiB at   28.24MiB/s (00:00:00)
+[download] 100% of   75.09KiB in 00:00:00 at 1.61MiB/s
 [info] Writing video metadata as JSON to: review-out/5RXGg3T4WlQ/source.info.json
 

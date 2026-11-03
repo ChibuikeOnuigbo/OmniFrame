@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=EuMrlKcNnLM
 [youtube] EuMrlKcNnLM: Downloading webpage
 [youtube] EuMrlKcNnLM: Downloading web embedded client config
-[youtube] EuMrlKcNnLM: Downloading player 11a45ffb-main
+[youtube] EuMrlKcNnLM: Downloading player 4efb8b2c-main
 [youtube] EuMrlKcNnLM: Downloading web embedded player API JSON
 [youtube] EuMrlKcNnLM: Downloading tv samsung player API JSON
 

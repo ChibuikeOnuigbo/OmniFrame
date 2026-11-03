@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T13:01:26.688452+00:00",
+  "generated": "2026-11-03T00:09:51.250420+00:00",
   "expected": 134,
   "processed": 134,
   "missing_ids": [],
@@ -1070,9 +1070,7 @@
           "duration": "17.948000"
         }
       },
-      "caption_files": [
-        "source.en.vtt"
-      ]
+      "caption_files": []
     },
     {
       "id": "F5RcdSwzUVw",
@@ -1297,7 +1295,9 @@
           "duration": "20.128000"
         }
       },
-      "caption_files": []
+      "caption_files": [
+        "source.en.vtt"
+      ]
     },
     {
       "id": "vTyefIjQ8_Q",
@@ -1375,9 +1375,7 @@
           "duration": "21.788000"
         }
       },
-      "caption_files": [
-        "source.en.vtt"
-      ]
+      "caption_files": []
     },
     {
       "id": "ZrwjaDc__ZM",
@@ -1533,9 +1531,7 @@
           "duration": "26.188000"
         }
       },
-      "caption_files": [
-        "source.en.vtt"
-      ]
+      "caption_files": []
     },
     {
       "id": "ShCYvdqTQ3s",
@@ -3025,9 +3021,7 @@
           "duration": "21.628000"
         }
       },
-      "caption_files": [
-        "source.en.vtt"
-      ]
+      "caption_files": []
     },
     {
       "id": "vh65StXSx7o",
@@ -3138,9 +3132,7 @@
           "duration": "17.608000"
         }
       },
-      "caption_files": [
-        "source.en.vtt"
-      ]
+      "caption_files": []
     },
     {
       "id": "DfnbdXs-JpI",
@@ -3408,7 +3400,9 @@
           "duration": "179.288000"
         }
       },
-      "caption_files": []
+      "caption_files": [
+        "source.en-orig.vtt"
+      ]
     },
     {
       "id": "PMvN6KSYQhU",
@@ -3523,7 +3517,6 @@
         }
       },
       "caption_files": [
-        "source.en.vtt",
         "source.en-orig.vtt"
       ]
     },
@@ -4449,9 +4442,7 @@
           "duration": "48.188000"
         }
       },
-      "caption_files": [
-        "source.en.vtt"
-      ]
+      "caption_files": []
     },
     {
       "id": "HHNTQkaGv-M",

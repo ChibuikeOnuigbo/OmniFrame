@@ -36,5 +36,7 @@
       "duration": "179.288000"
     }
   },
-  "caption_files": []
+  "caption_files": [
+    "source.en-orig.vtt"
+  ]
 }

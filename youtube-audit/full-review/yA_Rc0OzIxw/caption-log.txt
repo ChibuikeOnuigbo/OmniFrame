@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=yA_Rc0OzIxw
 [youtube] yA_Rc0OzIxw: Downloading webpage
 [youtube] yA_Rc0OzIxw: Downloading web embedded client config
-[youtube] yA_Rc0OzIxw: Downloading player 11a45ffb-main
+[youtube] yA_Rc0OzIxw: Downloading player 4efb8b2c-main
 [youtube] yA_Rc0OzIxw: Downloading web embedded player API JSON
 [youtube] yA_Rc0OzIxw: Downloading tv samsung player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
