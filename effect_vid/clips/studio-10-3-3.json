@@ -1,0 +1,550 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "effect_vid/clips/studio-10-3-3.mp4",
+  "out": "/workspace/OmniFrame/effect_vid/clips/studio-10-3-3.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 57645,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2,
+     "bg": "#10151d"
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "effect_vid/moving-source.mp4",
+     "fps": 12,
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 24,
+     "duration": 2,
+     "hasAudio": false
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "effects": {
+       "waveWarp": 8,
+       "chromatic": 1,
+       "gradientMap": 0.46,
+       "gradientMapFrom": "#271a12",
+       "gradientMapTo": "#e9b785"
+      },
+      "volume": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "988/1152  Ripple Lens · Copper · Balanced",
+     "preset": "plain",
+     "x": 0,
+     "y": 73
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "9",
+       "x": -301.6,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "8",
+       "x": -274.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "8",
+       "x": -248.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "/",
+       "x": -221.6,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "1",
+       "x": -208.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "1",
+       "x": -181.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "5",
+       "x": -154.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "2",
+       "x": -128.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": " ",
+       "x": -101.4,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 9,
+       "ch": " ",
+       "x": -88.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 10,
+       "ch": "R",
+       "x": -74.8,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 11,
+       "ch": "i",
+       "x": -40.1,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 12,
+       "ch": "p",
+       "x": -29.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 13,
+       "ch": "p",
+       "x": -2.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 14,
+       "ch": "l",
+       "x": 24,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 15,
+       "ch": "e",
+       "x": 34.6,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 16,
+       "ch": " ",
+       "x": 61.3,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 17,
+       "ch": "L",
+       "x": 74.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 18,
+       "ch": "e",
+       "x": 101.3,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 19,
+       "ch": "n",
+       "x": 128,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 20,
+       "ch": "s",
+       "x": 154.7,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 21,
+       "ch": " ",
+       "x": 178.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 22,
+       "ch": "·",
+       "x": 192.1,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 23,
+       "ch": " ",
+       "x": 208.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 24,
+       "ch": "C",
+       "x": 221.4,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 25,
+       "ch": "o",
+       "x": 256.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 26,
+       "ch": "p",
+       "x": 282.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 27,
+       "ch": "p",
+       "x": 309.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 28,
+       "ch": "e",
+       "x": 336.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 29,
+       "ch": "r",
+       "x": 362.8,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 30,
+       "ch": " ",
+       "x": 378.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 31,
+       "ch": "·",
+       "x": 392.2,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 32,
+       "ch": " ",
+       "x": 408.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 33,
+       "ch": "B",
+       "x": 421.5,
+       "y": -11.2,
+       "w": 32,
+       "h": 48
+      },
+      {
+       "pos": 34,
+       "ch": "a",
+       "x": 453.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 35,
+       "ch": "l",
+       "x": 480.2,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 36,
+       "ch": "a",
+       "x": 490.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 37,
+       "ch": "n",
+       "x": 517.6,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 38,
+       "ch": "c",
+       "x": 544.2,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 39,
+       "ch": "e",
+       "x": 568.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 40,
+       "ch": "d",
+       "x": 594.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 320,
+      "h": 180
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 10,
+       "color": "#ffffff",
+       "bold": true,
+       "shadowMode": "outer",
+       "shadowColor": "#000000",
+       "shadowBlur": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 10,
+      "color": "#ffffff",
+      "shadowMode": "outer",
+      "shadowColor": "#000000",
+      "shadowBlur": 2
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "effect_vid/clips/studio-10-3-3.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 12,
+    "duration": 2,
+    "bg": "#10151d"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "moving-source.mp4",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "volume": 0,
+     "asset": "effect_vid/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "waveWarp": 8,
+      "chromatic": 1,
+      "gradientMap": 0.46,
+      "gradientMapFrom": "#271a12",
+      "gradientMapTo": "#e9b785"
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:988/1152  Ripple Lens · Copper · Balanced",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "asset": "text:plain",
+     "transform": {
+      "x": 0,
+      "y": 73,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

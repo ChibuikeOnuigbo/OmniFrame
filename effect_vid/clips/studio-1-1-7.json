@@ -1,0 +1,534 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "effect_vid/clips/studio-1-1-7.mp4",
+  "out": "/workspace/OmniFrame/effect_vid/clips/studio-1-1-7.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 21975,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2,
+     "bg": "#10151d"
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "effect_vid/moving-source.mp4",
+     "fps": 12,
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 24,
+     "duration": 2,
+     "hasAudio": false
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "effects": {
+       "glow": 0.3,
+       "contrast": 0.95,
+       "gradientMap": 0.86,
+       "gradientMapFrom": "#072c45",
+       "gradientMapTo": "#8de9cb"
+      },
+      "volume": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "112/1152  Soft Bloom · Lagoon · Intense",
+     "preset": "plain",
+     "x": 0,
+     "y": 73
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "1",
+       "x": -272.3,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "1",
+       "x": -245.6,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "2",
+       "x": -218.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "/",
+       "x": -192.2,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "1",
+       "x": -178.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "1",
+       "x": -152.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "5",
+       "x": -125.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "2",
+       "x": -98.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": " ",
+       "x": -72.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 9,
+       "ch": " ",
+       "x": -58.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 10,
+       "ch": "S",
+       "x": -45.4,
+       "y": -11.2,
+       "w": 32,
+       "h": 48
+      },
+      {
+       "pos": 11,
+       "ch": "o",
+       "x": -13.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 12,
+       "ch": "f",
+       "x": 13.3,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 13,
+       "ch": "t",
+       "x": 26.6,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 14,
+       "ch": " ",
+       "x": 40,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 15,
+       "ch": "B",
+       "x": 53.3,
+       "y": -11.2,
+       "w": 32,
+       "h": 48
+      },
+      {
+       "pos": 16,
+       "ch": "l",
+       "x": 85.3,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 17,
+       "ch": "o",
+       "x": 96,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 18,
+       "ch": "o",
+       "x": 122.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 19,
+       "ch": "m",
+       "x": 149.4,
+       "y": -11.2,
+       "w": 40,
+       "h": 48
+      },
+      {
+       "pos": 20,
+       "ch": " ",
+       "x": 189.4,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 21,
+       "ch": "·",
+       "x": 202.7,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 22,
+       "ch": " ",
+       "x": 218.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 23,
+       "ch": "L",
+       "x": 232,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 24,
+       "ch": "a",
+       "x": 258.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 25,
+       "ch": "g",
+       "x": 285.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 26,
+       "ch": "o",
+       "x": 312.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 27,
+       "ch": "o",
+       "x": 338.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 28,
+       "ch": "n",
+       "x": 365.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 29,
+       "ch": " ",
+       "x": 392.2,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 30,
+       "ch": "·",
+       "x": 405.5,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 31,
+       "ch": " ",
+       "x": 421.5,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 32,
+       "ch": "I",
+       "x": 434.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 33,
+       "ch": "n",
+       "x": 448.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 34,
+       "ch": "t",
+       "x": 474.9,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 35,
+       "ch": "e",
+       "x": 488.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 36,
+       "ch": "n",
+       "x": 514.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 37,
+       "ch": "s",
+       "x": 541.6,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 38,
+       "ch": "e",
+       "x": 565.6,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 320,
+      "h": 180
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 10,
+       "color": "#ffffff",
+       "bold": true,
+       "shadowMode": "outer",
+       "shadowColor": "#000000",
+       "shadowBlur": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 10,
+      "color": "#ffffff",
+      "shadowMode": "outer",
+      "shadowColor": "#000000",
+      "shadowBlur": 2
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "effect_vid/clips/studio-1-1-7.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 12,
+    "duration": 2,
+    "bg": "#10151d"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "moving-source.mp4",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "volume": 0,
+     "asset": "effect_vid/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "glow": 0.3,
+      "contrast": 0.95,
+      "gradientMap": 0.86,
+      "gradientMapFrom": "#072c45",
+      "gradientMapTo": "#8de9cb"
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:112/1152  Soft Bloom · Lagoon · Intense",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "asset": "text:plain",
+     "transform": {
+      "x": 0,
+      "y": 73,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=Tmki6M1_PWI
 [youtube] Tmki6M1_PWI: Downloading webpage
 [youtube] Tmki6M1_PWI: Downloading web embedded client config
-[youtube] Tmki6M1_PWI: Downloading player 11a45ffb-main
+[youtube] Tmki6M1_PWI: Downloading player 4efb8b2c-main
 [youtube] Tmki6M1_PWI: Downloading web embedded player API JSON
 [youtube] Tmki6M1_PWI: This video is age-restricted and YouTube is requiring account age-verification; some formats may be missing
 [youtube] Tmki6M1_PWI: Downloading web creator client config
@@ -12,10 +12,14 @@
 [info] Tmki6M1_PWI: Downloading subtitles: en-orig, en
 [info] Tmki6M1_PWI: Downloading 1 format(s): 399+251-7
 [info] Writing video subtitles to: review-out/Tmki6M1_PWI/source.en-orig.vtt
+[download] Destination: review-out/Tmki6M1_PWI/source.en-orig.vtt
 
+[download]    1.00KiB at  Unknown B/s (00:00:00)
+[download]    3.00KiB at  Unknown B/s (00:00:00)
+[download]    7.00KiB at  Unknown B/s (00:00:00)
+[download]   15.00KiB at  Unknown B/s (00:00:00)
+[download]   18.25KiB at  Unknown B/s (00:00:00)
+[download] 100% of   18.25KiB in 00:00:00 at 278.58KiB/s
 [info] Writing video subtitles to: review-out/Tmki6M1_PWI/source.en.vtt
 
-
-
-ERROR: Did not get any data blocks
 ERROR: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests

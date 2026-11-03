@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=iXZhEZPoNZY
 [youtube] iXZhEZPoNZY: Downloading webpage
 [youtube] iXZhEZPoNZY: Downloading web embedded client config
-[youtube] iXZhEZPoNZY: Downloading player 11a45ffb-main
+[youtube] iXZhEZPoNZY: Downloading player 4efb8b2c-main
 [youtube] iXZhEZPoNZY: Downloading web embedded player API JSON
 [youtube] iXZhEZPoNZY: Downloading tv samsung player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
@@ -13,20 +13,20 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    7.00KiB at    6.82MiB/s (00:00:00)
-[download]   15.00KiB at   10.89MiB/s (00:00:00)
-[download]   31.00KiB at   18.07MiB/s (00:00:00)
-[download]   45.04KiB at   21.68MiB/s (00:00:00)
-[download] 100% of   45.04KiB in 00:00:00 at 405.32KiB/s
+[download]    7.00KiB at    6.68MiB/s (00:00:00)
+[download]   15.00KiB at   10.97MiB/s (00:00:00)
+[download]   31.00KiB at   17.69MiB/s (00:00:00)
+[download]   45.04KiB at   21.28MiB/s (00:00:00)
+[download] 100% of   45.04KiB in 00:00:00 at 608.51KiB/s
 [info] Writing video subtitles to: review-out/iXZhEZPoNZY/source.en.vtt
 [download] Destination: review-out/iXZhEZPoNZY/source.en.vtt
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    3.00KiB at  Unknown B/s (00:00:00)
-[download]    7.00KiB at    6.81MiB/s (00:00:00)
-[download]   15.00KiB at   11.23MiB/s (00:00:00)
-[download]   31.00KiB at   18.60MiB/s (00:00:00)
-[download]   45.04KiB at   21.78MiB/s (00:00:00)
-[download] 100% of   45.04KiB in 00:00:00 at 533.28KiB/s
+[download]    7.00KiB at  Unknown B/s (00:00:00)
+[download]   15.00KiB at   11.52MiB/s (00:00:00)
+[download]   31.00KiB at   18.67MiB/s (00:00:00)
+[download]   45.04KiB at   22.21MiB/s (00:00:00)
+[download] 100% of   45.04KiB in 00:00:00 at 1.92MiB/s
 [info] Writing video metadata as JSON to: review-out/iXZhEZPoNZY/source.info.json
 

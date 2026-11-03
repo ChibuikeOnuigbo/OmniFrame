@@ -1,0 +1,534 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "effect_vid/clips/studio-8-5-1.mp4",
+  "out": "/workspace/OmniFrame/effect_vid/clips/studio-8-5-1.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 23397,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2,
+     "bg": "#10151d"
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "effect_vid/moving-source.mp4",
+     "fps": 12,
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 24,
+     "duration": 2,
+     "hasAudio": false
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "effects": {
+       "fractalBlur": 3,
+       "glow": 0.18,
+       "gradientMap": 0.26,
+       "gradientMapFrom": "#39172a",
+       "gradientMapTo": "#ffd0ca"
+      },
+      "volume": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "810/1152  Dream Diffusion · Rose · Soft",
+     "preset": "plain",
+     "x": 0,
+     "y": 73
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "8",
+       "x": -266.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "1",
+       "x": -240.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "0",
+       "x": -213.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "/",
+       "x": -186.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "1",
+       "x": -173.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "1",
+       "x": -146.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "5",
+       "x": -120.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "2",
+       "x": -93.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": " ",
+       "x": -66.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 9,
+       "ch": " ",
+       "x": -53.3,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 10,
+       "ch": "D",
+       "x": -40,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 11,
+       "ch": "r",
+       "x": -5.3,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 12,
+       "ch": "e",
+       "x": 10.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 13,
+       "ch": "a",
+       "x": 37.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 14,
+       "ch": "m",
+       "x": 64,
+       "y": -11.2,
+       "w": 40,
+       "h": 48
+      },
+      {
+       "pos": 15,
+       "ch": " ",
+       "x": 104,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 16,
+       "ch": "D",
+       "x": 117.4,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 17,
+       "ch": "i",
+       "x": 152,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 18,
+       "ch": "f",
+       "x": 162.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 19,
+       "ch": "f",
+       "x": 176,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 20,
+       "ch": "u",
+       "x": 189.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 21,
+       "ch": "s",
+       "x": 216.1,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 22,
+       "ch": "i",
+       "x": 240.1,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 23,
+       "ch": "o",
+       "x": 250.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 24,
+       "ch": "n",
+       "x": 277.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 25,
+       "ch": " ",
+       "x": 304.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 26,
+       "ch": "·",
+       "x": 317.5,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 27,
+       "ch": " ",
+       "x": 333.4,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 28,
+       "ch": "R",
+       "x": 346.8,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 29,
+       "ch": "o",
+       "x": 381.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 30,
+       "ch": "s",
+       "x": 408.1,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 31,
+       "ch": "e",
+       "x": 432.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 32,
+       "ch": " ",
+       "x": 458.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 33,
+       "ch": "·",
+       "x": 472.2,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 34,
+       "ch": " ",
+       "x": 488.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 35,
+       "ch": "S",
+       "x": 501.5,
+       "y": -11.2,
+       "w": 32,
+       "h": 48
+      },
+      {
+       "pos": 36,
+       "ch": "o",
+       "x": 533.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 37,
+       "ch": "f",
+       "x": 560.2,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 38,
+       "ch": "t",
+       "x": 573.5,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 320,
+      "h": 180
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 10,
+       "color": "#ffffff",
+       "bold": true,
+       "shadowMode": "outer",
+       "shadowColor": "#000000",
+       "shadowBlur": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 10,
+      "color": "#ffffff",
+      "shadowMode": "outer",
+      "shadowColor": "#000000",
+      "shadowBlur": 2
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "effect_vid/clips/studio-8-5-1.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 12,
+    "duration": 2,
+    "bg": "#10151d"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "moving-source.mp4",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "volume": 0,
+     "asset": "effect_vid/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "fractalBlur": 3,
+      "glow": 0.18,
+      "gradientMap": 0.26,
+      "gradientMapFrom": "#39172a",
+      "gradientMapTo": "#ffd0ca"
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:810/1152  Dream Diffusion · Rose · Soft",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "asset": "text:plain",
+     "transform": {
+      "x": 0,
+      "y": 73,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

@@ -1,0 +1,488 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "effect_vid/clips/studio-0-2-2.mp4",
+  "out": "/workspace/OmniFrame/effect_vid/clips/studio-0-2-2.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 31225,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2,
+     "bg": "#10151d"
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "effect_vid/moving-source.mp4",
+     "fps": 12,
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 24,
+     "duration": 2,
+     "hasAudio": false
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "effects": {
+       "contrast": 1.15,
+       "saturation": 0.85,
+       "vignette": 0.22,
+       "gradientMap": 0.36,
+       "gradientMapFrom": "#321447",
+       "gradientMapTo": "#eab7f5"
+      },
+      "volume": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "19/1152  Cinema · Orchid · Gentle",
+     "preset": "plain",
+     "x": 0,
+     "y": 73
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "1",
+       "x": -206.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "9",
+       "x": -180.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "/",
+       "x": -153.5,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "1",
+       "x": -140.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "1",
+       "x": -113.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "5",
+       "x": -86.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "2",
+       "x": -60,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": " ",
+       "x": -33.3,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": " ",
+       "x": -20,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 9,
+       "ch": "C",
+       "x": -6.7,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 10,
+       "ch": "i",
+       "x": 28,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 11,
+       "ch": "n",
+       "x": 38.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 12,
+       "ch": "e",
+       "x": 65.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 13,
+       "ch": "m",
+       "x": 92.1,
+       "y": -11.2,
+       "w": 40,
+       "h": 48
+      },
+      {
+       "pos": 14,
+       "ch": "a",
+       "x": 132,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 15,
+       "ch": " ",
+       "x": 158.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 16,
+       "ch": "·",
+       "x": 172.1,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 17,
+       "ch": " ",
+       "x": 188.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 18,
+       "ch": "O",
+       "x": 201.4,
+       "y": -11.2,
+       "w": 37.3,
+       "h": 48
+      },
+      {
+       "pos": 19,
+       "ch": "r",
+       "x": 238.7,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 20,
+       "ch": "c",
+       "x": 254.7,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 21,
+       "ch": "h",
+       "x": 278.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 22,
+       "ch": "i",
+       "x": 305.4,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 23,
+       "ch": "d",
+       "x": 316.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 24,
+       "ch": " ",
+       "x": 342.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 25,
+       "ch": "·",
+       "x": 356.1,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 26,
+       "ch": " ",
+       "x": 372.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 27,
+       "ch": "G",
+       "x": 385.4,
+       "y": -11.2,
+       "w": 37.3,
+       "h": 48
+      },
+      {
+       "pos": 28,
+       "ch": "e",
+       "x": 422.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 29,
+       "ch": "n",
+       "x": 449.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 30,
+       "ch": "t",
+       "x": 476.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 31,
+       "ch": "l",
+       "x": 489.5,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 32,
+       "ch": "e",
+       "x": 500.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 320,
+      "h": 180
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 10,
+       "color": "#ffffff",
+       "bold": true,
+       "shadowMode": "outer",
+       "shadowColor": "#000000",
+       "shadowBlur": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 10,
+      "color": "#ffffff",
+      "shadowMode": "outer",
+      "shadowColor": "#000000",
+      "shadowBlur": 2
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "effect_vid/clips/studio-0-2-2.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 12,
+    "duration": 2,
+    "bg": "#10151d"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "moving-source.mp4",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "volume": 0,
+     "asset": "effect_vid/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "contrast": 1.15,
+      "saturation": 0.85,
+      "vignette": 0.22,
+      "gradientMap": 0.36,
+      "gradientMapFrom": "#321447",
+      "gradientMapTo": "#eab7f5"
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:19/1152  Cinema · Orchid · Gentle",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "asset": "text:plain",
+     "transform": {
+      "x": 0,
+      "y": 73,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

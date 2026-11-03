@@ -1,0 +1,542 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "effect_vid/clips/studio-8-8-6.mp4",
+  "out": "/workspace/OmniFrame/effect_vid/clips/studio-8-8-6.mp4",
+  "frames": 24,
+  "fps": 12,
+  "size": 17303,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2,
+     "bg": "#10151d"
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 2
+    }
+   },
+   {
+    "tool": "import_video",
+    "params": {
+     "path": "effect_vid/moving-source.mp4",
+     "fps": 12,
+     "fit": "cover"
+    },
+    "out": {
+     "clipId": "clip-1",
+     "frames": 24,
+     "duration": 2,
+     "hasAudio": false
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "clip-1",
+     "patch": {
+      "effects": {
+       "fractalBlur": 3,
+       "glow": 0.18,
+       "gradientMap": 0.76,
+       "gradientMapFrom": "#422323",
+       "gradientMapTo": "#ffad8f"
+      },
+      "volume": 0
+     }
+    },
+    "out": {
+     "clipId": "clip-1",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "create_text",
+    "params": {
+     "text": "839/1152  Dream Diffusion · Coral · Deep",
+     "preset": "plain",
+     "x": 0,
+     "y": 73
+    },
+    "out": {
+     "clipId": "text-2",
+     "presetApplied": "plain",
+     "charMetrics": [
+      {
+       "pos": 0,
+       "ch": "8",
+       "x": -282.9,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 1,
+       "ch": "3",
+       "x": -256.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 2,
+       "ch": "9",
+       "x": -229.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 3,
+       "ch": "/",
+       "x": -202.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 4,
+       "ch": "1",
+       "x": -189.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 5,
+       "ch": "1",
+       "x": -162.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 6,
+       "ch": "5",
+       "x": -136.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 7,
+       "ch": "2",
+       "x": -109.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 8,
+       "ch": " ",
+       "x": -82.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 9,
+       "ch": " ",
+       "x": -69.3,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 10,
+       "ch": "D",
+       "x": -56,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 11,
+       "ch": "r",
+       "x": -21.3,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 12,
+       "ch": "e",
+       "x": -5.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 13,
+       "ch": "a",
+       "x": 21.3,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 14,
+       "ch": "m",
+       "x": 48,
+       "y": -11.2,
+       "w": 40,
+       "h": 48
+      },
+      {
+       "pos": 15,
+       "ch": " ",
+       "x": 88,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 16,
+       "ch": "D",
+       "x": 101.4,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 17,
+       "ch": "i",
+       "x": 136,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 18,
+       "ch": "f",
+       "x": 146.7,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 19,
+       "ch": "f",
+       "x": 160,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 20,
+       "ch": "u",
+       "x": 173.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 21,
+       "ch": "s",
+       "x": 200.1,
+       "y": -11.2,
+       "w": 24,
+       "h": 48
+      },
+      {
+       "pos": 22,
+       "ch": "i",
+       "x": 224.1,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 23,
+       "ch": "o",
+       "x": 234.7,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 24,
+       "ch": "n",
+       "x": 261.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 25,
+       "ch": " ",
+       "x": 288.1,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 26,
+       "ch": "·",
+       "x": 301.4,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 27,
+       "ch": " ",
+       "x": 317.4,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 28,
+       "ch": "C",
+       "x": 330.8,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 29,
+       "ch": "o",
+       "x": 365.4,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 30,
+       "ch": "r",
+       "x": 392.1,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 31,
+       "ch": "a",
+       "x": 408.1,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 32,
+       "ch": "l",
+       "x": 434.8,
+       "y": -11.2,
+       "w": 10.7,
+       "h": 48
+      },
+      {
+       "pos": 33,
+       "ch": " ",
+       "x": 445.5,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 34,
+       "ch": "·",
+       "x": 458.8,
+       "y": -11.2,
+       "w": 16,
+       "h": 48
+      },
+      {
+       "pos": 35,
+       "ch": " ",
+       "x": 474.8,
+       "y": -11.2,
+       "w": 13.3,
+       "h": 48
+      },
+      {
+       "pos": 36,
+       "ch": "D",
+       "x": 488.1,
+       "y": -11.2,
+       "w": 34.7,
+       "h": 48
+      },
+      {
+       "pos": 37,
+       "ch": "e",
+       "x": 522.8,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 38,
+       "ch": "e",
+       "x": 549.5,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      },
+      {
+       "pos": 39,
+       "ch": "p",
+       "x": 576.2,
+       "y": -11.2,
+       "w": 26.7,
+       "h": 48
+      }
+     ],
+     "project": {
+      "w": 320,
+      "h": 180
+     }
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "text-2",
+     "patch": {
+      "textStyle": {
+       "fontSize": 10,
+       "color": "#ffffff",
+       "bold": true,
+       "shadowMode": "outer",
+       "shadowColor": "#000000",
+       "shadowBlur": 2
+      }
+     }
+    },
+    "out": {
+     "clipId": "text-2",
+     "compounded": null,
+     "textStyle": {
+      "fontFamily": "Inter, sans-serif",
+      "bold": true,
+      "fontSize": 10,
+      "color": "#ffffff",
+      "shadowMode": "outer",
+      "shadowColor": "#000000",
+      "shadowBlur": 2
+     }
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "effect_vid/clips/studio-8-8-6.mp4"
+    },
+    "out": {
+     "frames": 24
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 12,
+    "duration": 2,
+    "bg": "#10151d"
+   },
+   "selection": "text-2",
+   "clips": [
+    {
+     "id": "clip-1",
+     "name": "moving-source.mp4",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "volume": 0,
+     "asset": "effect_vid/moving-source.mp4",
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {
+      "fractalBlur": 3,
+      "glow": 0.18,
+      "gradientMap": 0.76,
+      "gradientMapFrom": "#422323",
+      "gradientMapTo": "#ffad8f"
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "text-2",
+     "name": "text:839/1152  Dream Diffusion · Coral · Deep",
+     "start": 0,
+     "duration": 2,
+     "inPoint": 0,
+     "asset": "text:plain",
+     "transform": {
+      "x": 0,
+      "y": 73,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}
