@@ -8,9 +8,9 @@
     Metadata:
       encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:21.768000000
-frame=  516 fps=0.0 q=-0.0 size=N/A time=00:00:13.90 bitrate=N/A speed=27.8x elapsed=0:00:00.50    
-[opus @ 0x5636679ada00] Error parsing Opus packet header.
-[Parsed_loudnorm_0 @ 0x7c8bb8002080] 
+frame=  531 fps=0.0 q=-0.0 size=N/A time=00:00:14.40 bitrate=N/A speed=28.8x elapsed=0:00:00.50    
+[opus @ 0x5e0ea4c0fa00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x763628002080] 
 {
 	"input_i" : "-13.24",
 	"input_tp" : "0.75",
@@ -23,5 +23,5 @@ frame=  516 fps=0.0 q=-0.0 size=N/A time=00:00:13.90 bitrate=N/A speed=27.8x ela
 	"normalization_type" : "dynamic",
 	"target_offset" : "-1.37"
 }
-[out#0/null @ 0x5636679f3240] video:265KiB audio:16300KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame=  652 fps=0.0 q=-0.0 Lsize=N/A time=00:00:21.73 bitrate=N/A speed=31.1x elapsed=0:00:00.69    
+[out#0/null @ 0x5e0ea4c55240] video:265KiB audio:16300KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=  652 fps=0.0 q=-0.0 Lsize=N/A time=00:00:21.73 bitrate=N/A speed=31.9x elapsed=0:00:00.68    
