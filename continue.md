@@ -1,3 +1,9 @@
+## 2026-11-07 — Motion Lab 201 original editable templates
+
+The orphaned four-item sequence-template modal is now a reachable Motion Lab with 201 original recipes, 16 categories, 12 keyframe motion families, eight procedural backdrops, search/filtering, media slot mapping and a real editable scene builder. The top-bar/mobile opener, modal stacking, generated SVG background, aspect setting, media fallbacks, styled text layers and Curve Engine keys passed unit and live Chromium checks. Evidence and exact access limits: `docs/MOTION_LAB_20261107.md`, `research/motionvid-public-catalog-scope-20261107.json`, `qa-output/motion-lab/`.
+
+Motionvid public pages reported 201 individual template URLs, but its Terms prohibit scripted scraping/internal endpoints and copying or derivative platform technology. No Motionvid projects or preview assets were bulk-downloaded or committed; no full-preview watch is claimed. The response is an independent OmniFrame catalogue using general motion-design techniques.
+
 ## 2026-11-07 — shared Burst/Aura engine, turbulence, liquify and effect regions
 
 Current branch `codex/omniframe-text-crop-gif-providers` now has a shared deterministic action engine: 50 real Burst presets (10 families × 5 tiers), eight bright-pixel aura presets, six FBM/curl/glass turbulence presets and eight parameterized liquify presets. Burst ranges loop with editable speed/cycle/gap, preserve phase across parent splits, and expose `Fit 1×`. Every FX stack row links to the existing multi-region effect mask; the mask scopes the combined clip stack, including raster/action effects and adjustment layers. Effect tabs/cards gained compact icons and asset browsing no longer displays licence acronyms, while attribution metadata remains stored.

@@ -1,3 +1,14 @@
+## 2026-11-07 — Motion Lab template system
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| 201 original editable recipes across 16 motion-design categories | `src/lib/templatePresets.ts`, `src/types.ts` | Exact count, unique IDs/names, slot integrity and search unit test |
+| Search, category filtering, palette/aspect/duration preview and asset mapping | `TemplatePickerModal.tsx` | Live Data/Neon search and inspector screenshot |
+| Generated backdrop, editable media/text layers and 12 real keyframe motions | `TemplatePickerModal.tsx` | Browser-built four-layer Data Story scene with three animated text tracks |
+| Reachable desktop/mobile entry and correct modal stacking | `TopBar.tsx`, `TemplatePickerModal.tsx` | Live top-bar open, modal visibility and z-order inspection |
+
+Motionvid scope evidence is recorded in `research/motionvid-public-catalog-scope-20261107.json`. Terms blocked bulk scraping/copying, so no third-party projects or previews were committed. Full details and evidence: `docs/MOTION_LAB_20261107.md`, `qa-output/motion-lab/`.
+
 ## 2026-11-01 — 1,152 Studio Looks and effect-library controls
 
 Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.

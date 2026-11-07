@@ -1,0 +1,15 @@
+{
+  "clips": 4,
+  "textLayers": 3,
+  "animatedText": 3,
+  "backgroundAssets": 1,
+  "attribution": "Original OmniFrame Motion Lab artwork",
+  "notice": "Data Story · Neon: built 4 editable layers.",
+  "aspect": "16:9",
+  "mobileBounds": {
+    "left": 0,
+    "right": 390,
+    "viewport": 390,
+    "documentWidth": 390
+  }
+}

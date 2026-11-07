@@ -1686,12 +1686,63 @@ export interface TemplateSlot {
   durationConstraint?: number
 }
 
+export type TemplateCategory =
+  | 'Titles'
+  | 'Brand'
+  | 'Lower thirds'
+  | 'Data'
+  | 'Diagrams'
+  | 'Maps'
+  | 'Product'
+  | 'Devices'
+  | 'Social'
+  | 'News'
+  | 'Countdowns'
+  | 'Photos'
+  | 'UI demos'
+  | 'Backgrounds'
+  | 'Music'
+  | 'Comparisons'
+
+export type TemplateMotionPreset =
+  | 'fade-rise'
+  | 'slide'
+  | 'pop'
+  | 'zoom'
+  | 'flip'
+  | 'swing'
+  | 'drift'
+  | 'typewriter'
+  | 'stagger'
+  | 'pulse'
+  | 'wipe'
+  | 'orbit'
+
+export type TemplateBackdropStyle =
+  | 'gradient'
+  | 'grid'
+  | 'rings'
+  | 'rays'
+  | 'paper'
+  | 'glass'
+  | 'noise'
+  | 'split'
+
 export interface TemplateDefinition {
   id: string
   name: string
   description: string
   slots: TemplateSlot[]
   thumbnail?: string
+  /** Motion Lab metadata. Older saved definitions remain valid. */
+  category?: TemplateCategory
+  tags?: string[]
+  duration?: number
+  aspect?: '16:9' | '9:16' | '1:1' | '4:5'
+  palette?: [string, string, string]
+  motion?: TemplateMotionPreset
+  backdrop?: TemplateBackdropStyle
+  origin?: 'omniframe-original' | 'legacy'
 }
 
 export interface GuidedMatteRecord {

@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-11-07T18:35:00Z",
+  "source": "https://motionvid.ai/templates",
+  "accessMethod": "Four direct public-page reads; no internal API calls and no authenticated access",
+  "publicCatalog": {
+    "sitemapTemplateUrls": 213,
+    "individualTemplatePages": 201,
+    "categoryPages": 12,
+    "landingPageClaim": "200+ free motion graphics templates"
+  },
+  "policyBoundary": {
+    "robots": "Public template routes are crawlable; private and internal API routes are disallowed.",
+    "terms": [
+      "Section 5 prohibits bots, scripts, scrapers, crawlers, data-mining tools and internal endpoint access.",
+      "Section 7 prohibits copying, modifying, distributing or creating derivatives of platform technology without written permission.",
+      "Generated exports may include a license for controlled template elements, but that does not license project-source redistribution."
+    ],
+    "downloadedTemplateProjects": 0,
+    "downloadedPreviewMedia": 0,
+    "decision": "Do not bulk-download or clone Motionvid projects. Build original OmniFrame recipes from general motion-design techniques."
+  },
+  "response": {
+    "originalOmniFrameRecipes": 201,
+    "categories": 16,
+    "motionFamilies": 12,
+    "backdropFamilies": 8,
+    "thirdPartyAssetsCommitted": 0
+  },
+  "retrievalEvidence": {
+    "robotsSha256": "b19eb23ff0831deb4898f06b11ec3274381323c7dc613864cacf84e4bfb62948",
+    "sitemapSha256": "bddb16f15c6b7db9d64db97b5109b268dd944072cba9475c24c8d40e913e8c5f",
+    "templatesPageSha256": "96e3831f8ca7ba13b6d3c387080f6a245b583a51fb5997b4ce0115024c885ac7",
+    "termsPageSha256": "2d274a9980766f7d2949bf04723070b870c5a9ff5e119f86b3fdcbdd8fd02719"
+  }
+}

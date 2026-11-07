@@ -57,6 +57,7 @@ import { IconButton } from './ui'
 import { WorkspaceSchematic } from './WorkspaceSchematic'
 import { LayoutManagerModal } from './LayoutManagerModal'
 import CompositionSettingsModal from './CompositionSettingsModal'
+import { TemplatePickerModal } from './TemplatePickerModal'
 
 const SETTINGS_CATEGORY_META: Record<SettingsCategory, {
   label: string
@@ -148,6 +149,7 @@ export function TopBar() {
   const [layoutOpen, setLayoutOpen] = useState(false)
   const [layoutModalOpen, setLayoutModalOpen] = useState(false)
   const [compOpen, setCompOpen] = useState(false)
+  const [templateOpen, setTemplateOpen] = useState(false)
   const layoutRef = useRef<HTMLDivElement>(null)
   const [settingsCategory, setSettingsCategory] = useState<SettingsCategory>('timeline')
   const [settingsSearch, setSettingsSearch] = useState('')
@@ -509,6 +511,20 @@ export function TopBar() {
         </span>
       )}
 
+      <button
+        type="button"
+        data-testid="templates-button"
+        title="Motion Lab templates"
+        aria-label="Open Motion Lab templates"
+        aria-haspopup="dialog"
+        aria-expanded={templateOpen}
+        onClick={() => setTemplateOpen(true)}
+        className={`hidden h-8 items-center gap-1.5 rounded-none border border-ink-700 bg-ink-800 px-2 text-xs transition-colors hover:bg-ink-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand md:flex ${templateOpen ? 'text-brand-300' : 'text-ink-300'}`}
+      >
+        <Sparkles size={14} />
+        <span className="hidden xl:inline">Motion Lab</span>
+      </button>
+
       <div role="group" aria-label="Workspace layout" className="relative">
         <button
           type="button"
@@ -629,6 +645,7 @@ export function TopBar() {
         <button type="button" aria-label="Workspace tools" aria-haspopup="menu" aria-expanded={mobileToolsOpen} data-testid="mobile-workspace-tools" className="grid h-10 w-10 place-items-center rounded-md border border-ink-700 bg-ink-800 text-ink-300" onClick={()=>setMobileToolsOpen(!mobileToolsOpen)}><MoreHorizontal size={20}/></button>
         {mobileToolsOpen&&<><div className="fixed inset-0 z-[75]" onPointerDown={()=>setMobileToolsOpen(false)}/><ViewportMenu x={window.innerWidth-240} y={52} testId="mobile-workspace-menu" label="Workspace tools" onClose={()=>setMobileToolsOpen(false)}>{[
           {name:'Workspace layout',run:()=>setLayoutOpen(true)},
+          {name:'Motion Lab templates',run:()=>setTemplateOpen(true)},
           {name:'Composition settings',run:()=>setCompOpen(true)},
           {name:'Appearance & palette',run:()=>{setSettingsCategory('appearance');setSettingsOpen(true)}},
           {name:'Help & shortcuts',run:()=>useEditor.getState().setHelpOpen(true)},
@@ -1760,6 +1777,7 @@ export function TopBar() {
 
       <LayoutManagerModal isOpen={layoutModalOpen} onClose={() => setLayoutModalOpen(false)} />
       {compOpen && <CompositionSettingsModal onClose={() => setCompOpen(false)} />}
+      <TemplatePickerModal isOpen={templateOpen} onClose={() => setTemplateOpen(false)} />
     </header>
   )
 }

@@ -1,3 +1,9 @@
+## 2026-11-07 — Motion Lab state
+
+Motion Lab is live from the top bar and mobile workspace menu with 201 original recipes, 16 categories, search/filtering, editable slots, procedural SVG backdrops, aspect setup and 12 Curve Engine motion families. The live browser built and displayed a four-layer Data Story recipe. Unit, typecheck, browser and production build evidence is in `docs/MOTION_LAB_20261107.md` and `qa-output/motion-lab/`.
+
+Motionvid's public sitemap exposed 201 individual pages, but its Terms prohibit scripted scraping/internal endpoints and copying platform technology. No source projects or preview media were downloaded or bundled; continuous viewing of every preview is not claimed.
+
 ## 2026-11-07 — Burst/Aura and effect-region state
 
 Branch `codex/omniframe-text-crop-gif-providers` adds a shared browser/headless action renderer with 50 Burst presets, eight bright-pixel auras, upgraded FBM/curl/glass turbulent displacement and eight liquify effect presets. Action clocks loop, expose speed/cycle/gap controls and survive parent splits. `Fit 1×` shortens a burst to one active cycle. FX rows open the existing ellipse/rectangle/circle/text/custom region mask; its verified scope is the combined clip effect stack. Adjustment-only raster/action masks now isolate correctly. Compact category icons and cleaner asset cards were browser-tested. Full evidence and limits: `docs/ACTION_EFFECTS_20261107.md`.
