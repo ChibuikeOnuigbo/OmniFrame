@@ -12,6 +12,19 @@ Current user request is a broad editor quality/performance upgrade against the u
 
 Read `docs/EDITOR_PERFORMANCE_20261031.md` for exact checks, current research and remaining scope. Evidence: `qa-output/performance-20261031/`; fresh Drive listings, uploaded-ledger index, repository searches and sampled reference review: `research/editor-upgrade-20261031/`. Proxies are tab-local realtime WebM, not frame-exact persistent/native proxies. No comparative speed benchmark, new model training, sculpting implementation or native platform certification is claimed. No environment configuration or publication, remote push or PR performed. Continue the open work listed in that report; preserve user media and historical evidence.
 
+## 2026-11-07 action effects, aura, liquify and effect regions
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| 50 loopable Burst presets across ten source-fragment/energy families | `src/lib/actionFx.ts`, `effectCatalog.ts`, `particleFx.ts`, `fxInstances.ts` | `qa/action-fx-unit.mjs`: exact 50 count, unique ids, ten distinct family renders and deterministic timing; inspected contact sheet |
+| Bright-pixel aura and FBM/curl/glass turbulence | `actionFx.ts`, `pixelGrade.ts`, `types.ts` | Eight aura and six turbulence catalog entries; changed-pixel proof and production build |
+| Parameterized liquify effect plus signed twirl direction | `pixelGrade.ts`, `deformation.ts` | Eight presets; existing four-mode deformation unit remains green |
+| Burst cycle controls, split continuity and one-cycle trim | `FxStackSection.tsx`, `fxInstances.ts` | Split source-clock unit and live UI 1 s / 2× → 0.5 s assertion |
+| Effect-region entry from every FX row; action/raster masking on adjustment layers | `FxStackSection.tsx`, `playback.ts`, existing `effectMask.ts` | Live ellipse region UI and visibly isolated burst screenshot; live MCP mask regression |
+| Compact effect icons and cleaner asset browsing | `EffectsPanel.tsx`, `AssetLibraryModal.tsx` | 1600×1000 browser screenshots; no visible `CC0` text in library modal, attribution metadata preserved |
+
+Evidence: `docs/ACTION_EFFECTS_20261107.md`, `qa/artifacts/burst-fx-contact-sheet.png`, and `qa-output/action-fx/`. Base catalog 10,550; lazy-pack total 15,550. These are recipe counts. This runner lacks Rust/Cargo, so native desktop compilation and cross-platform certification are not claimed.
+
 # Verified implementation changes — 2026-10-31
 
 Textured external asset increment: six new transition presets, five downloaded CC0 models plus one original fracture rig using a CC0 material. Device 3D now includes two Poly Haven CRTs with live video screens; Object 3D includes arrow/shell/payphone/fracture motions with parameter controls, thumbnails, source credits, undo and bundle persistence. Actual moving WebGL renders, native MP4/audio export, packed-source reopening and existing browser regressions passed. See `docs/EXTERNAL_TRANSITION_ASSETS_20261031.md` and `evidence_video/asset-transitions/` for source links, measured output and scope. Sketchfab download authentication remained unavailable.

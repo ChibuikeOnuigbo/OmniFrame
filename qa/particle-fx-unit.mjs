@@ -14,7 +14,10 @@ const src = readFileSync(join(process.cwd(), 'src/lib/particleFx.ts'), 'utf8')
 const { code } = transform(src, { transforms: ['typescript'] })
 const dir = mkdtempSync(join(tmpdir(), 'pfx-'))
 const file = join(dir, 'particleFx.mjs')
-writeFileSync(file, code)
+const actionSrc = readFileSync(join(process.cwd(), 'src/lib/actionFx.ts'), 'utf8')
+const actionCode = transform(actionSrc, { transforms: ['typescript'] }).code
+writeFileSync(join(dir, 'actionFx.mjs'), actionCode)
+writeFileSync(file, code.replace("from './actionFx'", "from './actionFx.mjs'"))
 const mod = await import(file)
 const { drawParticleFx, drawOverlayFx, drawReplaceBg, applyClipFxLayers, PARTICLE_KINDS, OVERLAY_KINDS, REPLACE_BG_KINDS } = mod
 

@@ -1,5 +1,6 @@
 import { buildStudioLooks } from './studioLooks'
 import type { ClipEffect } from '../types'
+import { BURST_FAMILIES } from './actionFx'
 
 /**
  * The Effects catalog (board J): every entry maps to REAL engine params
@@ -12,7 +13,7 @@ import type { ClipEffect } from '../types'
  * Counts are real: `getFxCatalog().length` is what the UI prints.
  */
 
-export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'retro' | 'light' | 'key' | 'Glitch NG'
+export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'burst' | 'retro' | 'light' | 'key' | 'Glitch NG'
 
 
 export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
@@ -23,6 +24,7 @@ export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
   { id: 'color', label: 'Color' },
   { id: 'blur', label: 'Blur' },
   { id: 'distort', label: 'Distort' },
+  { id: 'burst', label: 'Burst' },
   { id: 'retro', label: 'Retro' },
   { id: 'light', label: 'Light' },
   { id: 'key', label: 'Key' },
@@ -140,6 +142,40 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   oscillateWave: { label: 'Wave', kind: 'select', options: ['sine', 'triangle'] },
   oscillatePhase: { label: 'Phase', kind: 'number', min: 0, max: 1000, step: 1 },
   turbulent: { label: 'Turbulent Warp', kind: 'number', min: 0, max: 1, step: 0.01 },
+  turbulentScale: { label: 'Noise scale', kind: 'number', min: 8, max: 240, step: 1 },
+  turbulentSpeed: { label: 'Evolution', kind: 'number', min: 0, max: 6, step: 0.05 },
+  turbulentAngle: { label: 'Direction', kind: 'number', min: -180, max: 180, step: 1 },
+  turbulentSeed: { label: 'Noise seed', kind: 'number', min: 0, max: 9999, step: 1 },
+  turbulentMode: { label: 'Noise type', kind: 'select', options: ['fbm', 'curl', 'glass'] },
+  liquifyMode: { label: 'Liquify tool', kind: 'select', options: ['push', 'bulge', 'pinch', 'twirl'] },
+  liquifyAmount: { label: 'Liquify amount', kind: 'number', min: -1, max: 1, step: 0.01 },
+  liquifyRadius: { label: 'Brush radius', kind: 'number', min: 0.03, max: 0.8, step: 0.01 },
+  liquifyX: { label: 'Center X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  liquifyY: { label: 'Center Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstFx: { label: 'Burst type', kind: 'select', options: [...BURST_FAMILIES] },
+  burstIntensity: { label: 'Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstSpeed: { label: 'Speed', kind: 'number', min: 0.1, max: 5, step: 0.05 },
+  burstInterval: { label: 'Loop gap', kind: 'number', min: 0, max: 10, step: 0.05 },
+  burstCycle: { label: 'Cycle', kind: 'number', min: 0.1, max: 10, step: 0.05 },
+  burstLoop: { label: 'Loop', kind: 'number', min: 0, max: 1, step: 1 },
+  burstOriginX: { label: 'Origin X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstOriginY: { label: 'Origin Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstSpread: { label: 'Spread', kind: 'number', min: 0, max: 1.5, step: 0.01 },
+  burstFragments: { label: 'Pieces', kind: 'number', min: 4, max: 64, step: 1 },
+  burstGravity: { label: 'Gravity', kind: 'number', min: -1, max: 1, step: 0.01 },
+  burstRotation: { label: 'Spin', kind: 'number', min: 0, max: 720, step: 1 },
+  burstColor: { label: 'Energy color', kind: 'color' },
+  burstSeed: { label: 'Seed', kind: 'number', min: 0, max: 9999, step: 1 },
+  aura: { label: 'Aura', kind: 'number', min: 0, max: 1, step: 0.01 },
+  auraThreshold: { label: 'Bright threshold', kind: 'number', min: 0, max: 0.98, step: 0.01 },
+  auraRadius: { label: 'Bloom radius', kind: 'number', min: 2, max: 120, step: 1 },
+  auraLines: { label: 'Energy lines', kind: 'number', min: 4, max: 64, step: 1 },
+  auraSpeed: { label: 'Aura speed', kind: 'number', min: -6, max: 6, step: 0.05 },
+  auraRotation: { label: 'Aura angle', kind: 'number', min: -360, max: 360, step: 1 },
+  auraX: { label: 'Aura X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  auraY: { label: 'Aura Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  auraColor: { label: 'Aura color', kind: 'color' },
+  auraSecondary: { label: 'Second color', kind: 'color' },
   threshold: { label: 'Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
   sharpen: { label: 'Sharpen', kind: 'number', min: 0, max: 1, step: 0.01 },
   findEdges: { label: 'Find Edges', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -332,7 +368,28 @@ function buildCatalog(): FxCatalogEntry[] {
   ;[4, 8, 14, 22].forEach((w, i) => add(`wave-${i}`, `Wave Warp ${w}px`, 'distort', 'AE Wave Warp / AM wave (scanned docs)', { waveWarp: w }))
   for (const sw of [-180, -90, 90, 180, 360]) add(`swirl-${sw}`, `Swirl ${sw}°`, 'distort', 'AM Swirl / AE Twirl (official guides)', { swirl: sw })
   ;[-0.6, -0.3, 0.3, 0.6].forEach((p, i) => add(`pinch-${i}`, p < 0 ? `Pinch ${Math.abs(p)}` : `Bulge ${p}`, 'distort', 'AM Pinch/Bulge (official guide)', { pinchBulge: p }))
-  ;[0.35, 0.7, 1].forEach((t, i) => add(`turb-${i}`, `Turbulent Warp ${Math.round(t * 100)}%`, 'distort', 'AE Turbulent Displace / Wizzy course "Turbs"', { turbulent: t }))
+  ;[
+    ['Soft FBM', 'fbm', 0.3, 120, 0.6, 0],
+    ['Flow FBM', 'fbm', 0.58, 74, 1.1, 24],
+    ['Curl Current', 'curl', 0.62, 96, 0.8, -18],
+    ['Curl Storm', 'curl', 0.9, 48, 1.7, 32],
+    ['Turbulent Glass', 'glass', 0.72, 34, 0.45, 0],
+    ['Heat Glass', 'glass', 0.45, 62, 2.1, 90],
+  ].forEach(([name, mode, amount, scale, speed, angle], i) => add(`turb-pro-${i}`, String(name), 'distort',
+    'Retained editor audit: AE-style FBM/curl Turbulent Pro and GM Turbulent Glass; implemented in the shared raster engine',
+    { turbulent: amount as number, turbulentMode: mode as string, turbulentScale: scale as number, turbulentSpeed: speed as number, turbulentAngle: angle as number, turbulentSeed: 713 + i * 137 }))
+  ;[
+    ['Push Right', 'push', 0.65, 0.32, 0.5, 0.5],
+    ['Push Left', 'push', -0.65, 0.32, 0.5, 0.5],
+    ['Soft Bulge', 'bulge', 0.48, 0.42, 0.5, 0.5],
+    ['Lens Bulge', 'bulge', 0.85, 0.28, 0.5, 0.5],
+    ['Soft Pinch', 'pinch', 0.48, 0.42, 0.5, 0.5],
+    ['Deep Pinch', 'pinch', 0.88, 0.28, 0.5, 0.5],
+    ['Twirl Left', 'twirl', -0.72, 0.46, 0.5, 0.5],
+    ['Twirl Right', 'twirl', 0.72, 0.46, 0.5, 0.5],
+  ].forEach(([name, mode, amount, radius, x, y], i) => add(`liquify-${i}`, `Liquify ${name}`, 'distort',
+    'Shared non-destructive liquify field: the effect preset uses the same push/bulge/pinch/twirl vocabulary as the canvas brush',
+    { liquifyMode: mode as string, liquifyAmount: amount as number, liquifyRadius: radius as number, liquifyX: x as number, liquifyY: y as number }))
   ;[0.25, 0.5].forEach((p, i) => add(`pstretch-${i}`, `Pixel Stretch ${Math.round(p * 100)}%`, 'distort', 'AM Pixel Stretch (Hancybox rewatch corpus)', { pixelStretch: p }))
   for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
     for (const mode of ['max', 'min'] as const) {
@@ -341,6 +398,34 @@ function buildCatalog(): FxCatalogEntry[] {
     }
   }
   ;[3, 6, 12].forEach((c, i) => add(`chroma-${i}`, `RGB Fringe ${c}px`, 'distort', 'glitchology RGB split (pillar research)', { chromatic: c }))
+
+  // ---- Burst: 10 real motion families × 5 authored tiers = exactly 50 ----
+  const burstNames: Record<(typeof BURST_FAMILIES)[number], string> = {
+    glass: 'Glass', crack: 'Crack', shatter: 'Shatter', tiles: 'Tile Break', slice: 'Slice',
+    shockwave: 'Shockwave', fireball: 'Fireball', smoke: 'Smoke', energy: 'Energy', implosion: 'Implosion',
+  }
+  const burstColors: Record<(typeof BURST_FAMILIES)[number], string> = {
+    glass: '#c8f3ff', crack: '#ffffff', shatter: '#9fe8ff', tiles: '#ffd18a', slice: '#ff5577',
+    shockwave: '#79d8ff', fireball: '#ff8b2c', smoke: '#c7d0da', energy: '#9b7dff', implosion: '#42f5d7',
+  }
+  const burstTiers = [
+    ['Soft', 0.38, 16, 0.38, 90], ['Clean', 0.55, 22, 0.52, 130], ['Classic', 0.72, 30, 0.7, 180],
+    ['Heavy', 0.88, 42, 0.92, 260], ['Chaos', 1, 56, 1.18, 420],
+  ] as const
+  for (const [familyIndex, family] of BURST_FAMILIES.entries()) {
+    burstTiers.forEach(([tier, intensity, pieces, spread, rotation], tierIndex) => add(
+      `burst-${family}-${tier.toLowerCase()}`,
+      `${burstNames[family]} ${tier}`,
+      'burst',
+      'Retained YouTube audit + editor effect inventory: glass/crack/shatter, radial slice, shockwave, fire/explosion and implosion motifs; deterministic shared canvas implementation',
+      {
+        burstFx: family, burstIntensity: intensity, burstSpeed: 1, burstInterval: 0.35, burstCycle: 1,
+        burstLoop: 1, burstOriginX: 0.5, burstOriginY: 0.5, burstSpread: spread, burstFragments: pieces,
+        burstGravity: family === 'smoke' ? -0.18 : family === 'implosion' ? 0 : 0.22,
+        burstRotation: rotation, burstColor: burstColors[family], burstSeed: 701 + familyIndex * 97 + tierIndex * 17,
+      },
+    ))
+  }
 
   // ---- Retro ----
   ;[0.35, 0.6, 0.85, 1].forEach((v, i) => add(`vhs-${i}`, `VHS Tape ${Math.round(v * 100)}%`, 'retro', 'MatttVfx VHS one-framer j3Lt0dU1Lok (watched corpus)', { vhs: v }))
@@ -353,6 +438,18 @@ function buildCatalog(): FxCatalogEntry[] {
 
   // ---- Light ----
   ;[0.4, 0.7, 1].forEach((g, i) => add(`glow-${i}`, `Glow ${Math.round(g * 100)}%`, 'light', 'AM Glow (official guide)', { glow: g }))
+  ;[
+    ['Cyan Magenta', '#22d3ee', '#e935c1', 0.72, 24],
+    ['Green Pulse', '#64ff8a', '#d9ff6a', 0.7, 20],
+    ['Gold Spiral', '#ffd45e', '#ff7b2e', 0.82, 28],
+    ['Violet Core', '#9b7dff', '#42e8ff', 0.8, 32],
+    ['Red Energy', '#ff3b5f', '#ffb23f', 0.86, 22],
+    ['Ice Halo', '#c8f3ff', '#7db7ff', 0.62, 18],
+    ['Spectral', '#40ffd0', '#ff3bd4', 0.92, 40],
+    ['White Charge', '#ffffff', '#72d7ff', 1, 48],
+  ].forEach(([name, primary, secondary, amount, lines], i) => add(`aura-${i}`, `Aura ${name}`, 'light',
+    'Retained YouTube evidence: cyan/magenta and green glow aura motifs; retained effect inventory: S_GlowAura radial colored spiral lines around bright pixels',
+    { aura: amount as number, auraThreshold: 0.46, auraRadius: 24 + i * 3, auraLines: lines as number, auraSpeed: i % 2 ? -0.8 : 0.9, auraRotation: i * 17, auraX: 0.5, auraY: 0.5, auraColor: primary as string, auraSecondary: secondary as string }))
   for (const [name, hex] of PALETTE.slice(0, 8)) {
     add(`edgeglow-${name.toLowerCase()}`, `Edge Glow ${name}`, 'light', 'AM Edge Glow / Stroke Color (official guide)', { edgeGlow: 0.9, edgeGlowColor: hex })
   }

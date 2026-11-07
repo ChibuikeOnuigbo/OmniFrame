@@ -1,3 +1,9 @@
+## 2026-11-07 — Burst/Aura and effect-region state
+
+Branch `codex/omniframe-text-crop-gif-providers` adds a shared browser/headless action renderer with 50 Burst presets, eight bright-pixel auras, upgraded FBM/curl/glass turbulent displacement and eight liquify effect presets. Action clocks loop, expose speed/cycle/gap controls and survive parent splits. `Fit 1×` shortens a burst to one active cycle. FX rows open the existing ellipse/rectangle/circle/text/custom region mask; its verified scope is the combined clip effect stack. Adjustment-only raster/action masks now isolate correctly. Compact category icons and cleaner asset cards were browser-tested. Full evidence and limits: `docs/ACTION_EFFECTS_20261107.md`.
+
+Green checks: typecheck, production web build, action/deformation/particle/split units, live action UI, context-menu bounds/keyboard and live MCP bridge. Base/full catalog counts are 10,550/15,550. Native Tauri compilation remains blocked by missing Rust/Cargo in this runner. Retained visual/static audit evidence was used; no additional continuous YouTube watch is claimed.
+
 ## 2026-11-01 — 1,152 Studio Looks and effect-library controls
 
 Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.

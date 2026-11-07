@@ -19,7 +19,7 @@ import {
 
 const SOURCES: Array<{ id: AssetLibrarySource; label: string; note: string; icon: typeof Box }> = [
   { id: 'local', label: 'On this device', note: 'Bundled GLB models', icon: HardDrive },
-  { id: 'polyhaven', label: 'Poly Haven', note: 'Complete CC0 model catalog', icon: Box },
+  { id: 'polyhaven', label: 'Poly Haven', note: 'Models, textures and HDRIs', icon: Box },
   { id: 'unsplash', label: 'Unsplash', note: 'High-resolution photos', icon: Image },
   { id: 'pexels', label: 'Pexels', note: 'High-resolution photos', icon: Image },
 ]
@@ -109,7 +109,7 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
         if (cancelled) return
         setPolyAssets((catalogs) => ({ ...catalogs, [polyKind]: models }))
         const noun = polyKind === 'hdri' ? (models.length === 1 ? 'HDRI' : 'HDRIs') : `${polyKind}${models.length === 1 ? '' : 's'}`
-        setStatus(`${models.length.toLocaleString()} CC0 ${noun} indexed. Search runs locally.`)
+        setStatus(`${models.length.toLocaleString()} ${noun} indexed. Search runs locally.`)
       })
       .catch((error) => { if (!cancelled) setStatus(error instanceof Error ? error.message : 'Poly Haven could not be reached.') })
       .finally(() => { if (!cancelled) setLoading(false) })
@@ -216,9 +216,6 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
               </button>
             ))}
             <div className="my-3 border-t border-ink-800" />
-            <div className="rounded-md border border-emerald-500/20 bg-emerald-500/5 p-2 text-[9px] leading-relaxed text-emerald-200">
-              Poly Haven assets are CC0. Photo cards keep a source link and creator credit.
-            </div>
           </aside>
 
           <main className="min-w-0 flex-1 overflow-y-auto p-3 sm:p-4">
@@ -242,7 +239,6 @@ export function AssetLibraryModal({ open, onClose, onOpenPackBrowser }: { open: 
                   <article key={model.id} className="group overflow-hidden rounded-lg border border-ink-800 bg-ink-900 hover:border-brand/70">
                     <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-ink-800 to-ink-950">
                       {model.thumbnail ? <img src={model.thumbnail} alt="" loading="lazy" className="h-full w-full object-cover transition-transform group-hover:scale-105" /> : <Box size={42} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-ink-700" />}
-                      <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-0.5 text-[8px] font-semibold text-white">{model.license}</span>
                     </div>
                     <div className="p-2.5"><h3 className="truncate text-[11px] font-semibold text-ink-100" title={model.name}>{model.name}</h3><p className="mt-0.5 truncate text-[9px] text-ink-500">{model.author}{model.polycount ? ` · ${model.polycount.toLocaleString()} polygons` : ''}</p>
                       <div className="mt-2 flex gap-1.5"><button type="button" data-testid={`asset-library-add-${model.id.replace(/[^a-z0-9]+/gi, '-')}`} disabled={!!busyId} onClick={() => void importModel(model)} className="flex h-7 flex-1 items-center justify-center gap-1 rounded bg-brand text-[10px] font-semibold text-white hover:bg-brand/85 disabled:opacity-50">{busyId === model.id ? <Loader2 size={11} className="animate-spin" /> : addedId === model.id ? <Check size={11} /> : <Download size={11} />}{addedId === model.id ? 'Added' : model.kind && model.kind !== 'model' ? 'Add as 2.5D' : 'Add to scene'}</button><a href={model.sourceUrl} target="_blank" rel="noreferrer" aria-label={`Open source for ${model.name}`} className="grid h-7 w-7 place-items-center rounded border border-ink-700 text-ink-400 hover:text-white"><ExternalLink size={11} /></a></div>

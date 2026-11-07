@@ -656,6 +656,17 @@ export interface ClipEffect extends NgEffect {
   oscillatePhase?: number // AM Phase 0..1000
   /** AM-style turbulent/fractal warp: sin-domain pixel displacement. */
   turbulent?: number
+  turbulentScale?: number
+  turbulentSpeed?: number
+  turbulentAngle?: number
+  turbulentSeed?: number
+  turbulentMode?: 'fbm' | 'curl' | 'glass'
+  /** Parameterized liquify effect. Drawing-mode liquify dabs remain in Clip.deformation. */
+  liquifyMode?: 'push' | 'bulge' | 'pinch' | 'twirl'
+  liquifyAmount?: number
+  liquifyRadius?: number
+  liquifyX?: number
+  liquifyY?: number
   /** Board L: kaleidoscope mirror wedges (0/1 off, 2-12 segments). */
   kaleidoSegments?: number
   /** Board L: kaleidoscope wedge rotation (deg). */
@@ -772,6 +783,35 @@ export interface ClipEffect extends NgEffect {
   overlayFx?: 'none' | 'scanlines' | 'halftone' | 'spotlight' | 'vignette' | 'lightleak' | 'frameglow'
   overlayStrength?: number // 0..1 (default 0.5)
   replaceBg?: 'none' | 'synthwave' | 'aurora' | 'grid' | 'bokeh' | 'sunset' | 'studio'
+  /** Loopable source-fragment and energy burst engine. */
+  burstFx?: 'glass' | 'crack' | 'shatter' | 'tiles' | 'slice' | 'shockwave' | 'fireball' | 'smoke' | 'energy' | 'implosion'
+  burstIntensity?: number
+  burstSpeed?: number
+  burstInterval?: number
+  burstCycle?: number
+  /** Numeric for catalog/keyframe compatibility: 0 = once, 1 = loop. */
+  burstLoop?: number
+  burstOriginX?: number
+  burstOriginY?: number
+  burstSpread?: number
+  burstFragments?: number
+  burstGravity?: number
+  burstRotation?: number
+  burstColor?: string
+  burstSeed?: number
+  /** Bright-pixel radial aura. */
+  aura?: number
+  auraThreshold?: number
+  auraRadius?: number
+  auraLines?: number
+  auraSpeed?: number
+  auraRotation?: number
+  auraX?: number
+  auraY?: number
+  auraColor?: string
+  auraSecondary?: string
+  /** Runtime-only local action clock supplied by mergeFxInstances. */
+  motionClock?: number
 }
 
 /**

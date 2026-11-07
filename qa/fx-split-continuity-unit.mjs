@@ -11,4 +11,10 @@ for(const t of [4,4.2,4.8])assert.deepEqual(pixels(left,t),pixels(clip,t),`left 
 assert.equal(split.right[0].keys.ngIntensity[0].v,.25)
 const base={start:10,effects:inst.params}
 assert.deepEqual(pixels(base,11),NG.renderGlitchRGBA(source,32,24,1,NG.recipeFromEffect(inst.params)),'standalone NG follows clip-local time')
-console.log('PASS split effect keys, source clock, left/right pixel continuity and standalone clip-local NG timing')
+const burstInst={id:'burst',catalogId:'burst-glass-classic',name:'Glass',inP:1,duration:4,enabled:true,params:{burstFx:'glass',burstCycle:1,burstSpeed:1,burstInterval:.35,burstLoop:1}}
+const burstSplit=FXI.splitFxInstances([burstInst],2)
+const burstOriginal={start:3,fxInstances:[burstInst]},burstRight={start:5,fxInstances:burstSplit.right}
+assert.equal(FXI.mergeFxInstances(burstOriginal,2.6).motionClock,1.6)
+assert.equal(FXI.mergeFxInstances(burstRight,.6).motionClock,1.6,'burst cycle survives parent split')
+assert.equal(FXI.mergeFxInstances({start:8,effects:{aura:.8}},1.25).motionClock,1.25,'clip aura uses clip-local clock')
+console.log('PASS split effect keys, source clock, left/right pixel continuity, NG timing and loopable action continuity')

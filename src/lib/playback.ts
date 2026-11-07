@@ -734,7 +734,7 @@ export class PreviewEngine {
     // A spatial matte requires grading an isolated copy, then compositing the
     // graded pixels back through the mask. Without a mask we retain the fast
     // in-place path below.
-    if (clip.adjustmentMask && (stack.length > 0 || effectFilter)) {
+    if (clip.adjustmentMask && (stack.length > 0 || effectFilter || hasPixelGrade(effects) || hasNg(effects as NgEffect) || hasClipFxLayers(effects))) {
       const graded = this.takeScratch()
       const gctx = graded.getContext('2d')!
       try {

@@ -4,7 +4,7 @@
 export type WarpPoint = { x: number; y: number }
 export type WarpQuad = [WarpPoint, WarpPoint, WarpPoint, WarpPoint]
 export type LiquifyMode = 'push' | 'bulge' | 'pinch' | 'twirl'
-export interface LiquifyDab extends WarpPoint { dx: number; dy: number; radius: number; strength: number; mode: LiquifyMode }
+export interface LiquifyDab extends WarpPoint { dx: number; dy: number; radius: number; strength: number; mode: LiquifyMode; direction?: number }
 export interface DeformationSpec { corners?: WarpQuad; dabs?: LiquifyDab[] }
 export const UNIT_QUAD: WarpQuad = [{x:0,y:0},{x:1,y:0},{x:1,y:1},{x:0,y:1}]
 export function validWarpQuad(q: WarpQuad): boolean {
@@ -40,7 +40,7 @@ function displacementField(spec:DeformationSpec,w:number,h:number,dabs:LiquifyDa
       if(r>=radius)continue
       const falloff=(1-(r/radius)**2)**2,amount=Math.min(1,d.strength)*falloff
       if(d.mode==='push'){x-=Math.max(-.5,Math.min(.5,d.dx))*amount;y-=Math.max(-.5,Math.min(.5,d.dy))*amount}
-      else if(d.mode==='twirl'){const angle=-amount*Math.PI/2,cos=Math.cos(angle),sin=Math.sin(angle);x=d.x+(cx*cos-cy*sin)*minimum/w;y=d.y+(cx*sin+cy*cos)*minimum/h}
+      else if(d.mode==='twirl'){const angle=-amount*Math.PI/2*(d.direction??1),cos=Math.cos(angle),sin=Math.sin(angle);x=d.x+(cx*cos-cy*sin)*minimum/w;y=d.y+(cx*sin+cy*cos)*minimum/h}
       else {const scale=d.mode==='pinch'?1+amount*.75:1-amount*.6;x=d.x+cx*scale*minimum/w;y=d.y+cy*scale*minimum/h}
     }
     const i=(gy*(FIELD_SIZE+1)+gx)*2;field[i]=x-ox;field[i+1]=y-oy
@@ -87,7 +87,7 @@ export function validateDeformation(value: DeformationSpec | null): DeformationS
   if(value===null)return undefined
   if(!value||typeof value!=='object')throw new Error('Deformation must be an object or null')
   if(value.corners&&!validWarpQuad(value.corners))throw new Error('Invalid corner pin')
-  if(value.dabs&&(!Array.isArray(value.dabs)||value.dabs.length>256||value.dabs.some(d=>!d||![d.x,d.y,d.dx,d.dy,d.radius,d.strength].every(Number.isFinite)||d.radius<=0||d.radius>.8||d.strength<0||d.strength>1||!['push','pinch','bulge','twirl'].includes(d.mode))))throw new Error('Invalid liquify dabs')
+  if(value.dabs&&(!Array.isArray(value.dabs)||value.dabs.length>256||value.dabs.some(d=>!d||![d.x,d.y,d.dx,d.dy,d.radius,d.strength].every(Number.isFinite)||d.radius<=0||d.radius>.8||d.strength<0||d.strength>1||(d.direction!==undefined&&(!Number.isFinite(d.direction)||Math.abs(d.direction)>1))||!['push','pinch','bulge','twirl'].includes(d.mode))))throw new Error('Invalid liquify dabs')
   return structuredClone(value)
 }
 

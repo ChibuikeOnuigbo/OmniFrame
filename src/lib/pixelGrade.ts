@@ -5,12 +5,38 @@
  * Runs on the composited canvas wherever LUT stacks run.
  */
 import type { ClipEffect } from '../types'
+import { deformRGBA, type DeformationSpec } from './deformation'
 
 
 /* ---- Alight-Motion-named pixel family (guide.alightmotion.com/effects) ---- */
 const amHex = (v: string | undefined, d: [number, number, number]): [number, number, number] =>
   v && v[0] === '#' ? [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)] : d
 const amRnd = (seed: number) => { const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
+
+function applyLiquifyEffect(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number): void {
+  const amount = Math.max(-1, Math.min(1, e.liquifyAmount ?? 0))
+  if (Math.abs(amount) < 0.005) return
+  const mode = e.liquifyMode ?? 'bulge'
+  const radius = Math.max(0.03, Math.min(0.8, e.liquifyRadius ?? 0.36))
+  const strength = Math.abs(amount)
+  const spec: DeformationSpec = {
+    dabs: [{
+      x: Math.max(0, Math.min(1, e.liquifyX ?? 0.5)),
+      y: Math.max(0, Math.min(1, e.liquifyY ?? 0.5)),
+      dx: mode === 'push' ? amount * 0.28 : 0,
+      dy: 0,
+      radius,
+      strength,
+      mode,
+      direction: amount < 0 ? -1 : 1,
+    }],
+  }
+  try {
+    const image = ctx.getImageData(0, 0, w, h)
+    image.data.set(deformRGBA(image.data, w, h, spec))
+    ctx.putImageData(image, 0, 0)
+  } catch { /* tainted external media remains visible without the raster warp */ }
+}
 
 function amBlurStack(ctx: CanvasRenderingContext2D, w: number, h: number, passes: { dx: number; dy: number; sc?: number; al: number }[]) {
   const src = document.createElement('canvas')
@@ -29,6 +55,7 @@ function amBlurStack(ctx: CanvasRenderingContext2D, w: number, h: number, passes
 }
 
 function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  applyLiquifyEffect(ctx, e, w, h)
   if (e.zoomBlur && e.zoomBlur > 0) {
     const n = 6
     const passes: { dx: number; dy: number; sc?: number; al: number }[] = []
@@ -347,6 +374,7 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.tiles && effect.tiles >= 2) ||
     (effect.pinchBulge && Math.abs(effect.pinchBulge) > 0.01) ||
     (effect.swirl && Math.abs(effect.swirl) > 1) ||
+    (effect.liquifyAmount !== undefined && Math.abs(effect.liquifyAmount) > 0.005) ||
     (effect.gradientMap && effect.gradientMap > 0) ||
     (effect.threshold && effect.threshold > 0) ||
     (effect.exposure !== undefined && Math.abs(effect.exposure) > 0.001) ||
@@ -404,6 +432,12 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
   const span = Math.max(1, Math.abs(cxA) * w + Math.abs(cyA) * h)
   const [f0, f1, f2] = amHex(e.dirColorizeFrom, [0, 40, 255])
   const [t0, t1, t2] = amHex(e.dirColorizeTo, [255, 40, 0])
+  const turbulenceScale = Math.max(8, Math.min(240, e.turbulentScale ?? 80))
+  const turbulenceSpeed = Math.max(0, Math.min(6, e.turbulentSpeed ?? 1))
+  const turbulenceTime = (e.motionClock ?? seed / 24) * turbulenceSpeed + (e.turbulentSeed ?? 0) * 0.137
+  const turbulenceAngle = ((e.turbulentAngle ?? 0) * Math.PI) / 180
+  const turbulenceCos = Math.cos(turbulenceAngle), turbulenceSin = Math.sin(turbulenceAngle)
+  const turbulenceMode = e.turbulentMode ?? 'fbm'
   let st = (seed * 2654435761 + 12345) % 4294967296
   const rnd = () => (st = (st * 1664525 + 1013904223) % 4294967296) / 4294967296
   for (let y = 0; y < h; y++) {
@@ -414,9 +448,32 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
       let sx = wobble ? Math.min(w - 1, Math.max(0, x + wobble)) : x
       let sy = y
       if (tb > 0) {
-        const A = 10 * tb
-        sx = Math.min(w - 1, Math.max(0, Math.round(sx + A * Math.sin(y * 0.055 + seed * 0.9))))
-        sy = Math.min(h - 1, Math.max(0, Math.round(y + A * Math.sin(x * 0.043 + seed * 1.31))))
+        const nx = x / turbulenceScale, ny = y / turbulenceScale
+        let dx = 0, dy = 0
+        if (turbulenceMode === 'glass') {
+          const gx = Math.floor(nx * 2), gy = Math.floor(ny * 2)
+          const hash = Math.sin(gx * 127.1 + gy * 311.7 + turbulenceTime * 0.7) * 43758.5453
+          const cell = hash - Math.floor(hash)
+          const hash2 = Math.sin(gx * 269.5 + gy * 183.3 - turbulenceTime * 0.51) * 24634.6345
+          dx = (cell - 0.5) * 2
+          dy = (hash2 - Math.floor(hash2) - 0.5) * 2
+        } else if (turbulenceMode === 'curl') {
+          // Analytic curl of a two-octave scalar field: divergence-free flow.
+          const x1 = nx + turbulenceTime * 0.33, y1 = ny - turbulenceTime * 0.27
+          const dNdx = Math.cos(x1 * 2.1) * 2.1 * Math.cos(y1 * 1.7) + 0.46 * Math.cos(x1 * 4.3 + 1.2) * 4.3 * Math.cos(y1 * 3.2 - 0.7)
+          const dNdy = -Math.sin(x1 * 2.1) * Math.sin(y1 * 1.7) * 1.7 - 0.46 * Math.sin(x1 * 4.3 + 1.2) * Math.sin(y1 * 3.2 - 0.7) * 3.2
+          dx = dNdy * 0.42
+          dy = -dNdx * 0.42
+        } else {
+          // Three sine-domain octaves provide stable FBM-like displacement.
+          dx = (Math.sin(ny * 2.2 + turbulenceTime) + 0.5 * Math.sin((nx + ny) * 4.1 - turbulenceTime * 1.4) + 0.25 * Math.sin(ny * 8.3 + turbulenceTime * 2.1)) / 1.75
+          dy = (Math.sin(nx * 2.05 - turbulenceTime * 0.9) + 0.5 * Math.sin((nx - ny) * 3.7 + turbulenceTime * 1.2) + 0.25 * Math.sin(nx * 7.7 - turbulenceTime * 1.8)) / 1.75
+        }
+        const A = 18 * tb
+        const rdx = (dx * turbulenceCos - dy * turbulenceSin) * A
+        const rdy = (dx * turbulenceSin + dy * turbulenceCos) * A
+        sx = Math.min(w - 1, Math.max(0, Math.round(sx + rdx)))
+        sy = Math.min(h - 1, Math.max(0, Math.round(y + rdy)))
       }
       const bi = (sy * w + sx) * 4
       let R = src[bi]

@@ -1,6 +1,7 @@
 import { GLITCH_FAMILIES, type NgEffect } from './glitchNG'
 import type { ClipEffect, ClipLut, CustomEffect } from '../types'
 import { OVERLAY_KINDS, PARTICLE_KINDS, REPLACE_BG_KINDS } from './particleFx'
+import { BURST_FAMILIES } from './actionFx'
 
 /**
  * Custom effects — OmniFrame's take on Gold Motion's "Custom Effects"
@@ -16,7 +17,7 @@ export const CUSTOM_EFFECT_VERSION = 1
 export const MAX_CUSTOM_LUT_BYTES = 2 * 1024 * 1024
 
 /** Defaults mirror the Effects panel so "unset" values serialize away. */
-export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect>> & Partial<NgEffect> = {
+export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect | 'motionClock'>> & Partial<NgEffect> = {
   brightness: 1,
   contrast: 1,
   saturation: 1,
@@ -59,6 +60,8 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect>> & Parti
   minimax: 0, minimaxAngle: 0, minimaxMode: 'max', vhs: 0,
   dirColorize: 0, dirColorizeFrom: '#0028ff', dirColorizeTo: '#ff2800', dirColorizeAngle: 45,
   oscillate: 0, oscillateFreq: 2, oscillateAngle: 45, oscillateWave: 'sine', oscillatePhase: 0, turbulent: 0,
+  turbulentScale: 80, turbulentSpeed: 1, turbulentAngle: 0, turbulentSeed: 0, turbulentMode: 'fbm',
+  liquifyMode: 'bulge', liquifyAmount: 0, liquifyRadius: 0.36, liquifyX: 0.5, liquifyY: 0.5,
   kaleidoSegments: 0, kaleidoRotate: 0, flare: 0, flareX: 72, flareY: 28, flareStreak: 0.6, flareGhosts: 4, flareColor: '#ffd9a0',
   colorTemp: 6500,
   voronoi: 0, voronoiCells: 16, voronoiColor: '#22d3ee', spectralMap: 0,
@@ -76,6 +79,11 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect>> & Parti
   shadows: 0, highlights: 0, hotColor: 0, radialShadow: 0,
   fourColorGradient: 0, fcgColorA: '#ff375f', fcgColorB: '#25d7fb', fcgColorC: '#a0ff3c', fcgColorD: '#fffa8b', fcgPhase: 0,
   deviceOverlay: 'none',
+  burstFx: 'glass', burstIntensity: 0, burstSpeed: 1, burstInterval: 0.35, burstCycle: 1, burstLoop: 1,
+  burstOriginX: 0.5, burstOriginY: 0.5, burstSpread: 0.7, burstFragments: 28, burstGravity: 0.2,
+  burstRotation: 150, burstColor: '#bdefff', burstSeed: 731,
+  aura: 0, auraThreshold: 0.48, auraRadius: 28, auraLines: 18, auraSpeed: 1, auraRotation: 0,
+  auraX: 0.5, auraY: 0.5, auraColor: '#22d3ee', auraSecondary: '#e935c1',
 }
 
 const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
@@ -93,6 +101,13 @@ const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   flareStreak: [0, 1], flareGhosts: [0, 8], colorTemp: [1500, 15000],
   particleDensity: [0, 1],
   overlayStrength: [0, 1],
+  turbulentScale: [8, 240], turbulentSpeed: [0, 6], turbulentAngle: [-180, 180], turbulentSeed: [0, 9999],
+  liquifyAmount: [-1, 1], liquifyRadius: [0.03, 0.8], liquifyX: [0, 1], liquifyY: [0, 1],
+  burstIntensity: [0, 1], burstSpeed: [0.1, 5], burstInterval: [0, 10], burstCycle: [0.1, 10], burstLoop: [0, 1],
+  burstOriginX: [0, 1], burstOriginY: [0, 1], burstSpread: [0, 1.5], burstFragments: [4, 64],
+  burstGravity: [-1, 1], burstRotation: [0, 720], burstSeed: [0, 9999],
+  aura: [0, 1], auraThreshold: [0, 0.98], auraRadius: [2, 120], auraLines: [4, 64], auraSpeed: [-6, 6],
+  auraRotation: [-360, 360], auraX: [0, 1], auraY: [0, 1],
   brightness: [0, 2],
   contrast: [0, 2],
   saturation: [0, 2],
@@ -141,9 +156,16 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   if (typeof raw.particleFx === 'string' && (PARTICLE_KINDS as readonly string[]).includes(raw.particleFx)) out.particleFx = raw.particleFx as ClipEffect['particleFx']
   if (typeof raw.overlayFx === 'string' && (OVERLAY_KINDS as readonly string[]).includes(raw.overlayFx)) out.overlayFx = raw.overlayFx as ClipEffect['overlayFx']
   if (typeof raw.replaceBg === 'string' && (REPLACE_BG_KINDS as readonly string[]).includes(raw.replaceBg)) out.replaceBg = raw.replaceBg as ClipEffect['replaceBg']
+  if (typeof raw.burstFx === 'string' && (BURST_FAMILIES as readonly string[]).includes(raw.burstFx)) out.burstFx = raw.burstFx as ClipEffect['burstFx']
+  if (raw.turbulentMode === 'fbm' || raw.turbulentMode === 'curl' || raw.turbulentMode === 'glass') out.turbulentMode = raw.turbulentMode
+  if (raw.liquifyMode === 'push' || raw.liquifyMode === 'bulge' || raw.liquifyMode === 'pinch' || raw.liquifyMode === 'twirl') out.liquifyMode = raw.liquifyMode
   if (typeof raw.particleTint === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.particleTint)) out.particleTint = raw.particleTint
   if (raw.deviceOverlay === 'none' || raw.deviceOverlay === 'phone' || raw.deviceOverlay === 'monitor') out.deviceOverlay = raw.deviceOverlay
   for (const k of ['fcgColorA', 'fcgColorB', 'fcgColorC', 'fcgColorD'] as const) {
+    const v = raw[k]
+    if (typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)) out[k] = v
+  }
+  for (const k of ['burstColor', 'auraColor', 'auraSecondary'] as const) {
     const v = raw[k]
     if (typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)) out[k] = v
   }
@@ -197,6 +219,10 @@ const LABELS: Partial<Record<keyof ClipEffect, string>> = {
   particleFx: 'Particles',
   overlayFx: 'Overlay',
   replaceBg: 'BG bed',
+  burstFx: 'Burst',
+  aura: 'Aura',
+  liquifyAmount: 'Liquify',
+  turbulent: 'Turbulence',
 }
 
 /** Short human summary of what a custom effect does, e.g. "Sepia · Hue shift · LUT: Warm". */

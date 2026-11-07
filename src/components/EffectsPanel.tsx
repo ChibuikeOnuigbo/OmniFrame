@@ -11,7 +11,7 @@ import { PanelSection } from './PanelSection'
 import { SHAKE_PRESETS } from '../lib/shakePresets'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
 import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
-import { FX_CATS, getFxCatalog, loadGlitchRecipeCatalog, paramsForPatch, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
+import { FX_CATS, getFxCatalog, loadGlitchRecipeCatalog, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
 import type { CustomEffect } from '../types'
 
 type LutItem = {
@@ -976,17 +976,18 @@ function MyEffects() {
 }
 
 
-/** CAT colour dots so sub-tab scanning works without prose. */
-const CAT_DOT: Record<FxCat, string> = {
-  glitch: 'bg-fuchsia-400',
-  'Glitch NG': 'bg-cyan-300',
-  motion: 'bg-amber-400',
-  color: 'bg-emerald-400',
-  blur: 'bg-sky-400',
-  distort: 'bg-orange-400',
-  retro: 'bg-rose-400',
-  light: 'bg-yellow-300',
-  key: 'bg-lime-400',
+const CAT_ICON: Record<FxCat | 'all', LucideIcon> = {
+  all: Grid2x2,
+  glitch: Activity,
+  'Glitch NG': ScanLine,
+  motion: Orbit,
+  color: Aperture,
+  blur: CloudFog,
+  distort: Waves,
+  burst: Flame,
+  retro: Frame,
+  light: SunMedium,
+  key: CircleDot,
 }
 
 const FX_MIME = 'application/x-omniframe-fx'
@@ -1056,21 +1057,22 @@ function FxCatalogBrowser() {
         </select>
       </label>
       {packError && <button type="button" onClick={loadPack} className="text-[10px] text-amber-300">{packError} · Retry recipe library</button>}
-      <p className="text-[9px] text-ink-500">Choose and search on the left. Edit, keyframe and reorder applied layers in the right inspector. Recipe count does not imply visual uniqueness.</p>
       <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Effect categories">
-        {FX_CATS.map((c) => (
-          <button
+        {FX_CATS.map((c) => {
+          const Icon = CAT_ICON[c.id]
+          return <button
             key={c.id}
             type="button"
             role="tab"
             aria-selected={cat === c.id}
             data-testid={`fx-cat-${c.id}`}
             onClick={() => { setCat(c.id as FxCat | 'all'); setLimit(60) }}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${cat === c.id ? 'bg-cyan-400 text-ink-950' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'}`}
+            title={c.label}
+            className={`flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-medium transition-colors ${cat === c.id ? 'bg-cyan-400 text-ink-950' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'}`}
           >
-            {c.label}
+            <Icon size={11} aria-hidden="true" /> {c.label}
           </button>
-        ))}
+        })}
       </div>
       <div className="flex items-center gap-1.5">
         <div className="relative min-w-0 flex-1">
@@ -1089,8 +1091,9 @@ function FxCatalogBrowser() {
         </span>
       </div>
       <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
-        {entries.slice(0, limit).map((e) => (
-          <div key={e.id} className="group relative">
+        {entries.slice(0, limit).map((e) => {
+          const Icon = CAT_ICON[e.cat]
+          return <div key={e.id} className="group relative">
             <div className="flex justify-between gap-1">
               <button type="button" aria-label={`${favorites.includes(e.id) ? 'Unfavorite' : 'Favorite'} ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="px-1 text-xs text-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>
               <button type="button" aria-label={`Preview ${e.name}`} onClick={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }} className="px-1 text-[10px] text-cyan-300">Preview</button>
@@ -1108,12 +1111,12 @@ function FxCatalogBrowser() {
               onClick={() => apply(e, false)}
               className="flex w-full cursor-grab items-center gap-1 rounded border border-ink-700 bg-ink-900/80 px-1.5 py-1 text-left transition-colors hover:border-cyan-400/70 hover:bg-cyan-950/40 active:cursor-grabbing"
             >
-              <span className={`h-2 w-2 shrink-0 rounded-full ${CAT_DOT[e.cat]}`} aria-hidden="true" />
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-ink-800 text-ink-300" aria-hidden="true"><Icon size={11} /></span>
               <span className="min-w-0 flex-1 truncate text-[9.5px] font-medium text-ink-100">{e.name}</span>
             </button>
 
           </div>
-        ))}
+        })}
       </div>
       {entries.length > limit && (
         <button
@@ -1128,9 +1131,6 @@ function FxCatalogBrowser() {
       {entries.length === 0 && (
         <p className="py-2 text-center text-[10px] text-ink-500">No effects match — try another sub-tab or clear the search.</p>
       )}
-      <p className="text-[9px] leading-snug text-ink-500" data-testid="fx-catalog-note">
-        {paramsForPatch(entries[0]?.patch || {}).length >= 0 ? `${all.length} catalog recipes · applied properties remain editable and keyframeable.` : ''}
-      </p>
     </div>
   )
 }
