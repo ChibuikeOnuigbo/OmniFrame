@@ -8,9 +8,9 @@ e, yuv420p(tv, bt709, progressive), 480x480 [SAR 1:1 DAR 1:1], q=2-31, 200 kb/s,
     Metadata:
       encoder         : Lavc62.11.100 pcm_s16le
       DURATION        : 00:00:17.668000000
-frame=  414 fps=0.0 q=-0.0 size=N/A time=00:00:14.10 bitrate=N/A speed=28.2x elapsed=0:00:00.50    
-[opus @ 0x5b4bacc23a40] Error parsing Opus packet header.
-[Parsed_loudnorm_0 @ 0x7e55d4002080] 
+frame=  416 fps=0.0 q=-0.0 size=N/A time=00:00:14.10 bitrate=N/A speed=28.2x elapsed=0:00:00.50    
+[opus @ 0x57a17357aa40] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x78c148002080] 
 {
 	"input_i" : "-7.43",
 	"input_tp" : "2.62",
@@ -23,5 +23,5 @@ frame=  414 fps=0.0 q=-0.0 size=N/A time=00:00:14.10 bitrate=N/A speed=28.2x ela
 	"normalization_type" : "dynamic",
 	"target_offset" : "-0.54"
 }
-[out#0/null @ 0x5b4bacc6d3c0] video:172KiB audio:13227KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+[out#0/null @ 0x57a1735c43c0] video:172KiB audio:13227KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
 frame=  423 fps=0.0 q=-0.0 Lsize=N/A time=00:00:17.62 bitrate=N/A speed=  31x elapsed=0:00:00.56    

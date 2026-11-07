@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=h_D720n75B4
 [youtube] h_D720n75B4: Downloading webpage
 [youtube] h_D720n75B4: Downloading web embedded client config
-[youtube] h_D720n75B4: Downloading player 11a45ffb-main
+[youtube] h_D720n75B4: Downloading player 4efb8b2c-main
 [youtube] h_D720n75B4: Downloading web embedded player API JSON
 [youtube] h_D720n75B4: Downloading tv samsung player API JSON
 [youtube] [jsc:deno] Solving JS challenges using deno
@@ -13,6 +13,6 @@
 
 [download]    1.00KiB at  Unknown B/s (00:00:00)
 [download]    2.63KiB at  Unknown B/s (00:00:00)
-[download] 100% of    2.63KiB in 00:00:00 at 24.77KiB/s
+[download] 100% of    2.63KiB in 00:00:00 at 17.40KiB/s
 [info] Writing video metadata as JSON to: review-out/h_D720n75B4/source.info.json
 

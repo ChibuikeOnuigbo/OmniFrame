@@ -1,7 +1,7 @@
 [youtube] Extracting URL: https://www.youtube.com/watch?v=umTDI962BhM
 [youtube] umTDI962BhM: Downloading webpage
 [youtube] umTDI962BhM: Downloading web embedded client config
-[youtube] umTDI962BhM: Downloading player 11a45ffb-main
+[youtube] umTDI962BhM: Downloading player 4efb8b2c-main
 [youtube] umTDI962BhM: Downloading web embedded player API JSON
 [youtube] umTDI962BhM: Downloading tv samsung player API JSON
 
