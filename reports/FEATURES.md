@@ -1,3 +1,15 @@
+## 2026-11-08 — movable tilt-shift focus plane
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Angled selective-focus compositor with reusable scratch surfaces | `pixelGrade.ts` | Three distinct renders and measured sharp-plane retention |
+| Amount, centre X/Y, angle, width and feather | `types.ts`, `effectCatalog.ts`, `customEffects.ts` | Six editable/keyframeable controls; import clamping |
+| 48 curated focus-plane recipes | `effectCatalog.ts` | Four orientations × three offsets × four widths; unique patches |
+| Punctuation-tolerant multiword recipe search | `effectCatalog.ts`, `effectRecipeBank.ts` | Natural query finds the matching middle-dot preset live |
+| Live apply, parameter editing, keyframes and effect region | `qa/tilt-shift-focus-ui-e2e.mjs` | Browser screenshot and machine report |
+
+Details: `docs/TILT_SHIFT_FOCUS_20261108.md`.
+
 ## 2026-11-08 — 200-control UI quality gate
 
 | Change | Code | Verification / artifact |
@@ -15,8 +27,8 @@ Full numbered evidence: `docs/UI_QUALITY_200_SCAN_20261108.md` and
 
 | Change | Code | Verification / artifact |
 |---|---|---|
-| 139,425 deterministic indexed recipes across 12 generator families | `effectRecipeBank.ts` | All IDs unique/reconstructable; 150,000 exact base total |
-| Paged UI and MCP search without allocating the full bank | `effectCatalog.ts`, `EffectsPanel.tsx`, `tools/mcp/tools.mjs` | Final ID applied; 155,000 live with authored pack |
+| 139,425 deterministic indexed recipes across 12 generator families | `effectRecipeBank.ts` | All IDs unique/reconstructable; 150,048 current base total |
+| Paged UI and MCP search without allocating the full bank | `effectCatalog.ts`, `EffectsPanel.tsx`, `tools/mcp/tools.mjs` | Final ID applied; 155,048 live with authored pack |
 | 44 configurable commands wired to Studio runtime | `settingsRegistry.ts`, `Studio.tsx`, `store.ts` | Rebind, execute, reload, clear and Reset-compatible persistence |
 | Removed duplicate hard-coded Timeline shortcut listeners | `Timeline.tsx` | Group, multi-delete and export range commands use one registry |
 

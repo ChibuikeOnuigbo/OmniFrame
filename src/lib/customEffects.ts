@@ -56,7 +56,8 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect | 'motion
   replaceBg: 'none',
   zoomBlur: 0, directionalBlur: 0, directionalBlurAngle: 0, directionalBlurBias: 0,
   directionalBlurSpread: 0, directionalBlurThreshold: 0, glow: 0, edgeGlow: 0,
-  edgeGlowColor: '#ffdc78', tiltShift: 0,
+  edgeGlowColor: '#ffdc78', tiltShift: 0, tiltShiftCenterX: 0.5, tiltShiftCenterY: 0.5,
+  tiltShiftAngle: 0, tiltShiftWidth: 0.34, tiltShiftFeather: 0.18,
   lensBokeh: 0, bokehRadius: 18, bokehThreshold: 0.62, bokehGain: 1,
   bokehShape: 'circle', bokehRotation: 0, bokehSoftness: 0.3,
   vignette: 0, flicker: 0, tiles: 0,
@@ -147,6 +148,12 @@ const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   directionalBlurBias: [-1, 1],
   directionalBlurSpread: [0, 120],
   directionalBlurThreshold: [0, 1],
+  tiltShift: [0, 1],
+  tiltShiftCenterX: [0, 1],
+  tiltShiftCenterY: [0, 1],
+  tiltShiftAngle: [-180, 180],
+  tiltShiftWidth: [0.04, 0.9],
+  tiltShiftFeather: [0.01, 0.5],
   lensBokeh: [0, 1],
   bokehRadius: [2, 64],
   bokehThreshold: [0, 1],
@@ -246,6 +253,7 @@ const LABELS: Partial<Record<keyof ClipEffect, string>> = {
   liquifyAmount: 'Liquify',
   turbulent: 'Turbulence',
   lensBokeh: 'Lens Bokeh',
+  tiltShift: 'Tilt Shift',
 }
 
 /** Short human summary of what a custom effect does, e.g. "Sepia · Hue shift · LUT: Warm". */

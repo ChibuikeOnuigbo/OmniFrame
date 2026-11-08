@@ -1,3 +1,14 @@
+## 2026-11-08 — movable tilt-shift focus plane
+
+Tilt Shift now has six shared preview/export controls: amount, focus X/Y,
+angle, width and feather. The renderer keeps an angled sharp plane over a
+blurred field, works in translated clip-isolation canvases and reuses bounded
+scratch surfaces instead of allocating three canvases per frame. Forty-eight
+curated, editable presets raise the catalog to 150,048 base / 155,048 loaded
+while preserving every indexed ID. Catalog search now matches all natural query
+tokens across punctuation. Unit and live browser evidence is documented in
+`docs/TILT_SHIFT_FOCUS_20261108.md`.
+
 ## 2026-11-08 — strict 200-control UI scan
 
 The left dock now uses a reusable keyboard focus fallback, 24px slider/action
@@ -13,9 +24,9 @@ zero tiny, unnamed or duplicate-test-id findings.
 
 ## 2026-11-08 — 150K indexed effects and working shortcut settings
 
-The Effects browser now has 150,000 base recipes: 10,575 curated/materialized
+The Effects browser now has 150,048 base recipes: 10,623 curated/materialized
 plus 139,425 stable indexed variations. Loading the separate authored Glitch NG
-pack produces 155,000 live recipes. Indexed recipes are reconstructed by page
+pack produces 155,048 live recipes. Indexed recipes are reconstructed by page
 or ID instead of retained as 139k objects. UI search, categories, collections,
 favorites, project application and MCP paging/lookup use the same catalog API.
 
@@ -24,7 +35,7 @@ those saved bindings. Rebind, reload persistence, clearing, exact modifiers,
 multi-delete, grouping and export In/Out passed unit/live browser checks.
 Details and limits: `docs/EFFECT_CATALOG_150K_20261108.md` and
 `qa-output/effect-150k/`. Counts are recipes over shared kernels; do not report
-them as 150,000 independent algorithms or full-motion approvals.
+them as 150,048 independent algorithms or full-motion approvals.
 
 ## 2026-11-08 — lens bokeh, exact catalog count and source audit
 

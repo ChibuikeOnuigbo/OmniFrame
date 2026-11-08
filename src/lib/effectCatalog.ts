@@ -131,6 +131,11 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   edgeGlow: { label: 'Edge Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
   edgeGlowColor: { label: 'Edge Colour', kind: 'color' },
   tiltShift: { label: 'Tilt Shift', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiltShiftCenterX: { label: 'Focus X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiltShiftCenterY: { label: 'Focus Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiltShiftAngle: { label: 'Focus Angle (°)', kind: 'number', min: -180, max: 180, step: 1 },
+  tiltShiftWidth: { label: 'Focus Width', kind: 'number', min: 0.04, max: 0.9, step: 0.01 },
+  tiltShiftFeather: { label: 'Focus Feather', kind: 'number', min: 0.01, max: 0.5, step: 0.01 },
   lensBokeh: { label: 'Lens Bokeh', kind: 'number', min: 0, max: 1, step: 0.01 },
   bokehRadius: { label: 'Aperture Size (px)', kind: 'number', min: 2, max: 64, step: 1 },
   bokehThreshold: { label: 'Highlight Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -389,6 +394,40 @@ function buildCatalog(): FxCatalogEntry[] {
   add('blur-motion', 'Motion Blur', 'motion', 'Shared temporal motion sample kernel', { motionBlur: 0.7 })
   add('tilt-1', 'Tilt Shift Mini', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.55 })
   add('tilt-2', 'Tilt Shift Strong', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.95 })
+  const focusOrientations = [
+    { id: 'horizontal', label: 'Horizontal', angle: 0 },
+    { id: 'portrait', label: 'Portrait', angle: 90 },
+    { id: 'diagonal', label: 'Diagonal', angle: 35 },
+    { id: 'reverse', label: 'Reverse Diagonal', angle: -35 },
+  ] as const
+  const focusOffsets = [
+    { id: 'near', label: 'Near Edge', offset: -0.2 },
+    { id: 'center', label: 'Center', offset: 0 },
+    { id: 'far', label: 'Far Edge', offset: 0.2 },
+  ] as const
+  const focusWidths = [
+    { id: 'sliver', label: 'Sliver', width: 0.12, feather: 0.1, amount: 0.9 },
+    { id: 'narrow', label: 'Narrow', width: 0.22, feather: 0.14, amount: 0.84 },
+    { id: 'balanced', label: 'Balanced', width: 0.36, feather: 0.18, amount: 0.78 },
+    { id: 'wide', label: 'Wide', width: 0.52, feather: 0.22, amount: 0.72 },
+  ] as const
+  for (const orientation of focusOrientations) for (const position of focusOffsets) for (const focus of focusWidths) {
+    const normal = ((orientation.angle + 90) * Math.PI) / 180
+    add(
+      `tilt-focus-${orientation.id}-${position.id}-${focus.id}`,
+      `${orientation.label} Focus · ${position.label} · ${focus.label}`,
+      'blur',
+      'OmniFrame movable selective-focus plane',
+      {
+        tiltShift: focus.amount,
+        tiltShiftCenterX: Number((0.5 + Math.cos(normal) * position.offset).toFixed(3)),
+        tiltShiftCenterY: Number((0.5 + Math.sin(normal) * position.offset).toFixed(3)),
+        tiltShiftAngle: orientation.angle,
+        tiltShiftWidth: focus.width,
+        tiltShiftFeather: focus.feather,
+      },
+    )
+  }
   ;[
     ['Soft Portrait', 'circle', 0.58, 16, 0.64, 0.85, 0, 0.5],
     ['City Lights', 'circle', 0.84, 24, 0.52, 1.65, 0, 0.24],
@@ -665,6 +704,13 @@ export interface FxCatalogQuery {
   favorites?: string[]
 }
 
+const catalogSearchTokens = (query: string): string[] => query.toLowerCase().match(/[a-z0-9]+/g) ?? []
+const matchesCatalogSearch = (text: string, query: string): boolean => {
+  const tokens = catalogSearchTokens(query)
+  const haystack = text.toLowerCase()
+  return !tokens.length || tokens.every((token) => haystack.includes(token))
+}
+
 /** Search and page all effect recipes without materializing the indexed bank. */
 export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; entries: FxCatalogEntry[] } {
   const cat = options.cat ?? 'all'
@@ -678,7 +724,7 @@ export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; e
       .map(fxCatalogById)
       .filter((entry): entry is FxCatalogEntry => !!entry)
       .filter((entry) => cat === 'all' || entry.cat === cat)
-      .filter((entry) => !q || `${entry.id} ${entry.name} ${entry.trace}`.toLowerCase().includes(q))
+      .filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace}`, q))
     return { total: entries.length, entries: entries.slice(offset, offset + limit) }
   }
 
@@ -689,7 +735,7 @@ export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; e
 
   let materialized = getFxCatalog().filter((entry) => cat === 'all' || entry.cat === cat)
   if (collection === 'studio') materialized = materialized.filter((entry) => entry.id.startsWith('studio-'))
-  if (q) materialized = materialized.filter((entry) => `${entry.id} ${entry.name} ${entry.trace}`.toLowerCase().includes(q))
+  if (q) materialized = materialized.filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace}`, q))
   if (collection === 'studio' || collection === 'curated') return { total: materialized.length, entries: materialized.slice(offset, offset + limit) }
 
   const materializedPage = materialized.slice(offset, offset + limit)

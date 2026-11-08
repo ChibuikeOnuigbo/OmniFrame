@@ -627,8 +627,13 @@ export interface ClipEffect extends NgEffect {
   /** AM Edge Glow / Stroke Color: alpha-edge tint strength 0..1. */
   edgeGlow?: number
   edgeGlowColor?: string
-  /** AM Lens Blur tilt-shift: horizontal sharp band, 0..1 (0 = off). */
+  /** Tilt-shift focus plane: blurred field with a movable, rotatable sharp band. */
   tiltShift?: number
+  tiltShiftCenterX?: number // 0..1
+  tiltShiftCenterY?: number // 0..1
+  tiltShiftAngle?: number // -180..180 degrees, 0 = horizontal focus plane
+  tiltShiftWidth?: number // 0.04..0.9 of short edge
+  tiltShiftFeather?: number // 0.01..0.5 of short edge
   /** Camera/lens bokeh: defocus plus diaphragm-shaped highlight bloom. */
   lensBokeh?: number // 0..1 overall defocus mix
   bokehRadius?: number // 2..64 px aperture/blur radius

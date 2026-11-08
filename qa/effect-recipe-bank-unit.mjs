@@ -5,21 +5,21 @@ import { loadAppTs } from '../tools/mcp/appRender.mjs'
 const catalog = await loadAppTs('src/lib/effectCatalog.ts')
 const bank = await loadAppTs('src/lib/effectRecipeBank.ts')
 
-assert.equal(catalog.getFxCatalog().length, 10_575, 'curated/materialized catalog baseline')
+assert.equal(catalog.getFxCatalog().length, 10_623, 'curated/materialized catalog baseline')
 assert.equal(bank.GENERATED_RECIPE_COUNT, 139_425, 'indexed recipe bank size')
-assert.equal(catalog.fxCatalogCount(), 150_000, 'base catalog reaches exactly 150k without the optional authored pack')
+assert.equal(catalog.fxCatalogCount(), 150_048, 'base catalog remains above 150k without the optional authored pack')
 
 const categorySum = catalog.FX_CATS
   .filter((category) => category.id !== 'all')
   .reduce((sum, category) => sum + catalog.fxCatalogCount(category.id), 0)
-assert.equal(categorySum, 150_000, 'category counts partition the catalog')
+assert.equal(categorySum, 150_048, 'category counts partition the catalog')
 
-const lastPage = catalog.queryFxCatalog({ offset: 149_999, limit: 1 })
-assert.equal(lastPage.total, 150_000)
+const lastPage = catalog.queryFxCatalog({ offset: 150_047, limit: 1 })
+assert.equal(lastPage.total, 150_048)
 assert.equal(lastPage.entries[0].id, 'ofx-139425', 'last indexed recipe is reachable through paging')
 assert.deepEqual(catalog.fxCatalogById('ofx-139425'), lastPage.entries[0], 'ID lookup reconstructs the paged recipe')
 assert.equal(catalog.queryFxCatalog({ collection: 'generated', limit: 0 }).total, 139_425, 'generated collection count')
-assert.equal(catalog.queryFxCatalog({ collection: 'curated', limit: 0 }).total, 10_575, 'curated collection stays separately measurable')
+assert.equal(catalog.queryFxCatalog({ collection: 'curated', limit: 0 }).total, 10_623, 'curated collection stays separately measurable')
 
 const seen = new Set()
 const signatures = new Set()
@@ -52,4 +52,4 @@ for (let page = 0; page < 20; page++) catalog.queryFxCatalog({ q: page % 2 ? 'mo
 const elapsed = performance.now() - start
 assert.ok(elapsed < 1500, `20 indexed searches stay bounded (${elapsed.toFixed(1)} ms)`)
 
-console.log(`effect-recipe-bank-unit: 150000 base recipes, 139425 indexed IDs, ${bank.GENERATED_RECIPE_FAMILIES.length} real parameter families PASS (${elapsed.toFixed(1)} ms search sweep)`)
+console.log(`effect-recipe-bank-unit: 150048 base recipes, 139425 indexed IDs, ${bank.GENERATED_RECIPE_FAMILIES.length} generated families PASS (${elapsed.toFixed(1)} ms search sweep)`)

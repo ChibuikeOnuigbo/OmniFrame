@@ -1,3 +1,14 @@
+## 2026-11-08 — movable tilt-shift focus state
+
+Tilt Shift is no longer fixed to the horizontal centre. Its shared renderer
+accepts a movable X/Y centre, arbitrary plane angle, focus width and feather,
+and reuses three scratch canvases across frames. Forty-eight curated patches
+exercise four orientations, three offsets and four widths. All six numeric
+properties participate in FX-instance keyframes and the existing effect-region
+mask. Current catalog totals are 150,048 base / 155,048 loaded. Natural
+multiword search now matches all tokens across display punctuation. Evidence:
+`docs/TILT_SHIFT_FOCUS_20261108.md`.
+
 ## 2026-11-08 — 200-control UI audit state
 
 The visible Studio left-dock surface now has a strict repeatable quality gate:
@@ -12,9 +23,9 @@ sheets are under `qa-output/ui-200/`.
 
 ## 2026-11-08 — 150K catalog and shortcuts state
 
-The base Effects catalog is exactly 150,000 recipes (10,575 materialized plus
+The base Effects catalog is 150,048 recipes (10,623 materialized plus
 139,425 deterministic indexed IDs). The lazy authored pack takes the live UI to
-155,000. Indexed search creates only the requested page; direct lookup rebuilds
+155,048. Indexed search creates only the requested page; direct lookup rebuilds
 the same patch for UI, store and MCP application. Twelve generator families
 compose existing shared renderer controls and do not represent 139,425 new
 algorithms.

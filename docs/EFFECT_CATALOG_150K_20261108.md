@@ -2,12 +2,12 @@
 
 ## Delivered catalog
 
-OmniFrame now exposes **150,000 base effect recipes**:
+OmniFrame now exposes **150,048 base effect recipes**:
 
-- 10,575 curated/materialized recipes already present in the shared catalog;
+- 10,623 curated/materialized recipes already present in the shared catalog;
 - 139,425 stable indexed recipes (`ofx-000001` through `ofx-139425`);
 - the existing 5,000 authored Glitch NG pack loads on demand, producing
-  **155,000 recipes in the live Effects browser**.
+  **155,048 recipes in the live Effects browser**.
 
 The indexed bank is not a 139,425-object JSON download. Twelve deterministic
 generator families reconstruct only the requested search/page or ID. They
@@ -27,7 +27,11 @@ categories sit in a four-column semantic tab grid with a persistent selected
 border, lower-emphasis hover border and visible keyboard focus. The complete
 200-control live UI audit is in `docs/UI_QUALITY_200_SCAN_20261108.md`.
 
-These are recipe counts over existing render kernels. They are not 150,000
+The subsequent movable tilt-shift increment adds 48 curated focus-plane
+recipes and six shared-renderer controls. See
+`docs/TILT_SHIFT_FOCUS_20261108.md`.
+
+These are recipe counts over existing render kernels. They are not 150,048
 independent algorithms, full-motion visual acceptances or a claim that every
 possible creative look has been invented. Stable parameters and executable
 renderer paths are tested separately from perceptual distinctness.
@@ -52,7 +56,7 @@ keys such as Ctrl+S remain unclaimed.
   search sweep.
 - `node qa/shortcut-registry-unit.mjs`: 44 unique persistent settings,
   alternative chords, modifier matching, macOS Command and disabled bindings.
-- `node qa/effect-150k-shortcuts-e2e.mjs`: 155,000 live count, final indexed
+- `node qa/effect-150k-shortcuts-e2e.mjs`: 155,048 live count, final indexed
   recipe search/apply, editable parameters, Settings UI, runtime rebind,
   persistence across reload and clearing a binding.
 - `node qa/ui-200-scan-e2e.mjs`: exactly 200 visible controls across ten modes,

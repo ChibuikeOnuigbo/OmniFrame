@@ -14,6 +14,9 @@ let blurSourceCanvas: HTMLCanvasElement | null = null
 let blurBrightCanvas: HTMLCanvasElement | null = null
 let bokehSourceCanvas: HTMLCanvasElement | null = null
 let bokehHighlightsCanvas: HTMLCanvasElement | null = null
+let tiltSourceCanvas: HTMLCanvasElement | null = null
+let tiltBlurCanvas: HTMLCanvasElement | null = null
+let tiltMaskCanvas: HTMLCanvasElement | null = null
 
 /* ---- Alight-Motion-named pixel family (guide.alightmotion.com/effects) ---- */
 const amHex = (v: string | undefined, d: [number, number, number]): [number, number, number] =>
@@ -170,6 +173,83 @@ function applyLiquifyEffect(ctx: CanvasRenderingContext2D, e: ClipEffect, w: num
   } catch { /* tainted external media remains visible without the raster warp */ }
 }
 
+/**
+ * Selective focus plane used by tilt-shift and miniature looks. The original
+ * implementation allocated three canvases per frame and fixed the sharp band
+ * to the horizontal centre. This version reuses its surfaces and exposes the
+ * focus centre, angle, width and feather to preview, export and keyframes.
+ */
+function applyTiltShift(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number): void {
+  const amount = Math.max(0, Math.min(1, e.tiltShift ?? 0))
+  if (amount <= 0 || !w || !h) return
+  const centerX = Math.max(0, Math.min(1, e.tiltShiftCenterX ?? 0.5)) * w
+  const centerY = Math.max(0, Math.min(1, e.tiltShiftCenterY ?? 0.5)) * h
+  const angle = ((Math.max(-180, Math.min(180, e.tiltShiftAngle ?? 0))) * Math.PI) / 180
+  const width = Math.max(0.04, Math.min(0.9, e.tiltShiftWidth ?? 0.34))
+  const feather = Math.max(0.01, Math.min(0.5, e.tiltShiftFeather ?? 0.18))
+  const shortEdge = Math.min(w, h)
+  const focusHalf = width * shortEdge * 0.5
+  const featherPx = feather * shortEdge
+  const blurRadius = Math.max(0.25, amount * 18)
+
+  const source = tiltSourceCanvas ??= document.createElement('canvas')
+  if (source.width !== w) source.width = w
+  if (source.height !== h) source.height = h
+  const sx = source.getContext('2d')!
+  sx.setTransform(1, 0, 0, 1, 0, 0)
+  sx.clearRect(0, 0, w, h)
+  sx.drawImage(ctx.canvas, 0, 0)
+
+  const blurred = tiltBlurCanvas ??= document.createElement('canvas')
+  if (blurred.width !== w) blurred.width = w
+  if (blurred.height !== h) blurred.height = h
+  const bx = blurred.getContext('2d')!
+  bx.setTransform(1, 0, 0, 1, 0, 0)
+  bx.clearRect(0, 0, w, h)
+  bx.save()
+  bx.filter = `blur(${blurRadius.toFixed(2)}px)`
+  bx.drawImage(source, 0, 0)
+  bx.restore()
+
+  const mask = tiltMaskCanvas ??= document.createElement('canvas')
+  if (mask.width !== w) mask.width = w
+  if (mask.height !== h) mask.height = h
+  const mx = mask.getContext('2d')!
+  mx.setTransform(1, 0, 0, 1, 0, 0)
+  mx.globalCompositeOperation = 'source-over'
+  mx.clearRect(0, 0, w, h)
+
+  // The focus-plane direction is `angle`; its normal drives the alpha ramp.
+  const nx = -Math.sin(angle)
+  const ny = Math.cos(angle)
+  const extent = Math.hypot(w, h)
+  const gradient = mx.createLinearGradient(
+    centerX - nx * extent,
+    centerY - ny * extent,
+    centerX + nx * extent,
+    centerY + ny * extent,
+  )
+  const stop = (distance: number) => Math.max(0, Math.min(1, 0.5 + distance / (extent * 2)))
+  gradient.addColorStop(stop(-focusHalf - featherPx), 'rgba(0,0,0,0)')
+  gradient.addColorStop(stop(-focusHalf), 'rgba(0,0,0,1)')
+  gradient.addColorStop(stop(focusHalf), 'rgba(0,0,0,1)')
+  gradient.addColorStop(stop(focusHalf + featherPx), 'rgba(0,0,0,0)')
+  mx.fillStyle = gradient
+  mx.fillRect(0, 0, w, h)
+  mx.globalCompositeOperation = 'source-in'
+  mx.drawImage(source, 0, 0)
+  mx.globalCompositeOperation = 'source-over'
+
+  // Clip isolation can call this on a translated pad. Composite in backing
+  // canvas coordinates, then restore the caller transform for later effects.
+  ctx.save()
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  ctx.clearRect(0, 0, w, h)
+  ctx.drawImage(blurred, 0, 0)
+  ctx.drawImage(mask, 0, 0)
+  ctx.restore()
+}
+
 function amBlurStack(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -307,31 +387,7 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     ctx.restore()
     ctx.filter = 'none'
   }
-  if (e.tiltShift && e.tiltShift > 0) {
-    const src = document.createElement('canvas')
-    src.width = w; src.height = h
-    src.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
-    ctx.save()
-    ctx.filter = `blur(${Math.max(2, 8 * e.tiltShift)}px)`
-    ctx.clearRect(0, 0, w, h)
-    ctx.drawImage(src, 0, 0)
-    ctx.restore()
-    ctx.filter = 'none'
-    const band = h * 0.34
-    const grad = ctx.createLinearGradient(0, h / 2 - band, 0, h / 2 + band)
-    grad.addColorStop(0, 'rgba(0,0,0,0)')
-    grad.addColorStop(0.25, 'rgba(0,0,0,1)')
-    grad.addColorStop(0.75, 'rgba(0,0,0,1)')
-    grad.addColorStop(1, 'rgba(0,0,0,0)')
-    const mask = document.createElement('canvas')
-    mask.width = w; mask.height = h
-    const mx = mask.getContext('2d')!
-    mx.fillStyle = grad
-    mx.fillRect(0, 0, w, h)
-    mx.globalCompositeOperation = 'source-in'
-    mx.drawImage(src, 0, 0)
-    ctx.drawImage(mask, 0, 0)
-  }
+  applyTiltShift(ctx, e, w, h)
   if (e.vignette && e.vignette > 0) {
     const g = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.32, w / 2, h / 2, Math.max(w, h) * 0.72)
     g.addColorStop(0, 'rgba(0,0,0,0)')

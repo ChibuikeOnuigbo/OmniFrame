@@ -135,6 +135,7 @@ export function queryGeneratedRecipes(options: { cat?: GeneratedFxCat | 'all'; q
   const offset = Math.max(0, Math.floor(options.offset ?? 0))
   const limit = Math.max(0, Math.floor(options.limit ?? 60))
   const entries: GeneratedFxEntry[] = []
+  const queryTokens = q.match(/[a-z0-9]+/g) ?? []
   if (!q && cat === 'all') {
     const end = Math.min(GENERATED_RECIPE_COUNT, offset + limit)
     for (let index = offset; index < end; index++) {
@@ -148,11 +149,15 @@ export function queryGeneratedRecipes(options: { cat?: GeneratedFxCat | 'all'; q
     const family = FAMILIES[index % FAMILIES.length]
     if (cat !== 'all' && family.cat !== cat) continue
     const id = idFor(index)
-    if (q) {
+    if (queryTokens.length) {
       const staticText = `${family.label} ${family.key} ${family.cat} ${family.terms} ${id}`.toLowerCase()
       const variant = Math.floor(index / FAMILIES.length) + 1
-      const dynamicText = /\d|°/.test(q) ? `${family.describe(variant)} ${String(variant).padStart(4, '0')}`.toLowerCase() : ''
-      if (!staticText.includes(q) && !dynamicText.includes(q)) continue
+      const dynamicText = queryTokens.some((token) => /\d/.test(token)) ? `${family.describe(variant)} ${String(variant).padStart(4, '0')}`.toLowerCase() : ''
+      const searchable = `${staticText} ${dynamicText}`
+      const matches = queryTokens.length === 1
+        ? searchable.includes(queryTokens[0])
+        : queryTokens.every((token) => searchable.includes(token))
+      if (!matches) continue
     }
     if (total >= offset && entries.length < limit) {
       const entry = generatedRecipeAt(index)

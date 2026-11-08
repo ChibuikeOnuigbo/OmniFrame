@@ -25,7 +25,7 @@ try {
     const context = canvas.getContext('2d'); const gradient = context.createLinearGradient(0, 0, 640, 360)
     gradient.addColorStop(0, '#071224'); gradient.addColorStop(.5, '#315b8c'); gradient.addColorStop(1, '#ef8b55')
     context.fillStyle = gradient; context.fillRect(0, 0, 640, 360)
-    context.fillStyle = '#fff'; context.font = 'bold 64px sans-serif'; context.fillText('150K', 226, 205)
+    context.fillStyle = '#fff'; context.font = 'bold 64px sans-serif'; context.fillText('150K+', 205, 205)
     store.getState().addAsset({ id: 'recipe-source', kind: 'image', name: 'Recipe source', url: canvas.toDataURL(), duration: 5, width: 640, height: 360, size: 1000 })
     store.getState().addClipToTrack(store.getState().ensureTrack('video'), 'recipe-source', 0)
     store.getState().setLeftTab('effects'); store.getState().setRightOpen(true)
@@ -33,8 +33,8 @@ try {
 
   const count = page.getByTestId('fx-catalog-count')
   await count.waitFor({ state: 'visible' })
-  await page.waitForFunction(() => document.querySelector('[data-testid="fx-catalog-count"]')?.textContent?.includes('155,000'), null, { timeout: 15_000 })
-  assert.match(await count.textContent(), /155,000/, '5k authored pack joins the 150k base catalog')
+  await page.waitForFunction(() => document.querySelector('[data-testid="fx-catalog-count"]')?.textContent?.includes('155,048'), null, { timeout: 15_000 })
+  assert.match(await count.textContent(), /155,048/, '5k authored pack joins the 150k+ base catalog')
 
   await page.getByTestId('fx-catalog-search').fill('ofx-139425')
   await page.getByTestId('fx-tile-ofx-139425').waitFor({ state: 'visible' })
@@ -97,9 +97,9 @@ try {
   await page.keyboard.press('Alt+7')
   assert.equal(await page.evaluate(() => window.__omniframe_store.getState().leftOpen), false, 'cleared shortcut is disabled')
 
-  fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ baseRecipes: 150000, loadedRecipes: 155000, applied: applied.catalogId, editableParams: Object.keys(applied.params).length, shortcuts: 44, runtimeCommands: ['rebind', 'reload-persistence', 'clear', 'export-in', 'export-out', 'group', 'ungroup', 'multi-delete'], rebound, errors }, null, 2))
+  fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ baseRecipes: 150048, loadedRecipes: 155048, applied: applied.catalogId, editableParams: Object.keys(applied.params).length, shortcuts: 44, runtimeCommands: ['rebind', 'reload-persistence', 'clear', 'export-in', 'export-out', 'group', 'ungroup', 'multi-delete'], rebound, errors }, null, 2))
   assert.deepEqual(errors, [])
-  console.log('effect-150k-shortcuts-e2e: 155k loaded recipes, indexed apply, 44 persistent/rebindable commands PASS')
+  console.log('effect-150k-shortcuts-e2e: 155048 loaded recipes, indexed apply, 44 persistent/rebindable commands PASS')
 } finally {
   await browser.close()
 }
