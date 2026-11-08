@@ -7,6 +7,11 @@
 import type { ClipEffect } from '../types'
 import { deformRGBA, type DeformationSpec } from './deformation'
 
+// Reuse the two directional/zoom-blur surfaces across frames. Creating native
+// canvas backing stores per frame causes avoidable GC pressure during preview
+// and long exports, especially when a thresholded streak is active.
+let blurSourceCanvas: HTMLCanvasElement | null = null
+let blurBrightCanvas: HTMLCanvasElement | null = null
 
 /* ---- Alight-Motion-named pixel family (guide.alightmotion.com/effects) ---- */
 const amHex = (v: string | undefined, d: [number, number, number]): [number, number, number] =>
@@ -38,14 +43,26 @@ function applyLiquifyEffect(ctx: CanvasRenderingContext2D, e: ClipEffect, w: num
   } catch { /* tainted external media remains visible without the raster warp */ }
 }
 
-function amBlurStack(ctx: CanvasRenderingContext2D, w: number, h: number, passes: { dx: number; dy: number; sc?: number; al: number }[]) {
-  const src = document.createElement('canvas')
-  src.width = w; src.height = h
-  src.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
-  ctx.clearRect(0, 0, w, h)
+function amBlurStack(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  passes: { dx: number; dy: number; sc?: number; al: number }[],
+  options: { source?: HTMLCanvasElement; preserveBase?: boolean; composite?: GlobalCompositeOperation } = {},
+) {
+  const src = options.source ?? (blurSourceCanvas ??= document.createElement('canvas'))
+  if (!options.source) {
+    if (src.width !== w) src.width = w
+    if (src.height !== h) src.height = h
+    const sx = src.getContext('2d')!
+    sx.clearRect(0, 0, w, h)
+    sx.drawImage(ctx.canvas, 0, 0)
+  }
+  if (!options.preserveBase) ctx.clearRect(0, 0, w, h)
   for (const p of passes) {
     ctx.save()
     ctx.globalAlpha = p.al
+    ctx.globalCompositeOperation = options.composite ?? 'source-over'
     const sc = p.sc ?? 1
     ctx.translate(w / 2 + p.dx, h / 2 + p.dy)
     ctx.scale(sc, sc)
@@ -63,15 +80,46 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     amBlurStack(ctx, w, h, passes)
   }
   if (e.directionalBlur && e.directionalBlur > 0) {
-    const a = ((e.directionalBlurAngle ?? 0) * Math.PI) / 180
-    const len = e.directionalBlur * 24
-    const n = 7
+    const baseAngle = ((e.directionalBlurAngle ?? 0) * Math.PI) / 180
+    const len = Math.max(0, e.directionalBlur) * 24
+    const bias = Math.max(-1, Math.min(1, e.directionalBlurBias ?? 0))
+    const spread = (Math.max(0, Math.min(120, e.directionalBlurSpread ?? 0)) * Math.PI) / 180
+    const threshold = Math.max(0, Math.min(1, e.directionalBlurThreshold ?? 0))
+    const n = spread > 0 ? 11 : 9
     const passes: { dx: number; dy: number; al: number }[] = []
+    let totalWeight = 0
     for (let i = 0; i < n; i++) {
-      const t = (i / (n - 1) - 0.5) * len
-      passes.push({ dx: Math.cos(a) * t, dy: Math.sin(a) * t, al: 1 / n })
+      const u = i / (n - 1)
+      const centered = u - 0.5
+      const t = (centered + bias * 0.5) * len
+      const a = baseAngle + centered * spread
+      const weight = Math.exp(-0.5 * Math.pow(centered / 0.33, 2))
+      totalWeight += weight
+      passes.push({ dx: Math.cos(a) * t, dy: Math.sin(a) * t, al: weight })
     }
-    amBlurStack(ctx, w, h, passes)
+    for (const pass of passes) pass.al /= totalWeight
+    if (threshold > 0) {
+      const bright = blurBrightCanvas ??= document.createElement('canvas')
+      if (bright.width !== w) bright.width = w
+      if (bright.height !== h) bright.height = h
+      const bx = bright.getContext('2d')!
+      bx.clearRect(0, 0, w, h)
+      bx.drawImage(ctx.canvas, 0, 0)
+      try {
+        const pixels = bx.getImageData(0, 0, w, h)
+        for (let i = 0; i < pixels.data.length; i += 4) {
+          const lum = (pixels.data[i] * 0.2126 + pixels.data[i + 1] * 0.7152 + pixels.data[i + 2] * 0.0722) / 255
+          const mask = Math.max(0, Math.min(1, (lum - threshold) / Math.max(0.04, 1 - threshold)))
+          pixels.data[i + 3] = Math.round(pixels.data[i + 3] * mask)
+        }
+        bx.putImageData(pixels, 0, 0)
+        amBlurStack(ctx, w, h, passes, { source: bright, preserveBase: true, composite: 'screen' })
+      } catch {
+        amBlurStack(ctx, w, h, passes)
+      }
+    } else {
+      amBlurStack(ctx, w, h, passes)
+    }
   }
   if (e.glow && e.glow > 0) {
     const bright = document.createElement('canvas')

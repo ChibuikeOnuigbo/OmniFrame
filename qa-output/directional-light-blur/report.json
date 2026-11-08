@@ -1,0 +1,14 @@
+{
+  "stored": {
+    "lightType": "directional",
+    "lightColor": "#ffd27a",
+    "lightIntensity": 1,
+    "lightFalloff": 0.45,
+    "lightX": 0.5,
+    "lightY": 0.45,
+    "lightAngle": 62,
+    "lightWidth": 0.34,
+    "lightSoftness": 0.68
+  },
+  "errors": []
+}

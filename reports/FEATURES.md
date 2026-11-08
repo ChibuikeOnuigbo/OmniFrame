@@ -77,3 +77,14 @@ Verified 1,152 two-second moving Studio Look renders and one 2,304-second combin
 ## 2026-11-01 moving video text crop and GIF providers
 
 Added a real video-inside-text workflow to browser playback and headless MCP. An imported video is duplicated into glyph alpha, can be inverted and graded inside the letters, has a controllable solid core and source offset, and remains editable with Screen/Color Burn blend keys. The duplicated matte has its own live decoder so a background copy and text copy can seek independently. `new_work_qa/RDT_recopy2.mp4` is the corrected 601-frame evidence render with seven different scene looks and speed curves. Added Settings keys and one Media popup for GIPHY plus Klipy, including provider switching, trending/search, attribution, loading/error/download states and MP4 media import. Unit and live browser QA cover both providers and the moving matte.
+## 2026-11-08 — directional light/blur and tutorial audit
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Point, rotated Spot and feathered Directional light | `src/lib/lightFx.ts`, `playback.ts`, `tools/mcp/appRender.mjs` | Six distinct fixture renders and inspected contact sheet; universal MCP regression |
+| Blur trail bias, angle spread and bright-pixel threshold | `pixelGrade.ts`, `types.ts`, `effectCatalog.ts` | One-side and thresholded fan changed-pixel checks; four editable recipes |
+| Compact Point/Spot/Beam controls and valid unset defaults | `EffectsPanel.tsx`, `HelpModal.tsx` | Live browser slider persistence, no `NaN`, screenshot in `qa-output/directional-light-blur/` |
+| 211-channel subscription tutorial queue | `build-subscription-audit-queue.py`, `video-audit.yml` | Exact unique count, 36-batch coverage, classifier unit and parsed workflow YAML |
+| Measurable cross-platform product target | `docs/PRODUCT_GOAL.md` | Capability, responsiveness, simplicity and platform gates documented |
+
+Full implementation evidence and limits: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`. The subscription queue is an inventory/acquisition workflow; no new watched-video count is claimed yet.

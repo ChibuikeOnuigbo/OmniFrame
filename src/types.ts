@@ -613,9 +613,15 @@ export interface ClipEffect extends NgEffect {
   // ---- Alight-Motion-named effect family (rewatch 2026-10) ----
   /** AM Zoom Blur: radial scale-stack blur amount 0..1. */
   zoomBlur?: number
-  /** AM Directional Blur: angle deg + amount via directionalBlur (0..1). */
+  /** Directional blur length (0..6) plus angle and advanced sampling controls. */
   directionalBlur?: number
   directionalBlurAngle?: number
+  /** -1 = trail behind, 0 = centered, 1 = trail ahead. */
+  directionalBlurBias?: number
+  /** Fan angle in degrees around directionalBlurAngle. */
+  directionalBlurSpread?: number
+  /** Only streak pixels above this luma level; 0 blurs the full frame. */
+  directionalBlurThreshold?: number
   /** AM Glow: bright-pass + blur added back, 0..1. */
   glow?: number
   /** AM Edge Glow / Stroke Color: alpha-edge tint strength 0..1. */
@@ -765,14 +771,17 @@ export interface ClipEffect extends NgEffect {
   freezeHold?: number
   freezeAt?: number
   chromaColor?: string // key colour, default pure green
-  // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
+  // Light layer (Point/Spot/Directional, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.
-  lightType?: 'point' | 'spot' // default 'point' (spot = elliptical falloff cone)
+  lightType?: 'point' | 'spot' | 'directional'
   lightColor?: string // default '#ffd9a0'
   lightIntensity?: number // 0..1.5 (default 0 = off)
   lightFalloff?: number // radius as a fraction of the frame's long edge, 0.1..1 (default 0.45)
   lightX?: number // 0..1 horizontal center (default 0.5)
   lightY?: number // 0..1 vertical center (default 0.4)
+  lightAngle?: number // -180..180 degrees
+  lightWidth?: number // directional beam core width 0.03..1
+  lightSoftness?: number // directional beam feather 0..1
   // Particle / overlay / background-replace layers scanned from the AE
   // tutorial corpus (Study_edits_videos/deep-study-*.md): feather & ember
   // beds, dust/bokeh/sparkle overlays, scanline & halftone looks, spotlight

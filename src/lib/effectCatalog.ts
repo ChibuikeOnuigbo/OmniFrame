@@ -114,8 +114,11 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   deviceOverlay: { label: 'Device Overlay (green-screen plate)', kind: 'select', options: ['none', 'phone', 'monitor'] },
   cardFlip: { label: 'Card Flip (half-turns)', kind: 'number', min: 0, max: 2, step: 0.05 },
   zoomBlur: { label: 'Zoom Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
-  directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
+  directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 6, step: 0.01 },
   directionalBlurAngle: { label: 'Blur Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  directionalBlurBias: { label: 'Trail Bias', kind: 'number', min: -1, max: 1, step: 0.05 },
+  directionalBlurSpread: { label: 'Angle Spread (°)', kind: 'number', min: 0, max: 120, step: 1 },
+  directionalBlurThreshold: { label: 'Luma Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
   glow: { label: 'Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
   edgeGlow: { label: 'Edge Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
   edgeGlowColor: { label: 'Edge Colour', kind: 'color' },
@@ -199,10 +202,15 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   overlayStrength: { label: 'Overlay Strength', kind: 'number', min: 0, max: 1, step: 0.01 },
   particleFx: { label: 'Particles', kind: 'select', options: ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals'] },
   particleDensity: { label: 'Particle Density', kind: 'number', min: 0, max: 1, step: 0.01 },
-  lightType: { label: 'Light Type', kind: 'select', options: ['point', 'spot'] },
+  lightType: { label: 'Light Type', kind: 'select', options: ['point', 'spot', 'directional'] },
   lightColor: { label: 'Light Colour', kind: 'color' },
   lightIntensity: { label: 'Light Intensity', kind: 'number', min: 0, max: 1.5, step: 0.05 },
   lightFalloff: { label: 'Light Falloff', kind: 'number', min: 0.1, max: 1, step: 0.01 },
+  lightX: { label: 'Light X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  lightY: { label: 'Light Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  lightAngle: { label: 'Light Angle (°)', kind: 'number', min: -180, max: 180, step: 1 },
+  lightWidth: { label: 'Beam Width', kind: 'number', min: 0.03, max: 1, step: 0.01 },
+  lightSoftness: { label: 'Beam Softness', kind: 'number', min: 0, max: 1, step: 0.01 },
   kaleidoSegments: { label: 'Segments', kind: 'number', min: 0, max: 12, step: 1 },
   kaleidoRotate: { label: 'Wedge Rotate (°)', kind: 'number', min: 0, max: 360, step: 1 },
   flare: { label: 'Flare Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -357,6 +365,10 @@ function buildCatalog(): FxCatalogEntry[] {
   add('blur-horizontal', 'Horizontal Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 0 })
   add('blur-oblique', 'Oblique Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 35 })
   add('blur-vertical', 'Vertical Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 90 })
+  add('blur-one-side', 'One-Side Blur', 'blur', 'Asymmetric motion streak with editable direction and trail bias', { directionalBlur: 0.82, directionalBlurAngle: 12, directionalBlurBias: -1 })
+  add('blur-light-streak', 'Highlight Streak', 'blur', 'Thresholded directional blur for bright pixels and practical light trails', { directionalBlur: 1.15, directionalBlurAngle: 0, directionalBlurBias: 0.7, directionalBlurThreshold: 0.62 })
+  add('blur-fan', 'Fan Blur', 'blur', 'Multi-angle directional sampling with editable spread', { directionalBlur: 0.86, directionalBlurAngle: 90, directionalBlurSpread: 32 })
+  add('blur-vertical-light', 'Vertical Light Blur', 'blur', 'Vertical bright-pixel streak preset', { directionalBlur: 1.05, directionalBlurAngle: 90, directionalBlurThreshold: 0.55 })
   add('blur-radial', 'Radial Blur', 'blur', 'Shared zoom/radial sampling kernel', { zoomBlur: 0.68 })
   add('blur-cinematic', 'Cinematic Blur', 'blur', 'Soft focus with restrained highlight bloom', { blur: 7, glow: 0.18, vignette: 0.16 })
   add('blur-motion', 'Motion Blur', 'motion', 'Shared temporal motion sample kernel', { motionBlur: 0.7 })
@@ -453,10 +465,12 @@ function buildCatalog(): FxCatalogEntry[] {
   for (const [name, hex] of PALETTE.slice(0, 8)) {
     add(`edgeglow-${name.toLowerCase()}`, `Edge Glow ${name}`, 'light', 'AM Edge Glow / Stroke Color (official guide)', { edgeGlow: 0.9, edgeGlowColor: hex })
   }
-  for (const type of ['point', 'spot'] as const) {
+  for (const type of ['point', 'spot', 'directional'] as const) {
     for (const [name, hex] of [['Warm', '#ffd9a0'], ['Gold', '#ffc93c'], ['Cool', '#a8d8ff'], ['Blue', '#4f7dff'], ['Magenta', '#ff5df0'], ['Green', '#7dff9b']] as [string, string][]) {
-      add(`light-${type}-${name.toLowerCase()}`, `${type[0].toUpperCase()}${type.slice(1)} Light ${name}`, 'light', 'Gold Motion point/spot light layers (watched corpus)',
-        { lightType: type, lightColor: hex, lightIntensity: 1.1, lightFalloff: 0.5 })
+      add(`light-${type}-${name.toLowerCase()}`, `${type[0].toUpperCase()}${type.slice(1)} Light ${name}`, 'light', 'Editable shared-engine light layers',
+        type === 'directional'
+          ? { lightType: type, lightColor: hex, lightIntensity: 1.1, lightAngle: 35, lightWidth: 0.28, lightSoftness: 0.4 }
+          : { lightType: type, lightColor: hex, lightIntensity: 1.1, lightFalloff: 0.5 })
     }
   }
   ;[0.4, 0.8].forEach((v, i) => add(`vig-${i}`, `Vignette ${Math.round(v * 100)}%`, 'light', 'AM Vignette (official guide)', { vignette: v }))

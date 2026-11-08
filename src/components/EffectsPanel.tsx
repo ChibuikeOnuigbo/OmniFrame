@@ -50,6 +50,11 @@ const DEFAULT_EFFECTS: ClipEffect = {
   lightFalloff: 0.45,
   lightX: 0.5,
   lightY: 0.4,
+  lightAngle: 35,
+  lightWidth: 0.28,
+  lightSoftness: 0.4,
+  particleDensity: 0.5,
+  overlayStrength: 0.5,
 }
 
 let lutPreviewImagePromise: Promise<HTMLImageElement> | null = null
@@ -744,20 +749,25 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           <div className="flex items-center justify-between gap-2">
             <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-200/90">Light layer</span>
             <div className="flex gap-1">
-              {(['point', 'spot'] as const).map((lt) => (
+              {([
+                { id: 'point', label: 'Point', Icon: SunMedium },
+                { id: 'spot', label: 'Spot', Icon: Lamp },
+                { id: 'directional', label: 'Beam', Icon: Wind },
+              ] as const).map(({ id: lt, label, Icon }) => (
                 <button
                   key={lt}
                   type="button"
                   data-testid={`light-type-${lt}`}
                   aria-pressed={(effects.lightType ?? 'point') === lt}
                   onClick={() => setClipEffect(clip.id, { lightType: lt })}
-                  className={`rounded border px-1.5 py-0.5 text-[9px] capitalize transition-colors ${
+                  title={`${label} light`}
+                  className={`flex items-center gap-1 rounded border px-1.5 py-0.5 text-[9px] transition-colors ${
                     (effects.lightType ?? 'point') === lt
                       ? 'border-amber-400/60 bg-amber-400/15 text-amber-200'
                       : 'border-ink-700 text-ink-400 hover:text-white'
                   }`}
                 >
-                  {lt}
+                  <Icon size={10} aria-hidden="true" />{label}
                 </button>
               ))}
             </div>
@@ -775,15 +785,26 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           {(
             [
               { key: 'lightIntensity', label: 'Intensity', min: 0, max: 1.5, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` },
-              { key: 'lightFalloff', label: 'Falloff', min: 0.1, max: 1, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              ...(effects.lightType === 'directional'
+                ? []
+                : [{ key: 'lightFalloff', label: 'Falloff', min: 0.1, max: 1, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` }]),
               { key: 'lightX', label: 'Position X', min: 0, max: 1, step: 0.02, fmt: (v: number) => `${Math.round(v * 100)}%` },
               { key: 'lightY', label: 'Position Y', min: 0, max: 1, step: 0.02, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              ...((effects.lightType === 'directional' || effects.lightType === 'spot')
+                ? [{ key: 'lightAngle', label: 'Angle', min: -180, max: 180, step: 1, fmt: (v: number) => `${Math.round(v)}°` }]
+                : []),
+              ...(effects.lightType === 'directional'
+                ? [
+                    { key: 'lightWidth', label: 'Beam width', min: 0.03, max: 1, step: 0.01, fmt: (v: number) => `${Math.round(v * 100)}%` },
+                    { key: 'lightSoftness', label: 'Softness', min: 0, max: 1, step: 0.01, fmt: (v: number) => `${Math.round(v * 100)}%` },
+                  ]
+                : []),
             ] as const
           ).map((c) => (
             <label key={c.key} className="block">
               <span className="mb-0.5 flex items-center justify-between gap-2 text-[10px] text-ink-400">
                 <span>{c.label}</span>
-                <span className="font-mono text-[9px] text-ink-500">{c.fmt((effects[c.key] as number) ?? 0)}</span>
+                <span className="font-mono text-[9px] text-ink-500">{c.fmt((effects[c.key as keyof ClipEffect] as number) ?? 0)}</span>
               </span>
               <input
                 type="range"
@@ -792,13 +813,13 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
                 min={c.min}
                 max={c.max}
                 step={c.step}
-                value={(effects[c.key] as number) ?? 0}
+                value={(effects[c.key as keyof ClipEffect] as number) ?? 0}
                 onChange={(event) => setClipEffect(clip.id, { [c.key]: parseFloat(event.target.value) })}
                 className="of-range w-full"
               />
             </label>
           ))}
-          <p className="text-[9px] leading-snug text-ink-500">Screen-blended radial light over everything beneath this layer.</p>
+          <p className="text-[9px] leading-snug text-ink-500">Screen light over layers beneath. Directional adds an angled, feathered beam.</p>
         </div>
       ) : null}
       {labels.length > 0 && (

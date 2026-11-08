@@ -65,6 +65,7 @@ import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtw
 import type { VisualPreview } from './visualPreview'
 import { drawPillarFamily } from './pillarRenderers'
 import { PILLAR_DEF_BY_TYPE } from './transitionPresets'
+import { applyLightComposite } from './lightFx'
 
 export const PW = 1280
 export const PH = 720
@@ -204,53 +205,6 @@ function applyClipFilter(ctx: CanvasRenderingContext2D, effect?: ClipEffect) {
   if (!local) return
   const inherited = ctx.filter && ctx.filter !== 'none' ? ctx.filter : ''
   ctx.filter = inherited ? `${inherited} ${local}` : local
-}
-
-/** '#rrggbb'/'#rgb'/'rgb(...)' + alpha -> rgba() string (falls back to warm white). */
-function withAlpha(color: string, alpha: number): string {
-  const a = Math.max(0, Math.min(1, alpha))
-  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(color.trim())
-  if (hex) {
-    const h = hex[1].length === 3 ? hex[1].split('').map((ch) => ch + ch).join('') : hex[1]
-    return `rgba(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)}, ${a})`
-  }
-  const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i.exec(color.trim())
-  if (rgb) return `rgba(${rgb[1]}, ${rgb[2]}, ${rgb[3]}, ${a})`
-  return `rgba(255, 217, 160, ${a})`
-}
-
-/**
- * Gold Motion-style light layer: a radial light (Point, or Spot = squashed
- * ellipse) composited with 'screen' over everything drawn so far.
- */
-function applyLightComposite(
-  ctx: CanvasRenderingContext2D,
-  width: number,
-  height: number,
-  effect?: ClipEffect,
-): void {
-  const intensity = effect?.lightIntensity ?? 0
-  if (!effect || intensity <= 0) return
-  const cx = (effect.lightX ?? 0.5) * width
-  const cy = (effect.lightY ?? 0.4) * height
-  const radius = Math.max(24, (effect.lightFalloff ?? 0.45) * Math.max(width, height))
-  const color = effect.lightColor || '#ffd9a0'
-  const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius)
-  gradient.addColorStop(0, withAlpha(color, Math.min(1, intensity)))
-  gradient.addColorStop(1, withAlpha(color, 0))
-  ctx.save()
-  ctx.setTransform(1, 0, 0, 1, 0, 0)
-  ctx.globalCompositeOperation = 'screen'
-  ctx.globalAlpha = 1
-  ctx.filter = 'none'
-  if (effect.lightType === 'spot') {
-    ctx.translate(cx, cy)
-    ctx.scale(1, 0.55)
-    ctx.translate(-cx, -cy)
-  }
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, width, height)
-  ctx.restore()
 }
 
 export class PreviewEngine {

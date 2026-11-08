@@ -45,13 +45,17 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect | 'motion
   lightFalloff: 0.45,
   lightX: 0.5,
   lightY: 0.4,
+  lightAngle: 35,
+  lightWidth: 0.28,
+  lightSoftness: 0.4,
   particleFx: 'none',
   particleDensity: 0.5,
   particleTint: '#ffffff',
   overlayFx: 'none',
   overlayStrength: 0.5,
   replaceBg: 'none',
-  zoomBlur: 0, directionalBlur: 0, directionalBlurAngle: 0, glow: 0, edgeGlow: 0,
+  zoomBlur: 0, directionalBlur: 0, directionalBlurAngle: 0, directionalBlurBias: 0,
+  directionalBlurSpread: 0, directionalBlurThreshold: 0, glow: 0, edgeGlow: 0,
   edgeGlowColor: '#ffdc78', tiltShift: 0, vignette: 0, flicker: 0, tiles: 0,
   pinchBulge: 0, swirl: 0, gradientMap: 0, gradientMapFrom: '#0a0a28', gradientMapTo: '#ffbe5a',
   threshold: 0, sharpen: 0, findEdges: 0, echo: 0, echoDecay: 0.5, echoSpacing: 0.08,
@@ -132,6 +136,14 @@ const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   lightFalloff: [0.1, 1],
   lightX: [0, 1],
   lightY: [0, 1],
+  lightAngle: [-180, 180],
+  lightWidth: [0.03, 1],
+  lightSoftness: [0, 1],
+  directionalBlur: [0, 6],
+  directionalBlurAngle: [-360, 360],
+  directionalBlurBias: [-1, 1],
+  directionalBlurSpread: [0, 120],
+  directionalBlurThreshold: [0, 1],
 }
 
 const clamp = (v: number, [lo, hi]: [number, number]) => Math.min(hi, Math.max(lo, v))
@@ -151,7 +163,7 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   if (typeof raw.ngBlend === 'string' && ['normal','screen','multiply','add'].includes(raw.ngBlend)) out.ngBlend = raw.ngBlend as NgEffect['ngBlend']
   if (typeof raw.ngPattern === 'string' && ['microburst','slow-build','hard-intro','dual-attack','subtle-break','pulse-to-clean','reverse-shatter','freeze-then-snap','rhythmic','long-tail'].includes(raw.ngPattern)) out.ngPattern=raw.ngPattern
   for (const k of ['ngPrimary','ngSecondary'] as const) if (typeof raw[k] === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw[k])) out[k]=raw[k] as string
-  if (raw.lightType === 'point' || raw.lightType === 'spot') out.lightType = raw.lightType
+  if (raw.lightType === 'point' || raw.lightType === 'spot' || raw.lightType === 'directional') out.lightType = raw.lightType
   if (typeof raw.lightColor === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.lightColor)) out.lightColor = raw.lightColor
   if (typeof raw.particleFx === 'string' && (PARTICLE_KINDS as readonly string[]).includes(raw.particleFx)) out.particleFx = raw.particleFx as ClipEffect['particleFx']
   if (typeof raw.overlayFx === 'string' && (OVERLAY_KINDS as readonly string[]).includes(raw.overlayFx)) out.overlayFx = raw.overlayFx as ClipEffect['overlayFx']

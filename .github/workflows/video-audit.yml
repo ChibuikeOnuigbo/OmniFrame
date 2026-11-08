@@ -169,6 +169,14 @@ jobs:
           PY
           sed -i "s/__TS__/$(date -u +%FT%TZ)/" audit-out/inventory.json
 
+      - name: Inventory subscription tutorial batch
+        run: |
+          python3 scripts/build-subscription-audit-queue.py \
+            --subscriptions research/youtube-subscriptions/subscriptions-20261108.csv \
+            --plan-output audit-out/subscriptions/channel-plan.json \
+            --inventory-output audit-out/subscriptions/inventory.json \
+            --merge audit-out/inventory.json
+
       - name: Collect reddit link text from chat history (runner egress)
         run: |
           python3 - <<'PY'
@@ -209,11 +217,13 @@ jobs:
           python3 - <<'PY'
           import json, os, subprocess, math
           batch = 1
+          mode = "catalog"
           explicit_ids = []
           try:
               txt = open("youtube-audit/batch-trigger.txt").read()
               for line in txt.splitlines():
                   if line.startswith("batch="): batch = int(line.split("=")[1])
+                  if line.startswith("mode="): mode = line.split("=",1)[1].strip()
                   if line.startswith("ids="): explicit_ids = [x.strip() for x in line.split("=",1)[1].split(",") if x.strip()]
           except Exception: pass
           inv = json.load(open("audit-out/inventory.json"))["videos"]
@@ -223,12 +233,27 @@ jobs:
               if v["id"] in explicit: continue
               ch = v["channel"]
               per_channel.setdefault(ch, []).append(v)
-          selection = [v for v in inv if v["id"] in explicit]
-          for ch, vids in per_channel.items():
-              selection += vids
-          # resumable slicing: batch N processes items [(N-1)*20, N*20)
-          start, end = (batch-1)*20, batch*20
-          selection = selection[start:end] or selection[:20]
+          if mode == "subscriptions":
+              # The batch already selected a bounded group of channels. Acquire
+              # up to 20 title-classified tutorials, round-robin across channels.
+              buckets = {}
+              for v in inv:
+                  if v.get("subscription_tutorial"):
+                      buckets.setdefault(v.get("channel_id") or v.get("channel"), []).append(v)
+              selection = []
+              depth = 0
+              while len(selection) < 20 and any(depth < len(items) for items in buckets.values()):
+                  for items in buckets.values():
+                      if depth < len(items): selection.append(items[depth])
+                      if len(selection) == 20: break
+                  depth += 1
+          else:
+              selection = [v for v in inv if v["id"] in explicit]
+              for ch, vids in per_channel.items():
+                  selection += vids
+              # resumable slicing: batch N processes items [(N-1)*20, N*20)
+              start, end = (batch-1)*20, batch*20
+              selection = selection[start:end] or selection[:20]
           # retry lane: trigger ids= line overrides slicing with an explicit id list
           if explicit_ids:
               selection = [v for v in inv if v["id"] in explicit_ids]
@@ -352,8 +377,9 @@ jobs:
                   open(f"audit-out/errors/{vid}.txt","w").write(str(e))
               records.append(rec)
               print(vid, rec["status"])
-          json.dump({"batch": batch, "processed": len(records), "records": records},
-                    open(f"audit-out/reports/batch{batch}.json","w"), indent=1)
+          report_name = f"subscriptions-batch{batch}" if mode == "subscriptions" else f"batch{batch}"
+          json.dump({"mode": mode, "batch": batch, "processed": len(records), "records": records},
+                    open(f"audit-out/reports/{report_name}.json","w"), indent=1)
           PY
 
       - uses: actions/upload-artifact@v4
