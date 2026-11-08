@@ -114,7 +114,7 @@
         original url = /s/player/a5c2aafe/player_es6.vflset/en_US/base.js
 [debug] [youtube] Kp2wDz-DLtk: Detected experiment to bind GVS PO Token to video ID for web_embedded client
 [debug] [youtube] Kp2wDz-DLtk: Detected a 182s ad skippable after 5s for web
-[debug] [youtube] Kp2wDz-DLtk: Detected a 49s ad skippable after 5s for web
+[debug] [youtube] Kp2wDz-DLtk: Detected a 45s ad skippable after 5s for web
 [debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -
