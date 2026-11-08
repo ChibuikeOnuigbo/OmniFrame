@@ -29,3 +29,7 @@ No new “watched” count is claimed at commit time. A title inventory is not a
 viewing review. A video advances only to `FOOTAGE_ACQUIRED` after the audit
 runner downloads media and decodes timestamped frames; human visual/audio
 review remains a separate status.
+
+The first run verified 389 candidates across five channels, then exposed an
+empty Shorts tab represented by yt-dlp as JSON `null`. Empty tabs are now a
+normal zero-item result and the same batch is retriggered.

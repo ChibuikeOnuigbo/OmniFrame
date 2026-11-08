@@ -148,6 +148,8 @@ def yt_dlp_inventory(
         payload = json.loads(run.stdout)
     except Exception as exc:
         return [], f"invalid yt-dlp JSON: {exc}; {run.stderr[-1200:]}"
+    if not isinstance(payload, dict):
+        return [], f"yt-dlp returned an empty {tab} playlist; {run.stderr[-1200:]}"
     entries: list[dict[str, Any]] = []
     for item in payload.get("entries") or []:
         if not isinstance(item, dict) or not item.get("id"):
