@@ -32,11 +32,12 @@ EDITING_TOOLS = (
     "final cut", "photoshop", "krita", "video editor", "motion graphics",
 )
 TECHNIQUES = (
-    "edit", "effect", "transition", "blur", "light", "glow", "aura", "twixtor",
+    "effect", "transition", "blur", "light", "glow", "aura", "twixtor",
     "speed ramp", "speed curve", "keyframe", "mask", "rotoscop", "composit",
     "typography", "animation", "motion", "camera", "3d", "vfx", "color grade",
     "colour grade", "shake", "tracking", "liquify", "turbulent", "displacement",
     "particle", "text", "amv", "velocity", "graph", "preset", "overlay",
+    "sound design", "sound effect", "color correction", "colour correction", "lut",
 )
 CHANNEL_HINTS = (
     "tutorial", "edit", "vfx", "motion", "animation", "amv", "creator", "design",
@@ -71,7 +72,13 @@ def classify_video(title: str, channel_title: str) -> tuple[bool, list[str]]:
     text = normalized(title)
     strong = hits(text, STRONG_TUTORIAL)
     tools = hits(text, EDITING_TOOLS)
-    techniques = hits(text, TECHNIQUES)
+    # Tool names such as "After Effects" and "Alight Motion" contain generic
+    # technique words. Remove them before technique matching so a product
+    # showcase does not become a tutorial merely because of its app name.
+    technique_text = text
+    for tool in EDITING_TOOLS:
+        technique_text = technique_text.replace(tool, " ")
+    techniques = hits(technique_text, TECHNIQUES)
     channel = normalized(channel_title)
     channel_is_tutorial = "tutorial" in channel
     reasons: list[str] = []
@@ -79,8 +86,8 @@ def classify_video(title: str, channel_title: str) -> tuple[bool, list[str]]:
         reasons.append("tutorial phrase: " + ", ".join(strong[:3]))
     if tools and techniques:
         reasons.append("editor + technique: " + ", ".join((tools + techniques)[:4]))
-    if channel_is_tutorial and (techniques or not strong):
-        reasons.append("tutorial-named channel")
+    if channel_is_tutorial and techniques:
+        reasons.append("tutorial-named channel + technique title")
     if any(hint in channel for hint in CHANNEL_HINTS) and techniques:
         reasons.append("editing channel + technique title")
     return bool(reasons), reasons

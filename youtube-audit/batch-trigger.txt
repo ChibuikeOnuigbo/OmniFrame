@@ -3,4 +3,4 @@ batch=1
 channels_per_batch=6
 playlist_start=1
 playlist_end=500
-nonce=subscriptions-20261108-1-retry1
+nonce=subscriptions-20261108-1-refined

@@ -33,3 +33,10 @@ review remains a separate status.
 The first run verified 389 candidates across five channels, then exposed an
 empty Shorts tab represented by yt-dlp as JSON `null`. Empty tabs are now a
 normal zero-item result and the same batch is retriggered.
+
+Decoded frames from that retry revealed a second issue: a tutorial-named
+channel was allowing unrelated challenge and free-clip uploads. The classifier
+now requires a tutorial phrase or a specific technique after removing editor
+names such as “After Effects” from the technique text. Challenge/free-clip and
+product-showcase titles are regression-tested as non-candidates. Batch 1 is
+retriggered with the refined queue.

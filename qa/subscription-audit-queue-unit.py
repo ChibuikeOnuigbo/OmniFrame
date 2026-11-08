@@ -30,7 +30,13 @@ for title, channel in positive:
     candidate, reasons = module.classify_video(title, channel)
     assert candidate and reasons, (title, reasons)
 
-candidate, reasons = module.classify_video("My weekend lunch", "Travel Diary")
-assert not candidate and reasons == [], reasons
+for title, channel in [
+    ("My weekend lunch", "Travel Diary"),
+    ("I Challenged 15 Editors To Decide The Best Software", "Dr. Xenios Tutorials"),
+    ("Free 4K Neymar Clips", "mxtstutorials"),
+    ("After Effects Is Finally on Mobile?!", "Tyson Tutorials"),
+]:
+    candidate, reasons = module.classify_video(title, channel)
+    assert not candidate and reasons == [], (title, reasons)
 
 print("subscription-audit-queue-unit: 211 channels, 36 batches, classifier boundaries PASS")
