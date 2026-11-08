@@ -84,7 +84,7 @@ Added a real video-inside-text workflow to browser playback and headless MCP. An
 | Point, rotated Spot and feathered Directional light | `src/lib/lightFx.ts`, `playback.ts`, `tools/mcp/appRender.mjs` | Six distinct fixture renders and inspected contact sheet; universal MCP regression |
 | Blur trail bias, angle spread and bright-pixel threshold | `pixelGrade.ts`, `types.ts`, `effectCatalog.ts` | One-side and thresholded fan changed-pixel checks; four editable recipes |
 | Compact Point/Spot/Beam controls and valid unset defaults | `EffectsPanel.tsx`, `HelpModal.tsx` | Live browser slider persistence, no `NaN`, screenshot in `qa-output/directional-light-blur/` |
-| 211-channel subscription tutorial queue | `build-subscription-audit-queue.py`, `video-audit.yml` | Exact unique count, 36-batch coverage, classifier unit and parsed workflow YAML |
+| 211-channel subscription tutorial queue | `build-subscription-audit-queue.py`, `video-audit.yml` | Exact unique count, 36-batch coverage, refined classifier unit; batch 1 acquired 20/20 videos into 343 frames/60 audio diagnostics |
 | Measurable cross-platform product target | `docs/PRODUCT_GOAL.md` | Capability, responsiveness, simplicity and platform gates documented |
 
-Full implementation evidence and limits: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`. The subscription queue is an inventory/acquisition workflow; no new watched-video count is claimed yet.
+Full implementation evidence and limits: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`. The subscription queue is an inventory/acquisition workflow; 20 videos have decoded evidence, while continuous visual/audio review remains pending.

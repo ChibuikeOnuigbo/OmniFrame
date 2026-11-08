@@ -40,3 +40,42 @@ now requires a tutorial phrase or a specific technique after removing editor
 names such as “After Effects” from the technique text. Challenge/free-clip and
 product-showcase titles are regression-tested as non-candidates. Batch 1 is
 retriggered with the refined queue.
+
+## Refined batch 1 result
+
+GitHub Actions run `42432257986` completed in 10m08s and committed evidence as
+`fd44ee28`. It inventoried 889 unique Videos/Shorts entries and classified 814
+as tutorial or technique candidates. The round-robin selection acquired 20/20
+videos across all six channels using `yt-dlp default+cookies`:
+
+- Zept Tutorials: 4
+- Dr. Xenios Tutorials: 4
+- Wizzy Tutorials: 3
+- Tyson Tutorials: 3
+- Zenny Tutorials: 3
+- mxtstutorials: 3
+
+The selected sources total 7,460.198 seconds (2.07 hours). Extraction produced
+343 timestamped uniform/scene frames and 60 audio diagnostics. Every record is
+`FOOTAGE_ACQUIRED`; `visual_review` and listening remain `pending`. The refined
+midpoint contact sheet was inspected and shows workflows around 4K cleanup,
+colour correction/LUTs, flow and AE-like transitions, sound design, phone 3D,
+CapCut overlays, 3D book/card motion, text effects, shakes and time remapping.
+One sampled frame per video is not continuous viewing.
+
+Current editor mapping from that sampled evidence:
+
+| Observed topic | OmniFrame state |
+|---|---|
+| Colour correction and LUTs | Editable LUT/adjustment stack exists. |
+| Flow/AE-like transitions | Transition catalog, curves and compounds exist; tutorial-specific recreations are pending. |
+| 3D book/card motion | Card Flip and 3D object/device systems exist; exact tutorial parity is pending. |
+| Overlays and text effects | Editable overlay beds, effect regions and text effects exist. |
+| Shake effects | Imported Shake Pack and keyframeable effect instances exist. |
+| Time remapping | Fifteen tested speed curves exist in browser/headless source clocks. |
+| 4K cleanup/upscaling | Candidate-model research exists; a universal 4K quality/performance claim is not established. |
+| AI sound design and phone model generation | Audio editing and a 3D asset library exist; automatic SFX placement and a Tripo-equivalent generator are gaps. |
+
+Runner evidence: `youtube-audit/runner/reports/subscriptions-batch1.json`,
+`youtube-audit/runner/subscriptions/inventory.json` and the per-video folders
+under `youtube-audit/runner/evidence/`.
