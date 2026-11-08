@@ -1,0 +1,22 @@
+=12619 fps=1484 q=-0.0 size=N/A time=00:06:57.50 bitrate=N/A speed=49.1x elapsed=0:00:08.50    
+frame=13344 fps=1482 q=-0.0 size=N/A time=00:07:21.60 bitrate=N/A speed=  49x elapsed=0:00:09.00    
+frame=14046 fps=1478 q=-0.0 size=N/A time=00:07:45.10 bitrate=N/A speed=48.9x elapsed=0:00:09.50    
+frame=14632 fps=1463 q=-0.0 size=N/A time=00:08:04.70 bitrate=N/A speed=48.4x elapsed=0:00:10.00    
+frame=15300 fps=1457 q=-0.0 size=N/A time=00:08:26.70 bitrate=N/A speed=48.2x elapsed=0:00:10.50    
+frame=16092 fps=1462 q=-0.0 size=N/A time=00:08:53.20 bitrate=N/A speed=48.5x elapsed=0:00:11.00    
+[opus @ 0x5866e6b77a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x7dc1e8002080] 
+{
+	"input_i" : "-16.97",
+	"input_tp" : "0.74",
+	"input_lra" : "12.20",
+	"input_thresh" : "-27.95",
+	"output_i" : "-24.75",
+	"output_tp" : "-6.03",
+	"output_lra" : "7.20",
+	"output_thresh" : "-35.44",
+	"normalization_type" : "dynamic",
+	"target_offset" : "0.75"
+}
+[out#0/null @ 0x5866e6bbd240] video:6746KiB audio:415120KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=16605 fps=1458 q=-0.0 Lsize=N/A time=00:09:13.50 bitrate=N/A speed=48.6x elapsed=0:00:11.39    

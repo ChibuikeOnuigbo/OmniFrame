@@ -1,19 +1,101 @@
-[youtube] Extracting URL: https://www.youtube.com/watch?v=umTDI962BhM
-[youtube] umTDI962BhM: Downloading webpage
-[youtube] umTDI962BhM: Downloading web embedded client config
-[youtube] umTDI962BhM: Downloading player 4efb8b2c-main
-[youtube] umTDI962BhM: Downloading web embedded player API JSON
-[youtube] umTDI962BhM: Downloading tv samsung player API JSON
+     2 |   913.30KiB   59k https | audio only         opus        59k 48k [es-US] Spanish (US), low, WEB-E, webm_dash
+250-4   webm  audio only      2 |   915.68KiB   60k https | audio only         opus        60k 48k [hi] Hindi, low, WEB-E, webm_dash
+250-5   webm  audio only      2 |   920.79KiB   60k https | audio only         opus        60k 48k [de-DE] German (DE), low, WEB-E, webm_dash
+249-6   webm  audio only      2 |   752.89KiB   49k https | audio only         opus        49k 48k [en-US] English (US) original (default), low, WEB-E, webm_dash
+250-6   webm  audio only      2 |  1006.33KiB   65k https | audio only         opus        65k 48k [en-US] English (US) original (default), low, WEB-E, webm_dash
+140-drc m4a   audio only      2 |     1.94MiB  130k https | audio only         mp4a.40.2  130k 44k [en-US] English (US) original (default), medium, DRC, WEB-E, m4a_dash
+251-drc webm  audio only      2 |     1.96MiB  131k https | audio only         opus       131k 48k [en-US] English (US) original (default), medium, DRC, WEB-E, webm_dash
+140-0   m4a   audio only      2 |     1.95MiB  130k https | audio only         mp4a.40.2  130k 44k [de-DE] German (DE), medium, WEB-E, m4a_dash
+140-1   m4a   audio only      2 |     1.95MiB  130k https | audio only         mp4a.40.2  130k 44k [es-US] Spanish (US), medium, WEB-E, m4a_dash
+140-2   m4a   audio only      2 |     1.95MiB  130k https | audio only         mp4a.40.2  130k 44k [fr-FR] French (FR), medium, WEB-E, m4a_dash
+140-3   m4a   audio only      2 |     1.95MiB  130k https | audio only         mp4a.40.2  130k 44k [hi] Hindi, medium, WEB-E, m4a_dash
+140-4   m4a   audio only      2 |     1.95MiB  130k https | audio only         mp4a.40.2  130k 44k [it] Italian, medium, WEB-E, m4a_dash
+140-5   m4a   audio only      2 |     1.95MiB  130k https | audio only         mp4a.40.2  130k 44k [pt-BR] Portuguese (BR), medium, WEB-E, m4a_dash
+140-6   m4a   audio only      2 |     1.94MiB  130k https | audio only         mp4a.40.2  130k 44k [en-US] English (US) original (default), medium, WEB-E, m4a_dash
+251-0   webm  audio only      2 |     1.61MiB  107k https | audio only         opus       107k 48k [fr-FR] French (FR), medium, WEB-E, webm_dash
+251-1   webm  audio only      2 |     1.61MiB  107k https | audio only         opus       107k 48k [pt-BR] Portuguese (BR), medium, WEB-E, webm_dash
+251-2   webm  audio only      2 |     1.61MiB  108k https | audio only         opus       108k 48k [it] Italian, medium, WEB-E, webm_dash
+251-3   webm  audio only      2 |     1.62MiB  108k https | audio only         opus       108k 48k [es-US] Spanish (US), medium, WEB-E, webm_dash
+251-4   webm  audio only      2 |     1.62MiB  108k https | audio only         opus       108k 48k [hi] Hindi, medium, WEB-E, webm_dash
+251-5   webm  audio only      2 |     1.63MiB  109k https | audio only         opus       109k 48k [de-DE] German (DE), medium, WEB-E, webm_dash
+251-6   webm  audio only      2 |     1.96MiB  131k https | audio only         opus       131k 48k [en-US] English (US) original (default), medium, WEB-E, webm_dash
+91-0    mp4   256x144     30    | ~   2.89MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [de-DE] WEB-E
+91-1    mp4   256x144     30    | ~   2.89MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [it] WEB-E
+91-2    mp4   256x144     30    | ~   2.89MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [es-US] WEB-E
+91-3    mp4   256x144     30    | ~   2.89MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [pt-BR] WEB-E
+91-4    mp4   256x144     30    | ~   2.89MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [hi] WEB-E
+91-5    mp4   256x144     30    | ~   2.90MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [fr-FR] WEB-E
+91-6    mp4   256x144     30    | ~   2.90MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [en] WEB-E
+91-7    mp4   256x144     30    | ~   2.90MiB  193k m3u8  | avc1.4D400C        mp4a.40.5           [en-US] (original), WEB-E
+160     mp4   256x144     30    |     1.03MiB   69k https | avc1.4D400C    69k video only          144p, WEB-E, mp4_dash
+278     webm  256x144     30    |   867.07KiB   56k https | vp9            56k video only          144p, WEB-E, webm_dash
+394     mp4   256x144     30    |   604.45KiB   39k https | av01.0.00M.08  39k video only          144p, WEB-E, mp4_dash
+92-0    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [de-DE] WEB-E
+92-1    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [it] WEB-E
+92-2    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [es-US] WEB-E
+92-3    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [pt-BR] WEB-E
+92-4    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [hi] WEB-E
+92-5    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [fr-FR] WEB-E
+92-6    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [en] WEB-E
+92-7    mp4   426x240     30    | ~   4.85MiB  323k m3u8  | avc1.4D4015        mp4a.40.5           [en-US] (original), WEB-E
+133     mp4   426x240     30    |     2.03MiB  135k https | avc1.4D4015   135k video only          240p, WEB-E, mp4_dash
+242     webm  426x240     30    |     1.20MiB   80k https | vp9            80k video only          240p, WEB-E, webm_dash
+395     mp4   426x240     30    |   992.07KiB   65k https | av01.0.00M.08  65k video only          240p, WEB-E, mp4_dash
+93-0    mp4   640x360     30    | ~   9.19MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [es-US] WEB-E
+93-1    mp4   640x360     30    | ~   9.19MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [fr-FR] WEB-E
+93-2    mp4   640x360     30    | ~   9.19MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [it] WEB-E
+93-3    mp4   640x360     30    | ~   9.19MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [hi] WEB-E
+93-4    mp4   640x360     30    | ~   9.19MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [pt-BR] WEB-E
+93-5    mp4   640x360     30    | ~   9.19MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [de-DE] WEB-E
+93-6    mp4   640x360     30    | ~   9.20MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [en] WEB-E
+93-7    mp4   640x360     30    | ~   9.20MiB  612k m3u8  | avc1.4D401E        mp4a.40.2           [en-US] (original), WEB-E
+134     mp4   640x360     30    |     3.40MiB  226k https | avc1.4D401E   226k video only          360p, WEB-E, mp4_dash
+18      mp4   640x360     30  2 |     4.85MiB  323k https | avc1.42001E        mp4a.40.2       44k [en] 360p, WEB-E
+243     webm  640x360     30    |     2.00MiB  133k https | vp9           133k video only          360p, WEB-E, webm_dash
+396     mp4   640x360     30    |     1.61MiB  107k https | av01.0.01M.08 107k video only          360p, WEB-E, mp4_dash
+94-0    mp4   854x480     30    | ~  14.61MiB  972k m3u8  | avc1.4D401F        mp4a.40.2           [es-US] WEB-E
+94-1    mp4   854x480     30    | ~  14.61MiB  972k m3u8  | avc1.4D401F        mp4a.40.2           [fr-FR] WEB-E
+94-2    mp4   854x480     30    | ~  14.61MiB  972k m3u8  | avc1.4D401F        mp4a.40.2           [it] WEB-E
+94-3    mp4   854x480     30    | ~  14.61MiB  972k m3u8  | avc1.4D401F        mp4a.40.2           [hi] WEB-E
+94-4    mp4   854x480     30    | ~  14.61MiB  972k m3u8  | avc1.4D401F        mp4a.40.2           [pt-BR] WEB-E
+94-5    mp4   854x480     30    | ~  14.61MiB  972k m3u8  | avc1.4D401F        mp4a.40.2           [de-DE] WEB-E
+94-6    mp4   854x480     30    | ~  14.61MiB  973k m3u8  | avc1.4D401F        mp4a.40.2           [en] WEB-E
+94-7    mp4   854x480     30    | ~  14.61MiB  973k m3u8  | avc1.4D401F        mp4a.40.2           [en-US] (original), WEB-E
+135     mp4   854x480     30    |     5.18MiB  345k https | avc1.4D401F   345k video only          480p, WEB-E, mp4_dash
+244     webm  854x480     30    |     2.84MiB  189k https | vp9           189k video only          480p, WEB-E, webm_dash
+397     mp4   854x480     30    |     2.33MiB  155k https | av01.0.04M.08 155k video only          480p, WEB-E, mp4_dash
+95-0    mp4   1280x720    30    | ~  23.03MiB 1533k m3u8  | avc1.64001F        mp4a.40.2           [es-US] WEB-E
+95-1    mp4   1280x720    30    | ~  23.03MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [fr-FR] WEB-E
+95-2    mp4   1280x720    30    | ~  23.03MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [it] WEB-E
+95-3    mp4   1280x720    30    | ~  23.03MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [hi] WEB-E
+95-4    mp4   1280x720    30    | ~  23.03MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [pt-BR] WEB-E
+95-5    mp4   1280x720    30    | ~  23.03MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [de-DE] WEB-E
+95-6    mp4   1280x720    30    | ~  23.04MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [en] WEB-E
+95-7    mp4   1280x720    30    | ~  23.04MiB 1534k m3u8  | avc1.64001F        mp4a.40.2           [en-US] (original), WEB-E
+136     mp4   1280x720    30    |     8.04MiB  536k https | avc1.64001F   536k video only          720p, WEB-E, mp4_dash
+247     webm  1280x720    30    |     4.39MiB  292k https | vp9           292k video only          720p, WEB-E, webm_dash
+398     mp4   1280x720    30    |     3.61MiB  240k https | av01.0.05M.08 240k video only          720p, WEB-E, mp4_dash
+96-0    mp4   1920x1080   30    | ~  40.16MiB 2673k m3u8  | avc1.640028        mp4a.40.2           [es-US] WEB-E
+96-1    mp4   1920x1080   30    | ~  40.16MiB 2673k m3u8  | avc1.640028        mp4a.40.2           [fr-FR] WEB-E
+96-2    mp4   1920x1080   30    | ~  40.16MiB 2673k m3u8  | avc1.640028        mp4a.40.2           [it] WEB-E
+96-3    mp4   1920x1080   30    | ~  40.16MiB 2673k m3u8  | avc1.640028        mp4a.40.2           [hi] WEB-E
+96-4    mp4   1920x1080   30    | ~  40.16MiB 2673k m3u8  | avc1.640028        mp4a.40.2           [pt-BR] WEB-E
+96-5    mp4   1920x1080   30    | ~  40.16MiB 2674k m3u8  | avc1.640028        mp4a.40.2           [de-DE] WEB-E
+96-6    mp4   1920x1080   30    | ~  40.16MiB 2674k m3u8  | avc1.640028        mp4a.40.2           [en] WEB-E
+96-7    mp4   1920x1080   30    | ~  40.16MiB 2674k m3u8  | avc1.640028        mp4a.40.2           [en-US] (original), WEB-E
+137     mp4   1920x1080   30    |    13.87MiB  925k https | avc1.640028   925k video only          1080p, WEB-E, mp4_dash
+248     webm  1920x1080   30    |     5.89MiB  392k https | vp9           392k video only          1080p, WEB-E, webm_dash
+399     mp4   1920x1080   30    |     5.39MiB  359k https | av01.0.08M.08 359k video only          1080p, WEB-E, mp4_dash
 
 --STDERR--
-[debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=umTDI962BhM']
+[debug] Command-line config: ['-v', '-F', '--cookies', '/tmp/yt.cookies', 'https://www.youtube.com/watch?v=Kp2wDz-DLtk']
 [debug] User config "/home/runner/.config/yt-dlp/config": ['--remote-components', 'ejs:github']
 [debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
 [debug] yt-dlp version stable@2026.10.26 from yt-dlp/yt-dlp [c91f8de0b]
 [debug] Lazy loading extractors is disabled
-[debug] Python 3.14.4 (CPython x86_64 64bit) - Linux-7.0.0-1017-azure-x86_64-with-glibc2.43 (OpenSSL 3.5.5 27 Jan 2026, glibc 2.43)
+[debug] Python 3.14.4 (CPython x86_64 64bit) - Linux-7.0.0-1019-azure-x86_64-with-glibc2.43 (OpenSSL 3.5.5 27 Jan 2026, glibc 2.43)
 [debug] exe versions: ffmpeg 8.0.1 (setts), ffprobe 8.0.1
-[debug] Optional libraries: Cryptodome-3.24.1, brotli-1.2.1, certifi-2026.10.23, mutagen-1.48.1, requests-2.34.2, sqlite3-3.46.1, urllib3-2.8.0, websockets-17.4, yt_dlp_ejs-0.8.0
+[debug] Optional libraries: Cryptodome-3.24.2, brotli-1.2.1, certifi-2026.10.23, mutagen-1.48.1, requests-2.34.2, sqlite3-3.46.1, urllib3-2.8.0, websockets-17.4, yt_dlp_ejs-0.8.0
 [debug] JS runtimes: deno-2.5.4
 [debug] Proxy map: {}
 [debug] Request Handlers: urllib, requests, websockets
@@ -28,18 +110,13 @@
 [debug] [youtube] [pot] PO Token Cache Providers: memory
 [debug] [youtube] [pot] PO Token Cache Spec Providers: webpo
 [debug] [youtube] [jsc] JS Challenge Providers: bun (unavailable), deno, node (unavailable), quickjs (unavailable)
-[debug] [youtube] Forcing "main" player JS variant for player 4efb8b2c
-        original url = /s/player/4efb8b2c/player_es6.vflset/en_US/base.js
-[debug] [youtube] umTDI962BhM: Detected experiment to bind GVS PO Token to video ID for web_embedded client
-[debug] [youtube] umTDI962BhM: web_embedded player response playability status: ERROR
-[debug] [youtube] umTDI962BhM: tv_samsung player response playability status: ERROR
-[debug] [youtube] umTDI962BhM: web player response playability status: ERROR
-ERROR: [youtube] umTDI962BhM: This video is unavailable
-  File "/home/runner/.local/lib/python3.14/site-packages/yt_dlp/extractor/common.py", line 764, in extract
-    ie_result = self._real_extract(url)
-  File "/home/runner/.local/lib/python3.14/site-packages/yt_dlp/extractor/youtube/_video.py", line 4083, in _real_extract
-    self.raise_no_formats(reason, expected=True)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/.local/lib/python3.14/site-packages/yt_dlp/extractor/common.py", line 1271, in raise_no_formats
-    raise ExtractorError(msg, expected=expected, video_id=video_id)
-
+[debug] [youtube] Forcing "main" player JS variant for player a5c2aafe
+        original url = /s/player/a5c2aafe/player_es6.vflset/en_US/base.js
+[debug] [youtube] Kp2wDz-DLtk: Detected experiment to bind GVS PO Token to video ID for web_embedded client
+[debug] [youtube] Kp2wDz-DLtk: Detected a 182s ad skippable after 5s for web
+[debug] [youtube] Kp2wDz-DLtk: Detected a 49s ad skippable after 5s for web
+[debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
+[debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
+[debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -
+[debug] Sort order given by extractor: quality, res, fps, hdr:12, source, vcodec, channels, acodec, lang, proto
+[debug] Formats sorted by: hasvid, ie_pref, quality, res, fps, hdr:12(7), source, vcodec, channels, acodec, lang, proto, size, br, asr, vext, aext, hasaud, id

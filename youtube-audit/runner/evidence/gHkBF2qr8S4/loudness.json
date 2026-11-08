@@ -1,0 +1,27 @@
+ yuv420p(tv, bt709, progressive), 240x426 [SAR 1:1 DAR 40:71], q=2-31, 200 kb/s, 30 fps, 30 tbn (default)
+    Metadata:
+      encoder         : Lavc62.11.100 wrapped_avframe
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:00:31.133000000
+  Stream #0:1(eng): Audio: pcm_s16le, 192000 Hz, stereo, s16, 6144 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 pcm_s16le
+      DURATION        : 00:00:31.168000000
+frame=  903 fps=0.0 q=-0.0 size=N/A time=00:00:26.80 bitrate=N/A speed=53.6x elapsed=0:00:00.50    
+[opus @ 0x59eba2839a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x7e62d8002080] 
+{
+	"input_i" : "-6.63",
+	"input_tp" : "1.47",
+	"input_lra" : "2.00",
+	"input_thresh" : "-16.63",
+	"output_i" : "-23.77",
+	"output_tp" : "-15.46",
+	"output_lra" : "2.00",
+	"output_thresh" : "-33.77",
+	"normalization_type" : "dynamic",
+	"target_offset" : "-0.23"
+}
+[out#0/null @ 0x59eba287f240] video:379KiB audio:23353KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=  934 fps=0.0 q=-0.0 Lsize=N/A time=00:00:31.13 bitrate=N/A speed=55.7x elapsed=0:00:00.55    
