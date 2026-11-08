@@ -1,3 +1,22 @@
+## 2026-11-08 — lens bokeh state
+
+The shared raster engine now renders uniform camera-style defocus with
+thresholded diaphragm highlights. Eight aperture shapes and six numeric
+controls are available on every dropped instance; numeric fields keyframe and
+the existing effect-region system masks the result. Sixteen recipes bring the
+catalog to 10,575 unique base IDs and 15,575 with the lazy 5,000 pack. A live
+Chromium screenshot exposed a translated 3× isolation-canvas bug that the
+headless fixture could not; the engine now processes in canvas coordinates and
+restores the caller transform.
+
+Targeted official Adobe/Krita/Kdenlive/Blender/MDN documentation was read and
+hashed. The official MIT LibreCuts release APK matched its published digest and
+was inspected statically against its tagged source. A 2.4 MB CC0 Poly Haven
+camera model passed all manifest hashes and a Blender 4.3.2 import/render; it
+remains research evidence, not a bundled asset. Evidence and exact limits:
+`docs/LENS_BOKEH_EFFECTS_20261108.md` and
+`research/effect-source-audit-20261108.json`.
+
 ## 2026-11-07 — Motion Lab state
 
 Motion Lab is live from the top bar and mobile workspace menu with 201 original recipes, 16 categories, search/filtering, editable slots, procedural SVG backdrops, aspect setup and 12 Curve Engine motion families. The live browser built and displayed a four-layer Data Story recipe. Unit, typecheck, browser and production build evidence is in `docs/MOTION_LAB_20261107.md` and `qa-output/motion-lab/`.

@@ -123,6 +123,13 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   edgeGlow: { label: 'Edge Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
   edgeGlowColor: { label: 'Edge Colour', kind: 'color' },
   tiltShift: { label: 'Tilt Shift', kind: 'number', min: 0, max: 1, step: 0.01 },
+  lensBokeh: { label: 'Lens Bokeh', kind: 'number', min: 0, max: 1, step: 0.01 },
+  bokehRadius: { label: 'Aperture Size (px)', kind: 'number', min: 2, max: 64, step: 1 },
+  bokehThreshold: { label: 'Highlight Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
+  bokehGain: { label: 'Highlight Gain', kind: 'number', min: 0, max: 3, step: 0.05 },
+  bokehShape: { label: 'Aperture Shape', kind: 'select', options: ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octagon', 'diamond', 'star'] },
+  bokehRotation: { label: 'Aperture Rotation (°)', kind: 'number', min: -180, max: 180, step: 1 },
+  bokehSoftness: { label: 'Edge Softness', kind: 'number', min: 0, max: 1, step: 0.01 },
   vignette: { label: 'Vignette', kind: 'number', min: 0, max: 1, step: 0.01 },
   flicker: { label: 'Flicker', kind: 'number', min: 0, max: 1, step: 0.01 },
   tiles: { label: 'Tiles / Mirror', kind: 'number', min: 0, max: 6, step: 1 },
@@ -374,6 +381,30 @@ function buildCatalog(): FxCatalogEntry[] {
   add('blur-motion', 'Motion Blur', 'motion', 'Shared temporal motion sample kernel', { motionBlur: 0.7 })
   add('tilt-1', 'Tilt Shift Mini', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.55 })
   add('tilt-2', 'Tilt Shift Strong', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.95 })
+  ;[
+    ['Soft Portrait', 'circle', 0.58, 16, 0.64, 0.85, 0, 0.5],
+    ['City Lights', 'circle', 0.84, 24, 0.52, 1.65, 0, 0.24],
+    ['Triangle Prism', 'triangle', 0.76, 22, 0.57, 1.35, -30, 0.18],
+    ['Square Cinema', 'square', 0.72, 20, 0.6, 1.2, 45, 0.2],
+    ['Pentagon Portrait', 'pentagon', 0.7, 21, 0.58, 1.3, -18, 0.22],
+    ['Hex Night', 'hexagon', 0.88, 28, 0.5, 1.7, 30, 0.15],
+    ['Octagon Glass', 'octagon', 0.82, 26, 0.54, 1.55, 22.5, 0.16],
+    ['Diamond Spark', 'diamond', 0.7, 18, 0.68, 1.8, 0, 0.12],
+    ['Star Bloom', 'star', 0.78, 23, 0.62, 1.9, -18, 0.2],
+    ['Warm Dream', 'circle', 0.65, 30, 0.47, 1.35, 0, 0.65],
+    ['Neon Hex', 'hexagon', 0.92, 34, 0.44, 2.15, 0, 0.1],
+    ['Small Practical', 'circle', 0.42, 9, 0.74, 1.05, 0, 0.32],
+    ['Rack Focus Soft', 'octagon', 0.5, 14, 0.62, 1.15, 0, 0.42],
+    ['Anamorphic Gems', 'diamond', 0.9, 32, 0.5, 2.3, 45, 0.08],
+    ['Vintage Iris', 'pentagon', 0.8, 27, 0.56, 1.55, 12, 0.36],
+    ['Hard Aperture', 'hexagon', 1, 38, 0.7, 2.5, 30, 0],
+  ].forEach(([name, shape, amount, radius, threshold, gain, rotation, softness], i) => add(
+    `bokeh-lens-${i}`,
+    `Lens Bokeh ${name}`,
+    'blur',
+    'Lens defocus with editable iris and highlight controls',
+    { lensBokeh: amount as number, bokehRadius: radius as number, bokehThreshold: threshold as number, bokehGain: gain as number, bokehShape: shape as string, bokehRotation: rotation as number, bokehSoftness: softness as number },
+  ))
   ;[4, 8, 14].forEach((f, i) => add(`fblur-${i}`, `Fractal Blur ${f}px`, 'blur', 'AE Fractal Blur family (effects reference)', { fractalBlur: f }))
 
   // ---- Distort ----
@@ -588,7 +619,10 @@ function buildCatalog(): FxCatalogEntry[] {
   }
 
     // ---- Alight Motion study corpus: every mapped AM effect joins the site catalog ----
+  const catalogIds = new Set(out.map((entry) => entry.id))
   for (const am of AM_FX_CATALOG) {
+    if (catalogIds.has(am.id)) continue
+    catalogIds.add(am.id)
     out.push({ id: am.id, name: am.name, cat: am.cat as FxCat, trace: AM_TRACE, patch: am.patch })
   }
 return [...out, ...buildStudioLooks()]

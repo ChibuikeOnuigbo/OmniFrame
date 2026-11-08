@@ -28,3 +28,17 @@ controls drive the shared preview/export renderer, survive save/reload and
 undo, and pass an appropriate render or interaction check. Research queues,
 effect names, model listings and downloaded tutorials remain evidence or
 leads until those checks pass.
+
+## Current measurable milestones
+
+- Keep the base effect catalog above 10,000 unique recipe IDs while reporting
+  recipe, algorithm and full-motion acceptance counts separately.
+- Add missing effect families as bounded shared render kernels with editable
+  parameters, keyframes, effect-region masks and visual fixtures; avoid padding
+  the catalog with names that map to no renderer.
+- Maintain one project and render contract across browser preview, browser
+  export and the Tauri desktop targets. Web typecheck/build and browser QA run
+  on each increment; Windows, macOS and Linux installers remain release-CI
+  gates rather than claims made from this Linux runner alone.
+- Use official documentation and clearly licensed source/assets for research.
+  Downloaded APKs are inspected statically and never executed on the runner.

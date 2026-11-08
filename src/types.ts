@@ -629,6 +629,14 @@ export interface ClipEffect extends NgEffect {
   edgeGlowColor?: string
   /** AM Lens Blur tilt-shift: horizontal sharp band, 0..1 (0 = off). */
   tiltShift?: number
+  /** Camera/lens bokeh: defocus plus diaphragm-shaped highlight bloom. */
+  lensBokeh?: number // 0..1 overall defocus mix
+  bokehRadius?: number // 2..64 px aperture/blur radius
+  bokehThreshold?: number // 0..1 highlight cutoff
+  bokehGain?: number // 0..3 highlight energy
+  bokehShape?: 'circle' | 'triangle' | 'square' | 'pentagon' | 'hexagon' | 'octagon' | 'diamond' | 'star'
+  bokehRotation?: number // -180..180 degrees
+  bokehSoftness?: number // 0..1 aperture-edge softness
   /** AM Vignette: edge darkening 0..1. */
   vignette?: number
   /** AM Flicker: random brightness jitter 0..1. */

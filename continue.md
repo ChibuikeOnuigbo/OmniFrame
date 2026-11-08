@@ -1,3 +1,20 @@
+## 2026-11-08 — lens bokeh, exact catalog count and source audit
+
+Camera lens bokeh is now a shared browser/headless raster effect with editable
+amount, radius, highlight threshold/gain, eight aperture shapes, rotation and
+softness. Sixteen real recipes bring the base catalog to 10,575 unique IDs and
+the loaded total to 15,575 with the existing 5,000 pack. These are recipe
+counts. Numeric controls keyframe and the existing effect-region mask scopes
+the result. A live-browser translated-pad bug was found from the screenshot and
+fixed; rerun the live UI test after future pixel-grade transform work.
+
+Official blur/animation pages, the MIT LibreCuts release/source and a CC0 Poly
+Haven camera candidate are recorded in `docs/LENS_BOKEH_EFFECTS_20261108.md`
+and `research/effect-source-audit-20261108.json`. The APK was never executed;
+the camera candidate was hash-verified and Blender-rendered but not bundled.
+Do not call this a complete scan of every linked product manual or a native
+Android/desktop certification.
+
 ## 2026-11-07 — Motion Lab 201 original editable templates
 
 The orphaned four-item sequence-template modal is now a reachable Motion Lab with 201 original recipes, 16 categories, 12 keyframe motion families, eight procedural backdrops, search/filtering, media slot mapping and a real editable scene builder. The top-bar/mobile opener, modal stacking, generated SVG background, aspect setting, media fallbacks, styled text layers and Curve Engine keys passed unit and live Chromium checks. Evidence and exact access limits: `docs/MOTION_LAB_20261107.md`, `research/motionvid-public-catalog-scope-20261107.json`, `qa-output/motion-lab/`.

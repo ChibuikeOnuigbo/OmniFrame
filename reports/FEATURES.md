@@ -1,3 +1,18 @@
+## 2026-11-08 — camera lens bokeh and licensed source audit
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Shared highlight-defocus renderer with eight diaphragm shapes | `src/lib/pixelGrade.ts`, `src/types.ts` | Eight deterministic distinct renders; inspected contact sheet |
+| Amount/radius/threshold/gain/shape/rotation/softness controls | `effectCatalog.ts`, `customEffects.ts`, `FxStackSection.tsx` | Import clamping, numeric keyframe and live shape persistence |
+| Sixteen curated lens-bokeh recipes and unique catalog IDs | `effectCatalog.ts` | 10,575 unique base / 15,575 loaded recipe count; duplicate AM ID removed |
+| Effect-region and translated clip-isolation correctness | `pixelGrade.ts`, existing `playback.ts` mask path | Live ellipse-mask screenshot; browser-caught shifted/black output fixed |
+| Official documentation, licensed APK and CC0 model audit | `research/effect-source-audit-20261108.json` | LibreCuts APK digest/ZIP check; Poly Haven 11-file MD5 check and Blender render |
+
+Details and limits: `docs/LENS_BOKEH_EFFECTS_20261108.md`. Recipe totals are
+not independent algorithm or full-motion acceptance counts. The LibreCuts APK
+was statically inspected and never executed. The CC0 camera was rendered as a
+candidate and was not bundled into the product library.
+
 ## 2026-11-07 — Motion Lab template system
 
 | Change | Code | Verification / artifact |

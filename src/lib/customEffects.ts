@@ -56,7 +56,10 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect | 'motion
   replaceBg: 'none',
   zoomBlur: 0, directionalBlur: 0, directionalBlurAngle: 0, directionalBlurBias: 0,
   directionalBlurSpread: 0, directionalBlurThreshold: 0, glow: 0, edgeGlow: 0,
-  edgeGlowColor: '#ffdc78', tiltShift: 0, vignette: 0, flicker: 0, tiles: 0,
+  edgeGlowColor: '#ffdc78', tiltShift: 0,
+  lensBokeh: 0, bokehRadius: 18, bokehThreshold: 0.62, bokehGain: 1,
+  bokehShape: 'circle', bokehRotation: 0, bokehSoftness: 0.3,
+  vignette: 0, flicker: 0, tiles: 0,
   pinchBulge: 0, swirl: 0, gradientMap: 0, gradientMapFrom: '#0a0a28', gradientMapTo: '#ffbe5a',
   threshold: 0, sharpen: 0, findEdges: 0, echo: 0, echoDecay: 0.5, echoSpacing: 0.08,
   autoShake: 0, autoShakeFreq: 8, timeQuantization: 0, motionBlur: 0, reverse: 0,
@@ -144,6 +147,12 @@ const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   directionalBlurBias: [-1, 1],
   directionalBlurSpread: [0, 120],
   directionalBlurThreshold: [0, 1],
+  lensBokeh: [0, 1],
+  bokehRadius: [2, 64],
+  bokehThreshold: [0, 1],
+  bokehGain: [0, 3],
+  bokehRotation: [-180, 180],
+  bokehSoftness: [0, 1],
 }
 
 const clamp = (v: number, [lo, hi]: [number, number]) => Math.min(hi, Math.max(lo, v))
@@ -171,6 +180,7 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   if (typeof raw.burstFx === 'string' && (BURST_FAMILIES as readonly string[]).includes(raw.burstFx)) out.burstFx = raw.burstFx as ClipEffect['burstFx']
   if (raw.turbulentMode === 'fbm' || raw.turbulentMode === 'curl' || raw.turbulentMode === 'glass') out.turbulentMode = raw.turbulentMode
   if (raw.liquifyMode === 'push' || raw.liquifyMode === 'bulge' || raw.liquifyMode === 'pinch' || raw.liquifyMode === 'twirl') out.liquifyMode = raw.liquifyMode
+  if (typeof raw.bokehShape === 'string' && ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octagon', 'diamond', 'star'].includes(raw.bokehShape)) out.bokehShape = raw.bokehShape as ClipEffect['bokehShape']
   if (typeof raw.particleTint === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.particleTint)) out.particleTint = raw.particleTint
   if (raw.deviceOverlay === 'none' || raw.deviceOverlay === 'phone' || raw.deviceOverlay === 'monitor') out.deviceOverlay = raw.deviceOverlay
   for (const k of ['fcgColorA', 'fcgColorB', 'fcgColorC', 'fcgColorD'] as const) {
@@ -235,6 +245,7 @@ const LABELS: Partial<Record<keyof ClipEffect, string>> = {
   aura: 'Aura',
   liquifyAmount: 'Liquify',
   turbulent: 'Turbulence',
+  lensBokeh: 'Lens Bokeh',
 }
 
 /** Short human summary of what a custom effect does, e.g. "Sepia · Hue shift · LUT: Warm". */

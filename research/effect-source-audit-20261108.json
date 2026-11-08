@@ -1,0 +1,84 @@
+{
+  "date": "2026-11-08",
+  "scope": "Official blur/animation documentation, a licensed Android editor release, and a CC0 optics-related 3D model used to guide the lens-bokeh increment.",
+  "documentation": [
+    {
+      "source": "Adobe After Effects — Blur & Sharpen effects",
+      "url": "https://helpx.adobe.com/after-effects/using/blur-sharpen-effects.html",
+      "bytes": 528794,
+      "sha256": "a29f06fdae36f9bac1d5242d7b197e2ca4d569c92cc049d45360ac34f03f92fd",
+      "usedFindings": ["Camera Lens Blur iris shape/roundness/aspect/rotation", "highlight threshold and gain", "bounded blur radius and performance relevance"]
+    },
+    {
+      "source": "Krita 5.3 Manual — Blur filters",
+      "url": "https://docs.krita.org/en/reference_manual/filters/blur.html",
+      "bytes": 16636,
+      "sha256": "d0537d4b6874d4bb963655c0015c3855e6afc6a17beb55eefa4f589dc8b39a28",
+      "usedFindings": ["separate Gaussian, Motion, Blur, and Lens Blur families"]
+    },
+    {
+      "source": "Kdenlive Manual — Blur and Sharpen",
+      "url": "https://docs.kdenlive.org/en/effects_and_filters/video_effects/blur_and_sharpen.html",
+      "bytes": 15873,
+      "sha256": "bf93468a1342faa7dd8b1d6b930b1ff1c1ca8a4a87306a7f83abb4f8e594517f",
+      "usedFindings": ["Average, Bilateral, Box, Directional, Gaussian, Planes, Shape Adaptive, Smart and Square blur taxonomy", "effect keyframe documentation link"]
+    },
+    {
+      "source": "Blender 5.2 LTS Manual — Bokeh Blur Node",
+      "url": "https://docs.blender.org/manual/en/latest/compositing/types/filter/blur/bokeh_blur.html",
+      "bytes": 474023,
+      "sha256": "51e6c85035e70e7f4e0db03049fb433aef5307e368f86ed463a41d5a822e5c55",
+      "usedFindings": ["pixel-sized blur control", "external bokeh shape input", "calculation-area restriction and masking as performance controls"]
+    },
+    {
+      "source": "Blender 5.2 LTS Manual — Defocus Node",
+      "url": "https://docs.blender.org/manual/en/latest/compositing/types/filter/blur/defocus.html",
+      "bytes": 478668,
+      "sha256": "987d057671714322282422f597ec704ae789ccccd21ec23183abcf0b8b29a670",
+      "usedFindings": ["camera depth-of-field model", "bokeh angle", "maximum blur radius as a performance bound"]
+    },
+    {
+      "source": "MDN — Using the Web Animations API",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API",
+      "bytes": 193629,
+      "sha256": "ae9dd7a45fbc12b86c44551763e593e8b0c02983057389a3514d7b72dcf714a7",
+      "usedFindings": ["time-based keyframes and reusable timing data; no code copied"]
+    }
+  ],
+  "apk": {
+    "project": "LibreCuts",
+    "repository": "https://github.com/tharunbirla/LibreCuts",
+    "release": "https://github.com/tharunbirla/LibreCuts/releases/tag/v1.0-beta7",
+    "tag": "v1.0-beta7",
+    "sourceCommit": "240132f11c9bbd7dc58df0fbbe0d21990b0b0908",
+    "license": "MIT",
+    "asset": "LibreCuts-arm64-v8a.apk",
+    "bytes": 52994349,
+    "sha256": "cabdf4356fef9df2a048f88db27a6009953b8e920787e956071e074ecc8b04ca",
+    "verification": "GitHub release digest matched; ZIP integrity passed; APK was statically inspected and never executed.",
+    "architectureFindings": ["non-destructive operation-list project model", "JSON project round-trip", "overlay and mask keyframe data", "hardware H.264 encoder with software fallback", "export progress from FFmpeg timestamps"]
+  },
+  "model": {
+    "name": "Camera 01",
+    "source": "https://polyhaven.com/a/Camera_01",
+    "api": "https://api.polyhaven.com/files/Camera_01",
+    "author": "Rajil Jose Macatangay",
+    "license": "CC0",
+    "variant": "glTF 1K",
+    "files": 11,
+    "bytes": 2439882,
+    "polycount": 26987,
+    "meshes": 2,
+    "materials": 4,
+    "textures": 9,
+    "filesHash": "6db4d73f8b708eb87597df841c1f6e9beea70778",
+    "verification": "All 11 downloads matched the Poly Haven MD5 manifest; glTF imported into Blender 4.3.2 and rendered without executing embedded scripts.",
+    "bundled": false,
+    "reviewImage": "qa-output/lens-bokeh/polyhaven-camera-01.png"
+  },
+  "limits": [
+    "Documentation retrieval and targeted reading do not establish that every page in each product manual was read.",
+    "The LibreCuts APK/source audit is an architecture comparison, not Android runtime certification.",
+    "The CC0 camera is a reviewed candidate and was not added to the shipped model library in this increment."
+  ]
+}

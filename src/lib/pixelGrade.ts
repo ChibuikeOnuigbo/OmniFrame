@@ -12,11 +12,138 @@ import { deformRGBA, type DeformationSpec } from './deformation'
 // and long exports, especially when a thresholded streak is active.
 let blurSourceCanvas: HTMLCanvasElement | null = null
 let blurBrightCanvas: HTMLCanvasElement | null = null
+let bokehSourceCanvas: HTMLCanvasElement | null = null
+let bokehHighlightsCanvas: HTMLCanvasElement | null = null
 
 /* ---- Alight-Motion-named pixel family (guide.alightmotion.com/effects) ---- */
 const amHex = (v: string | undefined, d: [number, number, number]): [number, number, number] =>
   v && v[0] === '#' ? [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)] : d
 const amRnd = (seed: number) => { const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
+
+function aperturePath(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  shape: ClipEffect['bokehShape'],
+  rotation: number,
+): void {
+  ctx.beginPath()
+  if (!shape || shape === 'circle') {
+    ctx.arc(x, y, radius, 0, Math.PI * 2)
+    return
+  }
+  const star = shape === 'star'
+  const sides = shape === 'triangle' ? 3
+    : shape === 'square' || shape === 'diamond' ? 4
+      : shape === 'pentagon' ? 5
+        : shape === 'hexagon' ? 6
+          : 8
+  const points = star ? 10 : sides
+  const base = rotation + (shape === 'diamond' ? Math.PI / 4 : -Math.PI / 2)
+  for (let i = 0; i < points; i++) {
+    const rr = star && i % 2 ? radius * 0.43 : radius
+    const a = base + (i / points) * Math.PI * 2
+    const px = x + Math.cos(a) * rr
+    const py = y + Math.sin(a) * rr
+    if (i === 0) ctx.moveTo(px, py)
+    else ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+}
+
+/**
+ * Camera-style defocus. The base image receives a bounded blur, while only
+ * pixels over the highlight threshold are re-projected as diaphragm shapes.
+ * Scratch surfaces are reused because this path runs for every preview/export
+ * frame and native canvas allocation was a measured long-export bottleneck.
+ */
+function applyLensBokeh(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  const amount = Math.max(0, Math.min(1, e.lensBokeh ?? 0))
+  if (amount <= 0 || !w || !h) return
+  const radius = Math.max(2, Math.min(64, e.bokehRadius ?? 18))
+  const threshold = Math.max(0, Math.min(1, e.bokehThreshold ?? 0.62))
+  const gain = Math.max(0, Math.min(3, e.bokehGain ?? 1))
+  const softness = Math.max(0, Math.min(1, e.bokehSoftness ?? 0.3))
+  const rotation = ((e.bokehRotation ?? 0) * Math.PI) / 180
+
+  const source = bokehSourceCanvas ??= document.createElement('canvas')
+  if (source.width !== w) source.width = w
+  if (source.height !== h) source.height = h
+  const sx = source.getContext('2d')!
+  sx.clearRect(0, 0, w, h)
+  sx.drawImage(ctx.canvas, 0, 0)
+
+  // A full blurred plate plus the dry plate at (1 - amount) gives a stable
+  // crossfade on opaque and transparent clips without accumulating brightness.
+  // Clip isolation uses a translated 3× pad context. Work in canvas space and
+  // restore that caller transform so effect masks do not receive shifted/black
+  // pixels in browser preview or recorder export.
+  ctx.save()
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  ctx.clearRect(0, 0, w, h)
+  ctx.save()
+  ctx.filter = `blur(${Math.max(0.5, radius * amount * 0.42).toFixed(2)}px)`
+  ctx.drawImage(source, 0, 0)
+  ctx.restore()
+  if (amount < 0.999) {
+    ctx.save()
+    ctx.globalAlpha = 1 - amount
+    ctx.drawImage(source, 0, 0)
+    ctx.restore()
+  }
+
+  const highlights = bokehHighlightsCanvas ??= document.createElement('canvas')
+  if (highlights.width !== w) highlights.width = w
+  if (highlights.height !== h) highlights.height = h
+  const hx = highlights.getContext('2d')!
+  hx.clearRect(0, 0, w, h)
+
+  try {
+    const pixels = sx.getImageData(0, 0, w, h).data
+    const step = Math.max(3, Math.round(radius * 0.65), Math.ceil(Math.sqrt((w * h) / 1400)))
+    const candidates: { x: number; y: number; r: number; g: number; b: number; energy: number }[] = []
+    const offsets = [-0.3, 0, 0.3]
+    for (let gy = step / 2; gy < h; gy += step) {
+      for (let gx = step / 2; gx < w; gx += step) {
+        let best = -1, bi = 0, bx = 0, by = 0
+        for (const oy of offsets) for (const ox of offsets) {
+          const px = Math.max(0, Math.min(w - 1, Math.round(gx + ox * step)))
+          const py = Math.max(0, Math.min(h - 1, Math.round(gy + oy * step)))
+          const i = (py * w + px) * 4
+          if (pixels[i + 3] < 8) continue
+          const lum = (pixels[i] * 0.2126 + pixels[i + 1] * 0.7152 + pixels[i + 2] * 0.0722) / 255
+          if (lum > best) { best = lum; bi = i; bx = px; by = py }
+        }
+        if (best <= threshold) continue
+        candidates.push({
+          x: bx, y: by,
+          r: pixels[bi], g: pixels[bi + 1], b: pixels[bi + 2],
+          energy: Math.min(1, (best - threshold) / Math.max(0.02, 1 - threshold)),
+        })
+      }
+    }
+    candidates.sort((a, b) => b.energy - a.energy)
+    for (const c of candidates.slice(0, 520)) {
+      const spotRadius = radius * (0.55 + c.energy * 0.55)
+      const localRotation = rotation + (amRnd(seed + c.x * 0.17 + c.y * 0.31) - 0.5) * 0.12
+      aperturePath(hx, c.x, c.y, spotRadius, e.bokehShape ?? 'circle', localRotation)
+      hx.globalAlpha = Math.min(0.92, amount * c.energy * gain * 0.42)
+      hx.fillStyle = `rgb(${c.r},${c.g},${c.b})`
+      hx.fill()
+    }
+    hx.globalAlpha = 1
+    ctx.save()
+    ctx.globalCompositeOperation = 'screen'
+    ctx.globalAlpha = Math.min(1, 0.62 + gain * 0.16)
+    if (softness > 0) ctx.filter = `blur(${Math.max(0.2, softness * radius * 0.18).toFixed(2)}px)`
+    ctx.drawImage(highlights, 0, 0)
+    ctx.restore()
+  } catch {
+    // Cross-origin/tainted sources still receive the base defocus above.
+  }
+  ctx.restore()
+}
 
 function applyLiquifyEffect(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number): void {
   const amount = Math.max(-1, Math.min(1, e.liquifyAmount ?? 0))
@@ -121,6 +248,7 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
       amBlurStack(ctx, w, h, passes)
     }
   }
+  applyLensBokeh(ctx, e, w, h, seed)
   if (e.glow && e.glow > 0) {
     const bright = document.createElement('canvas')
     bright.width = w; bright.height = h
@@ -417,6 +545,7 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.glow && effect.glow > 0) ||
     (effect.edgeGlow && effect.edgeGlow > 0) ||
     (effect.tiltShift && effect.tiltShift > 0) ||
+    (effect.lensBokeh && effect.lensBokeh > 0) ||
     (effect.vignette && effect.vignette > 0) ||
     (effect.flicker && effect.flicker > 0) ||
     (effect.tiles && effect.tiles >= 2) ||
