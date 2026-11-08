@@ -31,8 +31,9 @@ leads until those checks pass.
 
 ## Current measurable milestones
 
-- Keep the base effect catalog above 10,000 unique recipe IDs while reporting
-  recipe, algorithm and full-motion acceptance counts separately.
+- Keep at least 150,000 stable executable recipe IDs available through paged
+  search while reporting recipe, renderer-family and full-motion acceptance
+  counts separately. Do not materialize the whole indexed bank in the UI.
 - Add missing effect families as bounded shared render kernels with editable
   parameters, keyframes, effect-region masks and visual fixtures; avoid padding
   the catalog with names that map to no renderer.
@@ -42,3 +43,6 @@ leads until those checks pass.
   gates rather than claims made from this Linux runner alone.
 - Use official documentation and clearly licensed source/assets for research.
   Downloaded APKs are inspected statically and never executed on the runner.
+- Keep the ten primary left-dock modes under a repeatable 200-control UI gate:
+  visible focus, at least 24×24 targets, explicit selected semantics, quieter
+  hover states and unclipped grid/flex grouping.

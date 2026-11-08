@@ -200,7 +200,7 @@ export function SectionsNavigator({
             className={`min-h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
               selected
                 ? 'border-brand bg-brand/25 text-white shadow-xs'
-                : 'border-ink-700 bg-ink-850 text-ink-300 hover:bg-ink-800 hover:text-ink-100'
+                : 'border-ink-700 bg-ink-850 text-ink-300 hover:border-ink-500 hover:bg-ink-800 hover:text-ink-100'
             }`}
           >
             {s.title}

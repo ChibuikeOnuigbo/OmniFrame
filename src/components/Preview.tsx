@@ -313,7 +313,8 @@ export function Preview() {
         <Tooltip label="Drawing & Paint">
         <IconButton
           data-testid="toggle-drawing-btn"
-
+          aria-label="Toggle drawing and paint"
+          title="Toggle drawing and paint"
           active={drawingEnabled}
           onClick={() => toggleDrawingEnabled()}
         >

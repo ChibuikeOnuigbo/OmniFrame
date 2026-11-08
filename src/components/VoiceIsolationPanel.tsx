@@ -558,6 +558,7 @@ export function VoiceIsolationPanel() {
           <button
             type="button"
             data-testid="panel-mode-keep-vocal"
+            aria-pressed={mode === 'keep_vocal'}
             onClick={() => handleModeChange('keep_vocal')}
             disabled={processing}
             className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${mode === 'keep_vocal' ? 'border-brand bg-brand/15 text-white' : 'border-ink-800 bg-ink-900/60 text-ink-400 hover:bg-ink-800'}`}
@@ -568,6 +569,7 @@ export function VoiceIsolationPanel() {
           <button
             type="button"
             data-testid="panel-mode-remove-vocal"
+            aria-pressed={mode === 'remove_vocal'}
             onClick={() => handleModeChange('remove_vocal')}
             disabled={processing}
             className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${mode === 'remove_vocal' ? 'border-brand bg-brand/15 text-white' : 'border-ink-800 bg-ink-900/60 text-ink-400 hover:bg-ink-800'}`}

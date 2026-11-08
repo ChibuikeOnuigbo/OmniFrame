@@ -1081,7 +1081,11 @@ export function TopBar() {
                     {[
                       ...EDITABLE_SHORTCUTS,
                     ].map((item) => {
-                      const curKey = customShortcuts[item.id] || item.defaultKey
+                      const curKey = Object.prototype.hasOwnProperty.call(customShortcuts, item.id) ? customShortcuts[item.id] : item.defaultKey
+                      const conflict = curKey ? EDITABLE_SHORTCUTS.find((other) => {
+                        const otherKey = Object.prototype.hasOwnProperty.call(customShortcuts, other.id) ? customShortcuts[other.id] : other.defaultKey
+                        return other.id !== item.id && otherKey.toLowerCase() === curKey.toLowerCase()
+                      }) : undefined
                       const isEditing = editingShortcutId === item.id
                       return (
                         <div
@@ -1089,7 +1093,7 @@ export function TopBar() {
                           data-testid={`shortcut-row-${item.id}`}
                           className="flex items-center justify-between gap-3 p-1.5 rounded-lg bg-ink-850 hover:bg-ink-800 transition-colors"
                         >
-                          <span className="text-xs text-ink-200">{item.label}</span>
+                          <span className="min-w-0 text-xs text-ink-200">{item.label}{conflict && <span className="ml-1 block text-[9px] text-amber-300">Conflicts with {conflict.label}</span>}</span>
                           <div className="flex items-center gap-1.5">
                             {isEditing ? (
                               <div className="flex items-center gap-1">
@@ -1108,7 +1112,7 @@ export function TopBar() {
                                     }
                                   }}
                                   placeholder="Type key"
-                                  className="w-16 h-6 rounded bg-ink-900 border border-brand px-1.5 font-mono text-[11px] text-white outline-none"
+                                  className="h-6 w-28 rounded bg-ink-900 border border-brand px-1.5 font-mono text-[11px] text-white outline-none"
                                 />
                                 <button
                                   type="button"
@@ -1119,6 +1123,14 @@ export function TopBar() {
                                   className="px-1.5 py-0.5 rounded bg-brand text-[10px] text-white"
                                 >
                                   Save
+                                </button>
+                                <button
+                                  type="button"
+                                  data-testid={`clear-shortcut-${item.id}`}
+                                  onClick={() => { setCustomShortcut(item.id, ''); setEditingShortcutId(null) }}
+                                  className="px-1.5 py-0.5 rounded border border-ink-700 text-[10px] text-ink-300"
+                                >
+                                  Clear
                                 </button>
                               </div>
                             ) : (
@@ -1132,7 +1144,7 @@ export function TopBar() {
                                 }}
                                 className="rounded border border-ink-700 bg-ink-800 px-2 py-1 font-mono text-[10px] text-ink-300 hover:border-brand hover:text-white transition-colors"
                               >
-                                {curKey}
+                                {curKey || 'Unassigned'}
                               </button>
                             )}
                           </div>

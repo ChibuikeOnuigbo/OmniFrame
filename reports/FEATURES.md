@@ -1,3 +1,28 @@
+## 2026-11-08 — 200-control UI quality gate
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Three-cell Effects collection picker and four-column category grid | `EffectsPanel.tsx` | Arrow order/cycling, 24px targets and four computed columns asserted live |
+| Persistent selected state, quieter hover border and pressed semantics | `EffectsPanel.tsx`, `SectionsNav.tsx`, `TransitionsPanel.tsx`, audio/3D panels | Computed selected/rest/hover colors and ARIA state checked |
+| Shared keyboard focus fallback and repaired undersized controls | `index.css`, `LinkPanel.tsx`, `TransitionsPanel.tsx` | Every measured target is at least 24×24 with visible focus |
+| Exactly 200 live UI scans and ten cutout contact sheets | `qa/ui-200-scan-e2e.mjs` | 200 PASS / 0 REVIEW / 0 FAIL; zero page errors |
+| Broader mode/submode affordance sweep at 1440 and 1024 | `qa/ui-affordance-audit.mjs` | 0 tiny, 0 unnamed and 0 duplicate-test-id findings |
+
+Full numbered evidence: `docs/UI_QUALITY_200_SCAN_20261108.md` and
+`qa-output/ui-200/`.
+
+## 2026-11-08 — 150K effects and persistent runtime shortcuts
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| 139,425 deterministic indexed recipes across 12 generator families | `effectRecipeBank.ts` | All IDs unique/reconstructable; 150,000 exact base total |
+| Paged UI and MCP search without allocating the full bank | `effectCatalog.ts`, `EffectsPanel.tsx`, `tools/mcp/tools.mjs` | Final ID applied; 155,000 live with authored pack |
+| 44 configurable commands wired to Studio runtime | `settingsRegistry.ts`, `Studio.tsx`, `store.ts` | Rebind, execute, reload, clear and Reset-compatible persistence |
+| Removed duplicate hard-coded Timeline shortcut listeners | `Timeline.tsx` | Group, multi-delete and export range commands use one registry |
+
+Details: `docs/EFFECT_CATALOG_150K_20261108.md`. Recipe count is separate
+from renderer-family count, perceptual uniqueness and full-motion acceptance.
+
 ## 2026-11-08 — camera lens bokeh and licensed source audit
 
 | Change | Code | Verification / artifact |

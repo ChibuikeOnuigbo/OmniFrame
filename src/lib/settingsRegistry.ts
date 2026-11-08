@@ -7,7 +7,7 @@ export interface SettingDefinition {
   label: string
   description: string
   aliases: string[]
-  controlType: 'select' | 'toggle' | 'radio' | 'read-only'
+  controlType: 'select' | 'toggle' | 'radio' | 'read-only' | 'shortcut'
   defaultValue: string | number | boolean
   scope: SettingsScope
   persistent: boolean
@@ -31,22 +31,90 @@ export interface EditableShortcut {
  * "split" reported a different default binding than the panel showed.
  */
 export const EDITABLE_SHORTCUTS: EditableShortcut[] = [
-  { id: 'split', label: 'Split at Playhead', defaultKey: 'B' },
+  { id: 'split', label: 'Split at Playhead', defaultKey: 'Ctrl+B' },
   { id: 'marker', label: 'Add Marker', defaultKey: 'M' },
+  { id: 'fixMarker', label: 'Add Fix Marker', defaultKey: 'Alt+M' },
   { id: 'hide', label: 'Hide / Unhide Clip', defaultKey: 'H' },
   { id: 'selectTool', label: 'Select Tool', defaultKey: 'V' },
   { id: 'bladeTool', label: 'Blade Tool', defaultKey: 'B' },
-  { id: 'delete', label: 'Delete Clip', defaultKey: 'Delete' },
+  { id: 'delete', label: 'Delete Clip', defaultKey: 'Delete / Backspace' },
   { id: 'duplicate', label: 'Duplicate Clip', defaultKey: 'Ctrl+D' },
   { id: 'cut', label: 'Cut Clip', defaultKey: 'Ctrl+X' },
   { id: 'copy', label: 'Copy Clip', defaultKey: 'Ctrl+C' },
   { id: 'paste', label: 'Paste Clip', defaultKey: 'Ctrl+V' },
   { id: 'undo', label: 'Undo', defaultKey: 'Ctrl+Z' },
-  { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Shift+Z' },
+  { id: 'redo', label: 'Redo', defaultKey: 'Ctrl+Y / Ctrl+Shift+Z' },
   { id: 'playPause', label: 'Play / Pause', defaultKey: 'Space' },
+  { id: 'stepBack', label: 'Previous Frame', defaultKey: 'ArrowLeft' },
+  { id: 'stepForward', label: 'Next Frame', defaultKey: 'ArrowRight' },
+  { id: 'jumpBack', label: 'Back One Second', defaultKey: 'Shift+ArrowLeft' },
+  { id: 'jumpForward', label: 'Forward One Second', defaultKey: 'Shift+ArrowRight' },
+  { id: 'prevMarker', label: 'Previous Marker', defaultKey: 'Alt+ArrowLeft / Alt+Shift+M' },
+  { id: 'nextMarker', label: 'Next Marker', defaultKey: 'Alt+ArrowRight / Shift+M' },
+  { id: 'zoomIn', label: 'Timeline Zoom In', defaultKey: '= / Shift+=' },
+  { id: 'zoomOut', label: 'Timeline Zoom Out', defaultKey: '-' },
+  { id: 'shuttleReverse', label: 'Reverse Playback', defaultKey: 'J' },
+  { id: 'shuttleStop', label: 'Stop Playback', defaultKey: 'K' },
+  { id: 'shuttleForward', label: 'Forward Playback', defaultKey: 'L' },
+  { id: 'selectGaps', label: 'Select Timeline Gaps', defaultKey: 'G' },
+  { id: 'removeGaps', label: 'Remove Timeline Gaps', defaultKey: 'Shift+G' },
+  { id: 'exportIn', label: 'Set Export In', defaultKey: 'I' },
+  { id: 'exportOut', label: 'Set Export Out', defaultKey: 'O' },
+  { id: 'clearExportRange', label: 'Clear Export Range', defaultKey: 'Alt+X' },
+  { id: 'toggleSnapping', label: 'Toggle Snapping', defaultKey: 'Shift+S' },
+  { id: 'group', label: 'Group Selection', defaultKey: 'Ctrl+G' },
+  { id: 'ungroup', label: 'Ungroup Selection', defaultKey: 'Ctrl+Shift+G' },
+  { id: 'effectsPanel', label: 'Open Effects', defaultKey: 'Shift+E' },
+  { id: 'mediaPanel', label: 'Open Media', defaultKey: 'Shift+A' },
+  { id: 'textPanel', label: 'Open Text', defaultKey: 'Shift+T' },
   { id: 'omniframe', label: 'OmniFrame Tab', defaultKey: 'Alt+O' },
-  { id: 'threed', label: 'Toggle 3D Mode', defaultKey: '3' },
+  { id: 'threed', label: 'Open 3D Mode', defaultKey: '3' },
+  { id: 'toggleLeftPanel', label: 'Toggle Left Panel', defaultKey: '[' },
+  { id: 'toggleRightPanel', label: 'Toggle Right Panel', defaultKey: ']' },
+  { id: 'focusCanvas', label: 'Canvas Focus', defaultKey: 'Shift+1' },
+  { id: 'focusTimeline', label: 'Timeline Focus', defaultKey: 'Shift+2' },
+  { id: 'focusReset', label: 'Reset Workspace Focus', defaultKey: 'Shift+0' },
+  { id: 'help', label: 'Help and Tool Info', defaultKey: 'Shift+/' },
 ]
+
+export const EDITABLE_SHORTCUT_DEFAULTS: Record<string, string> = Object.fromEntries(
+  EDITABLE_SHORTCUTS.map((shortcut) => [shortcut.id, shortcut.defaultKey]),
+)
+
+export interface ShortcutEventLike {
+  key: string
+  ctrlKey: boolean
+  metaKey: boolean
+  altKey: boolean
+  shiftKey: boolean
+}
+
+const normalizedKey = (key: string): string => {
+  const value = key.trim().toLowerCase()
+  if (value === 'space' || value === 'spacebar' || value === '') return ' '
+  if (value === 'del') return 'delete'
+  if (value === 'left') return 'arrowleft'
+  if (value === 'right') return 'arrowright'
+  if (value === '+') return '='
+  if (value === '_') return '-'
+  if (value === '?') return '/'
+  return value
+}
+
+/** Exact chord matching. Ctrl bindings also accept Command on macOS. */
+export function shortcutMatches(event: ShortcutEventLike, binding: string | undefined): boolean {
+  if (!binding?.trim()) return false
+  return binding.split(/\s+\/\s+/).some((alternative) => {
+    const parts = alternative.split('+').map((part) => part.trim()).filter(Boolean)
+    if (!parts.length) return false
+    const tokens = new Set(parts.slice(0, -1).map((part) => part.toLowerCase()))
+    const wantsCtrl = tokens.has('ctrl') || tokens.has('cmd') || tokens.has('meta')
+    if (wantsCtrl !== (event.ctrlKey || event.metaKey)) return false
+    if (tokens.has('alt') !== event.altKey) return false
+    if (tokens.has('shift') !== event.shiftKey) return false
+    return normalizedKey(parts[parts.length - 1] ?? '') === normalizedKey(event.key)
+  })
+}
 
 export const SETTINGS_REGISTRY: SettingDefinition[] = [
   {
@@ -150,7 +218,7 @@ export const SETTINGS_REGISTRY: SettingDefinition[] = [
     id: `shortcut.${shortcut.id}`, category: 'shortcuts', label: shortcut.label,
     description: `Rebindable shortcut, defaults to ${shortcut.defaultKey}.`,
     aliases: ['keyboard', 'key', 'shortcut', shortcut.defaultKey, shortcut.label],
-    controlType: 'read-only', defaultValue: shortcut.defaultKey, scope: 'session', persistent: false,
+    controlType: 'shortcut', defaultValue: shortcut.defaultKey, scope: 'user', persistent: true,
     requiresReload: false, capability: 'web-and-desktop', runtimeBinding: `shortcut.${shortcut.id}`,
     testId: `setting-shortcut-${shortcut.id}`, sourceRefs: [],
   })),

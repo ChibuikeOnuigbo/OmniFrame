@@ -19,10 +19,11 @@ export and `tools/mcp/appRender.mjs`.
 
 Sixteen curated recipes cover portrait, city light, practical, geometric,
 neon and hard-aperture looks. These are recipes over one parameterized render
-family. The exact base catalog is now **10,575 unique recipe IDs**. The
-existing lazy motion pack adds 5,000 entries for **15,575 loaded recipes**.
-Those numbers do not mean 15,575 independent algorithms or fully watched
-motion renders.
+family. At delivery this produced 10,575 materialized recipe IDs and 15,575
+with the lazy authored pack. The later indexed catalog work in
+`EFFECT_CATALOG_150K_20261108.md` supersedes those current totals while keeping
+the same 16 curated bokeh recipes. Recipe totals do not mean independent
+algorithms or fully watched motion renders.
 
 The renderer reuses two scratch canvases, samples a bounded grid and caps the
 brightest aperture stamps at 520 per frame. Blur radius is capped at 64 px.

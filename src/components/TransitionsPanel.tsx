@@ -159,7 +159,7 @@ export function TransitionsPanel() {
           step={0.1}
           value={duration}
           onChange={(e) => setDuration(clampDuration(Number(e.target.value)))}
-          className="w-full accent-fuchsia-400"
+          className="of-range w-full accent-fuchsia-400"
           aria-label="Transition duration in seconds (0.1 to 5)"
         />
         <div className="flex items-center gap-1">
@@ -168,9 +168,10 @@ export function TransitionsPanel() {
               key={d}
               type="button"
               data-testid={`transition-dur-${d}`}
+              aria-pressed={duration === d}
               onClick={() => setDuration(d)}
-              className={`min-h-[24px] px-1.5 py-1 rounded text-[10px] font-mono whitespace-nowrap leading-none transition-colors ${
-                duration === d ? 'bg-brand text-white font-semibold' : 'bg-ink-800 text-ink-400 hover:text-white'
+              className={`min-h-[24px] border px-1.5 py-1 rounded text-[10px] font-mono whitespace-nowrap leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                duration === d ? 'border-brand-300 bg-brand text-white font-semibold' : 'border-ink-700 bg-ink-800 text-ink-400 hover:border-ink-500 hover:text-white'
               }`}
             >
               {d}s
@@ -210,9 +211,10 @@ export function TransitionsPanel() {
                 key={pl.key}
                 type="button"
                 data-testid={`transition-pillar-${pl.key}`}
+                aria-pressed={pillar === pl.key}
                 onClick={() => setPillar(pl.key)}
-                className={`min-h-[30px] min-w-0 flex items-center justify-between gap-1 px-2 py-1 rounded text-[10px] font-medium leading-tight transition-colors ${
-                  pillar === pl.key ? 'bg-brand text-white font-semibold' : 'bg-ink-800 text-ink-400 hover:text-white'
+                className={`min-h-[30px] min-w-0 flex items-center justify-between gap-1 rounded border px-2 py-1 text-[10px] font-medium leading-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                  pillar === pl.key ? 'border-brand-300 bg-brand text-white font-semibold' : 'border-ink-700 bg-ink-800 text-ink-400 hover:border-ink-500 hover:text-white'
                 }`}
               >
                 <span className="truncate">{pl.label}</span><span className="shrink-0 opacity-70 font-mono">{count}</span>
@@ -256,7 +258,7 @@ export function TransitionsPanel() {
                   title={`Preview ${preset.name}; Apply from the monitor to add it`}
                   aria-label={`Preview ${preset.name} transition`}
                   onClick={(event) => { event.stopPropagation(); previewTransition(preset) }}
-                  className="flex items-center gap-1 px-2 py-1 rounded bg-brand/20 hover:bg-brand text-brand-400 hover:text-white text-[11px] font-medium whitespace-nowrap leading-none transition-colors"
+                  className="flex min-h-6 items-center gap-1 rounded border border-transparent bg-brand/20 px-2 py-1 text-[11px] font-medium leading-none text-brand-400 transition-colors hover:border-brand-300 hover:bg-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand whitespace-nowrap"
                 >
                   <Play size={12} className="shrink-0" />
                   <span>Preview</span>
@@ -267,7 +269,7 @@ export function TransitionsPanel() {
                   title={`Place ${preset.name} at the nearest usable cut`}
                   aria-label={`Apply ${preset.name} transition`}
                   onClick={(event) => { event.stopPropagation(); placeTransition(preset) }}
-                  className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-[11px] font-medium whitespace-nowrap leading-none transition-colors"
+                  className="flex min-h-6 items-center gap-1 rounded border border-transparent bg-emerald-500/20 px-2 py-1 text-[11px] font-medium leading-none text-emerald-300 transition-colors hover:border-emerald-300 hover:bg-emerald-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 whitespace-nowrap"
                 >
                   <Check size={12} className="shrink-0" />
                   <span>Apply</span>

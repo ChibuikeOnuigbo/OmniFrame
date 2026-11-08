@@ -1,3 +1,31 @@
+## 2026-11-08 — strict 200-control UI scan
+
+The left dock now uses a reusable keyboard focus fallback, 24px slider/action
+targets, explicit pressed semantics and stronger selected/rest/hover border
+hierarchies. The Effects collection picker follows the requested three-cell
+layout (previous / current collection / next), and its categories use a stable
+four-column grid. A live 1600×1000 Chromium audit measured exactly 20 visible,
+unclipped controls in each of ten modes and produced **200 PASS / 0 REVIEW /
+0 FAIL**, with no page errors. Ten cutout contact sheets and the complete
+numbered ledger are in `docs/UI_QUALITY_200_SCAN_20261108.md` and
+`qa-output/ui-200/`. The separate two-viewport affordance sweep also reports
+zero tiny, unnamed or duplicate-test-id findings.
+
+## 2026-11-08 — 150K indexed effects and working shortcut settings
+
+The Effects browser now has 150,000 base recipes: 10,575 curated/materialized
+plus 139,425 stable indexed variations. Loading the separate authored Glitch NG
+pack produces 155,000 live recipes. Indexed recipes are reconstructed by page
+or ID instead of retained as 139k objects. UI search, categories, collections,
+favorites, project application and MCP paging/lookup use the same catalog API.
+
+Settings now exposes 44 configurable commands and Studio actually executes
+those saved bindings. Rebind, reload persistence, clearing, exact modifiers,
+multi-delete, grouping and export In/Out passed unit/live browser checks.
+Details and limits: `docs/EFFECT_CATALOG_150K_20261108.md` and
+`qa-output/effect-150k/`. Counts are recipes over shared kernels; do not report
+them as 150,000 independent algorithms or full-motion approvals.
+
 ## 2026-11-08 — lens bokeh, exact catalog count and source audit
 
 Camera lens bokeh is now a shared browser/headless raster effect with editable

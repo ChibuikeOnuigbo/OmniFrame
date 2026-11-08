@@ -73,6 +73,7 @@ import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting
 import { uid, clamp } from './lib/time'
 import { clampFxToClip, splitFxInstances, FX_MIN_DUR } from './lib/fxInstances'
 import { fxCatalogById } from './lib/effectCatalog'
+import { EDITABLE_SHORTCUT_DEFAULTS } from './lib/settingsRegistry'
 import type { FxInstance } from './types'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
@@ -245,24 +246,7 @@ export const DEFAULT_CONTEXT_COMMANDS: Record<string, boolean> = {
   delete: true,
 }
 
-export const DEFAULT_SHORTCUTS: Record<string, string> = {
-  split: 'B',
-  marker: 'M',
-  hide: 'H',
-  selectTool: 'V',
-  bladeTool: 'B',
-  delete: 'Delete',
-  duplicate: 'Ctrl+D',
-  cut: 'Ctrl+X',
-  copy: 'Ctrl+C',
-  paste: 'Ctrl+V',
-  undo: 'Ctrl+Z',
-  redo: 'Ctrl+Y / Ctrl+Shift+Z',
-  playPause: 'Space',
-  omniframe: 'Alt+O',
-  threed: '3',
-  speed: 'Ctrl+R',
-}
+export const DEFAULT_SHORTCUTS: Record<string, string> = { ...EDITABLE_SHORTCUT_DEFAULTS }
 
 export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
   enabled: true,
@@ -1274,7 +1258,16 @@ export const useEditor = create<EditorState>((set, get) => {
     scrubbing: false,
 
     // ---- settings: context menu, shortcuts, unclustering initial state ----
-    customShortcuts: { ...DEFAULT_SHORTCUTS },
+    customShortcuts: (() => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('omniframe.shortcuts') || '{}')
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return { ...DEFAULT_SHORTCUTS }
+        const saved = Object.fromEntries(Object.entries(parsed).filter(([id, value]) => id in DEFAULT_SHORTCUTS && typeof value === 'string').map(([id, value]) => [id, String(value).trim().slice(0, 48)]))
+        return { ...DEFAULT_SHORTCUTS, ...saved }
+      } catch {
+        return { ...DEFAULT_SHORTCUTS }
+      }
+    })(),
     contextMenuEnabledCommands: { ...DEFAULT_CONTEXT_COMMANDS },
     unclusterInspector: false,
     cursorConfig: { ...DEFAULT_CURSOR_CONFIG },
@@ -3628,9 +3621,17 @@ export const useEditor = create<EditorState>((set, get) => {
     closeSubMode: () => set({ activeSubMode: null }),
 
     // ---- settings actions ----
-    setCustomShortcut: (id, key) =>
-      set((s) => ({ customShortcuts: { ...s.customShortcuts, [id]: key } })),
-    resetCustomShortcuts: () => set({ customShortcuts: { ...DEFAULT_SHORTCUTS } }),
+    setCustomShortcut: (id, key) => {
+      if (!(id in DEFAULT_SHORTCUTS)) return
+      const next = { ...get().customShortcuts, [id]: String(key).trim().slice(0, 48) }
+      set({ customShortcuts: next })
+      try { localStorage.setItem('omniframe.shortcuts', JSON.stringify(next)) } catch { /* private mode */ }
+    },
+    resetCustomShortcuts: () => {
+      const next = { ...DEFAULT_SHORTCUTS }
+      set({ customShortcuts: next })
+      try { localStorage.setItem('omniframe.shortcuts', JSON.stringify(next)) } catch { /* private mode */ }
+    },
     toggleContextMenuCommand: (id) =>
       set((s) => ({
         contextMenuEnabledCommands: {

@@ -20,6 +20,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 * { box-sizing: border-box; }
+/* Keyboard focus must survive local component styling. Individual controls may
+   use a branded Tailwind ring; this is the shared fallback for every native or
+   ARIA control, including scrollable panels made focusable with tabindex. */
+:where(button, a[href], input, select, textarea, [role="button"], [role="tab"], [role="switch"], [role="checkbox"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid rgb(var(--brand-400, 255 140 97));
+  outline-offset: 2px;
+}
 ::-webkit-scrollbar { width: 9px; height: 9px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #2e374a; border-radius: 2px; }
@@ -51,6 +58,10 @@ body {
   background: transparent;
   outline: none;
   cursor: pointer;
+}
+.of-range:focus-visible {
+  outline: 2px solid rgb(var(--brand-400, 255 140 97));
+  outline-offset: 2px;
 }
 /* Draw the thin track inside the taller box, so nothing looks different. */
 .of-range::-webkit-slider-runnable-track {

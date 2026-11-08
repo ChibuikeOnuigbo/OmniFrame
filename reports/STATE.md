@@ -1,3 +1,30 @@
+## 2026-11-08 — 200-control UI audit state
+
+The visible Studio left-dock surface now has a strict repeatable quality gate:
+ten modes × twenty unclipped controls at 1600×1000. All 200 measured controls
+pass accessible naming, viewport containment, 24px target size, keyboard focus
+and applicable hover/selected-state checks. The Effects picker uses the
+requested edge-arrow layout, a centered native collection select and a
+four-column semantic tab grid. A separate two-viewport mode/submode sweep has
+zero tiny, unnamed or duplicate-test-id findings. Evidence and professional pattern comparisons
+are in `docs/UI_QUALITY_200_SCAN_20261108.md`; machine data and ten contact
+sheets are under `qa-output/ui-200/`.
+
+## 2026-11-08 — 150K catalog and shortcuts state
+
+The base Effects catalog is exactly 150,000 recipes (10,575 materialized plus
+139,425 deterministic indexed IDs). The lazy authored pack takes the live UI to
+155,000. Indexed search creates only the requested page; direct lookup rebuilds
+the same patch for UI, store and MCP application. Twelve generator families
+compose existing shared renderer controls and do not represent 139,425 new
+algorithms.
+
+Keyboard Settings now owns 44 persistent command bindings and Studio consumes
+them at runtime. Users can rebind, clear and reset commands; exact chord
+matching supports Command-as-Ctrl on macOS. Unit and live Chromium checks plus
+screenshots are recorded in `docs/EFFECT_CATALOG_150K_20261108.md` and
+`qa-output/effect-150k/`.
+
 ## 2026-11-08 — lens bokeh state
 
 The shared raster engine now renders uniform camera-style defocus with

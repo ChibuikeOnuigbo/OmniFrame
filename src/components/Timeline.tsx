@@ -1590,55 +1590,8 @@ export function Timeline() {
     window.addEventListener('pointerup', onUp)
   }
 
-  // Delete / Backspace removes the whole gripped selection, not just the anchor.
-  useEffect(() => {
-    // CapCut desktop shortcuts: Ctrl+G group selection, Ctrl+Shift+G ungroup.
-    const onGroupKey = (e: KeyboardEvent) => {
-      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'g') return
-      const t = e.target as HTMLElement | null
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
-      e.preventDefault()
-      if (e.shiftKey) useEditor.getState().ungroupSelection()
-      else useEditor.getState().groupSelection()
-    }
-    window.addEventListener('keydown', onGroupKey)
-    return () => window.removeEventListener('keydown', onGroupKey)
-  }, [])
-
-  useEffect(() => {
-    const onDeleteKey = (ev: KeyboardEvent) => {
-      const target = ev.target as HTMLElement | null
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-      if (ev.key !== 'Delete' && ev.key !== 'Backspace') return
-      const st = useEditor.getState()
-      const ids = st.selectedClipIds || []
-      if (ids.length <= 1) return // single-clip delete is handled by Studio
-      ev.preventDefault()
-      ids.forEach((id) => st.removeClip(id))
-      st.selectClips([])
-    }
-    window.addEventListener('keydown', onDeleteKey)
-    return () => window.removeEventListener('keydown', onDeleteKey)
-  }, [])
-
-  // CapCut In/Out: I and O mark the export range at the playhead.
-  useEffect(() => {
-    const onInOut = (ev: KeyboardEvent) => {
-      const target = ev.target as HTMLElement | null
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-      if (ev.metaKey || ev.ctrlKey || ev.altKey) return
-      const st = useEditor.getState()
-      // If the user rebound another action onto I/O, that action wins.
-      const rebound = Object.values(st.customShortcuts || {}).some(
-        (key) => typeof key === 'string' && !key.includes('+') && key.toLowerCase() === ev.key.toLowerCase(),
-      )
-      if (rebound) return
-      if (ev.key === 'i' || ev.key === 'I') st.setExportIn()
-      else if (ev.key === 'o' || ev.key === 'O') st.setExportOut()
-    }
-    window.addEventListener('keydown', onInOut)
-    return () => window.removeEventListener('keydown', onInOut)
-  }, [])
+  // Editing shortcuts are handled once by Studio from the user-configurable
+  // registry, including multi-delete, grouping and export In/Out.
   const exportRange = useEditor((s) => s.exportRange)
   const clearExportRange = useEditor((s) => s.clearExportRange)
   const [scrollLeft, setScrollLeft] = useState(0)

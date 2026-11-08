@@ -1,6 +1,12 @@
 import { buildStudioLooks } from './studioLooks'
 import type { ClipEffect } from '../types'
 import { BURST_FAMILIES } from './actionFx'
+import {
+  GENERATED_RECIPE_COUNT,
+  generatedRecipeById,
+  generatedRecipeCount,
+  queryGeneratedRecipes,
+} from './effectRecipeBank'
 
 /**
  * The Effects catalog (board J): every entry maps to REAL engine params
@@ -10,7 +16,9 @@ import { BURST_FAMILIES } from './actionFx'
  * CapCut/Hancybox shorts, Wizzy course, Gold Motion) PLUS generative
  * combinatorial families (colour-pair ramps × angles). No dead entries.
  *
- * Counts are real: `getFxCatalog().length` is what the UI prints.
+ * `getFxCatalog()` holds the curated/authored materialized entries. The large
+ * parameter bank is deterministic and indexed through `queryFxCatalog()` so
+ * the browser never allocates 139k cards or patch objects at once.
  */
 
 export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'burst' | 'retro' | 'light' | 'key' | 'Glitch NG'
@@ -637,12 +645,58 @@ export function getFxCatalog(): FxCatalogEntry[] {
 }
 
 export function fxCatalogById(id: string): FxCatalogEntry | undefined {
-  return getFxCatalog().find((e) => e.id === id)
+  return (generatedRecipeById(id) as FxCatalogEntry | undefined) ?? getFxCatalog().find((e) => e.id === id)
 }
 
 export function fxCatalogCount(cat?: FxCat | 'all'): number {
   const all = getFxCatalog()
-  return !cat || cat === 'all' ? all.length : all.filter((e) => e.cat === cat).length
+  const materialized = !cat || cat === 'all' ? all.length : all.filter((e) => e.cat === cat).length
+  return materialized + generatedRecipeCount(cat ?? 'all')
+}
+
+export const GENERATED_FX_RECIPE_COUNT = GENERATED_RECIPE_COUNT
+
+export interface FxCatalogQuery {
+  cat?: FxCat | 'all'
+  q?: string
+  offset?: number
+  limit?: number
+  collection?: 'all' | 'curated' | 'generated' | 'studio' | 'favorites'
+  favorites?: string[]
+}
+
+/** Search and page all effect recipes without materializing the indexed bank. */
+export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; entries: FxCatalogEntry[] } {
+  const cat = options.cat ?? 'all'
+  const q = (options.q ?? '').trim().toLowerCase()
+  const offset = Math.max(0, Math.floor(options.offset ?? 0))
+  const limit = Math.max(0, Math.floor(options.limit ?? 60))
+  const collection = options.collection ?? 'all'
+
+  if (collection === 'favorites') {
+    const entries = (options.favorites ?? [])
+      .map(fxCatalogById)
+      .filter((entry): entry is FxCatalogEntry => !!entry)
+      .filter((entry) => cat === 'all' || entry.cat === cat)
+      .filter((entry) => !q || `${entry.id} ${entry.name} ${entry.trace}`.toLowerCase().includes(q))
+    return { total: entries.length, entries: entries.slice(offset, offset + limit) }
+  }
+
+  if (collection === 'generated') {
+    const generated = queryGeneratedRecipes({ cat, q, offset, limit })
+    return { total: generated.total, entries: generated.entries as FxCatalogEntry[] }
+  }
+
+  let materialized = getFxCatalog().filter((entry) => cat === 'all' || entry.cat === cat)
+  if (collection === 'studio') materialized = materialized.filter((entry) => entry.id.startsWith('studio-'))
+  if (q) materialized = materialized.filter((entry) => `${entry.id} ${entry.name} ${entry.trace}`.toLowerCase().includes(q))
+  if (collection === 'studio' || collection === 'curated') return { total: materialized.length, entries: materialized.slice(offset, offset + limit) }
+
+  const materializedPage = materialized.slice(offset, offset + limit)
+  const remaining = Math.max(0, limit - materializedPage.length)
+  const generated = queryGeneratedRecipes({ cat, q, offset: Math.max(0, offset - materialized.length), limit: remaining })
+  const generatedEntries = generated.entries
+  return { total: materialized.length + generated.total, entries: [...materializedPage, ...generatedEntries] as FxCatalogEntry[] }
 }
 
 /** Quick-add set for the timeline context menu (≤ 9 items, UI law). */
