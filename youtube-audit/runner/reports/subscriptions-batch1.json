@@ -1,0 +1,2714 @@
+{
+ "mode": "subscriptions",
+ "batch": 1,
+ "processed": 20,
+ "records": [
+  {
+   "id": "Kp2wDz-DLtk",
+   "url": "https://www.youtube.com/watch?v=Kp2wDz-DLtk",
+   "title": "Turn Your Low Quality Edits Into 4K ! - AMV Tutorial !",
+   "duration": 125.888,
+   "channel": "Zept Tutorials",
+   "channel_id": "UC64dPZiicrYD-4RlsDlTsgw",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 1,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "125.888000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 5.245333
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 15.736
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 26.226667
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 36.717333
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 47.208
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 57.698667
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 68.189333
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 78.68
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 89.170667
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 99.661333
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 110.152
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 120.642667
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.633
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 0.733
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 1.367
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 1.767
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "fA4OX9pY8JU",
+   "url": "https://www.youtube.com/watch?v=fA4OX9pY8JU",
+   "title": "Nodevideo Color Correction Masterclass!\ud83d\udd25 + Free LUT Pack",
+   "duration": 1847.868,
+   "channel": "Dr. Xenios Tutorials\ud83d\udd2d",
+   "channel_id": "UC72AfmGjyNDfbprGmAaau4g",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 2,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "1847.868000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 76.9945
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 230.9835
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 384.9725
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 538.9615
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 692.9505
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 846.9395
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 1000.9285
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 1154.9175
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 1308.9065
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 1462.8955
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 1616.8845
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 1770.8735
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 1.567
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 29.267
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 64.933
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 330.233
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 986.067
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 1000.2
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "3UNQ-bgmW3Y",
+   "url": "https://www.youtube.com/watch?v=3UNQ-bgmW3Y",
+   "title": "AI Marketing Tools: How to Make AI Videos for a Tesla Roadster Spec Ad",
+   "duration": 685.888,
+   "channel": "Wizzy Tutorials",
+   "channel_id": "UC8sBrtrmh33WHZNZqnVOwCA",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: how to"
+   ],
+   "audit_rank": 3,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "685.888000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 28.578667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 85.736
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 142.893333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 200.050667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 257.208
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 314.365333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 371.522667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 428.68
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 485.837333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 542.994667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 600.152
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 657.309333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 3.8
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 3.933
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 4.0
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 6.667
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 6.733
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 6.867
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "1p-dIlbrq2M",
+   "url": "https://www.youtube.com/watch?v=1p-dIlbrq2M",
+   "title": "I Let AI Add Sound Effects to My Edit...",
+   "duration": 496.388,
+   "channel": "Tyson Tutorials",
+   "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 4,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "496.388000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 20.682833
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 62.0485
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 103.414167
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 144.779833
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 186.1455
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 227.511167
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 268.876833
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 310.2425
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 351.608167
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 392.973833
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 434.3395
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 475.705167
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 9.933
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 13.7
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 26.3
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 26.467
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 26.5
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 26.733
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "DmR2A4mPnmM",
+   "url": "https://www.youtube.com/watch?v=DmR2A4mPnmM",
+   "title": "Forget Blender! I Found a Faster Way to Make 3D Models on Your Phone with Tripo",
+   "duration": 585.968,
+   "channel": "Zenny Tutorials",
+   "channel_id": "UCG_cuN2gE9w83CU12VaKNqQ",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "editor + technique: blender, 3d",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 5,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "585.968000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 24.415333
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 73.246
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 122.076667
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 170.907333
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 219.738
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 268.568667
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 317.399333
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 366.23
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 415.060667
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 463.891333
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 512.722
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 561.552667
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.567
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 2.067
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 2.233
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 2.5
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 4.567
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 5.767
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "JTrCm0he7Uk",
+   "url": "https://www.youtube.com/watch?v=JTrCm0he7Uk",
+   "title": "Tiki Tiki Rumba Tutorial CapCut",
+   "duration": 30.508,
+   "channel": "mxtstutorials",
+   "channel_id": "UC_fJzrlUul0PKlYonSe-QLg",
+   "format": "subscriptions/shorts",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial"
+   ],
+   "audit_rank": 6,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "30.508000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 1.271167
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 3.8135
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 6.355833
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 8.898167
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 11.4405
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 13.982833
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 16.525167
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 19.0675
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 21.609833
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 24.152167
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 26.6945
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 29.236833
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 5.933
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 8.9
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "RjWWtlfN6CU",
+   "url": "https://www.youtube.com/watch?v=RjWWtlfN6CU",
+   "title": "How To Make Flow style Transitions - AMV Tutorial!",
+   "duration": 442.648,
+   "channel": "Zept Tutorials",
+   "channel_id": "UC64dPZiicrYD-4RlsDlTsgw",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial, how to",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 1,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "442.648000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 18.443667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 55.331
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 92.218333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 129.105667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 165.993
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 202.880333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 239.767667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 276.655
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 313.542333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 350.429667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 387.317
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 424.204333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.033
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 0.067
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 10.3
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 11.2
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 11.3
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 11.8
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "Rx0j8WgUgNs",
+   "url": "https://www.youtube.com/watch?v=Rx0j8WgUgNs",
+   "title": "Can Higgsfield AI Turn a Beginner Into a PRO Motion Designer?",
+   "duration": 386.388,
+   "channel": "Dr. Xenios Tutorials\ud83d\udd2d",
+   "channel_id": "UC72AfmGjyNDfbprGmAaau4g",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 2,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 846,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "386.388000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 16.0995
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 48.2985
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 80.4975
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 112.6965
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 144.8955
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 177.0945
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 209.2935
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 241.4925
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 273.6915
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 305.8905
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 338.0895
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 370.2885
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 13.2
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 34.033
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 34.4
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 95.0
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 98.433
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 99.033
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "wuKJdT3Ks90",
+   "url": "https://www.youtube.com/watch?v=wuKJdT3Ks90",
+   "title": "My Face Reveal, But I Made the Sound Design CINEMATIC",
+   "duration": 338.368,
+   "channel": "Wizzy Tutorials",
+   "channel_id": "UC8sBrtrmh33WHZNZqnVOwCA",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 3,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "338.368000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 14.098667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 42.296
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 70.493333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 98.690667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 126.888
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 155.085333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 183.282667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 211.48
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 239.677333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 267.874667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 296.072
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 324.269333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.792
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 14.75
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 14.833
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 20.167
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 21.0
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 22.458
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "oIBmneJKuAI",
+   "url": "https://www.youtube.com/watch?v=oIBmneJKuAI",
+   "title": "I Tried Gold Motion\u2026 Is Alight Motion Cooked?",
+   "duration": 186.588,
+   "channel": "Tyson Tutorials",
+   "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "editor + technique: alight motion, motion",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 4,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 848,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "186.588000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 7.7745
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 23.3235
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 38.8725
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 54.4215
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 69.9705
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 85.5195
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 101.0685
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 116.6175
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 132.1665
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 147.7155
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 163.2645
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 178.8135
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.933
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 2.1
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 3.5
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 5.1
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 7.1
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 10.7
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "4E_LJgHhg1E",
+   "url": "https://www.youtube.com/watch?v=4E_LJgHhg1E",
+   "title": "Advanced 3D Book Effect in Alight Motion | Easy AMV Tutorial!",
+   "duration": 254.566,
+   "channel": "Zenny Tutorials",
+   "channel_id": "UCG_cuN2gE9w83CU12VaKNqQ",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial",
+    "editor + technique: alight motion, effect, 3d, amv",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 5,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "254.566000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 10.606917
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 31.82075
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 53.034583
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 74.248417
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 95.46225
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 116.676083
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 137.889917
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 159.10375
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 180.317583
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 201.531417
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 222.74525
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 243.959083
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 1.333
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 3.033
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 3.133
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 8.0
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 19.633
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 30.633
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "gHkBF2qr8S4",
+   "url": "https://www.youtube.com/watch?v=gHkBF2qr8S4",
+   "title": "How to use Overlays in CapCut",
+   "duration": 31.168,
+   "channel": "mxtstutorials",
+   "channel_id": "UC_fJzrlUul0PKlYonSe-QLg",
+   "format": "subscriptions/shorts",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: how to",
+    "editor + technique: capcut, overlay",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 6,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "31.168000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 1.298667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 3.896
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 6.493333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 9.090667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 11.688
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 14.285333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 16.882667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 19.48
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 22.077333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 24.674667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 27.272
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 29.869333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 9.7
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 10.2
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 11.8
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 12.933
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 20.8
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 21.867
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "_CXgEw-zoSw",
+   "url": "https://www.youtube.com/watch?v=_CXgEw-zoSw",
+   "title": "How To Make AE-Like Transition In Alight Motion - AMV Tutorial!",
+   "duration": 333.588,
+   "channel": "Zept Tutorials",
+   "channel_id": "UC64dPZiicrYD-4RlsDlTsgw",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial, how to",
+    "editor + technique: alight motion, transition, amv",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 1,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "333.588000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 13.8995
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 41.6985
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 69.4975
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 97.2965
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 125.0955
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 152.8945
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 180.6935
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 208.4925
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 236.2915
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 264.0905
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 291.8895
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 319.6885
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.733
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 0.767
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 0.8
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 4.333
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 4.433
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 5.033
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "FslahmSrO8g",
+   "url": "https://www.youtube.com/watch?v=FslahmSrO8g",
+   "title": "Three Awesome Text Effects You have to try!!! ",
+   "duration": 299.928,
+   "channel": "Dr. Xenios Tutorials\ud83d\udd2d",
+   "channel_id": "UC72AfmGjyNDfbprGmAaau4g",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 2,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 848,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "299.928000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 12.497
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 37.491
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 62.485
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 87.479
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 112.473
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 137.467
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 162.461
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 187.455
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 212.449
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 237.443
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 262.437
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 287.431
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 105.533
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 108.7
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 109.433
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 112.133
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 123.067
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 158.133
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "91AtnciF8fc",
+   "url": "https://www.youtube.com/watch?v=91AtnciF8fc",
+   "title": "How to Make YOUR OWN Shake Effects in Alight Motion",
+   "duration": 480.808,
+   "channel": "Wizzy Tutorials",
+   "channel_id": "UC8sBrtrmh33WHZNZqnVOwCA",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: how to",
+    "editor + technique: alight motion, effect, shake",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 3,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "480.808000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 20.033667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 60.101
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 100.168333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 140.235667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 180.303
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 220.370333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 260.437667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 300.505
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 340.572333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 380.639667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 420.707
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 460.774333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.333
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 0.733
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 0.767
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 1.7
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 1.867
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 4.2
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "tZPDgVHLGhQ",
+   "url": "https://www.youtube.com/watch?v=tZPDgVHLGhQ",
+   "title": "30K SPECIAL\ud83c\udf89 - MEGA EDITING PACK\ud83d\udd25 SHAKES, TURBS, CC, TEXTS, FRAMERS....",
+   "duration": 167.008,
+   "channel": "Tyson Tutorials",
+   "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 4,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "24/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "167.008000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 6.958667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 20.876
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 34.793333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 48.710667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 62.628
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 76.545333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 90.462667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 104.38
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 118.297333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 132.214667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 146.132
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 160.049333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 4.083
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 10.917
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 19.042
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 27.417
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 33.083
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 33.75
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "k3KgQlzZTYQ",
+   "url": "https://www.youtube.com/watch?v=k3KgQlzZTYQ",
+   "title": "The Only Time Remapping Guide You\u2019ll Ever Need \u2013 AMV Tutorial!",
+   "duration": 313.868,
+   "channel": "Zenny Tutorials",
+   "channel_id": "UCG_cuN2gE9w83CU12VaKNqQ",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial, guide",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 5,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "313.868000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 13.077833
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 39.2335
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 65.389167
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 91.544833
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 117.7005
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 143.856167
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 170.011833
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 196.1675
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 222.323167
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 248.478833
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 274.6345
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 300.790167
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 1.733
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 1.833
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 11.933
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 38.567
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 43.133
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 46.933
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "RVglsoWEnVM",
+   "url": "https://www.youtube.com/watch?v=RVglsoWEnVM",
+   "title": "Transition Tutorial CapCut",
+   "duration": 31.288,
+   "channel": "mxtstutorials",
+   "channel_id": "UC_fJzrlUul0PKlYonSe-QLg",
+   "format": "subscriptions/shorts",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial",
+    "editor + technique: capcut, transition",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 6,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 240,
+      "height": 426,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "31.288000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 1.303667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 3.911
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 6.518333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 9.125667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 11.733
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 14.340333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 16.947667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 19.555
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 22.162333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 24.769667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 27.377
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 29.984333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 8.9
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "4XPly5lQHbo",
+   "url": "https://www.youtube.com/watch?v=4XPly5lQHbo",
+   "title": "How I Find IDEAS For My Edits - AMV Tutorial !",
+   "duration": 361.868,
+   "channel": "Zept Tutorials",
+   "channel_id": "UC64dPZiicrYD-4RlsDlTsgw",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: tutorial",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 1,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 854,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "361.868000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 15.077833
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 45.2335
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 75.389167
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 105.544833
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 135.7005
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 165.856167
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 196.011833
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 226.1675
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 256.323167
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 286.478833
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 316.6345
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 346.790167
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg",
+    "s1.jpg",
+    "s2.jpg",
+    "s3.jpg",
+    "s4.jpg",
+    "s5.jpg",
+    "s6.jpg"
+   ],
+   "scene_times": [
+    {
+     "file": "s1.jpg",
+     "time_seconds": 0.033
+    },
+    {
+     "file": "s2.jpg",
+     "time_seconds": 0.067
+    },
+    {
+     "file": "s3.jpg",
+     "time_seconds": 8.433
+    },
+    {
+     "file": "s4.jpg",
+     "time_seconds": 39.767
+    },
+    {
+     "file": "s5.jpg",
+     "time_seconds": 39.8
+    },
+    {
+     "file": "s6.jpg",
+     "time_seconds": 47.1
+    }
+   ],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  },
+  {
+   "id": "JOthZPxj9MA",
+   "url": "https://www.youtube.com/watch?v=JOthZPxj9MA",
+   "title": "How To Get Anime Clips For Editing (100% FREE)",
+   "duration": 59.608,
+   "channel": "Dr. Xenios Tutorials\ud83d\udd2d",
+   "channel_id": "UC72AfmGjyNDfbprGmAaau4g",
+   "format": "subscriptions/videos",
+   "status": "FOOTAGE_ACQUIRED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
+    "tutorial phrase: how to"
+   ],
+   "audit_rank": 2,
+   "environment": "github-runner",
+   "access_method": "yt-dlp default+cookies",
+   "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+     {
+      "width": 846,
+      "height": 480,
+      "r_frame_rate": "30/1"
+     },
+     {
+      "r_frame_rate": "0/0"
+     }
+    ],
+    "format": {
+     "duration": "59.608000"
+    }
+   },
+   "sample_times": [
+    {
+     "file": "u00.jpg",
+     "time_seconds": 2.483667
+    },
+    {
+     "file": "u01.jpg",
+     "time_seconds": 7.451
+    },
+    {
+     "file": "u02.jpg",
+     "time_seconds": 12.418333
+    },
+    {
+     "file": "u03.jpg",
+     "time_seconds": 17.385667
+    },
+    {
+     "file": "u04.jpg",
+     "time_seconds": 22.353
+    },
+    {
+     "file": "u05.jpg",
+     "time_seconds": 27.320333
+    },
+    {
+     "file": "u06.jpg",
+     "time_seconds": 32.287667
+    },
+    {
+     "file": "u07.jpg",
+     "time_seconds": 37.255
+    },
+    {
+     "file": "u08.jpg",
+     "time_seconds": 42.222333
+    },
+    {
+     "file": "u09.jpg",
+     "time_seconds": 47.189667
+    },
+    {
+     "file": "u10.jpg",
+     "time_seconds": 52.157
+    },
+    {
+     "file": "u11.jpg",
+     "time_seconds": 57.124333
+    }
+   ],
+   "visual_review": "pending",
+   "frames": [
+    "u00.jpg",
+    "u01.jpg",
+    "u02.jpg",
+    "u03.jpg",
+    "u04.jpg",
+    "u05.jpg",
+    "u06.jpg",
+    "u07.jpg",
+    "u08.jpg",
+    "u09.jpg",
+    "u10.jpg",
+    "u11.jpg"
+   ],
+   "scene_times": [],
+   "audio_evidence": [
+    "loudness.json",
+    "spectrum.png",
+    "wave.png"
+   ],
+   "audio_review": "pending; evidence files are not a listening review"
+  }
+ ]
+}

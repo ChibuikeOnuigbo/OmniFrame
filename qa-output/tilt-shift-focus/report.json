@@ -1,0 +1,19 @@
+{
+  "catalogId": "tilt-focus-diagonal-center-narrow",
+  "controls": [
+    "tiltShift",
+    "tiltShiftCenterX",
+    "tiltShiftCenterY",
+    "tiltShiftAngle",
+    "tiltShiftWidth",
+    "tiltShiftFeather"
+  ],
+  "angle": -28,
+  "centerY": 0.68,
+  "keyframes": {
+    "angle": 1,
+    "centerY": 1
+  },
+  "region": "ellipse",
+  "errors": []
+}

@@ -613,16 +613,35 @@ export interface ClipEffect extends NgEffect {
   // ---- Alight-Motion-named effect family (rewatch 2026-10) ----
   /** AM Zoom Blur: radial scale-stack blur amount 0..1. */
   zoomBlur?: number
-  /** AM Directional Blur: angle deg + amount via directionalBlur (0..1). */
+  /** Directional blur length (0..6) plus angle and advanced sampling controls. */
   directionalBlur?: number
   directionalBlurAngle?: number
+  /** -1 = trail behind, 0 = centered, 1 = trail ahead. */
+  directionalBlurBias?: number
+  /** Fan angle in degrees around directionalBlurAngle. */
+  directionalBlurSpread?: number
+  /** Only streak pixels above this luma level; 0 blurs the full frame. */
+  directionalBlurThreshold?: number
   /** AM Glow: bright-pass + blur added back, 0..1. */
   glow?: number
   /** AM Edge Glow / Stroke Color: alpha-edge tint strength 0..1. */
   edgeGlow?: number
   edgeGlowColor?: string
-  /** AM Lens Blur tilt-shift: horizontal sharp band, 0..1 (0 = off). */
+  /** Tilt-shift focus plane: blurred field with a movable, rotatable sharp band. */
   tiltShift?: number
+  tiltShiftCenterX?: number // 0..1
+  tiltShiftCenterY?: number // 0..1
+  tiltShiftAngle?: number // -180..180 degrees, 0 = horizontal focus plane
+  tiltShiftWidth?: number // 0.04..0.9 of short edge
+  tiltShiftFeather?: number // 0.01..0.5 of short edge
+  /** Camera/lens bokeh: defocus plus diaphragm-shaped highlight bloom. */
+  lensBokeh?: number // 0..1 overall defocus mix
+  bokehRadius?: number // 2..64 px aperture/blur radius
+  bokehThreshold?: number // 0..1 highlight cutoff
+  bokehGain?: number // 0..3 highlight energy
+  bokehShape?: 'circle' | 'triangle' | 'square' | 'pentagon' | 'hexagon' | 'octagon' | 'diamond' | 'star'
+  bokehRotation?: number // -180..180 degrees
+  bokehSoftness?: number // 0..1 aperture-edge softness
   /** AM Vignette: edge darkening 0..1. */
   vignette?: number
   /** AM Flicker: random brightness jitter 0..1. */
@@ -656,6 +675,17 @@ export interface ClipEffect extends NgEffect {
   oscillatePhase?: number // AM Phase 0..1000
   /** AM-style turbulent/fractal warp: sin-domain pixel displacement. */
   turbulent?: number
+  turbulentScale?: number
+  turbulentSpeed?: number
+  turbulentAngle?: number
+  turbulentSeed?: number
+  turbulentMode?: 'fbm' | 'curl' | 'glass'
+  /** Parameterized liquify effect. Drawing-mode liquify dabs remain in Clip.deformation. */
+  liquifyMode?: 'push' | 'bulge' | 'pinch' | 'twirl'
+  liquifyAmount?: number
+  liquifyRadius?: number
+  liquifyX?: number
+  liquifyY?: number
   /** Board L: kaleidoscope mirror wedges (0/1 off, 2-12 segments). */
   kaleidoSegments?: number
   /** Board L: kaleidoscope wedge rotation (deg). */
@@ -754,14 +784,17 @@ export interface ClipEffect extends NgEffect {
   freezeHold?: number
   freezeAt?: number
   chromaColor?: string // key colour, default pure green
-  // Light layer (Gold Motion-style Point/Spot light, composited with 'screen').
+  // Light layer (Point/Spot/Directional, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.
-  lightType?: 'point' | 'spot' // default 'point' (spot = elliptical falloff cone)
+  lightType?: 'point' | 'spot' | 'directional'
   lightColor?: string // default '#ffd9a0'
   lightIntensity?: number // 0..1.5 (default 0 = off)
   lightFalloff?: number // radius as a fraction of the frame's long edge, 0.1..1 (default 0.45)
   lightX?: number // 0..1 horizontal center (default 0.5)
   lightY?: number // 0..1 vertical center (default 0.4)
+  lightAngle?: number // -180..180 degrees
+  lightWidth?: number // directional beam core width 0.03..1
+  lightSoftness?: number // directional beam feather 0..1
   // Particle / overlay / background-replace layers scanned from the AE
   // tutorial corpus (Study_edits_videos/deep-study-*.md): feather & ember
   // beds, dust/bokeh/sparkle overlays, scanline & halftone looks, spotlight
@@ -772,6 +805,35 @@ export interface ClipEffect extends NgEffect {
   overlayFx?: 'none' | 'scanlines' | 'halftone' | 'spotlight' | 'vignette' | 'lightleak' | 'frameglow'
   overlayStrength?: number // 0..1 (default 0.5)
   replaceBg?: 'none' | 'synthwave' | 'aurora' | 'grid' | 'bokeh' | 'sunset' | 'studio'
+  /** Loopable source-fragment and energy burst engine. */
+  burstFx?: 'glass' | 'crack' | 'shatter' | 'tiles' | 'slice' | 'shockwave' | 'fireball' | 'smoke' | 'energy' | 'implosion'
+  burstIntensity?: number
+  burstSpeed?: number
+  burstInterval?: number
+  burstCycle?: number
+  /** Numeric for catalog/keyframe compatibility: 0 = once, 1 = loop. */
+  burstLoop?: number
+  burstOriginX?: number
+  burstOriginY?: number
+  burstSpread?: number
+  burstFragments?: number
+  burstGravity?: number
+  burstRotation?: number
+  burstColor?: string
+  burstSeed?: number
+  /** Bright-pixel radial aura. */
+  aura?: number
+  auraThreshold?: number
+  auraRadius?: number
+  auraLines?: number
+  auraSpeed?: number
+  auraRotation?: number
+  auraX?: number
+  auraY?: number
+  auraColor?: string
+  auraSecondary?: string
+  /** Runtime-only local action clock supplied by mergeFxInstances. */
+  motionClock?: number
 }
 
 /**
@@ -1646,12 +1708,63 @@ export interface TemplateSlot {
   durationConstraint?: number
 }
 
+export type TemplateCategory =
+  | 'Titles'
+  | 'Brand'
+  | 'Lower thirds'
+  | 'Data'
+  | 'Diagrams'
+  | 'Maps'
+  | 'Product'
+  | 'Devices'
+  | 'Social'
+  | 'News'
+  | 'Countdowns'
+  | 'Photos'
+  | 'UI demos'
+  | 'Backgrounds'
+  | 'Music'
+  | 'Comparisons'
+
+export type TemplateMotionPreset =
+  | 'fade-rise'
+  | 'slide'
+  | 'pop'
+  | 'zoom'
+  | 'flip'
+  | 'swing'
+  | 'drift'
+  | 'typewriter'
+  | 'stagger'
+  | 'pulse'
+  | 'wipe'
+  | 'orbit'
+
+export type TemplateBackdropStyle =
+  | 'gradient'
+  | 'grid'
+  | 'rings'
+  | 'rays'
+  | 'paper'
+  | 'glass'
+  | 'noise'
+  | 'split'
+
 export interface TemplateDefinition {
   id: string
   name: string
   description: string
   slots: TemplateSlot[]
   thumbnail?: string
+  /** Motion Lab metadata. Older saved definitions remain valid. */
+  category?: TemplateCategory
+  tags?: string[]
+  duration?: number
+  aspect?: '16:9' | '9:16' | '1:1' | '4:5'
+  palette?: [string, string, string]
+  motion?: TemplateMotionPreset
+  backdrop?: TemplateBackdropStyle
+  origin?: 'omniframe-original' | 'legacy'
 }
 
 export interface GuidedMatteRecord {

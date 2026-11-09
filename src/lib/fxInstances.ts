@@ -64,8 +64,10 @@ export function fxParamsAt(inst: FxInstance, localT: number): Record<string, num
  */
 export function mergeFxInstances(clip: Clip, localT: number): ClipEffect | undefined {
   const insts = clip.fxInstances
-  if ((!insts || insts.length === 0) && !clip.effects?.ngFamily) return clip.effects
+  const clipTimed = !!(clip.effects?.burstFx || clip.effects?.aura || clip.effects?.turbulent)
+  if ((!insts || insts.length === 0) && !clip.effects?.ngFamily && !clipTimed) return clip.effects
   let merged: ClipEffect | undefined = clip.effects ? { ...clip.effects } : undefined
+  if (merged && clipTimed) merged.motionClock = Math.max(0, localT)
   const layers: NgLayer[] = []
   const addNg = (e: NgEffect | undefined, id: string, offset: number) => {
     if (!e?.ngFamily) return
@@ -76,6 +78,7 @@ export function mergeFxInstances(clip: Clip, localT: number): ClipEffect | undef
   for (const inst of insts || []) {
     if (!fxActiveAt(inst, localT)) continue
     const params = fxParamsAt(inst, localT) as unknown as ClipEffect
+    if (params.burstFx || params.aura || params.turbulent) params.motionClock = Math.max(0, localT - inst.inP + (inst.sourceOffset ?? 0))
     addNg(params as NgEffect, inst.id, clip.start + inst.inP - (inst.sourceOffset ?? 0))
     merged = { ...(merged || {}), ...params }
   }

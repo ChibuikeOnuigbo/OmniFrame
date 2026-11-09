@@ -1,3 +1,101 @@
+## 2026-11-09 — photographic thumbnail correction
+
+Effect catalog subjects now use two bundled Pexels photographs: a portrait for
+face/skin/beauty, color, blur and lighting; a car for glitch and other motion.
+Idle thumbnails apply shared canvas filters and raster grading before selection.
+Motion blur demonstrates shared temporal sample weights on a staged photo pan.
+LUT previews use the portrait, including their loading/error fallback, without
+category text over the picture. Source URLs, licenses and SHA-256 hashes are in
+`public/assets/effect-subjects/credits.json`.
+
+Fixed idle photo restoration after adding an effect or stopping an audition.
+Browser coverage includes photo restoration, Gaussian/temporal blur pixel changes,
+scrubbing, add/double-click, menus and live MCP. Typecheck and production build
+pass. Screenshots: `qa-output/square-preview/{glitch-photos,blur-photos}.png`.
+Idle cards are representative stills, not exhaustive temporal/3D effect renders;
+active auditions continue to mirror actual project footage. Full catalog visual
+acceptance and the earlier outstanding editor tasks remain open.
+
+## 2026-11-09 — square previews, 300K recipes and timeline audit
+
+Square effect/transition cards mirror active program auditions, expose a scrubber,
+hover/focus Add and double-click commit. Three reusable local subject images,
+themed catalog shortcuts, 300,000 base / 305,000 loaded recipes. Timeline gets
+3px raised playhead, marker alignment color, searchable markers, resolved marker
+navigation, millisecond ruler and decoded-media scrub pause. Ripple-delete menu
+added. Evidence and limits: `docs/SQUARE_EFFECT_BROWSER_20261109.md` and
+`ultimate tests/Ultimate_timeline_est.md`. Twenty million numerical clamp cases
+are distinct from the browser/render tests; full timeline certification is open.
+
+## 2026-11-08 — movable tilt-shift focus state
+
+Tilt Shift is no longer fixed to the horizontal centre. Its shared renderer
+accepts a movable X/Y centre, arbitrary plane angle, focus width and feather,
+and reuses three scratch canvases across frames. Forty-eight curated patches
+exercise four orientations, three offsets and four widths. All six numeric
+properties participate in FX-instance keyframes and the existing effect-region
+mask. Current catalog totals are 150,048 base / 155,048 loaded. Natural
+multiword search now matches all tokens across display punctuation. Evidence:
+`docs/TILT_SHIFT_FOCUS_20261108.md`.
+
+## 2026-11-08 — 200-control UI audit state
+
+The visible Studio left-dock surface now has a strict repeatable quality gate:
+ten modes × twenty unclipped controls at 1600×1000. All 200 measured controls
+pass accessible naming, viewport containment, 24px target size, keyboard focus
+and applicable hover/selected-state checks. The Effects picker uses the
+requested edge-arrow layout, a centered native collection select and a
+four-column semantic tab grid. A separate two-viewport mode/submode sweep has
+zero tiny, unnamed or duplicate-test-id findings. Evidence and professional pattern comparisons
+are in `docs/UI_QUALITY_200_SCAN_20261108.md`; machine data and ten contact
+sheets are under `qa-output/ui-200/`.
+
+## 2026-11-08 — 150K catalog and shortcuts state
+
+The base Effects catalog is 150,048 recipes (10,623 materialized plus
+139,425 deterministic indexed IDs). The lazy authored pack takes the live UI to
+155,048. Indexed search creates only the requested page; direct lookup rebuilds
+the same patch for UI, store and MCP application. Twelve generator families
+compose existing shared renderer controls and do not represent 139,425 new
+algorithms.
+
+Keyboard Settings now owns 44 persistent command bindings and Studio consumes
+them at runtime. Users can rebind, clear and reset commands; exact chord
+matching supports Command-as-Ctrl on macOS. Unit and live Chromium checks plus
+screenshots are recorded in `docs/EFFECT_CATALOG_150K_20261108.md` and
+`qa-output/effect-150k/`.
+
+## 2026-11-08 — lens bokeh state
+
+The shared raster engine now renders uniform camera-style defocus with
+thresholded diaphragm highlights. Eight aperture shapes and six numeric
+controls are available on every dropped instance; numeric fields keyframe and
+the existing effect-region system masks the result. Sixteen recipes bring the
+catalog to 10,575 unique base IDs and 15,575 with the lazy 5,000 pack. A live
+Chromium screenshot exposed a translated 3× isolation-canvas bug that the
+headless fixture could not; the engine now processes in canvas coordinates and
+restores the caller transform.
+
+Targeted official Adobe/Krita/Kdenlive/Blender/MDN documentation was read and
+hashed. The official MIT LibreCuts release APK matched its published digest and
+was inspected statically against its tagged source. A 2.4 MB CC0 Poly Haven
+camera model passed all manifest hashes and a Blender 4.3.2 import/render; it
+remains research evidence, not a bundled asset. Evidence and exact limits:
+`docs/LENS_BOKEH_EFFECTS_20261108.md` and
+`research/effect-source-audit-20261108.json`.
+
+## 2026-11-07 — Motion Lab state
+
+Motion Lab is live from the top bar and mobile workspace menu with 201 original recipes, 16 categories, search/filtering, editable slots, procedural SVG backdrops, aspect setup and 12 Curve Engine motion families. The live browser built and displayed a four-layer Data Story recipe. Unit, typecheck, browser and production build evidence is in `docs/MOTION_LAB_20261107.md` and `qa-output/motion-lab/`.
+
+Motionvid's public sitemap exposed 201 individual pages, but its Terms prohibit scripted scraping/internal endpoints and copying platform technology. No source projects or preview media were downloaded or bundled; continuous viewing of every preview is not claimed.
+
+## 2026-11-07 — Burst/Aura and effect-region state
+
+Branch `codex/omniframe-text-crop-gif-providers` adds a shared browser/headless action renderer with 50 Burst presets, eight bright-pixel auras, upgraded FBM/curl/glass turbulent displacement and eight liquify effect presets. Action clocks loop, expose speed/cycle/gap controls and survive parent splits. `Fit 1×` shortens a burst to one active cycle. FX rows open the existing ellipse/rectangle/circle/text/custom region mask; its verified scope is the combined clip effect stack. Adjustment-only raster/action masks now isolate correctly. Compact category icons and cleaner asset cards were browser-tested. Full evidence and limits: `docs/ACTION_EFFECTS_20261107.md`.
+
+Green checks: typecheck, production web build, action/deformation/particle/split units, live action UI, context-menu bounds/keyboard and live MCP bridge. Base/full catalog counts are 10,550/15,550. Native Tauri compilation remains blocked by missing Rust/Cargo in this runner. Retained visual/static audit evidence was used; no additional continuous YouTube watch is claimed.
+
 ## 2026-11-01 — 1,152 Studio Looks and effect-library controls
 
 Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.
@@ -231,3 +329,8 @@ Replace-Video-With-Video, TEMPLATE MODE, Alight Motion import, continue.md.
 The full 1,152-look moving render batch and combined reel are complete under `effect_vid/`. The independent `new_work_qa/RDT_recopy1.mp4` render and manifest are complete. Blend-mode keyframes, rendered live/headless preset previews, exact requested blur aliases, and GIPHY search/import are implemented and tested. Web production build and primary browser tests pass. Native Tauri launch is not claimed: this runner lacks Rust/Cargo, WebKitGTK 4.1 development files, and rsvg2; desktop frontend IPC contracts pass in a controlled shell harness and installer builds remain in the CI matrix.
 
 The corrected `new_work_qa/RDT_recopy2.mp4` uses real duplicated negative scene video as the title glyph fill, seven varied looks and speed curves, and keyed Screen/Color Burn modes. It validates at 601/601 distinct frames with AAC audio. Screen best fits the bright reference title cores; Linear Burn is not claimed. Live text fills have an independent video decoder and editable Negative/brightness/contrast/saturation/core/source-time controls; `text_crop_video` provides the same operation over live and headless MCP. GIPHY and Klipy keys now live in Settings → AI & APIs, and the shared GIF Library has tested search, provider switching, attribution, loading/error/download states and editable MP4 import. GitHub push is authorized by the latest user request.
+## 2026-11-08 — directional light/blur and tutorial-audit state
+
+Directional light now renders as an editable angled/feathered beam through the same browser, desktop and headless compositor. Directional Blur adds trail bias, angle spread and bright-pixel threshold controls; the existing direct blur aliases remain. Six distinct render fixtures, live icon/slider persistence, catalog controls, import clamping, typecheck/build and universal/action regressions pass. Evidence: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `qa-output/directional-light-blur/`.
+
+The user-provided subscriptions export contains 211 unique channels. A deterministic 36-batch GitHub audit queue now inventories and classifies tutorial candidates before sending 20 at a time through the existing decoded-frame/audio pipeline. Refined batch 1 indexed 889 entries / 814 candidates and acquired 20/20 selected videos through the cookie-backed runner, producing 343 frames and 60 audio diagnostics. Human visual/audio review remains pending; this is not 211 watched channels. Product quality targets are defined in `docs/PRODUCT_GOAL.md`.

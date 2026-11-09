@@ -44,6 +44,30 @@ export function resolveMarkerTime(m: TimelineMarker, clips: Pick<Clip, 'id' | 's
   return m.time
 }
 
+export interface MarkerSearchResult {
+  marker: TimelineMarker
+  time: number
+}
+
+/** Named-marker index used by the timeline finder. Every query word must
+ * match the name, notes, purpose or hosting clip, regardless of punctuation. */
+export function searchMarkers(
+  markers: TimelineMarker[],
+  clips: Pick<Clip, 'id' | 'start' | 'name'>[],
+  query: string,
+): MarkerSearchResult[] {
+  const tokens = query.toLowerCase().match(/[a-z0-9]+/g) ?? []
+  return markers
+    .map((marker) => {
+      const host = marker.clipId ? clips.find((clip) => clip.id === marker.clipId) : undefined
+      const haystack = `${marker.label} ${marker.notes ?? ''} ${marker.kind ?? ''} ${host?.name ?? ''}`.toLowerCase()
+      return { marker, time: resolveMarkerTime(marker, clips), matches: tokens.every((token) => haystack.includes(token)) }
+    })
+    .filter((result) => result.matches)
+    .sort((a, b) => a.time - b.time || a.marker.label.localeCompare(b.marker.label))
+    .map(({ marker, time }) => ({ marker, time }))
+}
+
 export interface MarkerGroup {
   time: number
   markers: TimelineMarker[]

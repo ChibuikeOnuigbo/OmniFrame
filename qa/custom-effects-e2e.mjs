@@ -141,7 +141,7 @@ await page.waitForTimeout(300)
 assert(await page.evaluate(() => window.__omniframe_store.getState().customEffects.length) === 0, 'delete removes the custom effect')
 
 await page.getByTestId('import-custom-effects-input').setInputFiles(filePath)
-await page.waitForTimeout(400)
+await page.waitForFunction(() => window.__omniframe_store.getState().customEffects.length === 1, null, { timeout: 5000 })
 const imported = await page.evaluate(() => window.__omniframe_store.getState().customEffects[0])
 assert(imported?.name === 'Ball Action QA' && imported.effect.sepia === 0.6, 'import restores the custom effect from file')
 

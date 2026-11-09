@@ -1,3 +1,100 @@
+## 2026-11-09 — photographic thumbnail correction
+
+Effect catalog subjects now use two bundled Pexels photographs: a portrait for
+face/skin/beauty, color, blur and lighting; a car for glitch and other motion.
+Idle thumbnails apply shared canvas filters and raster grading before selection.
+Motion blur demonstrates shared temporal sample weights on a staged photo pan.
+LUT previews use the portrait, including their loading/error fallback, without
+category text over the picture. Source URLs, licenses and SHA-256 hashes are in
+`public/assets/effect-subjects/credits.json`.
+
+Fixed idle photo restoration after adding an effect or stopping an audition.
+Browser coverage includes photo restoration, Gaussian/temporal blur pixel changes,
+scrubbing, add/double-click, menus and live MCP. Typecheck and production build
+pass. Screenshots: `qa-output/square-preview/{glitch-photos,blur-photos}.png`.
+Idle cards are representative stills, not exhaustive temporal/3D effect renders;
+active auditions continue to mirror actual project footage. Full catalog visual
+acceptance and the earlier outstanding editor tasks remain open.
+
+## 2026-11-09 — square previews, 300K recipes and timeline audit
+
+Square effect/transition cards mirror active program auditions, expose a scrubber,
+hover/focus Add and double-click commit. Three reusable local subject images,
+themed catalog shortcuts, 300,000 base / 305,000 loaded recipes. Timeline gets
+3px raised playhead, marker alignment color, searchable markers, resolved marker
+navigation, millisecond ruler and decoded-media scrub pause. Ripple-delete menu
+added. Evidence and limits: `docs/SQUARE_EFFECT_BROWSER_20261109.md` and
+`ultimate tests/Ultimate_timeline_est.md`. Twenty million numerical clamp cases
+are distinct from the browser/render tests; full timeline certification is open.
+
+## 2026-11-08 — movable tilt-shift focus plane
+
+Tilt Shift now has six shared preview/export controls: amount, focus X/Y,
+angle, width and feather. The renderer keeps an angled sharp plane over a
+blurred field, works in translated clip-isolation canvases and reuses bounded
+scratch surfaces instead of allocating three canvases per frame. Forty-eight
+curated, editable presets raise the catalog to 150,048 base / 155,048 loaded
+while preserving every indexed ID. Catalog search now matches all natural query
+tokens across punctuation. Unit and live browser evidence is documented in
+`docs/TILT_SHIFT_FOCUS_20261108.md`.
+
+## 2026-11-08 — strict 200-control UI scan
+
+The left dock now uses a reusable keyboard focus fallback, 24px slider/action
+targets, explicit pressed semantics and stronger selected/rest/hover border
+hierarchies. The Effects collection picker follows the requested three-cell
+layout (previous / current collection / next), and its categories use a stable
+four-column grid. A live 1600×1000 Chromium audit measured exactly 20 visible,
+unclipped controls in each of ten modes and produced **200 PASS / 0 REVIEW /
+0 FAIL**, with no page errors. Ten cutout contact sheets and the complete
+numbered ledger are in `docs/UI_QUALITY_200_SCAN_20261108.md` and
+`qa-output/ui-200/`. The separate two-viewport affordance sweep also reports
+zero tiny, unnamed or duplicate-test-id findings.
+
+## 2026-11-08 — 150K indexed effects and working shortcut settings
+
+The Effects browser now has 150,048 base recipes: 10,623 curated/materialized
+plus 139,425 stable indexed variations. Loading the separate authored Glitch NG
+pack produces 155,048 live recipes. Indexed recipes are reconstructed by page
+or ID instead of retained as 139k objects. UI search, categories, collections,
+favorites, project application and MCP paging/lookup use the same catalog API.
+
+Settings now exposes 44 configurable commands and Studio actually executes
+those saved bindings. Rebind, reload persistence, clearing, exact modifiers,
+multi-delete, grouping and export In/Out passed unit/live browser checks.
+Details and limits: `docs/EFFECT_CATALOG_150K_20261108.md` and
+`qa-output/effect-150k/`. Counts are recipes over shared kernels; do not report
+them as 150,048 independent algorithms or full-motion approvals.
+
+## 2026-11-08 — lens bokeh, exact catalog count and source audit
+
+Camera lens bokeh is now a shared browser/headless raster effect with editable
+amount, radius, highlight threshold/gain, eight aperture shapes, rotation and
+softness. Sixteen real recipes bring the base catalog to 10,575 unique IDs and
+the loaded total to 15,575 with the existing 5,000 pack. These are recipe
+counts. Numeric controls keyframe and the existing effect-region mask scopes
+the result. A live-browser translated-pad bug was found from the screenshot and
+fixed; rerun the live UI test after future pixel-grade transform work.
+
+Official blur/animation pages, the MIT LibreCuts release/source and a CC0 Poly
+Haven camera candidate are recorded in `docs/LENS_BOKEH_EFFECTS_20261108.md`
+and `research/effect-source-audit-20261108.json`. The APK was never executed;
+the camera candidate was hash-verified and Blender-rendered but not bundled.
+Do not call this a complete scan of every linked product manual or a native
+Android/desktop certification.
+
+## 2026-11-07 — Motion Lab 201 original editable templates
+
+The orphaned four-item sequence-template modal is now a reachable Motion Lab with 201 original recipes, 16 categories, 12 keyframe motion families, eight procedural backdrops, search/filtering, media slot mapping and a real editable scene builder. The top-bar/mobile opener, modal stacking, generated SVG background, aspect setting, media fallbacks, styled text layers and Curve Engine keys passed unit and live Chromium checks. Evidence and exact access limits: `docs/MOTION_LAB_20261107.md`, `research/motionvid-public-catalog-scope-20261107.json`, `qa-output/motion-lab/`.
+
+Motionvid public pages reported 201 individual template URLs, but its Terms prohibit scripted scraping/internal endpoints and copying or derivative platform technology. No Motionvid projects or preview assets were bulk-downloaded or committed; no full-preview watch is claimed. The response is an independent OmniFrame catalogue using general motion-design techniques.
+
+## 2026-11-07 — shared Burst/Aura engine, turbulence, liquify and effect regions
+
+Current branch `codex/omniframe-text-crop-gif-providers` now has a shared deterministic action engine: 50 real Burst presets (10 families × 5 tiers), eight bright-pixel aura presets, six FBM/curl/glass turbulence presets and eight parameterized liquify presets. Burst ranges loop with editable speed/cycle/gap, preserve phase across parent splits, and expose `Fit 1×`. Every FX stack row links to the existing multi-region effect mask; the mask scopes the combined clip stack, including raster/action effects and adjustment layers. Effect tabs/cards gained compact icons and asset browsing no longer displays licence acronyms, while attribution metadata remains stored.
+
+Verified: typecheck/build; action, deformation, particle and split-clock units; live Burst catalog/apply/fit/mask/asset-library browser test; required context-menu and live MCP regressions. Evidence and source limits: `docs/ACTION_EFFECTS_20261107.md`, `qa/artifacts/burst-fx-contact-sheet.png`, `qa-output/action-fx/`. Base catalog is now 10,550 recipes and 15,550 after the existing 5,000-recipe lazy pack loads; counts are presets, not unique algorithms. A read-only GitHub API scan recorded ten upscaling, roto, depth and 3D candidates with API-reported code licences; no uncertain or heavyweight model was silently bundled. Rust/Cargo is absent on this runner, so a native Tauri build remains unverified. No new end-to-end YouTube viewing is claimed; retained audit evidence was used.
+
 ## 2026-11-01 — 1,152 Studio Looks and effect-library controls
 
 Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.
@@ -89,3 +186,8 @@ All 1,152 Studio Looks now have individual moving MP4s plus a combined 38:24 ree
 ## 2026-11-01 corrected text-matte and GIF-provider increment
 
 `new_work_qa/RDT_recopy2.mp4` supersedes the first pass for review: 25.041667 s, 360×640 H.264 at 24 fps, AAC audio, 601/601 distinct decoded frames, SHA-256 `febe6a61368bc73def09ae3c2bea5f7bd16dbefa91f059c11fcbfbc831178c87`. It uses seven separate scene looks/speed curves and real duplicated negative video cropped inside every title, with keyed Screen/Color Burn holds. Screen is the evidence-based inference for the reference's bright cores; Linear Burn is not claimed. Browser and headless renderers now share editable video fill fields, and browser fills use an independent decoder so the matte does not fight the underlying clip for seek time. Settings → AI & APIs holds tab-only GIPHY and Klipy keys; the Media GIF Library tests provider switching, search, attribution, loading/download states and editable MP4 import. User has now explicitly authorized a GitHub push.
+## 2026-11-08 — directional light/blur and subscription audit queue
+
+Added a shared Point/Spot/Directional light compositor, professional directional-blur bias/spread/luma controls, ten focused recipes and icon-first light controls. Browser UI, headless rendering, catalog/sanitizer and a six-render contact sheet passed; the particle/overlay sliders no longer display `NaN`. Product targets are now explicit in `docs/PRODUCT_GOAL.md`. Details: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md`.
+
+The uploaded 211-channel subscriptions CSV now drives a 36-batch, cookie-capable GitHub audit queue. Refined batch 1 indexed 889 entries / 814 candidates and acquired 20/20 selected videos (2.07 source hours) into 343 timestamped frames and 60 audio diagnostics. Full visual/audio review remains pending; sampled evidence is not a full-watch claim. Details: `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`.

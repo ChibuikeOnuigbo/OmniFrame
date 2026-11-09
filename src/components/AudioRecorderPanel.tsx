@@ -246,7 +246,7 @@ export function AudioRecorderPanel() {
         data-testid="audio-recorder-toggle"
         aria-expanded={expanded}
         onClick={() => setExpanded((value) => !value)}
-        className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left"
+        className="flex w-full items-center justify-between gap-2 rounded-t-xl border border-transparent px-3 py-2.5 text-left transition-colors hover:border-ink-700 hover:bg-ink-900/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
         <span className="flex min-w-0 items-center gap-2">
           <span className="rounded-md border border-rose-400/25 bg-rose-500/10 p-1.5 text-rose-300"><Mic size={13} /></span>

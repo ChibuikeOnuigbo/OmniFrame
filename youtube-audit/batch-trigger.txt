@@ -1,3 +1,6 @@
-batch=19
-ids=Nt7yP-e06Oo,SsXi5rqVlvA,Tmki6M1_PWI,WmkdYFcXCtg,XE_Gx_m6MLQ,evsxqvwn65o,exRqiCBW-u8,fb-Ac9P4QZg,l1GF8APyVTg,pGd7t371kAk,tQIlQt4dTiM,umTDI962BhM,vTyefIjQ8_Q,yOjYKje861U,yXSlgdbaA_Q
-nonce=ledger-wave-2-20261102
+mode=subscriptions
+batch=1
+channels_per_batch=6
+playlist_start=1
+playlist_end=500
+nonce=subscriptions-20261108-1-refined

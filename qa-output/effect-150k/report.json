@@ -1,0 +1,24 @@
+{
+  "baseRecipes": 150048,
+  "loadedRecipes": 155048,
+  "applied": "ofx-139425",
+  "editableParams": 8,
+  "shortcuts": 44,
+  "runtimeCommands": [
+    "rebind",
+    "reload-persistence",
+    "clear",
+    "export-in",
+    "export-out",
+    "group",
+    "ungroup",
+    "multi-delete"
+  ],
+  "rebound": {
+    "leftOpen": true,
+    "leftTab": "effects",
+    "binding": "Alt+7",
+    "saved": "Alt+7"
+  },
+  "errors": []
+}

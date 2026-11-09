@@ -698,9 +698,9 @@ const APP_FUNCTION_CATALOG = {
   edit: ['transform (pos/size/rot)', 'mask draw/clear', 'roto points mask', 'effects inside', 'blend+opacity', 'speed curve', 'convert to compound'],
   select: ['click preview coords', 'select by id', 'expand to group'],
   contextMenu: ['group', 'ungroup', 'new-null', 'compound', 'duplicate', 'delete', 'bring-front', 'send-back'],
-  effects: ['pixelate', 'waveWarp', 'chromaKey', 'lumaKey (bg removal)', 'fractalBlur', 'cardFlip', 'posterize', 'grain', 'chromatic', 'lightType/intensity/color/falloff', 'particleFx: feathers/embers/dust/bokeh(+shape beds bokeh-square/plus/triangle/hexagon/star/bowtie/slash)/sparkles/snow/rain/petals', 'overlayFx: scanlines/halftone/spotlight/vignette/lightleak/frameglow', 'replaceBg: synthwave/aurora/grid/bokeh/sunset/studio', 'fx catalog (9k+ real presets, 8 sub-tabs) via fx_catalog/fx_add/fx_update/fx_remove', 'glitch EFFECT (intensity/style/scan/static/seed/rate, keyframeable — no longer a transition)', 'deviceOverlay: none/phone/monitor (AI chroma-green plates keyed live)', 'transitions: device_phone/device_monitor/device_tv (procedural 3D device fly-in → 2D handoff)'],
+  effects: ['pixelate', 'waveWarp', 'chromaKey', 'lumaKey (bg removal)', 'fractalBlur', 'cardFlip', 'posterize', 'grain', 'chromatic', 'directional blur with angle/bias/spread/threshold', 'lens bokeh with amount/radius/threshold/gain/8 aperture shapes/rotation/softness', 'movable tilt-shift focus plane with centre/angle/width/feather', 'turbulent FBM/curl/glass', 'liquify push/bulge/pinch/twirl', '50 burst presets + bright-pixel aura', 'effect regions: ellipse/rectangle/circle/text/custom', 'point/spot/directional light with color/intensity/angle/width/softness', 'particleFx: feathers/embers/dust/bokeh(+shape beds bokeh-square/plus/triangle/hexagon/star/bowtie/slash)/sparkles/snow/rain/petals', 'overlayFx: scanlines/halftone/spotlight/vignette/lightleak/frameglow', 'replaceBg: synthwave/aurora/grid/bokeh/sunset/studio', 'fx catalog (300k base / 305k with authored pack, paged) via fx_catalog/fx_add/fx_update/fx_remove', 'glitch EFFECT (intensity/style/scan/static/seed/rate, keyframeable — no longer a transition)', 'deviceOverlay: none/phone/monitor (AI chroma-green plates keyed live)', 'transitions: device_phone/device_monitor/device_tv (procedural 3D device fly-in → 2D handoff)'],
   keyframes: ['position_x/y/z', 'rotation_x/y/z', 'scale_x/y/z', 'opacity', 'pivot_x/y', 'interpolations: constant/linear/bezier/ease-in/ease-out/ease-in-out/cubic-in/cubic-out/back/bounce/elastic'],
-  presetsCatalogs: ['TEXT_PRESETS', 'PILLAR_PRESETS (glitch family now EFFECTS)', 'TRANSITION_PRESETS (glitch removed)', 'RATIO_PRESETS', 'speedCurves (15)', 'effectCatalog (9k+)'],
+  presetsCatalogs: ['TEXT_PRESETS', 'PILLAR_PRESETS (glitch family now EFFECTS)', 'TRANSITION_PRESETS (glitch removed)', 'RATIO_PRESETS', 'speedCurves (15)', 'effectCatalog (300k base, indexed paging)'],
 }
 class Help extends MCPTool {
   constructor() { super('help', 'Explains EVERY tool + lists all app functions/creation types so an agent can discover instead of guess.', {}) }
@@ -717,6 +717,8 @@ class ListPresets extends MCPTool {
   constructor() { super('list_presets', 'Paginated log of existing presets BEFORE choosing. Use preset_preview for rendered pixels.', { catalog: 'effect|text|pillar|transition|lut|ratios|speed|shake', offset: 'n', limit: 'n' }) }
   async run({ catalog = 'text', offset = 0, limit = 8 }) {
     let entries = []
+    offset = Math.max(0, Number(offset) || 0)
+    limit = Math.max(1, Math.min(200, Number(limit) || 8))
     const scan = (rel) => {
       const src = fs.readFileSync(path.join(ROOT, rel), 'utf8')
       const out = []
@@ -725,7 +727,10 @@ class ListPresets extends MCPTool {
       while ((m = re.exec(src))) out.push({ id: m[1], name: m[2] })
       return out
     }
-    if (catalog === 'effect') entries = FXC.getFxCatalog().map(({ id, name, cat }) => ({ id, name, category: cat }))
+    if (catalog === 'effect') {
+      const page = FXC.queryFxCatalog({ offset, limit })
+      return SESSION.note('list_presets', { catalog, offset, limit }, { catalog, total: page.total, offset, count: page.entries.length, nextOffset: offset + page.entries.length < page.total ? offset + page.entries.length : null, entries: page.entries.map(({ id, name, cat }) => ({ id, name, category: cat })) })
+    }
     else if (catalog === 'lut') {
       const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/luts/manifest.json'), 'utf8'))
       entries = (manifest.luts || []).map(({ id, name, category, file }) => ({ id, name, category, file }))
@@ -737,8 +742,6 @@ class ListPresets extends MCPTool {
     else if (catalog === 'shake') entries = (await loadAppTs('src/lib/shakePresets.ts')).SHAKE_PRESETS.map(p => ({ id: p.id, name: p.name }))
     else entries = SPEED.SPEED_CURVES.map(c => ({ id: c.id, name: c.name }))
     const total = entries.length
-    offset = Math.max(0, Number(offset) || 0)
-    limit = Math.max(1, Math.min(200, Number(limit) || 8))
     entries = entries.slice(offset, offset + limit)
     return SESSION.note('list_presets', { catalog, offset, limit }, { catalog, total, offset, count: entries.length, nextOffset: offset + entries.length < total ? offset + entries.length : null, entries })
   }
@@ -1147,16 +1150,15 @@ const FXC = await loadAppTs('src/lib/effectCatalog.ts')
 const FXI = await loadAppTs('src/lib/fxInstances.ts')
 
 class FxCatalog extends MCPTool {
-  constructor() { super('fx_catalog', 'Major tool: the Effects tab catalog — real engine presets (glitch/motion/color/blur/distort/retro/light/key). Every entry renders; all properties stay editable + keyframeable after the drop.', { cat: 'all|glitch|motion|color|blur|distort|retro|light|key', q: 'name search', limit: 'max entries returned (default 12)' }) }
+  constructor() { super('fx_catalog', 'Major tool: the Effects tab catalog — real engine presets (glitch/motion/color/blur/distort/burst/retro/light/key). Burst includes loopable glass, crack, shatter, slice, shockwave, fire, smoke, energy and implosion families. Every entry renders; all properties stay editable + keyframeable after the drop.', { cat: 'all|glitch|motion|color|blur|distort|burst|retro|light|key', q: 'name search', limit: 'max entries returned (default 12)' }) }
   async run({ cat = 'all', q = '', limit = 12 }) {
-    const all = FXC.getFxCatalog()
-    let list = cat && cat !== 'all' ? all.filter(e => e.cat === cat) : all
-    if (q) list = list.filter(e => e.name.toLowerCase().includes(String(q).toLowerCase()))
+    limit = Math.max(1, Math.min(50_000, Number(limit) || 12))
+    const result = FXC.queryFxCatalog({ cat, q: String(q || ''), limit })
     const byCat = {}
-    for (const e of all) byCat[e.cat] = (byCat[e.cat] || 0) + 1
+    for (const category of FXC.FX_CATS) if (category.id !== 'all') byCat[category.id] = FXC.fxCatalogCount(category.id)
     return SESSION.note('fx_catalog', { cat, q, limit }, {
-      total: all.length, byCat,
-      entries: list.slice(0, Number(limit) || 12).map(e => ({ id: e.id, name: e.name, cat: e.cat, params: Object.keys(e.patch), trace: e.trace })),
+      total: FXC.fxCatalogCount(), matched: result.total, byCat,
+      entries: result.entries.map(e => ({ id: e.id, name: e.name, cat: e.cat, params: Object.keys(e.patch), trace: e.trace })),
     })
   }
 }

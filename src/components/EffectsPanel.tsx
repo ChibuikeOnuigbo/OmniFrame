@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { PreviewSquare } from './PreviewSquare'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { Activity, Aperture, Ban, Circle, CircleDot, CloudFog, CloudRain, Download, Feather, Flame, Flower2, Frame, Grid2x2, Grid3x3, Image as ImageIcon, Lamp, Layers, Orbit, Play, Plus, Power, RotateCcw, ScanLine, Search, SlidersHorizontal, Snowflake, Sparkles, SunMedium, Sunset, Trash2, Upload, Wand2, Waves, Wind, X } from 'lucide-react'
+import { Activity, Aperture, Ban, ChevronLeft, ChevronRight, Circle, CircleDot, CloudFog, CloudRain, Download, Feather, Flame, Flower2, Frame, Grid2x2, Grid3x3, Image as ImageIcon, Lamp, Layers, Orbit, Play, Plus, Power, RotateCcw, ScanLine, Search, SlidersHorizontal, Snowflake, Sparkles, SunMedium, Sunset, Trash2, Upload, Wand2, Waves, Wind, X } from 'lucide-react'
 import SegmentCarousel from './SegmentCarousel'
 import ExpandableToolGroup from './ExpandableToolGroup'
 import { useEditor } from '../store'
@@ -11,7 +12,7 @@ import { PanelSection } from './PanelSection'
 import { SHAKE_PRESETS } from '../lib/shakePresets'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
 import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
-import { FX_CATS, getFxCatalog, loadGlitchRecipeCatalog, paramsForPatch, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
+import { FX_CATS, GENERATED_FX_RECIPE_COUNT, fxCatalogCount, loadGlitchRecipeCatalog, queryFxCatalog, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
 import type { CustomEffect } from '../types'
 
 type LutItem = {
@@ -50,6 +51,11 @@ const DEFAULT_EFFECTS: ClipEffect = {
   lightFalloff: 0.45,
   lightX: 0.5,
   lightY: 0.4,
+  lightAngle: 35,
+  lightWidth: 0.28,
+  lightSoftness: 0.4,
+  particleDensity: 0.5,
+  overlayStrength: 0.5,
 }
 
 let lutPreviewImagePromise: Promise<HTMLImageElement> | null = null
@@ -61,7 +67,7 @@ function loadLutPreviewImage() {
       image.decoding = 'async'
       image.onload = () => resolve(image)
       image.onerror = () => reject(new Error('LUT preview image could not be loaded'))
-      image.src = '/assets/room/clean_room_background.png'
+      image.src = '/assets/effect-subjects/pexels-portrait.jpg'
     }).catch((error) => {
       lutPreviewImagePromise = null
       throw error
@@ -74,8 +80,6 @@ function LutPreview({
   id,
   file,
   cubeText,
-  swatch,
-  category,
 }: {
   id: string
   file?: string
@@ -123,7 +127,7 @@ function LutPreview({
         context.putImageData(pixels, 0, 0)
         if (active) setPreviewUrl(canvas.toDataURL('image/jpeg', 0.84))
       } catch {
-        // Keep the color swatch fallback if a local preview/LUT cannot load.
+        // Keep the source photograph if a local LUT cannot load.
       }
     })()
     return () => { active = false }
@@ -134,10 +138,8 @@ function LutPreview({
       {previewUrl ? (
         <img data-testid={`lut-preview-${id}`} src={previewUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
-        <span className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${swatch || 'rgb(78, 104, 130)'} 0%, #182331 58%, #0c1018 100%)` }} />
+        <img src="/assets/effect-subjects/pexels-portrait.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
       )}
-      <span className="absolute inset-x-0 bottom-0 h-5 bg-gradient-to-t from-black/75 to-transparent" />
-      {category && <span className="absolute bottom-1 left-1.5 text-[9px] font-semibold uppercase tracking-wider text-white/90" aria-hidden="true">{category}</span>}
     </span>
   )
 }
@@ -744,20 +746,25 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           <div className="flex items-center justify-between gap-2">
             <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-200/90">Light layer</span>
             <div className="flex gap-1">
-              {(['point', 'spot'] as const).map((lt) => (
+              {([
+                { id: 'point', label: 'Point', Icon: SunMedium },
+                { id: 'spot', label: 'Spot', Icon: Lamp },
+                { id: 'directional', label: 'Beam', Icon: Wind },
+              ] as const).map(({ id: lt, label, Icon }) => (
                 <button
                   key={lt}
                   type="button"
                   data-testid={`light-type-${lt}`}
                   aria-pressed={(effects.lightType ?? 'point') === lt}
                   onClick={() => setClipEffect(clip.id, { lightType: lt })}
-                  className={`rounded border px-1.5 py-0.5 text-[9px] capitalize transition-colors ${
+                  title={`${label} light`}
+                  className={`flex items-center gap-1 rounded border px-1.5 py-0.5 text-[9px] transition-colors ${
                     (effects.lightType ?? 'point') === lt
                       ? 'border-amber-400/60 bg-amber-400/15 text-amber-200'
                       : 'border-ink-700 text-ink-400 hover:text-white'
                   }`}
                 >
-                  {lt}
+                  <Icon size={10} aria-hidden="true" />{label}
                 </button>
               ))}
             </div>
@@ -775,15 +782,26 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
           {(
             [
               { key: 'lightIntensity', label: 'Intensity', min: 0, max: 1.5, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` },
-              { key: 'lightFalloff', label: 'Falloff', min: 0.1, max: 1, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              ...(effects.lightType === 'directional'
+                ? []
+                : [{ key: 'lightFalloff', label: 'Falloff', min: 0.1, max: 1, step: 0.05, fmt: (v: number) => `${Math.round(v * 100)}%` }]),
               { key: 'lightX', label: 'Position X', min: 0, max: 1, step: 0.02, fmt: (v: number) => `${Math.round(v * 100)}%` },
               { key: 'lightY', label: 'Position Y', min: 0, max: 1, step: 0.02, fmt: (v: number) => `${Math.round(v * 100)}%` },
+              ...((effects.lightType === 'directional' || effects.lightType === 'spot')
+                ? [{ key: 'lightAngle', label: 'Angle', min: -180, max: 180, step: 1, fmt: (v: number) => `${Math.round(v)}°` }]
+                : []),
+              ...(effects.lightType === 'directional'
+                ? [
+                    { key: 'lightWidth', label: 'Beam width', min: 0.03, max: 1, step: 0.01, fmt: (v: number) => `${Math.round(v * 100)}%` },
+                    { key: 'lightSoftness', label: 'Softness', min: 0, max: 1, step: 0.01, fmt: (v: number) => `${Math.round(v * 100)}%` },
+                  ]
+                : []),
             ] as const
           ).map((c) => (
             <label key={c.key} className="block">
               <span className="mb-0.5 flex items-center justify-between gap-2 text-[10px] text-ink-400">
                 <span>{c.label}</span>
-                <span className="font-mono text-[9px] text-ink-500">{c.fmt((effects[c.key] as number) ?? 0)}</span>
+                <span className="font-mono text-[9px] text-ink-500">{c.fmt((effects[c.key as keyof ClipEffect] as number) ?? 0)}</span>
               </span>
               <input
                 type="range"
@@ -792,13 +810,13 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
                 min={c.min}
                 max={c.max}
                 step={c.step}
-                value={(effects[c.key] as number) ?? 0}
+                value={(effects[c.key as keyof ClipEffect] as number) ?? 0}
                 onChange={(event) => setClipEffect(clip.id, { [c.key]: parseFloat(event.target.value) })}
                 className="of-range w-full"
               />
             </label>
           ))}
-          <p className="text-[9px] leading-snug text-ink-500">Screen-blended radial light over everything beneath this layer.</p>
+          <p className="text-[9px] leading-snug text-ink-500">Screen light over layers beneath. Directional adds an angled, feathered beam.</p>
         </div>
       ) : null}
       {labels.length > 0 && (
@@ -976,17 +994,18 @@ function MyEffects() {
 }
 
 
-/** CAT colour dots so sub-tab scanning works without prose. */
-const CAT_DOT: Record<FxCat, string> = {
-  glitch: 'bg-fuchsia-400',
-  'Glitch NG': 'bg-cyan-300',
-  motion: 'bg-amber-400',
-  color: 'bg-emerald-400',
-  blur: 'bg-sky-400',
-  distort: 'bg-orange-400',
-  retro: 'bg-rose-400',
-  light: 'bg-yellow-300',
-  key: 'bg-lime-400',
+const CAT_ICON: Record<FxCat | 'all', LucideIcon> = {
+  all: Grid2x2,
+  glitch: Activity,
+  'Glitch NG': ScanLine,
+  motion: Orbit,
+  color: Aperture,
+  blur: CloudFog,
+  distort: Waves,
+  burst: Flame,
+  retro: Frame,
+  light: SunMedium,
+  key: CircleDot,
 }
 
 const FX_MIME = 'application/x-omniframe-fx'
@@ -1009,11 +1028,12 @@ function FxCatalogBrowser() {
     try { localStorage.setItem('omniframe.fxFavorites', JSON.stringify(next)) } catch { /* session favorites still work */ }
     return next
   })
-  const [, refreshCatalog] = useState(0)
+  const [catalogRevision, refreshCatalog] = useState(0)
   const [packError, setPackError] = useState('')
   const loadPack = () => { setPackError(''); void loadGlitchRecipeCatalog().then(() => refreshCatalog(n => n + 1)).catch(error => setPackError(String(error.message))) }
   useEffect(loadPack, [])
   const [q, setQ] = useState('')
+  const deferredQuery = useDeferredValue(q)
   const [limit, setLimit] = useState(60)
   const clips = useEditor((s) => s.clips)
   const assets = useEditor((s) => s.assets)
@@ -1022,16 +1042,28 @@ function FxCatalogBrowser() {
   const addFxAdjustment = useEditor((s) => s.addFxAdjustment)
   const requestRightSection = useEditor((s) => s.requestRightSection)
 
-  const all = getFxCatalog()
-  const entries = useMemo(() => {
-    let list = all
-    if (collection === 'studio') list = list.filter(e => e.id.startsWith('studio-'))
-    if (collection === 'favorites') list = list.filter(e => favorites.includes(e.id))
-    if (cat !== 'all') list = list.filter((e) => e.cat === cat)
-    const query = q.trim().toLowerCase()
-    if (query) list = list.filter((e) => e.name.toLowerCase().includes(query) || e.trace.toLowerCase().includes(query))
-    return list
-  }, [all, cat, q, collection, favorites])
+  const catalog = useMemo(() => queryFxCatalog({
+    cat,
+    q: deferredQuery,
+    limit,
+    collection: collection as 'all' | 'curated' | 'generated' | 'studio' | 'favorites',
+    favorites,
+  }), [cat, deferredQuery, limit, collection, favorites, catalogRevision])
+  const entries = catalog.entries
+  const catalogTotal = fxCatalogCount()
+  const collectionOptions = [
+    { value: 'all', label: 'All · 300K+' },
+    { value: 'curated', label: 'Curated + authored' },
+    { value: 'generated', label: `Indexed · ${GENERATED_FX_RECIPE_COUNT.toLocaleString()}` },
+    { value: 'studio', label: 'Studio Looks · 1,152' },
+    { value: 'favorites', label: `Favorites · ${favorites.length}` },
+  ]
+  const stepCollection = (delta: number) => {
+    const current = Math.max(0, collectionOptions.findIndex((option) => option.value === collection))
+    const next = collectionOptions[(current + delta + collectionOptions.length) % collectionOptions.length]
+    setCollection(next.value)
+    setLimit(60)
+  }
 
   const apply = (entry: FxCatalogEntry, asLayer: boolean) => {
     const clip = clips.find((c) => c.id === selectedClipId)
@@ -1050,27 +1082,36 @@ function FxCatalogBrowser() {
 
   return (
     <div data-testid="fx-catalog-browser" className="space-y-1.5">
-      <label className="flex items-center justify-between gap-2 text-[11px] text-ink-300">Collection
-        <select aria-label="Effect collection" value={collection} onChange={e => { setCollection(e.target.value); setLimit(60) }} className="rounded border border-ink-700 bg-ink-900 p-1">
-          <option value="all">All effects</option><option value="studio">Studio Looks · 1,152 recipes</option><option value="favorites">Favorites · {favorites.length}</option>
-        </select>
-      </label>
+      <div className="space-y-1 text-[10px] text-ink-400">
+        <span className="font-medium uppercase tracking-[0.12em]">Collection</span>
+        <div className="grid grid-cols-[28px_minmax(0,1fr)_28px] items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-900" data-testid="fx-collection-stepper">
+          <button type="button" data-testid="fx-collection-prev" aria-label="Previous effect collection" onClick={() => stepCollection(-1)} className="grid place-items-center border-r border-ink-700 text-ink-400 transition-colors hover:border-ink-500 hover:bg-ink-800 hover:text-white focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"><ChevronLeft size={13} /></button>
+          <select data-testid="fx-collection-select" aria-label="Effect collection" value={collection} onChange={e => { setCollection(e.target.value); setLimit(60) }} className="min-w-0 border-0 bg-transparent px-2 py-1.5 text-center text-[10px] font-medium text-ink-100 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300">
+            {collectionOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+          <button type="button" data-testid="fx-collection-next" aria-label="Next effect collection" onClick={() => stepCollection(1)} className="grid place-items-center border-l border-ink-700 text-ink-400 transition-colors hover:border-ink-500 hover:bg-ink-800 hover:text-white focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"><ChevronRight size={13} /></button>
+        </div>
+      </div>
+      <div className="flex gap-1 overflow-x-auto pb-1" aria-label="Effect packs">
+        {['Lens Bokeh', 'Motion Pulse', 'Directional Light', 'Turbulence'].map(pack => <button key={pack} type="button" onClick={() => {setQ(pack); setCat('all'); setCollection('all'); setLimit(60)}} className="shrink-0 rounded border border-ink-700 px-2 py-1 text-[10px] hover:border-cyan-400">{pack}</button>)}
+      </div>
       {packError && <button type="button" onClick={loadPack} className="text-[10px] text-amber-300">{packError} · Retry recipe library</button>}
-      <p className="text-[9px] text-ink-500">Choose and search on the left. Edit, keyframe and reorder applied layers in the right inspector. Recipe count does not imply visual uniqueness.</p>
-      <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Effect categories">
-        {FX_CATS.map((c) => (
-          <button
+      <div className="grid grid-cols-4 gap-1" role="tablist" aria-label="Effect categories" data-testid="fx-category-grid">
+        {FX_CATS.map((c) => {
+          const Icon = CAT_ICON[c.id]
+          return <button
             key={c.id}
             type="button"
             role="tab"
             aria-selected={cat === c.id}
             data-testid={`fx-cat-${c.id}`}
             onClick={() => { setCat(c.id as FxCat | 'all'); setLimit(60) }}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${cat === c.id ? 'bg-cyan-400 text-ink-950' : 'bg-ink-800 text-ink-300 hover:bg-ink-700'}`}
+            title={c.label}
+            className={`flex min-w-0 items-center justify-center gap-1 rounded-md border px-1.5 py-1 text-[9px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 ${cat === c.id ? 'border-cyan-200 bg-cyan-400 text-ink-950 shadow-[0_0_0_1px_rgba(103,232,249,.35)]' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500 hover:bg-ink-800 hover:text-white'}`}
           >
-            {c.label}
+            <Icon size={11} className="shrink-0" aria-hidden="true" /><span className="min-w-0 truncate">{c.label}</span>
           </button>
-        ))}
+        })}
       </div>
       <div className="flex items-center gap-1.5">
         <div className="relative min-w-0 flex-1">
@@ -1085,52 +1126,31 @@ function FxCatalogBrowser() {
           />
         </div>
         <span className="shrink-0 font-mono text-[9px] text-ink-400" data-testid="fx-catalog-count">
-          {entries.length}/{all.length}
+          {catalog.total.toLocaleString()}/{catalogTotal.toLocaleString()}
         </span>
       </div>
       <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
-        {entries.slice(0, limit).map((e) => (
-          <div key={e.id} className="group relative">
-            <div className="flex justify-between gap-1">
-              <button type="button" aria-label={`${favorites.includes(e.id) ? 'Unfavorite' : 'Favorite'} ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="px-1 text-xs text-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>
-              <button type="button" aria-label={`Preview ${e.name}`} onClick={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }} className="px-1 text-[10px] text-cyan-300">Preview</button>
-              <button type="button" data-testid={`fx-tile-layer-${e.id}`} aria-label={`Place ${e.name} as an adjustment layer`} onClick={() => apply(e, true)} className="px-1 text-[10px] text-cyan-300">Layer</button>
-            </div>
-            <button
-              type="button"
-              draggable
-              data-testid={`fx-tile-${e.id}`}
-              title={`${e.name} — ${e.trace}\nDrag onto an image/video/compound clip, or click to apply.`}
-              onDragStart={(ev) => {
-                ev.dataTransfer.setData(FX_MIME, e.id)
-                ev.dataTransfer.effectAllowed = 'copy'
-              }}
-              onClick={() => apply(e, false)}
-              className="flex w-full cursor-grab items-center gap-1 rounded border border-ink-700 bg-ink-900/80 px-1.5 py-1 text-left transition-colors hover:border-cyan-400/70 hover:bg-cyan-950/40 active:cursor-grabbing"
-            >
-              <span className={`h-2 w-2 shrink-0 rounded-full ${CAT_DOT[e.cat]}`} aria-hidden="true" />
-              <span className="min-w-0 flex-1 truncate text-[9.5px] font-medium text-ink-100">{e.name}</span>
-            </button>
-
-          </div>
-        ))}
+        {entries.slice(0, limit).map((e) => <div key={e.id} className="relative">
+          <PreviewSquare id={`fx-tile-${e.id}`} name={e.name} dragId={e.id} effect={e.patch as ClipEffect}
+            image={`/assets/effect-subjects/${/face|portrait|skin|beauty|eye/i.test(e.name) || ['color', 'blur', 'key', 'light'].includes(e.cat) ? 'pexels-portrait' : 'pexels-car'}.jpg`}
+            preview={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }}
+            add={() => { addFxAdjustment(e.id, { start: useEditor.getState().playhead, duration: 2 }); requestRightSection('effects') }} />
+          <button type="button" aria-label={`Favorite ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="absolute top-1 left-1 h-6 w-6 rounded bg-black/60 text-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>
+        </div>)}
       </div>
-      {entries.length > limit && (
+      {catalog.total > entries.length && (
         <button
           type="button"
           data-testid="fx-catalog-more"
           onClick={() => setLimit((n) => n + 120)}
           className="w-full rounded border border-ink-700 py-1 text-[10px] text-ink-300 hover:bg-ink-800"
         >
-          Show more ({entries.length - limit} left)
+          Show more ({(catalog.total - entries.length).toLocaleString()} left)
         </button>
       )}
-      {entries.length === 0 && (
+      {catalog.total === 0 && (
         <p className="py-2 text-center text-[10px] text-ink-500">No effects match — try another sub-tab or clear the search.</p>
       )}
-      <p className="text-[9px] leading-snug text-ink-500" data-testid="fx-catalog-note">
-        {paramsForPatch(entries[0]?.patch || {}).length >= 0 ? `${all.length} catalog recipes · applied properties remain editable and keyframeable.` : ''}
-      </p>
     </div>
   )
 }
@@ -1181,10 +1201,10 @@ export function EffectsPanel() {
         <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200">
           <Wand2 size={12} /> Effects
         </div>
-        <p className="mt-1 text-[10px] leading-snug text-ink-300">Drag onto a clip or click to apply — settings auto-open in the right panel.</p>
+        <p className="mt-1 text-[10px] leading-snug text-ink-300">Click to preview · Double-click or + to add</p>
       </div>
 
-      <PanelSection title="Effect catalog" hint={String(getFxCatalog().length)} defaultOpen testId="fx-catalog">
+      <PanelSection title="Effect catalog" hint="300K+" defaultOpen testId="fx-catalog">
         <FxCatalogBrowser />
       </PanelSection>
 

@@ -1,3 +1,4 @@
+import { effectFilterString } from './effectFilter'
 import { blendAt } from './blendModes'
 import { proxySource } from './mediaProxies'
 import { shouldRenderPreview } from './previewPerformance'
@@ -65,6 +66,7 @@ import { getLayeredArtworkInfo, toCanvasCompositeOperation } from './layeredArtw
 import type { VisualPreview } from './visualPreview'
 import { drawPillarFamily } from './pillarRenderers'
 import { PILLAR_DEF_BY_TYPE } from './transitionPresets'
+import { applyLightComposite } from './lightFx'
 
 export const PW = 1280
 export const PH = 720
@@ -184,19 +186,6 @@ function activeClipOnTrack(clips: Clip[], trackId: string, time: number): Clip |
   )
 }
 
-function effectFilterString(effect?: ClipEffect): string {
-  if (!effect) return ''
-  const filters: string[] = []
-  if (typeof effect.brightness === 'number' && effect.brightness !== 1) filters.push(`brightness(${effect.brightness})`)
-  if (typeof effect.contrast === 'number' && effect.contrast !== 1) filters.push(`contrast(${effect.contrast})`)
-  if (typeof effect.saturation === 'number' && effect.saturation !== 1) filters.push(`saturate(${effect.saturation})`)
-  if (typeof effect.blur === 'number' && effect.blur > 0) filters.push(`blur(${effect.blur}px)`)
-  if (typeof effect.grayscale === 'number' && effect.grayscale > 0) filters.push(`grayscale(${effect.grayscale})`)
-  if (typeof effect.invert === 'number' && effect.invert > 0) filters.push(`invert(${effect.invert})`)
-  if (typeof effect.sepia === 'number' && effect.sepia > 0) filters.push(`sepia(${effect.sepia})`)
-  if (typeof effect.hueRotate === 'number' && effect.hueRotate > 0) filters.push(`hue-rotate(${effect.hueRotate}deg)`)
-  return filters.join(' ')
-}
 
 /** Preserve a parent compound's filter while adding this clip's own filters. */
 function applyClipFilter(ctx: CanvasRenderingContext2D, effect?: ClipEffect) {
@@ -204,53 +193,6 @@ function applyClipFilter(ctx: CanvasRenderingContext2D, effect?: ClipEffect) {
   if (!local) return
   const inherited = ctx.filter && ctx.filter !== 'none' ? ctx.filter : ''
   ctx.filter = inherited ? `${inherited} ${local}` : local
-}
-
-/** '#rrggbb'/'#rgb'/'rgb(...)' + alpha -> rgba() string (falls back to warm white). */
-function withAlpha(color: string, alpha: number): string {
-  const a = Math.max(0, Math.min(1, alpha))
-  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(color.trim())
-  if (hex) {
-    const h = hex[1].length === 3 ? hex[1].split('').map((ch) => ch + ch).join('') : hex[1]
-    return `rgba(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)}, ${a})`
-  }
-  const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i.exec(color.trim())
-  if (rgb) return `rgba(${rgb[1]}, ${rgb[2]}, ${rgb[3]}, ${a})`
-  return `rgba(255, 217, 160, ${a})`
-}
-
-/**
- * Gold Motion-style light layer: a radial light (Point, or Spot = squashed
- * ellipse) composited with 'screen' over everything drawn so far.
- */
-function applyLightComposite(
-  ctx: CanvasRenderingContext2D,
-  width: number,
-  height: number,
-  effect?: ClipEffect,
-): void {
-  const intensity = effect?.lightIntensity ?? 0
-  if (!effect || intensity <= 0) return
-  const cx = (effect.lightX ?? 0.5) * width
-  const cy = (effect.lightY ?? 0.4) * height
-  const radius = Math.max(24, (effect.lightFalloff ?? 0.45) * Math.max(width, height))
-  const color = effect.lightColor || '#ffd9a0'
-  const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius)
-  gradient.addColorStop(0, withAlpha(color, Math.min(1, intensity)))
-  gradient.addColorStop(1, withAlpha(color, 0))
-  ctx.save()
-  ctx.setTransform(1, 0, 0, 1, 0, 0)
-  ctx.globalCompositeOperation = 'screen'
-  ctx.globalAlpha = 1
-  ctx.filter = 'none'
-  if (effect.lightType === 'spot') {
-    ctx.translate(cx, cy)
-    ctx.scale(1, 0.55)
-    ctx.translate(-cx, -cy)
-  }
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, width, height)
-  ctx.restore()
 }
 
 export class PreviewEngine {
@@ -734,7 +676,7 @@ export class PreviewEngine {
     // A spatial matte requires grading an isolated copy, then compositing the
     // graded pixels back through the mask. Without a mask we retain the fast
     // in-place path below.
-    if (clip.adjustmentMask && (stack.length > 0 || effectFilter)) {
+    if (clip.adjustmentMask && (stack.length > 0 || effectFilter || hasPixelGrade(effects) || hasNg(effects as NgEffect) || hasClipFxLayers(effects))) {
       const graded = this.takeScratch()
       const gctx = graded.getContext('2d')!
       try {
@@ -830,7 +772,7 @@ export class PreviewEngine {
     // made Space/click pause feel delayed under main-thread load.
     this.unsubscribe = useEditor.subscribe((state, previous) => {
       if (state.playing && !previous.playing) this.last = performance.now()
-      if (!state.playing && previous.playing) {
+      if ((!state.playing && previous.playing) || (state.scrubbing && !previous.scrubbing)) {
         videoCache.forEach((video) => video.pause())
         audioCache.forEach((audio) => audio.pause())
       }
@@ -971,7 +913,7 @@ export class PreviewEngine {
         if (clip.textStyle && track.type === 'video') this.drawTextClip(ctx, clip, time)
         return false
       }
-      const el = this.syncElement(asset, time, clip, st.playing, track.muted, st.speed)
+      const el = this.syncElement(asset, time, clip, st.playing && !st.scrubbing, track.muted, st.speed)
       if (!el) return track.type === 'video'
       if (track.type === 'video') {
         const media = asset.kind === 'video' ? el as HTMLVideoElement : null
@@ -1070,8 +1012,8 @@ export class PreviewEngine {
     st: ReturnType<typeof useEditor.getState>,
     trackMuted: boolean,
   ) {
-    const fromEl = fromAsset ? this.syncElement(fromAsset, time, fromClip, st.playing, trackMuted, st.speed, true) : null
-    const toEl = toAsset ? this.syncElement(toAsset, time, toClip, st.playing, trackMuted, st.speed, true) : null
+    const fromEl = fromAsset ? this.syncElement(fromAsset, time, fromClip, st.playing && !st.scrubbing, trackMuted, st.speed, true) : null
+    const toEl = toAsset ? this.syncElement(toAsset, time, toClip, st.playing && !st.scrubbing, trackMuted, st.speed, true) : null
     const hasFrom = !!fromEl || !!fromClip.textStyle
     const hasTo = !!toEl || !!toClip.textStyle
     if (!hasFrom && !hasTo) return
@@ -1987,7 +1929,7 @@ export class PreviewEngine {
         // element: sharing the main clip's per-asset decoder makes the two
         // layers fight over currentTime whenever their starts/in-points differ.
         const fillAsset = asset.kind === 'video' ? { ...asset, id: `${asset.id}:text-fill:${clip.id}` } : asset
-        const element = this.syncElement(fillAsset, time, carrier, state.playing, true, state.speed, true)
+        const element = this.syncElement(fillAsset, time, carrier, state.playing && !state.scrubbing, true, state.speed, true)
         if (element instanceof HTMLImageElement || (element instanceof HTMLVideoElement && element.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)) insideVideoEl = element
       }
     }
@@ -2586,7 +2528,7 @@ export class PreviewEngine {
         continue
       }
 
-      const el = this.syncElement(childAsset, innerTime, childClip, st.playing, trackMuted || childTrack.muted, st.speed)
+      const el = this.syncElement(childAsset, innerTime, childClip, st.playing && !st.scrubbing, trackMuted || childTrack.muted, st.speed)
       if (!el) continue
 
       if (childTrack.type === 'video') {

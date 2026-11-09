@@ -212,7 +212,7 @@ export function ThreePanel() {
               className={`px-2 py-1 min-h-[24px] rounded text-[10px] font-medium border transition-colors ${
                 cameraPaintActive
                   ? 'border-brand bg-brand/20 text-white'
-                  : 'border-ink-700 bg-ink-900 text-ink-400'
+                  : 'border-ink-700 bg-ink-900 text-ink-400 hover:border-ink-500 hover:bg-ink-800 hover:text-white'
               }`}
             >
               {cameraPaintActive ? 'Active' : 'Off'}

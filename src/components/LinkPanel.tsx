@@ -233,7 +233,7 @@ export function LinkPanel() {
             data-testid="add-null-btn"
             onClick={() => useEditor.getState().addNullObject()}
             title="AE Layer > New > Null Object: invisible transform controller"
-            className="text-[10px] text-brand-400 hover:text-brand-300"
+            className="min-h-6 rounded border border-transparent px-1.5 text-[10px] text-brand-400 transition-colors hover:border-brand/40 hover:bg-brand/10 hover:text-brand-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             + Null
           </button>
@@ -279,7 +279,7 @@ export function LinkPanel() {
             disabled={(selectedClipIds || []).length < 2}
             onClick={() => useEditor.getState().groupSelection()}
             title="CapCut-style group (Ctrl+G)"
-            className="text-[10px] text-brand-400 hover:text-brand-300 disabled:text-ink-600"
+            className="min-h-6 rounded border border-transparent px-1.5 text-[10px] text-brand-400 transition-colors hover:border-brand/40 hover:bg-brand/10 hover:text-brand-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:text-ink-600"
           >
             Group sel.
           </button>

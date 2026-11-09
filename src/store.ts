@@ -70,9 +70,10 @@ import { DEFAULT_CLIP_MASK } from './types'
 import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, dataUrlByteSize, registerCustomFont, registerAllCustomFonts, unregisterCustomFont } from './lib/fonts'
 import { parseSubtitles, parsePalette } from './lib/importUtils'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
-import { uid, clamp } from './lib/time'
+import { uid, clamp, maxTimelineZoom } from './lib/time'
 import { clampFxToClip, splitFxInstances, FX_MIN_DUR } from './lib/fxInstances'
 import { fxCatalogById } from './lib/effectCatalog'
+import { EDITABLE_SHORTCUT_DEFAULTS } from './lib/settingsRegistry'
 import type { FxInstance } from './types'
 import { createSelectionMask } from './lib/drawingEngine'
 import { RATIO_PRESETS } from './lib/aspectRatios'
@@ -245,24 +246,7 @@ export const DEFAULT_CONTEXT_COMMANDS: Record<string, boolean> = {
   delete: true,
 }
 
-export const DEFAULT_SHORTCUTS: Record<string, string> = {
-  split: 'B',
-  marker: 'M',
-  hide: 'H',
-  selectTool: 'V',
-  bladeTool: 'B',
-  delete: 'Delete',
-  duplicate: 'Ctrl+D',
-  cut: 'Ctrl+X',
-  copy: 'Ctrl+C',
-  paste: 'Ctrl+V',
-  undo: 'Ctrl+Z',
-  redo: 'Ctrl+Y / Ctrl+Shift+Z',
-  playPause: 'Space',
-  omniframe: 'Alt+O',
-  threed: '3',
-  speed: 'Ctrl+R',
-}
+export const DEFAULT_SHORTCUTS: Record<string, string> = { ...EDITABLE_SHORTCUT_DEFAULTS }
 
 export const DEFAULT_CURSOR_CONFIG: CursorConfig = {
   enabled: true,
@@ -321,7 +305,7 @@ import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } fro
 import { denoiseAudioBuffer } from './lib/aiDenoise'
 import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
 import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
-import { markerColorHex, MARKER_KINDS } from './lib/markers'
+import { markerColorHex, MARKER_KINDS, resolveMarkerTime } from './lib/markers'
 import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
 
 interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, OmniExtractSlice {
@@ -656,7 +640,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   ) => string
   trimClip: (id: string, edge: 'left' | 'right', value: number) => void
   splitAt: (time: number) => void
-  removeClip: (id: string) => void
+  removeClip: (id: string, ripple?: boolean) => void
   /** Remove every clip currently in the multi-selection (Windows-style lasso). */
   removeSelectedClips: () => number
   /** Shift the whole multi-selection in time, preserving relative offsets. */
@@ -1274,7 +1258,16 @@ export const useEditor = create<EditorState>((set, get) => {
     scrubbing: false,
 
     // ---- settings: context menu, shortcuts, unclustering initial state ----
-    customShortcuts: { ...DEFAULT_SHORTCUTS },
+    customShortcuts: (() => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('omniframe.shortcuts') || '{}')
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return { ...DEFAULT_SHORTCUTS }
+        const saved = Object.fromEntries(Object.entries(parsed).filter(([id, value]) => id in DEFAULT_SHORTCUTS && typeof value === 'string').map(([id, value]) => [id, String(value).trim().slice(0, 48)]))
+        return { ...DEFAULT_SHORTCUTS, ...saved }
+      } catch {
+        return { ...DEFAULT_SHORTCUTS }
+      }
+    })(),
     contextMenuEnabledCommands: { ...DEFAULT_CONTEXT_COMMANDS },
     unclusterInspector: false,
     cursorConfig: { ...DEFAULT_CURSOR_CONFIG },
@@ -2894,7 +2887,7 @@ export const useEditor = create<EditorState>((set, get) => {
       set((s) => ({ clips: newClips, duration: recompute(newClips) }))
     },
 
-    removeClip: (id) => {
+    removeClip: (id, ripple = false) => {
       const current = get().clips.find((c) => c.id === id)
       if (!current || get().tracks.find((t) => t.id === current.trackId)?.locked) return
       pushSnapshot()
@@ -2906,7 +2899,7 @@ export const useEditor = create<EditorState>((set, get) => {
         const removedEnd = current.start + current.duration
         const clips = s.clips
           .filter((c) => !targetIds.has(c.id))
-          .map((clip) => track?.gapless && clip.trackId === current.trackId && clip.start >= removedEnd
+          .map((clip) => (ripple || track?.gapless) && clip.trackId === current.trackId && clip.start >= removedEnd
             ? { ...clip, start: Math.max(current.start, clip.start - current.duration) }
             : clip)
         const transitions = (s.transitions || []).filter(
@@ -3517,7 +3510,7 @@ export const useEditor = create<EditorState>((set, get) => {
       }
       get().stopVisualPreview()
     },
-    setPlayhead: (t) => set((s) => ({ playhead: clamp(t, 0, s.duration) })),
+    setPlayhead: (t) => { if (Number.isFinite(t)) set((s) => ({ playhead: clamp(t, 0, s.duration) })) },
     // Importing or clicking a media asset sets monitorMode to 'source', and the
     // preview then tears down the engine that owns the playhead clock. Playing
     // from that state left `playing: true` with a permanently frozen playhead
@@ -3601,8 +3594,8 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     setAudioIsolationModel: (model) => set({ audioIsolationModel: model }),
 
-    setZoom: (px) => set({ pxPerSec: clamp(px, 8, 8000) }),
-    zoomBy: (factor) => set((s) => ({ pxPerSec: clamp(s.pxPerSec * factor, 8, 8000) })),
+    setZoom: (px) => set((s) => ({ pxPerSec: clamp(px, 8, maxTimelineZoom(s.duration)) })),
+    zoomBy: (factor) => set((s) => ({ pxPerSec: clamp(s.pxPerSec * factor, 8, maxTimelineZoom(s.duration)) })),
     toggleSnapping: () => set((state) => ({ snapping: !state.snapping })),
     setScrubbing: (scrubbing) => set({ scrubbing }),
 
@@ -3628,9 +3621,17 @@ export const useEditor = create<EditorState>((set, get) => {
     closeSubMode: () => set({ activeSubMode: null }),
 
     // ---- settings actions ----
-    setCustomShortcut: (id, key) =>
-      set((s) => ({ customShortcuts: { ...s.customShortcuts, [id]: key } })),
-    resetCustomShortcuts: () => set({ customShortcuts: { ...DEFAULT_SHORTCUTS } }),
+    setCustomShortcut: (id, key) => {
+      if (!(id in DEFAULT_SHORTCUTS)) return
+      const next = { ...get().customShortcuts, [id]: String(key).trim().slice(0, 48) }
+      set({ customShortcuts: next })
+      try { localStorage.setItem('omniframe.shortcuts', JSON.stringify(next)) } catch { /* private mode */ }
+    },
+    resetCustomShortcuts: () => {
+      const next = { ...DEFAULT_SHORTCUTS }
+      set({ customShortcuts: next })
+      try { localStorage.setItem('omniframe.shortcuts', JSON.stringify(next)) } catch { /* private mode */ }
+    },
     toggleContextMenuCommand: (id) =>
       set((s) => ({
         contextMenuEnabledCommands: {
@@ -4922,17 +4923,19 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     jumpToMarker: (id) => {
       const marker = get().markers.find((m) => m.id === id)
-      if (marker) get().setPlayhead(marker.time)
+      if (marker) get().setPlayhead(resolveMarkerTime(marker, get().clips))
     },
     jumpToNextMarker: () => {
       const { markers, playhead } = get()
-      const next = markers.find((m) => m.time > playhead + 0.05)
-      if (next) get().setPlayhead(next.time)
+      const times = markers.map(m => resolveMarkerTime(m, get().clips)).sort((a,b) => a-b)
+      const next = times.find(t => t > playhead + 0.001)
+      if (next !== undefined) get().setPlayhead(next)
     },
     jumpToPrevMarker: () => {
       const { markers, playhead } = get()
-      const prev = [...markers].reverse().find((m) => m.time < playhead - 0.05)
-      if (prev) get().setPlayhead(prev.time)
+      const times = markers.map(m => resolveMarkerTime(m, get().clips)).sort((a,b) => b-a)
+      const prev = times.find(t => t < playhead - 0.001)
+      if (prev !== undefined) get().setPlayhead(prev)
     },
 
     addCustomMarkerColor: (hex) => {

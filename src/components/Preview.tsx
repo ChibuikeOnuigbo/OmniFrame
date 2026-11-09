@@ -313,7 +313,8 @@ export function Preview() {
         <Tooltip label="Drawing & Paint">
         <IconButton
           data-testid="toggle-drawing-btn"
-
+          aria-label="Toggle drawing and paint"
+          title="Toggle drawing and paint"
           active={drawingEnabled}
           onClick={() => toggleDrawingEnabled()}
         >
@@ -477,7 +478,7 @@ export function Preview() {
         >
           <canvas
             id="of-canvas"
-            ref={canvasRef}
+            ref={canvasRef} data-testid="program-preview-canvas"
             width={canvasW}
             height={canvasH}
             data-quality-effect={previewQuality === 'low' ? 'pixelated' : previewQuality === 'medium' ? 'soft' : 'clear'}

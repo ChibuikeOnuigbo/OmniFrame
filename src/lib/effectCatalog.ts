@@ -1,5 +1,12 @@
 import { buildStudioLooks } from './studioLooks'
 import type { ClipEffect } from '../types'
+import { BURST_FAMILIES } from './actionFx'
+import {
+  GENERATED_RECIPE_COUNT,
+  generatedRecipeById,
+  generatedRecipeCount,
+  queryGeneratedRecipes,
+} from './effectRecipeBank'
 
 /**
  * The Effects catalog (board J): every entry maps to REAL engine params
@@ -9,10 +16,12 @@ import type { ClipEffect } from '../types'
  * CapCut/Hancybox shorts, Wizzy course, Gold Motion) PLUS generative
  * combinatorial families (colour-pair ramps × angles). No dead entries.
  *
- * Counts are real: `getFxCatalog().length` is what the UI prints.
+ * `getFxCatalog()` holds the curated/authored materialized entries. The large
+ * parameter bank is deterministic and indexed through `queryFxCatalog()` so
+ * the browser never allocates 139k cards or patch objects at once.
  */
 
-export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'retro' | 'light' | 'key' | 'Glitch NG'
+export type FxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'burst' | 'retro' | 'light' | 'key' | 'Glitch NG'
 
 
 export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
@@ -23,6 +32,7 @@ export const FX_CATS: { id: FxCat | 'all'; label: string }[] = [
   { id: 'color', label: 'Color' },
   { id: 'blur', label: 'Blur' },
   { id: 'distort', label: 'Distort' },
+  { id: 'burst', label: 'Burst' },
   { id: 'retro', label: 'Retro' },
   { id: 'light', label: 'Light' },
   { id: 'key', label: 'Key' },
@@ -112,12 +122,27 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   deviceOverlay: { label: 'Device Overlay (green-screen plate)', kind: 'select', options: ['none', 'phone', 'monitor'] },
   cardFlip: { label: 'Card Flip (half-turns)', kind: 'number', min: 0, max: 2, step: 0.05 },
   zoomBlur: { label: 'Zoom Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
-  directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 1, step: 0.01 },
+  directionalBlur: { label: 'Directional Blur', kind: 'number', min: 0, max: 6, step: 0.01 },
   directionalBlurAngle: { label: 'Blur Angle (°)', kind: 'number', min: 0, max: 360, step: 1 },
+  directionalBlurBias: { label: 'Trail Bias', kind: 'number', min: -1, max: 1, step: 0.05 },
+  directionalBlurSpread: { label: 'Angle Spread (°)', kind: 'number', min: 0, max: 120, step: 1 },
+  directionalBlurThreshold: { label: 'Luma Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
   glow: { label: 'Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
   edgeGlow: { label: 'Edge Glow', kind: 'number', min: 0, max: 1, step: 0.01 },
   edgeGlowColor: { label: 'Edge Colour', kind: 'color' },
   tiltShift: { label: 'Tilt Shift', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiltShiftCenterX: { label: 'Focus X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiltShiftCenterY: { label: 'Focus Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  tiltShiftAngle: { label: 'Focus Angle (°)', kind: 'number', min: -180, max: 180, step: 1 },
+  tiltShiftWidth: { label: 'Focus Width', kind: 'number', min: 0.04, max: 0.9, step: 0.01 },
+  tiltShiftFeather: { label: 'Focus Feather', kind: 'number', min: 0.01, max: 0.5, step: 0.01 },
+  lensBokeh: { label: 'Lens Bokeh', kind: 'number', min: 0, max: 1, step: 0.01 },
+  bokehRadius: { label: 'Aperture Size (px)', kind: 'number', min: 2, max: 64, step: 1 },
+  bokehThreshold: { label: 'Highlight Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
+  bokehGain: { label: 'Highlight Gain', kind: 'number', min: 0, max: 3, step: 0.05 },
+  bokehShape: { label: 'Aperture Shape', kind: 'select', options: ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octagon', 'diamond', 'star'] },
+  bokehRotation: { label: 'Aperture Rotation (°)', kind: 'number', min: -180, max: 180, step: 1 },
+  bokehSoftness: { label: 'Edge Softness', kind: 'number', min: 0, max: 1, step: 0.01 },
   vignette: { label: 'Vignette', kind: 'number', min: 0, max: 1, step: 0.01 },
   flicker: { label: 'Flicker', kind: 'number', min: 0, max: 1, step: 0.01 },
   tiles: { label: 'Tiles / Mirror', kind: 'number', min: 0, max: 6, step: 1 },
@@ -140,6 +165,40 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   oscillateWave: { label: 'Wave', kind: 'select', options: ['sine', 'triangle'] },
   oscillatePhase: { label: 'Phase', kind: 'number', min: 0, max: 1000, step: 1 },
   turbulent: { label: 'Turbulent Warp', kind: 'number', min: 0, max: 1, step: 0.01 },
+  turbulentScale: { label: 'Noise scale', kind: 'number', min: 8, max: 240, step: 1 },
+  turbulentSpeed: { label: 'Evolution', kind: 'number', min: 0, max: 6, step: 0.05 },
+  turbulentAngle: { label: 'Direction', kind: 'number', min: -180, max: 180, step: 1 },
+  turbulentSeed: { label: 'Noise seed', kind: 'number', min: 0, max: 9999, step: 1 },
+  turbulentMode: { label: 'Noise type', kind: 'select', options: ['fbm', 'curl', 'glass'] },
+  liquifyMode: { label: 'Liquify tool', kind: 'select', options: ['push', 'bulge', 'pinch', 'twirl'] },
+  liquifyAmount: { label: 'Liquify amount', kind: 'number', min: -1, max: 1, step: 0.01 },
+  liquifyRadius: { label: 'Brush radius', kind: 'number', min: 0.03, max: 0.8, step: 0.01 },
+  liquifyX: { label: 'Center X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  liquifyY: { label: 'Center Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstFx: { label: 'Burst type', kind: 'select', options: [...BURST_FAMILIES] },
+  burstIntensity: { label: 'Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstSpeed: { label: 'Speed', kind: 'number', min: 0.1, max: 5, step: 0.05 },
+  burstInterval: { label: 'Loop gap', kind: 'number', min: 0, max: 10, step: 0.05 },
+  burstCycle: { label: 'Cycle', kind: 'number', min: 0.1, max: 10, step: 0.05 },
+  burstLoop: { label: 'Loop', kind: 'number', min: 0, max: 1, step: 1 },
+  burstOriginX: { label: 'Origin X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstOriginY: { label: 'Origin Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  burstSpread: { label: 'Spread', kind: 'number', min: 0, max: 1.5, step: 0.01 },
+  burstFragments: { label: 'Pieces', kind: 'number', min: 4, max: 64, step: 1 },
+  burstGravity: { label: 'Gravity', kind: 'number', min: -1, max: 1, step: 0.01 },
+  burstRotation: { label: 'Spin', kind: 'number', min: 0, max: 720, step: 1 },
+  burstColor: { label: 'Energy color', kind: 'color' },
+  burstSeed: { label: 'Seed', kind: 'number', min: 0, max: 9999, step: 1 },
+  aura: { label: 'Aura', kind: 'number', min: 0, max: 1, step: 0.01 },
+  auraThreshold: { label: 'Bright threshold', kind: 'number', min: 0, max: 0.98, step: 0.01 },
+  auraRadius: { label: 'Bloom radius', kind: 'number', min: 2, max: 120, step: 1 },
+  auraLines: { label: 'Energy lines', kind: 'number', min: 4, max: 64, step: 1 },
+  auraSpeed: { label: 'Aura speed', kind: 'number', min: -6, max: 6, step: 0.05 },
+  auraRotation: { label: 'Aura angle', kind: 'number', min: -360, max: 360, step: 1 },
+  auraX: { label: 'Aura X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  auraY: { label: 'Aura Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  auraColor: { label: 'Aura color', kind: 'color' },
+  auraSecondary: { label: 'Second color', kind: 'color' },
   threshold: { label: 'Threshold', kind: 'number', min: 0, max: 1, step: 0.01 },
   sharpen: { label: 'Sharpen', kind: 'number', min: 0, max: 1, step: 0.01 },
   findEdges: { label: 'Find Edges', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -163,10 +222,15 @@ const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
   overlayStrength: { label: 'Overlay Strength', kind: 'number', min: 0, max: 1, step: 0.01 },
   particleFx: { label: 'Particles', kind: 'select', options: ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals'] },
   particleDensity: { label: 'Particle Density', kind: 'number', min: 0, max: 1, step: 0.01 },
-  lightType: { label: 'Light Type', kind: 'select', options: ['point', 'spot'] },
+  lightType: { label: 'Light Type', kind: 'select', options: ['point', 'spot', 'directional'] },
   lightColor: { label: 'Light Colour', kind: 'color' },
   lightIntensity: { label: 'Light Intensity', kind: 'number', min: 0, max: 1.5, step: 0.05 },
   lightFalloff: { label: 'Light Falloff', kind: 'number', min: 0.1, max: 1, step: 0.01 },
+  lightX: { label: 'Light X', kind: 'number', min: 0, max: 1, step: 0.01 },
+  lightY: { label: 'Light Y', kind: 'number', min: 0, max: 1, step: 0.01 },
+  lightAngle: { label: 'Light Angle (°)', kind: 'number', min: -180, max: 180, step: 1 },
+  lightWidth: { label: 'Beam Width', kind: 'number', min: 0.03, max: 1, step: 0.01 },
+  lightSoftness: { label: 'Beam Softness', kind: 'number', min: 0, max: 1, step: 0.01 },
   kaleidoSegments: { label: 'Segments', kind: 'number', min: 0, max: 12, step: 1 },
   kaleidoRotate: { label: 'Wedge Rotate (°)', kind: 'number', min: 0, max: 360, step: 1 },
   flare: { label: 'Flare Intensity', kind: 'number', min: 0, max: 1, step: 0.01 },
@@ -321,18 +385,101 @@ function buildCatalog(): FxCatalogEntry[] {
   add('blur-horizontal', 'Horizontal Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 0 })
   add('blur-oblique', 'Oblique Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 35 })
   add('blur-vertical', 'Vertical Blur', 'blur', 'Directional blur alias requested for quick discovery', { directionalBlur: 0.72, directionalBlurAngle: 90 })
+  add('blur-one-side', 'One-Side Blur', 'blur', 'Asymmetric motion streak with editable direction and trail bias', { directionalBlur: 0.82, directionalBlurAngle: 12, directionalBlurBias: -1 })
+  add('blur-light-streak', 'Highlight Streak', 'blur', 'Thresholded directional blur for bright pixels and practical light trails', { directionalBlur: 1.15, directionalBlurAngle: 0, directionalBlurBias: 0.7, directionalBlurThreshold: 0.62 })
+  add('blur-fan', 'Fan Blur', 'blur', 'Multi-angle directional sampling with editable spread', { directionalBlur: 0.86, directionalBlurAngle: 90, directionalBlurSpread: 32 })
+  add('blur-vertical-light', 'Vertical Light Blur', 'blur', 'Vertical bright-pixel streak preset', { directionalBlur: 1.05, directionalBlurAngle: 90, directionalBlurThreshold: 0.55 })
   add('blur-radial', 'Radial Blur', 'blur', 'Shared zoom/radial sampling kernel', { zoomBlur: 0.68 })
   add('blur-cinematic', 'Cinematic Blur', 'blur', 'Soft focus with restrained highlight bloom', { blur: 7, glow: 0.18, vignette: 0.16 })
   add('blur-motion', 'Motion Blur', 'motion', 'Shared temporal motion sample kernel', { motionBlur: 0.7 })
   add('tilt-1', 'Tilt Shift Mini', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.55 })
   add('tilt-2', 'Tilt Shift Strong', 'blur', 'AM Lens Blur tilt-shift (official guide)', { tiltShift: 0.95 })
+  const focusOrientations = [
+    { id: 'horizontal', label: 'Horizontal', angle: 0 },
+    { id: 'portrait', label: 'Portrait', angle: 90 },
+    { id: 'diagonal', label: 'Diagonal', angle: 35 },
+    { id: 'reverse', label: 'Reverse Diagonal', angle: -35 },
+  ] as const
+  const focusOffsets = [
+    { id: 'near', label: 'Near Edge', offset: -0.2 },
+    { id: 'center', label: 'Center', offset: 0 },
+    { id: 'far', label: 'Far Edge', offset: 0.2 },
+  ] as const
+  const focusWidths = [
+    { id: 'sliver', label: 'Sliver', width: 0.12, feather: 0.1, amount: 0.9 },
+    { id: 'narrow', label: 'Narrow', width: 0.22, feather: 0.14, amount: 0.84 },
+    { id: 'balanced', label: 'Balanced', width: 0.36, feather: 0.18, amount: 0.78 },
+    { id: 'wide', label: 'Wide', width: 0.52, feather: 0.22, amount: 0.72 },
+  ] as const
+  for (const orientation of focusOrientations) for (const position of focusOffsets) for (const focus of focusWidths) {
+    const normal = ((orientation.angle + 90) * Math.PI) / 180
+    add(
+      `tilt-focus-${orientation.id}-${position.id}-${focus.id}`,
+      `${orientation.label} Focus · ${position.label} · ${focus.label}`,
+      'blur',
+      'OmniFrame movable selective-focus plane',
+      {
+        tiltShift: focus.amount,
+        tiltShiftCenterX: Number((0.5 + Math.cos(normal) * position.offset).toFixed(3)),
+        tiltShiftCenterY: Number((0.5 + Math.sin(normal) * position.offset).toFixed(3)),
+        tiltShiftAngle: orientation.angle,
+        tiltShiftWidth: focus.width,
+        tiltShiftFeather: focus.feather,
+      },
+    )
+  }
+  ;[
+    ['Soft Portrait', 'circle', 0.58, 16, 0.64, 0.85, 0, 0.5],
+    ['City Lights', 'circle', 0.84, 24, 0.52, 1.65, 0, 0.24],
+    ['Triangle Prism', 'triangle', 0.76, 22, 0.57, 1.35, -30, 0.18],
+    ['Square Cinema', 'square', 0.72, 20, 0.6, 1.2, 45, 0.2],
+    ['Pentagon Portrait', 'pentagon', 0.7, 21, 0.58, 1.3, -18, 0.22],
+    ['Hex Night', 'hexagon', 0.88, 28, 0.5, 1.7, 30, 0.15],
+    ['Octagon Glass', 'octagon', 0.82, 26, 0.54, 1.55, 22.5, 0.16],
+    ['Diamond Spark', 'diamond', 0.7, 18, 0.68, 1.8, 0, 0.12],
+    ['Star Bloom', 'star', 0.78, 23, 0.62, 1.9, -18, 0.2],
+    ['Warm Dream', 'circle', 0.65, 30, 0.47, 1.35, 0, 0.65],
+    ['Neon Hex', 'hexagon', 0.92, 34, 0.44, 2.15, 0, 0.1],
+    ['Small Practical', 'circle', 0.42, 9, 0.74, 1.05, 0, 0.32],
+    ['Rack Focus Soft', 'octagon', 0.5, 14, 0.62, 1.15, 0, 0.42],
+    ['Anamorphic Gems', 'diamond', 0.9, 32, 0.5, 2.3, 45, 0.08],
+    ['Vintage Iris', 'pentagon', 0.8, 27, 0.56, 1.55, 12, 0.36],
+    ['Hard Aperture', 'hexagon', 1, 38, 0.7, 2.5, 30, 0],
+  ].forEach(([name, shape, amount, radius, threshold, gain, rotation, softness], i) => add(
+    `bokeh-lens-${i}`,
+    `Lens Bokeh ${name}`,
+    'blur',
+    'Lens defocus with editable iris and highlight controls',
+    { lensBokeh: amount as number, bokehRadius: radius as number, bokehThreshold: threshold as number, bokehGain: gain as number, bokehShape: shape as string, bokehRotation: rotation as number, bokehSoftness: softness as number },
+  ))
   ;[4, 8, 14].forEach((f, i) => add(`fblur-${i}`, `Fractal Blur ${f}px`, 'blur', 'AE Fractal Blur family (effects reference)', { fractalBlur: f }))
 
   // ---- Distort ----
   ;[4, 8, 14, 22].forEach((w, i) => add(`wave-${i}`, `Wave Warp ${w}px`, 'distort', 'AE Wave Warp / AM wave (scanned docs)', { waveWarp: w }))
   for (const sw of [-180, -90, 90, 180, 360]) add(`swirl-${sw}`, `Swirl ${sw}°`, 'distort', 'AM Swirl / AE Twirl (official guides)', { swirl: sw })
   ;[-0.6, -0.3, 0.3, 0.6].forEach((p, i) => add(`pinch-${i}`, p < 0 ? `Pinch ${Math.abs(p)}` : `Bulge ${p}`, 'distort', 'AM Pinch/Bulge (official guide)', { pinchBulge: p }))
-  ;[0.35, 0.7, 1].forEach((t, i) => add(`turb-${i}`, `Turbulent Warp ${Math.round(t * 100)}%`, 'distort', 'AE Turbulent Displace / Wizzy course "Turbs"', { turbulent: t }))
+  ;[
+    ['Soft FBM', 'fbm', 0.3, 120, 0.6, 0],
+    ['Flow FBM', 'fbm', 0.58, 74, 1.1, 24],
+    ['Curl Current', 'curl', 0.62, 96, 0.8, -18],
+    ['Curl Storm', 'curl', 0.9, 48, 1.7, 32],
+    ['Turbulent Glass', 'glass', 0.72, 34, 0.45, 0],
+    ['Heat Glass', 'glass', 0.45, 62, 2.1, 90],
+  ].forEach(([name, mode, amount, scale, speed, angle], i) => add(`turb-pro-${i}`, String(name), 'distort',
+    'Retained editor audit: AE-style FBM/curl Turbulent Pro and GM Turbulent Glass; implemented in the shared raster engine',
+    { turbulent: amount as number, turbulentMode: mode as string, turbulentScale: scale as number, turbulentSpeed: speed as number, turbulentAngle: angle as number, turbulentSeed: 713 + i * 137 }))
+  ;[
+    ['Push Right', 'push', 0.65, 0.32, 0.5, 0.5],
+    ['Push Left', 'push', -0.65, 0.32, 0.5, 0.5],
+    ['Soft Bulge', 'bulge', 0.48, 0.42, 0.5, 0.5],
+    ['Lens Bulge', 'bulge', 0.85, 0.28, 0.5, 0.5],
+    ['Soft Pinch', 'pinch', 0.48, 0.42, 0.5, 0.5],
+    ['Deep Pinch', 'pinch', 0.88, 0.28, 0.5, 0.5],
+    ['Twirl Left', 'twirl', -0.72, 0.46, 0.5, 0.5],
+    ['Twirl Right', 'twirl', 0.72, 0.46, 0.5, 0.5],
+  ].forEach(([name, mode, amount, radius, x, y], i) => add(`liquify-${i}`, `Liquify ${name}`, 'distort',
+    'Shared non-destructive liquify field: the effect preset uses the same push/bulge/pinch/twirl vocabulary as the canvas brush',
+    { liquifyMode: mode as string, liquifyAmount: amount as number, liquifyRadius: radius as number, liquifyX: x as number, liquifyY: y as number }))
   ;[0.25, 0.5].forEach((p, i) => add(`pstretch-${i}`, `Pixel Stretch ${Math.round(p * 100)}%`, 'distort', 'AM Pixel Stretch (Hancybox rewatch corpus)', { pixelStretch: p }))
   for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
     for (const mode of ['max', 'min'] as const) {
@@ -341,6 +488,34 @@ function buildCatalog(): FxCatalogEntry[] {
     }
   }
   ;[3, 6, 12].forEach((c, i) => add(`chroma-${i}`, `RGB Fringe ${c}px`, 'distort', 'glitchology RGB split (pillar research)', { chromatic: c }))
+
+  // ---- Burst: 10 real motion families × 5 authored tiers = exactly 50 ----
+  const burstNames: Record<(typeof BURST_FAMILIES)[number], string> = {
+    glass: 'Glass', crack: 'Crack', shatter: 'Shatter', tiles: 'Tile Break', slice: 'Slice',
+    shockwave: 'Shockwave', fireball: 'Fireball', smoke: 'Smoke', energy: 'Energy', implosion: 'Implosion',
+  }
+  const burstColors: Record<(typeof BURST_FAMILIES)[number], string> = {
+    glass: '#c8f3ff', crack: '#ffffff', shatter: '#9fe8ff', tiles: '#ffd18a', slice: '#ff5577',
+    shockwave: '#79d8ff', fireball: '#ff8b2c', smoke: '#c7d0da', energy: '#9b7dff', implosion: '#42f5d7',
+  }
+  const burstTiers = [
+    ['Soft', 0.38, 16, 0.38, 90], ['Clean', 0.55, 22, 0.52, 130], ['Classic', 0.72, 30, 0.7, 180],
+    ['Heavy', 0.88, 42, 0.92, 260], ['Chaos', 1, 56, 1.18, 420],
+  ] as const
+  for (const [familyIndex, family] of BURST_FAMILIES.entries()) {
+    burstTiers.forEach(([tier, intensity, pieces, spread, rotation], tierIndex) => add(
+      `burst-${family}-${tier.toLowerCase()}`,
+      `${burstNames[family]} ${tier}`,
+      'burst',
+      'Retained YouTube audit + editor effect inventory: glass/crack/shatter, radial slice, shockwave, fire/explosion and implosion motifs; deterministic shared canvas implementation',
+      {
+        burstFx: family, burstIntensity: intensity, burstSpeed: 1, burstInterval: 0.35, burstCycle: 1,
+        burstLoop: 1, burstOriginX: 0.5, burstOriginY: 0.5, burstSpread: spread, burstFragments: pieces,
+        burstGravity: family === 'smoke' ? -0.18 : family === 'implosion' ? 0 : 0.22,
+        burstRotation: rotation, burstColor: burstColors[family], burstSeed: 701 + familyIndex * 97 + tierIndex * 17,
+      },
+    ))
+  }
 
   // ---- Retro ----
   ;[0.35, 0.6, 0.85, 1].forEach((v, i) => add(`vhs-${i}`, `VHS Tape ${Math.round(v * 100)}%`, 'retro', 'MatttVfx VHS one-framer j3Lt0dU1Lok (watched corpus)', { vhs: v }))
@@ -353,13 +528,27 @@ function buildCatalog(): FxCatalogEntry[] {
 
   // ---- Light ----
   ;[0.4, 0.7, 1].forEach((g, i) => add(`glow-${i}`, `Glow ${Math.round(g * 100)}%`, 'light', 'AM Glow (official guide)', { glow: g }))
+  ;[
+    ['Cyan Magenta', '#22d3ee', '#e935c1', 0.72, 24],
+    ['Green Pulse', '#64ff8a', '#d9ff6a', 0.7, 20],
+    ['Gold Spiral', '#ffd45e', '#ff7b2e', 0.82, 28],
+    ['Violet Core', '#9b7dff', '#42e8ff', 0.8, 32],
+    ['Red Energy', '#ff3b5f', '#ffb23f', 0.86, 22],
+    ['Ice Halo', '#c8f3ff', '#7db7ff', 0.62, 18],
+    ['Spectral', '#40ffd0', '#ff3bd4', 0.92, 40],
+    ['White Charge', '#ffffff', '#72d7ff', 1, 48],
+  ].forEach(([name, primary, secondary, amount, lines], i) => add(`aura-${i}`, `Aura ${name}`, 'light',
+    'Retained YouTube evidence: cyan/magenta and green glow aura motifs; retained effect inventory: S_GlowAura radial colored spiral lines around bright pixels',
+    { aura: amount as number, auraThreshold: 0.46, auraRadius: 24 + i * 3, auraLines: lines as number, auraSpeed: i % 2 ? -0.8 : 0.9, auraRotation: i * 17, auraX: 0.5, auraY: 0.5, auraColor: primary as string, auraSecondary: secondary as string }))
   for (const [name, hex] of PALETTE.slice(0, 8)) {
     add(`edgeglow-${name.toLowerCase()}`, `Edge Glow ${name}`, 'light', 'AM Edge Glow / Stroke Color (official guide)', { edgeGlow: 0.9, edgeGlowColor: hex })
   }
-  for (const type of ['point', 'spot'] as const) {
+  for (const type of ['point', 'spot', 'directional'] as const) {
     for (const [name, hex] of [['Warm', '#ffd9a0'], ['Gold', '#ffc93c'], ['Cool', '#a8d8ff'], ['Blue', '#4f7dff'], ['Magenta', '#ff5df0'], ['Green', '#7dff9b']] as [string, string][]) {
-      add(`light-${type}-${name.toLowerCase()}`, `${type[0].toUpperCase()}${type.slice(1)} Light ${name}`, 'light', 'Gold Motion point/spot light layers (watched corpus)',
-        { lightType: type, lightColor: hex, lightIntensity: 1.1, lightFalloff: 0.5 })
+      add(`light-${type}-${name.toLowerCase()}`, `${type[0].toUpperCase()}${type.slice(1)} Light ${name}`, 'light', 'Editable shared-engine light layers',
+        type === 'directional'
+          ? { lightType: type, lightColor: hex, lightIntensity: 1.1, lightAngle: 35, lightWidth: 0.28, lightSoftness: 0.4 }
+          : { lightType: type, lightColor: hex, lightIntensity: 1.1, lightFalloff: 0.5 })
     }
   }
   ;[0.4, 0.8].forEach((v, i) => add(`vig-${i}`, `Vignette ${Math.round(v * 100)}%`, 'light', 'AM Vignette (official guide)', { vignette: v }))
@@ -477,7 +666,10 @@ function buildCatalog(): FxCatalogEntry[] {
   }
 
     // ---- Alight Motion study corpus: every mapped AM effect joins the site catalog ----
+  const catalogIds = new Set(out.map((entry) => entry.id))
   for (const am of AM_FX_CATALOG) {
+    if (catalogIds.has(am.id)) continue
+    catalogIds.add(am.id)
     out.push({ id: am.id, name: am.name, cat: am.cat as FxCat, trace: AM_TRACE, patch: am.patch })
   }
 return [...out, ...buildStudioLooks()]
@@ -492,12 +684,65 @@ export function getFxCatalog(): FxCatalogEntry[] {
 }
 
 export function fxCatalogById(id: string): FxCatalogEntry | undefined {
-  return getFxCatalog().find((e) => e.id === id)
+  return (generatedRecipeById(id) as FxCatalogEntry | undefined) ?? getFxCatalog().find((e) => e.id === id)
 }
 
 export function fxCatalogCount(cat?: FxCat | 'all'): number {
   const all = getFxCatalog()
-  return !cat || cat === 'all' ? all.length : all.filter((e) => e.cat === cat).length
+  const materialized = !cat || cat === 'all' ? all.length : all.filter((e) => e.cat === cat).length
+  return materialized + generatedRecipeCount(cat ?? 'all')
+}
+
+export const GENERATED_FX_RECIPE_COUNT = GENERATED_RECIPE_COUNT
+
+export interface FxCatalogQuery {
+  cat?: FxCat | 'all'
+  q?: string
+  offset?: number
+  limit?: number
+  collection?: 'all' | 'curated' | 'generated' | 'studio' | 'favorites'
+  favorites?: string[]
+}
+
+const catalogSearchTokens = (query: string): string[] => query.toLowerCase().match(/[a-z0-9]+/g) ?? []
+const matchesCatalogSearch = (text: string, query: string): boolean => {
+  const tokens = catalogSearchTokens(query)
+  const haystack = text.toLowerCase()
+  return !tokens.length || tokens.every((token) => haystack.includes(token))
+}
+
+/** Search and page all effect recipes without materializing the indexed bank. */
+export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; entries: FxCatalogEntry[] } {
+  const cat = options.cat ?? 'all'
+  const q = (options.q ?? '').trim().toLowerCase()
+  const offset = Math.max(0, Math.floor(options.offset ?? 0))
+  const limit = Math.max(0, Math.floor(options.limit ?? 60))
+  const collection = options.collection ?? 'all'
+
+  if (collection === 'favorites') {
+    const entries = (options.favorites ?? [])
+      .map(fxCatalogById)
+      .filter((entry): entry is FxCatalogEntry => !!entry)
+      .filter((entry) => cat === 'all' || entry.cat === cat)
+      .filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace}`, q))
+    return { total: entries.length, entries: entries.slice(offset, offset + limit) }
+  }
+
+  if (collection === 'generated') {
+    const generated = queryGeneratedRecipes({ cat, q, offset, limit })
+    return { total: generated.total, entries: generated.entries as FxCatalogEntry[] }
+  }
+
+  let materialized = getFxCatalog().filter((entry) => cat === 'all' || entry.cat === cat)
+  if (collection === 'studio') materialized = materialized.filter((entry) => entry.id.startsWith('studio-'))
+  if (q) materialized = materialized.filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace}`, q))
+  if (collection === 'studio' || collection === 'curated') return { total: materialized.length, entries: materialized.slice(offset, offset + limit) }
+
+  const materializedPage = materialized.slice(offset, offset + limit)
+  const remaining = Math.max(0, limit - materializedPage.length)
+  const generated = queryGeneratedRecipes({ cat, q, offset: Math.max(0, offset - materialized.length), limit: remaining })
+  const generatedEntries = generated.entries
+  return { total: materialized.length + generated.total, entries: [...materializedPage, ...generatedEntries] as FxCatalogEntry[] }
 }
 
 /** Quick-add set for the timeline context menu (≤ 9 items, UI law). */

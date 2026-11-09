@@ -5,21 +5,271 @@
  * Runs on the composited canvas wherever LUT stacks run.
  */
 import type { ClipEffect } from '../types'
+import { deformRGBA, type DeformationSpec } from './deformation'
 
+// Reuse the two directional/zoom-blur surfaces across frames. Creating native
+// canvas backing stores per frame causes avoidable GC pressure during preview
+// and long exports, especially when a thresholded streak is active.
+let blurSourceCanvas: HTMLCanvasElement | null = null
+let blurBrightCanvas: HTMLCanvasElement | null = null
+let bokehSourceCanvas: HTMLCanvasElement | null = null
+let bokehHighlightsCanvas: HTMLCanvasElement | null = null
+let tiltSourceCanvas: HTMLCanvasElement | null = null
+let tiltBlurCanvas: HTMLCanvasElement | null = null
+let tiltMaskCanvas: HTMLCanvasElement | null = null
 
 /* ---- Alight-Motion-named pixel family (guide.alightmotion.com/effects) ---- */
 const amHex = (v: string | undefined, d: [number, number, number]): [number, number, number] =>
   v && v[0] === '#' ? [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)] : d
 const amRnd = (seed: number) => { const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
 
-function amBlurStack(ctx: CanvasRenderingContext2D, w: number, h: number, passes: { dx: number; dy: number; sc?: number; al: number }[]) {
-  const src = document.createElement('canvas')
-  src.width = w; src.height = h
-  src.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
+function aperturePath(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  shape: ClipEffect['bokehShape'],
+  rotation: number,
+): void {
+  ctx.beginPath()
+  if (!shape || shape === 'circle') {
+    ctx.arc(x, y, radius, 0, Math.PI * 2)
+    return
+  }
+  const star = shape === 'star'
+  const sides = shape === 'triangle' ? 3
+    : shape === 'square' || shape === 'diamond' ? 4
+      : shape === 'pentagon' ? 5
+        : shape === 'hexagon' ? 6
+          : 8
+  const points = star ? 10 : sides
+  const base = rotation + (shape === 'diamond' ? Math.PI / 4 : -Math.PI / 2)
+  for (let i = 0; i < points; i++) {
+    const rr = star && i % 2 ? radius * 0.43 : radius
+    const a = base + (i / points) * Math.PI * 2
+    const px = x + Math.cos(a) * rr
+    const py = y + Math.sin(a) * rr
+    if (i === 0) ctx.moveTo(px, py)
+    else ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+}
+
+/**
+ * Camera-style defocus. The base image receives a bounded blur, while only
+ * pixels over the highlight threshold are re-projected as diaphragm shapes.
+ * Scratch surfaces are reused because this path runs for every preview/export
+ * frame and native canvas allocation was a measured long-export bottleneck.
+ */
+function applyLensBokeh(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  const amount = Math.max(0, Math.min(1, e.lensBokeh ?? 0))
+  if (amount <= 0 || !w || !h) return
+  const radius = Math.max(2, Math.min(64, e.bokehRadius ?? 18))
+  const threshold = Math.max(0, Math.min(1, e.bokehThreshold ?? 0.62))
+  const gain = Math.max(0, Math.min(3, e.bokehGain ?? 1))
+  const softness = Math.max(0, Math.min(1, e.bokehSoftness ?? 0.3))
+  const rotation = ((e.bokehRotation ?? 0) * Math.PI) / 180
+
+  const source = bokehSourceCanvas ??= document.createElement('canvas')
+  if (source.width !== w) source.width = w
+  if (source.height !== h) source.height = h
+  const sx = source.getContext('2d')!
+  sx.clearRect(0, 0, w, h)
+  sx.drawImage(ctx.canvas, 0, 0)
+
+  // A full blurred plate plus the dry plate at (1 - amount) gives a stable
+  // crossfade on opaque and transparent clips without accumulating brightness.
+  // Clip isolation uses a translated 3× pad context. Work in canvas space and
+  // restore that caller transform so effect masks do not receive shifted/black
+  // pixels in browser preview or recorder export.
+  ctx.save()
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
   ctx.clearRect(0, 0, w, h)
+  ctx.save()
+  ctx.filter = `blur(${Math.max(0.5, radius * amount * 0.42).toFixed(2)}px)`
+  ctx.drawImage(source, 0, 0)
+  ctx.restore()
+  if (amount < 0.999) {
+    ctx.save()
+    ctx.globalAlpha = 1 - amount
+    ctx.drawImage(source, 0, 0)
+    ctx.restore()
+  }
+
+  const highlights = bokehHighlightsCanvas ??= document.createElement('canvas')
+  if (highlights.width !== w) highlights.width = w
+  if (highlights.height !== h) highlights.height = h
+  const hx = highlights.getContext('2d')!
+  hx.clearRect(0, 0, w, h)
+
+  try {
+    const pixels = sx.getImageData(0, 0, w, h).data
+    const step = Math.max(3, Math.round(radius * 0.65), Math.ceil(Math.sqrt((w * h) / 1400)))
+    const candidates: { x: number; y: number; r: number; g: number; b: number; energy: number }[] = []
+    const offsets = [-0.3, 0, 0.3]
+    for (let gy = step / 2; gy < h; gy += step) {
+      for (let gx = step / 2; gx < w; gx += step) {
+        let best = -1, bi = 0, bx = 0, by = 0
+        for (const oy of offsets) for (const ox of offsets) {
+          const px = Math.max(0, Math.min(w - 1, Math.round(gx + ox * step)))
+          const py = Math.max(0, Math.min(h - 1, Math.round(gy + oy * step)))
+          const i = (py * w + px) * 4
+          if (pixels[i + 3] < 8) continue
+          const lum = (pixels[i] * 0.2126 + pixels[i + 1] * 0.7152 + pixels[i + 2] * 0.0722) / 255
+          if (lum > best) { best = lum; bi = i; bx = px; by = py }
+        }
+        if (best <= threshold) continue
+        candidates.push({
+          x: bx, y: by,
+          r: pixels[bi], g: pixels[bi + 1], b: pixels[bi + 2],
+          energy: Math.min(1, (best - threshold) / Math.max(0.02, 1 - threshold)),
+        })
+      }
+    }
+    candidates.sort((a, b) => b.energy - a.energy)
+    for (const c of candidates.slice(0, 520)) {
+      const spotRadius = radius * (0.55 + c.energy * 0.55)
+      const localRotation = rotation + (amRnd(seed + c.x * 0.17 + c.y * 0.31) - 0.5) * 0.12
+      aperturePath(hx, c.x, c.y, spotRadius, e.bokehShape ?? 'circle', localRotation)
+      hx.globalAlpha = Math.min(0.92, amount * c.energy * gain * 0.42)
+      hx.fillStyle = `rgb(${c.r},${c.g},${c.b})`
+      hx.fill()
+    }
+    hx.globalAlpha = 1
+    ctx.save()
+    ctx.globalCompositeOperation = 'screen'
+    ctx.globalAlpha = Math.min(1, 0.62 + gain * 0.16)
+    if (softness > 0) ctx.filter = `blur(${Math.max(0.2, softness * radius * 0.18).toFixed(2)}px)`
+    ctx.drawImage(highlights, 0, 0)
+    ctx.restore()
+  } catch {
+    // Cross-origin/tainted sources still receive the base defocus above.
+  }
+  ctx.restore()
+}
+
+function applyLiquifyEffect(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number): void {
+  const amount = Math.max(-1, Math.min(1, e.liquifyAmount ?? 0))
+  if (Math.abs(amount) < 0.005) return
+  const mode = e.liquifyMode ?? 'bulge'
+  const radius = Math.max(0.03, Math.min(0.8, e.liquifyRadius ?? 0.36))
+  const strength = Math.abs(amount)
+  const spec: DeformationSpec = {
+    dabs: [{
+      x: Math.max(0, Math.min(1, e.liquifyX ?? 0.5)),
+      y: Math.max(0, Math.min(1, e.liquifyY ?? 0.5)),
+      dx: mode === 'push' ? amount * 0.28 : 0,
+      dy: 0,
+      radius,
+      strength,
+      mode,
+      direction: amount < 0 ? -1 : 1,
+    }],
+  }
+  try {
+    const image = ctx.getImageData(0, 0, w, h)
+    image.data.set(deformRGBA(image.data, w, h, spec))
+    ctx.putImageData(image, 0, 0)
+  } catch { /* tainted external media remains visible without the raster warp */ }
+}
+
+/**
+ * Selective focus plane used by tilt-shift and miniature looks. The original
+ * implementation allocated three canvases per frame and fixed the sharp band
+ * to the horizontal centre. This version reuses its surfaces and exposes the
+ * focus centre, angle, width and feather to preview, export and keyframes.
+ */
+function applyTiltShift(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number): void {
+  const amount = Math.max(0, Math.min(1, e.tiltShift ?? 0))
+  if (amount <= 0 || !w || !h) return
+  const centerX = Math.max(0, Math.min(1, e.tiltShiftCenterX ?? 0.5)) * w
+  const centerY = Math.max(0, Math.min(1, e.tiltShiftCenterY ?? 0.5)) * h
+  const angle = ((Math.max(-180, Math.min(180, e.tiltShiftAngle ?? 0))) * Math.PI) / 180
+  const width = Math.max(0.04, Math.min(0.9, e.tiltShiftWidth ?? 0.34))
+  const feather = Math.max(0.01, Math.min(0.5, e.tiltShiftFeather ?? 0.18))
+  const shortEdge = Math.min(w, h)
+  const focusHalf = width * shortEdge * 0.5
+  const featherPx = feather * shortEdge
+  const blurRadius = Math.max(0.25, amount * 18)
+
+  const source = tiltSourceCanvas ??= document.createElement('canvas')
+  if (source.width !== w) source.width = w
+  if (source.height !== h) source.height = h
+  const sx = source.getContext('2d')!
+  sx.setTransform(1, 0, 0, 1, 0, 0)
+  sx.clearRect(0, 0, w, h)
+  sx.drawImage(ctx.canvas, 0, 0)
+
+  const blurred = tiltBlurCanvas ??= document.createElement('canvas')
+  if (blurred.width !== w) blurred.width = w
+  if (blurred.height !== h) blurred.height = h
+  const bx = blurred.getContext('2d')!
+  bx.setTransform(1, 0, 0, 1, 0, 0)
+  bx.clearRect(0, 0, w, h)
+  bx.save()
+  bx.filter = `blur(${blurRadius.toFixed(2)}px)`
+  bx.drawImage(source, 0, 0)
+  bx.restore()
+
+  const mask = tiltMaskCanvas ??= document.createElement('canvas')
+  if (mask.width !== w) mask.width = w
+  if (mask.height !== h) mask.height = h
+  const mx = mask.getContext('2d')!
+  mx.setTransform(1, 0, 0, 1, 0, 0)
+  mx.globalCompositeOperation = 'source-over'
+  mx.clearRect(0, 0, w, h)
+
+  // The focus-plane direction is `angle`; its normal drives the alpha ramp.
+  const nx = -Math.sin(angle)
+  const ny = Math.cos(angle)
+  const extent = Math.hypot(w, h)
+  const gradient = mx.createLinearGradient(
+    centerX - nx * extent,
+    centerY - ny * extent,
+    centerX + nx * extent,
+    centerY + ny * extent,
+  )
+  const stop = (distance: number) => Math.max(0, Math.min(1, 0.5 + distance / (extent * 2)))
+  gradient.addColorStop(stop(-focusHalf - featherPx), 'rgba(0,0,0,0)')
+  gradient.addColorStop(stop(-focusHalf), 'rgba(0,0,0,1)')
+  gradient.addColorStop(stop(focusHalf), 'rgba(0,0,0,1)')
+  gradient.addColorStop(stop(focusHalf + featherPx), 'rgba(0,0,0,0)')
+  mx.fillStyle = gradient
+  mx.fillRect(0, 0, w, h)
+  mx.globalCompositeOperation = 'source-in'
+  mx.drawImage(source, 0, 0)
+  mx.globalCompositeOperation = 'source-over'
+
+  // Clip isolation can call this on a translated pad. Composite in backing
+  // canvas coordinates, then restore the caller transform for later effects.
+  ctx.save()
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  ctx.clearRect(0, 0, w, h)
+  ctx.drawImage(blurred, 0, 0)
+  ctx.drawImage(mask, 0, 0)
+  ctx.restore()
+}
+
+function amBlurStack(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  passes: { dx: number; dy: number; sc?: number; al: number }[],
+  options: { source?: HTMLCanvasElement; preserveBase?: boolean; composite?: GlobalCompositeOperation } = {},
+) {
+  const src = options.source ?? (blurSourceCanvas ??= document.createElement('canvas'))
+  if (!options.source) {
+    if (src.width !== w) src.width = w
+    if (src.height !== h) src.height = h
+    const sx = src.getContext('2d')!
+    sx.clearRect(0, 0, w, h)
+    sx.drawImage(ctx.canvas, 0, 0)
+  }
+  if (!options.preserveBase) ctx.clearRect(0, 0, w, h)
   for (const p of passes) {
     ctx.save()
     ctx.globalAlpha = p.al
+    ctx.globalCompositeOperation = options.composite ?? 'source-over'
     const sc = p.sc ?? 1
     ctx.translate(w / 2 + p.dx, h / 2 + p.dy)
     ctx.scale(sc, sc)
@@ -29,6 +279,7 @@ function amBlurStack(ctx: CanvasRenderingContext2D, w: number, h: number, passes
 }
 
 function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, h: number, seed: number): void {
+  applyLiquifyEffect(ctx, e, w, h)
   if (e.zoomBlur && e.zoomBlur > 0) {
     const n = 6
     const passes: { dx: number; dy: number; sc?: number; al: number }[] = []
@@ -36,16 +287,48 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     amBlurStack(ctx, w, h, passes)
   }
   if (e.directionalBlur && e.directionalBlur > 0) {
-    const a = ((e.directionalBlurAngle ?? 0) * Math.PI) / 180
-    const len = e.directionalBlur * 24
-    const n = 7
+    const baseAngle = ((e.directionalBlurAngle ?? 0) * Math.PI) / 180
+    const len = Math.max(0, e.directionalBlur) * 24
+    const bias = Math.max(-1, Math.min(1, e.directionalBlurBias ?? 0))
+    const spread = (Math.max(0, Math.min(120, e.directionalBlurSpread ?? 0)) * Math.PI) / 180
+    const threshold = Math.max(0, Math.min(1, e.directionalBlurThreshold ?? 0))
+    const n = spread > 0 ? 11 : 9
     const passes: { dx: number; dy: number; al: number }[] = []
+    let totalWeight = 0
     for (let i = 0; i < n; i++) {
-      const t = (i / (n - 1) - 0.5) * len
-      passes.push({ dx: Math.cos(a) * t, dy: Math.sin(a) * t, al: 1 / n })
+      const u = i / (n - 1)
+      const centered = u - 0.5
+      const t = (centered + bias * 0.5) * len
+      const a = baseAngle + centered * spread
+      const weight = Math.exp(-0.5 * Math.pow(centered / 0.33, 2))
+      totalWeight += weight
+      passes.push({ dx: Math.cos(a) * t, dy: Math.sin(a) * t, al: weight })
     }
-    amBlurStack(ctx, w, h, passes)
+    for (const pass of passes) pass.al /= totalWeight
+    if (threshold > 0) {
+      const bright = blurBrightCanvas ??= document.createElement('canvas')
+      if (bright.width !== w) bright.width = w
+      if (bright.height !== h) bright.height = h
+      const bx = bright.getContext('2d')!
+      bx.clearRect(0, 0, w, h)
+      bx.drawImage(ctx.canvas, 0, 0)
+      try {
+        const pixels = bx.getImageData(0, 0, w, h)
+        for (let i = 0; i < pixels.data.length; i += 4) {
+          const lum = (pixels.data[i] * 0.2126 + pixels.data[i + 1] * 0.7152 + pixels.data[i + 2] * 0.0722) / 255
+          const mask = Math.max(0, Math.min(1, (lum - threshold) / Math.max(0.04, 1 - threshold)))
+          pixels.data[i + 3] = Math.round(pixels.data[i + 3] * mask)
+        }
+        bx.putImageData(pixels, 0, 0)
+        amBlurStack(ctx, w, h, passes, { source: bright, preserveBase: true, composite: 'screen' })
+      } catch {
+        amBlurStack(ctx, w, h, passes)
+      }
+    } else {
+      amBlurStack(ctx, w, h, passes)
+    }
   }
+  applyLensBokeh(ctx, e, w, h, seed)
   if (e.glow && e.glow > 0) {
     const bright = document.createElement('canvas')
     bright.width = w; bright.height = h
@@ -104,31 +387,7 @@ function applyAmFamily(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number, 
     ctx.restore()
     ctx.filter = 'none'
   }
-  if (e.tiltShift && e.tiltShift > 0) {
-    const src = document.createElement('canvas')
-    src.width = w; src.height = h
-    src.getContext('2d')!.drawImage(ctx.canvas, 0, 0)
-    ctx.save()
-    ctx.filter = `blur(${Math.max(2, 8 * e.tiltShift)}px)`
-    ctx.clearRect(0, 0, w, h)
-    ctx.drawImage(src, 0, 0)
-    ctx.restore()
-    ctx.filter = 'none'
-    const band = h * 0.34
-    const grad = ctx.createLinearGradient(0, h / 2 - band, 0, h / 2 + band)
-    grad.addColorStop(0, 'rgba(0,0,0,0)')
-    grad.addColorStop(0.25, 'rgba(0,0,0,1)')
-    grad.addColorStop(0.75, 'rgba(0,0,0,1)')
-    grad.addColorStop(1, 'rgba(0,0,0,0)')
-    const mask = document.createElement('canvas')
-    mask.width = w; mask.height = h
-    const mx = mask.getContext('2d')!
-    mx.fillStyle = grad
-    mx.fillRect(0, 0, w, h)
-    mx.globalCompositeOperation = 'source-in'
-    mx.drawImage(src, 0, 0)
-    ctx.drawImage(mask, 0, 0)
-  }
+  applyTiltShift(ctx, e, w, h)
   if (e.vignette && e.vignette > 0) {
     const g = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.32, w / 2, h / 2, Math.max(w, h) * 0.72)
     g.addColorStop(0, 'rgba(0,0,0,0)')
@@ -342,11 +601,13 @@ export function hasPixelGrade(effect?: ClipEffect): boolean {
     (effect.glow && effect.glow > 0) ||
     (effect.edgeGlow && effect.edgeGlow > 0) ||
     (effect.tiltShift && effect.tiltShift > 0) ||
+    (effect.lensBokeh && effect.lensBokeh > 0) ||
     (effect.vignette && effect.vignette > 0) ||
     (effect.flicker && effect.flicker > 0) ||
     (effect.tiles && effect.tiles >= 2) ||
     (effect.pinchBulge && Math.abs(effect.pinchBulge) > 0.01) ||
     (effect.swirl && Math.abs(effect.swirl) > 1) ||
+    (effect.liquifyAmount !== undefined && Math.abs(effect.liquifyAmount) > 0.005) ||
     (effect.gradientMap && effect.gradientMap > 0) ||
     (effect.threshold && effect.threshold > 0) ||
     (effect.exposure !== undefined && Math.abs(effect.exposure) > 0.001) ||
@@ -404,6 +665,12 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
   const span = Math.max(1, Math.abs(cxA) * w + Math.abs(cyA) * h)
   const [f0, f1, f2] = amHex(e.dirColorizeFrom, [0, 40, 255])
   const [t0, t1, t2] = amHex(e.dirColorizeTo, [255, 40, 0])
+  const turbulenceScale = Math.max(8, Math.min(240, e.turbulentScale ?? 80))
+  const turbulenceSpeed = Math.max(0, Math.min(6, e.turbulentSpeed ?? 1))
+  const turbulenceTime = (e.motionClock ?? seed / 24) * turbulenceSpeed + (e.turbulentSeed ?? 0) * 0.137
+  const turbulenceAngle = ((e.turbulentAngle ?? 0) * Math.PI) / 180
+  const turbulenceCos = Math.cos(turbulenceAngle), turbulenceSin = Math.sin(turbulenceAngle)
+  const turbulenceMode = e.turbulentMode ?? 'fbm'
   let st = (seed * 2654435761 + 12345) % 4294967296
   const rnd = () => (st = (st * 1664525 + 1013904223) % 4294967296) / 4294967296
   for (let y = 0; y < h; y++) {
@@ -414,9 +681,32 @@ function applyOneFramer(ctx: CanvasRenderingContext2D, e: ClipEffect, w: number,
       let sx = wobble ? Math.min(w - 1, Math.max(0, x + wobble)) : x
       let sy = y
       if (tb > 0) {
-        const A = 10 * tb
-        sx = Math.min(w - 1, Math.max(0, Math.round(sx + A * Math.sin(y * 0.055 + seed * 0.9))))
-        sy = Math.min(h - 1, Math.max(0, Math.round(y + A * Math.sin(x * 0.043 + seed * 1.31))))
+        const nx = x / turbulenceScale, ny = y / turbulenceScale
+        let dx = 0, dy = 0
+        if (turbulenceMode === 'glass') {
+          const gx = Math.floor(nx * 2), gy = Math.floor(ny * 2)
+          const hash = Math.sin(gx * 127.1 + gy * 311.7 + turbulenceTime * 0.7) * 43758.5453
+          const cell = hash - Math.floor(hash)
+          const hash2 = Math.sin(gx * 269.5 + gy * 183.3 - turbulenceTime * 0.51) * 24634.6345
+          dx = (cell - 0.5) * 2
+          dy = (hash2 - Math.floor(hash2) - 0.5) * 2
+        } else if (turbulenceMode === 'curl') {
+          // Analytic curl of a two-octave scalar field: divergence-free flow.
+          const x1 = nx + turbulenceTime * 0.33, y1 = ny - turbulenceTime * 0.27
+          const dNdx = Math.cos(x1 * 2.1) * 2.1 * Math.cos(y1 * 1.7) + 0.46 * Math.cos(x1 * 4.3 + 1.2) * 4.3 * Math.cos(y1 * 3.2 - 0.7)
+          const dNdy = -Math.sin(x1 * 2.1) * Math.sin(y1 * 1.7) * 1.7 - 0.46 * Math.sin(x1 * 4.3 + 1.2) * Math.sin(y1 * 3.2 - 0.7) * 3.2
+          dx = dNdy * 0.42
+          dy = -dNdx * 0.42
+        } else {
+          // Three sine-domain octaves provide stable FBM-like displacement.
+          dx = (Math.sin(ny * 2.2 + turbulenceTime) + 0.5 * Math.sin((nx + ny) * 4.1 - turbulenceTime * 1.4) + 0.25 * Math.sin(ny * 8.3 + turbulenceTime * 2.1)) / 1.75
+          dy = (Math.sin(nx * 2.05 - turbulenceTime * 0.9) + 0.5 * Math.sin((nx - ny) * 3.7 + turbulenceTime * 1.2) + 0.25 * Math.sin(nx * 7.7 - turbulenceTime * 1.8)) / 1.75
+        }
+        const A = 18 * tb
+        const rdx = (dx * turbulenceCos - dy * turbulenceSin) * A
+        const rdy = (dx * turbulenceSin + dy * turbulenceCos) * A
+        sx = Math.min(w - 1, Math.max(0, Math.round(sx + rdx)))
+        sy = Math.min(h - 1, Math.max(0, Math.round(y + rdy)))
       }
       const bi = (sy * w + sx) * 4
       let R = src[bi]

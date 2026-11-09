@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ArrowUp, ArrowDown, ChevronDown, ChevronRight, Copy, Eye, EyeOff, Plus, Trash2 } from 'lucide-react'
+import { ArrowUp, ArrowDown, ChevronDown, ChevronRight, Copy, Eye, EyeOff, Plus, Shapes, TimerReset, Trash2 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { Clip } from '../types'
 import { PanelSection } from './PanelSection'
 import { paramsForPatch } from '../lib/effectCatalog'
 import { fxCatalogById } from '../lib/effectCatalog'
 import { FX_MIN_DUR } from '../lib/fxInstances'
+import { DEFAULT_EFFECT_MASK } from '../lib/effectMask'
 
 /**
  * Effect Stack — the CapCut-style list of effect instances dropped ONTO the
@@ -27,6 +28,8 @@ export function FxStackSection({ clip }: { clip: Clip }) {
   const beginHistory = useEditor((s) => s.beginHistory)
   const endHistory = useEditor((s) => s.endHistory)
   const setLeftTab = useEditor((s) => s.setLeftTab)
+  const setClipProp = useEditor((s) => s.setClipProp)
+  const requestRightSection = useEditor((s) => s.requestRightSection)
   const [openId, setOpenId] = useState<string | null>(activeFx?.clipId === clip.id ? activeFx.fxId : null)
 
   useEffect(() => { if (activeFx?.clipId === clip.id) setOpenId(activeFx.fxId) }, [activeFx?.clipId, activeFx?.fxId, clip.id])
@@ -148,6 +151,35 @@ export function FxStackSection({ clip }: { clip: Clip }) {
                       className="w-16 rounded border border-ink-700 bg-ink-900 px-1 py-0.5 text-right font-mono text-[10px] text-ink-100"
                     />
                     <span className="font-mono text-[9px] text-ink-500">of {clip.duration.toFixed(1)}s</span>
+                  </div>
+                  <div className="flex items-center gap-1.5" data-testid={`fxstack-actions-${inst.id}`}>
+                    <button
+                      type="button"
+                      data-testid={`fxstack-region-${inst.id}`}
+                      title="Limit the combined effect stack to shape, text, or drawn regions"
+                      onClick={() => {
+                        if (!clip.adjustmentMask) setClipProp(clip.id, { adjustmentMask: { ...DEFAULT_EFFECT_MASK, regions: DEFAULT_EFFECT_MASK.regions?.map((region) => ({ ...region })) } })
+                        requestRightSection('effect-mask')
+                      }}
+                      className={`flex h-6 items-center gap-1 rounded border px-2 text-[9px] ${clip.adjustmentMask ? 'border-cyan-600 bg-cyan-950/40 text-cyan-200' : 'border-ink-700 text-ink-300 hover:border-cyan-600'}`}
+                    >
+                      <Shapes size={11} /> Region
+                    </button>
+                    {typeof inst.params.burstFx === 'string' && (
+                      <button
+                        type="button"
+                        data-testid={`fxstack-fit-cycle-${inst.id}`}
+                        title="Fit the effect length to one active cycle"
+                        onClick={() => {
+                          const cycle = typeof inst.params.burstCycle === 'number' ? inst.params.burstCycle : 1
+                          const speed = typeof inst.params.burstSpeed === 'number' ? inst.params.burstSpeed : 1
+                          useEditor.getState().setFxRange(clip.id, inst.id, undefined, Math.max(FX_MIN_DUR, cycle / Math.max(0.1, speed)))
+                        }}
+                        className="flex h-6 items-center gap-1 rounded border border-ink-700 px-2 text-[9px] text-ink-300 hover:border-amber-500 hover:text-amber-200"
+                      >
+                        <TimerReset size={11} /> Fit 1×
+                      </button>
+                    )}
                   </div>
                   {params.map((pd) => {
                     const raw = inst.params[pd.key]

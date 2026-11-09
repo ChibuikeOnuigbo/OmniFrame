@@ -1,3 +1,95 @@
+## 2026-11-09 — photographic thumbnail correction
+
+Effect catalog subjects now use two bundled Pexels photographs: a portrait for
+face/skin/beauty, color, blur and lighting; a car for glitch and other motion.
+Idle thumbnails apply shared canvas filters and raster grading before selection.
+Motion blur demonstrates shared temporal sample weights on a staged photo pan.
+LUT previews use the portrait, including their loading/error fallback, without
+category text over the picture. Source URLs, licenses and SHA-256 hashes are in
+`public/assets/effect-subjects/credits.json`.
+
+Fixed idle photo restoration after adding an effect or stopping an audition.
+Browser coverage includes photo restoration, Gaussian/temporal blur pixel changes,
+scrubbing, add/double-click, menus and live MCP. Typecheck and production build
+pass. Screenshots: `qa-output/square-preview/{glitch-photos,blur-photos}.png`.
+Idle cards are representative stills, not exhaustive temporal/3D effect renders;
+active auditions continue to mirror actual project footage. Full catalog visual
+acceptance and the earlier outstanding editor tasks remain open.
+
+## 2026-11-09 — square previews, 300K recipes and timeline audit
+
+Square effect/transition cards mirror active program auditions, expose a scrubber,
+hover/focus Add and double-click commit. Three reusable local subject images,
+themed catalog shortcuts, 300,000 base / 305,000 loaded recipes. Timeline gets
+3px raised playhead, marker alignment color, searchable markers, resolved marker
+navigation, millisecond ruler and decoded-media scrub pause. Ripple-delete menu
+added. Evidence and limits: `docs/SQUARE_EFFECT_BROWSER_20261109.md` and
+`ultimate tests/Ultimate_timeline_est.md`. Twenty million numerical clamp cases
+are distinct from the browser/render tests; full timeline certification is open.
+
+## 2026-11-08 — movable tilt-shift focus plane
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Angled selective-focus compositor with reusable scratch surfaces | `pixelGrade.ts` | Three distinct renders and measured sharp-plane retention |
+| Amount, centre X/Y, angle, width and feather | `types.ts`, `effectCatalog.ts`, `customEffects.ts` | Six editable/keyframeable controls; import clamping |
+| 48 curated focus-plane recipes | `effectCatalog.ts` | Four orientations × three offsets × four widths; unique patches |
+| Punctuation-tolerant multiword recipe search | `effectCatalog.ts`, `effectRecipeBank.ts` | Natural query finds the matching middle-dot preset live |
+| Live apply, parameter editing, keyframes and effect region | `qa/tilt-shift-focus-ui-e2e.mjs` | Browser screenshot and machine report |
+
+Details: `docs/TILT_SHIFT_FOCUS_20261108.md`.
+
+## 2026-11-08 — 200-control UI quality gate
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Three-cell Effects collection picker and four-column category grid | `EffectsPanel.tsx` | Arrow order/cycling, 24px targets and four computed columns asserted live |
+| Persistent selected state, quieter hover border and pressed semantics | `EffectsPanel.tsx`, `SectionsNav.tsx`, `TransitionsPanel.tsx`, audio/3D panels | Computed selected/rest/hover colors and ARIA state checked |
+| Shared keyboard focus fallback and repaired undersized controls | `index.css`, `LinkPanel.tsx`, `TransitionsPanel.tsx` | Every measured target is at least 24×24 with visible focus |
+| Exactly 200 live UI scans and ten cutout contact sheets | `qa/ui-200-scan-e2e.mjs` | 200 PASS / 0 REVIEW / 0 FAIL; zero page errors |
+| Broader mode/submode affordance sweep at 1440 and 1024 | `qa/ui-affordance-audit.mjs` | 0 tiny, 0 unnamed and 0 duplicate-test-id findings |
+
+Full numbered evidence: `docs/UI_QUALITY_200_SCAN_20261108.md` and
+`qa-output/ui-200/`.
+
+## 2026-11-08 — 150K effects and persistent runtime shortcuts
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| 139,425 deterministic indexed recipes across 12 generator families | `effectRecipeBank.ts` | All IDs unique/reconstructable; 150,048 current base total |
+| Paged UI and MCP search without allocating the full bank | `effectCatalog.ts`, `EffectsPanel.tsx`, `tools/mcp/tools.mjs` | Final ID applied; 155,048 live with authored pack |
+| 44 configurable commands wired to Studio runtime | `settingsRegistry.ts`, `Studio.tsx`, `store.ts` | Rebind, execute, reload, clear and Reset-compatible persistence |
+| Removed duplicate hard-coded Timeline shortcut listeners | `Timeline.tsx` | Group, multi-delete and export range commands use one registry |
+
+Details: `docs/EFFECT_CATALOG_150K_20261108.md`. Recipe count is separate
+from renderer-family count, perceptual uniqueness and full-motion acceptance.
+
+## 2026-11-08 — camera lens bokeh and licensed source audit
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Shared highlight-defocus renderer with eight diaphragm shapes | `src/lib/pixelGrade.ts`, `src/types.ts` | Eight deterministic distinct renders; inspected contact sheet |
+| Amount/radius/threshold/gain/shape/rotation/softness controls | `effectCatalog.ts`, `customEffects.ts`, `FxStackSection.tsx` | Import clamping, numeric keyframe and live shape persistence |
+| Sixteen curated lens-bokeh recipes and unique catalog IDs | `effectCatalog.ts` | 10,575 unique base / 15,575 loaded recipe count; duplicate AM ID removed |
+| Effect-region and translated clip-isolation correctness | `pixelGrade.ts`, existing `playback.ts` mask path | Live ellipse-mask screenshot; browser-caught shifted/black output fixed |
+| Official documentation, licensed APK and CC0 model audit | `research/effect-source-audit-20261108.json` | LibreCuts APK digest/ZIP check; Poly Haven 11-file MD5 check and Blender render |
+
+Details and limits: `docs/LENS_BOKEH_EFFECTS_20261108.md`. Recipe totals are
+not independent algorithm or full-motion acceptance counts. The LibreCuts APK
+was statically inspected and never executed. The CC0 camera was rendered as a
+candidate and was not bundled into the product library.
+
+## 2026-11-07 — Motion Lab template system
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| 201 original editable recipes across 16 motion-design categories | `src/lib/templatePresets.ts`, `src/types.ts` | Exact count, unique IDs/names, slot integrity and search unit test |
+| Search, category filtering, palette/aspect/duration preview and asset mapping | `TemplatePickerModal.tsx` | Live Data/Neon search and inspector screenshot |
+| Generated backdrop, editable media/text layers and 12 real keyframe motions | `TemplatePickerModal.tsx` | Browser-built four-layer Data Story scene with three animated text tracks |
+| Reachable desktop/mobile entry and correct modal stacking | `TopBar.tsx`, `TemplatePickerModal.tsx` | Live top-bar open, modal visibility and z-order inspection |
+
+Motionvid scope evidence is recorded in `research/motionvid-public-catalog-scope-20261107.json`. Terms blocked bulk scraping/copying, so no third-party projects or previews were committed. Full details and evidence: `docs/MOTION_LAB_20261107.md`, `qa-output/motion-lab/`.
+
 ## 2026-11-01 — 1,152 Studio Looks and effect-library controls
 
 Added 1,152 original shared-engine presets (12 families × 12 palettes × 8 tonal mixes), collection filtering, persistent favorites, explicit reversible previews and visible adjustment-layer actions. All new recipes passed changed-pixel, distinct-fixture-signature and parameter-bound checks; browser apply/undo/redo, bundle round-trip and real video export passed. Base catalog: 10,481; fully loaded with existing glitch pack: 15,481 entries. Counts are recipes, not algorithms or universal perceptual uniqueness. See `docs/STUDIO_LOOKS_20261101.md` and `qa-output/studio-looks-20261101/`. Prior broad editor/model/sculpting/native-platform work remains open.
@@ -11,6 +103,19 @@ Supplied Gold Motion and Toji Motion APKs downloaded and statically identified; 
 Current user request is a broad editor quality/performance upgrade against the uploaded full ledger. Implemented and measured: preview frame budgets, idle render suppression, no preview upscaling, visible render metrics, temporary video proxy preparation with original audio/export preservation, cancellation and memory bounds, stable 3D context across scrubbing/resizing, geometry/material cleanup, and unobstructed 3D tools. Desktop CI now preserves installers and typechecks. General E2E selectors and export-success requirement repaired.
 
 Read `docs/EDITOR_PERFORMANCE_20261031.md` for exact checks, current research and remaining scope. Evidence: `qa-output/performance-20261031/`; fresh Drive listings, uploaded-ledger index, repository searches and sampled reference review: `research/editor-upgrade-20261031/`. Proxies are tab-local realtime WebM, not frame-exact persistent/native proxies. No comparative speed benchmark, new model training, sculpting implementation or native platform certification is claimed. No environment configuration or publication, remote push or PR performed. Continue the open work listed in that report; preserve user media and historical evidence.
+
+## 2026-11-07 action effects, aura, liquify and effect regions
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| 50 loopable Burst presets across ten source-fragment/energy families | `src/lib/actionFx.ts`, `effectCatalog.ts`, `particleFx.ts`, `fxInstances.ts` | `qa/action-fx-unit.mjs`: exact 50 count, unique ids, ten distinct family renders and deterministic timing; inspected contact sheet |
+| Bright-pixel aura and FBM/curl/glass turbulence | `actionFx.ts`, `pixelGrade.ts`, `types.ts` | Eight aura and six turbulence catalog entries; changed-pixel proof and production build |
+| Parameterized liquify effect plus signed twirl direction | `pixelGrade.ts`, `deformation.ts` | Eight presets; existing four-mode deformation unit remains green |
+| Burst cycle controls, split continuity and one-cycle trim | `FxStackSection.tsx`, `fxInstances.ts` | Split source-clock unit and live UI 1 s / 2× → 0.5 s assertion |
+| Effect-region entry from every FX row; action/raster masking on adjustment layers | `FxStackSection.tsx`, `playback.ts`, existing `effectMask.ts` | Live ellipse region UI and visibly isolated burst screenshot; live MCP mask regression |
+| Compact effect icons and cleaner asset browsing | `EffectsPanel.tsx`, `AssetLibraryModal.tsx` | 1600×1000 browser screenshots; no visible `CC0` text in library modal, attribution metadata preserved |
+
+Evidence: `docs/ACTION_EFFECTS_20261107.md`, `qa/artifacts/burst-fx-contact-sheet.png`, and `qa-output/action-fx/`. Base catalog 10,550; lazy-pack total 15,550. These are recipe counts. This runner lacks Rust/Cargo, so native desktop compilation and cross-platform certification are not claimed.
 
 # Verified implementation changes — 2026-10-31
 
@@ -53,3 +158,14 @@ Verified 1,152 two-second moving Studio Look renders and one 2,304-second combin
 ## 2026-11-01 moving video text crop and GIF providers
 
 Added a real video-inside-text workflow to browser playback and headless MCP. An imported video is duplicated into glyph alpha, can be inverted and graded inside the letters, has a controllable solid core and source offset, and remains editable with Screen/Color Burn blend keys. The duplicated matte has its own live decoder so a background copy and text copy can seek independently. `new_work_qa/RDT_recopy2.mp4` is the corrected 601-frame evidence render with seven different scene looks and speed curves. Added Settings keys and one Media popup for GIPHY plus Klipy, including provider switching, trending/search, attribution, loading/error/download states and MP4 media import. Unit and live browser QA cover both providers and the moving matte.
+## 2026-11-08 — directional light/blur and tutorial audit
+
+| Change | Code | Verification / artifact |
+|---|---|---|
+| Point, rotated Spot and feathered Directional light | `src/lib/lightFx.ts`, `playback.ts`, `tools/mcp/appRender.mjs` | Six distinct fixture renders and inspected contact sheet; universal MCP regression |
+| Blur trail bias, angle spread and bright-pixel threshold | `pixelGrade.ts`, `types.ts`, `effectCatalog.ts` | One-side and thresholded fan changed-pixel checks; four editable recipes |
+| Compact Point/Spot/Beam controls and valid unset defaults | `EffectsPanel.tsx`, `HelpModal.tsx` | Live browser slider persistence, no `NaN`, screenshot in `qa-output/directional-light-blur/` |
+| 211-channel subscription tutorial queue | `build-subscription-audit-queue.py`, `video-audit.yml` | Exact unique count, 36-batch coverage, refined classifier unit; batch 1 acquired 20/20 videos into 343 frames/60 audio diagnostics |
+| Measurable cross-platform product target | `docs/PRODUCT_GOAL.md` | Capability, responsiveness, simplicity and platform gates documented |
+
+Full implementation evidence and limits: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`. The subscription queue is an inventory/acquisition workflow; 20 videos have decoded evidence, while continuous visual/audio review remains pending.

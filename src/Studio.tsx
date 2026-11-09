@@ -35,6 +35,7 @@ import { BackgroundRemovalModal } from './components/BackgroundRemovalModal'
 import { executeVoiceIsolationForClip } from './lib/voiceIsolation'
 import { MarkerPopup } from './components/MarkerPopup'
 import { MARKER_KINDS } from './lib/markers'
+import { shortcutMatches } from './lib/settingsRegistry'
 
 type ContextTarget =
   | { type: 'EMPTY_EDITOR' }
@@ -58,16 +59,10 @@ export default function Studio() {
   const [isBgModalOpen, setIsBgModalOpen] = useState(false)
   const [bgModalClipId, setBgModalClipId] = useState<string | undefined>(undefined)
   const importFiles = useEditor((s) => s.importFiles)
-  const togglePlay = useEditor((s) => s.togglePlay)
-  const setPlayhead = useEditor((s) => s.setPlayhead)
-  const setTool = useEditor((s) => s.setTool)
   const removeClip = useEditor((s) => s.removeClip)
   const selectedClipId = useEditor((s) => s.selectedClipId)
-  const projectFps = useEditor((s) => s.projectFps)
-  const zoomBy = useEditor((s) => s.zoomBy)
   const undo = useEditor((s) => s.undo)
   const redo = useEditor((s) => s.redo)
-  const setSpeed = useEditor((s) => s.setSpeed)
   const canUndo = useEditor((s) => s.past.length > 0)
   const canRedo = useEditor((s) => s.future.length > 0)
   const insertClipCopy = useEditor((s) => s.insertClipCopy)
@@ -127,149 +122,84 @@ export default function Studio() {
     document.documentElement.dataset.uiPalette = uiPalette
   }, [uiStyle, uiPalette])
 
-  // Global keyboard shortcuts (disabled while typing in inputs).
+  // Settings-backed global shortcuts. Inputs, dialogs and menus own their
+  // keystrokes; the editing surface consumes only exact configured chords.
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const t = e.target as HTMLElement | null
-      if (t && (t.isContentEditable || t.closest('input, textarea, select, option, [role="dialog"], [role="menu"], [role="listbox"]'))) return
-      const meta = e.ctrlKey || e.metaKey
-      const st = () => useEditor.getState()
-      if (meta && e.key.toLowerCase() === 'z') {
-        e.preventDefault()
-        e.shiftKey ? redo() : undo()
-        return
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      if (target && (target.isContentEditable || target.closest('input, textarea, select, option, [role="dialog"], [role="menu"], [role="listbox"]'))) return
+      const state = () => useEditor.getState()
+      const binding = (id: string) => state().customShortcuts[id]
+      const run = (id: string, action: () => void): boolean => {
+        if (!shortcutMatches(event, binding(id))) return false
+        event.preventDefault()
+        action()
+        return true
       }
-      if (meta && e.key.toLowerCase() === 'y') {
-        // Ctrl+Y = redo (CapCut/Windows convention), alongside Ctrl+Shift+Z.
-        e.preventDefault()
-        redo()
-        return
+      const selected = () => state().clips.find((clip) => clip.id === state().selectedClipId)
+      const addMarker = (kind?: string) => {
+        const s = state()
+        const existing = s.markers.find((marker) => Math.abs(marker.time - s.playhead) < 0.1)
+        if (existing) { s.setActiveMarkerModalId(existing.id); return }
+        const definition = MARKER_KINDS.find((item) => item.id === (kind || s.lastMarkerKind || 'beat')) || MARKER_KINDS[0]
+        const id = s.addMarker({ time: s.playhead, label: `${definition.label} ${s.markers.length + 1}`, color: definition.color, kind: definition.id })
+        s.setActiveMarkerModalId(id)
       }
-      if (meta && e.key.toLowerCase() === 'b') {
-        e.preventDefault()
-        st().splitAt(st().playhead)
-        return
-      }
-      if (meta && e.key.toLowerCase() === 'd') {
-        if (selectedClipId) {
-          e.preventDefault()
-          const c = st().clips.find((cl) => cl.id === selectedClipId)
-          if (c) insertClipCopy(c, c.start + c.duration)
-        }
-        return
-      }
-      if (meta) return
-      const f = 1 / projectFps
-      switch (e.key) {
-        case ' ':
-          e.preventDefault()
-          togglePlay()
-          break
-        case 'ArrowLeft':
-          e.preventDefault()
-          st().pause()
-          // Alt+Arrow steps between markers; plain Arrow steps frames/seconds.
-          if (e.altKey) st().jumpToPrevMarker()
-          else setPlayhead(st().playhead - (e.shiftKey ? 1 : f))
-          break
-        case 'ArrowRight':
-          e.preventDefault()
-          st().pause()
-          if (e.altKey) st().jumpToNextMarker()
-          else setPlayhead(st().playhead + (e.shiftKey ? 1 : f))
-          break
-        case 'h':
-        case 'H':
-          if (selectedClipId) {
-            e.preventDefault()
-            toggleClipHidden(selectedClipId)
-          }
-          break
-        case 'b':
-        case 'B':
-          setTool('blade')
-          break
-        case 'v':
-        case 'V':
-          setTool('select')
-          break
-        case 'Delete':
-        case 'Backspace': {
-          // An active (selected) effect instance dies first — it comes back
-          // with Ctrl+Z like every other action.
-          const af = st().activeFx
-          if (af) {
-            e.preventDefault()
-            st().removeActiveFx()
-            break
-          }
-          if (selectedClipId) removeClip(selectedClipId)
-          break
-        }
-        case '+':
-        case '=':
-          zoomBy(1.25)
-          break
-        case '-':
-        case '_':
-          zoomBy(0.8)
-          break
-        case 'j':
-        case 'J':
-          setSpeed(-(Math.abs(st().speed) || 1))
-          st().play()
-          break
-        case 'k':
-        case 'K':
-          st().pause()
-          break
-        case 'l':
-        case 'L':
-          setSpeed(Math.abs(st().speed) || 1)
-          st().play()
-          break
-        case 'g':
-        case 'G': {
-          e.preventDefault()
-          const s = st()
-          if (e.shiftKey) {
-            // Honour targeting when it is active, otherwise sweep everything.
-            s.removeGaps(s.targetedTrackIds.length > 0 ? 'targeted' : 'all')
-          } else {
-            s.setGapSelectMode(!s.gapSelectMode)
-          }
-          break
-        }
-        case 'm':
-        case 'M': {
-          e.preventDefault()
-          const s = st()
-          // CapCut navigation: Shift+M next marker, Alt+Shift+M previous.
-          if (e.shiftKey && e.altKey) { s.jumpToPrevMarker(); break }
-          if (e.shiftKey) { s.jumpToNextMarker(); break }
-          const existing = s.markers.find((m) => Math.abs(m.time - s.playhead) < 0.1)
-          if (existing) {
-            s.setActiveMarkerModalId(existing.id)
-          } else {
-            // M = quick marker in the last-used purpose; Alt+M = Fix-it
-            // (CapCut's "new colour" marker). The popup opens for naming.
-            const kind = e.altKey ? 'fix' : (s.lastMarkerKind || 'beat')
-            const def = MARKER_KINDS.find((d) => d.id === kind) || MARKER_KINDS[0]
-            const id = s.addMarker({
-              time: s.playhead,
-              label: `${def.label} ${s.markers.length + 1}`,
-              color: def.color,
-              kind: def.id,
-            })
-            s.setActiveMarkerModalId(id)
-          }
-          break
-        }
-      }
+
+      if (run('undo', () => state().undo())) return
+      if (run('redo', () => state().redo())) return
+      if (run('cut', () => { const clip = selected(); if (clip) { writeClipClipboard(clip); state().removeClip(clip.id) } })) return
+      if (run('copy', () => { const clip = selected(); if (clip) writeClipClipboard(clip) })) return
+      if (run('paste', () => { const clip = readClipClipboard(); if (clip) state().insertClipCopy(clip, state().playhead) })) return
+      if (run('split', () => state().splitAt(state().playhead))) return
+      if (run('duplicate', () => { const clip = selected(); if (clip) state().insertClipCopy(clip, clip.start + clip.duration) })) return
+      if (run('group', () => state().groupSelection())) return
+      if (run('ungroup', () => state().ungroupSelection())) return
+      if (run('delete', () => {
+        const s = state()
+        if (s.activeFx) { s.removeActiveFx(); return }
+        const ids = s.selectedClipIds.length ? [...s.selectedClipIds] : s.selectedClipId ? [s.selectedClipId] : []
+        ids.forEach((id) => state().removeClip(id))
+        if (ids.length) state().selectClips([])
+      })) return
+      if (run('playPause', () => state().togglePlay())) return
+      if (run('prevMarker', () => state().jumpToPrevMarker())) return
+      if (run('nextMarker', () => state().jumpToNextMarker())) return
+      if (run('stepBack', () => { const s = state(); s.pause(); s.setPlayhead(s.playhead - 1 / s.projectFps) })) return
+      if (run('stepForward', () => { const s = state(); s.pause(); s.setPlayhead(s.playhead + 1 / s.projectFps) })) return
+      if (run('jumpBack', () => { const s = state(); s.pause(); s.setPlayhead(s.playhead - 1) })) return
+      if (run('jumpForward', () => { const s = state(); s.pause(); s.setPlayhead(s.playhead + 1) })) return
+      if (run('hide', () => { const id = state().selectedClipId; if (id) state().toggleClipHidden(id) })) return
+      if (run('selectTool', () => state().setTool('select'))) return
+      if (run('bladeTool', () => state().setTool('blade'))) return
+      if (run('zoomIn', () => state().zoomBy(1.25))) return
+      if (run('zoomOut', () => state().zoomBy(0.8))) return
+      if (run('shuttleReverse', () => { const s = state(); s.setSpeed(-(Math.abs(s.speed) || 1)); s.play() })) return
+      if (run('shuttleStop', () => state().pause())) return
+      if (run('shuttleForward', () => { const s = state(); s.setSpeed(Math.abs(s.speed) || 1); s.play() })) return
+      if (run('selectGaps', () => state().setGapSelectMode(!state().gapSelectMode))) return
+      if (run('removeGaps', () => { const s = state(); s.removeGaps(s.targetedTrackIds.length ? 'targeted' : 'all') })) return
+      if (run('marker', () => addMarker())) return
+      if (run('fixMarker', () => addMarker('fix'))) return
+      if (run('exportIn', () => state().setExportIn())) return
+      if (run('exportOut', () => state().setExportOut())) return
+      if (run('clearExportRange', () => state().clearExportRange())) return
+      if (run('toggleSnapping', () => state().toggleSnapping())) return
+      if (run('effectsPanel', () => state().setLeftTab('effects'))) return
+      if (run('mediaPanel', () => state().setLeftTab('media'))) return
+      if (run('textPanel', () => state().setLeftTab('text'))) return
+      if (run('omniframe', () => state().setLeftTab('omniframe'))) return
+      if (run('threed', () => state().setLeftTab('threed'))) return
+      if (run('toggleLeftPanel', () => state().setLeftOpen(!state().leftOpen))) return
+      if (run('toggleRightPanel', () => state().setRightOpen(!state().rightOpen))) return
+      if (run('focusCanvas', () => state().setFocusMode('canvas-only'))) return
+      if (run('focusTimeline', () => state().setFocusMode('timeline'))) return
+      if (run('focusReset', () => state().setFocusMode('none'))) return
+      run('help', () => state().setHelpOpen(true))
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [togglePlay, setPlayhead, setTool, removeClip, toggleClipHidden, selectedClipId, projectFps, zoomBy, undo, redo, setSpeed])
+  }, [])
 
   // Release imported blob URLs when the document is actually leaving. Assets
   // remain live for the project lifetime so preview and export can reuse them.
@@ -494,6 +424,7 @@ export default function Studio() {
             },
           ]),
           { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
+          { id: 'ripple-delete', label: 'Ripple delete', icon: Minimize2, destructive: true, run: () => removeClip(contextMenu.clip.id, true) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
         ]
       : contextMenu.type === 'TRACK_LANE'

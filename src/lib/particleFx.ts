@@ -10,6 +10,7 @@
  * (qa/particle-fx-unit.mjs) and reused by playback.ts at every grade site.
  */
 import type { ClipEffect } from '../types'
+import { applyActionFx, hasActionFx } from './actionFx'
 
 
 export const PARTICLE_KINDS = ['none', 'feathers', 'embers', 'dust', 'bokeh', 'sparkles', 'snow', 'rain', 'petals',
@@ -74,7 +75,7 @@ export function hasReplaceBg(e?: ClipEffect | null): boolean {
   return !!e && !!e.replaceBg && e.replaceBg !== 'none'
 }
 export function hasClipFxLayers(e?: ClipEffect | null): boolean {
-  return hasParticleFx(e) || hasOverlayFx(e) || hasReplaceBg(e)
+  return hasParticleFx(e) || hasOverlayFx(e) || hasReplaceBg(e) || hasActionFx(e)
 }
 
 /* ----------------------------- particles ------------------------------ */
@@ -289,4 +290,5 @@ export function applyClipFxLayers(canvas: HTMLCanvasElement, e: ClipEffect, time
   }
   if (hasOverlayFx(e)) drawOverlayFx(ctx, w, h, timeSec, e.overlayFx as OverlayKind, e.overlayStrength ?? 0.5)
   if (hasParticleFx(e)) drawParticleFx(ctx, w, h, timeSec, e.particleFx as ParticleKind, e.particleDensity ?? 0.5, e.particleTint ?? '#ffffff')
+  if (hasActionFx(e)) applyActionFx(canvas, e, timeSec)
 }
