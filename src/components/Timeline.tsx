@@ -51,13 +51,14 @@ import {
   Group,
   Ungroup,
   SquareDashed,
+  Search,
 } from 'lucide-react'
 import { useEditor, gapsOnTrack } from '../store'
 import { CollapseChip } from './CollapseChip'
 import { ClipFilmstrip } from './ClipFilmstrip'
 import { FloatingWindow } from './FloatingWindow'
 import type { Clip, MediaAsset, Track, Transition, TransitionType } from '../types'
-import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp } from '../lib/time'
+import { chooseTickInterval, formatTimecode, formatRulerLabel, uid, clamp, maxTimelineZoom, timelineRulerMode } from '../lib/time'
 import { placedEffectLabels } from '../lib/adjustment'
 import { FX_QUICK_IDS, fxCatalogById } from '../lib/effectCatalog'
 import { FX_MIN_DUR } from '../lib/fxInstances'
@@ -65,7 +66,7 @@ import type { FxInstance } from '../types'
 
 /** Drag-and-drop payload for effects dragged out of the Effects tab. */
 const FX_MIME = 'application/x-omniframe-fx'
-import { MARKER_KINDS, groupMarkers, markerColorHex, markerGroupBackground, resolveMarkerTime } from '../lib/markers'
+import { MARKER_KINDS, groupMarkers, markerColorHex, markerGroupBackground, resolveMarkerTime, searchMarkers } from '../lib/markers'
 import type { MarkerKind } from '../types'
 import { detectBeatGrid, detectCustomBeat } from '../lib/beatDetect'
 import { IconButton } from './ui'
@@ -77,7 +78,6 @@ import { readableTextColor } from '../lib/color'
 
 const RULER_H = 28
 const HEADER_W = 168
-const MAX_PX = 8000 // continuous zoom remains usable through frame-level detail
 
 // Snap a time value to nearby clip edges, markers, and the playhead.
 /**
@@ -244,7 +244,7 @@ function LiveTimecode() {
   const ref = useRef<HTMLSpanElement>(null)
   useEffect(() => {
     const paint = () => {
-      if (ref.current) ref.current.textContent = formatTimecode(useEditor.getState().playhead)
+      if (ref.current) { const s = useEditor.getState(); ref.current.textContent = formatTimecode(s.playhead, s.projectFps, s.dropFrameTimecode) }
     }
     paint()
     return useEditor.subscribe((state, previous) => {
@@ -258,7 +258,15 @@ function PlayheadMarker({ px, handle = false }: { px: number; handle?: boolean }
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const paint = () => {
-      if (ref.current) ref.current.style.transform = `translate3d(${useEditor.getState().playhead * px}px,0,0)`
+      if (ref.current) {
+        const s = useEditor.getState()
+        ref.current.style.transform = `translate3d(${s.playhead * px}px,0,0)`
+        const onMarker = s.markers.some(m => Math.abs(resolveMarkerTime(m, s.clips)-s.playhead) < 0.5/s.projectFps)
+        ref.current.dataset.onMarker = String(onMarker)
+        ref.current.style.backgroundColor = onMarker ? '#fbbf24' : ''
+        const knob = ref.current.querySelector<HTMLElement>('[data-testid="timeline-playhead-knob"]')
+        if (knob) knob.style.backgroundColor = onMarker ? '#fbbf24' : ''
+      }
     }
     paint()
     return useEditor.subscribe((state, previous) => {
@@ -266,9 +274,20 @@ function PlayheadMarker({ px, handle = false }: { px: number; handle?: boolean }
     })
   }, [px])
   return (
-    <div ref={ref} className={`absolute left-0 top-0 bottom-0 w-0.5 pointer-events-none z-25 ${handle ? 'bg-red-500' : 'bg-red-500/80'}`}>
+    <div
+      ref={ref}
+      data-testid={handle ? 'timeline-playhead-handle' : 'timeline-playhead-line'}
+      aria-hidden="true"
+      className={`absolute left-0 top-0 bottom-0 w-[3px] pointer-events-none z-[80] bg-red-500 shadow-[0_0_0_1px_rgba(0,0,0,0.8),0_0_8px_rgba(239,68,68,0.9)] ${handle ? '' : 'opacity-95'}`}
+    >
       {handle && (
-        <div className="absolute -top-1 -left-1.5 w-3.5 h-3.5 bg-red-500 rotate-45 shadow-[0_0_6px_rgba(239,68,68,0.8)]" />
+        <div
+          data-testid="timeline-playhead-knob"
+          className="absolute -top-px -left-[7px] h-[17px] w-[17px] bg-red-500 shadow-[0_1px_0_rgba(0,0,0,0.8),0_0_7px_rgba(239,68,68,0.9)]"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%)' }}
+        >
+          <span className="absolute left-[6px] top-[4px] h-[4px] w-[4px] rounded-full bg-white/90" />
+        </div>
       )}
     </div>
   )
@@ -1597,6 +1616,9 @@ export function Timeline() {
   const [scrollLeft, setScrollLeft] = useState(0)
   const [viewW, setViewW] = useState(900)
   const seeking = useRef(false)
+  const markerSearchButtonRef = useRef<HTMLButtonElement>(null)
+  const [markerSearchOpen, setMarkerSearchOpen] = useState(false)
+  const [markerQuery, setMarkerQuery] = useState('')
   const [toolMenuOpen, setToolMenuOpen] = useState(false)
   const [speedMenuOpen, setSpeedMenuOpen] = useState(false)
   const [customSpeed, setCustomSpeed] = useState(Math.abs(speed))
@@ -1661,6 +1683,11 @@ export function Timeline() {
     }
   }, [toolMenuOpen, speedMenuOpen, contextMenu])
 
+  const maxPx = maxTimelineZoom(duration)
+  const markerMatches = useMemo(
+    () => searchMarkers(markers, clips, markerQuery).slice(0, 60),
+    [markers, clips, markerQuery],
+  )
   const contentWidth = Math.max(duration, 20) * px + 80
   const totalHeight = tracks.reduce((a, t) => a + new TrackModel(t).getEffectiveHeight(clips), 0)
   const hasVideo = clips.some((clip) => clip.kind === 'video' || clip.kind === 'image')
@@ -1724,7 +1751,7 @@ export function Timeline() {
       const cursorX = event.clientX - rect.left - HEADER_W
       const timeAtCursor = (el.scrollLeft + cursorX) / px
       const factor = event.deltaY < 0 ? 1.12 : 0.89
-      const next = clamp(px * factor, 8, MAX_PX)
+      const next = clamp(px * factor, 8, maxPx)
       setZoom(next)
       requestAnimationFrame(() => {
         el.scrollLeft = timeAtCursor * next - cursorX
@@ -1732,7 +1759,7 @@ export function Timeline() {
     }
     el.addEventListener('wheel', onWheel, { passive: false })
     return () => el.removeEventListener('wheel', onWheel)
-  }, [px, setZoom])
+  }, [px, setZoom, maxPx])
 
   const seekFromClientX = (clientX: number) => {
     const el = lanesRef.current
@@ -1915,7 +1942,8 @@ export function Timeline() {
   const tStart = Math.max(0, scrollLeft / px)
   const tEnd = (scrollLeft + viewW - HEADER_W) / px
   const frameW = px / FPS
-  const frameMode = frameW >= 10
+  const rulerMode = timelineRulerMode(px, FPS)
+  const frameMode = rulerMode === 'frame'
   type Tick = { t: number; label?: string; major: boolean }
   const ticks: Tick[] = []
   if (frameMode) {
@@ -1923,7 +1951,7 @@ export function Timeline() {
     const f1 = Math.ceil(tEnd * FPS)
     for (let f = f0; f <= f1; f++) {
       const t = f / FPS
-      const frame = f - Math.floor(t) * FPS
+      const frame = f % Math.max(1, Math.round(FPS))
       const major = frame === 0
       let label: string | undefined
       if (major) label = formatTimecode(t, FPS, dropFrameTimecode)
@@ -1931,7 +1959,7 @@ export function Timeline() {
       ticks.push({ t, label, major })
     }
   } else {
-    const interval = chooseTickInterval(px, 72, FPS)
+    const interval = chooseTickInterval(px, rulerMode === 'millisecond' ? 88 : 72, FPS)
     const minor = interval / (interval * px < 120 ? 2 : 5)
     for (let t = Math.floor(tStart / interval) * interval; t <= tEnd; t += interval) {
       ticks.push({ t, label: formatRulerLabel(t, interval, FPS, dropFrameTimecode), major: true })
@@ -1940,6 +1968,11 @@ export function Timeline() {
       if (!ticks.some((x) => Math.abs(x.t - t) < 1e-6)) ticks.push({ t, major: false })
     }
   }
+  const rulerResolution = rulerMode === 'millisecond'
+    ? `${Math.max(1, Math.round(chooseTickInterval(px, 88, FPS) * 1000))} ms`
+    : rulerMode === 'frame'
+      ? 'frame'
+      : 'clock'
 
   // Root attributes shared by every render path (docked, collapsed, floating
   // placeholder) so E2E instrumentation keeps working in all states.
@@ -1948,6 +1981,8 @@ export function Timeline() {
     'data-px-per-second': px.toFixed(4),
     'data-project-fps': String(FPS),
     'data-drop-frame': dropFrameTimecode ? 'true' : 'false',
+    'data-ruler-mode': rulerMode,
+    'data-ruler-resolution': rulerResolution,
     'data-render-count': String(renderCount.current),
   }
 
@@ -2049,7 +2084,7 @@ export function Timeline() {
             className="px-1 font-mono text-xs sm:text-sm tabular-nums whitespace-nowrap"
           >
             <LiveTimecode />
-            <span className="hidden text-ink-500 sm:inline"> / {formatTimecode(duration)}</span>
+            <span className="hidden text-ink-500 sm:inline"> / {formatTimecode(duration, FPS, dropFrameTimecode)}</span>
           </div>
           <button
             ref={speedButtonRef}
@@ -2141,6 +2176,18 @@ export function Timeline() {
         >
           <Bookmark size={15} />
         </button>
+        <button
+          ref={markerSearchButtonRef}
+          type="button"
+          data-testid="marker-search-btn"
+          title="Find named markers"
+          aria-label="Find named markers"
+          aria-expanded={markerSearchOpen}
+          onClick={() => setMarkerSearchOpen((open) => !open)}
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-none border border-l-0 border-ink-700 bg-ink-800 text-ink-300 transition-colors hover:bg-ink-700 hover:text-white"
+        >
+          <Search size={14} />
+        </button>
         </div>
 
         <div className="flex-1 min-w-[12px]" />
@@ -2164,7 +2211,7 @@ export function Timeline() {
               aria-label="Timeline zoom"
               className="of-range w-20 sm:w-28"
               min={8}
-              max={MAX_PX}
+              max={maxPx}
               value={px}
               onChange={(e) => setZoom(parseFloat(e.target.value))}
             />
@@ -2175,7 +2222,7 @@ export function Timeline() {
               style={{
                 left: `${
                   8 +
-                  ((Math.max(8, (viewW - HEADER_W - 40) / Math.max(duration, 10)) - 8) / (MAX_PX - 8)) * 100
+                  ((Math.min(maxPx, Math.max(8, (viewW - HEADER_W - 40) / Math.max(duration, 10))) - 8) / (maxPx - 8)) * 100
                 }%`,
               }}
             />
@@ -2238,7 +2285,7 @@ export function Timeline() {
           <span className="hidden xl:inline">Curves</span>
         </button>
         <span className="text-[10px] text-ink-500 whitespace-nowrap">
-          {px.toFixed(0)} px/s{frameMode ? ', frame' : ''}
+          {px.toFixed(0)} px/s · {rulerResolution}
         </span>
         </div>
       </div>
@@ -2351,6 +2398,7 @@ export function Timeline() {
               data-testid="timeline-ruler"
               className="h-[28px] sticky top-0 z-10 bg-ink-850 border-b border-ink-800 cursor-grab active:cursor-grabbing"
               onPointerDown={(e) => {
+                if (e.button !== 0) return
                 seeking.current = true
                 setScrubbing(true)
                 ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
@@ -2607,7 +2655,7 @@ export function Timeline() {
                     className="relative border-b border-ink-800 bg-ink-900/40"
                     style={{ height: laneHeight }}
                     onPointerDown={(e) => {
-                      if (e.target === e.currentTarget) {
+                      if (e.button === 0 && e.target === e.currentTarget) {
                         // Clicking empty timeline space clears the active clip/layer
                         // highlight and reveals the project inspector again.
                         selectClip(null)
@@ -2884,6 +2932,69 @@ export function Timeline() {
       )}
 
       {/* Centralized Target-Aware Context Menu */}
+      {markerSearchOpen && (() => {
+        const anchor = markerSearchButtonRef.current?.getBoundingClientRect()
+        return (
+          <>
+            <div className="fixed inset-0 z-[95]" onPointerDown={() => setMarkerSearchOpen(false)} />
+            <div
+              data-testid="marker-search-popover"
+              role="dialog"
+              aria-label="Find named markers"
+              className="fixed z-[105] w-80 max-w-[calc(100vw-1rem)] overflow-hidden rounded-lg border border-ink-600 bg-ink-900 shadow-2xl"
+              style={{
+                left: Math.max(8, Math.min(anchor?.left ?? 8, window.innerWidth - 328)),
+                top: Math.max(8, Math.min((anchor?.bottom ?? 48) + 6, window.innerHeight - 340)),
+              }}
+            >
+              <div className="flex items-center gap-2 border-b border-ink-700 px-2.5 py-2">
+                <Search size={14} className="shrink-0 text-ink-400" />
+                <input
+                  autoFocus
+                  data-testid="marker-search-input"
+                  value={markerQuery}
+                  onChange={(event) => setMarkerQuery(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Escape') setMarkerSearchOpen(false)
+                    if (event.key === 'Enter' && markerMatches[0]) {
+                      setPlayhead(markerMatches[0].time)
+                      setActiveMarkerModalId(markerMatches[0].marker.id)
+                      setMarkerSearchOpen(false)
+                    }
+                  }}
+                  placeholder="Search marker names, notes, clips…"
+                  className="h-7 min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-ink-600"
+                />
+                <span className="text-[10px] tabular-nums text-ink-500">{markerMatches.length}/{markers.length}</span>
+              </div>
+              <div className="max-h-64 overflow-y-auto p-1.5">
+                {markerMatches.length ? markerMatches.map(({ marker, time }) => (
+                  <button
+                    key={marker.id}
+                    type="button"
+                    data-testid="marker-search-result"
+                    data-marker-id={marker.id}
+                    onClick={() => {
+                      setPlayhead(time)
+                      setActiveMarkerModalId(marker.id)
+                      setMarkerSearchOpen(false)
+                    }}
+                    className="flex h-9 w-full items-center gap-2 rounded px-2 text-left hover:bg-ink-750 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                  >
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: markerColorHex(marker.color, marker.kind) }} />
+                    <span className="min-w-0 flex-1 truncate text-xs text-ink-100">{marker.label}</span>
+                    <span className="shrink-0 font-mono text-[10px] text-ink-500">{formatTimecode(time, FPS, dropFrameTimecode)}</span>
+                  </button>
+                )) : (
+                  <div data-testid="marker-search-empty" className="px-2 py-6 text-center text-xs text-ink-500">
+                    {markers.length ? 'No marker matches this search.' : 'Add and name a marker to find it here.'}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )
+      })()}
       {/* Combined-marker list: everything sitting at one point */}
       {markerPopover && (
         <>

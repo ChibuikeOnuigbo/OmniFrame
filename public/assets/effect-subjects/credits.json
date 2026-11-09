@@ -1,0 +1,26 @@
+[
+  {
+    "file": "portrait.jpg",
+    "source": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=320&q=80&fit=crop",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "sha256": "067fe8b2a8b7193617998df7276577c39373414bf1690744f0117688487118a1",
+    "usage": "Local low-resolution subject for effect previews; no endorsement implied"
+  },
+  {
+    "file": "landscape.jpg",
+    "source": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=320&q=80&fit=crop",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "sha256": "45e8208e7db185bfa95c137379a6cc9f15f2b2d86013876cfd17ec25268a7742",
+    "usage": "Local low-resolution subject for effect previews; no endorsement implied"
+  },
+  {
+    "file": "night.jpg",
+    "source": "https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=320&q=80&fit=crop",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "sha256": "fe4082b58d8bc29149bcbc7a950cc26bc27e021d1e099747c2765e568723825d",
+    "usage": "Local low-resolution subject for effect previews; no endorsement implied"
+  }
+]

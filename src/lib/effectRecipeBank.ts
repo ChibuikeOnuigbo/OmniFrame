@@ -12,10 +12,10 @@ export interface GeneratedFxEntry {
 
 /**
  * Compact, deterministic parameter-space recipes. These are indexed instead
- * of retained as 139k objects: browser search creates only the visible page,
+ * of retained as 289k objects: browser search creates only the visible page,
  * while ID lookup reconstructs the exact same editable engine patch.
  */
-export const GENERATED_RECIPE_COUNT = 139_425
+export const GENERATED_RECIPE_COUNT = 289_377
 export const GENERATED_RECIPE_PREFIX = 'ofx-'
 
 const PALETTE = ['#ff375f', '#ff9f0a', '#ffd60a', '#30d158', '#64d2ff', '#0a84ff', '#bf5af2', '#ff2d92', '#f5f5f7', '#111827']

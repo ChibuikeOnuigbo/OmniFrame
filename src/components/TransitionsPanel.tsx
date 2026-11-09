@@ -1,3 +1,4 @@
+import { PreviewSquare } from './PreviewSquare'
 import { prepareDeviceModels } from '../lib/device3d'
 import {prepareObjectAssets} from '../lib/object3d'
 import {transitionThumbnail} from '../lib/transitionAssetCatalog'
@@ -234,48 +235,11 @@ export function TransitionsPanel() {
             }}
           />
         </div>
-        <div data-testid="transition-variant-list" className="mt-1.5 max-h-[430px] overflow-y-auto pr-1 space-y-1.5">
+        <div data-testid="transition-variant-list" className="mt-2 grid grid-cols-2 gap-2 max-h-[430px] overflow-y-auto">
           {TRANSITION_PRESETS.filter((p) => (PILLARS.find((pl) => pl.key === pillar)?.cats || []).includes(p.category)).map((preset) => (
-            <div
-              key={preset.id}
-              data-testid={`transition-card-${preset.id}`}
-              onClick={() => selectPreset(preset)}
-              className={`group cursor-pointer p-2 rounded-lg bg-ink-900 border hover:border-brand/60 transition-all ${transitionThumbnail(preset.id)?'block space-y-2':'flex items-center justify-between'} ${selectedId === preset.id ? 'border-brand ring-1 ring-brand/50' : 'border-ink-800'}`}
-            >
-              <div className="min-w-0 flex-1 pr-2">
-                {transitionThumbnail(preset.id)&&<img src={transitionThumbnail(preset.id)} alt={`${preset.name} rendered preview`} loading="lazy" className="mb-2 h-28 w-full rounded-md object-cover"/>}
-                <div className="font-medium text-ink-100 flex items-center gap-1.5">
-                  <Sparkles size={12} className="text-amber-400 shrink-0" />
-                  <span className="truncate">{preset.name}</span>
-                  <span data-testid={`transition-base-${preset.id}`} className="text-[9px] font-mono px-1 py-px rounded bg-ink-800 text-ink-400 whitespace-nowrap">base {preset.baseDuration}s</span>
-                </div>
-                <div className={`text-[10px] text-ink-400 mt-0.5 leading-tight ${transitionThumbnail(preset.id)?'':'truncate'}`}>{preset.description}</div>
-              </div>
-              <div className="shrink-0 flex items-center gap-1">
-                <button
-                  type="button"
-                  data-testid={`apply-trans-btn-${preset.id}`}
-                  title={`Preview ${preset.name}; Apply from the monitor to add it`}
-                  aria-label={`Preview ${preset.name} transition`}
-                  onClick={(event) => { event.stopPropagation(); previewTransition(preset) }}
-                  className="flex min-h-6 items-center gap-1 rounded border border-transparent bg-brand/20 px-2 py-1 text-[11px] font-medium leading-none text-brand-400 transition-colors hover:border-brand-300 hover:bg-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand whitespace-nowrap"
-                >
-                  <Play size={12} className="shrink-0" />
-                  <span>Preview</span>
-                </button>
-                <button
-                  type="button"
-                  data-testid={`place-trans-btn-${preset.id}`}
-                  title={`Place ${preset.name} at the nearest usable cut`}
-                  aria-label={`Apply ${preset.name} transition`}
-                  onClick={(event) => { event.stopPropagation(); placeTransition(preset) }}
-                  className="flex min-h-6 items-center gap-1 rounded border border-transparent bg-emerald-500/20 px-2 py-1 text-[11px] font-medium leading-none text-emerald-300 transition-colors hover:border-emerald-300 hover:bg-emerald-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 whitespace-nowrap"
-                >
-                  <Check size={12} className="shrink-0" />
-                  <span>Apply</span>
-                </button>
-              </div>
-            </div>
+            <PreviewSquare key={preset.id} id={`transition-card-${preset.id}`} name={preset.name}
+              image={transitionThumbnail(preset.id) || '/assets/effect-subjects/landscape.jpg'}
+              preview={() => selectPreset(preset)} add={() => placeTransition(preset)} />
           ))}
         </div>
       </div>

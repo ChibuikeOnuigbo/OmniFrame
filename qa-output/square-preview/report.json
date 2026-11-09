@@ -1,0 +1,15 @@
+{
+  "loadedRecipes": 305000,
+  "square": true,
+  "nonDestructivePreview": true,
+  "scrub": true,
+  "addAtPlayhead": true,
+  "doubleClick": true,
+  "markerSearch": true,
+  "millisecondRuler": true,
+  "playhead": {
+    "z": "80",
+    "w": 3
+  },
+  "errors": []
+}

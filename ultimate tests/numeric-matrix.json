@@ -1,0 +1,6 @@
+{
+  "numericBoundaryCases": 20000000,
+  "failed": 0,
+  "elapsedMs": 136.71688100000006,
+  "scope": "seek clamping only; not 20 million UI scenarios"
+}

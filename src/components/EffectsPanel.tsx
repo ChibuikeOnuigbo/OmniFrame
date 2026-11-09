@@ -1,3 +1,4 @@
+import { PreviewSquare } from './PreviewSquare'
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { Activity, Aperture, Ban, ChevronLeft, ChevronRight, Circle, CircleDot, CloudFog, CloudRain, Download, Feather, Flame, Flower2, Frame, Grid2x2, Grid3x3, Image as ImageIcon, Lamp, Layers, Orbit, Play, Plus, Power, RotateCcw, ScanLine, Search, SlidersHorizontal, Snowflake, Sparkles, SunMedium, Sunset, Trash2, Upload, Wand2, Waves, Wind, X } from 'lucide-react'
@@ -1055,7 +1056,7 @@ function FxCatalogBrowser() {
   const entries = catalog.entries
   const catalogTotal = fxCatalogCount()
   const collectionOptions = [
-    { value: 'all', label: 'All · 150K+' },
+    { value: 'all', label: 'All · 300K+' },
     { value: 'curated', label: 'Curated + authored' },
     { value: 'generated', label: `Indexed · ${GENERATED_FX_RECIPE_COUNT.toLocaleString()}` },
     { value: 'studio', label: 'Studio Looks · 1,152' },
@@ -1095,6 +1096,9 @@ function FxCatalogBrowser() {
           <button type="button" data-testid="fx-collection-next" aria-label="Next effect collection" onClick={() => stepCollection(1)} className="grid place-items-center border-l border-ink-700 text-ink-400 transition-colors hover:border-ink-500 hover:bg-ink-800 hover:text-white focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"><ChevronRight size={13} /></button>
         </div>
       </div>
+      <div className="flex gap-1 overflow-x-auto pb-1" aria-label="Effect packs">
+        {['Lens Bokeh', 'Motion Pulse', 'Directional Light', 'Turbulence'].map(pack => <button key={pack} type="button" onClick={() => {setQ(pack); setCat('all'); setCollection('all'); setLimit(60)}} className="shrink-0 rounded border border-ink-700 px-2 py-1 text-[10px] hover:border-cyan-400">{pack}</button>)}
+      </div>
       {packError && <button type="button" onClick={loadPack} className="text-[10px] text-amber-300">{packError} · Retry recipe library</button>}
       <div className="grid grid-cols-4 gap-1" role="tablist" aria-label="Effect categories" data-testid="fx-category-grid">
         {FX_CATS.map((c) => {
@@ -1130,32 +1134,13 @@ function FxCatalogBrowser() {
         </span>
       </div>
       <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
-        {entries.slice(0, limit).map((e) => {
-          const Icon = CAT_ICON[e.cat]
-          return <div key={e.id} className="group relative">
-            <div className="flex justify-between gap-1">
-              <button type="button" aria-label={`${favorites.includes(e.id) ? 'Unfavorite' : 'Favorite'} ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="min-h-6 min-w-6 rounded border border-transparent px-1 text-xs text-amber-300 transition-colors hover:border-amber-400/50 hover:bg-amber-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>
-              <button type="button" aria-label={`Preview ${e.name}`} onClick={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }} className="min-h-6 rounded border border-transparent px-1 text-[10px] text-cyan-300 transition-colors hover:border-cyan-400/50 hover:bg-cyan-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">Preview</button>
-              <button type="button" data-testid={`fx-tile-layer-${e.id}`} aria-label={`Place ${e.name} as an adjustment layer`} onClick={() => apply(e, true)} className="min-h-6 rounded border border-transparent px-1 text-[10px] text-cyan-300 transition-colors hover:border-cyan-400/50 hover:bg-cyan-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">Layer</button>
-            </div>
-            <button
-              type="button"
-              draggable
-              data-testid={`fx-tile-${e.id}`}
-              title={`${e.name} — ${e.trace}\nDrag onto an image/video/compound clip, or click to apply.`}
-              onDragStart={(ev) => {
-                ev.dataTransfer.setData(FX_MIME, e.id)
-                ev.dataTransfer.effectAllowed = 'copy'
-              }}
-              onClick={() => apply(e, false)}
-              className="flex w-full cursor-grab items-center gap-1 rounded border border-ink-700 bg-ink-900/80 px-1.5 py-1 text-left transition-colors hover:border-cyan-400/70 hover:bg-cyan-950/40 active:cursor-grabbing"
-            >
-              <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-ink-800 text-ink-300" aria-hidden="true"><Icon size={11} /></span>
-              <span className="min-w-0 flex-1 truncate text-[9.5px] font-medium text-ink-100">{e.name}</span>
-            </button>
-
-          </div>
-        })}
+        {entries.slice(0, limit).map((e) => <div key={e.id} className="relative">
+          <PreviewSquare id={`fx-tile-${e.id}`} name={e.name} dragId={e.id} effect={e.patch as ClipEffect}
+            image={`/assets/effect-subjects/${e.cat === 'color' || e.cat === 'blur' || e.cat === 'key' ? 'portrait' : e.cat === 'light' || e.cat === 'glitch' || e.cat === 'Glitch NG' ? 'night' : 'landscape'}.jpg`}
+            preview={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }}
+            add={() => { addFxAdjustment(e.id, { start: useEditor.getState().playhead, duration: 2 }); requestRightSection('effects') }} />
+          <button type="button" aria-label={`Favorite ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="absolute top-1 left-1 h-6 w-6 rounded bg-black/60 text-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>
+        </div>)}
       </div>
       {catalog.total > entries.length && (
         <button
@@ -1220,10 +1205,10 @@ export function EffectsPanel() {
         <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200">
           <Wand2 size={12} /> Effects
         </div>
-        <p className="mt-1 text-[10px] leading-snug text-ink-300">Drag onto a clip or click to apply — settings auto-open in the right panel.</p>
+        <p className="mt-1 text-[10px] leading-snug text-ink-300">Click to preview · Double-click or + to add</p>
       </div>
 
-      <PanelSection title="Effect catalog" hint="150K+" defaultOpen testId="fx-catalog">
+      <PanelSection title="Effect catalog" hint="300K+" defaultOpen testId="fx-catalog">
         <FxCatalogBrowser />
       </PanelSection>
 

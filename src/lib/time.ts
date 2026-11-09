@@ -6,6 +6,23 @@ export function fps(): number {
   return 30
 }
 
+/** Maximum useful timeline density. Millisecond ticks are available on short
+ * and medium projects while the layout guard avoids browser-sized mega divs. */
+export const MAX_TIMELINE_PX_PER_SECOND = 32_000
+const MAX_TIMELINE_LAYOUT_WIDTH = 32_000_000
+
+export function maxTimelineZoom(durationSeconds: number): number {
+  const layoutSafe = MAX_TIMELINE_LAYOUT_WIDTH / Math.max(20, durationSeconds || 0)
+  return Math.max(8_000, Math.min(MAX_TIMELINE_PX_PER_SECOND, layoutSafe))
+}
+
+export type TimelineRulerMode = 'clock' | 'frame' | 'millisecond'
+
+export function timelineRulerMode(pxPerSec: number, frameRate = fps()): TimelineRulerMode {
+  if (pxPerSec >= 12_000) return 'millisecond'
+  return pxPerSec / Math.max(1, frameRate) >= 10 ? 'frame' : 'clock'
+}
+
 export function formatTimecode(seconds: number, frameRate = fps(), dropFrame = false): string {
   const s = Math.max(0, seconds)
   const nominalFps = Math.max(1, Math.round(frameRate))
@@ -44,6 +61,7 @@ export function formatClock(seconds: number): string {
 export function chooseTickInterval(pxPerSec: number, minPx = 72, frameRate = fps()): number {
   const frame = 1 / Math.max(1, frameRate)
   const candidates = [
+    0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
     frame, frame * 2, frame * 5, frame * 10,
     0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 30,
     60, 120, 300, 600, 1200, 1800, 3600,
@@ -53,6 +71,18 @@ export function chooseTickInterval(pxPerSec: number, minPx = 72, frameRate = fps
 
 export function formatRulerLabel(seconds: number, interval: number, frameRate = fps(), dropFrame = false): string {
   if (!Number.isFinite(seconds)) return '00:00'
+  if (interval < 1 / Math.max(1, frameRate) - 1e-9) {
+    const totalMs = Math.max(0, Math.round(seconds * 1000))
+    const ms = totalMs % 1000
+    const totalSeconds = Math.floor(totalMs / 1000)
+    const secs = totalSeconds % 60
+    const minutes = Math.floor(totalSeconds / 60) % 60
+    const hours = Math.floor(totalSeconds / 3600)
+    const pad = (value: number, length = 2) => String(value).padStart(length, '0')
+    return hours > 0
+      ? `${pad(hours)}:${pad(minutes)}:${pad(secs)}.${pad(ms, 3)}`
+      : `${pad(Math.floor(totalSeconds / 60))}:${pad(secs)}.${pad(ms, 3)}`
+  }
   if (interval < 1) return formatTimecode(seconds, frameRate, dropFrame)
   const total = Math.max(0, Math.round(seconds))
   const hours = Math.floor(total / 3600)

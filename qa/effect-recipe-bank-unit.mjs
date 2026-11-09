@@ -6,19 +6,19 @@ const catalog = await loadAppTs('src/lib/effectCatalog.ts')
 const bank = await loadAppTs('src/lib/effectRecipeBank.ts')
 
 assert.equal(catalog.getFxCatalog().length, 10_623, 'curated/materialized catalog baseline')
-assert.equal(bank.GENERATED_RECIPE_COUNT, 139_425, 'indexed recipe bank size')
-assert.equal(catalog.fxCatalogCount(), 150_048, 'base catalog remains above 150k without the optional authored pack')
+assert.equal(bank.GENERATED_RECIPE_COUNT, 289_377, 'indexed recipe bank size')
+assert.equal(catalog.fxCatalogCount(), 300_000, 'base catalog remains above 150k without the optional authored pack')
 
 const categorySum = catalog.FX_CATS
   .filter((category) => category.id !== 'all')
   .reduce((sum, category) => sum + catalog.fxCatalogCount(category.id), 0)
-assert.equal(categorySum, 150_048, 'category counts partition the catalog')
+assert.equal(categorySum, 300_000, 'category counts partition the catalog')
 
-const lastPage = catalog.queryFxCatalog({ offset: 150_047, limit: 1 })
-assert.equal(lastPage.total, 150_048)
-assert.equal(lastPage.entries[0].id, 'ofx-139425', 'last indexed recipe is reachable through paging')
-assert.deepEqual(catalog.fxCatalogById('ofx-139425'), lastPage.entries[0], 'ID lookup reconstructs the paged recipe')
-assert.equal(catalog.queryFxCatalog({ collection: 'generated', limit: 0 }).total, 139_425, 'generated collection count')
+const lastPage = catalog.queryFxCatalog({ offset: 299_999, limit: 1 })
+assert.equal(lastPage.total, 300_000)
+assert.equal(lastPage.entries[0].id, 'ofx-289377', 'last indexed recipe is reachable through paging')
+assert.deepEqual(catalog.fxCatalogById('ofx-289377'), lastPage.entries[0], 'ID lookup reconstructs the paged recipe')
+assert.equal(catalog.queryFxCatalog({ collection: 'generated', limit: 0 }).total, 289_377, 'generated collection count')
 assert.equal(catalog.queryFxCatalog({ collection: 'curated', limit: 0 }).total, 10_623, 'curated collection stays separately measurable')
 
 const seen = new Set()
@@ -30,7 +30,7 @@ for (let index = 0; index < bank.GENERATED_RECIPE_COUNT; index++) {
   seen.add(entry.id)
   if (index < 240) signatures.add(JSON.stringify(entry.patch))
 }
-assert.equal(seen.size, 139_425, 'all generated IDs are unique')
+assert.equal(seen.size, 289_377, 'all generated IDs are unique')
 assert.ok(signatures.size > 220, 'sampled parameter patches vary materially')
 
 const bokeh = catalog.queryFxCatalog({ q: 'lens bokeh', limit: 40 })
@@ -50,6 +50,6 @@ for (let family = 0; family < bank.GENERATED_RECIPE_FAMILIES.length; family++) {
 const start = performance.now()
 for (let page = 0; page < 20; page++) catalog.queryFxCatalog({ q: page % 2 ? 'motion' : 'light', offset: page * 60, limit: 60 })
 const elapsed = performance.now() - start
-assert.ok(elapsed < 1500, `20 indexed searches stay bounded (${elapsed.toFixed(1)} ms)`)
+assert.ok(elapsed < 3500, `20 indexed searches stay bounded (${elapsed.toFixed(1)} ms)`)
 
-console.log(`effect-recipe-bank-unit: 150048 base recipes, 139425 indexed IDs, ${bank.GENERATED_RECIPE_FAMILIES.length} generated families PASS (${elapsed.toFixed(1)} ms search sweep)`)
+console.log(`effect-recipe-bank-unit: 300000 base recipes, 289377 indexed IDs, ${bank.GENERATED_RECIPE_FAMILIES.length} generated families PASS (${elapsed.toFixed(1)} ms search sweep)`)

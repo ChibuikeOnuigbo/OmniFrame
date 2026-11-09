@@ -784,7 +784,7 @@ export class PreviewEngine {
     // made Space/click pause feel delayed under main-thread load.
     this.unsubscribe = useEditor.subscribe((state, previous) => {
       if (state.playing && !previous.playing) this.last = performance.now()
-      if (!state.playing && previous.playing) {
+      if ((!state.playing && previous.playing) || (state.scrubbing && !previous.scrubbing)) {
         videoCache.forEach((video) => video.pause())
         audioCache.forEach((audio) => audio.pause())
       }
@@ -925,7 +925,7 @@ export class PreviewEngine {
         if (clip.textStyle && track.type === 'video') this.drawTextClip(ctx, clip, time)
         return false
       }
-      const el = this.syncElement(asset, time, clip, st.playing, track.muted, st.speed)
+      const el = this.syncElement(asset, time, clip, st.playing && !st.scrubbing, track.muted, st.speed)
       if (!el) return track.type === 'video'
       if (track.type === 'video') {
         const media = asset.kind === 'video' ? el as HTMLVideoElement : null
@@ -1024,8 +1024,8 @@ export class PreviewEngine {
     st: ReturnType<typeof useEditor.getState>,
     trackMuted: boolean,
   ) {
-    const fromEl = fromAsset ? this.syncElement(fromAsset, time, fromClip, st.playing, trackMuted, st.speed, true) : null
-    const toEl = toAsset ? this.syncElement(toAsset, time, toClip, st.playing, trackMuted, st.speed, true) : null
+    const fromEl = fromAsset ? this.syncElement(fromAsset, time, fromClip, st.playing && !st.scrubbing, trackMuted, st.speed, true) : null
+    const toEl = toAsset ? this.syncElement(toAsset, time, toClip, st.playing && !st.scrubbing, trackMuted, st.speed, true) : null
     const hasFrom = !!fromEl || !!fromClip.textStyle
     const hasTo = !!toEl || !!toClip.textStyle
     if (!hasFrom && !hasTo) return
@@ -1941,7 +1941,7 @@ export class PreviewEngine {
         // element: sharing the main clip's per-asset decoder makes the two
         // layers fight over currentTime whenever their starts/in-points differ.
         const fillAsset = asset.kind === 'video' ? { ...asset, id: `${asset.id}:text-fill:${clip.id}` } : asset
-        const element = this.syncElement(fillAsset, time, carrier, state.playing, true, state.speed, true)
+        const element = this.syncElement(fillAsset, time, carrier, state.playing && !state.scrubbing, true, state.speed, true)
         if (element instanceof HTMLImageElement || (element instanceof HTMLVideoElement && element.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)) insideVideoEl = element
       }
     }
@@ -2540,7 +2540,7 @@ export class PreviewEngine {
         continue
       }
 
-      const el = this.syncElement(childAsset, innerTime, childClip, st.playing, trackMuted || childTrack.muted, st.speed)
+      const el = this.syncElement(childAsset, innerTime, childClip, st.playing && !st.scrubbing, trackMuted || childTrack.muted, st.speed)
       if (!el) continue
 
       if (childTrack.type === 'video') {

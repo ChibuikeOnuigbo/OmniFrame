@@ -424,6 +424,7 @@ export default function Studio() {
             },
           ]),
           { id: 'hide-toggle', label: contextMenu.clip.hidden ? 'Unhide Clip' : 'Hide Clip', shortcut: 'H', icon: contextMenu.clip.hidden ? Eye : EyeOff, run: () => toggleClipHidden(contextMenu.clip.id) },
+          { id: 'ripple-delete', label: 'Ripple delete', icon: Minimize2, destructive: true, run: () => removeClip(contextMenu.clip.id, true) },
           { id: 'delete', label: 'Delete', shortcut: 'Delete', icon: Trash2, destructive: true, run: () => removeClip(contextMenu.clip.id) },
         ]
       : contextMenu.type === 'TRACK_LANE'

@@ -1,3 +1,14 @@
+## 2026-11-09 — square previews, 300K recipes and timeline audit
+
+Square effect/transition cards mirror active program auditions, expose a scrubber,
+hover/focus Add and double-click commit. Three reusable local subject images,
+themed catalog shortcuts, 300,000 base / 305,000 loaded recipes. Timeline gets
+3px raised playhead, marker alignment color, searchable markers, resolved marker
+navigation, millisecond ruler and decoded-media scrub pause. Ripple-delete menu
+added. Evidence and limits: `docs/SQUARE_EFFECT_BROWSER_20261109.md` and
+`ultimate tests/Ultimate_timeline_est.md`. Twenty million numerical clamp cases
+are distinct from the browser/render tests; full timeline certification is open.
+
 ## 2026-11-08 — movable tilt-shift focus plane
 
 | Change | Code | Verification / artifact |
