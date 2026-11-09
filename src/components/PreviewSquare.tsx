@@ -3,6 +3,8 @@ import { Plus } from 'lucide-react'
 import { useEditor } from '../store'
 import type { ClipEffect } from '../types'
 import { applyPixelGrade } from '../lib/pixelGrade'
+import { effectFilterString } from '../lib/effectFilter'
+import { pfxMotionBlurSamples } from '../lib/proceduralFx'
 
 /** Only the active square copies the program monitor. Idle cards draw once. */
 export function PreviewSquare({ id, name, image, effect, preview, add, dragId }: {
@@ -16,23 +18,35 @@ export function PreviewSquare({ id, name, image, effect, preview, add, dragId }:
   const dragging = useRef(false)
   const resume = useRef(false)
   useEffect(() => {
+    if (active) return
     let disposed = false
     const img = new Image()
     img.onload = () => {
-      if (disposed || !canvas.current || owner.current) return
+      if (disposed || !canvas.current) return
       const c = canvas.current, ctx = c.getContext('2d')!
       const size = Math.min(img.naturalWidth, img.naturalHeight)
+      ctx.clearRect(0, 0, c.width, c.height)
+      ctx.save()
+      ctx.filter = effectFilterString(effect) || 'none'
       ctx.drawImage(img, (img.naturalWidth-size)/2, (img.naturalHeight-size)/2, size, size, 0, 0, c.width, c.height)
+      // A staged horizontal pan makes temporal blur legible in an idle photograph.
+      // Use the same temporal sample weights as project rendering; never alter the preset.
+      for (const sample of pfxMotionBlurSamples(effect, 1, 30)) {
+        ctx.globalAlpha = sample.alpha
+        ctx.drawImage(img, (img.naturalWidth-size)/2, (img.naturalHeight-size)/2, size, size,
+          (sample.time - 1) * 240, 0, c.width, c.height)
+      }
+      ctx.restore()
       if (effect) applyPixelGrade(c, effect, 17)
     }
     img.src = image
     return () => { disposed = true }
-  }, [image, effect])
+  }, [image, effect, active])
   useEffect(() => {
     let raf = 0
     const paint = () => {
       const s = useEditor.getState(), p = s.visualPreview
-      if (!p || p.id !== owner.current) { setActive(false); return }
+      if (!p || p.id !== owner.current) { owner.current = null; setActive(false); return }
       const source = document.querySelector<HTMLCanvasElement>('[data-testid="program-preview-canvas"]')
       const c = canvas.current
       if (source && c) {

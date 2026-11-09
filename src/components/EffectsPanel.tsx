@@ -67,7 +67,7 @@ function loadLutPreviewImage() {
       image.decoding = 'async'
       image.onload = () => resolve(image)
       image.onerror = () => reject(new Error('LUT preview image could not be loaded'))
-      image.src = '/assets/room/clean_room_background.png'
+      image.src = '/assets/effect-subjects/pexels-portrait.jpg'
     }).catch((error) => {
       lutPreviewImagePromise = null
       throw error
@@ -80,8 +80,6 @@ function LutPreview({
   id,
   file,
   cubeText,
-  swatch,
-  category,
 }: {
   id: string
   file?: string
@@ -129,7 +127,7 @@ function LutPreview({
         context.putImageData(pixels, 0, 0)
         if (active) setPreviewUrl(canvas.toDataURL('image/jpeg', 0.84))
       } catch {
-        // Keep the color swatch fallback if a local preview/LUT cannot load.
+        // Keep the source photograph if a local LUT cannot load.
       }
     })()
     return () => { active = false }
@@ -140,10 +138,8 @@ function LutPreview({
       {previewUrl ? (
         <img data-testid={`lut-preview-${id}`} src={previewUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
-        <span className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${swatch || 'rgb(78, 104, 130)'} 0%, #182331 58%, #0c1018 100%)` }} />
+        <img src="/assets/effect-subjects/pexels-portrait.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
       )}
-      <span className="absolute inset-x-0 bottom-0 h-5 bg-gradient-to-t from-black/75 to-transparent" />
-      {category && <span className="absolute bottom-1 left-1.5 text-[9px] font-semibold uppercase tracking-wider text-white/90" aria-hidden="true">{category}</span>}
     </span>
   )
 }
@@ -1136,7 +1132,7 @@ function FxCatalogBrowser() {
       <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
         {entries.slice(0, limit).map((e) => <div key={e.id} className="relative">
           <PreviewSquare id={`fx-tile-${e.id}`} name={e.name} dragId={e.id} effect={e.patch as ClipEffect}
-            image={`/assets/effect-subjects/${e.cat === 'color' || e.cat === 'blur' || e.cat === 'key' ? 'portrait' : e.cat === 'light' || e.cat === 'glitch' || e.cat === 'Glitch NG' ? 'night' : 'landscape'}.jpg`}
+            image={`/assets/effect-subjects/${/face|portrait|skin|beauty|eye/i.test(e.name) || ['color', 'blur', 'key', 'light'].includes(e.cat) ? 'pexels-portrait' : 'pexels-car'}.jpg`}
             preview={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }}
             add={() => { addFxAdjustment(e.id, { start: useEditor.getState().playhead, duration: 2 }); requestRightSection('effects') }} />
           <button type="button" aria-label={`Favorite ${e.name}`} aria-pressed={favorites.includes(e.id)} onClick={() => toggleFavorite(e.id)} className="absolute top-1 left-1 h-6 w-6 rounded bg-black/60 text-amber-300">{favorites.includes(e.id) ? '★' : '☆'}</button>

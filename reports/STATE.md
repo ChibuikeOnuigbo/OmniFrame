@@ -1,3 +1,21 @@
+## 2026-11-09 — photographic thumbnail correction
+
+Effect catalog subjects now use two bundled Pexels photographs: a portrait for
+face/skin/beauty, color, blur and lighting; a car for glitch and other motion.
+Idle thumbnails apply shared canvas filters and raster grading before selection.
+Motion blur demonstrates shared temporal sample weights on a staged photo pan.
+LUT previews use the portrait, including their loading/error fallback, without
+category text over the picture. Source URLs, licenses and SHA-256 hashes are in
+`public/assets/effect-subjects/credits.json`.
+
+Fixed idle photo restoration after adding an effect or stopping an audition.
+Browser coverage includes photo restoration, Gaussian/temporal blur pixel changes,
+scrubbing, add/double-click, menus and live MCP. Typecheck and production build
+pass. Screenshots: `qa-output/square-preview/{glitch-photos,blur-photos}.png`.
+Idle cards are representative stills, not exhaustive temporal/3D effect renders;
+active auditions continue to mirror actual project footage. Full catalog visual
+acceptance and the earlier outstanding editor tasks remain open.
+
 ## 2026-11-09 — square previews, 300K recipes and timeline audit
 
 Square effect/transition cards mirror active program auditions, expose a scrubber,

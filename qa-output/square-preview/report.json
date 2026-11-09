@@ -1,6 +1,11 @@
 {
   "loadedRecipes": 305000,
   "square": true,
+  "photoRestored": true,
+  "photoChecks": {
+    "blur-0": true,
+    "mblur-1": true
+  },
   "nonDestructivePreview": true,
   "scrub": true,
   "addAtPlayhead": true,

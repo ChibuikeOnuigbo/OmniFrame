@@ -22,5 +22,23 @@
     "licenseUrl": "https://unsplash.com/license",
     "sha256": "fe4082b58d8bc29149bcbc7a950cc26bc27e021d1e099747c2765e568723825d",
     "usage": "Local low-resolution subject for effect previews; no endorsement implied"
+  },
+  {
+    "file": "pexels-portrait.jpg",
+    "source": "https://www.pexels.com/photo/774909/",
+    "download": "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "sha256": "cd7eb095e44f0e103ed7ccb5732bf699e9edf6d296cdf47367e7190f962f6023",
+    "usage": "Local photographic subject for effect previews; no endorsement implied"
+  },
+  {
+    "file": "pexels-car.jpg",
+    "source": "https://www.pexels.com/photo/170811/",
+    "download": "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "sha256": "1f7a0863d69577ffc118be8a4bf56d1cc22dcb70fdd48586ed09ae7faa046510",
+    "usage": "Local photographic subject for effect previews; no endorsement implied"
   }
 ]
