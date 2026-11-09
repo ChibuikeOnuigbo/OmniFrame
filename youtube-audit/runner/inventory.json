@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-08T01:01:14Z",
- "total": 1262,
+ "generated": "2026-11-09T22:04:50Z",
+ "total": 1264,
  "videos": [
   {
    "id": "fGm0SBFTj3o",
@@ -242,6 +242,19 @@
    "title": "EGOTISTICAL | 4K",
    "duration": "22",
    "channel": "@Deppey",
+   "format": "videos",
+   "formats": [
+    "videos"
+   ],
+   "status": "INVENTORIED",
+   "access": "pending-batch"
+  },
+  {
+   "id": "w5N4Hx2TPiE",
+   "url": "https://www.youtube.com/watch?v=w5N4Hx2TPiE",
+   "title": "UNIQUE Effects Every Editor NEEDS To Try (PART 9)",
+   "duration": "167",
+   "channel": "@AvoidAEP",
    "format": "videos",
    "formats": [
     "videos"
@@ -9640,6 +9653,23 @@
    "classification_reasons": [
     "tutorial phrase: tutorial",
     "editor + technique: alight motion, text, amv",
+    "tutorial-named channel + technique title",
+    "editing channel + technique title"
+   ],
+   "audit_rank": 4
+  },
+  {
+   "id": "ycVyOWrqFj4",
+   "url": "https://www.youtube.com/watch?v=ycVyOWrqFj4",
+   "title": "Editing Process #amv #aftereffects #alightmotion",
+   "duration": 0,
+   "channel": "Tyson Tutorials",
+   "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
+   "format": "subscriptions/shorts",
+   "status": "INVENTORIED",
+   "access": "pending-batch",
+   "subscription_tutorial": true,
+   "classification_reasons": [
     "tutorial-named channel + technique title",
     "editing channel + technique title"
    ],

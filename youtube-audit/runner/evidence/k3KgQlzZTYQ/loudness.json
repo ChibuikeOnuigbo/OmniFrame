@@ -1,11 +1,11 @@
-e= 6255 fps=1137 q=-0.0 size=N/A time=00:03:25.40 bitrate=N/A speed=37.3x elapsed=0:00:05.50    
-frame= 6834 fps=1139 q=-0.0 size=N/A time=00:03:44.50 bitrate=N/A speed=37.4x elapsed=0:00:06.00    
-frame= 7399 fps=1138 q=-0.0 size=N/A time=00:04:03.50 bitrate=N/A speed=37.5x elapsed=0:00:06.50    
-frame= 7977 fps=1139 q=-0.0 size=N/A time=00:04:22.60 bitrate=N/A speed=37.5x elapsed=0:00:07.00    
-frame= 8553 fps=1140 q=-0.0 size=N/A time=00:04:41.80 bitrate=N/A speed=37.6x elapsed=0:00:07.50    
-frame= 9126 fps=1140 q=-0.0 size=N/A time=00:05:00.90 bitrate=N/A speed=37.6x elapsed=0:00:08.00    
-[opus @ 0x5ba511869a00] Error parsing Opus packet header.
-[Parsed_loudnorm_0 @ 0x7841ac002080] 
+e= 4783 fps=1594 q=-0.0 size=N/A time=00:02:36.20 bitrate=N/A speed=  52x elapsed=0:00:03.00    
+frame= 5588 fps=1596 q=-0.0 size=N/A time=00:03:03.00 bitrate=N/A speed=52.3x elapsed=0:00:03.50    
+frame= 6367 fps=1591 q=-0.0 size=N/A time=00:03:29.50 bitrate=N/A speed=52.4x elapsed=0:00:04.00    
+frame= 7209 fps=1601 q=-0.0 size=N/A time=00:03:57.00 bitrate=N/A speed=52.6x elapsed=0:00:04.50    
+frame= 8073 fps=1614 q=-0.0 size=N/A time=00:04:25.80 bitrate=N/A speed=53.1x elapsed=0:00:05.00    
+frame= 8946 fps=1626 q=-0.0 size=N/A time=00:04:54.90 bitrate=N/A speed=53.6x elapsed=0:00:05.50    
+[opus @ 0x5d8a3ef77a00] Error parsing Opus packet header.
+[Parsed_loudnorm_0 @ 0x7c17e0002080] 
 {
 	"input_i" : "-18.81",
 	"input_tp" : "0.12",
@@ -18,5 +18,5 @@ frame= 9126 fps=1140 q=-0.0 size=N/A time=00:05:00.90 bitrate=N/A speed=37.6x el
 	"normalization_type" : "dynamic",
 	"target_offset" : "0.79"
 }
-[out#0/null @ 0x5ba5118af240] video:3825KiB audio:235381KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 9415 fps=1134 q=-0.0 Lsize=N/A time=00:05:13.83 bitrate=N/A speed=37.8x elapsed=0:00:08.30    
+[out#0/null @ 0x5d8a3efbd240] video:3825KiB audio:235381KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 9415 fps=1621 q=-0.0 Lsize=N/A time=00:05:13.83 bitrate=N/A speed=  54x elapsed=0:00:05.80    

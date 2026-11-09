@@ -1,4 +1,4 @@
-     2 |   913.30KiB   59k https | audio only         opus        59k 48k [es-US] Spanish (US), low, WEB-E, webm_dash
+   webm  audio only      2 |   913.30KiB   59k https | audio only         opus        59k 48k [es-US] Spanish (US), low, WEB-E, webm_dash
 250-4   webm  audio only      2 |   915.68KiB   60k https | audio only         opus        60k 48k [hi] Hindi, low, WEB-E, webm_dash
 250-5   webm  audio only      2 |   920.79KiB   60k https | audio only         opus        60k 48k [de-DE] German (DE), low, WEB-E, webm_dash
 249-6   webm  audio only      2 |   752.89KiB   49k https | audio only         opus        49k 48k [en-US] English (US) original (default), low, WEB-E, webm_dash
@@ -113,8 +113,8 @@
 [debug] [youtube] Forcing "main" player JS variant for player a5c2aafe
         original url = /s/player/a5c2aafe/player_es6.vflset/en_US/base.js
 [debug] [youtube] Kp2wDz-DLtk: Detected experiment to bind GVS PO Token to video ID for web_embedded client
-[debug] [youtube] Kp2wDz-DLtk: Detected a 182s ad skippable after 5s for web
-[debug] [youtube] Kp2wDz-DLtk: Detected a 45s ad skippable after 5s for web
+[debug] [youtube] Kp2wDz-DLtk: Detected a 6s ad for web
+[debug] [youtube] Kp2wDz-DLtk: Detected a 187s ad skippable after 5s for web
 [debug] [youtube] [jsc:deno] Using challenge solver lib script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Using challenge solver core script v0.8.0 (source: python package, variant: minified)
 [debug] [youtube] [jsc:deno] Running deno: deno run --ext=js --no-code-cache --no-prompt --no-remote --no-lock --node-modules-dir=none --no-config --no-npm --cached-only -

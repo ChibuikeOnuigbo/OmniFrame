@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-08T01:01:14.079212+00:00",
+  "generated": "2026-11-09T22:04:50.820360+00:00",
   "batch": 1,
   "channels_per_batch": 6,
   "playlist_range_per_tab": [
@@ -38,10 +38,10 @@
     {
       "channel_id": "UC8sBrtrmh33WHZNZqnVOwCA",
       "channel_title": "Wizzy Tutorials",
-      "inventory_count": 112,
+      "inventory_count": 113,
       "tab_counts": {
         "videos": 68,
-        "shorts": 44
+        "shorts": 45
       },
       "candidate_count": 84,
       "diagnostic_tails": {
@@ -52,12 +52,12 @@
     {
       "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
       "channel_title": "Tyson Tutorials",
-      "inventory_count": 97,
+      "inventory_count": 99,
       "tab_counts": {
-        "videos": 61,
-        "shorts": 36
+        "videos": 62,
+        "shorts": 37
       },
-      "candidate_count": 77,
+      "candidate_count": 78,
       "diagnostic_tails": {
         "videos": "",
         "shorts": ""
@@ -92,8 +92,8 @@
       }
     }
   ],
-  "inventory_count": 889,
-  "candidate_count": 814,
+  "inventory_count": 892,
+  "candidate_count": 815,
   "videos": [
     {
       "id": "Kp2wDz-DLtk",
@@ -2925,6 +2925,20 @@
       "audit_rank": 3
     },
     {
+      "id": "Au2AXkOZal0",
+      "url": "https://www.youtube.com/watch?v=Au2AXkOZal0",
+      "title": "My Editing process #yuta #editing #jujutsukaisen #anime #maki #jjk",
+      "duration": 0,
+      "channel": "Wizzy Tutorials",
+      "channel_id": "UC8sBrtrmh33WHZNZqnVOwCA",
+      "format": "subscriptions/shorts",
+      "status": "INVENTORIED",
+      "access": "pending-batch",
+      "subscription_tutorial": false,
+      "classification_reasons": [],
+      "audit_rank": 3
+    },
+    {
       "id": "pQQjGUYnNg4",
       "url": "https://www.youtube.com/watch?v=pQQjGUYnNg4",
       "title": "DOOM \ud83e\udd76\ud83d\udd25 | The Definition of Pure Aura \ud83d\udc80 | Avengers Doomsday Edit",
@@ -3642,6 +3656,20 @@
         "editing channel + technique title"
       ],
       "audit_rank": 3
+    },
+    {
+      "id": "SwyxiUShPfM",
+      "url": "https://www.youtube.com/watch?v=SwyxiUShPfM",
+      "title": "Should You SWITCH From Alight Motion To Keyflow?",
+      "duration": 189,
+      "channel": "Tyson Tutorials",
+      "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
+      "format": "subscriptions/videos",
+      "status": "INVENTORIED",
+      "access": "pending-batch",
+      "subscription_tutorial": false,
+      "classification_reasons": [],
+      "audit_rank": 4
     },
     {
       "id": "1p-dIlbrq2M",
@@ -4679,6 +4707,23 @@
       "classification_reasons": [
         "tutorial phrase: tutorial",
         "editor + technique: alight motion, text, amv",
+        "tutorial-named channel + technique title",
+        "editing channel + technique title"
+      ],
+      "audit_rank": 4
+    },
+    {
+      "id": "ycVyOWrqFj4",
+      "url": "https://www.youtube.com/watch?v=ycVyOWrqFj4",
+      "title": "Editing Process #amv #aftereffects #alightmotion",
+      "duration": 0,
+      "channel": "Tyson Tutorials",
+      "channel_id": "UCFXE9caeOodxhu_zg2_MoPA",
+      "format": "subscriptions/shorts",
+      "status": "INVENTORIED",
+      "access": "pending-batch",
+      "subscription_tutorial": true,
+      "classification_reasons": [
         "tutorial-named channel + technique title",
         "editing channel + technique title"
       ],
