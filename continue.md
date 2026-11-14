@@ -287,3 +287,14 @@ alpha pixels, solid replacement, Program PNG subject pixels and `.omni` reopen.
 The full gate passed 36 units, ten browser flows, lint, typecheck and build.
 Video matting, complex backgrounds, images above the 2048 px output cap, native
 builds and the main-bundle size remain open; see `AUDIT_STATE.md` Cycle 10.
+
+## 2026-11-14 — cutout worker and transparency audit
+
+Cutout preview now uses a cancellable worker and Apply commits the same PNG.
+Closing, changing options, failure and completion release workers. Source alpha
+is preserved over replacement backdrops; transparent corners no longer erase
+black subjects. The feather slider now matches the engine's supported range.
+All 36 units, ten browser smoke flows, lint, typecheck and build passed, plus the
+cutout flow on the production bundle. Older-browser fallback parity was checked.
+The 2048² sample kept UI timers running during processing. See `AUDIT_STATE.md`
+Cycle 11 for measurements, remaining work and generated-media lifetime follow-up.

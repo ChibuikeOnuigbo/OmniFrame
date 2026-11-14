@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import {
   Sparkles,
   CheckCircle2,
@@ -8,25 +8,7 @@ import {
 } from 'lucide-react'
 import { useEditor } from '../store'
 import type { BgRemovalModelId, BgRemovalOptions } from '../types'
-import {
-  generateMattingMask,
-  compositeCutout,
-} from '../lib/bgRemovalEngine'
-
-function renderStillCutout(image: HTMLImageElement, options: BgRemovalOptions, maxEdge: number) {
-  const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight))
-  const source = document.createElement('canvas')
-  source.width = Math.max(1, Math.round(image.naturalWidth * scale))
-  source.height = Math.max(1, Math.round(image.naturalHeight * scale))
-  const sourceContext = source.getContext('2d', { willReadFrequently: true })
-  if (!sourceContext) throw new Error('Canvas processing is unavailable')
-  sourceContext.drawImage(image, 0, 0, source.width, source.height)
-  const pixels = sourceContext.getImageData(0, 0, source.width, source.height)
-  const mask = generateMattingMask(pixels, options.modelId, options)
-  const output = document.createElement('canvas')
-  compositeCutout(source, mask, options, output)
-  return output
-}
+import { renderStillCutoutAsync, type StillCutoutResult } from '../lib/backgroundCutout'
 
 interface Props {
   isOpen: boolean
@@ -50,42 +32,65 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
   const [chokeExpand, setChokeExpand] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const [previewGenerated, setPreviewGenerated] = useState(false)
-  const [sourceImage, setSourceImage] = useState<HTMLImageElement | null>(null)
+  const [previewAttempt, setPreviewAttempt] = useState(0)
+  const [source, setSource] = useState<{ key: object; image: HTMLImageElement } | null>(null)
+  const [result, setResult] = useState<{ key: object; output: StillCutoutResult } | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const previewCanvasRef = useRef<HTMLCanvasElement | null>(null)
+  const sourceKey = useMemo(() => ({ clipId: activeClip?.id, assetId: asset?.id, url: asset?.url }),
+    [activeClip?.id, asset?.id, asset?.url])
+  const sourceImage = source?.key === sourceKey ? source.image : null
 
   useEffect(() => {
-    setSourceImage(null)
+    setSource(null)
+    setResult(null)
     setPreviewGenerated(false)
+    setIsProcessing(false)
     setError(null)
     if (!isOpen || !asset || asset.kind !== 'image' || activeClip?.kind !== 'image') return
     let cancelled = false
     const image = new Image()
     image.crossOrigin = 'anonymous'
-    image.onload = () => { if (!cancelled) setSourceImage(image) }
+    image.onload = () => { if (!cancelled) setSource({ key: sourceKey, image }) }
     image.onerror = () => { if (!cancelled) setError('Could not load this image for cutout') }
     image.src = asset.url
     return () => { cancelled = true }
-  }, [isOpen, asset?.id, asset?.url, activeClip?.kind])
+  }, [isOpen, sourceKey, activeClip?.kind])
 
-  const options: BgRemovalOptions = { modelId, mode: bgMode, solidColor, blurRadius, featherRadius, chokeExpand }
+  const options = useMemo<BgRemovalOptions>(() => ({ modelId, mode: bgMode, solidColor, blurRadius, featherRadius, chokeExpand }),
+    [modelId, bgMode, solidColor, blurRadius, featherRadius, chokeExpand])
+  const resultKey = useMemo(() => ({ sourceKey, options }), [sourceKey, options])
 
   useEffect(() => {
     if (!isOpen || !sourceImage || !previewCanvasRef.current) return
     const canvas = previewCanvasRef.current
-    try {
-      const output = previewGenerated
-        ? renderStillCutout(sourceImage, options, 480)
-        : sourceImage
-      canvas.width = previewGenerated ? (output as HTMLCanvasElement).width : Math.min(480, sourceImage.naturalWidth)
-      canvas.height = previewGenerated ? (output as HTMLCanvasElement).height
-        : Math.max(1, Math.round(sourceImage.naturalHeight * canvas.width / sourceImage.naturalWidth))
-      canvas.getContext('2d')?.drawImage(output, 0, 0, canvas.width, canvas.height)
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause))
+    if (!previewGenerated) {
+      canvas.width = Math.min(480, sourceImage.naturalWidth)
+      canvas.height = Math.max(1, Math.round(sourceImage.naturalHeight * canvas.width / sourceImage.naturalWidth))
+      canvas.getContext('2d')?.drawImage(sourceImage, 0, 0, canvas.width, canvas.height)
+      return
     }
-  }, [isOpen, sourceImage, modelId, bgMode, solidColor, blurRadius, featherRadius, chokeExpand, previewGenerated])
+    const controller = new AbortController()
+    setIsProcessing(true)
+    setError(null)
+    setResult(null)
+    void renderStillCutoutAsync(sourceImage, options, controller.signal).then(async (output) => {
+      const image = new Image()
+      image.src = output.url
+      await image.decode()
+      if (controller.signal.aborted) return
+      // Preview the exact PNG that Apply will commit, including its edge pixels.
+      canvas.width = output.width; canvas.height = output.height
+      canvas.getContext('2d')?.drawImage(image, 0, 0)
+      setResult({ key: resultKey, output })
+    }).catch((cause) => {
+      if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : String(cause))
+    }).finally(() => {
+      if (!controller.signal.aborted) setIsProcessing(false)
+    })
+    return () => controller.abort()
+  }, [isOpen, sourceImage, options, resultKey, previewGenerated, previewAttempt])
 
   if (!isOpen) return null
 
@@ -93,32 +98,28 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
     if (!sourceImage) return
     setError(null)
     setPreviewGenerated(true)
+    setPreviewAttempt((attempt) => attempt + 1)
   }
 
-  const handleApplyCutout = async () => {
-    if (!activeClip || !sourceImage || isProcessing) return
-    setIsProcessing(true)
+  const handleApplyCutout = () => {
+    if (!activeClip || !result || result.key !== resultKey || isProcessing) return
     setError(null)
     try {
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
-      const output = renderStillCutout(sourceImage, options, 2048)
-      const url = output.toDataURL('image/png')
-      const id = applyStillCutout(activeClip.id, {
-        url, width: output.width, height: output.height,
-        size: Math.floor((url.length - 'data:image/png;base64,'.length) * 0.75),
-      })
+      const id = applyStillCutout(activeClip.id, result.output)
       if (!id) throw new Error('The selected still clip is no longer available')
       onClose()
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause))
-    } finally {
-      setIsProcessing(false)
     }
   }
 
   return (
     <div
       data-testid="bg-removal-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Quick Background Cutout"
+      aria-busy={isProcessing}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 select-none"
     >
       <div className="w-full max-w-xl rounded-2xl border border-ink-700 bg-ink-900 shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
@@ -138,6 +139,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
           <button
             type="button"
             data-testid="close-bg-removal-btn"
+            aria-label="Close cutout"
             onClick={onClose}
             className="p-1.5 rounded-lg text-ink-400 hover:text-white hover:bg-ink-800 transition-colors"
           >
@@ -261,7 +263,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
                 type="range"
                 data-testid="bg-feather-slider"
                 min={0}
-                max={15}
+                max={10}
                 value={featherRadius}
                 onChange={(e) => setFeatherRadius(parseInt(e.target.value, 10))}
                 className="of-range w-full"
@@ -338,7 +340,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
             <button
               type="button"
               data-testid="apply-bg-removal-btn"
-              disabled={isProcessing || !sourceImage}
+              disabled={isProcessing || !result || result.key !== resultKey}
               onClick={handleApplyCutout}
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-brand hover:bg-brand/90 text-white font-medium text-xs shadow-md shadow-brand/20 disabled:opacity-40"
             >

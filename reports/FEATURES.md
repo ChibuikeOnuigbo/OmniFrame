@@ -260,3 +260,12 @@ available. The browser checked actual alpha, Program PNG subject pixels,
 Undo/Redo and `.omni` reopen. All 36 unit scripts, ten browser smoke flows,
 lint, typecheck and build passed. Video and complex-scene segmentation remain
 open in `AUDIT_STATE.md` Cycle 10.
+
+## 2026-11-14 — cutout cancellation and preview parity
+
+Cutout work runs in a dedicated worker on supported browsers, with cancellation
+and retry. Apply uses the exact previewed PNG, avoiding resolution-dependent
+edge differences. Transparent source pixels now blend correctly and transparent
+corners do not erase black subjects. The unit and browser gates passed, including
+production worker loading, cancellation, failure recovery and save/reopen.
+Evidence and limits are in `AUDIT_STATE.md` Cycle 11.

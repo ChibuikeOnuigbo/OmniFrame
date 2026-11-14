@@ -1,5 +1,36 @@
 # OmniFrame adversarial audit state
 
+## Cycle 11 — cancellable cutout processing and alpha correctness
+
+- Fixed: preview and Apply previously processed different resolutions and could
+  show different feather edges. The dialog now generates one PNG at up to
+  2048 px and Apply commits that exact result. Changes to the source or options
+  invalidate old results; Apply stays disabled until the current preview is ready.
+- Responsive processing: a dedicated worker runs matte generation, refinement,
+  compositing and PNG encoding. Close, Cancel and superseding edits terminate
+  the worker. Completed/failed jobs also terminate; failures can be retried.
+  Bitmap and file-reader cancellation paths release resources. Older browsers
+  without OffscreenCanvas retain a synchronous compatibility path.
+- Adversarial fixes: new tests failed on existing source transparency being
+  ignored over a solid backdrop and transparent black corners erasing opaque
+  black subjects. Both now pass. The feather slider matches the engine's 10 px
+  maximum instead of silently ignoring its last five steps.
+- Gates: all 36 unit scripts, ten browser smoke flows, lint, typecheck and build
+  passed. The cutout browser flow also passed against the production bundle.
+  It checks cancellation, injected worker failure/retry, worker cleanup, exact
+  preview/applied pixel equality, fallback parity, PNG export and project reopen.
+  A separate 2048² sample with maximum refinement took 1546 ms while the UI
+  timer fired 95 times; cancellation during another job returned AbortError.
+  These measurements apply only to this cloud Chromium run.
+- Remaining: complex-scene and video matting, the 2048 px output cap, generated
+  asset retention after Undo, native desktop validation and the large main
+  bundle remain open. Source lint retains 277 non-high findings across 195
+  files. The compatibility path can still block older browsers during math.
+- Next pass: audit generated-media lifetime across undo history and project
+  replacement, including stale render jobs. Compare real photographs against
+  guided matting before expanding this quick algorithm's quality claims. Keep
+  the worker lifecycle checks in the browser gate.
+
 ## Cycle 10 — honest still-image background cutout
 
 - Fixed: the old dialog used a synthetic silhouette, fake progress and an Apply

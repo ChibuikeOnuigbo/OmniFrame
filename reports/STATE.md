@@ -422,3 +422,13 @@ than a synthetic silhouette; the context command is limited to image clips and
 describes the heuristic accurately. Ten browser flows, 36 unit scripts, lint,
 typecheck and build passed. The build retains a large-chunk warning; the source
 scan reports 277 non-high findings. See `AUDIT_STATE.md` Cycle 10 for limits.
+
+## 2026-11-14 — cancellable cutout worker
+
+Preview and Apply share one result, computed in a worker with cancellation and
+cleanup. New adversarial tests exposed and verified fixes for source alpha and
+transparent-corner color sampling. All 36 units, ten browser smoke flows, lint,
+typecheck and build passed; the cutout flow also passed on the production build.
+A 2048² refinement sample took 1546 ms with 95 UI timer ticks on cloud Chromium.
+The older-browser compatibility path, asset retention, video/complex matting,
+native builds and the large bundle remain open. Details: `AUDIT_STATE.md` Cycle 11.

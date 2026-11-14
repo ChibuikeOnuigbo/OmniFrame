@@ -26,7 +26,8 @@ export function generateMattingMask(
     : modelId === 'isnet-anime' ? 55
     : modelId === 'slimsam-fast' ? 75 : 40
   const corners = [0, width - 1, (height - 1) * width, pixelCount - 1]
-  const colors = corners.map((index) => {
+  // RGB values in transparent pixels do not describe the visible backdrop.
+  const colors = corners.filter((index) => data[index * 4 + 3] >= 32).map((index) => {
     const offset = index * 4
     return [data[offset], data[offset + 1], data[offset + 2]]
   })
@@ -124,18 +125,20 @@ export function refineAlphaMask(
 
 // Composite foreground with selected background mode into a destination canvas
 export function compositeCutout(
-  sourceCanvas: HTMLCanvasElement,
+  sourceCanvas: HTMLCanvasElement | OffscreenCanvas,
   mask: SegmentationMask,
   options: BgRemovalOptions,
-  destCanvas: HTMLCanvasElement
+  destCanvas: HTMLCanvasElement | OffscreenCanvas
 ) {
   const srcCtx = sourceCanvas.getContext('2d')
   if (!srcCtx) return
   const srcData = srcCtx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height)
   const { mode, solidColor, blurRadius } = options
-  let background: HTMLCanvasElement | null = null
+  let background: HTMLCanvasElement | OffscreenCanvas | null = null
   if (mode === 'blur') {
-    background = document.createElement('canvas')
+    background = typeof document === 'undefined'
+      ? new OffscreenCanvas(sourceCanvas.width, sourceCanvas.height)
+      : document.createElement('canvas')
     background.width = sourceCanvas.width
     background.height = sourceCanvas.height
     background.getContext('2d')?.putImageData(srcData, 0, 0)
@@ -161,19 +164,23 @@ export function compositeCutout(
 
   for (let i = 0; i < mask.data.length; i++) {
     const idx = i * 4
-    const a = mask.data[i] / 255
+    const a = mask.data[i] / 255 * srcData.data[idx + 3] / 255
 
     if (mode === 'transparent') {
       destData.data[idx] = srcData.data[idx]
       destData.data[idx + 1] = srcData.data[idx + 1]
       destData.data[idx + 2] = srcData.data[idx + 2]
-      destData.data[idx + 3] = Math.round(srcData.data[idx + 3] * a)
+      destData.data[idx + 3] = Math.round(255 * a)
     } else {
-      // Blend source over background
-      destData.data[idx] = Math.round(srcData.data[idx] * a + (currentBg?.data[idx] || 0) * (1 - a))
-      destData.data[idx + 1] = Math.round(srcData.data[idx + 1] * a + (currentBg?.data[idx + 1] || 0) * (1 - a))
-      destData.data[idx + 2] = Math.round(srcData.data[idx + 2] * a + (currentBg?.data[idx + 2] || 0) * (1 - a))
-      destData.data[idx + 3] = 255
+      // Source-over with both alphas preserves transparent holes and soft edges.
+      const backgroundAlpha = (currentBg?.data[idx + 3] || 0) / 255 * (1 - a)
+      const outputAlpha = a + backgroundAlpha
+      for (let channel = 0; channel < 3; channel++) {
+        destData.data[idx + channel] = outputAlpha > 0 ? Math.round(
+          (srcData.data[idx + channel] * a + (currentBg?.data[idx + channel] || 0) * backgroundAlpha) / outputAlpha,
+        ) : 0
+      }
+      destData.data[idx + 3] = Math.round(outputAlpha * 255)
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "totals": {
-    "files": 193,
+    "files": 195,
     "findings": 277
   },
   "byRule": {
@@ -212,14 +212,14 @@
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/BackgroundRemovalModal.tsx",
-      "line": 47,
+      "line": 29,
       "evidence": "hardcoded colour #00FF00 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/BackgroundRemovalModal.tsx",
-      "line": 223,
+      "line": 225,
       "evidence": "hardcoded colour #00FF00 instead of a theme token"
     },
     {
@@ -1934,21 +1934,21 @@
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 5515,
+      "line": 5516,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 5587,
+      "line": 5588,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 5612,
+      "line": 5613,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     }
   ]
