@@ -37,7 +37,7 @@ function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<ty
 }
 import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
 import { mergeFxInstances, fxLocalTime } from './fxInstances'
-import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath, tintEffectMaskFeather } from './effectMask'
+import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath, tintEffectMaskFeather, effectMaskFeatherBounds } from './effectMask'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -255,6 +255,7 @@ export class PreviewEngine {
   private shapeMatteCanvas: HTMLCanvasElement | null = null
   private effectMaskMatteCanvas: HTMLCanvasElement | null = null
   private effectMaskShapeCanvas: HTMLCanvasElement | null = null
+  private effectMaskTintCanvas: HTMLCanvasElement | null = null
   /** One bounded reusable surface avoids a full-canvas allocation per rigged layer. */
   private puppetCanvas: HTMLCanvasElement | null = null
   /** Resolve each PSD rig's hierarchy once per rendered frame. */
@@ -455,14 +456,22 @@ export class PreviewEngine {
       mctx.fillStyle = '#fff'; mctx.fillRect(0, 0, matte.width, matte.height)
       mctx.globalCompositeOperation = 'source-over'
     }
-    let featherOverlay: ImageData | null = null
+    let featherOverlay: HTMLCanvasElement | null = null
+    let featherX = 0, featherY = 0
     if (mask.featherOffset || mask.featherTint) {
-      const pixels = mctx.getImageData(0, 0, matte.width, matte.height)
+      const bounds = effectMaskFeatherBounds(regions, this.width, this.height)
+      const pixels = mctx.getImageData(bounds.x, bounds.y, bounds.width, bounds.height)
       const tinted = tintEffectMaskFeather(pixels.data, mask.featherColor, mask.featherTint, mask.featherOffset)
-      if (mask.featherOffset) mctx.putImageData(pixels, 0, 0)
+      if (mask.featherOffset) mctx.putImageData(pixels, bounds.x, bounds.y)
       if (tinted) {
-        featherOverlay = mctx.createImageData(matte.width, matte.height)
-        featherOverlay.data.set(tinted)
+        if (!this.effectMaskTintCanvas) this.effectMaskTintCanvas = document.createElement('canvas')
+        featherOverlay = this.effectMaskTintCanvas
+        if (featherOverlay.width !== bounds.width) featherOverlay.width = bounds.width
+        if (featherOverlay.height !== bounds.height) featherOverlay.height = bounds.height
+        const overlay = featherOverlay.getContext('2d')!
+        const image = overlay.createImageData(bounds.width, bounds.height)
+        image.data.set(tinted); overlay.putImageData(image, 0, 0)
+        featherX = bounds.x; featherY = bounds.y
       }
     }
     const sctx = scratch.getContext('2d')!
@@ -477,10 +486,8 @@ export class PreviewEngine {
     }
     sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
     if (featherOverlay) {
-      const overlay = shape.getContext('2d')!
-      overlay.putImageData(featherOverlay, 0, 0)
       sctx.globalCompositeOperation = 'source-over'
-      sctx.drawImage(shape, ox, oy)
+      sctx.drawImage(featherOverlay, ox + featherX, oy + featherY)
     }
     sctx.restore()
   }

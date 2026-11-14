@@ -1,5 +1,5 @@
 import { blendAt } from '../../src/lib/blendModes.ts'
-import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath, tintEffectMaskFeather } from '../../src/lib/effectMask.ts'
+import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath, tintEffectMaskFeather, effectMaskFeatherBounds } from '../../src/lib/effectMask.ts'
 // Headless renderer that speaks the APP's semantics, not the agent's style:
 // transforms come from CurveEngine.evaluateClipAnimation (the app's own key
 // evaluation), masks are ClipVisualMask shape mattes (centerX/Y, width/height,
@@ -253,15 +253,17 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
   if (mask.inverted) {
     mx.globalCompositeOperation = 'source-out'; mx.fillStyle = '#fff'; mx.fillRect(0, 0, matte.width, matte.height); mx.globalCompositeOperation = 'source-over'
   }
-  let featherOverlay = null
+  let featherOverlay = null, featherX = 0, featherY = 0
   if (mask.featherOffset || mask.featherTint) {
-    const pixels = mx.getImageData(0, 0, W, H)
+    const bounds = effectMaskFeatherBounds(regions, W, H)
+    const pixels = mx.getImageData(bounds.x, bounds.y, bounds.width, bounds.height)
     const tint = tintEffectMaskFeather(pixels.data, mask.featherColor, mask.featherTint, mask.featherOffset)
-    if (mask.featherOffset) mx.putImageData(pixels, 0, 0)
+    if (mask.featherOffset) mx.putImageData(pixels, bounds.x, bounds.y)
     if (tint) {
-      featherOverlay = makeCanvas(W, H)
-      const fx = featherOverlay.getContext('2d'), image = fx.createImageData(W, H)
+      featherOverlay = makeCanvas(bounds.width, bounds.height)
+      const fx = featherOverlay.getContext('2d'), image = fx.createImageData(bounds.width, bounds.height)
       image.data.set(tint); fx.putImageData(image, 0, 0)
+      featherX = bounds.x; featherY = bounds.y
     }
   }
   x.save()
@@ -271,7 +273,7 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
     x.clearRect(0, oy, ox, H)
     x.clearRect(ox + W, oy, x.canvas.width - ox - W, H)
   }
-  x.globalCompositeOperation = 'destination-in'; x.drawImage(matte, ox, oy); if (featherOverlay) { x.globalCompositeOperation = 'source-over'; x.drawImage(featherOverlay, ox, oy) } x.restore()
+  x.globalCompositeOperation = 'destination-in'; x.drawImage(matte, ox, oy); if (featherOverlay) { x.globalCompositeOperation = 'source-over'; x.drawImage(featherOverlay, ox + featherX, oy + featherY) } x.restore()
 }
 
 const PU = await loadAppTs('src/lib/patchUnder.ts')

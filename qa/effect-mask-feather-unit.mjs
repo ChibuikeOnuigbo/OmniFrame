@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict'
 import {makeCanvas} from '../tools/mcp/core.mjs'
 import {applyEffectMaskK} from '../tools/mcp/appRender.mjs'
+import {effectMaskFeatherBounds} from '../src/lib/effectMask.ts'
+const local = effectMaskFeatherBounds([{id:'r',shape:'circle',centerX:.5,centerY:.5,width:.3,height:.3,feather:24,opacity:1}],3840,2160)
+assert(local.width < 3840 && local.height < 2160, `expected a cropped 4K readback: ${JSON.stringify(local)}`)
+const split = effectMaskFeatherBounds([{id:'r',shape:'split',centerX:.5,centerY:.5,width:.3,height:.3,feather:24,opacity:1}],3840,2160)
+assert.deepEqual(split,{x:0,y:0,width:3840,height:2160})
 const render=(featherTint=0,featherOffset=0)=>{const c=makeCanvas(100,100),x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,100,100);applyEffectMaskK(x,{enabled:true,inverted:false,featherColor:'#0000ff',featherTint,featherOffset,regions:[{id:'r',shape:'circle',centerX:.5,centerY:.5,width:.5,height:.5,feather:10,opacity:1}]},100,100);return Array.from(x.getImageData(74,50,1,1).data)}
 const plain=render(),blue=render(1),inside=render(0,-1),outside=render(0,1)
 assert.equal(plain[0],255)

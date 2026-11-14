@@ -126,3 +126,35 @@ export function tintEffectMaskFeather(
   }
   return overlay
 }
+
+/** Conservative affected rectangle for optional per-pixel feather work. */
+export function effectMaskFeatherBounds(regions: ClipEffectMaskRegion[], width:number, height:number):{x:number;y:number;width:number;height:number} {
+  let left = width, top = height, right = 0, bottom = 0
+  for (const region of regions) {
+    if (region.shape === 'split') return { x: 0, y: 0, width, height }
+    const cx = region.centerX * width, cy = region.centerY * height
+    const w = region.width * width
+    const h = region.shape === 'circle' ? w : region.height * height
+    let radius = Math.hypot(w / 2, h / 2)
+    if (region.shape === 'custom' && region.points?.length) {
+      for (let i = 0; i < region.points.length; i++) {
+        const p = region.points[i]
+        const handles = maskPointHandles(region.points, i, region.curve || 0)
+        for (const v of [p, handles.inHandle, handles.outHandle]) {
+          radius = Math.max(radius, Math.hypot(v.x * width - cx, v.y * height - cy))
+        }
+      }
+    }
+    const margin = Math.max(2, (region.feather || 0) * 4 + 2)
+    left = Math.min(left, cx - radius - margin)
+    top = Math.min(top, cy - radius - margin)
+    right = Math.max(right, cx + radius + margin)
+    bottom = Math.max(bottom, cy + radius + margin)
+  }
+  const x = Math.max(0, Math.floor(left)), y = Math.max(0, Math.floor(top))
+  return {
+    x, y,
+    width: Math.max(1, Math.min(width, Math.ceil(right)) - x),
+    height: Math.max(1, Math.min(height, Math.ceil(bottom)) - y),
+  }
+}

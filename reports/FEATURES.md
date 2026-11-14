@@ -1,9 +1,17 @@
+## 2026-11-14 — bounded 4K feather work
+
+Browser and headless renderers now restrict optional mask tint/offset pixel work
+to the affected region. A 3840×2160 headless sample improved from 842–1071 to
+690–833 ms/frame, with RSS falling from about 975 to 684 MiB. Three mask cases
+matched the previous output pixel for pixel. This is still too slow for real-time
+4K; see `docs/EDITOR_FINISHING_GOAL.md`.
+
 ## 2026-11-14 — colored effect-mask feather
 
 Effect masks now expose black/white/blue/custom edge color, tint strength and
 inward/outward edge bias. Browser and headless rendering share the alpha/tint math;
 headless pixel and live control checks passed. This optional path uses canvas
-pixel readback; 4K performance profiling remains open. See the finishing goal.
+pixel readback; the 4K profile and remaining speed work are in the finishing goal.
 
 ## 2026-11-14 — Bezier effect-mask handles
 
