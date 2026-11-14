@@ -1,5 +1,36 @@
 # OmniFrame adversarial audit state
 
+## Cycle 9 — preview lifetime and source-scan accuracy
+
+- Fixed: a physical pointer click generated duplicate cursor bursts because both
+  pointer and compatibility mouse events were handled. The cursor now chooses
+  one event family, keeps each burst at its click position during movement, and
+  clears its timers on unmount. The live browser check verifies one burst, its
+  fixed position, and expiry.
+- Fixed: filmstrip retries now clear on cleanup, recover from rejected or empty
+  renders, and omit broken image tiles after retry exhaustion. The filmstrip
+  browser test starts with an empty project, requires both imported assets and
+  checks the image clip before entering a compound sequence; all 14 assertions
+  pass. Added both browser cases to the repeatable smoke runner.
+- Scan: replaced a 16-line JSX-key lookahead with TypeScript AST inspection of
+  JSX returned from `.map()` callbacks. Its two reported cases were data maps,
+  so the current scan reports 281 findings: 173 color literals, 65 non-null
+  assertions, 29 timer heuristics, nine console calls, four large handlers and
+  one TODO. The scanner remains heuristic and does not prove every rendered
+  list has a stable key.
+- Gates: 35 unit scripts, nine browser smoke flows, lint, typecheck and build
+  passed. The browser suite includes context-menu and live MCP checks. The
+  build still warns about the large main chunk.
+- Remaining: timer findings include intentional promise delays and handlers
+  needing case-by-case review. `BackgroundRemovalModal` still has simulated
+  progress and an apply action that changes only the clip name; that workflow
+  needs a separate functional acceptance pass. Native builds and broad browser
+  coverage are unverified.
+- Next pass: replace the background-removal placeholder with a genuine clip
+  processing path or remove its misleading success flow, then verify preview,
+  export and undo. Triage high-impact timers and profile main-bundle startup
+  before changing its split points. Preserve generated media and audit output.
+
 This log records bounded evidence. At the start, the repository had 34
 `qa/*-unit.mjs` scripts after the first new adversarial case and 136
 `qa/*-e2e.mjs` scripts, with no aggregate `test` or `lint` npm script. The

@@ -45,6 +45,12 @@ export function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false)
   const [ripples, setRipples] = useState<ClickRipple[]>([])
   const nextRippleId = useRef(0)
+  const rippleTimers = useRef(new Set<ReturnType<typeof setTimeout>>())
+
+  useEffect(() => () => {
+    for (const timer of rippleTimers.current) clearTimeout(timer)
+    rippleTimers.current.clear()
+  }, [])
 
   // Determine size scale factor. Real OS cursors render ~13-22 CSS px tall;
   // the base SVGs are 26-40px boxes, so "standard" is 0.85 to land near
@@ -264,9 +270,11 @@ export function CustomCursor() {
       if (cursorConfig.showClickBurst) {
         const id = nextRippleId.current++
         setRipples((prev) => [...prev, { id, x: e.clientX, y: e.clientY }])
-        setTimeout(() => {
+        const timer = setTimeout(() => {
+          rippleTimers.current.delete(timer)
           setRipples((prev) => prev.filter((r) => r.id !== id))
         }, 600)
+        rippleTimers.current.add(timer)
       }
     }
 
@@ -317,12 +325,16 @@ export function CustomCursor() {
       setIsVisible(true)
     }
 
-    window.addEventListener('pointermove', onPointerMove, { passive: true })
-    window.addEventListener('mousemove', onPointerMove, { passive: true })
-    window.addEventListener('pointerdown', onPointerDown, { passive: true })
-    window.addEventListener('mousedown', onPointerDown, { passive: true })
-    window.addEventListener('pointerup', onPointerUp, { passive: true })
-    window.addEventListener('mouseup', onPointerUp, { passive: true })
+    const pointerEvents = 'PointerEvent' in window
+    if (pointerEvents) {
+      window.addEventListener('pointermove', onPointerMove, { passive: true })
+      window.addEventListener('pointerdown', onPointerDown, { passive: true })
+      window.addEventListener('pointerup', onPointerUp, { passive: true })
+    } else {
+      window.addEventListener('mousemove', onPointerMove, { passive: true })
+      window.addEventListener('mousedown', onPointerDown, { passive: true })
+      window.addEventListener('mouseup', onPointerUp, { passive: true })
+    }
     window.addEventListener('dragstart', onDragStart)
     window.addEventListener('dragover', onDragOver)
     window.addEventListener('dragend', onDragEnd)
@@ -333,12 +345,15 @@ export function CustomCursor() {
     window.addEventListener('focus', onWindowFocus)
 
     return () => {
-      window.removeEventListener('pointermove', onPointerMove)
-      window.removeEventListener('mousemove', onPointerMove)
-      window.removeEventListener('pointerdown', onPointerDown)
-      window.removeEventListener('mousedown', onPointerDown)
-      window.removeEventListener('pointerup', onPointerUp)
-      window.removeEventListener('mouseup', onPointerUp)
+      if (pointerEvents) {
+        window.removeEventListener('pointermove', onPointerMove)
+        window.removeEventListener('pointerdown', onPointerDown)
+        window.removeEventListener('pointerup', onPointerUp)
+      } else {
+        window.removeEventListener('mousemove', onPointerMove)
+        window.removeEventListener('mousedown', onPointerDown)
+        window.removeEventListener('mouseup', onPointerUp)
+      }
       window.removeEventListener('dragstart', onDragStart)
       window.removeEventListener('dragover', onDragOver)
       window.removeEventListener('dragend', onDragEnd)
@@ -417,8 +432,8 @@ export function CustomCursor() {
           data-testid="cursor-click-burst"
           style={{
             position: 'absolute',
-            left: -14,
-            top: -14,
+            left: ripple.x - pos.x - hotspotOffset.x - 14,
+            top: ripple.y - pos.y - hotspotOffset.y - 14,
             width: 28,
             height: 28,
             borderRadius: '50%',

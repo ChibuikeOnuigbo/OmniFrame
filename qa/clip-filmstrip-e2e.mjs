@@ -51,20 +51,18 @@ page.on('pageerror', (e) => pageErrors.push(String(e)))
 
 await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1200)
+await page.evaluate(() => window.__omniframe_store.getState().newProject())
 
 // ---------- setup: ingest real media and place clips ----------
 const videoFixture = join(ROOT, 'qa/fixtures/pexels-cinematic-8s.webm')
 const imageFixture = join(ROOT, 'qa/fixtures/pexels-landscape-962322.jpg')
 await page.locator('input[type="file"]').first().setInputFiles([videoFixture, imageFixture])
 await page.waitForTimeout(800)
-const addBtns = page.locator('[data-testid="add-to-timeline-btn"]')
-for (let i = 0; i < await addBtns.count(); i++) {
-  await addBtns.nth(i).click({ force: true })
-  await page.waitForTimeout(200)
-}
+await page.getByRole('button', { name: /Add pexels-cinematic-8s\.webm to timeline/ }).click({ force: true })
+await page.getByRole('button', { name: /Add pexels-landscape-962322\.jpg to timeline/ }).click({ force: true })
 await page.waitForTimeout(400)
 const clipCount = await page.evaluate(() => window.__omniframe_store.getState().clips.length)
-assert('media imported and placed on the timeline', clipCount >= 2, `${clipCount} clips`)
+assert('both imported assets placed once on the timeline', clipCount === 2, `${clipCount} clips`)
 
 // ---------- 1. video clip filmstrip (the IMPORTED cinematic clip) ----------
 {
@@ -115,7 +113,14 @@ assert('media imported and placed on the timeline', clipCount >= 2, `${clipCount
   await page.screenshot({ path: join(EVIDENCE, 'filmstrip-video-clip.png') })
 }
 
-// ---------- 2. compound clip: nested composite thumbnails ----------
+// ---------- 2. image clip keeps a filmstrip container ----------
+{
+  const imageClip = page.locator('[data-testid="timeline-clip"][data-kind="image"]').first()
+  await imageClip.waitFor({ state: 'visible', timeout: 5000 })
+  assert('image clip has a filmstrip container', (await imageClip.locator('[data-testid="clip-filmstrip"]').count()) === 1)
+}
+
+// ---------- 3. compound clip: nested composite thumbnails ----------
 {
   // Select + compound the imported video clip via the context menu.
   const importedId = await page.evaluate(() => {
@@ -167,19 +172,6 @@ assert('media imported and placed on the timeline', clipCount >= 2, `${clipCount
     return { clips: st.clips.length, seqCount: (st.sequences || []).length }
   })
   assert('double-click enters the nested sequence', nested.seqCount >= 1, JSON.stringify(nested))
-}
-
-// ---------- 3. image clip keeps a filmstrip container ----------
-{
-  const imageClip = page.locator('[data-testid="timeline-clip"][data-kind="image"]').first()
-  const imgCount = await imageClip.count()
-  if (imgCount > 0) {
-    const imgContainer = imageClip.locator('[data-testid="clip-filmstrip"]')
-    assert('image clip has a filmstrip container', (await imgContainer.count()) === 1)
-  } else {
-    // No image clip on this timeline — nothing to assert (import order varies).
-    assert('image clip handling skipped (none placed)', true, 'no image clips')
-  }
 }
 
 assert('zero runtime page errors', pageErrors.length === 0, pageErrors.join(' | ').slice(0, 200))

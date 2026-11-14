@@ -12,6 +12,8 @@ for audit_test in \
   qa/context-menu-viewport-e2e.mjs \
   qa/mcp-live-bridge-e2e.mjs \
   qa/timeline-controls-e2e.mjs \
+  qa/clip-filmstrip-e2e.mjs \
+  qa/cursor-click-burst-e2e.mjs \
   qa/settings-quality-e2e.mjs \
   qa/three-d-video-plane-e2e.mjs; do
   audit_total=$((audit_total + 1))

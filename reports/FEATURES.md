@@ -241,3 +241,12 @@ Added a real video-inside-text workflow to browser playback and headless MCP. An
 | Measurable cross-platform product target | `docs/PRODUCT_GOAL.md` | Capability, responsiveness, simplicity and platform gates documented |
 
 Full implementation evidence and limits: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`. The subscription queue is an inventory/acquisition workflow; 20 videos have decoded evidence, while continuous visual/audio review remains pending.
+
+## 2026-11-14 — stable cursor bursts and clip filmstrips
+
+Each pointer click now makes one stationary cursor burst, with timers removed
+on unmount. Clip filmstrips retry failed or empty renders, cancel pending retries
+when removed, and avoid broken image tiles. Live browser checks cover those
+interactions and real video, image and compound clips. The expanded nine-flow
+smoke gate, 35 unit scripts, lint, typecheck and build passed. Remaining work is
+in `AUDIT_STATE.md` Cycle 9.

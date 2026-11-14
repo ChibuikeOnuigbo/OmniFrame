@@ -11,6 +11,7 @@
 
 import fs from 'node:fs'
 import path from 'node:path'
+import ts from 'typescript'
 
 const ROOT = process.cwd()
 const SRC = path.resolve('src')
@@ -70,25 +71,6 @@ for (const file of files) {
       }
     }
 
-    // S05 list rendered without a stable key. Only .map() calls that actually
-    // return JSX need a key -- a data transform like `keys.map((k) => k.time)`
-    // does not, and flagging those is pure noise. Look ahead far enough to
-    // catch a key placed several lines into a multi-line element.
-    if (/\.map\s*\(/.test(raw)) {
-      // A .map() whose call closes on the same line is returning a value, not
-      // rendering a block -- `keys.map((k) => k.time)` needs no key.
-      const opens = (raw.match(/\(/g) || []).length
-      const closes = (raw.match(/\)/g) || []).length
-      const multiline = opens !== closes
-      if (multiline) {
-        const chunk = lines.slice(i, i + 16).join('\n')
-        const rendersJSX = /^\s*<[A-Za-z][A-Za-z0-9]*[\s/>]/m.test(chunk)
-        if (rendersJSX && !/key=/.test(chunk)) {
-          add('S05', 'medium', file, line, 'multi-line .map() rendering JSX with no key prop')
-        }
-      }
-    }
-
     // S06 inline onClick doing real work: hard to test, hard to reuse.
     if (/onClick\s*=\s*\{\s*\(\s*\)\s*=>\s*\{[^}]{80,}/.test(raw)) {
       add('S06', 'low', file, line, 'large inline onClick handler')
@@ -106,6 +88,43 @@ for (const file of files) {
       add('S09', 'medium', file, line, 'setTimeout with no clearTimeout anywhere in the file')
     }
   })
+
+  if (file.endsWith('.tsx')) {
+    const tree = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+    const jsxReturns = (expression) => {
+      if (ts.isParenthesizedExpression(expression)) return jsxReturns(expression.expression)
+      if (ts.isJsxElement(expression) || ts.isJsxSelfClosingElement(expression) || ts.isJsxFragment(expression)) return [expression]
+      if (ts.isConditionalExpression(expression)) return [...jsxReturns(expression.whenTrue), ...jsxReturns(expression.whenFalse)]
+      return []
+    }
+    const hasKey = (jsx) => {
+      if (ts.isJsxFragment(jsx)) return false
+      const opening = ts.isJsxElement(jsx) ? jsx.openingElement : jsx
+      return opening.attributes.properties.some((attribute) =>
+        ts.isJsxAttribute(attribute) && attribute.name.text === 'key')
+    }
+    const visit = (node) => {
+      if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === 'map') {
+        const callback = node.arguments[0]
+        if (callback && (ts.isArrowFunction(callback) || ts.isFunctionExpression(callback))) {
+          const returns = []
+          if (ts.isBlock(callback.body)) {
+            const collect = (child) => {
+              if (ts.isReturnStatement(child) && child.expression) returns.push(...jsxReturns(child.expression))
+              else if (!ts.isFunctionLike(child)) ts.forEachChild(child, collect)
+            }
+            ts.forEachChild(callback.body, collect)
+          } else returns.push(...jsxReturns(callback.body))
+          if (returns.some((jsx) => !hasKey(jsx))) {
+            add('S05', 'medium', file, tree.getLineAndCharacterOfPosition(node.getStart(tree)).line + 1,
+              '.map() returns JSX without a key prop')
+          }
+        }
+      }
+      ts.forEachChild(node, visit)
+    }
+    visit(tree)
+  }
 }
 
 // Dedupe identical rule+file+line.

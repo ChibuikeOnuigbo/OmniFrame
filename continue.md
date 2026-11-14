@@ -264,3 +264,15 @@ All 1,152 Studio Looks now have individual moving MP4s plus a combined 38:24 ree
 Added a shared Point/Spot/Directional light compositor, professional directional-blur bias/spread/luma controls, ten focused recipes and icon-first light controls. Browser UI, headless rendering, catalog/sanitizer and a six-render contact sheet passed; the particle/overlay sliders no longer display `NaN`. Product targets are now explicit in `docs/PRODUCT_GOAL.md`. Details: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md`.
 
 The uploaded 211-channel subscriptions CSV now drives a 36-batch, cookie-capable GitHub audit queue. Refined batch 1 indexed 889 entries / 814 candidates and acquired 20/20 selected videos (2.07 source hours) into 343 timestamped frames and 60 audio diagnostics. Full visual/audio review remains pending; sampled evidence is not a full-watch claim. Details: `docs/SUBSCRIPTION_TUTORIAL_AUDIT_20261108.md`.
+
+## 2026-11-14 — preview interaction audit continuation
+
+The ninth adversarial pass fixed duplicate custom-cursor bursts, moving burst
+positions, timer cleanup, and filmstrip retries after empty/rejected renders.
+The filmstrip browser check now requires both real imported assets and checks
+the image before nested compound navigation. The repeatable smoke gate has nine
+flows. All nine browser flows, 35 unit scripts, lint, typecheck and build passed.
+The AST-based JSX-key scan removed two false alarms; 281 lower-severity source
+findings remain. The large main bundle and placeholder background-removal apply
+flow need follow-up; see `AUDIT_STATE.md` Cycle 9. No native build or real-time
+4K claim follows from these checks.

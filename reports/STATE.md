@@ -405,3 +405,11 @@ The corrected `new_work_qa/RDT_recopy2.mp4` uses real duplicated negative scene 
 Directional light now renders as an editable angled/feathered beam through the same browser, desktop and headless compositor. Directional Blur adds trail bias, angle spread and bright-pixel threshold controls; the existing direct blur aliases remain. Six distinct render fixtures, live icon/slider persistence, catalog controls, import clamping, typecheck/build and universal/action regressions pass. Evidence: `docs/DIRECTIONAL_LIGHT_BLUR_20261108.md` and `qa-output/directional-light-blur/`.
 
 The user-provided subscriptions export contains 211 unique channels. A deterministic 36-batch GitHub audit queue now inventories and classifies tutorial candidates before sending 20 at a time through the existing decoded-frame/audio pipeline. Refined batch 1 indexed 889 entries / 814 candidates and acquired 20/20 selected videos through the cookie-backed runner, producing 343 frames and 60 audio diagnostics. Human visual/audio review remains pending; this is not 211 watched channels. Product quality targets are defined in `docs/PRODUCT_GOAL.md`.
+
+## 2026-11-14 — preview interaction audit continuation
+
+Cycle 9 fixed cursor click bursts and filmstrip retry lifetime, made the
+filmstrip browser assertion deterministic, and replaced the JSX-key source-scan
+lookahead with an AST check. The final gate passed 35 unit scripts, nine browser
+flows, lint, typecheck and build. The scan retains 281 non-high findings and
+the build retains a large-chunk warning. `AUDIT_STATE.md` records exact risks.

@@ -43,27 +43,36 @@ export function ClipFilmstrip({
 
   useEffect(() => {
     let cancelled = false
+    let retryTimer: ReturnType<typeof setTimeout> | null = null
     loadedRef.current = false
     setTiles(null)
     renderClipFilmstrip(clip, widthPx)
       .then((out) => {
-        if (cancelled || out.length === 0) return
-        const complete = out.every((tile) => tile.dataUrl)
+        if (cancelled) return
+        const complete = out.length > 0 && out.every((tile) => tile.dataUrl)
         if (complete) {
           loadedRef.current = true
           setTiles(out)
         } else if (attempt < MAX_RETRIES) {
           // Media was still decoding — try again shortly.
-          setTimeout(() => {
+          retryTimer = setTimeout(() => {
             if (!cancelled && !loadedRef.current) setAttempt((a) => a + 1)
           }, 700)
         } else {
-          setTiles(out) // show what we have
+          setTiles(out.filter((tile) => tile.dataUrl)) // omit broken image elements
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        if (cancelled) return
+        if (attempt < MAX_RETRIES) {
+          retryTimer = setTimeout(() => {
+            if (!cancelled) setAttempt((a) => a + 1)
+          }, 700)
+        } else setTiles([]) // retain the poster fallback after retry exhaustion
+      })
     return () => {
       cancelled = true
+      if (retryTimer !== null) clearTimeout(retryTimer)
     }
   }, [
     clip,
