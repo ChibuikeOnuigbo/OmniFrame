@@ -237,13 +237,20 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
     sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
     sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
     if (region.shape === 'rectangle') sx.fillRect(-rw / 2, -rh / 2, rw, rh)
+    else if (region.shape === 'split') { const reach = Math.hypot(W, H) * 3; sx.fillRect(0, -reach, reach, reach * 2) }
     else if (region.shape === 'text') {
       sx.font = `700 ${Math.max(8, rh)}px ${region.fontFamily || 'sans-serif'}`
       sx.textAlign = 'center'; sx.textBaseline = 'middle'; sx.fillText(region.text || 'MASK', 0, 0, rw)
     } else if (region.shape === 'custom' && region.points?.length >= 3) {
       sx.restore(); sx.save(); sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
       sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
-      sx.beginPath(); region.points.forEach((point, i) => (i ? sx.lineTo(point.x * W, point.y * H) : sx.moveTo(point.x * W, point.y * H))); sx.closePath(); sx.fill()
+      sx.beginPath(); region.points.forEach((point, i) => {
+        const angle = (region.rotation || 0) * Math.PI / 180
+        const dx = point.x * W - cx, dy = point.y * H - cy
+        const x = cx + dx * Math.cos(angle) - dy * Math.sin(angle)
+        const y = cy + dx * Math.sin(angle) + dy * Math.cos(angle)
+        if (i) sx.lineTo(x, y); else sx.moveTo(x, y)
+      }); sx.closePath(); sx.fill()
     } else { sx.beginPath(); sx.ellipse(0, 0, rw / 2, rh / 2, 0, 0, Math.PI * 2); sx.fill() }
     sx.restore(); mx.drawImage(shape, 0, 0)
   }

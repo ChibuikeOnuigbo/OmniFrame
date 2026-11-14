@@ -1,3 +1,4 @@
+import { replaceCelExposure } from './lib/drawingCels'
 import { BLEND_MODES, putBlendKey } from './lib/blendModes'
 import { regroupFor, expandGroupSelection } from './lib/parentChain'
 import { recolorImage } from './lib/recolor'
@@ -104,6 +105,7 @@ export type LeftTab =
   | 'tracking'
   | 'relationships'
   | 'drawing'
+  | 'animation'
   | 'transitions'
   | 'effects'
   | 'text'
@@ -666,6 +668,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   selectTransition: (id: string | null) => void
 
   // ---- drawing actions ----
+  editDrawingCel: (mode: 'duplicate-next' | 'clear') => void
   addDrawingStroke: (stroke: DrawingStroke) => void
   clearDrawingStrokes: (layerId?: string) => void
   setDrawingTool: (tool: DrawingToolType) => void
@@ -3655,6 +3658,18 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ cursorConfig: { ...DEFAULT_CURSOR_CONFIG } }),
 
     // ---- drawing actions ----
+    editDrawingCel: (mode) => {
+      const s = get(), frame = Math.round(s.playhead * s.projectFps)
+      const layer = s.activePaintLayerId, hold = Math.max(1, s.drawingHoldFrames)
+      if (!layer) return
+      const source = s.drawingStrokes.filter(st => st.layerId === layer && st.temporalScope.type === 'frame' && frame >= (st.temporalScope.frame ?? 0) && frame < (st.temporalScope.frame ?? 0) + Math.max(1, st.temporalScope.holdFrames ?? 1))
+      if (mode === 'duplicate-next' && !source.length) return
+      const target = mode === 'duplicate-next' ? frame + hold : frame
+      pushSnapshot()
+      set({ drawingStrokes: replaceCelExposure(s.drawingStrokes, layer, target, hold, mode === 'duplicate-next' ? source : [], () => uid('cel')),
+        playhead: target / s.projectFps, duration: Math.max(s.duration, (target + hold) / s.projectFps), playing: false,
+        drawingScope: { type: 'frame', frame: target, holdFrames: hold } })
+    },
     addDrawingStroke: (stroke) => {
       pushSnapshot()
       set((s) => {

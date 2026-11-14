@@ -1,3 +1,11 @@
+## 2026-11-14 — animation entry and effect mask controls
+
+Animation now has a dedicated 2D entry using existing frame drawing, onion skins and
+curves, with duplicate/clear cel exposure edits and undo. Effect masks can start with
+a chosen shape; Split covers a rotatable half-plane and Outside swaps sides. Shared
+browser/headless renderers support it. See docs/ANIMATION_MASK_WORK_20261114.md.
+The broader physics, handwriting, hologram and learned-model requests remain open.
+
 ## 2026-11-09 — photographic thumbnail correction
 
 Effect catalog subjects now use two bundled Pexels photographs: a portrait for

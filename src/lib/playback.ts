@@ -430,6 +430,7 @@ export class PreviewEngine {
       sctx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
       sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
       if (region.shape === 'rectangle') sctx.fillRect(-w / 2, -h / 2, w, h)
+      else if (region.shape === 'split') { const reach = Math.hypot(this.width, this.height) * 3; sctx.fillRect(0, -reach, reach, reach * 2) }
       else if (region.shape === 'text') {
         sctx.font = `700 ${Math.max(8, h)}px ${region.fontFamily || 'sans-serif'}`
         sctx.textAlign = 'center'; sctx.textBaseline = 'middle'
@@ -441,8 +442,10 @@ export class PreviewEngine {
         sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
         sctx.beginPath()
         region.points.forEach((point, index) => {
-          const x = point.x * this.width
-          const y = point.y * this.height
+          const angle = (region.rotation || 0) * Math.PI / 180
+          const dx = point.x * this.width - cx, dy = point.y * this.height - cy
+          const x = cx + dx * Math.cos(angle) - dy * Math.sin(angle)
+          const y = cy + dx * Math.sin(angle) + dy * Math.cos(angle)
           if (index === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y)
         })
         sctx.closePath(); sctx.fill()

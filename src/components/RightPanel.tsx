@@ -533,6 +533,7 @@ function EffectMaskSection({ clip }: { clip: Clip }) {
   const setClipProp = useEditor((s) => s.setClipProp)
   const beginHistory = useEditor((s) => s.beginHistory)
   const endHistory = useEditor((s) => s.endHistory)
+  const [newShape, setNewShape] = useState<ClipEffectMaskRegion['shape']>('ellipse')
   const mask = clip.adjustmentMask
   const regions = mask ? effectMaskRegions(mask) : []
   const [selectedId, setSelectedId] = useState<string | null>(regions[0]?.id || null)
@@ -549,7 +550,7 @@ function EffectMaskSection({ clip }: { clip: Clip }) {
   const addRegion = (shape: ClipEffectMaskRegion['shape']) => {
     const base = { ...DEFAULT_EFFECT_MASK, ...mask }
     const region = nextEffectMaskRegion(base, shape)
-    commit({ ...base, regions: [...effectMaskRegions(base), region] })
+    commit({ ...base, regions: [...(mask ? effectMaskRegions({ ...mask, enabled: true }) : []), region] })
     setSelectedId(region.id)
   }
   const removeRegion = () => {
@@ -563,7 +564,8 @@ function EffectMaskSection({ clip }: { clip: Clip }) {
     <Section title="Effect Mask">
       {!mask ? (
         <div className="space-y-1.5">
-          <button type="button" data-testid="add-effect-mask-btn" onClick={() => commit({ ...DEFAULT_EFFECT_MASK, regions: DEFAULT_EFFECT_MASK.regions?.map((r) => ({ ...r })) })} className="flex h-8 w-full items-center justify-center rounded-md border border-cyan-800 bg-cyan-950/30 text-xs text-cyan-100 transition-colors hover:border-cyan-500">
+          <select aria-label="New mask shape" value={newShape} onChange={event => setNewShape(event.target.value as ClipEffectMaskRegion['shape'])} className="h-8 w-full rounded border border-ink-700 bg-ink-900 text-xs"><option value="rectangle">Rectangle</option><option value="ellipse">Ellipse</option><option value="circle">Circle</option><option value="split">Split</option><option value="text">Text</option><option value="custom">Polygon</option></select>
+          <button type="button" data-testid="add-effect-mask-btn" onClick={() => addRegion(newShape)} className="flex h-8 w-full items-center justify-center rounded-md border border-cyan-800 bg-cyan-950/30 text-xs text-cyan-100 transition-colors hover:border-cyan-500">
             Add effect-only mask
           </button>
           <p className="text-[10px] leading-snug text-ink-500">The original clip stays visible. Blur, glow, LUTs, and other effects are composited only through these regions.</p>
@@ -574,8 +576,8 @@ function EffectMaskSection({ clip }: { clip: Clip }) {
             <label className="flex flex-1 items-center gap-2 text-[11px] text-ink-300"><input type="checkbox" checked={mask.enabled !== false} onChange={(event) => updateMask({ enabled: event.target.checked })} className="accent-cyan-400" />Enabled</label>
             <label className="flex flex-1 items-center gap-2 text-[11px] text-ink-300"><input type="checkbox" checked={mask.inverted} onChange={(event) => updateMask({ inverted: event.target.checked })} className="accent-cyan-400" />Outside</label>
           </div>
-          <div className="grid grid-cols-5 gap-1" aria-label="Add effect mask region">
-            {([['rectangle', 'Rect'], ['circle', 'Circle'], ['ellipse', 'Ellipse'], ['text', 'Text'], ['custom', 'Draw']] as const).map(([shape, label]) => (
+          <div className="grid grid-cols-3 gap-1" aria-label="Add effect mask region">
+            {([['rectangle', 'Rect'], ['circle', 'Circle'], ['ellipse', 'Ellipse'], ['text', 'Text'], ['custom', 'Draw'], ['split', 'Split']] as const).map(([shape, label]) => (
               <button key={shape} type="button" data-testid={`add-effect-mask-${shape}`} onClick={() => addRegion(shape)} className="h-7 truncate rounded border border-ink-700 px-1 text-[9px] text-ink-300 hover:border-cyan-600 hover:text-cyan-100">{label}</button>
             ))}
           </div>
@@ -587,6 +589,7 @@ function EffectMaskSection({ clip }: { clip: Clip }) {
             <Field label="Center Y"><Slider label="Effect mask center Y" min={0} max={1} step={0.01} value={selected.centerY} onChange={(centerY) => updateRegion({ centerY })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.centerY * 100)}%</span></Field>
             <Field label="Width"><Slider label="Effect mask width" min={0.01} max={1} step={0.01} value={selected.width} onChange={(width) => updateRegion({ width, ...(selected.shape === 'circle' ? { height: width } : {}) })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.width * 100)}%</span></Field>
             {selected.shape !== 'circle' && <Field label="Height"><Slider label="Effect mask height" min={0.01} max={1} step={0.01} value={selected.height} onChange={(height) => updateRegion({ height })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.height * 100)}%</span></Field>}
+            <Field label="Rotation"><Slider label="Effect mask rotation" min={-180} max={180} step={1} value={selected.rotation || 0} onChange={(rotation) => updateRegion({ rotation })} /></Field>
             <Field label="Feather"><Slider label="Effect mask feather" min={0} max={240} step={1} value={selected.feather || 0} onChange={(feather) => updateRegion({ feather })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round(selected.feather || 0)}px</span></Field>
             <Field label="Opacity"><Slider label="Effect mask opacity" min={0} max={1} step={0.01} value={selected.opacity ?? 1} onChange={(opacity) => updateRegion({ opacity })} /><span className="w-9 text-right text-[10px] text-ink-400">{Math.round((selected.opacity ?? 1) * 100)}%</span></Field>
             {selected.shape === 'text' && <input aria-label="Effect mask text" value={selected.text || ''} onChange={(event) => updateRegion({ text: event.target.value })} className="h-7 w-full rounded border border-ink-700 bg-ink-900 px-2 text-[11px] text-ink-100" placeholder="Type mask text" />}

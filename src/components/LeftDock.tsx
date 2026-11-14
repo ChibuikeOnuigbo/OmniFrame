@@ -46,6 +46,7 @@ import { OmniFramePanel } from './OmniFramePanel'
 import { DesktopPackPanel } from './DesktopPackPanel'
 import { StoryboardPanel } from './StoryboardPanel'
 const VoiceIsolationPanel = lazy(() => import('./VoiceIsolationPanel').then((m) => ({ default: m.VoiceIsolationPanel })))
+const AnimationPanel = lazy(() => import('./AnimationPanel').then(m => ({ default: m.AnimationPanel })))
 const DrawingPanel = lazy(() => import('./DrawingPanel').then((m) => ({ default: m.DrawingPanel })))
 import { TrackingPanel } from './TrackingPanel'
 import { LinkPanel } from './LinkPanel'
@@ -77,6 +78,7 @@ const TABS: TabDef[] = [
   { id: 'storyboard', label: 'Storyboard', icon: Clapperboard, category: 'video', desc: 'Plan shots in order: thumbnails, duration, track and shot notes; plan the plan, not the clips' },
 
   // 2. 2D CREATIVE & PAINT (Photoshop / Krita / LumaCut Style)
+  { id: 'animation', label: 'Animation', icon: Clapperboard, category: '2d', desc: 'Frame cels, exposure, onion skins and curves' },
   { id: 'drawing', label: 'Drawing & Paint', icon: Palette, category: '2d', desc: 'Raster/Vector Brushes, Smart Patch donor/target clone across frames with OmniFrame scope sync & Onion Skin' },
   { id: 'omniframe', label: 'OmniFrame', icon: Scissors, category: '2d', desc: 'Frame-scope tool: apply edits to the whole frame or a selected region — drag, resize, shift, recolor, temporal inpaint' },
   { id: 'tracking', label: 'Masking & Tracking', icon: Target, category: '2d', desc: 'Lucas-Kanade Tracking & Mattes' },
@@ -226,7 +228,7 @@ export function LeftDock() {
     // Only follow the transition, and never yank the user out of a panel
     // that hosts drawing controls itself (Tracking / OmniFrame turn drawing
     // on for their own tools — the user is already where they need to be).
-    if (drawingEnabled && !was && !['drawing', 'tracking', 'omniframe'].includes(leftTab)) {
+    if (drawingEnabled && !was && !['drawing', 'animation', 'tracking', 'omniframe'].includes(leftTab)) {
       setLeftTab('drawing')
       setLeftOpen(true)
     }
@@ -769,6 +771,7 @@ export function LeftDock() {
               {leftTab === 'tracking' && <TrackingPanel />}
               {leftTab === 'relationships' && <LinkPanel />}
               {leftTab === 'drawing' && <DrawingPanel />}
+              {leftTab === 'animation' && <AnimationPanel />}
               {leftTab === 'transitions' && <TransitionsPanel />}
               {leftTab === 'effects' && <EffectsPanel />}
               {leftTab === 'text' && <TextPanel />}
@@ -809,6 +812,7 @@ export function LeftDock() {
               {leftTab === 'tracking' && <TrackingPanel />}
               {leftTab === 'relationships' && <LinkPanel />}
               {leftTab === 'drawing' && <DrawingPanel />}
+              {leftTab === 'animation' && <AnimationPanel />}
               {leftTab === 'transitions' && <TransitionsPanel />}
               {leftTab === 'effects' && <EffectsPanel />}
               {leftTab === 'text' && <TextPanel />}
