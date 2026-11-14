@@ -21,6 +21,13 @@ bounce/roll, dust, water, aura and tracked glowing-eye effects. No neural model 
 trained, and no huge catalog count is being presented as distinct working effects.
 
 Validation: TypeScript typecheck, production build, live animation entry/duplicate/clear/undo,
-effect-mask UI, and headless split-mask pixel checks passed. The legacy onion-skin
-browser test passed its UI stages but its last video-analysis step needs Python cv2,
-which is absent here. It is not counted as a full pass.
+effect-mask UI, and headless split-mask pixel checks passed. The full onion-skin browser/export test now passes with project-local OpenCV: 124
+decoded frames, average luminance 205.42. Install with
+`python -m pip install --target .cache/python-deps -r qa/requirements-opencv.txt`,
+then run with `PYTHONPATH=$PWD/.cache/python-deps node qa/onion-skin-cel-animation-e2e.mjs`.
+
+Animation now includes Draw on. It turns visible freehand strokes on the active
+paint layer into a timed path reveal with an adjustable 0.2–10 second duration; frame cels become a matching span. The same
+`renderAllPaintLayers` function serves browser playback/export and headless rendering.
+Draw-on remains path based and does not yet support typed handwriting, automatic
+shape templates or interactive timing curves.

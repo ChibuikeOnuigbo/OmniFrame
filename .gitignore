@@ -53,3 +53,6 @@ ui_downlaod_study/brandbird-rar-extract/
 Study_edits_videos/exports/concat-list.txt
 Study_edits_videos/chat-history/*.txt
 new_doc_toll_research/packs/
+
+# Project-local Python packages for optional video QA
+.cache/python-deps/

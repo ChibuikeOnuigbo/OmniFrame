@@ -930,6 +930,28 @@ export function renderSelectionMarchingAnts(
   ctx.restore()
 }
 
+/** Keep a length-proportional prefix of a drawn path for handwriting playback. */
+export function strokeRevealPoints(points: DrawingStroke['points'], progress: number, width: number, height: number): DrawingStroke['points'] {
+  if (progress >= 1) return points
+  if (progress <= 0 || points.length < 2) return []
+  const lengths = points.slice(1).map((p, i) => Math.hypot((p.x - points[i].x) * width, (p.y - points[i].y) * height))
+  const total = lengths.reduce((a, b) => a + b, 0)
+  if (total <= 0) return points.slice(0, 2)
+  let remaining = total * progress
+  const out = [points[0]]
+  for (let i = 0; i < lengths.length; i++) {
+    const distance = lengths[i]
+    if (remaining >= distance) { out.push(points[i + 1]); remaining -= distance; continue }
+    const t = distance ? remaining / distance : 0
+    const a = points[i], b = points[i + 1]
+    out.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t,
+      pressure: (a.pressure ?? 1) + ((b.pressure ?? 1) - (a.pressure ?? 1)) * t,
+      timestamp: a.timestamp + (b.timestamp - a.timestamp) * t })
+    break
+  }
+  return out
+}
+
 /** Resolve a Smart Patch's frame-addressed raster and composite it at the requested time. */
 function renderStrokeAtTime(
   ctx: CanvasRenderingContext2D,
@@ -947,6 +969,13 @@ function renderStrokeAtTime(
     )
     if (!frame) return
     renderStroke(ctx, { ...stroke, tool: 'fill', maskDataUrl: frame.dataUrl }, width, height)
+    return
+  }
+  if (stroke.revealStartTime !== undefined && stroke.revealDuration && FREEHAND_TOOLS.has(stroke.tool)) {
+    const progress = (time - stroke.revealStartTime) / stroke.revealDuration
+    const points = strokeRevealPoints(stroke.points, progress, width, height)
+    if (points.length < 2) return
+    renderStroke(ctx, { ...stroke, points }, width, height)
     return
   }
   renderStroke(ctx, stroke, width, height)

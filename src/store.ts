@@ -1,4 +1,5 @@
 import { replaceCelExposure } from './lib/drawingCels'
+import { isStrokeVisibleAtTime } from './lib/drawingEngine'
 import { BLEND_MODES, putBlendKey } from './lib/blendModes'
 import { regroupFor, expandGroupSelection } from './lib/parentChain'
 import { recolorImage } from './lib/recolor'
@@ -669,6 +670,7 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
 
   // ---- drawing actions ----
   editDrawingCel: (mode: 'duplicate-next' | 'clear') => void
+  animateDrawingStrokes: (duration: number) => void
   addDrawingStroke: (stroke: DrawingStroke) => void
   clearDrawingStrokes: (layerId?: string) => void
   setDrawingTool: (tool: DrawingToolType) => void
@@ -3658,6 +3660,18 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ cursorConfig: { ...DEFAULT_CURSOR_CONFIG } }),
 
     // ---- drawing actions ----
+    animateDrawingStrokes: (duration) => {
+      const s = get(), start = s.playhead, seconds = clamp(duration, 0.1, 30)
+      const supported = new Set(['brush', 'pencil', 'marker', 'calligraphy'])
+      const eligible = s.drawingStrokes.filter(st => st.layerId === s.activePaintLayerId && supported.has(st.tool) && st.points.length >= 2 && isStrokeVisibleAtTime(st, start, s.projectFps))
+      if (!eligible.length) return
+      const ids = new Set(eligible.map(st => st.id))
+      pushSnapshot()
+      set({ drawingStrokes: s.drawingStrokes.map(st => ids.has(st.id) ? { ...st,
+        temporalScope: st.temporalScope.type === 'frame' ? { type: 'span', startTime: start, duration: seconds } : st.temporalScope,
+        revealStartTime: start, revealDuration: seconds } : st),
+        duration: Math.max(s.duration, start + seconds) })
+    },
     editDrawingCel: (mode) => {
       const s = get(), frame = Math.round(s.playhead * s.projectFps)
       const layer = s.activePaintLayerId, hold = Math.max(1, s.drawingHoldFrames)

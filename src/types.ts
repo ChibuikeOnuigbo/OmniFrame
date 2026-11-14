@@ -1251,6 +1251,9 @@ export interface DrawingStroke {
   opacity: number // 0..1
   points: StrokePoint[]
   temporalScope: TemporalScope
+  /** Timed draw-on reveal for freehand strokes; rendered in preview and export. */
+  revealStartTime?: number
+  revealDuration?: number
   polygonSides?: number // 3..12 for the Krita Polygon Tool
   gradientColor?: string // end colour of the linear gradient ramp
   /** ibisPaint-style radial/symmetry ruler: duplicate the stroke rotated N times. */

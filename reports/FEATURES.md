@@ -1,3 +1,11 @@
+## 2026-11-14 — OpenCV acceptance and Draw on
+
+The full onion-skin export test passed with project-local OpenCV: 124 decoded
+frames, average luminance 205.42. Animation adds an adjustable freehand path
+reveal using the shared browser/headless paint renderer; pixel progression and
+live undo checked. Details: docs/ANIMATION_MASK_WORK_20261114.md. Typed
+handwriting and advanced requested effects remain open.
+
 ## 2026-11-14 — animation entry and effect mask controls
 
 Animation now has a dedicated 2D entry using existing frame drawing, onion skins and
