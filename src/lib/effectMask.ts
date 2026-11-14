@@ -129,28 +129,37 @@ export function tintEffectMaskFeather(
 
 /** Conservative affected rectangle for optional per-pixel feather work. */
 export function effectMaskFeatherBounds(regions: ClipEffectMaskRegion[], width:number, height:number):{x:number;y:number;width:number;height:number} {
+  const full = { x: 0, y: 0, width, height }
+  if (!regions.length) return full
   let left = width, top = height, right = 0, bottom = 0
   for (const region of regions) {
-    if (region.shape === 'split') return { x: 0, y: 0, width, height }
+    if (region.shape === 'split') return full
+    if ([region.centerX, region.centerY, region.width, region.height,
+      region.rotation ?? 0, region.feather ?? 0, region.curve ?? 0]
+      .some(value => !Number.isFinite(value))) return full
     const cx = region.centerX * width, cy = region.centerY * height
     const w = region.width * width
     const h = region.shape === 'circle' ? w : region.height * height
     let radius = Math.hypot(w / 2, h / 2)
+    if (![cx, cy, w, h, radius].every(Number.isFinite)) return full
     if (region.shape === 'custom' && region.points?.length) {
       for (let i = 0; i < region.points.length; i++) {
         const p = region.points[i]
         const handles = maskPointHandles(region.points, i, region.curve || 0)
         for (const v of [p, handles.inHandle, handles.outHandle]) {
+          if (!Number.isFinite(v.x) || !Number.isFinite(v.y)) return full
           radius = Math.max(radius, Math.hypot(v.x * width - cx, v.y * height - cy))
         }
       }
     }
     const margin = Math.max(2, (region.feather || 0) * 4 + 2)
+    if (!Number.isFinite(radius) || !Number.isFinite(margin)) return full
     left = Math.min(left, cx - radius - margin)
     top = Math.min(top, cy - radius - margin)
     right = Math.max(right, cx + radius + margin)
     bottom = Math.max(bottom, cy + radius + margin)
   }
+  if (right <= 0 || bottom <= 0 || left >= width || top >= height) return full
   const x = Math.max(0, Math.floor(left)), y = Math.max(0, Math.floor(top))
   return {
     x, y,

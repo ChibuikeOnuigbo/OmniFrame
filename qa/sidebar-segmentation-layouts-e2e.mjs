@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 /**
  * SIDEBAR SEGMENTATION + LAYOUT FORMS E2E
  * =======================================
@@ -23,7 +24,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const EVIDENCE = join(ROOT, 'evidence/screenshots')
 const REPORTS = join(ROOT, 'qa/reports')
 mkdirSync(EVIDENCE, { recursive: true })
@@ -56,7 +57,7 @@ const openLeftTab = async (tab) => {
   await page.waitForTimeout(400)
 }
 
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1200)
 
 /* ---- 1. Tabs is the default sidebar presentation ---- */

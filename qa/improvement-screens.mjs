@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 // Visual proof tour: screenshots of the shipped improvements, in-app.
 // 01 journey start (image-to-video + converted vector-drawing scene)
 // 02 rotate tricks mid-flight (spin Z + 3D flip Y on the entity)
@@ -10,7 +11,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { mkdirSync } from 'node:fs'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const OUT = join(ROOT, 'evidence', 'improvements')
 mkdirSync(OUT, { recursive: true })
 
@@ -23,7 +24,7 @@ const browser = await pwChromium.launch({
 })
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 page.on('pageerror', (e) => console.error('PAGEERROR', String(e).slice(0, 160)))
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1300)
 
 const shot = async (name) => {

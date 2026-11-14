@@ -1,10 +1,11 @@
+import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 import { chromium as pwChromium } from 'playwright'
 import serverlessChromium, { inflate } from '@sparticuz/chromium'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const URL = process.env.TEST_URL || 'http://localhost:5173/#studio'
 
 await inflate(join(ROOT, 'node_modules/@sparticuz/chromium/bin/al2023.tar.br'))

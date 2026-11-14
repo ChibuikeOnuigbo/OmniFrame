@@ -39,7 +39,7 @@ async function run() {
     if (msg.type() === 'error') console.error('Browser Error:', msg.text())
   })
 
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
   await page.waitForTimeout(1000)
 
   // Step 1: Ingest Test Asset

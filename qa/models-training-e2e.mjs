@@ -41,7 +41,7 @@ const mockProvider = async (route) => {
 await page.route('https://api.openai.com/v1/**', mockProvider)
 await page.route('https://example.com/v1/**', mockProvider)
 
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1500)
 const st = () => page.evaluate(() => window.__omniframe_store.getState())
 

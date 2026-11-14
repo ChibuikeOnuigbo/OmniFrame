@@ -12,7 +12,7 @@ const out = join(root, 'qa-output/studio-looks-20261101')
 mkdirSync(out, { recursive: true })
 try {
  const page = await browser.newPage({viewport:{width:1440,height:900}})
- await page.goto('http://localhost:5173/#studio',{waitUntil:'networkidle'})
+ await page.goto(process.env.URL || 'http://localhost:5173/#studio',{waitUntil:'networkidle'})
  const result = await page.evaluate(async () => {
   const {getFxCatalog,paramsForPatch,loadGlitchRecipeCatalog} = await import('/src/lib/effectCatalog.ts')
   const {applyPixelGrade} = await import('/src/lib/pixelGrade.ts')

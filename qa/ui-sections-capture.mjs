@@ -14,7 +14,7 @@ mkdirSync(OUT, { recursive: true })
 const browser = await chromium.launch(process.env.PW_EXE ? { executablePath: process.env.PW_EXE, args: ['--no-sandbox'] } : {})
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 page.on('pageerror', (e) => console.log('PAGEERROR', e.message.slice(0, 120)))
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1800)
 
 let n = 0

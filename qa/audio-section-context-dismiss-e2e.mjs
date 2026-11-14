@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 import { chromium as pwChromium } from 'playwright'
 import serverlessChromium, { inflate } from '@sparticuz/chromium'
@@ -5,7 +6,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { mkdirSync } from 'node:fs'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const SHOTS = join(ROOT, 'evidence/screenshots')
 mkdirSync(SHOTS, { recursive: true })
 
@@ -21,7 +22,7 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 
 try {
   console.log('--- Step 1: Navigating to OmniFrame Studio ---')
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
 
   // Seed sample asset and clip
   await page.evaluate(() => {

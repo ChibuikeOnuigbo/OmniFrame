@@ -70,7 +70,6 @@ import { MARKER_KINDS, groupMarkers, markerColorHex, markerGroupBackground, reso
 import type { MarkerKind } from '../types'
 import { detectBeatGrid, detectCustomBeat } from '../lib/beatDetect'
 import { IconButton } from './ui'
-import { readClipClipboard, writeClipClipboard } from '../lib/clipClipboard'
 import { GraphEditor } from './GraphEditor'
 import { AudioMeter } from './AudioMeter'
 import { TimelineController, TrackModel } from '../lib/oop/TimelineController'
@@ -1693,29 +1692,6 @@ export function Timeline() {
   const hasVideo = clips.some((clip) => clip.kind === 'video' || clip.kind === 'image')
   const hasAudio = clips.some((clip) => clip.kind === 'audio')
   const mediaMode = hasVideo && hasAudio ? 'Video + Audio' : hasVideo ? 'Video' : hasAudio ? 'Audio' : 'Empty'
-
-  useEffect(() => {
-    const onClipboardKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-      if (!(event.ctrlKey || event.metaKey)) return
-      const selected = useEditor.getState().clips.find((clip) => clip.id === useEditor.getState().selectedClipId)
-      const key = event.key.toLowerCase()
-      if ((key === 'c' || key === 'x') && selected) {
-        event.preventDefault()
-        writeClipClipboard(selected)
-        if (key === 'x') removeClip(selected.id)
-      } else if (key === 'v' && readClipClipboard()) {
-        event.preventDefault()
-        insertClipCopy(readClipClipboard()!, useEditor.getState().playhead)
-      } else if (key === 'd' && selected) {
-        event.preventDefault()
-        insertClipCopy(selected, selected.start + selected.duration)
-      }
-    }
-    window.addEventListener('keydown', onClipboardKey)
-    return () => window.removeEventListener('keydown', onClipboardKey)
-  }, [insertClipCopy, removeClip])
 
   const fitZoom = () => {
     const el = scrollRef.current

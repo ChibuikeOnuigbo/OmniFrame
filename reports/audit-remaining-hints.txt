@@ -1,0 +1,26 @@
+src/lib/voiceIsolation.ts:1020:  const activeModel = options.model || (store as any).audioIsolationModel || 'omni-voicetarget'
+src/store.ts:5442:  ;(window as any).__omniframe_store = useEditor
+src/store.ts:5444:  ;(window as any).__omniframe_lufs = async (channels: Float32Array[], sampleRate: number) => {
+src/store.ts:5447:  ;(window as any).__omniframe_denoise = {
+src/store/rigging.ts:138:    const state = _get() as any
+src/store/rigging.ts:228:      const state = _get() as any
+src/lib/oop/TimelineController.ts:89:    const hasText = trackClips.some((c) => c.kind === 'text' || (c as any).textStyle)
+src/lib/mcpBridge.ts:36:  const st = () => useEditor.getState() as any
+src/lib/mcpBridge.ts:37:  const clips = () => (st().clips || []) as any[]
+src/lib/mcpBridge.ts:246:        const tracks = (st().tracks || []) as any[]
+src/lib/mcpBridge.ts:283:        const tracks = (st().tracks || []) as any[]
+src/lib/mcpBridge.ts:291:            keyed: Object.entries((c.animation && (c.animation as any).curves) || {}).filter(([, v]: any) => v.keyframes && v.keyframes.length > 0).map(([k]) => k),
+qa/ai-denoise-model-e2e.mjs:168:} catch {}
+qa/cluster-fixer-settings-shortcuts-e2e.mjs:48:} catch {}
+qa/towel-masking-workflow-e2e.mjs:60:} catch {}
+src/components/TrackingPanel.tsx:407:                    setDrawingTool(sTool.type as any)
+src/components/Timeline.tsx:914:  const isText = clip.kind === 'text' || Boolean((clip as any).textStyle)
+qa/stress-e2e.mjs:32:} catch {}
+src/components/BackgroundRemovalModal.tsx:242:                  onClick={() => setBgMode(b.id as any)}
+qa/source-scan.mjs:42:      if (/\bTODO\b|\bFIXME\b|\bXXX\b|\bHACK\b/.test(raw)) add('S03', 'low', file, line, code.slice(0, 90))
+src/components/Preview.tsx:458:                ref={assetVideoRef as any}
+src/lib/bgRemovalEngine.ts:18:      const adapter = await (navigator as any).gpu.requestAdapter()
+qa/layout-selection-mask-e2e.mjs:52:} catch {}
+qa/omniframe-selection-masking-recolor-e2e.mjs:47:} catch {}
+qa/omniframe-clean-infill-motion-e2e.mjs:33:} catch {}
+src/lib/demucs/apply.js:277:    // TODO: implement random shifts

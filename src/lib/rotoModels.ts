@@ -22,6 +22,7 @@
 
 import type * as Ort from 'onnxruntime-web'
 import type { MaskBitmap } from './rotoBrush'
+import { withModelLoadProgress } from './modelLoadStore.js'
 
 export type RotoModelDomain = 'human' | 'anime' | 'hair' | 'general' | 'imported'
 
@@ -190,7 +191,6 @@ export async function getRotoSession(model: RotoModelDescriptor): Promise<Ort.In
       ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
       // streamed download with the live progress card (modelLoadStore) —
       // catalog models are 4-170 MB and the default create(url) is silent
-      const { withModelLoadProgress } = await import('./modelLoadStore.js')
       return await withModelLoadProgress(
         model.url,
         { id: `roto-${model.id}`, label: model.label, approxMb: model.approxMb ?? null },
@@ -227,7 +227,6 @@ export async function getRotoSamSessions(model: RotoModelDescriptor): Promise<Ro
       ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
       const encoderUrl = model.url
       const decoderUrl = model.decoderUrl ?? model.url.replace('encoder', 'decoder')
-      const { withModelLoadProgress } = await import('./modelLoadStore.js')
       const [encoder, decoder] = await Promise.all([
         withModelLoadProgress(
           encoderUrl,

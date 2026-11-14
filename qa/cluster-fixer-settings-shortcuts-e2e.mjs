@@ -39,7 +39,7 @@ async function runClusterFixerVerification() {
   const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await desktopContext.newPage()
 
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
 
 // Section presentation: these workflows exercise disclosure headers, so run
 // in single-open accordion mode (production default is tabs).
@@ -232,7 +232,7 @@ try {
   const mobileContext = await browser.newContext({ viewport: { width: 360, height: 800 } })
   const mobilePage = await mobileContext.newPage()
 
-  await mobilePage.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await mobilePage.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
   await mobilePage.waitForTimeout(1000)
 
   const mobileSettingsBtn = mobilePage.locator('[data-testid="settings-button"]')

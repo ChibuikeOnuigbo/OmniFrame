@@ -9,7 +9,7 @@ const browser=await chromium.launch({executablePath:await chrome.executablePath(
 try{
  const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[]
  page.on('pageerror',e=>errors.push(String(e)))
- await page.goto('http://localhost:5173/#studio',{waitUntil:'networkidle'})
+ await page.goto(process.env.URL || 'http://localhost:5173/#studio',{waitUntil:'networkidle'})
  await page.evaluate(()=>{const st=window.__omniframe_store;st.getState().setActiveCategory('2d');st.getState().setLeftTab('animation')})
  await page.getByTestId('animation-workspace').waitFor()
  const first=await page.evaluate(()=>{const s=window.__omniframe_store.getState();return {scope:s.drawingScope.type,enabled:s.drawingEnabled,onion:s.onionSkin.enabled}})

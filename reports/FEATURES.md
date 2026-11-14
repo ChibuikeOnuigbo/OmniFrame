@@ -1,3 +1,12 @@
+## 2026-11-14 — eight-pass adversarial repository audit
+
+Added safe mask bounds for malformed and offscreen geometry, removed duplicate
+clipboard/duplicate keyboard handling, made QA roots and direct browser
+navigations portable, fixed the scene-test loader, and removed ineffective
+audio/model-progress dynamic imports. The final gate passed 35 unit scripts,
+seven browser flows, a VAD rate check, Demucs unavailable/recovery, typecheck,
+build and source lint. Remaining findings and limits: `AUDIT_STATE.md`.
+
 ## 2026-11-14 — bounded 4K feather work
 
 Ordinary effect masks now use a bounded union matte and clear the remainder of

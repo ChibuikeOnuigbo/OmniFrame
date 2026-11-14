@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 /**
  * AI DENOISE MODEL E2E (browser)
  * =============================
@@ -13,7 +14,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const REPORTS = join(ROOT, 'qa/reports')
 const EVIDENCE = join(ROOT, 'evidence/screenshots')
 mkdirSync(REPORTS, { recursive: true })
@@ -47,7 +48,7 @@ page.on('requestfailed', (r) => {
   }
 })
 
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1200)
 
 /* 1. Model + runtime artifacts are served */

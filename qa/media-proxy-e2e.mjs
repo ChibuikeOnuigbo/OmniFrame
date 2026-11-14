@@ -18,7 +18,7 @@ const browser = await chromium.launch({ executablePath: await chrome.executableP
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   const errors = []; page.on('pageerror', e => errors.push(String(e)))
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
   await page.evaluate(async () => {
     const s = window.__omniframe_store.getState()
     s.addAsset({ id: 'proxy-source', kind: 'video', name: 'Proxy test', url: '/qa-output/performance-20261031/proxy-source.webm', width: 1920, height: 1080, duration: 2, size: 100 })

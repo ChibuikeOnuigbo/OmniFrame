@@ -11,7 +11,7 @@ fs.mkdirSync('qa-output/square-preview',{recursive:true})
 try {
  const page=await browser.newPage({viewport:{width:1600,height:1000}}),errors=[]
  page.on('pageerror',e=>errors.push(String(e)))
- await page.goto('http://localhost:5173/#studio',{waitUntil:'networkidle'})
+ await page.goto(process.env.URL || 'http://localhost:5173/#studio',{waitUntil:'networkidle'})
  await page.evaluate(async()=>{
   const st=window.__omniframe_store; st.setState({clips:[],tracks:[],assets:[],markers:[],past:[],future:[],visualPreview:null})
   const img=new Image();img.src='/assets/effect-subjects/pexels-portrait.jpg';await img.decode()

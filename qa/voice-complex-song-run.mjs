@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 // Runs the REAL product DSP isolation engine (src/lib/voiceIsolation.ts,
 // bundled with rolldown; neural deps stubbed because this harness exercises
 // the always-available DSP engine) on pre-decoded float32 stereo PCM in
@@ -12,7 +13,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const WORK = process.env.VOICE_BENCH_DIR || '/tmp/voice-bench'
 const tag = process.argv[2] || 'before'
 const strength = process.argv[3] ? parseFloat(process.argv[3]) : 0.92

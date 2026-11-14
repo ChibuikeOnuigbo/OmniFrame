@@ -24,7 +24,7 @@ async function runOmniFrameVetting() {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await context.newPage()
 
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
   await page.waitForTimeout(1000)
 
   const previewStage = page.locator('[data-testid="preview-stage"]')

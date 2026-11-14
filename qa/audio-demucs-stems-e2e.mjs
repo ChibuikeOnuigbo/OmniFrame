@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import { chromium as pwChromium } from 'playwright'
@@ -5,7 +6,7 @@ import serverlessChromium, { inflate } from '@sparticuz/chromium'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const URL = process.env.TEST_URL || 'http://localhost:5173/#studio'
 const FIXTURE = join(ROOT, 'evidence/voice/mix-showcase-clean-voice.wav')
 if (!existsSync(FIXTURE)) throw new Error('missing local voice/music smoke fixture at evidence/voice/mix-showcase-input.wav')

@@ -8,6 +8,7 @@
     "build": "vite build",
     "dev": "vite --host 0.0.0.0",
     "fetch:demucs": "node scripts/fetch-demucs-model.mjs",
+    "lint": "node qa/source-scan.mjs --no-write --fail-on-high",
     "preview": "vite preview --host 0.0.0.0",
     "qa:advanced": "node qa/advanced-e2e.mjs",
     "qa:adjustments": "node qa/adjustments-lut-e2e.mjs",

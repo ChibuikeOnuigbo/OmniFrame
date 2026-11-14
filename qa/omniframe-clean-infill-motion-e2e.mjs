@@ -24,7 +24,7 @@ async function runOmniFrameVerification() {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await context.newPage()
 
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
 
 // Section presentation: these workflows exercise disclosure headers, so run
 // in single-open accordion mode (production default is tabs).

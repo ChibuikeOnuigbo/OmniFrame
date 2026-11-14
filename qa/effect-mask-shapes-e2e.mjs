@@ -10,7 +10,7 @@ try{
  const page=await browser.newPage({viewport:{width:1280,height:850}})
  page.setDefaultTimeout(12000)
  const errors=[];page.on('pageerror',e=>errors.push(String(e)))
- await page.goto('http://localhost:5173/#studio',{waitUntil:'domcontentloaded'})
+ await page.goto(process.env.URL || 'http://localhost:5173/#studio',{waitUntil:'domcontentloaded'})
  await page.evaluate(()=>{const st=window.__omniframe_store;st.setState({assets:[],clips:[],tracks:[],selectedClipId:null,selectedClipIds:[],rightOpen:true,sidebarSectionMode:'tabs'});const c=document.createElement('canvas');c.width=320;c.height=180;st.getState().addAsset({id:'plate',kind:'image',name:'Plate',url:c.toDataURL(),duration:5,width:320,height:180,size:100});const t=st.getState().ensureTrack('video');st.getState().addClipToTrack(t,'plate',0);st.getState().selectClip(st.getState().clips[0].id)})
  await page.getByTestId('section-tab-effect-mask').click()
  await page.getByLabel('New mask shape').selectOption('star')

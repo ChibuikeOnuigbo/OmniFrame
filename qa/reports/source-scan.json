@@ -1,30 +1,18 @@
 {
   "totals": {
-    "files": 97,
-    "findings": 212
+    "files": 193,
+    "findings": 285
   },
   "byRule": {
-    "S04": 164,
-    "S09": 25,
-    "S07": 19,
-    "S03": 1,
-    "S01": 3
+    "S04": 173,
+    "S06": 4,
+    "S09": 31,
+    "S05": 2,
+    "S07": 65,
+    "S01": 9,
+    "S03": 1
   },
   "findings": [
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/Studio.tsx",
-      "line": 669,
-      "evidence": "hardcoded colour #11131d instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/Studio.tsx",
-      "line": 717,
-      "evidence": "hardcoded colour #11131d instead of a theme token"
-    },
     {
       "rule": "S04",
       "sev": "medium",
@@ -121,7 +109,7 @@
       "sev": "medium",
       "file": "src/components/AspectRatioSelector.tsx",
       "line": 116,
-      "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
+      "evidence": "hardcoded colour #ff8c61 instead of a theme token"
     },
     {
       "rule": "S04",
@@ -210,6 +198,20 @@
     {
       "rule": "S04",
       "sev": "medium",
+      "file": "src/components/AssetLibraryModal.tsx",
+      "line": 41,
+      "evidence": "hardcoded colour #a78bfa instead of a theme token"
+    },
+    {
+      "rule": "S06",
+      "sev": "low",
+      "file": "src/components/AssetLibraryModal.tsx",
+      "line": 213,
+      "evidence": "large inline onClick handler"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
       "file": "src/components/BackgroundRemovalModal.tsx",
       "line": 47,
       "evidence": "hardcoded colour #00FF00 instead of a theme token"
@@ -253,7 +255,7 @@
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/ClipFilmstrip.tsx",
-      "line": 58,
+      "line": 57,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
@@ -609,57 +611,85 @@
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingCanvasOverlay.tsx",
-      "line": 126,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 57,
+      "evidence": "hardcoded colour #6d5efc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingCanvasOverlay.tsx",
-      "line": 136,
-      "evidence": "hardcoded colour #ffffff instead of a theme token"
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 58,
+      "evidence": "hardcoded colour #2dd4bf instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 39,
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 59,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 40,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 60,
+      "evidence": "hardcoded colour #38bdf8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 41,
-      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 61,
+      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 42,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 62,
+      "evidence": "hardcoded colour #f472b6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 43,
-      "evidence": "hardcoded colour #a855f7 instead of a theme token"
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 91,
+      "evidence": "hardcoded colour #000 instead of a theme token"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 99,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/DrawingPanel.tsx",
-      "line": 44,
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 207,
+      "evidence": "hardcoded colour #ffd9a0 instead of a theme token"
+    },
+    {
+      "rule": "S05",
+      "sev": "medium",
+      "file": "src/components/DesktopPackPanel.tsx",
+      "line": 489,
+      "evidence": "multi-line .map() rendering JSX with no key prop"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingCanvasOverlay.tsx",
+      "line": 170,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingCanvasOverlay.tsx",
+      "line": 180,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
@@ -667,140 +697,245 @@
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
       "line": 45,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
+      "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 216,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
+      "line": 46,
+      "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 218,
-      "evidence": "hardcoded colour #000000 instead of a theme token"
+      "line": 47,
+      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 229,
+      "line": 48,
+      "evidence": "hardcoded colour #10b981 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 49,
+      "evidence": "hardcoded colour #a855f7 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 50,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 231,
+      "line": 51,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 259,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 261,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 272,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 242,
+      "line": 274,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/DrawingPanel.tsx",
+      "line": 285,
       "evidence": "hardcoded colour #808080 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 244,
+      "line": 287,
       "evidence": "hardcoded colour #808080 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/DrawingPanel.tsx",
-      "line": 855,
+      "line": 1019,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingToolbar.tsx",
-      "line": 28,
+      "line": 44,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingToolbar.tsx",
-      "line": 29,
+      "line": 45,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/DrawingToolbar.tsx",
-      "line": 30,
+      "line": 46,
       "evidence": "hardcoded colour #3b82f6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 523,
-      "evidence": "hardcoded colour #64748b instead of a theme token"
+      "file": "src/components/EffectMaskDrawOverlay.tsx",
+      "line": 43,
+      "evidence": "hardcoded colour #22d3ee instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 530,
-      "evidence": "hardcoded colour #64748b instead of a theme token"
+      "file": "src/components/EffectsPanel.tsx",
+      "line": 47,
+      "evidence": "hardcoded colour #00ff00 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 603,
-      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+      "file": "src/components/EffectsPanel.tsx",
+      "line": 49,
+      "evidence": "hardcoded colour #ffd9a0 instead of a theme token"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/EffectsPanel.tsx",
+      "line": 470,
+      "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 625,
-      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+      "file": "src/components/EffectsPanel.tsx",
+      "line": 777,
+      "evidence": "hardcoded colour #ffd9a0 instead of a theme token"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/components/EffectsPanel.tsx",
+      "line": 882,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/GraphEditor.tsx",
-      "line": 660,
+      "file": "src/components/FxStackSection.tsx",
+      "line": 195,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 661,
+      "line": 527,
+      "evidence": "hardcoded colour #64748b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 534,
+      "evidence": "hardcoded colour #64748b instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 607,
+      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 629,
+      "evidence": "hardcoded colour #94a3b8 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 664,
+      "evidence": "hardcoded colour #ffffff instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 665,
       "evidence": "hardcoded colour #0f172a instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 673,
+      "line": 677,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/GraphEditor.tsx",
-      "line": 676,
+      "line": 680,
       "evidence": "hardcoded colour #ef4444 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/GraphEditor.tsx",
-      "line": 770,
+      "line": 774,
       "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 846,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/components/GraphEditor.tsx",
+      "line": 884,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
@@ -820,127 +955,106 @@
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/LinkPanel.tsx",
-      "line": 65,
+      "line": 66,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/MarkerModal.tsx",
-      "line": 8,
-      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/MarkerModal.tsx",
-      "line": 9,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/MarkerModal.tsx",
-      "line": 10,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/MarkerModal.tsx",
-      "line": 11,
-      "evidence": "hardcoded colour #f59e0b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/MarkerModal.tsx",
-      "line": 12,
-      "evidence": "hardcoded colour #a855f7 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/MarkerModal.tsx",
-      "line": 13,
-      "evidence": "hardcoded colour #f97316 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 134,
-      "evidence": "hardcoded colour #105 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 135,
-      "evidence": "hardcoded colour #150 instead of a theme token"
+      "file": "src/components/MarkerPopup.tsx",
+      "line": 33,
+      "evidence": "hardcoded colour #ec4899 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/OmniFramePanel.tsx",
       "line": 136,
+      "evidence": "hardcoded colour #105 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/OmniFramePanel.tsx",
+      "line": 137,
+      "evidence": "hardcoded colour #150 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/OmniFramePanel.tsx",
+      "line": 138,
       "evidence": "hardcoded colour #210 instead of a theme token"
     },
     {
-      "rule": "S04",
+      "rule": "S01",
       "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 536,
-      "evidence": "hardcoded colour #2563eb instead of a theme token"
+      "file": "src/components/Preview.tsx",
+      "line": 54,
+      "evidence": "useEffect(() => { if (hasDeviceTransitions) void prepareDeviceModels().catch(error => cons"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Preview.tsx",
+      "line": 522,
+      "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S04",
       "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 537,
-      "evidence": "hardcoded colour #dc2626 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 538,
-      "evidence": "hardcoded colour #d97706 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 539,
-      "evidence": "hardcoded colour #059669 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/OmniFramePanel.tsx",
-      "line": 540,
-      "evidence": "hardcoded colour #7c3aed instead of a theme token"
+      "file": "src/components/PreviewSquare.tsx",
+      "line": 54,
+      "evidence": "hardcoded colour #090d14 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Rigging.tsx",
-      "line": 230,
+      "line": 362,
       "evidence": "hardcoded colour #9083ff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Rigging.tsx",
-      "line": 457,
+      "line": 663,
       "evidence": "hardcoded colour #0f0f11 instead of a theme token"
+    },
+    {
+      "rule": "S06",
+      "sev": "low",
+      "file": "src/components/RightPanel.tsx",
+      "line": 582,
+      "evidence": "large inline onClick handler"
+    },
+    {
+      "rule": "S06",
+      "sev": "low",
+      "file": "src/components/RightPanel.tsx",
+      "line": 605,
+      "evidence": "large inline onClick handler"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/RightPanel.tsx",
+      "line": 952,
+      "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/RightPanel.tsx",
-      "line": 512,
+      "line": 1189,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/RightPanel.tsx",
+      "line": 1409,
+      "evidence": "hardcoded colour #ffd9a0 instead of a theme token"
     },
     {
       "rule": "S04",
@@ -1022,247 +1136,387 @@
     {
       "rule": "S04",
       "sev": "medium",
+      "file": "src/components/StoryboardPanel.tsx",
+      "line": 13,
+      "evidence": "hardcoded colour #38bdf8 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/StoryboardPanel.tsx",
+      "line": 14,
+      "evidence": "hardcoded colour #a78bfa instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/StoryboardPanel.tsx",
+      "line": 15,
+      "evidence": "hardcoded colour #f472b6 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/StoryboardPanel.tsx",
+      "line": 16,
+      "evidence": "hardcoded colour #facc15 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/StoryboardPanel.tsx",
+      "line": 17,
+      "evidence": "hardcoded colour #34d399 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/StoryboardPanel.tsx",
+      "line": 18,
+      "evidence": "hardcoded colour #fbbf24 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/TemplatePickerModal.tsx",
+      "line": 197,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 19,
+      "line": 85,
+      "evidence": "hardcoded colour #ff2a4d instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/TextPanel.tsx",
+      "line": 107,
+      "evidence": "hardcoded colour #000000 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/TextPanel.tsx",
+      "line": 118,
+      "evidence": "hardcoded colour #ff2a4d instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/TextPanel.tsx",
+      "line": 123,
+      "evidence": "hardcoded colour #7dd3fc instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/TextPanel.tsx",
+      "line": 147,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 30,
+      "line": 158,
       "evidence": "hardcoded colour #ffffff instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 290,
+      "line": 617,
       "evidence": "hardcoded colour #f8fafc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 295,
+      "line": 622,
       "evidence": "hardcoded colour #38bdf8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/TextPanel.tsx",
-      "line": 300,
+      "line": 627,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/components/ThreePanel.tsx",
+      "line": 420,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 78,
+      "line": 96,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 427,
+      "line": 493,
       "evidence": "hardcoded colour #0f172a instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 429,
+      "line": 495,
       "evidence": "hardcoded colour #38bdf8 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 432,
+      "line": 498,
       "evidence": "hardcoded colour #f8fafc instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/ThreeViewer.tsx",
-      "line": 436,
+      "line": 502,
       "evidence": "hardcoded colour #f59e0b instead of a theme token"
+    },
+    {
+      "rule": "S01",
+      "sev": "medium",
+      "file": "src/components/ThreeViewer.tsx",
+      "line": 596,
+      "evidence": "console.warn(`Could not load 3D model ${sceneObject.name}`, error)"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 935,
+      "line": 265,
+      "evidence": "hardcoded colour #fbbf24 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/Timeline.tsx",
+      "line": 267,
+      "evidence": "hardcoded colour #fbbf24 instead of a theme token"
+    },
+    {
+      "rule": "S04",
+      "sev": "medium",
+      "file": "src/components/Timeline.tsx",
+      "line": 1091,
       "evidence": "hardcoded colour #fef08a instead of a theme token"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 1231,
+      "line": 1597,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 2034,
-      "evidence": "hardcoded colour #10b981 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/Timeline.tsx",
-      "line": 2036,
-      "evidence": "hardcoded colour #ef4444 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/Timeline.tsx",
-      "line": 2038,
-      "evidence": "hardcoded colour #f59e0b instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/Timeline.tsx",
-      "line": 2040,
-      "evidence": "hardcoded colour #a855f7 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/Timeline.tsx",
-      "line": 2042,
-      "evidence": "hardcoded colour #f97316 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/Timeline.tsx",
-      "line": 2043,
-      "evidence": "hardcoded colour #3b82f6 instead of a theme token"
-    },
-    {
-      "rule": "S04",
-      "sev": "medium",
-      "file": "src/components/Timeline.tsx",
-      "line": 2357,
+      "line": 2862,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S04",
       "sev": "medium",
       "file": "src/components/Timeline.tsx",
-      "line": 2370,
+      "line": 2875,
       "evidence": "hardcoded colour #8b5cf6 instead of a theme token"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2480,
+      "line": 3120,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2491,
+      "line": 3132,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3140,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3148,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3157,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3218,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3220,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3244,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3268,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3333,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/Timeline.tsx",
+      "line": 3344,
       "evidence": "2 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2523,
+      "line": 3376,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2538,
+      "line": 3391,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2540,
+      "line": 3393,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2555,
+      "line": 3438,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2578,
+      "line": 3461,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2582,
+      "line": 3465,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2597,
+      "line": 3480,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2601,
+      "line": 3484,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/components/Timeline.tsx",
-      "line": 2614,
+      "line": 3497,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 162,
+      "line": 316,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 165,
+      "line": 344,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
-      "rule": "S04",
+      "rule": "S09",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 258,
-      "evidence": "hardcoded colour #11131d instead of a theme token"
+      "line": 347,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
-      "rule": "S04",
+      "rule": "S09",
       "sev": "medium",
       "file": "src/components/TopBar.tsx",
-      "line": 406,
-      "evidence": "hardcoded colour #11131d instead of a theme token"
+      "line": 378,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/components/TopBar.tsx",
+      "line": 389,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S06",
+      "sev": "low",
+      "file": "src/components/TopBar.tsx",
+      "line": 1711,
+      "evidence": "large inline onClick handler"
     },
     {
       "rule": "S09",
@@ -1272,17 +1526,31 @@
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
-      "rule": "S09",
+      "rule": "S01",
       "sev": "medium",
       "file": "src/components/TransitionsPanel.tsx",
-      "line": 132,
-      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+      "line": 71,
+      "evidence": "useEffect(() => { void prepareDeviceModels().catch(error => console.warn('Device models co"
+    },
+    {
+      "rule": "S01",
+      "sev": "medium",
+      "file": "src/components/TransitionsPanel.tsx",
+      "line": 78,
+      "evidence": "useEffect(()=>{if(pillar==='object')void prepareObjectAssets().catch(error=>console.warn('"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/components/ViewportMenu.tsx",
+      "line": 39,
+      "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/components/VoiceIsolationModal.tsx",
-      "line": 82,
+      "line": 92,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
@@ -1328,6 +1596,76 @@
       "evidence": "hardcoded colour #F8FAFC instead of a theme token"
     },
     {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/alightXml.ts",
+      "line": 271,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/alightXml.ts",
+      "line": 272,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/alightXml.ts",
+      "line": 274,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S05",
+      "sev": "medium",
+      "file": "src/lib/alightXml.ts",
+      "line": 651,
+      "evidence": "multi-line .map() rendering JSX with no key prop"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/lib/audioAnalysis.ts",
+      "line": 228,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/audioBus.ts",
+      "line": 38,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/audioBus.ts",
+      "line": 40,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/builders.ts",
+      "line": 262,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/builders.ts",
+      "line": 274,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/builders.ts",
+      "line": 275,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/clipFilmstrip.ts",
@@ -1338,49 +1676,63 @@
       "rule": "S03",
       "sev": "low",
       "file": "src/lib/demucs/apply.js",
-      "line": 274,
+      "line": 277,
       "evidence": "// TODO: implement random shifts"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/demucs/index.ts",
-      "line": 305,
+      "line": 321,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/demucs/index.ts",
-      "line": 380,
+      "line": 400,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S01",
       "sev": "medium",
       "file": "src/lib/demucs/index.ts",
-      "line": 466,
+      "line": 497,
       "evidence": "console.warn(`[demucs] ${stem}: ${missing.reduce((a, b) => a + b, 0)} samples had no finit"
     },
     {
+      "rule": "S01",
+      "sev": "medium",
+      "file": "src/lib/deviceModelRenderer.ts",
+      "line": 102,
+      "evidence": "console.warn('Device WebGL renderer unavailable; using perspective canvas fallback', error"
+    },
+    {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/export.ts",
-      "line": 74,
+      "line": 39,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/export.ts",
-      "line": 158,
+      "line": 148,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/export.ts",
-      "line": 162,
+      "line": 154,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/lib/fineTune.ts",
+      "line": 46,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
@@ -1426,6 +1778,48 @@
       "evidence": "1 non-null assertion(s)"
     },
     {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/mediaProxies.ts",
+      "line": 60,
+      "evidence": "2 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/mediaProxies.ts",
+      "line": 65,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/mediaProxies.ts",
+      "line": 69,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/mediaProxies.ts",
+      "line": 70,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/mediaProxies.ts",
+      "line": 72,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/mediaProxies.ts",
+      "line": 78,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
       "rule": "S09",
       "sev": "medium",
       "file": "src/lib/modelLoadStore.ts",
@@ -1447,52 +1841,171 @@
       "evidence": "console.warn('[dspNative] native op out of memory, using JS fallback')"
     },
     {
-      "rule": "S09",
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/object3d.ts",
+      "line": 26,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S01",
       "sev": "medium",
+      "file": "src/lib/objectModelRenderer.ts",
+      "line": 61,
+      "evidence": "}catch(error){failure=String(error);console.warn('3D asset renderer unavailable; using tra"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/playback.ts",
+      "line": 972,
+      "evidence": "3 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/playback.ts",
+      "line": 1894,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/playback.ts",
+      "line": 1895,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/playback.ts",
+      "line": 2256,
+      "evidence": "2 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/playback.ts",
+      "line": 2262,
+      "evidence": "2 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/lib/playback.ts",
+      "line": 2265,
+      "evidence": "2 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/omniExtract.ts",
+      "line": 99,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
       "file": "src/store/rotoMask.ts",
-      "line": 199,
-      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+      "line": 234,
+      "evidence": "1 non-null assertion(s)"
     },
     {
-      "rule": "S09",
-      "sev": "medium",
+      "rule": "S07",
+      "sev": "low",
       "file": "src/store/rotoMask.ts",
-      "line": 212,
+      "line": 235,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 257,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 258,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 263,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 264,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 276,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 280,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store/rotoMask.ts",
+      "line": 281,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/store.ts",
+      "line": 1076,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 843,
+      "line": 1091,
+      "evidence": "setTimeout with no clearTimeout anywhere in the file"
+    },
+    {
+      "rule": "S07",
+      "sev": "low",
+      "file": "src/store.ts",
+      "line": 2236,
+      "evidence": "1 non-null assertion(s)"
+    },
+    {
+      "rule": "S09",
+      "sev": "medium",
+      "file": "src/store.ts",
+      "line": 5485,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 858,
+      "line": 5557,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 3620,
-      "evidence": "setTimeout with no clearTimeout anywhere in the file"
-    },
-    {
-      "rule": "S09",
-      "sev": "medium",
-      "file": "src/store.ts",
-      "line": 3680,
-      "evidence": "setTimeout with no clearTimeout anywhere in the file"
-    },
-    {
-      "rule": "S09",
-      "sev": "medium",
-      "file": "src/store.ts",
-      "line": 3705,
+      "line": 5582,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     }
   ]

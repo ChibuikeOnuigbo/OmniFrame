@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { chromium as pwChromium } from 'playwright'
 import serverlessChromium, { inflate } from '@sparticuz/chromium'
 import { join } from 'node:path'
@@ -5,7 +6,7 @@ import { tmpdir } from 'node:os'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const SHOTS_DIR = join(ROOT, 'evidence', 'rebuild')
 const CUTOUTS_DIR = join(ROOT, 'evidence', 'cutouts')
 const EXPORTS_DIR = join(ROOT, 'qa', 'exports')

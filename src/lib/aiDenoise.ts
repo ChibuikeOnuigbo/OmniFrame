@@ -18,6 +18,7 @@
  */
 
 import type * as Ort from 'onnxruntime-web'
+import { withModelLoadProgress } from './modelLoadStore.js'
 
 export const DENOISE_MODEL_URL = '/models/omni-denoise-v1.onnx'
 export const DENOISE_SR = 16000
@@ -49,7 +50,6 @@ export async function getDenoiseSession(): Promise<Ort.InferenceSession> {
       // Runtime files live in /ort-runtime/ during dev (importable through
       // vite's transform pipeline) and /ort/ in production builds.
       ort.env.wasm.wasmPaths = import.meta.env.DEV ? '/ort-runtime/' : '/ort/'
-      const { withModelLoadProgress } = await import('./modelLoadStore.js')
       return await withModelLoadProgress(
         DENOISE_MODEL_URL,
         { id: 'omni-denoise', label: 'AI Denoise (OmniFrame v1)' },

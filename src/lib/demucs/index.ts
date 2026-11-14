@@ -22,6 +22,7 @@
 import type { RawAudio } from './wav-utils.js'
 import { renderAtRate } from '../vad'
 import { initNativeDsp, nativeRemoveLsLeakage, nativeAveragePasses } from '../native/dspNative.js'
+import { useModelLoadStore } from '../modelLoadStore.js'
 import { triangleWeights, accumulateChunk, normalizeChunked } from './chunked.js'
 
 export const DEMUCS_MODEL_ID = 'htdemucs-v4'
@@ -180,9 +181,8 @@ function runPassInWorker(
     // worker boundary; drive the model-load progress card from here (the
     // store lives on the main thread)
     let modelCardStarted = false
-    const modelCard = async (fn: 'begin' | 'bytes' | 'compile' | 'ready' | 'fail', arg?: unknown) => {
-      const store = await import('../modelLoadStore.js')
-      const s = store.useModelLoadStore.getState()
+    const modelCard = (fn: 'begin' | 'bytes' | 'compile' | 'ready' | 'fail', arg?: unknown) => {
+      const s = useModelLoadStore.getState()
       if (fn === 'begin') s.begin('htdemucs-v4', 'Demucs v4 neural network', { approxMb: 174 })
       else if (fn === 'bytes') {
         const [loaded, total] = arg as [number, number | null]
@@ -204,19 +204,19 @@ function runPassInWorker(
       if (d.type === 'model-progress') {
         if (!modelCardStarted) {
           modelCardStarted = true
-          void modelCard('begin')
+          modelCard('begin')
         }
-        void modelCard('bytes', [d.loaded ?? 0, d.total ?? null] as [number, number | null])
+        modelCard('bytes', [d.loaded ?? 0, d.total ?? null] as [number, number | null])
         // coarse mapping into the separation progress line (5 -> 20 %)
         const frac = d.total ? Math.min(1, (d.loaded ?? 0) / d.total) : 0
         onProgress?.(5 + Math.round(frac * 15), 'Loading Demucs v4 weights…')
       } else if (d.type === 'progress') {
         if ((d.pct ?? 0) >= 20 && modelCardStarted && (d.pct ?? 0) < 30) {
           // weights fetched — the worker is compiling the session now
-          void modelCard('compile')
+          modelCard('compile')
         } else if ((d.pct ?? 0) >= 30 && modelCardStarted) {
           // session live — separation is running
-          void modelCard('ready')
+          modelCard('ready')
         }
         onProgress?.(d.pct ?? 0, d.msg ?? '')
       } else if (d.type === 'done') {
@@ -224,13 +224,13 @@ function runPassInWorker(
         resolve(d.stems as WorkerStems)
       } else if (d.type === 'error') {
         worker.terminate()
-        if (modelCardStarted) void modelCard('fail', d.message)
+        if (modelCardStarted) modelCard('fail', d.message)
         reject(new Error(d.message))
       }
     }
     worker.onerror = (e) => {
       worker.terminate()
-      if (modelCardStarted) void modelCard('fail', e.message)
+      if (modelCardStarted) modelCard('fail', e.message)
       reject(new Error(`Demucs worker failed: ${e.message}`))
     }
     worker.postMessage({ id: 1, channelData, sampleRate, overlap: opts.overlap ?? 0.25 })

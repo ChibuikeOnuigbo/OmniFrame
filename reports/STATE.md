@@ -1,3 +1,11 @@
+## 2026-11-14 — eight-pass adversarial repository audit
+
+Eight recorded cycles improved mask input safety, test portability, timeline
+shortcut ownership and audio/model loading. The final gate passed 35 unit
+scripts, seven browser flows, typecheck, build and source lint. The lint report
+retains 285 non-high findings and the build warns about the main chunk size.
+`AUDIT_STATE.md` lists each cycle, remaining risks and next steps.
+
 ## 2026-11-14 — bounded 4K feather work
 
 Ordinary effect masks now use a bounded union matte and clear the remainder of

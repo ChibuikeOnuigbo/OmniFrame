@@ -30,7 +30,8 @@ const add = (rule, sev, file, line, evidence) =>
   findings.push({ rule, sev, file: path.relative(ROOT, file), line, evidence: String(evidence).slice(0, 140) })
 
 for (const file of files) {
-  const lines = fs.readFileSync(file, 'utf8').split('\n')
+  const source = fs.readFileSync(file, 'utf8')
+  const lines = source.split('\n')
 
   lines.forEach((raw, i) => {
     const line = i + 1
@@ -46,6 +47,9 @@ for (const file of files) {
     if (/\bconsole\.(log|debug|info|warn)\s*\(/.test(raw)) add('S01', 'medium', file, line, code.slice(0, 90))
 
     // S02 exception swallowed with an empty or comment-only catch.
+    if (/\bcatch\s*(?:\([^)]*\))?\s*\{\s*\}/.test(raw)) {
+      add('S02', 'high', file, line, 'empty catch block swallows the error')
+    }
     if (/}\s*catch\s*\(/.test(raw)) {
       const body = (lines[i + 1] || '') + (lines[i + 2] || '')
       if (/^\s*\}\s*$/.test(lines[i + 1] || '') || /^\s*(\/\/[^*])?\s*\}\s*$/.test(lines[i + 1] || '')) {
@@ -98,7 +102,7 @@ for (const file of files) {
     if (/dangerouslySetInnerHTML/.test(raw)) add('S08', 'high', file, line, 'dangerouslySetInnerHTML')
 
     // S09 setTimeout with no cleanup partner in the same file.
-    if (/setTimeout\s*\(/.test(raw) && !/clearTimeout/.test(fs.readFileSync(file, 'utf8'))) {
+    if (/setTimeout\s*\(/.test(raw) && !/clearTimeout/.test(source)) {
       add('S09', 'medium', file, line, 'setTimeout with no clearTimeout anywhere in the file')
     }
   })
@@ -123,6 +127,9 @@ for (const [k, v] of Object.entries(byRule).sort((a, b) => b[1] - a[1])) {
 }
 console.log(`\ntotal: ${uniq.length}`)
 
-const out = path.join(ROOT, 'qa/reports/source-scan.json')
-fs.writeFileSync(out, JSON.stringify({ totals: { files: files.length, findings: uniq.length }, byRule, findings: uniq }, null, 2))
-console.log(`Wrote ${out}`)
+if (!process.argv.includes('--no-write')) {
+  const out = path.join(ROOT, 'qa/reports/source-scan.json')
+  fs.writeFileSync(out, JSON.stringify({ totals: { files: files.length, findings: uniq.length }, byRule, findings: uniq }, null, 2))
+  console.log(`Wrote ${out}`)
+}
+if (process.argv.includes('--fail-on-high') && uniq.some(f => f.sev === 'high')) process.exitCode = 1

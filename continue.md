@@ -1,3 +1,13 @@
+## 2026-11-14 — eight-pass adversarial repository audit
+
+Eight audit cycles are recorded in `AUDIT_STATE.md`. Fixes include safe
+effect-mask bounds, portable QA roots and server URLs, a scene-test loader,
+single-owner timeline shortcuts, and synchronous Demucs model progress. The
+repeatable gates passed 35 unit scripts, seven browser flows, typecheck, build
+and source lint. The lint report still lists 285 non-high findings and the
+build still warns about a large main chunk. See `AUDIT_STATE.md` for exact
+remaining work and next-pass instructions.
+
 ## 2026-11-14 — bounded 4K feather work
 
 Ordinary effect masks now use a bounded union matte and clear the remainder of

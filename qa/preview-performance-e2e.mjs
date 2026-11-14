@@ -14,7 +14,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   const errors = []
   page.on('pageerror', e => errors.push(String(e)))
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
   await page.waitForFunction(() => window.__omniframe_store)
   const setup = await page.evaluate(async () => {
     const store = window.__omniframe_store

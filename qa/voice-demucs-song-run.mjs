@@ -29,7 +29,7 @@ for (let i = 0; i < frames; i++) {
 }
 console.log(`mix: ${(frames / 44100).toFixed(1)}s`)
 
-const weights = readFileSync('/home/user/OmniFrame/public/models/htdemucs.onnx')
+const weights = readFileSync(new URL('../public/models/htdemucs.onnx', import.meta.url))
 const session = await ort.InferenceSession.create(weights, { executionProviders: ['wasm'] })
 const model = new ONNXHTDemucs()
 model.session = session

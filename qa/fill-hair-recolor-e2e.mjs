@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { chromium as pwChromium } from 'playwright'
 import serverlessChromium, { inflate } from '@sparticuz/chromium'
 import { join } from 'node:path'
@@ -5,7 +6,7 @@ import { tmpdir } from 'node:os'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const SHOTS_DIR = join(ROOT, 'evidence', 'drawing')
 const CUTOUTS_DIR = join(ROOT, 'evidence', 'cutouts')
 const EXPORTS_DIR = join(ROOT, 'qa', 'exports')
@@ -39,7 +40,7 @@ async function run() {
     if (msg.type() === 'error') console.error('Browser Error:', msg.text())
   })
 
-  await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
   await page.waitForTimeout(1000)
 
   // Step 1: Ingest Character Hair Outline Test Asset

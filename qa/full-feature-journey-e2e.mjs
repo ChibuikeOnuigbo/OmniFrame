@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 // Full-feature journey: the user's end-to-end scenario in one chain —
 // generate a 2D vector game scene (drawing strokes) -> image-to-video
 // timeline -> convert drawing to clips -> compound clip (enter/exit) ->
@@ -11,7 +12,7 @@ import { tmpdir } from 'node:os'
 import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const EXPORTS_DIR = join(ROOT, 'qa', 'exports')
 mkdirSync(EXPORTS_DIR, { recursive: true })
 
@@ -31,7 +32,7 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 900 
 const page = await context.newPage()
 page.on('pageerror', (e) => console.error('PAGEERROR', String(e).slice(0, 200)))
 
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1300)
 
 // ---- Step 1: reset + background image (image-to-video base) + entity ----

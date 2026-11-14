@@ -4,6 +4,7 @@ import {tmpdir} from 'node:os';import{join}from'node:path';import{mkdirSync,writ
 const ROOT=process.cwd(),URL=process.env.URL||'http://localhost:5173/#studio',REPORTS=join(ROOT,'qa/reports');mkdirSync(REPORTS,{recursive:true});await inflate(join(ROOT,'node_modules/@sparticuz/chromium/bin/al2023.tar.br'));process.env.LD_LIBRARY_PATH=`${join(tmpdir(),'al2023/lib')}:${tmpdir()}`
 const browser=await pwChromium.launch({executablePath:await serverlessChromium.executablePath(),args:['--no-sandbox','--use-gl=swiftshader']});const page=await browser.newPage({viewport:{width:1280,height:760}}),results=[],errors=[];page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('pageerror',e=>errors.push(String(e)));const ok=(v,n,d='')=>{if(!v)throw Error(`${n}: ${d}`);results.push({n,d});console.log('PASS',n,d)}
 await page.goto(URL,{waitUntil:'networkidle'})
+await page.evaluate(()=>window.__omniframe_store.getState().newProject())
 // I-10: media import only adds to the project library and loads the Source
 // Monitor; it places no clip. Add the imported asset explicitly, and open the
 // left dock first so its add button is not clipped.
@@ -21,6 +22,7 @@ const bladeCursor=await cursorEl.getAttribute('data-cursor-state');ok(bladeCurso
 await page.keyboard.press('v'); await page.mouse.move(cbox.x+cbox.width/2+1,cbox.y+cbox.height/2); await page.waitForTimeout(150)
 ok((await cursorEl.getAttribute('data-cursor-state'))!=='blade','select tool restores selection cursor',String(await cursorEl.getAttribute('data-cursor-state')))
 const snap=page.getByTestId('snapping-toggle');ok(await snap.getAttribute('aria-pressed')==='true','snapping starts enabled');await snap.click();ok(await snap.getAttribute('aria-pressed')==='false','snapping can be disabled');await snap.click();ok(await snap.getAttribute('aria-pressed')==='true','snapping can be re-enabled');await page.getByTestId('timeline-scale').fill('40');await clip.click();await page.keyboard.press('Control+d');const moved=page.getByTestId('timeline-clip').last()
+ok((await page.evaluate(()=>window.__omniframe_store.getState().clips.length))===2,'one shortcut press creates one duplicate')
 // A pointer move only becomes a drag past 5px, and snapping grabs anything
 // within 8px, so the nudge has to sit between the two: 7px is a real drag
 // that snapping can still pull back to the neighbouring edge at 8s. The old

@@ -9,21 +9,10 @@
  *
  * Run: node qa/scene-recreation-unit.mjs
  */
-import { transform } from 'sucrase'
-import { mkdtempSync, writeFileSync, readFileSync } from 'fs'
-import { tmpdir } from 'os'
-import { join } from 'path'
+import { loadAppTs } from '../tools/mcp/appRender.mjs'
 
-const dir = mkdtempSync(join(tmpdir(), 'scene-qa-'))
-const src = readFileSync(join(process.cwd(), 'src/lib/pillarRenderers.ts'), 'utf8')
-const { code } = transform(src, { transforms: ['typescript'] })
-// pillarRenderers imports ./particleFx — ship it alongside with a .mjs specifier
-const pfSrc = readFileSync(join(process.cwd(), 'src/lib/particleFx.ts'), 'utf8')
-const pf = transform(pfSrc, { transforms: ['typescript'] })
-writeFileSync(join(dir, 'particleFx.mjs'), pf.code)
-const bundle = join(dir, 'pillarRenderers.mjs')
-writeFileSync(bundle, code.replace(/from '\.\/particleFx'/g, "from './particleFx.mjs'"))
-const { drawPillarFamily } = await import(bundle)
+// Use the shared TypeScript loader so new renderer dependencies are included.
+const { drawPillarFamily } = await loadAppTs('src/lib/pillarRenderers.ts')
 
 function stubCtx(log) {
   const gradient = { addColorStop: (o, c) => log.push(['stop', o, c]) }

@@ -47,7 +47,7 @@ async function runResponsivenessVetting() {
     const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height } })
     const page = await context.newPage()
 
-    await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+    await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
     await page.waitForTimeout(600)
 
     // Ensure timeline has a video clip so all subsystems (timeline, preview, inspector) are populated

@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 // Pivot (anchor) rotation + Krita-style armature recreation:
 //  A. a solo arm rotates about its end joint (not its centre),
 //  B. the pivot itself can be keyframed and morphs mid-animation,
@@ -12,7 +13,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { mkdirSync } from 'node:fs'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const OUT = join(ROOT, 'evidence', 'improvements')
 mkdirSync(OUT, { recursive: true })
 
@@ -30,7 +31,7 @@ const browser = await pwChromium.launch({
 })
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 page.on('pageerror', (e) => console.error('PAGEERROR', String(e).slice(0, 200)))
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'domcontentloaded' })
 await page.waitForTimeout(1500)
 
 /** Screenshot the preview stage and return colour centroids as frame fractions. */

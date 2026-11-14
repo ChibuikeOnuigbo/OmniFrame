@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 /**
  * BUNDLE BUDGET E2E
  * =================
@@ -25,7 +26,7 @@ import { mkdirSync, writeFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const REPORTS = join(ROOT, 'qa/reports')
 mkdirSync(REPORTS, { recursive: true })
 

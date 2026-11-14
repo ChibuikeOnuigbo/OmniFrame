@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 /**
  * DEMUCS MODEL-UNAVAILABLE E2E
  * ============================
@@ -23,7 +24,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
-const ROOT = '/home/user/OmniFrame'
+const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const REPORTS = join(ROOT, 'qa/reports')
 mkdirSync(REPORTS, { recursive: true })
 
@@ -54,7 +55,7 @@ await page.route('**/models/htdemucs.onnx', (route) => {
   return route.continue()
 })
 
-await page.goto('http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
 await page.waitForSelector('[data-testid="preview-viewport"]')
 
 // Place an audio clip (the demo project already holds audio assets).

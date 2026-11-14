@@ -743,9 +743,7 @@ export function ThreeViewer({
     }
     viewportMaskStartRef.current = null
     setViewportMaskDraft(null)
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId)
-    } catch {}
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId)
     if (bounds.width < 0.01 || bounds.height < 0.01) return
     setThreeMaskSelection({
       id: `three-viewport-mask-${Date.now()}`,
@@ -760,9 +758,7 @@ export function ThreeViewer({
     e.stopPropagation()
     viewportMaskStartRef.current = null
     setViewportMaskDraft(null)
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId)
-    } catch {}
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId)
   }
 
   // Pointer Event Handlers for Free Orbit, Pan, Dolly, and scene-space selection.
@@ -812,9 +808,7 @@ export function ThreeViewer({
       pointerStartRef.current.button === 0 &&
       Math.hypot(dx, dy) < 4
     isPointerDownRef.current = false
-    try {
-      ;(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId)
-    } catch {}
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId)
     if (shouldPick) selectSceneMaskTarget(e.clientX, e.clientY)
   }
 

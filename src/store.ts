@@ -4616,7 +4616,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const updated = [...s.customWorkspaces, newWs]
       try {
         localStorage.setItem('omniframe.customWorkspaces', JSON.stringify(updated))
-      } catch {}
+      } catch { /* In-memory workspace remains usable when storage is unavailable. */ }
       set({ customWorkspaces: updated })
       return id
     },
@@ -4640,7 +4640,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const updated = get().customWorkspaces.filter((w) => w.id !== id)
       try {
         localStorage.setItem('omniframe.customWorkspaces', JSON.stringify(updated))
-      } catch {}
+      } catch { /* Deletion still applies to the current session. */ }
       set({ customWorkspaces: updated })
     },
     resetLayoutToDefault: () => {

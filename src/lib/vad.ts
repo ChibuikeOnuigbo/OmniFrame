@@ -18,6 +18,9 @@
  */
 
 import type * as OrtTypes from 'onnxruntime-web'
+import { resampleChannels } from './demucs/resample.js'
+import { initNativeDsp, nativeResampleChannels } from './native/dspNative.js'
+import { withModelLoadProgress } from './modelLoadStore.js'
 
 let ortModule: Promise<typeof OrtTypes> | null = null
 /** onnxruntime-web (404 KB minified) is the single biggest JS dependency in
@@ -40,7 +43,6 @@ function loadVadSession(): Promise<OrtTypes.InferenceSession> {
   if (!vadSession) {
     vadSession = (async () => {
       const ort = await loadOrt()
-      const { withModelLoadProgress } = await import('./modelLoadStore.js')
       return await withModelLoadProgress(
         VAD_MODEL_URL,
         { id: 'silero-vad', label: 'Voice activity detector (Silero)' },
@@ -126,10 +128,6 @@ export async function detectSpeech(
  * measures ~70 dB. Same length contract as before: ceil(length / rate).
  */
 export async function renderAtRate(buffer: AudioBuffer, rate: number): Promise<AudioBuffer> {
-  const [{ resampleChannels }, { initNativeDsp, nativeResampleChannels }] = await Promise.all([
-    import('./demucs/resample.js'),
-    import('./native/dspNative.js'),
-  ])
   const inChannels: Float32Array[] = []
   for (let c = 0; c < buffer.numberOfChannels; c++) inChannels.push(buffer.getChannelData(c))
   await initNativeDsp()
