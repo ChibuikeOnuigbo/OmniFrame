@@ -74,3 +74,22 @@ export function effectMaskPolygonPath(ctx: Pick<CanvasRenderingContext2D, 'begin
   }
   ctx.closePath()
 }
+
+/** Draw a closed custom mask with optional Catmull-Rom to Bezier smoothing. */
+export function effectMaskCustomPath(
+  ctx: Pick<CanvasRenderingContext2D, 'beginPath'|'moveTo'|'lineTo'|'bezierCurveTo'|'closePath'>,
+  points: {x:number;y:number}[], width:number,height:number,centerX:number,centerY:number,rotation=0,curve=0,
+):void {
+  if(points.length<3)return
+  const angle=rotation*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle)
+  const pts=points.map(p=>{const dx=p.x*width-centerX*width,dy=p.y*height-centerY*height;return{x:centerX*width+dx*cos-dy*sin,y:centerY*height+dx*sin+dy*cos}})
+  const n=pts.length,t=Math.min(1,Math.max(0,curve))/6
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y)
+  for(let i=0;i<n;i++){
+    const a=pts[i],b=pts[(i+1)%n]
+    if(t){const prev=pts[(i+n-1)%n],next=pts[(i+2)%n]
+      ctx.bezierCurveTo(a.x+(b.x-prev.x)*t,a.y+(b.y-prev.y)*t,b.x-(next.x-a.x)*t,b.y-(next.y-a.y)*t,b.x,b.y)
+    }else ctx.lineTo(b.x,b.y)
+  }
+  ctx.closePath()
+}

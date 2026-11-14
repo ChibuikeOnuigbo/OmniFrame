@@ -1,5 +1,5 @@
 import { blendAt } from '../../src/lib/blendModes.ts'
-import { effectMaskRegions, effectMaskPolygonPath } from '../../src/lib/effectMask.ts'
+import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath } from '../../src/lib/effectMask.ts'
 // Headless renderer that speaks the APP's semantics, not the agent's style:
 // transforms come from CurveEngine.evaluateClipAnimation (the app's own key
 // evaluation), masks are ClipVisualMask shape mattes (centerX/Y, width/height,
@@ -245,14 +245,9 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
     } else if (region.shape === 'custom' && region.points?.length >= 3) {
       sx.restore(); sx.save(); sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
       sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
-      sx.beginPath(); region.points.forEach((point, i) => {
-        const angle = (region.rotation || 0) * Math.PI / 180
-        const dx = point.x * W - cx, dy = point.y * H - cy
-        const x = cx + dx * Math.cos(angle) - dy * Math.sin(angle)
-        const y = cy + dx * Math.sin(angle) + dy * Math.cos(angle)
-        if (i) sx.lineTo(x, y); else sx.moveTo(x, y)
-      }); sx.closePath(); sx.fill()
-    } else { sx.beginPath(); sx.ellipse(0, 0, rw / 2, rh / 2, 0, 0, Math.PI * 2); sx.fill() }
+      effectMaskCustomPath(sx, region.points, W, H, region.centerX, region.centerY, region.rotation, region.curve)
+      sx.fill()
+    } else if (region.shape !== 'custom') { sx.beginPath(); sx.ellipse(0, 0, rw / 2, rh / 2, 0, 0, Math.PI * 2); sx.fill() }
     sx.restore(); mx.drawImage(shape, 0, 0)
   }
   if (mask.inverted) {

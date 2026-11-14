@@ -1,3 +1,10 @@
+## 2026-11-14 — monitor mask drawing and curve smoothing
+
+Effect masks now support click/drag polygon editing, freehand outlines, quarter-guide
+snapping, smooth cubic curves and conversion from a selection. Empty/unfinished
+custom masks stay transparent. Browser and headless renderers use the same curved
+path calculation. See docs/EDITOR_FINISHING_GOAL.md for acceptance and open work.
+
 ## 2026-11-14 — editor finishing goal and View Mask shapes
 
 The working goal and acceptance rules are in docs/EDITOR_FINISHING_GOAL.md. Added

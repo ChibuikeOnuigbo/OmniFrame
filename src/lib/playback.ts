@@ -37,7 +37,7 @@ function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<ty
 }
 import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
 import { mergeFxInstances, fxLocalTime } from './fxInstances'
-import { effectMaskRegions, effectMaskPolygonPath } from './effectMask'
+import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath } from './effectMask'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -441,16 +441,9 @@ export class PreviewEngine {
         sctx.save()
         sctx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
         sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
-        sctx.beginPath()
-        region.points.forEach((point, index) => {
-          const angle = (region.rotation || 0) * Math.PI / 180
-          const dx = point.x * this.width - cx, dy = point.y * this.height - cy
-          const x = cx + dx * Math.cos(angle) - dy * Math.sin(angle)
-          const y = cy + dx * Math.sin(angle) + dy * Math.cos(angle)
-          if (index === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y)
-        })
-        sctx.closePath(); sctx.fill()
-      } else {
+        effectMaskCustomPath(sctx, region.points, this.width, this.height, region.centerX, region.centerY, region.rotation, region.curve)
+        sctx.fill()
+      } else if (region.shape !== 'custom') {
         sctx.beginPath(); sctx.ellipse(0, 0, w / 2, h / 2, 0, 0, Math.PI * 2); sctx.fill()
       }
       sctx.restore()

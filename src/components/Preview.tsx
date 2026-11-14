@@ -27,6 +27,7 @@ import { IconButton } from './ui'
 import { DrawingToolbar } from './DrawingToolbar'
 import { SelectionSubToolBar } from './SelectionSubToolBar'
 import { DrawingCanvasOverlay } from './DrawingCanvasOverlay'
+import { EffectMaskDrawOverlay } from './EffectMaskDrawOverlay'
 import { SlideDock } from './SlideDock'
 import { CollapseChip } from './CollapseChip'
 import { Tooltip } from './Tooltip'
@@ -489,6 +490,7 @@ export function Preview() {
             }}
           />
           <DrawingCanvasOverlay width={canvasW} height={canvasH} />
+          <EffectMaskDrawOverlay width={canvasW} height={canvasH} />
           <DeformationOverlay width={canvasW} height={canvasH} />
 
           {/* Pivot (anchor) handle — Krita armature technique: drag the hinge
