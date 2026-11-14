@@ -37,7 +37,7 @@ function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<ty
 }
 import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
 import { mergeFxInstances, fxLocalTime } from './fxInstances'
-import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath } from './effectMask'
+import { effectMaskRegions, effectMaskPolygonPath, effectMaskCustomPath, tintEffectMaskFeather } from './effectMask'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -450,6 +450,21 @@ export class PreviewEngine {
       mctx.drawImage(shape, 0, 0)
     }
     regions.forEach(paintRegion)
+    if (mask.inverted) {
+      mctx.globalCompositeOperation = 'source-out'
+      mctx.fillStyle = '#fff'; mctx.fillRect(0, 0, matte.width, matte.height)
+      mctx.globalCompositeOperation = 'source-over'
+    }
+    let featherOverlay: ImageData | null = null
+    if (mask.featherOffset || mask.featherTint) {
+      const pixels = mctx.getImageData(0, 0, matte.width, matte.height)
+      const tinted = tintEffectMaskFeather(pixels.data, mask.featherColor, mask.featherTint, mask.featherOffset)
+      if (mask.featherOffset) mctx.putImageData(pixels, 0, 0)
+      if (tinted) {
+        featherOverlay = mctx.createImageData(matte.width, matte.height)
+        featherOverlay.data.set(tinted)
+      }
+    }
     const sctx = scratch.getContext('2d')!
     sctx.save()
     sctx.setTransform(1, 0, 0, 1, 0, 0)
@@ -460,13 +475,12 @@ export class PreviewEngine {
       sctx.clearRect(0, oy, ox, this.height)
       sctx.clearRect(ox + this.width, oy, scratch.width - ox - this.width, this.height)
     }
-    if (mask.inverted) {
-      mctx.globalCompositeOperation = 'source-out'
-      mctx.fillStyle = '#fff'; mctx.fillRect(0, 0, matte.width, matte.height)
-      mctx.globalCompositeOperation = 'source-over'
-      sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
-    } else {
-      sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
+    sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
+    if (featherOverlay) {
+      const overlay = shape.getContext('2d')!
+      overlay.putImageData(featherOverlay, 0, 0)
+      sctx.globalCompositeOperation = 'source-over'
+      sctx.drawImage(shape, ox, oy)
     }
     sctx.restore()
   }

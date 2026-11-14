@@ -934,6 +934,11 @@ export interface ClipAdjustmentMask {
   height: number // 0..1 of sequence height
   feather: number // blur radius in sequence pixels
   inverted: boolean
+  /** Optional edge tint; zero amount preserves ordinary feathering. */
+  featherColor?: string
+  featherTint?: number
+  /** Shift the soft edge toward inside (-1) or outside (+1). */
+  featherOffset?: number
   enabled?: boolean
   regions?: ClipEffectMaskRegion[]
 }

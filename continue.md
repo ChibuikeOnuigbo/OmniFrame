@@ -1,3 +1,10 @@
+## 2026-11-14 — colored effect-mask feather
+
+Effect masks now expose black/white/blue/custom edge color, tint strength and
+inward/outward edge bias. Browser and headless rendering share the alpha/tint math;
+headless pixel and live control checks passed. This optional path uses canvas
+pixel readback; 4K performance profiling remains open. See the finishing goal.
+
 ## 2026-11-14 — Bezier effect-mask handles
 
 Each custom-mask point now supports editable incoming/outgoing handles with preview

@@ -105,3 +105,24 @@ export function effectMaskCustomPath(
   }
   ctx.closePath()
 }
+
+/** Optional colored feather and contour bias. Runs only for masks that request it. */
+export function tintEffectMaskFeather(
+  data: Uint8ClampedArray, color: string | undefined, amount = 0, offset = 0,
+): Uint8ClampedArray | null {
+  const tint = Math.max(0, Math.min(1, amount))
+  const bias = Math.max(-1, Math.min(1, offset))
+  const match = /^#([0-9a-f]{6})$/i.exec(color || '')
+  const overlay = tint && match ? new Uint8ClampedArray(data.length) : null
+  const rgb = match ? [0, 2, 4].map(i => parseInt(match[1].slice(i, i + 2), 16)) : [0, 0, 0]
+  for (let i = 0; i < data.length; i += 4) {
+    const a = data[i + 3] / 255
+    const adjusted = Math.max(0, Math.min(1, a + 2 * bias * a * (1 - a)))
+    if (bias) data[i + 3] = Math.round(adjusted * 255)
+    if (overlay) {
+      overlay[i] = rgb[0]; overlay[i + 1] = rgb[1]; overlay[i + 2] = rgb[2]
+      overlay[i + 3] = Math.round(4 * adjusted * (1 - adjusted) * tint * 255)
+    }
+  }
+  return overlay
+}
