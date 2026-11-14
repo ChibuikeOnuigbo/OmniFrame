@@ -1,5 +1,31 @@
 # OmniFrame adversarial audit state
 
+## Cycle 10 — honest still-image background cutout
+
+- Fixed: the old dialog used a synthetic silhouette, fake progress and an Apply
+  action that only renamed the clip. It now decodes the selected still, previews
+  a real color-edge matte, creates a PNG asset, and replaces only that clip's
+  media reference with an undo snapshot. The original asset remains available.
+- Hardened: a corner-seeded flood removes connected background colors; choke
+  and feather use separable passes with clamped edges. Same-canvas compositing
+  captures source pixels before resizing the destination. Existing source alpha
+  is multiplied by the matte. UI labels now describe the heuristic rather than
+  claiming BiRefNet/MODNet inference or video temporal smoothing.
+- Checks: 36 unit scripts, ten browser smoke flows, typecheck, source lint and
+  build passed. The new live test checked actual preview alpha, solid backdrop,
+  generated-asset alpha, Program PNG subject pixels, undo/redo, `.omni` save and
+  reopen, and same-canvas compositing. A 1024² synthetic matte took 91 ms in
+  Node on this runner; that is not an interactive device benchmark.
+- Remaining: this color-based still-image tool cannot segment complex scenes
+  reliably or process moving video. The Apply path caps its longest edge at
+  2048 px and is synchronous on the main thread; large images may pause input.
+  Undo restores the clip but keeps the generated asset for Redo, so repeated
+  abandoned generations can retain memory. The large main bundle and 277
+  non-high source-scan findings remain. Native desktop builds are unverified.
+- Next pass: add a cancellable worker or chunked pipeline for larger stills,
+  then compare real-world cutout quality against the guided matte workflow.
+  Review generated-asset retention in undo history and profile project memory.
+
 ## Cycle 9 — preview lifetime and source-scan accuracy
 
 - Fixed: a physical pointer click generated duplicate cursor bursts because both

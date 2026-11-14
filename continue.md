@@ -276,3 +276,14 @@ The AST-based JSX-key scan removed two false alarms; 281 lower-severity source
 findings remain. The large main bundle and placeholder background-removal apply
 flow need follow-up; see `AUDIT_STATE.md` Cycle 9. No native build or real-time
 4K claim follows from these checks.
+
+## 2026-11-14 — functional still-image background cutout
+
+The old background-removal modal no longer draws a fake subject or renames a
+clip as a substitute for processing. It now previews the selected still image,
+applies a color-edge matte, stores a transparent PNG asset and updates the clip
+with Undo/Redo. The original asset remains available. A live browser test checks
+alpha pixels, solid replacement, Program PNG subject pixels and `.omni` reopen.
+The full gate passed 36 units, ten browser flows, lint, typecheck and build.
+Video matting, complex backgrounds, images above the 2048 px output cap, native
+builds and the main-bundle size remain open; see `AUDIT_STATE.md` Cycle 10.

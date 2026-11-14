@@ -250,3 +250,13 @@ when removed, and avoid broken image tiles. Live browser checks cover those
 interactions and real video, image and compound clips. The expanded nine-flow
 smoke gate, 35 unit scripts, lint, typecheck and build passed. Remaining work is
 in `AUDIT_STATE.md` Cycle 9.
+
+## 2026-11-14 — real still cutout workflow
+
+Quick Background Cutout now previews actual selected image pixels and applies a
+color-edge alpha matte to a generated PNG asset. The clip change is undoable;
+the source stays in the library. Transparent, solid and blurred backdrops are
+available. The browser checked actual alpha, Program PNG subject pixels,
+Undo/Redo and `.omni` reopen. All 36 unit scripts, ten browser smoke flows,
+lint, typecheck and build passed. Video and complex-scene segmentation remain
+open in `AUDIT_STATE.md` Cycle 10.

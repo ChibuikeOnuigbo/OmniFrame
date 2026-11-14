@@ -413,3 +413,12 @@ filmstrip browser assertion deterministic, and replaced the JSX-key source-scan
 lookahead with an AST check. The final gate passed 35 unit scripts, nine browser
 flows, lint, typecheck and build. The scan retains 281 non-high findings and
 the build retains a large-chunk warning. `AUDIT_STATE.md` records exact risks.
+
+## 2026-11-14 — still cutout replaces placeholder dialog
+
+The selected image is now processed into a real PNG matte asset and linked to
+the timeline clip with an undo snapshot. Preview uses the selected image rather
+than a synthetic silhouette; the context command is limited to image clips and
+describes the heuristic accurately. Ten browser flows, 36 unit scripts, lint,
+typecheck and build passed. The build retains a large-chunk warning; the source
+scan reports 277 non-high findings. See `AUDIT_STATE.md` Cycle 10 for limits.

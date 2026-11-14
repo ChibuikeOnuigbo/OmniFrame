@@ -655,6 +655,8 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   extractAudio: (id: string) => Promise<void>
   selectClip: (id: string | null) => void
   setClipProp: (id: string, partial: Partial<Clip>) => void
+  /** Replace one still clip with a generated cutout asset, preserving undo. */
+  applyStillCutout: (clipId: string, result: { url: string; width: number; height: number; size: number }) => string | null
   setClipTransform: (id: string, partial: Partial<ClipTransform>) => void
   setClipBlend: (id: string, mode: string, time?: number) => void
   toggleTrackMute: (id: string) => void
@@ -3151,6 +3153,35 @@ export const useEditor = create<EditorState>((set, get) => {
 
     setClipProp: (id, partial) => {
       set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...partial } : c)) }))
+    },
+    applyStillCutout: (clipId, result) => {
+      const clip = get().clips.find((item) => item.id === clipId)
+      const source = clip && get().assets.find((item) => item.id === clip.assetId)
+      if (!clip || clip.kind !== 'image' || !source || source.kind !== 'image' ||
+          !result.url.startsWith('data:image/png;base64,') ||
+          !Number.isFinite(result.width) || !Number.isFinite(result.height) ||
+          !Number.isFinite(result.size) ||
+          result.width <= 0 || result.height <= 0) return null
+      const id = uid('cutout')
+      const generated: MediaAsset = {
+        id,
+        name: `${source.name.replace(/\.[^.]+$/, '')} cutout.png`,
+        kind: 'image',
+        url: result.url,
+        duration: source.duration,
+        width: result.width,
+        height: result.height,
+        size: Math.max(0, Math.floor(result.size)),
+        thumbnail: result.url,
+      }
+      pushSnapshot()
+      set((s) => ({
+        assets: [...s.assets, generated],
+        clips: s.clips.map((item) => item.id === clipId
+          ? { ...item, assetId: id, name: `${item.name} Cutout` }
+          : item),
+      }))
+      return id
     },
 
     // ---- Clip Mask (CapCut/AE-style visibility mask; undoable) ----

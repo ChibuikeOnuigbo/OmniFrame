@@ -1026,7 +1026,7 @@ export function TopBar() {
                       { id: 'add-transition', label: 'Add Transition', shortcut: '', desc: 'Cross dissolve or wipe' },
                       { id: 'separate-audio', label: 'Separate Audio', shortcut: '', desc: 'Extract audio to new track' },
                       { id: 'isolate-voice', label: 'Voice Isolation', shortcut: '', desc: 'Vocal / Instrumental separation' },
-                      { id: 'remove-bg-modal', label: 'AI Background Removal', shortcut: '', desc: 'Segment character foreground' },
+                      { id: 'remove-bg-modal', label: 'Quick Background Cutout', shortcut: '', desc: 'Remove a still image backdrop' },
                       { id: 'compound-clip', label: 'Compound Sequence', shortcut: 'Ctrl+G', desc: 'Group or decompose clips' },
                       { id: 'hide-toggle', label: 'Hide / Unhide Clip', shortcut: 'H', desc: 'Toggle clip visibility' },
                       { id: 'delete', label: 'Delete Clip', shortcut: 'Delete', desc: 'Remove clip from sequence' },

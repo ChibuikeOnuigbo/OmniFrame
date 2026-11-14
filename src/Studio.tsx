@@ -378,10 +378,10 @@ export default function Studio() {
               ],
             },
           ] : []),
-          ...(contextMenu.type === 'VIDEO_CLIP' || contextMenu.type === 'IMAGE_CLIP' ? [
+          ...(contextMenu.type === 'IMAGE_CLIP' ? [
             {
               id: 'remove-bg-modal',
-              label: 'AI Background Removal…',
+              label: 'Quick Background Cutout…',
               icon: ImageOff,
               run: () => {
                 setBgModalClipId(contextMenu.clip.id)

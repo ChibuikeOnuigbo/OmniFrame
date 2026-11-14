@@ -1,25 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   Sparkles,
-  Cpu,
-  Layers,
-  Sliders,
   CheckCircle2,
   X,
-  Play,
   RefreshCw,
-  Image as ImageIcon,
-  Palette,
   Eye,
 } from 'lucide-react'
 import { useEditor } from '../store'
-import type { BgRemovalModelId, BgRemovalOptions, BgRemovalJob } from '../types'
+import type { BgRemovalModelId, BgRemovalOptions } from '../types'
 import {
-  detectHardwareAcceleration,
   generateMattingMask,
   compositeCutout,
-  type HardwareSupport,
 } from '../lib/bgRemovalEngine'
+
+function renderStillCutout(image: HTMLImageElement, options: BgRemovalOptions, maxEdge: number) {
+  const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight))
+  const source = document.createElement('canvas')
+  source.width = Math.max(1, Math.round(image.naturalWidth * scale))
+  source.height = Math.max(1, Math.round(image.naturalHeight * scale))
+  const sourceContext = source.getContext('2d', { willReadFrequently: true })
+  if (!sourceContext) throw new Error('Canvas processing is unavailable')
+  sourceContext.drawImage(image, 0, 0, source.width, source.height)
+  const pixels = sourceContext.getImageData(0, 0, source.width, source.height)
+  const mask = generateMattingMask(pixels, options.modelId, options)
+  const output = document.createElement('canvas')
+  compositeCutout(source, mask, options, output)
+  return output
+}
 
 interface Props {
   isOpen: boolean
@@ -30,17 +37,10 @@ interface Props {
 export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
   const clips = useEditor((s) => s.clips)
   const assets = useEditor((s) => s.assets)
-  const setClipProp = useEditor((s) => s.setClipProp)
-
-  const activeClip = clips.find((c) => c.id === clipId) || clips[0]
+  const applyStillCutout = useEditor((s) => s.applyStillCutout)
+  const selectedClipId = useEditor((s) => s.selectedClipId)
+  const activeClip = clips.find((c) => c.id === (clipId || selectedClipId)) || null
   const asset = activeClip ? assets.find((a) => a.id === activeClip.assetId) : null
-
-  const [hardware, setHardware] = useState<HardwareSupport>({
-    webgpu: false,
-    wasmSimd: true,
-    webgl2: true,
-    backend: 'wasm',
-  })
 
   const [modelId, setModelId] = useState<BgRemovalModelId>('birefnet-general')
   const [bgMode, setBgMode] = useState<'transparent' | 'solid' | 'blur'>('transparent')
@@ -48,114 +48,72 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
   const [blurRadius, setBlurRadius] = useState(12)
   const [featherRadius, setFeatherRadius] = useState(2)
   const [chokeExpand, setChokeExpand] = useState(0)
-  const [temporalSmoothing, setTemporalSmoothing] = useState(true)
-
   const [isProcessing, setIsProcessing] = useState(false)
-  const [progress, setProgress] = useState(0)
   const [previewGenerated, setPreviewGenerated] = useState(false)
+  const [sourceImage, setSourceImage] = useState<HTMLImageElement | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const previewCanvasRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
-    detectHardwareAcceleration().then(setHardware)
-  }, [])
+    setSourceImage(null)
+    setPreviewGenerated(false)
+    setError(null)
+    if (!isOpen || !asset || asset.kind !== 'image' || activeClip?.kind !== 'image') return
+    let cancelled = false
+    const image = new Image()
+    image.crossOrigin = 'anonymous'
+    image.onload = () => { if (!cancelled) setSourceImage(image) }
+    image.onerror = () => { if (!cancelled) setError('Could not load this image for cutout') }
+    image.src = asset.url
+    return () => { cancelled = true }
+  }, [isOpen, asset?.id, asset?.url, activeClip?.kind])
+
+  const options: BgRemovalOptions = { modelId, mode: bgMode, solidColor, blurRadius, featherRadius, chokeExpand }
 
   useEffect(() => {
-    if (!isOpen) {
-      setIsProcessing(false)
-      setProgress(0)
-      setPreviewGenerated(false)
-    }
-  }, [isOpen])
-
-  // Generate a live preview frame when modal is open
-  useEffect(() => {
-    if (!isOpen || !previewCanvasRef.current) return
+    if (!isOpen || !sourceImage || !previewCanvasRef.current) return
     const canvas = previewCanvasRef.current
-    canvas.width = 320
-    canvas.height = 180
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    // Draw placeholder preview or video frame
-    const grad = ctx.createLinearGradient(0, 0, 320, 180)
-    grad.addColorStop(0, '#1e1b4b')
-    grad.addColorStop(1, '#312e81')
-    ctx.fillStyle = grad
-    ctx.fillRect(0, 0, 320, 180)
-
-    // Draw synthetic subject silhouette
-    ctx.fillStyle = '#f87171'
-    ctx.beginPath()
-    ctx.arc(160, 80, 35, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.beginPath()
-    ctx.ellipse(160, 140, 50, 40, 0, 0, Math.PI * 2)
-    ctx.fill()
-
-    if (previewGenerated) {
-      const imgData = ctx.getImageData(0, 0, 320, 180)
-      const mask = generateMattingMask(imgData, modelId, {
-        modelId,
-        mode: bgMode,
-        solidColor,
-        blurRadius,
-        featherRadius,
-        chokeExpand,
-        temporalSmoothing,
-      })
-
-      compositeCutout(
-        canvas,
-        mask,
-        {
-          modelId,
-          mode: bgMode,
-          solidColor,
-          blurRadius,
-          featherRadius,
-          chokeExpand,
-          temporalSmoothing,
-        },
-        canvas
-      )
+    try {
+      const output = previewGenerated
+        ? renderStillCutout(sourceImage, options, 480)
+        : sourceImage
+      canvas.width = previewGenerated ? (output as HTMLCanvasElement).width : Math.min(480, sourceImage.naturalWidth)
+      canvas.height = previewGenerated ? (output as HTMLCanvasElement).height
+        : Math.max(1, Math.round(sourceImage.naturalHeight * canvas.width / sourceImage.naturalWidth))
+      canvas.getContext('2d')?.drawImage(output, 0, 0, canvas.width, canvas.height)
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause))
     }
-  }, [isOpen, modelId, bgMode, solidColor, blurRadius, featherRadius, chokeExpand, previewGenerated])
+  }, [isOpen, sourceImage, modelId, bgMode, solidColor, blurRadius, featherRadius, chokeExpand, previewGenerated])
 
   if (!isOpen) return null
 
-  const handleRunProcessing = async () => {
-    setIsProcessing(true)
-    setProgress(0)
-
-    for (let p = 10; p <= 100; p += 15) {
-      await new Promise((r) => setTimeout(r, 80))
-      setProgress(p)
-    }
-
+  const handleRunProcessing = () => {
+    if (!sourceImage) return
+    setError(null)
     setPreviewGenerated(true)
-    setIsProcessing(false)
   }
 
-  const handleApplyCutout = () => {
-    if (!activeClip) return
-    // Tag clip with background removal properties
-    setClipProp(activeClip.id, {
-      name: `${activeClip.name} (Cutout)`,
-    })
-    onClose()
-  }
-
-  const handleUseAsSelectionMask = () => {
-    if (!activeClip) return
-    const st = useEditor.getState()
-    st.setActiveSelection({
-      type: 'character',
-      bounds: { x: 0.15, y: 0.15, width: 0.7, height: 0.7 },
-      showMaskOnly: true,
-      maskDisplayMode: 'rubylith',
-    })
-    onClose()
+  const handleApplyCutout = async () => {
+    if (!activeClip || !sourceImage || isProcessing) return
+    setIsProcessing(true)
+    setError(null)
+    try {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+      const output = renderStillCutout(sourceImage, options, 2048)
+      const url = output.toDataURL('image/png')
+      const id = applyStillCutout(activeClip.id, {
+        url, width: output.width, height: output.height,
+        size: Math.floor((url.length - 'data:image/png;base64,'.length) * 0.75),
+      })
+      if (!id) throw new Error('The selected still clip is no longer available')
+      onClose()
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause))
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
@@ -171,13 +129,9 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               <Sparkles size={16} />
             </div>
             <div>
-              <h3 className="font-semibold text-white text-sm">AI Background Removal & Matting</h3>
+              <h3 className="font-semibold text-white text-sm">Quick Background Cutout</h3>
               <div className="flex items-center gap-1.5 text-[11px] text-ink-400">
-                <Cpu size={11} className="text-emerald-400" />
-                <span>Backend:</span>
-                <span className="font-mono text-emerald-300 font-semibold uppercase">
-                  {hardware.backend} {hardware.webgpu ? '(WebGPU Native)' : '(WASM SIMD)'}
-                </span>
+                <span>Color-edge matte for still images</span>
               </div>
             </div>
           </div>
@@ -193,17 +147,17 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
 
         {/* Body */}
         <div className="p-5 space-y-4 overflow-y-auto flex-1">
-          {/* Model Selector */}
+          {/* Detection profile */}
           <div>
             <label className="block text-[11px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
-              Segmentation Model
+              Edge Sensitivity
             </label>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { id: 'birefnet-general', title: 'BiRefNet General', desc: 'Ultra-fine hair & edge detail' },
-                { id: 'modnet-photographic', title: 'MODNet Portrait', desc: 'Fast human/person matting' },
-                { id: 'isnet-anime', title: 'ISNet Graphic', desc: 'Anime, cartoon & illustration' },
-                { id: 'slimsam-fast', title: 'SlimSAM Interactive', desc: 'Low-latency interactive segmentation' },
+                { id: 'modnet-photographic', title: 'Tight', desc: 'Keep more edge detail' },
+                { id: 'birefnet-general', title: 'Balanced', desc: 'Good starting point' },
+                { id: 'isnet-anime', title: 'Wide', desc: 'Remove more backdrop' },
+                { id: 'slimsam-fast', title: 'Widest', desc: 'For uneven backdrops' },
               ].map((m) => (
                 <button
                   key={m.id}
@@ -228,18 +182,17 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
             <label className="block text-[11px] font-semibold text-ink-400 uppercase tracking-wider mb-1.5">
               Replacement Mode
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {[
                 { id: 'transparent', label: 'Transparent Alpha' },
                 { id: 'solid', label: 'Solid Color' },
-                { id: 'blur', label: 'Bokeh Blur' },
-                { id: 'mask', label: 'Show Mask (Layer Mode)' },
+                { id: 'blur', label: 'Blur Backdrop' },
               ].map((b) => (
                 <button
                   key={b.id}
                   type="button"
                   data-testid={`bg-mode-${b.id}`}
-                  onClick={() => setBgMode(b.id as any)}
+                  onClick={() => setBgMode(b.id as 'transparent' | 'solid' | 'blur')}
                   className={`py-2 px-2 rounded-xl border text-center text-xs capitalize font-medium transition-colors ${
                     bgMode === b.id
                       ? 'border-brand bg-brand/20 text-white'
@@ -331,16 +284,6 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               />
             </div>
 
-            <label className="flex items-center gap-2 pt-1 text-[11px] text-ink-300 cursor-pointer">
-              <input
-                type="checkbox"
-                data-testid="bg-temporal-smoothing-toggle"
-                checked={temporalSmoothing}
-                onChange={(e) => setTemporalSmoothing(e.target.checked)}
-                className="rounded border-ink-700 bg-ink-800 text-brand-400"
-              />
-              <span>Multi-Frame Temporal Smoothing (Reduces edge chatter)</span>
-            </label>
           </div>
 
           {/* Preview Canvas */}
@@ -353,7 +296,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
               {isProcessing && (
                 <div className="absolute inset-0 bg-ink-950/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2">
                   <RefreshCw size={24} className="animate-spin text-brand-400" />
-                  <span className="text-xs font-mono text-white">Segmenting frames... {progress}%</span>
+                  <span className="text-xs font-mono text-white">Processing image…</span>
                 </div>
               )}
             </div>
@@ -364,7 +307,9 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
             data-testid="bg-removal-mask-scope-note"
             className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-3 py-2 text-[11px] leading-relaxed text-ink-300"
           >
-            This uses the selected bounds as an editing selection; it does not carry the AI preview matte or change the clip/export. For a real alpha matte, run Guided Background Removal, then apply its result to a Drawing paint layer.
+            {error || (asset?.kind === 'image' && activeClip?.kind === 'image'
+              ? 'Applies a color-edge matte to this still clip at up to 2048 px. The original stays in the library; Undo restores the clip. Complex backgrounds may need Guided Background Removal.'
+              : 'Select an image clip to make a cutout. Video requires frame-by-frame matting in the Roto tools.')}
           </p>
         </div>
 
@@ -373,7 +318,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
           <button
             type="button"
             data-testid="preview-bg-removal-btn"
-            disabled={isProcessing}
+            disabled={isProcessing || !sourceImage}
             onClick={handleRunProcessing}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-ink-700 bg-ink-800 hover:bg-ink-700 text-ink-200 text-xs font-medium disabled:opacity-40"
           >
@@ -382,18 +327,6 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
           </button>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              data-testid="apply-mask-layer-btn"
-              disabled={isProcessing}
-              onClick={handleUseAsSelectionMask}
-              aria-label="Use background-removal bounds as a temporary selection mask"
-              className="flex min-h-8 items-center gap-1.5 rounded-lg border border-brand/50 bg-brand/20 px-3 py-1.5 text-xs font-medium text-brand-400 transition-colors hover:bg-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-              title="Use the selected bounds as a temporary selection; the generated AI matte is not applied by this action"
-            >
-              <Layers size={13} />
-              <span>Use as Selection Mask</span>
-            </button>
             <button
               type="button"
               data-testid="cancel-bg-removal-btn"
@@ -405,7 +338,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
             <button
               type="button"
               data-testid="apply-bg-removal-btn"
-              disabled={isProcessing}
+              disabled={isProcessing || !sourceImage}
               onClick={handleApplyCutout}
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-brand hover:bg-brand/90 text-white font-medium text-xs shadow-md shadow-brand/20 disabled:opacity-40"
             >
