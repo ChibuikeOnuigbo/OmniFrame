@@ -60,3 +60,17 @@ export function nextEffectMaskRegion(
       : undefined,
   }
 }
+
+/** Path centered on the region origin; caller supplies canvas transform and fill. */
+export function effectMaskPolygonPath(ctx: Pick<CanvasRenderingContext2D, 'beginPath' | 'moveTo' | 'lineTo' | 'closePath'>, shape: 'star' | 'hexagon', width: number, height: number): void {
+  const vertices = shape === 'star' ? 10 : 6
+  ctx.beginPath()
+  for (let i = 0; i < vertices; i++) {
+    const angle = -Math.PI / 2 + i * Math.PI * 2 / vertices
+    const radius = shape === 'star' && i % 2 ? 0.43 : 1
+    const x = Math.cos(angle) * width * radius / 2
+    const y = Math.sin(angle) * height * radius / 2
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
+  }
+  ctx.closePath()
+}

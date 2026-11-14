@@ -37,7 +37,7 @@ function evalClipPfx(clip: import('../types').Clip, time: number): ReturnType<ty
 }
 import { pfxLocalTime, pfxShake, pfxEchoTimes, pfxMotionBlurSamples , pfxOscillate } from './proceduralFx'
 import { mergeFxInstances, fxLocalTime } from './fxInstances'
-import { effectMaskRegions } from './effectMask'
+import { effectMaskRegions, effectMaskPolygonPath } from './effectMask'
 import { remapClipLocal } from './speedCurves'
 import { useEditor } from '../store'
 import type { Clip, ClipAdjustmentMask, ClipEffect, ClipVisualMask, MediaAsset, RigPart, RigResolvedPart, Track, Transition } from '../types'
@@ -431,6 +431,7 @@ export class PreviewEngine {
       sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
       if (region.shape === 'rectangle') sctx.fillRect(-w / 2, -h / 2, w, h)
       else if (region.shape === 'split') { const reach = Math.hypot(this.width, this.height) * 3; sctx.fillRect(0, -reach, reach, reach * 2) }
+      else if (region.shape === 'star' || region.shape === 'hexagon') { effectMaskPolygonPath(sctx, region.shape, w, h); sctx.fill() }
       else if (region.shape === 'text') {
         sctx.font = `700 ${Math.max(8, h)}px ${region.fontFamily || 'sans-serif'}`
         sctx.textAlign = 'center'; sctx.textBaseline = 'middle'

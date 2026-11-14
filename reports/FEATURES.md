@@ -1,3 +1,10 @@
+## 2026-11-14 — editor finishing goal and View Mask shapes
+
+The working goal and acceptance rules are in docs/EDITOR_FINISHING_GOAL.md. Added
+star and hexagon effect masks through shared browser/headless path geometry, plus
+text font selection and editable polygon point coordinates. Further handwriting,
+interactive mask drawing and physics effects remain open.
+
 ## 2026-11-14 — OpenCV acceptance and Draw on
 
 The full onion-skin export test passed with project-local OpenCV: 124 decoded

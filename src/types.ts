@@ -906,7 +906,7 @@ export interface ClipAdjustment {
 /** One additive region in an effect-only matte, in normalized sequence coordinates. */
 export interface ClipEffectMaskRegion {
   id: string
-  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom' | 'split'
+  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom' | 'split' | 'star' | 'hexagon'
   centerX: number
   centerY: number
   width: number
@@ -925,7 +925,7 @@ export interface ClipEffectMaskRegion {
  * single-shape fields remain readable so existing projects round-trip.
  */
 export interface ClipAdjustmentMask {
-  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom' | 'split'
+  shape: 'ellipse' | 'rectangle' | 'circle' | 'text' | 'custom' | 'split' | 'star' | 'hexagon'
   centerX: number // 0..1, left to right
   centerY: number // 0..1, top to bottom
   width: number // 0..1 of sequence width

@@ -1,5 +1,5 @@
 import { blendAt } from '../../src/lib/blendModes.ts'
-import { effectMaskRegions } from '../../src/lib/effectMask.ts'
+import { effectMaskRegions, effectMaskPolygonPath } from '../../src/lib/effectMask.ts'
 // Headless renderer that speaks the APP's semantics, not the agent's style:
 // transforms come from CurveEngine.evaluateClipAnimation (the app's own key
 // evaluation), masks are ClipVisualMask shape mattes (centerX/Y, width/height,
@@ -238,6 +238,7 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
     sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
     if (region.shape === 'rectangle') sx.fillRect(-rw / 2, -rh / 2, rw, rh)
     else if (region.shape === 'split') { const reach = Math.hypot(W, H) * 3; sx.fillRect(0, -reach, reach, reach * 2) }
+    else if (region.shape === 'star' || region.shape === 'hexagon') { effectMaskPolygonPath(sx, region.shape, rw, rh); sx.fill() }
     else if (region.shape === 'text') {
       sx.font = `700 ${Math.max(8, rh)}px ${region.fontFamily || 'sans-serif'}`
       sx.textAlign = 'center'; sx.textBaseline = 'middle'; sx.fillText(region.text || 'MASK', 0, 0, rw)
