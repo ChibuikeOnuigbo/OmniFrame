@@ -1,3 +1,10 @@
+## 2026-11-14 — Bezier effect-mask handles
+
+Each custom-mask point now supports editable incoming/outgoing handles with preview
+overlays, reset control and shared browser/headless cubic geometry. The mask pixel
+check compares the same polygon with and without handles; live drag/reset tested.
+See docs/EDITOR_FINISHING_GOAL.md for remaining tasks.
+
 ## 2026-11-14 — monitor mask drawing and curve smoothing
 
 Effect masks now support click/drag polygon editing, freehand outlines, quarter-guide

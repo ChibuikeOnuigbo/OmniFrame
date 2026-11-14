@@ -32,3 +32,6 @@ console.log('PASS incomplete drawn masks remain transparent until third point')
 const curveImage=curve=>{const c=makeCanvas(100,100),x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,100,100);applyEffectMaskK(x,{enabled:true,inverted:false,regions:[{id:'curve',shape:'custom',centerX:.5,centerY:.5,width:1,height:1,rotation:0,feather:0,opacity:1,curve,points:[{x:.5,y:.1},{x:.9,y:.8},{x:.1,y:.8}]}]},100,100);return Buffer.from(x.getImageData(0,0,100,100).data)}
 assert.notDeepEqual(curveImage(0),curveImage(1))
 console.log('PASS custom mask curve changes rendered geometry')
+const handled=(useHandles)=>{const c=makeCanvas(100,100),x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,100,100);applyEffectMaskK(x,{enabled:true,inverted:false,regions:[{id:'handles',shape:'custom',centerX:.5,centerY:.5,width:1,height:1,feather:0,opacity:1,curve:0,points:[{x:.2,y:.2,...(useHandles?{outHandle:{x:.9,y:.05}}:{})},{x:.8,y:.2,...(useHandles?{inHandle:{x:.1,y:.05}}:{})},{x:.5,y:.8}]}]},100,100);return Buffer.from(x.getImageData(0,0,100,100).data)}
+assert.notDeepEqual(handled(true),handled(false))
+console.log('PASS individually edited Bezier handles change masked pixels')

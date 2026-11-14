@@ -916,7 +916,7 @@ export interface ClipEffectMaskRegion {
   opacity?: number
   text?: string
   fontFamily?: string
-  points?: { x: number; y: number }[]
+  points?: { x: number; y: number; inHandle?: {x:number;y:number}; outHandle?: {x:number;y:number} }[]
   /** Smoothness of a custom polygon path, 0 = straight edges, 1 = cubic curve. */
   curve?: number
 }

@@ -15,7 +15,8 @@ its intended visual result on real footage.
   and numeric polygon point editing.
 - [x] Draw polygon and freehand effect masks on the program monitor; drag points,
   snap to quarter guides and smooth outlines with an adjustable cubic curve.
-- [ ] Add individual Bezier handles and Krita-style assistants/rulers for precise curves.
+- [x] Add individually draggable Bezier handles with reset and shared preview/export geometry.
+- [ ] Add Krita-style perspective/curve assistants and rulers for precise drawing.
 - [ ] Color/offset feather controls with verified alpha and color output.
 - [ ] Text handwriting reveal with editable glyph paths and a useful preset set.
 - [ ] Card flip and hologram families with different motion, controls and test renders.
@@ -38,3 +39,7 @@ passed. Visual acceptance of all variants remains open.
 curve smoothing and conversion from an existing selection passed a live browser
 flow. Headless pixel checks cover open paths (0–2 points), cubic smoothing and
 completed masks. Editable per-point Bezier handles are still open.
+
+14 November Bezier check: independent incoming/outgoing handles change rendered
+mask pixels compared with the same straight polygon, drag and reset pass in the
+live editor. Colored feather and the larger effect families remain open.
