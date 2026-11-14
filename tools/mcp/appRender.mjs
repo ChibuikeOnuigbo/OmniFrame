@@ -225,15 +225,18 @@ export function applyShapeMatte(x, mask, W, H) {
 export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
   const regions = effectMaskRegions(mask)
   if (!regions.length) return
-  const matte = makeCanvas(W, H)
+  const frameBounds = mask.inverted ? { x: 0, y: 0, width: W, height: H } : effectMaskFeatherBounds(regions, W, H)
+  const matte = makeCanvas(frameBounds.width, frameBounds.height)
   const mx = matte.getContext('2d')
   for (const region of regions) {
-    const shape = makeCanvas(W, H)
+    // Match playback's local shape surface while preserving full-frame matte composition.
+    const bounds = effectMaskFeatherBounds([region], W, H)
+    const shape = makeCanvas(bounds.width, bounds.height)
     const sx = shape.getContext('2d')
     const cx = region.centerX * W, cy = region.centerY * H
     const rw = Math.max(1, region.width * W)
     const rh = Math.max(1, (region.shape === 'circle' ? region.width * W : region.height * H))
-    sx.save(); sx.translate(cx, cy); sx.rotate((region.rotation || 0) * Math.PI / 180)
+    sx.save(); sx.translate(-bounds.x, -bounds.y); sx.translate(cx, cy); sx.rotate((region.rotation || 0) * Math.PI / 180)
     sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
     sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
     if (region.shape === 'rectangle') sx.fillRect(-rw / 2, -rh / 2, rw, rh)
@@ -243,27 +246,27 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
       sx.font = `700 ${Math.max(8, rh)}px ${region.fontFamily || 'sans-serif'}`
       sx.textAlign = 'center'; sx.textBaseline = 'middle'; sx.fillText(region.text || 'MASK', 0, 0, rw)
     } else if (region.shape === 'custom' && region.points?.length >= 3) {
-      sx.restore(); sx.save(); sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
+      sx.restore(); sx.save(); sx.translate(-bounds.x, -bounds.y); sx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
       sx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
       effectMaskCustomPath(sx, region.points, W, H, region.centerX, region.centerY, region.rotation, region.curve)
       sx.fill()
     } else if (region.shape !== 'custom') { sx.beginPath(); sx.ellipse(0, 0, rw / 2, rh / 2, 0, 0, Math.PI * 2); sx.fill() }
-    sx.restore(); mx.drawImage(shape, 0, 0)
+    sx.restore(); mx.drawImage(shape, bounds.x - frameBounds.x, bounds.y - frameBounds.y)
   }
   if (mask.inverted) {
     mx.globalCompositeOperation = 'source-out'; mx.fillStyle = '#fff'; mx.fillRect(0, 0, matte.width, matte.height); mx.globalCompositeOperation = 'source-over'
   }
-  let featherOverlay = null, featherX = 0, featherY = 0
+  let featherOverlay = null, tintBounds = frameBounds
   if (mask.featherOffset || mask.featherTint) {
-    const bounds = effectMaskFeatherBounds(regions, W, H)
-    const pixels = mx.getImageData(bounds.x, bounds.y, bounds.width, bounds.height)
+    if (mask.inverted) tintBounds = effectMaskFeatherBounds(regions, W, H)
+    const localX = tintBounds.x - frameBounds.x, localY = tintBounds.y - frameBounds.y
+    const pixels = mx.getImageData(localX, localY, tintBounds.width, tintBounds.height)
     const tint = tintEffectMaskFeather(pixels.data, mask.featherColor, mask.featherTint, mask.featherOffset)
-    if (mask.featherOffset) mx.putImageData(pixels, bounds.x, bounds.y)
+    if (mask.featherOffset) mx.putImageData(pixels, localX, localY)
     if (tint) {
-      featherOverlay = makeCanvas(bounds.width, bounds.height)
-      const fx = featherOverlay.getContext('2d'), image = fx.createImageData(bounds.width, bounds.height)
+      featherOverlay = makeCanvas(tintBounds.width, tintBounds.height)
+      const fx = featherOverlay.getContext('2d'), image = fx.createImageData(tintBounds.width, tintBounds.height)
       image.data.set(tint); fx.putImageData(image, 0, 0)
-      featherX = bounds.x; featherY = bounds.y
     }
   }
   x.save()
@@ -273,7 +276,16 @@ export function applyEffectMaskK(x, mask, W, H, ox = 0, oy = 0) {
     x.clearRect(0, oy, ox, H)
     x.clearRect(ox + W, oy, x.canvas.width - ox - W, H)
   }
-  x.globalCompositeOperation = 'destination-in'; x.drawImage(matte, ox, oy); if (featherOverlay) { x.globalCompositeOperation = 'source-over'; x.drawImage(featherOverlay, ox + featherX, oy + featherY) } x.restore()
+  if (!mask.inverted) {
+    x.clearRect(ox, oy, frameBounds.x, H)
+    x.clearRect(ox + frameBounds.x + frameBounds.width, oy, W - frameBounds.x - frameBounds.width, H)
+    x.clearRect(ox + frameBounds.x, oy, frameBounds.width, frameBounds.y)
+    x.clearRect(ox + frameBounds.x, oy + frameBounds.y + frameBounds.height,
+      frameBounds.width, H - frameBounds.y - frameBounds.height)
+  }
+  x.globalCompositeOperation = 'destination-in'; x.drawImage(matte, ox + frameBounds.x, oy + frameBounds.y)
+  if (featherOverlay) { x.globalCompositeOperation = 'source-over'; x.drawImage(featherOverlay, ox + tintBounds.x, oy + tintBounds.y) }
+  x.restore()
 }
 
 const PU = await loadAppTs('src/lib/patchUnder.ts')

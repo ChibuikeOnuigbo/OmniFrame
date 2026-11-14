@@ -12,6 +12,19 @@ assert.equal(plain[0],255)
 assert(blue[2]>blue[0]+150,`blue feather ${blue}`)
 assert(inside[3]<plain[3]&&plain[3]<outside[3],`offset alpha ${inside[3]} < ${plain[3]} < ${outside[3]}`)
 console.log('PASS colored feather and biased soft edge pixels')
+// A bounded matte must clear the whole frame outside two disjoint regions.
+const multi=makeCanvas(200,100),multiCtx=multi.getContext('2d')
+multiCtx.fillStyle='#fff';multiCtx.fillRect(0,0,200,100)
+applyEffectMaskK(multiCtx,{enabled:true,inverted:false,regions:[
+ {id:'left',shape:'circle',centerX:.2,centerY:.5,width:.1,height:.1,feather:0,opacity:1},
+ {id:'right',shape:'circle',centerX:.8,centerY:.5,width:.1,height:.1,feather:0,opacity:1},
+]},200,100)
+const alphaAt=x=>multiCtx.getImageData(x,50,1,1).data[3]
+assert.equal(alphaAt(0),0)
+assert.equal(alphaAt(100),0)
+assert.equal(alphaAt(199),0)
+assert.equal(alphaAt(40),255)
+assert.equal(alphaAt(160),255)
 // Small deterministic comparison for human review; generated entirely by the renderer.
 const sheet=makeCanvas(900,300),sh=sheet.getContext('2d')
 sh.fillStyle='#1a2232';sh.fillRect(0,0,900,300)

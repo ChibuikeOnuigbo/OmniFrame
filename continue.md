@@ -1,5 +1,16 @@
 ## 2026-11-14 — bounded 4K feather work
 
+Ordinary effect masks now use a bounded union matte and clear the remainder of
+the frame. The same 4K headless sample takes 325–374 ms/frame and about 381 MiB
+RSS; seven mask layouts matched prior pixels at 512×384. Inverted masks keep a
+full-frame matte. Real-time 4K and browser/GPU timing remain open.
+An inverted 4K sample took 501–954 ms/frame; its tint readback remains local.
+
+Temporary effect-mask shape canvases now use only each region's bounds in browser
+and headless rendering. The same 4K headless sample now takes 459–645 ms/frame
+and about 542 MiB RSS. Four shape cases matched previous pixels at 512×384.
+Real-time 4K remains open.
+
 Browser and headless renderers now restrict optional mask tint/offset pixel work
 to the affected region. A 3840×2160 headless sample improved from 842–1071 to
 690–833 ms/frame, with RSS falling from about 975 to 684 MiB. Three mask cases

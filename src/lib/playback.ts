@@ -408,15 +408,20 @@ export class PreviewEngine {
     if (!this.effectMaskShapeCanvas) this.effectMaskShapeCanvas = document.createElement('canvas')
     const matte = this.effectMaskMatteCanvas
     const shape = this.effectMaskShapeCanvas
-    for (const canvas of [matte, shape]) {
-      if (canvas.width !== this.width) canvas.width = this.width
-      if (canvas.height !== this.height) canvas.height = this.height
-    }
+    const frameBounds = mask.inverted
+      ? { x: 0, y: 0, width: this.width, height: this.height }
+      : effectMaskFeatherBounds(regions, this.width, this.height)
+    if (matte.width !== frameBounds.width) matte.width = frameBounds.width
+    if (matte.height !== frameBounds.height) matte.height = frameBounds.height
     const mctx = matte.getContext('2d')!
     mctx.setTransform(1, 0, 0, 1, 0, 0); mctx.clearRect(0, 0, matte.width, matte.height)
     const ox = Math.max(0, (scratch.width - this.width) / 2)
     const oy = Math.max(0, (scratch.height - this.height) / 2)
     const paintRegion = (region: (typeof regions)[number]) => {
+      // Blur in a local surface; only the union matte needs the full frame.
+      const bounds = effectMaskFeatherBounds([region], this.width, this.height)
+      if (shape.width !== bounds.width) shape.width = bounds.width
+      if (shape.height !== bounds.height) shape.height = bounds.height
       const sctx = shape.getContext('2d')!
       sctx.setTransform(1, 0, 0, 1, 0, 0)
       sctx.filter = 'none'; sctx.globalAlpha = 1; sctx.globalCompositeOperation = 'source-over'
@@ -426,6 +431,7 @@ export class PreviewEngine {
       const w = Math.max(1, (region.shape === 'circle' ? region.width : region.width) * this.width)
       const h = Math.max(1, (region.shape === 'circle' ? region.width * this.width : region.height * this.height))
       sctx.save()
+      sctx.translate(-bounds.x, -bounds.y)
       sctx.translate(cx, cy)
       sctx.rotate(((region.rotation || 0) * Math.PI) / 180)
       sctx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
@@ -440,6 +446,7 @@ export class PreviewEngine {
       } else if (region.shape === 'custom' && region.points?.length && region.points.length >= 3) {
         sctx.restore()
         sctx.save()
+        sctx.translate(-bounds.x, -bounds.y)
         sctx.filter = (region.feather || 0) > 0 ? `blur(${region.feather}px)` : 'none'
         sctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, region.opacity ?? 1))})`
         effectMaskCustomPath(sctx, region.points, this.width, this.height, region.centerX, region.centerY, region.rotation, region.curve)
@@ -448,7 +455,7 @@ export class PreviewEngine {
         sctx.beginPath(); sctx.ellipse(0, 0, w / 2, h / 2, 0, 0, Math.PI * 2); sctx.fill()
       }
       sctx.restore()
-      mctx.drawImage(shape, 0, 0)
+      mctx.drawImage(shape, bounds.x - frameBounds.x, bounds.y - frameBounds.y)
     }
     regions.forEach(paintRegion)
     if (mask.inverted) {
@@ -457,21 +464,22 @@ export class PreviewEngine {
       mctx.globalCompositeOperation = 'source-over'
     }
     let featherOverlay: HTMLCanvasElement | null = null
-    let featherX = 0, featherY = 0
+    let tintBounds = frameBounds
     if (mask.featherOffset || mask.featherTint) {
-      const bounds = effectMaskFeatherBounds(regions, this.width, this.height)
-      const pixels = mctx.getImageData(bounds.x, bounds.y, bounds.width, bounds.height)
+      // Inverted mattes fill the frame, but their soft edge is still local.
+      if (mask.inverted) tintBounds = effectMaskFeatherBounds(regions, this.width, this.height)
+      const localX = tintBounds.x - frameBounds.x, localY = tintBounds.y - frameBounds.y
+      const pixels = mctx.getImageData(localX, localY, tintBounds.width, tintBounds.height)
       const tinted = tintEffectMaskFeather(pixels.data, mask.featherColor, mask.featherTint, mask.featherOffset)
-      if (mask.featherOffset) mctx.putImageData(pixels, bounds.x, bounds.y)
+      if (mask.featherOffset) mctx.putImageData(pixels, localX, localY)
       if (tinted) {
         if (!this.effectMaskTintCanvas) this.effectMaskTintCanvas = document.createElement('canvas')
         featherOverlay = this.effectMaskTintCanvas
-        if (featherOverlay.width !== bounds.width) featherOverlay.width = bounds.width
-        if (featherOverlay.height !== bounds.height) featherOverlay.height = bounds.height
+        if (featherOverlay.width !== tintBounds.width) featherOverlay.width = tintBounds.width
+        if (featherOverlay.height !== tintBounds.height) featherOverlay.height = tintBounds.height
         const overlay = featherOverlay.getContext('2d')!
-        const image = overlay.createImageData(bounds.width, bounds.height)
+        const image = overlay.createImageData(tintBounds.width, tintBounds.height)
         image.data.set(tinted); overlay.putImageData(image, 0, 0)
-        featherX = bounds.x; featherY = bounds.y
       }
     }
     const sctx = scratch.getContext('2d')!
@@ -484,10 +492,19 @@ export class PreviewEngine {
       sctx.clearRect(0, oy, ox, this.height)
       sctx.clearRect(ox + this.width, oy, scratch.width - ox - this.width, this.height)
     }
-    sctx.globalCompositeOperation = 'destination-in'; sctx.drawImage(matte, ox, oy)
+    if (!mask.inverted) {
+      sctx.clearRect(ox, oy, frameBounds.x, this.height)
+      sctx.clearRect(ox + frameBounds.x + frameBounds.width, oy,
+        this.width - frameBounds.x - frameBounds.width, this.height)
+      sctx.clearRect(ox + frameBounds.x, oy, frameBounds.width, frameBounds.y)
+      sctx.clearRect(ox + frameBounds.x, oy + frameBounds.y + frameBounds.height,
+        frameBounds.width, this.height - frameBounds.y - frameBounds.height)
+    }
+    sctx.globalCompositeOperation = 'destination-in'
+    sctx.drawImage(matte, ox + frameBounds.x, oy + frameBounds.y)
     if (featherOverlay) {
       sctx.globalCompositeOperation = 'source-over'
-      sctx.drawImage(featherOverlay, ox + featherX, oy + featherY)
+      sctx.drawImage(featherOverlay, ox + tintBounds.x, oy + tintBounds.y)
     }
     sctx.restore()
   }

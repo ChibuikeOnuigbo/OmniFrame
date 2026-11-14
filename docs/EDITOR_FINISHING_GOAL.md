@@ -64,3 +64,17 @@ custom mask outputs matched the previous renderer pixel for pixel at 512×384.
 Run `node --expose-gc qa/effect-mask-4k-benchmark.mjs` to repeat the current
 measurement. These are headless CPU figures, not browser playback measurements;
 real-time 4K colored feathering remains open.
+
+14 November second 4K pass: cropping each temporary shape canvas to its masked
+region reduced the same sample to 459–645 ms/frame and about 542 MiB RSS. Circle,
+inverted ellipse, curved custom path and text mask outputs matched the previous
+renderer pixel for pixel at 512×384. The next pass bounded the union matte too.
+
+14 November third 4K pass: ordinary masks now use a bounded union matte and clear
+the rest of the frame explicitly; inverted masks retain full-frame composition.
+The same headless sample took 325–374 ms/frame and about 381 MiB RSS. Seven
+single, edge, multiple, split, text and custom mask comparisons matched the
+previous renderer pixel for pixel at 512×384. The headless sample remains much
+slower than a real-time 4K frame budget, and browser/GPU timing is unverified.
+The same benchmark with `--inverted` took 501–954 ms/frame; inverted masks keep
+a full-frame matte but restrict tint readback to the edge region.
