@@ -1,3 +1,16 @@
+## 2026-11-16 — project lifecycle audit continuation
+
+Cycle 12 fixes racing project opens, incomplete New Project resets, discarded
+media/decoder cleanup and stale Smart Patch/filmstrip work. Real-footage 3D QA
+also exposed and fixed primitive controls failing to create persisted geometry
+in an empty scene. A fresh 2.5D screenshot is in
+`evidence/screenshots/three-d-video-plane-composite.png`.
+
+Continue with malformed .omni field/action validation, then project ownership
+for generated audio and roto jobs. Same-project library cleanup, full filmstrip
+content invalidation and native desktop/performance acceptance remain open.
+See `AUDIT_STATE.md` Cycle 12 for exact evidence, limits and next-pass steps.
+
 ## 2026-11-14 — eight-pass adversarial repository audit
 
 Eight audit cycles are recorded in `AUDIT_STATE.md`. Fixes include safe

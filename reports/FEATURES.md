@@ -1,3 +1,16 @@
+## 2026-11-16 — reliable project replacement and empty-scene 3D controls
+
+New/Open clear old project selections, generated overlays and nested media
+ownership; obsolete opens cannot replace newer work. Discarded URLs, cached
+preview media and sampling decoders are released. Smart Patch and filmstrip
+results cannot cross project boundaries. In an empty 3D scene, choosing a
+primitive or material now creates editable, persisted geometry. The 3D browser
+check uses real local video instead of a fake media URL and checks moving pixels.
+
+Unit, browser, persistence and scan evidence/limits: `AUDIT_STATE.md` Cycle 12.
+This does not establish completion of all asynchronous producer guards or native
+platform acceptance.
+
 ## 2026-11-14 — eight-pass adversarial repository audit
 
 Added safe mask bounds for malformed and offscreen geometry, removed duplicate

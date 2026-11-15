@@ -35,11 +35,13 @@ interface OmniManifest {
 export interface ParsedOmniProject {
   projectName: string
   state: Record<string, unknown>
+  /** Release URLs from a parsed project that will not be installed in the store. */
+  dispose: () => void
 }
 
 const NON_DOCUMENT_KEYS = new Set([
   'past', 'future', 'mediaImportNotice', 'playing', 'scrubbing', 'inInteraction', 'activeBgRemovalJob',
-  'rotoBusy', 'guidedMatteBusy', 'cloneSourcePoint', 'smartPatchStatus',
+  'rotoBusy', 'guidedMatteBusy', 'cloneSourcePoint', 'smartPatchStatus', 'projectGeneration',
 ])
 
 function safeArchivePath(path: string): boolean {
@@ -439,6 +441,7 @@ export async function parseOmniProjectBundle(file: File): Promise<ParsedOmniProj
     return {
       projectName: typeof manifest.projectName === 'string' && manifest.projectName.trim() ? manifest.projectName.trim() : file.name.replace(/\.omni$/i, '') || 'Untitled',
       state: restored,
+      dispose: () => { for (const url of urls.values()) URL.revokeObjectURL(url); urls.clear() },
     }
   } catch (error) {
     for (const url of urls.values()) URL.revokeObjectURL(url)

@@ -21,6 +21,7 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
   const assets = useEditor((s) => s.assets)
   const applyStillCutout = useEditor((s) => s.applyStillCutout)
   const selectedClipId = useEditor((s) => s.selectedClipId)
+  const projectGeneration = useEditor((s) => s.projectGeneration)
   const activeClip = clips.find((c) => c.id === (clipId || selectedClipId)) || null
   const asset = activeClip ? assets.find((a) => a.id === activeClip.assetId) : null
 
@@ -38,8 +39,8 @@ export function BackgroundRemovalModal({ isOpen, onClose, clipId }: Props) {
   const [error, setError] = useState<string | null>(null)
 
   const previewCanvasRef = useRef<HTMLCanvasElement | null>(null)
-  const sourceKey = useMemo(() => ({ clipId: activeClip?.id, assetId: asset?.id, url: asset?.url }),
-    [activeClip?.id, asset?.id, asset?.url])
+  const sourceKey = useMemo(() => ({ clipId: activeClip?.id, assetId: asset?.id, url: asset?.url, projectGeneration }),
+    [activeClip?.id, asset?.id, asset?.url, projectGeneration])
   const sourceImage = source?.key === sourceKey ? source.image : null
 
   useEffect(() => {

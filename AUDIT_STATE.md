@@ -1,5 +1,64 @@
 # OmniFrame adversarial audit state
 
+## Cycle 12 — project ownership, stale jobs and empty 3D scenes (2026-11-16)
+
+- Reproduced and fixed: New Project retained old cutouts, source-preview state,
+  selections, clone donors, rigs and 3D objects. A shared reset now clears
+  project-owned data before New/Open; imported documents can still supply their
+  own content. User preferences/libraries and media still referenced there stay.
+- Project loading now uses request ordering: older successful or failed opens
+  cannot replace a newer project or its status. New Project cancels pending
+  opens. Uninstalled parsed projects release embedded object URLs; replacement
+  releases discarded main/nested/history URLs, retaining shared library URLs.
+  Runtime generation is excluded from saved bundles.
+- Filmstrip work checks project ownership before using its decoder or publishing
+  tiles. Replacement releases its sampler, queue and cached images. Live preview
+  releases old video/audio DOM elements and image caches. Reused asset IDs update
+  source URLs; sampler eviction now detaches its DOM elements. Cutout previews
+  also invalidate when the project changes, even if clip/source IDs recur.
+- Smart Patch rejects late results/progress/errors after project replacement,
+  clip deletion/movement, source replacement, layer changes or a newer request.
+  Rejected results do not add Undo snapshots or leave the current job busy.
+- Visual review found the former 3D smoke used a fake blob URL and nonexistent
+  track. Its success was not moving-video evidence. Replaced it with local real
+  footage and actual canvas/decoder checks. This exposed empty-scene primitive
+  controls changing local state without storing geometry; they now create a
+  project object, and an empty scene no longer displays unsaved phantom geometry.
+- Checks: the initial project-reset and stale-patch regressions failed before
+  fixes. All 38 unit scripts passed. The project bundle test passed 15 checks,
+  including native PSD bytes, raster output and tampered-resource rejection.
+  Smart Patch passed its current/range/still browser flow. The expanded lifecycle
+  browser test checks overlapping opens, rejected-load URL cleanup, failure
+  safety, real Program pixels with reused IDs and detached decoders.
+  Final gate: all 11 browser smoke flows, typecheck, source lint and build passed.
+  Responsive-workbench checks passed. Six external-model transitions each rendered
+  49/49 distinct sampled frames; product recorder export had 18/18 distinct VFR
+  frames with audio RMS 0.07055. This is browser export, not a native-app build.
+  Fresh 3D screenshot inspected: real footage appears on the plane beside a stored
+  diamond primitive. The main bundle warning remains.
+- Scan: repository history audit rerun (inventory is not feature acceptance).
+  Source scan currently retains 277 non-high findings across 196 files; exact
+  locations are in qa/reports/source-scan.json. Targeted weak-type/error hints
+  remain in reports/audit-remaining-hints.txt. Large bundle warning persists.
+- Remaining: voice isolation, Demucs stem/vocal-patch, roto/tracking and other
+  asynchronous producers still need project/clip ownership guards. This pass
+  does not terminate every model computation or prove browser memory reclamation.
+  Same-project generated assets intentionally remain in the library for reuse
+  and Redo; a deliberate unused-media cleanup flow is still needed. Filmstrip
+  hashing does not yet cover every compound/effect/source edit within one project.
+  Per-field .omni validation remains incomplete: an incomplete test fixture
+  missing clip.volume crashed Timeline's toFixed call until the fixture was
+  corrected. Audit root fields that could overwrite store actions as well.
+  Native OS builds, complex/video matting, real-time 4K and the full tutorial/
+  effect acceptance backlog remain unverified; no new videos were watched here.
+- Next pass: add adversarial malformed-document tests and validate/normalize
+  root/clip/track fields before installation; preserve the current project on
+  failure and release decoded attachments. Then guard generated-audio and roto
+  commits (including progress and output URLs), test deletion/undo/project switch
+  during processing, and verify atomic Undo. Expand filmstrip content invalidation
+  with actual same-ID source replacement and compound edits. Run relevant browser
+  flows and the repeatable gates; keep native/model/performance claims separate.
+
 ## Cycle 11 — cancellable cutout processing and alpha correctness
 
 - Fixed: preview and Apply previously processed different resolutions and could

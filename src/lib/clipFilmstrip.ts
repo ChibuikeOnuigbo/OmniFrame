@@ -113,9 +113,10 @@ function jobKey(clip: Clip, tiles: number): string {
 
 // ---- seek settling --------------------------------------------------------
 
-async function settleSeeks(eng: PreviewEngine, budgetMs = SEEK_BUDGET_MS): Promise<boolean> {
+async function settleSeeks(eng: PreviewEngine, isCurrent: () => boolean, budgetMs = SEEK_BUDGET_MS): Promise<boolean> {
   const t0 = performance.now()
   for (;;) {
+    if (!isCurrent()) return false
     const els = eng.sampleElements()
     const ready = els.every(
       (el) => !el.seeking && (el.readyState >= 2 || el.readyState === 0 || el.error),
@@ -134,6 +135,17 @@ async function settleSeeks(eng: PreviewEngine, budgetMs = SEEK_BUDGET_MS): Promi
 // ---- serialized job queue --------------------------------------------------
 
 let queueTail: Promise<unknown> = Promise.resolve()
+
+useEditor.subscribe((state, previous) => {
+  if (state.projectGeneration === previous.projectGeneration) return
+  tileCache.clear()
+  inFlight.clear()
+  sampleEngine?.dispose()
+  sampleEngine = null
+  // New-project tiles need not wait behind obsolete seeks. Old jobs check
+  // their generation before touching their disposed engine or publishing.
+  queueTail = Promise.resolve()
+})
 
 function enqueue<T>(job: () => Promise<T>): Promise<T> {
   const run = queueTail.then(job, job)
@@ -156,6 +168,8 @@ function tileFromCanvas(c: HTMLCanvasElement): string {
  * on-screen width — the tile count adapts to it (roughly one frame per 56px).
  */
 export async function renderClipFilmstrip(clip: Clip, widthPx: number): Promise<FilmstripTile[]> {
+  const generation = useEditor.getState().projectGeneration
+  const isCurrent = () => generation === useEditor.getState().projectGeneration
   const duration = Math.max(0.05, clip.duration)
   const tiles = Math.max(1, Math.min(MAX_TILES, Math.round(widthPx / TILE_TARGET_PX)))
   const key = jobKey(clip, tiles)
@@ -166,6 +180,7 @@ export async function renderClipFilmstrip(clip: Clip, widthPx: number): Promise<
   if (flying) return flying
 
   const job = enqueue(async (): Promise<FilmstripTile[]> => {
+    if (!isCurrent()) return []
     // Another worker may have filled the cache while we waited in the queue.
     const again = tileCache.get(key)
     if (again) return again
@@ -180,7 +195,8 @@ export async function renderClipFilmstrip(clip: Clip, widthPx: number): Promise<
       const t = clip.start + step * (i + 0.5)
       // Pass 1 issues the seeks on the dedicated pool; pass 2 draws them.
       eng.renderClipTile(clip, t, st)
-      const ready = await settleSeeks(eng)
+      const ready = await settleSeeks(eng, isCurrent)
+      if (!isCurrent()) return []
       if (!ready) allReady = false
       const drew = eng.renderClipTile(clip, t, st)
       const url = drew ? tileFromCanvas(eng.sampleCanvas()) : ''
@@ -200,7 +216,7 @@ export async function renderClipFilmstrip(clip: Clip, widthPx: number): Promise<
   try {
     return await job
   } finally {
-    inFlight.delete(key)
+    if (inFlight.get(key) === job) inFlight.delete(key)
   }
 }
 

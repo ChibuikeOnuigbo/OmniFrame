@@ -115,6 +115,7 @@ function getAudio(asset: MediaAsset): HTMLAudioElement {
     audioCache.set(asset.id, a)
     mediaHost().appendChild(a)
   }
+  if (a.getAttribute('src') !== asset.url) { a.pause(); a.src = asset.url }
   return a
 }
 
@@ -125,11 +126,30 @@ function getImage(asset: MediaAsset): HTMLImageElement {
     i.src = asset.url
     imageCache.set(asset.id, i)
   }
+  if (i.getAttribute('src') !== asset.url) i.src = asset.url
   return i
 }
 
 const urlImageCache = new Map<string, HTMLImageElement>()
 let activePreviewEngine: PreviewEngine | null = null
+
+function releaseMediaElement(element: HTMLMediaElement): void {
+  element.pause()
+  element.removeAttribute('src')
+  element.load()
+  element.remove()
+}
+
+function clearProjectMedia(): void {
+  videoCache.forEach(releaseMediaElement)
+  audioCache.forEach(releaseMediaElement)
+  videoCache.clear()
+  audioCache.clear()
+  for (const cache of [imageCache, urlImageCache]) {
+    cache.forEach((image) => { image.onload = null; image.removeAttribute('src') })
+    cache.clear()
+  }
+}
 
 export function preloadRoomAssets() {
   const urls = [
@@ -806,6 +826,12 @@ export class PreviewEngine {
     // Pause decoded media synchronously with state. Waiting for the next rAF
     // made Space/click pause feel delayed under main-thread load.
     this.unsubscribe = useEditor.subscribe((state, previous) => {
+      if (state.projectGeneration !== previous.projectGeneration) {
+        clearProjectMedia()
+        this.lastRenderedState = null
+        this.usedThisFrame.clear()
+        this.deformedSources.clear()
+      }
       if (state.playing && !previous.playing) this.last = performance.now()
       if ((!state.playing && previous.playing) || (state.scrubbing && !previous.scrubbing)) {
         videoCache.forEach((video) => video.pause())
@@ -1560,8 +1586,7 @@ export class PreviewEngine {
         const firstKey = this.samplePool.keys().next().value
         if (firstKey !== undefined) {
           const dropped = this.samplePool.get(firstKey)
-          dropped?.pause()
-          dropped?.removeAttribute('src')
+          if (dropped) releaseMediaElement(dropped)
           this.samplePool.delete(firstKey)
         }
       }
@@ -1574,6 +1599,7 @@ export class PreviewEngine {
       mediaHost().appendChild(v)
       this.samplePool.set(asset.id, v)
     }
+    if (v.getAttribute('src') !== asset.url) { v.pause(); v.src = asset.url }
     return v
   }
 
@@ -1589,6 +1615,7 @@ export class PreviewEngine {
       mediaHost().appendChild(a)
       this.samplePool.set(asset.id, a)
     }
+    if (a.getAttribute('src') !== asset.url) { a.pause(); a.src = asset.url }
     return a
   }
 
@@ -2583,10 +2610,7 @@ export class PreviewEngine {
     this.puppetCanvas = null
     this.deformedSources.clear()
     if (this.sampling) {
-      this.samplePool.forEach((el) => {
-        el.pause()
-        el.removeAttribute('src')
-      })
+      this.samplePool.forEach(releaseMediaElement)
       this.samplePool.clear()
       return
     }

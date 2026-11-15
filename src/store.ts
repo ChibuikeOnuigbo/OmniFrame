@@ -307,6 +307,7 @@ import { measureIntegratedLufs } from './lib/loudness'
 import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } from './lib/rotoBrush'
 import { denoiseAudioBuffer } from './lib/aiDenoise'
 import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
+import { releaseDiscardedProjectUrls } from './lib/projectLifetime'
 import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
 import { markerColorHex, MARKER_KINDS, resolveMarkerTime } from './lib/markers'
 import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
@@ -336,6 +337,8 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   saveOmniProject: (name?: string) => Promise<Blob>
   setProjectName: (name: string) => void
   loadOmniProject: (file: File) => Promise<void>
+  /** Runtime-only generation: asynchronous jobs must not cross project replacements. */
+  projectGeneration: number
   mediaImportNotice: string | null
   clearMediaImportNotice: () => void
   tracks: Track[]
@@ -1134,6 +1137,7 @@ export const DEMO_ASSETS = [
 ] as MediaAsset[]
 
 export const useEditor = create<EditorState>((set, get) => {
+  let projectLoadRequest = 0
   let maskUndoAt = 0
   let maskUndoClipId = ''
   const pushSnapshot = () => {
@@ -1147,6 +1151,74 @@ export const useEditor = create<EditorState>((set, get) => {
     return Math.max(d, 5)
   }
 
+  const clearedProject = (previous: EditorState): Partial<EditorState> => ({
+    projectGeneration: previous.projectGeneration + 1,
+    projectName: 'Untitled',
+    assets: [],
+    sourceDocuments: [],
+    tracks: [],
+    clips: [],
+    transitions: [],
+    drawingStrokes: [],
+    paintLayers: [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
+    activePaintLayerId: 'default-paint-layer',
+    activeSelection: null,
+    activeMaskId: null,
+    cloneSourcePoint: null,
+    drawingEnabled: false,
+    activeFx: null,
+    maskEditClipId: null,
+    visualPreview: null,
+    replaceDialog: null,
+    compoundWindow: null,
+    exportRange: null,
+    rightFocus: null,
+    monitorMode: 'program',
+    sourcePreview: { ...previous.sourcePreview, assetId: null, playing: false, currentTime: 0, zoom: 1, pan: { x: 0, y: 0 } },
+    omniframeCharacters: [],
+    omniframeMode: false,
+    omniSelection: null,
+    selectedCharacterId: null,
+    attachedVideoClipId: null,
+    guidedMatte: null,
+    guidedMatteBusy: false,
+    activeBgRemovalJob: null,
+    smartPatchStatus: { phase: 'idle', done: 0, total: 0, message: '' },
+    rotoClicks: [],
+    rotoResult: null,
+    rotoFrames: [],
+    rotoLumaExport: null,
+    rotoBusy: false,
+    rotoTracking: { running: false, done: 0, total: 0 },
+    rotoInpaint: { ...previous.rotoInpaint, phase: 'idle', done: 0, total: 0, message: '', candidates: [], selectedDonorFrame: null, targetFrames: [], donorByTarget: [] },
+    rigs: [],
+    activeRigId: null,
+    selectedPartId: null,
+    scene3DObjects: [],
+    selected3DObjectId: null,
+    threeMaskSelection: null,
+    is3DMode: false,
+    markers: [],
+    linkSets: [],
+    parentRelationships: [],
+    groups: [],
+    trackingSessions: [],
+    activeMarkerModalId: null,
+    selectedTransitionId: null,
+    playhead: 0,
+    duration: 10,
+    selectedClipId: null,
+    selectedClipIds: [],
+    sequences: [],
+    activeSequenceId: 'main',
+    breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
+    past: [],
+    future: [],
+    playing: false,
+    scrubbing: false,
+    inInteraction: false,
+  })
+
   return {
     // Library starts empty. The three demo fixtures below exist for the
     // OmniFrame region-edit demo loaders and the automated QA rigs
@@ -1156,12 +1228,24 @@ export const useEditor = create<EditorState>((set, get) => {
     customFonts: [],
     customPalettes: [],
     projectName: 'Untitled',
+    projectGeneration: 0,
     saveOmniProject: async (name) => buildOmniProjectBundle(get(), name || get().projectName),
     setProjectName: (name) => set({ projectName: name.trim() || 'Untitled' }),
     loadOmniProject: async (file) => {
-      const loaded = await parseOmniProjectBundle(file)
+      const request = ++projectLoadRequest
+      const loaded = await parseOmniProjectBundle(file).catch((error) => {
+        if (request !== projectLoadRequest) throw new DOMException('Project open superseded', 'AbortError')
+        throw error
+      })
+      if (request !== projectLoadRequest) {
+        loaded.dispose()
+        throw new DOMException('Project open superseded', 'AbortError')
+      }
+      const previous = get()
       set({
+        ...clearedProject(previous),
         ...loaded.state as Partial<EditorState>,
+        projectGeneration: previous.projectGeneration + 1,
         projectName: loaded.projectName,
         playing: false,
         visualPreview: null,
@@ -1169,10 +1253,14 @@ export const useEditor = create<EditorState>((set, get) => {
         inInteraction: false,
         rotoBusy: false,
         guidedMatteBusy: false,
+        cloneSourcePoint: null,
+        activeBgRemovalJob: null,
+        smartPatchStatus: { phase: 'idle', done: 0, total: 0, message: '' },
         mediaImportNotice: null,
         past: [],
         future: [],
       })
+      releaseDiscardedProjectUrls(previous, get())
       // Fonts travel inside the bundle; re-register them with the document.
       void registerAllCustomFonts(get().customFonts || [])
     },
@@ -5437,32 +5525,10 @@ export const useEditor = create<EditorState>((set, get) => {
     clearGuidedMatte: () => set({ guidedMatte: null }),
 
     newProject: () => {
-      for (const asset of get().assets) URL.revokeObjectURL(asset.url)
-      set({
-        assets: [],
-        tracks: [],
-        clips: [],
-        transitions: [],
-        drawingStrokes: [],
-        paintLayers: [{ id: 'default-paint-layer', name: 'Paint 1', visible: true, locked: false, opacity: 1 }],
-        markers: [],
-        linkSets: [],
-        parentRelationships: [],
-        groups: [],
-        trackingSessions: [],
-        activeMarkerModalId: null,
-        selectedTransitionId: null,
-        playhead: 0,
-        duration: 10,
-        selectedClipId: null,
-        selectedClipIds: [],
-        sequences: [],
-        activeSequenceId: 'main',
-        breadcrumbs: [{ id: 'main', name: 'Main Timeline' }],
-        past: [],
-        future: [],
-        playing: false,
-      })
+      projectLoadRequest++
+      const previous = get()
+      set(clearedProject(previous))
+      releaseDiscardedProjectUrls(previous, get())
     },
 
     recomputeDuration: () => set((s) => ({ duration: recompute(s.clips) })),

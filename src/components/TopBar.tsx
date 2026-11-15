@@ -328,6 +328,7 @@ export function TopBar() {
     void loadOmniProject(file).then(() => {
       setProjectStatus(`Opened ${file.name}, project state and embedded source media restored`)
     }).catch((error) => {
+      if (error instanceof DOMException && error.name === 'AbortError') return
       setProjectStatus(`Could not open .omni: ${error instanceof Error ? error.message : String(error)}`)
     })
   }

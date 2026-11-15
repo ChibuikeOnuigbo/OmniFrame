@@ -22,6 +22,7 @@ export interface SmartPatchSlice {
 }
 
 interface SmartPatchStoreState extends SmartPatchSlice {
+  projectGeneration: number
   assets: MediaAsset[]
   clips: Clip[]
   selectedClipId: string | null
@@ -41,6 +42,7 @@ type SetState = (
 type GetState = () => SmartPatchStoreState
 
 export function createSmartPatchSlice(set: SetState, get: GetState, pushSnapshot: () => void): SmartPatchSlice {
+  let request = 0
   return {
     smartPatchScope: { mode: 'current', start: 0, end: 2, step: 1 },
     smartPatchBrushRadius: 52,
@@ -52,6 +54,7 @@ export function createSmartPatchSlice(set: SetState, get: GetState, pushSnapshot
     setSmartPatchFeather: (feather) => set({ smartPatchFeather: Math.max(0, Math.min(36, feather)) }),
 
     applySmartPatch: async (points, useSelection = false) => {
+      const job = ++request
       const state = get()
       const sourcePoint = state.cloneSourcePoint
       if (!sourcePoint?.sampleDataUrl || points.length === 0) {
@@ -64,6 +67,13 @@ export function createSmartPatchSlice(set: SetState, get: GetState, pushSnapshot
       const asset = clip ? state.assets.find((candidate) => candidate.id === clip.assetId) : undefined
       if (!clip || !asset) {
         set({ smartPatchStatus: { phase: 'error', done: 0, total: 0, message: 'Select a still or video clip first' } })
+        return false
+      }
+      const ownsStatus = () => job === request && get().projectGeneration === state.projectGeneration
+      const isCurrent = () => ownsStatus() && get().clips.includes(clip) && get().assets.includes(asset)
+        && get().activePaintLayerId === state.activePaintLayerId
+      const discard = () => {
+        if (ownsStatus()) set({ smartPatchStatus: { phase: 'idle', done: 0, total: 0, message: '' } })
         return false
       }
 
@@ -133,6 +143,7 @@ export function createSmartPatchSlice(set: SetState, get: GetState, pushSnapshot
             width = img.naturalWidth
             height = img.naturalHeight
           }
+          if (!isCurrent()) return discard()
           const dataUrl = await buildSmartPatchFrame({
             source,
             width,
@@ -142,6 +153,7 @@ export function createSmartPatchSlice(set: SetState, get: GetState, pushSnapshot
             brushRadius: state.smartPatchBrushRadius,
             feather: state.smartPatchFeather,
           })
+          if (!isCurrent()) return discard()
           frames.push({ time: timelineTime, dataUrl })
           set((current) => ({ smartPatchStatus: { ...current.smartPatchStatus, done: index + 1 } }))
         }
@@ -183,6 +195,7 @@ export function createSmartPatchSlice(set: SetState, get: GetState, pushSnapshot
         }))
         return true
       } catch (err) {
+        if (!isCurrent()) return discard()
         set({
           smartPatchStatus: {
             phase: 'error',

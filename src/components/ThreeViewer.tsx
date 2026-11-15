@@ -22,8 +22,9 @@ import {
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
-import type { BlenderMode, Primitive3D, ThreeMaskSelection } from '../types'
+import type { BlenderMode, Primitive3D, Scene3DObject, ThreeMaskSelection } from '../types'
 import { evaluateCurve } from '../lib/animation/CurveEngine'
+import { uid } from '../lib/time'
 
 function disposeObject(root: THREE.Object3D) {
   const geometries = new Set<THREE.BufferGeometry>()
@@ -82,7 +83,6 @@ export function ThreeViewer({
   const setThreeMaskSelection = useEditor((s) => s.setThreeMaskSelection)
   const clearThreeMaskSelection = useEditor((s) => s.clearThreeMaskSelection)
   const sceneObject = useEditor((s) => s.scene3DObjects.find((object) => object.id === s.selected3DObjectId) || s.scene3DObjects[0])
-  const updateScene3DObject = useEditor((s) => s.updateScene3DObject)
   const threeMaskToolActive = leftTab === 'threed' && activeSubMode === 'threed-mask' && threeMaskMode !== 'off'
 
   // Component UI state mirrors the persisted scene object so an .omni load
@@ -106,6 +106,21 @@ export function ThreeViewer({
     sceneObject?.position.y ?? 0.15,
     sceneObject?.position.z ?? 0.6,
   ))
+
+  // A new project has no scene objects. Choosing a primitive/material must
+  // create editable project geometry rather than only changing local UI state.
+  const updatePreviewObject = (updates: Partial<Scene3DObject>) => {
+    const state = useEditor.getState()
+    const current = state.scene3DObjects.find((object) => object.id === state.selected3DObjectId) || state.scene3DObjects[0]
+    if (current) state.updateScene3DObject(current.id, updates)
+    else state.addScene3DObject({
+      id: uid('3d'), name: `3D ${updates.type ?? primitive}`, type: primitive,
+      position: { x: objectPosition.current.x, y: objectPosition.current.y, z: objectPosition.current.z },
+      rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 },
+      color: materialColor, roughness: materialRoughness, metalness: materialMetalness, wireframe,
+      ...updates,
+    })
+  }
 
   useEffect(() => {
     if (!sceneObject) return
@@ -557,6 +572,8 @@ export function ThreeViewer({
       objectMeshRef.current = null
     }
 
+    if (!sceneObject) return
+
     const mat = new THREE.MeshStandardMaterial({
       color: new THREE.Color(materialColor),
       metalness: materialMetalness,
@@ -1001,7 +1018,7 @@ export function ThreeViewer({
                 onChange={(e) => {
                   const color = e.target.value
                   setMaterialColor(color)
-                  if (sceneObject) updateScene3DObject(sceneObject.id, { color })
+                  updatePreviewObject({ color })
                 }}
                 className="w-7 h-7 rounded border border-ink-700 bg-transparent cursor-pointer"
               />
@@ -1023,7 +1040,7 @@ export function ThreeViewer({
               onChange={(e) => {
                 const roughness = parseFloat(e.target.value)
                 setMaterialRoughness(roughness)
-                if (sceneObject) updateScene3DObject(sceneObject.id, { roughness })
+                updatePreviewObject({ roughness })
               }}
               className="w-full accent-brand"
             />
@@ -1043,7 +1060,7 @@ export function ThreeViewer({
               onChange={(e) => {
                 const metalness = parseFloat(e.target.value)
                 setMaterialMetalness(metalness)
-                if (sceneObject) updateScene3DObject(sceneObject.id, { metalness })
+                updatePreviewObject({ metalness })
               }}
               className="w-full accent-brand"
             />
@@ -1130,13 +1147,13 @@ export function ThreeViewer({
               key={prim}
               type="button"
               data-testid={`three-primitive-${prim}`}
-              title={`Change 3D Object to ${prim}`}
+              title={sceneObject ? `Change 3D Object to ${prim}` : `Add ${prim}`}
               onClick={() => {
                 setPrimitive(prim)
-                if (sceneObject) updateScene3DObject(sceneObject.id, { type: prim, modelUrl: undefined, sourceUrl: undefined, attribution: undefined, license: undefined })
+                updatePreviewObject({ type: prim, modelUrl: undefined, sourceUrl: undefined, attribution: undefined, license: undefined })
               }}
               className={`px-1.5 py-0.5 rounded text-[10px] capitalize font-medium transition-colors ${
-                !sceneObject?.modelUrl && primitive === prim
+                sceneObject && !sceneObject.modelUrl && primitive === prim
                   ? 'bg-brand/20 text-brand-400 border border-brand/40 font-semibold'
                   : 'text-ink-400 hover:bg-ink-800 hover:text-white'
               }`}
@@ -1167,7 +1184,7 @@ export function ThreeViewer({
           onClick={() => {
             const next = !wireframe
             setWireframe(next)
-            if (sceneObject) updateScene3DObject(sceneObject.id, { wireframe: next })
+            updatePreviewObject({ wireframe: next })
           }}
           className={`p-1 rounded transition-colors shrink-0 ${
             wireframe ? 'bg-brand/20 text-brand-400' : 'text-ink-400 hover:bg-ink-800 hover:text-white'
