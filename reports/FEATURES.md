@@ -1,3 +1,12 @@
+## 2026-11-16 — safe project imports and local credential preservation
+
+Core .omni validation now protects live state from malformed timelines, numeric
+fields, duplicate IDs, broken tracks, cyclic compounds and store-action fields.
+Invalid decoded projects release their embedded URLs. New .omni files omit the
+memory-only AI API key; legacy imported keys cannot replace local configuration.
+Valid PSD/media bundles and compound projects still reopen with editable content.
+Tests and the remaining schema coverage limits: `AUDIT_STATE.md` Cycle 13.
+
 ## 2026-11-16 — reliable project replacement and empty-scene 3D controls
 
 New/Open clear old project selections, generated overlays and nested media

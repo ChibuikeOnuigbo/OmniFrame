@@ -308,6 +308,7 @@ import { autoBrushMaskFromStroke, magicWandMask, maskBounds, maskToDataUrl } fro
 import { denoiseAudioBuffer } from './lib/aiDenoise'
 import { buildOmniProjectBundle, parseOmniProjectBundle } from './lib/omniProject'
 import { releaseDiscardedProjectUrls } from './lib/projectLifetime'
+import { validateImportedProject } from './lib/projectValidation'
 import { sanitizeEffect, sanitizeLuts } from './lib/customEffects'
 import { markerColorHex, MARKER_KINDS, resolveMarkerTime } from './lib/markers'
 import type { VisualPreview, VisualPreviewInput } from './lib/visualPreview'
@@ -1242,6 +1243,12 @@ export const useEditor = create<EditorState>((set, get) => {
         throw new DOMException('Project open superseded', 'AbortError')
       }
       const previous = get()
+      try {
+        validateImportedProject(loaded.state, previous)
+      } catch (error) {
+        loaded.dispose()
+        throw error
+      }
       set({
         ...clearedProject(previous),
         ...loaded.state as Partial<EditorState>,

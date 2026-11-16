@@ -1,5 +1,45 @@
 # OmniFrame adversarial audit state
 
+## Cycle 13 — project import validation and credential privacy (2026-11-16)
+
+- Reproduced in the real browser: a document without clip.volume replaced the
+  active project and caused a Timeline failure; a document containing pause:null
+  replaced the editor's pause action. Both now fail before any live-state change,
+  and staged embedded media URLs are released on validation failure.
+- Core import validation checks unique collection IDs, media/track/clip fields,
+  finite numeric values, track references, transforms, nested timelines, sequence
+  settings, markers, paint layers, transitions and 3D vectors. Compound sequence
+  cycles, missing source sequences without fallback children, and more than 32
+  compound nesting levels are rejected. Canvas dimensions must be safe integers,
+  no axis over 32768 and no area above the existing 7680-square custom limit.
+  Runtime action names and reserved prototype fields cannot be imported.
+- Privacy: the memory-only AI API key was included by the generic bundle encoder.
+  It is now excluded from new saves and stripped from decoded legacy files, so
+  importing a project preserves the current local key. Tests use invented keys;
+  no real credential was inspected. Existing saved archives are not rewritten.
+- Verification: 35 hostile validation cases plus valid minimal/nested inputs;
+  browser rejection checks preserve the exact current state and functions and
+  verify attachment release. A real compound save/New/Open still restores its
+  editable child sequence. Credential tests inspect archive bytes and a legacy
+  manifest; the live browser verifies local-key preservation. The existing
+  15-check PSD/media/project round-trip also passed during this pass.
+  Final combined gate: all 40 unit scripts and 11 browser smoke flows passed,
+  along with typecheck, source lint and production build. The history inventory
+  was rerun. Source scan retains 277 non-high findings across 197 files and the
+  build retains its large-chunk warning.
+- Remaining: this is core-document validation, not a complete schema for every
+  nested effect, animation/keyframe, rig, font or drawing-tool payload. Those
+  collections still need deeper adversarial tests and explicit schema/version
+  migration. Model/audio/roto producers still need project-generation guards;
+  generated media retention, full same-project filmstrip invalidation, native
+  desktop acceptance, the large main bundle and 277 non-high source-scan findings
+  remain. Previous video/effect coverage limitations still apply.
+- Next pass: protect generated audio/stem/roto completion and progress from
+  project switches, clip/source replacement and Undo; dispose abandoned output
+  URLs and use atomic Undo for commits. Expand import validation to optional
+  animation/effect payloads with round-trip fixtures from existing projects.
+  Do not declare every historical editor feature or platform complete.
+
 ## Cycle 12 — project ownership, stale jobs and empty 3D scenes (2026-11-16)
 
 - Reproduced and fixed: New Project retained old cutouts, source-preview state,

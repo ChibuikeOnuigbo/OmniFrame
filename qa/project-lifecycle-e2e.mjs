@@ -95,6 +95,50 @@ try {
   assert.equal(result.failedSafely, true, 'invalid projects leave the active project intact')
   assert.equal(result.obsoleteError, 'AbortError', 'a stale load error must not overwrite the newer success message')
 
+  const invalid = await page.evaluate(async () => {
+    const store = window.__omniframe_store
+    const { buildOmniProjectBundle } = await import('/src/lib/omniProject.ts')
+    const attachment = URL.createObjectURL(new Blob(['bad project attachment']))
+    const doc = { assets: [{ id: 'source', name: 'Source', kind: 'image', url: attachment, width: 1, height: 1, size: 22, duration: 2 }],
+      tracks: [{ id: 'track', name: 'Video', type: 'video', height: 64, gapless: false, hidden: false, muted: false, locked: false }],
+      clips: [{ id: 'clip', assetId: 'source', trackId: 'track', kind: 'image', name: 'Missing volume', start: 0, inPoint: 0,
+        duration: 2, hidden: false, transform: { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 } }] }
+    const malformed = await buildOmniProjectBundle(doc, 'Malformed')
+    const overwrite = await buildOmniProjectBundle({ assets: doc.assets, tracks: [], clips: [], pause: null }, 'Action overwrite')
+    URL.revokeObjectURL(attachment)
+    const outcomes = []
+    const allocated = []
+    const createUrl = URL.createObjectURL
+    URL.createObjectURL = blob => { const url = createUrl.call(URL, blob); allocated.push(url); return url }
+    try {
+      for (const bundle of [malformed, overwrite]) {
+        const before = store.getState()
+        let rejected = false
+        try { await store.getState().loadOmniProject(new File([bundle], 'invalid.omni')) } catch { rejected = true }
+        outcomes.push({ rejected, unchanged: store.getState() === before, pauseIsAction: typeof store.getState().pause === 'function' })
+        if (!rejected) store.setState(before, true) // restore the fixture if the regression fails
+      }
+    } finally { URL.createObjectURL = createUrl }
+    const released = await Promise.all(allocated.map(async url => {
+      try { await fetch(url); return false } catch { return true }
+    }))
+    return { outcomes, released }
+  })
+  assert.deepEqual(invalid.outcomes, [{ rejected: true, unchanged: true, pauseIsAction: true },
+    { rejected: true, unchanged: true, pauseIsAction: true }], 'malformed documents cannot alter live project data or actions')
+  assert.deepEqual(invalid.released, [true, true], 'validation failures release decoded attachments')
+  const localKeyKept = await page.evaluate(async () => {
+    const store = window.__omniframe_store
+    const { buildOmniProjectBundle } = await import('/src/lib/omniProject.ts')
+    store.getState().setAiApiKey('test-only-local-key')
+    try {
+      const blob = await buildOmniProjectBundle({ assets: [], tracks: [], clips: [] }, 'Key preservation')
+      await store.getState().loadOmniProject(new File([blob], 'key.omni'))
+      return store.getState().aiApiKey === 'test-only-local-key'
+    } finally { store.getState().setAiApiKey('') }
+  })
+  assert.equal(localKeyKept, true, 'opening a project preserves the current memory-only API configuration')
+
   // Reopen a different image with the same asset/clip IDs: inspect actual Program pixels.
   for (const color of ['#ff0000', '#0000ff']) {
     await page.evaluate(async fill => {
@@ -128,6 +172,17 @@ try {
       throw error
     })
   }
+  const compound = await page.evaluate(async () => {
+    const store = window.__omniframe_store
+    store.getState().createCompoundClip([store.getState().clips[0].id], 'Valid compound')
+    const bundle = await store.getState().saveOmniProject('Compound round trip')
+    store.getState().newProject()
+    await store.getState().loadOmniProject(new File([bundle], 'compound.omni'))
+    const current = store.getState()
+    const clip = current.clips[0]
+    return { kind: clip.kind, children: current.sequences.find(sequence => sequence.id === clip.sourceSequenceId)?.clips.length }
+  })
+  assert.deepEqual(compound, { kind: 'compound', children: 1 }, 'valid compound projects remain editable after validation and reopen')
   const cleanup = await page.evaluate(async () => {
     const store = window.__omniframe_store
     const asset = { id: 'movie', kind: 'video', name: 'Movie', url: '/qa/fixtures/pexels-cinematic-8s.webm', duration: 8, width: 640, height: 360, size: 100, fps: 24 }
@@ -147,5 +202,5 @@ try {
   assert(cleanup.count > 0, 'test must decode media before resetting')
   assert.equal(cleanup.cached, 0)
   assert.equal(cleanup.released, true, 'New Project detaches and releases previous preview decoders')
-  console.log('PASS project reset, nested/abandoned URL release, overlapping loads, failure safety, reused-ID Program pixels and decoder cleanup')
+  console.log('PASS project reset, URL release, overlapping loads, malformed/action-overwrite rejection, reused-ID Program pixels and decoder cleanup')
 } finally { await browser.close() }

@@ -1,6 +1,6 @@
 {
   "totals": {
-    "files": 196,
+    "files": 197,
     "findings": 277
   },
   "byRule": {
@@ -1913,42 +1913,42 @@
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 1081,
+      "line": 1082,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 1096,
+      "line": 1097,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S07",
       "sev": "low",
       "file": "src/store.ts",
-      "line": 2326,
+      "line": 2333,
       "evidence": "1 non-null assertion(s)"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 5582,
+      "line": 5589,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 5654,
+      "line": 5661,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     },
     {
       "rule": "S09",
       "sev": "medium",
       "file": "src/store.ts",
-      "line": 5679,
+      "line": 5686,
       "evidence": "setTimeout with no clearTimeout anywhere in the file"
     }
   ]

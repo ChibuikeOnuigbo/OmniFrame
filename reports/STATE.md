@@ -1,3 +1,16 @@
+## 2026-11-16 — validated imports and project-file privacy
+
+Cycle 13 rejects malformed core project data and attempts to overwrite editor
+actions before changing the active session. Failed imports release staged media.
+Compound cycles/depth and canvas dimensions are bounded; valid compounds reopen.
+The memory-only AI API key is excluded from new bundles and ignored on legacy
+import. Existing project archives are not rewritten.
+
+Next: project/clip ownership for audio, stem and roto jobs; deeper schemas for
+optional effects/animation/rig payloads; deliberate unused-media cleanup and
+same-project filmstrip invalidation. Full platform, performance and historical
+feature acceptance remains open. Evidence and gates: `AUDIT_STATE.md` Cycle 13.
+
 ## 2026-11-16 — project lifecycle audit continuation
 
 Cycle 12 fixes racing project opens, incomplete New Project resets, discarded

@@ -41,7 +41,7 @@ export interface ParsedOmniProject {
 
 const NON_DOCUMENT_KEYS = new Set([
   'past', 'future', 'mediaImportNotice', 'playing', 'scrubbing', 'inInteraction', 'activeBgRemovalJob',
-  'rotoBusy', 'guidedMatteBusy', 'cloneSourcePoint', 'smartPatchStatus', 'projectGeneration',
+  'rotoBusy', 'guidedMatteBusy', 'cloneSourcePoint', 'smartPatchStatus', 'projectGeneration', 'aiApiKey',
 ])
 
 function safeArchivePath(path: string): boolean {
@@ -435,6 +435,9 @@ export async function parseOmniProjectBundle(file: File): Promise<ParsedOmniProj
     const state = await decodeProjectState(manifest.state, blobs, urls, attachmentNames)
     if (!state || typeof state !== 'object' || Array.isArray(state)) throw new Error('The OmniFrame project editor state is invalid.')
     const restored = state as Record<string, unknown>
+    // Old bundles may contain this memory-only credential. Never install a
+    // key from a project file; keep the current user's local API configuration.
+    delete restored.aiApiKey
     if (!Array.isArray(restored.assets) || !Array.isArray(restored.tracks) || !Array.isArray(restored.clips)) {
       throw new Error('This OmniFrame project is missing required media/timeline collections.')
     }
