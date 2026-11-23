@@ -1,3 +1,24 @@
+## 2026-11-23 — nested effects and reference-driven controls
+
+Effects now browse through groups/subgroups with breadcrumbs and scoped tag
+search (for example Blur → Shape Blur → Box). Lazy generated recipes retain
+stable IDs and arithmetic paging. Added five shared kernels/eight presets:
+Box Blur, Color Hold, Luma Range, Despill and Channel Mixer. Animation mode now
+has freehand Trim Path with linear keys, wrap, Undo and project persistence.
+A live test exposed and fixed stale offscreen canvas sizes after resizing.
+
+Verification: 41 unit scripts, 12 browser smoke flows, typecheck, lint and build
+passed; a shared-renderer MP4 decoded 216 frames. Screenshots, official KDE
+package checksums, manual indexes and a capability/gap ledger are in
+`research/editor-capabilities/README.md`. No proprietary plugin import, complete
+Glaxnimate parity, native OS acceptance or full tutorial-watching claim.
+
+Next: native adjustment keyframe UI with split/extend tests; Bezier trim and
+curve integration; optional payload validation and async audio/roto ownership.
+The existing 277 non-high lint findings and large bundle remain. See
+`AUDIT_STATE.md` Cycle 14. Work stays on `codex/omniframe-text-crop-gif-providers`;
+no main merge, PR creation or environment publication.
+
 ## 2026-11-16 — validated imports and project-file privacy
 
 Cycle 13 rejects malformed core project data and attempts to overwrite editor

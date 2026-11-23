@@ -8,6 +8,7 @@ audit_total=0
 audit_failed=0
 for audit_test in \
   qa/animation-entry-e2e.mjs \
+  qa/editor-capabilities-e2e.mjs \
   qa/effect-mask-shapes-e2e.mjs \
   qa/context-menu-viewport-e2e.mjs \
   qa/mcp-live-bridge-e2e.mjs \

@@ -1,0 +1,21 @@
+{
+  "workflow": "Shared headless app compositor → render_export → decoded framemd5",
+  "presets": [
+    "Box Blur",
+    "Color Hold",
+    "Luma Range",
+    "Midtone Matte",
+    "Despill Green",
+    "Despill Blue",
+    "Channel Mixer",
+    "Channel Swap",
+    "Trim Path"
+  ],
+  "frames": 216,
+  "distinctDecodedFrames": 207,
+  "maskedColorHold": "pass",
+  "lumaAlpha": "pass",
+  "despill": "pass",
+  "channelMixer": "pass",
+  "source": "Existing Pexels car subject; see public/assets/effect-subjects credits"
+}

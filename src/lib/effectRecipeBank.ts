@@ -1,8 +1,10 @@
+import { GENERATED_GROUPS, effectGroupLabel, isInEffectGroup } from './effectTaxonomy'
 import type { ClipEffect } from '../types'
 
 export type GeneratedFxCat = 'glitch' | 'motion' | 'color' | 'blur' | 'distort' | 'burst' | 'retro' | 'light' | 'key' | 'Glitch NG'
 
 export interface GeneratedFxEntry {
+  groupPath?: readonly string[]
   id: string
   name: string
   cat: GeneratedFxCat
@@ -118,6 +120,7 @@ export function generatedRecipeAt(index: number): GeneratedFxEntry | undefined {
     id: idFor(index),
     name: `${family.label} · ${family.describe(variant)} · ${String(variant).padStart(4, '0')}`,
     cat: family.cat,
+    groupPath: GENERATED_GROUPS[family.key] ?? [family.cat, 'recipes'],
     trace: `OmniFrame ${family.label} recipe`,
     patch: family.patch(variant) as Record<string, number | string>,
   }
@@ -129,31 +132,41 @@ export function generatedRecipeById(id: string): GeneratedFxEntry | undefined {
   return Number.isInteger(value) ? generatedRecipeAt(value - 1) : undefined
 }
 
-export function queryGeneratedRecipes(options: { cat?: GeneratedFxCat | 'all'; q?: string; offset?: number; limit?: number } = {}): { total: number; entries: GeneratedFxEntry[] } {
+export function queryGeneratedRecipes(options: { cat?: GeneratedFxCat | 'all'; q?: string; offset?: number; limit?: number; groupPath?: readonly string[] } = {}): { total: number; entries: GeneratedFxEntry[] } {
   const cat = options.cat ?? 'all'
   const q = (options.q ?? '').trim().toLowerCase()
   const offset = Math.max(0, Math.floor(options.offset ?? 0))
   const limit = Math.max(0, Math.floor(options.limit ?? 60))
   const entries: GeneratedFxEntry[] = []
   const queryTokens = q.match(/[a-z0-9]+/g) ?? []
-  if (!q && cat === 'all') {
-    const end = Math.min(GENERATED_RECIPE_COUNT, offset + limit)
-    for (let index = offset; index < end; index++) {
+  const staticText = FAMILIES.map(family => `${family.label} ${family.key} ${family.cat} ${family.terms} ${(GENERATED_GROUPS[family.key] ?? []).map(effectGroupLabel).join(' ')}`.toLowerCase())
+  const simpleQuery = !queryTokens.some(token => /\d/.test(token) || 'ofx'.includes(token))
+  const allowed = FAMILIES.map((family, index) => ({ family, index })).filter(({ family, index }) =>
+    (cat === 'all' || family.cat === cat) && isInEffectGroup(GENERATED_GROUPS[family.key] ?? [family.cat, 'recipes'], options.groupPath)
+    && (!simpleQuery || queryTokens.every(token => staticText[index].includes(token))))
+  // Whole-family pages use arithmetic. Never allocate or scan all variations just to browse a folder.
+  if (!q || simpleQuery) {
+    const rounds = Math.floor(GENERATED_RECIPE_COUNT / FAMILIES.length)
+    const tail = GENERATED_RECIPE_COUNT % FAMILIES.length
+    const total = rounds * allowed.length + allowed.filter(({ index }) => index < tail).length
+    for (let rank = offset; rank < Math.min(total, offset + limit); rank++) {
+      const index = Math.floor(rank / allowed.length) * FAMILIES.length + allowed[rank % allowed.length].index
       const entry = generatedRecipeAt(index)
       if (entry) entries.push(entry)
     }
-    return { total: GENERATED_RECIPE_COUNT, entries }
+    return { total, entries }
   }
+  const allowedIndices = new Set(allowed.map(({ index }) => index))
   let total = 0
   for (let index = 0; index < GENERATED_RECIPE_COUNT; index++) {
     const family = FAMILIES[index % FAMILIES.length]
-    if (cat !== 'all' && family.cat !== cat) continue
+    if (!allowedIndices.has(index % FAMILIES.length)) continue
     const id = idFor(index)
     if (queryTokens.length) {
-      const staticText = `${family.label} ${family.key} ${family.cat} ${family.terms} ${id}`.toLowerCase()
+      const familyText = `${staticText[index % FAMILIES.length]} ${id}`
       const variant = Math.floor(index / FAMILIES.length) + 1
       const dynamicText = queryTokens.some((token) => /\d/.test(token)) ? `${family.describe(variant)} ${String(variant).padStart(4, '0')}`.toLowerCase() : ''
-      const searchable = `${staticText} ${dynamicText}`
+      const searchable = `${familyText} ${dynamicText}`
       const matches = queryTokens.length === 1
         ? searchable.includes(queryTokens[0])
         : queryTokens.every((token) => searchable.includes(token))

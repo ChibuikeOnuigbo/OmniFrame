@@ -23,7 +23,7 @@ for parent,dirs,names in os.walk(ROOT,followlinks=False):
  rel_parent=Path(parent).relative_to(ROOT).as_posix()
  for d in list(dirs):
   rel=(Path(rel_parent)/d).as_posix().removeprefix('./')
-  if d in SKIP or rel in {'public/ort','reports/repo-audit'}:
+  if d in SKIP or rel in {'public/ort','reports/repo-audit','.cache/reference-apps'}:
    dirs.remove(d);exclusions.append(rel)
  for name in names:
   p=Path(parent)/name;rel=p.relative_to(ROOT).as_posix()

@@ -294,6 +294,10 @@ export class PreviewEngine {
       this.padPool.push(c)
     }
     this.padInUse.add(c)
+    // The project/preview resolution can change while this pool survives.
+    // Old dimensions offset the mask from the rendered pixels after a resize.
+    if (c.width !== this.width * 3) c.width = this.width * 3
+    if (c.height !== this.height * 3) c.height = this.height * 3
     const c2 = c.getContext('2d')!
     c2.setTransform(1, 0, 0, 1, 0, 0)
     c2.filter = 'none'
@@ -313,6 +317,8 @@ export class PreviewEngine {
       this.scratchPool.push(c)
     }
     this.scratchInUse.add(c)
+    if (c.width !== this.width) c.width = this.width
+    if (c.height !== this.height) c.height = this.height
     const c2 = c.getContext('2d')!
     c2.setTransform(1, 0, 0, 1, 0, 0)
     c2.filter = 'none'

@@ -1,3 +1,4 @@
+import { SelectionGradeControls } from './SelectionGradeControls'
 import { BLEND_GROUPS, blendAt } from '../lib/blendModes'
 import { TransformModes } from './TransformWorkbench'
 import { DeviceTransitionInspector } from './DeviceTransitionInspector'
@@ -1283,6 +1284,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       )}
 
       <PlacedEffectsSection clip={clip} />
+      <SelectionGradeControls clip={clip} />
 
       <FxStackSection clip={clip} />
 

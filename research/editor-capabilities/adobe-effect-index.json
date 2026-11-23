@@ -1,0 +1,1166 @@
+{
+  "source": "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/effects-and-animation-presets/effect-list.html",
+  "evidence": "Official effect-name table indexed; names do not establish OmniFrame feature parity.",
+  "effects": [
+    {
+      "group": "3D Channel",
+      "name": "3D Channel Extract"
+    },
+    {
+      "group": "3D Channel",
+      "name": "Cryptomatte"
+    },
+    {
+      "group": "3D Channel",
+      "name": "Depth Matte"
+    },
+    {
+      "group": "3D Channel",
+      "name": "Depth of Field"
+    },
+    {
+      "group": "3D Channel",
+      "name": "Extractor"
+    },
+    {
+      "group": "3D Channel",
+      "name": "Fog 3D"
+    },
+    {
+      "group": "3D Channel",
+      "name": "ID Matte"
+    },
+    {
+      "group": "3D Channel",
+      "name": "IDentifier"
+    },
+    {
+      "group": "Audio",
+      "name": "Backwards"
+    },
+    {
+      "group": "Audio",
+      "name": "Bass & Treble"
+    },
+    {
+      "group": "Audio",
+      "name": "Delay"
+    },
+    {
+      "group": "Audio",
+      "name": "Flange & Chorus"
+    },
+    {
+      "group": "Audio",
+      "name": "High-Low Pass"
+    },
+    {
+      "group": "Audio",
+      "name": "Modulator"
+    },
+    {
+      "group": "Audio",
+      "name": "Parametric EQ"
+    },
+    {
+      "group": "Audio",
+      "name": "Reverb"
+    },
+    {
+      "group": "Audio",
+      "name": "Stereo Mixer"
+    },
+    {
+      "group": "Audio",
+      "name": "Tone"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Bilateral Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Camera Lens Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Camera-Shake Deblur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "CC Cross Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "CC Radial Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "CC Radial Fast Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "CC Vector Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Channel Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Compound Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Directional Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Fast Box Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Gaussian Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Radial Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Sharpen"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Smart Blur"
+    },
+    {
+      "group": "Blur & Sharpen",
+      "name": "Unsharp Mask"
+    },
+    {
+      "group": "Boris FX Mocha",
+      "name": "Mocha AE"
+    },
+    {
+      "group": "Channel",
+      "name": "Arithmetic"
+    },
+    {
+      "group": "Channel",
+      "name": "Blend"
+    },
+    {
+      "group": "Channel",
+      "name": "Calculations"
+    },
+    {
+      "group": "Channel",
+      "name": "CC Composite"
+    },
+    {
+      "group": "Channel",
+      "name": "Channel Combiner"
+    },
+    {
+      "group": "Channel",
+      "name": "Compound Arithmetic"
+    },
+    {
+      "group": "Channel",
+      "name": "Invert"
+    },
+    {
+      "group": "Channel",
+      "name": "Minimax"
+    },
+    {
+      "group": "Channel",
+      "name": "Remove Color Matting"
+    },
+    {
+      "group": "Channel",
+      "name": "Set Channels"
+    },
+    {
+      "group": "Channel",
+      "name": "Set Matte"
+    },
+    {
+      "group": "Channel",
+      "name": "Shift Channels"
+    },
+    {
+      "group": "Channel",
+      "name": "Solid Composite"
+    },
+    {
+      "group": "CINEMA 4D",
+      "name": "CINEWARE"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Auto Color"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Auto Contrast"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Auto Levels"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Black & White"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Brightness & Contrast"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Broadcast Colors"
+    },
+    {
+      "group": "Color Correction",
+      "name": "CC Color Neutralizer"
+    },
+    {
+      "group": "Color Correction",
+      "name": "CC Color Offset"
+    },
+    {
+      "group": "Color Correction",
+      "name": "CC Kernel"
+    },
+    {
+      "group": "Color Correction",
+      "name": "CC Toner"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Change Color"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Change to Color"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Channel Mixer"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Color Balance"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Color Balance (HLS)"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Color Link"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Color Stabilizer"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Colorama"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Curves"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Equalize"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Exposure"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Gamma/Pedestal/Gain"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Hue/Saturation"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Leave Color"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Levels"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Levels (Individual Controls)"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Lumetri Color"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Photo Filter"
+    },
+    {
+      "group": "Color Correction",
+      "name": "PS Arbitrary Map"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Selective Color"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Shadow/Highlight"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Tint"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Tritone"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Vibrance"
+    },
+    {
+      "group": "Color Correction",
+      "name": "Video Limiter"
+    },
+    {
+      "group": "Distort",
+      "name": "Bezier Warp"
+    },
+    {
+      "group": "Distort",
+      "name": "Bulge"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Bend It"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Bender"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Blobbylize"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Flo Motion"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Griddler"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Lens"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Page Turn"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Power Pin"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Ripple Pulse"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Slant"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Smear"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Split"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Split 2"
+    },
+    {
+      "group": "Distort",
+      "name": "CC Tiler"
+    },
+    {
+      "group": "Distort",
+      "name": "Corner Pin"
+    },
+    {
+      "group": "Distort",
+      "name": "Detail-preserving Upscale"
+    },
+    {
+      "group": "Distort",
+      "name": "Displacement Map"
+    },
+    {
+      "group": "Distort",
+      "name": "Liquify"
+    },
+    {
+      "group": "Distort",
+      "name": "Magnify"
+    },
+    {
+      "group": "Distort",
+      "name": "Mesh Warp"
+    },
+    {
+      "group": "Distort",
+      "name": "Mirror"
+    },
+    {
+      "group": "Distort",
+      "name": "Offset"
+    },
+    {
+      "group": "Distort",
+      "name": "Optics Compensation"
+    },
+    {
+      "group": "Distort",
+      "name": "Polar Coordinates"
+    },
+    {
+      "group": "Distort",
+      "name": "Reshape"
+    },
+    {
+      "group": "Distort",
+      "name": "Ripple"
+    },
+    {
+      "group": "Distort",
+      "name": "Rolling Shutter Repair"
+    },
+    {
+      "group": "Distort",
+      "name": "Smear"
+    },
+    {
+      "group": "Distort",
+      "name": "Spherize"
+    },
+    {
+      "group": "Distort",
+      "name": "Transform"
+    },
+    {
+      "group": "Distort",
+      "name": "Turbulent Displace"
+    },
+    {
+      "group": "Distort",
+      "name": "Twirl"
+    },
+    {
+      "group": "Distort",
+      "name": "Warp"
+    },
+    {
+      "group": "Distort",
+      "name": "Warp Stabilizer"
+    },
+    {
+      "group": "Distort",
+      "name": "Wave Warp"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "3D Point Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Angle Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Checkbox Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Color Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Dropdown Menu Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Layer Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Point Control"
+    },
+    {
+      "group": "Expression Controls",
+      "name": "Slider Control"
+    },
+    {
+      "group": "Generate",
+      "name": "4-Color Gradient"
+    },
+    {
+      "group": "Generate",
+      "name": "Advanced Lightning"
+    },
+    {
+      "group": "Generate",
+      "name": "Audio Spectrum"
+    },
+    {
+      "group": "Generate",
+      "name": "Audio Waveform"
+    },
+    {
+      "group": "Generate",
+      "name": "Beam"
+    },
+    {
+      "group": "Generate",
+      "name": "CC Glue Gun"
+    },
+    {
+      "group": "Generate",
+      "name": "CC Light Burst 2.5"
+    },
+    {
+      "group": "Generate",
+      "name": "CC Light Rays"
+    },
+    {
+      "group": "Generate",
+      "name": "CC Light Sweep"
+    },
+    {
+      "group": "Generate",
+      "name": "CC Threads"
+    },
+    {
+      "group": "Generate",
+      "name": "Cell Pattern"
+    },
+    {
+      "group": "Generate",
+      "name": "Checkerboard"
+    },
+    {
+      "group": "Generate",
+      "name": "Circle"
+    },
+    {
+      "group": "Generate",
+      "name": "Ellipse"
+    },
+    {
+      "group": "Generate",
+      "name": "Eyedropper Fill"
+    },
+    {
+      "group": "Generate",
+      "name": "Fill"
+    },
+    {
+      "group": "Generate",
+      "name": "Fractal"
+    },
+    {
+      "group": "Generate",
+      "name": "Gradient Ramp"
+    },
+    {
+      "group": "Generate",
+      "name": "Grid"
+    },
+    {
+      "group": "Generate",
+      "name": "Lens Flare"
+    },
+    {
+      "group": "Generate",
+      "name": "Paint Bucket"
+    },
+    {
+      "group": "Generate",
+      "name": "Radio Waves"
+    },
+    {
+      "group": "Generate",
+      "name": "Scribble"
+    },
+    {
+      "group": "Generate",
+      "name": "Stroke"
+    },
+    {
+      "group": "Generate",
+      "name": "Vegas"
+    },
+    {
+      "group": "Generate",
+      "name": "Write-on"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Blur"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Chromatic Aberrations"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Color Gradients"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Converter"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR De-Noise"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Digital Glitch"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Fractal Noise"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Glow"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Plane to Sphere"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Rotate Sphere"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Sharpen"
+    },
+    {
+      "group": "Immersive Video",
+      "name": "VR Sphere to Plane"
+    },
+    {
+      "group": "Keying",
+      "name": "Advanced Spill Suppressor"
+    },
+    {
+      "group": "Keying",
+      "name": "CC Simple Wire Removal"
+    },
+    {
+      "group": "Keying",
+      "name": "Color Difference Key"
+    },
+    {
+      "group": "Keying",
+      "name": "Color Range"
+    },
+    {
+      "group": "Keying",
+      "name": "Difference Matte"
+    },
+    {
+      "group": "Keying",
+      "name": "Extract"
+    },
+    {
+      "group": "Keying",
+      "name": "Inner/Outer Key"
+    },
+    {
+      "group": "Keying",
+      "name": "Key Cleaner"
+    },
+    {
+      "group": "Keying",
+      "name": "Keylight (1.2)"
+    },
+    {
+      "group": "Keying",
+      "name": "Linear Color Key"
+    },
+    {
+      "group": "Matte",
+      "name": "Matte Choker"
+    },
+    {
+      "group": "Matte",
+      "name": "Mocha shape"
+    },
+    {
+      "group": "Matte",
+      "name": "Refine Hard Matte"
+    },
+    {
+      "group": "Matte",
+      "name": "Refine Soft Matte"
+    },
+    {
+      "group": "Matte",
+      "name": "Simple Choker"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Add Grain"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Dust & Scratches"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Fractal Noise"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Match Grain"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Median"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Median (Legacy)"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Noise"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Noise Alpha"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Noise HLS"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Noise HLS Auto"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Remove Grain"
+    },
+    {
+      "group": "Noise & Grain",
+      "name": "Turbulent Noise"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Basic 3D"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Basic Text"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Color Key"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Gaussian Blur (Legacy)"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Lightning"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Luma Key"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Path Text"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Reduce Interlace Flicker"
+    },
+    {
+      "group": "Obsolete",
+      "name": "Spill Suppressor"
+    },
+    {
+      "group": "Perspective",
+      "name": "3D Camera Tracker"
+    },
+    {
+      "group": "Perspective",
+      "name": "3D Glasses"
+    },
+    {
+      "group": "Perspective",
+      "name": "Bevel Alpha"
+    },
+    {
+      "group": "Perspective",
+      "name": "Bevel Edges"
+    },
+    {
+      "group": "Perspective",
+      "name": "CC Cylinder"
+    },
+    {
+      "group": "Perspective",
+      "name": "CC Environment"
+    },
+    {
+      "group": "Perspective",
+      "name": "CC Sphere"
+    },
+    {
+      "group": "Perspective",
+      "name": "CC Spotlight"
+    },
+    {
+      "group": "Perspective",
+      "name": "Drop Shadow"
+    },
+    {
+      "group": "Perspective",
+      "name": "Radial Shadow"
+    },
+    {
+      "group": "Simulation",
+      "name": "Card Dance"
+    },
+    {
+      "group": "Simulation",
+      "name": "Caustics"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Ball Action"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Bubbles"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Drizzle"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Hair"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Mr. Mercury"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Particle Systems \u2161"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Particle World"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Pixel Polly"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Rainfall"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Scatterize"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Snowfall"
+    },
+    {
+      "group": "Simulation",
+      "name": "CC Star Burst"
+    },
+    {
+      "group": "Simulation",
+      "name": "Foam"
+    },
+    {
+      "group": "Simulation",
+      "name": "Particle Playground"
+    },
+    {
+      "group": "Simulation",
+      "name": "Shatter"
+    },
+    {
+      "group": "Simulation",
+      "name": "Wave World"
+    },
+    {
+      "group": "Stylize",
+      "name": "Brush Strokes"
+    },
+    {
+      "group": "Stylize",
+      "name": "Cartoon"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Block Load"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Burn Flim"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Glass"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC HexTile"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Kaleida"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Mr. Smoothie"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Plastic"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC RepeTile"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Threshold"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Threshold RGB"
+    },
+    {
+      "group": "Stylize",
+      "name": "CC Vignette"
+    },
+    {
+      "group": "Stylize",
+      "name": "Color Emboss"
+    },
+    {
+      "group": "Stylize",
+      "name": "Emboss"
+    },
+    {
+      "group": "Stylize",
+      "name": "Find Edges"
+    },
+    {
+      "group": "Stylize",
+      "name": "Glow"
+    },
+    {
+      "group": "Stylize",
+      "name": "Mosaic"
+    },
+    {
+      "group": "Stylize",
+      "name": "Motion Tile"
+    },
+    {
+      "group": "Stylize",
+      "name": "Posterize"
+    },
+    {
+      "group": "Stylize",
+      "name": "Roughen Edges"
+    },
+    {
+      "group": "Stylize",
+      "name": "Scatter"
+    },
+    {
+      "group": "Stylize",
+      "name": "Strobe Light"
+    },
+    {
+      "group": "Stylize",
+      "name": "Texturize"
+    },
+    {
+      "group": "Stylize",
+      "name": "Threshold"
+    },
+    {
+      "group": "Text",
+      "name": "Numbers"
+    },
+    {
+      "group": "Text",
+      "name": "Timecode"
+    },
+    {
+      "group": "Time",
+      "name": "CC Force Motion Blur"
+    },
+    {
+      "group": "Time",
+      "name": "CC Wide Time"
+    },
+    {
+      "group": "Time",
+      "name": "Echo"
+    },
+    {
+      "group": "Time",
+      "name": "Pixel Motion Blur"
+    },
+    {
+      "group": "Time",
+      "name": "Posterize Time"
+    },
+    {
+      "group": "Time",
+      "name": "Time Difference"
+    },
+    {
+      "group": "Time",
+      "name": "Time Displacement"
+    },
+    {
+      "group": "Time",
+      "name": "Timewarp"
+    },
+    {
+      "group": "Transition",
+      "name": "Block Dissolve"
+    },
+    {
+      "group": "Transition",
+      "name": "Card Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Glass Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Grid Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Image Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Jaws"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Light Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Line Sweep"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Radial ScaleWipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Scale Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "CC Twister"
+    },
+    {
+      "group": "Transition",
+      "name": "CC WarpoMatic"
+    },
+    {
+      "group": "Transition",
+      "name": "Gradient Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "Iris Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "Linear Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "Radial Wipe"
+    },
+    {
+      "group": "Transition",
+      "name": "Venetian Blinds"
+    },
+    {
+      "group": "Utility",
+      "name": "Apply Color LUT"
+    },
+    {
+      "group": "Utility",
+      "name": "CC Overbrights"
+    },
+    {
+      "group": "Utility",
+      "name": "Cineon Converter"
+    },
+    {
+      "group": "Utility",
+      "name": "Color Profile Converter"
+    },
+    {
+      "group": "Utility",
+      "name": "Grow Bounds"
+    },
+    {
+      "group": "Utility",
+      "name": "HDR Compander"
+    },
+    {
+      "group": "Utility",
+      "name": "HDR Highlight Compression"
+    }
+  ]
+}

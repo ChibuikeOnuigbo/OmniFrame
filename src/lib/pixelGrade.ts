@@ -1,3 +1,4 @@
+import { applyBoxBlur } from './boxBlur'
 /**
  * Per-pixel grade pass (Nova-style effects CSS filters cannot express):
  * Vibrance (smart saturation that protects already-saturated pixels),
@@ -5,6 +6,7 @@
  * Runs on the composited canvas wherever LUT stacks run.
  */
 import type { ClipEffect } from '../types'
+import { applySelectionGrade, hasSelectionGrade } from './selectionGrade'
 import { deformRGBA, type DeformationSpec } from './deformation'
 
 // Reuse the two directional/zoom-blur surfaces across frames. Creating native
@@ -585,6 +587,7 @@ let egEdge: HTMLCanvasElement | null = null
 export function hasPixelGrade(effect?: ClipEffect): boolean {
   if (!effect) return false
   return Boolean(
+    hasSelectionGrade(effect) || (Number.isFinite(effect.boxBlur) && (effect.boxBlur ?? 0) > 0) ||
     (effect.vibrance && effect.vibrance !== 1) ||
     (effect.solarize && effect.solarize > 0) ||
     (effect.posterize && effect.posterize > 0) ||
@@ -1201,6 +1204,8 @@ export function applyPixelGrade(canvas: HTMLCanvasElement, effect: ClipEffect, s
     d[i + 1] = g < 0 ? 0 : g > 255 ? 255 : g
     d[i + 2] = b < 0 ? 0 : b > 255 ? 255 : b
   }
+  applyBoxBlur(image, effect.boxBlur ?? 0)
+  applySelectionGrade(image, effect)
   ctx.putImageData(image, 0, 0)
   applyAmFamily(ctx, effect, canvas.width, canvas.height, seed)
   applyOneFramer(ctx, effect, canvas.width, canvas.height, seed)

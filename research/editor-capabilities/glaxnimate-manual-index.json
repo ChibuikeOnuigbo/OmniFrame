@@ -1,0 +1,292 @@
+[
+  {
+    "url": "https://docs.glaxnimate.org/en/index.html",
+    "title": "Glaxnimate Manual",
+    "headings": [
+      "Glaxnimate Manual",
+      "Getting started",
+      "User Interface"
+    ],
+    "sha256": "06b10922ab7673b750b93b03abccaadd24f557afdf51ab1f74c316f33abfb6dc",
+    "bytes": 11314,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/formats.html",
+    "title": "Supported Formats",
+    "headings": [
+      "Supported Formats",
+      "Lottie",
+      "Telegram Animated Stickers",
+      "Scalable Vector Graphics",
+      "Raster Images"
+    ],
+    "sha256": "a8cd129b66b65af8df912dfd084b7333a2e263834b4f2f81efe029d7f4314883",
+    "bytes": 10547,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/introduction.html",
+    "title": "Core Concepts",
+    "headings": [
+      "Core Concepts",
+      "Vector graphics",
+      "Tweening",
+      "Layers",
+      "Precompositions"
+    ],
+    "sha256": "a68887fb0d4b8cff933bd8de8de7194c2f19c46f6c56d020b82019c057576115",
+    "bytes": 11480,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/shapes.html",
+    "title": "Shapes and Layers",
+    "headings": [
+      "Shapes and Layers",
+      "Containers",
+      "Group",
+      "Layer",
+      "Precomposition Layer",
+      "Shapes",
+      "Rectangle",
+      "Ellipse",
+      "Path",
+      "PolyStar",
+      "Style Shapes",
+      "Fill",
+      "Stroke",
+      "Shape Modifiers",
+      "Trim Path",
+      "Repeater",
+      "Inflate / Deflate",
+      "Offset Path",
+      "Zig Zag",
+      "Miscellaneous",
+      "Image"
+    ],
+    "sha256": "f99fb755d8004c5c044fd3e89637aab6974245ef400be32dc0b931a2eec5765c",
+    "bytes": 34670,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/tutorials.html",
+    "title": "Tutorials",
+    "headings": [
+      "Tutorials",
+      "Written Tutorials",
+      "Video Tutorials"
+    ],
+    "sha256": "eea1cb5ff3569aa1342db817a59f2935e656b72ea27eac545916b312c0ddafd8",
+    "bytes": 10503,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/tutorials/bouncy_ball.html",
+    "title": "Bouncing Ball",
+    "headings": [
+      "Bouncing Ball",
+      "Create a new project",
+      "Creating the Ball",
+      "Basic Animation Loop",
+      "Easing",
+      "Squishing",
+      "Multiple Bounces",
+      "Hit Lines"
+    ],
+    "sha256": "8742eee95c34da404fdd7a27b547c79e0b24819a3e8c58153b72ef5751b4108c",
+    "bytes": 35429,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface.html",
+    "title": "User Interface",
+    "headings": [
+      "User Interface"
+    ],
+    "sha256": "44ca98228e9728315c5b336c2d41b30bf3b60b77f5e0f024ad8638dcaa922496",
+    "bytes": 10558,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/canvas.html",
+    "title": "Canvas",
+    "headings": [
+      "Canvas",
+      "Tools",
+      "Moving around",
+      "Panning",
+      "Zooming",
+      "Rotating",
+      "Finer control"
+    ],
+    "sha256": "68af6d8488e89505ceb2df47da456ebbd9ad0acd7d276bbac8116991299c6da5",
+    "bytes": 12943,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/docks.html",
+    "title": "Dockable Views",
+    "headings": [
+      "Dockable Views",
+      "Tools",
+      "Tool Options",
+      "Fill",
+      "HSV",
+      "HSL",
+      "RGB",
+      "CMYK",
+      "Palette",
+      "Stroke",
+      "Stroke Style",
+      "Stroke Color",
+      "Layers",
+      "Context Menu",
+      "Timeline",
+      "Playback Buttons",
+      "Composition Tabs",
+      "Property and Object List",
+      "Keyframe Timeline",
+      "Custom Easing Dialog",
+      "Align",
+      "Properties",
+      "Undo History",
+      "Gradients",
+      "Presets",
+      "Editing from the List",
+      "Editing from the Canvas",
+      "Swatch",
+      "Swatch Extra Options",
+      "Mouse interactions",
+      "From Palette",
+      "Assets",
+      "Script Console",
+      "Snippets",
+      "Logs"
+    ],
+    "sha256": "0354f40fb44b179cf32b7cf3cfed8181d13298c89aa6197679357d62696782cb",
+    "bytes": 50191,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/menus.html",
+    "title": "Menus",
+    "headings": [
+      "Menus",
+      "File",
+      "Edit",
+      "Tools",
+      "View",
+      "Views",
+      "Toolbar Menu",
+      "Document",
+      "Single frame",
+      "Web preview",
+      "Playback",
+      "Layers",
+      "New layer",
+      "Object",
+      "Align",
+      "Path",
+      "Help",
+      "Toolbars",
+      "Main",
+      "Node Editing",
+      "Tools",
+      "Status Bar"
+    ],
+    "sha256": "f6d9d2699cef883cc0cad85e0da40d8b11ec5f76b47eae9cd298cc035bc582db",
+    "bytes": 18756,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/tutorials/loading_spinner.html",
+    "title": "Loading Spinner",
+    "headings": [
+      "Loading Spinner",
+      "Draw a Circle",
+      "Trim Path",
+      "Adding Keyframes"
+    ],
+    "sha256": "335ac7f76e9a3b19e5660753027582f62b091741edc5211780abdb88894e8bc0",
+    "bytes": 16717,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/dialogs.html",
+    "title": "Dialogs",
+    "headings": [
+      "Dialogs",
+      "About",
+      "Credits",
+      "Paths",
+      "System",
+      "Move To",
+      "Resize",
+      "Timing",
+      "Trace Bitmap",
+      "Closest Color",
+      "Extract Colors",
+      "Transparency",
+      "Pixel",
+      "Curve Options",
+      "Preview",
+      "Emoji Selection",
+      "Emoji Sets",
+      "Emoji Select Dialog"
+    ],
+    "sha256": "d7afdc220d56c68d2c1735c4d6758a67ab39fb005d99630d16ed7243b5976a56",
+    "bytes": 23719,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/settings.html",
+    "title": "Settings Dialog",
+    "headings": [
+      "Settings Dialog",
+      "User Interface",
+      "New Animation Defaults",
+      "Open Save",
+      "Toolbars",
+      "Plugins",
+      "Clipboard",
+      "Widget Theme",
+      "Keyboard Shortcuts"
+    ],
+    "sha256": "fa4f8d0a523e38baa81514f5001a3306e2dac5341b53c58ceeaaf9a10ba2fabb",
+    "bytes": 15198,
+    "controls": []
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/tools.html",
+    "title": "Tools",
+    "headings": [
+      "Tools",
+      "Select",
+      "Mouse Actions",
+      "Keyboard Actions",
+      "Context Menu",
+      "Edit Nodes",
+      "Mouse Actions",
+      "Context Menu",
+      "Draw Bezier",
+      "Mouse Actions",
+      "Keyboard Actions",
+      "Rectangle",
+      "Mouse Interactions",
+      "Keyboard Interactions",
+      "Ellipse",
+      "Star / Polygon",
+      "Mouse Interactions",
+      "Keyboard Interactions",
+      "Options",
+      "Shape Options",
+      "Color Picker",
+      "Mouse Interactions",
+      "Options"
+    ],
+    "sha256": "33def2a5791a77dce97750ec3826c6b6e550e09fa16b7e120ed66b2272720960",
+    "bytes": 25881,
+    "controls": []
+  }
+]

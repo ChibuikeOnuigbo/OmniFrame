@@ -1,3 +1,4 @@
+import { effectGroupLabel, effectTags } from '../lib/effectTaxonomy'
 import { PreviewSquare } from './PreviewSquare'
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
@@ -12,7 +13,7 @@ import { PanelSection } from './PanelSection'
 import { SHAKE_PRESETS } from '../lib/shakePresets'
 import { previewClipEffect, previewClipPlayback, previewEffectLayer, previewLut } from '../lib/visualPreviewActions'
 import { customEffectFileName, customEffectSummary, parseCustomEffectFile, serializeCustomEffect } from '../lib/customEffects'
-import { FX_CATS, GENERATED_FX_RECIPE_COUNT, fxCatalogCount, loadGlitchRecipeCatalog, queryFxCatalog, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
+import { FX_CATS, fxGroupChildren, fxCatalogCount, loadGlitchRecipeCatalog, queryFxCatalog, type FxCat, type FxCatalogEntry } from '../lib/effectCatalog'
 import type { CustomEffect } from '../types'
 
 type LutItem = {
@@ -27,6 +28,7 @@ type LutItem = {
 }
 
 const DEFAULT_EFFECTS: ClipEffect = {
+  boxBlur: 0, colorHold: 0, lumaRange: 0, despill: 0, channelMixer: 0,
   brightness: 1,
   contrast: 1,
   saturation: 1,
@@ -1019,6 +1021,12 @@ const FX_MIME = 'application/x-omniframe-fx'
  */
 function FxCatalogBrowser() {
   const [cat, setCat] = useState<FxCat | 'all'>('all')
+  const [groupPath, setGroupPath] = useState<string[]>([])
+  const navigateGroup = (path: string[]) => {
+    setGroupPath(path)
+    setCat((path[0] as FxCat) ?? 'all')
+    setLimit(60)
+  }
   const [collection, setCollection] = useState('all')
   const [favorites, setFavorites] = useState<string[]>(() => {
     try { const saved = JSON.parse(localStorage.getItem('omniframe.fxFavorites') || '[]'); return Array.isArray(saved) ? saved.filter(x => typeof x === 'string') : [] } catch { return [] }
@@ -1043,19 +1051,21 @@ function FxCatalogBrowser() {
   const requestRightSection = useEditor((s) => s.requestRightSection)
 
   const catalog = useMemo(() => queryFxCatalog({
-    cat,
+    cat, groupPath,
     q: deferredQuery,
     limit,
-    collection: collection as 'all' | 'curated' | 'generated' | 'studio' | 'favorites',
+    collection: collection as 'all' | 'essentials' | 'curated' | 'generated' | 'studio' | 'favorites',
     favorites,
-  }), [cat, deferredQuery, limit, collection, favorites, catalogRevision])
+  }), [cat, groupPath, deferredQuery, limit, collection, favorites, catalogRevision])
+  const childGroups = useMemo(() => fxGroupChildren(groupPath), [groupPath, catalogRevision])
   const entries = catalog.entries
   const catalogTotal = fxCatalogCount()
   const collectionOptions = [
-    { value: 'all', label: 'All · 300K+' },
-    { value: 'curated', label: 'Curated + authored' },
-    { value: 'generated', label: `Indexed · ${GENERATED_FX_RECIPE_COUNT.toLocaleString()}` },
-    { value: 'studio', label: 'Studio Looks · 1,152' },
+    { value: 'all', label: 'All' },
+    { value: 'essentials', label: 'Essentials' },
+    { value: 'curated', label: 'Curated' },
+    { value: 'generated', label: 'Variations' },
+    { value: 'studio', label: 'Studio looks' },
     { value: 'favorites', label: `Favorites · ${favorites.length}` },
   ]
   const stepCollection = (delta: number) => {
@@ -1092,11 +1102,8 @@ function FxCatalogBrowser() {
           <button type="button" data-testid="fx-collection-next" aria-label="Next effect collection" onClick={() => stepCollection(1)} className="grid place-items-center border-l border-ink-700 text-ink-400 transition-colors hover:border-ink-500 hover:bg-ink-800 hover:text-white focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"><ChevronRight size={13} /></button>
         </div>
       </div>
-      <div className="flex gap-1 overflow-x-auto pb-1" aria-label="Effect packs">
-        {['Lens Bokeh', 'Motion Pulse', 'Directional Light', 'Turbulence'].map(pack => <button key={pack} type="button" onClick={() => {setQ(pack); setCat('all'); setCollection('all'); setLimit(60)}} className="shrink-0 rounded border border-ink-700 px-2 py-1 text-[10px] hover:border-cyan-400">{pack}</button>)}
-      </div>
       {packError && <button type="button" onClick={loadPack} className="text-[10px] text-amber-300">{packError} · Retry recipe library</button>}
-      <div className="grid grid-cols-4 gap-1" role="tablist" aria-label="Effect categories" data-testid="fx-category-grid">
+      <div className="grid grid-cols-3 gap-1" role="tablist" aria-label="Effect categories" data-testid="fx-category-grid">
         {FX_CATS.map((c) => {
           const Icon = CAT_ICON[c.id]
           return <button
@@ -1105,7 +1112,7 @@ function FxCatalogBrowser() {
             role="tab"
             aria-selected={cat === c.id}
             data-testid={`fx-cat-${c.id}`}
-            onClick={() => { setCat(c.id as FxCat | 'all'); setLimit(60) }}
+            onClick={() => navigateGroup(c.id === 'all' ? [] : [c.id])}
             title={c.label}
             className={`flex min-w-0 items-center justify-center gap-1 rounded-md border px-1.5 py-1 text-[9px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 ${cat === c.id ? 'border-cyan-200 bg-cyan-400 text-ink-950 shadow-[0_0_0_1px_rgba(103,232,249,.35)]' : 'border-ink-700 bg-ink-900 text-ink-300 hover:border-ink-500 hover:bg-ink-800 hover:text-white'}`}
           >
@@ -1113,6 +1120,22 @@ function FxCatalogBrowser() {
           </button>
         })}
       </div>
+      {groupPath.length > 0 && <div className="space-y-1.5 rounded-md border border-ink-700 p-1.5" data-testid="fx-group-browser">
+        <nav aria-label="Effect group path" className="flex min-w-0 items-center gap-1">
+          <button type="button" aria-label="Parent effect group" onClick={() => navigateGroup(groupPath.slice(0, -1))} className="grid h-7 w-7 shrink-0 place-items-center rounded hover:bg-ink-800 focus-visible:ring-2 focus-visible:ring-cyan-300"><ChevronLeft size={14}/></button>
+          <div className="flex min-w-0 items-center gap-1 overflow-x-auto text-[10px]">
+            {groupPath.map((part, index) => <span key={groupPath.slice(0, index + 1).join('/')} className="flex shrink-0 items-center gap-1">
+              {index > 0 && <ChevronRight size={10} aria-hidden="true"/>}
+              <button type="button" aria-current={index === groupPath.length - 1 ? 'page' : undefined} onClick={() => navigateGroup(groupPath.slice(0, index + 1))} className="rounded px-1 py-1 text-ink-300 hover:bg-ink-800 aria-[current=page]:text-cyan-200 focus-visible:ring-2 focus-visible:ring-cyan-300">{effectGroupLabel(part)}</button>
+            </span>)}
+          </div>
+        </nav>
+        {childGroups.length > 0 && <div className="grid grid-cols-2 gap-1" aria-label="Effect subgroups">
+          {childGroups.map(group => <button key={group.id} type="button" data-testid={`fx-group-${group.id}`} onClick={() => navigateGroup(group.path)} title={group.label} className="flex min-w-0 items-center gap-1.5 rounded border border-ink-700 bg-ink-900 px-2 py-2 text-[10px] text-ink-200 hover:border-ink-500 hover:bg-ink-800 focus-visible:ring-2 focus-visible:ring-cyan-300">
+            <Layers size={12} className="shrink-0" aria-hidden="true"/><span className="min-w-0 flex-1 truncate text-left">{group.label}</span><ChevronRight size={12} className="shrink-0" aria-hidden="true"/>
+          </button>)}
+        </div>}
+      </div>}
       <div className="flex items-center gap-1.5">
         <div className="relative min-w-0 flex-1">
           <Search size={11} className="pointer-events-none absolute left-1.5 top-1/2 -translate-y-1/2 text-ink-500" />
@@ -1121,7 +1144,7 @@ function FxCatalogBrowser() {
             value={q}
             data-testid="fx-catalog-search"
             onChange={(e) => { setQ(e.target.value); setLimit(60) }}
-            placeholder="Search effects…"
+            placeholder={groupPath.length ? `Search ${effectGroupLabel(groupPath[groupPath.length - 1])}…` : 'Search effects…'}
             className="w-full rounded border border-ink-700 bg-ink-900 py-1 pl-6 pr-1.5 text-[10px] text-ink-100 placeholder:text-ink-500"
           />
         </div>
@@ -1130,7 +1153,7 @@ function FxCatalogBrowser() {
         </span>
       </div>
       <div className="grid max-h-[38vh] grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-1 overflow-y-auto pr-0.5" data-testid="fx-catalog-grid">
-        {entries.slice(0, limit).map((e) => <div key={e.id} className="relative">
+        {entries.slice(0, limit).map((e) => <div key={e.id} className="relative" title={effectTags(e).join(' › ')}>
           <PreviewSquare id={`fx-tile-${e.id}`} name={e.name} dragId={e.id} effect={e.patch as ClipEffect}
             image={`/assets/effect-subjects/${/face|portrait|skin|beauty|eye/i.test(e.name) || ['color', 'blur', 'key', 'light'].includes(e.cat) ? 'pexels-portrait' : 'pexels-car'}.jpg`}
             preview={() => { if (selectedClipId) previewClipEffect(selectedClipId, e.name, e.patch as ClipEffect); else previewEffectLayer(e.name, e.patch as ClipEffect) }}
@@ -1149,7 +1172,7 @@ function FxCatalogBrowser() {
         </button>
       )}
       {catalog.total === 0 && (
-        <p className="py-2 text-center text-[10px] text-ink-500">No effects match — try another sub-tab or clear the search.</p>
+        <p className="py-2 text-center text-[10px] text-ink-500">No effects here. Clear search or choose another group.</p>
       )}
     </div>
   )
@@ -1204,7 +1227,7 @@ export function EffectsPanel() {
         <p className="mt-1 text-[10px] leading-snug text-ink-300">Click to preview · Double-click or + to add</p>
       </div>
 
-      <PanelSection title="Effect catalog" hint="300K+" defaultOpen testId="fx-catalog">
+      <PanelSection title="Effect catalog" defaultOpen testId="fx-catalog">
         <FxCatalogBrowser />
       </PanelSection>
 

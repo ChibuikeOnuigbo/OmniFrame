@@ -56,3 +56,6 @@ new_doc_toll_research/packs/
 
 # Project-local Python packages for optional video QA
 .cache/python-deps/
+
+# Official reference editor packages used for local compatibility study
+.cache/reference-apps/

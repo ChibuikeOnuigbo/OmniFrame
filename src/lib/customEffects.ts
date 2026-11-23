@@ -21,6 +21,7 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect | 'motion
   brightness: 1,
   contrast: 1,
   saturation: 1,
+  boxBlur: 0,
   blur: 0,
   grayscale: 0,
   invert: 0,
@@ -39,6 +40,10 @@ export const EFFECT_DEFAULTS: Required<Omit<ClipEffect, keyof NgEffect | 'motion
   lumaKey: 0,
   cardFlip: 0,
   chromaColor: '#00ff00',
+  colorHold: 0, holdColor: '#ff0000', holdSimilarity: .12, holdSoftness: .15,
+  lumaRange: 0, lumaLow: .15, lumaHigh: .85, lumaFeather: .05, lumaInvert: 0,
+  despill: 0, despillChannel: 'green', despillBalance: .5, despillLuma: .5,
+  channelMixer: 0, mixRR: 1, mixRG: 0, mixRB: 0, mixGR: 0, mixGG: 1, mixGB: 0, mixBR: 0, mixBG: 0, mixBB: 1,
   lightType: 'point',
   lightColor: '#ffd9a0',
   lightIntensity: 0,
@@ -119,6 +124,7 @@ const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   brightness: [0, 2],
   contrast: [0, 2],
   saturation: [0, 2],
+  boxBlur: [0, 64],
   blur: [0, 20],
   grayscale: [0, 1],
   invert: [0, 1],
@@ -133,6 +139,11 @@ const RANGES: Partial<Record<keyof ClipEffect, [number, number]>> = {
   pixelStretch: [0, 60],
   waveWarp: [0, 24],
   chromaKey: [0, 1],
+  colorHold: [0, 1], holdSimilarity: [0, 1], holdSoftness: [0, 1],
+  lumaRange: [0, 1], lumaLow: [0, 1], lumaHigh: [0, 1], lumaFeather: [0, .5], lumaInvert: [0, 1],
+  despill: [0, 1], despillBalance: [0, 1], despillLuma: [0, 1], channelMixer: [0, 1],
+  mixRR: [-2, 2], mixRG: [-2, 2], mixRB: [-2, 2], mixGR: [-2, 2], mixGG: [-2, 2], mixGB: [-2, 2],
+  mixBR: [-2, 2], mixBG: [-2, 2], mixBB: [-2, 2],
   fractalBlur: [0, 24],
   lumaKey: [0, 1],
   cardFlip: [0, 2],
@@ -187,6 +198,11 @@ export function sanitizeEffect(input: unknown): ClipEffect {
   if (typeof raw.burstFx === 'string' && (BURST_FAMILIES as readonly string[]).includes(raw.burstFx)) out.burstFx = raw.burstFx as ClipEffect['burstFx']
   if (raw.turbulentMode === 'fbm' || raw.turbulentMode === 'curl' || raw.turbulentMode === 'glass') out.turbulentMode = raw.turbulentMode
   if (raw.liquifyMode === 'push' || raw.liquifyMode === 'bulge' || raw.liquifyMode === 'pinch' || raw.liquifyMode === 'twirl') out.liquifyMode = raw.liquifyMode
+  if (raw.despillChannel === 'green' || raw.despillChannel === 'blue') out.despillChannel = raw.despillChannel
+  for (const key of ['holdColor', 'chromaColor'] as const) {
+    const value = raw[key]
+    if (typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value)) out[key] = value
+  }
   if (typeof raw.bokehShape === 'string' && ['circle', 'triangle', 'square', 'pentagon', 'hexagon', 'octagon', 'diamond', 'star'].includes(raw.bokehShape)) out.bokehShape = raw.bokehShape as ClipEffect['bokehShape']
   if (typeof raw.particleTint === 'string' && /^#[0-9a-fA-F]{6}$/.test(raw.particleTint)) out.particleTint = raw.particleTint
   if (raw.deviceOverlay === 'none' || raw.deviceOverlay === 'phone' || raw.deviceOverlay === 'monitor') out.deviceOverlay = raw.deviceOverlay

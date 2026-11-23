@@ -5,21 +5,23 @@ import { loadAppTs } from '../tools/mcp/appRender.mjs'
 const catalog = await loadAppTs('src/lib/effectCatalog.ts')
 const bank = await loadAppTs('src/lib/effectRecipeBank.ts')
 
-assert.equal(catalog.getFxCatalog().length, 10_623, 'curated/materialized catalog baseline')
+const curatedCount = catalog.getFxCatalog().length
+const totalCount = curatedCount + bank.GENERATED_RECIPE_COUNT
+assert.ok(curatedCount >= 10_623, 'existing curated effects are retained')
 assert.equal(bank.GENERATED_RECIPE_COUNT, 289_377, 'indexed recipe bank size')
-assert.equal(catalog.fxCatalogCount(), 300_000, 'base catalog remains above 150k without the optional authored pack')
+assert.equal(catalog.fxCatalogCount(), totalCount, 'base catalog remains above 150k without the optional authored pack')
 
 const categorySum = catalog.FX_CATS
   .filter((category) => category.id !== 'all')
   .reduce((sum, category) => sum + catalog.fxCatalogCount(category.id), 0)
-assert.equal(categorySum, 300_000, 'category counts partition the catalog')
+assert.equal(categorySum, totalCount, 'category counts partition the catalog')
 
-const lastPage = catalog.queryFxCatalog({ offset: 299_999, limit: 1 })
-assert.equal(lastPage.total, 300_000)
+const lastPage = catalog.queryFxCatalog({ offset: totalCount - 1, limit: 1 })
+assert.equal(lastPage.total, totalCount)
 assert.equal(lastPage.entries[0].id, 'ofx-289377', 'last indexed recipe is reachable through paging')
 assert.deepEqual(catalog.fxCatalogById('ofx-289377'), lastPage.entries[0], 'ID lookup reconstructs the paged recipe')
 assert.equal(catalog.queryFxCatalog({ collection: 'generated', limit: 0 }).total, 289_377, 'generated collection count')
-assert.equal(catalog.queryFxCatalog({ collection: 'curated', limit: 0 }).total, 10_623, 'curated collection stays separately measurable')
+assert.equal(catalog.queryFxCatalog({ collection: 'curated', limit: 0 }).total, curatedCount, 'curated collection stays separately measurable')
 
 const seen = new Set()
 const signatures = new Set()
@@ -52,4 +54,4 @@ for (let page = 0; page < 20; page++) catalog.queryFxCatalog({ q: page % 2 ? 'mo
 const elapsed = performance.now() - start
 assert.ok(elapsed < 3500, `20 indexed searches stay bounded (${elapsed.toFixed(1)} ms)`)
 
-console.log(`effect-recipe-bank-unit: 300000 base recipes, 289377 indexed IDs, ${bank.GENERATED_RECIPE_FAMILIES.length} generated families PASS (${elapsed.toFixed(1)} ms search sweep)`)
+console.log(`effect-recipe-bank-unit: ${totalCount} base recipes, 289377 indexed IDs, ${bank.GENERATED_RECIPE_FAMILIES.length} generated families PASS (${elapsed.toFixed(1)} ms search sweep)`)

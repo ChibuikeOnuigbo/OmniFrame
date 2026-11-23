@@ -1,0 +1,23 @@
+[
+  {
+    "app": "kdenlive",
+    "url": "https://download.kde.org/stable/kdenlive/26.08/linux/kdenlive-26.08.3-x86_64.AppImage",
+    "checksum_url": "https://download.kde.org/stable/kdenlive/26.08/linux/kdenlive-26.08.3-x86_64.AppImage.sha256",
+    "local": ".cache/reference-apps/kdenlive-26.08.3-x86_64.AppImage",
+    "resolved_url": "https://mirrors.ircam.fr/pub/KDE/stable/kdenlive/26.08/linux/kdenlive-26.08.3-x86_64.AppImage",
+    "bytes": 214346232,
+    "sha256": "2c8322edfc86605e4c98a78a019310d9b4fc46bb8e94e6fe313dc7dd987e7671",
+    "expected_sha256": "2c8322edfc86605e4c98a78a019310d9b4fc46bb8e94e6fe313dc7dd987e7671",
+    "status": "verified"
+  },
+  {
+    "app": "glaxnimate",
+    "url": "https://download.kde.org/stable/glaxnimate/0.6.0/linux/glaxnimate-0.6.0-x86_64.AppImage",
+    "checksum_url": "https://download.kde.org/stable/glaxnimate/0.6.0/linux/glaxnimate-0.6.0-x86_64.AppImage.sha256",
+    "local": ".cache/reference-apps/glaxnimate-0.6.0-x86_64.AppImage",
+    "bytes": 261904888,
+    "sha256": "cd8ecda980464520f1171cc9029968b0b3e3c1e6ccb1b7f4e40294796f9292b0",
+    "expected_sha256": "cd8ecda980464520f1171cc9029968b0b3e3c1e6ccb1b7f4e40294796f9292b0",
+    "status": "verified"
+  }
+]

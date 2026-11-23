@@ -1,5 +1,60 @@
 # OmniFrame adversarial audit state
 
+## Cycle 14 — effect hierarchy, reference study and shared rendering (2026-11-23)
+
+- Added nested effect browsing, breadcrumb/back navigation, searchable group tags,
+  scoped search, and an Essentials collection. Categories and subgroups are based
+  on actual patch fields; corrected Liquify and glitch-style classification during
+  review. Generated recipe groups use arithmetic paging and family search. Fixed
+  count badges were removed; totals are derived from the current catalog.
+- Implemented original Box Blur, Color Hold, Luma Range, green/blue Despill and
+  Channel Mixer kernels (eight presets). They share preview/export paths, masks,
+  custom-effect serialization, and the existing dropped-effect keyframe system.
+  Added adjustment-layer controls and corrected their missing Undo boundary.
+- Added arc-length Trim Path for freehand strokes with Start/End/Offset, linear
+  keys, pressure/time interpolation, disjoint wrapping, reset and persistence.
+  Draw On and frame-addressed onion ghosts now honor trim. Slider gestures use
+  a single history transaction; individual keyboard/input edits stay undoable.
+- Browser regression reproduced black masked regions after switching project
+  dimensions: pooled offscreen canvases retained their old sizes. Both padded
+  and plain surfaces now resize when acquired. The live test renders a photo
+  at 640×360, then a masked/keyframed fixture at 320×180 in the same engine.
+- Research: indexed 303 Kdenlive manual pages, 14 Glaxnimate pages, 290 Adobe
+  effect names and the CapCut product/download page. Checksum-verified both KDE
+  AppImages; ran their version commands; indexed 447 installed Kdenlive effect
+  definitions (433 files) and exported/rendered an original SVG using Glaxnimate.
+  These are inventory and selected-feature study, not full tutorial watching or
+  native-plugin parity. Source attribution, scripts and coverage gaps are in
+  research/editor-capabilities/README.md. Cached binaries/HTML are not shipped.
+- Verification: all 41 unit scripts, all 12 browser smoke flows, TypeScript,
+  source lint and production build passed. The new browser workflow also passed
+  against the production bundle. The newly added custom-effect
+  serialization/adversarial cases also passed after that full gate. Browser
+  proof covers nested search, bounded generated pages, audition versus commit,
+  radius/Undo, narrow dock, masked/animated Program pixels, and grade/trim
+  save/New/Open. Shared headless export decoded 216 frames with 207 distinct
+  hashes; compositor checks cover masked Color Hold, luma alpha, despill and
+  channel mixing. Screenshots and an 18-second video are linked in the research
+  README. The project-history audit was rerun; reference package caches are now
+  excluded from that project-source inventory.
+- Scan: source lint retains 277 non-high findings across 201 files; the broad
+  TODO/FIXME/HACK/weak-typing/empty-catch scan has 25 matches. The production
+  bundle still warns about large chunks. No warning was suppressed.
+- Remaining: native adjustment properties still lack the dropped FX Stack's
+  general keyframe UI. Trim supports freehand paths and linear keys, not Bezier
+  shapes, an easing graph, modifier chains or Lottie round trips. Generated
+  combinations have one primary group and parameter variants are not independent
+  engines. Pixel math remains 8-bit RGB; no GPU/HDR or 4K real-time claim. Broader
+  import schemas, generated audio/roto project ownership, media retention,
+  same-project filmstrip invalidation, native OS acceptance, prior video-study
+  and all-effect visual acceptance remain open as recorded in Cycles 12–13.
+- Next pass: unify native adjustment and FX-instance parameter/keyframe editing
+  while preserving split/trim/extend behavior and old projects; add animated
+  layer-mask/alpha export proofs. Extend trim to editable Bezier paths only with
+  shared renderer and graph/persistence tests. Continue project-owned async-job
+  guards and optional drawing/effect import validation. Do not equate reference
+  indexes, recipe totals or CLI version checks with shipped feature parity.
+
 ## Cycle 13 — project import validation and credential privacy (2026-11-16)
 
 - Reproduced in the real browser: a document without clip.volume replaced the

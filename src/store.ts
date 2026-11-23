@@ -677,6 +677,8 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   // ---- drawing actions ----
   editDrawingCel: (mode: 'duplicate-next' | 'clear') => void
   animateDrawingStrokes: (duration: number) => void
+  setDrawingTrim: (strokeId: string, field: 'start' | 'end' | 'offset', value: number, keyframe?: boolean) => void
+  resetDrawingTrim: (strokeId: string) => void
   addDrawingStroke: (stroke: DrawingStroke) => void
   clearDrawingStrokes: (layerId?: string) => void
   setDrawingTool: (tool: DrawingToolType) => void
@@ -3786,6 +3788,23 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ cursorConfig: { ...DEFAULT_CURSOR_CONFIG } }),
 
     // ---- drawing actions ----
+    setDrawingTrim: (strokeId, field, value, keyframe = false) => {
+      const s = get(), stroke = s.drawingStrokes.find(st => st.id === strokeId)
+      if (!stroke || !Number.isFinite(value) || !['start', 'end', 'offset'].includes(field)) return
+      const v = clamp(value, field === 'offset' ? -1 : 0, 1)
+      const trim = stroke.pathTrim ?? { start: 0, end: 1, offset: 0 }
+      const keys = trim.keys?.[field] ?? []
+      // Once keyed, changing a slider edits the value at this frame instead of an invisible base value.
+      const keyed = keyframe || keys.length > 0
+      const next = keyed ? { ...trim, keys: { ...trim.keys, [field]: [...keys.filter(k => Math.abs(k.t - s.playhead) > .5 / s.projectFps), { t: s.playhead, v }].sort((a, b) => a.t - b.t) } } : { ...trim, [field]: v }
+      if (!s.inInteraction) pushSnapshot()
+      set({ drawingStrokes: s.drawingStrokes.map(st => st.id === strokeId ? { ...st, pathTrim: next } : st) })
+    },
+    resetDrawingTrim: (strokeId) => {
+      if (!get().drawingStrokes.some(st => st.id === strokeId && st.pathTrim)) return
+      pushSnapshot()
+      set(s => ({ drawingStrokes: s.drawingStrokes.map(st => st.id === strokeId ? { ...st, pathTrim: undefined } : st) }))
+    },
     animateDrawingStrokes: (duration) => {
       const s = get(), start = s.playhead, seconds = clamp(duration, 0.1, 30)
       const supported = new Set(['brush', 'pencil', 'marker', 'calligraphy'])

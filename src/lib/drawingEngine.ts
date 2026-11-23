@@ -259,7 +259,7 @@ export function renderOnionSkin(
         ...stroke,
         color: blendGhostColor(stroke.color, settings.tintBefore || '#ef4444', settings.tintStrength ?? 1),
       }
-      renderStroke(ctx, ghostStroke, width, height)
+      renderStrokeAtTime(ctx, ghostStroke, width, height, targetFrame / fps, fps)
     }
     ctx.restore()
   }
@@ -285,7 +285,7 @@ export function renderOnionSkin(
         ...stroke,
         color: blendGhostColor(stroke.color, settings.tintAfter || '#10b981', settings.tintStrength ?? 1),
       }
-      renderStroke(ctx, ghostStroke, width, height)
+      renderStrokeAtTime(ctx, ghostStroke, width, height, targetFrame / fps, fps)
     }
     ctx.restore()
   }
@@ -952,7 +952,57 @@ export function strokeRevealPoints(points: DrawingStroke['points'], progress: nu
   return out
 }
 
-/** Resolve a Smart Patch's frame-addressed raster and composite it at the requested time. */
+const trimFinite = (value: number, fallback: number) => Number.isFinite(value) ? value : fallback
+
+export function drawingTrimAt(stroke: DrawingStroke, time: number): { start: number; end: number; offset: number } {
+  const trim = stroke.pathTrim
+  const value = (key: 'start' | 'end' | 'offset', fallback: number) => {
+    const keys = (trim?.keys?.[key] ?? []).filter(k => Number.isFinite(k.t) && Number.isFinite(k.v)).slice().sort((a, b) => a.t - b.t)
+    if (!keys.length) return trimFinite(trim?.[key] ?? fallback, fallback)
+    if (time <= keys[0].t) return keys[0].v
+    for (let i = 1; i < keys.length; i++) if (time < keys[i].t) {
+      const a = keys[i - 1], b = keys[i], t = (time - a.t) / (b.t - a.t)
+      return a.v + (b.v - a.v) * t
+    }
+    return keys[keys.length - 1].v
+  }
+  return { start: Math.max(0, Math.min(1, value('start', 0))), end: Math.max(0, Math.min(1, value('end', 1))), offset: value('offset', 0) }
+}
+
+/** Wrapped ranges are separate paths: never draw a bridge across their gap. */
+export function strokeTrimSegments(points: DrawingStroke['points'], start: number, end: number, offset: number, width: number, height: number): DrawingStroke['points'][] {
+  const low = Math.min(Math.max(0, trimFinite(start, 0)), 1)
+  const high = Math.min(Math.max(0, trimFinite(end, 1)), 1)
+  const span = Math.abs(high - low)
+  if (span <= 0 || points.length < 2) return []
+  if (span >= 1) return [points]
+  const lengths = points.slice(1).map((p, i) => Math.hypot((p.x - points[i].x) * width, (p.y - points[i].y) * height))
+  const total = lengths.reduce((a, b) => a + b, 0)
+  if (!total) return []
+  const from = ((Math.min(low, high) + trimFinite(offset, 0)) % 1 + 1) % 1
+  const ranges = from + span <= 1 ? [[from, from + span]] : [[from, 1], [0, from + span - 1]]
+  return ranges.map(([a, b]) => {
+    const out: DrawingStroke['points'] = []
+    let distance = 0
+    for (let i = 0; i < lengths.length; i++) {
+      const length = lengths[i], next = distance + length
+      if (length > 0 && next > a * total && distance < b * total) {
+        const interpolate = (t: number) => ({
+          x: points[i].x + (points[i + 1].x - points[i].x) * t,
+          y: points[i].y + (points[i + 1].y - points[i].y) * t,
+          pressure: (points[i].pressure ?? 1) + ((points[i + 1].pressure ?? 1) - (points[i].pressure ?? 1)) * t,
+          timestamp: points[i].timestamp + (points[i + 1].timestamp - points[i].timestamp) * t,
+        })
+        if (!out.length) out.push(interpolate(Math.max(0, (a * total - distance) / length)))
+        out.push(interpolate(Math.min(1, (b * total - distance) / length)))
+      }
+      distance = next
+    }
+    return out
+  }).filter(segment => segment.length >= 2)
+}
+
+/** Resolve frame-addressed drawing, animated path trims and draw-on in the shared renderer. */
 function renderStrokeAtTime(
   ctx: CanvasRenderingContext2D,
   stroke: DrawingStroke,
@@ -971,11 +1021,17 @@ function renderStrokeAtTime(
     renderStroke(ctx, { ...stroke, tool: 'fill', maskDataUrl: frame.dataUrl }, width, height)
     return
   }
-  if (stroke.revealStartTime !== undefined && stroke.revealDuration && FREEHAND_TOOLS.has(stroke.tool)) {
-    const progress = (time - stroke.revealStartTime) / stroke.revealDuration
-    const points = strokeRevealPoints(stroke.points, progress, width, height)
-    if (points.length < 2) return
-    renderStroke(ctx, { ...stroke, points }, width, height)
+  if ((stroke.pathTrim || stroke.revealStartTime !== undefined && stroke.revealDuration) && FREEHAND_TOOLS.has(stroke.tool)) {
+    const trim = drawingTrimAt(stroke, time)
+    const segments = strokeTrimSegments(stroke.points, trim.start, trim.end, trim.offset, width, height)
+    const lengths = segments.map(segment => segment.slice(1).reduce((n, p, i) => n + Math.hypot((p.x - segment[i].x) * width, (p.y - segment[i].y) * height), 0))
+    const progress = stroke.revealStartTime !== undefined && stroke.revealDuration ? Math.max(0, Math.min(1, (time - stroke.revealStartTime) / stroke.revealDuration)) : 1
+    let remaining = lengths.reduce((a, b) => a + b, 0) * progress
+    segments.forEach((segment, index) => {
+      const points = strokeRevealPoints(segment, lengths[index] ? remaining / lengths[index] : progress, width, height)
+      if (points.length >= 2) renderStroke(ctx, { ...stroke, points }, width, height)
+      remaining = Math.max(0, remaining - lengths[index])
+    })
     return
   }
   renderStroke(ctx, stroke, width, height)

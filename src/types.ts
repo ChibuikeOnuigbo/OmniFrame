@@ -589,6 +589,7 @@ export interface ClipEffect extends NgEffect {
   brightness?: number // 0..2 (default 1)
   contrast?: number // 0..2 (default 1)
   saturation?: number // 0..2 (default 1)
+  boxBlur?: number
   blur?: number // 0..20 px (default 0)
   grayscale?: number // 0..1 (default 0)
   invert?: number // 0..1 (default 0)
@@ -784,6 +785,25 @@ export interface ClipEffect extends NgEffect {
   freezeHold?: number
   freezeAt?: number
   chromaColor?: string // key colour, default pure green
+  /** Selective color retention, adjustable luminance matte and spill cleanup. */
+  colorHold?: number
+  holdColor?: string
+  holdSimilarity?: number
+  holdSoftness?: number
+  lumaRange?: number
+  lumaLow?: number
+  lumaHigh?: number
+  lumaFeather?: number
+  lumaInvert?: number
+  despill?: number
+  despillChannel?: 'green' | 'blue'
+  despillBalance?: number
+  despillLuma?: number
+  /** Row-major RGB channel mixer; diagonal 1 and other coefficients 0 are neutral. */
+  channelMixer?: number
+  mixRR?: number; mixRG?: number; mixRB?: number
+  mixGR?: number; mixGG?: number; mixGB?: number
+  mixBR?: number; mixBG?: number; mixBB?: number
   // Light layer (Point/Spot/Directional, composited with 'screen').
   // Honoured on adjustment layers (lights everything beneath) and in audition previews.
   lightType?: 'point' | 'spot' | 'directional'
@@ -1261,6 +1281,13 @@ export interface DrawingStroke {
   /** Timed draw-on reveal for freehand strokes; rendered in preview and export. */
   revealStartTime?: number
   revealDuration?: number
+  /** Fractions of freehand arc length; key times are project seconds. */
+  pathTrim?: {
+    start: number
+    end: number
+    offset: number
+    keys?: Partial<Record<'start' | 'end' | 'offset', FxKey[]>>
+  }
   polygonSides?: number // 3..12 for the Krita Polygon Tool
   gradientColor?: string // end colour of the linear gradient ramp
   /** ibisPaint-style radial/symmetry ruler: duplicate the stroke rotated N times. */

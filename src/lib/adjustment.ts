@@ -4,6 +4,7 @@ import type { Clip, ClipEffect, Sequence } from '../types'
 export function activeEffectKeys(effects?: ClipEffect): string[] {
   if (!effects) return []
   const keys: string[] = []
+  for (const key of ['boxBlur', 'colorHold', 'lumaRange', 'despill', 'channelMixer'] as const) if ((effects[key] ?? 0) > 0) keys.push(key)
   if (typeof effects.brightness === 'number' && effects.brightness !== 1) keys.push('brightness')
   if (typeof effects.contrast === 'number' && effects.contrast !== 1) keys.push('contrast')
   if (typeof effects.saturation === 'number' && effects.saturation !== 1) keys.push('saturation')
@@ -29,6 +30,7 @@ export function activeEffectKeys(effects?: ClipEffect): string[] {
 }
 
 const EFFECT_LABEL: Record<string, string> = {
+  boxBlur: 'Box Blur', colorHold: 'Color Hold', lumaRange: 'Luma Range', despill: 'Despill', channelMixer: 'Channel Mixer',
   brightness: 'Brightness',
   contrast: 'Contrast',
   saturation: 'Saturation',

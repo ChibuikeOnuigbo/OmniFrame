@@ -1,0 +1,10 @@
+{
+  "verified_on": "2026-11-23",
+  "kdenlive_version": "kdenlive 26.08.3",
+  "glaxnimate_version": "glaxnimate 0.6.0-git-d2da67a",
+  "glaxnimate_probe": [
+    "SVG \u2192 Lottie JSON via --export",
+    "SVG \u2192 PNG via --render --frame 0"
+  ],
+  "limits": "Linux CLI probes only; no GUI interaction or native OmniFrame desktop builds certified."
+}

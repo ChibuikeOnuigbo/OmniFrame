@@ -1,3 +1,4 @@
+import { effectGroupPath, effectGroupLabel, effectTags, isInEffectGroup, GENERATED_GROUPS } from './effectTaxonomy'
 import { buildStudioLooks } from './studioLooks'
 import type { ClipEffect } from '../types'
 import { BURST_FAMILIES } from './actionFx'
@@ -49,6 +50,7 @@ export interface FxParamDef {
 }
 
 export interface FxCatalogEntry {
+  groupPath?: readonly string[]
   id: string
   name: string
   cat: FxCat
@@ -60,6 +62,30 @@ export interface FxCatalogEntry {
 
 /** Schema for every catalogued property: all editable, all numerics keyframeable. */
 const KEY_META: Record<string, Omit<FxParamDef, 'key'>> = {
+  boxBlur: { label: 'Radius (px)', kind: 'number', min: 0, max: 64, step: 1 },
+  colorHold: { label: 'Amount', kind: 'number', min: 0, max: 1, step: .01 },
+  holdColor: { label: 'Keep color', kind: 'color' },
+  holdSimilarity: { label: 'Similarity', kind: 'number', min: 0, max: 1, step: .01 },
+  holdSoftness: { label: 'Softness', kind: 'number', min: 0, max: 1, step: .01 },
+  lumaRange: { label: 'Amount', kind: 'number', min: 0, max: 1, step: .01 },
+  lumaLow: { label: 'Low', kind: 'number', min: 0, max: 1, step: .01 },
+  lumaHigh: { label: 'High', kind: 'number', min: 0, max: 1, step: .01 },
+  lumaFeather: { label: 'Feather', kind: 'number', min: 0, max: .5, step: .01 },
+  lumaInvert: { label: 'Invert', kind: 'number', min: 0, max: 1, step: 1 },
+  despill: { label: 'Amount', kind: 'number', min: 0, max: 1, step: .01 },
+  despillChannel: { label: 'Screen', kind: 'select', options: ['green', 'blue'] },
+  despillBalance: { label: 'Balance', kind: 'number', min: 0, max: 1, step: .01 },
+  despillLuma: { label: 'Keep luma', kind: 'number', min: 0, max: 1, step: .01 },
+  channelMixer: { label: 'Amount', kind: 'number', min: 0, max: 1, step: .01 },
+  mixRR: { label: 'Red ← Red', kind: 'number', min: -2, max: 2, step: .01 },
+  mixRG: { label: 'Red ← Green', kind: 'number', min: -2, max: 2, step: .01 },
+  mixRB: { label: 'Red ← Blue', kind: 'number', min: -2, max: 2, step: .01 },
+  mixGR: { label: 'Green ← Red', kind: 'number', min: -2, max: 2, step: .01 },
+  mixGG: { label: 'Green ← Green', kind: 'number', min: -2, max: 2, step: .01 },
+  mixGB: { label: 'Green ← Blue', kind: 'number', min: -2, max: 2, step: .01 },
+  mixBR: { label: 'Blue ← Red', kind: 'number', min: -2, max: 2, step: .01 },
+  mixBG: { label: 'Blue ← Green', kind: 'number', min: -2, max: 2, step: .01 },
+  mixBB: { label: 'Blue ← Blue', kind: 'number', min: -2, max: 2, step: .01 },
   ngBlend: { label: 'Blend mode', kind: 'select', options: ['normal', 'screen', 'multiply', 'add'] },
   ngPattern: { label: 'Event pattern', kind: 'select', options: ['microburst', 'slow-build', 'hard-intro', 'dual-attack', 'subtle-break', 'pulse-to-clean', 'reverse-shatter', 'freeze-then-snap', 'rhythmic', 'long-tail'] },
   ngGhost: { label: 'Ghost opacity', kind: 'number', min: 0, max: 1, step: .01 },
@@ -313,6 +339,20 @@ function buildCatalog(): FxCatalogEntry[] {
   const add = (id: string, name: string, cat: FxCat, trace: string, patch: Record<string, number | string>) => {
     out.push({ id, name, cat, trace, patch })
   }
+  const reference = 'Kdenlive manual: https://docs.kdenlive.org/en/effects_and_filters/video_effects/'
+  add('essential-box-blur', 'Box Blur', 'blur', reference + 'deprecated/box_blur.html', { boxBlur: 6 })
+  add('essential-color-hold', 'Color Hold', 'color', reference + 'color_image_correction/color_hold.html',
+    { colorHold: 1, holdColor: '#ff0000', holdSimilarity: .12, holdSoftness: .15 })
+  add('essential-luma-range', 'Luma Range', 'key', reference + 'alpha_mask_keying/lumakey.html',
+    { lumaRange: 1, lumaLow: .15, lumaHigh: 1, lumaFeather: .05, lumaInvert: 0 })
+  add('essential-luma-midtones', 'Midtone Matte', 'key', reference + 'alpha_mask_keying/lumakey.html',
+    { lumaRange: 1, lumaLow: .2, lumaHigh: .8, lumaFeather: .08, lumaInvert: 0 })
+  for (const channel of ['green', 'blue']) add(`essential-despill-${channel}`, `Despill ${channel === 'green' ? 'Green' : 'Blue'}`, 'key',
+    reference + 'alpha_mask_keying/despill.html', { despill: 1, despillChannel: channel, despillBalance: .5, despillLuma: .5 })
+  add('essential-channel-mixer', 'Channel Mixer', 'color', reference + 'color_image_correction/color_channel_mixer.html',
+    { channelMixer: 1, mixRR: 1.15, mixRG: -.1, mixRB: -.05, mixGR: 0, mixGG: 1, mixGB: 0, mixBR: -.1, mixBG: .1, mixBB: 1 })
+  add('essential-channel-swap', 'Channel Swap', 'color', reference + 'color_image_correction/color_channel_mixer.html',
+    { channelMixer: 1, mixRR: 0, mixRG: 0, mixRB: 1, mixGR: 0, mixGG: 1, mixGB: 0, mixBR: 1, mixBG: 0, mixBB: 0 })
 
   // ---- Glitch (moved out of transitions: 8 styles × 5 tiers) ----
   for (const [style, styleName, seedBase] of GLITCH_STYLES) {
@@ -377,7 +417,7 @@ function buildCatalog(): FxCatalogEntry[] {
   for (const [name, id, patch] of looks) add(`look-${id}`, name, 'color', 'Editor-corpus look presets (Hancybox/CapCut scans)', patch)
 
   // ---- Blur ----
-  ;[2, 5, 10, 18].forEach((b, i) => add(`blur-${i}`, `Gaussian Blur ${b}px`, 'blur', 'AE Fast Box Blur / CapCut blur (scanned docs)', { blur: b }))
+  ;[2, 5, 10, 18].forEach((b, i) => add(`blur-${i}`, `Gaussian Blur ${b}px`, 'blur', 'Gaussian blur', { blur: b }))
   ;[0.35, 0.6, 0.9].forEach((z, i) => add(`zblur-${i}`, `Zoom Blur ${Math.round(z * 100)}%`, 'blur', 'AM Zoom Blur (official guide)', { zoomBlur: z }))
   for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
     add(`dblur-${a}`, `Directional Blur ${a}°`, 'blur', 'AM Directional Blur (official guide)', { directionalBlur: 0.7, directionalBlurAngle: a })
@@ -696,15 +736,21 @@ export function fxCatalogCount(cat?: FxCat | 'all'): number {
 export const GENERATED_FX_RECIPE_COUNT = GENERATED_RECIPE_COUNT
 
 export interface FxCatalogQuery {
+  groupPath?: readonly string[]
   cat?: FxCat | 'all'
   q?: string
   offset?: number
   limit?: number
-  collection?: 'all' | 'curated' | 'generated' | 'studio' | 'favorites'
+  collection?: 'all' | 'essentials' | 'curated' | 'generated' | 'studio' | 'favorites'
   favorites?: string[]
 }
 
 const catalogSearchTokens = (query: string): string[] => query.toLowerCase().match(/[a-z0-9]+/g) ?? []
+const ESSENTIAL_FX_IDS = new Set([
+  'blur-1', 'blur-horizontal', 'blur-vertical', 'blur-motion', 'zblur-1', 'tilt-1', 'bokeh-lens-0',
+  'glow-1', 'mblur-1', 'echo-0', 'shake-10', 'wave-1', 'pinch-2', 'turb-pro-0', 'liquify-0',
+  'vhs-2', 'glitch-rgb-medium', 'look-noir',
+])
 const matchesCatalogSearch = (text: string, query: string): boolean => {
   const tokens = catalogSearchTokens(query)
   const haystack = text.toLowerCase()
@@ -713,6 +759,7 @@ const matchesCatalogSearch = (text: string, query: string): boolean => {
 
 /** Search and page all effect recipes without materializing the indexed bank. */
 export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; entries: FxCatalogEntry[] } {
+  const groupPath = options.groupPath ?? []
   const cat = options.cat ?? 'all'
   const q = (options.q ?? '').trim().toLowerCase()
   const offset = Math.max(0, Math.floor(options.offset ?? 0))
@@ -723,24 +770,25 @@ export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; e
     const entries = (options.favorites ?? [])
       .map(fxCatalogById)
       .filter((entry): entry is FxCatalogEntry => !!entry)
-      .filter((entry) => cat === 'all' || entry.cat === cat)
-      .filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace}`, q))
+      .filter((entry) => (cat === 'all' || entry.cat === cat) && isInEffectGroup(effectGroupPath(entry), groupPath))
+      .filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace} ${effectTags(entry).join(' ') }`, q))
     return { total: entries.length, entries: entries.slice(offset, offset + limit) }
   }
 
   if (collection === 'generated') {
-    const generated = queryGeneratedRecipes({ cat, q, offset, limit })
+    const generated = queryGeneratedRecipes({ cat, q, offset, limit, groupPath })
     return { total: generated.total, entries: generated.entries as FxCatalogEntry[] }
   }
 
-  let materialized = getFxCatalog().filter((entry) => cat === 'all' || entry.cat === cat)
+  let materialized = getFxCatalog().filter((entry) => (cat === 'all' || entry.cat === cat) && isInEffectGroup(effectGroupPath(entry), groupPath))
+  if (collection === 'essentials') materialized = materialized.filter((entry) => entry.id.startsWith('essential-') || ESSENTIAL_FX_IDS.has(entry.id))
   if (collection === 'studio') materialized = materialized.filter((entry) => entry.id.startsWith('studio-'))
-  if (q) materialized = materialized.filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace}`, q))
-  if (collection === 'studio' || collection === 'curated') return { total: materialized.length, entries: materialized.slice(offset, offset + limit) }
+  if (q) materialized = materialized.filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace} ${effectTags(entry).join(' ') }`, q))
+  if (collection === 'studio' || collection === 'curated' || collection === 'essentials') return { total: materialized.length, entries: materialized.slice(offset, offset + limit) }
 
   const materializedPage = materialized.slice(offset, offset + limit)
   const remaining = Math.max(0, limit - materializedPage.length)
-  const generated = queryGeneratedRecipes({ cat, q, offset: Math.max(0, offset - materialized.length), limit: remaining })
+  const generated = queryGeneratedRecipes({ cat, q, groupPath, offset: Math.max(0, offset - materialized.length), limit: remaining })
   const generatedEntries = generated.entries
   return { total: materialized.length + generated.total, entries: [...materializedPage, ...generatedEntries] as FxCatalogEntry[] }
 }
@@ -768,4 +816,16 @@ export function loadGlitchRecipeCatalog(): Promise<number> {
     return entries.length
   }).catch(error => { recipePackPromise = null; throw error })
   return recipePackPromise
+}
+
+/** Immediate children only; a path may contain both effects and deeper subgroups. */
+export function fxGroupChildren(parent: readonly string[]): { id: string; label: string; path: string[] }[] {
+  const children = new Set<string>()
+  const add = (path: readonly string[]) => {
+    if (isInEffectGroup(path, parent) && path.length > parent.length) children.add(path[parent.length])
+  }
+  getFxCatalog().forEach(entry => add(effectGroupPath(entry)))
+  Object.values(GENERATED_GROUPS).forEach(add)
+  return [...children].map(id => ({ id, label: effectGroupLabel(id), path: [...parent, id] }))
+    .sort((a, b) => a.label.localeCompare(b.label))
 }

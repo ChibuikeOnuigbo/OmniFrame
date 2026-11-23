@@ -1,3 +1,16 @@
+## 2026-11-23 — nested effect groups and animation trim
+
+Added nested groups/tags, breadcrumb navigation, scoped search and lazy family
+paging. Box Blur now has a real square kernel; new Color Hold, Luma Range,
+Despill and Channel Mixer controls share browser/headless render math. Freehand
+Trim Path supports linear keys, wrapped segments, onion ghosts and save/reopen.
+Fixed stale preview scratch dimensions after canvas resizing and Undo for new
+adjustment controls. Existing square photographic previews remain interactive.
+
+41 unit scripts, 12 browser smoke flows and static/build gates passed. Actual
+screenshots, a decoded export proof, source attribution and limitations:
+`research/editor-capabilities/README.md`, `AUDIT_STATE.md` Cycle 14.
+
 ## 2026-11-16 — safe project imports and local credential preservation
 
 Core .omni validation now protects live state from malformed timelines, numeric

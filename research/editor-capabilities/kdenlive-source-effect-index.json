@@ -1,0 +1,2292 @@
+{
+  "source": "https://github.com/KDE/kdenlive/tree/master/data/effects",
+  "tree_sha": "7fe66d8ee1983490e546b57a2b0141c53662a0c6",
+  "evidence": "Source-tree paths indexed; contents not copied into the editor.",
+  "definitions": [
+    {
+      "path": "data/effects/audiobalance.xml",
+      "sha": "8aca0dff02f2e8ae1591deda5e2fde2e77fb410c",
+      "size": 472
+    },
+    {
+      "path": "data/effects/audiolevel.xml",
+      "sha": "7991c3ff66f276af50934bd0432a1f8f57617516",
+      "size": 416
+    },
+    {
+      "path": "data/effects/audiolevelgraph.xml",
+      "sha": "bfafe22dcfee2fdd4810b52ba3b3058d1a69e415",
+      "size": 3016
+    },
+    {
+      "path": "data/effects/audiomap.xml",
+      "sha": "4879b7d44fdc5a9739ff132026076326696cc666",
+      "size": 2606
+    },
+    {
+      "path": "data/effects/audiopan.xml",
+      "sha": "8ce2096e6198f813f6274be08082a96cf20059e6",
+      "size": 614
+    },
+    {
+      "path": "data/effects/audiospectrum.xml",
+      "sha": "e6378ef54ad2203687335d14622f450d840b3b2f",
+      "size": 4490
+    },
+    {
+      "path": "data/effects/audiowave.xml",
+      "sha": "d98171100963a14ab74795c337caa47e8a78b791",
+      "size": 265
+    },
+    {
+      "path": "data/effects/audiowaveform.xml",
+      "sha": "48719156418ade1e3a19c0632d9ef92c78d73229",
+      "size": 1277
+    },
+    {
+      "path": "data/effects/avfilter/acompressor.xml",
+      "sha": "e84ec96a6fd28e7dbff07b8a34e51de5eaccc6e0",
+      "size": 1858
+    },
+    {
+      "path": "data/effects/avfilter/aecho.xml",
+      "sha": "a87531d3e7158f8bb2f25577203ba81d6e83e23d",
+      "size": 784
+    },
+    {
+      "path": "data/effects/avfilter/agate.xml",
+      "sha": "c253135def6c0d2d53991da07e3b153788d7a1d5",
+      "size": 1720
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_acontrast.xml",
+      "sha": "57d99bf4c3ed4c8ba9cc334b4f850d5df7b7ed63",
+      "size": 463
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_acrusher.xml",
+      "sha": "6cc63bf05b35582a61a95b6e1ece248c896163d2",
+      "size": 1959
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_alimiter.xml",
+      "sha": "485208c760fbb9600e92d3c054e3b3c7c4164f48",
+      "size": 1319
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_allpass.xml",
+      "sha": "661a8edc9ffdd06eff8654320b876052462e7b79",
+      "size": 1822
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_aphaser.xml",
+      "sha": "c576c010d9500959ae560ff3d083832463e8d48d",
+      "size": 1160
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_apulsator.xml",
+      "sha": "ca4e9271e7034d29abed3f996029aa37d542b063",
+      "size": 2009
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_atadenoise.xml",
+      "sha": "1664f14380c04c22c021217dfe2fb7cd1a316f0e",
+      "size": 1405
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_avgblur.xml",
+      "sha": "37ea110b640e9283aed18969403e734d7697828c",
+      "size": 735
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_backgroundkey.xml",
+      "sha": "de36a707cf794498463d81c0ab75b851f659c2ac",
+      "size": 968
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_bandpass.xml",
+      "sha": "2da47ba0f6272d90ac3f7e1c53f2fa0e2748a5b9",
+      "size": 1834
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_bandreject.xml",
+      "sha": "6d971de7bfad0b71bdf095e16d22cb373905290a",
+      "size": 1622
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_bass.xml",
+      "sha": "f1692c5a83e04b1470fe5b84ad4296d8d4950f77",
+      "size": 1943
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_bilateral.xml",
+      "sha": "a5f61ee4a1ec347e70368c71474761ed2040ff3b",
+      "size": 967
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_boxblur.xml",
+      "sha": "2e054fc1135ca114f0b4f450905e8ce583216fa7",
+      "size": 1504
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_bs2b.xml",
+      "sha": "f8a8b70733fa577ce782ea3625b5ce9ebc1fd14f",
+      "size": 890
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_bwdif.xml",
+      "sha": "ebcfcd6d2b4bdf7293ba97289599c504b77ba0c3",
+      "size": 945
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_cas.xml",
+      "sha": "d3a1c7ddab95236334cad51d375fedb3e18de1cf",
+      "size": 695
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_chromahold.xml",
+      "sha": "f7ad44d8642106afaafd409233e3373cf34d53ee",
+      "size": 1392
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_chromanr.xml",
+      "sha": "f744836537ac876777f35cd04788e07a7df76ef6",
+      "size": 1468
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_chromashift.xml",
+      "sha": "ef4b2a68e574d7cf725958ce8a3754a358de116f",
+      "size": 1063
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_ciescope.xml",
+      "sha": "fd9304d4a2e0f80c7cf5cdbb89484dac616e65e7",
+      "size": 3026
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorbalance.xml",
+      "sha": "de2204109149541ee8b263eff25e4c11aa460ac9",
+      "size": 1680
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorchannelmixer.xml",
+      "sha": "a1c6300a2a00e335bdc6b7d15eaf7c39b58c259e",
+      "size": 1570
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorcontrast.xml",
+      "sha": "85da7d5c4bf6b86340762a1118a9a53fc94a2f42",
+      "size": 1306
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorcorrect.xml",
+      "sha": "4a0a6be4acc80143bc0750d6dfc1bc09c1798596",
+      "size": 1292
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorhold.xml",
+      "sha": "c64c2eba998df4ac3c52b3ddeff4d801a63479db",
+      "size": 682
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorize.xml",
+      "sha": "f65bd7d2c73cb93e9ce8599f4eb25b06e434cbb6",
+      "size": 885
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorlevels.xml",
+      "sha": "744d718c5d85c0ddb7f36704732c6e00e8567baf",
+      "size": 2016
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colormatrix.xml",
+      "sha": "176f9ec2f7123e395100bd0657597371b41e56b8",
+      "size": 860
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colorspace.xml",
+      "sha": "ec733616d17498a1f7681f9ab22d57b412578535",
+      "size": 4975
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_colortemperature.xml",
+      "sha": "edd90eb6a1e0e14500e70c7389d4293e9a4964b3",
+      "size": 929
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_compand.xml",
+      "sha": "3e8e1ff65d85a4d60e16c08169e6868eb0a06c08",
+      "size": 2998
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_compensationdelay.xml",
+      "sha": "446825bafddff1c73b760e46feb1c21c351c4b40",
+      "size": 2652
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_crossfeed.xml",
+      "sha": "ce11355971bcd98c6121582568fb704305db652d",
+      "size": 1547
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_crystalizer.xml",
+      "sha": "1d0571ce01601854db20797d6cc81f202d6c49fb",
+      "size": 804
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_curves.xml",
+      "sha": "c5a06a7e2e521abc4ee0745dfe26b56ae6e57a30",
+      "size": 724
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_datascope.xml",
+      "sha": "c9d062dcc93f706c5c01794bcd657fe5a9712e19",
+      "size": 1663
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_dblur.xml",
+      "sha": "9a92f1cb9ac854c5e64b20b97105187486695d5a",
+      "size": 1036
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_dcshift.xml",
+      "sha": "5c3bbe8c4f38d27b771a661c4e7b2ea52fc2dc1b",
+      "size": 1056
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_dctdnoiz.xml",
+      "sha": "94418790269ef9c278ea826820624e042364c92f",
+      "size": 675
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_deband.xml",
+      "sha": "b7d5dec82aa58af69a926ca3ed6ce181ce502868",
+      "size": 3577
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_deblock.xml",
+      "sha": "199ca29069e3207f1e7f3a7dd6c8f1baed0b6b81",
+      "size": 1396
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_dedot.xml",
+      "sha": "e2621074bcec1900563cfdb524d22785b9c28963",
+      "size": 1117
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_deesser.xml",
+      "sha": "9d2be5f2c7a9637f52e1f6e8c9444835db491017",
+      "size": 1246
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_deflate.xml",
+      "sha": "2596acfb0b71c59f424c30582e8f57abcb60acaa",
+      "size": 910
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_delogo.xml",
+      "sha": "972126706ac341a608d7f38bbada5f8bf2152d83",
+      "size": 910
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_derain.xml",
+      "sha": "29573b1d7c71cd7c6f342ad88e49e94bbd49f9ec",
+      "size": 647
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_despill.xml",
+      "sha": "63360379aab8c3e598580907c2cef20170ef7938",
+      "size": 1392
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_dilation.xml",
+      "sha": "b3790837df2fd5c809e43b635b0dd8873851b6c5",
+      "size": 1977
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_doubleweave.xml",
+      "sha": "b925c50b47d8c81f380197fa7b8428b2854dca90",
+      "size": 511
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_drawbox.xml",
+      "sha": "74f121c0ecc4fe9128eb8a047afe9e9ea737bda5",
+      "size": 1646
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_drawgrid.xml",
+      "sha": "1f95efc244d6759f8b1b96bbf5ecc898aa9e2ec0",
+      "size": 2011
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_edgedetect.xml",
+      "sha": "e4f25e24448c7d538499d0604b9b2146e2cdf2e0",
+      "size": 1014
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_elbg.xml",
+      "sha": "eb134ecf9567ae2d559c017523aad659aff11c88",
+      "size": 795
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_epx.xml",
+      "sha": "e08021f1549001a1a01c279aae74ccc16a420678",
+      "size": 430
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_eq.xml",
+      "sha": "231e03b9407ccbf5848948a65ecc3b9523a91d01",
+      "size": 1383
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_equalizer.xml",
+      "sha": "a1f18f56c10e414416563b7cb5d7473a88ae2ab1",
+      "size": 1831
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_erosion.xml",
+      "sha": "0f6ec1311f2086c11ed1c05d992490fc07cdccd3",
+      "size": 1971
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_exposure.xml",
+      "sha": "c081b1abcb2aca2d928e3a7310232e0e2d3b5a99",
+      "size": 543
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_extrastereo.xml",
+      "sha": "c6eafb1efc527f7aae807fab39ee9544a081a732",
+      "size": 824
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_fftdnoiz.xml",
+      "sha": "84295d376c049484d878cec3491da7bc52451feb",
+      "size": 2056
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_fftfilt.xml",
+      "sha": "524f66c0e5f36bfc53baca745fef4c97c98b3aa9",
+      "size": 1314
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_field.xml",
+      "sha": "2ba05252362e43fad57f00ebba3b3050ba3e8ec5",
+      "size": 482
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_fieldorder.xml",
+      "sha": "ab0b25a92b26fb84cf2130abf03eb8c82c162809",
+      "size": 505
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_fillborders.xml",
+      "sha": "8c7c26c67a4b654d40eda0b7afd228ee2527e3dc",
+      "size": 1316
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_flanger.xml",
+      "sha": "d604420b84de839ac5f33836c62a9ba776240996",
+      "size": 2183
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_framestep.xml",
+      "sha": "52bc0195099776b5ab1134b064889b55f36dde79",
+      "size": 424
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_fspp.xml",
+      "sha": "1f510b4f067af29508ff0b23ce1ec22a25ff61b4",
+      "size": 814
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_gblur.xml",
+      "sha": "1cb7dbfc2a8557d1635d6c0a45ed54085b8b89c9",
+      "size": 1416
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_gradfun.xml",
+      "sha": "f39878d722fa2e5d87e43ec91b20417d59a719cc",
+      "size": 1341
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_graphmonitor.xml",
+      "sha": "e3c979d1a5b72b7a019d826aa50fcebff56b3d09",
+      "size": 1279
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_grayworld.xml",
+      "sha": "77b3db112a3784fcb19dcfbad382574f8bfa86ee",
+      "size": 320
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_haas.xml",
+      "sha": "1a7a14df5ed80f4157075e1657a10b4a9f85b25c",
+      "size": 2312
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_hflip.xml",
+      "sha": "3f7808fd550a9482ffed1b413113ee9cf09aa282",
+      "size": 269
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_highpass.xml",
+      "sha": "7aaa88efaa2a150ef40cfeb884d129308b16c28d",
+      "size": 1814
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_highshelf.xml",
+      "sha": "b190a3a3be4774711b3c2e8602d9bf936e80f63f",
+      "size": 1779
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_histeq.xml",
+      "sha": "bddc878fd89d8426027fb151fc7aed241e0d8da6",
+      "size": 814
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_histogram.xml",
+      "sha": "afa6a6e9e2e09dc3ef578d3c34fac218dbc14b2e",
+      "size": 1953
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_hqdn3d.xml",
+      "sha": "8d11f23d585928388d868757c88509999d89e7f9",
+      "size": 911
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_hqx.xml",
+      "sha": "5b8b1e731b920ff604e2f97756e625d3d986a84d",
+      "size": 540
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_hsvhold.xml",
+      "sha": "7b9f025964acb391a176259f040cc436a66cb3e9",
+      "size": 1505
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_hsvkey.xml",
+      "sha": "dba9b9274396b7b3dde992ddcc6554c7b69d6971",
+      "size": 1528
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_huesaturation.xml",
+      "sha": "d8c79049e49715d2601148af193a910f8d912ac4",
+      "size": 2605
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_il.xml",
+      "sha": "bbf3aa977ae30a7f228879f446f69fb910ce3b5c",
+      "size": 1194
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_inflate.xml",
+      "sha": "422d515d0cecd7005cd70dd974eb15df912b7ad0",
+      "size": 928
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_kerneldeint.xml",
+      "sha": "a58967d9b5082d798439eecf7c89938fe03641d0",
+      "size": 1022
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_kirsch.xml",
+      "sha": "957be7cd7e820f84af3f04551830a4e38f33a57f",
+      "size": 924
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_lagfun.xml",
+      "sha": "dd706b78474fa2788901e6e0bbfbaf8874e589b4",
+      "size": 961
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_lenscorrection.xml",
+      "sha": "7b8114fb434d0786292eed15b8018b01ca0aa6e9",
+      "size": 1500
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_limiter.xml",
+      "sha": "99bd9389fb185bc65fd4d4bd20c1d7eb0cf841b3",
+      "size": 927
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_loudnorm.xml",
+      "sha": "00cefe41449e09f06a690a884dd6bd336773459c",
+      "size": 1767
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_lowpass.xml",
+      "sha": "d29a9af370aaaaa46036d783ac17d9b7fc8c22ac",
+      "size": 1811
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_lowshelf.xml",
+      "sha": "0f9f7acdc86bcd6a5e8773d851203a721ea42494",
+      "size": 1774
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_lut3d.xml",
+      "sha": "6a149d08df09b9a06f8c8b8109057718832b4bad",
+      "size": 859
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_mcdeint.xml",
+      "sha": "fbedff7c5fc4cf370152bcb412f1fb22825f7b97",
+      "size": 1099
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_median.xml",
+      "sha": "6655baf3246ce6dd78517748594f035fd9b9c22b",
+      "size": 1349
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_monochrome.xml",
+      "sha": "03eea01cc45fda69206db393e8f1b7e89b6eea83",
+      "size": 862
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_negate.xml",
+      "sha": "5c8cc7560a30b849d5773561d0b94e0dbc37624b",
+      "size": 393
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_noise.xml",
+      "sha": "73719d0aeafe9a6df556bcd2b36335b557c18e8f",
+      "size": 4440
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_normalize.xml",
+      "sha": "14a75eaf82f624dc580c3821423d1bd1a6000fc9",
+      "size": 1523
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_oscilloscope.xml",
+      "sha": "c4a7dd0117ef20a0d71ae85378cde880e34be738",
+      "size": 3102
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_phase.xml",
+      "sha": "5762e7faa980b9bbb180109d5f49c087f3da684b",
+      "size": 851
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_photosensitivity.xml",
+      "sha": "3f0257aa201ff29f8c11be397d495763705b00e5",
+      "size": 1084
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_pixelize.xml",
+      "sha": "f0c30a6f101370392729930dccd9a7b9ba75db28",
+      "size": 989
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_prewitt.xml",
+      "sha": "9c97dcd4fd811118143de4ebb2093727963ab67d",
+      "size": 796
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_pseudocolor.xml",
+      "sha": "c47b15d0f9af798d3461bfd55ac323d0a740871d",
+      "size": 1858
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_random.xml",
+      "sha": "da69b0c1d6828724d919a6c5a0a9b52c815628d2",
+      "size": 608
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_removegrain.xml",
+      "sha": "d27acb63c61737f7b718f868912b13832d847a81",
+      "size": 877
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_rgbashift.xml",
+      "sha": "acee16b4478a34e9e3165e429f79c3d94ff6c56f",
+      "size": 1664
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_roberts.xml",
+      "sha": "a964087915b8041528c06ae2ef0dfca90ab40ace",
+      "size": 802
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_sab.xml",
+      "sha": "8d96c4e29d68bc2487e4ea578501cd3db1c1a5ab",
+      "size": 1102
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_scharr.xml",
+      "sha": "5bbf2542fbd3cea0671456879743aecd0d732769",
+      "size": 1097
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_scroll.xml",
+      "sha": "a8471f467d8fe90d73910360d73ea7f93a95a6ea",
+      "size": 923
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_selectivecolor.xml",
+      "sha": "b5bd4d2ba086adee308284e29fc3ff7b2ec670cf",
+      "size": 1743
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_separatefields.xml",
+      "sha": "ba34da4f162f0eefa2687238311439352a3370d1",
+      "size": 421
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_setrange.xml",
+      "sha": "6a47a36169efb8a6597d68dd3443fc81c9062213",
+      "size": 545
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_shear.xml",
+      "sha": "bc03d385388a119230ba346bc0b33db23f6b19f9",
+      "size": 900
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_shufflepixels.xml",
+      "sha": "392682adb7fbdf2843d6dfd82de447034e37ae1c",
+      "size": 1835
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_shuffleplanes.xml",
+      "sha": "c91294f39397426cb5b21a6fe92928702056eb75",
+      "size": 849
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_smartblur.xml",
+      "sha": "3366614c02205fcadb8f712beee17f12ffa41c73",
+      "size": 3969
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_sobel.xml",
+      "sha": "e71cf453b43d0bb813d6d6f826f10e538f9cc4c6",
+      "size": 809
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_sofalizer.xml",
+      "sha": "b42b02da0685ce1c2ceff342106b90fefdb4abf8",
+      "size": 2510
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_sr.xml",
+      "sha": "e445d4b54ea8a5cf9c84ec7f6c783838b19857b7",
+      "size": 792
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_stereo3D.xml",
+      "sha": "9599ea98de727fd5564bcc0679d27c608873711f",
+      "size": 1718
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_stereotools.xml",
+      "sha": "a2bcb2bcd342f1860a7fa7e2abbf9b0469cc7058",
+      "size": 5589
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_stereowiden.xml",
+      "sha": "2eb5e49b2e177722e4a64edcd0d6346d1ba488c4",
+      "size": 1551
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_swapuv.xml",
+      "sha": "d11c5239b83445c65ab352f44064a0bc9a95ada9",
+      "size": 284
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_tmix.xml",
+      "sha": "845ac420dacd21bdb9cf2129fb2af8a954bf2c78",
+      "size": 422
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_transpose.xml",
+      "sha": "e03e7f598dda58a450981ba6e3d5ff07e22e5177",
+      "size": 773
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_unsharp.xml",
+      "sha": "64cac6d35db626b3cf8c364d3e9ae6cd80f57acd",
+      "size": 2859
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_vaguedenoiser.xml",
+      "sha": "4b0855d340f71a09503ce882aa238fc7c9d92d4e",
+      "size": 1423
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_vectorscope.xml",
+      "sha": "a4da8c0e04f2b897d0c264c9e5065aacc2f17b7b",
+      "size": 2669
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_vflip.xml",
+      "sha": "ab66246f131e176acd47353d45402a80b0bc0892",
+      "size": 265
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_vibrance.xml",
+      "sha": "855c434b2bdde74ad7fd212f40c7f2202b7af45b",
+      "size": 1361
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_vibrato.xml",
+      "sha": "7ffde12cead8cbba88e9659cf4a2e245a577a7dc",
+      "size": 539
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_w3fdif.xml",
+      "sha": "135329bab6c84feced1b852783a788acd6852d1e",
+      "size": 769
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_waveform.xml",
+      "sha": "d0b6cc04cedd2edd5cf3dd72fa20daa5cab3e8fc",
+      "size": 4970
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_weave.xml",
+      "sha": "6ac349a0f065489d71e5851ada83badb2387af52",
+      "size": 600
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_xbr.xml",
+      "sha": "37e506dfb486c40d8addea3819afbc9d3105ba3c",
+      "size": 541
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_yadif.xml",
+      "sha": "b6857baf481b7244e2193315dcd722bd9ebb7d45",
+      "size": 961
+    },
+    {
+      "path": "data/effects/avfilter/avfilter_zoompan.xml",
+      "sha": "9464b890cee1849568e3961276515af3e8ac4abc",
+      "size": 742
+    },
+    {
+      "path": "data/effects/avfilter/subtitles.xml",
+      "sha": "de4ebcc60bd822813f56dcccffd76d44021e60a4",
+      "size": 384
+    },
+    {
+      "path": "data/effects/box_blur.xml",
+      "sha": "7115679483cc7467bc2d78a8c8ac516842c1e622",
+      "size": 1255
+    },
+    {
+      "path": "data/effects/boxblur.xml",
+      "sha": "856a50b5ec681edd67a8be10619ccfd1acc3fb71",
+      "size": 654
+    },
+    {
+      "path": "data/effects/brightness.xml",
+      "sha": "0422b173ef06376c00d0e3e755763c2c49feac33",
+      "size": 392
+    },
+    {
+      "path": "data/effects/burningtv.xml",
+      "sha": "1b11b9e5241024bbea3880809fff340f9e9dda99",
+      "size": 529
+    },
+    {
+      "path": "data/effects/channelcopy.xml",
+      "sha": "0d9b690e7abcd620397d8aa5e9a83342d4964db2",
+      "size": 792
+    },
+    {
+      "path": "data/effects/charcoal.xml",
+      "sha": "59cecf6f222753d109024bb0ab6b06151dfbcac6",
+      "size": 838
+    },
+    {
+      "path": "data/effects/chroma.xml",
+      "sha": "85e422e763624d28f47128772481abb4b257a325",
+      "size": 504
+    },
+    {
+      "path": "data/effects/chroma_hold.xml",
+      "sha": "fe148365d452b048259f1a7bffb1b31b75fc2e55",
+      "size": 757
+    },
+    {
+      "path": "data/effects/copychannelstostereo.xml",
+      "sha": "d322abf99623847eea49a013f0361e9bc5d60c48",
+      "size": 840
+    },
+    {
+      "path": "data/effects/crop.xml",
+      "sha": "d647aef06ad54f8916a2537294106ddf03ad692d",
+      "size": 1176
+    },
+    {
+      "path": "data/effects/dance.xml",
+      "sha": "f2cc2f27bfa9c0599428a6ca59828e0df59a5337",
+      "size": 2296
+    },
+    {
+      "path": "data/effects/dropshadow.xml",
+      "sha": "a8c2456d53007253b116667c47184d095d46a3f0",
+      "size": 1044
+    },
+    {
+      "path": "data/effects/dust.xml",
+      "sha": "3d4bf41e6e5262eb367aa5bb58adf6eca9fd957e",
+      "size": 590
+    },
+    {
+      "path": "data/effects/dynamic_loudness.xml",
+      "sha": "dfeb5f257b5a26515db1b72008bb6e5c63bb16fd",
+      "size": 1155
+    },
+    {
+      "path": "data/effects/dynamictext.xml",
+      "sha": "4ff912cabc319548dca81e81b5fbe34da8481538",
+      "size": 6652
+    },
+    {
+      "path": "data/effects/fade_from_black.xml",
+      "sha": "fc5204022d54bdcaf8db5b56b0f85f3628139cb6",
+      "size": 718
+    },
+    {
+      "path": "data/effects/fade_to_black.xml",
+      "sha": "b9db1b27c3aec0b16f3f40547775f749b24ef0f8",
+      "size": 719
+    },
+    {
+      "path": "data/effects/fadein.xml",
+      "sha": "b379862aab7e9fdecbe6ca84a533b8d4e17532c9",
+      "size": 728
+    },
+    {
+      "path": "data/effects/fadeout.xml",
+      "sha": "a64cf5b6c58c00defc6703572f041dede05c86e2",
+      "size": 736
+    },
+    {
+      "path": "data/effects/freeze.xml",
+      "sha": "6890bccff4953a6ef889b79d8ce436fa2477a312",
+      "size": 654
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_3dflippo.xml",
+      "sha": "9dc234ddabe9ae6c91f29dc0f3ab7f96716b45a5",
+      "size": 1942
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_3dperspective.xml",
+      "sha": "21258f01661e05a6806fc4a6e82ca1e1c3b83a58",
+      "size": 1799
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_B.xml",
+      "sha": "9a01e22d5639afe9b6fc7766a7eff6e5ab6dbf63",
+      "size": 272
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_G.xml",
+      "sha": "4cbec46abcab2460e77a417b3e6246822805c95f",
+      "size": 274
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_R.xml",
+      "sha": "4e8e3b5142b0db6a867c3f01e69c2824aefa6e99",
+      "size": 270
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_aech0r.xml",
+      "sha": "1e6dc02fc9f5bd6ee3fe62dbec12f1d8bd747050",
+      "size": 1418
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_alpha0ps.xml",
+      "sha": "47848cad101ef7be42c556b68e36a7e6e59551b5",
+      "size": 3171
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_alpha0ps_alpha0ps.xml",
+      "sha": "cfaf868ed42f4f5a41f79a186240634e675ba0df",
+      "size": 1441
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_alpha0ps_alphagrad.xml",
+      "sha": "9a682aef6753ec73cbe93d8b6ad8f28bf5af2a87",
+      "size": 1832
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_alpha0ps_alphaspot.xml",
+      "sha": "14ca6f11eb344205f70af539d81d9aec756c2cfb",
+      "size": 1854
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_alphagrad.xml",
+      "sha": "d63ad28564815f80b8a3c03e7821cfeb38f2ab1a",
+      "size": 1908
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_alphaspot.xml",
+      "sha": "3b96567d4372a852e34b0ff81cb30a8e1c3c2722",
+      "size": 1940
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_autothresh0ld.xml",
+      "sha": "fac899a9035021f504ba378bbf14f50b83c2275c",
+      "size": 503
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_balanc0r.xml",
+      "sha": "c5d34f2f389dba8a9f8da97ccc0f751a6dec317e",
+      "size": 1192
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_baltan.xml",
+      "sha": "eef9390a3825f6bc14e5bc1e09e32448733eff32",
+      "size": 400
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bezier_curves.xml",
+      "sha": "81fe5f23ea19ac0fa71c40f2636370315d6b2ee2",
+      "size": 824
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bgsubtract0r.xml",
+      "sha": "b8172d6c6f64baf59c5acd20920eb6fe2fd50f99",
+      "size": 665
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_eq_cap.xml",
+      "sha": "83d1a16048c23c3ff29abbde5f70e63315b9d27d",
+      "size": 5624
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_eq_mask.xml",
+      "sha": "5acc242048324da08176525b46b8a7c281c53cd4",
+      "size": 2073
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_eq_to_rect.xml",
+      "sha": "4aa3b707cb07db25ce5357504a9d3d368327c7d7",
+      "size": 2095
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_eq_to_stereo.xml",
+      "sha": "27fe8e541101db8e9d6fdc709e1400fb20cc7ed8",
+      "size": 1295
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_eq_wrap.xml",
+      "sha": "9aa6366eac78254ff96412e4441be1bb6c16c1c0",
+      "size": 2084
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_hemi_to_eq.xml",
+      "sha": "595201a39ea950e9f2ad38553dafc00fa3da4e17",
+      "size": 11049
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_rect_to_eq.xml",
+      "sha": "3928f77d40202243ec7aecde587106da438cacb9",
+      "size": 918
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_stabilize_360.xml",
+      "sha": "dd5ce58f31c181949b80a53bdc63860db64340ff",
+      "size": 6637
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bigsh0t_transform_360.xml",
+      "sha": "06ad4dd9d01b615d3b50417d083bf69196e7d7f1",
+      "size": 1365
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bluescreen0r.xml",
+      "sha": "fc5089e0028e4f0abf0be215a3d0ae29c091b3e0",
+      "size": 710
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_brightness.xml",
+      "sha": "75236847307bcbeb8d8ba605943f944ae40b6d13",
+      "size": 464
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_bw0r.xml",
+      "sha": "2481158dda83f134fa380674384d3cfef5a0f261",
+      "size": 269
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_c0rners.xml",
+      "sha": "4bf7adfa4f0f6cde4cd808a0fd92f38a4de34246",
+      "size": 2755
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_cairogradient.xml",
+      "sha": "c9b4e78b573d54082d2b5f125548ae0cbc62e938",
+      "size": 2373
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_cairoimagegrid.xml",
+      "sha": "1f50bb547d919f076997a31072452631c375fec5",
+      "size": 1978
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_camerashake.xml",
+      "sha": "130249fbdd5a5b2904b9bb3f854b69bb851e6a7c",
+      "size": 2244
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_cartoon.xml",
+      "sha": "451d41ce2eac09e947a14f8b9c6b5ae16e6f6984",
+      "size": 600
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_cluster.xml",
+      "sha": "3d9fd9294c28f69eda1cb53895a5cc18477e3feb",
+      "size": 681
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_colgate.xml",
+      "sha": "c486a664d0244a87bbc4860264c631a2a4897341",
+      "size": 624
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_coloradj_rgb.xml",
+      "sha": "4aeeb03e18259b78fec5814ac96bfc5aeef18bee",
+      "size": 1290
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_colordistance.xml",
+      "sha": "5f4a772e0ad8d4685bff54092546a686360f2c84",
+      "size": 474
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_colorenhance.xml",
+      "sha": "d1ebebbfbd9e4e63983450d79556b18608703d55",
+      "size": 1145
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_colorize.xml",
+      "sha": "41a340e22d2bb3333a53cc96f04693eba25a7c51",
+      "size": 949
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_colortap.xml",
+      "sha": "9d484e0223a6437760ace8ea38f8eb6e863bfcd6",
+      "size": 557
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_contrast0r.xml",
+      "sha": "8b5ad5ed72b78949268aa5743897a1ddfc3b4cad",
+      "size": 453
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_curves.xml",
+      "sha": "931e1ee22b485367eeb6c95ba5707c364c7ec2bf",
+      "size": 5558
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_d90stairsteppingfix.xml",
+      "sha": "bc8ef85cd776b313b6dbdd75c68eb922ef9ab00c",
+      "size": 552
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_defish0r.xml",
+      "sha": "96efa19bfd59ef46c49ce9ad3d36b098ce4f8333",
+      "size": 2304
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_delay0r.xml",
+      "sha": "88c00b0d59608bfb5e63b9d13ee089371947e6da",
+      "size": 404
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_delaygrab.xml",
+      "sha": "e7c09f5d55136cbcfd6f0de2cfab1fece5008875",
+      "size": 309
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_denoise_hqdn3d.xml",
+      "sha": "0eaf9c746b39f2c01f0e859f5ee7e1779884b9c9",
+      "size": 705
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_distort0r.xml",
+      "sha": "638612c0103a6af5c959e1ebfb587c871e131693",
+      "size": 916
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_dither.xml",
+      "sha": "59b7d2049b0bd96b91173d29f9be251c595342de",
+      "size": 775
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_edgeglow.xml",
+      "sha": "c12890968df148b5fd8c50b8b9641ce41919273b",
+      "size": 813
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_elastic_scale.xml",
+      "sha": "23b3f80e89e7b8a91808935cca8fff2b6d995ff0",
+      "size": 1316
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_emboss.xml",
+      "sha": "72377f8fcad79eb7557d8b9bb0e9ddb45aeb666d",
+      "size": 1283
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_equaliz0r.xml",
+      "sha": "3de00e2713d5a76cb6b6fc213498d19a0602068f",
+      "size": 308
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_facebl0r.xml",
+      "sha": "c6647d933da5ed9fd89ce06ffa6c10591f7dd0e4",
+      "size": 1666
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_facedetect.xml",
+      "sha": "e22903d326dadd56b74b36dd1a9a66bc315691a2",
+      "size": 3231
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_filmgrain.xml",
+      "sha": "dd90846640da0393ac6dce98a339e3e58c6d476d",
+      "size": 1963
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_flarefx.xml",
+      "sha": "8781d70ac166fdda4860d87c17f89330637a8647",
+      "size": 1871
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_flippo.xml",
+      "sha": "f9b95291f70f0230d0896d4872acab2c69c201a6",
+      "size": 469
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_gateweave.xml",
+      "sha": "97dfd2105c561e66024937fc3545781bc1b20caf",
+      "size": 1086
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_glitch0r.xml",
+      "sha": "d96bfff409e870443d00aef49574b4e81d77e5fc",
+      "size": 897
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_glow.xml",
+      "sha": "0a6f036e3155aea869ddeb1a14c0c46e4f25ca2e",
+      "size": 407
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_harris0r.xml",
+      "sha": "5e8814efaa637c8253ac3f970efad6ee288eed0c",
+      "size": 763
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_heatmap0r.xml",
+      "sha": "50742a1f958500d96bed151f6e12485aa8d8378b",
+      "size": 1121
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_hqdn3d.xml",
+      "sha": "826c99bb88f6f6f690ce0ec0c4137af1892635d1",
+      "size": 736
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_hueshift0r.xml",
+      "sha": "8cfb9e81cc25e84bd6401932515c28eea436a9eb",
+      "size": 404
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_iirblur.xml",
+      "sha": "06d764f2907c09cf9cb5d55e8b87f5ac54adb8af",
+      "size": 885
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_invert0r.xml",
+      "sha": "95ede697eb44faafda2a1619bcba7c5d91dfb02d",
+      "size": 286
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_kaleid0sc0pe.xml",
+      "sha": "3f682b9f7c286e7f806ccfe9acad5c852f81efb6",
+      "size": 3739
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_keyspillm0pup.xml",
+      "sha": "9b99a99999c1e564383d088c3f2b0da30420aaf5",
+      "size": 2309
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_lenscorrection.xml",
+      "sha": "16fb657f5766972d85e2e40b43d1869c21637dc6",
+      "size": 1122
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_letterb0xed.xml",
+      "sha": "4966390ac4fd502535edd0deaccf8885a0251dcd",
+      "size": 847
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_levels.xml",
+      "sha": "c82cdbb46d8fe51cf9c04d110ad955d1b1373275",
+      "size": 8647
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_lightgraffiti.xml",
+      "sha": "7b946cdf21d5e3acb134fbd5e977e7d1b427b97c",
+      "size": 12533
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_luminance.xml",
+      "sha": "a48548a592a1a6f1be9326309e3ec0f847f5ebdc",
+      "size": 328
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_mask0mate.xml",
+      "sha": "fea3b6609cf6d391877543508dfc20d05a378d0d",
+      "size": 1089
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_measure_pr0be.xml",
+      "sha": "f84282c7e394b53e98804c9fa29910978cf5e297",
+      "size": 1380
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_measure_pr0file.xml",
+      "sha": "d46a3cacd4632d4b023e131c5c071ed1521f6f88",
+      "size": 4505
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_medians.xml",
+      "sha": "56354aae5aff15f026a77c641e92f7aa76d58e26",
+      "size": 740
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_mirr0r.xml",
+      "sha": "40ffe35dfa2619f45916f547b5cb735a622902a7",
+      "size": 897
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_motiondiff0r.xml",
+      "sha": "e2888af09a80107f8075fa0f3191569fb0d65361",
+      "size": 1869
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_ndvi.xml",
+      "sha": "bfc8139a7bbff2d2bf999c14cd8ddaae2a92090c",
+      "size": 2678
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_nervous.xml",
+      "sha": "a51ee56f53e06ff0d2e8ad215a10b7305aab7a74",
+      "size": 281
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_normaliz0r.xml",
+      "sha": "dadb82bc5af67d818c9bd432629b4d3d15bf429b",
+      "size": 1502
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_nosync0r.xml",
+      "sha": "5848936ae86e156d8ac95051b4920d2c923b27fb",
+      "size": 530
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_ntsc.xml",
+      "sha": "78d6a57ca1d97e0abecf9adcc89498281c2610d9",
+      "size": 608
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_pixeliz0r.xml",
+      "sha": "d6b72c88cbb46f5caa270ead38e9cc255d017d15",
+      "size": 886
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_pixels0rt.xml",
+      "sha": "ee8469ffe0080108d1a8087b7e8deaf618706e83",
+      "size": 1334
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_pixs0r.xml",
+      "sha": "dd7e675f58721e544e6d722968f96da66d0e915b",
+      "size": 1432
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_posterize.xml",
+      "sha": "247282ca26430ff8d54912acc3761ccc6b492ea0",
+      "size": 500
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_pr0be.xml",
+      "sha": "4028d065ca71ffa2640b9452873556fa75ff167b",
+      "size": 1463
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_pr0file.xml",
+      "sha": "8340508638ebf70402addbbd5398eebbc311914a",
+      "size": 4590
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_premultiply.xml",
+      "sha": "7d1941d600d46bf86a0becb33824a59e79916538",
+      "size": 527
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_primaries.xml",
+      "sha": "84707e19b5c4f85d42978c486fb71aa00272e57b",
+      "size": 496
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_rgbnoise.xml",
+      "sha": "a75147ed46dce230ee3e13661374195550b80fb8",
+      "size": 493
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_rgbparade.xml",
+      "sha": "92e351b5d44c8517a5b529e5f2807a5fc63d5fcf",
+      "size": 296
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_rgbsplit0r.xml",
+      "sha": "5f1ca4163634a51f8705c54d884dbf46e74db408",
+      "size": 742
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_saturat0r.xml",
+      "sha": "37973a59500d4ed73993cca11969a148f9f055df",
+      "size": 464
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_scale0tilt.xml",
+      "sha": "a997b8e59d0e5a3c55723a4c4fc44c3f657cd6ca",
+      "size": 1439
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_scanline0r.xml",
+      "sha": "cd7a20bea16c3b50670cc17b944f4cb9fdab4261",
+      "size": 281
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_select0r.xml",
+      "sha": "e9690ed30f47dc2c75a3126f30b67a0c95d0deb9",
+      "size": 4265
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_shadert0y.xml",
+      "sha": "a7582038510f45f2145762a0d7f33cdb0c9848f9",
+      "size": 6060
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_shake0scillate.xml",
+      "sha": "1f1daca90bf1ec08af11b8d8f16981fd7ea67c34",
+      "size": 1743
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_sharpness.xml",
+      "sha": "85e4fcb1cd0270fac69886edb2ac85f2d2a8e5cb",
+      "size": 582
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_sigmoidaltransfer.xml",
+      "sha": "e40a9c61c947a68ed538d56a2897e0993a8d8b8b",
+      "size": 824
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_slitscan0r.xml",
+      "sha": "eff248b60f0e57c1fb5252392f11841e494bb357",
+      "size": 2123
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_sobel.xml",
+      "sha": "b144832fb2877cb3902dc2fec6811ac6409ae219",
+      "size": 274
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_softglow.xml",
+      "sha": "2f2947b7b8d02b363d9c5a59b4fc35e250b1b7fd",
+      "size": 1262
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_sopsat.xml",
+      "sha": "4e8553727337c4ef68d2f0ad4e452761329d546f",
+      "size": 6479
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_spillsupress.xml",
+      "sha": "756032bc81a9dbf7077b37dff05c6115b97608e8",
+      "size": 613
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_squareblur.xml",
+      "sha": "0c0b3eae451fa9c04a8eefd83c6d1fcafc3eb648",
+      "size": 388
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_squigglevision.xml",
+      "sha": "c0134bf62f21c9535f0e8879e28ce4c9c15fe379",
+      "size": 914
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_tehroxx0r.xml",
+      "sha": "820ff3cc72c5162bcb6c3b3585181d5515b4f250",
+      "size": 403
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_three_point_balance.xml",
+      "sha": "2995d863dae120a6398a1b42c6d73187eb974463",
+      "size": 850
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_threelay0r.xml",
+      "sha": "72e462b189cc257418a1961e657f48a809f6a93f",
+      "size": 270
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_threshold0r.xml",
+      "sha": "13b3e10cd02f304a5d53a6998d7b423219f3c5da",
+      "size": 413
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_timeout.xml",
+      "sha": "79841bd56b2d43d5fa9e8821595a4921179e6a6c",
+      "size": 693
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_tint0r.xml",
+      "sha": "a760b447c197473e30302ec192372d3cf442d50c",
+      "size": 698
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_transparency.xml",
+      "sha": "b3c88eccc1d2f3bfb00c49d8c9eed4782f942910",
+      "size": 449
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_twolay0r.xml",
+      "sha": "4d3303f8de1a549c8d958577669a4d803f4cc280",
+      "size": 261
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_vectorscope.xml",
+      "sha": "dbed8afe304223a6fcc2f7199af2b102a00a7bff",
+      "size": 312
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_vertigo.xml",
+      "sha": "d76e29fa90e8d13d6351dd11b940bfa4f03f6aea",
+      "size": 1204
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_vignette.xml",
+      "sha": "dce6bfb5ed6f0bd23be5e52d73246f0070b9de82",
+      "size": 707
+    },
+    {
+      "path": "data/effects/frei0r/frei0r_whirlpinch0r.xml",
+      "sha": "385d86ecffdf4453c496baaef5e00d72f7860ee0",
+      "size": 1434
+    },
+    {
+      "path": "data/effects/frei0r/mask_start_frei0r_alphaspot.xml",
+      "sha": "7699781b451adf514d118e060f397ff7fc780453",
+      "size": 2252
+    },
+    {
+      "path": "data/effects/gain.xml",
+      "sha": "e002896d30f2d727e47efb56252e05e0e1bcd290",
+      "size": 427
+    },
+    {
+      "path": "data/effects/gamma.xml",
+      "sha": "a1bffe814d593534b585610829f6d8413e34dd1f",
+      "size": 405
+    },
+    {
+      "path": "data/effects/gpsgraphic.xml",
+      "sha": "f1de84c95de1821373b0ac0458df14d3e01d4cdc",
+      "size": 14538
+    },
+    {
+      "path": "data/effects/gpstext.xml",
+      "sha": "51988e4dfc77fd34b5eb280bbb2036ccc23bf449",
+      "size": 7290
+    },
+    {
+      "path": "data/effects/gradientmap.xml",
+      "sha": "f55f4439cc1293686ca74c8952791623928c8b00",
+      "size": 411
+    },
+    {
+      "path": "data/effects/grain.xml",
+      "sha": "c454602f459129daaa7d72953bc029fc688c9edf",
+      "size": 661
+    },
+    {
+      "path": "data/effects/greyedge.xml",
+      "sha": "a0253250b3efed647f5513cd9354f400c7d644b5",
+      "size": 969
+    },
+    {
+      "path": "data/effects/greyscale.xml",
+      "sha": "2b5126fab4f74df4c27db6378913e795ab171b98",
+      "size": 276
+    },
+    {
+      "path": "data/effects/hsl_primaries.xml",
+      "sha": "610f54a863a9145563c2bba3a11c08abf86ff410",
+      "size": 3419
+    },
+    {
+      "path": "data/effects/hsl_range.xml",
+      "sha": "ad023f23cf34d56418dbd18f4307284022624d6c",
+      "size": 1684
+    },
+    {
+      "path": "data/effects/invert.xml",
+      "sha": "bb710585f7dac26f8fc6c7d1ca48b0fe528b33bc",
+      "size": 252
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1185.xml",
+      "sha": "575ca0fd92601e34ef40f3bdc3962b3f5335cd20",
+      "size": 956
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1190.xml",
+      "sha": "f3acea598a70c41eb7316727505eacf0d8f87c9c",
+      "size": 958
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1191.xml",
+      "sha": "362faca720752ba235130fb8d6f5d271fefbfd39",
+      "size": 1843
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1192.xml",
+      "sha": "8a83b9585bbddc5b579bbc5554d9d404fa2d1e53",
+      "size": 893
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1195.xml",
+      "sha": "1807abeae9a31e727896c71573112b729cb594c9",
+      "size": 539
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1196.xml",
+      "sha": "37628c4df2fb21ac29b0e0721ddf9e7d4b681fd3",
+      "size": 854
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1202.xml",
+      "sha": "cdb2a21775fd06c9b8857cd16cfac1920c03c7cb",
+      "size": 1106
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1203.xml",
+      "sha": "7f4e6bc55b27abe06f9f5e43d7db1da42cb42ea9",
+      "size": 1456
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1207.xml",
+      "sha": "c4425b50bbb9c96da4fb057f2e932f606ec29f70",
+      "size": 624
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1213.xml",
+      "sha": "7af42a51501a906c8817e40ab1fe60d858c49176",
+      "size": 1072
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1218.xml",
+      "sha": "d5f6d11bee01865d1ee680b55683e8db1060c9c7",
+      "size": 1787
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1219.xml",
+      "sha": "d0e42141723bb2dcce7dde0f39bf002501b09b58",
+      "size": 1231
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1402.xml",
+      "sha": "f856036c9b9b79fbfbe773f3b17c3ab6e2ce985d",
+      "size": 3141
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1403.xml",
+      "sha": "1d9aca119d6393cf8357b7c143ef7716dc4c9762",
+      "size": 1302
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1404.xml",
+      "sha": "3edad7cc11de5d6fd1a1773b753306822ea80335",
+      "size": 1077
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1407.xml",
+      "sha": "4080226ecfd0525d1dbebe414fb41c122e2662ed",
+      "size": 852
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1408.xml",
+      "sha": "a5b273bc4ecb909bc2c42b70d1e5bcd58fcdb7d6",
+      "size": 1221
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1410.xml",
+      "sha": "81859b5da86e96d88094a5f00d1a9ed0f6cddfd6",
+      "size": 2467
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1411.xml",
+      "sha": "5b5a7624050c7d23d8071182582ac804fa3bfcfd",
+      "size": 895
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1415.xml",
+      "sha": "9855befb35f82c617d694afcc4ef2454a4857223",
+      "size": 931
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1423.xml",
+      "sha": "3abef046b2347fd3b37a00bd5e0d233689d1992f",
+      "size": 971
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1430.xml",
+      "sha": "1361e565cebad9f75d820cc4b942566601f46b51",
+      "size": 924
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1431.xml",
+      "sha": "7a2b33c07812d48901696d8744da5625439eea60",
+      "size": 1209
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1432.xml",
+      "sha": "b2d4fe27924e2638dbdbbf10ac0edf55440551ba",
+      "size": 1683
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1433.xml",
+      "sha": "a3a3e161843a00386c444aaba978e9f68d173a0d",
+      "size": 1287
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1438.xml",
+      "sha": "df3b38c299ba882e5781715745ef4e76866b9a5a",
+      "size": 1530
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1886.xml",
+      "sha": "080bfcd521347e137e1ad08064cb62fe221c7462",
+      "size": 640
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1887.xml",
+      "sha": "58248d50b29469a89166ad49793c7406865a5920",
+      "size": 1420
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1888.xml",
+      "sha": "90f7896ccc18f02920f209c738b2193d39668371",
+      "size": 1432
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1889.xml",
+      "sha": "8f382416f52f9e12de42355045ca1197793cd2c1",
+      "size": 1414
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1890.xml",
+      "sha": "d9d898939c6abe625e668468b070981d8528eba7",
+      "size": 1080
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1891.xml",
+      "sha": "15913070a2e55b4b4dc64cf32d3a7e7dcf458838",
+      "size": 1079
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1892.xml",
+      "sha": "69285c93548c8760abaff1d261bb9ef816e21d7c",
+      "size": 1237
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1893.xml",
+      "sha": "2512dca22cc5de014b7cd0e881c4f828f8cff85a",
+      "size": 869
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1895.xml",
+      "sha": "fbe82573a1ebee3a0bd243af6deee8abcbe790c2",
+      "size": 1276
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1896.xml",
+      "sha": "f8d7a4424bb786720636ac3f6646f124924c3bef",
+      "size": 1259
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1897.xml",
+      "sha": "2cb497e9038adb4f4d61e60aa63bf64e52ffa9d4",
+      "size": 1265
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1900.xml",
+      "sha": "db492b74f8948ef8681c636a57d005406620f7c9",
+      "size": 848
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1901.xml",
+      "sha": "0629c1c99f6150a5fa232240ab0ae6eababd0c7c",
+      "size": 1237
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1902.xml",
+      "sha": "e8da9b08d96982856d693711545f0575350da566",
+      "size": 795
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1903.xml",
+      "sha": "78d2cc3c2a22459873444d941d602e7435b48a54",
+      "size": 794
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1904.xml",
+      "sha": "0d7bbaf37719c0a5c084b4c0ab9e127c4940c37a",
+      "size": 796
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1905.xml",
+      "sha": "1c5d74c865f02fc3531bbb60045dcb2fb1c0c37b",
+      "size": 1591
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1907.xml",
+      "sha": "7286d3747dd0f1b69d52bad16dcb7dceb3c8e938",
+      "size": 1251
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_1913.xml",
+      "sha": "d6d212b0ac568343bbb2e5385dff69eeff2f27ab",
+      "size": 1905
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2141.xml",
+      "sha": "373cd921db9111fdb30a7c73f216db38287a41fc",
+      "size": 3178
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2142.xml",
+      "sha": "df5745ef404538e8634b791d43b56d7a5196f510",
+      "size": 2607
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2143.xml",
+      "sha": "9005489346da388c3f73efe9f47117a8e07da482",
+      "size": 1891
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2144.xml",
+      "sha": "273676a0560ce0c7391ed6e6085d33da8757e52b",
+      "size": 940
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2145.xml",
+      "sha": "e8efc24674c9786253b88d8f978d83b1e9ea1e79",
+      "size": 822
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2146.xml",
+      "sha": "85378bbc1f9444f888deae2aa126453c5b70f994",
+      "size": 1115
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2147.xml",
+      "sha": "f194c00a9b6b9ab1540c119344dd92457d65b3a9",
+      "size": 1267
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2148.xml",
+      "sha": "db65f4053f98da121836e6ac504c3bb933216b66",
+      "size": 1376
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2149.xml",
+      "sha": "5de21323177dc7d736927a34a1e79c167f1bc249",
+      "size": 1091
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2150.xml",
+      "sha": "8d1078174d39ffc526ff9f6fce31bc9e0250fbb4",
+      "size": 1435
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2151.xml",
+      "sha": "bc47184f756783226daa1a839ba8b7b9a59ac711",
+      "size": 4406
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2152.xml",
+      "sha": "2f6b05919c6691e739a323a9d9f125ab8372da57",
+      "size": 1562
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2153.xml",
+      "sha": "8976c646c1ad843d8ab46420e9e936a529977a49",
+      "size": 1879
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2154.xml",
+      "sha": "1f6047b15c43e47ba2c46593cdcad91d74f3ca5c",
+      "size": 1118
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2155.xml",
+      "sha": "2a717c305d62dba9c0a02e14196a4b8604cf5bc9",
+      "size": 1048
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2156.xml",
+      "sha": "ad688a9f443ca35523c8ce4ea473c983f9b76112",
+      "size": 2869
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2157.xml",
+      "sha": "14d8efa2cc0189fd5b753878b48b2f0a3b2fed27",
+      "size": 1009
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2158.xml",
+      "sha": "fd5252b4bf3d772d71573fdd6713ae18770be55d",
+      "size": 1032
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_2159.xml",
+      "sha": "cb364b95dd9fbdd37a558fd5e4834a0875087ce9",
+      "size": 3437
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_declipper.xml",
+      "sha": "5eaac277c53ddc3da397b0d7899e4b9d5ef20ab8",
+      "size": 307
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_equalizer.xml",
+      "sha": "584a9b8627fbb4a03d1c6153e7cdfda6b8c5c319",
+      "size": 674
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_equalizer_15.xml",
+      "sha": "b34bf62b926cd11d22fa23b51ed289b0f9943b3a",
+      "size": 2095
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_librnnoise.xml",
+      "sha": "f82fbfabac634dd92e9185015ef479d3f13ead91",
+      "size": 715
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_limiter.xml",
+      "sha": "797b1d23338598c40e9ed338ec77637e5ceb6a1f",
+      "size": 747
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_phaser.xml",
+      "sha": "5d9a5474cfe2e6db7c2b1c3112b10cd7a2f7074e",
+      "size": 832
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_pitch.xml",
+      "sha": "336098d16f614c0dfcf8957173ebc8a1c69d975d",
+      "size": 454
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_pitch_scale.xml",
+      "sha": "6a968d10fbee739bbbf4d8d414c8cc099499d1ee",
+      "size": 458
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_rate_scale.xml",
+      "sha": "7a333360b228a460ffd5661e93636c0f56254054",
+      "size": 447
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_reverb.xml",
+      "sha": "f9b82996a8ff98eaa4fc44ef1c80ae8d149adcef",
+      "size": 599
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_room_reverb.xml",
+      "sha": "637f2b9dce1f3b5178c8b3c2450307bbf9e111f0",
+      "size": 714
+    },
+    {
+      "path": "data/effects/ladspa/ladspa_vinyl.xml",
+      "sha": "31dc2233fb4ed47893ff7dbddcd24d97c92939fc",
+      "size": 1027
+    },
+    {
+      "path": "data/effects/lift_gamma_gain.xml",
+      "sha": "a6f7ff6757a51963ef0f0a1822b8d27aff8b36d7",
+      "size": 1472
+    },
+    {
+      "path": "data/effects/lightshow.xml",
+      "sha": "8fe4d2596b35c0a2759fb0a6ca7b783c808c0bb0",
+      "size": 1250
+    },
+    {
+      "path": "data/effects/loudness.xml",
+      "sha": "491284ce4bc2b7dc8cf37d238ba771225e0d7d81",
+      "size": 1196
+    },
+    {
+      "path": "data/effects/luma.xml",
+      "sha": "a4b2f85abfc0e4c5cb148fba17d16da0650b33dd",
+      "size": 186
+    },
+    {
+      "path": "data/effects/lumakey.xml",
+      "sha": "f5fe041e096c2ec8a2d7f175db58027969db05e8",
+      "size": 1617
+    },
+    {
+      "path": "data/effects/lumaliftgaingamma.xml",
+      "sha": "1434e6ac7e608d61c4b4a357473025309c80328b",
+      "size": 737
+    },
+    {
+      "path": "data/effects/mask_apply.xml",
+      "sha": "12680567af6945d576e9f818eb0591c7fa3595c2",
+      "size": 448
+    },
+    {
+      "path": "data/effects/mask_start.xml",
+      "sha": "4936cb829b7a394e16ed9692d01ed1f268fc7fbc",
+      "size": 669
+    },
+    {
+      "path": "data/effects/mask_start_frei0r_alphaspot.xml",
+      "sha": "286e0a46ef4811e8a6a10d34a5d0e00445cca4d6",
+      "size": 2252
+    },
+    {
+      "path": "data/effects/mask_start_frei0r_select0r.xml",
+      "sha": "33aaee70973a0fc6ba997a8bbc3b7bdbc0a93e44",
+      "size": 2553
+    },
+    {
+      "path": "data/effects/mask_start_rotoscoping.xml",
+      "sha": "bf6bf94155f8915640252680c4223c420a3f6fd4",
+      "size": 1742
+    },
+    {
+      "path": "data/effects/mask_start_shape.xml",
+      "sha": "37b137cb70833f156ae441170554143eabce883d",
+      "size": 2624
+    },
+    {
+      "path": "data/effects/mirror.xml",
+      "sha": "0eef8837f32c6f5be894a782d0db4da834b4ba00",
+      "size": 648
+    },
+    {
+      "path": "data/effects/mono.xml",
+      "sha": "3cb981a2483fda9e92fe9c0b53b4d0097c1bfcd1",
+      "size": 525
+    },
+    {
+      "path": "data/effects/movit/movit_blur.xml",
+      "sha": "8c0e065b39529cae7164b1c864e82fa1e254d314",
+      "size": 331
+    },
+    {
+      "path": "data/effects/movit/movit_deconvolution_sharpen.xml",
+      "sha": "42cd264b5e4a317ebe4451fac8dce087cac80850",
+      "size": 938
+    },
+    {
+      "path": "data/effects/movit/movit_diffusion.xml",
+      "sha": "b366ed8a8ff76f5506b61735d9d7fab671d4d54a",
+      "size": 484
+    },
+    {
+      "path": "data/effects/movit/movit_flip.xml",
+      "sha": "9831eeeff478b7eb4b2b7589b08e206e5e6a94a4",
+      "size": 240
+    },
+    {
+      "path": "data/effects/movit/movit_glow.xml",
+      "sha": "f7e6ce31899515d17b43d88c7f12bffd5ba6ec99",
+      "size": 642
+    },
+    {
+      "path": "data/effects/movit/movit_lift_gamma_gain.xml",
+      "sha": "35753d67d0aa71eb9d4269c54da534e2c3ac791f",
+      "size": 1472
+    },
+    {
+      "path": "data/effects/movit/movit_lift_gamma_gain2.xml",
+      "sha": "26aab96ae1c91bb8d4c323c7a6483612cff2d28f",
+      "size": 1483
+    },
+    {
+      "path": "data/effects/movit/movit_mirror.xml",
+      "sha": "3b401c0ea697b080e0dfa1c7705cc64b97c4316e",
+      "size": 203
+    },
+    {
+      "path": "data/effects/movit/movit_opacity.xml",
+      "sha": "1563ea18c216c50b853ba340ebfe379a2fd3046f",
+      "size": 342
+    },
+    {
+      "path": "data/effects/movit/movit_rect.xml",
+      "sha": "7e274cd562830c7530252c61f11482d0b039fb9f",
+      "size": 466
+    },
+    {
+      "path": "data/effects/movit/movit_saturation.xml",
+      "sha": "205ae6eebbf5404b70b459504ffa296e3766c21c",
+      "size": 358
+    },
+    {
+      "path": "data/effects/movit/movit_unsharp_mask.xml",
+      "sha": "376676832af5bb76641f523321307203cddf0f04",
+      "size": 493
+    },
+    {
+      "path": "data/effects/movit/movit_vignette.xml",
+      "sha": "7967fbea5168ba711ff1476019e3d5f8066d4514",
+      "size": 497
+    },
+    {
+      "path": "data/effects/movit/movit_white_balance.xml",
+      "sha": "3fba0088242dddf2a292d8eb142b76f10ae2016f",
+      "size": 498
+    },
+    {
+      "path": "data/effects/mute.xml",
+      "sha": "011719aad21ba7e6757f8e2f7b1bf287ad008530",
+      "size": 365
+    },
+    {
+      "path": "data/effects/normalise.xml",
+      "sha": "e2122b8442c241fa66bf1aaab59157bc3a23c388",
+      "size": 717
+    },
+    {
+      "path": "data/effects/obscure.xml",
+      "sha": "7430115d67a8c8a822c6162512f1e4ee5d0a73a5",
+      "size": 410
+    },
+    {
+      "path": "data/effects/oldfilm.xml",
+      "sha": "a82dc7d41bdf323d66b7e5006d896edcebf0bc1e",
+      "size": 2228
+    },
+    {
+      "path": "data/effects/pan_zoom.xml",
+      "sha": "f54dad80b1581449a36ccc783f4312d8240f6b77",
+      "size": 1049
+    },
+    {
+      "path": "data/effects/pillar_echo.xml",
+      "sha": "83cc21da9beb956c491926c1fff69dfa07dd1b2f",
+      "size": 558
+    },
+    {
+      "path": "data/effects/qtblend.xml",
+      "sha": "c77e3a5f808b42bd19e69ff576330362e6786d16",
+      "size": 4296
+    },
+    {
+      "path": "data/effects/qtcrop.xml",
+      "sha": "b23aa6ed0db1ed811a65d3b00b8e9eada278bfd1",
+      "size": 815
+    },
+    {
+      "path": "data/effects/rboctaveshift.xml",
+      "sha": "76498607666b4d03eb0d87db3108cfaece46d33f",
+      "size": 1360
+    },
+    {
+      "path": "data/effects/rbpitchscale.xml",
+      "sha": "da732a95766ab6bb57c337931b5451afb4d7beb1",
+      "size": 1380
+    },
+    {
+      "path": "data/effects/rotate-3-way.xml",
+      "sha": "f67584e562b3b3a41b62370cec3ba7fcf7c91473",
+      "size": 3159
+    },
+    {
+      "path": "data/effects/rotation.xml",
+      "sha": "371ff25abefd499962ad47c9bcafa5086da5beca",
+      "size": 2385
+    },
+    {
+      "path": "data/effects/rotation_keyframable.xml",
+      "sha": "a1928bddb6fea30fc3f104b3e9ad84f11aa7936a",
+      "size": 1566
+    },
+    {
+      "path": "data/effects/rotoscoping.xml",
+      "sha": "168b092a8b2942dfe081112475d27a4eb5d1fdd0",
+      "size": 1229
+    },
+    {
+      "path": "data/effects/scratchlines.xml",
+      "sha": "c83f948676f6208dc4c51b831ee0409523065961",
+      "size": 1149
+    },
+    {
+      "path": "data/effects/sepia.xml",
+      "sha": "7a4c8650e5db71564bf6ba5397eeeaeb08aaa405",
+      "size": 509
+    },
+    {
+      "path": "data/effects/shape.xml",
+      "sha": "0bf8a29826260db0088a40f2047c249494302606",
+      "size": 2127
+    },
+    {
+      "path": "data/effects/shear.xml",
+      "sha": "d46dadb02f8386509c387b25e8d219ea3cd101a3",
+      "size": 2978
+    },
+    {
+      "path": "data/effects/sox/sox.xml",
+      "sha": "7f0ac4aa66767c5da882024658ab726d0d3e1b77",
+      "size": 1277
+    },
+    {
+      "path": "data/effects/sox/sox_band.xml",
+      "sha": "b0932291f47ff8175bfefb3b0e20f02f0cfbc6c5",
+      "size": 519
+    },
+    {
+      "path": "data/effects/sox/sox_bass.xml",
+      "sha": "75263ff10bc08499e0b1d24aa3f573f7cb3f8cce",
+      "size": 505
+    },
+    {
+      "path": "data/effects/sox/sox_echo.xml",
+      "sha": "1860e47d4aea044a3f04505bacb92942f4462809",
+      "size": 791
+    },
+    {
+      "path": "data/effects/sox/sox_flanger.xml",
+      "sha": "8bb95874a3ab074cd52e65e7a1bc2ae0638afe5c",
+      "size": 1338
+    },
+    {
+      "path": "data/effects/sox/sox_gain.xml",
+      "sha": "8ad972e64916b34a24655fca67c76801c65dad7b",
+      "size": 703
+    },
+    {
+      "path": "data/effects/sox/sox_phaser.xml",
+      "sha": "39e957ffd8fb23817d624259b1a64356ba78d274",
+      "size": 912
+    },
+    {
+      "path": "data/effects/sox/sox_pitch.xml",
+      "sha": "ae7ed07da39d994749144e9a54cae423731c09eb",
+      "size": 531
+    },
+    {
+      "path": "data/effects/sox/sox_reverb.xml",
+      "sha": "7379ad178920c9c0e82d0ee4ee63739007a58505",
+      "size": 1134
+    },
+    {
+      "path": "data/effects/sox/sox_stretch.xml",
+      "sha": "f797fa28b254305cf79a8c8dff258781f7c01116",
+      "size": 522
+    },
+    {
+      "path": "data/effects/speed.xml",
+      "sha": "1340a11fa91aac514f7dfa77c525c71fbb36b63a",
+      "size": 411
+    },
+    {
+      "path": "data/effects/spot_remover.xml",
+      "sha": "6f8c0c67cbc226129191486243569ca5f6cf8d2e",
+      "size": 596
+    },
+    {
+      "path": "data/effects/strobe.xml",
+      "sha": "3ad5f8e36b404baf382e4068ace58d5f0723e371",
+      "size": 712
+    },
+    {
+      "path": "data/effects/swapchannels.xml",
+      "sha": "aa6e58d528be7b045fe27270319ad4c226018d0f",
+      "size": 291
+    },
+    {
+      "path": "data/effects/tcolor.xml",
+      "sha": "8f5531dd1b8f679936ea40ba70d30d7607f4dd0f",
+      "size": 590
+    },
+    {
+      "path": "data/effects/templates/secondary_color_correction.xml",
+      "sha": "149ad6b670e06faed90a5a91af58e64b3bce7a63",
+      "size": 1694
+    },
+    {
+      "path": "data/effects/templates/secondary_color_correction_v2.xml",
+      "sha": "573aa4d5d9db6f9a90bfcc3ea2441d651d0569af",
+      "size": 1673
+    },
+    {
+      "path": "data/effects/templates/shut_off.xml",
+      "sha": "4567a4fe0e89048af0d6ce39f19f1576bcd0df7f",
+      "size": 2685
+    },
+    {
+      "path": "data/effects/threshold.xml",
+      "sha": "178aa1fa0a8ffc031ac1f3f87fabd33278a4aa5e",
+      "size": 484
+    },
+    {
+      "path": "data/effects/timer.xml",
+      "sha": "a701ac9a47060b7e981c5091531af3f7f7f3f3d9",
+      "size": 5979
+    },
+    {
+      "path": "data/effects/tracker.xml",
+      "sha": "908dcdd3116c4b48b47e0e432d8c06c8dec24e99",
+      "size": 3544
+    },
+    {
+      "path": "data/effects/typewriter.xml",
+      "sha": "3584abdb32b2567209ce4a22cdcbb11fe40ca67c",
+      "size": 1288
+    },
+    {
+      "path": "data/effects/vidstab.xml",
+      "sha": "e4ff662c95dc8ef9a22bfb4ae7f5d5c2ba33450e",
+      "size": 3198
+    },
+    {
+      "path": "data/effects/vignette.xml",
+      "sha": "9c6f8f52e6d7cd34d1f6d03637b2e0eca5754600",
+      "size": 1152
+    },
+    {
+      "path": "data/effects/volume.xml",
+      "sha": "278fdf57c0807c22aaab5a521bfac99f040f06eb",
+      "size": 443
+    },
+    {
+      "path": "data/effects/wave.xml",
+      "sha": "31a6fe65fc7bd2b5a5a7595a382e257a22593f6e",
+      "size": 1190
+    }
+  ]
+}
