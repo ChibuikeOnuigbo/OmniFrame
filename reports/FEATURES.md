@@ -1,3 +1,25 @@
+## 2026-11-24 — effect-instance trim continuity
+
+Fixed pointer/keyboard trims and overwrite tails pulling completed/future effects
+into the remaining clip or restarting surviving keys. Effect intervals now
+intersect the remaining parent window; numeric curves and procedural source
+offsets retain their timing. Fully removed intervals are restored by Undo, not
+by later extending footage. Short-parent range clamping no longer creates an
+effect longer than its clip.
+
+New browser proof checks exact preview pixels, Undo/Redo, Save/Open, keyboard
+trim and overwrite clocks. Shared headless photo renders match exactly at four
+timecodes. Evidence: `qa-output/fx-trim/`; tests: `qa/fx-trim-*`.
+Verification: 45 unit scripts, 13 browser smoke flows, all 15 speed curves
+(120 pixel comparisons/15 moving exports), typecheck, lint and build pass.
+
+Still open: persisted mesh sculpting is not present in the inspected 3D
+object/edit/paint implementation; it needs implementation rather than a blanket
+acceptance label. Native effect easing graphs, duration-dependent motion phases,
+matched competitor benchmarks and native desktop validation remain open.
+Next: design serializable non-destructive sculpt strokes and test mesh changes,
+Undo, Save/Open and preview/export before claiming sculpt support.
+
 ## 2026-11-24 follow-up — parent controls and motion review
 
 Consolidated eleven angle-only blur cards into Directional Blur settings,

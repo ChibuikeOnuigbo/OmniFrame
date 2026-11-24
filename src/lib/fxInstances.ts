@@ -72,16 +72,10 @@ export function mergeFxInstances(clip: Clip, localT: number): ClipEffect | undef
 
 /** Clamp an instance inside its parent clip: the container is closed. */
 export function clampFxToClip(inP: number, duration: number, clipDuration: number): { inP: number; duration: number } {
-  const maxDur = Math.max(FX_MIN_DUR, clipDuration)
-  let d = Math.max(FX_MIN_DUR, Math.min(duration, maxDur))
-  if (d > clipDuration) d = Math.max(FX_MIN_DUR, clipDuration)
-  let s = Math.max(0, Math.min(inP, Math.max(0, clipDuration - d)))
-  if (s + d > clipDuration) {
-    d = Math.max(FX_MIN_DUR, clipDuration - s)
-    if (s + d > clipDuration) {
-      s = Math.max(0, clipDuration - d)
-    }
-  }
+  const maxDur = Number.isFinite(clipDuration) ? Math.max(0, clipDuration) : 0
+  const minimum = Math.min(FX_MIN_DUR, maxDur)
+  const d = Math.max(minimum, Math.min(Number.isFinite(duration) ? duration : minimum, maxDur))
+  const s = Math.max(0, Math.min(Number.isFinite(inP) ? inP : 0, maxDur - d))
   return { inP: s, duration: d }
 }
 
@@ -140,4 +134,24 @@ function splitFxKeys(keys: Record<string, FxKey[]>, cut: number) {
     right[name]=[{t:0,v:boundary},...sorted.filter(k=>k.t>cut).map(k=>({...k,t:k.t-cut}))]
   }
   return {left,right}
+}
+
+/** Keep only the effect interval visible through a trimmed parent window.
+ * Keys retain their full curve, rebased to the surviving instance start.
+ * Completed/future instances must never be dragged into the visible window.
+ */
+export function trimFxInstances(instances: FxInstance[] | undefined, offset: number, duration: number): FxInstance[] | undefined {
+  if (!instances) return undefined
+  if (!Number.isFinite(offset) || !Number.isFinite(duration) || duration <= 0) return []
+  const result: FxInstance[] = []
+  for (const instance of instances) {
+    const start = Math.max(offset, instance.inP)
+    const end = Math.min(offset + duration, instance.inP + instance.duration)
+    if (end <= start) continue
+    const consumed = start - instance.inP
+    result.push({ ...instance, inP: start - offset, duration: end - start,
+      sourceOffset: (instance.sourceOffset ?? 0) + consumed,
+      keys: instance.keys ? Object.fromEntries(Object.entries(instance.keys).map(([name, keys]) => [name, keys.map(key => ({ ...key, t: key.t - consumed }))])) : undefined })
+  }
+  return result
 }

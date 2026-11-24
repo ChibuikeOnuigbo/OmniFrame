@@ -60,3 +60,10 @@ Next: profile matched proxy/4K workloads; exercise actual sculpt strokes and
 mesh persistence; expand graph/instance trim coverage; retrieve playable Drive
 sources and recreate a timecoded edit with an explicit mismatch ledger. Preserve
 legacy project IDs while consolidating other genuine parameter-only variants.
+
+## Follow-up correction
+
+The current 3D object/edit/paint code does not establish a persisted mesh
+sculpting feature. Treat that as missing implementation, not merely an untested
+finished feature. Effect-instance trim/overwrite continuity is now fixed and
+verified in `qa-output/fx-trim/`; ratings are unchanged pending broader work.

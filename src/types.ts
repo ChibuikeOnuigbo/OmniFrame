@@ -880,7 +880,7 @@ export interface FxInstance {
   name: string
   /** seconds from parent clip start */
   inP: number
-  /** >= FX_MIN_DUR (0.1s); clamped inside the parent clip at all times */
+  /** Positive visible duration; short parents/edge trims may be under 0.1s. */
   duration: number
   /** editable properties (ClipEffect keys + glitch family) */
   params: Record<string, number | string>

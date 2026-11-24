@@ -1,5 +1,32 @@
 # OmniFrame adversarial audit state
 
+## Cycle 17 — effect-window intersections (2026-11-24)
+
+- Replaced clamp-on-trim with interval intersection for pointer trims, keyboard
+  trims and overwrite splits. Completed/future effects are removed from the
+  visible window; surviving curves are rebased without dropping their offscreen
+  keys. Procedural source offsets advance by the consumed instance duration.
+- Fixed `clampFxToClip` exceeding a parent shorter than its 0.1-second minimum;
+  empty/invalid duration and non-finite range inputs now produce bounded ranges.
+- New adversarial helper tests cover repeated trims, before/after intervals,
+  short fragments, left extension and immutability. Real browser proof verifies
+  identical preview pixels after trim and Save/New/Open, Undo/Redo, keyboard
+  trim and overwrite clocks. Headless shared compositor yields four exact PNG
+  matches on real photo footage; the comparison sheet was visually inspected.
+- Verified 45 unit scripts, 13 smoke browser flows, source clocks (120 exact
+  comparisons and 15 exports), TypeScript, source lint and production build.
+  Project history audit rerun. Existing 277 non-high findings and large bundle
+  warnings remain; no broad speed or all-effect acceptance claim.
+- Remaining: trimming removes fully excluded effect intervals; use Undo to
+  recover them. Native easing graphs and duration-based procedural phase
+  continuity are separate work. Inspection found no persisted sculpting engine
+  in the current object/edit/paint 3D code; prior acceptance wording must not
+  imply sculpt-mesh support. Desktop acceptance and fair speed benchmarks remain.
+- Next: implement/test serializable sculpt deformations through actual renderer,
+  Undo and project persistence; retain existing geometry/asset ownership. Then
+  native effect easing and comprehensive motion-clock tests. Do not raise app
+  ratings solely because these regression cases pass.
+
 ## Cycle 16 — selective catalog consolidation and motion review (2026-11-24)
 
 - Eleven angle-only blur cards now live under Directional Blur controls; old

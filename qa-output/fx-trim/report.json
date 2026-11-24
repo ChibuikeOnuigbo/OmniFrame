@@ -1,0 +1,38 @@
+{
+  "pixelContinuity": true,
+  "undoRedo": true,
+  "roundTrip": true,
+  "instances": [
+    {
+      "id": "fx_6g1hp72glk9",
+      "catalogId": "essential-color-hold",
+      "name": "Color Hold",
+      "inP": 0,
+      "duration": 4,
+      "params": {
+        "colorHold": 1,
+        "holdColor": "#ff0000",
+        "holdSimilarity": 0.12,
+        "holdSoftness": 0.15
+      },
+      "keys": {
+        "colorHold": [
+          {
+            "t": -2,
+            "v": 0
+          },
+          {
+            "t": 2,
+            "v": 1
+          },
+          {
+            "t": 6,
+            "v": 0
+          }
+        ]
+      },
+      "enabled": true,
+      "sourceOffset": 2
+    }
+  ]
+}

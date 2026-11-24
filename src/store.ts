@@ -73,7 +73,7 @@ import { fontFamilyFromFileName, fontFormatFromFileName, readFileAsDataUrl, data
 import { parseSubtitles, parsePalette } from './lib/importUtils'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp, maxTimelineZoom } from './lib/time'
-import { clampFxToClip, splitFxInstances, FX_MIN_DUR } from './lib/fxInstances'
+import { clampFxToClip, splitFxInstances, trimFxInstances, FX_MIN_DUR } from './lib/fxInstances'
 import { clipEffectsAt, clipEffectTime, shiftClipEffectClock } from './lib/clipEffectAnimation'
 import { fxCatalogById, fxParamMeta } from './lib/effectCatalog'
 import { EDITABLE_SHORTCUT_DEFAULTS } from './lib/settingsRegistry'
@@ -1022,7 +1022,7 @@ function resolveSameTrackRipple(
       if (cEnd <= insertStart || c.start >= insertEnd) return [c]
       if (c.start >= insertStart && cEnd <= insertEnd) return []
       if (c.start < insertStart && cEnd > insertEnd) {
-        const left: Clip = { ...c, duration: insertStart - c.start }
+        const left: Clip = { ...c, duration: insertStart - c.start, fxInstances: trimFxInstances(c.fxInstances, 0, insertStart - c.start) }
         const right: Clip = {
           ...c,
           id: uid('clip'),
@@ -1030,11 +1030,12 @@ function resolveSameTrackRipple(
           duration: cEnd - insertEnd,
           inPoint: c.inPoint + (insertEnd - c.start),
           ...shiftClipEffectClock(c, insertEnd - c.start),
+        fxInstances: trimFxInstances(c.fxInstances, insertEnd - c.start, cEnd - insertEnd),
         }
         return [left, right]
       }
       if (c.start < insertStart) {
-        return [{ ...c, duration: insertStart - c.start }]
+        return [{ ...c, duration: insertStart - c.start, fxInstances: trimFxInstances(c.fxInstances, 0, insertStart - c.start) }]
       }
       return [{
         ...c,
@@ -1042,6 +1043,7 @@ function resolveSameTrackRipple(
         duration: cEnd - insertEnd,
         inPoint: c.inPoint + (insertEnd - c.start),
         ...shiftClipEffectClock(c, insertEnd - c.start),
+        fxInstances: trimFxInstances(c.fxInstances, insertEnd - c.start, cEnd - insertEnd),
       }]
     })
   }
@@ -2985,14 +2987,6 @@ export const useEditor = create<EditorState>((set, get) => {
           if (c.id !== id) return c
           const asset = s.assets.find((a) => a.id === c.assetId)
           const srcMax = c.kind === 'adjustment' ? Infinity : asset ? asset.duration : c.duration
-          // The fx container closes on trim: instances shift/re-clamp with it.
-          const reclampFx = (shift: number, dur: number) =>
-            (c.fxInstances || [])
-              .map((f) => {
-                const r = clampFxToClip(f.inP + shift, f.duration, dur)
-                return { ...f, inP: r.inP, duration: r.duration }
-              })
-              .filter((f) => f.duration >= FX_MIN_DUR - 1e-9)
           if (edge === 'left') {
             const maxStart = c.start + c.duration - MIN_CLIP
             const minStart = c.kind === 'adjustment' ? 0 : Math.max(0, c.start - c.inPoint)
@@ -3001,10 +2995,10 @@ export const useEditor = create<EditorState>((set, get) => {
             const newIn = Math.max(0, c.inPoint + delta)
             const newDur = c.duration - delta
             if (newDur < MIN_CLIP) return c
-            return { ...c, ...shiftClipEffectClock(c, delta), start: newStart, inPoint: newIn, duration: newDur, fxInstances: c.fxInstances ? reclampFx(-delta, newDur) : c.fxInstances }
+            return { ...c, ...shiftClipEffectClock(c, delta), start: newStart, inPoint: newIn, duration: newDur, fxInstances: trimFxInstances(c.fxInstances, delta, newDur) }
           } else {
             const newDur = clamp(value - c.start, MIN_CLIP, (srcMax || c.duration) - c.inPoint)
-            return { ...c, duration: newDur, fxInstances: c.fxInstances ? reclampFx(0, newDur) : c.fxInstances }
+            return { ...c, duration: newDur, fxInstances: trimFxInstances(c.fxInstances, 0, newDur) }
           }
         })
         return { clips, duration: recompute(clips) }
@@ -3196,10 +3190,10 @@ export const useEditor = create<EditorState>((set, get) => {
             const maxDelta = c.duration - 0.05
             const minDelta = c.kind === 'adjustment' ? -c.start : Math.max(-c.inPoint, -c.start)
             const d = Math.min(Math.max(deltaSeconds, minDelta), maxDelta)
-            return { ...c, ...shiftClipEffectClock(c, d), start: c.start + d, duration: c.duration - d, inPoint: Math.max(0, c.inPoint + d) }
+            return { ...c, ...shiftClipEffectClock(c, d), start: c.start + d, duration: c.duration - d, fxInstances: trimFxInstances(c.fxInstances, d, c.duration - d), inPoint: Math.max(0, c.inPoint + d) }
           }
           const d = Math.max(deltaSeconds, -(c.duration - 0.05))
-          return { ...c, duration: c.duration + d }
+          return { ...c, duration: c.duration + d, fxInstances: trimFxInstances(c.fxInstances, 0, c.duration + d) }
         })
         return { clips, duration: recompute(clips) }
       })
