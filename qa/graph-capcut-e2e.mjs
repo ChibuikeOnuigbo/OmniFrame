@@ -133,8 +133,8 @@ await page.waitForTimeout(400)
 // ---------- 2. axis semantics labels ----------
 {
   const labels = await page.locator('[data-testid="graph-svg-canvas"] text').allTextContents()
-  const hasY = labels.some((t) => t.includes('Y · value'))
-  const hasX = labels.some((t) => t.includes('X · time'))
+  const hasY = labels.some((t) => /Y\s*[·,]\s*value/.test(t))
+  const hasX = labels.some((t) => /X\s*[·,]\s*time/.test(t))
   assert('canvas labels state Y · value (CapCut semantics)', hasY, labels.join(' | '))
   assert('canvas labels state X · time (CapCut semantics)', hasX)
 }

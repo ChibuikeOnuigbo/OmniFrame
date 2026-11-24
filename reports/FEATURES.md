@@ -1,3 +1,26 @@
+## 2026-11-24 follow-up — parent controls and motion review
+
+Consolidated eleven angle-only blur cards into Directional Blur settings,
+retaining old IDs/favorites and distinct kernels. Added direction shortcuts;
+corrected catalog count/ID regressions during testing. Motion graph tests pass
+37 assertions; MCP, camera/3D masks, editable Motion Lab, liquify/corner pin and
+35 curve families pass. Final gate: 44 unit scripts, typecheck, lint and build passed. Original MCP motion demo and provisional ratings:
+`reports/EDITOR_REVIEW_20261124.md`. No competitor speed or all-tutorial claim.
+
+## 2026-11-24 — animated effect layers
+
+Added numeric keyframe diamonds, previous/next, auto-keyed sliders, freeze and
+reset to native Effects controls. Animation retains its source clock through
+cuts, trims, overwrite tails and moves; native effect clips extend freely.
+Numeric keys use linear interpolation. Color/string controls remain static.
+
+Fixed inspector focus, slider history cleanup, shared-object `.omni` saving,
+and missing headless standalone masks/LUTs. New keys/clocks survive project and
+template round trips; malformed animation payloads are rejected before mutation.
+Forty-three unit scripts, thirteen browser smoke flows, production keyframe UI,
+static gates, speed curves and compatibility checks passed. Evidence and limits:
+`AUDIT_STATE.md` Cycle 15; `qa-output/native-effect-keyframes/report.json`.
+
 ## 2026-11-23 — nested effect groups and animation trim
 
 Added nested groups/tags, breadcrumb navigation, scoped search and lazy family

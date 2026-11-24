@@ -419,6 +419,7 @@ function buildCatalog(): FxCatalogEntry[] {
   // ---- Blur ----
   ;[2, 5, 10, 18].forEach((b, i) => add(`blur-${i}`, `Gaussian Blur ${b}px`, 'blur', 'Gaussian blur', { blur: b }))
   ;[0.35, 0.6, 0.9].forEach((z, i) => add(`zblur-${i}`, `Zoom Blur ${Math.round(z * 100)}%`, 'blur', 'AM Zoom Blur (official guide)', { zoomBlur: z }))
+  add('directional-blur', 'Directional Blur', 'blur', 'Horizontal vertical diagonal oblique directional blur; choose angle, spread and trail bias in controls', { directionalBlur: .7, directionalBlurAngle: 0, directionalBlurBias: 0, directionalBlurSpread: 0, directionalBlurThreshold: 0 })
   for (const a of [0, 45, 90, 135, 180, 225, 270, 315]) {
     add(`dblur-${a}`, `Directional Blur ${a}°`, 'blur', 'AM Directional Blur (official guide)', { directionalBlur: 0.7, directionalBlurAngle: a })
   }
@@ -728,7 +729,7 @@ export function fxCatalogById(id: string): FxCatalogEntry | undefined {
 }
 
 export function fxCatalogCount(cat?: FxCat | 'all'): number {
-  const all = getFxCatalog()
+  const all = getFxCatalog().filter(entry => !isDirectionalSetting(entry.id))
   const materialized = !cat || cat === 'all' ? all.length : all.filter((e) => e.cat === cat).length
   return materialized + generatedRecipeCount(cat ?? 'all')
 }
@@ -745,9 +746,12 @@ export interface FxCatalogQuery {
   favorites?: string[]
 }
 
+// Keep saved IDs and favorites resolvable; angle-only variants live in parent controls.
+const isDirectionalSetting = (id: string) => /^dblur-(0|45|90|135|180|225|270|315)$/.test(id) || ['blur-horizontal', 'blur-vertical', 'blur-oblique'].includes(id)
+
 const catalogSearchTokens = (query: string): string[] => query.toLowerCase().match(/[a-z0-9]+/g) ?? []
 const ESSENTIAL_FX_IDS = new Set([
-  'blur-1', 'blur-horizontal', 'blur-vertical', 'blur-motion', 'zblur-1', 'tilt-1', 'bokeh-lens-0',
+  'blur-1', 'directional-blur', 'blur-motion', 'zblur-1', 'tilt-1', 'bokeh-lens-0',
   'glow-1', 'mblur-1', 'echo-0', 'shake-10', 'wave-1', 'pinch-2', 'turb-pro-0', 'liquify-0',
   'vhs-2', 'glitch-rgb-medium', 'look-noir',
 ])
@@ -780,7 +784,7 @@ export function queryFxCatalog(options: FxCatalogQuery = {}): { total: number; e
     return { total: generated.total, entries: generated.entries as FxCatalogEntry[] }
   }
 
-  let materialized = getFxCatalog().filter((entry) => (cat === 'all' || entry.cat === cat) && isInEffectGroup(effectGroupPath(entry), groupPath))
+  let materialized = getFxCatalog().filter((entry) => !isDirectionalSetting(entry.id) && (cat === 'all' || entry.cat === cat) && isInEffectGroup(effectGroupPath(entry), groupPath))
   if (collection === 'essentials') materialized = materialized.filter((entry) => entry.id.startsWith('essential-') || ESSENTIAL_FX_IDS.has(entry.id))
   if (collection === 'studio') materialized = materialized.filter((entry) => entry.id.startsWith('studio-'))
   if (q) materialized = materialized.filter((entry) => matchesCatalogSearch(`${entry.id} ${entry.name} ${entry.trace} ${effectTags(entry).join(' ') }`, q))

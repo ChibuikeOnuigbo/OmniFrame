@@ -1,0 +1,16 @@
+[
+  {
+    "url": "https://drive.google.com/drive/folders/1KlxUlem-Qjyd61dLkqs9nk3Ob4bou1Kp",
+    "status": 200,
+    "bytes": 356230
+  },
+  {
+    "url": "https://docs.kdenlive.org/en/effects_and_filters.html",
+    "status": 200,
+    "bytes": 70491
+  },
+  {
+    "url": "https://docs.glaxnimate.org/en/user_interface/docks/timeline.html",
+    "error": "HTTP Error 404: Not Found"
+  }
+]

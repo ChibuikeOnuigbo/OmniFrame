@@ -5,9 +5,9 @@ import { loadAppTs } from '../tools/mcp/appRender.mjs'
 const catalog = await loadAppTs('src/lib/effectCatalog.ts')
 const bank = await loadAppTs('src/lib/effectRecipeBank.ts')
 
-const curatedCount = catalog.getFxCatalog().length
+const curatedCount = catalog.queryFxCatalog({ collection: 'curated', limit: 0 }).total
 const totalCount = curatedCount + bank.GENERATED_RECIPE_COUNT
-assert.ok(curatedCount >= 10_623, 'existing curated effects are retained')
+assert.ok(catalog.getFxCatalog().length >= 10_623, 'existing curated IDs remain resolvable')
 assert.equal(bank.GENERATED_RECIPE_COUNT, 289_377, 'indexed recipe bank size')
 assert.equal(catalog.fxCatalogCount(), totalCount, 'base catalog remains above 150k without the optional authored pack')
 

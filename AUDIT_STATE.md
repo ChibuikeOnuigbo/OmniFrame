@@ -1,5 +1,95 @@
 # OmniFrame adversarial audit state
 
+## Cycle 16 — selective catalog consolidation and motion review (2026-11-24)
+
+- Eleven angle-only blur cards now live under Directional Blur controls; old
+  project IDs and favorites remain resolvable. Distinct blur implementations stay.
+  Added native direction buttons. Adversarial unit runs caught duplicate parent
+  IDs from repeated insertion and counts including hidden aliases; fixed both.
+- Graph suite initially failed two punctuation-only label assertions. Corrected
+  them to test axis semantics; all 37 assertions pass, including actual dragging,
+  easing strength, custom points and visible 2.5D foreshortening. MCP, Motion Lab,
+  camera/keyframe/3D masks and responsive corner-pin/liquify browser flows pass.
+  Deformation units and the 35-family curve simulator pass.
+- Rendered an original 72-frame three-word MCP typography study. OpenCV decoded
+  sampled frames; inspected the contact sheet. Kdenlive launches and Glaxnimate
+  renders the original SVG. These are not comparative speed benchmarks.
+- Revisited an archived Drive reference frame. Folder HTML was accessible but
+  no new video/audio was recovered or watched. Detailed evidence, provisional
+  MCP 7/10 and overall readiness 6/10 judgments, and limitations are in
+  `reports/EDITOR_REVIEW_20261124.md`.
+- Remaining: matched hardware/media performance benchmarks, actual sculpt-mesh
+  acceptance and persistence, full tutorial retrieval/recreations, broader
+  consolidation, plus Cycle 15 graph/clock and ownership gaps. Next: add failing
+  sculpt persistence tests and matched preview workloads before rating speed;
+  preserve saved recipe IDs when consolidating further parameter-only variants.
+
+## Cycle 15 — native effect keys, editing clocks and persistence (2026-11-24)
+
+- Re-read modified paths and reviewed rendering, history ownership, timeline
+  edits, import/tool mutation, serialization, templates and inspector lifecycle.
+  Native `effectKeys` and `effectSourceOffset` are evaluated in the shared
+  `clipEffectAnimation`/`fxInstances` path; legacy clips retain static behavior.
+- Native effect and clip-grade numeric controls now have key diamonds,
+  previous/next, auto-keyed sliders, freeze/reset, locked-track protection and
+  Undo. One schema-driven inspector replaces duplicate controls. Color/select
+  properties stay static; numeric interpolation is linear. A Help entry explains
+  the workflow. Interrupted slider gestures close only their own history group.
+- Cuts, overwrite tails and pointer/keyboard left trims shift the retained
+  source clock; moving clips does not. Right trims preserve future keys.
+  Adjustment clips can extend beyond their original duration. Fixed left-trim
+  clamping that could move a clip's end when its in-point reached zero.
+- Adversarial browser testing reproduced an empty inspector after a focus
+  request raced section registration. Requests are now consumed once the target
+  exists; manual tab selection cancels pending focus. Reset returns to a valid
+  section; Undo restores animation.
+- Save-after-split reproduced a false cycle error because concurrent siblings
+  shared one serialization ancestor set. Branch-local ancestor sets preserve
+  legitimate shared keys/typed data/Map/Set members while rejecting true cycles.
+  Validated actual split-project Save/New/Open and nested malformed imports.
+- Shared validation rejects non-finite keys/clocks, incompatible base types,
+  prototype keys and oversized key collections before import or MCP mutation.
+  Live/headless edits and dumps expose native animation. Templates preserve it;
+  no-carry replacement clears keys/clocks along with effect values.
+- The headless adjustment branch had bypassed masks and LUTs. It now uses the
+  shared grade path and composites the masked grade over the original frame,
+  matching PreviewEngine for the exercised grades. A combined LUT/grade matches
+  separate layers in the browser pipeline order. Half-opacity masks retain
+  opaque footage; higher clips stay unaffected. Keyed split tails produce exact
+  PNG matches. No blanket procedural-motion or alpha-keying parity claim.
+- Executed: 43 unit scripts, 13 browser smoke flows, TypeScript, source lint and
+  production build. New native-keyframe workflow passes development and built
+  production. Speed-curve tests performed 120 exact media-pixel comparisons and
+  15 moving exports. Replacement/template, TYMM LUT parity and Alight XML
+  round-trip passed. The template test was expanded from three cleared stages
+  to assert all five fields and actual carried/cleared keys, not just a count.
+- Proof: `qa/native-effect-keyframes-{e2e,render}.mjs`,
+  `qa/clip-effect-animation-unit.mjs`, `qa/omni-project-sharing-unit.mjs`;
+  `qa-output/native-effect-keyframes/{native-keyframes.mp4,contact-sheet.png,report.json}`;
+  `evidence/screenshots/native-effect-keyframes{,-mobile}.png`.
+  MP4 has 72 frames and 72 distinct decoded hashes. Frame sheet and desktop/
+  mobile screenshots were visually inspected. These are synthetic/color-plate
+  regression and photo demonstrations, not universal artistic acceptance.
+- Scan: source lint reports the existing 277 non-high findings (170 UI-color
+  literals, 65 non-null assertions, 28 timer heuristics, nine debug calls, four
+  inline handlers, one Demucs TODO). The targeted repository hint scan also
+  sees report/scanner references to that TODO. History audit was rerun. Large
+  bundle warnings remain visible; unrelated regenerated outputs are restored.
+- Remaining: native keys lack easing graphs and color/discrete interpolation.
+  Dropped FX instances still need left-trim/overwrite source-key preservation;
+  duration-dependent procedural motion (for example Card Flip) does not acquire
+  full cut/extension phase continuity from native scalar keys. Optional import
+  schemas outside these keys, async audio/roto ownership, retained media and
+  same-project filmstrip invalidation remain open. Shared blob attachment
+  deduplication, all-browser-script coverage, native installers, 4K performance,
+  prior video-study and all-effect visual acceptance are not established.
+- Next pass: add failing browser/export tests for FX-instance left trim and
+  overwrite, including active, completed and future intervals; preserve the
+  source curves without forcing hidden instances back into the clip. Audit
+  procedural clocks separately before claiming seamless motion cuts. Then
+  connect native keys to easing/graphs with mask, Undo and `.omni` round trips.
+  Continue Bezier path trim and async project ownership work from Cycles 12–14.
+
 ## Cycle 14 — effect hierarchy, reference study and shared rendering (2026-11-23)
 
 - Added nested effect browsing, breadcrumb/back navigation, searchable group tags,

@@ -1,3 +1,5 @@
+import { clipEffectsAt, clipEffectTime, evalFxKeys } from './clipEffectAnimation'
+export { evalFxKeys } from './clipEffectAnimation'
 import { recipeFromEffect, type NgLayer, type NgEffect } from './glitchNG'
 import type { Clip, ClipEffect, FxInstance, FxKey } from '../types'
 
@@ -15,25 +17,6 @@ import type { Clip, ClipEffect, FxInstance, FxKey } from '../types'
  */
 
 export const FX_MIN_DUR = 0.1
-
-/** Linear interpolation across a property's keyframes; ends clamp. */
-export function evalFxKeys(keys: FxKey[] | undefined, t: number, fallback: number): number {
-  if (!keys || keys.length === 0) return fallback
-  const sorted = [...keys].sort((a, b) => a.t - b.t)
-  if (t <= sorted[0].t) return sorted[0].v
-  if (t >= sorted[sorted.length - 1].t) return sorted[sorted.length - 1].v
-  for (let i = 0; i < sorted.length - 1; i++) {
-    const a = sorted[i]
-    const b = sorted[i + 1]
-    if (t >= a.t && t <= b.t) {
-      const span = b.t - a.t
-      if (span <= 0) return b.v
-      const k = (t - a.t) / span
-      return a.v + (b.v - a.v) * k
-    }
-  }
-  return fallback
-}
 
 /** Seconds from the parent clip's start. */
 export function fxLocalTime(clip: Clip, time: number): number {
@@ -64,17 +47,18 @@ export function fxParamsAt(inst: FxInstance, localT: number): Record<string, num
  */
 export function mergeFxInstances(clip: Clip, localT: number): ClipEffect | undefined {
   const insts = clip.fxInstances
-  const clipTimed = !!(clip.effects?.burstFx || clip.effects?.aura || clip.effects?.turbulent)
-  if ((!insts || insts.length === 0) && !clip.effects?.ngFamily && !clipTimed) return clip.effects
-  let merged: ClipEffect | undefined = clip.effects ? { ...clip.effects } : undefined
-  if (merged && clipTimed) merged.motionClock = Math.max(0, localT)
+  const base = clipEffectsAt(clip, localT)
+  const clipTimed = !!(base?.burstFx || base?.aura || base?.turbulent)
+  if ((!insts || insts.length === 0) && !base?.ngFamily && !clipTimed) return base
+  let merged: ClipEffect | undefined = base ? { ...base } : undefined
+  if (merged && clipTimed) merged.motionClock = Math.max(0, clipEffectTime(clip, localT))
   const layers: NgLayer[] = []
   const addNg = (e: NgEffect | undefined, id: string, offset: number) => {
     if (!e?.ngFamily) return
     const r = recipeFromEffect(e)
     layers.push({ id, family: e.ngFamily, seed: r.seed, palette: r.palette, timeline: r.timeline, parameters: r.parameters, timeOffset: offset, opacity: e.ngOpacity, blendMode: e.ngBlend })
   }
-  addNg(clip.effects as NgEffect | undefined, 'clip', clip.start)
+  addNg(base as NgEffect | undefined, 'clip', clip.start - clipEffectTime(clip, 0))
   for (const inst of insts || []) {
     if (!fxActiveAt(inst, localT)) continue
     const params = fxParamsAt(inst, localT) as unknown as ClipEffect

@@ -1,3 +1,4 @@
+import { clipEffectsAt } from '../lib/clipEffectAnimation'
 import { effectGroupLabel, effectTags } from '../lib/effectTaxonomy'
 import { PreviewSquare } from './PreviewSquare'
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
@@ -613,6 +614,7 @@ const CONTROL_DEFS: Array<{ key: keyof ClipEffect; label: string; min: number; m
 ]
 
 function ClipEffectsControls({ clip }: { clip?: Clip }) {
+  const playhead = useEditor(s => s.playhead)
   const setClipEffect = useEditor((s) => s.setClipEffect)
   const isLayer = clip?.kind === 'adjustment'
   if (!clip) {
@@ -623,9 +625,9 @@ function ClipEffectsControls({ clip }: { clip?: Clip }) {
       </div>
     )
   }
-  const effects: ClipEffect = { ...DEFAULT_EFFECTS, ...(clip.effects || {}) }
+  const effects: ClipEffect = { ...DEFAULT_EFFECTS, ...(clipEffectsAt(clip, Math.max(0, Math.min(clip.duration, playhead - clip.start))) || {}) }
   const labels = activeEffectKeys(clip.effects)
-  const reset = () => setClipEffect(clip.id, DEFAULT_EFFECTS)
+  const reset = () => useEditor.getState().resetClipEffects(clip.id)
   const presetEffects: Record<string, ClipEffect> = {
     cinematic: { contrast: 1.25, saturation: 1.15, brightness: 0.95, sepia: 0.1, hueRotate: 0 },
     noir: { grayscale: 1, contrast: 1.4, brightness: 0.9, sepia: 0, hueRotate: 0 },

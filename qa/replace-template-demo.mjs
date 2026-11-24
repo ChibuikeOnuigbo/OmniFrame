@@ -28,6 +28,7 @@ await call('select', { clipId: c1.clipId })
 await call('edit_element', { clipId: c1.clipId, patch: {
   adjustment: { luts: [{ builtin: 'tymm-5', intensity: 1 }] },
   effects: { contrast: 1.15, saturation: 1.25, vignette: 0.3 },
+  effectKeys: { contrast: [{ t: 0, v: 1 }, { t: 2, v: 1.4 }] }, effectSourceOffset: .25,
 } })
 await call('keyframe_set', { property: 'position', channel: 'X', time: 0, value: -60, interpolation: 'easeInOut' })
 await call('keyframe_set', { property: 'position', channel: 'X', time: 2.5, value: 60, interpolation: 'easeInOut' })
@@ -42,17 +43,22 @@ const dump = JSON.parse(fs.readFileSync(t.file, 'utf8'))
 ok(dump.fields.adjustment.luts[0].builtin === 'tymm-5', 'TYMM lut inside template dump')
 ok(dump.fields.animation && dump.fields.animation.curves.position_x.keyframes.length === 2, 'keys captured in dump')
 
+ok(dump.fields.effectKeys.contrast.length === 2 && dump.fields.effectSourceOffset === .25, 'native effect source keys captured')
+
 // ---- 3. NEW THEME video + TEMPLATE APPLY -----------------------------------
 const c2 = await call('import_video', { path: 'public/death_note_video.mp4', fps: 12, fit: 'cover' })
 const ap = await call('template_apply', { templateId: t.templateId, clipId: c2.clipId })
 ok(ap.applied.includes('adjustment') && ap.applied.includes('animation') && ap.applied.includes('effects'), 'chain replayed on new clip: ' + ap.applied.join(','))
 
+ok(SESSION.seq.clips.find(c => c.id === c2.clipId).effectKeys.contrast.length === 2 && SESSION.seq.clips.find(c => c.id === c2.clipId).effectSourceOffset === .25, 'native effect keys and clock replayed')
+
 // ---- 4. REPLACE VIDEO (carry vs no-carry) -----------------------------------
 const c3 = await call('import_video', { path: 'new_glitch/batch/b0013_digital-slice.mp4', fps: 12, fit: 'cover' })
 const rep = await call('replace_video', { clipId: c2.clipId, path: 'Study_edits_videos/exports/-JLpm8uJBOo.mp4', windowStart: 0.5, carryEffects: true })
 ok(rep.carried === true && rep.window.start >= 0 && rep.window.start <= Math.max(0, rep.sourceDuration - rep.window.length) + 0.01, 'replace carried effects, window ' + rep.window.start + '-' + rep.window.end + ' of ' + rep.sourceDuration + 's')
+await call('edit_element', { clipId: c3.clipId, patch: { effects: { blur: 1 }, effectKeys: { blur: [{ t: 0, v: 1 }] }, effectSourceOffset: 1 } })
 const rep2 = await call('replace_video', { clipId: c3.clipId, path: 'Study_edits_videos/exports/-JLpm8uJBOo.mp4', windowStart: 999, carryEffects: false })
-ok(rep2.cleared.length === 3, 'no-carry cleared: ' + rep2.cleared.join(','))
+ok(['effects', 'fxInstances', 'adjustment', 'effectKeys', 'effectSourceOffset'].every(key => rep2.cleared.includes(key) && SESSION.seq.clips.find(c => c.id === c3.clipId)[key] === undefined), 'no-carry cleared: ' + rep2.cleared.join(','))
 ok(rep2.window.start < rep2.sourceDuration, 'windowStart clamped into source')
 const list = await call('list_templates', {})
 ok(list.templates.length >= 1 && list.templates[0].fields.length >= 4, 'list_templates sees the dump')

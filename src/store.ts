@@ -74,7 +74,8 @@ import { parseSubtitles, parsePalette } from './lib/importUtils'
 import { guidedRectMatting, type GuidedMattingResult } from './lib/guidedMatting'
 import { uid, clamp, maxTimelineZoom } from './lib/time'
 import { clampFxToClip, splitFxInstances, FX_MIN_DUR } from './lib/fxInstances'
-import { fxCatalogById } from './lib/effectCatalog'
+import { clipEffectsAt, clipEffectTime, shiftClipEffectClock } from './lib/clipEffectAnimation'
+import { fxCatalogById, fxParamMeta } from './lib/effectCatalog'
 import { EDITABLE_SHORTCUT_DEFAULTS } from './lib/settingsRegistry'
 import type { FxInstance } from './types'
 import { createSelectionMask } from './lib/drawingEngine'
@@ -527,6 +528,10 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
 
   // ---- clip effects & titles ----
   setClipEffect: (id: string, effect: Partial<ClipEffect>) => void
+  /** Key time is clip-local; the source clock survives cuts and trims. */
+  setClipEffectKey: (id: string, param: string, time: number, value: number) => void
+  removeClipEffectKey: (id: string, param: string, time?: number) => void
+  resetClipEffects: (id: string) => void
   setClipSpeedCurve: (id: string, curve: import('./lib/speedCurves').SpeedCurveId | undefined) => void
   setClipNotes: (id: string, notes: string) => void
   customFonts: CustomFont[]
@@ -1024,6 +1029,7 @@ function resolveSameTrackRipple(
           start: insertEnd,
           duration: cEnd - insertEnd,
           inPoint: c.inPoint + (insertEnd - c.start),
+          ...shiftClipEffectClock(c, insertEnd - c.start),
         }
         return [left, right]
       }
@@ -1035,6 +1041,7 @@ function resolveSameTrackRipple(
         start: insertEnd,
         duration: cEnd - insertEnd,
         inPoint: c.inPoint + (insertEnd - c.start),
+        ...shiftClipEffectClock(c, insertEnd - c.start),
       }]
     })
   }
@@ -1872,11 +1879,52 @@ export const useEditor = create<EditorState>((set, get) => {
       }))
     },
     setClipEffect: (id, effect) => {
-      set((s) => ({
-        clips: s.clips.map((c) =>
-          c.id === id ? { ...c, effects: { ...c.effects, ...effect } } : c,
-        ),
-      }))
+      const s = get(), clip = s.clips.find(c => c.id === id)
+      if (!clip || s.tracks.find(t => t.id === clip.trackId)?.locked) return
+      const entries = Object.entries(effect)
+      if (!entries.length || entries.some(([key, value]) => ['__proto__', 'constructor', 'prototype'].includes(key) || (typeof value === 'number' && !Number.isFinite(value)))) return
+      const effects = { ...clip.effects }, effectKeys = { ...clip.effectKeys }
+      const time = clipEffectTime(clip, clamp(s.playhead - clip.start, 0, clip.duration))
+      for (const [param, value] of entries) {
+        if (effectKeys[param]?.length && typeof value === 'number') {
+          effectKeys[param] = [...effectKeys[param].filter(k => Math.abs(k.t - time) > 1e-6), { t: time, v: value }].sort((a, b) => a.t - b.t)
+        } else {
+          Object.assign(effects, { [param]: value })
+          if (typeof value !== 'number') delete effectKeys[param]
+        }
+      }
+      if (!s.inInteraction) pushSnapshot()
+      set({ clips: s.clips.map(c => c.id === id ? { ...c, effects, effectKeys } : c) })
+    },
+    setClipEffectKey: (id, param, localTime, value) => {
+      const s = get(), clip = s.clips.find(c => c.id === id), meta = fxParamMeta(param)
+      if (!clip || s.tracks.find(t => t.id === clip.trackId)?.locked || meta?.kind !== 'number' || !Number.isFinite(localTime) || !Number.isFinite(value)) return
+      const t = clipEffectTime(clip, clamp(localTime, 0, clip.duration))
+      const v = clamp(value, meta.min ?? -Infinity, meta.max ?? Infinity)
+      const list = clip.effectKeys?.[param] ?? []
+      if (list.some(k => Math.abs(k.t - t) < 1e-6 && k.v === v)) return
+      const effectKeys = { ...clip.effectKeys, [param]: [...list.filter(k => Math.abs(k.t - t) > 1e-6), { t, v }].sort((a, b) => a.t - b.t) }
+      if (!s.inInteraction) pushSnapshot()
+      set({ clips: s.clips.map(c => c.id === id ? { ...c, effects: { ...c.effects, [param]: c.effects?.[param as keyof ClipEffect] ?? v }, effectKeys } : c) })
+    },
+    removeClipEffectKey: (id, param, localTime) => {
+      const s = get(), clip = s.clips.find(c => c.id === id)
+      if (!clip || !clip.effectKeys?.[param]?.length || s.tracks.find(t => t.id === clip.trackId)?.locked || (localTime !== undefined && !Number.isFinite(localTime))) return
+      const effectKeys = { ...clip.effectKeys }
+      const time = clipEffectTime(clip, clamp(localTime ?? s.playhead - clip.start, 0, clip.duration))
+      const list = localTime === undefined ? [] : effectKeys[param].filter(k => Math.abs(k.t - time) > 1e-6)
+      if (list.length === effectKeys[param].length) return
+      const value = clipEffectsAt(clip, clamp(s.playhead - clip.start, 0, clip.duration))?.[param as keyof ClipEffect]
+      if (list.length) effectKeys[param] = list
+      else delete effectKeys[param]
+      if (!s.inInteraction) pushSnapshot()
+      set({ clips: s.clips.map(c => c.id === id ? { ...c, effectKeys, effects: !list.length ? { ...c.effects, [param]: value } : c.effects } : c) })
+    },
+    resetClipEffects: (id) => {
+      const s = get(), clip = s.clips.find(c => c.id === id)
+      if (!clip || (!clip.effects && !clip.effectKeys) || s.tracks.find(t => t.id === clip.trackId)?.locked) return
+      if (!s.inInteraction) pushSnapshot()
+      set({ clips: s.clips.map(c => c.id === id ? { ...c, effects: undefined, effectKeys: undefined, effectSourceOffset: undefined } : c) })
     },
 
     setClipNotes: (id: string, notes: string) => {
@@ -2930,12 +2978,13 @@ export const useEditor = create<EditorState>((set, get) => {
 
     trimClip: (id, edge, value) => {
       const current = get().clips.find((c) => c.id === id)
-      if (!current || get().tracks.find((t) => t.id === current.trackId)?.locked) return
+      if (!current || !Number.isFinite(value) || get().tracks.find((t) => t.id === current.trackId)?.locked) return
+      if (!get().inInteraction) pushSnapshot()
       set((s) => {
         const clips = s.clips.map((c) => {
           if (c.id !== id) return c
           const asset = s.assets.find((a) => a.id === c.assetId)
-          const srcMax = asset ? asset.duration : c.duration
+          const srcMax = c.kind === 'adjustment' ? Infinity : asset ? asset.duration : c.duration
           // The fx container closes on trim: instances shift/re-clamp with it.
           const reclampFx = (shift: number, dur: number) =>
             (c.fxInstances || [])
@@ -2946,12 +2995,13 @@ export const useEditor = create<EditorState>((set, get) => {
               .filter((f) => f.duration >= FX_MIN_DUR - 1e-9)
           if (edge === 'left') {
             const maxStart = c.start + c.duration - MIN_CLIP
-            const newStart = Math.min(maxStart, Math.max(0, value))
+            const minStart = c.kind === 'adjustment' ? 0 : Math.max(0, c.start - c.inPoint)
+            const newStart = Math.min(maxStart, Math.max(minStart, value))
             const delta = newStart - c.start
             const newIn = Math.max(0, c.inPoint + delta)
-            const newDur = c.duration - (newIn - c.inPoint)
+            const newDur = c.duration - delta
             if (newDur < MIN_CLIP) return c
-            return { ...c, start: newStart, inPoint: newIn, duration: newDur, fxInstances: c.fxInstances ? reclampFx(-delta, newDur) : c.fxInstances }
+            return { ...c, ...shiftClipEffectClock(c, delta), start: newStart, inPoint: newIn, duration: newDur, fxInstances: c.fxInstances ? reclampFx(-delta, newDur) : c.fxInstances }
           } else {
             const newDur = clamp(value - c.start, MIN_CLIP, (srcMax || c.duration) - c.inPoint)
             return { ...c, duration: newDur, fxInstances: c.fxInstances ? reclampFx(0, newDur) : c.fxInstances }
@@ -2984,6 +3034,7 @@ export const useEditor = create<EditorState>((set, get) => {
           start: time,
           duration: c.duration - offset,
           inPoint: c.inPoint + offset,
+          ...shiftClipEffectClock(c, offset),
           fxInstances: fx ? fx.right : c.fxInstances,
         }
         newClips.push(left, right)
@@ -3125,7 +3176,7 @@ export const useEditor = create<EditorState>((set, get) => {
     trimSelectedClips: (edge, deltaSeconds) => {
       const s = get()
       const ids = (s.selectedClipIds.length ? s.selectedClipIds : s.selectedClipId ? [s.selectedClipId] : [])
-      if (ids.length === 0 || Math.abs(deltaSeconds) < 1e-6) return 0
+      if (ids.length === 0 || !Number.isFinite(deltaSeconds) || Math.abs(deltaSeconds) < 1e-6) return 0
 
       const lockedTrackIds = new Set(s.tracks.filter((t) => t.locked).map((t) => t.id))
       const trimIds = new Set(
@@ -3143,8 +3194,9 @@ export const useEditor = create<EditorState>((set, get) => {
           if (edge === 'left') {
             // Moving the left edge right shortens, left lengthens (consuming in-point).
             const maxDelta = c.duration - 0.05
-            const d = Math.min(Math.max(deltaSeconds, -c.inPoint), maxDelta)
-            return { ...c, start: c.start + d, duration: c.duration - d, inPoint: Math.max(0, c.inPoint + d) }
+            const minDelta = c.kind === 'adjustment' ? -c.start : Math.max(-c.inPoint, -c.start)
+            const d = Math.min(Math.max(deltaSeconds, minDelta), maxDelta)
+            return { ...c, ...shiftClipEffectClock(c, d), start: c.start + d, duration: c.duration - d, inPoint: Math.max(0, c.inPoint + d) }
           }
           const d = Math.max(deltaSeconds, -(c.duration - 0.05))
           return { ...c, duration: c.duration + d }

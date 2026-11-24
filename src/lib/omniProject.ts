@@ -99,7 +99,6 @@ async function encodeProjectState(
   files: Record<string, Uint8Array>,
 ): Promise<Encoded> {
   const idsByUrl = new Map<string, string>()
-  const active = new WeakSet<object>()
   let nextAttachment = 1
   let totalAttachmentBytes = 0
 
@@ -121,7 +120,7 @@ async function encodeProjectState(
     return id
   }
 
-  const encode = async (value: unknown, key = ''): Promise<Encoded> => {
+  const encode = async (value: unknown, key = '', ancestors: ReadonlySet<object> = new Set()): Promise<Encoded> => {
     if (value === null) return null
     if (value === undefined) return { [REF_TAG]: 'undefined' }
     if (typeof value === 'boolean' || typeof value === 'string') {
@@ -158,7 +157,7 @@ async function encodeProjectState(
           text = text.split(url).join(marker)
           refs.push({ marker, id })
         }
-        return { [REF_TAG]: 'text', value: text, refs: await encode(refs, 'refs') }
+        return { [REF_TAG]: 'text', value: text, refs: await encode(refs, 'refs', ancestors) }
       }
       return value
     }
@@ -171,7 +170,9 @@ async function encodeProjectState(
     if (typeof value !== 'object') return { [REF_TAG]: 'undefined' }
 
     const objectValue = value as object
-    if (active.has(objectValue)) throw new Error('The editor state contains a cyclic object and cannot be saved as an OmniFrame project.')
+    if (ancestors.has(objectValue)) throw new Error('The editor state contains a cyclic object and cannot be saved as an OmniFrame project.')
+    // Sibling array entries encode concurrently; shared clip data is not a cycle.
+    const active = new Set(ancestors)
     active.add(objectValue)
     try {
       if (value instanceof Blob) {
@@ -190,15 +191,15 @@ async function encodeProjectState(
       }
       if (value instanceof Date) return { [REF_TAG]: 'date', value: value.toISOString() }
       if (typeof ImageData !== 'undefined' && value instanceof ImageData) {
-        return { [REF_TAG]: 'image-data', width: value.width, height: value.height, data: await encode(value.data, 'data') }
+        return { [REF_TAG]: 'image-data', width: value.width, height: value.height, data: await encode(value.data, 'data', active) }
       }
       if (value instanceof Map) {
-        return { [REF_TAG]: 'map', entries: await encode([...value.entries()], 'entries') }
+        return { [REF_TAG]: 'map', entries: await encode([...value.entries()], 'entries', active) }
       }
       if (value instanceof Set) {
-        return { [REF_TAG]: 'set', values: await encode([...value.values()], 'values') }
+        return { [REF_TAG]: 'set', values: await encode([...value.values()], 'values', active) }
       }
-      if (Array.isArray(value)) return await Promise.all(value.map((item) => encode(item)))
+      if (Array.isArray(value)) return await Promise.all(value.map((item) => encode(item, '', active)))
       if (!isPlainObject(objectValue)) {
         throw new Error(`The editor state contains a non-portable ${objectValue.constructor?.name || 'object'} value; convert it to project media before saving.`)
       }
@@ -206,7 +207,7 @@ async function encodeProjectState(
       for (const [childKey, childValue] of Object.entries(value as Record<string, unknown>)) {
         if (objectValue === root && NON_DOCUMENT_KEYS.has(childKey)) continue
         if (typeof childValue === 'function' || typeof childValue === 'symbol') continue
-        output[childKey] = await encode(childValue, childKey)
+        output[childKey] = await encode(childValue, childKey, active)
       }
       return output
     } finally {

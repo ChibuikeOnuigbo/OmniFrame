@@ -1,6 +1,6 @@
 # Editor reference study and nested effects
 
-Updated 2026-11-23. This is a source inventory plus a tested implementation increment. It is **not** a claim that every reference effect has been ported, every tutorial watched, or every desktop platform validated.
+Updated 2026-11-24. This is a source inventory plus a tested implementation increment. It is **not** a claim that every reference effect has been ported, every tutorial watched, or every desktop platform validated.
 
 ## What changed in OmniFrame
 
@@ -30,7 +30,7 @@ The Essentials collection exposes existing fundamentals and eight new presets ba
 | Despill Green / Blue | Channel, amount, balance, luminance compensation | Same shared pixel module |
 | Channel Mixer / Channel Swap | Nine signed RGB coefficients and mix amount | Same shared pixel module |
 
-The same pixel path is used by browser preview/export and the headless compositor. Native adjustment layers show schema-based controls with Undo. Effects dropped onto image/video/compound clips use the existing FX Stack, including numeric keyframes. Native adjustment-layer properties do not yet have the same general keyframe UI; this remains a separate gap. Existing projects are not migrated or renamed.
+The same pixel path is used by browser preview/export and the headless compositor. Native adjustment layers show schema-based controls with Undo. Effects dropped onto image/video/compound clips use the existing FX Stack, including numeric keyframes. Native adjustment-layer numeric properties now have diamonds, previous/next, auto-keyed sliders, freeze and reset. Their source clock survives cuts/trims/extensions and project/template persistence. Easing graphs and animated color/string controls remain open. Existing projects are not migrated or renamed.
 
 Animation mode now provides Trim Path for visible freehand strokes on the active paint layer: Start, End, Offset, key buttons, reset and stroke selection. Trimming follows arc length, interpolates pressure/timestamps, and wraps into disjoint segments without drawing a bridge. Keys use project seconds and linear interpolation; once a field is keyed, changing its slider edits that frame. Draw On, onion ghosts, Undo and `.omni` save/reopen honor trim. This is not yet Bezier-shape Trim Path, a trim graph editor, a full Glaxnimate modifier stack or Lottie import/export inside OmniFrame.
 
@@ -79,3 +79,17 @@ Run `python3 scripts/research-editor-capabilities.py` for manual/product indexes
 `qa/editor-capabilities-render.mjs` uses the shared headless renderer and `render_export`: [18-second proof](../../qa-output/editor-capabilities/effects-and-trim.mp4), [contact sheet](../../qa-output/editor-capabilities/contact-sheet.png), [report](../../qa-output/editor-capabilities/report.json). The exported proof has 216 decoded frames and 207 distinct frame hashes. Pixel tests separately assert masked Color Hold, luma alpha, despill and channel mixing. Distinct hashes establish changing frames, not human acceptance of every effect.
 
 Screenshots: [nested blur](../../evidence/screenshots/effects-nested-shape-blur.png), [narrow dock](../../evidence/screenshots/effects-nested-mobile.png), [Trim Path](../../evidence/screenshots/animation-trim-path.png).
+
+## Native effect animation follow-up — 2026-11-24
+
+[Six-second MP4](../../qa-output/native-effect-keyframes/native-keyframes.mp4),
+[frame sheet](../../qa-output/native-effect-keyframes/contact-sheet.png),
+[report](../../qa-output/native-effect-keyframes/report.json),
+[desktop](../../evidence/screenshots/native-effect-keyframes.png) and
+[mobile](../../evidence/screenshots/native-effect-keyframes-mobile.png).
+The right half of an existing credited Pexels car photo receives animated blur
+and selective color; the left half stays unchanged. All 72 decoded frames are
+distinct. Actual browser checks cover key controls, masks, cut/trim/extend,
+overwrite/move, Undo, locked tracks, invalid MCP inputs and Save/New/Open.
+See `AUDIT_STATE.md` Cycle 15 for limitations, including linear interpolation
+and the separate work still required for dropped-instance trim clocks.

@@ -1,3 +1,4 @@
+import { validateClipEffectAnimation } from './clipEffectAnimation'
 import { validateDeformation } from './deformation'
 import { SPEED_CURVE_IDS } from './speedCurves'
 /**
@@ -50,7 +51,7 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
     const seq = st().sequenceSettings || { width: 1920, height: 1080 }
     switch (tool) {
       case 'help':
-        out = { catalog: OMNI_MCP_CATALOG, editElementFields:['transform','deformation','speedCurve','inPoint','volume','effects','adjustmentMask'], note: 'universal tools operate the real store; every call is logged in the MCP Console' }
+        out = { catalog: OMNI_MCP_CATALOG, editElementFields:['transform','deformation','speedCurve','inPoint','volume','effects','effectKeys','effectSourceOffset','adjustmentMask'], note: 'universal tools operate the real store; every call is logged in the MCP Console' }
         break
       case 'select':
         if (params.clipId != null && !clips().some(c => c.id === params.clipId)) throw new Error('clip not found')
@@ -110,12 +111,16 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
       }
       case 'edit_element': {
         const c=params.clipId?clips().find(c=>c.id===params.clipId):requireClip();if(!c)throw new Error('clip not found')
-        const patch=params.patch||{};for(const key of Object.keys(patch))if(!['transform','deformation','speedCurve','inPoint','volume','effects','adjustmentMask'].includes(key))throw new Error('Unsupported live edit_element field '+key)
+        const patch=params.patch||{};for(const key of Object.keys(patch))if(!['transform','deformation','speedCurve','inPoint','volume','effects','effectKeys','effectSourceOffset','adjustmentMask'].includes(key))throw new Error('Unsupported live edit_element field '+key)
         const next:any={}
         if(patch.transform){for(const [key,value]of Object.entries(patch.transform)){if(!['x','y','z','scale','scaleX','scaleY','scaleZ','rotation','rotationX','rotationY','opacity','pivotX','pivotY'].includes(key))throw new Error('Unknown transform field');finite(key,value)}next.transform={...c.transform,...patch.transform}}
         if('deformation'in patch)next.deformation=validateDeformation(patch.deformation)
         if('speedCurve'in patch){if(patch.speedCurve!==null&&!SPEED_CURVE_IDS.includes(patch.speedCurve))throw new Error('Unknown speed curve');next.speedCurve=patch.speedCurve??undefined}
         if('effects'in patch){if(!patch.effects||typeof patch.effects!=='object'||Array.isArray(patch.effects))throw new Error('effects must be an object');next.effects={...(c.effects||{}),...patch.effects}}
+        if('effectKeys' in patch) next.effectKeys = patch.effectKeys
+        if('effectSourceOffset' in patch) next.effectSourceOffset = patch.effectSourceOffset
+        validateClipEffectAnimation(next.effects ?? c.effects, 'effectKeys' in next ? next.effectKeys : c.effectKeys, 'effectSourceOffset' in next ? next.effectSourceOffset : c.effectSourceOffset)
+        if('effectKeys' in next) next.effectKeys = structuredClone(next.effectKeys)
         if('adjustmentMask'in patch){
           const mask=patch.adjustmentMask
           if(mask!==null&&(!mask||typeof mask!=='object'||!Array.isArray(mask.regions)))throw new Error('adjustmentMask must contain a regions array or be null')
@@ -305,7 +310,7 @@ export async function omniMcpCall(tool: string, params: Record<string, any> = {}
       case 'dump':
         out = {
           sequence: seq, fps: st().projectFps, selection: st().selectedClipIds,
-          clips: clips().map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, transform: c.transform, mask: c.mask || null, adjustmentMask: c.adjustmentMask || null, effects: c.effects || null, speedCurve: c.speedCurve || null })),
+          clips: clips().map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, transform: c.transform, mask: c.mask || null, adjustmentMask: c.adjustmentMask || null, effects: c.effects || null, effectKeys: c.effectKeys || {}, effectSourceOffset: c.effectSourceOffset ?? 0, speedCurve: c.speedCurve || null })),
         }
         break
       default:

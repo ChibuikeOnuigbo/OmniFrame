@@ -866,7 +866,7 @@ export interface ClipEffect extends NgEffect {
  * using kind 'adjustment' (they grade every track below them).
  */
 export interface FxKey {
-  /** seconds inside the instance (0 = instance start) */
+  /** Seconds in the owning effect clock (instance-local or clip effect source). */
   t: number
   v: number
 }
@@ -1412,6 +1412,10 @@ export interface Clip {
   notes?: string
   transform: ClipTransform
   effects?: ClipEffect
+  /** Numeric base-effect keys in the effect's retained source clock. */
+  effectKeys?: Record<string, FxKey[]>
+  /** Seconds consumed by left trims/cuts; may be negative after extending left. */
+  effectSourceOffset?: number
   /** Effect instances dropped onto this clip (CapCut-style inner effect bars). */
   fxInstances?: FxInstance[]
   /** LUT stack: adjustment layers grade everything below them; regular

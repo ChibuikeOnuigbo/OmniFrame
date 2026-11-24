@@ -1,0 +1,142 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { chromium } from 'playwright'
+import chrome, { inflate } from '@sparticuz/chromium'
+await inflate(path.resolve('node_modules/@sparticuz/chromium/bin/al2023.tar.br'))
+process.env.LD_LIBRARY_PATH = `${os.tmpdir()}/al2023/lib:${os.tmpdir()}:${process.env.LD_LIBRARY_PATH || ''}`
+const browser = await chromium.launch({ executablePath: await chrome.executablePath(), args: ['--no-sandbox'] })
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 940 } })
+  page.setDefaultTimeout(15000)
+  const errors = []; page.on('pageerror', e => errors.push(String(e)))
+  await page.goto(process.env.URL || 'http://localhost:5173/#studio', { waitUntil: 'networkidle' })
+  const id = await page.evaluate(() => {
+    const st = window.__omniframe_store; st.getState().newProject(); st.getState().setCustomSequenceDimensions(320, 180)
+    const cv = document.createElement('canvas'); cv.width = 320; cv.height = 180
+    const x = cv.getContext('2d'); x.fillStyle = '#ff0000'; x.fillRect(0, 0, 160, 180); x.fillStyle = '#00ff00'; x.fillRect(160, 0, 160, 180)
+    st.getState().addAsset({ id: 'native-fixture', name: 'Color plate', kind: 'image', url: cv.toDataURL(), width: 320, height: 180, duration: 12, size: 1000 })
+    st.getState().addClipToTrack(st.getState().ensureTrack('video'), 'native-fixture', 0)
+    st.getState().setClipProp(st.getState().clips[0].id, { duration: 12 })
+    const id = st.getState().addFxAdjustment('essential-color-hold', { start: 0, duration: 4 })
+    st.getState().selectClip(id); st.getState().setLeftTab('effects'); st.getState().requestRightSection('effects')
+    st.getState().setMonitorMode('program'); st.getState().setPlayhead(0)
+    return id
+  })
+  const field = page.getByTestId('native-effect-colorHold'), slider = field.getByRole('slider', { name: 'Amount', exact: true })
+  await slider.fill('0')
+  await field.getByRole('button', { name: 'Add Amount keyframe', exact: true }).click()
+  await page.evaluate(() => window.__omniframe_store.getState().setPlayhead(2))
+  await slider.fill('1')
+  const getClip = () => page.evaluate(id => window.__omniframe_store.getState().clips.find(c => c.id === id), id)
+  assert.deepEqual((await getClip()).effectKeys.colorHold, [{ t: 0, v: 0 }, { t: 2, v: 1 }])
+  await page.evaluate(() => window.__omniframe_store.getState().undo())
+  assert.deepEqual((await getClip()).effectKeys.colorHold, [{ t: 0, v: 0 }], 'one Undo reverses a keyed slider edit')
+  await page.evaluate(() => window.__omniframe_store.getState().redo())
+  await field.getByRole('button', { name: 'Previous Amount keyframe' }).click()
+  assert.equal(await page.evaluate(() => window.__omniframe_store.getState().playhead), 0)
+  await field.getByRole('button', { name: 'Next Amount keyframe' }).click()
+  assert.equal(await slider.inputValue(), '1')
+  const waitPixel = async (green, y = .5) => page.waitForFunction(({ green, y }) => {
+    const c = document.getElementById('of-canvas'), p = c.getContext('2d').getImageData(c.width * .75, c.height * y, 1, 1).data
+    return green ? p[0] < 5 && p[1] > 250 : p[0] > 170 && Math.abs(p[0] - p[1]) < 3
+  }, { green, y })
+  await waitPixel(false)
+  await page.evaluate(() => window.__omniframe_store.getState().setPlayhead(0))
+  await waitPixel(true)
+  await page.evaluate(id => {
+    const s = window.__omniframe_store.getState()
+    s.setClipProp(id, { adjustmentMask: { enabled: true, inverted: false, shape: 'rectangle', centerX: .5, centerY: .25, width: 1, height: .5, feather: 0 } }); s.setPlayhead(2)
+  }, id)
+  await waitPixel(false, .2); await waitPixel(true, .8)
+  fs.mkdirSync('evidence/screenshots', { recursive: true })
+  await page.screenshot({ path: 'evidence/screenshots/native-effect-keyframes.png' })
+  // Stopping animation freezes the visible value; Undo brings the curve back.
+  await page.evaluate(() => window.__omniframe_store.getState().setPlayhead(1))
+  // Navigating during a slider drag must close the history transaction.
+  await slider.dispatchEvent('pointerdown', { pointerId: 3 })
+  await page.evaluate(() => window.__omniframe_store.getState().selectClip(null))
+  await page.waitForFunction(() => !window.__omniframe_store.getState().inInteraction)
+  await page.evaluate(id => { const s = window.__omniframe_store.getState(); s.selectClip(id); s.requestRightSection('effects') }, id)
+  await field.getByRole('button', { name: 'Stop animating Amount' }).click()
+  assert.equal((await getClip()).effects.colorHold, .5)
+  assert.equal((await getClip()).effectKeys.colorHold, undefined)
+  await page.evaluate(() => window.__omniframe_store.getState().undo())
+  assert.equal((await getClip()).effectKeys.colorHold.length, 2)
+  const outcomes = await page.evaluate(async id => {
+    const st = window.__omniframe_store, state = () => st.getState(), clip = id => state().clips.find(c => c.id === id)
+    const check = (value, msg) => { if (!value) throw Error(msg) }
+    state().splitAt(1)
+    const right = state().clips.find(c => c.kind === 'adjustment' && c.start === 1)
+    check(right.effectSourceOffset === 1 && right.effectKeys.colorHold.length === 2, 'cut preserves source keys')
+    state().trimClip(right.id, 'left', 1.5)
+    check(clip(right.id).effectSourceOffset === 1.5 && clip(right.id).start + clip(right.id).duration === 4, 'left trim retains original end')
+    state().trimClip(right.id, 'right', 10)
+    check(clip(right.id).duration === 8.5 && clip(right.id).effectKeys.colorHold.length === 2, 'effect clips extend with future keys intact')
+    state().trimClip(right.id, 'left', 0)
+    check(clip(right.id).effectSourceOffset === 0 && clip(right.id).duration === 10, 'left extension restores the curve')
+    state().selectClip(right.id); state().trimSelectedClips('left', 1)
+    check(clip(right.id).effectSourceOffset === 1 && clip(right.id).duration === 9, 'keyboard trim updates source clock')
+    state().undo(); check(clip(right.id).effectSourceOffset === 0, 'trim undo')
+    const before = JSON.stringify(clip(right.id))
+    state().trimClip(right.id, 'left', NaN); state().trimSelectedClips('right', NaN)
+    state().setClipEffectKey(right.id, 'colorHold', 1, NaN); state().setClipEffect(right.id, { colorHold: Infinity })
+    check(before === JSON.stringify(clip(right.id)), 'non-finite inputs mutate nothing')
+    st.setState({ tracks: state().tracks.map(t => t.id === right.trackId ? { ...t, locked: true } : t) })
+    state().setClipEffect(right.id, { colorHold: .3 }); state().setClipEffectKey(right.id, 'colorHold', 3, .3)
+    state().removeClipEffectKey(right.id, 'colorHold'); state().resetClipEffects(right.id); state().trimClip(right.id, 'right', 4)
+    check(before === JSON.stringify(clip(right.id)), 'locked effect layer is immutable')
+    st.setState({ tracks: state().tracks.map(t => ({ ...t, locked: false })) })
+    for (const patch of [{ effectKeys: null }, { effectSourceOffset: NaN }, { effectKeys: { colorHold: [{ t: 0, v: Infinity }] } }, { effects: { colorHold: 'bad' } }]) {
+      const bad = await window.omniMCP.call('edit_element', { clipId: right.id, patch: { volume: .2, ...patch } })
+      check(!bad.ok && before === JSON.stringify(clip(right.id)), 'invalid MCP edit must be atomic')
+    }
+    const good = await window.omniMCP.call('edit_element', { clipId: right.id, patch: { effectSourceOffset: .5 } })
+    check(good.ok && clip(right.id).effectSourceOffset === .5, 'live MCP clock edit')
+    const dump = await window.omniMCP.call('dump', {})
+    check(dump.out.clips.find(c => c.id === right.id).effectKeys.colorHold.length === 2, 'MCP inspection includes keys')
+    const bundle = await state().saveOmniProject('Native keys')
+    state().newProject(); await state().loadOmniProject(new File([bundle], 'native.omni'))
+    check(clip(right.id).effectSourceOffset === .5 && clip(right.id).effectKeys.colorHold[1].v === 1, 'saved keys and source clock')
+    state().selectClip(right.id); state().requestRightSection('effects'); state().setPlayhead(1.5)
+    return { rightId: right.id, roundTrip: true, splitTrimExtend: true, undo: true, locks: true, invalidInputs: true, liveMCP: true }
+  }, id)
+  await waitPixel(false, .2); await waitPixel(true, .8)
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.evaluate(() => { const s = window.__omniframe_store.getState(); s.setLeftOpen(false); s.requestRightSection('effects') })
+  const inspector = page.getByTestId('selection-grade-controls')
+  await inspector.waitFor()
+  assert.equal(await inspector.evaluate(el => el.scrollWidth > el.clientWidth + 1), false)
+  await page.screenshot({ path: 'evidence/screenshots/native-effect-keyframes-mobile.png' })
+  await inspector.getByRole('button', { name: 'Reset native effects' }).click()
+  await page.getByTestId('section-header-clip').waitFor()
+  assert.equal(await page.evaluate(id => window.__omniframe_store.getState().clips.find(c => c.id === id).effectKeys, outcomes.rightId), undefined)
+  await page.evaluate(() => window.__omniframe_store.getState().undo())
+  assert.equal(await page.evaluate(id => window.__omniframe_store.getState().clips.find(c => c.id === id).effectKeys.colorHold.length, outcomes.rightId), 2)
+  const overwrite = await page.evaluate(() => {
+    const st = window.__omniframe_store, s = () => st.getState()
+    s().newProject()
+    const id = s().addFxAdjustment('essential-box-blur', { start: 1, duration: 8 })
+    s().setClipEffectKey(id, 'boxBlur', 0, 0); s().setClipEffectKey(id, 'boxBlur', 8, 40)
+    const first = s().clips.find(c => c.id === id)
+    // Ordinary clip insertion uses the same overwrite path for graded footage.
+    st.setState({ clips: [{ ...first, kind: 'image' }], insertionMode: 'overwrite' })
+    s().addAsset({ id: 'overwrite-source', name: 'Insert', kind: 'image', url: 'data:image/png;base64,', width: 2, height: 2, duration: 2, size: 0 })
+    s().addClipToTrack(first.trackId, 'overwrite-source', 3)
+    const tail = s().clips.find(c => c.name === first.name && c.start > 1)
+    if (!tail || tail.effectSourceOffset !== tail.start - 1) throw Error('overwrite tail lost effect clock')
+    const offset = tail.effectSourceOffset
+    s().moveClip(tail.id, 12)
+    if (s().clips.find(c => c.id === tail.id).effectSourceOffset !== offset) throw Error('moving clip changed source clock')
+    return true
+  })
+  assert.equal(overwrite, true)
+  const parentId = await page.evaluate(() => { const s = window.__omniframe_store.getState(); s.newProject(); const id = s.addFxAdjustment('directional-blur'); s.selectClip(id); s.requestRightSection('effects'); return id })
+  await page.getByRole('button', { name: 'Vertical', exact: true }).click()
+  assert.equal(await page.evaluate(id => window.__omniframe_store.getState().clips.find(c => c.id === id).effects.directionalBlurAngle, parentId), 90)
+  await page.getByRole('button', { name: 'Diagonal', exact: true }).click()
+  assert.equal(await page.evaluate(id => window.__omniframe_store.getState().clips.find(c => c.id === id).effects.directionalBlurAngle, parentId), 45)
+  assert.deepEqual(errors, [])
+  console.log('PASS native effect inspector, masked pixels, keys, cuts, extension, Undo, locks, invalid MCP inputs, save/reopen and mobile layout', outcomes)
+} finally { await browser.close() }

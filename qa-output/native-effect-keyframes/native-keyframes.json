@@ -1,0 +1,244 @@
+{
+ "tool": "render_export",
+ "ok": true,
+ "meta": {},
+ "data": {
+  "video": "qa-output/native-effect-keyframes/native-keyframes.mp4",
+  "out": "/workspace/OmniFrame/qa-output/native-effect-keyframes/native-keyframes.mp4",
+  "frames": 72,
+  "fps": 12,
+  "size": 45308,
+  "audio": {
+   "tracks": 0
+  },
+  "mode": "omniframe",
+  "recipe": [
+   {
+    "tool": "project_new",
+    "params": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 6,
+     "bg": "#000000"
+    },
+    "out": {
+     "w": 320,
+     "h": 180,
+     "fps": 12,
+     "duration": 6
+    }
+   },
+   {
+    "tool": "edit_element",
+    "params": {
+     "clipId": "native-photo-fx",
+     "patch": {
+      "effects": {
+       "boxBlur": 0,
+       "colorHold": 0,
+       "holdColor": "#ff0000",
+       "holdSimilarity": 0.15,
+       "holdSoftness": 0.2
+      },
+      "effectKeys": {
+       "colorHold": [
+        {
+         "t": 0,
+         "v": 0
+        },
+        {
+         "t": 2,
+         "v": 1
+        },
+        {
+         "t": 4,
+         "v": 0
+        },
+        {
+         "t": 6,
+         "v": 1
+        }
+       ],
+       "boxBlur": [
+        {
+         "t": 0,
+         "v": 0
+        },
+        {
+         "t": 2,
+         "v": 16
+        },
+        {
+         "t": 4,
+         "v": 0
+        },
+        {
+         "t": 6,
+         "v": 24
+        }
+       ]
+      },
+      "adjustmentMask": {
+       "enabled": true,
+       "inverted": false,
+       "shape": "rectangle",
+       "centerX": 0.75,
+       "centerY": 0.5,
+       "width": 0.5,
+       "height": 1,
+       "feather": 0
+      }
+     }
+    },
+    "out": {
+     "clipId": "native-photo-fx",
+     "compounded": null
+    }
+   },
+   {
+    "tool": "render_export",
+    "params": {
+     "out": "qa-output/native-effect-keyframes/native-keyframes.mp4"
+    },
+    "out": {
+     "frames": 72
+    }
+   }
+  ],
+  "inspect": {
+   "mode": "omniframe",
+   "sequence": {
+    "w": 320,
+    "h": 180,
+    "fps": 12,
+    "duration": 6,
+    "bg": "#000000"
+   },
+   "selection": null,
+   "clips": [
+    {
+     "id": "car",
+     "name": "Car",
+     "start": 0,
+     "duration": 6,
+     "inPoint": 0,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "blendKeys": [],
+     "opacity": 1,
+     "effects": {},
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    },
+    {
+     "id": "native-photo-fx",
+     "name": "Animated blur and color",
+     "start": 0,
+     "duration": 6,
+     "inPoint": 0,
+     "transform": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotation": 0,
+      "opacity": 1,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+     },
+     "mask": null,
+     "blendMode": "source-over",
+     "blendKeys": [],
+     "opacity": 1,
+     "effects": {
+      "boxBlur": 0,
+      "colorHold": 0,
+      "holdColor": "#ff0000",
+      "holdSimilarity": 0.15,
+      "holdSoftness": 0.2
+     },
+     "effectKeys": {
+      "colorHold": [
+       {
+        "t": 0,
+        "v": 0
+       },
+       {
+        "t": 2,
+        "v": 1
+       },
+       {
+        "t": 4,
+        "v": 0
+       },
+       {
+        "t": 6,
+        "v": 1
+       }
+      ],
+      "boxBlur": [
+       {
+        "t": 0,
+        "v": 0
+       },
+       {
+        "t": 2,
+        "v": 16
+       },
+       {
+        "t": 4,
+        "v": 0
+       },
+       {
+        "t": 6,
+        "v": 24
+       }
+      ]
+     },
+     "patch": null,
+     "curves": {
+      "position_x": [],
+      "position_y": [],
+      "position_z": [],
+      "rotation_x": [],
+      "rotation_y": [],
+      "rotation_z": [],
+      "scale_x": [],
+      "scale_y": [],
+      "scale_z": [],
+      "opacity": [],
+      "pivot_x": [],
+      "pivot_y": [],
+      "playback_speed": [],
+      "wheel_rotation": []
+     }
+    }
+   ],
+   "trace": "[same-object-ref]"
+  }
+ }
+}

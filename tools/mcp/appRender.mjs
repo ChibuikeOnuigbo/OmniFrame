@@ -170,7 +170,7 @@ export function makeClip({ id, name, asset, natW, natH, start = 0, duration = 2,
   }
 }
 
-export function applyEffects(x, clip, w, h, t = 0) {
+export function applyEffects(x, clip, w, h, t = 0, adjustmentLuts = []) {
   // single source of truth: the app's own pixelGrade (AM-named family included),
   // with dropped effect instances merged in (CapCut model, board J). Full parity
   // with playback: CSS-filter keys, particle/overlay fx layers and light layers
@@ -190,6 +190,8 @@ export function applyEffects(x, clip, w, h, t = 0) {
     back.drawImage(tmp, 0, 0)
     back.restore()
   }
+  // Adjustment layers grade LUTs before pixel effects, as PreviewEngine does.
+  if (adjustmentLuts.length) applyClipLutsK(x, w, h, adjustmentLuts)
   PG.applyPixelGrade(x.canvas, eff, Math.round(t * 24))
   NG.applyGlitchNG(x.canvas, eff, t)
   if (PRT.hasClipFxLayers(eff)) PRT.applyClipFxLayers(x.canvas, eff, t)
@@ -354,19 +356,17 @@ function drawSeq(x, seq, t, depth = 0) {
     // Standalone effect clip (adjustment): grades everything already drawn —
     // clips earlier in the list are the tracks BELOW it. Same law as playback.
     if (clip.kind === 'adjustment') {
-      const aEff = FXI.mergeFxInstances(clip, t - clip.start) || {}
-      const flt = cssFilterOf(aEff)
-      if (flt) {
-        const tmp = makeCanvas(seq.w, seq.h)
-        const tx = tmp.getContext('2d')
-        tx.filter = flt
-        tx.drawImage(x.canvas, 0, 0)
-        x.canvas.getContext('2d').drawImage(tmp, 0, 0)
+      const original = clip.adjustmentMask?.enabled ? makeCanvas(seq.w, seq.h) : null
+      if (original) original.getContext('2d').drawImage(x.canvas, 0, 0)
+      applyEffects(x, clip, seq.w, seq.h, t, clip.adjustment?.luts ?? [])
+      if (original) {
+        applyEffectMaskK(x, clip.adjustmentMask, seq.w, seq.h)
+        const base = original.getContext('2d')
+        // Match PreviewEngine: blend the masked grade over the unmodified frame.
+        // Masking the base with the complement would darken feathered edges.
+        base.drawImage(x.canvas, 0, 0)
+        x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'copy'; x.drawImage(original, 0, 0); x.restore()
       }
-      PG.applyPixelGrade(x.canvas, aEff, Math.round(t * 24))
-      NG.applyGlitchNG(x.canvas, aEff, t)
-      if (PRT.hasClipFxLayers(aEff)) PRT.applyClipFxLayers(x.canvas, aEff, t)
-      LFX.applyLightComposite(x.canvas.getContext('2d'), seq.w, seq.h, aEff)
       continue
     }
     const eff = FXI.mergeFxInstances(clip, t - clip.start) || {}

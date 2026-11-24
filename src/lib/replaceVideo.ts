@@ -38,7 +38,7 @@ export interface ReplacePatch {
   inPoint: number
   duration: number
   /** fields cleared when carryEffects is false (CapCut checkbox unticked) */
-  cleared: Array<'effects' | 'fxInstances' | 'adjustment'>
+  cleared: Array<'effects' | 'effectKeys' | 'effectSourceOffset' | 'fxInstances' | 'adjustment'>
 }
 
 export function replaceVideoPatch(clip: Pick<Clip, 'duration'>, assetId: string, sourceDuration: number, windowStart: number, carryEffects: boolean): ReplacePatch {
@@ -47,13 +47,13 @@ export function replaceVideoPatch(clip: Pick<Clip, 'duration'>, assetId: string,
     assetId,
     inPoint: w.start,
     duration: w.clipDuration,
-    cleared: carryEffects ? [] : ['effects', 'fxInstances', 'adjustment'],
+    cleared: carryEffects ? [] : ['effects', 'effectKeys', 'effectSourceOffset', 'fxInstances', 'adjustment'],
   }
 }
 
 /** Every processing stage we remember, in pipeline order. */
 export const TEMPLATE_FIELDS = [
-  'transform', 'animation', 'effects', 'fxInstances', 'adjustment', 'adjustmentMask',
+  'transform', 'animation', 'effects', 'effectKeys', 'effectSourceOffset', 'fxInstances', 'adjustment', 'adjustmentMask',
   'mask', 'blendMode', 'speedCurve', 'textStyle', 'volume', 'hidden',
 ] as const
 

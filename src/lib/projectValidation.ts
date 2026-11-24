@@ -1,3 +1,4 @@
+import { validateClipEffectAnimation } from './clipEffectAnimation'
 /** Validate the core document before it can replace a live editor session. */
 type RecordValue = Record<string, unknown>
 const mediaKinds = new Set(['video', 'image', 'audio', 'text', 'threed', 'compound', 'adjustment', 'drawing', 'null'])
@@ -48,6 +49,7 @@ function timeline(tracksValue: unknown, clipsValue: unknown, path: string, depth
     string(clip.name, `${path}.clip name`)
     if (!mediaKinds.has(clip.kind as string)) invalid(`${path}.clip kind`)
     for (const key of ['start', 'duration', 'inPoint', 'volume']) number(clip[key], `${path}.clip ${key}`, 0)
+    try { validateClipEffectAnimation(clip.effects, clip.effectKeys, clip.effectSourceOffset) } catch { invalid(`${path}.effect animation`) }
     boolean(clip.hidden, `${path}.clip visibility`)
     const transform = record(clip.transform, `${path}.clip transform`)
     for (const key of ['x', 'y', 'scale', 'rotation', 'opacity']) number(transform[key], `${path}.clip transform ${key}`)

@@ -1288,43 +1288,6 @@ function ClipInspector({ clip }: { clip: Clip }) {
 
       <FxStackSection clip={clip} />
 
-      {clip.effects && (
-        <Section title="Effects">
-          <Field label="Brightness">
-            <Slider label="Brightness" min={0} max={2} step={0.05} value={clip.effects.brightness ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { brightness: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.brightness ?? 1).toFixed(2)}</span>
-          </Field>
-          <Field label="Contrast">
-            <Slider label="Contrast" min={0} max={2} step={0.05} value={clip.effects.contrast ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { contrast: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.contrast ?? 1).toFixed(2)}</span>
-          </Field>
-          <Field label="Saturation">
-            <Slider label="Saturation" min={0} max={2} step={0.05} value={clip.effects.saturation ?? 1} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { saturation: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.saturation ?? 1).toFixed(2)}</span>
-          </Field>
-          <Field label="Blur">
-            <Slider label="Blur" min={0} max={20} step={0.5} value={clip.effects.blur ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { blur: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{(clip.effects.blur ?? 0).toFixed(0)}px</span>
-          </Field>
-          <Field label="Hue rotate">
-            <Slider label="Hue rotate" min={0} max={360} step={5} value={clip.effects.hueRotate ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { hueRotate: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round(clip.effects.hueRotate ?? 0)}°</span>
-          </Field>
-          <Field label="Grayscale">
-            <Slider label="Grayscale" min={0} max={1} step={0.05} value={clip.effects.grayscale ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { grayscale: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((clip.effects.grayscale ?? 0) * 100)}%</span>
-          </Field>
-          <Field label="Invert">
-            <Slider label="Invert" min={0} max={1} step={0.05} value={clip.effects.invert ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { invert: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((clip.effects.invert ?? 0) * 100)}%</span>
-          </Field>
-          <Field label="Sepia">
-            <Slider label="Sepia" min={0} max={1} step={0.05} value={clip.effects.sepia ?? 0} onChange={(v) => useEditor.getState().setClipEffect(clip.id, { sepia: v })} />
-            <span className="w-9 text-right text-[11px] text-ink-400 tabular-nums">{Math.round((clip.effects.sepia ?? 0) * 100)}%</span>
-          </Field>
-        </Section>
-      )}
-
       <Section title="Source">
         <Field label="In point">
           <span className="text-[11px] text-ink-300 tabular-nums">{formatClock(clip.inPoint)}</span>

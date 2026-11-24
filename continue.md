@@ -1,3 +1,39 @@
+## 2026-11-24 follow-up — parent controls and motion review
+
+Consolidated eleven angle-only blur cards into Directional Blur settings,
+retaining old IDs/favorites and distinct kernels. Added direction shortcuts;
+corrected catalog count/ID regressions during testing. Motion graph tests pass
+37 assertions; MCP, camera/3D masks, editable Motion Lab, liquify/corner pin and
+35 curve families pass. Final gate: 44 unit scripts, typecheck, lint and build passed. Original MCP motion demo and provisional ratings:
+`reports/EDITOR_REVIEW_20261124.md`. No competitor speed or all-tutorial claim.
+
+## 2026-11-24 — native effect keyframes and timeline continuity
+
+Native effect clips and clip grades now expose schema-based numeric keyframes
+in the Effects inspector: add/remove, previous/next, auto-keyed sliders, freeze
+and reset. Stored source clocks preserve curves through cuts, left trims,
+keyboard trims, overwrite tails and movement; effect layers can extend beyond
+their initial length. Masks and clips above the effect keep their scope.
+
+Fixed inspector focus during section registration, unfinished history gestures
+on clip changes, and project saving falsely treating shared split-clip objects
+as cycles. Live/headless MCP and project import validate the new animation data.
+Templates carry keys/clocks; replacing without effects clears both. Headless
+standalone grades now honor masks, including partly opaque edges, and LUTs.
+
+Verified: 43 unit scripts, 13 browser smoke flows, typecheck/lint/build, all 15
+source clocks, replacement/template, LUT parity and Alight round trips. Native
+keyframes also pass the production-bundle workflow. A six-second shared-engine
+MP4 decodes 72 distinct frames; desktop/mobile screenshots and the contact sheet
+are in `qa-output/native-effect-keyframes/` and `evidence/screenshots/`.
+
+Next: curve/easing integration for native effect keys; dropped FX-instance
+left-trim/overwrite retention; duration-dependent procedural motion clocks;
+Bezier Trim Path and broader optional-payload/async-job ownership validation.
+The 277 non-high source findings, large bundle and native OS acceptance remain
+open. See `AUDIT_STATE.md` Cycle 15. Branch remains
+`codex/omniframe-text-crop-gif-providers`; no main merge or environment publish.
+
 ## 2026-11-23 — nested effects and reference-driven controls
 
 Effects now browse through groups/subgroups with breadcrumbs and scoped tag

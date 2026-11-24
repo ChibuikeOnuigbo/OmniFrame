@@ -1,3 +1,4 @@
+import { validateClipEffectAnimation } from '../../src/lib/clipEffectAnimation.ts'
 import { BLEND_MODES, putBlendKey } from '../../src/lib/blendModes.ts'
 import { PNG } from 'pngjs'
 // OmniFrame MCP layer v2 — UNIVERSAL tools only (vow.md universal-tools law).
@@ -611,7 +612,7 @@ function inspectPayload() {
     mode: SESSION.mode,
     sequence: s ? { w: s.w, h: s.h, fps: s.fps, duration: s.duration, bg: s.bg } : null,
     selection: SESSION.selection ? SESSION.selection.id : null,
-    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, speedCurve: c.speedCurve, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, blendKeys: c.blendKeys || [], opacity: c.opacity, effects: c.effects, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
+    clips: s ? s.clips.map(c => ({ id: c.id, name: c.name, start: c.start, duration: c.duration, inPoint: c.inPoint, speedCurve: c.speedCurve, volume: c.volume, asset: c.asset, deformation: c.deformation, transform: c.transform, mask: c.mask || null, blendMode: c.blendMode, blendKeys: c.blendKeys || [], opacity: c.opacity, effects: c.effects, effectKeys: c.effectKeys, effectSourceOffset: c.effectSourceOffset, patch: c.patch || null, curves: Object.fromEntries(Object.entries(c.animation.curves).map(([k, v]) => [k, v.keyframes.map(kf => ({ id: kf.id, time: kf.time, value: kf.value, interpolation: kf.interpolation }))])) })) : [],
     trace: SESSION.trace,
   }
 }
@@ -851,7 +852,7 @@ class CreateText extends MCPTool {
   }
 }
 class EditElement extends MCPTool {
-  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), visibility mask, multi-region effect mask, effects, blend/blend keyframes, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,adjustmentMask?{enabled,inverted,regions[]},effects?,opacity?,blendMode?,blendKeys?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
+  constructor() { super('edit_element', 'Edit an existing element: transform, deformation (corner pin/liquify), speedCurve (15 shared presets, null clears), visibility mask, multi-region effect mask, effects, blend/blend keyframes, or compound clip.', { clipId: '', patch: '{transform?,deformation?,speedCurve?,inPoint?,volume?,mask?,adjustmentMask?{enabled,inverted,regions[]},effects?,effectKeys?{property:[{t,v}]},effectSourceOffset?,opacity?,blendMode?,blendKeys?,textStyle?,adjustment?{luts}}', convert: 'compound|null' }) }
   async run({ clipId, patch = {}, convert }) {
     const s = seq()
     const c = clipId ? s.clips.find(c => c.id === clipId) : sel()
@@ -866,6 +867,9 @@ class EditElement extends MCPTool {
       if (!Array.isArray(patch.blendKeys)) throw new Error('blendKeys must be an array')
       blendKeys = patch.blendKeys.reduce((keys, key) => putBlendKey(keys, key.time, key.mode), [])
     }
+    if ('effects' in patch && (!patch.effects || typeof patch.effects !== 'object' || Array.isArray(patch.effects))) throw new Error('effects must be an object')
+    validateClipEffectAnimation(patch.effects ? { ...c.effects, ...patch.effects } : c.effects, 'effectKeys' in patch ? patch.effectKeys : c.effectKeys, 'effectSourceOffset' in patch ? patch.effectSourceOffset : c.effectSourceOffset)
+    const effectKeys = patch.effectKeys === undefined ? undefined : structuredClone(patch.effectKeys)
     const deformation = patch.deformation !== undefined ? DEFORMATION.validateDeformation(patch.deformation) : undefined
     if (patch.inPoint !== undefined) c.inPoint = patch.inPoint
     if (patch.volume !== undefined) c.volume = patch.volume
@@ -876,6 +880,8 @@ class EditElement extends MCPTool {
     if (patch.mask !== undefined) c.mask = patch.mask
     if (patch.adjustmentMask !== undefined) c.adjustmentMask = patch.adjustmentMask
     if (patch.effects) c.effects = { ...c.effects, ...patch.effects }
+    if (effectKeys !== undefined) c.effectKeys = effectKeys
+    if (patch.effectSourceOffset !== undefined) c.effectSourceOffset = patch.effectSourceOffset
     if (patch.opacity !== undefined) c.opacity = patch.opacity
     if (patch.blendMode) c.blendMode = patch.blendMode
     if (blendKeys) c.blendKeys = blendKeys

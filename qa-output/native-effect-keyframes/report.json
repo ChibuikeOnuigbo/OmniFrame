@@ -1,0 +1,68 @@
+{
+  "workflow": "Native effect clip → shared compositor → render_export → decoded framemd5",
+  "frames": 72,
+  "distinctDecodedFrames": 72,
+  "maskedKeyframes": "pass",
+  "splitContinuity": "exact PNG match",
+  "higherLayerUnaffected": true,
+  "atomicInvalidEdits": true,
+  "adjustmentLutOrder": "pass",
+  "photo": "Existing credited Pexels car subject",
+  "patch": {
+    "effects": {
+      "boxBlur": 0,
+      "colorHold": 0,
+      "holdColor": "#ff0000",
+      "holdSimilarity": 0.15,
+      "holdSoftness": 0.2
+    },
+    "effectKeys": {
+      "colorHold": [
+        {
+          "t": 0,
+          "v": 0
+        },
+        {
+          "t": 2,
+          "v": 1
+        },
+        {
+          "t": 4,
+          "v": 0
+        },
+        {
+          "t": 6,
+          "v": 1
+        }
+      ],
+      "boxBlur": [
+        {
+          "t": 0,
+          "v": 0
+        },
+        {
+          "t": 2,
+          "v": 16
+        },
+        {
+          "t": 4,
+          "v": 0
+        },
+        {
+          "t": 6,
+          "v": 24
+        }
+      ]
+    },
+    "adjustmentMask": {
+      "enabled": true,
+      "inverted": false,
+      "shape": "rectangle",
+      "centerX": 0.75,
+      "centerY": 0.5,
+      "width": 0.5,
+      "height": 1,
+      "feather": 0
+    }
+  }
+}

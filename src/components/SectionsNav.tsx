@@ -96,6 +96,8 @@ export function SectionsNavigator({
   // Whether the user (or a test) has picked a section yet — initial active
   // otherwise prefers the first section marked defaultOpen.
   const touched = useRef(false)
+  const handledFocus = useRef<number | undefined>()
+  const focusNonce = focusRequest?.nonce
 
   const register = useCallback((id: string, meta: { title: string; hint?: string; defaultOpen?: boolean }) => {
     // Re-registering (e.g. a hint change on a mounted section) updates the
@@ -121,10 +123,11 @@ export function SectionsNavigator({
 
   const activate = useCallback((id: string) => {
     touched.current = true
+    handledFocus.current = focusNonce
     // In accordion mode, clicking the open header collapses it (− → closed),
     // so the user can fold every section away; + on a closed one reopens it.
     setActiveId((cur) => (mode === 'accordion' && cur === id ? null : id))
-  }, [mode])
+  }, [mode, focusNonce])
 
   // First registered section wins the initial active slot.
   useEffect(() => {
@@ -133,14 +136,14 @@ export function SectionsNavigator({
 
   // Auto-open the connected section when the store requests focus (e.g. an
   // effect was dropped on a clip → show its settings immediately).
-  const focusNonce = focusRequest?.nonce
   useEffect(() => {
-    if (focusRequest && focusRequest.id) {
-      touched.current = true
-      setActiveId(focusRequest.id)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusNonce])
+    // Registration can finish after the request (or remount under StrictMode).
+    // Consume it only when the target exists; never keep overriding user tabs.
+    if (!focusRequest?.id || handledFocus.current === focusNonce || !sections.some(section => section.id === focusRequest.id)) return
+    handledFocus.current = focusNonce
+    touched.current = true
+    setActiveId(focusRequest.id)
+  }, [focusNonce, focusRequest?.id, sections])
 
   // Keyboard arrow navigation across the tab list.
   const onTablistKeyDown = (e: React.KeyboardEvent) => {

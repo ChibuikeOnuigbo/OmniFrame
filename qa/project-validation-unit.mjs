@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
-import { validateImportedProject } from '../src/lib/projectValidation.ts'
+import { loadAppTs } from '../tools/mcp/appRender.mjs'
+const { validateImportedProject } = await loadAppTs('src/lib/projectValidation.ts')
 
 const runtime = { newProject() {}, pause() {}, loadOmniProject() {}, markers: [] }
 const fixture = () => ({
