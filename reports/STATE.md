@@ -1,3 +1,19 @@
+## Cycle 20 — paused 3D render budget (2026-11-25)
+
+Avoided repeated GPU submission for unchanged paused 3D frames while retaining
+camera, geometry, settings and source-refresh invalidation. Measured eight idle
+redraws in two seconds, following the intentional 2D 4 Hz decode refresh. Tested
+actual grid/camera updates and preserved sculpt/export/persistence regressions.
+47 unit scripts, 14 browser flows, targeted idle checks, typecheck, lint and build
+pass. Reviewed the desktop screenshot and proxy implementation. Details, measured
+limits and ratings: reports/SPEED_REVIEW_20261125.md.
+
+Remaining: no source/proxy seek benchmark, representative 4K workload or native
+GPU comparison yet; speed remains unrated. Appearance remains 6/10, MCP 7/10.
+Next run matched original/proxy playback and seek tests with frame-time percentiles,
+long tasks and audio sync; harden proxy cancellation/cache ownership, then revisit
+sequence-resolution 3D capture. Existing 277 lint findings and bundle warnings remain.
+
 ## Cycle 19 — camera fit and input ownership (2026-11-25)
 
 Object focus now uses transformed geometry bounds and both camera axes. Narrow

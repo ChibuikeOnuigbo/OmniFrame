@@ -1,7 +1,7 @@
 import { sphereFitDistance } from '../lib/sceneCamera'
 import { sculptGeometry } from '../lib/sculptGeometry'
 import { MAX_SCULPT_DABS } from '../lib/sculptData'
-import { usePerformanceSettings } from '../lib/performanceSettings'
+import { previewMetrics, usePerformanceSettings } from '../lib/performanceSettings'
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
@@ -437,6 +437,8 @@ export function ThreeViewer({
     let animId: number
     let lastTime = performance.now()
     let lastRenderTime = -Infinity
+    let lastRenderedState: ReturnType<typeof useEditor.getState> | null = null
+    let lastView = ''
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
@@ -500,6 +502,13 @@ export function ThreeViewer({
       }
 
       const live = useEditor.getState()
+      const view = [camera.position.x, camera.position.y, camera.position.z,
+        camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w,
+        camera.aspect, renderer.domElement.width, renderer.domElement.height,
+        objectMeshRef.current?.uuid, scene.getObjectByName('gridHelper')?.visible,
+        previewMetrics.frames, videoElement?.currentTime].join('|')
+      // Keep the animation clock alive, but leave an unchanged paused GPU buffer alone.
+      if (!live.playing && live === lastRenderedState && view === lastView) return
       const renderFps = live.previewQuality === 'full' ? Math.max(60, live.projectFps) : usePerformanceSettings.getState().previewFps
       if (now - lastRenderTime < 1000 / renderFps) return
       lastRenderTime = now
@@ -510,6 +519,8 @@ export function ThreeViewer({
       }
 
       renderer.render(scene, camera)
+      lastRenderedState = live
+      lastView = view
       renderer.domElement.dataset.renderedFrames = String(Number(renderer.domElement.dataset.renderedFrames || 0) + 1)
     }
     animate()

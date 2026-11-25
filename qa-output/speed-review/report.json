@@ -1,0 +1,15 @@
+{
+  "idleRedrawsInTwoSeconds": 8,
+  "gridInteractionWallMs": [
+    147,
+    143,
+    212,
+    114,
+    154,
+    174,
+    104,
+    110
+  ],
+  "meanInteractionWallMs": 144.75,
+  "scope": "Software Chromium; includes Playwright click and polling overhead. Not video decode, seek, 4K, or competitor benchmark."
+}

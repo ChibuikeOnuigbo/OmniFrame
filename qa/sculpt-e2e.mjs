@@ -20,7 +20,7 @@ try{
  })
  await page.getByTestId('blender-mode-sculpt').click()
  await page.getByTestId('aim-object-btn').click()
- await page.waitForFunction(()=>Number(document.getElementById('of-three-canvas')?.dataset.renderedFrames)>5)
+ await page.waitForFunction(()=>Number(document.getElementById('of-three-canvas')?.dataset.renderedFrames)>0)
  const canvas=page.locator('#of-three-canvas'),box=await canvas.boundingBox()
  assert.ok(box)
  const dimensions=await page.evaluate(()=>{const c=document.getElementById('of-three-canvas'),p=c.parentElement;return {w:c.clientWidth,h:c.clientHeight,pw:p.clientWidth,ph:p.clientHeight}})
