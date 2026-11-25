@@ -1,0 +1,60 @@
+{
+  "dimensions": [
+    854,
+    480
+  ],
+  "bytes": 272341,
+  "active": [
+    {
+      "kind": "VIDEO",
+      "src": "blob:http://localhost:5183/1cd6a602-1925-49bc-8cf0-7e22a83956b1",
+      "muted": true,
+      "width": 854,
+      "time": 0.800907
+    },
+    {
+      "kind": "AUDIO",
+      "src": "/qa-output/proxy-review-20261125/proxy-source.webm",
+      "muted": false,
+      "time": 0.720557
+    }
+  ],
+  "originalExport": true,
+  "cancellation": true,
+  "seekBenchmark": {
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "samplesMs": [
+        131.80000000074506,
+        126.79999999981374,
+        77.5,
+        121,
+        49.700000000186265,
+        120.6000000005588,
+        47.799999999813735,
+        114.70000000018626
+      ],
+      "p50Ms": 120.6000000005588,
+      "p95Ms": 131.80000000074506
+    },
+    "proxy": {
+      "width": 854,
+      "height": 480,
+      "samplesMs": [
+        11.700000000186265,
+        40.5,
+        23.09999999962747,
+        62,
+        21.90000000037253,
+        36,
+        18.700000000186265,
+        41.59999999962747
+      ],
+      "p50Ms": 36,
+      "p95Ms": 62
+    },
+    "scope": "Synthetic 1080p fixture; warm browser decoder seeks, excluding compositor and UI. Single software Chromium run."
+  },
+  "errors": []
+}

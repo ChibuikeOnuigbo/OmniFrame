@@ -1,5 +1,23 @@
 # OmniFrame adversarial audit state
 
+## Cycle 21 — proxy decoding and error ownership (2026-11-25)
+
+Hardened proxy cancellation, missing canvas context and interval drawing errors;
+completion now stops source playback and interval work once. Real browser tests
+verify proxy decode dimensions, original audio, original-source export, immediate
+cancel, clear-during-preparation and injected drawing failure cleanup. Eight warm
+decoder seeks on a synthetic 1080p source reported upper-middle 120.6 ms original
+versus 36 ms proxy. This does not measure whole-editor or real-camera performance.
+47 units, 14 browser smoke flows, expanded proxy checks and static/build gates pass.
+Details and raw-sample scope: reports/PROXY_REVIEW_20261125.md. Two development
+hot-module duplicate-store test failures were resolved by restarting Vite.
+
+Remaining: real footage/long GOP, sustained audio sync, frame-time distributions,
+layered 4K rendering and queue-wide cancel/clear need further testing. Next run
+matched camera-footage playback and seek-to-present tests, then fix measured
+bottlenecks. Appearance/MCP ratings remain 6/10 and 7/10; overall speed unrated.
+
+
 ## Cycle 20 — paused 3D render budget (2026-11-25)
 
 Avoided repeated GPU submission for unchanged paused 3D frames while retaining

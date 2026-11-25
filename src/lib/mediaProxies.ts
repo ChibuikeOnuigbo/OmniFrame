@@ -45,16 +45,23 @@ export async function generateProxy(asset: MediaAsset) {
       abort.signal.addEventListener('abort', cancel, { once: true })
       video.src = asset.url
     })
+    if (abort.signal.aborted) throw Error('Proxy preparation cancelled.')
     if (!Number.isFinite(video.duration) || video.duration <= 0 || video.duration > 300) throw Error('Browser proxies currently support videos up to five minutes.')
     const { width, height } = previewDimensions(video.videoWidth, video.videoHeight, 'medium')
     const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height
-    const ctx = canvas.getContext('2d')!
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw Error('Could not allocate the proxy canvas.')
     ctx.drawImage(video, 0, 0, width, height)
     stream = canvas.captureStream(30)
     recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 1_500_000 })
     const chunks: Blob[] = []; let bytes = 0
     await new Promise<void>((resolve, reject) => {
+      let settled = false
       const finish = (error?: Error) => {
+        if (settled) return
+        settled = true
+        clearInterval(timer)
+        video.pause()
         clearTimeout(timeout); abort.signal.removeEventListener('abort', cancel)
         video.onended = null; video.onerror = null
         if (recorder!.state !== 'inactive') recorder!.stop()
@@ -72,8 +79,10 @@ export async function generateProxy(asset: MediaAsset) {
       video.onended = () => recorder!.stop()
       abort.signal.addEventListener('abort', cancel, { once: true })
       timer = setInterval(() => {
-        ctx.drawImage(video, 0, 0, width, height)
-        useMediaProxies.setState({ progress: Math.min(1, video.currentTime / video.duration) })
+        try {
+          ctx.drawImage(video, 0, 0, width, height)
+          useMediaProxies.setState({ progress: Math.min(1, video.currentTime / video.duration) })
+        } catch { finish(Error('Could not draw the source frame. Proxy preparation stopped.')) }
       }, 1000 / 30)
       recorder!.start(500)
       void video.play().catch(() => finish(Error('Browser blocked proxy playback. Try again from the Prepare button.')))
