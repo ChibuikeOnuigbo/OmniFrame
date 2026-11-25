@@ -1,3 +1,25 @@
+## 2026-11-25 — persisted primitive sculpting and 3D fixes
+
+Added Raise/Carve/Flatten on five editable primitives, radius/strength, Reset
+and collapsible controls. One drag is one Undo step; .omni retains editable
+strokes and OBJ exports the same deformed geometry. Fixed missing 3D history,
+deleted-object selection, right-drag panning, camera/canvas aspect mismatch and
+overlapping viewport controls. Actual browser video export preserves proportions.
+
+Verified: 46 unit scripts, 14 browser smoke flows including live MCP, responsive
+workbench and graph/camera/mask checks, typecheck, lint and build. OpenCV decoded
+65 distinct frames from the real browser MP4. Screenshots, OBJ and demo:
+`qa-output/sculpt/README.md`. Details and limitations: `AUDIT_STATE.md` Cycle 18.
+
+Still open: imported/multi-part sculpting, larger/remeshed geometry, pressure,
+brush-outline feedback, narrow-view camera fitting, multi-object scene preview,
+sequence-resolution/headless 3D rendering, native effect easing and phase
+continuity, competitor benchmarks and native desktop acceptance. The existing
+277 lower-severity source findings and bundle warnings were not suppressed.
+Next: camera framing/render-target parity and imported-object history ownership,
+then native effect easing and motion clocks. This closes the primitive-sculpt
+gap only; the older general sculpting claims remain unverified beyond this scope.
+
 ## 2026-11-24 — effect-instance trim continuity
 
 Fixed pointer/keyboard trims and overwrite tails pulling completed/future effects

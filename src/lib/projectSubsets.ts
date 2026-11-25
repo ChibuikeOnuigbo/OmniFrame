@@ -1,3 +1,4 @@
+import { sculptGeometry } from './sculptGeometry'
 import type * as THREE from 'three'
 import type { Scene3DObject } from '../types'
 
@@ -29,16 +30,8 @@ function createPrimitive(THREE: ThreeModule, object: Scene3DObject): THREE.Objec
     const hub = new THREE.CylinderGeometry(0.24, 0.24, 0.44, 16)
     hub.rotateX(Math.PI / 2)
     addMesh(hub, `${group.name}-hub`, '#f59e0b')
-  } else if (object.type === 'cube') {
-    addMesh(new THREE.BoxGeometry(1.2, 1.2, 1.2), group.name)
-  } else if (object.type === 'sphere') {
-    addMesh(new THREE.SphereGeometry(0.8, 32, 32), group.name)
-  } else if (object.type === 'torus') {
-    addMesh(new THREE.TorusGeometry(0.7, 0.28, 24, 48), group.name)
-  } else if (object.type === 'plane') {
-    addMesh(new THREE.PlaneGeometry(1.4, 1.4), group.name)
   } else {
-    addMesh(new THREE.OctahedronGeometry(0.9, 0), group.name)
+    addMesh(sculptGeometry(THREE, object), group.name)
   }
 
   group.position.set(object.position.x, object.position.y, object.position.z)

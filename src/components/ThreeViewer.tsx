@@ -1,3 +1,5 @@
+import { sculptGeometry } from '../lib/sculptGeometry'
+import { MAX_SCULPT_DABS } from '../lib/sculptData'
 import { usePerformanceSettings } from '../lib/performanceSettings'
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import * as THREE from 'three'
@@ -19,10 +21,11 @@ import {
   Plus,
   Sliders,
   Check,
+  ChevronDown,
 } from 'lucide-react'
 import { BlenderRotationIcon } from './icons/BlenderRotationIcon'
 import { useEditor } from '../store'
-import type { BlenderMode, Primitive3D, Scene3DObject, ThreeMaskSelection } from '../types'
+import type { BlenderMode, Primitive3D, Scene3DObject, ThreeMaskSelection, SculptDab } from '../types'
 import { evaluateCurve } from '../lib/animation/CurveEngine'
 import { uid } from '../lib/time'
 
@@ -84,6 +87,56 @@ export function ThreeViewer({
   const clearThreeMaskSelection = useEditor((s) => s.clearThreeMaskSelection)
   const sceneObject = useEditor((s) => s.scene3DObjects.find((object) => object.id === s.selected3DObjectId) || s.scene3DObjects[0])
   const threeMaskToolActive = leftTab === 'threed' && activeSubMode === 'threed-mask' && threeMaskMode !== 'off'
+
+  const [sculptMode, setSculptMode] = useState<SculptDab['mode']>('raise')
+  const [sculptRadius, setSculptRadius] = useState(.35)
+  const [sculptStrength, setSculptStrength] = useState(.6)
+  const [sculptNotice, setSculptNotice] = useState('')
+  const [sculptControlsOpen, setSculptControlsOpen] = useState(true)
+  const sculptGesture = useRef<{ pointerId: number; id: string; x: number; y: number; ownsHistory: boolean } | null>(null)
+  const canSculpt = !!sceneObject && !sceneObject.modelUrl && sceneObject.type !== 'wheel'
+  const endSculpt = () => {
+    if (sculptGesture.current?.ownsHistory) useEditor.getState().endHistory()
+    sculptGesture.current = null
+  }
+  useEffect(() => { setSculptNotice(''); return endSculpt }, [sceneObject?.id, activeBlenderMode])
+  useEffect(() => {
+    window.addEventListener('blur', endSculpt)
+    return () => { window.removeEventListener('blur', endSculpt); endSculpt() }
+  }, [])
+  const sculptAt = (e: React.PointerEvent, first = false) => {
+    const mesh = objectMeshRef.current, camera = cameraRef.current, canvas = containerRef.current
+    if (!canSculpt || !sceneObject || sculptStrength === 0 || !(mesh instanceof THREE.Mesh) || !camera || !canvas) return
+    if (first && sculptGesture.current) return
+    if ([sceneObject.scale.x, sceneObject.scale.y, sceneObject.scale.z].some(v => !Number.isFinite(v) || Math.abs(v) < 1e-6)) return
+    const rect = canvas.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) return
+    const ray = new THREE.Raycaster()
+    ray.setFromCamera(new THREE.Vector2((e.clientX - rect.left) / rect.width * 2 - 1, -(e.clientY - rect.top) / rect.height * 2 + 1), camera)
+    mesh.updateWorldMatrix(true, false)
+    const hit = ray.intersectObject(mesh, false)[0]
+    if (!hit?.face) return
+    const gesture = sculptGesture.current
+    if (!first && (!gesture || gesture.pointerId !== e.pointerId || Math.hypot(e.clientX - gesture.x, e.clientY - gesture.y) < 6)) return
+    const state = useEditor.getState()
+    if ((sceneObject.sculptDabs?.length ?? 0) >= MAX_SCULPT_DABS) { setSculptNotice('Stroke limit reached. Undo or Reset to continue.'); return }
+    const point = mesh.worldToLocal(hit.point.clone()), normal = hit.face.normal.clone().normalize()
+    if (!normal.lengthSq() || ![point.x, point.y, point.z].every(v => Number.isFinite(v) && Math.abs(v) <= 20)) return
+    if (first) {
+      const ownsHistory = !state.inInteraction
+      if (ownsHistory) state.beginHistory()
+      sculptGesture.current = { pointerId: e.pointerId, id: sceneObject.id, x: e.clientX, y: e.clientY, ownsHistory }
+      canvas.setPointerCapture(e.pointerId)
+    }
+    state.appendSceneSculpt(sceneObject.id, { point: { x: point.x, y: point.y, z: point.z }, normal: { x: normal.x, y: normal.y, z: normal.z }, radius: sculptRadius, strength: sculptStrength, mode: sculptMode })
+    if (sculptGesture.current) { sculptGesture.current.x = e.clientX; sculptGesture.current.y = e.clientY }
+  }
+
+  const enterSculpt = () => {
+    useEditor.getState().pause()
+    setActiveBlenderMode('sculpt')
+    useEditor.getState().setThreeMaskMode('off')
+  }
 
   // Component UI state mirrors the persisted scene object so an .omni load
   // and geometry-subset export refer to the same editable primitive.
@@ -316,9 +369,8 @@ export function ThreeViewer({
     scene.background = new THREE.Color(0x06080d)
     sceneRef.current = scene
 
-    // Camera aspect matches project sequence aspect ratio
-    const projAspect = sequenceSettings.width / Math.max(1, sequenceSettings.height)
-    const camera = new THREE.PerspectiveCamera(45, projAspect, 0.1, 1000)
+    // The working viewport may have a different shape from the sequence.
+    const camera = new THREE.PerspectiveCamera(45, Math.max(1, container.clientWidth) / Math.max(1, container.clientHeight), 0.1, 1000)
     cameraRef.current = camera
     updateCameraPosition()
 
@@ -451,21 +503,20 @@ export function ThreeViewer({
   }, [])
 
   useEffect(() => {
-    const renderer = rendererRef.current
-    if (!renderer) return
-    // Preview size is already quality-scaled; full export must use exact dimensions.
-    renderer.setPixelRatio(previewQuality === 'full' || previewQuality === 'low' ? 1 : Math.min(window.devicePixelRatio, 1.5))
-    renderer.setSize(width, height)
-  }, [width, height, previewQuality])
-
-  // Synchronize Camera Aspect Ratio on sequence settings change
-  useEffect(() => {
-    if (cameraRef.current) {
-      const projAspect = sequenceSettings.width / Math.max(1, sequenceSettings.height)
-      cameraRef.current.aspect = projAspect
-      cameraRef.current.updateProjectionMatrix()
+    const renderer = rendererRef.current, camera = cameraRef.current, container = containerRef.current
+    if (!renderer || !camera || !container) return
+    const resize = () => {
+      const w = Math.max(1, container.clientWidth), h = Math.max(1, container.clientHeight)
+      renderer.setPixelRatio(previewQuality === 'full' || previewQuality === 'low' ? 1 : Math.min(window.devicePixelRatio, 1.5))
+      renderer.setSize(w, h)
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
     }
-  }, [sequenceSettings.width, sequenceSettings.height])
+    resize()
+    const observer = new ResizeObserver(resize)
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [width, height, previewQuality])
 
   // Setup / Update 2.5D Video Plane
   useEffect(() => {
@@ -668,20 +719,7 @@ export function ThreeViewer({
       objectMeshRef.current = wheelGroup
       scene.add(wheelGroup)
     } else {
-      let geom: THREE.BufferGeometry
-
-      if (primitive === 'cube') {
-        geom = new THREE.BoxGeometry(1.2, 1.2, 1.2)
-      } else if (primitive === 'sphere') {
-        geom = new THREE.SphereGeometry(0.8, 32, 32)
-      } else if (primitive === 'torus') {
-        geom = new THREE.TorusGeometry(0.7, 0.28, 24, 48)
-      } else if (primitive === 'plane') {
-        geom = new THREE.PlaneGeometry(1.4, 1.4)
-      } else {
-        // Diamond (Octahedron)
-        geom = new THREE.OctahedronGeometry(0.9, 0)
-      }
+      const geom = sculptGeometry(THREE, sceneObject)
 
       const mesh = new THREE.Mesh(geom, mat)
       mesh.name = `${primitive}-object`
@@ -693,6 +731,7 @@ export function ThreeViewer({
   }, [
     sceneObject?.id,
     sceneObject?.modelUrl,
+    sceneObject?.sculptDabs,
     primitive,
     wireframe,
     materialRoughness,
@@ -780,6 +819,8 @@ export function ThreeViewer({
 
   // Pointer Event Handlers for Free Orbit, Pan, Dolly, and scene-space selection.
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (sculptGesture.current) return
+    if (activeBlenderMode === 'sculpt' && e.button === 0) { e.preventDefault(); sculptAt(e, true); return }
     isPointerDownRef.current = true
     pointerStartRef.current = { x: e.clientX, y: e.clientY, button: e.button }
     lastPointerRef.current = { x: e.clientX, y: e.clientY, button: e.button }
@@ -787,6 +828,7 @@ export function ThreeViewer({
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
+    if (sculptGesture.current) { sculptAt(e); return }
     if (!isPointerDownRef.current) return
     const dx = e.clientX - lastPointerRef.current.x
     const dy = e.clientY - lastPointerRef.current.y
@@ -797,7 +839,7 @@ export function ThreeViewer({
     }
 
     const s = sphericalRef.current
-    if (e.button === 2 || e.shiftKey) {
+    if ((e.buttons & 2) !== 0 || e.shiftKey) {
       // Pan camera target and position together
       const cam = cameraRef.current
       if (!cam) return
@@ -817,6 +859,7 @@ export function ThreeViewer({
   }
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    if (sculptGesture.current?.pointerId === e.pointerId) { endSculpt(); if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); return }
     const dx = e.clientX - pointerStartRef.current.x
     const dy = e.clientY - pointerStartRef.current.y
     const shouldPick =
@@ -847,7 +890,7 @@ export function ThreeViewer({
         ref={containerRef}
         data-testid="three-canvas-wrapper"
         className={`w-full h-full relative ${
-          threeMaskToolActive && threeMaskMode === 'viewport'
+          activeBlenderMode === 'sculpt' || (threeMaskToolActive && threeMaskMode === 'viewport')
             ? 'cursor-crosshair'
             : threeMaskToolActive
               ? 'cursor-cell'
@@ -857,6 +900,7 @@ export function ThreeViewer({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onLostPointerCapture={endSculpt}
         onWheel={handleWheel}
         onContextMenu={(e) => e.preventDefault()}
       />
@@ -910,12 +954,9 @@ export function ThreeViewer({
       {/* Unreal / Unity Style Camera Safe Frame Perspective Overlay */}
       <div
         data-testid="camera-safe-frame"
-        className="absolute inset-4 pointer-events-none border border-cyan-500/40 rounded-sm shadow-[0_0_20px_rgba(56,189,248,0.15)] flex flex-col justify-between p-2"
+        className="absolute inset-4 pointer-events-none border border-cyan-500/40 rounded-sm shadow-[0_0_20px_rgba(56,189,248,0.15)] flex flex-col justify-end p-2"
       >
-        <div className="flex items-center justify-between text-[10px] text-cyan-400 font-mono tracking-wider bg-ink-950/70 px-2 py-0.5 rounded backdrop-blur-xs self-start">
-          <span>CAM: {sequenceSettings.aspectRatio} ({sequenceSettings.width}×{sequenceSettings.height})</span>
-        </div>
-        <div className="flex items-center justify-between text-[9px] text-ink-400 font-mono self-end">
+                <div className="flex items-center justify-between text-[9px] text-ink-400 font-mono self-end">
           <span>SAFE ACTION / TITLE 90%</span>
         </div>
       </div>
@@ -923,7 +964,7 @@ export function ThreeViewer({
       {/* Blender Modes Top Toolbar (Object Mode, Camera View, Texturing, Animation) */}
       <div
         data-testid="blender-modes-toolbar"
-        className="absolute top-3 left-4 z-20 flex items-center gap-1 p-1 rounded-lg bg-ink-900/90 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs"
+        className="absolute top-3 left-4 z-20 flex max-w-[calc(100%-2rem)] overflow-x-auto items-center gap-1 p-1 [&>button]:shrink-0 [&>button]:whitespace-nowrap rounded-lg bg-ink-900/90 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs"
       >
         <button
           type="button"
@@ -976,6 +1017,8 @@ export function ThreeViewer({
           <span>Texturing</span>
         </button>
 
+        <button type="button" data-testid="blender-mode-sculpt" aria-pressed={activeBlenderMode === 'sculpt'} onClick={enterSculpt} className={`flex shrink-0 items-center gap-1 rounded px-2 py-1 text-[11px] ${activeBlenderMode === 'sculpt' ? 'bg-brand text-white' : 'text-ink-300 hover:bg-ink-800'}`}><Paintbrush size={13}/> Sculpt</button>
+
         <button
           type="button"
           data-testid="blender-mode-animation"
@@ -995,6 +1038,30 @@ export function ThreeViewer({
           <span>Curves</span>
         </button>
       </div>
+
+      {activeBlenderMode === 'sculpt' && (
+        <div data-testid="sculpt-controls" className="absolute top-14 left-4 z-20 w-60 max-w-[calc(100%-2rem)] space-y-2 rounded-lg border border-ink-700 bg-ink-900/95 p-3 text-xs shadow-xl">
+          <div className="flex items-center justify-between">
+            <button type="button" aria-expanded={sculptControlsOpen} aria-controls="sculpt-brush-settings" onClick={() => setSculptControlsOpen(!sculptControlsOpen)} className="flex items-center gap-2 font-semibold">
+              Sculpt <ChevronDown size={13} className={sculptControlsOpen ? '' : '-rotate-90'} />
+            </button>
+            <button type="button" disabled={!sceneObject?.sculptDabs?.length} onClick={() => { if (sceneObject) useEditor.getState().resetSceneSculpt(sceneObject.id) }} className="rounded px-2 py-1 hover:bg-ink-700 disabled:opacity-40">Reset</button>
+          </div>
+          {sculptControlsOpen && <div id="sculpt-brush-settings" className="space-y-2">
+            {!canSculpt ? <p>Choose a cube, sphere, torus, plane or diamond.</p> : <>
+              <div className="grid grid-cols-3 gap-1">
+                {(['raise', 'carve', 'flatten'] as const).map(mode => (
+                  <button type="button" key={mode} aria-pressed={sculptMode === mode} onClick={() => setSculptMode(mode)} className="rounded border border-ink-700 px-1 py-1 capitalize hover:border-ink-500 aria-pressed:border-brand aria-pressed:bg-brand/20">{mode}</button>
+                ))}
+              </div>
+              <label className="flex items-center gap-2">Radius<input aria-label="Sculpt radius" type="range" min=".02" max="2" step=".01" value={sculptRadius} onChange={e => setSculptRadius(Number(e.target.value))} className="min-w-0 flex-1" /></label>
+              <label className="flex items-center gap-2">Strength<input aria-label="Sculpt strength" type="range" min="0" max="1" step=".01" value={sculptStrength} onChange={e => setSculptStrength(Number(e.target.value))} className="min-w-0 flex-1" /></label>
+              <p className="text-ink-400">Drag to sculpt · Right-drag to pan</p>
+            </>}
+          </div>}
+          {sculptNotice && <p role="status">{sculptNotice}</p>}
+        </div>
+      )}
 
       {/* Texturing / Material Drawer (Visible when in Texturing mode) */}
       {activeBlenderMode === 'texturing' && (
@@ -1071,7 +1138,7 @@ export function ThreeViewer({
       {/* 3D Navigation & Viewport HUD Toolbar */}
       <div
         data-testid="three-hud-toolbar"
-        className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 max-w-[calc(100vw-32px)] overflow-x-auto scrollbar-none"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink-900/95 border border-ink-700/80 shadow-2xl backdrop-blur-md text-xs text-ink-200 max-w-[calc(100%-2rem)] overflow-x-auto scrollbar-none"
       >
         {/* Play/Pause live video sequence in 3D */}
         <button
@@ -1208,7 +1275,7 @@ export function ThreeViewer({
       </div>
 
       {/* Camera Guidance & Aim Status Overlay */}
-      <div className="absolute top-3 right-3 z-10 flex items-center gap-2 pointer-events-none">
+      <div className="absolute bottom-3 left-4 z-10 flex items-center gap-2 pointer-events-none">
         <div
           data-testid="camera-aim-status"
           className="px-2 py-1 rounded bg-ink-900/80 border border-ink-700/60 text-[10px] text-ink-300 font-medium flex items-center gap-1.5 shadow-md"

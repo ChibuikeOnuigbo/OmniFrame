@@ -19,6 +19,7 @@ for audit_test in \
   qa/project-lifecycle-e2e.mjs \
   qa/cursor-click-burst-e2e.mjs \
   qa/settings-quality-e2e.mjs \
+  qa/sculpt-e2e.mjs \
   qa/three-d-video-plane-e2e.mjs; do
   audit_total=$((audit_total + 1))
   audit_name="${audit_test##*/}"

@@ -91,7 +91,7 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   // the PreviewEngine caches its render size, so mutating the live canvas
   // behind its back used to bake the (smaller, quality-scaled) preview into
   // the top-left of the export with black bars right/bottom. The scaler
-  // draws the live canvas stretched to the exact sequence size each frame.
+  // preserves the live canvas aspect ratio within the sequence each frame.
   const scaler = document.createElement('canvas')
   scaler.width = targetW
   scaler.height = targetH
@@ -101,7 +101,13 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
     if (!scalerRunning) return
     try {
       attachAudioElements(allMediaElements())
-      scalerCtx?.drawImage(canvas, 0, 0, targetW, targetH)
+      if (scalerCtx && canvas.width > 0 && canvas.height > 0) {
+        const scale = Math.min(targetW / canvas.width, targetH / canvas.height)
+        const w = canvas.width * scale, h = canvas.height * scale
+        scalerCtx.fillStyle = '#000000'
+        scalerCtx.fillRect(0, 0, targetW, targetH)
+        scalerCtx.drawImage(canvas, (targetW - w) / 2, (targetH - h) / 2, w, h)
+      }
     } catch { /* live canvas momentarily unavailable */ }
     requestAnimationFrame(pumpScaler)
   }

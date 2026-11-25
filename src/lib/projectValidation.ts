@@ -1,3 +1,4 @@
+import { validateSculptDabs } from './sculptData'
 import { validateClipEffectAnimation } from './clipEffectAnimation'
 /** Validate the core document before it can replace a live editor session. */
 type RecordValue = Record<string, unknown>
@@ -166,6 +167,8 @@ export function validateImportedProject(document: RecordValue, runtime: object):
   }
   if (document.scene3DObjects !== undefined) {
     for (const object of collection(document.scene3DObjects, '3D objects')) {
+      try { validateSculptDabs(object.sculptDabs) } catch { invalid('3D sculpt strokes') }
+      if (Array.isArray(object.sculptDabs) && object.sculptDabs.length && (object.modelUrl || object.type === 'wheel')) invalid('sculpt target')
       string(object.name, '3D object name')
       string(object.color, '3D object color')
       if (!['wheel', 'cube', 'sphere', 'torus', 'diamond', 'plane'].includes(object.type as string)) invalid('3D object type')

@@ -1446,10 +1446,20 @@ export interface Clip {
 }
 
 // ---- 3D Scene Architecture & Blender Modes ----
-export type BlenderMode = 'object' | 'camera' | 'texturing' | 'animation'
+export type BlenderMode = 'object' | 'camera' | 'texturing' | 'animation' | 'sculpt'
 export type Primitive3D = 'wheel' | 'cube' | 'sphere' | 'torus' | 'diamond' | 'plane'
 
+export interface SculptDab {
+  point: { x: number; y: number; z: number }
+  normal: { x: number; y: number; z: number }
+  radius: number
+  strength: number
+  mode: 'raise' | 'carve' | 'flatten'
+}
+
 export interface Scene3DObject {
+  /** Non-destructive object-local primitive sculpt strokes. */
+  sculptDabs?: SculptDab[]
   id: string
   name: string
   type: Primitive3D

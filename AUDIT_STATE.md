@@ -1,5 +1,50 @@
 # OmniFrame adversarial audit state
 
+## Cycle 18 — persisted sculpting and 3D history (2026-11-25)
+
+- Added Raise/Carve/Flatten with radius, strength, Reset and collapsible controls
+  on cube, sphere, torus, plane and diamond. Deterministic object-local brush
+  samples are shared by WebGL preview and OBJ geometry export. Imports reject
+  invalid brushes, non-finite coordinates, unsupported targets and over-capacity
+  stroke arrays. Capacity stops new work without discarding earlier samples.
+- Found 3D objects missing from Undo snapshots. Scene geometry and selection now
+  survive Undo/Redo; scene property changes create history, and deleting the
+  first selected object selects a remaining object instead of the deleted ID.
+  One brush drag owns one transaction. Cancel, blur, unmount and capture loss
+  release it; extra pointers cannot steal it. Zero-strength brushes do nothing.
+- Found a real aspect mismatch between the sequence-shaped camera and the
+  differently shaped working viewport. Renderer, camera and pointer surface now
+  share actual container dimensions. Right-drag panning reads held buttons.
+  Mode/HUD controls scroll within their panel; status and aspect controls no
+  longer overlap the top mode row or bottom tool row. Help explains sculpting.
+- Real browser export preserves the captured viewport aspect with letterboxing.
+  A native 2-second MP4 was decoded by OpenCV: 65 distinct frames at 640×360.
+  Before/after sculpt pixels differ; a clear centered sphere measures 0.998
+  width/height. The first visual assertion failed because the test sphere
+  intersected the video plane; moved the fixture in front of it, retaining the
+  strict circularity assertion. Inspect qa-output/sculpt/ for original evidence.
+- Verified 46 unit scripts, 14 browser smoke flows (including actual MCP),
+  responsive workbench and graph/camera/mask integration, TypeScript, source
+  lint and build. History inventory rerun. No high-severity source-scan findings;
+  277 lower-severity findings and large build chunks remain. These are not full
+  coverage of every QA script, native desktop acceptance or speed comparisons.
+- Remaining: only five single primitives support sculpting. 256 samples per
+  object; no remeshing, pressure, animated sculpt or imported model sculpting.
+  Brush influence is volumetric, not front-surface-only. The scene viewport
+  still presents one selected object; OBJ is only a geometry subset. Browser
+  video captures viewport resolution, potentially letterboxed/upscaled; there
+  is no matching headless 3D scene renderer. On narrow views users may need to
+  zoom out after resizing; camera-fit and brush-outline feedback remain work.
+  Native effect easing/phase continuity, desktop builds, tutorial recreations,
+  source findings and matched competitor benchmarks remain unresolved.
+- Next pass: implement proper camera framing and a separate sequence-resolution
+  render target, with real 3D browser/headless export comparisons. Expand scene
+  history tests for imported-object resource ownership. Then native effect
+  easing and motion-clock continuity. Retain existing IDs/media and do not
+  promote recipe counts, successful test counts or old video inventories into
+  all-feature or all-tutorial acceptance.
+
+
 ## Cycle 17 — effect-window intersections (2026-11-24)
 
 - Replaced clamp-on-trim with interval intersection for pointer trims, keyboard

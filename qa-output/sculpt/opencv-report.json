@@ -1,0 +1,11 @@
+{
+  "opencv": "4.12.0",
+  "changed_preview_pixels": 47930,
+  "unsculpted_sphere_width_height_ratio": 0.9977477477477478,
+  "decoded_video_frames": 65,
+  "distinct_video_frames": 65,
+  "exported_frame_size": [
+    640,
+    360
+  ]
+}

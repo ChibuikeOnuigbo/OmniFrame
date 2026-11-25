@@ -1,0 +1,39 @@
+{
+  "count": 9,
+  "checks": [
+    "actual pointer gesture changes pixels",
+    "one gesture / one Undo",
+    "Redo",
+    "save/open",
+    "OBJ deformation and round trip",
+    "Reset Undo",
+    "add/delete Undo with valid selection",
+    "invalid input atomic rejection",
+    "capacity preserves earlier work",
+    "shape replacement invalidates dabs",
+    "second pointer leaves gesture ownership intact",
+    "capture loss closes history",
+    "native browser video export contains geometry with preserved aspect"
+  ],
+  "layouts": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "overflow": false,
+      "withinStage": true,
+      "canvasFits": true
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "overflow": false,
+      "withinStage": true,
+      "canvasFits": true
+    }
+  ],
+  "errors": []
+}

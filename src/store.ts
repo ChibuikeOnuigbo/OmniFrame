@@ -1,3 +1,4 @@
+import { validateSculptDabs, MAX_SCULPT_DABS } from './lib/sculptData'
 import { replaceCelExposure } from './lib/drawingCels'
 import { isStrokeVisibleAtTime } from './lib/drawingEngine'
 import { BLEND_MODES, putBlendKey } from './lib/blendModes'
@@ -195,6 +196,8 @@ export const INITIAL_ROOM_OBJECTS: OmniframeCharacter[] = [
 ]
 
 interface Doc {
+  scene3DObjects?: Scene3DObject[]
+  selected3DObjectId?: string | null
   tracks: Track[]
   clips: Clip[]
   transitions: Transition[]
@@ -215,6 +218,8 @@ const MIN_CLIP = 0.05 // seconds
 
 function cloneDoc(s: EditorState): Doc {
   return {
+    scene3DObjects: structuredClone(s.scene3DObjects),
+    selected3DObjectId: s.selected3DObjectId,
     tracks: structuredClone(s.tracks),
     clips: structuredClone(s.clips),
     transitions: structuredClone(s.transitions || []),
@@ -949,6 +954,8 @@ interface EditorState extends RiggingSlice, RotoMaskSlice, SmartPatchSlice, Omni
   selected3DObjectId: string | null
   setSelected3DObjectId: (id: string | null) => void
   addScene3DObject: (object: Scene3DObject) => void
+  appendSceneSculpt: (id: string, dab: import('./types').SculptDab) => boolean
+  resetSceneSculpt: (id: string) => void
   updateScene3DObject: (id: string, updates: Partial<Scene3DObject>) => void
   removeScene3DObject: (id: string) => void
   threeMaskMode: ThreeMaskMode
@@ -1454,16 +1461,37 @@ export const useEditor = create<EditorState>((set, get) => {
       pushSnapshot()
       set((s) => ({ scene3DObjects: [...s.scene3DObjects, obj], selected3DObjectId: obj.id }))
     },
+    appendSceneSculpt: (id, dab) => {
+      const s = get(), object = s.scene3DObjects.find(o => o.id === id)
+      if (!object || object.modelUrl || object.type === 'wheel' || (object.sculptDabs?.length ?? 0) >= MAX_SCULPT_DABS) return false
+      validateSculptDabs([dab])
+      if (dab.strength === 0) return false
+      if (!s.inInteraction) pushSnapshot()
+      set({ scene3DObjects: s.scene3DObjects.map(o => o.id === id ? { ...o, sculptDabs: [...(o.sculptDabs ?? []), structuredClone(dab)] } : o) })
+      return true
+    },
+    resetSceneSculpt: (id) => {
+      if (!get().scene3DObjects.find(o => o.id === id)?.sculptDabs?.length) return
+      if (!get().inInteraction) pushSnapshot()
+      set(s => ({ scene3DObjects: s.scene3DObjects.map(o => o.id === id ? { ...o, sculptDabs: undefined } : o) }))
+    },
     updateScene3DObject: (id, updates) => {
+      const current = get().scene3DObjects.find(o => o.id === id)
+      if (!current || Object.entries(updates).every(([key, value]) => current[key as keyof Scene3DObject] === value)) return
+      if ('sculptDabs' in updates) {
+        validateSculptDabs(updates.sculptDabs)
+        if (updates.sculptDabs?.length && (updates.modelUrl || current?.modelUrl || (updates.type ?? current?.type) === 'wheel')) throw new Error('Choose a single primitive to sculpt')
+      }
+      if (!get().inInteraction) pushSnapshot()
       set((s) => ({
-        scene3DObjects: s.scene3DObjects.map((o) => (o.id === id ? { ...o, ...updates } : o)),
+        scene3DObjects: s.scene3DObjects.map((o) => (o.id === id ? { ...o, ...updates, ...((updates.type && updates.type !== o.type) || (updates.modelUrl && updates.modelUrl !== o.modelUrl) ? { sculptDabs: undefined } : {}) } : o)),
       }))
     },
     removeScene3DObject: (id) => {
       pushSnapshot()
       set((s) => ({
         scene3DObjects: s.scene3DObjects.filter((o) => o.id !== id),
-        selected3DObjectId: s.selected3DObjectId === id ? (s.scene3DObjects[0]?.id || null) : s.selected3DObjectId,
+        selected3DObjectId: s.selected3DObjectId === id ? (s.scene3DObjects.find(o => o.id !== id)?.id || null) : s.selected3DObjectId,
       }))
     },
     threeMaskMode: 'off',
@@ -5042,6 +5070,8 @@ export const useEditor = create<EditorState>((set, get) => {
       const prev = past[past.length - 1]
       const current = cloneDoc(get())
       set({
+        scene3DObjects: prev.scene3DObjects ?? get().scene3DObjects,
+        selected3DObjectId: prev.scene3DObjects ? prev.selected3DObjectId ?? null : get().selected3DObjectId,
         tracks: prev.tracks,
         clips: prev.clips,
         transitions: prev.transitions || [],
@@ -5068,6 +5098,8 @@ export const useEditor = create<EditorState>((set, get) => {
       const next = future[future.length - 1]
       const current = cloneDoc(get())
       set({
+        scene3DObjects: next.scene3DObjects ?? get().scene3DObjects,
+        selected3DObjectId: next.scene3DObjects ? next.selected3DObjectId ?? null : get().selected3DObjectId,
         tracks: next.tracks,
         clips: next.clips,
         transitions: next.transitions || [],
