@@ -1,5 +1,26 @@
 # OmniFrame adversarial audit state
 
+## Cycle 19 — camera fit and input ownership (2026-11-25)
+
+Object focus now uses transformed geometry bounds and both camera axes. Narrow
+resizes refit a focused object; manual zoom switches to free framing. WASD/QE
+movement belongs to the focused viewport, clears on blur, and ignores modifier
+chords. A targeted browser test verifies keyboard ownership and scaled-object
+margins at 390 px. Its initial image mask included cyan grid lines; visual review
+confirmed the object fit and the mask was corrected to isolate neutral highlights.
+
+Verified: 47 unit scripts, 14 browser smoke flows, the additional camera flow,
+typecheck, source lint and production build. History inventory rerun. Evidence:
+qa-output/camera-review/. Existing media outputs were restored after testing.
+
+Remaining: sequence-resolution 3D capture was explored but not integrated; the
+untested render-target prototype was removed. Video still captures the viewport.
+Imported sculpting, multi-object preview, native desktop validation, effect easing,
+277 source findings and large bundles remain. Next: implement a scoped capture
+session with tone/color parity, disposal, context-loss and concurrent-export tests;
+then run actual resolution/detail comparisons before claiming export completion.
+
+
 ## Cycle 18 — persisted sculpting and 3D history (2026-11-25)
 
 - Added Raise/Carve/Flatten with radius, strength, Reset and collapsible controls

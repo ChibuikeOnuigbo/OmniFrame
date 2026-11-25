@@ -1,3 +1,4 @@
+import { sphereFitDistance } from '../lib/sceneCamera'
 import { sculptGeometry } from '../lib/sculptGeometry'
 import { MAX_SCULPT_DABS } from '../lib/sculptData'
 import { usePerformanceSettings } from '../lib/performanceSettings'
@@ -144,6 +145,8 @@ export function ThreeViewer({
   const [wireframe, setWireframe] = useState(!!sceneObject?.wireframe)
   const [showGrid, setShowGrid] = useState(true)
   const [aimTarget, setAimTarget] = useState<CameraAimTarget>('composite')
+  const aimTargetRef = useRef<CameraAimTarget>('composite')
+  const setCameraAim = (target: CameraAimTarget) => { aimTargetRef.current = target; setAimTarget(target) }
   const [materialRoughness, setMaterialRoughness] = useState(sceneObject?.roughness ?? 0.25)
   const [materialMetalness, setMaterialMetalness] = useState(sceneObject?.metalness ?? 0.8)
   const [materialColor, setMaterialColor] = useState(sceneObject?.color ?? '#8b5cf6')
@@ -311,8 +314,22 @@ export function ThreeViewer({
   }
 
   // Handle Aim / Camera transitions
+  const fitObject = () => {
+    const object = objectMeshRef.current, camera = cameraRef.current
+    if (!object || !camera) return
+    object.updateWorldMatrix(true, true)
+    const sphere = object instanceof THREE.Mesh && object.geometry.boundingSphere
+      ? object.geometry.boundingSphere.clone().applyMatrix4(object.matrixWorld)
+      : new THREE.Box3().setFromObject(object, true).getBoundingSphere(new THREE.Sphere())
+    if (!Number.isFinite(sphere.radius) || sphere.radius < 0) return
+    targetRef.current.copy(sphere.center)
+    sphericalRef.current.radius = sphereFitDistance(sphere.radius, camera.fov, camera.aspect)
+    camera.far = Math.max(1000, sphericalRef.current.radius + sphere.radius * 4)
+    camera.updateProjectionMatrix()
+  }
+
   const handleAim = (target: CameraAimTarget) => {
-    setAimTarget(target)
+    setCameraAim(target)
     if (target === 'camera_view') {
       // Direct Camera Perspective View (Unreal/Unity/Blender Numpad 0)
       targetRef.current.set(0, 0, 0)
@@ -323,6 +340,7 @@ export function ThreeViewer({
     } else if (target === 'object') {
       targetRef.current.copy(objectPosition.current)
       sphericalRef.current = { radius: 2.8, theta: Math.PI / 4, phi: Math.PI / 3 }
+      fitObject()
     } else if (target === 'composite') {
       targetRef.current.set(objectPosition.current.x * 0.4, 0.1, 0.3)
       sphericalRef.current = { radius: 5.4, theta: 0.38, phi: 1.35 }
@@ -338,8 +356,8 @@ export function ThreeViewer({
   // Keyboard WASD camera listener
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      // Ignore if typing in text inputs
-      if ((e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA') return
+      // Camera movement belongs only to the focused viewport, never dialogs or inputs.
+      if (document.activeElement !== containerRef.current || e.altKey || e.ctrlKey || e.metaKey) return
       const k = e.code
       if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyQ', 'KeyE'].includes(k)) {
         keysPressedRef.current.add(k)
@@ -348,9 +366,13 @@ export function ThreeViewer({
     const onKeyUp = (e: KeyboardEvent) => {
       keysPressedRef.current.delete(e.code)
     }
+    const clearKeys = () => keysPressedRef.current.clear()
+    window.addEventListener('blur', clearKeys)
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
     return () => {
+      window.removeEventListener('blur', clearKeys)
+      clearKeys()
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
     }
@@ -383,7 +405,6 @@ export function ThreeViewer({
     renderer.domElement.setAttribute('data-testid', 'three-canvas-element')
     rendererRef.current = renderer
     container.replaceChildren(renderer.domElement)
-
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.85)
     scene.add(ambientLight)
@@ -460,7 +481,7 @@ export function ThreeViewer({
           targetRef.current.y += speed
           cam.position.y += speed
         }
-        setAimTarget('free')
+        setCameraAim('free')
       }
 
       const { playing, activeClip, clipPlayheadTime } = animationState.current
@@ -511,6 +532,7 @@ export function ThreeViewer({
       renderer.setSize(w, h)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
+      if (aimTargetRef.current === 'object') { fitObject(); updateCameraPosition() }
     }
     resize()
     const observer = new ResizeObserver(resize)
@@ -820,6 +842,7 @@ export function ThreeViewer({
   // Pointer Event Handlers for Free Orbit, Pan, Dolly, and scene-space selection.
   const handlePointerDown = (e: React.PointerEvent) => {
     if (sculptGesture.current) return
+    containerRef.current?.focus({ preventScroll: true })
     if (activeBlenderMode === 'sculpt' && e.button === 0) { e.preventDefault(); sculptAt(e, true); return }
     isPointerDownRef.current = true
     pointerStartRef.current = { x: e.clientX, y: e.clientY, button: e.button }
@@ -847,12 +870,12 @@ export function ThreeViewer({
       const up = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion)
       targetRef.current.addScaledVector(right, -dx * 0.005 * s.radius)
       targetRef.current.addScaledVector(up, dy * 0.005 * s.radius)
-      setAimTarget('free')
+      setCameraAim('free')
     } else {
       // Orbit camera around target
       s.theta -= dx * 0.008
       s.phi = Math.max(0.08, Math.min(Math.PI - 0.08, s.phi - dy * 0.008))
-      setAimTarget('free')
+      setCameraAim('free')
     }
 
     updateCameraPosition()
@@ -876,6 +899,7 @@ export function ThreeViewer({
     e.preventDefault()
     if (threeMaskSelection) clearThreeMaskSelection()
     if (threeMaskToolActive && threeMaskMode === 'viewport') return
+    setCameraAim('free')
     const factor = e.deltaY < 0 ? 0.88 : 1.12
     sphericalRef.current.radius = Math.max(1.0, Math.min(35, sphericalRef.current.radius * factor))
     updateCameraPosition()
@@ -889,6 +913,9 @@ export function ThreeViewer({
       <div
         ref={containerRef}
         data-testid="three-canvas-wrapper"
+        tabIndex={0}
+        aria-label="3D viewport"
+        onBlur={() => keysPressedRef.current.clear()}
         className={`w-full h-full relative ${
           activeBlenderMode === 'sculpt' || (threeMaskToolActive && threeMaskMode === 'viewport')
             ? 'cursor-crosshair'
