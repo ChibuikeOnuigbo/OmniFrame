@@ -27,6 +27,12 @@ try{
  assert.ok(Math.abs(before.rightDb+29.03)<.5,`actual right RMS dBFS: ${before.rightDb}`)
  assert.ok(Math.abs(before.leftPeakDb+20)<.2)
  assert.ok(Math.abs((after.leftDb-before.leftDb)+6.02)<.5,'half volume gives -6.02dB')
- fs.mkdirSync(path.join(root,'qa-output/audio'),{recursive:true});fs.writeFileSync(path.join(root,'qa-output/audio/meter-report.json'),JSON.stringify({before,after},null,2))
+ await page.evaluate(()=>window.__qaBus.detachAudioElement(window.__qaAudio));await page.waitForTimeout(200)
+ const detached=await page.evaluate(()=>window.__qaBus.readAudioLevels())
+ assert.ok(detached.leftDb < -70 && detached.rightDb < -70,'detached source no longer reaches output')
+ await page.evaluate(()=>window.__qaBus.attachAudioElements([window.__qaAudio]));await page.waitForTimeout(200)
+ const reattached=await page.evaluate(()=>window.__qaBus.readAudioLevels())
+ assert.ok(Math.abs(reattached.leftDb-after.leftDb)<.5,'reattached source preserves gain without a duplicate node')
+ fs.mkdirSync(path.join(root,'qa-output/audio'),{recursive:true});fs.writeFileSync(path.join(root,'qa-output/audio/meter-report.json'),JSON.stringify({before,after,detached,reattached},null,2))
  console.log('PASS real stereo RMS/peak metering and element-volume tracking',before,after)
 }finally{await browser.close()}

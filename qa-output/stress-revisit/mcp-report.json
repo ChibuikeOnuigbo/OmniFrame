@@ -1,0 +1,176 @@
+{
+  "catalog": [
+    "help",
+    "select",
+    "click",
+    "mask_draw",
+    "mask_clear",
+    "keyframe_set",
+    "curve_set",
+    "transform_set",
+    "edit_element",
+    "effect_set",
+    "remove_background",
+    "fill_composition_area",
+    "snapshot",
+    "dump",
+    "preset_preview",
+    "text_crop_video",
+    "timeline_screenshot",
+    "track_assign",
+    "log",
+    "clip_stretch",
+    "transparent_select",
+    "select_main_element",
+    "omniframe_extract",
+    "patch_under",
+    "omniframe_move"
+  ],
+  "dump": {
+    "sequence": {
+      "aspectRatio": "16:9",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "label": "16:9 Landscape (1920×1080)",
+      "isCustom": false
+    },
+    "fps": 30,
+    "selection": [
+      "clip_kjgk0pizdv3"
+    ],
+    "clips": [
+      {
+        "id": "clip_kjgk0pizdv3",
+        "name": "MCP plate",
+        "start": 0,
+        "duration": 5,
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1
+        },
+        "mask": {
+          "shape": "rectangle",
+          "centerX": 0.0546875,
+          "centerY": 0.06481481481481481,
+          "width": 0.09895833333333333,
+          "height": 0.09259259259259259,
+          "rotation": 0,
+          "feather": 0,
+          "expansion": 0,
+          "opacity": 1,
+          "inverted": false,
+          "enabled": true,
+          "kind": "shape"
+        },
+        "adjustmentMask": {
+          "enabled": true,
+          "inverted": false,
+          "shape": "ellipse",
+          "centerX": 0.5,
+          "centerY": 0.5,
+          "width": 0.2,
+          "height": 0.2,
+          "feather": 12,
+          "regions": [
+            {
+              "id": "bulb-1",
+              "shape": "circle",
+              "centerX": 0.25,
+              "centerY": 0.4,
+              "width": 0.14,
+              "height": 0.14,
+              "feather": 8,
+              "opacity": 1
+            },
+            {
+              "id": "title-mask",
+              "shape": "text",
+              "centerX": 0.65,
+              "centerY": 0.6,
+              "width": 0.3,
+              "height": 0.18,
+              "feather": 4,
+              "opacity": 1,
+              "text": "FX"
+            },
+            {
+              "id": "drawn-region",
+              "shape": "custom",
+              "centerX": 0.5,
+              "centerY": 0.5,
+              "width": 0.3,
+              "height": 0.3,
+              "feather": 2,
+              "opacity": 1,
+              "points": [
+                {
+                  "x": 0.4,
+                  "y": 0.2
+                },
+                {
+                  "x": 0.7,
+                  "y": 0.3
+                },
+                {
+                  "x": 0.6,
+                  "y": 0.7
+                }
+              ]
+            }
+          ]
+        },
+        "effects": {
+          "blur": 6,
+          "glow": 1.2
+        },
+        "effectKeys": {},
+        "effectSourceOffset": 0,
+        "speedCurve": null
+      },
+      {
+        "id": "clip_b8l7mlwzdv4",
+        "name": "MCP plate",
+        "start": 5,
+        "duration": 5,
+        "transform": {
+          "x": 0,
+          "y": 0,
+          "scale": 1,
+          "rotation": 0,
+          "opacity": 1
+        },
+        "mask": null,
+        "adjustmentMask": null,
+        "effects": null,
+        "effectKeys": {},
+        "effectSourceOffset": 0,
+        "speedCurve": null
+      }
+    ]
+  },
+  "mask": {
+    "shape": "rectangle",
+    "centerX": 0.0546875,
+    "centerY": 0.06481481481481481,
+    "width": 0.09895833333333333,
+    "height": 0.09259259259259259,
+    "rotation": 0,
+    "feather": 0,
+    "expansion": 0,
+    "opacity": 1,
+    "inverted": false,
+    "enabled": true,
+    "kind": "shape"
+  },
+  "effectMaskRegions": 3,
+  "invalidInputsRejected": true,
+  "undo": true,
+  "sourceClockVolumePersistence": true,
+  "blendKeyPersistence": true,
+  "effectMaskPersistence": true,
+  "presetPreview": true
+}

@@ -1,5 +1,19 @@
 # OmniFrame adversarial audit state
 
+## Cycle 23 — revisit, boundary and audio regression tests (2026-11-26)
+
+Four targeted browser scripts passed: 100-clip eviction/reload and rapid seeks,
+clip-boundary transport/reset, stereo audio detach/reconnect, filmstrip/compound
+previews and live MCP (the boundary/reset checks are in the revisit script).
+Added real audio silence/reconnection assertions. No new application defect was
+reproduced; production code is unchanged. Details: reports/STRESS_REVISIT_20261126.md.
+
+Remaining: unique-footage import, sustained audible boundary continuity, displayed
+frame/seek latency and 4K/GPU behavior are not established. Next measure actual
+presented frames and A/V drift with diverse long-GOP sources. Do not promote
+short automated waits or transport-clock advancement to lag-free playback claims.
+
+
 ## Cycle 22 — 100-video decoder stress (2026-11-26)
 
 Tested 100 assets/100 sequential clips with blur and 100 catalog instances, then
