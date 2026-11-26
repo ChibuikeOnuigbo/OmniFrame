@@ -1,0 +1,26 @@
+{
+  "loadMs": 231.19999999995343,
+  "assets": 100,
+  "clips": 100,
+  "effectInstances": 100,
+  "retainedVideoElements": 24,
+  "playbackDecoders": 16,
+  "layered": {
+    "layers": 10,
+    "renderedFrames": 51,
+    "elapsedMs": 1509.8999999999069,
+    "playhead": 1.7248000000000008
+  },
+  "seekWallMs": {
+    "p50": 100,
+    "p95": 599,
+    "max": 749
+  },
+  "playback": {
+    "elapsedMs": 3098.8000000000466,
+    "renderedFrames": 87,
+    "playhead": 13.0666
+  },
+  "errors": [],
+  "scope": "100 distinct asset IDs/blob URLs reuse one authorized 8-second fixture; 100 sequential one-second clips, blur plus one catalog effect per clip. Not 100 unique movies or 100 simultaneous decoders. Software Chromium, automated seek waits include polling."
+}

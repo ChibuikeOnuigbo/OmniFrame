@@ -1,3 +1,5 @@
+import { pruneIdleMedia } from './idleMediaCache'
+import { detachAudioElement } from './audioBus'
 import { effectFilterString } from './effectFilter'
 import { blendAt } from './blendModes'
 import { proxySource } from './mediaProxies'
@@ -81,6 +83,7 @@ let hostEl: HTMLElement | null = null
 function mediaHost(): HTMLElement {
   if (!hostEl) {
     hostEl = document.createElement('div')
+    hostEl.dataset.playbackMediaHost = ''
     hostEl.style.cssText =
       'position:absolute;left:-99999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;'
     document.body.appendChild(hostEl)
@@ -93,6 +96,7 @@ function getVideo(asset: MediaAsset): HTMLVideoElement {
   let v = videoCache.get(asset.id)
   if (!v) {
     v = document.createElement('video')
+    v.dataset.playbackCached = 'true'
     v.src = source
     v.preload = 'auto'
     v.muted = false
@@ -102,6 +106,7 @@ function getVideo(asset: MediaAsset): HTMLVideoElement {
     mediaHost().appendChild(v)
   }
   if (v.getAttribute('src') !== source) { v.pause(); v.src = source }
+  videoCache.delete(asset.id); videoCache.set(asset.id, v)
   return v
 }
 
@@ -116,6 +121,7 @@ function getAudio(asset: MediaAsset): HTMLAudioElement {
     mediaHost().appendChild(a)
   }
   if (a.getAttribute('src') !== asset.url) { a.pause(); a.src = asset.url }
+  audioCache.delete(asset.id); audioCache.set(asset.id, a)
   return a
 }
 
@@ -134,6 +140,7 @@ const urlImageCache = new Map<string, HTMLImageElement>()
 let activePreviewEngine: PreviewEngine | null = null
 
 function releaseMediaElement(element: HTMLMediaElement): void {
+  detachAudioElement(element)
   element.pause()
   element.removeAttribute('src')
   element.load()
@@ -1066,6 +1073,10 @@ export class PreviewEngine {
     }
     videoCache.forEach(pause)
     audioCache.forEach(pause)
+    if (!this.sampling) {
+      pruneIdleMedia(videoCache, this.usedThisFrame, releaseMediaElement)
+      pruneIdleMedia(audioCache, this.usedThisFrame, releaseMediaElement)
+    }
   }
 
   private drawTransition(

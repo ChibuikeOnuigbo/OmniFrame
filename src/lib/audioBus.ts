@@ -21,6 +21,11 @@ function ensureBus(): AudioContext {
   return context
 }
 
+export function detachAudioElement(element: HTMLMediaElement): void {
+  connected.get(element)?.disconnect()
+  connected.delete(element)
+}
+
 export function attachAudioElements(elements: HTMLMediaElement[]): void {
   const ctx = ensureBus(), active = new Set(elements.filter(el => el instanceof HTMLAudioElement || !el.muted))
   if (ctx.state === 'suspended') void ctx.resume().catch(() => {})

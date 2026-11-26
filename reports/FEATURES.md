@@ -1,3 +1,20 @@
+## Cycle 22 — 100-video decoder stress (2026-11-26)
+
+Tested 100 assets/100 sequential clips with blur and 100 catalog instances, then
+ten overlapping video tracks. Assets have distinct IDs/blob URLs but reuse one
+Pexels fixture. Retained video elements fell from 107 to 24 after bounding inactive
+playback caches; the latter includes 16 playback and eight thumbnail decoders.
+Active composition layers are never evicted; released sources and audio nodes
+are unloaded/disconnected. Tests initially conflated sampling/playback pools;
+corrected selectors separate them. Seek p95 remained about 599 ms: no speedup claim.
+
+48 units, 14 browser smoke flows, targeted stress test, typecheck, lint and build
+pass. Raw evidence and limitations: reports/STRESS_100_20261126.md.
+Remaining: unique large footage imports, sustained A/V sync, 100 simultaneous
+layers, precise presented-frame/seek latency, 4K/GPU/native desktop benchmarks.
+Next test decoder eviction/reload at transitions and measure seek-to-present
+before claiming smoothness. Existing source findings and build warnings remain.
+
 ## Cycle 21 — proxy decoding and error ownership (2026-11-25)
 
 Hardened proxy cancellation, missing canvas context and interval drawing errors;
