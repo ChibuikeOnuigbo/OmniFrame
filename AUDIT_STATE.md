@@ -1,5 +1,19 @@
 # OmniFrame adversarial audit state
 
+## Cycle 24 — repeated edit/export speed review (2026-11-26)
+
+Created a six-second 720p edit and portable project; repeated Low/Full samples,
+validated native export decoding and project reopening. Repeated 100-clip seek,
+eviction and reset stress passed. Fixed QA's insufficient screenshot wait:
+300 ms showed a stale title; decoder-ready wait measured 444 ms and the settled
+preview was correct. Final export took 6.135 s; speed remains provisional 6/10.
+Production code unchanged. Syntax, whitespace and source lint checks pass;
+277 nonblocking source-scan hints remain. See reports/EDIT_SPEED_REVIEW_20261126.md.
+
+Remaining: precise displayed-frame latency, varied real sources, sustained A/V
+sync, GPU/4K/native desktop and competitor comparisons. Next profile decoder seek
+and canvas commit separately; test long-GOP media and avoid fixed-sleep screenshots.
+
 ## Cycle 23 — revisit, boundary and audio regression tests (2026-11-26)
 
 Four targeted browser scripts passed: 100-clip eviction/reload and rapid seeks,

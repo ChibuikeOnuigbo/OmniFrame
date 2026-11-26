@@ -1,0 +1,27 @@
+{
+  "results": [
+    {
+      "quality": "low",
+      "elapsedMs": 4501.299999998882,
+      "renderedFrames": 129,
+      "renderMsP50": 25.200000001117587,
+      "renderMsP95": 33.59999999962747,
+      "longTasks": 4,
+      "longestTaskMs": 77,
+      "sampledFrames": 85
+    },
+    {
+      "quality": "full",
+      "elapsedMs": 4505.4000000003725,
+      "renderedFrames": 158,
+      "renderMsP50": 5.099999999627471,
+      "renderMsP95": 31.300000000745058,
+      "longTasks": 8,
+      "longestTaskMs": 81,
+      "sampledFrames": 141
+    }
+  ],
+  "exportWallMs": 6155,
+  "errors": [],
+  "scope": "One six-second 720p edit: three footage cuts, keyed blur and three animated titles. Same source, software Chromium. Render submissions are not unique presented frames; not a 4K benchmark."
+}
