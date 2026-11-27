@@ -1,0 +1,69 @@
+{
+  "failures": {
+    "cancel": "AbortError",
+    "concurrent": "An export is already running.",
+    "encoder": "Video encoder failed. Try WebM or a lower export resolution.",
+    "interrupted": "Playback stopped before export finished. Please export again.",
+    "empty": "Video encoder returned an empty file."
+  },
+  "replaced": {
+    "message": "Project changed during export. Please export again.",
+    "quality": "medium",
+    "speed": 1.5,
+    "clips": 0,
+    "tracksEnded": true
+  },
+  "exports": [
+    {
+      "format": "auto",
+      "file": "qa-output/export-cleanup/reliability/0-omniframe-export.mp4",
+      "bytes": 700180,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.070542
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/export-cleanup/reliability/1-omniframe-export.webm",
+      "bytes": 851761,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.075
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/export-cleanup/reliability/2-omniframe-export.mp4",
+      "bytes": 860148,
+      "decoded": false,
+      "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 0x44497240] error reading header\nqa-output/export-cleanup/reliability/2-omniframe-export.mp4: Operation not permitted\n",
+      "decodedSeconds": 0
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/export-cleanup/reliability/3-omniframe-export.webm",
+      "bytes": 959213,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.088
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/export-cleanup/reliability/4-omniframe-export.mp4",
+      "bytes": 736014,
+      "decoded": false,
+      "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 0x39ca3240] error reading header\nqa-output/export-cleanup/reliability/4-omniframe-export.mp4: Operation not permitted\n",
+      "decodedSeconds": 0
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/export-cleanup/reliability/5-omniframe-export.webm",
+      "bytes": 820419,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.122
+    }
+  ],
+  "rangeSeconds": 4.08,
+  "errors": [],
+  "scope": "640x360 native recordings, one reused Pexels source; synthetic recorder faults and real cancellation UI. Six sequential exports."
+}

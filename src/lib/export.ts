@@ -1,3 +1,4 @@
+import { cleanupAll } from './cleanup'
 import { nextExportFrameTime } from './exportFrameBudget'
 import { beginThreeExport, type ThreeExportSession } from './threeExportBridge'
 import { attachAudioElements, createRecordingAudioStream } from './audioBus'
@@ -71,6 +72,7 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   const previousSpeed = st.speed
   let cleanup = () => {}
   let threeExport: ThreeExportSession | null = null
+  let exportFailed = false
   st.setPreviewQuality('full')
   try {
   // Let React resize the engine itself; never resize its canvas behind it.
@@ -147,19 +149,25 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
 
   opts.onStatus?.('Preparing recorder…')
   const stream = scaler.captureStream(30)
-  cleanup = () => { scalerRunning = false; stream.getTracks().forEach(track => track.stop()) }
+  cleanup = () => { scalerRunning = false; cleanupAll(...stream.getTracks().map(track => () => track.stop())) }
   const audio = createRecordingAudioStream()
+  // Own the destination before adding tracks: addTrack itself can fail.
+  cleanup = () => {
+    scalerRunning = false
+    cleanupAll(...stream.getTracks().map(track => () => track.stop()), () => audio.dispose())
+  }
   audio.stream.getAudioTracks().forEach(track => stream.addTrack(track))
-
-  cleanup = () => { scalerRunning = false; stream.getTracks().forEach(track => track.stop()); audio.dispose() }
   const recorder = new MediaRecorder(stream, {
     mimeType: mime,
     videoBitsPerSecond: 8_000_000,
   })
   cleanup = () => {
     scalerRunning = false
-    try { if (recorder.state !== 'inactive') recorder.stop() }
-    finally { stream.getTracks().forEach(track => track.stop()); audio.dispose() }
+    cleanupAll(
+      () => { if (recorder.state !== 'inactive') recorder.stop() },
+      ...stream.getTracks().map(track => () => track.stop()),
+      () => audio.dispose(),
+    )
   }
   const chunks: BlobPart[] = []
   recorder.ondataavailable = (e) => {
@@ -224,14 +232,29 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   download(blob, `omniframe-export.${ext}`)
   opts.onStatus?.('Export complete')
   opts.onProgress?.(1)
+  } catch (error) {
+    exportFailed = true
+    throw error
   } finally {
-    try { cleanup() } finally { threeExport?.dispose() }
-    // A replacement project owns its own transport/settings.
-    if (useEditor.getState().projectGeneration === generation) {
-      st.stopVisualPreview()
-      st.pause()
-      st.setSpeed(previousSpeed)
-      st.setPreviewQuality(previousQuality)
+    try {
+      cleanupAll(
+        () => cleanup(),
+        () => threeExport?.dispose(),
+        () => {
+          // A replacement project owns its own transport/settings.
+          if (useEditor.getState().projectGeneration !== generation) return
+          cleanupAll(
+            () => st.stopVisualPreview(),
+            () => st.pause(),
+            () => st.setSpeed(previousSpeed),
+            () => st.setPreviewQuality(previousQuality),
+          )
+        },
+      )
+    } catch (error) {
+      // Do not replace cancellation/encoder errors with a secondary teardown failure.
+      if (!exportFailed) throw error
+      console.warn('Export cleanup also failed:', error)
     }
   }
 }

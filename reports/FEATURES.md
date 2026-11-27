@@ -1,3 +1,21 @@
+## Cycle 29 — export cleanup under API failures (2026-11-27)
+
+Reproduced encoder stop throwing during Cancel: playback remained active, quality
+stayed Full and speed stayed 1; the cleanup error replaced AbortError. Cleanup now
+attempts all track/audio/3D releases and restores the originating project's state
+independently. Original errors survive secondary cleanup failures. Replacement
+projects retain their own settings. Audio cleanup is idempotent; failed audio
+connection/track attachment now releases the allocated destination stream.
+
+Nine injected browser fault cases pass, as do 51 unit scripts, stereo audio checks,
+six native MP4/WebM decode checks and clean landscape/portrait 3D exports. Evidence:
+qa-output/export-cleanup/ and reports/EXPORT_CLEANUP_REVIEW_20261127.md.
+No new performance or rating increase claimed. Remaining: first-frame readiness,
+long/background export and A/V drift, real GPU/4K load, older MP4 decoder
+compatibility, complex scene coverage and unvalidated native platforms. Next pass:
+measure first-frame correctness using different starting/target footage and a
+nonzero export range; preserve existing source clocks and project ownership.
+
 ## Cycle 28 — clean sequence-sized 3D output and paced rendering (2026-11-27)
 
 3D exports now use the live scene with a separate sequence-aspect camera/output

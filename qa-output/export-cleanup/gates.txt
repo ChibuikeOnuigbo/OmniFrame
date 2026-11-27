@@ -1,0 +1,8 @@
+51 unit scripts PASS
+9 browser fault scenarios PASS
+Stereo audio integration PASS
+6 sequential MP4/WebM decodes and explicit range PASS
+Clean landscape/portrait 3D export PASS
+Typecheck PASS
+Source lint PASS (277 nonblocking findings)
+Production build PASS (large chunk warning remains)

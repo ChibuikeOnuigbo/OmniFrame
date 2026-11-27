@@ -1,3 +1,4 @@
+import { cleanupAll } from './cleanup'
 /** One media-element audio graph for playback, actual meters and repeatable exports.
  * A media element may be wrapped by createMediaElementSource only once. */
 let context: AudioContext | null = null
@@ -40,9 +41,22 @@ export function attachAudioElements(elements: HTMLMediaElement[]): void {
 
 export function createRecordingAudioStream(): { stream: MediaStream; dispose: () => void } {
   const ctx = ensureBus(), destination = ctx.createMediaStreamDestination()
-  output!.connect(destination)
+  const bus = output
+  if (!bus) throw new Error('Audio output is unavailable.')
+  try { bus.connect(destination) } catch (error) {
+    try { cleanupAll(...destination.stream.getTracks().map(track => () => track.stop())) }
+    finally { throw error }
+  }
   if (ctx.state === 'suspended') void ctx.resume().catch(() => {})
-  return { stream: destination.stream, dispose: () => { output!.disconnect(destination); destination.stream.getTracks().forEach(track => track.stop()) } }
+  let disposed = false
+  return { stream: destination.stream, dispose: () => {
+    if (disposed) return
+    disposed = true
+    cleanupAll(
+      () => bus.disconnect(destination),
+      ...destination.stream.getTracks().map(track => () => track.stop()),
+    )
+  } }
 }
 
 function measure(samples: Float32Array): { rms: number; peak: number } {

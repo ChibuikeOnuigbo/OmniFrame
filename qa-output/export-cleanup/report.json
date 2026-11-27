@@ -1,0 +1,105 @@
+{
+  "results": [
+    {
+      "fault": "stop",
+      "outcome": {
+        "name": "AbortError",
+        "message": "Export cancelled."
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "track",
+      "outcome": {
+        "name": "AbortError",
+        "message": "Export cancelled."
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "disconnect",
+      "outcome": {
+        "name": "AbortError",
+        "message": "Export cancelled."
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "add-track",
+      "outcome": {
+        "name": "Error",
+        "message": "Injected addTrack failure"
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "callback",
+      "outcome": {
+        "name": "Error",
+        "message": "Injected status callback failure"
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "project-replace",
+      "outcome": {
+        "name": "Error",
+        "message": "Project changed during export. Please export again."
+      },
+      "quality": "medium",
+      "speed": 1.5,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "capture",
+      "outcome": {
+        "name": "Error",
+        "message": "Injected capture failure"
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "connect",
+      "outcome": {
+        "name": "Error",
+        "message": "Injected audio connect failure"
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    },
+    {
+      "fault": "cancel",
+      "outcome": {
+        "name": "AbortError",
+        "message": "Export cancelled."
+      },
+      "quality": "low",
+      "speed": 2,
+      "playing": false,
+      "tracksEnded": true
+    }
+  ],
+  "audioDispose": true,
+  "errors": []
+}

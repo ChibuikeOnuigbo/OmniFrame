@@ -1,0 +1,10 @@
+{
+  "outcome": {
+    "name": "Error",
+    "message": "Injected recorder teardown failure"
+  },
+  "quality": "full",
+  "speed": 1,
+  "playing": true,
+  "tracksEnded": true
+}

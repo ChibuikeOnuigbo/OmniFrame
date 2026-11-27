@@ -1,0 +1,26 @@
+{
+  "before": {
+    "leftDb": -22.97349153230105,
+    "rightDb": -28.995712108986602,
+    "leftPeakDb": -20.00071694148037,
+    "rightPeakDb": -26.021404874763185
+  },
+  "after": {
+    "leftDb": -29.099177848102112,
+    "rightDb": -35.12141891742719,
+    "leftPeakDb": -26.02131685475999,
+    "rightPeakDb": -32.04200414083365
+  },
+  "detached": {
+    "leftDb": -80,
+    "rightDb": -80,
+    "leftPeakDb": -80,
+    "rightPeakDb": -80
+  },
+  "reattached": {
+    "leftDb": -29.089533995414012,
+    "rightDb": -35.1117575344121,
+    "leftPeakDb": -26.021316207557387,
+    "rightPeakDb": -32.04200414083365
+  }
+}
