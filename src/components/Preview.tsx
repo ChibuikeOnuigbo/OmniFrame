@@ -321,12 +321,28 @@ export function Preview() {
         >
           <Paintbrush size={15} />
         </IconButton></Tooltip>
-        <Tooltip label="Safe areas"><IconButton title="Toggle safe areas" active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton></Tooltip>
-        <Tooltip label="Grid"><IconButton title="Toggle composition grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton></Tooltip>
+        <div role="group" aria-label="Composition guides" className="flex items-center gap-0.5 rounded-md border border-ink-700 bg-ink-800 p-0.5">
+          <Tooltip label="Safe areas"><IconButton title="Toggle safe areas" active={safe} onClick={() => setSafe((v) => !v)}><Scan size={15} /></IconButton></Tooltip>
+          <Tooltip label="Grid"><IconButton title="Toggle composition grid" active={grid} onClick={() => setGrid((v) => !v)}><Grid3x3 size={15} /></IconButton></Tooltip>
+        </div>
         <div className="ml-1 flex h-8 items-stretch overflow-hidden rounded-md border border-ink-700 bg-ink-800 max-sm:hidden">
           <Tooltip label="Auto fit preview"><button type="button" aria-label="Auto fit preview" aria-pressed={display === 'fit'} onClick={() => chooseDisplay('fit')} className={`grid w-9 place-items-center border-r border-ink-700 ${display === 'fit' ? 'bg-brand text-white' : 'text-ink-400 hover:bg-ink-700 hover:text-white'}`}><Maximize2 size={14} /></button></Tooltip>
-          <div className="relative flex items-center px-2"><input data-testid="preview-zoom-slider" aria-label="Preview zoom" type="range" min={25} max={200} step={5} value={Math.max(25, Math.min(200, Math.round(scale * 100)))} onChange={(e) => chooseDisplay(Number(e.target.value) / 100)} className="of-range w-20 sm:w-28" /><i aria-hidden="true" title="Auto fit point" className="pointer-events-none absolute top-1/2 h-3 w-px -translate-y-1/2 bg-white/60" style={{ left: `${8 + Math.max(0, Math.min(1, (fitScale * 100 - 25) / 175)) * 100}%` }} /></div>
-          <output className="hidden sm:flex w-11 items-center justify-end border-l border-ink-700 pr-2 text-[10px] tabular-nums text-ink-400">{Math.round(scale * 100)}%</output>
+          <div className="relative flex items-center px-2"><input data-testid="preview-zoom-slider" aria-label="Preview zoom" type="range" min={25} max={200} step={1} value={Math.max(25, Math.min(200, Math.round(scale * 100)))} onChange={(e) => chooseDisplay(Number(e.target.value) / 100)} className="of-range w-20 sm:w-28" /></div>
+          <label className="flex items-center border-l border-ink-700 px-1 text-[10px] tabular-nums text-ink-400">
+            <input key={`${display}-${scale}`} type="number" aria-label="Preview zoom percent" title="Preview zoom percent (25–200)" min={25} max={200} step={1} defaultValue={Math.round(scale * 100)}
+              className="w-10 bg-transparent text-right text-ink-100 outline-none focus:ring-1 focus:ring-brand rounded"
+              onBlur={(e) => {
+                const value = e.currentTarget.valueAsNumber
+                if (Number.isFinite(value) && value !== Math.round(scale * 100)) {
+                  const percent = Math.max(25, Math.min(200, value))
+                  e.currentTarget.value = String(percent)
+                  chooseDisplay(percent / 100)
+                }
+                else e.currentTarget.value = String(Math.round(scale * 100))
+              }}
+              onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); if (e.key === 'Escape') { e.currentTarget.value = String(Math.round(scale * 100)); e.currentTarget.blur() } }}
+            />%
+          </label>
         </div>
         </SlideDock>
       </div>

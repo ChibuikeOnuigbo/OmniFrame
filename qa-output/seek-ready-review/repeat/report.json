@@ -1,0 +1,55 @@
+{
+  "samples": [
+    {
+      "target": 1.25,
+      "decoderMs": 139.60000000149012,
+      "commitMs": 159,
+      "readyToCommitMs": 19.399999998509884
+    },
+    {
+      "target": 6.25,
+      "decoderMs": 163,
+      "commitMs": 180.10000000149012,
+      "readyToCommitMs": 17.100000001490116
+    },
+    {
+      "target": 2.25,
+      "decoderMs": 212,
+      "commitMs": 233.10000000149012,
+      "readyToCommitMs": 21.100000001490116
+    },
+    {
+      "target": 5.25,
+      "decoderMs": 105.90000000596046,
+      "commitMs": 116.30000000447035,
+      "readyToCommitMs": 10.399999998509884
+    },
+    {
+      "target": 0.25,
+      "decoderMs": 48.600000001490116,
+      "commitMs": 61.20000000298023,
+      "readyToCommitMs": 12.600000001490116
+    },
+    {
+      "target": 4.25,
+      "decoderMs": 236.29999999701977,
+      "commitMs": 244.29999999701977,
+      "readyToCommitMs": 8
+    },
+    {
+      "target": 1.25,
+      "decoderMs": 92.20000000298023,
+      "commitMs": 97.5,
+      "readyToCommitMs": 5.299999997019768
+    },
+    {
+      "target": 6.25,
+      "decoderMs": 111,
+      "commitMs": 128.40000000596046,
+      "readyToCommitMs": 17.400000005960464
+    }
+  ],
+  "idleCommits": 4,
+  "errors": [],
+  "scope": "Single Pexels fixture; seeked to program-canvas drawImage commit, not compositor presentation. Software Chromium."
+}

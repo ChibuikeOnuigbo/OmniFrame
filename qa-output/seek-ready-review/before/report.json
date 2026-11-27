@@ -1,0 +1,55 @@
+{
+  "samples": [
+    {
+      "target": 1.25,
+      "decoderMs": 154.10000000149012,
+      "commitMs": 267.79999999701977,
+      "readyToCommitMs": 113.69999999552965
+    },
+    {
+      "target": 6.25,
+      "decoderMs": 131.69999999552965,
+      "commitMs": 280.69999999552965,
+      "readyToCommitMs": 149
+    },
+    {
+      "target": 2.25,
+      "decoderMs": 130.59999999403954,
+      "commitMs": 264.69999999552965,
+      "readyToCommitMs": 134.10000000149012
+    },
+    {
+      "target": 5.25,
+      "decoderMs": 60.100000001490116,
+      "commitMs": 279.6000000014901,
+      "readyToCommitMs": 219.5
+    },
+    {
+      "target": 0.25,
+      "decoderMs": 39.399999998509884,
+      "commitMs": 267.70000000298023,
+      "readyToCommitMs": 228.30000000447035
+    },
+    {
+      "target": 4.25,
+      "decoderMs": 237.29999999701977,
+      "commitMs": 261.6000000014901,
+      "readyToCommitMs": 24.30000000447035
+    },
+    {
+      "target": 1.25,
+      "decoderMs": 85.60000000149012,
+      "commitMs": 267.8999999985099,
+      "readyToCommitMs": 182.29999999701977
+    },
+    {
+      "target": 6.25,
+      "decoderMs": 93.79999999701977,
+      "commitMs": 264.6000000014901,
+      "readyToCommitMs": 170.80000000447035
+    }
+  ],
+  "idleCommits": 4,
+  "errors": [],
+  "scope": "Single Pexels fixture; seeked to program-canvas drawImage commit, not compositor presentation. Software Chromium."
+}

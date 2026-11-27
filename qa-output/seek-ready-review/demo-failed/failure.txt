@@ -1,0 +1,50 @@
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x10d7ad00] error reading header
+qa-output/seek-ready-review/demo/coast-edit.mp4: Operation not permitted
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /workspace/OmniFrame/node_modules/@ffmpeg-installer/linux-x64/ffmpeg -v error -xerror -i qa-output/seek-ready-review/demo/coast-edit.mp4 -vsync 0 -enc_time_base -1 -f null -
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x10d7ad00] error reading header
+qa-output/seek-ready-review/demo/coast-edit.mp4: Operation not permitted
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at file:///workspace/OmniFrame/qa/edit-speed-review-e2e.mjs:64:2 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    Buffer(0) [Uint8Array] [],
+    Buffer(133) [Uint8Array] [
+       91, 109, 111, 118,  44, 109, 112,  52,  44, 109,  52,  97,
+       44,  51, 103, 112,  44,  51, 103,  50,  44, 109, 106,  50,
+       32,  64,  32,  48, 120,  49,  48, 100,  55,  97, 100,  48,
+       48,  93,  32, 101, 114, 114, 111, 114,  32, 114, 101,  97,
+      100, 105, 110, 103,  32, 104, 101,  97, 100, 101, 114,  10,
+      113,  97,  45, 111, 117, 116, 112, 117, 116,  47, 115, 101,
+      101, 107,  45, 114, 101,  97, 100, 121,  45, 114, 101, 118,
+      105, 101, 119,  47, 100, 101, 109, 111,  47,  99, 111,  97,
+      115, 116,  45, 101,
+      ... 33 more items
+    ]
+  ],
+  pid: 49966,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(133) [Uint8Array] [
+     91, 109, 111, 118,  44, 109, 112,  52,  44, 109,  52,  97,
+     44,  51, 103, 112,  44,  51, 103,  50,  44, 109, 106,  50,
+     32,  64,  32,  48, 120,  49,  48, 100,  55,  97, 100,  48,
+     48,  93,  32, 101, 114, 114, 111, 114,  32, 114, 101,  97,
+    100, 105, 110, 103,  32, 104, 101,  97, 100, 101, 114,  10,
+    113,  97,  45, 111, 117, 116, 112, 117, 116,  47, 115, 101,
+    101, 107,  45, 114, 101,  97, 100, 121,  45, 114, 101, 118,
+    105, 101, 119,  47, 100, 101, 109, 111,  47,  99, 111,  97,
+    115, 116,  45, 101,
+    ... 33 more items
+  ]
+}
+
+Node.js v24.19.0

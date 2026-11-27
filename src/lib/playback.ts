@@ -235,6 +235,7 @@ export class PreviewEngine {
   private width: number
   private height: number
   private unsubscribe: (() => void) | null = null
+  private unsubscribeMediaReady: (() => void) | null = null
   private usedThisFrame = new Set<HTMLMediaElement>()
   private requestedTime = new WeakMap<HTMLMediaElement, number>()
   private sampling = false
@@ -836,6 +837,22 @@ export class PreviewEngine {
     if (this.running) return
     this.running = true
     this.last = performance.now()
+    if (!this.sampling) {
+      const host = mediaHost()
+      const onReady = (event: Event) => {
+        // Media events do not bubble. Capture only active decoders; thumbnail
+        // and evicted media must not wake an otherwise idle program monitor.
+        if (event.target instanceof HTMLVideoElement && this.usedThisFrame.has(event.target)) {
+          this.lastRenderedState = null
+        }
+      }
+      host.addEventListener('seeked', onReady, true)
+      host.addEventListener('loadeddata', onReady, true)
+      this.unsubscribeMediaReady = () => {
+        host.removeEventListener('seeked', onReady, true)
+        host.removeEventListener('loadeddata', onReady, true)
+      }
+    }
     // Pause decoded media synchronously with state. Waiting for the next rAF
     // made Space/click pause feel delayed under main-thread load.
     this.unsubscribe = useEditor.subscribe((state, previous) => {
@@ -2623,6 +2640,8 @@ export class PreviewEngine {
     cancelAnimationFrame(this.raf)
     this.unsubscribe?.()
     this.unsubscribe = null
+    this.unsubscribeMediaReady?.()
+    this.unsubscribeMediaReady = null
     if (activePreviewEngine === this) activePreviewEngine = null
     this.puppetCanvas = null
     this.deformedSources.clear()

@@ -1,5 +1,21 @@
 # OmniFrame adversarial audit state
 
+## Cycle 25 — decoder-ready paused preview scheduling (2026-11-27)
+
+Active decoder seek/load completion now invalidates the paused preview for the
+next animation frame, avoiding the 250 ms heartbeat wait. Inactive/sample events
+are ignored; disposal removes listeners. Eight-seek median ready-to-canvas delay
+fell from 159.9 ms to 23.1 ms (repeat 14.9 ms); idle stayed at four commits/1.1 s.
+48 units, 14 browser flows, 15 source-clock renders, static/build gates and 100-clip
+revisit/reset pass. Native edit export/reopen/decode passed on retry; first MP4 header failure remains unresolved.
+Preview guides are grouped, fit tick removed, and exact 1% zoom entry added. Detailed evidence and
+scope: reports/SEEK_READY_REVIEW_20261127.md. Overall speed remains provisional 6/10.
+
+Remaining: actual presentation, varied cold long-GOP decoding, sustained A/V sync,
+GPU/4K/native desktop and competitor checks. 277 source-scan hints and large build
+chunk remain. Next reproduce the retained MP4 header failure, then profile cold decode/proxy readiness; preserve complete-frame
+commits and idle limits. Do not generalize this fixture to lag-free editing.
+
 ## Cycle 24 — repeated edit/export speed review (2026-11-26)
 
 Created a six-second 720p edit and portable project; repeated Low/Full samples,

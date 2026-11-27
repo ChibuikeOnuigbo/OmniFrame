@@ -1,0 +1,9 @@
+48 unit scripts: pass
+14 browser smoke flows: pass
+15 source clocks, 120 pixel comparisons, 15 moving exports: pass
+Typecheck: pass
+Source lint: pass, 277 nonblocking heuristic findings remain
+Production build: pass, large-chunk warning remains
+Toolbar: exact zoom, bounds, cancellation, Fit preservation, mobile group bounds pass
+Context menus and live MCP rerun after toolbar: pass
+First MP4 decode: failed header parsing; fresh-server repeat: pass (root cause unresolved)

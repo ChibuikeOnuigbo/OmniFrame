@@ -1,0 +1,16 @@
+PASS source clock pixels and moving export linear
+PASS source clock pixels and moving export ease-in-quad
+PASS source clock pixels and moving export ease-out-quad
+PASS source clock pixels and moving export ease-in-out-cubic
+PASS source clock pixels and moving export ease-out-back
+PASS source clock pixels and moving export ease-in-out-back
+PASS source clock pixels and moving export elastic-out
+PASS source clock pixels and moving export bounce-out
+PASS source clock pixels and moving export expo-in
+PASS source clock pixels and moving export expo-out
+PASS source clock pixels and moving export circ-in-out
+PASS source clock pixels and moving export sine-in-out
+PASS source clock pixels and moving export hold-then-go
+PASS source clock pixels and moving export ramp-hold-ramp
+PASS source clock pixels and moving export velocity-spike
+PASS all 15 clocks: 120 exact media-pixel comparisons and 15 actual moving-video exports

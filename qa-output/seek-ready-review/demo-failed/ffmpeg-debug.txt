@@ -1,0 +1,38 @@
+ffmpeg version N-47683-g0e8eb07980-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2018 the FFmpeg developers
+  built with gcc 6.3.0 (Debian 6.3.0-18+deb9u1) 20170516
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-debug --disable-ffplay --disable-indev=sndio --disable-outdev=sndio --cc=gcc-6 --enable-fontconfig --enable-frei0r --enable-gnutls --enable-gray --enable-libaom --enable-libfribidi --enable-libass --enable-libvmaf --enable-libfreetype --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-librubberband --enable-libsoxr --enable-libspeex --enable-libvorbis --enable-libopus --enable-libtheora --enable-libvidstab --enable-libvo-amrwbenc --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg
+  libavutil      56. 24.101 / 56. 24.101
+  libavcodec     58. 42.100 / 58. 42.100
+  libavformat    58. 24.100 / 58. 24.100
+  libavdevice    58.  6.101 / 58.  6.101
+  libavfilter     7. 46.101 /  7. 46.101
+  libswscale      5.  4.100 /  5.  4.100
+  libswresample   3.  4.100 /  3.  4.100
+  libpostproc    55.  4.100 / 55.  4.100
+Splitting the commandline.
+Reading option '-v' ... matched as option 'v' (set logging level) with argument 'debug'.
+Reading option '-i' ... matched as input url with argument 'qa-output/seek-ready-review/demo/coast-edit.mp4'.
+Reading option '-f' ... matched as option 'f' (force format) with argument 'null'.
+Reading option '-' ... matched as output url.
+Finished splitting the commandline.
+Parsing a group of options: global .
+Applying option v (set logging level) with argument debug.
+Successfully parsed a group of options.
+Parsing a group of options: input url qa-output/seek-ready-review/demo/coast-edit.mp4.
+Successfully parsed a group of options.
+Opening an input file: qa-output/seek-ready-review/demo/coast-edit.mp4.
+[NULL @ 0x25b5ab80] Opening 'qa-output/seek-ready-review/demo/coast-edit.mp4' for reading
+[file @ 0x25b5b480] Setting default whitelist 'file,crypto'
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] Format mov,mp4,m4a,3gp,3g2,mj2 probed with size=2048 and score=100
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] ISO: File Type Major Brand: isom
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] Unknown dref type 0x206c7275 size 13
+    Last message repeated 1 times
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] found tfdt time 0, using it for dts
+    Last message repeated 1 times
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] found tfdt time 123358, using it for dts
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] found tfdt time 196286, using it for dts
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] found tfdt time 181578, using it for dts
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] found tfdt time 0, using it for dts
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x25b5ab80] error reading header
+[AVIOContext @ 0x25b638c0] Statistics: 68650 bytes read, 2 seeks
+qa-output/seek-ready-review/demo/coast-edit.mp4: Operation not permitted

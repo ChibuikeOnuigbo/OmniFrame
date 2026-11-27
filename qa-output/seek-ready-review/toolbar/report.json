@@ -1,0 +1,10 @@
+{
+  "exactZoom": true,
+  "clamps": true,
+  "repeatedClamp": true,
+  "emptySafe": true,
+  "escapePreservesFit": true,
+  "blurPreservesFit": true,
+  "mobileGuidesInViewport": true,
+  "errors": []
+}
