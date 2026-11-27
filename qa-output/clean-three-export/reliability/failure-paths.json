@@ -1,0 +1,7 @@
+{
+  "cancel": "AbortError",
+  "concurrent": "An export is already running.",
+  "encoder": "Video encoder failed. Try WebM or a lower export resolution.",
+  "interrupted": "Playback stopped before export finished. Please export again.",
+  "empty": "Video encoder returned an empty file."
+}

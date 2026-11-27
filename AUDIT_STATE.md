@@ -1,5 +1,25 @@
 # OmniFrame adversarial audit state
 
+## Cycle 28 — clean sequence-sized 3D output and paced rendering (2026-11-27)
+
+3D exports now use the live scene with a separate sequence-aspect camera/output
+renderer, excluding editor guides and viewport padding. Working viewport pixels
+are preserved; cancellation/unmount release the export renderer. 30 fps recording
+budgets avoid redundant renders/copies and catch-up bursts. Isolated median scene
+copies fell 79→62 (~22%); viewport step 68→60. Recorded frame counts improved, but
+wall time stayed ~2.3 s and long tasks remain. No whole-app/competitor speed claim.
+
+50 units, 14 browser smoke flows, native landscape/portrait exports, export fault
+recovery, 100-clip revisit/reset, audio and proxy checks pass. Static/build gates
+pass with 278 nonblocking hints and large chunk warning. Detailed evidence/ratings:
+reports/CLEAN_3D_AND_SPEED_REVIEW_20261127.md. 3D/2.5D rises provisionally to 6/10;
+overall tested browser editor remains 6/10. Native apps/AI/security not rated.
+
+Remaining: temporary renderer memory/context pressure, sustained GPU/4K and A/V,
+older-decoder MP4 compatibility, first-frame/long/background recording, advanced
+multi-object/plane and camera persistence. Next measure realistic sustained work
+and expand scene coverage without duplicating renderer semantics.
+
 ## Cycle 27 — deterministic 3D poses and short-export endpoints (2026-11-27)
 
 Playback/rewind changed automatic 3D poses; timeline-derived rotation now restores

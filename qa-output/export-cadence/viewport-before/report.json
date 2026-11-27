@@ -1,0 +1,29 @@
+{
+  "samples": [
+    {
+      "elapsedMs": 2387.900000002235,
+      "viewportRenders": 64,
+      "copies": 59,
+      "firstToLastCopyMs": 2233.400000002235,
+      "longTasks": 5,
+      "longestTaskMs": 235
+    },
+    {
+      "elapsedMs": 2218.400000002235,
+      "viewportRenders": 71,
+      "copies": 63,
+      "firstToLastCopyMs": 2146.39999999851,
+      "longTasks": 2,
+      "longestTaskMs": 105
+    },
+    {
+      "elapsedMs": 2313,
+      "viewportRenders": 68,
+      "copies": 64,
+      "firstToLastCopyMs": 2214.699999999255,
+      "longTasks": 2,
+      "longestTaskMs": 101
+    }
+  ],
+  "scope": "Three repeated native two-second 640x360 3D exports; counts rendered scene copies, not displayed FPS. Software Chromium, no concurrent test suites."
+}

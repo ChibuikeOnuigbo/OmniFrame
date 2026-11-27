@@ -1,0 +1,38 @@
+{
+  "viewportUnchanged": true,
+  "viewportSize": [
+    803,
+    618
+  ],
+  "outputSize": [
+    1280,
+    720
+  ],
+  "guidesInvariant": true,
+  "disposedRejects": true,
+  "cancelled": {
+    "message": "AbortError",
+    "quality": "low"
+  },
+  "closedDuringExport": "The 3D export renderer is unavailable.",
+  "unmounted": {
+    "disposed": true,
+    "unregistered": true
+  },
+  "exports": [
+    {
+      "width": 1280,
+      "height": 720,
+      "exportMs": 2659,
+      "exportAndVerificationMs": 2902
+    },
+    {
+      "width": 720,
+      "height": 1280,
+      "exportMs": 2801,
+      "exportAndVerificationMs": 3059
+    }
+  ],
+  "errors": [],
+  "scope": "Same live Three.js scene, separate output camera and renderer; one cube and real video plane in software Chromium."
+}

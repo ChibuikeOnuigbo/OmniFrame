@@ -1,0 +1,27 @@
+{
+  "loadMs": 223.09999999776483,
+  "assets": 100,
+  "clips": 100,
+  "effectInstances": 100,
+  "revisitWaitMs": [
+    152,
+    95,
+    116,
+    121,
+    137,
+    126,
+    111,
+    140,
+    61,
+    97
+  ],
+  "boundary": {
+    "playhead": 12.524399999999991,
+    "active": 0
+  },
+  "evictedSourceReleased": true,
+  "rapidSeekSettled": true,
+  "newProjectReleasedPlayback": true,
+  "errors": [],
+  "scope": "100 asset IDs reuse one video fixture. Decoder readiness and transport checks, not sustained audible sync or unique presented-frame verification."
+}

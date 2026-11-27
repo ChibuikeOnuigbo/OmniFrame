@@ -1,0 +1,69 @@
+{
+  "failures": {
+    "cancel": "AbortError",
+    "concurrent": "An export is already running.",
+    "encoder": "Video encoder failed. Try WebM or a lower export resolution.",
+    "interrupted": "Playback stopped before export finished. Please export again.",
+    "empty": "Video encoder returned an empty file."
+  },
+  "replaced": {
+    "message": "Project changed during export. Please export again.",
+    "quality": "medium",
+    "speed": 1.5,
+    "clips": 0,
+    "tracksEnded": true
+  },
+  "exports": [
+    {
+      "format": "auto",
+      "file": "qa-output/clean-three-export/reliability/0-omniframe-export.mp4",
+      "bytes": 893927,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.109521
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/clean-three-export/reliability/1-omniframe-export.webm",
+      "bytes": 1068665,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.077
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/clean-three-export/reliability/2-omniframe-export.mp4",
+      "bytes": 936747,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.054354
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/clean-three-export/reliability/3-omniframe-export.webm",
+      "bytes": 1062175,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.073
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/clean-three-export/reliability/4-omniframe-export.mp4",
+      "bytes": 939174,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.109479
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/clean-three-export/reliability/5-omniframe-export.webm",
+      "bytes": 1035332,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.215
+    }
+  ],
+  "rangeSeconds": 4.079,
+  "errors": [],
+  "scope": "640x360 native recordings, one reused Pexels source; synthetic recorder faults and real cancellation UI. Six sequential exports."
+}

@@ -1,0 +1,11 @@
+PASS real stereo RMS/peak metering and element-volume tracking {
+  leftDb: -23.078556648709668,
+  rightDb: -29.100810811661802,
+  leftPeakDb: -20.00071694148037,
+  rightPeakDb: -26.021404874763185
+} {
+  leftDb: -29.099177848102112,
+  rightDb: -35.12141891742719,
+  leftPeakDb: -26.02131685475999,
+  rightPeakDb: -32.04200414083365
+}

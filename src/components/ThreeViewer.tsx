@@ -1,3 +1,6 @@
+import { nextExportFrameTime } from '../lib/exportFrameBudget'
+import { registerThreeExportFactory, type ThreeExportSession } from '../lib/threeExportBridge'
+import { createThreeSceneExport } from '../lib/threeSceneExport'
 import { sphereFitDistance } from '../lib/sceneCamera'
 import { sculptGeometry } from '../lib/sculptGeometry'
 import { MAX_SCULPT_DABS } from '../lib/sculptData'
@@ -425,13 +428,24 @@ export function ThreeViewer({
     const gridHelper = new THREE.GridHelper(14, 28, 0x6366f1, 0x1e1e2d)
     gridHelper.position.y = -planeH * 0.52
     gridHelper.name = 'gridHelper'
+    gridHelper.userData.editorOnly = true
     scene.add(gridHelper)
 
     // Coordinate Axes
     const axesHelper = new THREE.AxesHelper(1.8)
     axesHelper.position.set(-planeW * 0.6, -planeH * 0.5, 0)
     axesHelper.name = 'axesHelper'
+    axesHelper.userData.editorOnly = true
     scene.add(axesHelper)
+
+    const exportSessions = new Set<ThreeExportSession>()
+    const unregisterExport = registerThreeExportFactory((w, h) => {
+      const session = createThreeSceneExport(renderer, scene, camera, w, h)
+      const dispose = session.dispose
+      session.dispose = () => { exportSessions.delete(session); dispose() }
+      exportSessions.add(session)
+      return session
+    })
 
     // Render & Animation Loop
     let animId: number
@@ -513,8 +527,16 @@ export function ThreeViewer({
       // Keep the animation clock alive, but leave an unchanged paused GPU buffer alone.
       if (!live.playing && live === lastRenderedState && view === lastView) return
       const renderFps = live.previewQuality === 'full' ? Math.max(60, live.projectFps) : usePerformanceSettings.getState().previewFps
-      if (now - lastRenderTime < 1000 / renderFps) return
-      lastRenderTime = now
+      if (exportSessions.size > 0) {
+        // Keep the working monitor responsive without drawing it faster than
+        // the recorder while the sequence-sized export renderer is also active.
+        const nextFrame = nextExportFrameTime(now, lastRenderTime)
+        if (nextFrame === null) return
+        lastRenderTime = nextFrame
+      } else {
+        if (now - lastRenderTime < 1000 / renderFps) return
+        lastRenderTime = now
+      }
 
       // Update live video / canvas texture
       if (videoTextureRef.current) {
@@ -530,6 +552,8 @@ export function ThreeViewer({
 
     return () => {
       cancelAnimationFrame(animId)
+      unregisterExport()
+      exportSessions.forEach(session => session.dispose())
       disposeObject(scene)
       videoTextureRef.current?.dispose()
       renderer.dispose()
@@ -641,6 +665,7 @@ export function ThreeViewer({
     const edgeMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2 })
     const edgeLines = new THREE.LineSegments(edgeGeom, edgeMat)
     edgeLines.position.z = 0.002
+    edgeLines.userData.editorOnly = true
     planeGroup.add(edgeLines)
 
     videoMesh.name = 'video-plane'

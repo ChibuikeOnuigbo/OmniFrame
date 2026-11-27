@@ -1,3 +1,5 @@
+import { nextExportFrameTime } from './exportFrameBudget'
+import { beginThreeExport, type ThreeExportSession } from './threeExportBridge'
 import { attachAudioElements, createRecordingAudioStream } from './audioBus'
 // Real export: record the live preview canvas (driven by PreviewEngine) with
 // MediaRecorder, mixing in audio from active media elements where possible.
@@ -68,6 +70,7 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   const previousQuality = st.previewQuality
   const previousSpeed = st.speed
   let cleanup = () => {}
+  let threeExport: ThreeExportSession | null = null
   st.setPreviewQuality('full')
   try {
   // Let React resize the engine itself; never resize its canvas behind it.
@@ -92,20 +95,22 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
       checkActive()
       const live = useEditor.getState()
       const preferred = live.is3DMode ? 'of-three-canvas' : 'of-canvas'
-      const el =
-        (document.getElementById(preferred) as HTMLCanvasElement | null) ??
-        (document.getElementById('of-canvas') as HTMLCanvasElement | null)
+      const el = document.getElementById(preferred) as HTMLCanvasElement | null
       if (el) return el
       if (performance.now() >= deadline) return null
       await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
     }
   }
 
-  const canvas = await findCanvas()
+  let canvas = await findCanvas()
   if (!canvas) throw new Error('Preview canvas not found')
 
   const targetW = st.sequenceSettings?.width || 1920
   const targetH = st.sequenceSettings?.height || 1080
+  if (initial.is3DMode) {
+    threeExport = beginThreeExport(targetW, targetH)
+    canvas = threeExport.canvas
+  }
   // Record from a scaler canvas, NOT by resizing the live preview canvas:
   // the PreviewEngine caches its render size, so mutating the live canvas
   // behind its back used to bake the (smaller, quality-scaled) preview into
@@ -117,10 +122,16 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   const scalerCtx = scaler.getContext('2d')
   if (!scalerCtx) throw new Error('Cannot create the export canvas.')
   let scalerRunning = true
+  let renderError: Error | null = null
   cleanup = () => { scalerRunning = false }
-  const pumpScaler = () => {
+  let lastScalerFrame = -Infinity
+  const pumpScaler = (now = performance.now()) => {
     if (!scalerRunning) return
+    const nextFrame = nextExportFrameTime(now, lastScalerFrame)
+    if (nextFrame === null) { requestAnimationFrame(pumpScaler); return }
+    lastScalerFrame = nextFrame
     try {
+      threeExport?.render()
       attachAudioElements(allMediaElements())
       if (scalerCtx && canvas.width > 0 && canvas.height > 0) {
         const scale = Math.min(targetW / canvas.width, targetH / canvas.height)
@@ -129,7 +140,7 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
         scalerCtx.fillRect(0, 0, targetW, targetH)
         scalerCtx.drawImage(canvas, (targetW - w) / 2, (targetH - h) / 2, w, h)
       }
-    } catch { /* live canvas momentarily unavailable */ }
+    } catch (error) { renderError = error instanceof Error ? error : new Error('Export rendering failed.') }
     requestAnimationFrame(pumpScaler)
   }
   pumpScaler()
@@ -159,7 +170,7 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   let recorderError: Error | null = null
   recorder.onstop = () => { recorderStopped = true }
   recorder.onerror = () => { recorderError = new Error('Video encoder failed. Try WebM or a lower export resolution.') }
-  const checkRecorder = () => { checkActive(); if (recorderError) throw recorderError }
+  const checkRecorder = () => { checkActive(); if (recorderError) throw recorderError; if (renderError) throw renderError }
 
   // In/Out range export: record only the marked slice (CapCut behaviour).
   const range = st.exportRange && st.exportRange.out > st.exportRange.in ? st.exportRange : null
@@ -214,7 +225,7 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   opts.onStatus?.('Export complete')
   opts.onProgress?.(1)
   } finally {
-    cleanup()
+    try { cleanup() } finally { threeExport?.dispose() }
     // A replacement project owns its own transport/settings.
     if (useEditor.getState().projectGeneration === generation) {
       st.stopVisualPreview()

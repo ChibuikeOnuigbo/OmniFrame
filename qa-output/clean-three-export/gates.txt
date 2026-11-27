@@ -1,0 +1,5 @@
+50 unit scripts: pass
+14 browser smoke flows: pass
+Targeted clean-3D, export-reliability, 100-clip revisit/reset, audio-bus and media-proxy scripts: pass
+Typecheck, source lint and production build: pass
+278 nonblocking source-lint findings and large bundle warning remain

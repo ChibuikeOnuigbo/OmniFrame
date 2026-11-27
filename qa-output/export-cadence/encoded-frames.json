@@ -1,0 +1,74 @@
+[
+  {
+    "phase": "before",
+    "run": 0,
+    "decodedFrames": 32,
+    "decodedSeconds": 2.119
+  },
+  {
+    "phase": "before",
+    "run": 1,
+    "decodedFrames": 37,
+    "decodedSeconds": 2.133
+  },
+  {
+    "phase": "before",
+    "run": 2,
+    "decodedFrames": 36,
+    "decodedSeconds": 2.117
+  },
+  {
+    "phase": "after",
+    "run": 0,
+    "decodedFrames": 34,
+    "decodedSeconds": 2.114
+  },
+  {
+    "phase": "after",
+    "run": 1,
+    "decodedFrames": 38,
+    "decodedSeconds": 2.133
+  },
+  {
+    "phase": "after",
+    "run": 2,
+    "decodedFrames": 33,
+    "decodedSeconds": 2.07
+  },
+  {
+    "phase": "viewport-before",
+    "run": 0,
+    "decodedFrames": 33,
+    "decodedSeconds": 2.121
+  },
+  {
+    "phase": "viewport-before",
+    "run": 1,
+    "decodedFrames": 35,
+    "decodedSeconds": 2.08
+  },
+  {
+    "phase": "viewport-before",
+    "run": 2,
+    "decodedFrames": 35,
+    "decodedSeconds": 2.131
+  },
+  {
+    "phase": "final",
+    "run": 0,
+    "decodedFrames": 47,
+    "decodedSeconds": 2.07
+  },
+  {
+    "phase": "final",
+    "run": 1,
+    "decodedFrames": 49,
+    "decodedSeconds": 2.129
+  },
+  {
+    "phase": "final",
+    "run": 2,
+    "decodedFrames": 42,
+    "decodedSeconds": 2.07
+  }
+]
