@@ -1,0 +1,8 @@
+{
+  "source": "qa-output/seek-ready-review/demo-failed/coast-edit.mp4",
+  "pinnedDecoder": "Repository @ffmpeg-installer/ffmpeg; previously rejected MP4 header",
+  "supplementalDecoder": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "supplementalDecodeCommand": "ffmpeg -v error -xerror -i <source> -vsync 0 -enc_time_base -1 -f null -",
+  "supplementalDecodeExitCode": 0,
+  "conclusion": "This file decodes with FFmpeg 7.1.5. Older decoder compatibility remains unresolved; this is not proof of universal player support."
+}

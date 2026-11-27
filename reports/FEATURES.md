@@ -1,3 +1,19 @@
+## Cycle 26 — export ownership, cancellation and failure recovery (2026-11-27)
+
+Added Cancel and explicit WebM export. Concurrent requests, recorder errors,
+interrupted playback, empty data and premature stop now reject; cleanup restores
+settings unless a replacement project owns them. Progress panel now portals above
+the inspector after a real click test reproduced interception. Six final native
+MP4/WebM exports decode with pinned FFmpeg. Failure/replacement/UI checks, 48 units,
+14 browser flows and static/build gates pass. See reports/EXPORT_RELIABILITY_20261127.md.
+
+The retained old MP4 decodes with supplemental FFmpeg 7.1.5 (H.264/Opus, 6.1322 s),
+so corruption is unproven; older-decoder/container compatibility remains open.
+Remaining: long-duration/finalization-timeout fault tests, background suspension,
+A/V drift, first-frame synchronization, native platforms and external players.
+Next inspect fragment/audio metadata with old/new decoders, then sustained A/V
+exports. Source lint retains 278 nonblocking findings and the large bundle warning.
+
 ## Cycle 25 — decoder-ready paused preview scheduling (2026-11-27)
 
 Active decoder seek/load completion now invalidates the paused preview for the

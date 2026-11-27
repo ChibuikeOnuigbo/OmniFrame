@@ -1,0 +1,6 @@
+48 unit scripts: pass
+14 browser smoke flows: pass
+Typecheck, source lint, production build: pass
+Six final native exports: pinned FFmpeg full decode pass
+Synthetic fault, Cancel UI, WebM menu, project replacement: pass
+Lint: 278 nonblocking findings; build: large chunk warning remains

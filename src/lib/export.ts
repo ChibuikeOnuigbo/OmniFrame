@@ -7,6 +7,8 @@ import { useEditor } from '../store'
 import { allMediaElements } from './playback'
 
 export interface ExportOptions {
+  signal?: AbortSignal
+  format?: 'auto' | 'webm'
   onProgress?: (fraction: number) => void
   onStatus?: (status: string) => void
 }
@@ -39,9 +41,24 @@ function download(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1500)
 }
 
+let exportInProgress = false
+
 export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
+  if (opts.signal?.aborted) throw new DOMException('Export cancelled.', 'AbortError')
+  if (exportInProgress) throw new Error('An export is already running.')
+  exportInProgress = true
+  try { await recordVideo(opts) } finally { exportInProgress = false }
+}
+
+async function recordVideo(opts: ExportOptions): Promise<void> {
   const st = useEditor.getState()
   if (st.clips.length === 0) throw new Error('Add a clip to the timeline before exporting.')
+
+  const generation = st.projectGeneration
+  const checkActive = () => {
+    if (opts.signal?.aborted) throw new DOMException('Export cancelled.', 'AbortError')
+    if (useEditor.getState().projectGeneration !== generation) throw new Error('Project changed during export. Please export again.')
+  }
 
   // Ensure Program monitor is active and canvas dimensions match authoritative sequence settings
   if (st.monitorMode !== 'program') {
@@ -55,7 +72,8 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   try {
   // Let React resize the engine itself; never resize its canvas behind it.
   await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
-  const mime = pickMime()
+  checkActive()
+  const mime = pickMime(opts.format === 'webm')
   if (!mime) throw new Error('MediaRecorder is not supported in this browser.')
 
   // Look the canvas up only AFTER the monitor switch. In Source mode the
@@ -71,6 +89,7 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   const findCanvas = async (timeoutMs = 3000): Promise<HTMLCanvasElement | null> => {
     const deadline = performance.now() + timeoutMs
     for (;;) {
+      checkActive()
       const live = useEditor.getState()
       const preferred = live.is3DMode ? 'of-three-canvas' : 'of-canvas'
       const el =
@@ -96,7 +115,9 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   scaler.width = targetW
   scaler.height = targetH
   const scalerCtx = scaler.getContext('2d')
+  if (!scalerCtx) throw new Error('Cannot create the export canvas.')
   let scalerRunning = true
+  cleanup = () => { scalerRunning = false }
   const pumpScaler = () => {
     if (!scalerRunning) return
     try {
@@ -115,6 +136,7 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
 
   opts.onStatus?.('Preparing recorder…')
   const stream = scaler.captureStream(30)
+  cleanup = () => { scalerRunning = false; stream.getTracks().forEach(track => track.stop()) }
   const audio = createRecordingAudioStream()
   audio.stream.getAudioTracks().forEach(track => stream.addTrack(track))
 
@@ -123,15 +145,21 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
     mimeType: mime,
     videoBitsPerSecond: 8_000_000,
   })
-  cleanup = () => { scalerRunning = false; if (recorder.state !== 'inactive') recorder.stop(); stream.getTracks().forEach(track => track.stop()); audio.dispose() }
+  cleanup = () => {
+    scalerRunning = false
+    try { if (recorder.state !== 'inactive') recorder.stop() }
+    finally { stream.getTracks().forEach(track => track.stop()); audio.dispose() }
+  }
   const chunks: BlobPart[] = []
   recorder.ondataavailable = (e) => {
     if (e.data && e.data.size > 0) chunks.push(e.data)
   }
 
-  const stopped = new Promise<void>((resolve) => {
-    recorder.onstop = () => resolve()
-  })
+  let recorderStopped = false
+  let recorderError: Error | null = null
+  recorder.onstop = () => { recorderStopped = true }
+  recorder.onerror = () => { recorderError = new Error('Video encoder failed. Try WebM or a lower export resolution.') }
+  const checkRecorder = () => { checkActive(); if (recorderError) throw recorderError }
 
   // In/Out range export: record only the marked slice (CapCut behaviour).
   const range = st.exportRange && st.exportRange.out > st.exportRange.in ? st.exportRange : null
@@ -146,11 +174,16 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   // Wait for playback to finish (engine pauses itself at duration).
   const start = performance.now()
   while (true) {
+    checkRecorder()
     const s = useEditor.getState()
     const frac = recordTo > recordFrom ? (s.playhead - recordFrom) / (recordTo - recordFrom) : 1
     opts.onProgress?.(Math.min(1, Math.max(0, frac)))
-    if (!s.playing || s.playhead >= recordTo - 0.02) break
-    if (performance.now() - start > 5 * 60 * 1000) break // safety timeout
+    if (s.playhead >= recordTo - 0.02) break
+    if (!s.playing) throw new Error('Playback stopped before export finished. Please export again.')
+    if (recorderStopped) throw new Error('Video encoder stopped before export finished.')
+    if (performance.now() - start > Math.max(30_000, (recordTo - recordFrom) * 1500 + 10_000)) {
+      throw new Error('Export timed out before the timeline finished.')
+    }
     await new Promise((r) => setTimeout(r, 100))
   }
 
@@ -159,22 +192,32 @@ export async function exportVideo(opts: ExportOptions = {}): Promise<void> {
   // into every export. MediaRecorder flushes pending data on stop().
   await new Promise((r) => setTimeout(r, 50))
   if (recorder.state !== 'inactive') recorder.stop()
-  await stopped
+  const stopDeadline = performance.now() + 10_000
+  while (!recorderStopped) {
+    checkRecorder()
+    if (performance.now() >= stopDeadline) throw new Error('Video encoder did not finish saving.')
+    await new Promise(resolve => setTimeout(resolve, 25))
+  }
+  checkRecorder()
   scalerRunning = false
 
   const ext = mime.includes('mp4') ? 'mp4' : 'webm'
   // Each recording owns its initialization segment. Prepending a chunk from
   // an earlier export corrupts independent MP4/WebM streams.
   const blob = new Blob(chunks, { type: mime })
+  if (blob.size === 0) throw new Error('Video encoder returned an empty file.')
   st.setSpeed(previousSpeed)
   download(blob, `omniframe-export.${ext}`)
   opts.onStatus?.('Export complete')
   opts.onProgress?.(1)
   } finally {
     cleanup()
-    st.stopVisualPreview()
-    st.pause()
-    st.setSpeed(previousSpeed)
-    st.setPreviewQuality(previousQuality)
+    // A replacement project owns its own transport/settings.
+    if (useEditor.getState().projectGeneration === generation) {
+      st.stopVisualPreview()
+      st.pause()
+      st.setSpeed(previousSpeed)
+      st.setPreviewQuality(previousQuality)
+    }
   }
 }

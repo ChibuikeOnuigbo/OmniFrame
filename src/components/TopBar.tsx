@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { ProxyProgress } from './ProxyProgress'
 import { PerformanceSettings } from './PerformanceSettings'
 import { ViewportMenu } from './ViewportMenu'
@@ -142,6 +143,8 @@ export function TopBar() {
   const [projectStatus, setProjectStatus] = useState('')
   const [exportMenuOpen, setExportMenuOpen] = useState(false)
   const [exporting, setExporting] = useState(false)
+  const exportController = useRef<AbortController | null>(null)
+  useEffect(() => () => exportController.current?.abort(), [])
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
   const [mobileToolsOpen,setMobileToolsOpen]=useState(false)
@@ -333,18 +336,20 @@ export function TopBar() {
     })
   }
 
-  const onExport = async () => {
+  const onExport = async (format: 'auto' | 'webm' = 'auto') => {
     if (exporting) return
     setExporting(true)
     setProgress(0)
     setStatus('Starting…')
+    const controller = new AbortController()
+    exportController.current = controller
     try {
-      await exportVideo({ onProgress: setProgress, onStatus: setStatus })
+      await exportVideo({ format, signal: controller.signal, onProgress: setProgress, onStatus: setStatus })
     } catch (err) {
-      setStatus(`Export failed: ${(err as Error).message}`)
+      setStatus(err instanceof DOMException && err.name === 'AbortError' ? 'Export cancelled' : `Export failed: ${(err as Error).message}`)
       setTimeout(() => setExporting(false), 2500)
       return
-    }
+    } finally { exportController.current = null }
     setTimeout(() => setExporting(false), 1200)
   }
 
@@ -705,7 +710,7 @@ export function TopBar() {
           <button
             type="button"
             data-testid="export-video-btn"
-            onClick={onExport}
+            onClick={() => void onExport()}
             disabled={exporting}
             title={exporting ? 'Exporting video' : 'Export the complete timeline as video'}
             aria-label={exporting ? 'Exporting video' : 'Export video'}
@@ -755,6 +760,11 @@ export function TopBar() {
                   >
                     <Film size={14} className="text-amber-300" />
                     <span><strong>Video sequence</strong><span className="ml-1 text-ink-400">— rendered timeline; layers become frames</span></span>
+                  </button>
+                  <button type="button" role="menuitem" data-testid="export-webm-option" disabled={exporting}
+                    onClick={() => { setExportMenuOpen(false); void onExport('webm') }}
+                    className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs text-ink-200 hover:bg-ink-700 focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-50">
+                    <Film size={14} /><span>Export WebM</span>
                   </button>
                   <p data-testid="video-export-loss-warning" className="mx-2 my-1 rounded-none border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] leading-relaxed text-amber-200">
                     Video is a rendered copy, not an editable timeline. MediaRecorder chooses MP4 or WebM based on browser support.
@@ -1778,14 +1788,17 @@ export function TopBar() {
         </div>
       )}
 
-      {exporting && (
-        <div className="fixed bottom-4 right-4 z-50 w-72 bg-ink-850 border border-ink-700 rounded-lg shadow-xl p-3 of-fade">
-          <div className="text-xs text-ink-300 mb-2">{status}</div>
+      {exporting && createPortal(
+        <div className="fixed bottom-4 right-4 z-[1000] w-72 max-w-[calc(100vw-2rem)] bg-ink-850 border border-ink-700 rounded-lg shadow-xl p-3 of-fade">
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <span role="status" className="text-xs text-ink-300">{status}</span>
+            {exportController.current && <button type="button" data-testid="cancel-video-export" onClick={() => exportController.current?.abort()} className="rounded px-2 py-1 text-xs text-ink-200 hover:bg-ink-700 focus-visible:ring-2 focus-visible:ring-brand">Cancel</button>}
+          </div>
           <div className="h-1.5 rounded-full bg-ink-700 overflow-hidden">
             <div className="h-full bg-brand transition-all" style={{ width: `${Math.round(progress * 100)}%` }} />
           </div>
           <div className="text-[11px] text-ink-500 mt-1 text-right">{Math.round(progress * 100)}%</div>
-        </div>
+        </div>, document.body
       )}
 
       <LayoutManagerModal isOpen={layoutModalOpen} onClose={() => setLayoutModalOpen(false)} />

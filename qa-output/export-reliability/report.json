@@ -1,0 +1,62 @@
+{
+  "failures": {
+    "cancel": "AbortError",
+    "concurrent": "An export is already running.",
+    "encoder": "Video encoder failed. Try WebM or a lower export resolution.",
+    "interrupted": "Playback stopped before export finished. Please export again.",
+    "empty": "Video encoder returned an empty file."
+  },
+  "replaced": {
+    "message": "Project changed during export. Please export again.",
+    "quality": "medium",
+    "speed": 1.5,
+    "clips": 0,
+    "tracksEnded": true
+  },
+  "exports": [
+    {
+      "format": "auto",
+      "file": "qa-output/export-reliability/0-omniframe-export.mp4",
+      "bytes": 938437,
+      "decoded": true,
+      "detail": ""
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/export-reliability/1-omniframe-export.webm",
+      "bytes": 1082401,
+      "decoded": true,
+      "detail": ""
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/export-reliability/2-omniframe-export.mp4",
+      "bytes": 947588,
+      "decoded": true,
+      "detail": ""
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/export-reliability/3-omniframe-export.webm",
+      "bytes": 1094299,
+      "decoded": true,
+      "detail": ""
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/export-reliability/4-omniframe-export.mp4",
+      "bytes": 962377,
+      "decoded": true,
+      "detail": ""
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/export-reliability/5-omniframe-export.webm",
+      "bytes": 946236,
+      "decoded": true,
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "scope": "640x360 native recordings, one reused Pexels source; synthetic recorder faults and real cancellation UI. Six sequential exports."
+}
