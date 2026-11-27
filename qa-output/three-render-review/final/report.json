@@ -1,0 +1,34 @@
+{
+  "rewindMatches": true,
+  "keyedSeekStable": true,
+  "isolatedPlaneChanges": true,
+  "sculpt": {
+    "dabs": 256,
+    "extraAccepted": false,
+    "elapsedMs": 2052.0999999999767,
+    "renderSubmissions": 66
+  },
+  "results": [
+    {
+      "quality": "low",
+      "elapsedMs": 2543.899999999907,
+      "renderSubmissions": 85,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "width": 803,
+      "height": 618
+    },
+    {
+      "quality": "full",
+      "elapsedMs": 2550.5,
+      "renderSubmissions": 75,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "width": 803,
+      "height": 618
+    }
+  ],
+  "exportMs": 4209,
+  "errors": [],
+  "scope": "One cube, static title then one moving composite video plane; software WebGL. Submissions are not GPU completion or unique displayed FPS."
+}

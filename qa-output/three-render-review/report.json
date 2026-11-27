@@ -1,0 +1,27 @@
+{
+  "rewindMatches": true,
+  "keyedSeekStable": true,
+  "results": [
+    {
+      "quality": "low",
+      "elapsedMs": 2558.5,
+      "renderSubmissions": 72,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "width": 803,
+      "height": 618
+    },
+    {
+      "quality": "full",
+      "elapsedMs": 2553.5,
+      "renderSubmissions": 70,
+      "longTasks": 1,
+      "maxLongTaskMs": 55,
+      "width": 803,
+      "height": 618
+    }
+  ],
+  "exportMs": 5210,
+  "errors": [],
+  "scope": "One cube, static title then one moving composite video plane; software WebGL. Submissions are not GPU completion or unique displayed FPS."
+}

@@ -1,0 +1,21 @@
+{
+  "frames": [
+    {
+      "width": 623,
+      "height": 61,
+      "count": 15053
+    },
+    {
+      "width": 312,
+      "height": 320,
+      "count": 6279
+    },
+    {
+      "width": 623,
+      "height": 61,
+      "count": 15053
+    }
+  ],
+  "errors": [],
+  "scope": "Keyed projected X/Y text rotation, ease-in-out segments, exact return pose and native WebM decode; not volumetric geometry."
+}

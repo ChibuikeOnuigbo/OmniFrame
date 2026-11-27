@@ -1,0 +1,69 @@
+{
+  "failures": {
+    "cancel": "AbortError",
+    "concurrent": "An export is already running.",
+    "encoder": "Video encoder failed. Try WebM or a lower export resolution.",
+    "interrupted": "Playback stopped before export finished. Please export again.",
+    "empty": "Video encoder returned an empty file."
+  },
+  "replaced": {
+    "message": "Project changed during export. Please export again.",
+    "quality": "medium",
+    "speed": 1.5,
+    "clips": 0,
+    "tracksEnded": true
+  },
+  "exports": [
+    {
+      "format": "auto",
+      "file": "qa-output/three-render-review/export-duration/0-omniframe-export.mp4",
+      "bytes": 901232,
+      "decoded": false,
+      "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 0xa346240] error reading header\nqa-output/three-render-review/export-duration/0-omniframe-export.mp4: Operation not permitted\n",
+      "decodedSeconds": 0
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/three-render-review/export-duration/1-omniframe-export.webm",
+      "bytes": 1017656,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.123
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/three-render-review/export-duration/2-omniframe-export.mp4",
+      "bytes": 1006804,
+      "decoded": false,
+      "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 0x30cc9240] error reading header\nqa-output/three-render-review/export-duration/2-omniframe-export.mp4: Operation not permitted\n",
+      "decodedSeconds": 0
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/three-render-review/export-duration/3-omniframe-export.webm",
+      "bytes": 1015561,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.13
+    },
+    {
+      "format": "auto",
+      "file": "qa-output/three-render-review/export-duration/4-omniframe-export.mp4",
+      "bytes": 835315,
+      "decoded": false,
+      "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 0x231ae240] error reading header\nqa-output/three-render-review/export-duration/4-omniframe-export.mp4: Operation not permitted\n",
+      "decodedSeconds": 0
+    },
+    {
+      "format": "webm",
+      "file": "qa-output/three-render-review/export-duration/5-omniframe-export.webm",
+      "bytes": 987524,
+      "decoded": true,
+      "detail": "",
+      "decodedSeconds": 2.145
+    }
+  ],
+  "rangeSeconds": 4.052,
+  "errors": [],
+  "scope": "640x360 native recordings, one reused Pexels source; synthetic recorder faults and real cancellation UI. Six sequential exports."
+}

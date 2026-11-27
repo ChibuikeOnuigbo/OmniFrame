@@ -9,7 +9,7 @@ import chrome,{inflate} from '@sparticuz/chromium'
 await inflate(path.resolve('node_modules/@sparticuz/chromium/bin/al2023.tar.br'))
 process.env.LD_LIBRARY_PATH=`${os.tmpdir()}/al2023/lib:${os.tmpdir()}:${process.env.LD_LIBRARY_PATH||''}`
 const browser=await chromium.launch({executablePath:await chrome.executablePath(),args:['--no-sandbox','--use-gl=swiftshader']})
-const out='qa-output/export-reliability';fs.mkdirSync(out,{recursive:true})
+const out=process.env.OUT||'qa-output/export-reliability';fs.mkdirSync(out,{recursive:true})
 try {
  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[],downloads=[]
  page.on('pageerror',e=>errors.push(String(e)));page.on('download',d=>downloads.push(d))
@@ -58,10 +58,17 @@ try {
    await page.getByTestId('export-options-toggle').click();await page.getByTestId('export-webm-option').click()
   }else await page.evaluate(format=>window.runExport({format}),format)
   const d=await next,file=out+'/'+exports.length+'-'+d.suggestedFilename();await d.saveAs(file)
-  let decoded=true,detail=''
-  try{execFileSync(ffmpeg.path,['-v','error','-xerror','-i',file,'-vsync','0','-enc_time_base','-1','-f','null','-'],{stdio:'pipe'})}catch(e){decoded=false;detail=String(e.stderr)}
-  exports.push({format,file,bytes:fs.statSync(file).size,decoded,detail})
+  let decoded=true,detail='',decodedSeconds=0
+  try{const progress=execFileSync(ffmpeg.path,['-v','error','-xerror','-i',file,'-vsync','0','-enc_time_base','-1','-progress','pipe:1','-nostats','-f','null','-'],{encoding:'utf8',stdio:'pipe'});decodedSeconds=Math.max(...[...progress.matchAll(/out_time_ms=(\d+)/g)].map(m=>Number(m[1])/1e6))}catch(e){decoded=false;detail=String(e.stderr)}
+  exports.push({format,file,bytes:fs.statSync(file).size,decoded,detail,decodedSeconds});if(decoded)assert.ok(decodedSeconds>1.5&&decodedSeconds<2.5,`short export includes padding: ${decodedSeconds}`)
  }
+ await page.evaluate(()=>{const s=window.__omniframe_store.getState();s.setPlayhead(0);s.setExportIn();s.setPlayhead(4);s.setExportOut()})
+ const rangeDownload=page.waitForEvent('download',{timeout:30000})
+ await page.evaluate(()=>window.runExport({format:'webm'}));await(await rangeDownload).saveAs(out+'/explicit-range.webm')
+ const rangeProgress=execFileSync(ffmpeg.path,['-v','error','-i',out+'/explicit-range.webm','-vsync','0','-enc_time_base','-1','-progress','pipe:1','-nostats','-f','null','-'],{encoding:'utf8',stdio:'pipe'})
+ const rangeSeconds=Math.max(...[...rangeProgress.matchAll(/out_time_ms=(\d+)/g)].map(m=>Number(m[1])/1e6))
+ assert.ok(rangeSeconds>3.5&&rangeSeconds<4.5,'explicit range must preserve requested empty tail')
+ await page.evaluate(()=>window.__omniframe_store.getState().clearExportRange())
  const replaced=await page.evaluate(async()=>{
   const s=()=>window.__omniframe_store.getState()
   const message=await window.runExport({onStatus:status=>{if(status.startsWith('Recording')){
@@ -71,7 +78,7 @@ try {
  })
  assert.match(replaced.message,/Project changed/);assert.equal(replaced.quality,'medium');assert.equal(replaced.speed,1.5);assert.equal(replaced.clips,0);assert.equal(replaced.tracksEnded,true)
  assert.deepEqual(errors,[])
- fs.writeFileSync(out+'/report.json',JSON.stringify({failures,replaced,exports,errors,scope:'640x360 native recordings, one reused Pexels source; synthetic recorder faults and real cancellation UI. Six sequential exports.'},null,2))
+ fs.writeFileSync(out+'/report.json',JSON.stringify({failures,replaced,exports,rangeSeconds,errors,scope:'640x360 native recordings, one reused Pexels source; synthetic recorder faults and real cancellation UI. Six sequential exports.'},null,2))
  console.log({failures,exports})
  assert.ok(exports.filter(x=>x.format==='webm').every(x=>x.decoded),'WebM exports must decode')
 }finally{await browser.close()}

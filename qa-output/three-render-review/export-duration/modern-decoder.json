@@ -1,0 +1,35 @@
+{
+  "decoder": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "file": "0-omniframe-export.mp4",
+      "supplementalDecodeExitCode": 0,
+      "stderr": "",
+      "probe": {
+        "format": {
+          "duration": "2.105133"
+        }
+      }
+    },
+    {
+      "file": "2-omniframe-export.mp4",
+      "supplementalDecodeExitCode": 0,
+      "stderr": "",
+      "probe": {
+        "format": {
+          "duration": "2.069367"
+        }
+      }
+    },
+    {
+      "file": "4-omniframe-export.mp4",
+      "supplementalDecodeExitCode": 0,
+      "stderr": "",
+      "probe": {
+        "format": {
+          "duration": "2.073433"
+        }
+      }
+    }
+  ]
+}

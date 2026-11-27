@@ -378,8 +378,8 @@ export function ThreeViewer({
     }
   }, [])
 
-  const animationState = useRef({ playing, activeClip, clipPlayheadTime })
-  animationState.current = { playing, activeClip, clipPlayheadTime }
+  const animationState = useRef({ playing, activeClip, clipPlayheadTime, sceneObject })
+  animationState.current = { playing, activeClip, clipPlayheadTime, sceneObject }
 
   // Initialize once: timeline ticks must not destroy the WebGL context and scene.
   // Initialize Three.js Scene
@@ -486,18 +486,21 @@ export function ThreeViewer({
         setCameraAim('free')
       }
 
-      const { playing, activeClip, clipPlayheadTime } = animationState.current
+      const { activeClip, clipPlayheadTime, sceneObject } = animationState.current
       // 3D Object Rotation (Keyframed or Auto-spin)
       if (objectMeshRef.current) {
+        const base = sceneObject?.rotation ?? { x: 0, y: 0, z: 0 }
+        objectMeshRef.current.rotation.set(base.x, base.y, base.z)
         const wheelCurve = activeClip?.animation?.curves?.['wheel_rotation'] || activeClip?.animation?.curves?.['rotation_z']
         if (wheelCurve && wheelCurve.keyframes.length > 0) {
           // Evaluate exact curve at current playhead time
           const evalDeg = evaluateCurve(wheelCurve, clipPlayheadTime)
           objectMeshRef.current.rotation.z = (evalDeg * Math.PI) / 180
-        } else if (playing) {
-          // Continuous rotation when playing without static keyframes
-          objectMeshRef.current.rotation.z += 2.4 * Math.min(dt, 0.1)
-          objectMeshRef.current.rotation.y += 0.6 * Math.min(dt, 0.1)
+        } else {
+          // Derive the pose from timeline time: rewind, replay and export must
+          // not depend on how many animation frames happened previously.
+          objectMeshRef.current.rotation.z = base.z + 2.4 * clipPlayheadTime
+          objectMeshRef.current.rotation.y = base.y + 0.6 * clipPlayheadTime
         }
       }
 

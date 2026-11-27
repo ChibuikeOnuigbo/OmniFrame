@@ -1,0 +1,8 @@
+48 unit scripts: pass
+14 browser smoke flows: pass (includes sculpt, video-plane, lifecycle and MCP)
+15 source-clock renders / 120 exact pixel comparisons: pass
+Final typecheck, source lint and build: pass
+Final 3D/XY native WebM decode: pass
+Export endpoints: three WebM ~2.12-2.15s, explicit range 4.052s
+Three new MP4: pinned old decoder rejects headers; supplemental FFmpeg 7.1.5 decodes all (~2.07-2.11s)
+278 nonblocking lint findings; large bundle warning remains

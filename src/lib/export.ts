@@ -164,7 +164,10 @@ async function recordVideo(opts: ExportOptions): Promise<void> {
   // In/Out range export: record only the marked slice (CapCut behaviour).
   const range = st.exportRange && st.exportRange.out > st.exportRange.in ? st.exportRange : null
   const recordFrom = range ? range.in : 0
-  const recordTo = range ? range.out : st.duration
+  // The timeline keeps a five-second editing floor; it is not rendered content.
+  const contentEnd = st.clips.reduce((end, clip) => Math.max(end, clip.start + clip.duration), 0)
+  const recordTo = range ? range.out : Math.min(st.duration, contentEnd)
+  if (!Number.isFinite(recordTo) || recordTo <= recordFrom) throw new Error('No timeline duration to export.')
   st.pause()
   st.setSpeed(1)
   recorder.start(100)

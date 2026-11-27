@@ -1,0 +1,4 @@
+{
+  "rewindMatches": true,
+  "scope": "Static title plane and fixed camera; compare actual WebGL canvas pixels at t=0 before/after playback."
+}

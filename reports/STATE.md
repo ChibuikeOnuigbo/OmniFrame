@@ -1,3 +1,21 @@
+## Cycle 27 — deterministic 3D poses and short-export endpoints (2026-11-27)
+
+Playback/rewind changed automatic 3D poses; timeline-derived rotation now restores
+identical pixels. Keyed seeks, isolated moving video plane, 256-dab sphere limit,
+and projected X/Y title animation pass. Final Low/Full samples submitted 85/75
+renders over ~2.55 s; these are not displayed FPS. Native 3D and XY WebM exports
+decode. Fixed export using the five-second editing floor: short WebM outputs now
+measure ~2.12–2.15 s, while explicit 4 s range remains 4.052 s. Earlier two-second
+export wording was inaccurate and is corrected. Full details: reports/THREE_RENDER_REVIEW_20261127.md.
+
+48 units/14 browser flows after pose fix; targeted endpoint/failure tests, 15 source
+clock renders and final static/build gates pass. Three new MP4s fail old pinned
+parser but decode with FFmpeg 7.1.5. Remaining: guide-free sequence-sized 3D export
+(current viewport capture includes guides/padding), multi-object/plane depth,
+large scenes, actual GPU/display timing, A/V sync and native-platform coverage.
+Next implement/test clean 3D rendering without changing preview camera behavior.
+Provisional tested 3D/2.5D capability: 5/10; no competitor superiority claim.
+
 ## Cycle 26 — export ownership, cancellation and failure recovery (2026-11-27)
 
 Added Cancel and explicit WebM export. Concurrent requests, recorder errors,

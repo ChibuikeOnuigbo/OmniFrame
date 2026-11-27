@@ -1,5 +1,10 @@
 # Export reliability review — 27 November 2026
 
+Correction from the subsequent 3D review: clip length was two seconds, but the
+sequence retained a five-second minimum. The original exports below therefore
+did not prove two-second output. The later endpoint fix and measured-duration
+checks are documented in `THREE_RENDER_REVIEW_20261127.md`.
+
 Export now supports cancellation, rejects overlapping API requests, and refuses
 to label interrupted playback, empty encoder output, premature encoder stop or
 timeout as successful. Recorder error events terminate the operation and cleanup
